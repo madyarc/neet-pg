@@ -11,7 +11,9 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 
 | # | Module | Branch | What it does |
 |---|---|---|---|
-| 01 | [The Femur](anatomy/lower-limb/femur.html) | Lower limb | 3D bone: 18 landmarks with a find-it quiz; left or right?; 30 muscle and ligament attachments; neck fracture and blood supply; five ossification centres |
+| — | [Anatomy home](anatomy/index.html) | Whole body | The whole skeleton in 3D; system filters; tap a bone to open its page |
+| 01 | [The Skull](anatomy/head-neck/skull.html) | Head and neck | 22 bones assembled and colour-coded; sutures and meeting points (bregma, lambda, pterion, asterion, nasion); inside the cranial cavity: the three fossae |
+| 02 | [The Femur](anatomy/lower-limb/femur.html) | Lower limb | 3D bone: 18 landmarks; left or right; 30 muscle and ligament attachments; neck fracture and blood supply; five ossification centres |
 
 ## Syllabus
 
@@ -26,13 +28,20 @@ SYLLABUS.md                 index of the NMC topic lists
 <subject>/SYLLABUS.md       per-subject checklist
 anatomy/                    index.html, DATA-SOURCES.md, lower-limb/femur.html
 tools/syllabus/             generates the SYLLABUS files from the NMC PDF
-tools/bones/                builds 3D bone data from BodyParts3D
+anatomy/assets/             shared 3D viewer (viewer.js) and styles (atlas.css)
+anatomy/models/             simplified BodyParts3D meshes (skeleton overview, skull)
+tools/bones-rs/             Rust mesh pipeline: BodyParts3D OBJ -> simplified binaries + contacts
+tools/bones/                Python helpers: femur build, skull sutures/points, bone colours
 tools/test/                 headless-browser checks
 ```
 
 ## Run locally
 
-Open `index.html` in a browser.
+```bash
+python3 -m http.server 8000   # then open http://localhost:8000/
+```
+
+The anatomy pages load model files, which browsers block when a page is opened straight from disk.
 
 ## Credits
 

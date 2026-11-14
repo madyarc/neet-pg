@@ -31,7 +31,7 @@ async def run():
             await pg.screenshot(path=f'{outdir}/{name}-explore-fossa.png')
             # side
             await pg.locator('#h-side').scroll_into_view_if_needed()
-            await pg.click('#side-right')
+            await pg.click('#side-back')
             await pg.wait_for_timeout(900)
             await pg.locator('#h-side').scroll_into_view_if_needed()
             await pg.screenshot(path=f'{outdir}/{name}-side.png')
@@ -52,10 +52,6 @@ async def run():
                 await pg.wait_for_timeout(200)
                 await pg.locator('#h-oss').scroll_into_view_if_needed()
                 await pg.screenshot(path=f'{outdir}/{name}-oss{k}.png')
-            # quiz
-            await pg.locator('#quiz .opt').first.click()
-            await pg.locator('#h-q').scroll_into_view_if_needed()
-            await pg.screenshot(path=f'{outdir}/{name}-quiz.png')
             print(name, 'errors after actions', errs)
             await ctx.close()
         await b.close()

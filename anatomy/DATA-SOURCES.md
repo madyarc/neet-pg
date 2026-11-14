@@ -38,3 +38,44 @@ them only with a source (Gray's hip-joint chapter, BD Chaurasia, a forensic text
 **Checks done (2026-11-14):** headless Chromium (playwright): no console errors in light/dark at 1200 and 400 px, no
 sideways scroll; all 18 landmarks visible when selected; all 30 attachment areas visible when selected; find-it quiz
 hits all 18 landmarks when tapped at the marker.
+
+## Skull — `head-neck/skull.html`
+
+**Sources.** Every statement is checked in two places: Gray's *Anatomy of the Human Body*, 20th ed. (1918), chapters
+"The Skull" (bartleby.com/107/30), each bone (107/31–45), "The Exterior of the Skull" (107/46) and "The Interior of the
+Skull" (107/47), read from the Internet Archive copy; and the Wikipedia article on each bone, each suture, the pterion,
+asterion, bregma, lambda, nasion, the middle meningeal artery and each cranial fossa (read 2026-11-14, plain-text API).
+Local copies in `sources-local/text/` (not in git).
+
+OpenStax *Anatomy and Physiology 2e* was read once and then dropped: its licence page forbids ingestion by AI systems
+without permission. Nothing from it is used.
+
+**Disagreements and how they were settled**
+
+| Point | Gray 1918 | Wikipedia / other | On the page |
+|---|---|---|---|
+| Lambdoid suture | between the parietals and the occipital; continues below as the occipitomastoid suture (occipital–mastoid temporal) | same | Gray's wording. (OpenStax said "occipital to parietal and temporal" — loose.) |
+| Parts of the temporal bone | five: squama, petrous, mastoid, tympanic, styloid process | four: squamous, mastoid, petrous, tympanic | "four parts … plus the styloid process (which Gray counts as a fifth part)" |
+| Parts of the ethmoid | four: cribriform plate, perpendicular plate, two lateral masses | three: cribriform plate, labyrinth, perpendicular plate | the parts named without a count |
+| Lacrimal bone | "the smallest and most fragile bone of the face" | "small and fragile" | "small and fragile" |
+| Mandible | "largest and strongest bone of the face" | "strongest bone of the facial skeleton"; "only movable bone" | "strongest bone of the face and the only movable bone of the skull" |
+| Pterion position | ~3 cm behind the frontozygomatic region | 2.6 cm behind, 1.3 cm above the frontozygomatic suture | no distance given |
+| Pterion definition | the point at the posterior end of the sphenoparietal suture | the region where frontal, parietal, temporal and sphenoid join | both given |
+| Superior/middle conchae part of the ethmoid | yes (middle concha explicit) | not stated in the articles read | not stated; the inferior concha is "the lowest of the three nasal conchae" |
+| Sphenoid "like a bat" | Gray's simile | not in Wikipedia | left out |
+
+**Single-source points (kept because the second source is derived from the first):** the cranial-fossa descriptions —
+Wikipedia's fossa articles reproduce Gray's text. Contents (frontal lobes; temporal lobes and pituitary; cerebellum,
+pons, medulla) are in both.
+
+**Clinical point:** pterion — anterior branch of the middle meningeal artery beneath it; weakest part of the skull;
+fracture may tear the artery → extradural (epidural) haematoma: Wikipedia "Pterion" and "Middle meningeal artery".
+Gray 1918 does not discuss it in these chapters. Independent second source: StatPearls, "Neuroanatomy, Middle
+Meningeal Arteries" (statpearls.com/point-of-care/25132) and "Anatomy, Head and Neck, Skull" (NCBI Bookshelf NBK499834) —
+the anterior branch runs beneath the pterion; rupture, most often there, typically gives an epidural haematoma.
+
+**Model:** BodyParts3D 3.0 (95 % polygon reduction) meshes for the 22 bones and the hyoid, simplified by
+`tools/bones-rs` (absolute error limit in the config). Bone colours: `tools/bones/assign_colours.py` (Paul Tol "light"
+palette; bones that touch never share a colour). Sutures = vertices of two named bones within `contact_mm` of each other,
+outer surface only (`tools/bones/skull_points.py`); points = where the named bones meet. The inion (external occipital
+protuberance) is NOT shown: the simple rule ("most posterior midline point") finds the opisthocranion region instead.

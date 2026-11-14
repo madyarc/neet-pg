@@ -9,7 +9,11 @@ project `jee-materials`, adapted for medicine.
 - Revision for NEET-PG that makes the MBBS syllabus **visible**: anatomy you can turn in 3D, processes you can step
   through, findings you can compare. Not a PDF of one-liners.
 - Audience: an MBBS graduate preparing for NEET-PG.
-- Prefer **predict-then-reveal** interactions (find-it, which-side, rank-it, step-through) over passive reading.
+- **Learning material only on the module pages.** Quizzes and practice questions live separately (`practice/`, not
+  linked yet); keep any that are written there, never on a learning page.
+- **Anatomy is assembled.** The Anatomy page is the whole body in 3D with a filter per system; tapping a part opens its
+  detailed page. Each region is built part by part (skull, then vertebrae, thorax, upper limbs, lower limbs…), then
+  added to the assembled body. The same for each later system (muscles, vessels, nerves, organs).
 
 ## Syllabus
 
@@ -41,9 +45,12 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
 
 ## Content rules (non-negotiable)
 
-1. **No unverified data.** Every fact, number and attachment must be checked against a published source (standard
-   textbooks — Gray's, BD Chaurasia, Moore, Guyton, Robbins, KD Tripathi, Park…; current official guidelines; NMC/NBEMS
-   documents; peer-reviewed papers) **before** it goes on a page. Never enter facts from memory.
+1. **No unverified data, two sources.** Every fact must be checked **before** it goes on a page, in two independent
+   sources where at all possible. The owner cannot spot medical errors by eye, so this is the only safeguard. Sources
+   we can legally read: Gray's *Anatomy* 20th ed. (1918, public domain; text via the Internet Archive copy of
+   bartleby.com/107), Wikipedia (CC BY-SA; check its citations), StatPearls / NCBI Bookshelf, official guidelines,
+   peer-reviewed papers. Never enter facts from memory. Never use pirated textbooks. **Do not use OpenStax** — its
+   licence forbids ingestion by AI systems. When sources disagree, log both and say on the page what both support.
 2. **Cite sources** on the page (footer) and in the subject's `DATA-SOURCES.md`. The footer is for students: a short
    "Based on:" line with the textbooks, and a "Models used:" line for simplifications and 3D-model credits. Verification
    notes, URLs and corrections go in `DATA-SOURCES.md` only.
@@ -68,8 +75,10 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
 
 ## Technical rules
 
-- **One self-contained HTML file per module**, no build step for the reader, no framework. External resources: Google
-  Fonts only (plus a pinned CDN library only if truly needed).
+- No build step for the reader, no framework. External resources: Google Fonts only.
+- Non-anatomy modules: one self-contained HTML file each. **Anatomy** pages share `anatomy/assets/viewer.js` (WebGL
+  viewer) and `anatomy/assets/atlas.css`, and load model files from `anatomy/models/<group>/` (the femur page is still
+  the older self-contained version).
 - Every module starts with `<nav class="back"><a href="../index.html">← <Subject></a></nav>` (adjust `../` to depth).
 - Relative links only (works on GitHub Pages and locally).
 - Keep data (facts, attachments, quiz items) in clearly marked arrays near the top of the script.
@@ -79,16 +88,29 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
 ### 3D models
 
 - Bones come from **BodyParts3D** (© The Database Center for Life Science). The OBJ files state CC BY-SA 2.1 Japan; the
-  2025 README says CC BY 4.0 — follow the stricter one: credit it in the footer, and the simplified meshes we publish
-  are under the same licence.
-- `tools/bones/build_<bone>.py` reads the BodyParts3D OBJ, finds landmark points from the shape, and writes JSON plus a
-  check image; `tools/bones/embed.py` puts the JSON into the page's `<script type="application/json" id="mesh">`. Run
-  with the venv at `~/personal/buildenv` (numpy, pillow, playwright + headless Chromium). Check the image by eye.
-- The viewer is plain WebGL inside the page (no library). Attachment areas are drawn per pixel as tubes/spots around
-  surface points (`setCapsules`), so their edges stay sharp on the reduced mesh; put surface points with ray casts
-  (`cast`), not nearest vertices. Deep pits need a set viewing direction (`VIEW_FROM`).
-- Test with headless Chromium: no console errors, light/dark, 400 px width, every landmark and attachment visible when
-  selected, the find-it quiz hits every landmark.
+  2025 README says CC BY 4.0 — follow the stricter one: credit it in the footer; the simplified meshes we publish are
+  under the same licence. Archives live in `sources-local/bp3d/` (not in git): 3.0 at 95 % reduction for detailed
+  pages, 4.0 at 99 % for the whole-body overview.
+- `tools/bones-rs` (Rust; `cargo build --release`, binary `target/release/bones`): `bones build configs/<group>.json`
+  reads the OBJs from the zips, welds, simplifies to an absolute error (mm), writes `NPM1` binaries + a manifest with
+  bounding boxes and the **contacts** between parts (sutures, joints). Coordinates stay in the BodyParts3D body frame
+  (mm; +x left, +y posterior, +z up), so separately built groups assemble without transforms.
+- `tools/bones/skull_points.py`: named sutures and points from the contacts. `tools/bones/assign_colours.py`: bone
+  colours. The femur page still uses `tools/bones/build_femur.py` + `embed.py`.
+- Python scripts run with the venv `~/personal/buildenv` (numpy, pillow, playwright + headless Chromium inside it:
+  `PLAYWRIGHT_BROWSERS_PATH=0`). Pages that fetch models need a local http server to test (`python3 -m http.server`).
+- Every computed point or line (landmark, suture, fossa) is checked by eye in a screenshot before it ships, and is
+  labelled approximate. If a rule can't place something reliably (e.g. the inion), leave it out.
+
+### Colour
+
+- **One meaning per colour, everywhere** (tokens in `atlas.css`): `--bone`, `--suture`, `--mark` (selected point),
+  `--ori` / `--ins` / `--lig` (muscle origin, insertion, ligament — Okabe–Ito, colour-blind safe), `--cart` / `--centre` /
+  `--plate` (cartilage, secondary ossification centre, growth plate). Never reuse a meaning colour for something else.
+- Bone identity colours (assembled regions): Paul Tol's "light" palette, assigned by `assign_colours.py` so that bones
+  that touch never share a colour; bones are also **named on the model**, so nothing depends on colour alone.
+- Selecting a part shows the rest as faint glass, so deep parts (sphenoid, ethmoid) are visible whole.
+- Check light and dark mode, and that labels stay readable on every bone colour.
 
 ## Adding a module
 

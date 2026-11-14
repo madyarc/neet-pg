@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Skull</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs .chip{font-size:13.5px;padding:6px 14px}
+.group-h{font:600 12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:10px 0 2px}
+.group-h:first-child{margin-top:0}
+.desc{min-height:3em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>The Skull</h1>
+  <p class="lede">Twenty-two bones: eight form the cranium, which houses the brain, and fourteen form the face. All but one
+    are locked together at sutures; the mandible is the only movable bone. Turn the skull, tap a bone, then look at the
+    sutures and inside the cranial cavity.</p>
+</header>
+
+<section class="stack" aria-label="3D skull">
+  <div class="tabs" role="tablist" aria-label="What to show">
+    <button class="chip" role="tab" id="tab-bones" aria-pressed="true">The bones</button>
+    <button class="chip" role="tab" id="tab-sutures" aria-pressed="false">Sutures and meeting points</button>
+    <button class="chip" role="tab" id="tab-inside" aria-pressed="false">Inside: cranial fossae</button>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <div id="v"></div>
+      <div class="vbar" id="views"></div>
+      <div class="vbar">
+        <button class="chip" id="names" aria-pressed="true">Names on the model</button>
+        <button class="chip" id="jaw" aria-pressed="true">Mandible and hyoid</button>
+      </div>
+    </div>
+    <div class="panel stack" id="side">
+      <!-- bones -->
+      <div id="pane-bones" class="stack">
+        <div class="cap key desc" id="bone-desc">Tap a bone on the model or in the list.</div>
+        <div class="legend" id="bone-list"></div>
+        <p class="muted">Each kind of bone has its own colour; bones that touch never share one. Paired bones (left and right) share a colour.</p>
+      </div>
+      <!-- sutures -->
+      <div id="pane-sutures" class="stack" hidden>
+        <div class="cap key desc" id="sut-desc">A suture is an immovable fibrous joint between bones of the skull. Tap a suture or a point.</div>
+        <div class="group-h">Sutures</div>
+        <div class="legend" id="sut-list"></div>
+        <div class="group-h">Where sutures meet</div>
+        <div class="legend" id="pt-list"></div>
+        <p class="muted">Suture lines are where the bones of the model touch <span class="hw">approximate</span>; the points are found from where the named bones meet.</p>
+      </div>
+      <!-- inside -->
+      <div id="pane-inside" class="stack" hidden>
+        <div class="cap key desc" id="fos-desc">The cap of the skull is cut away. The floor of the cranial cavity steps down in three levels, from front to back. Tap a fossa.</div>
+        <div class="legend" id="fos-list"></div>
+        <div class="row"><label class="muted" for="cut">Cut height</label><input type="range" id="cut" min="10" max="60" step="1" value="32" style="flex:1"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Based on: Gray's <i>Anatomy of the Human Body</i> (20th ed.), chapters on the skull, each skull bone, and the exterior and interior of the skull; cross-checked with Wikipedia's articles on each bone, the sutures and the cranial fossae.</p>
+  <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). The model's mouth is slightly open. Suture lines and points are found from where the bones of the model touch, and are approximate.</p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — every statement checked in Gray's 1918 and Wikipedia (see anatomy/DATA-SOURCES.md) ===================== */
+// bone types: key, name, group, description. Colours: tools/bones/assign_colours.py (Paul Tol "light"; touching bones never share)
+const TYPES = [
+  ['frontal', 'Frontal bone', 'cranium', '#EEDD88', 'Single bone. Its vertical part (squama) forms the forehead; its horizontal (orbital) part forms the roofs of the orbits and part of the roof of the nasal cavity.'],
+  ['parietal', 'Parietal bones', 'cranium', '#77AADD', 'Paired. Joined to each other at the sagittal suture, the two form the sides and roof of the cranium.'],
+  ['occipital', 'Occipital bone', 'cranium', '#44BB99', 'Single bone at the back and lower part of the cranium. It is pierced by the foramen magnum, through which the cranial cavity communicates with the vertebral canal.'],
+  ['temporal', 'Temporal bones', 'cranium', '#AAAA00', 'Paired, at the sides and base of the skull. Four parts — squamous, petrous, mastoid and tympanic — plus the styloid process (which Gray counts as a fifth part).'],
+  ['sphenoid', 'Sphenoid bone', 'cranium', '#FFAABB', 'Single bone at the base of the skull, in front of the temporal bones and the basilar part of the occipital. A central body, two greater wings, two lesser wings, and two pterygoid processes that project downward.'],
+  ['ethmoid', 'Ethmoid bone', 'cranium', '#44BB99', 'Single, light and spongy, at the front of the base of the cranium between the two orbits and at the roof of the nose. Its parts: the cribriform plate, the perpendicular plate (the upper part of the nasal septum) and a labyrinth (lateral mass) on each side.'],
+  ['nasal', 'Nasal bones', 'face', '#FFAABB', 'Two small oblong bones side by side at the middle and upper part of the face; together they form the bridge of the nose.'],
+  ['maxilla', 'Maxillae', 'face', '#BBCC33', 'Paired; the two maxillae form the whole of the upper jaw. Each helps form the roof of the mouth, the floor and lateral wall of the nose, and the floor of the orbit.'],
+  ['lacrimal', 'Lacrimal bones', 'face', '#77AADD', 'Paired, small and fragile, at the front of the medial wall of the orbit.'],
+  ['zygomatic', 'Zygomatic bones', 'face', '#EE8866', 'Paired: the cheekbones. Each forms the prominence of the cheek and parts of the lateral wall and floor of the orbit and of the temporal and infratemporal fossae.'],
+  ['palatine', 'Palatine bones', 'face', '#99DDFF', 'Paired, at the back of the nasal cavity between the maxilla and the pterygoid process of the sphenoid. Each helps form the floor and lateral wall of the nasal cavity, the roof of the mouth and the floor of the orbit.'],
+  ['concha', 'Inferior nasal conchae', 'face', '#AAAA00', 'Paired. A scroll-like plate of spongy bone running along the lateral wall of the nasal cavity; the lowest of the three nasal conchae.'],
+  ['vomer', 'Vomer', 'face', '#EEDD88', 'Single, thin bone in the midline. It forms the lower and back part of the nasal septum; the perpendicular plate of the ethmoid forms the upper part.'],
+  ['mandible', 'Mandible', 'face', '#77AADD', 'The lower jaw: the strongest bone of the face and the only movable bone of the skull. A horseshoe-shaped body and two rami.'],
+  ['hyoid', 'Hyoid bone', 'other', '#44BB99', 'Not one of the 22 skull bones, and it touches no other bone. Horseshoe-shaped: a body with greater and lesser horns. It hangs from the styloid processes of the temporal bones by the stylohyoid ligaments.'],
+];
+// short names for labels on the model (the side panel gives full names)
+const SHORT = {frontal: 'Frontal', parietal: 'Parietal', occipital: 'Occipital', temporal: 'Temporal', sphenoid: 'Sphenoid',
+  ethmoid: 'Ethmoid', nasal: 'Nasal', maxilla: 'Maxilla', lacrimal: 'Lacrimal', zygomatic: 'Zygomatic', palatine: 'Palatine',
+  concha: 'Inf. nasal concha', vomer: 'Vomer', mandible: 'Mandible', hyoid: 'Hyoid'};
+// where to look from when a bone is selected (bones deep in the skull can't be seen from "their" side)
+const VIEW_FOR = {sphenoid: [1, -0.2, 0.15], ethmoid: [0.25, -1, 0.1], vomer: [0, 0.15, -1], palatine: [0, 0.1, -1],
+  concha: [0.15, -1, 0], lacrimal: [0.6, -1, 0.1], nasal: [0.3, -1, 0.1], maxilla: [0.2, -1, 0], zygomatic: [0.9, -0.8, 0],
+  temporal: [1, 0, 0], parietal: [0.7, 0, 0.7], hyoid: [0.4, -1, -0.5]};
+const GROUPS = [['cranium', 'Cranium — 8 bones'], ['face', 'Face — 14 bones'], ['other', 'Described with the skull']];
+
+// sutures: key in skull-points.json, description (Gray's 1918, Exterior of the Skull; Wikipedia)
+const SUTURES = [
+  ['coronal', 'Between the frontal bone and the two parietals, running across the top of the skull from side to side.'],
+  ['sagittal', 'Between the two parietal bones, in the midline of the roof.'],
+  ['lambdoid', 'Between the two parietals and the occipital, at the back. Below, it continues as the occipitomastoid suture.'],
+  ['squamosal', 'The squamosal suture joins the squamous part of the temporal bone to the lower border of the parietal; behind, it continues as the short parietomastoid suture (mastoid part of the temporal to the parietal). The model does not separate the two.'],
+  ['occipitomastoid', 'Between the occipital and the mastoid part of the temporal bone; the downward continuation of the lambdoid suture.'],
+  ['sphenoparietal', 'Between the greater wing of the sphenoid and the parietal, at the side of the skull. Its posterior end is the pterion.'],
+  ['sphenosquamosal', 'Between the greater wing of the sphenoid and the squamous part of the temporal bone.'],
+  ['sphenofrontal', 'Between the sphenoid and the frontal bone.'],
+  ['frontonasal', 'Between the frontal bone and the nasal bones. Its mid-point is the nasion.'],
+  ['internasal', 'Between the two nasal bones.'],
+];
+// meeting points: key in skull-points.json, description
+const POINTS = [
+  ['bregma', 'Where the sagittal and coronal sutures meet. It marks the position of the anterior fontanelle in the fetal skull.'],
+  ['lambda', 'Where the sagittal and lambdoid sutures meet. It marks the position of the posterior fontanelle in the fetal skull.'],
+  ['pterion_r', 'The region where four bones meet: frontal, parietal, squamous part of the temporal and greater wing of the sphenoid (Gray places the point at the posterior end of the sphenoparietal suture). The anterior branch of the middle meningeal artery runs beneath it. It is considered the weakest part of the skull, and a fracture here can tear the artery and cause an extradural (epidural) haematoma.'],
+  ['asterion_r', 'Where the lambdoid, parietomastoid and occipitomastoid sutures meet.'],
+  ['nasion', 'The mid-point of the frontonasal suture.'],
+];
+// cranial fossae (Gray's 1918, Interior of the Skull; Wikipedia's articles on each fossa follow Gray)
+const FOSSAE = [
+  ['anterior', 'The highest of the three. Its floor is formed by the orbital plates of the frontal bone, the cribriform plate of the ethmoid, and the lesser wings and front of the body of the sphenoid. It supports the frontal lobes of the brain. Its back edge is the posterior border of the lesser wings of the sphenoid.',
+    ['frontal', 'ethmoid', 'sphenoid']],
+  ['middle', 'Deeper than the anterior fossa; narrow in the middle and wide at the sides. In front: the posterior margins of the lesser wings of the sphenoid. Behind: the upper borders of the petrous parts of the temporal bones and the dorsum sellae. It lodges the temporal lobes of the brain, and in the middle the sella turcica holds the pituitary gland.',
+    ['sphenoid', 'temporal_r', 'temporal_l', 'parietal_r', 'parietal_l']],
+  ['posterior', 'The largest and deepest. Formed by the dorsum sellae and clivus of the sphenoid, the occipital bone, the petrous and mastoid parts of the temporal bones, and the mastoid angles of the parietals. It lodges the cerebellum, pons and medulla oblongata; the foramen magnum is in its centre.',
+    ['occipital', 'temporal_r', 'temporal_l', 'sphenoid', 'parietal_r', 'parietal_l']],
+];
+
+/* ===================== PAGE ===================== */
+const typeOf = k => k.replace(/_(r|l)$/, '');
+const T = Object.fromEntries(TYPES.map(t => [t[0], {name: t[1], group: t[2], colour: t[3], text: t[4]}]));
+const v = new AtlasViewer(document.getElementById('v'));
+let PTS = null, tab = 'bones', selType = null, partNames = {};
+
+const views = [['Front', 'anterior'], ['Left side', 'left'], ['Right side', 'right'], ['Back', 'posterior'], ['From above', 'superior'], ['From below', 'inferior']];
+for (const [label, name] of views) {
+  const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
+  b.onclick = () => viewTo(name); document.getElementById('views').append(b);
+}
+function viewTo(name) {
+  // looking down on the skull, the face is conventionally at the top of the picture
+  if (name === 'superior') v.animate(Math.PI, Math.PI / 2 - 0.001, 1, null);
+  else v.view(name);
+}
+
+function paintBones(focus = null) {
+  for (const k of v.order) { v.setColour(k, T[typeOf(k)].colour); v.setVertexMarks(k, null); }
+  v.setFocus(focus);
+}
+function boneLabels() {
+  if (!document.getElementById('names').getAttribute('aria-pressed').startsWith('t')) return [];
+  // one label per bone type: the first visible part (left/right pairs are labelled once each side)
+  return v.order.filter(k => v.parts.get(k).visible).map(k => ({p: PTS.anchors[k], label: SHORT[typeOf(k)], color: '#3b4a63'}));
+}
+
+/* ----- tab: bones ----- */
+function buildBoneList() {
+  const box = document.getElementById('bone-list'); box.replaceChildren();
+  for (const [g, title] of GROUPS) {
+    const h = document.createElement('div'); h.className = 'group-h'; h.textContent = title; box.append(h);
+    for (const [key, name] of TYPES.filter(t => t[2] === g)) {
+      const parts = v.order.filter(k => typeOf(k) === key);
+      const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+      b.innerHTML = `<i style="background:${T[key].colour}"></i><span>${name}</span><span class="n">${parts.length === 2 ? '×2' : ''}</span>`;
+      b.onclick = () => selectType(selType === key ? null : key, true);
+      box.append(b);
+    }
+  }
+}
+function selectType(key, turn) {
+  selType = key;
+  document.querySelectorAll('#bone-list button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === key));
+  const desc = document.getElementById('bone-desc');
+  if (!key) { desc.textContent = 'Tap a bone on the model or in the list.'; v.setFocus(null); v.setMarkers(boneLabels()); return; }
+  const t = T[key], parts = v.order.filter(k => typeOf(k) === key);
+  desc.innerHTML = `<b>${t.name}.</b> ${t.text}`;
+  v.setFocus(parts);
+  v.setMarkers(parts.map(k => ({p: PTS.anchors[k], label: partNames[k], big: true})));
+  if (turn) {
+    const c = [0, 1, 2].map(i => parts.reduce((s, k) => s + PTS.anchors[k][i], 0) / parts.length);
+    const dir = VIEW_FOR[key] || c.map((x, i) => x - PTS.centre[i]);
+    const big = ['frontal', 'parietal', 'occipital', 'temporal', 'mandible', 'sphenoid'].includes(key);
+    v.face(dir, {zoom: big ? 1 : 1.6, focus: big || parts.length === 2 ? null : c});
+  }
+}
+
+/* ----- tab: sutures ----- */
+function buildSutureLists() {
+  const sl = document.getElementById('sut-list'); sl.replaceChildren();
+  for (const [key] of SUTURES) {
+    const s = PTS.sutures[key]; if (!s) continue;
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--suture)"></i><span>${s.name}</span>`;
+    b.onclick = () => selectSuture(key); sl.append(b);
+  }
+  const pl = document.getElementById('pt-list'); pl.replaceChildren();
+  for (const [key] of POINTS) {
+    const p = PTS.points[key]; if (!p) continue;
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${p.name.replace(' (right)', '')}</span>`;
+    b.onclick = () => selectPoint(key); pl.append(b);
+  }
+}
+function paintSutures(active) {
+  for (const k of v.order) {
+    v.setColour(k, '--bone');
+    const marks = [];
+    for (const [key] of SUTURES) {
+      const s = PTS.sutures[key]; if (!s || !s.parts[k]) continue;
+      marks.push({verts: s.parts[k], colour: key === active ? '--mark' : '--suture'});
+    }
+    marks.sort((a, b) => (a.colour === '--mark') - (b.colour === '--mark'));   // the active one painted last, on top
+    v.setVertexMarks(k, marks);
+  }
+  v.setFocus(null);
+}
+function pressed(listId, key) { document.querySelectorAll(`#${listId} button`).forEach(b => b.setAttribute('aria-pressed', b.dataset.k === key)); }
+function selectSuture(key) {
+  pressed('sut-list', key); pressed('pt-list', null);
+  const s = PTS.sutures[key], text = SUTURES.find(x => x[0] === key)[1];
+  document.getElementById('sut-desc').innerHTML = `<b>${s.name}.</b> ${text}`;
+  paintSutures(key);
+  // face the suture: mean of its vertices
+  let n = 0; const c = [0, 0, 0];
+  for (const [pk, verts] of Object.entries(s.parts)) { const pos = v.parts.get(pk).m.pos; for (const i of verts) { for (let k = 0; k < 3; k++) c[k] += pos[i * 3 + k]; n++; } }
+  const m = c.map(x => x / n), dir = m.map((x, i) => x - PTS.centre[i]);
+  if (Math.abs(dir[0]) > 30 && key !== 'coronal' && key !== 'lambdoid') dir[0] = Math.sign(dir[0]) * Math.max(Math.abs(dir[0]), 1);
+  v.face(key === 'sagittal' || key === 'coronal' ? [0, -0.3, 1] : key === 'lambdoid' ? [0, 1, 0.5] : dir, {zoom: 1.2});
+  v.setMarkers([]);
+}
+function selectPoint(key) {
+  pressed('pt-list', key); pressed('sut-list', null);
+  const p = PTS.points[key], text = POINTS.find(x => x[0] === key)[1];
+  document.getElementById('sut-desc').innerHTML = `<b>${p.name.replace(' (right)', '')}.</b> ${text}`;
+  paintSutures(null);
+  const both = key.endsWith('_r') ? [p, PTS.points[key.replace('_r', '_l')]].filter(Boolean) : [p];
+  v.setMarkers(both.map(q => ({p: q.p, label: q.name.replace(/ \((right|left)\)/, ''), big: true, always: true})));
+  const dir = p.p.map((x, i) => x - PTS.centre[i]);
+  v.face(key === 'bregma' ? [0, -0.6, 1] : key === 'lambda' ? [0, 1, 0.6] : dir, {zoom: 1.6, focus: p.p});
+}
+
+/* ----- tab: inside ----- */
+function buildFossaList() {
+  const box = document.getElementById('fos-list'); box.replaceChildren();
+  for (const [key] of FOSSAE) {
+    const f = PTS.fossae[key]; if (!f) continue;
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${f.name}</span>`;
+    b.onclick = () => selectFossa(key); box.append(b);
+  }
+}
+function cutZ() { return PTS.points.nasion.p[2] + +document.getElementById('cut').value; }
+function selectFossa(key) {
+  pressed('fos-list', key);
+  const [, text, bones] = FOSSAE.find(f => f[0] === key);
+  document.getElementById('fos-desc').innerHTML = `<b>${PTS.fossae[key].name}.</b> ${text}`;
+  v.setFocus(key ? v.order.filter(k => bones.includes(k) || bones.includes(typeOf(k))) : null);
+  v.setMarkers(FOSSAE.map(([k]) => ({p: PTS.fossae[k].p, label: PTS.fossae[k].name.replace(' cranial fossa', ''), big: k === key, always: true})));
+}
+
+/* ----- tabs ----- */
+function setTab(name) {
+  tab = name;
+  for (const t of ['bones', 'sutures', 'inside']) {
+    document.getElementById('tab-' + t).setAttribute('aria-pressed', t === name);
+    document.getElementById('pane-' + t).hidden = t !== name;
+  }
+  if (name === 'bones') { v.setClip(null); paintBones(); selectType(null); viewTo('anterior'); }
+  if (name === 'sutures') { v.setClip(null); paintSutures(null); v.setMarkers([]); pressed('sut-list', null); pressed('pt-list', null); viewTo('left'); }
+  if (name === 'inside') {
+    paintBones(); v.setClip([0, 0, 1], cutZ());
+    v.setMarkers(FOSSAE.map(([k]) => ({p: PTS.fossae[k].p, label: PTS.fossae[k].name.replace(' cranial fossa', ''), always: true})));
+    pressed('fos-list', null);
+    v.animate(Math.PI, 1.3, 1.1, null);        // from above, the face toward the top of the picture
+  }
+}
+for (const t of ['bones', 'sutures', 'inside']) document.getElementById('tab-' + t).onclick = () => setTab(t);
+document.getElementById('cut').oninput = () => v.setClip([0, 0, 1], cutZ());
+document.getElementById('names').onclick = function () {
+  const on = this.getAttribute('aria-pressed') !== 'true'; this.setAttribute('aria-pressed', on);
+  if (tab === 'bones' && !selType) v.setMarkers(boneLabels());
+};
+document.getElementById('jaw').onclick = function () {
+  const on = this.getAttribute('aria-pressed') !== 'true'; this.setAttribute('aria-pressed', on);
+  v.setVisible('mandible', on); v.setVisible('hyoid', on);
+  if (tab === 'bones' && !selType) v.setMarkers(boneLabels());
+};
+
+v.onPick = hit => {
+  if (!hit) return;
+  if (tab === 'bones') selectType(typeOf(hit.key), false);
+  else if (tab === 'inside') document.getElementById('fos-desc').innerHTML = `<b>${partNames[hit.key]}.</b> ${T[typeOf(hit.key)].text}`;
+  else document.getElementById('sut-desc').innerHTML = `<b>${partNames[hit.key]}.</b> ${T[typeOf(hit.key)].text}`;
+};
+
+(async () => {
+  const man = await v.load('../models/skull/skull.json');
+  PTS = await (await fetch('../models/skull/skull-points.json')).json();
+  for (const p of man.parts) partNames[p.key] = p.name;
+  buildBoneList(); buildSutureLists(); buildFossaList();
+  setTab('bones');
+  v.setMarkers(boneLabels());
+  window.ready = true;
+})().catch(e => { document.getElementById('bone-desc').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

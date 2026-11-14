@@ -1,0 +1,74 @@
+/* Shared styles for the anatomy pages. Colour tokens carry ONE meaning each across every page:
+   --bone (plain bone), --ori / --ins / --lig (muscle origin, muscle insertion, ligament — Okabe–Ito, colour-blind safe),
+   --suture (suture lines), --mark (selected point), --cart / --centre / --plate (cartilage, secondary ossification
+   centre, growth plate). Bone-identity colours (one per bone type on the assembled skull) live in each page's data. */
+html,body{margin:0} [hidden]{display:none!important}
+:root{
+  --bg:#f5f6f9; --surface:#ffffff; --ink:#1a2130; --muted:#5a6375; --line:#dce0e8;
+  --accent:#2c56cc; --flag:#cf3f33; --ok:#2d8a4e;
+  --bone:#e8dfc8; --suture:#2b2f38; --mark:#cf3f33;
+  --ins:#d55e00; --ori:#0072b2; --lig:#009e73; --clin:#cc3311;
+  --cart:#c3cad3; --centre:#cc79a7; --plate:#3b4a63;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c;
+  --accent:#7d9dff; --flag:#ff7b6f; --ok:#5cc983;
+  --bone:#d9cfb6; --suture:#14171d; --mark:#ff7b6f;
+  --ins:#f28c3c; --ori:#56b4e9; --lig:#3cc49a; --clin:#ff7b6f;
+  --cart:#8d96a3; --centre:#e08fbd; --plate:#1d2533; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c;
+  --accent:#7d9dff; --flag:#ff7b6f; --ok:#5cc983;
+  --bone:#d9cfb6; --suture:#14171d; --mark:#ff7b6f;
+  --ins:#f28c3c; --ori:#56b4e9; --lig:#3cc49a; --clin:#ff7b6f;
+  --cart:#8d96a3; --centre:#e08fbd; --plate:#1d2533; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:30px}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,4vw,38px);line-height:1.1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h2{font-family:var(--f-display);font-weight:600;font-size:21px;margin:0 0 4px;text-wrap:balance}
+h3{font-size:15px;margin:0 0 4px}
+p{margin:0}
+a{color:var(--accent)}
+.back a{font-size:14px;color:var(--muted);text-decoration:none} .back a:hover{color:var(--accent)}
+.lede{max-width:72ch;color:var(--muted)}
+.muted{color:var(--muted);font-size:13.5px}
+.hw{font:500 11px var(--f-mono);color:var(--flag);border:1px solid var(--flag);border-radius:4px;padding:0 5px;white-space:nowrap}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.stack{display:flex;flex-direction:column;gap:12px}
+.split{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.split{grid-template-columns:minmax(0,1fr)}}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 12.5px var(--f-body);background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:4px 11px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible,.legend button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{font:500 13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cap{border-left:3px solid var(--line);padding:2px 0 2px 10px;font-size:14px;max-width:80ch}
+.cap.key{border-left-color:var(--accent)} .cap.warn{border-left-color:var(--clin)}
+.swatch{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.tag{font:500 10.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+/* 3D viewer */
+.viewer{position:relative;width:100%;height:min(72vh,600px);min-height:360px;border-radius:8px;background:var(--bg);
+  touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden;cursor:grab}
+.viewer:active{cursor:grabbing}
+.viewer canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.viewer svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.viewer svg text{font:600 12.5px var(--f-body);fill:var(--ink);paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
+.viewer .hint{position:absolute;left:10px;bottom:8px;font:500 11.5px var(--f-mono);color:var(--muted);pointer-events:none}
+.viewer .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font:500 13px var(--f-mono)}
+.viewer .nogl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;color:var(--muted)}
+.vbar{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.legend{display:flex;flex-direction:column;gap:2px;font-size:13.5px}
+.legend button{display:flex;gap:8px;align-items:center;text-align:left;background:none;border:1px solid transparent;border-radius:6px;padding:3px 6px;color:var(--ink);font:inherit;cursor:pointer}
+.legend button[aria-pressed="true"]{border-color:var(--line);background:var(--bg)}
+.legend i{flex:none;width:13px;height:13px;border-radius:3px;border:1px solid rgba(0,0,0,.15)}
+.legend .n{font:500 11px var(--f-mono);color:var(--muted);margin-left:auto}
+.cols{columns:2 220px;column-gap:16px}
+dl.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+dl.facts dt{font-weight:600} dl.facts dd{margin:0}
+footer{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:12px}

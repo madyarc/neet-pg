@@ -8,13 +8,12 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 html,body{margin:0} [hidden]{display:none!important}
-/* Layout: (1) explore the bone in 3D: landmarks, find-it quiz  (2) which side is it?  (3) attachments + clinical
-   (4) ossification stages  (5) predict, then check  — every 3D panel is one BoneViewer instance */
+/* Layout: (1) explore the bone in 3D: landmarks  (2) left or right  (3) attachments + clinical  (4) ossification stages  — every 3D panel is one BoneViewer instance */
 :root{
   --bg:#f5f6f9; --surface:#ffffff; --ink:#1a2130; --muted:#5a6375; --line:#dce0e8;
   --accent:#2c56cc; --flag:#cf3f33; --ok:#2d8a4e;
-  --bone:#e8dfc8; --cart:#9cc3e6; --centre:#e0802a; --plate:#3b4a63; --mark:#cf3f33;
-  --ins:#c2410c; --ori:#2563eb; --lig:#15803d;
+  --bone:#e8dfc8; --cart:#c3cad3; --centre:#cc79a7; --plate:#3b4a63; --mark:#cf3f33;
+  --ins:#d55e00; --ori:#0072b2; --lig:#009e73; --clin:#cc3311;
   --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
   --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
@@ -22,13 +21,13 @@ html,body{margin:0} [hidden]{display:none!important}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c;
   --accent:#7d9dff; --flag:#ff7b6f; --ok:#5cc983;
-  --bone:#d9cfb6; --cart:#6fa3d6; --centre:#f0a04b; --plate:#1d2533; --mark:#ff7b6f;
-  --ins:#fb923c; --ori:#7d9dff; --lig:#5cc983; color-scheme:dark}}
+  --bone:#d9cfb6; --cart:#8d96a3; --centre:#e08fbd; --plate:#1d2533; --mark:#ff7b6f;
+  --ins:#f28c3c; --ori:#56b4e9; --lig:#3cc49a; --clin:#ff7b6f; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c;
   --accent:#7d9dff; --flag:#ff7b6f; --ok:#5cc983;
-  --bone:#d9cfb6; --cart:#6fa3d6; --centre:#f0a04b; --plate:#1d2533; --mark:#ff7b6f;
-  --ins:#fb923c; --ori:#7d9dff; --lig:#5cc983; color-scheme:dark}
+  --bone:#d9cfb6; --cart:#8d96a3; --centre:#e08fbd; --plate:#1d2533; --mark:#ff7b6f;
+  --ins:#f28c3c; --ori:#56b4e9; --lig:#3cc49a; --clin:#ff7b6f; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
@@ -92,8 +91,8 @@ footer{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;ga
 
 <header class="stack">
   <h1>The Femur</h1>
-  <p class="lede">The longest and strongest bone in the skeleton. Turn it in 3D, find its landmarks, tell a left from a right,
-    see what attaches where, and watch its five ossification centres appear and fuse.</p>
+  <p class="lede">The longest and strongest bone in the skeleton. Turn it in 3D, look at its landmarks, see how a left is
+    told from a right, what attaches where, and how its five ossification centres appear and fuse.</p>
 </header>
 
 <!-- 1. Explore -->
@@ -106,20 +105,9 @@ footer{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;ga
       <div class="vbar" id="vbar-explore"></div>
     </div>
     <div class="panel stack">
-      <div class="row" role="group" aria-label="Mode">
-        <button class="chip" id="mode-explore" aria-pressed="true">Explore</button>
-        <button class="chip" id="mode-find" aria-pressed="false">Find it (quiz)</button>
-      </div>
       <div id="explore-pane" class="stack">
         <div class="chips" id="lm-chips"></div>
         <div class="cap key" id="lm-cap">Tap a landmark name to see where it is and what it does.</div>
-      </div>
-      <div id="find-pane" class="stack" hidden>
-        <p class="stage" id="find-ask"></p>
-        <p class="muted">Tap the spot on the bone. Turn it first if you need to.</p>
-        <div class="verdict" id="find-verdict">Waiting for your tap…</div>
-        <div class="row"><button class="btn" id="find-show">Show me</button><button class="btn primary" id="find-next">Next</button>
-          <span class="muted" id="find-score"></span></div>
       </div>
       <p class="muted">Landmark points are placed on a simplified 3D model <span class="hw">approximate</span>.
         Fine ridges (linea aspera, gluteal tuberosity) are smoothed on this mesh; their points mark where they run.</p>
@@ -129,29 +117,26 @@ footer{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;ga
 
 <!-- 2. Side -->
 <section class="stack" aria-labelledby="h-side">
-  <h2 id="h-side">Which side is it?</h2>
-  <p class="lede">A classic viva and exam question. The bone below is a left or a right femur, turned at random. Decide, then check.</p>
+  <h2 id="h-side">Left or right?</h2>
+  <p class="lede">Three features fix which side a femur comes from. Switch between a right and a left femur and look at them.</p>
   <div class="split">
     <div class="panel">
       <div class="viewer short" id="v-side"></div>
+      <div class="vbar">
+        <button class="chip" id="side-r" aria-pressed="true">Right femur</button>
+        <button class="chip" id="side-l" aria-pressed="false">Left femur</button>
+        <button class="chip" id="side-front" aria-pressed="true">From the front</button>
+        <button class="chip" id="side-back" aria-pressed="false">From behind</button>
+      </div>
     </div>
     <div class="panel stack">
-      <div class="row">
-        <button class="btn" id="side-left">Left femur</button>
-        <button class="btn" id="side-right">Right femur</button>
-        <button class="btn primary" id="side-next">Another</button>
-        <span class="muted" id="side-score"></span>
-      </div>
-      <div class="verdict" id="side-verdict">Turn it until you can see the head and the back of the shaft.</div>
-      <div id="side-rules" hidden>
-        <h3>How to side it</h3>
-        <ol class="steps">
-          <li><b>Upper end:</b> the end with the head (the lower end, with the two condyles, is larger).</li>
-          <li><b>Medial:</b> the head points medially — upward, medialward and a little forward.</li>
-          <li><b>Posterior:</b> the linea aspera runs down the back, and the condyles project backward with a deep notch between them.</li>
-          <li>Hold it as if it were in your own thigh — head up and pointing toward your midline, linea aspera at the back. The thigh it fits is its side.</li>
-        </ol>
-      </div>
+      <ol class="steps">
+        <li><b>Upper end</b> is the end with the head; the lower end, with the two condyles, is the larger.</li>
+        <li><b>Medial</b> is where the head points: upward, medially and a little forward.</li>
+        <li><b>Posterior</b> is the side with the linea aspera; the condyles also project backward, with a deep notch between them.</li>
+      </ol>
+      <div class="cap key" id="side-cap"></div>
+      <p class="muted">Hold it as if it were in your own thigh: head up and pointing toward your midline, linea aspera at the back. The thigh it fits is its side.</p>
     </div>
   </div>
 </section>
@@ -159,7 +144,10 @@ footer{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;ga
 <!-- 3. Attachments + clinical -->
 <section class="stack" aria-labelledby="h-att">
   <h2 id="h-att">What attaches where</h2>
-  <p class="lede">Pick a region; each attachment gets its own colour, and the list says whether it is an origin, an insertion or a ligament.
+  <p class="lede">Pick a region. Colour tells you the kind of attachment —
+    <span class="swatch" style="background:var(--ori)"></span>origin of a muscle ·
+    <span class="swatch" style="background:var(--ins)"></span>insertion of a muscle ·
+    <span class="swatch" style="background:var(--lig)"></span>ligament — and each one is named on the bone.
     Tap an item to bring it round.</p>
   <div class="split">
     <div class="panel">
@@ -200,12 +188,6 @@ footer{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;ga
   </div>
 </section>
 
-<!-- 5. Predict, then check -->
-<section class="stack" aria-labelledby="h-q">
-  <h2 id="h-q">Predict, then check</h2>
-  <div class="qgrid" id="quiz"></div>
-</section>
-
 <footer>
   <p>Based on: Gray's <i>Anatomy of the Human Body</i> (20th ed.), chapter on the femur; Moore, <i>Clinically Oriented Anatomy</i> (blood supply of the head and neck).</p>
   <p>Models used: 3D bone from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified mesh; the simplified mesh on this page is shared under the same licence). Landmark points, attachment areas and ossification regions are drawn on the model by hand and are approximate.</p>
@@ -216,7 +198,7 @@ footer{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;ga
 <script>
 "use strict";
 /* ===================== DATA (check against Gray's, 20th ed., femur) ===================== */
-// Landmarks: key = point in the mesh data (found by tools/bones/build_femur.py), name, description, tolerance for "find it" (mm)
+// Landmarks: key = point in the mesh data (found by tools/bones/build_femur.py), name, description, tap tolerance (mm)
 const LANDMARKS = [
   ['head', 'Head', 'Globular, rather more than a hemisphere. Directed upward, medially and a little forward; articulates with the acetabulum.', 22],
   ['fovea', 'Fovea capitis', 'Ovoid pit a little below and behind the centre of the head, not covered by cartilage. Attachment of the ligament of the head of the femur (ligamentum teres).', 14],
@@ -304,28 +286,6 @@ const OSS = [
   ['After puberty (next)', 'Then the greater trochanter joins.', 'all', 1, 1, 2, 2],
   ['After puberty (next)', 'Then the head joins.', 'all', 1, 2, 2, 2],
   ['About the 20th year', 'Last, the lower end joins the shaft — the first to appear is the last to fuse.', 'all', 2, 2, 2, 2],
-];
-
-// Predict, then check. [question, [options], index of correct option, landmark to show, why]
-const QUIZ = [
-  ['Which muscle is inserted into the trochanteric fossa?', ['Obturator externus', 'Obturator internus', 'Piriformis', 'Quadratus femoris'], 0, 'trochanteric_fossa',
-   'Obturator internus and the gemelli insert just above and in front of the fossa; piriformis on the upper border; quadratus femoris on the intertrochanteric crest.'],
-  ['The summit of the lesser trochanter gives insertion to…', ['Psoas major', 'Gluteus minimus', 'Adductor magnus', 'Obturator externus'], 0, 'lesser_trochanter',
-   'Iliacus inserts just below it, between the pectineal line and the medial ridge.'],
-  ['Which epiphyseal centre of the femur appears first?', ['Lower end (9th month of fetal life)', 'Head (end of 1st year)', 'Greater trochanter (4th year)', 'Lesser trochanter (13th–14th year)'], 0, 'patellar_surface',
-   'It is present before birth. The shaft’s primary centre appears much earlier, at about the 7th week of fetal life.'],
-  ['Which part of the femur is the last to unite with the shaft?', ['Lower end', 'Head', 'Greater trochanter', 'Lesser trochanter'], 0, 'medial_condyle',
-   'Union is in the reverse order of appearance; the lower end joins at about the 20th year.'],
-  ['In the adult, the neck of the femur makes an angle with the shaft of about…', ['125°', '90°', '145°', '105°'], 0, 'neck',
-   'Widest in infancy, it lessens during growth; in the female it is nearer a right angle.'],
-  ['The fovea capitis gives attachment to…', ['Ligament of the head of the femur', 'Iliofemoral ligament', 'Obturator externus', 'Tibial collateral ligament'], 0, 'fovea',
-   'The fovea is the one part of the head not covered by cartilage.'],
-  ['On the femur, the anterior cruciate ligament is attached to…', ['Upper, back part of the lateral wall of the intercondylar fossa', 'Lower, front part of the medial wall of the intercondylar fossa', 'Medial epicondyle', 'Adductor tubercle'], 0, 'intercondylar_fossa',
-   'The posterior cruciate is on the opposite (medial) wall, lower and in front.'],
-  ['After a fracture of the femoral neck the head may undergo avascular necrosis because of damage to branches of the…', ['Medial circumflex femoral artery', 'Femoral artery', 'Popliteal artery', 'Lateral plantar artery'], 0, 'neck',
-   'Its posterior retinacular branches carry most of the blood to the head and neck.'],
-  ['Popliteus arises from…', ['The depression just below the lateral epicondyle', 'The adductor tubercle', 'The medial epicondyle', 'The gluteal tuberosity'], 0, 'lateral_epicondyle',
-   'Its tendon lies in a groove on the lateral condyle: the oblique groove in flexion, the vertical groove in extension.'],
 ];
 
 /* ===================== GEOMETRY ===================== */
@@ -586,23 +546,42 @@ class BoneViewer {
   setMarkers(list) { this.markers = list; this.draw(); }
   drawMarkers() {
     const svg = this.svg; svg.replaceChildren();
+    const dots = [], labels = [];
     for (const m of this.markers) {
       const q = this.toCam(m.p), [sx, sy] = this.toScreen(q);
       if (sx < -20 || sy < -20 || sx > this.w + 20 || sy > this.h + 20) continue;
       const h = this.hitAt(q[0], q[2]);
       const hidden = h && q[1] > h.depth + 3;
       if (hidden && !m.always) continue;
-      const g = document.createElementNS(SVGNS, 'g'); g.setAttribute('opacity', hidden ? .35 : 1);
-      const c = document.createElementNS(SVGNS, 'circle');
-      c.setAttribute('cx', sx); c.setAttribute('cy', sy); c.setAttribute('r', m.big ? 7 : 4.5);
-      c.setAttribute('fill', m.color || css('--mark')); c.setAttribute('stroke', css('--surface')); c.setAttribute('stroke-width', 2);
-      g.append(c);
-      if (m.label && this.labelsOn) {
-        const t = document.createElementNS(SVGNS, 'text'); const left = sx > this.w * .62;
-        t.setAttribute('x', left ? sx - 10 : sx + 10); t.setAttribute('y', sy + 4); t.setAttribute('text-anchor', left ? 'end' : 'start');
-        t.textContent = m.label; g.append(t);
+      dots.push({m, sx, sy, hidden});
+    }
+    // labels: right of the dot (left of it near the right edge); move down/up in 15 px steps until clear
+    const boxes = [], overlaps = (b) => boxes.some(o => b.x0 < o.x1 && b.x1 > o.x0 && b.y0 < o.y1 && b.y1 > o.y0);
+    for (const d of dots) boxes.push({x0: d.sx - 6, x1: d.sx + 6, y0: d.sy - 6, y1: d.sy + 6});
+    for (const d of [...dots].sort((a, b) => a.sy - b.sy)) {
+      if (!d.m.label || !this.labelsOn) continue;
+      const wdt = d.m.label.length * 7 + 6, pref = d.sx > this.w * .6;
+      let best = null;
+      for (const dy of [0, 15, -15, 30, -30, 45, -45, 60, -60, 75, -75]) {
+        for (const left of [pref, !pref]) {
+          const y = d.sy + dy, b = left ? {x0: d.sx - 12 - wdt, x1: d.sx - 8, y0: y - 9, y1: y + 7} : {x0: d.sx + 8, x1: d.sx + 12 + wdt, y0: y - 9, y1: y + 7};
+          if (b.x0 >= 2 && b.x1 <= this.w - 2 && !overlaps(b)) { best = {b, y, left}; break; }
+        }
+        if (best) break;
       }
-      svg.append(g);
+      if (!best) continue;              // no room: the dot stays, the name shows when the item is tapped
+      boxes.push(best.b); labels.push({d, left: best.left, y: best.y});
+    }
+    const mk = (tag, attrs) => { const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
+    for (const {d, left, y} of labels) if (Math.abs(y - d.sy) > 1) {
+      svg.append(mk('line', {x1: d.sx, y1: d.sy, x2: left ? d.sx - 10 : d.sx + 10, y2: y - 3, stroke: css('--muted'), 'stroke-width': 1, opacity: d.hidden ? .35 : .8}));
+    }
+    for (const d of dots) {
+      svg.append(mk('circle', {cx: d.sx, cy: d.sy, r: d.m.big ? 7 : 4.5, fill: d.m.color || css('--mark'), stroke: css('--surface'), 'stroke-width': 2, opacity: d.hidden ? .35 : 1}));
+    }
+    for (const {d, left, y} of labels) {
+      const t = mk('text', {x: left ? d.sx - 10 : d.sx + 10, y: y + 4, 'text-anchor': left ? 'end' : 'start', opacity: d.hidden ? .35 : 1});
+      t.textContent = d.m.label; svg.append(t);
     }
   }
   // turn so that model-space direction n (right-femur frame) faces the viewer
@@ -717,86 +696,39 @@ for (const [k, name] of LANDMARKS) {
 }
 exploreMarkers();
 
-// find-it quiz
-let mode = 'explore', target = null, findTries = 0, findRight = 0, findDone = false;
-const findAsk = document.getElementById('find-ask'), findVerdict = document.getElementById('find-verdict'), findScore = document.getElementById('find-score');
-let findQueue = [];
-function nextFind() {
-  if (!findQueue.length) findQueue = shuffle(LANDMARKS.map(l => l[0]));
-  target = findQueue.pop(); findDone = false;
-  findAsk.textContent = `Tap the ${lmName[target].toLowerCase()}`;
-  findVerdict.textContent = 'Waiting for your tap…';
-  vE.setMarkers([]); vE.reset();
-}
-function setMode(m) {
-  mode = m;
-  document.getElementById('mode-explore').setAttribute('aria-pressed', m === 'explore');
-  document.getElementById('mode-find').setAttribute('aria-pressed', m === 'find');
-  document.getElementById('explore-pane').hidden = m !== 'explore';
-  document.getElementById('find-pane').hidden = m !== 'find';
-  if (m === 'find') nextFind(); else { exploreMarkers(); }
-}
-document.getElementById('mode-explore').onclick = () => setMode('explore');
-document.getElementById('mode-find').onclick = () => setMode('find');
-document.getElementById('find-next').onclick = nextFind;
-document.getElementById('find-show').onclick = () => {
-  if (!target) return;
-  vE.setMarkers([{p: GEO.L[target], label: lmName[target], big: true, always: true}]);
-  vE.face(lmDir(target), {zoom: 1.6, focus: GEO.L[target]});
-  if (!findDone) { findDone = true; findTries++; findScore.textContent = `${findRight} / ${findTries}`; }
-  findVerdict.innerHTML = `Here is the <b>${lmName[target].toLowerCase()}</b>. ${LANDMARKS.find(l => l[0] === target)[2]}`;
-};
 vE.onTap = hit => {
   if (!hit) return;
-  if (mode === 'explore') {
-    let best = null, bd = 1e9;
-    for (const [k, , , tol] of LANDMARKS) { const d = dist(hit.p, GEO.L[k]); if (d < tol && d < bd) { bd = d; best = k; } }
-    if (best) showLandmark(best, false); else capE.textContent = 'No named landmark right there — try nearer one of the dots.';
-    return;
-  }
-  if (findDone) return;
-  const [, , text, tol] = LANDMARKS.find(l => l[0] === target);
-  const d = dist(hit.p, GEO.L[target]);
-  findDone = true; findTries++;
-  // the nearest landmark to the tap, to say what they hit instead
-  let near = null, nd = 1e9; for (const [k] of LANDMARKS) { const dd = dist(hit.p, GEO.L[k]); if (dd < nd) { nd = dd; near = k; } }
-  if (d <= tol) { findRight++; findVerdict.innerHTML = `<b style="color:var(--ok)">Yes.</b> ${text}`; }
-  else findVerdict.innerHTML = `<b style="color:var(--flag)">Not quite</b> — that is ${Math.round(d / 10)} cm away${near !== target && nd < 25 ? `, nearer the ${lmName[near].toLowerCase()}` : ''}. The marker shows the ${lmName[target].toLowerCase()}.`;
-  vE.setMarkers([{p: hit.p, color: css('--muted')}, {p: GEO.L[target], label: lmName[target], big: true, always: true, color: d <= tol ? css('--ok') : css('--mark')}]);
-  findScore.textContent = `${findRight} / ${findTries}`;
+  let best = null, bd = 1e9;
+  for (const [k, , , tol] of LANDMARKS) { const d = dist(hit.p, GEO.L[k]); if (d < tol && d < bd) { bd = d; best = k; } }
+  if (best) showLandmark(best, false); else capE.textContent = 'No named landmark right there — tap nearer one of the dots.';
 };
 
-/* ===================== 2. WHICH SIDE ===================== */
+/* ===================== 2. LEFT OR RIGHT ===================== */
 const vS = new BoneViewer(document.getElementById('v-side'));
-let sideIsLeft = false, sideAnswered = false, sideRight = 0, sideTries = 0;
-const sideVerdict = document.getElementById('side-verdict');
-function newSide() {
-  sideIsLeft = Math.random() < .5; sideAnswered = false; vS.mirror = sideIsLeft;
-  vS.yaw = Math.random() * 2 * Math.PI; vS.pitch = (Math.random() - .5) * .9; vS.zoom = 1; vS.pan = [0, 0];
-  vS.setMarkers([]); vS.draw();
-  sideVerdict.textContent = 'Turn it until you can see the head and the back of the shaft.';
-  document.getElementById('side-rules').hidden = true;
-}
-function answerSide(left) {
-  if (sideAnswered) return; sideAnswered = true; sideTries++;
-  const ok = left === sideIsLeft; if (ok) sideRight++;
-  document.getElementById('side-score').textContent = `${sideRight} / ${sideTries}`;
-  sideVerdict.innerHTML = `${ok ? '<b style="color:var(--ok)">Right.</b>' : '<b style="color:var(--flag)">No —</b>'} It is a <b>${sideIsLeft ? 'left' : 'right'}</b> femur. Now seen from behind: the head points to your ${sideIsLeft ? 'right' : 'left'}, toward the body\u2019s midline.`;
-  document.getElementById('side-rules').hidden = false;
-  vS.setMarkers([{p: GEO.L.head, label: 'Head (medial)', always: true}, {p: GEO.L.linea_aspera, label: 'Linea aspera (posterior)', always: true},
+let sideLeft = false, sideFrom = 'anterior';
+function sideShow() {
+  vS.mirror = sideLeft;
+  [['side-r', !sideLeft], ['side-l', sideLeft], ['side-front', sideFrom === 'anterior'], ['side-back', sideFrom === 'posterior']]
+    .forEach(([id, on]) => document.getElementById(id).setAttribute('aria-pressed', on));
+  vS.setMarkers([{p: GEO.L.head, label: 'Head: medial', always: true}, {p: GEO.L.linea_aspera, label: 'Linea aspera: posterior', always: true},
     {p: GEO.L.intercondylar_fossa, label: 'Condyles project backward', always: true}]);
-  vS.view('posterior');
+  vS.view(sideFrom);
+  // the head points to the body's midline: from the front that is the viewer's right for a right femur, from behind the viewer's left
+  const side = sideLeft ? 'left' : 'right';
+  const towards = (sideFrom === 'anterior') === !sideLeft ? 'right' : 'left';
+  document.getElementById('side-cap').innerHTML = `A <b>${side}</b> femur seen ${sideFrom === 'anterior' ? 'from the front' : 'from behind'}: the head points to your <b>${towards}</b>, toward the body\u2019s midline.`;
 }
-document.getElementById('side-left').onclick = () => answerSide(true);
-document.getElementById('side-right').onclick = () => answerSide(false);
-document.getElementById('side-next').onclick = newSide;
-newSide();
+document.getElementById('side-r').onclick = () => { sideLeft = false; sideShow(); };
+document.getElementById('side-l').onclick = () => { sideLeft = true; sideShow(); };
+document.getElementById('side-front').onclick = () => { sideFrom = 'anterior'; sideShow(); };
+document.getElementById('side-back').onclick = () => { sideFrom = 'posterior'; sideShow(); };
+sideShow();
 
 /* ===================== 3. ATTACHMENTS ===================== */
 const vA = new BoneViewer(document.getElementById('v-att'));
 viewButtons(document.getElementById('vbar-att'), vA);
-const TYPE = {I: ['--ins', 'insertion'], O: ['--ori', 'origin'], L: ['--lig', 'ligament'], C: ['--flag', 'clinical']};
-const PAL = ['#d1495b', '#2e86ab', '#e09f3e', '#3a9d5d', '#8e5bd6', '#c2185b', '#00838f', '#7c6f64'];
+const TYPE = {I: ['--ins', 'insertion'], O: ['--ori', 'origin'], L: ['--lig', 'ligament'], C: ['--clin', 'clinical']};
+const TYPES = ['I', 'O', 'L', 'C'];
 // an item's shape: {indices} -> vertex area; {path} -> tube along the points; [points] -> spots
 const shapeCache = new Map();
 function shapeFor(item) {
@@ -811,7 +743,11 @@ function shapeFor(item) {
     const centre = [0, 1, 2].map(k => pts.reduce((s, p) => s + p[k], 0) / pts.length);
     const n = [0, 0, 0];
     for (const p of pts) { const v = G.nearIdx(p); for (let k = 0; k < 3; k++) n[k] += GEO.nrm[v * 3 + k]; }
-    shapeCache.set(item, {caps, verts, centre, n, big: verts ? verts.size > 300 : false});
+    // where to put the name: a point on the surface of the area
+    let labelAt;
+    if (verts) { let bd = 1e18; for (const v of verts) { const d = dist(GEO.P(v), centre); if (d < bd) { bd = d; labelAt = GEO.P(v); } } }
+    else labelAt = sh.path ? sh.path[Math.floor(sh.path.length / 2)] : caps[0].a;
+    shapeCache.set(item, {caps, verts, centre, n, labelAt, big: verts ? verts.size > 300 : false});
   }
   return shapeCache.get(item);
 }
@@ -823,12 +759,11 @@ function showGroup(gi) {
   legend.replaceChildren();
   attGroup.items.forEach((it, i) => {
     const b = document.createElement('button'); b.setAttribute('aria-pressed', 'false');
-    b.innerHTML = `<i style="background:${PAL[i % PAL.length]}"></i><span><span>${it[0]}</span><br><span class="t" style="color:var(${TYPE[it[1]][0]})">${TYPE[it[1]][1]}</span></span>`;
+    b.innerHTML = `<i style="background:var(${TYPE[it[1]][0]})"></i><span><span>${it[0]}</span><br><span class="t" style="color:var(${TYPE[it[1]][0]})">${TYPE[it[1]][1]}</span></span>`;
     b.onclick = () => focusItem(i); legend.append(b);
   });
   attHint();
   paintAtt();
-  vA.setMarkers([]);
   vA.face(attGroup.view, {zoom: attGroup.zoom, focus: attGroup.focus ? GEO.L[attGroup.focus] : null, pitchK: 1});
   if (attGroup.clinical) focusItem(0);
 }
@@ -836,24 +771,25 @@ function attHint() {
   attCap.className = 'cap'; attCap.textContent = `${attGroup.items.length} ${attGroup.clinical ? 'items' : 'attachments'}. Tap one to bring it round.`;
 }
 function paintAtt() {
-  const col = new Map(), caps = [];
+  const col = new Map(), caps = [], marks = [];
   attGroup.items.forEach((it, i) => { if (attFocus !== null && attFocus !== i) return;
-    const sh = shapeFor(it);
-    if (sh.verts) for (const v of sh.verts) col.set(v, PAL[i % PAL.length]);
-    for (const c of sh.caps) caps.push({...c, c: i % PAL.length});
+    const sh = shapeFor(it), t = TYPES.indexOf(it[1]);
+    if (sh.verts) for (const v of sh.verts) col.set(v, TYPE[it[1]][0]);
+    for (const c of sh.caps) caps.push({...c, c: t});
+    marks.push({p: sh.labelAt, label: it[0], color: css(TYPE[it[1]][0])});
   });
-  vA.setCapsules(caps, PAL);
+  vA.setCapsules(caps, TYPES.map(k => TYPE[k][0]));
   vA.paint(i => col.get(i) || null);
+  vA.setMarkers(marks);
 }
 function focusItem(i) {
   attFocus = attFocus === i ? null : i;
   legend.querySelectorAll('button').forEach((b, k) => b.setAttribute('aria-pressed', k === attFocus));
   paintAtt();
-  if (attFocus === null) { attHint(); vA.setMarkers([]); return; }
+  if (attFocus === null) { attHint(); return; }
   const it = attGroup.items[i], sh = shapeFor(it);
   attCap.innerHTML = `<b>${it[0]}</b> <span class="t" style="color:var(${TYPE[it[1]][0]})">(${TYPE[it[1]][1]})</span> — ${it[2]}`;
   attCap.className = it[1] === 'C' ? 'cap warn' : 'cap';
-  vA.setMarkers([]);
   vA.face(it[5] || sh.n, {zoom: sh.big ? 1 : 1.8, focus: sh.big ? null : sh.centre});
 }
 ATTACH_GROUPS.forEach((g, i) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = g.name; b.onclick = () => showGroup(i); document.getElementById('att-groups').append(b); });
@@ -900,26 +836,6 @@ ossSlider.max = OSS.length - 1;
 ossSlider.oninput = () => showOss(+ossSlider.value);
 showOss(0);
 
-/* ===================== 5. QUIZ ===================== */
-const quizBox = document.getElementById('quiz');
-QUIZ.forEach(([q, opts, right, lm, why], qi) => {
-  const card = document.createElement('div'); card.className = 'panel';
-  card.innerHTML = `<div class="qn">Q${qi + 1}</div><p>${q}</p><div class="opts"></div><p class="why" hidden></p>`;
-  const box = card.querySelector('.opts'), whyEl = card.querySelector('.why');
-  shuffle(opts.map((o, i) => [o, i])).forEach(([o, i]) => {
-    const b = document.createElement('button'); b.className = 'opt'; b.textContent = o; b.dataset.i = i;
-    b.onclick = () => {
-      box.querySelectorAll('.opt').forEach(x => { x.disabled = true; if (+x.dataset.i === right) x.classList.add('right'); });
-      if (i !== right) b.classList.add('wrong');
-      whyEl.hidden = false; whyEl.innerHTML = `${why} <button class="btn" style="margin-left:4px">Show on the bone</button>`;
-      whyEl.querySelector('button').onclick = () => {
-        setMode('explore'); showLandmark(lm); document.getElementById('h-explore').scrollIntoView({behavior: 'smooth'});
-      };
-    };
-    box.append(b);
-  });
-  quizBox.append(card);
-});
 </script>
 </body>
 </html>
