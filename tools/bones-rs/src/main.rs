@@ -220,7 +220,7 @@ fn read_from_zips(zips: &[PathBuf], file: &str) -> Result<String> {
         let mut ar = zip::ZipArchive::new(f)?;
         let name = (0..ar.len()).find_map(|i| {
             let n = ar.by_index(i).ok()?.name().to_string();
-            let base = n.rsplit('/').next().unwrap_or(&n);
+            let base = n.rsplit(['/', '\\']).next().unwrap_or(&n);
             (base == format!("{file}.obj")).then_some(n)
         });
         if let Some(n) = name {

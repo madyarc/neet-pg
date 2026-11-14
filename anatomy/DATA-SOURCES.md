@@ -79,3 +79,17 @@ the anterior branch runs beneath the pterion; rupture, most often there, typical
 palette; bones that touch never share a colour). Sutures = vertices of two named bones within `contact_mm` of each other,
 outer surface only (`tools/bones/skull_points.py`); points = where the named bones meet. The inion (external occipital
 protuberance) is NOT shown: the simple rule ("most posterior midline point") finds the opisthocranion region instead.
+
+**Independent review (2026-11-14):** a separate reviewer checked every statement against Gray and Wikipedia: no
+anatomical errors; 9 wording issues, all fixed — colour note (colours do repeat), clivus (sphenoid body + basilar
+occipital: Wikipedia "Posterior cranial fossa", "Occipital bone"), chiasmatic groove in the anterior/middle fossa
+boundaries (Gray 47), ear ossicles not counted in the 22 (Wikipedia "Skull"), "bony" nasal septum, lacrimal as Gray's
+"smallest and most fragile" (attributed to Gray), pterion caveat (sphenoparietal suture can be absent — Gray 46),
+superior and middle conchae belong to the ethmoid (Gray 36; Wikipedia "Inferior nasal concha"). Single-source kept:
+hyoid "touches no other bone" (Wikipedia "Hyoid bone"; Gray says only that it hangs by ligaments).
+
+**Skull model choice (2026-11-14):** BodyParts3D 3.0 (95 %) and 4.0 (99 %) skull meshes are almost the same shape (4.0
+is a cleaned copy); 3.0 has slightly finer surface detail and is used (1.0 MB for the 23 parts at 0.15 mm error).
+Neither models the small foramina: the sphenoid has one opening per side, at the base of the lateral pterygoid plate,
+where Gray places the foramen ovale; rotundum, spinosum, optic canal etc. are not holes in the mesh. Foramina will be
+shown as labelled markers at text-checked positions, never as invented holes.
