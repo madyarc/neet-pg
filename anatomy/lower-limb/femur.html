@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Femur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+html,body{margin:0} [hidden]{display:none!important}
+/* Layout: (1) explore the bone in 3D: landmarks, find-it quiz  (2) which side is it?  (3) attachments + clinical
+   (4) ossification stages  (5) predict, then check  — every 3D panel is one BoneViewer instance */
+:root{
+  --bg:#f5f6f9; --surface:#ffffff; --ink:#1a2130; --muted:#5a6375; --line:#dce0e8;
+  --accent:#2c56cc; --flag:#cf3f33; --ok:#2d8a4e;
+  --bone:#e8dfc8; --cart:#9cc3e6; --centre:#e0802a; --plate:#3b4a63; --mark:#cf3f33;
+  --ins:#c2410c; --ori:#2563eb; --lig:#15803d;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c;
+  --accent:#7d9dff; --flag:#ff7b6f; --ok:#5cc983;
+  --bone:#d9cfb6; --cart:#6fa3d6; --centre:#f0a04b; --plate:#1d2533; --mark:#ff7b6f;
+  --ins:#fb923c; --ori:#7d9dff; --lig:#5cc983; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c;
+  --accent:#7d9dff; --flag:#ff7b6f; --ok:#5cc983;
+  --bone:#d9cfb6; --cart:#6fa3d6; --centre:#f0a04b; --plate:#1d2533; --mark:#ff7b6f;
+  --ins:#fb923c; --ori:#7d9dff; --lig:#5cc983; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:30px}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,4vw,38px);line-height:1.1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h2{font-family:var(--f-display);font-weight:600;font-size:21px;margin:0 0 4px;text-wrap:balance}
+h3{font-size:15px;margin:0 0 4px}
+p{margin:0}
+.back a{font-size:14px;color:var(--muted);text-decoration:none} .back a:hover{color:var(--accent)}
+.lede{max-width:72ch;color:var(--muted)}
+.muted{color:var(--muted);font-size:13.5px}
+.hw{font:500 11px var(--f-mono);color:var(--flag);border:1px solid var(--flag);border-radius:4px;padding:0 5px;white-space:nowrap}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.stack{display:flex;flex-direction:column;gap:12px}
+.split{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.split{grid-template-columns:minmax(0,1fr)}}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 12.5px var(--f-body);background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:4px 11px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.chip:focus-visible,.btn:focus-visible,.opt:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{font:500 13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.btn[disabled]{opacity:.5;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cap{border-left:3px solid var(--line);padding:2px 0 2px 10px;font-size:14px;max-width:80ch}
+.cap.key{border-left-color:var(--accent)} .cap.warn{border-left-color:var(--flag)} .cap.good{border-left-color:var(--ok)}
+.verdict{padding:8px 10px;border-radius:8px;background:var(--bg);font-size:14px}
+/* 3D viewer */
+.viewer{position:relative;width:100%;height:min(72vh,560px);min-height:360px;border-radius:8px;background:var(--bg);
+  touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden;cursor:grab}
+.viewer.short{height:min(60vh,440px)}
+.viewer:active{cursor:grabbing}
+.viewer canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.viewer svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.viewer svg text{font:600 12.5px var(--f-body);fill:var(--ink);paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
+.viewer .hint{position:absolute;left:10px;bottom:8px;font:500 11.5px var(--f-mono);color:var(--muted);pointer-events:none}
+.viewer .nogl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;color:var(--muted)}
+.vbar{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.legend{display:flex;flex-direction:column;gap:4px;font-size:13.5px}
+.legend button{display:flex;gap:8px;align-items:flex-start;text-align:left;background:none;border:1px solid transparent;border-radius:6px;padding:4px 6px;color:var(--ink);font:inherit;cursor:pointer}
+.legend button[aria-pressed="true"]{border-color:var(--line);background:var(--bg)}
+.legend i{flex:none;width:12px;height:12px;border-radius:3px;margin-top:4px}
+.legend .t{font:500 10.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.swatch{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.stage{font:600 16px var(--f-display)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.steps{display:flex;flex-direction:column;gap:6px;margin:0;padding-left:20px;font-size:14px}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px}
+.qn{font:600 12px var(--f-mono);color:var(--accent);margin-bottom:4px}
+.opts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.opt{text-align:left;font:500 14px var(--f-body);background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer}
+.opt[disabled]{cursor:default}
+.opt.right{border-color:var(--ok);color:var(--ok)} .opt.wrong{border-color:var(--flag);color:var(--flag)}
+.why{font-size:13.5px;color:var(--muted);margin-top:8px}
+footer{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>The Femur</h1>
+  <p class="lede">The longest and strongest bone in the skeleton. Turn it in 3D, find its landmarks, tell a left from a right,
+    see what attaches where, and watch its five ossification centres appear and fuse.</p>
+</header>
+
+<!-- 1. Explore -->
+<section class="stack" aria-labelledby="h-explore">
+  <h2 id="h-explore">Explore the bone</h2>
+  <p class="muted">Drag to turn, pinch or scroll to zoom, two fingers (or shift-drag) to move. Tap a name, or tap the bone.</p>
+  <div class="split">
+    <div class="panel">
+      <div class="viewer" id="v-explore"></div>
+      <div class="vbar" id="vbar-explore"></div>
+    </div>
+    <div class="panel stack">
+      <div class="row" role="group" aria-label="Mode">
+        <button class="chip" id="mode-explore" aria-pressed="true">Explore</button>
+        <button class="chip" id="mode-find" aria-pressed="false">Find it (quiz)</button>
+      </div>
+      <div id="explore-pane" class="stack">
+        <div class="chips" id="lm-chips"></div>
+        <div class="cap key" id="lm-cap">Tap a landmark name to see where it is and what it does.</div>
+      </div>
+      <div id="find-pane" class="stack" hidden>
+        <p class="stage" id="find-ask"></p>
+        <p class="muted">Tap the spot on the bone. Turn it first if you need to.</p>
+        <div class="verdict" id="find-verdict">Waiting for your tap…</div>
+        <div class="row"><button class="btn" id="find-show">Show me</button><button class="btn primary" id="find-next">Next</button>
+          <span class="muted" id="find-score"></span></div>
+      </div>
+      <p class="muted">Landmark points are placed on a simplified 3D model <span class="hw">approximate</span>.
+        Fine ridges (linea aspera, gluteal tuberosity) are smoothed on this mesh; their points mark where they run.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Side -->
+<section class="stack" aria-labelledby="h-side">
+  <h2 id="h-side">Which side is it?</h2>
+  <p class="lede">A classic viva and exam question. The bone below is a left or a right femur, turned at random. Decide, then check.</p>
+  <div class="split">
+    <div class="panel">
+      <div class="viewer short" id="v-side"></div>
+    </div>
+    <div class="panel stack">
+      <div class="row">
+        <button class="btn" id="side-left">Left femur</button>
+        <button class="btn" id="side-right">Right femur</button>
+        <button class="btn primary" id="side-next">Another</button>
+        <span class="muted" id="side-score"></span>
+      </div>
+      <div class="verdict" id="side-verdict">Turn it until you can see the head and the back of the shaft.</div>
+      <div id="side-rules" hidden>
+        <h3>How to side it</h3>
+        <ol class="steps">
+          <li><b>Upper end:</b> the end with the head (the lower end, with the two condyles, is larger).</li>
+          <li><b>Medial:</b> the head points medially — upward, medialward and a little forward.</li>
+          <li><b>Posterior:</b> the linea aspera runs down the back, and the condyles project backward with a deep notch between them.</li>
+          <li>Hold it as if it were in your own thigh — head up and pointing toward your midline, linea aspera at the back. The thigh it fits is its side.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Attachments + clinical -->
+<section class="stack" aria-labelledby="h-att">
+  <h2 id="h-att">What attaches where</h2>
+  <p class="lede">Pick a region; each attachment gets its own colour, and the list says whether it is an origin, an insertion or a ligament.
+    Tap an item to bring it round.</p>
+  <div class="split">
+    <div class="panel">
+      <div class="viewer" id="v-att"></div>
+      <div class="vbar" id="vbar-att"></div>
+    </div>
+    <div class="panel stack">
+      <div class="chips" id="att-groups"></div>
+      <div class="legend" id="att-legend"></div>
+      <div class="cap" id="att-cap"></div>
+      <p class="muted">Coloured areas show where each attachment is <span class="hw">schematic area, not exact footprint</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Ossification -->
+<section class="stack" aria-labelledby="h-oss">
+  <h2 id="h-oss">Five centres: appearance and fusion</h2>
+  <p class="lede">One centre for the shaft, one for the head, one for each trochanter and one for the lower end.
+    Step through the timeline and notice the order in which they join the shaft.</p>
+  <div class="split">
+    <div class="panel">
+      <div class="viewer short" id="v-oss"></div>
+      <div class="vbar" id="vbar-oss"></div>
+    </div>
+    <div class="panel stack">
+      <input type="range" id="oss-slider" min="0" max="9" step="1" value="0" aria-label="Ossification stage">
+      <p class="stage" id="oss-when"></p>
+      <div class="cap key" id="oss-what"></div>
+      <p class="muted"><span class="swatch" style="background:var(--cart)"></span>cartilage ·
+        <span class="swatch" style="background:var(--centre)"></span>secondary centre, not yet fused ·
+        <span class="swatch" style="background:var(--plate)"></span>growth plate ·
+        <span class="swatch" style="background:var(--bone)"></span>bone</p>
+      <div class="cap" id="oss-law" hidden>Order of fusion is the reverse of the order of appearance: the lower end appears first
+        (before birth) and fuses last (about the 20th year); the lesser trochanter appears last and fuses first.</div>
+      <p class="muted">Region boundaries are drawn on the adult bone <span class="hw">schematic, not to scale</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Predict, then check -->
+<section class="stack" aria-labelledby="h-q">
+  <h2 id="h-q">Predict, then check</h2>
+  <div class="qgrid" id="quiz"></div>
+</section>
+
+<footer>
+  <p>Based on: Gray's <i>Anatomy of the Human Body</i> (20th ed.), chapter on the femur; Moore, <i>Clinically Oriented Anatomy</i> (blood supply of the head and neck).</p>
+  <p>Models used: 3D bone from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified mesh; the simplified mesh on this page is shared under the same licence). Landmark points, attachment areas and ossification regions are drawn on the model by hand and are approximate.</p>
+</footer>
+</div>
+
+<script type="application/json" id="mesh">{"source":"BodyParts3D FJ3365 (right femur, FMA24474)","nverts":1574,"ntris":3102,"lo":[-59.12,-31.331,-233.051],"span":466.102,"pos":"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","idx":"OgA9AAAAAgADABAABQABAAIAAQAHAAIAAgAHAAMABAAGAAIAPAAFAAYACQAFADwAAQAFAAkAPQA8AAYABgAFAAIAAAA9AAYAAAAGAAQAAwAHABMABwAWABMACQA8AD8AAQAIAAcAFAAHAAgACAABAAkADABBAAoACAAMAAoACAAKABQABwAUABYACQA1AAsACQALAAgACwAMAAgAQABBAAwADgAEAA8ADgAPAA0AAAAEAA4AAAAOAEsADgBMAEsAEAAPAAIADwAEAAIAEQANAA8ADwAQABEAEAASABEADQARABoAEQASABoAAwATABAAEgAQABMAEgBOABoAEgATAE4AEwAWAE4AFAAYABUAFAAVACAAFQAeACAAFgAUACAAHgAVACEAFQAXACEAIQAXACIAGAAXABUAFwCTACIATwBMAA4AGwBPAA4AGgAcAA0ADQAcABkADgANABsAGQAbAA0AGQBTABsAHQBTABkAGQAcAB0AVgAfACQAJQBWACQAKAAfAB4AKAAmAB8AHwAgAB4AJAAfACYAKAAeACEAIQAnACgAIgAnACEAkwAjACIAJgAlACQAWgBVACUAWgAlACYAJgAuAFoAJgAoAC0ALQAuACYAJwApACgAKAApAC0AKQAwAC0AJwAiACoAKQAnACoAIgAjACoAKgArACkAKQArADAAKgAjACsALAAuAC8ALABaAC4ALQAvAC4AMAAxAC0AMABnADEAbwBxADMAMwAyAG8AMwB3ADIACQA/ADUAPwA2ADUANgA4ADUANgCDADgANgA/ADQANACDADYAOAA3ADUANwALADUACwA3AEAARQBAADcANwA4ADkAOQBFADcAOACDADkAOQCGAEUAhgCOAEUAPgA9ADoAOgAAAEsAPgA6ADsAOwA6AEsAPgA7AIwAPwA8ADQAPgA8AD0ANAA8AD4ANAA+AIwAQAAMAAsACgBCABgAFAAKABgAGABCABcAQABDAEEAQQBDAEIAQQBCAAoARAAXAEIAQABFAEMAQwBEAEIAQwBFAEQARABIABcARQBGAEQAjgBGAEUAFwBIAEcARwCTABcARABGAEgASgCTAEcASABGAI0ARwBIAI0ASQBKAEcASQCRAEoATQBMAFEAlwCLAE0AlwBNAFEAOwBLAE0ATQBLAEwAOwBNAIsAGgBOAFQATgBWAFQATgAWAFYATwBRAEwAUABRAE8AGwBQAE8AUABTAFcAGwBTAFAAUwBYAFcAUgCfAFEAUABSAFEAVwBSAFAAHABVAB0AVgAWACAAHwBWACAAGgBUABwAVABVABwAVABWAFUAVgAlAFUAogBbACMAIwCTAJkAIwCZAKIAWACpAFcAqABXAKkAHQBVAFkAVQBaAFkAHQBYAFMAWQBaAF0AWQBYAB0AWQBdAFgAIwBbACsAWwBoACsAogCtAFsAXABdAFoAYABcAFoAXgBdAFwAXgBcAGAAXwBgAGIAXgBgAF8AWABdAKkArgBeAF8ALAAvAGAAYAAvAGEALABgAFoALwAxAGEALwAtADEAKwBnADAAZwArAGgAYABhAGIAYgBhADEAZAAxAGMAYwAxAGYAYwBmAGUAZABiADEAZQBkAGMArwBiAGQAaQBkAGUAMQBnAGYAZwBqAGYAZQBmAGoAagBpAGUAZABpALAAagBnALMAtABqALMAZwC4ALMAaAC4AGcAvwBwAG4AcQBvAHAAcADAAHEAwABwAL8AawByAHEAwABrAHEAwADBAGsAawDBAMYAxgDHAGsAawDIAHIAyABrAMcAeQDPAG4AdABtAGwAbQBuAGwAeQBuAG0AbABuAHAAcABvAGwAbwAyAGwAcgAzAHEAdgAzAHIAyABzAHIAzABzAMgAzADRAHMA1QDPAHkAdAB5AG0AegB5AHQAdABsADIAMgB3AHUAdQB0ADIAdQCAAHQAMwB2AHcAdgB9AHcAdgB4AH0AewB1AHcAdwB8AHsAdwB9AHwAdgByAHgAcgBzAHgAcwDQAHgAeAB+AH0AcwDRANAA1gDVAHkAegDWAHkA2gDWAHoAdACAAHoAegCAAH8AdQB7AIAAewCBAIAAfACBAHsAgQB8ANsAfAB9ANsAfQB+ANwA3ADbAH0AfgDYANcA3AB+ANcAeADYAH4A1wDZANwAgACBAOAA3QCAAOAAggA0AIwA5wDoAIIAggCDADQA6ACDAIIA6ACFAIMAgwCEADkAhQCEAIMAhACGADkAjgCGAIcAhACHAIYA6gCHAIQAjwCSAEkAiACSAI8AjwCQAIkAiACKAJIAjwCJAIgAkACHAIkAkACOAIcA6wCIAIkAiADtAIoAiwCMADsA5wCCAIwAjADxAOcAjgCNAEYAjQBJAEcAkACPAI0AjQCPAEkAkgCRAEkAkACNAI4AkQCUAJMAkQCTAEoAkgCUAJEAlQCSAIoAlQCUAJIAlACaAJMAlgCUAJUAEQaUAJYAlwBRAJ8AmACLAJcAmgCbAJkAkwCaAJkAogCZAJsAmwCcAKIAEgYRBp0AEwYSBp0AEQaWAJ0AEwadAJ4AngCdAPMAnQCWAPMAngDzAPQAmACXAJ8AoACfAFIAoQCYAJ8AoQCfAKAAogCkAKMAowCtAKIAogCcAKQAFAYTBp4ApACmAKMApQAUBp4ApQCmABQG9AClAJ4ApQD0APcA9wCmAKUA9wD4AKYApwBSAFcApwBXAKgAoABSAKcApwCoAPoAqgD6AKgAoACnAPoA+gCqAP0ApgD8AKMABgGjAPwAqQCqAKgAqgCpAKsA/QCqAKwA/gD9AKwAqwCpAF0AqwBdAF4ArgCrAF4ArACrAK4AqgCrAKwArAD/AP4AaABbAK0AowAIAa0ABgEIAaMArACuAP8A/wCuAAEBYgCvAF8ArgBfAAEBrwABAV8ArwBkALAAsQCwAGkArwCwAAcBsACxAAoBsQBpAGoAaACtALgArQAIAbgAsgBqALQAtgCyALQAsQCyAAoBsQBqALIAtACzALcAtgC0ALcAuAC5ALMAswC5ALcACAENAbgAtQALAbIAtgC1ALIADgG1ALYAtgC3AA4BuAANAbkAMgG6ADEBMQG6ADYBMgG7ALoAvQA7ATYBugC9ADYBugC7AL0AvAC+ALsAuwA5AbwAOQE6AbwAuwC/AL0AvgC/ALsAvgDAAL8AwQDAAL4AvgC8AMEAvAA6AcEAvwBuAL0AbgA7Ab0AxgDBAMkAyQDBADoBzwDCAMQAPAHCAM8AxQDEAMMAwgA8AcMAwgDDAMQAxADFAG4AxQA7AW4AzwDEAG4AwwA7AcUAxgDJAMcAygDIAMcAzgDIAMoAygDHAMkAzgDKAMsAOgHLAMkAyQDLAMoA0wA9ATwBzADIAM4AzADOAM0AzgDSAM0A0QDMAM0A0gDOAD4BzwDTADwBzwDVANMA2ADQANEAeADQANgAzQDZANEA0QDZANgA0gDZAM0APwHSAD4B0wDVANQA0wDUAD0B1ADVANYA1ADWAE4B1gDaAE4B1wDYANkA2QBEAdwARAHZANIA3wBOAdoA2gB6AH8A3QB/AIAAgQDbAOAA4ADbAOIA2wDcAOEAfwDdANoA3gDaAN0A4ADeAN0A3gDfANoA3gDgAFEB5QBRAeAA2wDhAOMA4wDiANsA5QDiAOMA4ADiAOUA4wDkAFQB5QBUAVIB5QDjAFQB4QDcAOYA4wDhAOYA5ADjAOYAVwHkAOYA5wDpAOgA6QCFAOgAhQDqAIQA2QHqAIUA6gDsAOsA7ADqANkB6gCJAIcA6wDtAIgAiQDqAOsA6wDsAO0A7QCVAIoA7gDxAIwAjACLAO4AiwDvAO4A7gDvAPAA7gDwAPEA7wBjAfAA8QDpAOcAlQBhAZYAYAHtAOwAYAGVAO0AYAFhAZUA3AFgAewAYQFnAZYAlgBnAfMA3QFnAWEB7wCLAJgAmADyAO8AYgFjAfIA8gBjAe8AZwH0APMA9QChAKAA8gCYAKEA+gD1AKAA8gChAPYA9gChAPUA+wD1APoA+wD2APUA8gD2AGIB/ACmAPgA+QD3APQA+QD4APcAbwH7APoAbwH6AP0AdwFvAf0AdwH9AP4AdwFxAW8BdgEGAfwA/wABAQIBAAH+AP8AdwH+AAABcQF3AQABAAH/AAQB/wACAQQBBAF0AQABAgEBAa8ArwAHAQMBAgGvAAMBAgEDAXkBAwEHAQUBdAEEAXkBeQEEAQIBeQEDAQUBsAAKAQcBCgEJAQcBBwF8AQUBBwEJAXwBfgF8AQkBCgGyAAsBDAEIAQYBBgF9AQwBCgELAQkBCQELAX4BDAENAQgBfgELAX8BtwC5ABEBDAGBAYABtQAPAQsBDgEPAbUAuQANAREBDwF/AQsBDgG3ABABDQEMAREBDgESAQ8BtwARARABDgEQARMBEwESAQ4BEQEUARABEAEUARUBEAEVARMBEwEVARIBFgEUAREBEQGEARYBhAEaARYBFgEaARQBhgEVARgBGgEXARQBGwEaAYQBFAEZARUBFwEaAR4BFAEXARkBFQEZARgBGQEdARgBGgEcAR4BGgEbARwBHAEbAYgBFwEeARkBHgEcAR8BGQEeAR0BHAGIAR8BiAGLAR8BHQEeASABHQEgASEBJAEhASABIAEeASQBHgEfASIBIgEfAY0BJAEeASIBiwGNAR8BIwEhASQBIwEkASUBJQGOASMBJAEiASwBIgGNASYBJQEkAScBKQGQASUBJwEkASwBJgEsASIBJgGNASgBJwEpASUBkAEpAZQBKAEuASYBJgEuASwBJwEsASoBKQEnASsBKgErAScBKgEsATIBKwEqAS8BlAEpATABlAEwAS0BmAGUAS0BmAEtAZoBMgEsATMBKgEyAS8BKQErATABKwEvATABMwEsAS4BLgGcATUBMgExAS8BLwExATcBNwEwAS8BMAE3ATQBNAEtATABnQEtATQBLgE1ATMBNAE3ATgBNAE4AaMBpQE0AaMBMgEzAbsAuwAzATkBOQEzATUBowE4AaQBNgE3ATEBOQE1AaEBqAE5AaEBOAE3ATYBOAE2ATsBOQGoAToBOwHDADwBqwE7ATwBqwE8AT0BywA+Ac4APgHLADoBPwFDAdIAQwE/AUABQQFAAT8BPwE+AUIBQQE/AUIBQQFCAUwBtQFMAUIBPQHUAFABtAE9AVABRAHSAEMBQAFGAUMBRgFHAUMBRwFEAUMBRgFAAUEBRQFEAUgBSQFHAUYBRgFBAUkBSQFKAUcBRAFHAUgBRwFKAUgBQQFMAUkBSAFKAUsBRQFIAUsBSwFNAUUBSgFJAUwBSwFKAUwBTAFNAUsBtQFNAUwB1ABOAVABTwFOAd8A3wDGAU8BTgFPAVABUAFPAcYBuQFQAcYBRQHcAEQBRQFNAdwATQHmANwAwgFNAcUBxgHfAMcB3gBRAd8AUQFYAc8BzwHfAFEBUQHlAFIBVgHKAVMByAHPAcoBzwFTAcoBVAHkAFcBUwFSAVQBVQFUAVcBVAFVAVMBVwFWAVUBVgFTAVUBzgFWAVcBwgFXAeYATQHCAeYAWAFRAVIBUgFTAVgBUwHPAVgBhQDpANkB3AHsANsB8QDwAFkBWgHwAGMBWQHwAFoB8QBZAVwBXAFZAV0BWgFbAVkBWQFbAV0BZAFbAVoBZAFaAWMB8QBcAekA6QBcAV4BXQFlAd4BWwFlAV0B6QBfAdkBXgFfAekAXAHQAV4BXwHUAdkB3AFhAWABZAFjAWIBaAFbAWQBZAFiAWgBaAFlAVsB3gFlAWYB3gFmAd8B9ABnAeQB4QFnAd0BZwHhAeQB9ADkAfkAaAFiAfYAaAH2AGkB+wBpAfYA+wBsAWkBagFoAWkBbAFqAWkBaAFqAWsBaAFrAWUBZQFrAWYBawFuAWYBeAL4APkA+QDkAXgC+wBtAWwBbQFqAWwBbgFrAWoBbQFuAWoBZgFuAeUBbgFtAXMBbwFxAXABbQH7AHAB+wBvAXABbQFwAXMBcAFxAXMBcgFzAXEBcwFyAXUBcgFxAXQB5QFuAXUBbgFzAXUB6gF1AXQBeAHqAXQBdQHqAekBdQFyAXQB5QF1AekB6gF4AXoB+AB2AfwA7wF2AfgAdAFxAQABeQF4AXQBegF4AXkBegF5AQUBfAF6AQUB7gF6AXwBdgHvAXsBewEGAXYBfAF+Ae4BfQEGAXsBfQGBAQwBfgF/AfIBfQF7AYEBewHzAYEBDwGCAX8BDwESAYIBgQGDAYABgAERAQwBgAGEAREBgwGEAYABgQGJAYMBFQGGAYUBFQGFARIBEgGFAYIBhQGGAYIBggGGAfUB9QGGAYcBhgEYAYcB9wH1AYcBhwEYAYoBGwGEAYMBigH8AYcBGAEdAYoBiQGIAYMBiAEbAYMBiQH6Af0BiAGJAYsBigEhAf4BHQEhAYoBjwGNAYsB/gEhAYwBjgEhASMBIQGOAYwBjAGOAQECBQIBAo4B/QGPAYsBkQGPAf0BjgGQAZIBjgElAZABBQKOAZIBjwGXAY0BkwGPAZEBkgGWAQUCjQGXASgBjwGTAZcBkgGQAZQBkgGUAZgBlQGSAZgBlgGSAZUBkwETAqIBlgGVAZoBKAGZAS4BmQEoAZcBogGXAZMBmAGaAZUBCAKWAZoBnAGZAZcBnAGXAaIBCAKaAZsBDwIIApsBLgGZAZwBnQGaAS0BmwGaAZ0BmwGdAQ8CoAEPAp0BNQGcAaEBogGhAZwBngGgATQBnwGgAZ4BngE0AZ8BEgKfAacBEAKgAZ8BoAGdATQBnwE0AaUBpwGfAaUBqAGiARMCOwGkATgBpAGlAaMBpgGkATsBpQGkAaYBpwGlAaYBpgESAqcBqAGhAaIBFAKmAaoBOwGrAaYBqQGsAagBqQEeAqwBqwE9Aa0BrQGqAasBqgGmAasBOgGoAawBrAGwAToBHgKwAawBPQGuAa0BrwGuAT0BHgKyArABrwE9AbIBPgE6AbABsgIqArABQgGxAbUBQgE+AbABsAGxAUIBKgKxAbABKgIxArEBuAG0AbkBsgG0AbgBswGyAbgBMwKzAbgBsgE9AbQBNQKzATMCtQHFAU0BsQG2AbUBtQG2AcUBtgGxATECtgG3AcUBuAG5AboBtAFQAbkBMwK4AboBugG5AcYBTgIzAroBzAG+AbsBuwFdAswBzQG8Ab0BvgG9Ab8BvwG9AbwBvgHMAb0BwAG8AcEBwQFDAsABQwLBAUkCvwG8AcABQwK/AcABvwFCAjwCQwJCAr8BPAK+Ab8BwQG8Ac0BSQLBAc4BSgJJAs4BxQHDAcIBSgLOAUsCxAHDAbcBzgHEAUsCxAHOAcMBTALEAbcBxAFMAksCtwHDAcUBxwFPAsYB3wDPAccBxwHPAckByQHPAcgByAFcAskBXQLIAcwBywHKAVYBygHLAcgBywHNAb0BywFWAc0BvQHMAcsByAHLAcwBVgHOAcEBVgHBAc0BVwHCAc4BwwHOAcIBXAFdAdAB0AFdAd4BXwFeAdAB0QFfAdAB0AHeAdMB0QHQAdMBXwHVAdQBXwHRAdIB1QFfAdIB0gHRAdMB1QHWAdQB1AHWAdkB0wHgAdIB0gHXAdUB0gHgAdcB1gHYAdkB1QHXAdYB2AHWAdcB1wFiAtgB2QHbAewA2wHZAdoB2AHaAdkBZwLcAdsB3QHcAWcCYAJnAtsBYALbAdoB3AHdAWEBaALdAWcC4wHTAd8B3gHfAdMB0wHjAeAB4AHjAW0CbQJpAuABbgLdAWgC3QFuAuEBZgHiAd8B4wHfAeIBbQLjAeIB4QFuAuQBbwLkAW4C5QHiAWYB5QHnAeIB5QHpAeYB5QHmAecB5wHmAegB5wFxAuIB7AFwAugB6AFwAucBdwL4AHgC6QHqAeYB6AHmAewB7AHmAeoB7AHqAesBegHrAeoB6wHtAewBegHuAesB6wHuAXsCewLtAesB8AHxAe8BAQPwAe8B8AEBA/EB8QF7Ae8B7gF+AfIB7gHyAX0C8QF+AnsB8wF7AX4CfgKAAvMBfgIDA4AC8gF/AfQB8gH0AQIDgAKBAvMBfwGCAfQB9AGCAfYB9AH2AYIC8wGJAYEB9gGCAfUB8wH6AYkB9gH1AfgBggL2AfgB9QH3AfgBggL4AfkB8wGEAvoB+AH3AfwB9wGHAfwB+AH8AfsB+QH4AfsBhQL5AfsBigH+AfwB/gH/AfwB+wH8Af8BhQL7AYcChwL7Af8BAAL/Af4BhwL/AYkCiQL/AY4C/QGPAgICjgL/AQACAAL+AQEC/gGMAQECAQIDAgACjgIAAgQCAQIFAgMCiwGJAf0BAgKRAf0BBAIAAgMCAgIGApEBjwIGAgICBAIDAgwCBAIMApQClAIMAg4CkwGRAQcCBgIHApEBkwIHAgYCAwIFAgwCCgIMAgUCBwITApMBBQKWAQgCCgIFAgkCCQIIAgsCBQIIAgkCCgIJAgsCCwIIAg0CDAIKAgsCDgILAg0CDgIMAgsCBwKXAhMCDQIIAg8CDgINAg8CDgIPApYCDwIQApYCEAIPAqABlgIQApgCEgIQAp8BmQIQAhIClwIRAhMCPAMRAjYDEQI8AxMCFAKaAhICEgKmARQCEwKpAagBPAMVAhMCFQKpARMCngKpARUCPAOeAhUCFAKqARYCmwIUAhYCnAIWAhgCqQGeAh4CFgKqAa0BFgKtARkCGwIcAhcCFwIYAhYCHAIYAhcCrgEZAq0BGQKuAa8BGgIZAq8BGwIZAhoCFgIZAhsCGgIdAhsCHQIaAiACFwIWAhsCHQIcAhsCIAIiAh0CrwEfAhoCrwGyAR8CHwIgAhoCHwIrAiACHwKyAbMBKwIfArMBKwIiAiACIQIiAisCIgIWBiwCLAIkAiMCJgIoAiUCJQIjAiQCJAImAiUCIwIiAiwCJgInAigCJwIpAigCwwIXBsQCxAIXBikCKwKzATUCNQIhAisCIQI1AjcCFgY3AiwCLAI3Ai0CJgIkAi0CLAItAiQCPwItAkECJwI/Aj4CJgItAi4CJgIuAicCLgItAj8CLgI/AicCLwInAj4CKQInAi8CKQIvAsUCxQIvAjACMAIvAkgCMQIyArYBMgK3AbYBtwEyAsoCTgI0AjMCTgK6AcYBMwI0AjYCNQIzAjYCNAI5AjYCOQI0AlECNAJOAlECNgI4AjUCUgI5AlECNQI4AjcCOgI3AjgCOQI4AjYCUgI6AjgCOQJSAjgCLQI7AlkCLQI3AjsCOwI3AjoCOgJSAlsCOgJbAjsCuwE8Aj0CuwG+ATwCXgK7AT0CXQK7AV4CQAI8AkQCXgI9AkECPgI/AjwCLwJAAkgCLwI+AkACPgI8AkACGQYaBkgCPQI/AkECPAI/Aj0CWQJeAkECQQItAlkCPAJCAhsGGgZCAkUCRQJCAkMCRQJDAkcCRgIaBkUCRgJFAkcCRgJIAhoGRwJIAkYCMAJIAkcCMAJHAscCSQJHAkMCRwJJAskCSQJKAk0CSQJNAs4CTQJKAksCygJMArcBTQJLAkwCTQJMAssCTALKAssCzgJNAssCTwJOAsYBUAJOAk8CVAJPAscBUAJPAlQCUwJRAlACUAJRAk4CUAJXAlMCUgJRAlMCVQLHAckBVQJUAscBVwJQAlQCVwJUAlUCVgJXAlUCVgJcAlgCyQFWAlUCXAJWAskBWAJdAl4CXAJdAlgCWAJeAlkCWgJTAlcCVgJaAlcCWgJWAlgCUwJaAlsCWgJZAlsCWgJYAlkCWwJZAjsCWwJSAlMCXQJcAsgBZgJfAmECZQJgAtoBYQLcAmYCZgLcAmACYAJlAmYC3AJnAmAC2AFlAtoB2AFiAmUCZgJlAmMCYwJlAmQCZAJlAmICXwJjAmQCZgJjAl8CZAIcBmkC4wJkAmsC4gLjAmsCbQJqAmkC6AJqAm0C5QJqAugC1wHgAWkCYgLXAWkCZAJpAmsCawJpAmoC5QJrAmoC4gJrAuUCbgJoAmwCcQJtAuIB6QJxAnUCbQLpAugC6QJtAnECbwJuAmwCbwJ4AuQB6gJvAmwC6wJvAuoCcQLnAXICcgLnAXAC7AF5AnAC7AHtAXkCdAJyAnACdAJwAnkCeQJ6AnQCdQJxAnICdQJyAnMCdAJzAnIC7gJ1AnYCdgJ1AnMCdAJ2AnMC7gJ2Au0CdgJ0Au0CegLtAnQC+gLtAnoCdwLvAfgA8QJ4Am8CeAL7AncCdwL7Au8B+wJ4AvICegJ5Au0BewL+Au0BegLtAfoC7QH+AvoC+wJ8Au8BfAL7Av8CAAP+AnsCfQJ7Au4BAAN7An0CAQPvAXwC/wK4A3wCAQN8ArgDfwJ+AvEBfQLyAQIDfwIDA34CvwOAAgMDBQMCA/QBBAMCAwUDgAK/A4ECBQP0AYICgQKEAvMBgQIIA4QCgQK/AwgD+QGDAoICgwL5AYUCBwODAoUChQKIAgcDhAL9AfoBhAKGAv0BCAOGAoQChQKJAogChwKJAoUCDQMKA4gChgKNAo8CjwL9AYYCiAKJAg0DDQOJAosCFAMNA4sCigKJAo4CigKLAokCjAKLAooCFwOLAowCFAOLAhcDjgIaA4oCigIaA4wCjQKQAo8CGwONAhEDGgOOAgQCjwKQApECjQIbA5ACkAKSApECGwOSApACBAKUAhoDjwKRAgYCIAOSAhsDIQMaA5QCkQKTAgYCkwKRApIClQIHApMCkwIiA5UClAIOAicDKgOVAiIDKgMpA5UClQKXAgcCJwMOApYCLAOXApUCKQMsA5UCJwOWApgClwIsAzYDmAIQApkCLgMtA5gCmAKZAi4DNgMRApcCEgI4A5kCOAMSApoCmwKaAhQCPQOaApsCPQObApwCSAOeAjwDnAIYAp8CnAKbAhYCnAKfAp0CowJHA50CGAIcAp8CnwIVBqgCnQKfAqACnwKoAqACoAKoAqECoAKjAp0CowKgAqECogKhAqwCrAKqAqICoQKkAqMCogKkAqECogKlAqQCqgKlAqICowKkAkcDRwOkAqYCpAKnAqYCpwKkAqUCpQKwAqcCSQNHA6YCpwJJA6YCSQOnAkoDpwKwAkoDSAOyAp4CFQapAqgCqAKpAqsCqAKrAqoCFQYdAqkCqQIdArMCqQKzAqsCqAKqAqwCqgKrAq0CqAKsAqECrwKqAq0CrQK5Aq4CpQKqAq8CrwKtAq4CrwKwAqUCsAKvArECrgKxAq8CsQKuAsACSgOwAkwDTAOwArECTQOxAsACngKyAh4CswIdAiICqwKzArUCswIiArUCIwK2AiICtgK0ArgCtgIjArQCuAK0AiUCJQK0AiMCGAYdBiUCrQK1AroCqwK1Aq0CugK1AiICIgK2ArsCuwK2ArwCtgK3ArwCtwK2ArgCHQa4AiUCrQK6ArkCuQK6ArsCugIiArsCuwK8Aq4CvQK8ArcCvQK3ArgCvQK4Ar4CvgK4Ah0GuwKuArkCrgK8Ar8CvAK9Ar8CvgK/Ar0CvwK+AsICrgK/AsECwQLAAq4CwQK/Ak8DTwO/AsICwQJNA8ACTQPBAk4DTwNOA8EC+QPCAvwDwgK+Ah0GxQLEAikCHQbEAlEDxALFAsYCxALGAlEDwgIdBlEDUQP8A8ICsgIxAioCxgLFAjACMALHAsYCUQPGAscCygIyAswCzAIyAjECxwJHAsgCRwLJAsgCUgPIAskCUgPHAsgCyQJJAs4CzALLAsoCUgPJAs0CVgPNAs4CzQLJAs4CzQJWA1IDXANWA84CzgJaA1kDzgLLAloD0wJ+A9oC2wLTAtoC2gJ3A2ECYQJ3A3kDzwLVAosD2QLRAtgC0ALUAtsC2ALQAtsC2ALRAtAC1ALQAtYC0ALRAtIC0QLjAtICfgPTAtQC1ALTAtsC1gLQAtICfgPVAs8C1ALVAn4D1ALWAtUC1gLXAtUC1gLSAtcCXwLYAmEC2AJfAmQCZALZAtgC4wLZAmQCYQLYAtoC0QLZAuMC2ALbAtoC3AJhAnkDeQN/A9wC3AJ/A2cCZwJ/A4ADzwLhAt0C3QLgAt8C3QLeAuAC4QLeAt0C3wLgAuQC4AKRAx4G3gKRA+ACewPPAt0CfAPdAt8CfAPfAoQD4QKTA94CiwPhAs8C4wLiAtIC4gLXAtICiwPXAuICaAKBA2wClQOLA+cC4gLlAuYC5QLoAuYC5wKLA+IC5wLiAuYC7gLpAnUC7wLpAu4C5wLmAukC6QKmA+cC5gLoAukC8QJvAusClgPrAuoCbAKWA+oC7ALrApYDrQPsAqIDogPsApYD7wLuAu0C7QL6AvAC8ALvAu0C8AKnA+8CpgPpAqcD6QLvAqcD8gJ4AvEC8wLyAvEC8gL0AvsC6wLzAvEC8wL1AvIC7ALzAusC9QL2AvIC8gL2AvQC8wLsAvUC+QL2AvUC+QL3AvYC9wL0AvYC9wL9AvQC9QLsAq0D+AL5AvUC9wL5Av0CrQP4AvUCrAP5AvgCtgP5AqwD+gKvA/AC+gL+Aq8DtAOvA/4C9AL8AvsC/wL7AvwC/QL8AvQC+QK2A/0CuAP/AvwC/QK4A/wCAQO4A38CAQN/AvEBuQMDA38CAwO5A70DwwMFAwcDgwIFA4ICBQODAgcDBgO/A70DvwMJAwgDBgMJA78DCwMJAwYDBgPJAwsDhgIIAwkDCQONAoYCCQMLA40CiAIKAwcDxgPFAwoDCwPJAwwDxgMKAw4DCgMNAxMDCgMTAw4DDAMQAxIDCwMRA40CCwMMAxIDywMOAw8DzAMZAxIDywMPA8wDEgMQA8wDEgMRAwsDGAMNAxQDGAMTAw0DEwMPAw4DDwMVA80DDwMTAxUDzAPNAxYDEgMZAxEDFgMZA8wDFwMYAxQDzQMVAxYDFwOMAhoDFwMaAxgDGQMWAyoDHQMTAxgDEQMcAxsDEQMZAxwDGQMqAxwDGgMdAxgDHAMgAxsDIQMdAxoDHgMTAx0DFQMTAx4DFQMeAxYDHgMdAx8DIAMcAyoDIQMfAx0DkwKSAiADkwIgAyIDIgMgAyoDHwMhAyMDHgMfAyYDHgMmAxYDHwMjAyYDlAIkAyEDIQMkAyMDzgMqAxYDlAInAyUDlAIlAyQDJAMlAyMDIwMlAyYDKAMmAyUDKwMlAycDKAMlAzEDKAMxAyYDQAMqA84DJwOYAi0DLQMrAycDJQMrAzEDKQM2AywDLgMvAy0DLgOZAjIDNAMvAy4DMgM0Ay4DLwMrAy0DMAMxAysDLwMwAysDNwMpAyoDNwMqA0ADmQI4AzIDMgMzAzQDMwMyA9sDNAM1Ay8DNAMzAzUDMAMvAzUD0QMwAzUDMAPRA9gDMQMwA9kDMAPYA9kDKQM3AzYDOgPaAzgD2gM6A+0DMgM4A9oDOgM4AzkDOQM4A5oCOQOaAj0DOwM6AzkDOQM/AzsDNwNGAzYDPwM5Az4DPgM9A5wCOQM9Az4DPgOcAj8DPwNFA/MDNgNGAzwDQANGAzcDnAKdAkIDQgOdAkcDnAJBAz8DnAJCA0EDQwM/A0EDQwNBA0IDQwNCA0QDQwNFAz8DRQNDA0QDRQNEA/UDPANGA0gDRgP4A0gDQgNHA0QD9gNHA0sDRANHA/YDSwP6A/YDRwNJA0wDTANJA0oDSwNHA0wD+gNMA/kDSwNMA/oDUAOxAk0DTAOxAlAD+QNMA1AD+wOyAkgDTgNPA/kD+QNPA8ICUANNA04DUANOA/kD+wMxArICgQT5A/wD+wPMAjECxwJTA1EDzAL7A/0DUgNTA8cCywLMAmED/gNhA8wCUQNTAwIEUgNUA1MDUwNUA2kDUgNWA1QDaQNUAxMEaQMRBFMDVgNcA2ADVgNgA2sDVgNVA1QDEwRUA1cDVANVA1cDagNWA2sDVwNVAwwEVQNWA1gDDARVA1gDVgNqAx8GFwQfBmoDFwQMBFgDXgNaA1sDWgPLAlsDXAPOAl0DXQPOAlkDWQNaA14DXgNbA18DWwPLAiAGWwMgBl8DXQNZA14DYgNkA14DXwNiA14DYwNfAyAGXgNkA10DYgNfA2MDXQNmA1wDXQNkA2YDXANmA2ADZQNkA2IDYwNlA2IDZANlA2cDYwNoA2UDZgNkA2cDaANnA2UDZwNvA2YDYANmA28DYwMgBmgDZwNoA28DDQRoAyAGDQRhA/4DawNgA28DbANrA20DbANqA2sDawNvA24DbQNrA24DagNsAxcEGQQXBGwDbQMZBGwDaANwA28DbgNvA3ADHwRwA2gDzwJ7A34DfgN7A3IDcgNzA34DdAN2A3MDcwNyA3QDdAMtBHYDdANyA3EDLAR0A3ED2gJ+A3UDdwPaAnUDdQNzA3cDcwN1A34DdgMvBHcDcwN2A3cDdgMuBC8EdgMtBC4EeAN5A3cDLwR4A3cDMQR4Ay8EeAMxBHkDMgR5AzEEMgR/A3kDegN8A4YDegOGA4kDNAR6A4kDMwR6AzQEewN9A3IDfAN9A3sDfQN8A3oDcQN9AzMEcQNyA30DMwR9A3oDLARxAzMEfwMyBDcEMgQ5BDcENwSAA38DgANoAmcCggOAAzcEOASCAzcEggM4BIMDaAKAA4EDggOBA4ADgQOCA4MDhQOHA4QDfAOEA4YDhgOEA4cDhwOFA4gDiQOGA4cDhwOIA4oDigOIA48DiQOHA4oDNASJA4oDOwQ0BIoD3QJ8A3sD1wKLA9UC4QKLA5MDiwOVA5MDbAKBA4wDgwOMA4EDlwNsAowDjAODA40DlwOMA40DjgOXA40DjQODAzwEjQM8BI4DPgSPAz0EhAPfAoUDkAOFA98C5AKQA98CmQOSA5AD5AKZA5ADHgaRAyEGhQOQA5IDkgOIA4UDmQOdA5IDkgOPA4gDPQSPA5IDlQOUA5MD3gKUA5EDlAPeApMD5wKmA5UDlQOmA5QDlwOWA2wCmAOWA5cDjgOYA5cDkQOaAyEGmwOcAyEGmgObAyEGkQOgA5oDlAOgA5EDmQMiBp0DoAObA5oDnQMiBqMDPQSSA54DkgOdA54DnQOjA58DnwOeA50DlAOmA6QDoQOlA5sDoAOUA6EDlAOkA6EDmwOgA6EDpAOlA6EDmANJBKIDmAOiA5YDnwOjA0QERASjA0UEpQOcA5sDpAOqA6UDIgalA6MDpAOmA6oDowOlA64DrgOlA6oDsAOuA6oDRwRFBKMDRwSjA64DRwSuA0oEpwPwAqgD8AKvA6gDqwOoA7EDpgOpA6oDpgOnA6kDqQOrA6oDpwOoA6kDqwOpA6gDqwOwA6oDsQOwA6sDrAP4Aq0DrANJBLYDSQSsA60DSQStA6IDSARHBEoErgOzA0oEsQOoA68DrwOyA7EDsAOxA7IDrgOwA7MDsgOzA7ADsgOvA7UDtQOvA7QDSQS3A7YDtwO4A7YDtANPBLUDTwS0A/4CTwT+AlAEtgO4A/0CtwO5A7gDugP+AgAD/gJSBFAEUgT+AroDuQN/ArgDAAN9AgIDAAMCA7oDVQS6AwIDugNVBFIEAgO7A1kEvQO5A1QEVARYBL0DWQS7A1sEAgMEA7sDuwMEA1sEBAO8A1sEAwO9A78DvgO8A8MDvAMEAwUDwwO8AwUDXQS+A8IDvgPAA8IDwgNYBF0EvgPEA8ADwQO9A1gEwgPBA1gEvgPDA8QDyQO9A8EDyQPBA8IDxQPEA8MDxwPCA8ADCgPDAwcDCgPFA8MDxAPFA8YDxAPGA8ADwAPGA8cDvQPJAwYDyAPJA8IDwgPHA8gDyQPIAwwDxgPLA8cDxwPLA8gDywPGAw4DyAPKAwwDywPKA8gDygMQAwwDywMQA8oDzAMQA8sDzQPMAw8DFgMmA84DzgMmA+wDzgPsA0ADJgMxA+wDMQPZA+wDzwMzA9AD2wPQAzMD0APnA88DNQPSA9EDNQMzA88D0gM1A88D0QPSA9MD1APTA9cD1APRA9MD1QPSA88D1gPSA9UD0wPSA9YD1gPXA9MD5wPWA9UDzwPnA9UD5APWA+cD2APrA9kD2APRA9QD6gPYA9QD2APqA+sD3APaA+0D3wPcA+0D7wPfA+0D2gPbAzID3APbA9oD4APnA9AD2wPcA94D0APbA90D2wPeA90D3APfA94D3gPhA90D0APdA+AD3QPhA+AD3gPiA+ED3gPfA+ID4gNeBOEDXgTgA+ED1wPjA9QD1gPkA9cD5APlA9cD1wPlA+MD6APkA+cD5QPkA+gD5QNgBOMDYATmA+MD6QPwA+YDXwToA+cDYQTlA+gD5gNgBOkDaQTpA2AE6wPsA9kD6wPqA/QD4wPmA+oD1APjA+oD5gPwA+oD9APqA/ADQAPsA+sD7QM6AzsD7QM7A+4D7gM7A/ED7wPtA+4D7wPuA/IDZATvA/IDZARlBO8D3wPvA+IDQAPrA/cDOwM/A/ED8wPxAz8D7gPxA/ID8gPxA/MD8gPzA2QE9wPrA/QD9QPzA0UD9QNyBPMD9QP2A3IEcgT2A3QEQAP3A0YDRAP2A/UDRgP3A/gD+wNIA/gD+AN5BPsD+wN5BHoEegT9A/sD/wP9A3oEggT/A3oEgQT8A4AEBQQKBIAEiASABAoEBQT8A1ED/AMFBIAE/QP+A8wC/gP9AwAE/QP/AwAEggQABP8DAASCBIQEAASEBIUE/gMABIUEiAQKBAsECQSLBIgEBARRAwEEUQMCBAEEBAQFBFEDBAQBBAMEAgQPBAEEAwQBBA8EBQQEBAgECAQEBAMECQQIBAMEDwQJBAMEBgQKBAUEBwQKBAYEBQQIBAYECAQHBAYEBwQIBAsECQSIBAsECwQIBAkEBwQLBAoEAgRTAxEEHwRoAw0EigQNBP4DDgSLBAkEDwQCBBAEAgQRBBAEDwQOBAkEIAQPBBAEFgQgBBAEEgRpAxMEFAQRBGkDEgQUBGkDFAQQBBEEEAQUBBYEFQQUBBIEEgQTBBUEFAQVBBYEEwQiBBUEIwYeBCIEFQQiBBYEIQQgBBYEDAQXBBwEHAQXBBkEbQMaBBkEGAQaBG0DbgMYBG0DGwQaBBgEJAQbBBgEJAQYBHADDAQjBlcDHgQjBgwEHQQcBBkEGQQaBB0EGgQbBB0EIwQdBBsEJQQjBBsEJAQlBBsEHAQeBAwEHAQdBB4EIwQiBB0EHQQiBB4EcAMYBG4DHwQmBHADDQSNBB8EDgQPBJAEkAQPBCAEIAQhBJAEIQSRBJAElQSRBCEEFgQiBCEEIQQiBCoElQQhBCoEIwQlBCIEKgQiBCUEKAQqBCUEcAMmBCcEJARwAycEKwQnBCYEJQQkBCcEKAQlBCcEKwQoBCcEHwQpBCYEHwSSBCkEKQQrBCYElQQqBJcElwQqBJgEKgQoBJgEmAQoBCsELAQ2BJoELAQtBHQDMQQvBDAELgQwBC8EMQShBDIEMQSfBKEEMgShBDkENQQzBDQENAQ7BDUEMwQ1BDYEpAQ1BDsEMwQ2BCwENwQ5BDgEPAQ4BDkEgwM4BDwEOwSKAzoEOgSKA48DOgSPAz4EpwQ7BDoEqgQ6BD4EjgOpBJgDjgM8BKkEPgQ9BD8EqgQ+BD8EPQSeAz8EngOfAz8EQQQ/BJ8DPwRBBEAEqgQ/BEAErARABEEESQRCBEMEmANCBEkEQgSzBEMErQSyBJgDmAOyBEIEsgSzBEIEnwNEBEEERARFBEYERARGBEEESARFBEcERgRFBEgETARKBLMDSARKBEwEuARIBEwEuAS2BEgETASzA0sEsgNLBLMDsgNNBEsESwRNBEwEuARMBE0ETgRNBLIDTgSyA7UDuARNBE4ETwROBLUDQwS3A0kETwRQBFEETwRRBLwEUQRQBFIEtwNUBLkDUQRSBFMEVAS3A8AEwARYBFQEWATABMQEVQRTBFIEVQRWBFMEVgTBBFMEwQRWBFcExQRaBFgEVgRVBFsEVwRcBMUEWgTFBFwEAgNZBFUEVQRZBFsEWwRXBFYEVwRbBFwEvAO+A1sEWwS+A1wEWgRdBFgEWgRcBF0EXAS+A10EXgRfBOADYwRfBF4EYwReBGYEXgTiA2YE5wPgA18EYQToA18EYQRfBGIEYQRgBOUDaQRgBGEEYQRiBGgEaQRhBGgEXwRjBGIEagRiBGMEagRoBGIE7wNlBOIDZgTiA2UEZARnBGUEZQRnBGYEZgRnBG0EaQTwA+kDcQTwA2kEcQRuBPADYwRmBGoEaARqBGkEbQRxBGkEagRmBG0EagRtBGkEbATzA2sEZATzA2wEbARrBG0EZwRkBGwEbQRvBHEEbwRtBGsEZwRsBG0EcAT0A24EbwRwBG4EcARvBGsEcQRvBG4E8ANuBPQDdgT0A3AEcgRrBPMDawRzBHAEawRyBHMEcgR0BHMEdARwBHME9wP0A3UEdQT0A3YEdgRwBHQEyQR1BHYEdwR0BPYDdAR3BHYEdgR3BHgE9gN4BHcEdgR4BMcEyQR2BMYEyAT4A/cDdQTIBPcDdQTJBMgE9gP6A3gE+gP5A8wEzAR4BPoDywR5BPgDgQTMBPkDfgR8BHkEfgR5BM0EggR6BHsEggR7BIMEfAR6BHkEfAR7BHoEewR9BIMEfQR7BHwEfQR/BIMEzwR9BHwE0AR/BH0EfQTPBNAEgASIBIkEgASJBIEE0wSBBIkENQXTBIkEhASGBIUEgwSEBIIEhASDBIYEhQSGBIoEhgSHBIoEhgSDBH8EfwSHBIYEigSHBNQEhwTVBNQE2ASKBNQEhQSKBP4DiwQOBI4EjASIBIsEjASJBIgEjASLBI4EkgQfBI0EDQSKBI0EigTaBI0E2gSUBI0EjwTcBI4EkASOBA4EjgSQBI8EjwSQBJEE4ASRBJUEkQTfBI8EkgSUBN0EKQSTBCsEKQSSBJMEkgSNBJQEkwSSBN0EmQQrBJMEkwTdBJkEkQTgBN8ElgSVBJcElgTgBJUElgSXBOEElwSYBOEE4QSYBOIEmQSYBCsEmQTiBJgELASaBJsEmwSaBOsEmgTqBOsELQQsBJsEnAQuBC0EmwScBC0E6wScBJsEnATsBJ0EMAQuBJ0ELgScBJ0EMASdBJ4EnwQxBDAEngSfBDAE8ASeBJ0E8gSeBPAEnwSgBKEEnwSeBKAE8gSgBJ4EoAT1BKEE8gT1BKAEOQShBKIEogQ8BDkEogShBPUEpgQ8BKIE9QSmBKIEpgT1BF4FNgQ1BKMEpQQ2BKMENQSkBKME9gSlBKME9gSjBKQENgSlBJoEpASoBPYEqQQ8BKYEpAQ7BKcEqASkBKcEOgSoBKcEBwU6BKoECwUHBaoEmAOpBK0ErwStBKkEqwRABKwEqgRABKsECwWqBKsEtASrBKwEDAULBasEqwS0BA0FswSuBEMErwSuBK0EsASuBK8ErgSwBEMEsQS7BEMEqQQTBa8EEwWwBK8EsASxBEMEsAQTBbEEsgSuBLMErQSuBLIERgSsBEEERgRIBLQEtASsBEYESAS1BLQEtgS1BEgEtwS1BLYEtwQXBbUEtwS5BBoFtwS2BLgEuQS3BLgEuQS4BLoEugS4BE4EHQVOBE8ETgQdBboEugQcBbkEIAUdBU8EGgW5BBwFHQUcBboEQwS7BLcDHwW+BLsEIAVPBLwEIAW8BL0EIAW9BCIFvwTABCUFwAS3A7sEwAS7BL4EJQXABL4EUQS9BLwEvQRRBCIFUQQmBSIFIwUmBcIEIwXCBMMEwwTEBL8EwwRYBMQEwwS/BCUFxATABL8EJgVRBFMEwQTCBCYFUwTBBCYFwgTBBFcExQTCBFcEwwTCBMUEwwTFBFgExgR2BMcEeAQpBccEygTGBMcEygTHBCcFyQTGBMoEyQTLBMgEyQTKBCcFyQQnBSgFKQV4BMwEywTJBCgFJwUtBSgFKAUtBcsEyATLBPgDMQUpBcwEeQTLBCwFeQQsBc0EMwXNBCwFgQTTBM4EzQTSBH4EfAR+BM8EfgTSBM8EMwXSBM0EzwTSBNEE0ATPBNEEfwTQBNEE0QTVBH8E0QTSBNUEMwXVBNIEOAXVBDMFNAU4BTMF1wQ1BYkEhwR/BNUE1ATVBNgE2ATVBDkF1gSJBIwE2QTWBIwE1wSJBNYEPAXWBNkEOgXXBNYEOgXWBDwFPwXaBNgEjASOBNkE2ATaBIoE2wSUBNoE3gSUBNsEPwXbBNoE3ATZBI4EPQXZBNwE3gTdBJQE3gTkBN0E5ATeBEkF3gRDBUkF2wRDBd4E3ASPBN8ERQXfBOAERAXcBN8ERAXfBEUFlgTmBOAE4ATmBEUF6AThBOIE5wSWBOEE6ATiBOME4wTiBOUEmQTlBOIE5QSZBOQEmQTdBOQESQVKBeQE5QTkBEoF5gSWBOcE5gTnBE4F4QToBOcE5wToBOkE6QToBOMETgXnBOkE6QTjBFEFmgSlBOoE6gT4BO8E6wTsBJwE6gTtBOsE6wTtBOwE7gTtBO8E7wTtBOoE7gTvBPkE8QTuBPkE+QT6BPEE8ASdBOwE8ATzBPIE7ATtBPAE7gTzBPAE7QTuBPAE8QTzBO4E8wT/BPQE/gReBfIE/gTyBPME/gTzBPQEXgX1BPIEqAQCBfYE9gQCBfcE9wQEBfgEAgUEBfcE+AQEBVUF9wSlBPYE6gSlBPcE9wT4BOoE+QT4BFUF7wT4BPkE+gT5BFUF+gRVBfwE+wT6BPwE/wTzBPEE8QT6BP8E/wT6BPsE/wT7BP0E9AT/BP4EAAVeBf4E/QQABf8E/wQABf4EVAUABf0EBQWmBF4FqAQ6BAEFCAUDBQEFYAUDBQgFAQUCBagEAQUDBQIFAgUDBQQFBAUDBWAFBAVgBVUFXgVfBQUFCgUFBV8FpgQGBakEqQQGBQkFpgQFBQYFBgUFBQkFBQUKBQkFAQU6BAcFBwULBQgFAQUHBQgFCwUOBQgFCAUOBRIFEgVgBQgFCQUKBakEqQQKBRMFEwUKBWQFqwQNBQwFDgULBQwFDwUQBQwFDQUPBQwFDQUVBQ8FDAUQBQ4FEQUPBRUFEAUSBQ4FDwURBRAFZwURBRgFFAUfBRMFsQQTBR8FFQUNBbQEtQQXBRYFFQW0BLUEFQW1BBYFFgURBRUFEQUWBRgFGAUWBRcFGQUXBbcEGwUZBbcEcwUZBRsFFwUZBRgFdAUYBRkFGgUbBbcEdgVzBRsFewUlBR8FsQQfBbsEGgUcBRsFHQUbBRwFHQV2BRsFHQUhBX0FIQUdBSAFvgQfBSUFJAUgBSIFIQUgBSQFIgUjBSQFJAYjBR4FIwXDBB4FIwUiBSYFwwQlBR4FKQUnBccELQUsBcsEzASBBDEFMQUrBSkFJwUpBSsFJwUrBSoFhwUrBTEFKwWGBSoFKwWHBYYFJwUqBS0FLAUtBZIFMwUsBZIFLgXOBNMELwXOBC4FMgXOBC8FLgU3BTAFLwUuBTAFMgUvBZUFMAWVBS8FlQUwBZYFMAU3BZQFMAWUBZYFgQTOBDEFMQXOBDIFigUxBTIFMQWKBYcFMgWVBYoFNAUzBZIFOAU0BZkFOAWZBZ4FkgWZBTQFNgU1BdcENgU3BTUF0wQ3BS4FNwXTBDUFmgU3BTYFOAU5BdUEOQU4BZ4FNgXXBDoFnAU2BToFmwWcBToFmwU6BTwFOwU/BdgEOQU7BdgEngU7BTkFngWgBTsFPAXZBD0FPgU8BT0FPAU+BZsFmwU+BZ8FQAXbBD8FQAU/BTsFpAVDBUAFoQWkBUAFQgU9BdwEQQXcBEQFQgU+BT0FQQVCBdwEogU+BUIFowVCBUEFQwXbBEAFpAVJBUMFRgVEBUUFRQVHBUYFRAVGBUEFRwVFBU0FpgVBBUYF5gRNBUUFTQWnBUcF4wTlBEsFUQXjBEsFqwVRBUgFSAVRBUsFTAVIBUsF5QRKBUsFSgVJBUwFTAVLBUoFpAVMBUkF5gROBU0FTQVOBU8FTQVPBacFTgXpBFAFUAXpBFEFTgVQBU8FUAVRBasF+wT8BFIF+wRSBVgF+wRTBf0EUgX8BFYFUwX7BFgFWAVSBVYFVAVTBVgF/QRTBVQFXAUABVQFXgUABVwFVQVWBfwEVQVXBVYFVgVXBVgFYQVYBVcFVAVYBVkFWAVhBVsFWwVhBWIFWgVZBVgFWAVbBVoFXAVUBVkFWQVaBVwFWgVdBVwFXAVdBV4FWgVjBV0FXwVeBV0FCgVfBV0FVQVgBVcFYAVmBVcFWgVbBXAFWwViBXAFcAViBW4FZAVdBW8FYwVaBXAFXQVjBW8FbwVjBXEFcQVjBXAFXQVkBQoFEwVkBRQFYAUSBWYFEgVlBWYFEgUQBWUFZQUQBREFZQVnBWgFEQVnBWUFZgVlBWgFZwV0BWoFdAVnBRgFVwVmBWkFZgVoBWkFaQVoBWoFagVoBWcFawVXBWkFagVrBWkFYQVXBW0FbQVsBWEFbAViBWEFbQVXBWsFawVqBXgFbQVrBXgFbAVuBWIFcAVuBa4FcQVwBa4FrgV6BXEFbwVxBXoFZAVyBRQFcgV7BRQFZAVvBXIFFAV7BR8FGQV1BXQFGQVzBXUFagV0BXUFcwV2BXUFagV1BXcFdQV2BXcFfAV3BXYFdwV4BWoFeAV3BXkFeQV3BXwFeQV8BYEFsAWCBYMFegWDBXsFcgVvBXoFsAV6Ba4FegWwBYMFegV7BXIFdgUdBX0FdgV9BXwFfQUhBYQFfAV9BX4FfQWEBX4FfgV/BYAFhAV/BX4FfwUkBh4FJAZ/BYQFgAV/BYMFfwUeBYMFgAWBBXwFgAV8BX4FgQWCBbAFggWBBYAFgAWDBYIFHgUlBXsFHgV7BYMFIQUkBYQFhQWNBYoFjQWFBY4FlgWYBYUFlgWXBZgFmAWxBYUFhQWxBY4FhwWIBYYFigWIBYcFiAWLBYkFiQWGBYgFhgWPBSoFiwWIBYoFiwWPBYkFiQWPBYYFiwWNBY4FjgWMBYsFiwWMBY8FjAWOBY8FiwWKBY0FjgWzBY8FsQWzBY4FKgWPBS0FjwWRBS0FLQWRBZAFswWRBY8FkAWSBS0FkgWQBZMFkAW3BZMFtwW/BZMFkwW/BZIFlAWXBZYFlAU3BZoFlwWUBZoFlgWFBZUFlQWFBYoFmAWXBbgFxgWZBZIFxgWSBb8FxgWeBZkFmgU2BZwFlwWaBcIFwwWaBZwFwgWaBcMFxwXMBZ4FngXGBccFmwWfBZ0FmwWdBZwFnQXDBZwFngXMBaAFzAXRBaAFnwU+BaIFnwXIBZ0FnwWiBdIFnwXSBc0FoAVABTsFoQVABaAFogVCBaMFowXSBaIF0wWjBdoFoQWlBaQFpQXXBaQFowVBBaYFpgVGBagFRgVHBagFqAXaBaYF2gWjBaYFRwWnBagFpwVPBaoFpwWpBagFqgWpBacFqQWqBdwF2wWpBdwF2gWoBakF2wXaBakFqgWsBdwF3AWsBd4FSAWsBasFTAWtBUgFqgVQBasFrAWqBasFrQWsBUgFrQXeBawFpAXXBUwF1wWtBUwFUAWqBU8FbQWvBWwFbAWwBW4FsAWuBW4FbQV4Ba8FbAWvBbAFrwV4BXkFrwV5BbAFsAV5BYEFsQW5BbIFsgW5BbwFtAWxBbIFvAW0BbIFtQW2BbMFtAWzBbEFtAW8Bb0FswW0BbUFswW2BZEFtgW3BZEFkAWRBbcFlwXCBbgFsQWYBbkFugW8BbkFuQWYBboFuAW6BZgFuAW7BboFugW9BbwFugXfBb0F3wW6BbsF4AXfBbsFuwW4BeIFtAW9BbUFtQW9Bb4FvgW2BbUF3wW+Bb0FtgW+Bd8FtgXfBeEFtwW2BeEF4QXABbcFtwXABb8FwAXBBb8FwQXGBb8FxAXCBcMFxAW4BcIFxAXiBbgFxQXGBcEFygXHBcUFwQXpBcUFxQXpBf0FxQX9BcoF/QXLBcoFxQXHBcYFzAXHBcoFwwXIBcQFnQXIBcMFyAXrBcQF6wXiBcQFyAXtBesFygXLBcwFywXRBcwFnwXNBcgFyAXNBe0FzQXTBc4FzQXOBe0FzwXJBfMFyQXPBQYGBgbPBQUG2QXRBdAFywXQBdEFoQXZBaUF0QWhBaAF0QXZBaEF0gXTBc0F0wXSBaMF1AXTBdoFzgXTBdQFDAbOBdQFDAbdBQ4GDAbUBd0F3QXWBQ0G1gXVBRAG1QXWBd4FrQXXBdUF2QXYBdcF2AXVBdcF0AXYBdkFCwbYBdAF2QXXBaUF2wXUBdoF3QXbBdwF3QXUBdsF3QXcBd4F3QXeBdYF1QXeBa0F3wXgBeMF5gXhBd8F3wXjBeYF6AXABeEFwQXABegF6AXhBeYFuwXiBeAF4AXiBeQF5AXiBfEF8QXlBeQF4AXkBeMF4wXkBeUF5QX1BfgF9QX0BfgF5QXnBeYF5gXjBeUF5QX7BecF6QXBBegF5gXqBegF6QXoBeoF+gXpBeoF5gXnBeoF5wX7BeoF6QX6Bf0F/QX6Bf4F/wXzBQIG7QUDBuwF7AUDBgIGAgbzBewF7wXuBesF6wXtBe8F7wXwBSUG7AXvBe0F8AXvBewF8QXiBesF8QX2BeUF8QXrBfYF6wXuBfYF9gUlBvAF9AXJBfgF7AXyBfAF8gXJBfQF8wXyBewFyQXyBfMF+AXJBfcF9wXJBQYG8AXyBfQF5QX2BfUF9QX2BfQF9AX2BfAF+AX3BfkF+QX3BQgG5QX5BfsF5QX4BfkF+QX8BfsFCwb+BfoF/AUJBvoF+gUJBgsG6gX7BfoF+gX7BfwFywX+BQoG/QX+BcsF/gULBgoGzgUABgMGAgYDBv8FAwYABv8F/wUABgEG/wUBBgQGAAbOBQEGzgUMBgEGBQYBBgwG7QXOBQMG8wX/Bc8FzwX/BQQGBQbPBQQGAQYFBgQGBwYGBgUGBQYMBgcG9wUGBggGCAYGBgcGBwYPBggG/AUIBg8G/AX5BQgGCQb8BQ8GCgbQBcsFCgYLBtAF3QUNBg4GDwYNBhAGBwYMBg4GBwYOBg8GDwYOBg0G2AUQBtUF1gUQBg0GCQYQBtgFEAYJBg8GCwYJBtgF","head_centre":[3.6,1.8,209.8],"head_radius":23.0,"shaft_axis":[-0.1525,0.0612,0.9864],"landmarks":{"head":{"v":1360,"p":[3.8,1.3,233.1]},"fovea":{"v":1508,"p":[25.2,10.2,205.7]},"greater_trochanter":{"v":344,"p":[-45.7,9.5,207.8]},"neck":{"v":1022,"p":[-14.4,-12.0,204.3]},"lesser_trochanter":{"v":1124,"p":[-3.6,21.5,146.7]},"intertrochanteric_crest":{"v":541,"p":[-26.4,28.6,175.0]},"intertrochanteric_line":{"v":840,"p":[-18.3,-7.5,164.0]},"trochanteric_fossa":{"v":558,"p":[-30.7,15.7,191.6]},"gluteal_tuberosity":{"v":301,"p":[-32.8,8.8,111.1]},"linea_aspera":{"v":647,"p":[-7.0,1.5,-5.8]},"medial_epicondyle":{"v":1455,"p":[59.1,11.4,-199.2]},"adductor_tubercle":{"v":1316,"p":[49.8,4.0,-185.6]},"lateral_epicondyle":{"v":40,"p":[-21.7,3.9,-205.4]},"medial_condyle":{"v":1078,"p":[39.8,22.0,-227.4]},"lateral_condyle":{"v":140,"p":[-6.8,17.1,-224.8]},"intercondylar_fossa":{"v":629,"p":[17.4,10.1,-203.3]},"patellar_surface":{"v":754,"p":[20.5,-25.3,-200.1]},"popliteal_surface":{"v":271,"p":[-5.1,0.7,-153.0]}},"length_mm":466.1}</script>
+<script>
+"use strict";
+/* ===================== DATA (check against Gray's, 20th ed., femur) ===================== */
+// Landmarks: key = point in the mesh data (found by tools/bones/build_femur.py), name, description, tolerance for "find it" (mm)
+const LANDMARKS = [
+  ['head', 'Head', 'Globular, rather more than a hemisphere. Directed upward, medially and a little forward; articulates with the acetabulum.', 22],
+  ['fovea', 'Fovea capitis', 'Ovoid pit a little below and behind the centre of the head, not covered by cartilage. Attachment of the ligament of the head of the femur (ligamentum teres).', 14],
+  ['neck', 'Neck', 'Joins head to shaft. In the adult it makes an angle of about 125° with the shaft, and also projects forward (on average 12–14°). Its anterior surface is pierced by many vascular foramina.', 18],
+  ['greater_trochanter', 'Greater trochanter', 'Large quadrilateral eminence at the junction of neck and shaft, directed a little laterally and backward. In the adult its top is about 1 cm lower than the head.', 22],
+  ['lesser_trochanter', 'Lesser trochanter', 'Conical eminence projecting from the lower and back part of the base of the neck. Its summit gives insertion to psoas major.', 16],
+  ['intertrochanteric_line', 'Intertrochanteric line', 'Runs obliquely downward and medially on the front, from the tubercle of the femur to below the lesser trochanter. Upper half: iliofemoral ligament. Lower half: origin of the upper part of vastus medialis.', 18],
+  ['intertrochanteric_crest', 'Intertrochanteric crest', 'Prominent ridge on the back, from the summit of the greater trochanter down and medially to the lesser trochanter. A thickening near its middle (quadrate tubercle) marks quadratus femoris.', 18],
+  ['trochanteric_fossa', 'Trochanteric fossa', 'Deep depression at the base of the medial surface of the greater trochanter. Insertion of obturator externus.', 15],
+  ['gluteal_tuberosity', 'Gluteal tuberosity', 'Rough lateral ridge running up from the linea aspera to the base of the greater trochanter. Gives attachment to part of gluteus maximus.', 20],
+  ['linea_aspera', 'Linea aspera', 'Prominent longitudinal ridge with medial and lateral lips on the back of the middle third of the shaft. Pierced a little below its centre by the nutrient canal, which is directed upward.', 22],
+  ['popliteal_surface', 'Popliteal surface', 'Triangular area on the back of the lower shaft, between the two lower prolongations of the linea aspera. The popliteal artery rests on it.', 22],
+  ['adductor_tubercle', 'Adductor tubercle', 'Small tubercle at the top of the medial epicondyle. Insertion of the tendon of adductor magnus.', 14],
+  ['medial_epicondyle', 'Medial epicondyle', 'Large convex eminence on the medial condyle. Tibial collateral ligament of the knee.', 16],
+  ['lateral_epicondyle', 'Lateral epicondyle', 'Smaller and less prominent than the medial. Fibular collateral ligament; popliteus arises from the depression just below it.', 16],
+  ['medial_condyle', 'Medial condyle', 'The longer condyle: with the shaft held vertical it reaches lower than the lateral; in the natural oblique position both lie almost in the same horizontal plane.', 20],
+  ['lateral_condyle', 'Lateral condyle', 'The more prominent condyle, broader from front to back and from side to side.', 20],
+  ['intercondylar_fossa', 'Intercondylar fossa', 'Deep notch between the condyles behind. Anterior cruciate ligament: upper, back part of its lateral wall. Posterior cruciate ligament: lower, front part of its medial wall.', 16],
+  ['patellar_surface', 'Patellar surface', 'Smooth shallow groove in front between the condyles, for the patella. Its lateral part is broader, more prominent and reaches higher.', 18],
+];
+
+// Landmarks seen best from a set direction instead of along the surface normal (deep pits)
+const VIEW_FROM = {trochanteric_fossa: [0.25, 0.75, 0.6]};
+const lmDir = k => VIEW_FROM[k] || nrmAt(GEO.LV[k]);
+
+// Attachments. type: I insertion, O origin, L ligament. where(): seed points on the right femur
+// (+x medial, +y posterior, +z up, mm); r = radius of the coloured area. Text from Gray's.
+const ATTACH_GROUPS = [
+  {name: 'Greater trochanter', view: [-0.75, 0.65, 0.15], zoom: 1.8, focus: 'greater_trochanter', items: [
+    ['Gluteus medius', 'I', 'Diagonal impression on the lateral surface of the greater trochanter.', g => [g.toward(g.add(g.L.greater_trochanter, [0,0,-18]), g.LAT)], 15],
+    ['Gluteus minimus', 'I', 'Lateral part of the anterior border of the greater trochanter.', g => [g.toward(g.add(g.L.greater_trochanter, [0,0,-24]), g.mix(g.ANT, g.LAT, .6))], 11],
+    ['Piriformis', 'I', 'Impression near the centre of the upper border of the greater trochanter.', g => [g.L.greater_trochanter], 8],
+    ['Obturator internus + gemelli', 'I', 'Impression on the medial surface, above and in front of the trochanteric fossa.', g => [g.near(g.add(g.L.trochanteric_fossa, [0,-6,10]))], 7],
+    ['Obturator externus', 'I', 'Trochanteric fossa.', g => [g.L.trochanteric_fossa], 7, VIEW_FROM.trochanteric_fossa],
+    ['Quadratus femoris', 'I', 'Thickening (quadrate tubercle) about the middle of the intertrochanteric crest.', g => [g.L.intertrochanteric_crest], 9],
+    ['Vastus lateralis (upper part)', 'O', 'Rough ridge along the inferior border of the greater trochanter.', g => [g.toward(g.add(g.L.greater_trochanter, [0,0,-38]), g.LAT)], 9],
+  ]},
+  {name: 'Lesser trochanter', view: [0.7, 0.7, 0], zoom: 1.9, focus: 'lesser_trochanter', items: [
+    ['Psoas major', 'I', 'Summit of the lesser trochanter.', g => [g.L.lesser_trochanter], 9],
+    ['Iliacus', 'I', 'Between the pectineal line and the medial ridge, just below the lesser trochanter.', g => [g.toward(g.add(g.L.lesser_trochanter, [2,0,-18]), g.mix(g.POST, g.MED, .5))], 8],
+    ['Pectineus', 'I', 'Pectineal line, from the base of the lesser trochanter down toward the linea aspera.', g => [g.toward(g.add(g.L.lesser_trochanter, [-6,0,-30]), g.POST)], 7],
+  ]},
+  {name: 'Back of shaft', view: [0, 1, 0], zoom: 1, items: [
+    ['Gluteus maximus', 'I', 'Gluteal tuberosity (part of the muscle).', g => ({path: [g.toward(g.add(g.L.gluteal_tuberosity, [0,0,14]), g.mix(g.POST, g.LAT, .6)), g.L.gluteal_tuberosity, g.toward(g.add(g.L.gluteal_tuberosity, [0,0,-16]), g.mix(g.POST, g.LAT, .6))]}), 7],
+    ['Adductor magnus', 'I', 'Linea aspera, its lateral prolongation above and its medial prolongation below, to the adductor tubercle.', g => ({path: g.ridge(g.L.popliteal_surface[2]+20, g.L.gluteal_tuberosity[2]-10, 0).path.concat([g.L.adductor_tubercle].reverse()).sort((a, b) => b[2] - a[2])}), 3.2],
+    ['Adductor longus + brevis', 'I', 'Between adductor magnus and vastus medialis, on the medial side of the linea aspera.', g => g.ridge(g.L.linea_aspera[2]-40, g.L.lesser_trochanter[2]-45, 5), 2.6],
+    ['Vastus medialis', 'O', 'Medial lip of the linea aspera and its prolongations; lower half of the intertrochanteric line.', g => g.ridge(g.L.popliteal_surface[2]+30, g.L.lesser_trochanter[2]-20, 10), 2.6],
+    ['Vastus lateralis', 'O', 'Lateral lip of the linea aspera and its upward prolongation.', g => g.ridge(g.L.linea_aspera[2]-30, g.L.gluteal_tuberosity[2]+10, -10), 2.6],
+    ['Biceps femoris, short head', 'O', 'Lateral lip of the linea aspera, below gluteus maximus.', g => g.ridge(g.L.popliteal_surface[2]+30, g.L.linea_aspera[2]-35, -5), 2.6],
+  ]},
+  {name: 'Front of shaft', view: [0, -1, 0], zoom: 1, items: [
+    ['Vastus intermedius', 'O', 'Upper three-fourths of the anterior and lateral surfaces of the shaft.', g => g.surface(g.mix(g.ANT, g.LAT, .45), .25, g.zAt(.25), g.L.lesser_trochanter[2]-10), 0],
+    ['Articularis genu', 'O', 'Anterior surface, just above the lower fourth (which is covered by the knee synovial membrane and a bursa).', g => [g.toward([g.L.patellar_surface[0], 0, g.zAt(.24)], g.ANT)], 8],
+  ]},
+  {name: 'Lower end', view: [0, 1, 0.15], zoom: 2, focus: 'intercondylar_fossa', items: [
+    ['Gastrocnemius, medial head', 'O', 'Rough impression behind the adductor tubercle.', g => [g.toward(g.add(g.L.adductor_tubercle, [-9,0,0]), g.POST)], 8],
+    ['Gastrocnemius, lateral head', 'O', 'Above and behind the lateral epicondyle.', g => [g.toward(g.add(g.L.lateral_epicondyle, [4,0,12]), g.mix(g.POST, g.LAT, .7))], 8],
+    ['Plantaris', 'O', 'Above and medial to the lateral head of gastrocnemius.', g => [g.toward(g.add(g.L.lateral_epicondyle, [12,0,26]), g.POST)], 6],
+    ['Popliteus', 'O', 'Depression directly below the lateral epicondyle.', g => [g.near(g.add(g.L.lateral_epicondyle, [0,0,-11]))], 6],
+  ]},
+  {name: 'Ligaments', view: [0.6, -0.8, 0], zoom: 1, items: [
+    ['Ligament of the head of the femur', 'L', 'Fovea capitis.', g => [g.L.fovea], 6],
+    ['Iliofemoral ligament', 'L', 'Upper half of the intertrochanteric line.', g => g.line(g.toward(g.add(g.L.greater_trochanter, [6,0,-20]), g.ANT), g.L.intertrochanteric_line, g.ANT, 4), 5],
+    ['Tibial collateral ligament', 'L', 'Medial epicondyle.', g => [g.L.medial_epicondyle], 8],
+    ['Fibular collateral ligament', 'L', 'Lateral epicondyle.', g => [g.L.lateral_epicondyle], 7],
+    ['Anterior cruciate ligament', 'L', 'Impression on the upper and back part of the lateral wall of the intercondylar fossa.', g => [g.near(g.add(g.L.intercondylar_fossa, [-7,5,7]))], 5],
+    ['Posterior cruciate ligament', 'L', 'Lower and front part of the medial wall of the intercondylar fossa.', g => [g.near(g.add(g.L.intercondylar_fossa, [7,-4,-3]))], 5],
+  ]},
+  {name: 'Clinical: neck fracture', view: [0.2, -1, 0.25], zoom: 2, focus: 'neck', clinical: true, items: [
+    ['Neck of the femur', 'C', 'Branches of the medial circumflex femoral artery (posterior retinacular arteries) carry most of the blood to the head and neck. They are often torn in fractures of the neck and in dislocation of the hip, and the head can then undergo avascular necrosis. The small artery in the ligament of the head becomes important when the neck is fractured.', g => g.neck(), 0],
+    ['Fovea: artery in the ligament of the head', 'L', 'The ligament of the head carries a small artery; after a neck fracture this supply becomes crucial.', g => [g.L.fovea], 6],
+  ]},
+];
+
+// Ossification (Gray's): appearance and union. state per region: 0 cartilage, 1 secondary centre (unfused), 2 bone (fused)
+const OSS = [
+  // [when, what, shaft, lower, head, gt, lt]
+  ['About the 7th week of fetal life', 'Primary centre appears in the middle of the shaft. Of all the long bones, only the clavicle shows ossification earlier. It spreads rapidly up and down.', 'mid', 0, 0, 0, 0],
+  ['Later in fetal life', 'The shaft is bone; both ends are still cartilage.', 'all', 0, 0, 0, 0],
+  ['9th month of fetal life', 'Centre for the lower end appears — the first epiphyseal centre, present before birth. The condyles and epicondyles form from it.', 'all', 1, 0, 0, 0],
+  ['End of the 1st year after birth', 'Centre for the head appears.', 'all', 1, 1, 0, 0],
+  ['During the 4th year', 'Centre for the greater trochanter appears.', 'all', 1, 1, 1, 0],
+  ['13th–14th year', 'Centre for the lesser trochanter appears — the last to appear.', 'all', 1, 1, 1, 1],
+  ['After puberty', 'The lesser trochanter joins the shaft first.', 'all', 1, 1, 1, 2],
+  ['After puberty (next)', 'Then the greater trochanter joins.', 'all', 1, 1, 2, 2],
+  ['After puberty (next)', 'Then the head joins.', 'all', 1, 2, 2, 2],
+  ['About the 20th year', 'Last, the lower end joins the shaft — the first to appear is the last to fuse.', 'all', 2, 2, 2, 2],
+];
+
+// Predict, then check. [question, [options], index of correct option, landmark to show, why]
+const QUIZ = [
+  ['Which muscle is inserted into the trochanteric fossa?', ['Obturator externus', 'Obturator internus', 'Piriformis', 'Quadratus femoris'], 0, 'trochanteric_fossa',
+   'Obturator internus and the gemelli insert just above and in front of the fossa; piriformis on the upper border; quadratus femoris on the intertrochanteric crest.'],
+  ['The summit of the lesser trochanter gives insertion to…', ['Psoas major', 'Gluteus minimus', 'Adductor magnus', 'Obturator externus'], 0, 'lesser_trochanter',
+   'Iliacus inserts just below it, between the pectineal line and the medial ridge.'],
+  ['Which epiphyseal centre of the femur appears first?', ['Lower end (9th month of fetal life)', 'Head (end of 1st year)', 'Greater trochanter (4th year)', 'Lesser trochanter (13th–14th year)'], 0, 'patellar_surface',
+   'It is present before birth. The shaft’s primary centre appears much earlier, at about the 7th week of fetal life.'],
+  ['Which part of the femur is the last to unite with the shaft?', ['Lower end', 'Head', 'Greater trochanter', 'Lesser trochanter'], 0, 'medial_condyle',
+   'Union is in the reverse order of appearance; the lower end joins at about the 20th year.'],
+  ['In the adult, the neck of the femur makes an angle with the shaft of about…', ['125°', '90°', '145°', '105°'], 0, 'neck',
+   'Widest in infancy, it lessens during growth; in the female it is nearer a right angle.'],
+  ['The fovea capitis gives attachment to…', ['Ligament of the head of the femur', 'Iliofemoral ligament', 'Obturator externus', 'Tibial collateral ligament'], 0, 'fovea',
+   'The fovea is the one part of the head not covered by cartilage.'],
+  ['On the femur, the anterior cruciate ligament is attached to…', ['Upper, back part of the lateral wall of the intercondylar fossa', 'Lower, front part of the medial wall of the intercondylar fossa', 'Medial epicondyle', 'Adductor tubercle'], 0, 'intercondylar_fossa',
+   'The posterior cruciate is on the opposite (medial) wall, lower and in front.'],
+  ['After a fracture of the femoral neck the head may undergo avascular necrosis because of damage to branches of the…', ['Medial circumflex femoral artery', 'Femoral artery', 'Popliteal artery', 'Lateral plantar artery'], 0, 'neck',
+   'Its posterior retinacular branches carry most of the blood to the head and neck.'],
+  ['Popliteus arises from…', ['The depression just below the lateral epicondyle', 'The adductor tubercle', 'The medial epicondyle', 'The gluteal tuberosity'], 0, 'lateral_epicondyle',
+   'Its tendon lies in a groove on the lateral condyle: the oblique groove in flexion, the vertical groove in extension.'],
+];
+
+/* ===================== GEOMETRY ===================== */
+const M = JSON.parse(document.getElementById('mesh').textContent);
+const GEO = (() => {
+  const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0)).buffer;
+  const q = new Uint16Array(b64(M.pos)), idx = new Uint16Array(b64(M.idx));
+  const n = q.length / 3, pos = new Float32Array(n * 3);
+  for (let i = 0; i < n * 3; i++) pos[i] = M.lo[i % 3] + q[i] / 65535 * M.span;
+  const nrm = new Float32Array(n * 3);
+  for (let t = 0; t < idx.length; t += 3) {
+    const a = idx[t] * 3, b = idx[t + 1] * 3, c = idx[t + 2] * 3;
+    const ux = pos[b] - pos[a], uy = pos[b + 1] - pos[a + 1], uz = pos[b + 2] - pos[a + 2];
+    const vx = pos[c] - pos[a], vy = pos[c + 1] - pos[a + 1], vz = pos[c + 2] - pos[a + 2];
+    const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+    for (const k of [a, b, c]) { nrm[k] += nx; nrm[k + 1] += ny; nrm[k + 2] += nz; }
+  }
+  for (let i = 0; i < n; i++) {
+    const l = Math.hypot(nrm[i * 3], nrm[i * 3 + 1], nrm[i * 3 + 2]) || 1;
+    nrm[i * 3] /= l; nrm[i * 3 + 1] /= l; nrm[i * 3 + 2] /= l;
+  }
+  const nb = Array.from({length: n}, () => new Set());
+  for (let t = 0; t < idx.length; t += 3) for (let k = 0; k < 3; k++) {
+    nb[idx[t + k]].add(idx[t + (k + 1) % 3]); nb[idx[t + k]].add(idx[t + (k + 2) % 3]);
+  }
+  let zmin = 1e9, zmax = -1e9;
+  for (let i = 0; i < n; i++) { zmin = Math.min(zmin, pos[i * 3 + 2]); zmax = Math.max(zmax, pos[i * 3 + 2]); }
+  const P = i => [pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]];
+  const L = {}, LV = {};
+  for (const [k, o] of Object.entries(M.landmarks)) { L[k] = P(o.v); LV[k] = o.v; }
+  return {pos, nrm, idx, n, nb, zmin, zmax, H: zmax - zmin, P, L, LV};
+})();
+
+// helpers used by ATTACH_GROUPS (right-femur frame)
+const G = (() => {
+  const {pos, nrm, n, P} = GEO;
+  const norm = v => { const l = Math.hypot(...v) || 1; return v.map(x => x / l); };
+  const g = {
+    L: GEO.L, MED: [1, 0, 0], LAT: [-1, 0, 0], POST: [0, 1, 0], ANT: [0, -1, 0], UP: [0, 0, 1],
+    add: (a, b) => a.map((x, i) => x + b[i]),
+    mix: (a, b, t) => norm(a.map((x, i) => x + t * b[i])),
+    zAt: f => GEO.zmin + f * GEO.H,
+    nearIdx(p) { let best = 0, bd = 1e18; for (let i = 0; i < n; i++) { const d = (pos[i*3]-p[0])**2 + (pos[i*3+1]-p[1])**2 + (pos[i*3+2]-p[2])**2; if (d < bd) { bd = d; best = i; } } return best; },
+    near(p) { return P(g.nearIdx(p)); },
+    // outermost vertex on the side `dir`, among vertices within 6 mm of the line through p along dir
+    toward(p, dir) {
+      const d = norm(dir); let best = -1, bv = -1e18;
+      for (let i = 0; i < n; i++) {
+        const r = [pos[i*3]-p[0], pos[i*3+1]-p[1], pos[i*3+2]-p[2]];
+        const t = r[0]*d[0] + r[1]*d[1] + r[2]*d[2];
+        const perp = Math.hypot(r[0]-t*d[0], r[1]-t*d[1], r[2]-t*d[2]);
+        if (perp < 6 && t > bv) { bv = t; best = i; }
+      }
+      return best < 0 ? g.near(p) : P(best);
+    },
+    // exact surface point: cast a ray from outside (p + 150·dir) back along -dir, first triangle hit
+    cast(p, dir) {
+      const d = norm(dir), o = p.map((x, k) => x + 150 * d[k]), r = d.map(x => -x), idx = GEO.idx;
+      let bt = Infinity;
+      for (let t = 0; t < idx.length; t += 3) {
+        const a = idx[t]*3, b = idx[t+1]*3, c = idx[t+2]*3;
+        const e1 = [pos[b]-pos[a], pos[b+1]-pos[a+1], pos[b+2]-pos[a+2]], e2 = [pos[c]-pos[a], pos[c+1]-pos[a+1], pos[c+2]-pos[a+2]];
+        const pv = [r[1]*e2[2]-r[2]*e2[1], r[2]*e2[0]-r[0]*e2[2], r[0]*e2[1]-r[1]*e2[0]];
+        const det = e1[0]*pv[0] + e1[1]*pv[1] + e1[2]*pv[2]; if (Math.abs(det) < 1e-9) continue;
+        const tv = [o[0]-pos[a], o[1]-pos[a+1], o[2]-pos[a+2]];
+        const u = (tv[0]*pv[0] + tv[1]*pv[1] + tv[2]*pv[2]) / det; if (u < 0 || u > 1) continue;
+        const qv = [tv[1]*e1[2]-tv[2]*e1[1], tv[2]*e1[0]-tv[0]*e1[2], tv[0]*e1[1]-tv[1]*e1[0]];
+        const v = (r[0]*qv[0] + r[1]*qv[1] + r[2]*qv[2]) / det; if (v < 0 || u + v > 1) continue;
+        const tt = (e2[0]*qv[0] + e2[1]*qv[1] + e2[2]*qv[2]) / det; if (tt > 0 && tt < bt) bt = tt;
+      }
+      return bt === Infinity ? g.near(p) : o.map((x, k) => x + bt * r[k]);
+    },
+    // the linea aspera: in cross-sections every 6 mm, the posterior-most surface point (rays from behind
+    // across the section), smoothed; then sampled about every 20 mm and moved dx mm (+ medial, - lateral)
+    ridge(z0, z1, dx) {
+      const lo = Math.min(z0, z1), hi = Math.max(z0, z1), raw = [];
+      for (let z = lo - 12; z <= hi + 12; z += 6) {
+        let xs = [], xmin = 1e9, xmax = -1e9;
+        for (let i = 0; i < n; i++) if (Math.abs(pos[i*3+2] - z) < 4) { xmin = Math.min(xmin, pos[i*3]); xmax = Math.max(xmax, pos[i*3]); }
+        let best = null;
+        for (let x = xmin; x <= xmax; x += 1.5) { const q = g.cast([x, 0, z], g.POST); if (Math.abs(q[2] - z) < 1 && (!best || q[1] > best[1])) best = q; }
+        if (best) raw.push(best);
+      }
+      const sm = raw.map((_, i) => { const w = raw.slice(Math.max(0, i - 2), i + 3);
+        return [0, 1, 2].map(k => w.reduce((s, p) => s + p[k], 0) / w.length); });
+      const k = Math.max(1, Math.ceil((hi - lo) / 30)), out = [];
+      for (let j = 0; j <= k; j++) {
+        const z = lo + (hi - lo) * j / k;
+        let c = sm[0]; for (const p of sm) if (Math.abs(p[2] - z) < Math.abs(c[2] - z)) c = p;
+        out.push(dx ? g.cast([c[0] + dx, c[1], z], g.mix(g.POST, dx > 0 ? g.MED : g.LAT, Math.min(.3, Math.abs(dx) / 30))) : g.cast([c[0], c[1], z], g.POST));
+      }
+      return {path: out};
+    },
+    line(a, b, dir, k) { const out = []; for (let i = 0; i <= k; i++) { const t = i / k; out.push(g.cast(a.map((x, j) => x + t * (b[j] - x)), dir)); } return {path: out}; },
+    // all vertices facing `dir` (normal·dir > c) between z0 and z1: returned as an index list
+    surface(dir, c, z0, z1) {
+      const d = norm(dir), out = [];
+      for (let i = 0; i < n; i++) { const z = pos[i*3+2]; if (z < z0 || z > z1) continue;
+        if (nrm[i*3]*d[0] + nrm[i*3+1]*d[1] + nrm[i*3+2]*d[2] > c) out.push(i); }
+      return {indices: out};
+    },
+    neck() {
+      const hc = M.head_centre, r = M.head_radius, gt = GEO.L.greater_trochanter, lt = GEO.L.lesser_trochanter, out = [];
+      for (let i = 0; i < n; i++) { const p = P(i), d = Math.hypot(p[0]-hc[0], p[1]-hc[1], p[2]-hc[2]);
+        if (d > r * 1.04 && d < r * 2.1 && p[2] > lt[2] + 8 && p[0] > gt[0] + 22) out.push(i); }
+      return {indices: out};
+    },
+  };
+  return g;
+})();
+
+/* ===================== VIEWER ===================== */
+const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+function rgb(hex) {
+  const h = hex.replace('#', ''); const f = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
+  return [0, 2, 4].map(i => parseInt(f.slice(i, i + 2), 16) / 255);
+}
+const SVGNS = 'http://www.w3.org/2000/svg';
+
+class BoneViewer {
+  constructor(host, opts = {}) {
+    this.host = host; this.mirror = !!opts.mirror; this.yaw = 0; this.pitch = 0; this.zoom = 1; this.pan = [0, 0];
+    this.markers = []; this.onTap = null; this.labelsOn = true;
+    host.innerHTML = '<canvas></canvas><svg aria-hidden="true"></svg><div class="hint">drag · pinch/scroll</div>';
+    this.c = host.querySelector('canvas'); this.svg = host.querySelector('svg');
+    const gl = this.gl = this.c.getContext('webgl', {antialias: true, alpha: true, premultipliedAlpha: false});
+    if (!gl) { host.innerHTML = '<div class="nogl">3D needs WebGL, which this browser has turned off.</div>'; this.dead = true; return; }
+    // capsules (attachment areas) are drawn per pixel: as many as the GPU's uniform budget allows
+    const MAXC = this.MAXC = Math.max(8, Math.min(64, Math.floor((gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS) - 16) / 2)));
+    const vs = `attribute vec3 p; attribute vec3 nm; attribute vec3 col;
+      uniform mat3 R; uniform vec2 S; uniform vec2 PN; varying vec3 vn; varying vec3 vc; varying vec3 vp;
+      void main(){ vec3 q = R*p; gl_Position = vec4((q.x-PN.x)*S.x, (q.z-PN.y)*S.y, q.y/600.0, 1.0); vn = R*nm; vc = col; vp = p; }`;
+    const fs = `#ifdef GL_FRAGMENT_PRECISION_HIGH
+      precision highp float;
+      #else
+      precision mediump float;
+      #endif
+       varying vec3 vn; varying vec3 vc; varying vec3 vp;
+      uniform vec4 CA[${MAXC}]; uniform vec4 CB[${MAXC}]; uniform vec3 PAL[8]; uniform float NC;
+      void main(){ vec3 base = vc;
+        for (int i = 0; i < ${MAXC}; i++) { if (float(i) >= NC) break;
+          vec3 a = CA[i].xyz; vec3 ab = CB[i].xyz - a;
+          float t = clamp(dot(vp - a, ab) / max(dot(ab, ab), 1e-6), 0.0, 1.0);
+          float d = length(vp - a - ab * t), r = CA[i].w;
+          if (d < r) { vec3 c = PAL[0]; for (int j = 1; j < 8; j++) if (float(j) == CB[i].w) c = PAL[j];
+            base = mix(base, c, 1.0 - smoothstep(r - 0.8, r, d)); } }
+        vec3 n = normalize(vn); if (n.y > 0.0) n = -n;
+        vec3 l1 = normalize(vec3(0.35,-0.75,0.55)); vec3 l2 = normalize(vec3(-0.6,-0.3,-0.4));
+        float d = max(dot(n,l1),0.0)*0.72 + max(dot(n,l2),0.0)*0.18 + 0.30;
+        float s = pow(max(dot(reflect(-l1,n), vec3(0.0,-1.0,0.0)),0.0), 24.0)*0.12;
+        gl_FragColor = vec4(base*d + s, 1.0); }`;
+    const sh = (t, src) => { const s = gl.createShader(t); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+    const pr = this.pr = gl.createProgram();
+    gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr);
+    const buf = (data, loc) => { const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+      const a = gl.getAttribLocation(pr, loc); gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 3, gl.FLOAT, false, 0, 0); return b; };
+    gl.useProgram(pr);
+    buf(GEO.pos, 'p'); buf(GEO.nrm, 'nm');
+    this.colors = new Float32Array(GEO.n * 3);
+    this.cbuf = buf(this.colors, 'col');
+    const ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, GEO.idx, gl.STATIC_DRAW);
+    gl.enable(gl.DEPTH_TEST);
+    this.uR = gl.getUniformLocation(pr, 'R'); this.uS = gl.getUniformLocation(pr, 'S'); this.uP = gl.getUniformLocation(pr, 'PN');
+    this.uCA = gl.getUniformLocation(pr, 'CA'); this.uCB = gl.getUniformLocation(pr, 'CB'); this.uPAL = gl.getUniformLocation(pr, 'PAL'); this.uNC = gl.getUniformLocation(pr, 'NC');
+    this.caps = []; this.capPal = [];
+    this.paint(() => null);
+    this.cam = new Float32Array(GEO.n * 3); this.camDirty = true;
+    this.bindInput();
+    new ResizeObserver(() => this.resize()).observe(host);
+    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => this.repaint());
+    this.resize();
+  }
+  // colourer(i) -> css var name / hex or null for bone
+  paint(colourer) {
+    this.colourer = colourer; this.repaint();
+  }
+  repaint() {
+    if (this.dead) return;
+    const bone = rgb(css('--bone')), cache = {};
+    for (let i = 0; i < GEO.n; i++) {
+      const c = this.colourer(i);
+      const v = c ? (cache[c] ||= rgb(c.startsWith('--') ? css(c) : c)) : bone;
+      this.colors[i * 3] = v[0]; this.colors[i * 3 + 1] = v[1]; this.colors[i * 3 + 2] = v[2];
+    }
+    const gl = this.gl; gl.bindBuffer(gl.ARRAY_BUFFER, this.cbuf); gl.bufferData(gl.ARRAY_BUFFER, this.colors, gl.DYNAMIC_DRAW);
+    this.draw();
+  }
+  // caps: [{a:[x,y,z], b:[x,y,z], r, c: palette index 0..7}], pal: up to 8 colours (hex or css var)
+  setCapsules(caps, pal) { if (caps.length > this.MAXC) console.warn(`${caps.length} areas, GPU allows ${this.MAXC}`); this.caps = caps.slice(0, this.MAXC); this.capPal = pal; this.draw(); }
+  matrix() {
+    const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw), cp = Math.cos(this.pitch), sp = Math.sin(this.pitch), m = this.mirror ? -1 : 1;
+    // R = Rx(pitch) * Rz(yaw) * diag(m,1,1); rows
+    const rz = [[cy, -sy, 0], [sy, cy, 0], [0, 0, 1]];
+    const rx = [[1, 0, 0], [0, cp, -sp], [0, sp, cp]];
+    const r = [0, 1, 2].map(i => [0, 1, 2].map(j => rx[i][0] * rz[0][j] + rx[i][1] * rz[1][j] + rx[i][2] * rz[2][j]));
+    for (let i = 0; i < 3; i++) r[i][0] *= m;
+    return r;
+  }
+  scale() { return this.zoom * this.h * 0.9 / GEO.H; }
+  resize() {
+    if (this.dead) return;
+    const dpr = Math.min(2, devicePixelRatio || 1), w = this.host.clientWidth, h = this.host.clientHeight;
+    this.w = w; this.h = h; this.c.width = Math.round(w * dpr); this.c.height = Math.round(h * dpr);
+    this.svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    this.draw();
+  }
+  draw() {
+    if (this.dead || !this.w) return;
+    if (this.raf) return;
+    this.raf = requestAnimationFrame(() => { this.raf = 0; this.render(); });
+  }
+  render() {
+    const gl = this.gl, R = this.matrix(), s = this.scale();
+    this.R = R; this.camDirty = true;
+    gl.viewport(0, 0, this.c.width, this.c.height);
+    gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.useProgram(this.pr);
+    gl.uniformMatrix3fv(this.uR, false, new Float32Array([R[0][0], R[1][0], R[2][0], R[0][1], R[1][1], R[2][1], R[0][2], R[1][2], R[2][2]]));
+    gl.uniform2f(this.uS, 2 * s / this.w, 2 * s / this.h); gl.uniform2f(this.uP, this.pan[0], this.pan[1]);
+    const ca = new Float32Array(this.MAXC * 4), cb = new Float32Array(this.MAXC * 4), pal = new Float32Array(24);
+    this.caps.forEach((c, i) => { ca.set([...c.a, c.r], i * 4); cb.set([...c.b, c.c], i * 4); });
+    this.capPal.forEach((h, i) => pal.set(rgb(h.startsWith('--') ? css(h) : h), i * 3));
+    gl.uniform4fv(this.uCA, ca); gl.uniform4fv(this.uCB, cb); gl.uniform3fv(this.uPAL, pal); gl.uniform1f(this.uNC, this.caps.length);
+    gl.drawElements(gl.TRIANGLES, GEO.idx.length, gl.UNSIGNED_SHORT, 0);
+    this.drawMarkers();
+  }
+  toCam(p) { const R = this.R || this.matrix(); return [0, 1, 2].map(i => R[i][0] * p[0] + R[i][1] * p[1] + R[i][2] * p[2]); }
+  toScreen(q) { const s = this.scale(); return [this.w / 2 + (q[0] - this.pan[0]) * s, this.h / 2 - (q[2] - this.pan[1]) * s]; }
+  camVerts() {
+    if (!this.camDirty) return this.cam;
+    const R = this.R, p = GEO.pos, c = this.cam;
+    for (let i = 0; i < GEO.n; i++) { const x = p[i*3], y = p[i*3+1], z = p[i*3+2];
+      c[i*3] = R[0][0]*x + R[0][1]*y + R[0][2]*z; c[i*3+1] = R[1][0]*x + R[1][1]*y + R[1][2]*z; c[i*3+2] = R[2][0]*x + R[2][1]*y + R[2][2]*z; }
+    this.camDirty = false; return c;
+  }
+  // nearest surface hit at camera-plane point (x, z): {depth, tri, bary}
+  hitAt(x, z) {
+    const c = this.camVerts(), idx = GEO.idx; let best = null;
+    for (let t = 0; t < idx.length; t += 3) {
+      const a = idx[t] * 3, b = idx[t + 1] * 3, d = idx[t + 2] * 3;
+      const ax = c[a], az = c[a + 2], bx = c[b], bz = c[b + 2], dx = c[d], dz = c[d + 2];
+      const den = (bz - dz) * (ax - dx) + (dx - bx) * (az - dz); if (Math.abs(den) < 1e-9) continue;
+      const w1 = ((bz - dz) * (x - dx) + (dx - bx) * (z - dz)) / den, w2 = ((dz - az) * (x - dx) + (ax - dx) * (z - dz)) / den, w3 = 1 - w1 - w2;
+      if (w1 < 0 || w2 < 0 || w3 < 0) continue;
+      const y = w1 * c[a + 1] + w2 * c[b + 1] + w3 * c[d + 1];
+      if (!best || y < best.depth) best = {depth: y, tri: t, bary: [w1, w2, w3]};
+    }
+    return best;
+  }
+  pick(clientX, clientY) {
+    const r = this.c.getBoundingClientRect(), s = this.scale();
+    const x = (clientX - r.left - this.w / 2) / s + this.pan[0], z = -(clientY - r.top - this.h / 2) / s + this.pan[1];
+    const h = this.hitAt(x, z); if (!h) return null;
+    const ids = [GEO.idx[h.tri], GEO.idx[h.tri + 1], GEO.idx[h.tri + 2]];
+    const p = [0, 1, 2].map(k => ids.reduce((acc, id, j) => acc + h.bary[j] * GEO.pos[id * 3 + k], 0));
+    return {p, v: ids[h.bary.indexOf(Math.max(...h.bary))]};
+  }
+  setMarkers(list) { this.markers = list; this.draw(); }
+  drawMarkers() {
+    const svg = this.svg; svg.replaceChildren();
+    for (const m of this.markers) {
+      const q = this.toCam(m.p), [sx, sy] = this.toScreen(q);
+      if (sx < -20 || sy < -20 || sx > this.w + 20 || sy > this.h + 20) continue;
+      const h = this.hitAt(q[0], q[2]);
+      const hidden = h && q[1] > h.depth + 3;
+      if (hidden && !m.always) continue;
+      const g = document.createElementNS(SVGNS, 'g'); g.setAttribute('opacity', hidden ? .35 : 1);
+      const c = document.createElementNS(SVGNS, 'circle');
+      c.setAttribute('cx', sx); c.setAttribute('cy', sy); c.setAttribute('r', m.big ? 7 : 4.5);
+      c.setAttribute('fill', m.color || css('--mark')); c.setAttribute('stroke', css('--surface')); c.setAttribute('stroke-width', 2);
+      g.append(c);
+      if (m.label && this.labelsOn) {
+        const t = document.createElementNS(SVGNS, 'text'); const left = sx > this.w * .62;
+        t.setAttribute('x', left ? sx - 10 : sx + 10); t.setAttribute('y', sy + 4); t.setAttribute('text-anchor', left ? 'end' : 'start');
+        t.textContent = m.label; g.append(t);
+      }
+      svg.append(g);
+    }
+  }
+  // turn so that model-space direction n (right-femur frame) faces the viewer
+  face(n, opts = {}) {
+    const m = [this.mirror ? -n[0] : n[0], n[1], n[2]];
+    const h = Math.hypot(m[0], m[1]);
+    let yaw = h > 1e-6 ? Math.atan2(m[0], m[1]) + Math.PI : this.yaw;
+    let pitch = Math.atan2(m[2], Math.max(h, 1e-6)) * (opts.pitchK ?? .75);
+    pitch = Math.max(-1.1, Math.min(1.1, pitch));
+    this.animate(yaw, pitch, opts.zoom ?? 1, opts.focus ?? null);
+  }
+  view(name) {
+    const d = {anterior: [0, -1, 0], posterior: [0, 1, 0], medial: [1, 0, 0], lateral: [-1, 0, 0], superior: [0, -0.35, 1], inferior: [0, -0.35, -1]}[name];
+    this.face(d, {pitchK: 1});
+  }
+  animate(yaw, pitch, zoom, focus) {
+    let dy = ((yaw - this.yaw) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
+    const y0 = this.yaw, p0 = this.pitch, z0 = this.zoom, pan0 = this.pan.slice();
+    // target pan: focus point (model space) under the centre at the end rotation
+    let pan1 = [0, 0];
+    if (focus) {
+      const save = [this.yaw, this.pitch]; this.yaw = y0 + dy; this.pitch = pitch; this.R = this.matrix();
+      const q = this.toCam(focus); pan1 = [q[0], q[2]]; [this.yaw, this.pitch] = save; this.R = this.matrix();
+    }
+    const t0 = performance.now(), dur = matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 520;
+    const step = now => {
+      const k = Math.min(1, (now - t0) / dur), e = k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
+      this.yaw = y0 + dy * e; this.pitch = p0 + (pitch - p0) * e; this.zoom = z0 + (zoom - z0) * e;
+      this.pan = [pan0[0] + (pan1[0] - pan0[0]) * e, pan0[1] + (pan1[1] - pan0[1]) * e];
+      this.render(); if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  reset() { this.animate(this.mirror ? 0 : 0, 0, 1, null); }
+  bindInput() {
+    const el = this.host, pts = new Map(); let down = null, pinch = null;
+    el.addEventListener('pointerdown', e => {
+      el.setPointerCapture(e.pointerId); pts.set(e.pointerId, [e.clientX, e.clientY]);
+      if (pts.size === 1) down = {x: e.clientX, y: e.clientY, t: performance.now(), moved: false, pan: e.shiftKey || e.button === 2};
+      if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = {d: Math.hypot(a[0] - b[0], a[1] - b[1]), z: this.zoom, mid: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]}; down && (down.moved = true); }
+    });
+    el.addEventListener('pointermove', e => {
+      if (!pts.has(e.pointerId)) return;
+      const prev = pts.get(e.pointerId); pts.set(e.pointerId, [e.clientX, e.clientY]);
+      const dx = e.clientX - prev[0], dy = e.clientY - prev[1];
+      if (pts.size === 2 && pinch) {
+        const [a, b] = [...pts.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+        this.zoom = Math.max(.6, Math.min(6, pinch.z * d / pinch.d));
+        const s = this.scale(); this.pan[0] -= (mid[0] - pinch.mid[0]) / s; this.pan[1] += (mid[1] - pinch.mid[1]) / s; pinch.mid = mid;
+        this.draw(); return;
+      }
+      if (!down) return;
+      if (Math.abs(e.clientX - down.x) + Math.abs(e.clientY - down.y) > 6) down.moved = true;
+      if (down.pan) { const s = this.scale(); this.pan[0] -= dx / s; this.pan[1] += dy / s; }
+      else { this.yaw += dx * 0.0105; this.pitch = Math.max(-1.45, Math.min(1.45, this.pitch + dy * 0.0105)); }
+      this.draw();
+    });
+    const up = e => {
+      pts.delete(e.pointerId);
+      if (pts.size < 2) pinch = null;
+      if (down && pts.size === 0) {
+        if (!down.moved && performance.now() - down.t < 500 && this.onTap) { const h = this.pick(e.clientX, e.clientY); this.onTap(h); }
+        down = null;
+      }
+    };
+    el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+    el.addEventListener('contextmenu', e => e.preventDefault());
+    el.addEventListener('wheel', e => {
+      e.preventDefault();
+      const r = this.c.getBoundingClientRect(), s0 = this.scale();
+      const fx = (e.clientX - r.left - this.w / 2) / s0 + this.pan[0], fz = -(e.clientY - r.top - this.h / 2) / s0 + this.pan[1];
+      this.zoom = Math.max(.6, Math.min(6, this.zoom * Math.exp(-e.deltaY * 0.0015)));
+      const s1 = this.scale(); this.pan[0] = fx - (e.clientX - r.left - this.w / 2) / s1; this.pan[1] = fz + (e.clientY - r.top - this.h / 2) / s1;
+      this.draw();
+    }, {passive: false});
+  }
+}
+
+function viewButtons(bar, v, extra = []) {
+  for (const [label, fn] of [['Front', () => v.view('anterior')], ['Back', () => v.view('posterior')], ['Medial', () => v.view('medial')],
+      ['Lateral', () => v.view('lateral')], ['From above', () => v.view('superior')], ['Reset', () => v.reset()], ...extra]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = fn; bar.append(b);
+  }
+}
+const lmName = Object.fromEntries(LANDMARKS.map(l => [l[0], l[1]]));
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const nrmAt = v => [GEO.nrm[v * 3], GEO.nrm[v * 3 + 1], GEO.nrm[v * 3 + 2]];
+const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+
+/* ===================== 1. EXPLORE ===================== */
+const vE = new BoneViewer(document.getElementById('v-explore'));
+viewButtons(document.getElementById('vbar-explore'), vE, [['Show left femur', function () {
+  vE.mirror = !vE.mirror; this.textContent = vE.mirror ? 'Show right femur' : 'Show left femur'; vE.draw(); }]]);
+let selected = null;
+const capE = document.getElementById('lm-cap');
+function showLandmark(key, turn = true) {
+  selected = key;
+  const [, name, text] = LANDMARKS.find(l => l[0] === key);
+  capE.innerHTML = `<b>${name}.</b> ${text}`;
+  document.querySelectorAll('#lm-chips .chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.k === key));
+  exploreMarkers();
+  if (turn) vE.face(lmDir(key), {zoom: 1.7, focus: GEO.L[key]});
+}
+function exploreMarkers() {
+  vE.setMarkers(LANDMARKS.map(([k, name]) => ({p: GEO.L[k], label: k === selected ? name : '', big: k === selected,
+    color: k === selected ? css('--mark') : css('--muted')})));
+}
+const chipBox = document.getElementById('lm-chips');
+for (const [k, name] of LANDMARKS) {
+  const b = document.createElement('button'); b.className = 'chip'; b.dataset.k = k; b.textContent = name; b.setAttribute('aria-pressed', 'false');
+  b.onclick = () => showLandmark(k); chipBox.append(b);
+}
+exploreMarkers();
+
+// find-it quiz
+let mode = 'explore', target = null, findTries = 0, findRight = 0, findDone = false;
+const findAsk = document.getElementById('find-ask'), findVerdict = document.getElementById('find-verdict'), findScore = document.getElementById('find-score');
+let findQueue = [];
+function nextFind() {
+  if (!findQueue.length) findQueue = shuffle(LANDMARKS.map(l => l[0]));
+  target = findQueue.pop(); findDone = false;
+  findAsk.textContent = `Tap the ${lmName[target].toLowerCase()}`;
+  findVerdict.textContent = 'Waiting for your tap…';
+  vE.setMarkers([]); vE.reset();
+}
+function setMode(m) {
+  mode = m;
+  document.getElementById('mode-explore').setAttribute('aria-pressed', m === 'explore');
+  document.getElementById('mode-find').setAttribute('aria-pressed', m === 'find');
+  document.getElementById('explore-pane').hidden = m !== 'explore';
+  document.getElementById('find-pane').hidden = m !== 'find';
+  if (m === 'find') nextFind(); else { exploreMarkers(); }
+}
+document.getElementById('mode-explore').onclick = () => setMode('explore');
+document.getElementById('mode-find').onclick = () => setMode('find');
+document.getElementById('find-next').onclick = nextFind;
+document.getElementById('find-show').onclick = () => {
+  if (!target) return;
+  vE.setMarkers([{p: GEO.L[target], label: lmName[target], big: true, always: true}]);
+  vE.face(lmDir(target), {zoom: 1.6, focus: GEO.L[target]});
+  if (!findDone) { findDone = true; findTries++; findScore.textContent = `${findRight} / ${findTries}`; }
+  findVerdict.innerHTML = `Here is the <b>${lmName[target].toLowerCase()}</b>. ${LANDMARKS.find(l => l[0] === target)[2]}`;
+};
+vE.onTap = hit => {
+  if (!hit) return;
+  if (mode === 'explore') {
+    let best = null, bd = 1e9;
+    for (const [k, , , tol] of LANDMARKS) { const d = dist(hit.p, GEO.L[k]); if (d < tol && d < bd) { bd = d; best = k; } }
+    if (best) showLandmark(best, false); else capE.textContent = 'No named landmark right there — try nearer one of the dots.';
+    return;
+  }
+  if (findDone) return;
+  const [, , text, tol] = LANDMARKS.find(l => l[0] === target);
+  const d = dist(hit.p, GEO.L[target]);
+  findDone = true; findTries++;
+  // the nearest landmark to the tap, to say what they hit instead
+  let near = null, nd = 1e9; for (const [k] of LANDMARKS) { const dd = dist(hit.p, GEO.L[k]); if (dd < nd) { nd = dd; near = k; } }
+  if (d <= tol) { findRight++; findVerdict.innerHTML = `<b style="color:var(--ok)">Yes.</b> ${text}`; }
+  else findVerdict.innerHTML = `<b style="color:var(--flag)">Not quite</b> — that is ${Math.round(d / 10)} cm away${near !== target && nd < 25 ? `, nearer the ${lmName[near].toLowerCase()}` : ''}. The marker shows the ${lmName[target].toLowerCase()}.`;
+  vE.setMarkers([{p: hit.p, color: css('--muted')}, {p: GEO.L[target], label: lmName[target], big: true, always: true, color: d <= tol ? css('--ok') : css('--mark')}]);
+  findScore.textContent = `${findRight} / ${findTries}`;
+};
+
+/* ===================== 2. WHICH SIDE ===================== */
+const vS = new BoneViewer(document.getElementById('v-side'));
+let sideIsLeft = false, sideAnswered = false, sideRight = 0, sideTries = 0;
+const sideVerdict = document.getElementById('side-verdict');
+function newSide() {
+  sideIsLeft = Math.random() < .5; sideAnswered = false; vS.mirror = sideIsLeft;
+  vS.yaw = Math.random() * 2 * Math.PI; vS.pitch = (Math.random() - .5) * .9; vS.zoom = 1; vS.pan = [0, 0];
+  vS.setMarkers([]); vS.draw();
+  sideVerdict.textContent = 'Turn it until you can see the head and the back of the shaft.';
+  document.getElementById('side-rules').hidden = true;
+}
+function answerSide(left) {
+  if (sideAnswered) return; sideAnswered = true; sideTries++;
+  const ok = left === sideIsLeft; if (ok) sideRight++;
+  document.getElementById('side-score').textContent = `${sideRight} / ${sideTries}`;
+  sideVerdict.innerHTML = `${ok ? '<b style="color:var(--ok)">Right.</b>' : '<b style="color:var(--flag)">No —</b>'} It is a <b>${sideIsLeft ? 'left' : 'right'}</b> femur. Now seen from behind: the head points to your ${sideIsLeft ? 'right' : 'left'}, toward the body\u2019s midline.`;
+  document.getElementById('side-rules').hidden = false;
+  vS.setMarkers([{p: GEO.L.head, label: 'Head (medial)', always: true}, {p: GEO.L.linea_aspera, label: 'Linea aspera (posterior)', always: true},
+    {p: GEO.L.intercondylar_fossa, label: 'Condyles project backward', always: true}]);
+  vS.view('posterior');
+}
+document.getElementById('side-left').onclick = () => answerSide(true);
+document.getElementById('side-right').onclick = () => answerSide(false);
+document.getElementById('side-next').onclick = newSide;
+newSide();
+
+/* ===================== 3. ATTACHMENTS ===================== */
+const vA = new BoneViewer(document.getElementById('v-att'));
+viewButtons(document.getElementById('vbar-att'), vA);
+const TYPE = {I: ['--ins', 'insertion'], O: ['--ori', 'origin'], L: ['--lig', 'ligament'], C: ['--flag', 'clinical']};
+const PAL = ['#d1495b', '#2e86ab', '#e09f3e', '#3a9d5d', '#8e5bd6', '#c2185b', '#00838f', '#7c6f64'];
+// an item's shape: {indices} -> vertex area; {path} -> tube along the points; [points] -> spots
+const shapeCache = new Map();
+function shapeFor(item) {
+  if (!shapeCache.has(item)) {
+    const sh = item[3](G), r = item[4];
+    let caps = [], verts = null;
+    if (sh.indices) verts = new Set(sh.indices);
+    else if (sh.path) for (let k = 0; k + 1 < sh.path.length; k++) caps.push({a: sh.path[k], b: sh.path[k + 1], r});
+    else caps = sh.map(p => ({a: p, b: p, r}));
+    // centre and outward direction, for turning the bone to face it
+    const pts = verts ? [...verts].map(GEO.P) : caps.flatMap(c => [c.a, c.b]);
+    const centre = [0, 1, 2].map(k => pts.reduce((s, p) => s + p[k], 0) / pts.length);
+    const n = [0, 0, 0];
+    for (const p of pts) { const v = G.nearIdx(p); for (let k = 0; k < 3; k++) n[k] += GEO.nrm[v * 3 + k]; }
+    shapeCache.set(item, {caps, verts, centre, n, big: verts ? verts.size > 300 : false});
+  }
+  return shapeCache.get(item);
+}
+let attGroup = null, attFocus = null;
+const legend = document.getElementById('att-legend'), attCap = document.getElementById('att-cap');
+function showGroup(gi) {
+  attGroup = ATTACH_GROUPS[gi]; attFocus = null;
+  document.querySelectorAll('#att-groups .chip').forEach((c, i) => c.setAttribute('aria-pressed', i === gi));
+  legend.replaceChildren();
+  attGroup.items.forEach((it, i) => {
+    const b = document.createElement('button'); b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:${PAL[i % PAL.length]}"></i><span><span>${it[0]}</span><br><span class="t" style="color:var(${TYPE[it[1]][0]})">${TYPE[it[1]][1]}</span></span>`;
+    b.onclick = () => focusItem(i); legend.append(b);
+  });
+  attHint();
+  paintAtt();
+  vA.setMarkers([]);
+  vA.face(attGroup.view, {zoom: attGroup.zoom, focus: attGroup.focus ? GEO.L[attGroup.focus] : null, pitchK: 1});
+  if (attGroup.clinical) focusItem(0);
+}
+function attHint() {
+  attCap.className = 'cap'; attCap.textContent = `${attGroup.items.length} ${attGroup.clinical ? 'items' : 'attachments'}. Tap one to bring it round.`;
+}
+function paintAtt() {
+  const col = new Map(), caps = [];
+  attGroup.items.forEach((it, i) => { if (attFocus !== null && attFocus !== i) return;
+    const sh = shapeFor(it);
+    if (sh.verts) for (const v of sh.verts) col.set(v, PAL[i % PAL.length]);
+    for (const c of sh.caps) caps.push({...c, c: i % PAL.length});
+  });
+  vA.setCapsules(caps, PAL);
+  vA.paint(i => col.get(i) || null);
+}
+function focusItem(i) {
+  attFocus = attFocus === i ? null : i;
+  legend.querySelectorAll('button').forEach((b, k) => b.setAttribute('aria-pressed', k === attFocus));
+  paintAtt();
+  if (attFocus === null) { attHint(); vA.setMarkers([]); return; }
+  const it = attGroup.items[i], sh = shapeFor(it);
+  attCap.innerHTML = `<b>${it[0]}</b> <span class="t" style="color:var(${TYPE[it[1]][0]})">(${TYPE[it[1]][1]})</span> — ${it[2]}`;
+  attCap.className = it[1] === 'C' ? 'cap warn' : 'cap';
+  vA.setMarkers([]);
+  vA.face(it[5] || sh.n, {zoom: sh.big ? 1 : 1.8, focus: sh.big ? null : sh.centre});
+}
+ATTACH_GROUPS.forEach((g, i) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = g.name; b.onclick = () => showGroup(i); document.getElementById('att-groups').append(b); });
+showGroup(0);
+
+/* ===================== 4. OSSIFICATION ===================== */
+const vO = new BoneViewer(document.getElementById('v-oss'));
+viewButtons(document.getElementById('vbar-oss'), vO);
+const OSSREG = (() => {
+  const {n, P} = GEO, hc = M.head_centre, r = M.head_radius, gt = GEO.L.greater_trochanter, lt = GEO.L.lesser_trochanter, me = GEO.L.medial_epicondyle;
+  const lower = new Set(), head = new Set(), gtr = new Set(), ltr = new Set(), mid = new Set();
+  const zLow = me[2] + 16, zMid = [GEO.zmin + .4 * GEO.H, GEO.zmin + .6 * GEO.H];
+  for (let i = 0; i < n; i++) {
+    const p = P(i);
+    if (dist(p, hc) < r * 1.06 && p[0] > hc[0] - r * .45) head.add(i);
+    else if (p[2] > gt[2] - 30 && p[0] < gt[0] + 24) gtr.add(i);
+    else if (dist(p, lt) < 11) ltr.add(i);
+    else if (p[2] < zLow) lower.add(i);
+    if (p[2] > zMid[0] && p[2] < zMid[1]) mid.add(i);
+  }
+  // growth plate: shaft vertices next to an epiphysis
+  const epi = [lower, head, gtr, ltr], plate = epi.map(() => new Set());
+  for (let i = 0; i < n; i++) {
+    if (epi.some(s => s.has(i))) continue;
+    for (const j of GEO.nb[i]) epi.forEach((s, k) => { if (s.has(j)) plate[k].add(i); });
+  }
+  return {lower, head, gtr, ltr, mid, plate};
+})();
+const ossWhen = document.getElementById('oss-when'), ossWhat = document.getElementById('oss-what');
+function showOss(k) {
+  const [when, what, shaft, ...st] = OSS[k];
+  ossWhen.textContent = when; ossWhat.textContent = what;
+  document.getElementById('oss-law').hidden = k < 6;
+  const regs = [OSSREG.lower, OSSREG.head, OSSREG.gtr, OSSREG.ltr];
+  vO.paint(i => {
+    for (let r = 0; r < 4; r++) if (regs[r].has(i)) return st[r] === 0 ? '--cart' : st[r] === 1 ? '--centre' : null;
+    for (let r = 0; r < 4; r++) if (OSSREG.plate[r].has(i) && st[r] === 1) return '--plate';
+    if (shaft === 'mid') return OSSREG.mid.has(i) ? null : '--cart';
+    return null;
+  });
+}
+const ossSlider = document.getElementById('oss-slider');
+ossSlider.max = OSS.length - 1;
+ossSlider.oninput = () => showOss(+ossSlider.value);
+showOss(0);
+
+/* ===================== 5. QUIZ ===================== */
+const quizBox = document.getElementById('quiz');
+QUIZ.forEach(([q, opts, right, lm, why], qi) => {
+  const card = document.createElement('div'); card.className = 'panel';
+  card.innerHTML = `<div class="qn">Q${qi + 1}</div><p>${q}</p><div class="opts"></div><p class="why" hidden></p>`;
+  const box = card.querySelector('.opts'), whyEl = card.querySelector('.why');
+  shuffle(opts.map((o, i) => [o, i])).forEach(([o, i]) => {
+    const b = document.createElement('button'); b.className = 'opt'; b.textContent = o; b.dataset.i = i;
+    b.onclick = () => {
+      box.querySelectorAll('.opt').forEach(x => { x.disabled = true; if (+x.dataset.i === right) x.classList.add('right'); });
+      if (i !== right) b.classList.add('wrong');
+      whyEl.hidden = false; whyEl.innerHTML = `${why} <button class="btn" style="margin-left:4px">Show on the bone</button>`;
+      whyEl.querySelector('button').onclick = () => {
+        setMode('explore'); showLandmark(lm); document.getElementById('h-explore').scrollIntoView({behavior: 'smooth'});
+      };
+    };
+    box.append(b);
+  });
+  quizBox.append(card);
+});
+</script>
+</body>
+</html>
