@@ -12,7 +12,7 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | # | Module | Branch | What it does |
 |---|---|---|---|
 | — | [Anatomy home](anatomy/index.html) | Whole body | The whole skeleton in 3D; system filters; tap a bone to open its page |
-| 01 | [The Skull](anatomy/head-neck/skull.html) | Head and neck | 22 bones assembled and colour-coded; sutures and meeting points (bregma, lambda, pterion, asterion, nasion); inside the cranial cavity: the three fossae |
+| 01 | [The Skull](anatomy/head-neck/skull.html) | Head and neck | 22 bones assembled and colour-coded; sutures and meeting points (bregma, lambda, pterion, asterion, nasion); inside the cranial cavity: the three fossae; foramina of the cranial floor and what passes through them |
 | 02 | [Bones of the Skull](anatomy/head-neck/skull-bones.html) | Head and neck | Each skull bone and the hyoid alone at near-full detail: parts, 110 landmarks and foramina, the bones it joins (contact areas from the model), ossification |
 | 03 | [The Femur](anatomy/lower-limb/femur.html) | Lower limb | 3D bone: 18 landmarks; left or right; 30 muscle and ligament attachments; neck fracture and blood supply; five ossification centres |
 

@@ -138,3 +138,19 @@ says so instead of drawing them. 110 landmarks placed by hand (`tools/bones/land
 the textbook wording, each checked by eye in several views. Foramina that the mesh does not model (supraorbital,
 spinosum, zygomaticotemporal, nasal foramen) are markers at the described position and say so. The fossa of the
 temporal bone was cross-checked against where the mandible touches it in the model.
+
+## Skull — Foramina tab (`head-neck/skull.html`, 2026-11-14)
+
+Eleven openings of the cranial floor, grouped by fossa. Contents as on Bones of the Skull (Gray 1918, checked against
+StatPearls "Skull Foramen" NBK545298 and the review above). New here:
+- **Jugular foramen** — Gray 46/47: between the petrous temporal and the occipital; IX, X, XI, inferior petrosal sinus,
+  and the "transverse sinus" (the part now called the sigmoid sinus, continuing as the internal jugular vein).
+  StatPearls "Anatomy, Head and Neck: Jugular Foramen" (statpearls.com/articlelibrary/viewarticle/36073): IX, X, XI,
+  internal jugular vein, inferior petrosal sinus. Agree.
+- **Foramen lacerum** — Gray 46 (the internal carotid passes across the upper surface of the fibrocartilage) and Gray
+  47 (its upper part "transmits" the artery) differ; modern accounts (StatPearls "Foramen Lacerum", PubMed 31082070, and
+  a microanatomy study) say no significant structure passes completely through it. The page says the artery crosses
+  its upper part and that nothing large passes right through.
+Points: paired openings on the right only. The internal acoustic meatus, jugular foramen and foramen spinosum were
+re-placed on the inner (cranial) surface of the assembled base (`bone_views.py pick` with `aim`/`focus`); the others
+reuse the bone-page landmarks; the lacerum and jugular foramen were placed at the centres of their openings in the model.

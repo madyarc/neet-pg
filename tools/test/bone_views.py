@@ -28,8 +28,9 @@ async def main():
         b, pg = await page(p, key)
         if cmd == 'views':
             out = sys.argv[3]; os.makedirs(out, exist_ok=True)
+            Z = float(os.environ.get('ZOOM', 1)); F = os.environ.get('FOCUS'); F = json.dumps([float(x) for x in F.split(',')]) if F else 'null'
             for name in (sys.argv[4:] or DIRS):
-                await pg.evaluate(f'faceNow({json.dumps(pdir(name))})'); await pg.wait_for_timeout(150)
+                await pg.evaluate(f'faceNow({json.dumps(pdir(name))}, {Z}, {F})'); await pg.wait_for_timeout(150)
                 f = f'{out}/{key.split(",")[0]}-{name.replace(",", "_")}.png'
                 await pg.locator('#v').screenshot(path=f); grid(f)
                 ax = await pg.evaluate('''(() => { const c = v.centre, o = v.toScreen(v.toCam(c)), r = {};
@@ -41,7 +42,7 @@ async def main():
             items = json.load(open(sys.argv[3])); res = []
             for it in items:
                 if 'xy' not in it and 'aim' not in it: res.append(it); print(it['name'], 'fixed', it.get('p')); continue   # point given directly (e.g. centre of a hole)
-                await pg.evaluate(f'faceNow({json.dumps(pdir(it["dir"]) if isinstance(it["dir"], str) else it["dir"])}, {it.get("zoom", 1)})')
+                await pg.evaluate(f'faceNow({json.dumps(pdir(it["dir"]) if isinstance(it["dir"], str) else it["dir"])}, {it.get("zoom", 1)}, {json.dumps(it.get("focus"))})')
                 if it.get('aim'):   # aim at a 3D point: project it, then pick the surface seen there
                     it['xy'] = await pg.evaluate(f'v.toScreen(v.toCam({json.dumps(it["aim"])})).map(Math.round)')
                 h = await pg.evaluate(f'pickAt({it["xy"][0]}, {it["xy"][1]})')

@@ -30,6 +30,7 @@
     <button class="chip" role="tab" id="tab-bones" aria-pressed="true">The bones</button>
     <button class="chip" role="tab" id="tab-sutures" aria-pressed="false">Sutures and meeting points</button>
     <button class="chip" role="tab" id="tab-inside" aria-pressed="false">Inside: cranial fossae</button>
+    <button class="chip" role="tab" id="tab-foramina" aria-pressed="false">Foramina</button>
   </div>
   <div class="split">
     <div class="panel">
@@ -55,6 +56,12 @@
         <div class="group-h">Where sutures meet</div>
         <div class="legend" id="pt-list"></div>
         <p class="muted">Suture lines are where the bones of the model touch <span class="hw">approximate</span>; the points are found from where the named bones meet.</p>
+      </div>
+      <!-- foramina -->
+      <div id="pane-foramina" class="stack" hidden>
+        <div class="cap key desc" id="for-desc">The main openings in the floor of the cranial cavity, seen from above with the cap of the skull cut away. Tap one to see what passes through it.</div>
+        <div class="legend" id="for-list"></div>
+        <p class="muted">Paired openings are marked on the right side only. Faint markers lie under an overhanging edge of bone from this angle; turn the skull to see them. Most foramina are not holes in this model; the markers show where the textbooks place them <span class="hw">approximate</span>.</p>
       </div>
       <!-- inside -->
       <div id="pane-inside" class="stack" hidden>
@@ -134,6 +141,24 @@ const FOSSAE = [
   ['posterior', 'The largest and deepest. Formed by the dorsum sellae, the clivus (the back of the body of the sphenoid and the basilar part of the occipital), the rest of the occipital bone, the petrous and mastoid parts of the temporal bones, and the mastoid angles of the parietals. It lodges the cerebellum, pons and medulla oblongata; the foramen magnum is in its centre.',
     ['occipital', 'temporal_r', 'temporal_l', 'sphenoid', 'parietal_r', 'parietal_l']],
 ];
+
+// foramina of the cranial floor: key, name, fossa, where the point comes from ([bone, landmark] in
+// ../models/skull-detail/landmarks.json, or a point placed on the inner surface of the assembled base with
+// tools/test/bone_views.py), text (Gray 1918 + StatPearls)
+const FORAMINA = [
+  ['cribriform', 'Cribriform plate', 'anterior', ['ethmoid', 'cribriform_plate'], 'The plate of the ethmoid beside the crista galli. It supports the olfactory bulb, and its many small holes transmit the olfactory nerves (I).'],
+  ['optic', 'Optic canal', 'middle', ['sphenoid', 'optic_canal'], 'Between the two roots of the lesser wing of the sphenoid. It transmits the optic nerve (II) and the ophthalmic artery into the orbit.'],
+  ['sof', 'Superior orbital fissure', 'middle', ['sphenoid', 'superior_orbital_fissure'], 'The gap between the lesser and greater wings of the sphenoid, opening into the orbit. It transmits the oculomotor (III), trochlear (IV) and abducent (VI) nerves, the three branches of the ophthalmic nerve (V1), the ophthalmic vein and sympathetic filaments, among others.'],
+  ['rotundum', 'Foramen rotundum', 'middle', ['sphenoid', 'foramen_rotundum'], 'In the greater wing of the sphenoid, behind the medial end of the superior orbital fissure. It transmits the maxillary nerve (V2).'],
+  ['ovale', 'Foramen ovale', 'middle', ['sphenoid', 'foramen_ovale'], 'In the greater wing, behind and lateral to the foramen rotundum. It transmits the mandibular nerve (V3), the accessory meningeal artery and (Gray: sometimes) the lesser petrosal nerve.'],
+  ['spinosum', 'Foramen spinosum', 'middle', [-29.3, -106.6, 1516.1], 'Lateral to the foramen ovale, in front of the spine of the sphenoid. It transmits the middle meningeal vessels and a recurrent (meningeal) branch of the mandibular nerve.'],
+  ['lacerum', 'Foramen lacerum', 'middle', [-13.7, -105.0, 1519.5], 'Medial to the foramen ovale, between the apex of the petrous temporal, the body of the sphenoid and the basilar occipital. In life its lower part is closed by fibrocartilage. The internal carotid artery, coming out of the carotid canal, crosses its upper part on the way to the cavernous sinus; modern accounts stress that no large structure passes right through it. The nerve of the pterygoid canal pierces the cartilage (Gray).'],
+  ['iam', 'Internal acoustic meatus', 'posterior', [-24.0, -89.8, 1516.7], 'On the back surface of the petrous temporal. It transmits the facial (VII) and vestibulocochlear (VIII) nerves and the labyrinthine artery.'],
+  ['jugular', 'Jugular foramen', 'posterior', [-29.5, -82.0, 1511.5], 'Between the petrous temporal (in front) and the occipital (behind), below the internal acoustic meatus. It transmits the glossopharyngeal (IX), vagus (X) and accessory (XI) nerves, the inferior petrosal sinus, and the sigmoid sinus, which becomes the internal jugular vein here (Gray calls this part the transverse sinus).'],
+  ['hypoglossal', 'Hypoglossal canal', 'posterior', ['occipital', 'hypoglossal_canal'], 'Through the occipital bone above each condyle, at the front and side of the foramen magnum. It transmits the hypoglossal nerve (XII).'],
+  ['magnum', 'Foramen magnum', 'posterior', ['occipital', 'foramen_magnum'], 'The large opening in the occipital bone. It transmits the medulla oblongata and its membranes, the accessory nerves, the vertebral arteries, the anterior and posterior spinal arteries, the tectorial membrane and the alar ligaments.'],
+];
+const FOSSA_NAMES = {anterior: 'Anterior cranial fossa', middle: 'Middle cranial fossa', posterior: 'Posterior cranial fossa'};
 
 /* ===================== PAGE ===================== */
 const typeOf = k => k.replace(/_(r|l)$/, '');
@@ -271,11 +296,37 @@ function selectFossa(key) {
   v.setMarkers(FOSSAE.map(([k]) => ({p: PTS.fossae[k].p, label: PTS.fossae[k].name.replace(' cranial fossa', ''), big: k === key, always: true})));
 }
 
+/* ----- tab: foramina ----- */
+let LM = null;
+const forP = f => Array.isArray(f[3]) && typeof f[3][0] === 'string' ? LM[f[3][0]][f[3][1]].p : f[3];
+function buildForaminaList() {
+  const box = document.getElementById('for-list'); box.replaceChildren();
+  for (const fossa of ['anterior', 'middle', 'posterior']) {
+    const h = document.createElement('div'); h.className = 'group-h'; h.textContent = FOSSA_NAMES[fossa]; box.append(h);
+    for (const [key, name] of FORAMINA.filter(f => f[2] === fossa)) {
+      const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+      b.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${name}</span>`;
+      b.onclick = () => selectForamen(key); box.append(b);
+    }
+  }
+}
+function forMarkers(active) {
+  return FORAMINA.map(f => ({p: forP(f), label: document.getElementById('names').getAttribute('aria-pressed') === 'true' || f[0] === active ? f[1] : '',
+    big: f[0] === active, always: true, color: f[0] === active ? null : '#3b4a63'}));
+}
+function selectForamen(key) {
+  pressed('for-list', key);
+  const f = FORAMINA.find(x => x[0] === key);
+  document.getElementById('for-desc').innerHTML = `<b>${f[1]}.</b> ${f[4]}`;
+  v.setMarkers(forMarkers(key));
+  v.animate(Math.PI, 1.25, 1.9, forP(f));
+}
+
 /* ----- tabs ----- */
 function setTab(name) {
   tab = name;
   card.hidden = true;
-  for (const t of ['bones', 'sutures', 'inside']) {
+  for (const t of ['bones', 'sutures', 'inside', 'foramina']) {
     document.getElementById('tab-' + t).setAttribute('aria-pressed', t === name);
     document.getElementById('pane-' + t).hidden = t !== name;
   }
@@ -287,12 +338,19 @@ function setTab(name) {
     pressed('fos-list', null);
     v.animate(Math.PI, 1.3, 1.1, null);        // from above, the face toward the top of the picture
   }
+  if (name === 'foramina') {
+    paintBones(); v.setClip([0, 0, 1], PTS.points.nasion.p[2] + 20);
+    document.getElementById('for-desc').textContent = 'The main openings in the floor of the cranial cavity, seen from above with the cap of the skull cut away. Tap one to see what passes through it.';
+    pressed('for-list', null); v.setMarkers(forMarkers(null));
+    v.animate(Math.PI, 1.3, 1.1, null);
+  }
 }
-for (const t of ['bones', 'sutures', 'inside']) document.getElementById('tab-' + t).onclick = () => setTab(t);
+for (const t of ['bones', 'sutures', 'inside', 'foramina']) document.getElementById('tab-' + t).onclick = () => setTab(t);
 document.getElementById('cut').oninput = () => v.setClip([0, 0, 1], cutZ());
 document.getElementById('names').onclick = function () {
   const on = this.getAttribute('aria-pressed') !== 'true'; this.setAttribute('aria-pressed', on);
   if (tab === 'bones' && !selType) v.setMarkers(boneLabels());
+  if (tab === 'foramina') v.setMarkers(forMarkers(document.querySelector('#for-list button[aria-pressed="true"]')?.dataset.k));
 };
 document.getElementById('jaw').onclick = function () {
   const on = this.getAttribute('aria-pressed') !== 'true'; this.setAttribute('aria-pressed', on);
@@ -308,14 +366,16 @@ v.onPick = hit => {
     selectType(t, false);
   }
   else if (tab === 'inside') document.getElementById('fos-desc').innerHTML = `<b>${partNames[hit.key]}.</b> ${T[typeOf(hit.key)].text}`;
+  else if (tab === 'foramina') document.getElementById('for-desc').innerHTML = `<b>${partNames[hit.key]}.</b> ${T[typeOf(hit.key)].text}`;
   else document.getElementById('sut-desc').innerHTML = `<b>${partNames[hit.key]}.</b> ${T[typeOf(hit.key)].text}`;
 };
 
 (async () => {
   const man = await v.load('../models/skull/skull.json');
   PTS = await (await fetch('../models/skull/skull-points.json')).json();
+  LM = await (await fetch('../models/skull-detail/landmarks.json')).json();
   for (const p of man.parts) partNames[p.key] = p.name;
-  buildBoneList(); buildSutureLists(); buildFossaList();
+  buildBoneList(); buildSutureLists(); buildFossaList(); buildForaminaList();
   setTab('bones');
   v.setMarkers(boneLabels());
   window.ready = true;

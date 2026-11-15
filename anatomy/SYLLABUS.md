@@ -289,7 +289,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 30. Cranial cavity
 
 - [~] **AN30.1** Describe the cranial fossae & identify related structures — *[The Skull](head-neck/skull.html)*
-- [~] **AN30.2** Describe & identify major foramina with structures passing through them — *on each bone: [Bones of the Skull](head-neck/skull-bones.html)*
+- [~] **AN30.2** Describe & identify major foramina with structures passing through them — *foramina of the cranial floor with their contents: [The Skull](head-neck/skull.html) (Foramina); on each bone: [Bones of the Skull](head-neck/skull-bones.html)*
 - [ ] **AN30.3** Describe & identify dural folds & dural venous sinuses
 - [ ] **AN30.4** Describe clinical importance of dural venous sinuses
 - [ ] **AN30.5** Explain effect of pituitary tumours on visual pathway
