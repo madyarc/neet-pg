@@ -198,16 +198,16 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 21. Thoracic cage
 
-- [~] **AN21.1** Identify and describe the salient features of sternum, typical rib and typical thoracic vertebra. — *typical thoracic vertebra: [The Vertebrae](back/vertebrae.html)*
-- [~] **AN21.2** Identify & describe the features of atypical ribs and atypical thoracic vertebrae. — *atypical thoracic vertebrae (T1, T9–T12): [The Vertebrae](back/vertebrae.html)*
-- [ ] **AN21.3** Describe & demonstrate the boundaries of thoracic inlet, cavity and outlet along with its applied aspect.( Thoracic inlet Syndrome)
+- [x] **AN21.1** Identify and describe the salient features of sternum, typical rib and typical thoracic vertebra. — *sternum, typical rib: [Ribs and Sternum](thorax/ribs.html); typical thoracic vertebra: [The Vertebrae](back/vertebrae.html)*
+- [x] **AN21.2** Identify & describe the features of atypical ribs and atypical thoracic vertebrae. — *ribs 1, 2, 10, 11, 12: [Ribs and Sternum](thorax/ribs.html); T1, T9–T12: [The Vertebrae](back/vertebrae.html)*
+- [~] **AN21.3** Describe & demonstrate the boundaries of thoracic inlet, cavity and outlet along with its applied aspect.( Thoracic inlet Syndrome) — *boundaries of the openings: [The Thoracic Cage](thorax/thoracic-cage.html); cervical rib: [Ribs and Sternum](thorax/ribs.html)*
 - [ ] **AN21.4** Describe & demonstrate extent, attachments, direction of fibres, nerve supply and actions of intercostal muscles
 - [ ] **AN21.5** Describe & demonstrate origin, course, relations and branches of a typical intercostal nerve
 - [ ] **AN21.6** Mention origin, course and branches/ tributaries of: 1) anterior & posterior intercostal vessels 2) internal thoracic vessels
 - [ ] **AN21.7** Mention the origin, course, relations and branches of 1) atypical intercostal nerve 2) superior intercostal artery, subcostal artery
-- [ ] **AN21.8** Describe & demonstrate type, articular surfaces & movements of manubriosternal, costovertebral, costotransverse and xiphisternal joints
+- [~] **AN21.8** Describe & demonstrate type, articular surfaces & movements of manubriosternal, costovertebral, costotransverse and xiphisternal joints — *[The Thoracic Cage](thorax/thoracic-cage.html) (joints)*
 - [ ] **AN21.9** Describe & demonstrate mechanics and types of respiration
-- [ ] **AN21.10** Describe costochondral and interchondral joints
+- [~] **AN21.10** Describe costochondral and interchondral joints — *[The Thoracic Cage](thorax/thoracic-cage.html) (joints)*
 - [ ] **AN21.11** Mention boundaries and contents of the superior, anterior, middle and posterior mediastinum
 
 ### 22. Heart & Pericardium

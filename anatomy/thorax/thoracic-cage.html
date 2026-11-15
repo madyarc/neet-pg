@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Thoracic Cage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+.tabs{display:flex;gap:6px}
+.tabs .chip{font-size:13.5px;padding:6px 14px}
+.group-h{font:600 12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:10px 0 2px}
+.group-h:first-child{margin-top:0}
+.desc{min-height:3em}
+.vgrid{display:flex;flex-wrap:wrap;gap:4px}
+.vgrid button{font:500 12px var(--f-mono);min-width:38px;padding:5px 6px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.vgrid button[aria-pressed="true"]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>The Thoracic Cage</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="stack" aria-label="3D thoracic cage">
+  <div class="tabs scrollrow" role="tablist" aria-label="What to show">
+    <button class="chip" role="tab" id="tab-regions" aria-pressed="true">Ribs</button>
+    <button class="chip" role="tab" id="tab-curves" aria-pressed="false">Sternum and joints</button>
+    <button class="chip" role="tab" id="tab-discs" aria-pressed="false">Openings</button>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <div id="v"></div>
+      <div class="vbar scrollrow" id="views"></div>
+    </div>
+    <div class="panel stack">
+      <div id="pane-regions" class="stack">
+        <div class="cap key desc" id="reg-desc"></div>
+        <div class="legend" id="reg-list"></div>
+        <div class="group-h">Each rib (right side)</div>
+        <div class="vgrid" id="vgrid"></div>
+      </div>
+      <div id="pane-curves" class="stack" hidden>
+        <div class="cap key desc" id="curve-desc"></div>
+        <div class="legend" id="curve-list"></div>
+      </div>
+      <div id="pane-discs" class="stack" hidden>
+        <div class="cap key desc" id="disc-desc"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p>Models used: 3D bones and costal cartilages from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). BodyParts3D has costal cartilages 1–7 only, so the cartilages of ribs 8–10 are missing from the model.</p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — checked in Gray's 1918, Wikipedia and StatPearls (see anatomy/DATA-SOURCES.md) ===================== */
+const DATA = {
+  lede: 'An osseo-cartilaginous cage that holds and protects the main organs of breathing and circulation: the 12 thoracic vertebrae behind, 12 pairs of ribs at the sides, the costal cartilages and the sternum in front. Tap a rib to select it, tap again to open it.',
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the thorax, sternum, ribs, costal cartilages and their joints; cross-checked with Wikipedia\'s articles and StatPearls (NCBI Bookshelf).',
+  regionsIntro: 'Twelve ribs on each side (a cervical or lumbar rib may add one; there may be only eleven). They lengthen from the first to the seventh and then shorten. Tap a group or a rib.',
+  regions: [
+    ['true', 'True ribs — 1 to 7', 'Joined behind to the vertebral column and in front to the sternum, each through its own costal cartilage (vertebrosternal ribs). Gray: the eighth cartilage sometimes reaches the sternum, more often on the right.'],
+    ['false', 'False ribs (vertebrochondral) — 8 to 10', 'False ribs are ribs 8–12 (Gray): ribs 8–10 join the cartilage of the rib above (vertebrochondral), and 11–12 float. Some texts (StatPearls) call only 8–10 false. The cartilages of ribs 8–10 are not in this model.'],
+    ['floating', 'Floating ribs — 11 and 12', 'Free at their front ends, which end in the abdominal wall (vertebral ribs).'],
+    ['cart', 'Costal cartilages', 'Bars of hyaline cartilage that carry the ribs forward and make the chest wall elastic. Cartilages 1–7 reach the sternum; 8–10 join the cartilage above; 11 and 12 are free. They tend to ossify superficially in old age.'],
+    ['sternum', 'Sternum', 'Manubrium, body and xiphoid process, in the middle of the front of the chest.'],
+    ['vertebra', 'Thoracic vertebrae', 'The 12 thoracic vertebrae form the back of the cage.'],
+  ],
+  curvesIntro: 'Joints of the cage. Tap one.',
+  curves: [
+    ['costovertebral', 'Joints of the heads of the ribs', 'Each head meets the bodies of two neighbouring vertebrae and the disc between them; ribs 1, 10, 11 and 12 meet only one vertebra. Synovial plane joints (Gray: arthrodial) with a capsule and a radiate ligament; an intra-articular ligament from the crest of the head to the disc splits each into two cavities (not in ribs 1, 10, 11, 12).',
+      ['rib6_r', 't5', 't6']],
+    ['costotransverse', 'Costotransverse joints', 'The articular part of the tubercle meets the transverse process: a synovial plane joint. Absent in ribs 11 and 12.', ['rib6_r', 't6']],
+    ['sternocostal', 'Sternocostal joints', 'Cartilages 2–7 meet the sternum at synovial plane joints (Gray: arthrodial); the second has two cavities. The first cartilage is directly united with the manubrium: a primary cartilaginous joint (synchondrosis), with no cavity.',
+      ['manubrium', 'sternum_body', 'xiphoid', 'cc1_r', 'cc2_r', 'cc3_r', 'cc4_r', 'cc5_r', 'cc6_r', 'cc7_r']],
+    ['manubriosternal', 'Manubriosternal joint', 'A secondary cartilaginous joint (symphysis) at the sternal angle: manubrium and body are joined by fibrocartilage. They sometimes fuse by bone, more often with age.', ['manubrium', 'sternum_body']],
+    ['interchondral', 'Interchondral joints', 'The touching borders of cartilages 6, 7 and 8 meet at small facets, each in a synovial capsule. Cartilages 9 and 10 are more often joined only by ligamentous fibres (Gray).', ['cc6_r', 'cc7_r']],
+  ],
+  discs: 'The upper opening (superior thoracic aperture) is formed by T1 behind, the first rib on each side and the upper border of the manubrium in front. It is kidney-shaped, wider from side to side, and slopes downward and forward, so its front is lower than its back. Gray: about 5 cm front to back and 10 cm across; Wikipedia: 6.5 × 11 cm. Wikipedia notes it is also called the thoracic inlet, and clinically the thoracic outlet. The lower opening is formed by T12, ribs 11 and 12, and the cartilages of ribs 7–10, which meet in the subcostal angle with the xiphoid process at its apex; the diaphragm closes it (Gray).',
+};
+
+/* region of each part, colour per region (Paul Tol "light"; discs = cartilage) */
+const REGION_OF = k => { const m = /^rib(\d+)_/.exec(k); if (m) { const n = +m[1]; return n <= 7 ? 'true' : n <= 10 ? 'false' : 'floating'; }
+  return k.startsWith('cc') ? 'cart' : /^(manubrium|sternum_body|xiphoid)$/.test(k) ? 'sternum' : 'vertebra'; };
+const COLOURS = {true: '#77AADD', false: '#EE8866', floating: '#BBCC33', sternum: '#EEDD88', cart: '--cart', vertebra: '--bone'};
+/* the detailed page for each part (ribs.html#type, or the thoracic vertebra page) */
+const TYPE_OF = k => { const m = /^rib(\d+)_/.exec(k); if (m) { const n = +m[1]; return n === 1 ? 'first' : n === 2 ? 'second' : n === 12 ? 'twelfth' : 'typical'; }
+  if (/^(manubrium|sternum_body|xiphoid)$/.test(k)) return 'sternum'; if (/^t\d+$/.test(k)) return 'vertebra'; return null; };
+const TYPE_TITLE = {first: 'First rib', second: 'Second rib', twelfth: 'Twelfth rib', typical: 'Typical rib', sternum: 'Sternum', vertebra: 'Thoracic vertebra'};
+const HREF = t => t === 'vertebra' ? '../back/vertebrae.html#thoracic' : 'ribs.html#' + t;
+
+/* ===================== PAGE ===================== */
+const v = new AtlasViewer(document.getElementById('v'));
+const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
+let man = null, names = {}, tab = 'regions', picked = null;
+const views = [['Front', [0, -1, 0]], ['Left side', [1, 0, 0]], ['Back', [0, 1, 0]], ['Right side', [-1, 0, 0]]];
+for (const [label, dir] of views) {
+  const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
+  b.onclick = () => v.face(dir, {zoom: 1}); document.getElementById('views').append(b);
+}
+const pressed = (sel, key) => document.querySelectorAll(sel).forEach(b => b.setAttribute('aria-pressed', b.dataset.k === key));
+
+function paint(focus = null) {
+  for (const k of v.order) { v.setColour(k, COLOURS[REGION_OF(k)]); v.setVertexMarks(k, null); }
+  v.setFocus(focus);
+}
+function typeTitle(t) { return TYPE_TITLE[t] || t; }
+
+/* tap a vertebra: select it; tap again (or the button) to open its type's page */
+function pick(key) {
+  const t = TYPE_OF(key);
+  if (!t) { picked = null; v.setFocus([key]); card.hidden = false; card.innerHTML = `<div class="what"><b>${names[key]}</b><span>Costal cartilage</span></div><button class="x" aria-label="Clear">×</button>`; card.querySelector('.x').onclick = clearPick; return; }
+  if (picked === key) { location.href = HREF(t); return; }
+  picked = key;
+  pressed('#vgrid button', key);
+  v.setFocus([key]);
+  card.hidden = false;
+  card.innerHTML = `<div class="what"><b>${names[key]}</b><span>${typeTitle(t)} · tap again to open</span></div><a class="go" href="${HREF(t)}">Open →</a><button class="x" aria-label="Clear">×</button>`;
+  card.querySelector('.x').onclick = clearPick;
+}
+function clearPick() { picked = null; card.hidden = true; pressed('#vgrid button', null); paint(); }
+
+function buildRegions() {
+  const box = document.getElementById('reg-list'); box.replaceChildren();
+  for (const [key, name, text] of DATA.regions) {
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:${COLOURS[key].startsWith('--') ? 'var(' + COLOURS[key] + ')' : COLOURS[key]}"></i><span>${name}</span>`;
+    b.onclick = () => {
+      clearPick(); pressed('#reg-list button', key);
+      document.getElementById('reg-desc').innerHTML = `<b>${name}.</b> ${text}`;
+      const keys = v.order.filter(k => REGION_OF(k) === key);
+      v.setFocus(keys); v.fit(keys); v.face([0.6, -1, 0], {zoom: 1});
+    };
+    box.append(b);
+  }
+  const g = document.getElementById('vgrid'); g.replaceChildren();
+  const SEQ = [...[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(i => 'rib' + i + '_r'), 'manubrium', 'sternum_body', 'xiphoid'];
+  for (const k of SEQ.filter(k => v.parts.has(k))) {
+    const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
+    b.textContent = k.startsWith('rib') ? k.slice(3, -2) : {manubrium: 'Manubrium', sternum_body: 'Body', xiphoid: 'Xiphoid'}[k];
+    b.onclick = () => { if (picked !== k) { v.fit([k]); v.face([0.6, -1, 0.3], {zoom: 1}); } pick(k); };
+    g.append(b);
+  }
+}
+function buildCurves() {
+  const box = document.getElementById('curve-list'); box.replaceChildren();
+  for (const [key, name, text, keys] of DATA.curves) {
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${name}</span>`;
+    b.onclick = () => {
+      pressed('#curve-list button', key);
+      document.getElementById('curve-desc').innerHTML = `<b>${name}.</b> ${text}`;
+      v.setFocus(keys);
+    };
+    box.append(b);
+  }
+}
+function selectDisc(key) {
+  setTab('discs', false);
+  v.setFocus([key]);
+  document.getElementById('disc-desc').innerHTML = `<b>${names[key]}.</b> ${DATA.discs}`;
+}
+
+function setTab(name, move = true) {
+  tab = name; clearPick();
+  for (const t of ['regions', 'curves', 'discs']) {
+    document.getElementById('tab-' + t).setAttribute('aria-pressed', t === name);
+    document.getElementById('pane-' + t).hidden = t !== name;
+  }
+  pressed('#reg-list button', null); pressed('#curve-list button', null);
+  paint();
+  if (name === 'regions') { document.getElementById('reg-desc').innerHTML = DATA.regionsIntro; if (move) { v.fit(null); v.face([0, -1, 0], {zoom: 1}); } }
+  if (name === 'curves') { document.getElementById('curve-desc').innerHTML = DATA.curvesIntro; if (move) { v.fit(null); v.face([-0.6, -1, 0.2], {zoom: 1}); } }
+  if (name === 'discs') {
+    document.getElementById('disc-desc').innerHTML = DATA.discs;
+    v.setFocus(v.order.filter(k => /^(rib1_|t1$|t12$|rib11_|rib12_|manubrium|xiphoid|cc7_)/.test(k)));
+    if (move) { v.fit(null); v.face([0, -1, 0.6], {zoom: 1}); }
+  }
+}
+for (const t of ['regions', 'curves', 'discs']) document.getElementById('tab-' + t).onclick = () => setTab(t);
+v.onPick = hit => hit ? pick(hit.key) : clearPick();
+
+(async () => {
+  document.getElementById('lede').innerHTML = DATA.lede;
+  document.getElementById('based').innerHTML = DATA.based;
+  man = await v.load('../models/thorax/thorax.json');
+  for (const p of man.parts) names[p.key] = p.name;
+  buildRegions(); buildCurves();
+  setTab('regions');
+  window.ready = true;
+})().catch(e => { document.getElementById('reg-desc').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

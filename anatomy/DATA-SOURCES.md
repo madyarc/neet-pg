@@ -179,3 +179,23 @@ instead of Wikipedia's "70 %"; (7) sacral fusion starts around puberty (StatPear
 (0.04 mm, single vertebrae). BodyParts3D's "sacrum" includes the coccyx. 63 hand-placed landmarks
 (`tools/spine/landmarks/`), checked in two oblique views each; vertebral-foramen centres of T6 and L3 set between the
 back of the body and the laminae (picking from above sees through the canal).
+
+## Thorax — `thorax/thoracic-cage.html`, `thorax/ribs.html` (2026-11-14)
+
+**Sources.** Gray 1918: 107/26–29 (thorax, sternum, ribs, costal cartilages), 107/76–77 (costovertebral and sternocostal
+joints); Wikipedia "Sternum", "Xiphoid process", "Sternal angle", "Rib", "Rib cage", "Costal cartilage", "Superior
+thoracic aperture" (largely copied from Gray). Quote-checked fact sheet `sources-local/facts/thorax.md`. Two Wikipedia
+errors not used: "first two pairs"/"top five ribs" join the sternum (Gray and Wikipedia "Rib cage": seven), and the xiphoid
+"celiac plexus" sentence.
+
+**Independent review (2026-11-14; StatPearls/Radiopaedia via search excerpts):** no factual errors; ~22 exam facts
+confirmed (typical ribs 3–9; first-rib grooves and contents; single-vertebra ribs 1, 10–12; cervical rib on the lower
+trunk; aperture boundaries). Fixed: sternal angle at the T4/T5 disc with what lies there (StatPearls NBK459336);
+xiphoid ossification from ~3 years, variable (Radiopaedia 50176) vs Gray's 5–18; joint classes added — manubriosternal
+secondary cartilaginous (symphysis), 1st sternocostal synchondrosis, 2–7 and costovertebral/costotransverse synovial
+plane; false ribs: Gray 8–12 (8–10 vertebrochondral, 11–12 floating) vs StatPearls 8–10, both given; interchondral
+9–10 usually ligamentous (Gray's own next sentence).
+
+**Models.** `configs/thorax.json` (BodyParts3D 3.0, 0.25 mm: ribs, cartilages 1–7, sternum, T1–T12) and
+`configs/thorax-detail.json` (0.04 mm: right ribs 1, 2, 6, 10, 11, 12 and the sternum). BodyParts3D has no cartilages
+for ribs 8–10. 29 hand-placed landmarks (`tools/thorax/landmarks/`), checked in two views each.

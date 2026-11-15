@@ -16,7 +16,9 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | 02 | [Bones of the Skull](anatomy/head-neck/skull-bones.html) | Head and neck | Each skull bone and the hyoid alone at near-full detail: parts, 110 landmarks and foramina, the bones it joins (contact areas from the model), ossification |
 | 03 | [The Vertebral Column](anatomy/back/vertebral-column.html) | Back | 24 vertebrae, sacrum, coccyx and 23 discs assembled; regions; the four curves; discs |
 | 04 | [The Vertebrae](anatomy/back/vertebrae.html) | Back | Atlas, axis, typical cervical, C7, thoracic, lumbar, sacrum and coccyx in detail: landmarks, how to recognise each, ossification |
-| 05 | [The Femur](anatomy/lower-limb/femur.html) | Lower limb | 3D bone: 18 landmarks; left or right; 30 muscle and ligament attachments; neck fracture and blood supply; five ossification centres |
+| 05 | [The Thoracic Cage](anatomy/thorax/thoracic-cage.html) | Thorax | Ribs (true, false, floating), costal cartilages, sternum, thoracic vertebrae assembled; joints; openings |
+| 06 | [Ribs and Sternum](anatomy/thorax/ribs.html) | Thorax | Typical, first, second and twelfth ribs and the sternum in detail |
+| 07 | [The Femur](anatomy/lower-limb/femur.html) | Lower limb | 3D bone: 18 landmarks; left or right; 30 muscle and ligament attachments; neck fracture and blood supply; five ossification centres |
 
 ## Syllabus
 

@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ribs and Sternum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+.picker{display:flex;gap:6px;flex-wrap:wrap}
+@media (max-width:600px){.picker{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none} .picker::-webkit-scrollbar{display:none} .picker > *{flex:none}}
+.desc{min-height:3em}
+.facts h3{margin-bottom:4px}
+.facts p{max-width:75ch}
+.facts dl{display:grid;grid-template-columns:minmax(0,max-content) minmax(0,1fr);gap:4px 14px;margin:0}
+.facts dt{font-weight:600}
+.facts dd{margin:0}
+.facts ul{margin:0;padding-left:20px;max-width:75ch}
+.facts li{margin:2px 0}
+@media (max-width:560px){.facts dl{grid-template-columns:minmax(0,1fr)} .facts dd{margin-bottom:6px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> · <a href="thoracic-cage.html">The Thoracic Cage</a></nav>
+
+<header class="stack">
+  <h1 id="title">Ribs and Sternum</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="panel picker" aria-label="Choose a bone" id="picker"></section>
+
+<section class="split" aria-label="3D bone">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="views"></div>
+    <div class="vbar">
+      <button class="chip" id="ctx" aria-pressed="false">Show the rest of the cage</button>
+      <button class="chip" id="names" aria-pressed="true">Names on the model</button>
+    </div>
+  </div>
+  <div class="panel stack">
+    <div class="cap key desc" id="lm-desc">Tap a landmark in the list.</div>
+    <div class="legend" id="lm-list"></div>
+    <p class="muted">Marker positions were placed by hand on the model from the textbook descriptions <span class="hw">approximate</span>. Ribs are shown on the right side.</p>
+  </div>
+</section>
+
+<section class="panel stack facts" aria-label="About this bone" id="facts"></section>
+
+<footer>
+  <p>Based on: Gray's <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the thorax, sternum, ribs, costal cartilages and their joints; cross-checked with Wikipedia's articles and StatPearls (NCBI Bookshelf). Where modern sources differ from Gray, both are given.</p>
+  <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (the shown bone at near full detail, the rest of the cage simplified; shared under the same licence). BodyParts3D has costal cartilages 1–7 only.</p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — checked in Gray's 1918, Wikipedia and StatPearls (see anatomy/DATA-SOURCES.md) =====================
+ * VERTS[key]: name, short, part (model part in ../models/thorax-detail), region, intro, parts [[name, text]],
+ *   landmarks [[key, name, text]] (positions in ../models/thorax-detail/landmarks.json), recognise [text], ossification, clinical
+ */
+const VERTS = {
+  typical: {name: 'Typical rib', short: 'Typical rib', part: 'rib6_r', region: 'true', view: [-0.3, 1, 0.3],
+    intro: 'Gray studies the ribs from one in the middle of the series; ribs 3–9 share these features (Gray calls ribs 1, 2, 10, 11 and 12 "peculiar"). Shown: the right sixth rib.',
+    parts: [
+      ['Vertebral (posterior) end', 'Head, neck and tubercle.'],
+      ['Shaft (body)', 'Thin and flat, with an outer and an inner surface and an upper and a lower border.'],
+      ['Sternal (anterior) end', 'Flattened, with a pit that receives the costal cartilage.'],
+    ],
+    landmarks: [
+      ['head', 'Head', 'A kidney-shaped articular surface split by a horizontal crest into two facets (the upper smaller) for the bodies of two neighbouring vertebrae. The crest takes the intra-articular ligament.'],
+      ['neck', 'Neck', 'The flattened part running laterally from the head (Gray: about 2.5 cm long), in front of the transverse process of the lower of the two vertebrae it meets.'],
+      ['tubercle', 'Tubercle', 'On the back of the rib where neck meets shaft. Its lower, medial part has a facet for the transverse process; its rough upper part takes the ligament of the tubercle.'],
+      ['angle', 'Angle', 'A prominent line on the outer surface a little lateral to the tubercle, for a tendon of the iliocostalis. Here the rib bends and twists.'],
+      ['shaft', 'Shaft', 'The external intercostal muscle is attached to its thin lower border.'],
+      ['costal_groove', 'Costal groove', 'On the inner surface along the lower border, deepest just in front of the angle. It carries the intercostal vessels and nerve.'],
+      ['sternal_end', 'Sternal end', 'Its porous pit receives the costal cartilage (costochondral joint).'],
+    ],
+    recognise: ['A head with two facets separated by a crest.', 'A neck, a tubercle with an articular facet, and an angle.', 'A costal groove on the inner surface along the lower border.'],
+    atypical: ['The tenth and eleventh ribs', ['Rib 10 has a single facet on its head and meets only the body of T10.', 'Rib 11 has one large head facet, no neck or tubercle, a slight angle, a shallow costal groove and a pointed front end.']],
+    ossification: 'Ribs 1–10 ossify from four centres: a primary one for the shaft and epiphyses for the head and for the articular and non-articular parts of the tubercle. Ossification begins near the angle toward the end of the 2nd month of fetal life, first in ribs 6 and 7; the epiphyses appear between 16 and 20 years and unite about 25 (Gray).'},
+
+  first: {name: 'First rib', zoom: 0.7, short: 'First rib', part: 'rib1_r', region: 'true', view: [-0.3, -0.3, 1],
+    intro: 'The most curved and usually the shortest rib; broad and flat, its surfaces facing up and down. Shown: the right first rib, from above.',
+    parts: [
+      ['Head', 'Small, with a single facet for the body of T1.'],
+      ['Neck and tubercle', 'A narrow neck; a thick, prominent tubercle on the outer border. There is no angle.'],
+      ['Shaft', 'Its upper surface is grooved; its under surface is smooth, with no costal groove.'],
+      ['Anterior end', 'Larger and thicker than that of any other rib.'],
+    ],
+    landmarks: [
+      ['head', 'Head', 'Small and rounded, with one facet for the body of T1.'],
+      ['neck', 'Neck', 'Narrow.'],
+      ['tubercle', 'Tubercle', 'Thick and prominent, on the outer border.'],
+      ['scalene_tubercle', 'Scalene tubercle', 'On the inner border about its middle, at the end of a ridge across the upper surface. The scalenus anterior attaches to it.'],
+      ['subclavian_vein_groove', 'Groove for the subclavian vein', 'On the upper surface, in front of the scalene tubercle.'],
+      ['subclavian_artery_groove', 'Groove for the subclavian artery', 'On the upper surface, behind the scalene tubercle; it carries the subclavian artery and the lowest trunk of the brachial plexus. The scalenus medius attaches behind it.'],
+      ['sternal_end', 'Anterior end', 'Its costal cartilage is directly continuous with the manubrium (the first sternocostal joint is a synchondrosis).'],
+    ],
+    recognise: ['Broad, flat and strongly curved, with surfaces facing up and down.', 'The scalene tubercle with a groove in front and a groove behind.', 'A single facet on the head; no angle and no costal groove.'],
+    ossification: 'Like ribs 2–10: a primary centre for the shaft and three epiphysial centres (head and two for the tubercle).',
+    clinical: 'A cervical rib (from C7) may press on the lower trunk of the brachial plexus (C8, T1) or, less often, on the subclavian artery.'},
+
+  second: {name: 'Second rib', zoom: 0.7, short: 'Second rib', part: 'rib2_r', region: 'true', view: [-1, -0.3, 0.6],
+    intro: 'Much longer than the first rib but curved in the same way. Its shaft is not twisted, so both ends touch a flat surface it is laid on. Shown: the right second rib.',
+    parts: [
+      ['Angle', 'Slight, and close to the tubercle.'],
+      ['Outer surface', 'Faces upward and a little outward, with a rough eminence near its middle.'],
+      ['Inner surface', 'A short costal groove on its back part.'],
+    ],
+    landmarks: [
+      ['head', 'Head', 'Two facets, like a typical rib: it meets T1 and T2.'],
+      ['tubercle', 'Tubercle', 'The slight angle lies close to it.'],
+      ['serratus_eminence', 'Rough eminence (for serratus anterior)', 'Near the middle of the outer surface, for the lower part of the first and the whole of the second digitation of the serratus anterior; the scalenus posterior attaches behind and above it (Gray). Approximate position.'],
+      ['sternal_end', 'Anterior end', 'Its cartilage joins the sternum at the sternal angle.'],
+    ],
+    recognise: ['Like a longer first rib, with a rough eminence on its outer surface.', 'Not twisted: both ends touch a table it is laid on.']},
+
+  twelfth: {name: 'Twelfth rib', short: 'Twelfth rib', part: 'rib12_r', region: 'floating', view: [-0.3, 1, 0],
+    intro: 'A floating rib: free at its front end. Much shorter than the eleventh, and sometimes shorter than the first. Shown: the right twelfth rib.',
+    parts: [
+      ['Head', 'One large facet, for T12 only; the head tilts slightly downward.'],
+      ['Shaft', 'No neck, no tubercle, no angle and no costal groove.'],
+      ['Anterior end', 'Pointed and free.'],
+    ],
+    landmarks: [
+      ['head', 'Head', 'A single large facet; it meets only the body of T12, and there is no joint with the transverse process.'],
+      ['shaft', 'Shaft', 'Short, with no angle or costal groove.'],
+      ['anterior_end', 'Anterior end', 'Pointed; its cartilage ends free in the abdominal wall.'],
+    ],
+    recognise: ['Short, with one head facet and no neck, tubercle, angle or groove.', 'A pointed, free front end.'],
+    ossification: 'Ribs 11 and 12 have only two centres (shaft and head); the tubercle centres are missing.'},
+
+  sternum: {name: 'Sternum', short: 'Sternum', part: 'sternum_body', also: ['manubrium', 'xiphoid'], region: 'sternum', view: [-0.4, -1, 0.1],
+    intro: 'A long flat bone in the middle of the front of the chest, about 17 cm long in the adult (a little longer in males): manubrium, body and xiphoid process. It articulates with both clavicles and the upper seven costal cartilages on each side.',
+    parts: [
+      ['Manubrium', 'Roughly four-sided, broad and thick above, narrow below.'],
+      ['Body', 'Longer, narrower and thinner than the manubrium; widest near its lower end. It forms from four segments (sternebrae).'],
+      ['Xiphoid process', 'The smallest part: thin and long, cartilage in youth, partly bone in the adult; its shape varies (broad, pointed, bifid, perforated).'],
+    ],
+    landmarks: [
+      ['jugular_notch', 'Jugular (suprasternal) notch', 'In the middle of the thick upper border of the manubrium.'],
+      ['clavicular_notch', 'Clavicular notch', 'On each side of the jugular notch, for the sternal end of the clavicle (sternoclavicular joint).'],
+      ['manubrium', 'Manubrium', 'The pectoralis major and sternocleidomastoid arise from its front; the sternohyoid and sternothyroid from its back.'],
+      ['first_costal_notch', 'Notch for the first costal cartilage', 'At the top of each lateral border of the manubrium; the first cartilage is directly continuous with the bone: a primary cartilaginous joint (synchondrosis), with no joint cavity.'],
+      ['sternal_angle', 'Sternal angle (angle of Louis)', 'Where the manubrium meets the body; the second costal cartilage joins the sternum here, so it is used to find the second rib and count down from it. It lies at the level of the T4/T5 intervertebral disc (StatPearls), the boundary between the superior and inferior mediastinum; the arch of the aorta begins and ends at this level and the trachea divides about here.'],
+      ['second_costal_notch', 'Notch for the second costal cartilage', 'Shared by the manubrium and the body. This joint has two cavities, separated by a ligament to the fibrocartilage between manubrium and body.'],
+      ['body', 'Body', 'Notches for cartilages 3–6 along each border, and half the notch for cartilage 7 at its lower corner.'],
+      ['xiphoid', 'Xiphoid process', 'The linea alba attaches to its tip; the diaphragm, transversus thoracis and abdominal aponeuroses attach to it.'],
+    ],
+    recognise: ['Manubrium, body and xiphoid process in a line.', 'The sternal angle at the junction with the second costal notches.'],
+    ossification: 'From six centres: one for the manubrium, four for the body, one for the xiphoid. Manubrium and first piece of the body in the 6th fetal month; second and third in the 7th; fourth in the 1st year after birth; xiphoid from about the 3rd year onward, very variable (Gray: 5–18 years). The pieces of the body unite from below upward, from puberty to about 25 (Gray). Irregular union of paired centres can leave a sternal foramen.',
+    clinical: 'The manubriosternal joint is a secondary cartilaginous joint (symphysis): manubrium and body are joined by fibrocartilage. They sometimes fuse by bone, more often with age (Radiopaedia: complete fusion in about 5% of people). Gray: the xiphoid may join the body before 30, more often after 40, or stay separate.'},
+};
+/* ===================== PAGE ===================== */
+const REGION_COLOUR = {true: '#77AADD', false: '#EE8866', floating: '#BBCC33', sternum: '#EEDD88'};
+const v = new AtlasViewer(document.getElementById('v'));
+const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
+let DET = null, LM = null, names = {}, cur = null, sel = null, picked = null;
+const views = [['Above', [0, -0.35, 1]], ['Front', [0, -1, 0]], ['Right side', [-1, 0, 0]], ['Back', [0, 1, 0]], ['Below', [0, -0.35, -1]], ['Left side', [1, 0, 0]]];
+for (const [label, dir] of views) {
+  const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
+  b.onclick = () => v.face(dir, {zoom: 0.9}); document.getElementById('views').append(b);
+}
+const on = id => document.getElementById(id).getAttribute('aria-pressed') === 'true';
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function buildPicker() {
+  const box = document.getElementById('picker');
+  for (const [key, t] of Object.entries(VERTS)) {
+    const c = document.createElement('button'); c.className = 'chip'; c.dataset.k = key; c.textContent = t.short;
+    c.onclick = () => { location.hash = key; };
+    box.append(c);
+  }
+}
+function context() {
+  const t = VERTS[cur], ctx = on('ctx'), mine = [t.part, ...(t.also || [])];
+  for (const k of v.order) if (!k.startsWith('D:')) {
+    v.setVisible(k, ctx && !mine.includes(k));
+    v.setColour(k, k.startsWith('cc') ? '--cart' : '--bone');
+  }
+  v.setFocus(mine.map(k => 'D:' + k));
+}
+async function show(key) {
+  if (!VERTS[key]) key = 'typical';
+  cur = key; sel = null; picked = null; card.hidden = true;
+  const t = VERTS[key], dk = 'D:' + t.part;
+  document.querySelectorAll('#picker .chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.k === key));
+  document.getElementById('title').textContent = t.name; document.title = t.name;
+  document.getElementById('lede').innerHTML = t.intro;
+  const mine = [t.part, ...(t.also || [])];
+  for (const k of mine) if (!v.parts.has('D:' + k)) { const info = DET.parts.find(p => p.key === k); await v.loadPart('D:' + k, '../models/thorax-detail/' + info.file, info); }
+  for (const k of v.order) if (k.startsWith('D:')) v.setVisible(k, mine.includes(k.slice(2)));
+  for (const k of mine) v.setColour('D:' + k, REGION_COLOUR[t.region]);
+  context();
+  v.fit(mine.map(k => 'D:' + k)); v.face(t.view || [0.5, -0.8, 0.6], {zoom: t.zoom || 0.9});
+  writeFacts(t); buildList(t);
+  document.getElementById('lm-desc').textContent = 'Tap a landmark in the list.';
+  v.setMarkers(markers(null));
+}
+function writeFacts(t) {
+  let h = '<h2>About it</h2><dl>';
+  for (const [n, x] of t.parts) h += `<dt>${esc(n)}</dt><dd>${x}</dd>`;
+  h += '</dl>';
+  if (t.recognise) h += `<div><h3>How to recognise it</h3><ul>${t.recognise.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+  if (t.atypical) h += `<div><h3>${t.atypical[0]}</h3><ul>${t.atypical[1].map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+  if (t.ossification) h += `<div><h3>Ossification</h3><p>${t.ossification}</p></div>`;
+  if (t.clinical) h += `<div class="cap warn"><b>Clinical.</b> ${t.clinical}</div>`;
+  document.getElementById('facts').innerHTML = h;
+}
+function buildList(t) {
+  const ll = document.getElementById('lm-list'); ll.replaceChildren();
+  for (const [k, name] of t.landmarks) {
+    if (!LM[t.part] || !LM[t.part][k]) continue;
+    const e = document.createElement('button'); e.dataset.k = k; e.setAttribute('aria-pressed', 'false');
+    e.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${esc(name)}</span>`;
+    e.onclick = () => selectLm(sel === k ? null : k); ll.append(e);
+  }
+}
+function markers(active) {
+  const t = VERTS[cur];
+  return t.landmarks.filter(([k]) => LM[t.part] && LM[t.part][k]).map(([k, name]) => ({p: LM[t.part][k].p,
+    label: on('names') || k === active ? name : '', big: k === active, color: k === active ? css('--mark') : '#3b4a63', always: k === active}));
+}
+function selectLm(k) {
+  sel = k; const t = VERTS[cur];
+  document.querySelectorAll('#lm-list button').forEach(e => e.setAttribute('aria-pressed', e.dataset.k === k));
+  const d = document.getElementById('lm-desc');
+  if (!k) { d.textContent = 'Tap a landmark in the list.'; v.setMarkers(markers(null)); return; }
+  const [, name, text] = t.landmarks.find(l => l[0] === k), L = LM[t.part][k];
+  d.innerHTML = `<b>${esc(name)}.</b> ${text}`;
+  v.setMarkers(markers(k));
+  v.face(L.dir, {zoom: 1.3, focus: L.p});
+}
+for (const id of ['ctx', 'names']) document.getElementById(id).onclick = function () {
+  this.setAttribute('aria-pressed', !on(id));
+  if (id === 'ctx') context(); else v.setMarkers(markers(sel));
+};
+v.onPick = hit => {
+  if (!hit || hit.key.startsWith('D:') || TYPE_OF(hit.key) === null) { picked = null; card.hidden = true; return; }
+  const t = TYPE_OF(hit.key), href = t.startsWith('../') ? t : '#' + t;
+  if (picked === hit.key) { location.href = href; return; }
+  picked = hit.key; card.hidden = false;
+  card.innerHTML = `<div class="what"><b>${esc(names[hit.key])}</b><span>Tap it again to open it</span></div><a class="go" href="${href}">Open →</a><button class="x" aria-label="Clear">×</button>`;
+  card.querySelector('.x').onclick = () => { picked = null; card.hidden = true; };
+};
+const TYPE_OF = k => { const m = /^rib(\d+)_/.exec(k); if (m) { const n = +m[1]; return n === 1 ? 'first' : n === 2 ? 'second' : n === 12 ? 'twelfth' : 'typical'; }
+  if (/^(manubrium|sternum_body|xiphoid)$/.test(k)) return 'sternum'; if (/^t\d+$/.test(k)) return '../back/vertebrae.html#thoracic'; return null; };
+addEventListener('hashchange', () => show(location.hash.slice(1)));
+
+(async () => {
+  const [det, lm] = await Promise.all(['../models/thorax-detail/thorax-detail.json', '../models/thorax-detail/landmarks.json']
+    .map(u => fetch(u).then(r => { if (!r.ok) throw new Error(u + ': ' + r.status); return r.json(); })));
+  DET = det; LM = lm;
+  const man = await v.load('../models/thorax/thorax.json');
+  for (const p of man.parts) names[p.key] = p.name;
+  buildPicker();
+  await show(location.hash.slice(1));
+  window.ready = true;
+})().catch(e => { document.getElementById('lm-desc').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>
