@@ -9,6 +9,7 @@
  *   v.onPick = (key, point) => …;  v.view('anterior');  v.setClip([0, 0, 1], z) / v.setClip(null)
  *   v.setVertexMarks('frontal', Uint32Array of vertex ids, '#000')   // e.g. sutures
  *   v.setMarkers([{p:[x,y,z], label:'Bregma', color:'#…'}])
+ *   await v.loadPart('D:frontal', '../models/skull-detail/frontal.bin')     // one extra part from its own file
  */
 'use strict';
 (function () {
@@ -106,6 +107,13 @@
       this.fit();
       this.loadingEl.remove();
       return man;
+    }
+    /** add one more part from its own binary (e.g. a detailed copy of a bone over a lighter model) */
+    async loadPart(key, url, info = {}) {
+      const m = decode(await (await fetch(url)).arrayBuffer());
+      this.addPart(key, m, info);
+      if (this.loadingEl.isConnected) this.loadingEl.remove();
+      return this.parts.get(key);
     }
     addPart(key, m, info = {}) {
       if (this.dead) return;

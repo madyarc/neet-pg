@@ -45,6 +45,8 @@ hits all 18 landmarks when tapped at the marker.
 "The Skull" (bartleby.com/107/30), each bone (107/31–45), "The Exterior of the Skull" (107/46) and "The Interior of the
 Skull" (107/47), read from the Internet Archive copy; and the Wikipedia article on each bone, each suture, the pterion,
 asterion, bregma, lambda, nasion, the middle meningeal artery and each cranial fossa (read 2026-11-14, plain-text API).
+Correction: the local copy fetched as "Asterion" was the mythology article; the asterion definition was re-checked
+against StatPearls "Anatomy, Head and Neck: Asterion" and Wikipedia "Asterion (anatomy)" — confirmed.
 Local copies in `sources-local/text/` (not in git).
 
 OpenStax *Anatomy and Physiology 2e* was read once and then dropped: its licence page forbids ingestion by AI systems
@@ -93,3 +95,42 @@ is a cleaned copy); 3.0 has slightly finer surface detail and is used (1.0 MB fo
 Neither models the small foramina: the sphenoid has one opening per side, at the base of the lateral pterygoid plate,
 where Gray places the foramen ovale; rotundum, spinosum, optic canal etc. are not holes in the mesh. Foramina will be
 shown as labelled markers at text-checked positions, never as invented holes.
+
+## Bones of the Skull — `head-neck/skull-bones.html`
+
+**Sources.** Gray 1918, chapter on each bone (bartleby 107/31–45, with 46 and 47), and the Wikipedia article on each
+bone. Fact sheets with verbatim quotes from both (every quote checked as an exact substring of the source text) are in
+`sources-local/facts/` (not in git). Much of Wikipedia's bone text is copied from Gray, so "in both" is often not
+independent; every statement was therefore also checked by an independent reviewer against StatPearls (NCBI
+Bookshelf) and recent papers (2026-11-14).
+
+**Independent review (2026-11-14):** no factual errors; about 30 exam-relevant statements confirmed (articulation counts,
+contents of the optic canal, superior orbital fissure, rotundum, hypoglossal canal, stylomastoid foramen, foramen
+magnum, mandibular/mental/infraorbital foramina, muscle and ligament attachments, hyoid articulating with no bone).
+Fixed: (1) metopic suture — Gray "obliterated by the eighth year", modern: closes in infancy (StatPearls
+"Trigonocephaly", NBK565874); both given. (2) spheno-occipital fusion — Gray 18–25 years, modern CT: usually adolescence
+(PubMed 35141949; PMC7731241); both given. (3) foramen ovale — accessory meningeal artery and lesser petrosal nerve
+added (Gray 35; StatPearls "Skull Foramen", NBK545298). (4) foramen spinosum — meningeal branch of the mandibular nerve
+added (Gray 35/47). (5) internal acoustic meatus — "labyrinthine artery" (modern name of Gray's internal auditory
+artery; StatPearls NBK544288). (6) maxillary sinus first appears earlier than Gray's fourth month (PMC9544638); both
+given. (7) anterior fontanelle — StatPearls 13–24 months (NBK542197) beside Gray's year and a half. (8) mandibular angle
+at birth — Gray 175°, StatPearls about 160° (NBK532292); both given.
+
+**Single-source (Gray) points kept** (old descriptive anatomy, no modern disagreement found): frontal eminence 3 cm above
+the supraorbital margin; supraorbital notch at the medial/intermediate third junction; lacrimal fossa of the frontal;
+optic canal between the roots of the lesser wing; crista galli, cribriform plate, middle concha; external acoustic
+meatus; ossification details of the nasal, palatine, vomer; parietal single centre (some texts say two).
+
+**Disagreements noted on the page:** temporal parts (Gray 5 / Wikipedia 4); ethmoid articulations (Gray 15 /
+Wikipedia 13, sphenoidal conchae); internal occipital crest (Gray: falx cerebelli / Wikipedia: falx cerebri);
+zygomaticofacial foramen (malar surface / frontal process); nasion ("middle" / "most anterior point" of the frontonasal
+suture). Lacrimal drainage: Wikipedia's "into the nasopharynx" is not used; Gray: the canal opens into the inferior
+meatus.
+
+**Models.** `configs/skull-detail.json`: BodyParts3D 3.0 (95 %) at 0.04 mm error (about the source detail), 2.5 MB for
+23 parts; the page loads only the chosen bone. Contact areas ("joins with") are the detailed model's contacts
+(1.2 mm). Some articulations in Gray's lists do not touch in the model (e.g. sphenoid–vomer, maxilla–vomer); the page
+says so instead of drawing them. 110 landmarks placed by hand (`tools/bones/landmarks/`, `tools/test/bone_views.py`) from
+the textbook wording, each checked by eye in several views. Foramina that the mesh does not model (supraorbital,
+spinosum, zygomaticotemporal, nasal foramen) are markers at the described position and say so. The fossa of the
+temporal bone was cross-checked against where the mandible touches it in the model.

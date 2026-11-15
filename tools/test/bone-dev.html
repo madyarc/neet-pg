@@ -1,0 +1,23 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../anatomy/assets/atlas.css">
+<style>body{margin:0;background:#fff}#v{width:800px;height:800px}</style></head><body>
+<div id="v"></div>
+<script src="../../anatomy/assets/viewer.js"></script>
+<script>
+// dev page for placing landmarks: ?b=<part key>[,<context keys>]
+const keys = new URLSearchParams(location.search).get('b').split(',');
+const v = new AtlasViewer(document.getElementById('v'));
+v.c.parentElement.querySelector('.hint').remove();
+v.load('../../anatomy/models/skull-detail/skull-detail.json', keys).then(() => {
+  for (const k of keys) v.setColour(k, '#d9cfb6');
+  v.fit([keys[0]]); window.v = v; window.ready = true; });
+// set a view instantly: dir in body frame
+window.faceNow = (n, zoom = 1, focus = null) => {
+  const h = Math.hypot(n[0], n[1]);
+  v.yaw = h > 1e-6 ? Math.atan2(n[0], n[1]) + Math.PI : 0;
+  v.pitch = Math.max(-1.45, Math.min(1.45, Math.atan2(n[2], Math.max(h, 1e-6))));
+  v.zoom = zoom; v.pan = [0, 0];
+  if (focus) { const q = v.toCam(focus); v.pan = [q[0], q[2]]; }
+  v.render(0); v.drawMarkers(null);
+};
+window.pickAt = (x, y) => { const r = v.c.getBoundingClientRect(); return v.pick(r.left + x, r.top + y); };
+</script></body></html>

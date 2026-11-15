@@ -15,7 +15,6 @@
 .mod:hover h3{color:var(--accent)}
 .num{font:500 13px var(--f-mono);color:var(--muted);padding-top:2px}
 .mod p{color:var(--muted);font-size:14px}
-.open{display:inline-block;margin-top:6px;font-weight:600}
 </style>
 </head>
 <body>
@@ -24,7 +23,7 @@
 <header class="stack">
   <h1>Anatomy</h1>
   <p class="lede">The whole body, assembled. Choose a system, turn the body, and tap a part to see its name; parts with a
-    page open into it. Built so far: the skeleton, with detailed pages for the skull and the femur.</p>
+    page open into it. Built so far: the skeleton, with detailed pages for the skull, each bone of the skull, and the femur.</p>
 </header>
 
 <section class="split" aria-label="Whole body">
@@ -50,7 +49,9 @@
       <nav class="mods" aria-label="Modules">
         <a class="mod" href="head-neck/skull.html"><span class="num">01</span><div><h3>The Skull</h3>
           <p>The 22 bones assembled and colour-coded; sutures and the points where they meet; inside the cranial cavity.</p></div></a>
-        <a class="mod" href="lower-limb/femur.html"><span class="num">02</span><div><h3>The Femur</h3>
+        <a class="mod" href="head-neck/skull-bones.html"><span class="num">02</span><div><h3>Bones of the Skull</h3>
+          <p>Each of the 22 bones and the hyoid on its own, in near-full detail: parts, landmarks and foramina, the bones it joins, ossification.</p></div></a>
+        <a class="mod" href="lower-limb/femur.html"><span class="num">03</span><div><h3>The Femur</h3>
           <p>Landmarks, telling left from right, muscle and ligament attachments, neck fracture, ossification.</p></div></a>
       </nav>
     </div>
@@ -68,9 +69,13 @@
 /* which detailed page each bone opens (by its BodyParts3D name) */
 const PAGES = [
   [/^(frontal bone|(right|left) parietal bone|occipital bone|(right|left) temporal bone|sphenoid bone|ethmoid|(right|left) nasal bone|(right|left) maxilla|(right|left) lacrimal bone|(right|left) zygomatic bone|(right|left) palatine bone|(right|left) inferior nasal concha|vomer|mandible|hyoid bone)$/i,
-   'head-neck/skull.html', 'the skull'],
+   'head-neck/skull-bones.html#', 'this bone'],
   [/^(right|left) femur$/i, 'lower-limb/femur.html', 'the femur'],
 ];
+// skull bone name -> its key on the bones-of-the-skull page
+const SKULL_TYPE = [[/frontal/i, 'frontal'], [/parietal/i, 'parietal'], [/occipital/i, 'occipital'], [/temporal/i, 'temporal'],
+  [/sphenoid/i, 'sphenoid'], [/ethmoid/i, 'ethmoid'], [/nasal bone/i, 'nasal'], [/maxilla/i, 'maxilla'], [/lacrimal/i, 'lacrimal'],
+  [/zygomatic/i, 'zygomatic'], [/palatine/i, 'palatine'], [/concha/i, 'concha'], [/vomer/i, 'vomer'], [/mandible/i, 'mandible'], [/hyoid/i, 'hyoid']];
 // regions for the quick buttons: which bones to frame (by name)
 const REGIONS = [
   ['Whole body', null],
@@ -87,7 +92,13 @@ v.onPick = hit => {
   if (!hit) { info.textContent = 'Tap a bone.'; v.setFocus(null); return; }
   const name = names[hit.key], page = PAGES.find(([re]) => re.test(name));
   v.setFocus([hit.key]);
-  info.innerHTML = `<b>${name}</b>` + (page ? `<br><a class="open" href="${page[1]}">Open ${page[2]} →</a>` : `<br><span class="muted">No detailed page yet.</span>`);
+  let link = '';
+  if (page && page[1].endsWith('#')) {
+    // skull bones: their own page, plus the assembled skull
+    const type = SKULL_TYPE.find(([re]) => re.test(name))[1];
+    link = `<br><a class="open" href="${page[1]}${type}">Open ${page[2]} →</a> &nbsp; <a class="open" href="head-neck/skull.html">The whole skull →</a>`;
+  } else if (page) link = `<br><a class="open" href="${page[1]}">Open ${page[2]} →</a>`;
+  info.innerHTML = `<b>${name}</b>` + (link || `<br><span class="muted">No detailed page yet.</span>`);
 };
 for (const [label, re] of REGIONS) {
   const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;

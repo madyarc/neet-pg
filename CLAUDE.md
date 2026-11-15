@@ -48,7 +48,8 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
 1. **No unverified data, two sources.** Every fact must be checked **before** it goes on a page, in two independent
    sources where at all possible. The owner cannot spot medical errors by eye, so this is the only safeguard. Sources
    we can legally read: Gray's *Anatomy* 20th ed. (1918, public domain; text via the Internet Archive copy of
-   bartleby.com/107), Wikipedia (CC BY-SA; check its citations), StatPearls / NCBI Bookshelf, official guidelines,
+   bartleby.com/107), Wikipedia (CC BY-SA; check its citations — much of its anatomy text is copied from Gray 1918, so
+   it is not an independent second source for those sentences), StatPearls / NCBI Bookshelf, official guidelines,
    peer-reviewed papers. Never enter facts from memory. Never use pirated textbooks. **Do not use OpenStax** — its
    licence forbids ingestion by AI systems. When sources disagree, log both and say on the page what both support.
 2. **Cite sources** on the page (footer) and in the subject's `DATA-SOURCES.md`. The footer is for students: a short
@@ -101,6 +102,13 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
   `PLAYWRIGHT_BROWSERS_PATH=0`). Pages that fetch models need a local http server to test (`python3 -m http.server`).
 - Every computed point or line (landmark, suture, fossa) is checked by eye in a screenshot before it ships, and is
   labelled approximate. If a rule can't place something reliably (e.g. the inion), leave it out.
+- Hand-placed landmarks: `tools/test/bone_views.py` (with `tools/test/bone-dev.html`) renders a bone from any direction
+  with a pixel grid (`views`), turns chosen pixels into surface points (`pick`, or `aim` at a 3D point; holes get a
+  fixed centre from points on their rim) and draws all markers for checking (`all`). One JSON per bone in
+  `tools/bones/landmarks/`; `build.py` writes `anatomy/models/skull-detail/landmarks.json`. Place each point from the
+  textbook's words ("about 3 cm above the supraorbital margin"), then check it in several views.
+- Detailed single bones: `configs/skull-detail.json` (error 0.04 mm, about the source detail); a bone page shows the
+  detailed bone over the lighter assembled model (`AtlasViewer.loadPart`).
 
 ### Colour
 
@@ -108,7 +116,7 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
   `--ori` / `--ins` / `--lig` (muscle origin, insertion, ligament — Okabe–Ito, colour-blind safe), `--cart` / `--centre` /
   `--plate` (cartilage, secondary ossification centre, growth plate). Never reuse a meaning colour for something else.
 - Bone identity colours (assembled regions): Paul Tol's "light" palette, assigned by `assign_colours.py` so that bones
-  that touch never share a colour; bones are also **named on the model**, so nothing depends on colour alone.
+  that touch never share a colour (copied to `anatomy/models/skull/colours.json` for the bone pages); bones are also **named on the model**, so nothing depends on colour alone.
 - Selecting a part shows the rest as faint glass, so deep parts (sphenoid, ethmoid) are visible whole.
 - Check light and dark mode, and that labels stay readable on every bone colour.
 

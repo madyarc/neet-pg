@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bones of the Skull</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+.picker{display:flex;flex-direction:column;gap:6px}
+.picker .row{gap:6px}
+.picker .tag{min-width:64px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs .chip{font-size:13.5px;padding:6px 14px}
+.desc{min-height:3em}
+.facts h3{margin-bottom:4px}
+.facts p{max-width:75ch}
+.facts dl{display:grid;grid-template-columns:minmax(0,max-content) minmax(0,1fr);gap:4px 14px;margin:0}
+.facts dt{font-weight:600}
+.facts dd{margin:0;color:var(--ink)}
+@media (max-width:560px){.facts dl{grid-template-columns:minmax(0,1fr)} .facts dd{margin-bottom:6px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> · <a href="skull.html">The Skull</a></nav>
+
+<header class="stack">
+  <h1 id="title">Bones of the Skull</h1>
+  <p class="lede" id="lede">Each bone of the skull on its own, in detail: its parts, the landmarks on it, and the bones it joins.
+    Choose a bone.</p>
+</header>
+
+<section class="panel picker" aria-label="Choose a bone" id="picker"></section>
+
+<section class="stack" aria-label="3D bone">
+  <div class="tabs" role="tablist" aria-label="What to show">
+    <button class="chip" role="tab" id="tab-lm" aria-pressed="true">Landmarks</button>
+    <button class="chip" role="tab" id="tab-art" aria-pressed="false">Joins with</button>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <div id="v"></div>
+      <div class="vbar" id="views"></div>
+      <div class="vbar">
+        <button class="chip" id="ctx" aria-pressed="false">Show the rest of the skull</button>
+        <button class="chip" id="names" aria-pressed="true">Names on the model</button>
+      </div>
+    </div>
+    <div class="panel stack">
+      <div id="pane-lm" class="stack">
+        <div class="cap key desc" id="lm-desc"></div>
+        <div class="legend" id="lm-list"></div>
+        <p class="muted">Marker positions were placed by hand on the model from the textbook descriptions <span class="hw">approximate</span>.</p>
+      </div>
+      <div id="pane-art" class="stack" hidden>
+        <div class="cap key desc" id="art-desc"></div>
+        <div class="legend" id="art-list"></div>
+        <p class="muted" id="art-note">Shaded areas are where this bone touches its neighbour in the model <span class="hw">approximate</span>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel stack facts" aria-label="About this bone" id="facts"></section>
+
+<footer>
+  <p>Based on: Gray's <i>Anatomy of the Human Body</i> (20th ed., 1918), chapter on each bone of the skull; cross-checked with Wikipedia's article on each bone and with StatPearls (NCBI Bookshelf). Where modern sources differ from Gray (closure and fusion ages, names), both are given.</p>
+  <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (the shown bone at near full detail, the rest of the skull simplified; shared under the same licence). Small holes (foramina) and fine notches are mostly not modelled; their markers show where the textbooks place them. Contact areas are where the bones of the model touch.</p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — every statement checked in Gray's 1918 and Wikipedia (see anatomy/DATA-SOURCES.md) =====================
+ * BONES[type]: name, part (the model part shown; paired bones show the right one), group, intro,
+ *   parts: [[name, text]], landmarks: [[key, name, text]] (positions in ../models/skull-detail/landmarks.json),
+ *   joins: [[part key, text]] (Gray's list of articulations; part keys from the skull model; '' = not in the model),
+ *   joinsNote, ossification, clinical (optional)
+ */
+const BONES = {
+  frontal: {short: 'Frontal', name: 'Frontal bone', part: 'frontal', group: 'cranium', view: [0.35, -1, 0.15],
+    intro: 'The bone of the forehead. A vertical part, the squama, forms the forehead; a horizontal part forms the roofs of the orbits and of the nasal cavities.',
+    parts: [
+      ['Squama', 'The vertical part, forming the forehead.'],
+      ['Orbital part', 'Two thin triangular orbital plates that form the roofs of the orbits, separated by a gap in the midline, the ethmoidal notch.'],
+      ['Nasal part', 'The part of the squama that projects down between the two supraorbital margins (Gray counts it with the squama; it is sometimes described as a third part).'],
+    ],
+    landmarks: [
+      ['frontal_eminence', 'Frontal eminence', 'A rounded elevation on each side of the midline, about 3 cm above the supraorbital margin (Gray).'],
+      ['superciliary_arch', 'Superciliary arch', 'An arched elevation below each frontal eminence, prominent medially; the two are joined by the glabella (Gray).'],
+      ['glabella', 'Glabella', 'The smooth midline elevation between the two superciliary arches. The nasion lies just below it.'],
+      ['supraorbital_margin', 'Supraorbital margin', 'The curved margin that forms the upper boundary of the opening of the orbit and separates the squama from the orbital part.'],
+      ['supraorbital_notch', 'Supraorbital notch or foramen', 'A notch, sometimes closed into a foramen, at the junction of the medial and intermediate thirds of the supraorbital margin. It transmits the supraorbital vessels and nerve (Gray). Not modelled: the marker shows the position.'],
+      ['zygomatic_process', 'Zygomatic process', 'The strong lateral end of the supraorbital margin; it articulates with the zygomatic bone.'],
+      ['nasion', 'Nasion', 'The midpoint of the frontonasal suture, where the frontal bone meets the nasal bones (Wikipedia: its most anterior point).'],
+      ['orbital_plate', 'Orbital plate', 'Thin plate forming the roof of the orbit.'],
+      ['lacrimal_fossa', 'Lacrimal fossa', 'A shallow depression on the underside of the orbital plate, laterally, under cover of the zygomatic process, for the lacrimal gland (Gray). Not the fossa of the same name on the lacrimal bone.'],
+      ['ethmoidal_notch', 'Ethmoidal notch', 'The midline gap between the two orbital plates; the cribriform plate of the ethmoid fits into it.'],
+      ['frontal_crest', 'Frontal crest', 'A midline ridge on the inner surface; with the edges of the groove above it, it gives attachment to the falx cerebri. It ends below in a notch that the ethmoid closes into the foramen cecum.'],
+    ],
+    joins: [['sphenoid', 'Sphenoid'], ['ethmoid', 'Ethmoid'], ['parietal_r', 'Right parietal'], ['parietal_l', 'Left parietal'], ['nasal_r', 'Right nasal'], ['nasal_l', 'Left nasal'],
+      ['maxilla_r', 'Right maxilla'], ['maxilla_l', 'Left maxilla'], ['lacrimal_r', 'Right lacrimal'], ['lacrimal_l', 'Left lacrimal'], ['zygomatic_r', 'Right zygomatic'], ['zygomatic_l', 'Left zygomatic']],
+    joinsNote: 'Gray: the frontal articulates with twelve bones — the sphenoid, the ethmoid, and the paired parietals, nasals, maxillae, lacrimals and zygomatics.',
+    ossification: 'Ossified in membrane from two primary centres, one for each half, appearing toward the end of the second month of fetal life, one above each supraorbital margin. At birth the bone is in two pieces, separated by the frontal (metopic) suture. Gray (1918) says it is usually obliterated by the eighth year; modern studies find that it normally closes in infancy, within the first year (StatPearls).',
+    clinical: 'The frontal (metopic) suture occasionally persists throughout life. The glabella is more prominent in male skulls.'},
+
+  parietal: {short: 'Parietal', name: 'Parietal bone', part: 'parietal_r', group: 'cranium', view: [-1, 0, 0.3],
+    intro: 'Paired. The two parietals form the sides and roof of the cranium. Each is roughly four-sided, with two surfaces, four borders and four angles. The right bone is shown.',
+    parts: [
+      ['External surface', 'Convex and smooth, with the parietal eminence near its centre.'],
+      ['Internal surface', 'Concave, marked by impressions of the brain and by grooves for the middle meningeal vessels.'],
+      ['Borders', 'Sagittal (meets the opposite parietal at the sagittal suture), frontal, occipital, and squamous (meets the temporal and the sphenoid).'],
+      ['Angles', 'Frontal, sphenoidal, occipital and mastoid — the four corners.'],
+    ],
+    landmarks: [
+      ['parietal_eminence', 'Parietal eminence', 'An eminence near the centre of the external surface; it marks where ossification began.'],
+      ['sagittal_sulcus', 'Groove for the superior sagittal sinus', 'A shallow groove along the upper margin of the inner surface; with the one on the opposite parietal it forms the sagittal sulcus for the superior sagittal sinus. Its edges give attachment to the falx cerebri.'],
+      ['middle_meningeal_grooves', 'Grooves for the middle meningeal vessels', 'Furrows on the inner surface running upward and backward. The inner surface of the sphenoidal angle has a deep groove, sometimes a canal, for the anterior divisions of the middle meningeal artery.'],
+      ['transverse_sinus_groove', 'Groove for the transverse sinus', 'A broad shallow groove on the inner surface of the mastoid angle, lodging part of the transverse sinus.'],
+      ['frontal_angle', 'Frontal angle (bregma)', 'Practically a right angle, at the meeting of the sagittal and coronal sutures (the bregma). In the fetus and for about a year and a half after birth this region is membranous: the anterior fontanelle (Gray; StatPearls gives on average 13–24 months).'],
+      ['occipital_angle', 'Occipital angle (lambda)', 'Rounded, at the meeting of the sagittal and lambdoid sutures (the lambda). In the fetus this part is membranous: the posterior fontanelle.'],
+      ['sphenoidal_angle', 'Sphenoidal angle (pterion)', 'Thin and acute; it fits between the frontal bone and the greater wing of the sphenoid, at the pterion.'],
+      ['mastoid_angle', 'Mastoid angle (asterion)', 'Where it meets the occipital and the mastoid part of the temporal bone: the asterion.'],
+    ],
+    joins: [['parietal_l', 'Opposite parietal'], ['occipital', 'Occipital'], ['frontal', 'Frontal'], ['temporal_r', 'Temporal'], ['sphenoid', 'Sphenoid']],
+    joinsNote: 'Gray: the parietal articulates with five bones — the opposite parietal, the occipital, frontal, temporal and sphenoid.',
+    ossification: 'Ossified in membrane from a single centre, which appears at the parietal eminence about the eighth week of fetal life. The angles are the last parts formed, which is why the fontanelles are there.'},
+
+  occipital: {short: 'Occipital', name: 'Occipital bone', part: 'occipital', group: 'cranium', view: [0, 0.6, -1],
+    intro: 'The bone at the back and lower part of the cranium, pierced by the foramen magnum.',
+    parts: [
+      ['Squama', 'The curved, expanded plate behind and above the foramen magnum; the largest part.'],
+      ['Basilar part', 'The thick, roughly four-sided piece in front of the foramen magnum, running forward and up to the sphenoid.'],
+      ['Lateral parts', 'One on each side of the foramen magnum; their under surfaces carry the condyles.'],
+    ],
+    landmarks: [
+      ['ext_occipital_protuberance', 'External occipital protuberance', 'A prominence on the outer surface, midway between the summit of the bone and the foramen magnum. Its highest point is the inion.'],
+      ['superior_nuchal_line', 'Superior nuchal line', 'A curved line running laterally on each side from the external occipital protuberance; the faint highest nuchal line lies a little above it.'],
+      ['median_nuchal_line', 'External occipital crest', 'A midline ridge (Gray: median nuchal line) running down from the protuberance to the foramen magnum; it gives attachment to the ligamentum nuchae.'],
+      ['inferior_nuchal_line', 'Inferior nuchal line', 'Runs from the middle of the external occipital crest across each half of the nuchal area.'],
+      ['foramen_magnum', 'Foramen magnum', 'A large oval opening, long front-to-back and wider behind. It transmits the medulla oblongata and its membranes, the accessory nerves, the vertebral arteries, the anterior and posterior spinal arteries, the tectorial membrane and the alar ligaments.'],
+      ['condyle', 'Occipital condyle', 'On the under surface of each lateral part, beside the foramen magnum, for articulation with the atlas.'],
+      ['hypoglossal_canal', 'Hypoglossal canal', 'A short canal through the bone at the base of each condyle, for the hypoglossal nerve (XII). Approximate position.'],
+      ['jugular_process', 'Jugular process', 'A plate extending laterally from the back half of each condyle. The notch in its front edge forms the back part of the jugular foramen.'],
+      ['basilar_part', 'Basilar part', 'Runs forward and upward to meet the body of the sphenoid.'],
+      ['int_occipital_protuberance', 'Internal occipital protuberance', 'On the inner surface, where the four limbs of the cruciate eminence cross. A groove for the transverse sinus runs laterally from it on each side.'],
+      ['int_occipital_crest', 'Internal occipital crest', 'The lower limb of the cruciate eminence, running down to the foramen magnum. Gray: it gives attachment to the falx cerebelli (Wikipedia says falx cerebri; Gray attaches the falx cerebri to the groove above).'],
+    ],
+    joins: [['parietal_r', 'Right parietal'], ['parietal_l', 'Left parietal'], ['temporal_r', 'Right temporal'], ['temporal_l', 'Left temporal'], ['sphenoid', 'Sphenoid'], ['', 'Atlas (first cervical vertebra)']],
+    joinsNote: 'Gray: the occipital articulates with six bones — the two parietals, the two temporals, the sphenoid and the atlas.',
+    ossification: 'The part of the squama above the highest nuchal lines forms in membrane (it may stay separate for life as the interparietal bone); the rest forms in cartilage. About the fourth year the squama and the two lateral parts unite, and about the sixth year the bone is a single piece. The occipital and the sphenoid unite later: Gray gives the 18th to 25th years; modern CT studies find fusion usually in adolescence, earlier in girls, sometimes as late as the mid-20s.'},
+
+  temporal: {short: 'Temporal', name: 'Temporal bone', part: 'temporal_r', group: 'cranium', view: [-1, 0, -0.2],
+    intro: 'Paired, at the side and base of the skull; it contains the organ of hearing. The right bone is shown.',
+    parts: [
+      ['Squama', 'The thin, scale-like front and upper part; it carries the zygomatic process.'],
+      ['Mastoid part', 'The back part, continued below into the mastoid process.'],
+      ['Petrous part', 'A pyramid wedged in the base of the skull between the sphenoid and the occipital.'],
+      ['Tympanic part', 'A curved plate below the squama and in front of the mastoid process; it forms most of the bony external acoustic meatus.'],
+      ['Styloid process', 'A slender spine projecting downward and forward from the under surface (Gray counts it as a fifth part; Wikipedia describes four parts and the process separately).'],
+    ],
+    landmarks: [
+      ['squama', 'Squama', 'The thin plate forming the side of the skull.'],
+      ['zygomatic_process', 'Zygomatic process', 'A long arched process from the lower part of the squama; its front end articulates with the zygomatic bone to complete the zygomatic arch.'],
+      ['mandibular_fossa', 'Mandibular fossa', 'On the under surface, in front of the external acoustic meatus, bounded in front by the articular tubercle. It receives the condyle of the mandible.'],
+      ['external_acoustic_meatus', 'External acoustic meatus', 'The opening of the ear canal, below the back root of the zygomatic process, bounded in front, below and behind by the tympanic part (Gray).'],
+      ['mastoid_process', 'Mastoid process', 'A conical projection behind the external acoustic meatus. Larger in the male. It gives attachment to the sternocleidomastoid, splenius capitis and longissimus capitis.'],
+      ['styloid_process', 'Styloid process', 'A sharp spine about 2.5 cm long. It gives attachment to the stylohyoid and stylomandibular ligaments and to the styloglossus, stylohyoid and stylopharyngeus muscles.'],
+      ['stylomastoid_foramen', 'Stylomastoid foramen', 'Between the styloid and mastoid processes: the end of the facial canal. It transmits the facial nerve and the stylomastoid artery.'],
+      ['internal_acoustic_meatus', 'Internal acoustic meatus', 'A large opening near the centre of the back surface of the petrous part, facing the posterior cranial fossa. It transmits the facial (VII) and vestibulocochlear (VIII) nerves and the labyrinthine artery (Gray: the internal auditory artery).'],
+      ['arcuate_eminence', 'Arcuate eminence', 'A bulge near the centre of the front surface of the petrous part (floor of the middle cranial fossa); it marks the superior semicircular canal.'],
+      ['trigeminal_impression', 'Trigeminal impression', 'A shallow hollow on the front surface of the petrous part near its tip, for the trigeminal ganglion.'],
+    ],
+    joins: [['occipital', 'Occipital'], ['parietal_r', 'Parietal'], ['sphenoid', 'Sphenoid'], ['mandible', 'Mandible (temporomandibular joint)'], ['zygomatic_r', 'Zygomatic']],
+    joinsNote: 'Gray: the temporal articulates with five bones — occipital, parietal, sphenoid, mandible and zygomatic.',
+    ossification: 'Eight centres, not counting the internal ear and the ossicles: one for the squama (in membrane, about the second month), one for the tympanic part (about the third month), four for the petrous and mastoid parts (in cartilage, about the fifth or sixth month) and two for the styloid process. At birth the mastoid part is flat; the mastoid process develops later.'},
+
+  sphenoid: {short: 'Sphenoid', name: 'Sphenoid bone', part: 'sphenoid', group: 'cranium', view: [0, -0.4, 1],
+    intro: 'A single bone in the middle of the base of the skull: a central body, two greater wings, two lesser wings and two pterygoid processes. Several of the main foramina of the skull base are in it.',
+    parts: [
+      ['Body', 'The central, roughly cube-shaped part, hollowed out by the two sphenoidal sinuses.'],
+      ['Greater wings', 'Two strong processes from the sides of the body, curving upward, outward and backward.'],
+      ['Lesser wings', 'Two thin triangular plates from the upper front of the body, projecting outward to sharp points.'],
+      ['Pterygoid processes', 'One on each side, hanging straight down from where the body and greater wing meet; each has a medial and a lateral plate.'],
+    ],
+    landmarks: [
+      ['sella_turcica', 'Sella turcica', 'A deep hollow on the upper surface of the body; its deepest part (the hypophyseal fossa) holds the pituitary gland.'],
+      ['dorsum_sellae', 'Dorsum sellae', 'The square plate of bone forming the back wall of the sella turcica.'],
+      ['posterior_clinoid', 'Posterior clinoid process', 'The upper corners of the dorsum sellae; they give attachment to the tentorium cerebelli.'],
+      ['anterior_clinoid', 'Anterior clinoid process', 'The medial end of the back border of each lesser wing; it gives attachment to the tentorium cerebelli.'],
+      ['optic_canal', 'Optic canal', 'Between the two roots of the lesser wing; it transmits the optic nerve and the ophthalmic artery into the orbit (Gray).'],
+      ['superior_orbital_fissure', 'Superior orbital fissure', 'The gap between the lesser wing above and the greater wing below, opening from the cranial cavity into the orbit. Gray: it transmits the oculomotor, trochlear and abducent nerves, the three branches of the ophthalmic nerve and the ophthalmic vein, among others.'],
+      ['foramen_rotundum', 'Foramen rotundum', 'Behind the medial end of the superior orbital fissure; it transmits the maxillary nerve.'],
+      ['foramen_ovale', 'Foramen ovale', 'In the greater wing, behind and lateral to the foramen rotundum, at the base of the lateral pterygoid plate. It transmits the mandibular nerve, the accessory meningeal artery and (Gray: sometimes) the lesser petrosal nerve.'],
+      ['foramen_spinosum', 'Foramen spinosum', 'In the back corner of the greater wing, lateral to the foramen ovale and in front of the spine. It transmits the middle meningeal vessels and a recurrent (meningeal) branch of the mandibular nerve. Not modelled: the marker shows the position.'],
+      ['spina_angularis', 'Spine of the sphenoid', 'A downward-pointing process at the back corner of the greater wing; the sphenomandibular ligament attaches to it.'],
+      ['greater_wing', 'Greater wing', 'Its surfaces face the cranial cavity (part of the middle cranial fossa), the temporal and infratemporal fossae, and the orbit (back part of its lateral wall).'],
+      ['lesser_wing', 'Lesser wing', 'Thin plate forming the back part of the floor of the anterior cranial fossa.'],
+      ['sphenoidal_crest', 'Sphenoidal crest', 'A vertical midline crest on the front of the body; it meets the perpendicular plate of the ethmoid and forms part of the nasal septum.'],
+      ['lateral_pterygoid_plate', 'Lateral pterygoid plate', 'Its lateral surface gives attachment to the lateral pterygoid muscle.'],
+      ['medial_pterygoid_plate', 'Medial pterygoid plate', 'The inner plate; between the two plates behind is the pterygoid fossa.'],
+      ['pterygoid_hamulus', 'Pterygoid hamulus', 'A hook at the lower end of the medial plate; the tendon of the tensor veli palatini glides around it.'],
+    ],
+    joins: [['vomer', 'Vomer'], ['ethmoid', 'Ethmoid'], ['frontal', 'Frontal'], ['occipital', 'Occipital'], ['parietal_r', 'Right parietal'], ['parietal_l', 'Left parietal'],
+      ['temporal_r', 'Right temporal'], ['temporal_l', 'Left temporal'], ['zygomatic_r', 'Right zygomatic'], ['zygomatic_l', 'Left zygomatic'], ['palatine_r', 'Right palatine'], ['palatine_l', 'Left palatine']],
+    joinsNote: 'Gray: the sphenoid articulates with twelve bones — the vomer, ethmoid, frontal and occipital, and the paired parietals, temporals, zygomatics and palatines.',
+    ossification: 'Most of the bone is ossified in cartilage; the lateral pterygoid plate and the medial plate (except its hamulus) are ossified in membrane. At birth the bone is in three pieces. It fuses with the occipital later (Gray: by the 25th year; modern CT studies: usually in adolescence).'},
+
+  ethmoid: {short: 'Ethmoid', name: 'Ethmoid bone', part: 'ethmoid', group: 'cranium', view: [0.25, -1, 0.3],
+    intro: 'A single, light, spongy bone at the front of the base of the cranium, between the two orbits and at the roof of the nose.',
+    parts: [
+      ['Cribriform plate', 'A horizontal plate that fits into the ethmoidal notch of the frontal bone and roofs the nasal cavities.'],
+      ['Perpendicular plate', 'A thin plate hanging down from the cribriform plate; it helps form the nasal septum.'],
+      ['Labyrinths', 'One on each side: thin-walled air cells (anterior, middle and posterior groups) between an orbital plate and a nasal plate.'],
+    ],
+    landmarks: [
+      ['crista_galli', 'Crista galli', 'A thick triangular process rising from the midline of the cribriform plate; the falx cerebri attaches to its back border (Gray).'],
+      ['cribriform_plate', 'Cribriform plate', 'Beside the crista galli the plate is narrow and grooved; it supports the olfactory bulb and is perforated for the olfactory nerves (Gray). The small holes are not modelled.'],
+      ['perpendicular_plate', 'Perpendicular plate', 'Helps form the nasal septum; below and behind it meets the vomer.'],
+      ['lamina_papyracea', 'Orbital plate (lamina papyracea)', 'The thin, smooth lateral surface of the labyrinth; it forms a large part of the medial wall of the orbit.'],
+      ['middle_concha', 'Middle nasal concha', 'The free, curled lower margin of the plate forming the inner surface of the labyrinth (Gray). The superior concha is above it at the back.'],
+    ],
+    joins: [['frontal', 'Frontal'], ['sphenoid', 'Sphenoid (and the sphenoidal conchae)'], ['nasal_r', 'Right nasal'], ['nasal_l', 'Left nasal'], ['maxilla_r', 'Right maxilla'], ['maxilla_l', 'Left maxilla'],
+      ['lacrimal_r', 'Right lacrimal'], ['lacrimal_l', 'Left lacrimal'], ['palatine_r', 'Right palatine'], ['palatine_l', 'Left palatine'], ['concha_r', 'Right inferior nasal concha'], ['concha_l', 'Left inferior nasal concha'], ['vomer', 'Vomer']],
+    joinsNote: 'Gray counts fifteen bones (he counts the two sphenoidal conchae separately; Wikipedia counts thirteen): the frontal, the sphenoid and its two conchae, and of the face the two nasals, maxillae, lacrimals, palatines and inferior nasal conchae, and the vomer.',
+    ossification: 'Ossified in the cartilage of the nasal capsule from three centres: one for the perpendicular plate and one for each labyrinth. The labyrinths begin between the fourth and fifth months of fetal life; the perpendicular plate and crista galli begin in the first year after birth and join the labyrinths about the beginning of the second year.'},
+
+  nasal: {name: 'Nasal bone', short: 'Nasal', part: 'nasal_r', group: 'face', view: [-0.4, -1, 0.1],
+    intro: 'Paired: two small oblong bones side by side at the middle and upper part of the face; together they form the bridge of the nose. The right bone is shown.',
+    parts: [
+      ['Two surfaces', 'Outer and inner.'],
+      ['Four borders', 'The superior border is narrow, thick and serrated for the nasal notch of the frontal bone; the inferior border gives attachment to the lateral cartilage of the nose.'],
+    ],
+    landmarks: [
+      ['nasal_foramen', 'Foramen for a small vein', 'The outer surface is pierced about its centre by a small foramen for a vein. Not modelled: the marker shows the position.'],
+      ['superior_border', 'Superior border', 'Narrow, thick and serrated; it articulates with the nasal notch of the frontal bone.'],
+      ['inferior_border', 'Inferior border', 'Thin; it gives attachment to the lateral cartilage of the nose.'],
+    ],
+    joins: [['frontal', 'Frontal'], ['ethmoid', 'Ethmoid'], ['nasal_l', 'Opposite nasal'], ['maxilla_r', 'Maxilla']],
+    joinsNote: 'Gray: the nasal articulates with four bones — the frontal and ethmoid, the opposite nasal and the maxilla.',
+    ossification: 'One centre, appearing at the beginning of the third month of fetal life (Gray).'},
+
+  maxilla: {short: 'Maxilla', name: 'Maxilla', part: 'maxilla_r', group: 'face', view: [-0.5, -1, 0],
+    intro: 'Paired; the two maxillae form the whole of the upper jaw. Each helps form the roof of the mouth, the floor and lateral wall of the nose and the floor of the orbit. The right bone is shown.',
+    parts: [
+      ['Body', 'Pyramid-shaped, with four surfaces (anterior, infratemporal, orbital and nasal); it contains the maxillary sinus.'],
+      ['Zygomatic process', 'A rough triangular projection that articulates with the zygomatic bone.'],
+      ['Frontal process', 'A strong plate projecting upward beside the nose, forming part of its lateral boundary.'],
+      ['Alveolar process', 'The thickest, most spongy part; it holds the upper teeth.'],
+      ['Palatine process', 'A thick horizontal shelf projecting medially; with its fellow it forms the front three-quarters of the hard palate (Gray) and the floor of the nose.'],
+    ],
+    landmarks: [
+      ['infraorbital_foramen', 'Infraorbital foramen', 'On the front surface just below the margin of the orbit: the end of the infraorbital canal. It transmits the infraorbital vessels and nerve.'],
+      ['infraorbital_groove', 'Infraorbital groove', 'Runs forward on the orbital surface (floor of the orbit) from near the middle of its back part, becoming the infraorbital canal.'],
+      ['sinus_opening', 'Maxillary sinus', 'A large pyramidal cavity in the body. Its large irregular opening is on the nasal surface; in the intact skull it drains into the middle meatus of the nose (Gray).'],
+      ['frontal_process', 'Frontal process', 'Projects upward beside the nose to meet the frontal bone.'],
+      ['zygomatic_process', 'Zygomatic process', 'Meets the zygomatic bone.'],
+      ['alveolar_process', 'Alveolar process', 'Carries the sockets of the upper teeth.'],
+      ['palatine_process', 'Palatine process', 'The horizontal shelf forming the front of the hard palate and the floor of the nose.'],
+      ['anterior_nasal_spine', 'Anterior nasal spine', 'A pointed process at the lower end of the nasal notch on the front surface; with its fellow of the other side it forms the anterior nasal spine.'],
+      ['incisive_foramen', 'Incisive foramen', 'A funnel-shaped opening in the midline of the palate, just behind the incisor teeth, formed by the two maxillae together. Approximate position.'],
+    ],
+    joins: [['frontal', 'Frontal'], ['ethmoid', 'Ethmoid'], ['nasal_r', 'Nasal'], ['zygomatic_r', 'Zygomatic'], ['lacrimal_r', 'Lacrimal'], ['concha_r', 'Inferior nasal concha'], ['palatine_r', 'Palatine'], ['vomer', 'Vomer'], ['maxilla_l', 'Opposite maxilla']],
+    joinsNote: 'Gray: the maxilla articulates with nine bones — the frontal and ethmoid, and the nasal, zygomatic, lacrimal, inferior nasal concha, palatine, vomer and the opposite maxilla.',
+    ossification: 'Ossified in membrane; Gray (after Mall and Fawcett) gives two centres, one for the maxilla proper and one for the premaxilla, appearing in the sixth week and uniting early in the third month. Gray dates the first appearance of the maxillary sinus to about the fourth month of fetal life (modern studies find it earlier, around the tenth week); it does not reach full size until after the second dentition.'},
+
+  lacrimal: {name: 'Lacrimal bone', short: 'Lacrimal', part: 'lacrimal_r', group: 'face', view: [-1, -0.5, 0.1],
+    intro: 'Paired. Gray calls it the smallest and most fragile bone of the face; it lies at the front of the medial wall of the orbit. The right bone is shown.',
+    parts: [
+      ['Orbital (lateral) surface', 'Divided by a vertical ridge, the posterior lacrimal crest, into a front and a back part.'],
+      ['Nasal (medial) surface', 'Has a furrow matching the crest; its front part forms part of the middle meatus.'],
+    ],
+    landmarks: [
+      ['posterior_lacrimal_crest', 'Posterior lacrimal crest', 'The vertical ridge on the orbital surface; it gives origin to the lacrimal part of the orbicularis oculi.'],
+      ['lacrimal_sulcus', 'Lacrimal groove', 'In front of the crest. With the frontal process of the maxilla it completes the lacrimal fossa, whose upper part lodges the lacrimal sac and lower part the nasolacrimal duct.'],
+    ],
+    joins: [['frontal', 'Frontal'], ['ethmoid', 'Ethmoid'], ['maxilla_r', 'Maxilla'], ['concha_r', 'Inferior nasal concha']],
+    joinsNote: 'Gray: the lacrimal articulates with four bones — the frontal and ethmoid, the maxilla and the inferior nasal concha.',
+    ossification: 'A single centre, appearing about the twelfth week of fetal life.'},
+
+  zygomatic: {name: 'Zygomatic bone', short: 'Zygomatic', part: 'zygomatic_r', group: 'face', view: [-1, -0.6, 0],
+    intro: 'Paired: the cheekbone. It forms the prominence of the cheek and parts of the lateral wall and floor of the orbit. The right bone is shown.',
+    parts: [
+      ['Malar surface', 'The convex outer surface of the cheek.'],
+      ['Temporal surface', 'Concave, facing backward and medially.'],
+      ['Frontosphenoidal process', 'Thick and serrated; it articulates with the zygomatic process of the frontal bone.'],
+      ['Orbital process', 'A thick plate projecting backward and medially from the orbital margin into the floor and lateral wall of the orbit.'],
+      ['Maxillary process', 'Articulates with the maxilla.'],
+      ['Temporal process', 'Long and narrow; with the zygomatic process of the temporal bone it forms the zygomatic arch.'],
+    ],
+    landmarks: [
+      ['frontosphenoidal_process', 'Frontosphenoidal process', 'Meets the frontal bone.'],
+      ['temporal_process', 'Temporal process', 'Meets the zygomatic process of the temporal bone to form the zygomatic arch.'],
+      ['maxillary_process', 'Maxillary process', 'Meets the maxilla.'],
+      ['zygomaticofacial_foramen', 'Zygomaticofacial foramen', 'A small opening near the centre of the malar surface, for the zygomaticofacial nerve and vessels (Gray; Wikipedia also places it on the frontal process). Approximate position.'],
+      ['zygomaticotemporal_foramen', 'Zygomaticotemporal foramen', 'Near the centre of the temporal surface, for the zygomaticotemporal nerve. Not modelled: the marker shows the position.'],
+    ],
+    joins: [['frontal', 'Frontal'], ['sphenoid', 'Sphenoid'], ['temporal_r', 'Temporal'], ['maxilla_r', 'Maxilla']],
+    joinsNote: 'Gray: the zygomatic articulates with four bones — the frontal, sphenoid, temporal and maxilla.',
+    ossification: 'Generally described as three centres (one for the malar part and two for the orbital part) appearing about the eighth week and fusing about the fifth month of fetal life; Mall describes one centre.'},
+
+  palatine: {name: 'Palatine bone', short: 'Palatine', part: 'palatine_r', group: 'face', view: [1, 0.2, 0],
+    intro: 'Paired, at the back of the nasal cavity between the maxilla and the pterygoid process of the sphenoid. Shaped somewhat like the letter L. Shown: the right bone, seen from the midline.',
+    parts: [
+      ['Horizontal plate', 'With its fellow it forms the back part of the hard palate (Gray: the posterior fourth) and of the floor of the nose.'],
+      ['Perpendicular plate', 'A thin oblong plate in the lateral wall of the nose.'],
+      ['Pyramidal process', 'Projects backward and laterally from the junction of the two plates, into the gap between the lower ends of the pterygoid plates.'],
+      ['Orbital process', 'On the top of the perpendicular plate, in front; its upper surface forms the back part of the floor of the orbit.'],
+      ['Sphenoidal process', 'A thin plate at the top of the perpendicular plate, behind; smaller than the orbital process.'],
+    ],
+    landmarks: [
+      ['orbital_process', 'Orbital process', 'Forms the back part of the floor of the orbit.'],
+      ['sphenoidal_process', 'Sphenoidal process', 'Directed upward and medially, toward the body of the sphenoid.'],
+      ['sphenopalatine_notch', 'Sphenopalatine notch', 'Between the orbital and sphenoidal processes; the under surface of the body of the sphenoid closes it into the sphenopalatine foramen.'],
+      ['perpendicular_plate', 'Perpendicular plate', 'Part of the lateral wall of the nose.'],
+      ['horizontal_plate', 'Horizontal plate', 'The back of the hard palate.'],
+      ['pyramidal_process', 'Pyramidal process', 'Fits between the pterygoid plates. The lesser palatine foramina are on its base (Gray).'],
+    ],
+    joins: [['sphenoid', 'Sphenoid'], ['ethmoid', 'Ethmoid'], ['maxilla_r', 'Maxilla'], ['concha_r', 'Inferior nasal concha'], ['vomer', 'Vomer'], ['palatine_l', 'Opposite palatine']],
+    joinsNote: 'Gray: the palatine articulates with six bones — the sphenoid, ethmoid, maxilla, inferior nasal concha, vomer and the opposite palatine.',
+    ossification: 'In membrane from a single centre, appearing about the sixth or eighth week of fetal life at the angle between the two plates (Gray).'},
+
+  concha: {name: 'Inferior nasal concha', short: 'Inf. nasal concha', part: 'concha_r', group: 'face', view: [-1, -0.2, 0.2],
+    intro: 'Paired: a scroll-like plate along the lateral wall of the nasal cavity; the lowest of the three nasal conchae and the only one that is a separate bone. The right bone is shown, from the side.',
+    parts: [
+      ['Medial surface', 'Convex, with many small holes and grooves for vessels.'],
+      ['Lateral surface', 'Concave; it forms part of the inferior meatus.'],
+      ['Upper border', 'Thin and irregular, joined to the bones of the lateral wall of the nose; it carries three processes.'],
+      ['Inferior border', 'Free and thick.'],
+    ],
+    landmarks: [
+      ['lacrimal_process', 'Lacrimal process', 'Small and pointed, a quarter of the way back along the upper border; it meets the descending process of the lacrimal bone.'],
+      ['ethmoidal_process', 'Ethmoidal process', 'A thin plate behind the lacrimal process, rising to meet the uncinate process of the ethmoid.'],
+      ['maxillary_process', 'Maxillary process', 'A thin lamina curving downward and laterally; it forms part of the medial wall of the maxillary sinus.'],
+      ['posterior_end', 'Posterior end', 'Both ends are pointed; the back one tapers more.'],
+    ],
+    joins: [['ethmoid', 'Ethmoid'], ['maxilla_r', 'Maxilla'], ['lacrimal_r', 'Lacrimal'], ['palatine_r', 'Palatine']],
+    joinsNote: 'Gray: the inferior nasal concha articulates with four bones — the ethmoid, maxilla, lacrimal and palatine.',
+    ossification: 'A single centre, appearing about the fifth month of fetal life.'},
+
+  vomer: {short: 'Vomer', name: 'Vomer', part: 'vomer', group: 'face', view: [-1, 0, 0],
+    intro: 'A single thin bone in the midline. It forms the lower and back part of the bony nasal septum; the perpendicular plate of the ethmoid forms the upper part.',
+    parts: [
+      ['Two surfaces', 'Marked by small furrows for vessels, and each by the nasopalatine groove.'],
+      ['Superior border', 'The thickest; a deep furrow between two alae receives the rostrum of the sphenoid.'],
+      ['Inferior border', 'Articulates with the crest formed by the maxillae and palatine bones.'],
+      ['Anterior border', 'The longest; its upper half joins the perpendicular plate of the ethmoid, its lower half is grooved for the septal cartilage.'],
+      ['Posterior border', 'Free and concave; it separates the two posterior openings of the nose (choanae).'],
+    ],
+    landmarks: [
+      ['ala', 'Ala', 'One of the two wings of the superior border, between which the rostrum of the sphenoid fits.'],
+      ['anterior_border', 'Anterior border', 'Upper half joined to the ethmoid; lower half grooved for the septal cartilage of the nose.'],
+      ['posterior_border', 'Posterior border', 'Free and concave; it separates the choanae (the two openings at the back of the nasal cavity).'],
+      ['nasopalatine_groove', 'Nasopalatine groove', 'Runs obliquely downward and forward on each surface; it lodges the nasopalatine nerve and vessels. Not modelled: the marker shows the position.'],
+    ],
+    joins: [['sphenoid', 'Sphenoid'], ['ethmoid', 'Ethmoid'], ['maxilla_r', 'Right maxilla'], ['maxilla_l', 'Left maxilla'], ['palatine_r', 'Right palatine'], ['palatine_l', 'Left palatine'], ['', 'Septal cartilage of the nose']],
+    joinsNote: 'Gray: the vomer articulates with six bones — the sphenoid and ethmoid, the two maxillae and the two palatines — and with the septal cartilage of the nose.',
+    ossification: 'Ossified in membrane from two centres, one on each side of the midline, appearing about the eighth week of fetal life; so the vomer is at first two lamellae, which are almost completely united by puberty (Gray).'},
+
+  mandible: {short: 'Mandible', name: 'Mandible', part: 'mandible', group: 'face', view: [-1, -0.7, 0.1],
+    intro: 'The lower jaw: the largest and strongest bone of the face (Gray) and the only movable bone of the skull. A horseshoe-shaped body and two rami.',
+    parts: [
+      ['Body', 'The curved horizontal part that carries the lower teeth.'],
+      ['Rami', 'The two vertical parts rising from the back of the body, each with two processes on its upper border.'],
+      ['Coronoid process', 'The thin triangular process at the front of the upper border of the ramus; the temporalis inserts on it.'],
+      ['Condyloid process', 'At the back: the condyle on a narrow neck. The condyle articulates with the disc of the temporomandibular joint.'],
+    ],
+    landmarks: [
+      ['condyle', 'Condyle', 'Articulates with the disc of the temporomandibular joint, in the mandibular fossa of the temporal bone.'],
+      ['coronoid_process', 'Coronoid process', 'Thin and triangular; the temporalis (and, Gray adds, the masseter) attaches to it.'],
+      ['mandibular_notch', 'Mandibular notch', 'The deep notch between the coronoid and condyloid processes; the masseteric vessels and nerve cross it.'],
+      ['ramus', 'Ramus', 'Four-sided, with two surfaces, four borders and two processes.'],
+      ['angle', 'Angle', 'Where the lower border meets the back border of the ramus. The masseter attaches outside and the medial pterygoid inside.'],
+      ['mandibular_foramen', 'Mandibular foramen', 'About the centre of the inner surface of the ramus; the inferior alveolar vessels and nerve enter it.'],
+      ['lingula', 'Lingula', 'A sharp spine on the front margin of the mandibular foramen; the sphenomandibular ligament attaches to it.'],
+      ['body', 'Body', 'Carries the lower teeth.'],
+      ['alveolar_border', 'Alveolar border', 'The upper border of the body, with sixteen sockets for the teeth.'],
+      ['mental_foramen', 'Mental foramen', 'Below the second premolar tooth, midway between the upper and lower borders of the body; it transmits the mental nerve and vessels.'],
+      ['mental_protuberance', 'Mental protuberance', 'The triangular eminence at the front of the chin, below the faint midline ridge of the symphysis.'],
+      ['mental_spines', 'Mental spines', 'On the inner surface near the lower part of the symphysis: an upper pair for the genioglossus and a lower pair (or ridge) for the geniohyoid.'],
+    ],
+    joins: [['temporal_r', 'Right temporal (temporomandibular joint)'], ['temporal_l', 'Left temporal (temporomandibular joint)']],
+    joinsNote: 'The mandible articulates with the two temporal bones. The model\'s mouth is slightly open.',
+    ossification: 'Ossified in the membrane covering Meckel\'s cartilage; each half from a single centre near the mental foramen, about the sixth week of fetal life. At birth the two halves are joined at the symphysis, which ossifies during the first year.',
+    clinical: 'The angle changes with age: about 175° at birth, about 140° by the fourth year, 110–120° in the adult, and about 140° again in old age (Gray and Wikipedia; StatPearls gives about 160° at birth).'},
+
+  hyoid: {name: 'Hyoid bone', short: 'Hyoid', part: 'hyoid', group: 'other', view: [-0.4, -1, 0.5],
+    intro: 'A horseshoe-shaped bone. It is not one of the 22 skull bones and touches no other bone: it hangs from the tips of the styloid processes by the stylohyoid ligaments.',
+    parts: [
+      ['Body', 'The central, four-sided part.'],
+      ['Greater cornua (horns)', 'Project backward from the sides of the body, tapering; each ends in a tubercle.'],
+      ['Lesser cornua', 'Two small cone-shaped projections at the junctions of the body and the greater cornua.'],
+    ],
+    landmarks: [
+      ['body', 'Body', 'Its front surface gives insertion to the geniohyoid; below the transverse ridge, to the mylohyoid, sternohyoid and omohyoid.'],
+      ['transverse_ridge', 'Transverse ridge', 'Crosses the upper half of the front of the body.'],
+      ['greater_cornu', 'Greater cornu', 'The hyoglossus and the middle pharyngeal constrictor arise along its whole length.'],
+      ['lesser_cornu', 'Lesser cornu', 'In line with the transverse ridge; the stylohyoid ligament attaches to its tip.'],
+    ],
+    joins: [],
+    joinsNote: 'The hyoid does not articulate with any bone. It is suspended from the styloid processes of the temporal bones by the stylohyoid ligaments.',
+    ossification: 'Six centres: two for the body and one for each cornu. Ossification begins in the greater cornua toward the end of fetal life, in the body shortly afterward, and in the lesser cornua in the first or second year after birth.'},
+};
+const GROUPS = [['cranium', 'Cranium'], ['face', 'Face'], ['other', 'With the skull']];
+
+/* ===================== PAGE ===================== */
+const typeOf = k => k.replace(/_(r|l)$/, '');
+const v = new AtlasViewer(document.getElementById('v'));
+let DET = null, LM = null, COLOURS = {}, partNames = {}, cur = null, tab = 'lm', sel = null;
+const views = [['Front', [0, -1, 0]], ['Back', [0, 1, 0]], ['Left side', [1, 0, 0]], ['Right side', [-1, 0, 0]], ['Above', [0, -0.001, 1]], ['Below', [0, -0.001, -1]]];
+for (const [label, dir] of views) {
+  const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
+  b.onclick = () => v.face(dir, {zoom: 1}); document.getElementById('views').append(b);
+}
+const on = id => document.getElementById(id).getAttribute('aria-pressed') === 'true';
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+function buildPicker() {
+  const box = document.getElementById('picker');
+  for (const [g, title] of GROUPS) {
+    const row = document.createElement('div'); row.className = 'row';
+    row.innerHTML = `<span class="tag">${title}</span>`;
+    for (const [key, b] of Object.entries(BONES).filter(([, b]) => b.group === g)) {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.k = key; c.textContent = b.short || b.name;
+      c.onclick = () => { location.hash = key; };
+      row.append(c);
+    }
+    box.append(row);
+  }
+}
+
+async function show(key) {
+  if (!BONES[key]) key = 'frontal';
+  cur = key; sel = null;
+  const b = BONES[key], dk = 'D:' + b.part;
+  document.querySelectorAll('#picker .chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.k === key));
+  document.getElementById('title').textContent = b.name;
+  document.title = b.name;
+  document.getElementById('lede').textContent = b.intro;
+  if (!v.parts.has(dk)) {
+    const info = DET.parts.find(p => p.key === b.part);
+    await v.loadPart(dk, '../models/skull-detail/' + info.file, info);
+  }
+  for (const k of v.order) if (k.startsWith('D:')) v.setVisible(k, k === dk);
+  v.setColour(dk, COLOURS[key] || '--bone'); v.setVertexMarks(dk, null);
+  context();
+  v.fit([dk]); v.face(b.view || [0, -1, 0], {zoom: 0.85});
+  writeFacts(b);
+  buildLists(b);
+  setTab(tab);
+}
+
+/* rest of the skull: hidden, or as glass around the bone */
+function context(solid = []) {
+  const b = BONES[cur], ctx = on('ctx');
+  for (const k of v.order) if (!k.startsWith('D:')) {
+    v.setVisible(k, k !== b.part && (ctx || solid.includes(k)));
+    v.setColour(k, COLOURS[typeOf(k)] || '--bone');
+  }
+  v.setFocus(['D:' + b.part, ...solid]);
+}
+
+function writeFacts(b) {
+  const box = document.getElementById('facts');
+  let h = '<h2>About the bone</h2><dl>';
+  for (const [n, t] of b.parts) h += `<dt>${esc(n)}</dt><dd>${t}</dd>`;
+  h += '</dl>';
+  if (b.ossification) h += `<div><h3>Ossification</h3><p>${b.ossification}</p></div>`;
+  if (b.clinical) h += `<div class="cap warn"><b>Clinical.</b> ${b.clinical}</div>`;
+  box.innerHTML = h;
+}
+
+function buildLists(b) {
+  const ll = document.getElementById('lm-list'); ll.replaceChildren();
+  for (const [k, name] of b.landmarks) {
+    if (!LM[cur] || !LM[cur][k]) continue;
+    const e = document.createElement('button'); e.dataset.k = k; e.setAttribute('aria-pressed', 'false');
+    e.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${esc(name)}</span>`;
+    e.onclick = () => selectLm(sel === k ? null : k); ll.append(e);
+  }
+  const al = document.getElementById('art-list'); al.replaceChildren();
+  for (const [pk, label] of b.joins) {
+    const e = document.createElement('button'); e.dataset.k = pk; e.setAttribute('aria-pressed', 'false');
+    const has = pk && contactVerts(b.part, pk).length;
+    e.innerHTML = `<i style="background:${pk ? COLOURS[typeOf(pk)] : 'transparent'}"></i><span>${esc(label)}</span><span class="n">${pk && !has ? 'not touching in the model' : !pk ? 'not in the model' : ''}</span>`;
+    e.onclick = () => selectArt(sel === pk ? null : pk); al.append(e);
+  }
+}
+
+function lmMarkers(active) {
+  const b = BONES[cur];
+  return b.landmarks.filter(([k]) => LM[cur] && LM[cur][k]).map(([k, name]) => ({p: LM[cur][k].p,
+    label: on('names') || k === active ? name : '', big: k === active, color: k === active ? '--mark' : '#3b4a63', always: k === active}))
+    .map(m => ({...m, color: m.color.startsWith('--') ? getComputedStyle(document.documentElement).getPropertyValue(m.color).trim() : m.color}));
+}
+function selectLm(k) {
+  sel = k; const b = BONES[cur];
+  document.querySelectorAll('#lm-list button').forEach(e => e.setAttribute('aria-pressed', e.dataset.k === k));
+  const d = document.getElementById('lm-desc');
+  if (!k) { d.textContent = 'Tap a landmark in the list.'; v.setMarkers(lmMarkers(null)); return; }
+  const [, name, text] = b.landmarks.find(l => l[0] === k), L = LM[cur][k];
+  d.innerHTML = `<b>${esc(name)}.</b> ${text}`;
+  v.setMarkers(lmMarkers(k));
+  v.face(L.dir, {zoom: L.zoom || 1.4, focus: L.p});
+}
+
+/* contact vertices of the detailed part with another part (from the detailed model's contacts) */
+function contactVerts(a, b) {
+  const c = DET.contactsBy[a + '|' + b];
+  return c || [];
+}
+function selectArt(pk) {
+  sel = pk; const b = BONES[cur], dk = 'D:' + b.part;
+  document.querySelectorAll('#art-list button').forEach(e => e.setAttribute('aria-pressed', e.dataset.k === pk));
+  const d = document.getElementById('art-desc');
+  const all = b.joins.filter(([k]) => k).map(([k]) => ({verts: contactVerts(b.part, k), colour: k === pk ? '--mark' : '--suture'}));
+  all.sort((x, y) => (x.colour === '--mark') - (y.colour === '--mark'));
+  v.setVertexMarks(dk, all);
+  document.getElementById('art-note').hidden = !b.joins.some(j => j[0]);
+  if (pk === null) { d.innerHTML = b.joinsNote; context(); v.setMarkers([]); return; }
+  const [, label] = b.joins.find(j => j[0] === pk), has = pk && contactVerts(b.part, pk).length;
+  d.innerHTML = `<b>${esc(label)}.</b> ` + (!pk ? 'Not part of this model.' : has ? 'The highlighted area is where the two bones touch in the model.'
+    : 'In this model the two bones do not quite touch, so no area is highlighted.');
+  if (!pk) { context(); v.setMarkers([]); return; }
+  context([pk]);
+  const verts = contactVerts(b.part, pk), pos = v.parts.get(dk).m.pos;
+  if (verts.length) {
+    const c = [0, 1, 2].map(i => verts.reduce((s, j) => s + pos[j * 3 + i], 0) / verts.length);
+    const bb = v.parts.get(dk).bbox, mid = [0, 1, 2].map(i => (bb[0][i] + bb[1][i]) / 2);
+    const dir = c.map((x, i) => x - mid[i]);
+    v.setMarkers([{p: c, label: partNames[pk], big: true, always: true}]);
+    v.face(BONES[cur].joinView?.[pk] || dir, {zoom: 1});
+  } else v.setMarkers([]);
+}
+
+function setTab(name) {
+  tab = name; sel = null;
+  for (const t of ['lm', 'art']) {
+    document.getElementById('tab-' + t).setAttribute('aria-pressed', t === name);
+    document.getElementById('pane-' + t).hidden = t !== name;
+  }
+  const b = BONES[cur], dk = 'D:' + b.part;
+  v.setVertexMarks(dk, null); context();
+  document.querySelectorAll('#lm-list button, #art-list button').forEach(e => e.setAttribute('aria-pressed', 'false'));
+  if (name === 'lm') { document.getElementById('lm-desc').textContent = 'Tap a landmark in the list.'; v.setMarkers(lmMarkers(null)); }
+  else selectArt(null);
+}
+for (const t of ['lm', 'art']) document.getElementById('tab-' + t).onclick = () => setTab(t);
+for (const id of ['ctx', 'names']) document.getElementById(id).onclick = function () {
+  this.setAttribute('aria-pressed', !on(id));
+  if (id === 'ctx') { if (tab === 'art' && sel) selectArt(sel); else context(); }
+  else if (tab === 'lm') v.setMarkers(lmMarkers(sel));
+};
+v.onPick = hit => {
+  if (!hit || hit.key.startsWith('D:')) return;
+  location.hash = typeOf(hit.key);      // tapping a neighbour opens it
+};
+addEventListener('hashchange', () => show(location.hash.slice(1)));
+
+(async () => {
+  const [det, lm, cols] = await Promise.all(['../models/skull-detail/skull-detail.json', '../models/skull-detail/landmarks.json', '../models/skull/colours.json']
+    .map(u => fetch(u).then(r => { if (!r.ok) throw new Error(u + ': ' + r.status); return r.json(); })));
+  DET = det; LM = lm; COLOURS = cols;
+  const b64 = s => { const x = Uint8Array.from(atob(s), c => c.charCodeAt(0)); return new Uint32Array(x.buffer); };
+  DET.contactsBy = {};
+  for (const c of det.contacts) { DET.contactsBy[c.a + '|' + c.b] = b64(c.va); DET.contactsBy[c.b + '|' + c.a] = b64(c.vb); }
+  const man = await v.load('../models/skull/skull.json');
+  for (const p of man.parts) partNames[p.key] = p.name;
+  buildPicker();
+  await show(location.hash.slice(1));
+  window.ready = true;
+})().catch(e => { document.getElementById('lm-desc').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>
