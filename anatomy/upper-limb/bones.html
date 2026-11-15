@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bones of the Upper Limb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+.picker{display:flex;gap:6px;flex-wrap:wrap}
+@media (max-width:600px){.picker{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none} .picker::-webkit-scrollbar{display:none} .picker > *{flex:none}}
+.desc{min-height:3em}
+.facts h3{margin-bottom:4px}
+.facts p{max-width:75ch}
+.facts dl{display:grid;grid-template-columns:minmax(0,max-content) minmax(0,1fr);gap:4px 14px;margin:0}
+.facts dt{font-weight:600}
+.facts dd{margin:0}
+.facts ul{margin:0;padding-left:20px;max-width:75ch}
+.facts li{margin:2px 0}
+@media (max-width:560px){.facts dl{grid-template-columns:minmax(0,1fr)} .facts dd{margin-bottom:6px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> · <a href="upper-limb.html">The Upper Limb</a></nav>
+
+<header class="stack">
+  <h1 id="title">Bones of the Upper Limb</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="panel picker" aria-label="Choose a bone" id="picker"></section>
+
+<section class="split" aria-label="3D bone">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="views"></div>
+    <div class="vbar">
+      <button class="chip" id="ctx" aria-pressed="false">Show the rest of the limb</button>
+      <button class="chip" id="names" aria-pressed="true">Names on the model</button>
+    </div>
+  </div>
+  <div class="panel stack">
+    <div class="cap key desc" id="lm-desc">Tap a landmark in the list.</div>
+    <div class="legend" id="lm-list"></div>
+    <p class="muted">Marker positions were placed by hand on the model from the textbook descriptions <span class="hw">approximate</span>. The right limb is shown.</p>
+  </div>
+</section>
+
+<section class="panel stack facts" aria-label="About this bone" id="facts"></section>
+
+<footer>
+  <p>Based on: Gray's <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the bones of the upper extremity; cross-checked with Wikipedia's articles and StatPearls (NCBI Bookshelf). Where modern sources differ from Gray, both are given.</p>
+  <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (the shown bone at near full detail, the rest of the limb simplified; shared under the same licence).</p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — checked in Gray's 1918, Wikipedia and StatPearls (see anatomy/DATA-SOURCES.md) =====================
+ * VERTS[key]: name, short, part (model part in ../models/upper-limb-detail), region, intro, parts [[name, text]],
+ *   landmarks [[key, name, text]] (positions in ../models/upper-limb-detail/landmarks.json), recognise [text], ossification, clinical
+ */
+const VERTS = {
+  clavicle: {name: 'Clavicle', short: 'Clavicle', part: 'clavicle', region: 'girdle', view: [0, -0.2, -1], zoom: 0.8,
+    intro: 'A long, doubly curved bone lying almost horizontally at the front of the root of the neck, just above the first rib. It joins the sternum to the scapula and acts as a strut for the shoulder. Shown: the right clavicle.',
+    parts: [
+      ['Medial two-thirds', 'Prismatic and convex forward (Gray: three surfaces and three borders).'],
+      ['Lateral third', 'Flattened from above down and concave forward; the deltoid attaches in front, the trapezius behind.'],
+      ['Sternal end', 'Articulates with the manubrium through an articular disc, and below with the first costal cartilage.'],
+      ['Acromial end', 'A small oval facet for the acromion (acromioclavicular joint).'],
+    ],
+    landmarks: [
+      ['sternal_end', 'Sternal end', 'Directed medially, a little down and forward; joins the manubrium at the sternoclavicular joint.'],
+      ['acromial_end', 'Acromial end', 'Its small oval facet meets the acromion of the scapula.'],
+      ['shaft', 'Shaft', 'Convex forward in its medial part, concave forward in its lateral part.'],
+      ['conoid_tubercle', 'Conoid tubercle', 'On the under surface of the lateral third, at its posterior border, above the coracoid process; the conoid ligament attaches to it (Gray: "coracoid tuberosity").'],
+      ['trapezoid_line', 'Trapezoid line', 'Runs forward and laterally from the conoid tubercle on the under surface; the trapezoid ligament attaches to it.'],
+      ['subclavian_groove', 'Subclavian groove', 'On the under surface of the middle part, for the subclavius (Gray).'],
+      ['costal_impression', 'Costal (rhomboid) impression', 'On the under surface near the medial end, for the costoclavicular ligament (Gray).'],
+    ],
+    recognise: ['A doubly curved bone: convex forward medially, concave forward laterally.', 'A broad, flat lateral end and a thick medial end.', 'The conoid tubercle on the under surface near the lateral end.'],
+    ossification: 'The first bone of the body to begin ossifying, mainly in membrane: two primary centres in the 5th–6th week of fetal life. A secondary centre for the sternal end appears in the late teens (Gray: 18–20 years) and unites at about 23–25: the last long-bone epiphysis to fuse.'},
+
+  scapula: {name: 'Scapula', short: 'Scapula', part: 'scapula', region: 'girdle', view: [-0.4, 1, 0.2], zoom: 0.85,
+    intro: 'A flat, triangular bone on the back of the chest wall, with two surfaces, three borders and three angles; its spine ends in the acromion, and its lateral angle carries the glenoid cavity for the head of the humerus. Shown: the right scapula.',
+    parts: [
+      ['Costal surface', 'Faces the ribs: the subscapular fossa.'],
+      ['Dorsal surface', 'Divided by the spine into a small supraspinous fossa above and a large infraspinous fossa below.'],
+      ['Borders', 'Superior (shortest and thinnest), lateral (axillary; thickest) and medial (vertebral; longest).'],
+      ['Angles', 'Superior, inferior and lateral; the lateral angle (head) carries the glenoid cavity on a neck.'],
+    ],
+    landmarks: [
+      ['spine', 'Spine', 'Crosses the upper dorsal surface obliquely and ends laterally in the acromion. The trapezius attaches to its upper lip and the deltoid to its lower lip.'],
+      ['acromion', 'Acromion', 'The summit of the shoulder, overhanging the glenoid cavity. A small facet on its medial border meets the clavicle; the deltoid and trapezius attach to it.'],
+      ['coracoid_process', 'Coracoid process', 'Arises from the upper part of the neck and curves forward. The pectoralis minor, coracobrachialis and short head of the biceps attach to it, and the coracoclavicular ligaments to its root (Gray).'],
+      ['glenoid_cavity', 'Glenoid cavity', 'On the lateral angle; it meets the head of the humerus (shoulder joint). The glenoid labrum is attached to its margin.'],
+      ['supraglenoid_tubercle', 'Supraglenoid tubercle', 'At the top of the glenoid cavity; the long head of the biceps arises from it.'],
+      ['infraglenoid_tubercle', 'Infraglenoid tubercle', 'Just below the glenoid cavity; the long head of the triceps arises from it.'],
+      ['suprascapular_notch', 'Suprascapular notch', 'In the lateral part of the superior border, beside the base of the coracoid. The superior transverse ligament (sometimes ossified) bridges it: the suprascapular nerve passes below the ligament, and usually the suprascapular artery and vein pass above it.'],
+      ['supraspinous_fossa', 'Supraspinous fossa', 'Above the spine; the supraspinatus arises from it.'],
+      ['infraspinous_fossa', 'Infraspinous fossa', 'Below the spine, much larger; the infraspinatus arises from it.'],
+      ['subscapular_fossa', 'Subscapular fossa', 'The whole costal surface; the subscapularis arises from it.'],
+      ['superior_angle', 'Superior angle', 'Where the superior and medial borders meet.'],
+      ['inferior_angle', 'Inferior angle', 'Where the medial and lateral borders meet.'],
+      ['medial_border', 'Medial (vertebral) border', 'The longest border.'],
+      ['lateral_border', 'Lateral (axillary) border', 'The thickest border; the teres minor and teres major arise from the dorsal surface beside it.'],
+    ],
+    recognise: ['A flat triangle with a spine across its back ending in the acromion.', 'The glenoid cavity on the lateral angle, with the coracoid process above it.'],
+    ossification: 'From seven or more centres (Gray): the body about the 2nd month of fetal life; at birth the glenoid, coracoid, acromion, medial border and inferior angle are still cartilage. The coracoid centre appears at about 15–18 months and joins about 15 years; the other epiphyses appear at 14–20 years and all have joined by about 25.'},
+
+  humerus: {name: 'Humerus', short: 'Humerus', part: 'humerus', region: 'arm', view: [-0.4, -1, 0.1], zoom: 0.9,
+    intro: 'The longest and largest bone of the upper limb: an upper end with the head and two tubercles, a shaft, and a lower end that forms the elbow joint. Shown: the right humerus.',
+    parts: [
+      ['Upper end', 'Head, anatomical neck, greater and lesser tubercles; the surgical neck is the constriction below the tubercles.'],
+      ['Shaft', 'Cylindrical above, prism-shaped below.'],
+      ['Lower end', 'Flattened and curved forward: the capitulum and trochlea, and the medial and lateral epicondyles.'],
+    ],
+    landmarks: [
+      ['head', 'Head', 'Faces upward, medially and a little backward; it meets the glenoid cavity of the scapula.'],
+      ['anatomical_neck', 'Anatomical neck', 'The margin of the head; the capsule of the shoulder joint attaches to it. Rarely fractured (Gray).'],
+      ['greater_tubercle', 'Greater tubercle', 'Lateral to the head. Its three facets receive the supraspinatus (highest), infraspinatus and teres minor.'],
+      ['lesser_tubercle', 'Lesser tubercle', 'In front, directed medially and forward; the subscapularis inserts on it.'],
+      ['intertubercular_sulcus', 'Intertubercular (bicipital) groove', 'Between the tubercles; it holds the long tendon of the biceps. The latissimus dorsi inserts in its floor, the pectoralis major on its lateral lip and the teres major on its medial lip (Gray).'],
+      ['surgical_neck', 'Surgical neck', 'The constriction below the tubercles, a frequent site of fracture. The axillary nerve and posterior circumflex humeral artery run round it (Wikipedia).'],
+      ['deltoid_tuberosity', 'Deltoid tuberosity', 'About the middle of the lateral side of the shaft; the deltoid inserts on it.'],
+      ['radial_groove', 'Radial (spiral) groove', 'Runs obliquely downward and laterally across the back of the shaft, behind the deltoid tuberosity, between the origins of the lateral and medial heads of the triceps; it carries the radial nerve and the profunda brachii artery. (Gray places it on the antero-lateral surface below the tuberosity.)'],
+      ['capitulum', 'Capitulum', 'The rounded lateral part of the lower articular surface; it meets the head of the radius.'],
+      ['trochlea', 'Trochlea', 'The pulley-shaped medial part of the lower articular surface; it meets the trochlear notch of the ulna.'],
+      ['coronoid_fossa', 'Coronoid fossa', 'Above the front of the trochlea; it receives the coronoid process of the ulna in flexion.'],
+      ['radial_fossa', 'Radial fossa', 'Above the front of the capitulum; it receives the edge of the head of the radius in flexion.'],
+      ['olecranon_fossa', 'Olecranon fossa', 'Above the back of the trochlea; it receives the olecranon in extension.'],
+      ['medial_epicondyle', 'Medial epicondyle', 'Large and prominent. The common flexor tendon, pronator teres and ulnar collateral ligament attach to it.'],
+      ['ulnar_nerve_groove', 'Groove for the ulnar nerve', 'On the back of the medial epicondyle; the ulnar nerve runs here (the "funny bone").'],
+      ['lateral_epicondyle', 'Lateral epicondyle', 'Smaller; the radial collateral ligament and the common extensor tendon and supinator attach to it.'],
+    ],
+    recognise: ['A rounded head at one end; capitulum and trochlea at the other.', 'The intertubercular groove between the two tubercles.'],
+    ossification: 'Gray: eight centres. The shaft from about the 8th week of fetal life; at birth only the shaft is bone. Upper end: modern sources give the head from birth to about 6 months, the greater tubercle about the 1st year and the lesser by about 5 years (Gray: 1st, 3rd and 5th years); they join into one epiphysis by about 6 years and fuse with the shaft at about 18–22. The upper end is the growing end of the humerus. The lower-end centres unite with the shaft earlier, at 16–18 years (Gray).',
+    clinical: 'Three nerves lie on the humerus: the axillary nerve at the surgical neck, the radial nerve in the radial groove, and the ulnar nerve behind the medial epicondyle.'},
+
+  ulna: {name: 'Ulna', short: 'Ulna', part: 'ulna', region: 'forearm', view: [-1, -0.4, 0.1], zoom: 0.9,
+    intro: 'The medial bone of the forearm, parallel to the radius. Its thick upper end forms much of the elbow joint; its small lower end is kept out of the wrist joint by an articular disc (Gray). Shown: the right ulna.',
+    parts: [
+      ['Upper end', 'The olecranon and coronoid process, enclosing the trochlear notch; the radial notch on the side.'],
+      ['Shaft', 'Prism-shaped, with a sharp interosseous border facing the radius.'],
+      ['Lower end', 'The head and the styloid process.'],
+    ],
+    landmarks: [
+      ['olecranon', 'Olecranon', 'A large curved eminence at the upper back of the ulna; its posterior surface lies under the skin. The triceps inserts on it; it fits into the olecranon fossa in extension.'],
+      ['trochlear_notch', 'Trochlear notch', 'The large hollow formed by the olecranon and coronoid process; it meets the trochlea of the humerus (Gray: semilunar notch).'],
+      ['coronoid_process', 'Coronoid process', 'Projects forward from the upper front of the ulna; it enters the coronoid fossa in flexion. The brachialis inserts on its front surface and the tuberosity below.'],
+      ['tuberosity', 'Tuberosity of the ulna', 'A rough eminence where the coronoid process meets the front of the shaft; part of the brachialis inserts on it.'],
+      ['radial_notch', 'Radial notch', 'On the lateral side of the coronoid process; it receives the rim of the head of the radius (proximal radioulnar joint). The annular ligament attaches to its ends.'],
+      ['shaft', 'Shaft', 'Its interosseous border faces the radius.'],
+      ['head', 'Head', 'The rounded lower end; it meets the ulnar notch of the radius and rests on the articular disc.'],
+      ['styloid_process', 'Styloid process', 'Projects from the medial and back part of the lower end, a little below the head; the ulnar collateral ligament of the wrist attaches to it.'],
+    ],
+    recognise: ['A hook-shaped upper end (olecranon and coronoid process) with the trochlear notch.', 'A small head and styloid process at the lower end.'],
+    ossification: 'Three centres: the shaft about the 8th week of fetal life, the lower end at 5–6 years (Radiopaedia; Gray: about the 4th year), the top of the olecranon about the 10th year. The upper epiphysis fuses about 16, the lower about 20 (Gray).'},
+
+  radius: {name: 'Radius', short: 'Radius', part: 'radius', region: 'forearm', view: [-0.3, -1, 0.1], zoom: 0.9,
+    intro: 'The lateral bone of the forearm: a small head above, and a broad lower end that forms most of the wrist joint. Shown: the right radius.',
+    parts: [
+      ['Upper end', 'Head, neck and radial tuberosity.'],
+      ['Shaft', 'Its sharp interosseous border faces the ulna.'],
+      ['Lower end', 'Broad, with the carpal articular surface below, the ulnar notch medially and the styloid process laterally.'],
+    ],
+    landmarks: [
+      ['head', 'Head', 'Cylindrical; its upper cup meets the capitulum of the humerus and its rim turns in the radial notch of the ulna.'],
+      ['neck', 'Neck', 'The narrow part below the head.'],
+      ['radial_tuberosity', 'Radial tuberosity', 'Below the neck on the medial side; the biceps brachii inserts on its rough back part.'],
+      ['shaft', 'Shaft', 'The pronator teres inserts on a rough ridge about the middle of its lateral surface.'],
+      ['styloid_process', 'Styloid process', 'A strong projection from the lateral side of the lower end. The brachioradialis attaches to its base and the radial collateral ligament of the wrist to its apex. In the model it reaches lower than the ulnar styloid.'],
+      ['ulnar_notch', 'Ulnar notch', 'On the medial side of the lower end; it meets the head of the ulna (distal radioulnar joint).'],
+      ['dorsal_tubercle', 'Dorsal (Lister\'s) tubercle', 'A ridge on the back of the lower end, beside the groove for the extensor pollicis longus (the name is from Wikipedia).'],
+      ['carpal_surface', 'Carpal articular surface', 'Meets the scaphoid and lunate at the wrist joint.'],
+    ],
+    recognise: ['A small disc-shaped head and a broad lower end.', 'The radial tuberosity below the neck; the styloid process on the lateral side of the lower end.'],
+    ossification: 'Three centres: the shaft about the 8th week of fetal life, the lower end at about 1 year (Radiopaedia; Gray: end of the 2nd year), the upper end about the 5th year. The upper epiphysis fuses earlier than the lower (modern data: about 14–18 and 17–20 years; Gray: 17–18 and 20).'},
+
+  hand: {name: 'Bones of the hand', short: 'Hand', part: 'capitate', also: ['scaphoid', 'lunate', 'triquetral', 'pisiform', 'trapezium', 'trapezoid', 'hamate', 'mc1', 'mc2', 'mc3', 'mc4', 'mc5', 'pp1', 'dp1', 'pp2', 'mp2', 'dp2', 'pp3', 'mp3', 'dp3', 'pp4', 'mp4', 'dp4', 'pp5', 'mp5', 'dp5'], region: 'hand', view: [0, -1, 0], zoom: 0.9,
+    intro: 'Eight carpal bones in two rows, five metacarpals and fourteen phalanges. Shown: the right hand, palm forward.',
+    parts: [
+      ['Carpus', 'Proximal row, from the lateral (thumb) side: scaphoid, lunate, triquetrum, pisiform. Distal row: trapezium, trapezoid, capitate, hamate.'],
+      ['Metacarpals', 'Five, each with a base, shaft and head.'],
+      ['Phalanges', 'Two in the thumb and three in each finger: proximal, middle and distal.'],
+    ],
+    landmarks: [
+      ['scaphoid', 'Scaphoid', 'The largest bone of the proximal row, boat-shaped, at the radial side; it articulates with the radius, trapezium, trapezoid, capitate and lunate.'],
+      ['scaphoid_tubercle', 'Tubercle of the scaphoid', 'At the lower lateral part of its palmar surface; the flexor retinaculum (Gray: transverse carpal ligament) attaches to it.'],
+      ['lunate', 'Lunate', 'Crescent-shaped, in the middle of the proximal row; it articulates with the radius, capitate, scaphoid and triquetrum, and in many wrists with the hamate.'],
+      ['triquetral', 'Triquetrum', 'Pyramid-shaped, with an oval facet for the pisiform.'],
+      ['pisiform', 'Pisiform', 'Small and round, in front of the triquetrum, its only articulation. The flexor carpi ulnaris and the flexor retinaculum attach to it.'],
+      ['trapezium', 'Trapezium', 'At the radial side of the distal row; its saddle-shaped surface meets the first metacarpal (the joint at the base of the thumb).'],
+      ['trapezium_tubercle', 'Ridge (tubercle) of the trapezium', 'On its palmar surface, beside a groove for the tendon of the flexor carpi radialis; the flexor retinaculum attaches to it.'],
+      ['trapezoid', 'Trapezoid', 'Between the trapezium and capitate.'],
+      ['capitate', 'Capitate', 'The largest carpal bone, in the middle of the distal row; it articulates with seven bones (Gray).'],
+      ['hamate', 'Hamate', 'Wedge-shaped, at the medial side of the distal row, resting on the 4th and 5th metacarpals.'],
+      ['hook_of_hamate', 'Hook of the hamate', 'Projects forward from the palmar surface; the flexor retinaculum attaches to its apex, and the flexor carpi ulnaris reaches it through the pisohamate ligament.'],
+      ['mc1', 'First metacarpal (thumb)', 'Its saddle-shaped base meets the trapezium; the abductor pollicis longus inserts on a tubercle at its radial side.'],
+      ['mc2', 'Second metacarpal', 'The longest metacarpal, with the largest base.'],
+      ['mc3', 'Third metacarpal', 'Its base has a styloid process on the back of its radial side (Gray).'],
+      ['mc4', 'Fourth metacarpal', 'Shorter and smaller than the third.'],
+      ['mc5', 'Fifth metacarpal', 'The extensor carpi ulnaris inserts on a tubercle on the ulnar side of its base.'],
+    ],
+    recognise: ['Carpal rows from the thumb side: "scaphoid, lunate, triquetrum, pisiform; trapezium, trapezoid, capitate, hamate".'],
+    atypical: ['The carpal tunnel (Gray, Wikipedia)', ['The flexor retinaculum (Gray: transverse carpal ligament) is attached to four bony points: the pisiform and the hook of the hamate medially, the tubercle of the scaphoid and the ridge of the trapezium laterally.', 'With the hollow front of the carpus it forms the carpal tunnel (the term is from Wikipedia).']],
+    ossification: 'Each carpal bone from one centre, all after birth. Modern order and ages (Radiopaedia): capitate (1–3 months), hamate (2–4 months), triquetrum (2–3 years), lunate (2–4 years), scaphoid, trapezium and trapezoid (4–6 years), pisiform last (8–12 years). Gray (1918) gives later ages and puts the trapezium before the scaphoid. Metacarpals and phalanges have two centres each; the epiphysis is at the head of metacarpals 2–5 but at the base of the first metacarpal and of every phalanx.'},
+};
+/* ===================== PAGE ===================== */
+const REGION_COLOUR = {girdle: '#77AADD', arm: '#EE8866', forearm: '#BBCC33', hand: '#EEDD88'};
+const v = new AtlasViewer(document.getElementById('v'));
+const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
+let DET = null, LM = null, names = {}, cur = null, sel = null, picked = null;
+const views = [['Above', [0, -0.35, 1]], ['Front', [0, -1, 0]], ['Right side', [-1, 0, 0]], ['Back', [0, 1, 0]], ['Below', [0, -0.35, -1]], ['Left side', [1, 0, 0]]];
+for (const [label, dir] of views) {
+  const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
+  b.onclick = () => v.face(dir, {zoom: 0.9}); document.getElementById('views').append(b);
+}
+const on = id => document.getElementById(id).getAttribute('aria-pressed') === 'true';
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function buildPicker() {
+  const box = document.getElementById('picker');
+  for (const [key, t] of Object.entries(VERTS)) {
+    const c = document.createElement('button'); c.className = 'chip'; c.dataset.k = key; c.textContent = t.short;
+    c.onclick = () => { location.hash = key; };
+    box.append(c);
+  }
+}
+function context() {
+  const t = VERTS[cur], ctx = on('ctx'), mine = [t.part, ...(t.also || [])];
+  for (const k of v.order) if (!k.startsWith('D:')) {
+    v.setVisible(k, ctx && !mine.includes(k));
+    v.setColour(k, '--bone');
+  }
+  v.setFocus(mine.map(k => 'D:' + k));
+}
+async function show(key) {
+  if (!VERTS[key]) key = 'humerus';
+  cur = key; sel = null; picked = null; card.hidden = true;
+  const t = VERTS[key], dk = 'D:' + t.part;
+  document.querySelectorAll('#picker .chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.k === key));
+  document.getElementById('title').textContent = t.name; document.title = t.name;
+  document.getElementById('lede').innerHTML = t.intro;
+  const mine = [t.part, ...(t.also || [])];
+  for (const k of mine) if (!v.parts.has('D:' + k)) { const info = DET.parts.find(p => p.key === k); await v.loadPart('D:' + k, '../models/upper-limb-detail/' + info.file, info); }
+  for (const k of v.order) if (k.startsWith('D:')) v.setVisible(k, mine.includes(k.slice(2)));
+  for (const k of mine) v.setColour('D:' + k, REGION_COLOUR[t.region]);
+  context();
+  v.fit(mine.map(k => 'D:' + k)); v.face(t.view || [0.5, -0.8, 0.6], {zoom: t.zoom || 0.9});
+  writeFacts(t); buildList(t);
+  document.getElementById('lm-desc').textContent = 'Tap a landmark in the list.';
+  v.setMarkers(markers(null));
+}
+function writeFacts(t) {
+  let h = '<h2>About it</h2><dl>';
+  for (const [n, x] of t.parts) h += `<dt>${esc(n)}</dt><dd>${x}</dd>`;
+  h += '</dl>';
+  if (t.recognise) h += `<div><h3>How to recognise it</h3><ul>${t.recognise.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+  if (t.atypical) h += `<div><h3>${t.atypical[0]}</h3><ul>${t.atypical[1].map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+  if (t.ossification) h += `<div><h3>Ossification</h3><p>${t.ossification}</p></div>`;
+  if (t.clinical) h += `<div class="cap warn"><b>Clinical.</b> ${t.clinical}</div>`;
+  document.getElementById('facts').innerHTML = h;
+}
+function buildList(t) {
+  const ll = document.getElementById('lm-list'); ll.replaceChildren();
+  for (const [k, name] of t.landmarks) {
+    if (!LM[t.part] || !LM[t.part][k]) continue;
+    const e = document.createElement('button'); e.dataset.k = k; e.setAttribute('aria-pressed', 'false');
+    e.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${esc(name)}</span>`;
+    e.onclick = () => selectLm(sel === k ? null : k); ll.append(e);
+  }
+}
+function markers(active) {
+  const t = VERTS[cur];
+  return t.landmarks.filter(([k]) => LM[t.part] && LM[t.part][k]).map(([k, name]) => ({p: LM[t.part][k].p,
+    label: on('names') || k === active ? name : '', big: k === active, color: k === active ? css('--mark') : '#3b4a63', always: k === active}));
+}
+function selectLm(k) {
+  sel = k; const t = VERTS[cur];
+  document.querySelectorAll('#lm-list button').forEach(e => e.setAttribute('aria-pressed', e.dataset.k === k));
+  const d = document.getElementById('lm-desc');
+  if (!k) { d.textContent = 'Tap a landmark in the list.'; v.setMarkers(markers(null)); return; }
+  const [, name, text] = t.landmarks.find(l => l[0] === k), L = LM[t.part][k];
+  d.innerHTML = `<b>${esc(name)}.</b> ${text}`;
+  v.setMarkers(markers(k));
+  v.face(L.dir, {zoom: 1.3, focus: L.p});
+}
+for (const id of ['ctx', 'names']) document.getElementById(id).onclick = function () {
+  this.setAttribute('aria-pressed', !on(id));
+  if (id === 'ctx') context(); else v.setMarkers(markers(sel));
+};
+v.onPick = hit => {
+  if (!hit || hit.key.startsWith('D:') || TYPE_OF(hit.key) === null) { picked = null; card.hidden = true; return; }
+  const t = TYPE_OF(hit.key), href = t.startsWith('../') ? t : '#' + t;
+  if (picked === hit.key) { location.href = href; return; }
+  picked = hit.key; card.hidden = false;
+  card.innerHTML = `<div class="what"><b>${esc(names[hit.key])}</b><span>Tap it again to open it</span></div><a class="go" href="${href}">Open →</a><button class="x" aria-label="Clear">×</button>`;
+  card.querySelector('.x').onclick = () => { picked = null; card.hidden = true; };
+};
+const TYPE_OF = k => ['clavicle', 'scapula', 'humerus', 'radius', 'ulna'].includes(k) ? k : 'hand';
+addEventListener('hashchange', () => show(location.hash.slice(1)));
+
+(async () => {
+  const [det, lm] = await Promise.all(['../models/upper-limb-detail/upper-limb-detail.json', '../models/upper-limb-detail/landmarks.json']
+    .map(u => fetch(u).then(r => { if (!r.ok) throw new Error(u + ': ' + r.status); return r.json(); })));
+  DET = det; LM = lm;
+  const man = await v.load('../models/upper-limb/upper-limb.json');
+  for (const p of man.parts) names[p.key] = p.name;
+  buildPicker();
+  await show(location.hash.slice(1));
+  window.ready = true;
+})().catch(e => { document.getElementById('lm-desc').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

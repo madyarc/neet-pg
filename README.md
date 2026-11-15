@@ -18,7 +18,9 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | 04 | [The Vertebrae](anatomy/back/vertebrae.html) | Back | Atlas, axis, typical cervical, C7, thoracic, lumbar, sacrum and coccyx in detail: landmarks, how to recognise each, ossification |
 | 05 | [The Thoracic Cage](anatomy/thorax/thoracic-cage.html) | Thorax | Ribs (true, false, floating), costal cartilages, sternum, thoracic vertebrae assembled; joints; openings |
 | 06 | [Ribs and Sternum](anatomy/thorax/ribs.html) | Thorax | Typical, first, second and twelfth ribs and the sternum in detail |
-| 07 | [The Femur](anatomy/lower-limb/femur.html) | Lower limb | 3D bone: 18 landmarks; left or right; 30 muscle and ligament attachments; neck fracture and blood supply; five ossification centres |
+| 07 | [The Upper Limb](anatomy/upper-limb/upper-limb.html) | Upper limb | Shoulder girdle, humerus, radius and ulna, hand assembled; nerves on the humerus; carpal tunnel |
+| 08 | [Bones of the Upper Limb](anatomy/upper-limb/bones.html) | Upper limb | Clavicle, scapula, humerus, ulna, radius and hand bones in detail |
+| 09 | [The Femur](anatomy/lower-limb/femur.html) | Lower limb | 3D bone: 18 landmarks; left or right; 30 muscle and ligament attachments; neck fracture and blood supply; five ossification centres |
 
 ## Syllabus
 

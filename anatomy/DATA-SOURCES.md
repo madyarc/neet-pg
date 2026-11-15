@@ -199,3 +199,24 @@ plane; false ribs: Gray 8–12 (8–10 vertebrochondral, 11–12 floating) vs St
 **Models.** `configs/thorax.json` (BodyParts3D 3.0, 0.25 mm: ribs, cartilages 1–7, sternum, T1–T12) and
 `configs/thorax-detail.json` (0.04 mm: right ribs 1, 2, 6, 10, 11, 12 and the sternum). BodyParts3D has no cartilages
 for ribs 8–10. 29 hand-placed landmarks (`tools/thorax/landmarks/`), checked in two views each.
+
+## Upper limb — `upper-limb/upper-limb.html`, `upper-limb/bones.html` (2026-11-14)
+
+**Sources.** Gray 1918: 107/49–56 (clavicle to phalanges); Wikipedia "Clavicle", "Scapula", "Humerus", "Radius (bone)",
+"Ulna", "Carpal bones", "Scaphoid bone", "Hamate bone", "Metacarpal bones", "Phalanx bone", "Anatomical snuffbox" (much
+copied from Gray). Quote-checked fact sheets `sources-local/facts/upper-limb-a.md`, `-b.md`. Neither source gives
+side-determination rules, so the pages give none yet (AN8.1 marked partial).
+
+**Independent review (2026-11-14; StatPearls, Radiopaedia, Orthobullets, papers via search excerpts):** no factual
+errors; ~95 statements confirmed. Fixed: carpal ossification order and ages (Radiopaedia 12232; Gray's differ, both
+given); lower ends of radius (~1 year) and ulna (5–6 years) vs Gray; humeral upper-end centres (StatPearls NBK534821) vs
+Gray, growing end added; radial groove on the back of the shaft behind the deltoid tuberosity (Gray: antero-lateral
+surface, noted); suprascapular artery/vein usually above the transverse ligament, nerve below; brachialis on the front
+of the coronoid; flexor carpi ulnaris reaches the hook of the hamate via the pisohamate ligament; 2nd metacarpal the
+longest of all five (PMC8461199); clavicle mainly membranous, medial epiphysis the last to fuse (PMC7749897);
+lunate–hamate contact only in many wrists.
+
+**Models.** `configs/upper-limb.json` (BodyParts3D 3.0, 0.2 mm, 32 bones of the right limb) and
+`configs/upper-limb-detail.json` (0.04 mm). 69 landmarks (`tools/upper-limb/landmarks/`): long-bone points picked in
+zoomed views (`ZOOM`/`FOCUS`, per-item `focus`/`zoom`); carpal points from the meshes (most palmar point for the hook of
+the hamate and the scaphoid and trapezium tubercles; each bone's palmar or dorsal surface at its centroid).

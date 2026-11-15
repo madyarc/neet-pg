@@ -68,9 +68,9 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 8. Features of individual bones (Upper Limb)
 
-- [ ] **AN8.1** Identify the given bone, its side, anatomical position, joint formation, important features and clinical anatomy (clavicle, scapula, humerus, radius, ulna, carpal bones)
+- [~] **AN8.1** Identify the given bone, its side, anatomical position, joint formation, important features and clinical anatomy (clavicle, scapula, humerus, radius, ulna, carpal bones) — *features, joints, clinical points (side determination not yet): [Bones of the Upper Limb](upper-limb/bones.html)*
 - [ ] **AN8.2** Demonstrate important muscle attachments on the given bone
-- [ ] **AN8.3** Identify and name various bones in articulated hand, Specify the parts of metacarpals and phalanges and enumerate the peculiarities of pisiform
+- [x] **AN8.3** Identify and name various bones in articulated hand, Specify the parts of metacarpals and phalanges and enumerate the peculiarities of pisiform — *[Bones of the Upper Limb](upper-limb/bones.html)#hand, [The Upper Limb](upper-limb/upper-limb.html)*
 - [ ] **AN8.4** Describe scaphoid fracture and explain the anatomical basis of avascular necrosis
 
 ### 9. Pectoral region
@@ -109,7 +109,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN12.1** Describe and demonstrate important muscle groups of ventral forearm with attachments, nerve supply and actions
 - [ ] **AN12.2** Identify & describe origin, course, relations, branches (or tributaries), termination of important nerves and vessels of forearm
 - [ ] **AN12.3** Identify & describe flexor retinaculum with its attachments
-- [ ] **AN12.4** Explain anatomical basis of carpal tunnel syndrome
+- [~] **AN12.4** Explain anatomical basis of carpal tunnel syndrome — *bony attachments of the flexor retinaculum: [The Upper Limb](upper-limb/upper-limb.html)*
 - [ ] **AN12.5** Identify & describe small muscles of hand. Also describe movements of thumb and muscles involved
 - [ ] **AN12.6** Describe & demonstrate movements of thumb and muscles involved
 - [ ] **AN12.7** Identify & describe course and branches of important blood vessels and nerves in hand
