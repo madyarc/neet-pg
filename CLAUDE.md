@@ -71,7 +71,12 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
 
 ## Visual rules
 
-- Light and dark mode with CSS colour tokens on `:root`; usable at phone width (~400 px) with no sideways scroll.
+- Light theme by default (whatever the device setting); dark theme only when the reader picks it with the switch on the
+  home page or the Anatomy page. The choice is saved in `localStorage` (`neetpg-theme`) and every page applies it with
+  a one-line script in `<head>`; dark tokens live under `:root[data-theme="dark"]`. Usable at phone width (~400 px)
+  with no sideways scroll.
+- Phones first: the model takes most of the screen; frequent actions (selection card with Open, region/view chips in
+  one swipeable row) are visible without scrolling. Tap selects, a second tap (or Open) opens the detailed page.
 - Fonts: Bricolage Grotesque (headings), IBM Plex Sans (body), IBM Plex Mono (data), from Google Fonts.
 
 ## Technical rules
@@ -120,7 +125,7 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
 - Bone identity colours (assembled regions): Paul Tol's "light" palette, assigned by `assign_colours.py` so that bones
   that touch never share a colour (copied to `anatomy/models/skull/colours.json` for the bone pages); bones are also **named on the model**, so nothing depends on colour alone.
 - Selecting a part shows the rest as faint glass, so deep parts (sphenoid, ethmoid) are visible whole.
-- Check light and dark mode, and that labels stay readable on every bone colour.
+- Check both themes, and that labels stay readable on every bone colour.
 
 ## Adding a module
 

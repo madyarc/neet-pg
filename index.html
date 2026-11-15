@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>NEET-PG</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +16,6 @@ html,body{margin:0} [hidden]{display:none!important}
   --f-body:"IBM Plex Sans","Noto Sans Math","Noto Sans Symbols 2",ui-sans-serif,system-ui,sans-serif;
   --f-mono:"IBM Plex Mono","Noto Sans Math","Noto Sans Symbols 2",ui-monospace,Menlo,monospace;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c; --accent:#7d9dff; color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c; --accent:#7d9dff; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;
@@ -39,12 +39,14 @@ p{margin:0}
 .back a{font-size:14px;color:var(--muted);text-decoration:none}
 .back a:hover{color:var(--accent)}
 footer{font-size:13px;color:var(--muted)}
+.themebtn{font:500 13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <h1>NEET-PG</h1>
+    <div class="topbar"><h1>NEET-PG</h1><button class="themebtn" id="theme" type="button"></button></div>
     <p class="lede">Revision you can see and handle: bones to turn in 3D, landmarks to find, attachments to switch on.
       Every fact is checked against a standard textbook, and every simplification is labelled as one.</p>
   </header>
@@ -62,5 +64,19 @@ footer{font-size:13px;color:var(--muted)}
 
   <footer>Built for NEET-PG preparation, following the NMC MBBS curriculum (CBME 2024). The textbooks each page is based on are listed at the bottom of that page.</footer>
 </div>
+<script>
+/* light by default; the reader can switch to dark here, and every page remembers it */
+(() => {
+  const b = document.getElementById('theme'), root = document.documentElement;
+  const label = () => { const dark = root.dataset.theme === 'dark'; b.textContent = dark ? '☀ Light theme' : '☾ Dark theme'; b.setAttribute('aria-pressed', dark); };
+  b.onclick = () => {
+    const dark = root.dataset.theme !== 'dark';
+    if (dark) root.dataset.theme = 'dark'; else delete root.dataset.theme;
+    try { localStorage.setItem('neetpg-theme', dark ? 'dark' : 'light'); } catch (e) {}
+    label();
+  };
+  label();
+})();
+</script>
 </body>
 </html>

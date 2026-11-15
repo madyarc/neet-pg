@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Anatomy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,11 +16,13 @@
 .mod:hover h3{color:var(--accent)}
 .num{font:500 13px var(--f-mono);color:var(--muted);padding-top:2px}
 .mod p{color:var(--muted);font-size:14px}
+.themebtn{font:500 13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
 </style>
 </head>
 <body>
 <div class="wrap">
-<nav class="back"><a href="../index.html">← All subjects</a></nav>
+<div class="topbar"><nav class="back"><a href="../index.html">← All subjects</a></nav><button class="themebtn" id="theme" type="button"></button></div>
 <header class="stack">
   <h1>Anatomy</h1>
   <p class="lede">The whole body, assembled. Turn it with a finger, pinch to zoom, tap a part to select it, tap it again to open it.</p>
@@ -123,6 +126,20 @@ v.load('models/skeleton/skeleton.json').then(m => {
   for (const p of m.parts) { names[p.key] = p.name; v.setColour(p.key, /costal cartilage/i.test(p.name) ? '--cart' : '--bone'); }
   window.ready = true;
 }).catch(e => { card.hidden = false; card.textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+<script>
+/* light by default; the reader can switch to dark here, and every page remembers it */
+(() => {
+  const b = document.getElementById('theme'), root = document.documentElement;
+  const label = () => { const dark = root.dataset.theme === 'dark'; b.textContent = dark ? '☀ Light theme' : '☾ Dark theme'; b.setAttribute('aria-pressed', dark); };
+  b.onclick = () => {
+    const dark = root.dataset.theme !== 'dark';
+    if (dark) root.dataset.theme = 'dark'; else delete root.dataset.theme;
+    try { localStorage.setItem('neetpg-theme', dark ? 'dark' : 'light'); } catch (e) {}
+    label();
+  };
+  label();
+})();
 </script>
 </body>
 </html>

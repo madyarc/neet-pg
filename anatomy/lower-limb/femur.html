@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Femur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,11 +19,6 @@ html,body{margin:0} [hidden]{display:none!important}
   --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c;
-  --accent:#7d9dff; --flag:#ff7b6f; --ok:#5cc983;
-  --bone:#d9cfb6; --cart:#8d96a3; --centre:#e08fbd; --plate:#1d2533; --mark:#ff7b6f;
-  --ins:#f28c3c; --ori:#56b4e9; --lig:#3cc49a; --clin:#ff7b6f; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c;
   --accent:#7d9dff; --flag:#ff7b6f; --ok:#5cc983;
@@ -455,7 +451,7 @@ class BoneViewer {
     this.cam = new Float32Array(GEO.n * 3); this.camDirty = true;
     this.bindInput();
     new ResizeObserver(() => this.resize()).observe(host);
-    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => this.repaint());
+    new MutationObserver(() => this.repaint()).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
     this.resize();
   }
   // colourer(i) -> css var name / hex or null for bone

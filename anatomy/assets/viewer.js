@@ -89,7 +89,7 @@
       gl.enable(gl.DEPTH_TEST);
       this.bindInput();
       new ResizeObserver(() => this.resize()).observe(host);
-      matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => this.draw());
+      new MutationObserver(() => { this.draw(); this.scheduleMarkers(); }).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
       this.resize();
     }
 
