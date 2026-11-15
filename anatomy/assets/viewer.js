@@ -157,6 +157,12 @@
     setClip(n, d) { this.clip = n ? [...n, d] : null; this.draw(); }
     setMarkers(list) { this.markers = list || []; this.draw(); }
 
+    /** put an element over the viewer (e.g. a selection card); taps on it do not reach the model */
+    addOverlay(el) {
+      for (const ev of ['pointerdown', 'pointerup', 'pointermove', 'wheel']) el.addEventListener(ev, e => e.stopPropagation());
+      this.host.append(el); return el;
+    }
+
     /* ---------- camera ---------- */
     matrix() {
       const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw), cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);

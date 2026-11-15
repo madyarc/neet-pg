@@ -76,6 +76,10 @@ Gray 1918 does not discuss it in these chapters. Independent second source: Stat
 Meningeal Arteries" (statpearls.com/point-of-care/25132) and "Anatomy, Head and Neck, Skull" (NCBI Bookshelf NBK499834) —
 the anterior branch runs beneath the pterion; rupture, most often there, typically gives an epidural haematoma.
 
+**Whole-body model (2026-11-14 update):** sternum (manubrium, body, xiphoid process) and costal cartilages 1–7 added
+from BodyParts3D 4.0 (partof); cartilages are drawn in the cartilage colour. BodyParts3D has no 8th–10th costal
+cartilages, so the lower costal margin is open in the model (said in the footer).
+
 **Model:** BodyParts3D 3.0 (95 % polygon reduction) meshes for the 22 bones and the hyoid, simplified by
 `tools/bones-rs` (absolute error limit in the config). Bone colours: `tools/bones/assign_colours.py` (Paul Tol "light"
 palette; bones that touch never share a colour). Sutures = vertices of two named bones within `contact_mm` of each other,

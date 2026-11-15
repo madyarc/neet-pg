@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/atlas.css">
 <style>
-#v{height:min(80vh,720px)}
+@media (min-width:601px){#v{height:min(80vh,720px)}}
 .chip[disabled]{opacity:.5;cursor:default}
 .mods{display:flex;flex-direction:column;border-top:1px solid var(--line)}
 .mod{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid var(--line);text-decoration:none;color:inherit}
@@ -22,19 +22,18 @@
 <nav class="back"><a href="../index.html">← All subjects</a></nav>
 <header class="stack">
   <h1>Anatomy</h1>
-  <p class="lede">The whole body, assembled. Choose a system, turn the body, and tap a part to see its name; parts with a
-    page open into it. Built so far: the skeleton, with detailed pages for the skull, each bone of the skull, and the femur.</p>
+  <p class="lede">The whole body, assembled. Turn it with a finger, pinch to zoom, tap a part to select it, tap it again to open it.</p>
 </header>
 
 <section class="split" aria-label="Whole body">
   <div class="panel">
     <div id="v"></div>
-    <div class="vbar" id="regions"></div>
+    <div class="vbar scrollrow" id="regions" aria-label="Go to a region"></div>
   </div>
   <div class="panel stack">
     <div>
       <h3>Systems</h3>
-      <div class="chips" id="systems">
+      <div class="chips scrollrow" id="systems">
         <button class="chip" aria-pressed="true" data-sys="skeletal">Skeletal</button>
         <button class="chip" disabled>Muscular — coming</button>
         <button class="chip" disabled>Joints and ligaments — coming</button>
@@ -43,7 +42,7 @@
         <button class="chip" disabled>Organs — coming</button>
       </div>
     </div>
-    <div class="cap key" id="info">Tap a bone.</div>
+    <p class="muted"><span class="swatch" style="background:var(--bone)"></span>bone &nbsp; <span class="swatch" style="background:var(--cart)"></span>cartilage (costal cartilages)</p>
     <div>
       <h3>Detailed pages</h3>
       <nav class="mods" aria-label="Modules">
@@ -59,60 +58,66 @@
 </section>
 
 <footer>
-  <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). This overview uses a lighter version of each bone than the detailed pages. The four small sesamoid bones of the feet are not included yet.</p>
+  <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). This overview uses a lighter version of each bone than the detailed pages. The four small sesamoid bones of the feet are not included yet. The model has costal cartilages 1–7 only (BodyParts3D does not include the 8th–10th).</p>
 </footer>
 </div>
 
 <script src="assets/viewer.js"></script>
 <script>
 "use strict";
-/* which detailed page each bone opens (by its BodyParts3D name) */
-const PAGES = [
-  [/^(frontal bone|(right|left) parietal bone|occipital bone|(right|left) temporal bone|sphenoid bone|ethmoid|(right|left) nasal bone|(right|left) maxilla|(right|left) lacrimal bone|(right|left) zygomatic bone|(right|left) palatine bone|(right|left) inferior nasal concha|vomer|mandible|hyoid bone)$/i,
-   'head-neck/skull-bones.html#', 'this bone'],
-  [/^(right|left) femur$/i, 'lower-limb/femur.html', 'the femur'],
+/* groups that open a page: the first tap selects the whole group, a second tap (or the button) opens it */
+const SKULL = /^(frontal bone|(right|left) parietal bone|occipital bone|(right|left) temporal bone|sphenoid bone|ethmoid|(right|left) nasal bone|(right|left) maxilla|(right|left) lacrimal bone|(right|left) zygomatic bone|(right|left) palatine bone|(right|left) inferior nasal concha|vomer|mandible|hyoid bone)$/i;
+const GROUPS = [
+  {id: 'skull', name: 'The skull', re: SKULL, href: 'head-neck/skull.html'},
+  {id: 'femur_r', name: 'Right femur', re: /^right femur$/i, href: 'lower-limb/femur.html'},
+  {id: 'femur_l', name: 'Left femur', re: /^left femur$/i, href: 'lower-limb/femur.html'},
 ];
-// skull bone name -> its key on the bones-of-the-skull page
-const SKULL_TYPE = [[/frontal/i, 'frontal'], [/parietal/i, 'parietal'], [/occipital/i, 'occipital'], [/temporal/i, 'temporal'],
-  [/sphenoid/i, 'sphenoid'], [/ethmoid/i, 'ethmoid'], [/nasal bone/i, 'nasal'], [/maxilla/i, 'maxilla'], [/lacrimal/i, 'lacrimal'],
-  [/zygomatic/i, 'zygomatic'], [/palatine/i, 'palatine'], [/concha/i, 'concha'], [/vomer/i, 'vomer'], [/mandible/i, 'mandible'], [/hyoid/i, 'hyoid']];
 // regions for the quick buttons: which bones to frame (by name)
 const REGIONS = [
   ['Whole body', null],
-  ['Head', PAGES[0][0]],
+  ['Head', SKULL],
   ['Thorax', /rib|sternum|manubrium|xiphoid|thoracic vertebra|costal/i],
   ['Upper limbs', /clavicle|scapula|humerus|radius|ulna|carp|scaphoid|lunate|triquetral|pisiform|trapez|capitate|hamate|metacarp|finger|thumb/i],
   ['Pelvis', /hip bone|sacrum|coccyx|lumbar vertebra/i],
   ['Lower limbs', /femur|patella|tibia|fibula|talus|calcaneus|navicular|cuboid|cuneiform|metatars|toe/i],
 ];
 const v = new AtlasViewer(document.getElementById('v'));
-let man = null, names = {};
-const info = document.getElementById('info');
-v.onPick = hit => {
-  if (!hit) { info.textContent = 'Tap a bone.'; v.setFocus(null); return; }
-  const name = names[hit.key], page = PAGES.find(([re]) => re.test(name));
-  v.setFocus([hit.key]);
-  let link = '';
-  if (page && page[1].endsWith('#')) {
-    // skull bones: their own page, plus the assembled skull
-    const type = SKULL_TYPE.find(([re]) => re.test(name))[1];
-    link = `<br><a class="open" href="${page[1]}${type}">Open ${page[2]} →</a> &nbsp; <a class="open" href="head-neck/skull.html">The whole skull →</a>`;
-  } else if (page) link = `<br><a class="open" href="${page[1]}">Open ${page[2]} →</a>`;
-  info.innerHTML = `<b>${name}</b>` + (link || `<br><span class="muted">No detailed page yet.</span>`);
-};
+let man = null, names = {}, sel = null;      // sel = {group, key}
+
+// selection card over the model, and a "whole body" button
+const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
+const home = v.addOverlay(document.createElement('button')); home.className = 'tr'; home.textContent = '⟲ Whole body';
+home.onclick = () => { clear(); v.fit(null); v.animate(0, 0, 1, null); };
+
+function keysOf(g) { return man.parts.filter(p => g.re.test(p.name)).map(p => p.key); }
+function clear() { sel = null; card.hidden = true; v.setFocus(null); }
+function select(key) {
+  const name = names[key], g = GROUPS.find(g => g.re.test(name)) || null;
+  if (g && sel && sel.group === g) { location.href = g.href; return; }      // second tap on the group: open it
+  sel = {group: g, key};
+  v.setFocus(g ? keysOf(g) : [key]);
+  card.hidden = false;
+  card.innerHTML = g
+    ? `<div class="what"><b>${g.name}</b><span>${name} · tap again to open</span></div><a class="go" href="${g.href}">Open →</a><button class="x" aria-label="Clear">×</button>`
+    : `<div class="what"><b>${name}</b><span>No detailed page yet</span></div><button class="x" aria-label="Clear">×</button>`;
+  card.querySelector('.x').onclick = clear;
+}
+v.onPick = hit => hit ? select(hit.key) : clear();
+
 for (const [label, re] of REGIONS) {
-  const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
+  const b = document.createElement('button'); b.className = 'chip'; b.textContent = label;
   b.onclick = () => {
+    clear();
     const keys = re ? man.parts.filter(p => re.test(p.name)).map(p => p.key) : null;
-    v.setFocus(null); v.fit(keys); v.animate(0, 0, 1, null);
+    v.fit(keys); v.animate(0, 0, 1, null);
   };
   document.getElementById('regions').append(b);
 }
 v.load('models/skeleton/skeleton.json').then(m => {
   man = m;
-  for (const p of m.parts) { names[p.key] = p.name; v.setColour(p.key, '--bone'); }
+  for (const p of m.parts) { names[p.key] = p.name; v.setColour(p.key, /costal cartilage/i.test(p.name) ? '--cart' : '--bone'); }
   window.ready = true;
-}).catch(e => { info.textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+}).catch(e => { card.hidden = false; card.textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
 </script>
 </body>
 </html>

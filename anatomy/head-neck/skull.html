@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="../assets/atlas.css">
 <style>
-.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs{display:flex;gap:6px}
 .tabs .chip{font-size:13.5px;padding:6px 14px}
 .group-h{font:600 12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:10px 0 2px}
 .group-h:first-child{margin-top:0}
@@ -21,13 +21,12 @@
 
 <header class="stack">
   <h1>The Skull</h1>
-  <p class="lede">Twenty-two bones (the tiny ear ossicles are not counted): eight form the cranium, which houses the brain,
-    and fourteen form the face. All but one are immovably joined, mostly at sutures; the mandible is the only movable bone. Turn the skull, tap a bone, then look at the
-    sutures and inside the cranial cavity.</p>
+  <p class="lede">Twenty-two bones: eight form the cranium and fourteen the face. Tap a bone to select it, tap it again to
+    open it in detail.</p>
 </header>
 
 <section class="stack" aria-label="3D skull">
-  <div class="tabs" role="tablist" aria-label="What to show">
+  <div class="tabs scrollrow" role="tablist" aria-label="What to show">
     <button class="chip" role="tab" id="tab-bones" aria-pressed="true">The bones</button>
     <button class="chip" role="tab" id="tab-sutures" aria-pressed="false">Sutures and meeting points</button>
     <button class="chip" role="tab" id="tab-inside" aria-pressed="false">Inside: cranial fossae</button>
@@ -35,7 +34,7 @@
   <div class="split">
     <div class="panel">
       <div id="v"></div>
-      <div class="vbar" id="views"></div>
+      <div class="vbar scrollrow" id="views"></div>
       <div class="vbar">
         <button class="chip" id="names" aria-pressed="true">Names on the model</button>
         <button class="chip" id="jaw" aria-pressed="true">Mandible and hyoid</button>
@@ -44,7 +43,7 @@
     <div class="panel stack" id="side">
       <!-- bones -->
       <div id="pane-bones" class="stack">
-        <div class="cap key desc" id="bone-desc">Tap a bone on the model or in the list.</div>
+        <div class="cap key desc" id="bone-desc">The ear ossicles are not counted in the 22. All but one of the bones are immovably joined, mostly at sutures; the mandible is the only movable bone. Tap a bone on the model or in the list.</div>
         <div class="legend" id="bone-list"></div>
         <p class="muted">Bones that touch never share a colour, and left and right members of a pair share one. Colours do repeat on bones far apart, so go by the names on the model.</p>
       </div>
@@ -140,6 +139,7 @@ const FOSSAE = [
 const typeOf = k => k.replace(/_(r|l)$/, '');
 const T = Object.fromEntries(TYPES.map(t => [t[0], {name: t[1], group: t[2], colour: t[3], text: t[4]}]));
 const v = new AtlasViewer(document.getElementById('v'));
+const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
 let PTS = null, tab = 'bones', selType = null, partNames = {};
 
 const views = [['Front', 'anterior'], ['Left side', 'left'], ['Right side', 'right'], ['Back', 'posterior'], ['From above', 'superior'], ['From below', 'inferior']];
@@ -181,9 +181,12 @@ function selectType(key, turn) {
   selType = key;
   document.querySelectorAll('#bone-list button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === key));
   const desc = document.getElementById('bone-desc');
-  if (!key) { desc.textContent = 'Tap a bone on the model or in the list.'; v.setFocus(null); v.setMarkers(boneLabels()); return; }
+  if (!key) { desc.textContent = 'The ear ossicles are not counted in the 22. All but one of the bones are immovably joined, mostly at sutures; the mandible is the only movable bone. Tap a bone on the model or in the list.'; v.setFocus(null); v.setMarkers(boneLabels()); card.hidden = true; return; }
   const t = T[key], parts = v.order.filter(k => typeOf(k) === key);
   desc.innerHTML = `<b>${t.name}.</b> ${t.text}<br><a class="open" href="skull-bones.html#${key}">The ${SHORT[key].replace('Inf. nasal concha', 'inferior nasal concha').toLowerCase()} in detail →</a>`;
+  card.hidden = false;
+  card.innerHTML = `<div class="what"><b>${t.name}</b><span>Tap it again to open it in detail</span></div><a class="go" href="skull-bones.html#${key}">Open →</a><button class="x" aria-label="Clear">×</button>`;
+  card.querySelector('.x').onclick = () => selectType(null);
   v.setFocus(parts);
   v.setMarkers(parts.map(k => ({p: PTS.anchors[k], label: partNames[k], big: true})));
   if (turn) {
@@ -271,6 +274,7 @@ function selectFossa(key) {
 /* ----- tabs ----- */
 function setTab(name) {
   tab = name;
+  card.hidden = true;
   for (const t of ['bones', 'sutures', 'inside']) {
     document.getElementById('tab-' + t).setAttribute('aria-pressed', t === name);
     document.getElementById('pane-' + t).hidden = t !== name;
@@ -298,7 +302,11 @@ document.getElementById('jaw').onclick = function () {
 
 v.onPick = hit => {
   if (!hit) return;
-  if (tab === 'bones') selectType(typeOf(hit.key), false);
+  if (tab === 'bones') {
+    const t = typeOf(hit.key);
+    if (selType === t) { location.href = 'skull-bones.html#' + t; return; }   // second tap opens the bone
+    selectType(t, false);
+  }
   else if (tab === 'inside') document.getElementById('fos-desc').innerHTML = `<b>${partNames[hit.key]}.</b> ${T[typeOf(hit.key)].text}`;
   else document.getElementById('sut-desc').innerHTML = `<b>${partNames[hit.key]}.</b> ${T[typeOf(hit.key)].text}`;
 };

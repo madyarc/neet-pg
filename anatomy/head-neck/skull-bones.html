@@ -11,7 +11,8 @@
 .picker{display:flex;flex-direction:column;gap:6px}
 .picker .row{gap:6px}
 .picker .tag{min-width:64px}
-.tabs{display:flex;gap:6px;flex-wrap:wrap}
+@media (max-width:600px){.picker .row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none} .picker .row::-webkit-scrollbar{display:none} .picker .row > *{flex:none}}
+.tabs{display:flex;gap:6px}
 .tabs .chip{font-size:13.5px;padding:6px 14px}
 .desc{min-height:3em}
 .facts h3{margin-bottom:4px}
@@ -35,14 +36,14 @@
 <section class="panel picker" aria-label="Choose a bone" id="picker"></section>
 
 <section class="stack" aria-label="3D bone">
-  <div class="tabs" role="tablist" aria-label="What to show">
+  <div class="tabs scrollrow" role="tablist" aria-label="What to show">
     <button class="chip" role="tab" id="tab-lm" aria-pressed="true">Landmarks</button>
     <button class="chip" role="tab" id="tab-art" aria-pressed="false">Joins with</button>
   </div>
   <div class="split">
     <div class="panel">
       <div id="v"></div>
-      <div class="vbar" id="views"></div>
+      <div class="vbar scrollrow" id="views"></div>
       <div class="vbar">
         <button class="chip" id="ctx" aria-pressed="false">Show the rest of the skull</button>
         <button class="chip" id="names" aria-pressed="true">Names on the model</button>
@@ -434,7 +435,7 @@ function buildPicker() {
 
 async function show(key) {
   if (!BONES[key]) key = 'frontal';
-  cur = key; sel = null;
+  cur = key; sel = null; picked = null; card.hidden = true;
   const b = BONES[key], dk = 'D:' + b.part;
   document.querySelectorAll('#picker .chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.k === key));
   document.getElementById('title').textContent = b.name;
@@ -554,9 +555,16 @@ for (const id of ['ctx', 'names']) document.getElementById(id).onclick = functio
   if (id === 'ctx') { if (tab === 'art' && sel) selectArt(sel); else context(); }
   else if (tab === 'lm') v.setMarkers(lmMarkers(sel));
 };
+const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
+let picked = null;
 v.onPick = hit => {
-  if (!hit || hit.key.startsWith('D:')) return;
-  location.hash = typeOf(hit.key);      // tapping a neighbour opens it
+  if (!hit || hit.key.startsWith('D:')) { picked = null; card.hidden = true; return; }
+  const t = typeOf(hit.key);
+  if (picked === t) { location.hash = t; return; }      // second tap on a neighbour opens it
+  picked = t;
+  card.hidden = false;
+  card.innerHTML = `<div class="what"><b>${esc(partNames[hit.key])}</b><span>Tap it again to open it</span></div><a class="go" href="#${t}">Open →</a><button class="x" aria-label="Clear">×</button>`;
+  card.querySelector('.x').onclick = () => { picked = null; card.hidden = true; };
 };
 addEventListener('hashchange', () => show(location.hash.slice(1)));
 
