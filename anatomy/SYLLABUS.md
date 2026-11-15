@@ -198,8 +198,8 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 21. Thoracic cage
 
-- [ ] **AN21.1** Identify and describe the salient features of sternum, typical rib and typical thoracic vertebra.
-- [ ] **AN21.2** Identify & describe the features of atypical ribs and atypical thoracic vertebrae.
+- [~] **AN21.1** Identify and describe the salient features of sternum, typical rib and typical thoracic vertebra. — *typical thoracic vertebra: [The Vertebrae](back/vertebrae.html)*
+- [~] **AN21.2** Identify & describe the features of atypical ribs and atypical thoracic vertebrae. — *atypical thoracic vertebrae (T1, T9–T12): [The Vertebrae](back/vertebrae.html)*
 - [ ] **AN21.3** Describe & demonstrate the boundaries of thoracic inlet, cavity and outlet along with its applied aspect.( Thoracic inlet Syndrome)
 - [ ] **AN21.4** Describe & demonstrate extent, attachments, direction of fibres, nerve supply and actions of intercostal muscles
 - [ ] **AN21.5** Describe & demonstrate origin, course, relations and branches of a typical intercostal nerve
@@ -256,9 +256,9 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN26.2** Describe & demonstrate the features of norma frontalis, verticalis, occipitalis, lateralis and basalis
 - [~] **AN26.3** Describe & demonstrate cranial cavity, its subdivisions, foramina and structures passing through them — *fossae: [The Skull](head-neck/skull.html); foramina of each bone: [Bones of the Skull](head-neck/skull-bones.html)*
 - [x] **AN26.4** Describe & demonstrate morphological features of mandible — *[Bones of the Skull](head-neck/skull-bones.html)#mandible*
-- [ ] **AN26.5** Describe & demonstrate features of typical and atypical cervical vertebrae (atlas and axis)
+- [x] **AN26.5** Describe & demonstrate features of typical and atypical cervical vertebrae (atlas and axis) — *[The Vertebrae](back/vertebrae.html)*
 - [~] **AN26.6** Explain the concept of bones that ossify in membrane — *ossification of each skull bone (membrane or cartilage): [Bones of the Skull](head-neck/skull-bones.html)*
-- [ ] **AN26.7** Describe & demonstrate the features of the 7th cervical vertebra
+- [x] **AN26.7** Describe & demonstrate the features of the 7th cervical vertebra — *[The Vertebrae](back/vertebrae.html)*
 
 ### 27. Scalp
 
@@ -455,8 +455,8 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 50. Vertebral column
 
-- [ ] **AN50.1** Describe the curvatures of the vertebral column
-- [ ] **AN50.2** Describe & demonstrate the type, articular ends, ligaments and movements of Intervertebral joints, Sacroiliac joints & Pubic symphysis
+- [x] **AN50.1** Describe the curvatures of the vertebral column — *[The Vertebral Column](back/vertebral-column.html)*
+- [~] **AN50.2** Describe & demonstrate the type, articular ends, ligaments and movements of Intervertebral joints, Sacroiliac joints & Pubic symphysis — *intervertebral discs: [The Vertebral Column](back/vertebral-column.html)*
 - [ ] **AN50.3** Describe lumbar puncture (site, direction of the needle, structures pierced during the lumbar puncture)
 - [ ] **AN50.4** Explain the anatomical basis of Scoliosis, Lordosis, Prolapsed disc, Spondylolisthesis & Spina bifida
 

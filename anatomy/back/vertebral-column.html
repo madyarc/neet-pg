@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Vertebral Column</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+.tabs{display:flex;gap:6px}
+.tabs .chip{font-size:13.5px;padding:6px 14px}
+.group-h{font:600 12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:10px 0 2px}
+.group-h:first-child{margin-top:0}
+.desc{min-height:3em}
+.vgrid{display:flex;flex-wrap:wrap;gap:4px}
+.vgrid button{font:500 12px var(--f-mono);min-width:38px;padding:5px 6px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.vgrid button[aria-pressed="true"]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>The Vertebral Column</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="stack" aria-label="3D vertebral column">
+  <div class="tabs scrollrow" role="tablist" aria-label="What to show">
+    <button class="chip" role="tab" id="tab-regions" aria-pressed="true">Regions</button>
+    <button class="chip" role="tab" id="tab-curves" aria-pressed="false">Curves</button>
+    <button class="chip" role="tab" id="tab-discs" aria-pressed="false">Discs</button>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <div id="v"></div>
+      <div class="vbar scrollrow" id="views"></div>
+    </div>
+    <div class="panel stack">
+      <div id="pane-regions" class="stack">
+        <div class="cap key desc" id="reg-desc"></div>
+        <div class="legend" id="reg-list"></div>
+        <div class="group-h">Each vertebra</div>
+        <div class="vgrid" id="vgrid"></div>
+      </div>
+      <div id="pane-curves" class="stack" hidden>
+        <div class="cap key desc" id="curve-desc"></div>
+        <div class="legend" id="curve-list"></div>
+      </div>
+      <div id="pane-discs" class="stack" hidden>
+        <div class="cap key desc" id="disc-desc"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p>Models used: 3D bones and discs from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). BodyParts3D models the sacrum and coccyx as one piece.</p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — checked in Gray's 1918, Wikipedia and StatPearls (see anatomy/DATA-SOURCES.md) ===================== */
+const DATA = {
+  lede: 'Usually 33 vertebrae: 7 cervical, 12 thoracic, 5 lumbar, 5 sacral (fused into the sacrum) and 4 coccygeal (the coccyx). Turn the column, tap a vertebra to select it, tap it again to open it.',
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the vertebral column and its joints; cross-checked with Wikipedia\'s articles and StatPearls (NCBI Bookshelf).',
+  regionsIntro: 'The cervical, thoracic and lumbar vertebrae stay separate throughout life (Gray: true or movable vertebrae); the sacral and coccygeal ones unite in the adult into the sacrum and coccyx (false or fixed vertebrae). Tap a region or a vertebra.',
+  regions: [
+    ['cervical', 'Cervical — 7', 'The smallest movable vertebrae, recognised by a foramen in each transverse process. C1 (atlas), C2 (axis) and C7 are atypical. The number of cervical vertebrae very rarely changes.'],
+    ['thoracic', 'Thoracic — 12', 'Intermediate in size, growing larger downward; they carry facets for the ribs on their bodies and (except T11 and T12) on their transverse processes.'],
+    ['lumbar', 'Lumbar — 5', 'The largest movable vertebrae, with no foramen in the transverse process and no facets on the body.'],
+    ['sacral', 'Sacrum and coccyx', 'Five sacral vertebrae fuse into the sacrum; the coccyx is usually four rudimentary vertebrae (three to five). The model has the two as one piece.'],
+    ['disc', 'Intervertebral discs', 'Between the bodies, from the axis to the sacrum (none between the skull, atlas and axis). See the Discs tab.'],
+  ],
+  curvesIntro: 'Seen from the side the column has four curves. The thoracic and pelvic (sacral) curves are primary: they keep the curve of the fetal spine. The cervical and lumbar curves are secondary: they begin before birth but become evident only after it (Gray: "developed after birth"). Tap a curve.',
+  curves: [
+    ['cervical', 'Cervical curve — convex forward', 'From the tip of the dens to the middle of T2; the least marked of the curves. Secondary: it appears when the child holds up its head (3–4 months) and sits upright (9 months) (Gray).',
+      ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7']],
+    ['thoracic', 'Thoracic curve — concave forward', 'From the middle of T2 to the middle of T12. Primary. Its most prominent point behind is the spine of T7 (Gray).',
+      ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 't11', 't12']],
+    ['lumbar', 'Lumbar curve — convex forward', 'From the middle of T12 to the sacrovertebral angle; more marked in the female. Secondary: it appears when the child begins to walk (12–18 months) (Gray).',
+      ['l1', 'l2', 'l3', 'l4', 'l5']],
+    ['pelvic', 'Pelvic curve — concave forward and downward', 'From the lumbosacral joint to the tip of the coccyx. Primary.', ['sacrum']],
+  ],
+  discs: 'The intervertebral discs lie between the bodies of neighbouring vertebrae, from the axis to the sacrum, and are the chief bonds between them. Each has an outer ring, the annulus fibrosus (layers of fibrous tissue and fibrocartilage whose fibres cross like an X), and a soft, elastic centre, the nucleus pulposus, a remnant of the notochord. Gray: the discs are thicker in front in the cervical and lumbar regions, adding to their forward curves, and make up about a quarter of the length of the column (below the axis). Wikipedia: 23 discs.',
+};
+
+/* region of each part, colour per region (Paul Tol "light"; discs = cartilage) */
+const REGION_OF = k => k.startsWith('disc') ? 'disc' : k === 'sacrum' ? 'sacral' : {c: 'cervical', t: 'thoracic', l: 'lumbar'}[k[0]];
+const COLOURS = {cervical: '#77AADD', thoracic: '#EE8866', lumbar: '#BBCC33', sacral: '#EEDD88', disc: '--cart'};
+/* the detailed page for each vertebra: [type key on vertebrae.html, title] */
+const TYPE_OF = k => k === 'c1' ? 'atlas' : k === 'c2' ? 'axis' : k === 'c7' ? 'c7' : k[0] === 'c' ? 'cervical'
+  : k[0] === 't' ? 'thoracic' : k[0] === 'l' ? 'lumbar' : k === 'sacrum' ? 'sacrum' : null;
+const TYPE_TITLE = {atlas: 'Atlas', axis: 'Axis', c7: 'Vertebra prominens', cervical: 'Typical cervical vertebra', thoracic: 'Thoracic vertebra', lumbar: 'Lumbar vertebra', sacrum: 'Sacrum and coccyx'};
+
+/* ===================== PAGE ===================== */
+const v = new AtlasViewer(document.getElementById('v'));
+const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
+let man = null, names = {}, tab = 'regions', picked = null;
+const views = [['Front', [0, -1, 0]], ['Left side', [1, 0, 0]], ['Back', [0, 1, 0]], ['Right side', [-1, 0, 0]]];
+for (const [label, dir] of views) {
+  const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
+  b.onclick = () => v.face(dir, {zoom: 1}); document.getElementById('views').append(b);
+}
+const pressed = (sel, key) => document.querySelectorAll(sel).forEach(b => b.setAttribute('aria-pressed', b.dataset.k === key));
+
+function paint(focus = null) {
+  for (const k of v.order) { v.setColour(k, COLOURS[REGION_OF(k)]); v.setVertexMarks(k, null); }
+  v.setFocus(focus);
+}
+function typeTitle(t) { return TYPE_TITLE[t] || t; }
+
+/* tap a vertebra: select it; tap again (or the button) to open its type's page */
+function pick(key) {
+  if (key.startsWith('disc')) { selectDisc(key); return; }
+  const t = TYPE_OF(key);
+  if (picked === key && t) { location.href = 'vertebrae.html#' + t; return; }
+  picked = key;
+  pressed('#vgrid button', key);
+  v.setFocus([key]);
+  card.hidden = false;
+  card.innerHTML = `<div class="what"><b>${names[key]}</b><span>${typeTitle(t)} · tap again to open</span></div><a class="go" href="vertebrae.html#${t}">Open →</a><button class="x" aria-label="Clear">×</button>`;
+  card.querySelector('.x').onclick = clearPick;
+}
+function clearPick() { picked = null; card.hidden = true; pressed('#vgrid button', null); paint(); }
+
+function buildRegions() {
+  const box = document.getElementById('reg-list'); box.replaceChildren();
+  for (const [key, name, text] of DATA.regions) {
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:${COLOURS[key].startsWith('--') ? 'var(' + COLOURS[key] + ')' : COLOURS[key]}"></i><span>${name}</span>`;
+    b.onclick = () => {
+      clearPick(); pressed('#reg-list button', key);
+      document.getElementById('reg-desc').innerHTML = `<b>${name}.</b> ${text}`;
+      const keys = v.order.filter(k => REGION_OF(k) === key);
+      v.setFocus(keys); v.fit(keys); v.face([0.6, -1, 0], {zoom: 1});
+    };
+    box.append(b);
+  }
+  const g = document.getElementById('vgrid'); g.replaceChildren();
+  const SEQ = [...[1, 2, 3, 4, 5, 6, 7].map(i => 'c' + i), ...[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(i => 't' + i), ...[1, 2, 3, 4, 5].map(i => 'l' + i), 'sacrum'];
+  for (const k of SEQ.filter(k => v.parts.has(k))) {
+    const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
+    b.textContent = k === 'sacrum' ? 'Sacrum' : k.toUpperCase();
+    b.onclick = () => { if (picked !== k) { v.fit([k]); v.face([0.6, -1, 0.3], {zoom: 1}); } pick(k); };
+    g.append(b);
+  }
+}
+function buildCurves() {
+  const box = document.getElementById('curve-list'); box.replaceChildren();
+  for (const [key, name, text, keys] of DATA.curves) {
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${name}</span>`;
+    b.onclick = () => {
+      pressed('#curve-list button', key);
+      document.getElementById('curve-desc').innerHTML = `<b>${name}.</b> ${text}`;
+      v.setFocus(keys);
+    };
+    box.append(b);
+  }
+}
+function selectDisc(key) {
+  setTab('discs', false);
+  v.setFocus([key]);
+  document.getElementById('disc-desc').innerHTML = `<b>${names[key]}.</b> ${DATA.discs}`;
+}
+
+function setTab(name, move = true) {
+  tab = name; clearPick();
+  for (const t of ['regions', 'curves', 'discs']) {
+    document.getElementById('tab-' + t).setAttribute('aria-pressed', t === name);
+    document.getElementById('pane-' + t).hidden = t !== name;
+  }
+  pressed('#reg-list button', null); pressed('#curve-list button', null);
+  paint();
+  if (name === 'regions') { document.getElementById('reg-desc').innerHTML = DATA.regionsIntro; if (move) { v.fit(null); v.face([0, -1, 0], {zoom: 1}); } }
+  if (name === 'curves') { document.getElementById('curve-desc').innerHTML = DATA.curvesIntro; if (move) { v.fit(null); v.face([-1, 0, 0], {zoom: 1}); } }
+  if (name === 'discs') {
+    document.getElementById('disc-desc').innerHTML = DATA.discs;
+    v.setFocus(v.order.filter(k => k.startsWith('disc')));
+    if (move) { v.fit(null); v.face([-1, -0.3, 0], {zoom: 1}); }
+  }
+}
+for (const t of ['regions', 'curves', 'discs']) document.getElementById('tab-' + t).onclick = () => setTab(t);
+v.onPick = hit => hit ? pick(hit.key) : clearPick();
+
+(async () => {
+  document.getElementById('lede').innerHTML = DATA.lede;
+  document.getElementById('based').innerHTML = DATA.based;
+  man = await v.load('../models/spine/spine.json');
+  for (const p of man.parts) names[p.key] = p.name;
+  buildRegions(); buildCurves();
+  setTab('regions');
+  window.ready = true;
+})().catch(e => { document.getElementById('reg-desc').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

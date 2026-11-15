@@ -1,4 +1,5 @@
-"""Landmark placing helper (needs `python3 -m http.server 8765` in neet-pg).
+"""Landmark placing helper (needs `python3 -m http.server 8765` in neet-pg). Env MANIFEST=<url relative to
+tools/test/> picks another model set (default: skull-detail); ZOOM / FOCUS for the views command.
   views <key> <outdir> [dir ...]       screenshots from standard (or given 'x,y,z') directions, with a pixel grid
   pick  <key> <json>                   json: [{"name", "dir":[x,y,z], "xy":[x,y], "zoom"?}] -> prints points (3D, body frame)
   check <key> <json-with-p> <outdir>   screenshots with markers at the given points from each one's dir
@@ -19,7 +20,8 @@ async def page(p, key):
     b = await p.chromium.launch(args=['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'])
     pg = await b.new_page(viewport={'width': 800, 'height': 800})
     pg.on('pageerror', lambda e: print('ERR', e))
-    await pg.goto(BASE + key); await pg.wait_for_function('window.ready', timeout=60000)
+    m = os.environ.get('MANIFEST')
+    await pg.goto(BASE + key + (f'&m={m}' if m else '')); await pg.wait_for_function('window.ready', timeout=60000)
     return b, pg
 def pdir(s): return DIRS[s] if s in DIRS else [float(x) for x in s.split(',')]
 async def main():
@@ -41,6 +43,12 @@ async def main():
         elif cmd == 'pick':
             items = json.load(open(sys.argv[3])); res = []
             for it in items:
+                if 'rims' in it:    # centre of a hole: mean of surface points picked on its rim
+                    await pg.evaluate(f'faceNow({json.dumps(pdir(it["dir"]))}, {it.get("zoom", 1)}, {json.dumps(it.get("focus"))})')
+                    ps = [await pg.evaluate(f'pickAt({x}, {y})') for x, y in it['rims']]
+                    ps = [h['p'] for h in ps if h]
+                    it['p'] = [round(sum(q[i] for q in ps) / len(ps), 2) for i in range(3)] if len(ps) >= 2 else None
+                    res.append(it); print(it['name'], 'hole', len(ps), it['p']); continue
                 if 'xy' not in it and 'aim' not in it: res.append(it); print(it['name'], 'fixed', it.get('p')); continue   # point given directly (e.g. centre of a hole)
                 await pg.evaluate(f'faceNow({json.dumps(pdir(it["dir"]) if isinstance(it["dir"], str) else it["dir"])}, {it.get("zoom", 1)}, {json.dumps(it.get("focus"))})')
                 if it.get('aim'):   # aim at a 3D point: project it, then pick the surface seen there

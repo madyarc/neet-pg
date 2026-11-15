@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Vertebrae</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+.picker{display:flex;gap:6px;flex-wrap:wrap}
+@media (max-width:600px){.picker{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none} .picker::-webkit-scrollbar{display:none} .picker > *{flex:none}}
+.desc{min-height:3em}
+.facts h3{margin-bottom:4px}
+.facts p{max-width:75ch}
+.facts dl{display:grid;grid-template-columns:minmax(0,max-content) minmax(0,1fr);gap:4px 14px;margin:0}
+.facts dt{font-weight:600}
+.facts dd{margin:0}
+.facts ul{margin:0;padding-left:20px;max-width:75ch}
+.facts li{margin:2px 0}
+@media (max-width:560px){.facts dl{grid-template-columns:minmax(0,1fr)} .facts dd{margin-bottom:6px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> · <a href="vertebral-column.html">The Vertebral Column</a></nav>
+
+<header class="stack">
+  <h1 id="title">The Vertebrae</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="panel picker" aria-label="Choose a vertebra" id="picker"></section>
+
+<section class="split" aria-label="3D vertebra">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="views"></div>
+    <div class="vbar">
+      <button class="chip" id="ctx" aria-pressed="false">Show its neighbours</button>
+      <button class="chip" id="names" aria-pressed="true">Names on the model</button>
+    </div>
+  </div>
+  <div class="panel stack">
+    <div class="cap key desc" id="lm-desc">Tap a landmark in the list.</div>
+    <div class="legend" id="lm-list"></div>
+    <p class="muted">Marker positions were placed by hand on the model from the textbook descriptions <span class="hw">approximate</span>. Paired features are marked on the right side.</p>
+  </div>
+</section>
+
+<section class="panel stack facts" aria-label="About this vertebra" id="facts"></section>
+
+<footer>
+  <p>Based on: Gray's <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the vertebral column, each group of vertebrae and their joints; cross-checked with Wikipedia's articles and StatPearls (NCBI Bookshelf). Where modern sources differ from Gray, both are given.</p>
+  <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (the shown vertebra at near full detail, its neighbours simplified; shared under the same licence). BodyParts3D models the sacrum and coccyx as one piece. Small holes such as the hypoglossal and sacral foramina are only partly modelled.</p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — checked in Gray's 1918, Wikipedia and StatPearls (see anatomy/DATA-SOURCES.md) =====================
+ * VERTS[key]: name, short, part (model part in ../models/spine-detail), region, intro, parts [[name, text]],
+ *   landmarks [[key, name, text]] (positions in ../models/spine-detail/landmarks.json), recognise [text], ossification, clinical
+ */
+const VERTS = {
+  atlas: {name: 'Atlas (C1)', short: 'Atlas C1', part: 'c1', region: 'cervical', view: [0.3, -0.5, 1],
+    intro: 'The first cervical vertebra, named because it supports the head. It has no body (its body has fused with the axis) and no spinous process: it is a ring of two arches and two lateral masses.',
+    parts: [
+      ['Anterior arch', 'About one-fifth of the ring; the anterior tubercle is in the middle of its front.'],
+      ['Posterior arch', 'About two-fifths of the ring, ending behind in the posterior tubercle, a rudimentary spinous process.'],
+      ['Lateral masses', 'The bulkiest, strongest parts, which carry the weight of the head; each has a superior and an inferior articular facet.'],
+      ['Transverse processes', 'Large and long; each is pierced by a foramen transversarium.'],
+    ],
+    landmarks: [
+      ['anterior_arch', 'Anterior arch', 'Its back surface carries a smooth facet for the dens of the axis (Gray: fovea dentis).'],
+      ['anterior_tubercle', 'Anterior tubercle', 'In the middle of the front of the anterior arch; the longus colli muscles attach to it.'],
+      ['posterior_arch', 'Posterior arch', 'Longer than the anterior arch; behind each superior facet its upper surface is grooved by the vertebral artery.'],
+      ['posterior_tubercle', 'Posterior tubercle', 'A rudimentary spinous process; it gives origin to the rectus capitis posterior minor. Its small size keeps it out of the way of movements between the atlas and the skull.'],
+      ['vertebral_artery_groove', 'Groove for the vertebral artery', 'On the upper surface of the posterior arch, just behind each superior facet. It carries the vertebral artery and the suboccipital (first spinal) nerve; sometimes a thin bar of bone turns it into a foramen.'],
+      ['superior_facet', 'Superior articular facet', 'Large, oval and concave, a cup for the occipital condyle; suited to the nodding movement of the head at the atlanto-occipital joint.'],
+      ['inferior_facet', 'Inferior articular facet', 'Circular and flat (Gray: flat or slightly convex; modern sources: flat or slightly concave); it meets the axis and allows rotation of the head.'],
+      ['lateral_mass', 'Lateral mass', 'A small tubercle on its medial side anchors the transverse ligament, which divides the ring: the front part holds the dens, the back part the spinal cord and its membranes.'],
+      ['transverse_process', 'Transverse process', 'Large; it serves for muscles that help rotate the head.'],
+      ['foramen_transversarium', 'Foramen transversarium', 'Transmits the vertebral artery and vein (as in C1–C6).'],
+    ],
+    recognise: ['A ring with no body and no spinous process.', 'Large concave superior facets for the occipital condyles.', 'A facet for the dens on the back of the anterior arch.'],
+    ossification: 'Usually from three centres: one in each lateral mass (about the 7th week of fetal life) and one for the anterior arch (about the end of the first year after birth). The halves of the posterior arch unite between the 3rd and 4th years; the anterior arch joins the lateral masses between the 6th and 8th years.',
+    clinical: 'Because the ring is large, the atlas can be displaced sideways without compressing the spinal cord (Gray).'},
+
+  axis: {name: 'Axis (C2)', short: 'Axis C2', part: 'c2', region: 'cervical', view: [0.4, -1, 0.4],
+    intro: 'The second cervical vertebra: the pivot on which the atlas, carrying the head, turns. Its distinctive feature is the dens (odontoid process), which rises straight up from its body.',
+    parts: [
+      ['Dens', 'A strong peg rising from the body, with a slight neck where it joins it.'],
+      ['Body', 'Deeper in front than behind; it overlaps the front of C3.'],
+      ['Superior articular surfaces', 'Round, slightly convex, facing upward and laterally; they meet the atlas.'],
+      ['Spinous process', 'Large, very strong and bifid.'],
+    ],
+    landmarks: [
+      ['dens', 'Dens (odontoid process)', 'Rises from the upper surface of the body. Its pointed apex gives attachment to the apical ligament; the alar ligaments attach on either side below the apex and run to the occipital condyles. A groove on the back of its neck holds the transverse ligament of the atlas.'],
+      ['dens_facet', 'Facet on the front of the dens', 'Meets the facet on the anterior arch of the atlas (a pivot joint).'],
+      ['body', 'Body', 'A median ridge on its front separates two hollows for the longus colli.'],
+      ['superior_facet', 'Superior articular surface', 'Supported on the body, pedicles and transverse processes; the atlas glides and rotates on it.'],
+      ['transverse_process', 'Transverse process', 'Very small, with a single tubercle; pierced by the foramen transversarium.'],
+      ['vertebral_foramen', 'Vertebral foramen', 'Large, but smaller than that of the atlas.'],
+      ['lamina', 'Lamina', 'Thick and strong.'],
+      ['spinous_process', 'Spinous process', 'Large, very strong and bifid.'],
+    ],
+    recognise: ['The dens rising from the body.', 'A large, strong, bifid spinous process.', 'Small transverse processes with a single tubercle.'],
+    ossification: 'From five primary centres (one for the body, two for the arch, two for the base of the dens) and two secondary centres (the tip of the dens, and a plate on the under surface of the body). The tip of the dens has its own centre (Gray: appearing in the second year; modern sources: about 3–6 years), which joins about the twelfth year.'},
+
+  cervical: {name: 'Typical cervical vertebra (C3–C6)', short: 'Cervical C3–C6', part: 'c4', region: 'cervical', view: [0.4, -0.6, 0.8],
+    intro: 'The smallest of the movable vertebrae. Every cervical vertebra has a foramen in each transverse process, which tells it apart from thoracic and lumbar vertebrae. Shown: C4.',
+    parts: [
+      ['Body', 'Small, wider side to side than front to back; its lower front edge overlaps the vertebra below.'],
+      ['Vertebral arch', 'Pedicles directed laterally and backward; narrow laminae.'],
+      ['Articular pillar', 'The superior and inferior articular processes of each side are fused into a pillar.'],
+      ['Transverse process', 'Pierced by the foramen transversarium, with an anterior and a posterior tubercle. Most of it is a costal (rib-like) element.'],
+    ],
+    landmarks: [
+      ['body', 'Body', 'Small and broader from side to side than from front to back.'],
+      ['uncinate_lip', 'Lip of the body (uncinate process)', 'The upper surface of the body is turned up into a lip on each side (Wikipedia: uncinate process).'],
+      ['vertebral_foramen', 'Vertebral foramen', 'Large and triangular.'],
+      ['pedicle', 'Pedicle', 'Directed laterally and backward.'],
+      ['lamina', 'Lamina', 'Narrow, thinner above than below.'],
+      ['spinous_process', 'Spinous process', 'Short and bifid, the two halves often unequal.'],
+      ['articular_pillar', 'Articular pillar', 'The superior facets look backward, upward and slightly medially; the inferior facets forward, downward and slightly laterally.'],
+      ['inferior_facet', 'Inferior articular facet', 'Flat and oval; faces forward, downward and slightly laterally.'],
+      ['foramen_transversarium', 'Foramen transversarium', 'In C1–C6 it transmits the vertebral artery, the vertebral vein and a plexus of sympathetic nerves.'],
+      ['transverse_process', 'Transverse process', 'It has an anterior and a posterior tubercle joined by a bar of bone grooved above for the spinal nerve. The costal element (the rib-like part) includes the anterior root, both tubercles and the bar; only the posterior root is the true transverse process (Gray, footnote; modern texts agree).'],
+    ],
+    recognise: ['A foramen in each transverse process (foramen transversarium).', 'A short, bifid spinous process.', 'A small body, wider than it is deep, with a lip on each side of its upper surface.', 'A large, triangular vertebral foramen.'],
+    atypical: ['The other cervical vertebrae', ['C1 (atlas), C2 (axis) and C7 are atypical: see their own pages.', 'Wikipedia names the anterior tubercle of C6 the carotid (Chassaignac) tubercle.']],
+    ossification: 'Like every typical vertebra, from three primary centres: one for the body and two for the arch. Gray: the arches begin in the upper cervical vertebrae about the 7th–8th week of fetal life; the body joins the arch about the 3rd year in the upper cervical region. Five secondary centres appear about the 16th year and fuse about the 25th.'},
+
+  c7: {name: 'Seventh cervical vertebra (vertebra prominens)', short: 'C7', part: 'c7', region: 'cervical', view: [0.5, 0.6, 0.7],
+    intro: 'Named for its long, prominent spinous process, the distinctive feature of this vertebra. It is not always the most prominent spine at the base of the neck: C6 or T1 may be.',
+    parts: [
+      ['Spinous process', 'Long, thick, nearly horizontal and not bifid; it ends in a tubercle for the lower end of the ligamentum nuchae.'],
+      ['Transverse processes', 'Large; their posterior roots are large and their anterior roots small.'],
+    ],
+    landmarks: [
+      ['spinous_process', 'Spinous process', 'Long and prominent, not bifid; the ligamentum nuchae attaches to its tip.'],
+      ['body', 'Body', 'Like the other cervical bodies.'],
+      ['vertebral_foramen', 'Vertebral foramen', 'Encloses the spinal cord.'],
+      ['foramen_transversarium', 'Foramen transversarium', 'Often smaller, sometimes double or absent. It usually transmits only the (accessory) vertebral vein: the vertebral artery normally passes in front of the C7 transverse process and enters the foramen transversarium of C6.'],
+      ['transverse_process', 'Transverse process', 'Its upper surface usually has a shallow groove for the eighth spinal nerve.'],
+      ['posterior_root', 'Posterior root of the transverse process', 'Large and prominent.'],
+    ],
+    recognise: ['A long, non-bifid spinous process ending in a tubercle.', 'A small foramen transversarium that the vertebral artery usually does not pass through.'],
+    ossification: 'Gray: the front (costal) part of its transverse process sometimes ossifies from a separate centre about the 6th fetal month.',
+    clinical: 'A cervical rib: the anterior (costal) root of the C7 transverse process sometimes grows large and exists as a separate bone.'},
+
+  thoracic: {name: 'Typical thoracic vertebra', short: 'Thoracic', part: 't6', region: 'thoracic', view: [-0.7, -0.4, 0.6],
+    intro: 'Twelve thoracic vertebrae, between the cervical and lumbar in size and getting larger downward. They carry facets for the ribs: on the sides of the bodies, and on the transverse processes of all but T11 and T12. Shown: T6.',
+    parts: [
+      ['Body', 'Heart-shaped in the middle of the region, as long front to back as it is wide.'],
+      ['Costal facets', 'Two demifacets on each side of the body (upper and lower); with the disc between two vertebrae they form a socket for a rib head.'],
+      ['Transverse processes', 'Thick, strong and long, each ending in a clubbed tip with a facet in front for the tubercle of a rib.'],
+      ['Spinous process', 'Long, sloping obliquely downward; the spines overlap from T5 to T8.'],
+    ],
+    landmarks: [
+      ['body', 'Body', 'Heart-shaped.'],
+      ['costal_demifacet', 'Costal demifacets', 'The upper one is near the root of the pedicle; the lower one is in front of the inferior vertebral notch. Where two vertebrae meet, the lower demifacet of one, the upper demifacet of the next and the disc between them form an oval socket for the head of a rib.'],
+      ['transverse_costal_facet', 'Facet on the transverse process', 'On the front of the clubbed tip; it meets the tubercle of the rib.'],
+      ['transverse_process', 'Transverse process', 'Thick and long, directed backward and laterally.'],
+      ['vertebral_foramen', 'Vertebral foramen', 'Small and circular.'],
+      ['pedicle', 'Pedicle', 'Below it the inferior vertebral notch is deeper than in any other region.'],
+      ['lamina', 'Lamina', 'Broad and thick; the laminae overlap like tiles on a roof.'],
+      ['superior_articular_process', 'Superior articular process', 'Its facet is flat and faces backward, a little laterally and upward.'],
+      ['spinous_process', 'Spinous process', 'Long, triangular in section, sloping downward to a knobbed tip.'],
+    ],
+    recognise: ['Costal facets on the sides of the body.', 'Facets on the transverse processes (except T11 and T12).', 'A heart-shaped body, a small circular vertebral foramen and a long, downward-sloping spine.'],
+    atypical: ['Atypical thoracic vertebrae (T1, T9–T12)', [
+      'T1: a whole facet for the head of the first rib and a lower demifacet for the second; a cervical-like body; a thick, almost horizontal spine.',
+      'T9: may have no lower demifacets.',
+      'T10: usually one whole rib facet on each side, partly on the pedicle.',
+      'T11: a lumbar-like body; large rib facets mainly on the pedicles; short transverse processes with no facets.',
+      'T12: like T11, but its inferior articular facets are convex and face laterally like lumbar ones; each transverse process has superior, inferior and lateral tubercles (the first two correspond to the mammillary and accessory processes of the lumbar vertebrae).']],
+    ossification: 'From three primary centres (body and two halves of the arch). Gray: ossification of the bodies begins about the 8th week in the lower thoracic region. The facets for the rib heads lie behind the neurocentral junctions, so they ossify from the arch centres.'},
+
+  lumbar: {name: 'Typical lumbar vertebra', short: 'Lumbar', part: 'l3', region: 'lumbar', view: [-0.6, -0.5, 0.7],
+    intro: 'Five lumbar vertebrae, the largest of the movable vertebrae. They have no foramen in the transverse process and no facets on the sides of the body. Shown: L3.',
+    parts: [
+      ['Body', 'Large, wider side to side than front to back, a little thicker in front.'],
+      ['Arch', 'Very strong pedicles from the upper part of the body; short, broad, strong laminae.'],
+      ['Spinous process', 'Thick, broad and four-sided, pointing straight backward.'],
+      ['Transverse processes', 'Long and slender; they lie in front of the articular processes and correspond to ribs.'],
+    ],
+    landmarks: [
+      ['body', 'Body', 'Large; wider from side to side than from front to back.'],
+      ['vertebral_foramen', 'Vertebral foramen', 'Triangular; larger than in the thoracic region, smaller than in the cervical.'],
+      ['pedicle', 'Pedicle', 'Very strong; because it comes off the upper part of the body, the inferior vertebral notch below it is deep.'],
+      ['lamina', 'Lamina', 'Broad, short and strong.'],
+      ['spinous_process', 'Spinous process', 'Thick, broad and roughly four-sided; it projects backward to a rough border.'],
+      ['transverse_process', 'Transverse process', 'Long and slender; horizontal in L1–L3, tilted slightly up in L4–L5.'],
+      ['superior_articular_process', 'Superior articular process', 'Its facet is concave and faces backward and medially; the two superior processes are wider apart and clasp the inferior processes of the vertebra above.'],
+      ['mammillary_process', 'Mammillary process', 'A tubercle on the back of the superior articular process.'],
+      ['inferior_articular_process', 'Inferior articular process', 'Its facet is convex and faces forward and laterally.'],
+    ],
+    recognise: ['A large body with no rib facets.', 'No foramen in the transverse process.', 'A thick, four-sided spine pointing straight back.', 'Mammillary processes on the superior articular processes.'],
+    atypical: ['The fifth lumbar vertebra', ['Its body is much deeper in front than behind, matching the forward jut of the lumbosacral joint.', 'A smaller spinous process and a wide gap between its inferior articular processes.', 'Thick transverse processes that spring from the body as well as from the pedicles.']],
+    ossification: 'Three primary centres like every vertebra, plus two extra centres for the mammillary processes (Gray). The transverse process of L1 sometimes stays separate as a lumbar rib.'},
+
+  sacrum: {name: 'Sacrum and coccyx', short: 'Sacrum', part: 'sacrum', region: 'sacral', view: [-0.3, -1, 0.3],
+    intro: 'The sacrum is a large triangular bone of five fused vertebrae, wedged between the two hip bones at the back of the pelvis. Below it the coccyx is usually four small rudimentary vertebrae (three to five). The model has them as one piece.',
+    parts: [
+      ['Base', 'Faces upward and forward; the oval top of the first sacral body meets L5 through a disc.'],
+      ['Pelvic surface', 'Concave, crossed by four transverse ridges where the five bodies were separate, with four pairs of anterior sacral foramina.'],
+      ['Dorsal surface', 'Convex and narrower, with the median sacral crest and four pairs of posterior sacral foramina.'],
+      ['Lateral parts', 'With the ear-shaped auricular surface for the ilium.'],
+      ['Coccyx', 'Usually four segments; they have no pedicles, laminae or spinous processes.'],
+    ],
+    landmarks: [
+      ['base', 'Base', 'The oval upper surface of the first sacral body.'],
+      ['promontory', 'Promontory', 'The front edge of the base, which juts forward to form the sacrovertebral angle with L5 (Gray: "sacrovertebral angle"; Wikipedia: sacral promontory).'],
+      ['ala', 'Ala', 'A large triangular surface on each side of the base; it supports the psoas major and the lumbosacral trunk.'],
+      ['superior_articular_process', 'Superior articular process', 'Concave, facing backward and medially; it meets the inferior process of L5.'],
+      ['sacral_canal', 'Sacral canal', 'Its opening on the base is large and triangular. It lodges the sacral nerves, which leave through the sacral foramina.'],
+      ['anterior_sacral_foramen', 'Anterior sacral foramina', 'Four on each side, at the ends of the transverse ridges. They let out the ventral rami (Gray: anterior divisions) of the sacral nerves and let in the lateral sacral arteries.'],
+      ['posterior_sacral_foramen', 'Posterior sacral foramina', 'Four on each side, smaller and less regular; they transmit the dorsal rami (Gray: posterior divisions) of the sacral nerves.'],
+      ['median_sacral_crest', 'Median sacral crest', 'In the midline behind, with three or four tubercles: the rudimentary spines of the upper sacral vertebrae.'],
+      ['sacral_hiatus', 'Sacral hiatus', 'The laminae of S5 (sometimes S4) do not meet, leaving a gap in the back wall of the canal (the name is from Wikipedia; Gray: "a hiatus or deficiency"). The sacral cornua (the inferior articular processes of S5, prolonged downward) connect with the cornua of the coccyx.'],
+      ['auricular_surface', 'Auricular surface', 'Ear-shaped and covered with cartilage in life; it articulates with the ilium (sacroiliac joint).'],
+      ['coccyx', 'Coccyx', 'Its apex gives attachment to the external anal sphincter; its front, to the anterior sacrococcygeal ligament and the levator ani.'],
+    ],
+    recognise: ['Five fused vertebrae with four pairs of anterior and four of posterior sacral foramina.', 'An auricular surface on each side for the sacroiliac joint.'],
+    atypical: ['Male and female (Gray)', ['The female sacrum is shorter and wider; its upper half is nearly straight and most of its curve is in the lower half.', 'In the male the curve is more even and greater overall.']],
+    ossification: 'Each sacral body has a primary centre and two epiphysial plates; each arch two centres; the first three segments have extra centres for their costal elements. Fusion of the bodies begins between the lowest segments (Gray: about the 18th year; StatPearls: around puberty) and is complete between the 25th and 30th. The coccyx ossifies from four centres, all after birth: the first between the 1st and 4th years, the last between the 14th and 20th.',
+    clinical: 'Gray says the last three coccygeal pieces are usually fused; Wikipedia says the coccyx is often not fully fused, most often having two or three segments.'},
+};
+
+/* ===================== PAGE ===================== */
+const REGION_COLOUR = {cervical: '#77AADD', thoracic: '#EE8866', lumbar: '#BBCC33', sacral: '#EEDD88'};
+const v = new AtlasViewer(document.getElementById('v'));
+const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
+let DET = null, LM = null, names = {}, cur = null, sel = null, picked = null;
+const views = [['Above', [0, -0.35, 1]], ['Front', [0, -1, 0]], ['Right side', [-1, 0, 0]], ['Back', [0, 1, 0]], ['Below', [0, -0.35, -1]], ['Left side', [1, 0, 0]]];
+for (const [label, dir] of views) {
+  const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
+  b.onclick = () => v.face(dir, {zoom: 0.9}); document.getElementById('views').append(b);
+}
+const on = id => document.getElementById(id).getAttribute('aria-pressed') === 'true';
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function buildPicker() {
+  const box = document.getElementById('picker');
+  for (const [key, t] of Object.entries(VERTS)) {
+    const c = document.createElement('button'); c.className = 'chip'; c.dataset.k = key; c.textContent = t.short;
+    c.onclick = () => { location.hash = key; };
+    box.append(c);
+  }
+}
+/* neighbours: the vertebrae above and below in the (lighter) assembled column */
+function neighbours(part) {
+  const seq = v.order.filter(k => !k.startsWith('D:') && !k.startsWith('disc'));
+  const i = seq.indexOf(part);
+  return [seq[i - 1], seq[i + 1], ...v.order.filter(k => k.startsWith('disc') && (k === 'disc_' + part || k === 'disc_' + seq[i - 1]))].filter(Boolean);
+}
+function context() {
+  const t = VERTS[cur], ctx = on('ctx'), nb = neighbours(t.part);
+  for (const k of v.order) if (!k.startsWith('D:')) {
+    v.setVisible(k, ctx && nb.includes(k));
+    v.setColour(k, k.startsWith('disc') ? '--cart' : '--bone');
+  }
+  v.setFocus(['D:' + t.part]);
+}
+async function show(key) {
+  if (!VERTS[key]) key = 'cervical';
+  cur = key; sel = null; picked = null; card.hidden = true;
+  const t = VERTS[key], dk = 'D:' + t.part;
+  document.querySelectorAll('#picker .chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.k === key));
+  document.getElementById('title').textContent = t.name; document.title = t.name;
+  document.getElementById('lede').innerHTML = t.intro;
+  if (!v.parts.has(dk)) { const info = DET.parts.find(p => p.key === t.part); await v.loadPart(dk, '../models/spine-detail/' + info.file, info); }
+  for (const k of v.order) if (k.startsWith('D:')) v.setVisible(k, k === dk);
+  v.setColour(dk, REGION_COLOUR[t.region]);
+  context();
+  v.fit([dk]); v.face(t.view || [0.5, -0.8, 0.6], {zoom: 0.9});
+  writeFacts(t); buildList(t);
+  document.getElementById('lm-desc').textContent = 'Tap a landmark in the list.';
+  v.setMarkers(markers(null));
+}
+function writeFacts(t) {
+  let h = '<h2>About it</h2><dl>';
+  for (const [n, x] of t.parts) h += `<dt>${esc(n)}</dt><dd>${x}</dd>`;
+  h += '</dl>';
+  if (t.recognise) h += `<div><h3>How to recognise it</h3><ul>${t.recognise.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+  if (t.atypical) h += `<div><h3>${t.atypical[0]}</h3><ul>${t.atypical[1].map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+  if (t.ossification) h += `<div><h3>Ossification</h3><p>${t.ossification}</p></div>`;
+  if (t.clinical) h += `<div class="cap warn"><b>Clinical.</b> ${t.clinical}</div>`;
+  document.getElementById('facts').innerHTML = h;
+}
+function buildList(t) {
+  const ll = document.getElementById('lm-list'); ll.replaceChildren();
+  for (const [k, name] of t.landmarks) {
+    if (!LM[t.part] || !LM[t.part][k]) continue;
+    const e = document.createElement('button'); e.dataset.k = k; e.setAttribute('aria-pressed', 'false');
+    e.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${esc(name)}</span>`;
+    e.onclick = () => selectLm(sel === k ? null : k); ll.append(e);
+  }
+}
+function markers(active) {
+  const t = VERTS[cur];
+  return t.landmarks.filter(([k]) => LM[t.part] && LM[t.part][k]).map(([k, name]) => ({p: LM[t.part][k].p,
+    label: on('names') || k === active ? name : '', big: k === active, color: k === active ? css('--mark') : '#3b4a63', always: k === active}));
+}
+function selectLm(k) {
+  sel = k; const t = VERTS[cur];
+  document.querySelectorAll('#lm-list button').forEach(e => e.setAttribute('aria-pressed', e.dataset.k === k));
+  const d = document.getElementById('lm-desc');
+  if (!k) { d.textContent = 'Tap a landmark in the list.'; v.setMarkers(markers(null)); return; }
+  const [, name, text] = t.landmarks.find(l => l[0] === k), L = LM[t.part][k];
+  d.innerHTML = `<b>${esc(name)}.</b> ${text}`;
+  v.setMarkers(markers(k));
+  v.face(L.dir, {zoom: 1.3, focus: L.p});
+}
+for (const id of ['ctx', 'names']) document.getElementById(id).onclick = function () {
+  this.setAttribute('aria-pressed', !on(id));
+  if (id === 'ctx') context(); else v.setMarkers(markers(sel));
+};
+v.onPick = hit => {
+  if (!hit || hit.key.startsWith('D:') || hit.key.startsWith('disc')) { picked = null; card.hidden = true; return; }
+  const t = TYPE_OF(hit.key);
+  if (picked === hit.key && t) { location.hash = t; return; }
+  picked = hit.key; card.hidden = false;
+  card.innerHTML = `<div class="what"><b>${esc(names[hit.key])}</b><span>Tap it again to open it</span></div><a class="go" href="#${t}">Open →</a><button class="x" aria-label="Clear">×</button>`;
+  card.querySelector('.x').onclick = () => { picked = null; card.hidden = true; };
+};
+const TYPE_OF = k => k === 'c1' ? 'atlas' : k === 'c2' ? 'axis' : k === 'c7' ? 'c7' : k[0] === 'c' ? 'cervical' : k[0] === 't' ? 'thoracic' : k[0] === 'l' ? 'lumbar' : 'sacrum';
+addEventListener('hashchange', () => show(location.hash.slice(1)));
+
+(async () => {
+  const [det, lm] = await Promise.all(['../models/spine-detail/spine-detail.json', '../models/spine-detail/landmarks.json']
+    .map(u => fetch(u).then(r => { if (!r.ok) throw new Error(u + ': ' + r.status); return r.json(); })));
+  DET = det; LM = lm;
+  const man = await v.load('../models/spine/spine.json');
+  for (const p of man.parts) names[p.key] = p.name;
+  buildPicker();
+  await show(location.hash.slice(1));
+  window.ready = true;
+})().catch(e => { document.getElementById('lm-desc').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

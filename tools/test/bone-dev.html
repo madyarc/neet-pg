@@ -4,10 +4,11 @@
 <script src="../../anatomy/assets/viewer.js"></script>
 <script>
 // dev page for placing landmarks: ?b=<part key>[,<context keys>]
-const keys = new URLSearchParams(location.search).get('b').split(',');
+const q = new URLSearchParams(location.search), keys = q.get('b').split(',');
+const MAN = q.get('m') || '../../anatomy/models/skull-detail/skull-detail.json';
 const v = new AtlasViewer(document.getElementById('v'));
 v.c.parentElement.querySelector('.hint').remove();
-v.load('../../anatomy/models/skull-detail/skull-detail.json', keys).then(() => {
+v.load(MAN, keys).then(() => {
   for (const k of keys) v.setColour(k, '#d9cfb6');
   v.fit([keys[0]]); window.v = v; window.ready = true; });
 // set a view instantly: dir in body frame

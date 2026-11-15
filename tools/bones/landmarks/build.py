@@ -3,9 +3,12 @@ into anatomy/models/skull-detail/landmarks.json: {bone type: {landmark key: {p, 
 `dir` is the direction (body frame) the page turns to face when the landmark is selected."""
 import json, glob, os
 DIRS = {'ant': [0, -1, 0], 'post': [0, 1, 0], 'left': [1, 0, 0], 'right': [-1, 0, 0], 'sup': [0, -0.35, 1], 'inf': [0, -0.35, -1]}
+import sys
 here = os.path.dirname(os.path.abspath(__file__))
+# usage: build.py [src dir] [dst file]   (default: these skull landmarks -> skull-detail/landmarks.json)
+src = sys.argv[1] if len(sys.argv) > 1 else here
 out = {}
-for f in sorted(glob.glob(os.path.join(here, '*.json'))):
+for f in sorted(glob.glob(os.path.join(src, '*.json'))):
     bone = os.path.basename(f)[:-5]
     pts = {}
     for it in json.load(open(f)):
@@ -13,6 +16,6 @@ for f in sorted(glob.glob(os.path.join(here, '*.json'))):
         d = it['dir']; d = DIRS[d] if isinstance(d, str) and d in DIRS else ([float(x) for x in d.split(',')] if isinstance(d, str) else d)
         pts[it['name']] = {'p': it['p'], 'dir': d}
     out[bone] = pts
-dst = os.path.join(here, '../../../anatomy/models/skull-detail/landmarks.json')
+dst = sys.argv[2] if len(sys.argv) > 2 else os.path.join(here, '../../../anatomy/models/skull-detail/landmarks.json')
 json.dump(out, open(dst, 'w'), separators=(',', ':'))
 print({b: len(p) for b, p in out.items()}, sum(len(p) for p in out.values()))

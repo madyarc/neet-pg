@@ -40,7 +40,7 @@ tools/                      generators: syllabus/, bones/
 ```
 
 Create a subject's `index.html` only when its first module is written. File names are lowercase-kebab-case.
-Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`, `head-neck/`, `abdomen-pelvis/`,
+Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`, `head-neck/`, `back/` (vertebral column), `abdomen-pelvis/`,
 `neuroanatomy/`, `histology/`, `embryology/`, `genetics/`, `general/`.
 
 ## Content rules (non-negotiable)
@@ -106,7 +106,9 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
   with a pixel grid (`views`), turns chosen pixels into surface points (`pick`, or `aim` at a 3D point; holes get a
   fixed centre from points on their rim) and draws all markers for checking (`all`). One JSON per bone in
   `tools/bones/landmarks/`; `build.py` writes `anatomy/models/skull-detail/landmarks.json`. Place each point from the
-  textbook's words ("about 3 cm above the supraorbital margin"), then check it in several views.
+  textbook's words ("about 3 cm above the supraorbital margin"), then check it in several views. Spine:
+  `tools/spine/landmarks/` -> `anatomy/models/spine-detail/landmarks.json` (`build.py <src> <dst>`; `MANIFEST=` env for
+  bone_views.py). Picking inside a canal from above sees through it; compute such centres from the mesh instead.
 - Detailed single bones: `configs/skull-detail.json` (error 0.04 mm, about the source detail); a bone page shows the
   detailed bone over the lighter assembled model (`AtlasViewer.loadPart`).
 

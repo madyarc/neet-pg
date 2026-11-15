@@ -154,3 +154,28 @@ StatPearls "Skull Foramen" NBK545298 and the review above). New here:
 Points: paired openings on the right only. The internal acoustic meatus, jugular foramen and foramen spinosum were
 re-placed on the inner (cranial) surface of the assembled base (`bone_views.py pick` with `aim`/`focus`); the others
 reuse the bone-page landmarks; the lacerum and jugular foramen were placed at the centres of their openings in the model.
+
+## Vertebral column — `back/vertebral-column.html`, `back/vertebrae.html` (2026-11-14)
+
+**Sources.** Gray 1918: 107/19–25 (column, vertebrae, sacrum, coccyx, ossification) and 107/72–74 (joints), from dated
+Internet Archive snapshots of bartleby.com; Wikipedia "Vertebra", "Cervical vertebrae", "Atlas (anatomy)", "Axis
+(anatomy)", "Thoracic vertebrae", "Lumbar vertebrae", "Sacrum", "Coccyx", "Intervertebral disc", "Vertebral column"
+(mostly copied from Gray). Quote-checked fact sheets in `sources-local/facts/vertebrae-*.md`.
+
+**Independent review (2026-11-14, StatPearls via search excerpts, Radiopaedia, PMC papers):** about 115 statements
+confirmed. Fixed: (1) costal element of a cervical transverse process — includes both tubercles and the bar, only the
+posterior root is the true transverse process (Gray's own footnote; gpnotebook); (2) C7 foramen transversarium usually
+transmits only the (accessory) vertebral vein; the artery enters at C6 (StatPearls NBK539734); (3) atlas inferior facets
+— Gray "slightly convex", Radiopaedia "flat or slightly concave": both given; (4) secondary curves begin before birth and
+become evident after it (Kenhub; Gray "developed after birth" quoted); (5) ossicle at the tip of the dens appears at
+about 3–6 years (PMC4498315) vs Gray's second year: both given; (6) C7 not always the most prominent spine (PMC3847791)
+instead of Wikipedia's "70 %"; (7) sacral fusion starts around puberty (StatPearls) vs Gray's 18th year: both given.
+23 discs is the standard count (one StatPearls disc article says 25; not used).
+
+**Words in neither Gray nor the Wikipedia copies, left out:** "hatchet-shaped" lumbar spine, "wedge-shaped" L5 body.
+"Sacral hiatus", "promontory" are Wikipedia's names for features Gray describes in other words; both given.
+
+**Models.** `configs/spine.json` (0.2 mm, 0.9 MB, assembled column with 23 discs) and `configs/spine-detail.json`
+(0.04 mm, single vertebrae). BodyParts3D's "sacrum" includes the coccyx. 63 hand-placed landmarks
+(`tools/spine/landmarks/`), checked in two oblique views each; vertebral-foramen centres of T6 and L3 set between the
+back of the body and the laminae (picking from above sees through the canal).
