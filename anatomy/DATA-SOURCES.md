@@ -253,3 +253,33 @@ behind the ischial spine; shared semitendinosus/biceps origin; supports of the m
 views; joint facets (tibia–fibula, tibia–talus) from `near.py`; foot points from the meshes (`dorsal.py`, extremes for
 the posterior process, sustentaculum, tuberosity processes, 5th metatarsal tuberosity), checked in colour-coded views.
 The old `lower-limb/femur.html` stays as the femur's attachments and side page.
+
+## Additions after re-search (2026-11-15) — side determination, fibular neck, arches, talus, ossification law
+
+**Left or right** (`upper-limb/bones.html`, `lower-limb/bones.html`): fact sheet `sources-local/facts/side-determination.md`.
+Rules from Hall et al., *Introduction to Human Osteology* (Grand Valley State Univ. 2010, CC BY-NC, via archive.org),
+J. Robinson's A&P lab manual (LibreTexts, CC BY 4.0) and the Cuyamaca College handout "Identifying Left or Right
+Bones" (low authority, used only where another source agrees), with orientation facts from Kenhub, TeachMeAnatomy and
+StatPearls. Not taken: source L's "radial notch medial" (wrong; Kenhub and C say lateral) and source C's clavicle
+curvature wording. Labelled on the page as built from descriptions (no source states the rule): fibula, 5th metatarsal,
+and the patella tipping test. Left out: 1st metatarsal (sources disagree on its base tubercle), carpals, navicular,
+cuboid, cuneiforms.
+
+**Other items** (`sources-local/facts/lower-limb-extra.md`; Europe PMC full texts, PubMed, Kenhub, TeachMeAnatomy,
+IMAIOS; StatPearls and Radiopaedia via search excerpts):
+- Neck of the fibula and the common fibular nerve, injury by fracture, tight plaster or bandage, leg crossing; foot drop
+  (Int Orthop 2022 and Insights Imaging 2023 reviews, TeachMeAnatomy, Kenhub, StatPearls). "Lateral side of the neck"
+  not stated by any source, so not used.
+- Arch keystones: medial — head of the talus (StatPearls) vs navicular (several papers, incl. Commun Biol 2023), both
+  given; lateral — cuboid (three papers); transverse — intermediate cuneiform vs 2nd metatarsal base, both given.
+  Supports: fibularis longus, long and short plantar ligaments, transverse head of adductor hallucis (Kenhub's
+  "adductor longus" is a slip, not copied).
+- Lateral process of the talus and the snowboarder's fracture; lateral talocalcaneal ligament from its tip (EFORT Open
+  Rev 2018, World J Clin Cases 2024, BMC Musculoskelet Disord 2019).
+- Fibula: nutrient foramen directed downward, upper end the growing end; lower end appears and fuses first (three
+  foramen studies, Kenhub). "Appears first fuses last" as the general rule rests on teaching sites only; the page states
+  it as the contrast, without calling it a law.
+- Distal femur ~36 weeks, proximal tibia ~38 weeks (two papers); forensic sign of a term infant (JIAFM 2024 case
+  report — single source, worded "at autopsy").
+- Pubic tubercle 2.5–3 cm from the symphysis (2026 review; 2015 cadaver study, 26 mm). Subpubic angle: male roughly
+  50–70°, female 90° or more, given as a guide (Kenhub; Texas Tech teaching page; studies vary, PMC7118257).
