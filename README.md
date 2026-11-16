@@ -20,7 +20,9 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | 06 | [Ribs and Sternum](anatomy/thorax/ribs.html) | Thorax | Typical, first, second and twelfth ribs and the sternum in detail |
 | 07 | [The Upper Limb](anatomy/upper-limb/upper-limb.html) | Upper limb | Shoulder girdle, humerus, radius and ulna, hand assembled; nerves on the humerus; carpal tunnel |
 | 08 | [Bones of the Upper Limb](anatomy/upper-limb/bones.html) | Upper limb | Clavicle, scapula, humerus, ulna, radius and hand bones in detail |
-| 09 | [The Femur](anatomy/lower-limb/femur.html) | Lower limb | 3D bone: 18 landmarks; left or right; 30 muscle and ligament attachments; neck fracture and blood supply; five ossification centres |
+| 09 | [The Lower Limb](anatomy/lower-limb/lower-limb.html) | Lower limb | Hip bone, femur and patella, tibia and fibula, foot assembled; the joints between them; arches of the foot |
+| 10 | [Bones of the Lower Limb](anatomy/lower-limb/bones.html) | Lower limb | Hip bone (with the pelvis), femur, patella, tibia, fibula and foot bones in detail: 88 landmarks, how to recognise each, ossification |
+| 11 | [The Femur: attachments and side](anatomy/lower-limb/femur.html) | Lower limb | 3D bone: 18 landmarks; left or right; 30 muscle and ligament attachments; neck fracture and blood supply; five ossification centres |
 
 ## Syllabus
 
@@ -36,10 +38,11 @@ SYLLABUS.md                 index of the NMC topic lists
 anatomy/                    index.html, DATA-SOURCES.md, lower-limb/femur.html
 tools/syllabus/             generates the SYLLABUS files from the NMC PDF
 anatomy/assets/             shared 3D viewer (viewer.js) and styles (atlas.css)
-anatomy/models/             simplified BodyParts3D meshes (skeleton overview, skull, skull-detail, spine, spine-detail + landmarks)
+anatomy/models/             simplified BodyParts3D meshes (skeleton overview; skull, spine, thorax, upper-limb, lower-limb, each with a -detail set + landmarks)
 tools/bones-rs/             Rust mesh pipeline: BodyParts3D OBJ -> simplified binaries + contacts
 tools/bones/                Python helpers: femur build, skull sutures/points, bone colours, landmarks/ (hand-placed points)
-tools/test/                 headless-browser checks
+tools/test/                 headless-browser checks; bone_views.py places landmarks
+tools/<region>/landmarks/   hand-placed landmark sources per region (spine, thorax, upper-limb, lower-limb)
 ```
 
 ## Run locally

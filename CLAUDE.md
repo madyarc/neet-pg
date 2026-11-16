@@ -114,6 +114,10 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
   textbook's words ("about 3 cm above the supraorbital margin"), then check it in several views. Spine:
   `tools/spine/landmarks/` -> `anatomy/models/spine-detail/landmarks.json` (`build.py <src> <dst>`; `MANIFEST=` env for
   bone_views.py). Picking inside a canal from above sees through it; compute such centres from the mesh instead.
+  Same for `tools/{thorax,upper-limb,lower-limb}/landmarks/` -> `anatomy/models/<group>-detail/landmarks.json`.
+  `COLOUR=1` gives each listed part its own colour (to tell small bones apart). Joint facets are easier computed than
+  picked: `tools/lower-limb/near.py <manifest> A B mm [z cuts]` prints the centroid of the part of A within mm of B;
+  `dorsal.py` gives the top-surface point of each named bone.
 - Detailed single bones: `configs/skull-detail.json` (error 0.04 mm, about the source detail); a bone page shows the
   detailed bone over the lighter assembled model (`AtlasViewer.loadPart`).
 

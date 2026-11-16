@@ -21,7 +21,7 @@ async def page(p, key):
     pg = await b.new_page(viewport={'width': 800, 'height': 800})
     pg.on('pageerror', lambda e: print('ERR', e))
     m = os.environ.get('MANIFEST')
-    await pg.goto(BASE + key + (f'&m={m}' if m else '') + ('&fitall=1' if os.environ.get('FITALL') else '')); await pg.wait_for_function('window.ready', timeout=60000)
+    await pg.goto(BASE + key + (f'&m={m}' if m else '') + ('&fitall=1' if os.environ.get('FITALL') else '') + ('&colour=1' if os.environ.get('COLOUR') else '')); await pg.wait_for_function('window.ready', timeout=60000)
     return b, pg
 def pdir(s): return DIRS[s] if s in DIRS else [float(x) for x in s.split(',')]
 async def main():

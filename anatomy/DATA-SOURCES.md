@@ -220,3 +220,36 @@ lunate–hamate contact only in many wrists.
 `configs/upper-limb-detail.json` (0.04 mm). 69 landmarks (`tools/upper-limb/landmarks/`): long-bone points picked in
 zoomed views (`ZOOM`/`FOCUS`, per-item `focus`/`zoom`); carpal points from the meshes (most palmar point for the hook of
 the hamate and the scaphoid and trapezium tubercles; each bone's palmar or dorsal surface at its centroid).
+
+## Lower limb — `lower-limb/lower-limb.html`, `lower-limb/bones.html` (2026-11-15)
+
+**Sources.** Gray 1918: 107/57–65 (hip bone, pelvis, femur, patella, tibia, fibula, tarsus, metatarsus, phalanges);
+Wikipedia "Hip bone", "Pelvis", "Ilium (bone)", "Ischium", "Pubis (bone)", "Acetabulum", "Obturator foramen", "Greater"/
+"Lesser sciatic foramen", "Femur", "Femoral neck", "Linea aspera", "Patella", "Tibia", "Tuberosity of the tibia",
+"Fibula", "Talus bone", "Calcaneus", "Navicular bone", "Cuboid bone", "Cuneiform bones", "Tarsus (skeleton)",
+"Metatarsal bones", "Phalanx bone", "Sesamoid bone", "Arches of the foot" (much copied from Gray; the arches are
+Wikipedia-only among these). Quote-checked fact sheets `sources-local/facts/lower-limb-a.md` (510 quotes) and `-b.md`
+(456 quotes). Neither source gives side-determination rules; only the femur page has one (AN14.1 partial). Left out as
+unsourced: the neck of the fibula and the common fibular nerve, the lateral process of the talus (marker kept in the
+data, not listed), keystones of the arches, "law of ossification" by name.
+
+**Independent review (2026-11-15; Radiopaedia, StatPearls, TeachMeAnatomy, papers — Radiopaedia and StatPearls read
+through search excerpts):** ~140 statements confirmed. Errors fixed: greater sciatic foramen is closed by the
+sacrotuberous and sacrospinous ligaments (Radiopaedia "greater sciatic foramen"); bipartite patella is an unfused
+accessory centre, ~2%, superolateral (Radiopaedia "bipartite patella") — Wikipedia's contrary claim dropped. Modern
+figures given beside Gray's: femoral head 4–6 months, greater trochanter 2–4 years, lesser about puberty, fusion
+14–18 / distal 16–19 (Radiopaedia "ossification centres of the hip and pelvis"; DDH literature); lower femoral centre
+as a sign of a term fetus; neck–shaft angle 125–130°, anteversion 10–15° (Acta Orthop cadaver series; PMC2911927);
+patella 3–6 years (StatPearls "Knee Patella"); tibia lower end 6–12 months, tibial tuberosity centre 8–14 years, fusion
+(PMC5761927 and cited studies); fibula lower end ~1 year, the fibula breaks the appear-first-fuse-last rule; calcaneal
+apophysis 5–8 years (Radiopaedia 40790), which also confirms Gray's tarsal order; ischiopubic rami 4–8 years. Changed:
+intertrochanteric line (capsule and iliofemoral ligament along it; vastus lateralis above, medialis below —
+TeachMeAnatomy); lesser trochanter = iliopsoas (PMC4732368); fibular share of load 6–17% (PMC6594497); subpubic angle
+figures removed (studies range widely, PMC7118257); pubic tubercle "3 cm" removed (no source). Added: pudendal nerve
+behind the ischial spine; shared semitendinosus/biceps origin; supports of the medial and transverse arches.
+
+**Models.** `configs/lower-limb.json` (BodyParts3D 3.0, 0.2 mm, 31 bones of the right limb + the hallux sesamoids) and
+`configs/lower-limb-detail.json` (0.04 mm). 90 landmarks (`tools/lower-limb/landmarks/`): long bones picked in zoomed
+views; joint facets (tibia–fibula, tibia–talus) from `near.py`; foot points from the meshes (`dorsal.py`, extremes for
+the posterior process, sustentaculum, tuberosity processes, 5th metatarsal tuberosity), checked in colour-coded views.
+The old `lower-limb/femur.html` stays as the femur's attachments and side page.

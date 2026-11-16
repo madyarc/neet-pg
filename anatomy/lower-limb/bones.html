@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bones of the Lower Limb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+.picker{display:flex;gap:6px;flex-wrap:wrap}
+@media (max-width:600px){.picker{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none} .picker::-webkit-scrollbar{display:none} .picker > *{flex:none}}
+.desc{min-height:3em}
+.facts h3{margin-bottom:4px}
+.facts p{max-width:75ch}
+.facts dl{display:grid;grid-template-columns:minmax(0,max-content) minmax(0,1fr);gap:4px 14px;margin:0}
+.facts dt{font-weight:600}
+.facts dd{margin:0}
+.facts ul{margin:0;padding-left:20px;max-width:75ch}
+.facts li{margin:2px 0}
+@media (max-width:560px){.facts dl{grid-template-columns:minmax(0,1fr)} .facts dd{margin-bottom:6px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> · <a href="lower-limb.html">The Lower Limb</a></nav>
+
+<header class="stack">
+  <h1 id="title">Bones of the Lower Limb</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="panel picker" aria-label="Choose a bone" id="picker"></section>
+
+<section class="split" aria-label="3D bone">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="views"></div>
+    <div class="vbar">
+      <button class="chip" id="ctx" aria-pressed="false">Show the rest of the limb</button>
+      <button class="chip" id="names" aria-pressed="true">Names on the model</button>
+    </div>
+  </div>
+  <div class="panel stack">
+    <div class="cap key desc" id="lm-desc">Tap a landmark in the list.</div>
+    <div class="legend" id="lm-list"></div>
+    <p class="muted">Marker positions were placed by hand on the model from the textbook descriptions <span class="hw">approximate</span>. The right limb is shown.</p>
+  </div>
+</section>
+
+<section class="panel stack facts" aria-label="About this bone" id="facts"></section>
+
+<footer>
+  <p>Based on: Gray's <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the bones of the lower extremity, the pelvis and the foot; cross-checked with Wikipedia's articles, StatPearls (NCBI Bookshelf), Radiopaedia and published studies. Where modern sources differ from Gray, both are given.</p>
+  <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (the shown bone at near full detail, the rest of the limb simplified; shared under the same licence).</p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — checked in Gray's 1918, Wikipedia and StatPearls (see anatomy/DATA-SOURCES.md) =====================
+ * VERTS[key]: name, short, part (model part in ../models/lower-limb-detail), region, intro, parts [[name, text]],
+ *   landmarks [[key, name, text]] (positions in ../models/lower-limb-detail/landmarks.json), recognise [text], ossification, clinical
+ */
+const VERTS = {
+  hip: {name: 'Hip bone', short: 'Hip bone', part: 'hip', region: 'hip', view: [-1, -0.25, 0.05], zoom: 0.85,
+    intro: 'A large flat bone, narrow in the middle and wide above and below. It is made of three parts — ilium, ischium and pubis — that are separate in the child and fused at the acetabulum in the adult. The two hip bones, with the sacrum and coccyx behind, form the pelvis. Shown: the right hip bone.',
+    parts: [
+      ['Ilium', 'The upper, wide part: a body (in the acetabulum) and a wing (ala). On the inner surface the arcuate line marks where they meet.'],
+      ['Ischium', 'The lower and back part, the strongest: a body (in the acetabulum), the ischial tuberosity and a ramus that joins the inferior ramus of the pubis.'],
+      ['Pubis', 'The front part: a body, which meets the opposite pubis at the pubic symphysis, and superior and inferior rami.'],
+      ['Acetabulum', 'All three parts share it: ilium a little under two-fifths, ischium a little over two-fifths, pubis one-fifth (Gray).'],
+    ],
+    landmarks: [
+      ['iliac_crest', 'Iliac crest', 'The S-shaped upper border of the ilium, from the anterior to the posterior superior iliac spine. Outer lip: tensor fasciae latae, external oblique, latissimus dorsi; intermediate line: internal oblique; inner lip: transversus abdominis, quadratus lumborum, erector spinae, iliacus (Gray).'],
+      ['tubercle_of_crest', 'Tubercle of the crest', 'A prominent tubercle on the outer lip of the crest, about 5 cm behind the anterior superior iliac spine (Gray).'],
+      ['asis', 'Anterior superior iliac spine', 'The front end of the crest. The inguinal ligament and the sartorius attach to its tip.'],
+      ['aiis', 'Anterior inferior iliac spine', 'Below the ASIS on the anterior border, just above the acetabulum. The straight head of the rectus femoris and the iliofemoral ligament attach to it.'],
+      ['psis', 'Posterior superior iliac spine', 'The back end of the crest; the posterior sacroiliac ligaments and multifidus attach to it (Gray).'],
+      ['piis', 'Posterior inferior iliac spine', 'Below the PSIS, at the back end of the auricular surface; the greater sciatic notch begins below it.'],
+      ['gluteal_surface', 'Gluteal surface', 'The outer surface of the wing, crossed by three gluteal lines. Gluteus maximus arises behind the posterior line, gluteus medius between the posterior and anterior lines, gluteus minimus between the anterior and inferior lines.'],
+      ['iliac_fossa', 'Iliac fossa', 'The smooth hollow on the inner surface of the wing; the iliacus arises from it.'],
+      ['auricular_surface', 'Auricular surface', 'Ear-shaped, on the inner surface behind the iliac fossa; it meets the sacrum at the sacroiliac joint.'],
+      ['iliac_tuberosity', 'Iliac tuberosity', 'The rough area behind the auricular surface, for the posterior sacroiliac ligaments (Gray).'],
+      ['arcuate_line', 'Arcuate line', 'The rounded ridge below the iliac fossa on the inner surface: part of the pelvic brim, between the greater and lesser pelvis.'],
+      ['greater_sciatic_notch', 'Greater sciatic notch', 'Below the PIIS and above the ischial spine; the sacrotuberous and sacrospinous ligaments turn it into the greater sciatic foramen. The piriformis passes through it: the superior gluteal vessels and nerve pass above the piriformis, all the other structures below it (Gray).'],
+      ['ischial_spine', 'Ischial spine', 'Between the two sciatic notches. The sacrospinous ligament attaches to its tip, the coccygeus and levator ani to its inner surface, the gemellus superior to its outer surface. The pudendal nerve and internal pudendal vessels cross behind the spine and sacrospinous ligament: the landmark for a pudendal nerve block.'],
+      ['lesser_sciatic_notch', 'Lesser sciatic notch', 'Between the spine and the tuberosity; the sacrotuberous and sacrospinous ligaments turn it into the lesser sciatic foramen. It transmits the tendon of the obturator internus and its nerve, and the internal pudendal vessels and pudendal nerve (Gray).'],
+      ['ischial_tuberosity', 'Ischial tuberosity', 'The large swelling at the lowest back part, the bone we sit on. The semitendinosus and the long head of the biceps femoris share an origin from its upper medial part, the semimembranosus arises lateral to them, and the adductor magnus (hamstring part) from its lower lateral part; the sacrotuberous ligament attaches to its inner margin.'],
+      ['acetabulum', 'Acetabulum', 'The deep cup on the outer surface, facing down, outward and forward; it holds the head of the femur (hip joint).'],
+      ['lunate_surface', 'Lunate surface', 'The horseshoe-shaped articular part of the acetabulum, around the non-articular fossa in its floor.'],
+      ['acetabular_notch', 'Acetabular notch', 'A gap in the lower rim, bridged by the transverse ligament; vessels and nerves enter the joint below the ligament.'],
+      ['obturator_foramen', 'Obturator foramen', 'The large opening between the ischium and pubis, below and in front of the acetabulum. The obturator membrane closes it except for the obturator canal at the top, through which the obturator vessels and nerve leave the pelvis.'],
+      ['iliopubic_eminence', 'Iliopubic eminence', 'On the front, above the acetabulum, where the ilium meets the pubis (Gray: iliopectineal eminence).'],
+      ['superior_ramus', 'Superior pubic ramus', 'From the acetabulum to the body of the pubis; it forms the upper edge of the obturator foramen, with the obturator groove on its under surface.'],
+      ['pecten_pubis', 'Pecten pubis', 'The sharp ridge running laterally from the pubic tubercle along the superior ramus; part of the pelvic brim. The pectineus arises in front of it (Gray: pectineal line).'],
+      ['pubic_tubercle', 'Pubic tubercle', 'A forward-projecting tubercle on the upper border of the pubis, at the lateral end of the pubic crest; the inguinal ligament attaches to it.'],
+      ['symphyseal_surface', 'Symphyseal surface', 'The medial end of the pubis; it meets the opposite pubis through the interpubic disc (pubic symphysis).'],
+      ['ischiopubic_ramus', 'Ischiopubic ramus', 'The inferior pubic ramus and the ramus of the ischium, joined below the obturator foramen; the gracilis and adductor muscles arise from its outer surface.'],
+    ],
+    recognise: ['A flat bone with a deep cup (acetabulum) on its outer surface and a large opening (obturator foramen) below it.', 'The wing (ilium) above, the pubis in front, the ischial tuberosity behind and below.'],
+    atypical: ['The pelvis: female and male (Gray, Wikipedia)', ['The two hip bones, sacrum and coccyx form a ring. The pelvic brim (sacral promontory, arcuate and pectineal lines, top of the symphysis) divides the greater (false) pelvis above from the lesser (true) pelvis below.', 'Female: lighter bones and a shallower, wider cavity; the inlet is larger and more nearly circular; the pubic arch is wide and rounded, roughly a right angle or more, against an acute subpubic angle in the male (measured figures vary widely between studies); the greater sciatic notch is wider; the ischial spines project less inward and the ischial tuberosities are wider apart; the sacrum is shorter and wider; the preauricular sulcus is more often present.']],
+    ossification: 'Eight centres (Gray): three primary — ilium about the 8th–9th week of fetal life, ischium about the 3rd month, pubis about the 4th–5th month — and five secondary — iliac crest, anterior inferior spine, ischial tuberosity, pubic symphysis, and the Y-shaped piece in the acetabulum. At birth the three parts are separate. The rami of the ischium and pubis unite at about 4–8 years (Gray: 7–8). In the acetabulum the three parts are separated by the Y-shaped (triradiate) cartilage and fuse about puberty. The secondary centres appear about puberty and join between 20 and 25 years.'},
+
+  femur: {name: 'Femur', short: 'Femur', part: 'femur', region: 'thigh', view: [-0.3, -1, 0.05], zoom: 0.9,
+    intro: 'The longest bone of the body and, per Gray, the strongest. It slopes downward and medially, bringing the knees close together, more so in females. Shown: the right femur. Its muscle attachments and how to tell a left femur from a right one are on the separate <a href="femur.html">femur page</a>.',
+    parts: [
+      ['Upper end', 'Head, neck, and the greater and lesser trochanters, joined by the intertrochanteric line in front and crest behind.'],
+      ['Shaft', 'Arched forward; the linea aspera runs down its back.'],
+      ['Lower end', 'Two condyles with an intercondylar fossa behind and the patellar surface in front; the medial and lateral epicondyles.'],
+    ],
+    landmarks: [
+      ['head', 'Head', 'More than half a sphere (Gray), facing up, medially and a little forward; it fits the acetabulum (hip joint).'],
+      ['fovea', 'Fovea of the head', 'A small pit a little below and behind the centre of the head, without cartilage, for the ligament of the head (ligamentum teres).'],
+      ['neck', 'Neck', 'Joins the head to the shaft at the neck–shaft (inclination) angle, about 125–130° in the adult; it is widest in infancy and smaller in females. The neck also points forward relative to the line of the condyles: femoral anteversion, about 10–15° in the adult (Gray: 12–14°), greater in infants.'],
+      ['greater_trochanter', 'Greater trochanter', 'A large quadrilateral eminence at the top of the shaft, lateral to the neck; in the adult about 1 cm lower than the head (Gray). The gluteus medius and minimus, piriformis, obturator internus and gemelli insert on it.'],
+      ['trochanteric_fossa', 'Trochanteric fossa', 'A deep pit on the medial surface of the greater trochanter; the obturator externus inserts into it (Gray).'],
+      ['lesser_trochanter', 'Lesser trochanter', 'A conical eminence at the lower back part of the base of the neck, on the medial side; the iliopsoas (psoas major, joined by the iliacus) inserts on it.'],
+      ['intertrochanteric_line', 'Intertrochanteric line', 'On the front, between the trochanters, where the neck meets the shaft. The capsule of the hip joint and the iliofemoral ligament attach along it; the highest fibres of the vastus lateralis arise from its upper end and of the vastus medialis from its lower end.'],
+      ['intertrochanteric_crest', 'Intertrochanteric crest', 'On the back, from the greater to the lesser trochanter.'],
+      ['quadrate_tubercle', 'Quadrate tubercle', 'A rounded swelling on the intertrochanteric crest (Gray: about its middle; Wikipedia: at its upper third); the quadratus femoris inserts on it.'],
+      ['gluteal_tuberosity', 'Gluteal tuberosity', 'The lateral upward continuation of the linea aspera, toward the greater trochanter; the gluteus maximus inserts on it.'],
+      ['linea_aspera', 'Linea aspera', 'A prominent ridge down the middle third of the back of the shaft, with medial and lateral lips. The vastus medialis and lateralis arise from its lips and the adductors insert along it. The nutrient foramen lies on it, a little below the middle, directed upward.'],
+      ['popliteal_surface', 'Popliteal surface', 'The flat triangle at the back of the lower end, between the two ridges into which the linea aspera divides; the popliteal artery lies on it.'],
+      ['adductor_tubercle', 'Adductor tubercle', 'At the top of the medial condyle, at the lower end of the medial ridge; the tendon of the adductor magnus inserts on it.'],
+      ['medial_epicondyle', 'Medial epicondyle', 'On the medial side of the medial condyle; the tibial collateral ligament attaches to it.'],
+      ['lateral_epicondyle', 'Lateral epicondyle', 'On the lateral side of the lateral condyle; the fibular collateral ligament attaches to it, and the popliteus arises from a pit just below.'],
+      ['medial_condyle', 'Medial condyle', 'Longer than the lateral; it reaches lower when the shaft is held vertical, but in the femur\'s natural slanting position the lower surfaces of the two condyles are level.'],
+      ['lateral_condyle', 'Lateral condyle', 'Broader and more prominent in front than the medial condyle.'],
+      ['intercondylar_fossa', 'Intercondylar fossa', 'The deep notch between the condyles at the back. The anterior cruciate ligament attaches to its lateral wall, the posterior cruciate ligament to its medial wall.'],
+      ['patellar_surface', 'Patellar surface', 'The smooth articular surface on the front of the lower end, for the patella; its lateral part is broader and rises higher than the medial.'],
+    ],
+    recognise: ['A rounded head on a neck at one end; two large condyles at the other.', 'The linea aspera down the back of the shaft.'],
+    ossification: 'Five centres: the shaft at about the 7th week of fetal life (Gray: the first long bone to begin after the clavicle); the lower end in the 9th month of fetal life, so it is present at birth — a sign of a full-term fetus; the head at about 4–6 months (Gray: end of the 1st year); the greater trochanter at 2–4 years (Gray: 4th year); the lesser trochanter about puberty (Gray: 13–14 years). They join the shaft in the reverse order of appearance: lesser trochanter, greater trochanter, head (about 14–18 years), and last the lower end (about 16–19 years, earlier in girls; Gray: 20).'},
+
+  patella: {name: 'Patella', short: 'Patella', part: 'patella', region: 'thigh', view: [-0.2, -1, 0.1], zoom: 0.7,
+    intro: 'A flat, triangular sesamoid bone in the tendon of the quadriceps femoris, in front of the knee — the largest sesamoid bone (Wikipedia). It protects the front of the knee joint and increases the leverage of the quadriceps. Shown: the right patella.',
+    parts: [
+      ['Base', 'The thick upper border.'],
+      ['Apex', 'The pointed lower end.'],
+      ['Anterior surface', 'Convex and rough.'],
+      ['Posterior surface', 'The upper part is articular, divided by a vertical ridge into a larger lateral and a smaller medial facet; the lower part is not articular.'],
+    ],
+    landmarks: [
+      ['base', 'Base', 'The thick upper border; the rectus femoris and vastus intermedius parts of the quadriceps tendon attach to it. The vastus lateralis and medialis attach to the lateral and medial borders.'],
+      ['apex', 'Apex', 'The pointed lower end; the ligamentum patellae (patellar tendon) attaches to it.'],
+      ['anterior_surface', 'Anterior surface', 'Convex, with small openings for vessels; the prepatellar bursa lies in front of it.'],
+      ['lateral_facet', 'Lateral facet', 'The broader of the two articular facets (Gray: and deeper); it meets the lateral part of the patellar surface of the femur.'],
+      ['medial_facet', 'Medial facet', 'The narrower facet, on the other side of the vertical ridge.'],
+    ],
+    recognise: ['A triangle with its apex pointing down.', 'A smooth back with a vertical ridge; the lateral facet is the broader.'],
+    ossification: 'From a single centre that appears at about 3–6 years (it may be seen from 2–3 years; Gray: 2nd–3rd year); ossification is complete about puberty. A bipartite patella (about 2% of people, usually at the upper lateral corner) is an accessory ossification centre that has not fused (Radiopaedia).'},
+
+  tibia: {name: 'Tibia', short: 'Tibia', part: 'tibia', region: 'leg', view: [0.4, -1, 0.05], zoom: 0.9,
+    intro: 'The medial bone of the leg and, after the femur, the longest bone of the body. Its upper end carries the weight from the femur at the knee; its lower end forms the ankle joint with the talus. Shown: the right tibia.',
+    parts: [
+      ['Upper end', 'Medial and lateral condyles with flat articular facets on top (the tibial plateau), separated by the intercondylar eminence; the tuberosity in front.'],
+      ['Shaft', 'Triangular in section: anterior, medial and interosseous borders; medial, lateral and posterior surfaces. The medial surface lies under the skin.'],
+      ['Lower end', 'Smaller; the inferior articular surface for the talus, the medial malleolus, and the fibular notch on the lateral side.'],
+    ],
+    landmarks: [
+      ['medial_condyle', 'Medial condyle', 'Its oval facet meets the medial condyle of the femur; the semimembranosus inserts into a groove on its back, and the tibial collateral ligament attaches to its medial side.'],
+      ['lateral_condyle', 'Lateral condyle', 'Its nearly circular facet meets the lateral condyle of the femur. An eminence on the front of its lateral surface takes the iliotibial band (Gray; often called Gerdy\'s tubercle).'],
+      ['intercondylar_eminence', 'Intercondylar eminence', 'Between the two facets, nearer the back. The rough areas in front of and behind it take the anterior and posterior cruciate ligaments and the horns of the menisci.'],
+      ['fibular_facet', 'Fibular facet', 'A flat, round facet on the back and underside of the lateral condyle, for the head of the fibula (superior tibiofibular joint).'],
+      ['tibial_tuberosity', 'Tibial tuberosity', 'The oblong elevation at the top of the anterior border; the ligamentum patellae (patellar tendon) attaches to it.'],
+      ['anterior_border', 'Anterior border (shin)', 'The most prominent border, from the tuberosity to the front of the medial malleolus; sharp in its upper two-thirds and felt under the skin.'],
+      ['medial_surface', 'Medial surface', 'Broad and smooth, under the skin for most of its length. The sartorius, gracilis and semitendinosus insert on its upper part (Gray; together called the pes anserinus).'],
+      ['medial_malleolus', 'Medial malleolus', 'The strong process at the medial side of the lower end. Its lateral surface meets the talus; the deltoid ligament attaches to it; a groove on its back carries the tendons of the tibialis posterior and flexor digitorum longus.'],
+      ['fibular_notch', 'Fibular notch', 'A triangular hollow on the lateral side of the lower end, for the lower end of the fibula and the interosseous ligament that binds them (inferior tibiofibular joint).'],
+      ['inferior_articular_surface', 'Inferior articular surface', 'Quadrilateral, broader in front; it meets the trochlea of the talus (ankle joint) and continues onto the medial malleolus.'],
+    ],
+    recognise: ['A large upper end with two flat condyles; a sharp anterior border down the shaft.', 'The medial malleolus projecting down from the lower end.'],
+    ossification: 'Three main centres: the shaft about the 7th week of fetal life; the upper end at or just after birth; the lower end at about 6–12 months (Gray: 2nd year). The tibial tuberosity forms from a tongue-shaped downward process of the upper epiphysis, with its own centre at about 8–14 years that joins at 14–18 (the site of Osgood–Schlatter disease). The lower end fuses first (about 14–17 years; Gray: 18), the upper end later (about 16–19; Gray: 20), earlier in girls.'},
+
+  fibula: {name: 'Fibula', short: 'Fibula', part: 'fibula', region: 'leg', view: [-1, -0.2, 0.05], zoom: 0.9,
+    intro: 'The lateral bone of the leg: for its length the most slender long bone. Its head lies below the knee and takes no part in the knee joint; its lower end, the lateral malleolus, forms the lateral part of the ankle joint. It carries only a small share of the load — about 6–17% (roughly one-sixth) in cadaver studies; the tibia carries the rest. Shown: the right fibula.',
+    parts: [
+      ['Head', 'The upper end, with a facet for the tibia and an apex (styloid process) pointing up.'],
+      ['Shaft', 'Four borders and four surfaces; the interosseous border faces the tibia.'],
+      ['Lower end', 'The lateral malleolus.'],
+    ],
+    landmarks: [
+      ['head', 'Head', 'Irregular in shape. The biceps femoris and the fibular collateral ligament attach to its lateral part; the fibularis (peroneus) longus arises in front and the soleus behind.'],
+      ['apex', 'Apex (styloid process)', 'Projects upward from the back of the head.'],
+      ['head_facet', 'Articular facet of the head', 'Faces up, forward and medially; it meets the lateral condyle of the tibia (superior tibiofibular joint).'],
+      ['lateral_malleolus', 'Lateral malleolus', 'Pyramid-shaped, with a subcutaneous lateral surface; it reaches lower than the medial malleolus (Gray). The anterior talofibular ligament attaches to its front border and the calcaneofibular ligament to its tip; a groove on its back carries the fibularis longus and brevis tendons.'],
+      ['malleolar_facet', 'Articular facet of the malleolus', 'A smooth triangular facet on the medial surface; it meets the lateral side of the talus.'],
+      ['malleolar_fossa', 'Malleolar fossa', 'The rough hollow behind and below the facet; the posterior talofibular ligament attaches to it.'],
+    ],
+    recognise: ['A thin bone with a small head at one end and a flattened, pointed malleolus at the other.'],
+    ossification: 'Three centres: the shaft about the 8th week of fetal life; the ends are cartilage at birth. The lower end appears at about 1 year (Gray: 2nd year) and fuses in the mid-teens; the upper end appears later (Gray: about the 4th year) and fuses in the late teens (Gray: 25th year). The fibula breaks the usual rule that the end which appears first fuses last: its lower end both appears first and fuses first.'},
+
+  foot: {name: 'Bones of the foot', short: 'Foot', part: 'talus', also: ['calcaneus', 'navicular', 'cun_med', 'cun_int', 'cun_lat', 'cuboid', 'mt1', 'mt2', 'mt3', 'mt4', 'mt5', 'pp1', 'dp1', 'pp2', 'mp2', 'dp2', 'pp3', 'mp3', 'dp3', 'pp4', 'mp4', 'dp4', 'pp5', 'mp5', 'dp5', 'sesamoid'], region: 'foot', view: [0.9, -0.6, 0.4], zoom: 0.9,
+    intro: 'Seven tarsal bones, five metatarsals and fourteen phalanges, with two sesamoid bones under the head of the first metatarsal. Shown: the right foot.',
+    parts: [
+      ['Tarsus', 'Hindfoot: talus and calcaneus. Midfoot: navicular, cuboid and the medial, intermediate and lateral cuneiforms.'],
+      ['Metatarsals', 'Five, numbered from the medial side, each with a base, body and head.'],
+      ['Phalanges', 'Two in the big toe and three in each of the others: proximal, middle and distal.'],
+    ],
+    landmarks: [
+      ['talus_trochlea', 'Trochlea of the talus', 'The smooth top of the body of the talus, broader in front than behind; it meets the lower end of the tibia (ankle joint). No muscle attaches to the talus (Wikipedia).'],
+      ['talus_neck', 'Neck of the talus', 'The narrow part between the body and the head, directed forward and medially.'],
+      ['talus_head', 'Head of the talus', 'Faces forward and medially; it meets the navicular, and below rests on the spring (plantar calcaneonavicular) ligament and the calcaneus.'],
+      ['talus_posterior_process', 'Posterior process of the talus', 'At the back of the body, with a groove for the tendon of the flexor hallucis longus between a larger lateral and a smaller medial tubercle. The lateral tubercle may be a separate bone, the os trigonum.'],
+      ['sinus_tarsi', 'Sinus tarsi', 'The tunnel between the talus and calcaneus, formed by a groove on each; it opens laterally and holds the interosseous talocalcaneal ligament.'],
+      ['sustentaculum_tali', 'Sustentaculum tali', 'A shelf on the medial side of the calcaneus that supports the talus; the tendon of the flexor hallucis longus runs in a groove under it.'],
+      ['calcaneal_tuberosity', 'Calcaneal tuberosity', 'The back of the heel. The tendo calcaneus (Achilles tendon) inserts on the middle part of its posterior surface.'],
+      ['medial_process', 'Medial process of the tuberosity', 'The larger of the two processes on the underside of the heel; the abductor hallucis, flexor digitorum brevis and plantar aponeurosis arise from it.'],
+      ['navicular', 'Navicular', 'Boat-shaped, on the medial side between the head of the talus behind and the three cuneiforms in front.'],
+      ['navicular_tuberosity', 'Tuberosity of the navicular', 'On its medial surface; the main insertion of the tibialis posterior.'],
+      ['cuboid', 'Cuboid', 'On the lateral side, between the calcaneus and the 4th and 5th metatarsals. A groove on its plantar surface carries the tendon of the fibularis (peroneus) longus.'],
+      ['cun_med', 'Medial cuneiform', 'The largest cuneiform, with its wide end facing down; the tibialis anterior and fibularis longus insert on it.'],
+      ['cun_int', 'Intermediate cuneiform', 'The smallest cuneiform, with its thin end down; it is set back, so the base of the 2nd metatarsal sits in a recess.'],
+      ['cun_lat', 'Lateral cuneiform', 'Between the intermediate cuneiform and the cuboid; it articulates with six bones.'],
+      ['mt1', 'First metatarsal', 'The shortest and thickest. Two grooved facets under its head carry the sesamoid bones; the tibialis anterior and fibularis longus insert on its base.'],
+      ['mt2', 'Second metatarsal', 'The longest; its base is locked into the recess between the medial and lateral cuneiforms.'],
+      ['mt3', 'Third metatarsal', 'Its base meets the lateral cuneiform.'],
+      ['mt4', 'Fourth metatarsal', 'Its base meets the lateral cuneiform and the cuboid.'],
+      ['mt5', 'Fifth metatarsal', 'Its base meets the cuboid.'],
+      ['mt5_tuberosity', 'Tuberosity of the 5th metatarsal', 'On the lateral side of its base; the fibularis (peroneus) brevis inserts on it.'],
+      ['sesamoids', 'Sesamoid bones', 'Two small bones under the head of the first metatarsal, in the tendon of the flexor hallucis brevis (Wikipedia).'],
+      ['pp1', 'Proximal phalanx of the big toe', 'The big toe has two phalanges; each of the other toes has three.'],
+      ['dp1', 'Distal phalanx of the big toe', 'The distal phalanges are flattened and carry the nail.'],
+    ],
+    recognise: ['Tarsal bones from back to front: "talus and calcaneus; navicular and cuboid; three cuneiforms".', 'The calcaneus is the largest tarsal bone; the talus sits on it and carries the tibia.'],
+    ossification: 'Each tarsal bone from one centre, except the calcaneus, which also has an epiphysis (apophysis) for the back of the heel, appearing at about 5–8 years (Gray: 10) and fusing at about 12–16. Order (Gray, Radiopaedia): calcaneus (6th month of fetal life), talus (7th month), cuboid (9th month), lateral cuneiform (1st year), medial cuneiform (3rd year), intermediate cuneiform and navicular (4th year). So the calcaneus, talus and usually the cuboid are present at birth; the navicular is the last tarsal bone to ossify. Metatarsals and phalanges have two centres each: the epiphysis is at the head of metatarsals 2–5 but at the base of the first metatarsal and of every phalanx.'},
+};
+/* ===================== PAGE ===================== */
+const REGION_COLOUR = {hip: '#77AADD', thigh: '#EE8866', leg: '#BBCC33', foot: '#EEDD88'};
+const v = new AtlasViewer(document.getElementById('v'));
+const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
+let DET = null, LM = null, names = {}, cur = null, sel = null, picked = null;
+const views = [['Above', [0, -0.35, 1]], ['Front', [0, -1, 0]], ['Right side', [-1, 0, 0]], ['Back', [0, 1, 0]], ['Below', [0, -0.35, -1]], ['Left side', [1, 0, 0]]];
+for (const [label, dir] of views) {
+  const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
+  b.onclick = () => v.face(dir, {zoom: 0.9}); document.getElementById('views').append(b);
+}
+const on = id => document.getElementById(id).getAttribute('aria-pressed') === 'true';
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function buildPicker() {
+  const box = document.getElementById('picker');
+  for (const [key, t] of Object.entries(VERTS)) {
+    const c = document.createElement('button'); c.className = 'chip'; c.dataset.k = key; c.textContent = t.short;
+    c.onclick = () => { location.hash = key; };
+    box.append(c);
+  }
+}
+function context() {
+  const t = VERTS[cur], ctx = on('ctx'), mine = [t.part, ...(t.also || [])];
+  for (const k of v.order) if (!k.startsWith('D:')) {
+    v.setVisible(k, ctx && !mine.includes(k));
+    v.setColour(k, '--bone');
+  }
+  v.setFocus(mine.map(k => 'D:' + k));
+}
+async function show(key) {
+  if (!VERTS[key]) key = 'femur';
+  cur = key; sel = null; picked = null; card.hidden = true;
+  const t = VERTS[key], dk = 'D:' + t.part;
+  document.querySelectorAll('#picker .chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.k === key));
+  document.getElementById('title').textContent = t.name; document.title = t.name;
+  document.getElementById('lede').innerHTML = t.intro;
+  const mine = [t.part, ...(t.also || [])];
+  for (const k of mine) if (!v.parts.has('D:' + k)) { const info = DET.parts.find(p => p.key === k); await v.loadPart('D:' + k, '../models/lower-limb-detail/' + info.file, info); }
+  for (const k of v.order) if (k.startsWith('D:')) v.setVisible(k, mine.includes(k.slice(2)));
+  for (const k of mine) v.setColour('D:' + k, REGION_COLOUR[t.region]);
+  context();
+  v.fit(mine.map(k => 'D:' + k)); v.face(t.view || [0.5, -0.8, 0.6], {zoom: t.zoom || 0.9});
+  writeFacts(t); buildList(t);
+  document.getElementById('lm-desc').textContent = 'Tap a landmark in the list.';
+  v.setMarkers(markers(null));
+}
+function writeFacts(t) {
+  let h = '<h2>About it</h2><dl>';
+  for (const [n, x] of t.parts) h += `<dt>${esc(n)}</dt><dd>${x}</dd>`;
+  h += '</dl>';
+  if (t.recognise) h += `<div><h3>How to recognise it</h3><ul>${t.recognise.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+  if (t.atypical) h += `<div><h3>${t.atypical[0]}</h3><ul>${t.atypical[1].map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+  if (t.ossification) h += `<div><h3>Ossification</h3><p>${t.ossification}</p></div>`;
+  if (t.clinical) h += `<div class="cap warn"><b>Clinical.</b> ${t.clinical}</div>`;
+  document.getElementById('facts').innerHTML = h;
+}
+function buildList(t) {
+  const ll = document.getElementById('lm-list'); ll.replaceChildren();
+  for (const [k, name] of t.landmarks) {
+    if (!LM[t.part] || !LM[t.part][k]) continue;
+    const e = document.createElement('button'); e.dataset.k = k; e.setAttribute('aria-pressed', 'false');
+    e.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${esc(name)}</span>`;
+    e.onclick = () => selectLm(sel === k ? null : k); ll.append(e);
+  }
+}
+function markers(active) {
+  const t = VERTS[cur];
+  return t.landmarks.filter(([k]) => LM[t.part] && LM[t.part][k]).map(([k, name]) => ({p: LM[t.part][k].p,
+    label: on('names') || k === active ? name : '', big: k === active, color: k === active ? css('--mark') : '#3b4a63', always: k === active}));
+}
+function selectLm(k) {
+  sel = k; const t = VERTS[cur];
+  document.querySelectorAll('#lm-list button').forEach(e => e.setAttribute('aria-pressed', e.dataset.k === k));
+  const d = document.getElementById('lm-desc');
+  if (!k) { d.textContent = 'Tap a landmark in the list.'; v.setMarkers(markers(null)); return; }
+  const [, name, text] = t.landmarks.find(l => l[0] === k), L = LM[t.part][k];
+  d.innerHTML = `<b>${esc(name)}.</b> ${text}`;
+  v.setMarkers(markers(k));
+  v.face(L.dir, {zoom: 1.3, focus: L.p});
+}
+for (const id of ['ctx', 'names']) document.getElementById(id).onclick = function () {
+  this.setAttribute('aria-pressed', !on(id));
+  if (id === 'ctx') context(); else v.setMarkers(markers(sel));
+};
+v.onPick = hit => {
+  if (!hit || hit.key.startsWith('D:') || TYPE_OF(hit.key) === null) { picked = null; card.hidden = true; return; }
+  const t = TYPE_OF(hit.key), href = t.startsWith('../') ? t : '#' + t;
+  if (picked === hit.key) { location.href = href; return; }
+  picked = hit.key; card.hidden = false;
+  card.innerHTML = `<div class="what"><b>${esc(names[hit.key])}</b><span>Tap it again to open it</span></div><a class="go" href="${href}">Open →</a><button class="x" aria-label="Clear">×</button>`;
+  card.querySelector('.x').onclick = () => { picked = null; card.hidden = true; };
+};
+const TYPE_OF = k => ['hip', 'femur', 'patella', 'tibia', 'fibula'].includes(k) ? k : 'foot';
+addEventListener('hashchange', () => show(location.hash.slice(1)));
+
+(async () => {
+  const [det, lm] = await Promise.all(['../models/lower-limb-detail/lower-limb-detail.json', '../models/lower-limb-detail/landmarks.json']
+    .map(u => fetch(u).then(r => { if (!r.ok) throw new Error(u + ': ' + r.status); return r.json(); })));
+  DET = det; LM = lm;
+  const man = await v.load('../models/lower-limb/lower-limb.json');
+  for (const p of man.parts) names[p.key] = p.name;
+  buildPicker();
+  await show(location.hash.slice(1));
+  window.ready = true;
+})().catch(e => { document.getElementById('lm-desc').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

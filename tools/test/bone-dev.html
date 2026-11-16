@@ -9,7 +9,8 @@ const MAN = q.get('m') || '../../anatomy/models/skull-detail/skull-detail.json';
 const v = new AtlasViewer(document.getElementById('v'));
 v.c.parentElement.querySelector('.hint').remove();
 v.load(MAN, keys).then(() => {
-  for (const k of keys) v.setColour(k, '#d9cfb6');
+  const PAL = ['#d9cfb6', '#88ccee', '#ddcc77', '#cc6677', '#44aa99', '#aa4499', '#99ddff', '#bbcc33'];
+  keys.forEach((k, i) => v.setColour(k, q.get('colour') ? PAL[i % PAL.length] : '#d9cfb6'));
   v.fit(q.get('fitall') ? keys : [keys[0]]); window.v = v; window.ready = true; });
 // set a view instantly: dir in body frame
 window.faceNow = (n, zoom = 1, focus = null) => {

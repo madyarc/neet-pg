@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Lower Limb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+.tabs{display:flex;gap:6px}
+.tabs .chip{font-size:13.5px;padding:6px 14px}
+.group-h{font:600 12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:10px 0 2px}
+.group-h:first-child{margin-top:0}
+.desc{min-height:3em}
+.vgrid{display:flex;flex-wrap:wrap;gap:4px}
+.vgrid button{font:500 12px var(--f-mono);min-width:38px;padding:5px 6px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.vgrid button[aria-pressed="true"]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>The Lower Limb</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="stack" aria-label="3D lower limb">
+  <div class="tabs scrollrow" role="tablist" aria-label="What to show">
+    <button class="chip" role="tab" id="tab-regions" aria-pressed="true">Bones</button>
+    <button class="chip" role="tab" id="tab-curves" aria-pressed="false">Joints</button>
+    <button class="chip" role="tab" id="tab-discs" aria-pressed="false">Arches of the foot</button>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <div id="v"></div>
+      <div class="vbar scrollrow" id="views"></div>
+    </div>
+    <div class="panel stack">
+      <div id="pane-regions" class="stack">
+        <div class="cap key desc" id="reg-desc"></div>
+        <div class="legend" id="reg-list"></div>
+        <div class="group-h">Each bone</div>
+        <div class="vgrid" id="vgrid"></div>
+      </div>
+      <div id="pane-curves" class="stack" hidden>
+        <div class="cap key desc" id="curve-desc"></div>
+        <div class="legend" id="curve-list"></div>
+      </div>
+      <div id="pane-discs" class="stack" hidden>
+        <div class="cap key desc" id="disc-desc"></div>
+        <div class="legend" id="arch-list"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). The right limb is shown.</p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — checked in Gray's 1918, Wikipedia and StatPearls (see anatomy/DATA-SOURCES.md) ===================== */
+const DATA = {
+  lede: 'The bones of the right lower limb: the hip bone, the femur and patella, the tibia and fibula, and the foot. Tap a bone to select it, tap it again to open it.',
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the bones of the lower extremity and the foot; cross-checked with Wikipedia\'s articles and StatPearls (NCBI Bookshelf).',
+  regionsIntro: 'Thirty-one bones on each side, with two sesamoid bones under the big toe. Tap a group or a bone.',
+  regions: [
+    ['hip', 'Hip bone', 'Ilium, ischium and pubis fused into one bone. The two hip bones, with the sacrum and coccyx, form the pelvis and attach the lower limb to the trunk.'],
+    ['thigh', 'Thigh and knee', 'The femur, and the patella in front of the knee.'],
+    ['leg', 'Leg', 'The tibia medially, which carries the weight, and the slender fibula laterally.'],
+    ['foot', 'Foot', '7 tarsal bones, 5 metatarsals and 14 phalanges.'],
+  ],
+  curvesIntro: 'Where the bones of the lower limb meet. Tap a joint.',
+  curves: [
+    ['hip', 'Hip joint', 'The head of the femur in the acetabulum of the hip bone.', ['hip', 'femur'], [-76.71, -113.08, 829.71]],
+    ['knee', 'Knee joint', 'The condyles of the femur on the condyles of the tibia, with the menisci between them, and the patella on the front of the femur. The fibula takes no part in it.', ['femur', 'tibia', 'patella'], [-61.9, -72.9, 403.3]],
+    ['tibfib_sup', 'Superior tibiofibular joint', 'The head of the fibula against a facet on the lateral condyle of the tibia.', ['tibia', 'fibula'], [-107.5, -60.6, 384.6]],
+    ['tibfib_inf', 'Inferior tibiofibular joint', 'The lower end of the fibula in the fibular notch of the tibia, bound by an interosseous ligament (a syndesmosis).', ['tibia', 'fibula'], [-92.7, -47.4, 75.8]],
+    ['ankle', 'Ankle joint', 'The trochlea of the talus held between the lower end of the tibia above, the medial malleolus and the lateral malleolus of the fibula.', ['tibia', 'fibula', 'talus'], [-67.2, -59.0, 67.4]],
+    ['subtalar', 'Talus on the calcaneus', 'The underside of the talus on three facets of the calcaneus, the posterior facet the largest; the sinus tarsi separates the posterior facet from the middle and anterior ones.', ['talus', 'calcaneus'], [-80.3, -54.8, 41.4]],
+    ['talonav', 'Talus and navicular', 'The head of the talus in the hollow back of the navicular.', ['talus', 'navicular'], [-81.8, -88.8, 53.0]],
+    ['calccub', 'Calcaneus and cuboid', 'The front of the calcaneus against the back of the cuboid.', ['calcaneus', 'cuboid'], [-94.5, -77.7, 33.3]],
+  ],
+  archesIntro: 'The tarsal and metatarsal bones form arches, held up by ligaments and tendons (Wikipedia, StatPearls). Tap an arch.',
+  arches: [
+    ['medial', 'Medial longitudinal arch', 'Higher than the lateral: calcaneus, talus, navicular, the three cuneiforms and the first three metatarsals. The talus is at its summit; it rests on the calcaneal tuberosity behind and the heads of the first three metatarsals in front. The spring (plantar calcaneonavicular) ligament supports the head of the talus; the tibialis posterior, flexor hallucis longus and plantar aponeurosis also support it.', ['calcaneus', 'talus', 'navicular', 'cun_med', 'cun_int', 'cun_lat', 'mt1', 'mt2', 'mt3']],
+    ['lateral', 'Lateral longitudinal arch', 'Low and solid: calcaneus, cuboid and the 4th and 5th metatarsals, held by the long plantar and plantar calcaneocuboid ligaments.', ['calcaneus', 'cuboid', 'mt4', 'mt5']],
+    ['transverse', 'Transverse arch', 'Across the foot: the three cuneiforms, the cuboid and the bases of the five metatarsals; maintained mainly by the tendon of the fibularis (peroneus) longus.', ['cun_med', 'cun_int', 'cun_lat', 'cuboid', 'mt1', 'mt2', 'mt3', 'mt4', 'mt5']],
+  ],
+};
+
+/* region of each part, colour per region (Paul Tol "light") */
+const REGION_OF = k => k === 'hip' ? 'hip' : k === 'femur' || k === 'patella' ? 'thigh' : k === 'tibia' || k === 'fibula' ? 'leg' : 'foot';
+const COLOURS = {hip: '#77AADD', thigh: '#EE8866', leg: '#BBCC33', foot: '#EEDD88'};
+/* the detailed page for each bone */
+const TYPE_OF = k => ['hip', 'femur', 'patella', 'tibia', 'fibula'].includes(k) ? k : 'foot';
+const TYPE_TITLE = {hip: 'Hip bone', femur: 'Femur', patella: 'Patella', tibia: 'Tibia', fibula: 'Fibula', foot: 'Bones of the foot'};
+const HREF = t => 'bones.html#' + t;
+
+/* ===================== PAGE ===================== */
+const v = new AtlasViewer(document.getElementById('v'));
+const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
+let man = null, names = {}, tab = 'regions', picked = null;
+const views = [['Front', [0, -1, 0]], ['Left side', [1, 0, 0]], ['Back', [0, 1, 0]], ['Right side', [-1, 0, 0]]];
+for (const [label, dir] of views) {
+  const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
+  b.onclick = () => v.face(dir, {zoom: 1}); document.getElementById('views').append(b);
+}
+const pressed = (sel, key) => document.querySelectorAll(sel).forEach(b => b.setAttribute('aria-pressed', b.dataset.k === key));
+
+function paint(focus = null) {
+  for (const k of v.order) { v.setColour(k, COLOURS[REGION_OF(k)]); v.setVertexMarks(k, null); }
+  v.setFocus(focus);
+}
+function typeTitle(t) { return TYPE_TITLE[t] || t; }
+
+/* tap a bone: select it; tap again (or the button) to open its type's page */
+function pick(key) {
+  const t = TYPE_OF(key);
+  if (picked === key) { location.href = HREF(t); return; }
+  picked = key;
+  pressed('#vgrid button', key);
+  v.setFocus([key]);
+  card.hidden = false;
+  card.innerHTML = `<div class="what"><b>${names[key]}</b><span>${typeTitle(t)} · tap again to open</span></div><a class="go" href="${HREF(t)}">Open →</a><button class="x" aria-label="Clear">×</button>`;
+  card.querySelector('.x').onclick = clearPick;
+}
+function clearPick() { picked = null; card.hidden = true; pressed('#vgrid button', null); paint(); }
+
+function buildRegions() {
+  const box = document.getElementById('reg-list'); box.replaceChildren();
+  for (const [key, name, text] of DATA.regions) {
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:${COLOURS[key].startsWith('--') ? 'var(' + COLOURS[key] + ')' : COLOURS[key]}"></i><span>${name}</span>`;
+    b.onclick = () => {
+      clearPick(); pressed('#reg-list button', key);
+      document.getElementById('reg-desc').innerHTML = `<b>${name}.</b> ${text}`;
+      const keys = v.order.filter(k => REGION_OF(k) === key);
+      v.setFocus(keys); v.fit(keys); v.face([0.6, -1, 0.1], {zoom: 1});
+    };
+    box.append(b);
+  }
+  const g = document.getElementById('vgrid'); g.replaceChildren();
+  const SEQ = ['hip', 'femur', 'patella', 'tibia', 'fibula', 'talus', 'calcaneus', 'navicular', 'cuboid', 'cun_med', 'cun_int', 'cun_lat', 'mt1', 'mt2', 'mt3', 'mt4', 'mt5'];
+  const LABEL = {hip: 'Hip', cun_med: 'Med cun', cun_int: 'Int cun', cun_lat: 'Lat cun'};
+  for (const k of SEQ.filter(k => v.parts.has(k))) {
+    const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
+    b.textContent = LABEL[k] || (k.startsWith('mt') ? 'MT' + k.slice(2) : k[0].toUpperCase() + k.slice(1));
+    b.onclick = () => { if (picked !== k) { v.fit([k]); v.face([0.6, -1, 0.3], {zoom: 1}); } pick(k); };
+    g.append(b);
+  }
+}
+function buildCurves() {
+  const box = document.getElementById('curve-list'); box.replaceChildren();
+  for (const [key, name, text, keys] of DATA.curves) {
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${name}</span>`;
+    b.onclick = () => {
+      pressed('#curve-list button', key);
+      document.getElementById('curve-desc').innerHTML = `<b>${name}.</b> ${text}`;
+      v.setFocus(keys);
+      const pt = DATA.curves.find(c => c[0] === key)[4];
+      v.setMarkers(pt ? [{p: pt, label: name, big: true, always: true}] : []); v.fit(keys); v.face([0.5, -1, 0.2], {zoom: 1});
+    };
+    box.append(b);
+  }
+}
+function buildArches() {
+  const box = document.getElementById('arch-list'); box.replaceChildren();
+  for (const [key, name, text, keys] of DATA.arches) {
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:${COLOURS.foot}"></i><span>${name}</span>`;
+    b.onclick = () => {
+      pressed('#arch-list button', key);
+      document.getElementById('disc-desc').innerHTML = `<b>${name}.</b> ${text}`;
+      v.setFocus(keys); v.face([1, -0.3, 0.05], {zoom: 1});
+    };
+    box.append(b);
+  }
+}
+
+function setTab(name, move = true) {
+  tab = name; clearPick();
+  for (const t of ['regions', 'curves', 'discs']) {
+    document.getElementById('tab-' + t).setAttribute('aria-pressed', t === name);
+    document.getElementById('pane-' + t).hidden = t !== name;
+  }
+  pressed('#reg-list button', null); pressed('#curve-list button', null);
+  paint(); v.setMarkers([]);
+  if (name === 'regions') { document.getElementById('reg-desc').innerHTML = DATA.regionsIntro; if (move) { v.fit(null); v.face([0, -1, 0], {zoom: 1}); } }
+  if (name === 'curves') { document.getElementById('curve-desc').innerHTML = DATA.curvesIntro; if (move) { v.fit(null); v.face([0.5, -1, 0], {zoom: 1}); } }
+  if (name === 'discs') {
+    document.getElementById('disc-desc').innerHTML = DATA.archesIntro; pressed('#arch-list button', null);
+    if (move) { v.fit(v.order.filter(k => REGION_OF(k) === 'foot')); v.face([1, -0.3, 0.05], {zoom: 1}); }
+  }
+}
+for (const t of ['regions', 'curves', 'discs']) document.getElementById('tab-' + t).onclick = () => setTab(t);
+v.onPick = hit => hit ? pick(hit.key) : clearPick();
+
+(async () => {
+  document.getElementById('lede').innerHTML = DATA.lede;
+  document.getElementById('based').innerHTML = DATA.based;
+  man = await v.load('../models/lower-limb/lower-limb.json');
+  for (const p of man.parts) names[p.key] = p.name;
+  buildRegions(); buildCurves(); buildArches();
+  setTab('regions');
+  window.ready = true;
+})().catch(e => { document.getElementById('reg-desc').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

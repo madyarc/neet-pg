@@ -135,10 +135,10 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 14. Features of individual bones (Lower Limb)
 
-- [~] **AN14.1** Identify the given bone, its side, anatomical position, joint formation, important features and clinical anatomy (hip bone, femur, tibia fibula, tarsal bones) — *femur (identification, side, features, clinical anatomy of the neck): [The Femur](lower-limb/femur.html)*
-- [ ] **AN14.2** Identify & describe joints formed by the given bone
-- [~] **AN14.3** Describe the importance of ossification of lower end of femur & upper end of tibia, and explain violation of law of ossification in fibula — *femur: ossification of the lower end: [The Femur](lower-limb/femur.html)*
-- [ ] **AN14.4** Identify and name various bones in the articulated foot with individual muscle attachment
+- [~] **AN14.1** Identify the given bone, its side, anatomical position, joint formation, important features and clinical anatomy (hip bone, femur, tibia fibula, tarsal bones) — *features and joints of every bone: [Bones of the Lower Limb](lower-limb/bones.html); side only for the femur: [The Femur](lower-limb/femur.html)*
+- [~] **AN14.2** Identify & describe joints formed by the given bone — *bones meeting at each joint: [The Lower Limb](lower-limb/lower-limb.html) (Joints)*
+- [~] **AN14.3** Describe the importance of ossification of lower end of femur & upper end of tibia, and explain violation of law of ossification in fibula — *timing of each centre: [Bones of the Lower Limb](lower-limb/bones.html); lower end of femur: [The Femur](lower-limb/femur.html)*
+- [~] **AN14.4** Identify and name various bones in the articulated foot with individual muscle attachment — *bones and main attachments: [Bones of the Lower Limb](lower-limb/bones.html)#foot*
 
 ### 15. Front & Medial side of thigh
 
@@ -179,7 +179,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN19.2** Describe and demonstrate the origin, course, relations, branches (or tributaries), termination of important nerves and vessels of back of leg
 - [ ] **AN19.3** Explain the concept of “Peripheral heart”
 - [ ] **AN19.4** Explain the anatomical basis of rupture of calcaneal tendon
-- [ ] **AN19.5** Describe factors maintaining importance arches of the foot with its importance
+- [~] **AN19.5** Describe factors maintaining importance arches of the foot with its importance — *bones and supports of each arch: [The Lower Limb](lower-limb/lower-limb.html) (Arches)*
 - [ ] **AN19.6** Explain the anatomical basis of Flat foot & Club foot
 - [ ] **AN19.7** Explain the anatomical basis of Metatarsalgia & Plantar fasciitis
 
