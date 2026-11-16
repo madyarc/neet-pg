@@ -308,3 +308,17 @@ Fact sheets `sources-local/facts/side-determination-2.md` and `lower-limb-extra-
   Jurisprudence* 7th ed. 1920 vol. I p. 199; Lyon 1921 supports); upper tibial nucleus present in the mature newborn
   (Glaister p. 467 fig. 117; Morina et al. 2024; PMC7766077). Worded as maturity, not viability, and as a supporting
   sign (Taylor: "open to numerous exceptions").
+
+## Modern open sources for the left/right rules (2026-11-15)
+
+Fact sheet `sources-local/facts/side-determination-modern.md`; downloads in `sources-local/modern/`. No modern open
+source contradicts any rule on the site; every disagreement found was an internal error in one source, corrected by
+another. Sources: eForensics osteology pages (eforensics.info, 2017–19); Hall et al. 2010 (GVSU, CC BY-NC — has carpal
+and tarsal notes, missed earlier); Bone Broke (J. Beck, CC BY-NC); Tallahassee CC handout (J. Steiner); Cuyamaca College
+tutor tool; Robinson LibreTexts lab manual (CC BY 4.0); UW–Madison virtual femur lab; Landfald et al. 2025 (1st
+metatarsal); Radiopaedia (excerpt). HALL, Bone Broke and eForensics follow White's *Human Bone Manual*, so for carpals
+and tarsals they count as one tradition, independent of Holden/Frazer. Errors in those sources not followed: eForensics
+clavicle (conoid tubercle), triquetrum and hamate (proximal/distal swapped); Robinson ulna (radial notch); Hall navicular
+(contradicts itself) and lateral cuneiform (triangular facet is the front one, Gray). Added from them: pisiform siding
+unreliable on some bones (White et al. via Bone Broke; eForensics); patella table test (Bone Broke; Radiopaedia
+excerpt), same direction as the facet rule. 1st metatarsal: no modern full rule; the fact (lateral tubercle) agrees.
