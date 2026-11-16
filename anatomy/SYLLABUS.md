@@ -68,7 +68,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 8. Features of individual bones (Upper Limb)
 
-- [~] **AN8.1** Identify the given bone, its side, anatomical position, joint formation, important features and clinical anatomy (clavicle, scapula, humerus, radius, ulna, carpal bones) — *features, joints, clinical points, left or right for the long bones (not the carpals): [Bones of the Upper Limb](upper-limb/bones.html)*
+- [x] **AN8.1** Identify the given bone, its side, anatomical position, joint formation, important features and clinical anatomy (clavicle, scapula, humerus, radius, ulna, carpal bones) — *features, joints, clinical points, left or right for every bone incl. the carpals: [Bones of the Upper Limb](upper-limb/bones.html)*
 - [ ] **AN8.2** Demonstrate important muscle attachments on the given bone
 - [x] **AN8.3** Identify and name various bones in articulated hand, Specify the parts of metacarpals and phalanges and enumerate the peculiarities of pisiform — *[Bones of the Upper Limb](upper-limb/bones.html)#hand, [The Upper Limb](upper-limb/upper-limb.html)*
 - [ ] **AN8.4** Describe scaphoid fracture and explain the anatomical basis of avascular necrosis
@@ -135,7 +135,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 14. Features of individual bones (Lower Limb)
 
-- [~] **AN14.1** Identify the given bone, its side, anatomical position, joint formation, important features and clinical anatomy (hip bone, femur, tibia fibula, tarsal bones) — *features, joints, and left or right for each bone except the navicular, cuboid, cuneiforms and 1st metatarsal: [Bones of the Lower Limb](lower-limb/bones.html), [The Femur](lower-limb/femur.html)*
+- [x] **AN14.1** Identify the given bone, its side, anatomical position, joint formation, important features and clinical anatomy (hip bone, femur, tibia fibula, tarsal bones) — *features, joints, and left or right for each bone: [Bones of the Lower Limb](lower-limb/bones.html), [The Femur](lower-limb/femur.html)*
 - [~] **AN14.2** Identify & describe joints formed by the given bone — *bones meeting at each joint: [The Lower Limb](lower-limb/lower-limb.html) (Joints)*
 - [x] **AN14.3** Describe the importance of ossification of lower end of femur & upper end of tibia, and explain violation of law of ossification in fibula — *[Bones of the Lower Limb](lower-limb/bones.html) (femur, tibia, fibula), [The Femur](lower-limb/femur.html)*
 - [~] **AN14.4** Identify and name various bones in the articulated foot with individual muscle attachment — *bones and main attachments: [Bones of the Lower Limb](lower-limb/bones.html)#foot*

@@ -283,3 +283,28 @@ IMAIOS; StatPearls and Radiopaedia via search excerpts):
   report — single source, worded "at autopsy").
 - Pubic tubercle 2.5–3 cm from the symphysis (2026 review; 2015 cadaver study, 26 mm). Subpubic angle: male roughly
   50–70°, female 90° or more, given as a guide (Kenhub; Texas Tech teaching page; studies vary, PMC7118257).
+
+## Second re-search (2026-11-15) — classic osteology and forensic texts
+
+Fact sheets `sources-local/facts/side-determination-2.md` and `lower-limb-extra-2.md`; OCR texts (archive.org) in
+`sources-local/classic/`, quotes checked by script against them.
+- **Left or right, carpals and small foot bones** (scaphoid … hamate; navicular, cuboid, three cuneiforms, 1st
+  metatarsal): Holden, *Human Osteology*, 6th ed. 1885 (`humanosteologyco00holdiala`) states a "Right or Left?" rule
+  for each; Frazer, *Anatomy of the Human Skeleton*, 2nd ed. 1920 (`anatomyofhumansk00frazuoft`) states or supports
+  them; Gray 1918 and Cunningham 1902 confirm each facet direction. 1st metatarsal: fibularis longus tubercle
+  plantar-lateral, tibialis anterior medial (Holden, Frazer, Cunningham, Gray; Landfald et al. 2025,
+  doi:10.3389/fcell.2025.1678965). Kenhub's "tuberosity medially" rejected (contradicts all). Lunate: palmar/dorsal
+  size disagrees between sources, so not used.
+- **Fibula, patella, 5th metatarsal side rules now stated in sources:** fibula — Cunningham 4th ed. 1914 p. 250,
+  Wagstaffe *Student's Guide to Human Osteology* 1875 p. 121; patella (larger lateral facet) — Holden 3rd ed. 1861
+  p. 184, Frazer 1920 p. 152; 5th metatarsal — Holden 1861 p. 204, Wagstaffe p. 150. The patella table-tipping test
+  has no source and was removed.
+- **Common fibular nerve round the lateral side of the fibular neck:** Cunningham 1914 p. 251; Gray 1918 p. 1342.
+- **Order of epiphyseal union / growing end / nutrient canal "towards the elbow, from the knee"; fibula the
+  exception:** Frazer p. 4, Holden p. 27 and p. 140, Cunningham p. 87, Wagstaffe p. 40; fibula: Holden p. 192,
+  Wagstaffe p. 118. No source calls it a "law", so the page doesn't.
+- **Knee centres at term:** lower femoral nucleus as the sign of maturity, ~36–37 weeks, ~5 mm at term (Glaister,
+  *Text-book of Medical Jurisprudence* 3rd ed. 1915 p. 468; Taylor, *Principles and Practice of Medical
+  Jurisprudence* 7th ed. 1920 vol. I p. 199; Lyon 1921 supports); upper tibial nucleus present in the mature newborn
+  (Glaister p. 467 fig. 117; Morina et al. 2024; PMC7766077). Worded as maturity, not viability, and as a supporting
+  sign (Taylor: "open to numerous exceptions").
