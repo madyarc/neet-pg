@@ -12,6 +12,7 @@
 //! Binary format "NPM1" (little endian):
 //!   b"NPM1", u32 nverts, u32 ntris, f32 lo[3], f32 span, u32 index_bytes (2|4),
 //!   u16 pos[nverts*3] (lo + q/65535*span), i8 nrm[nverts*3] (/127), pad to 4, u16|u32 idx[ntris*3]
+//! With `"pack": true` the parts are concatenated into `<name>.pack` and each manifest part gets its `offset`.
 
 use anyhow::{Context, Result, anyhow, bail};
 use base64::Engine;
@@ -42,6 +43,10 @@ struct Config {
     /// credit line written into the manifest (default: BodyParts3D)
     #[serde(default)]
     source: Option<String>,
+    /// write all parts into one file `<name>.pack` (each part 4-byte aligned, its `offset` in the manifest)
+    /// instead of one `.bin` per part: one request per model, which loads much faster than hundreds
+    #[serde(default)]
+    pack: bool,
     parts: Vec<PartCfg>,
 }
 fn default_contact() -> f32 { 1.5 }
@@ -68,6 +73,8 @@ struct PartOut {
     name: String,
     fma: String,
     file: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    offset: Option<usize>,
     nverts: usize,
     ntris: usize,
     source_tris: usize,
@@ -267,17 +274,27 @@ fn build(cfg_path: &Path) -> Result<()> {
     }).collect::<Result<_>>()?;
 
     let mut parts = Vec::new();
+    let mut pack: Vec<u8> = Vec::new();
     for (p, m, src) in &meshes {
         let bytes = encode(m);
-        let file = format!("{}.bin", p.key);
-        std::fs::File::create(out.join(&file))?.write_all(&bytes)?;
+        let (file, offset) = if cfg.pack {
+            while pack.len() % 4 != 0 { pack.push(0); }
+            let o = pack.len(); pack.extend_from_slice(&bytes);
+            (format!("{}.pack", cfg.name), Some(o))
+        } else {
+            let file = format!("{}.bin", p.key);
+            std::fs::File::create(out.join(&file))?.write_all(&bytes)?;
+            (file, None)
+        };
         parts.push(PartOut {
-            key: p.key.clone(), name: p.name.clone(), fma: p.fma.clone(), file,
+            key: p.key.clone(), name: p.name.clone(), fma: p.fma.clone(), file, offset,
             nverts: m.pos.len(), ntris: m.idx.len() / 3, source_tris: *src, error_mm: p.error_mm.unwrap_or(cfg.error_mm),
             bbox: bbox(&m.pos), bytes: bytes.len(),
         });
         eprintln!("{:<28} {:>7} -> {:>7} tris  {:>8} bytes", p.key, src, m.idx.len() / 3, bytes.len());
     }
+
+    if cfg.pack { std::fs::write(out.join(format!("{}.pack", cfg.name)), &pack)?; }
 
     // contacts between every pair of parts whose boxes come within contact distance
     let d = cfg.contact_mm;

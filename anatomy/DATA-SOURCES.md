@@ -501,3 +501,14 @@ models line no longer says "the palate muscles" are absent (palatopharyngeus is 
 cartilage, the longus colli extent (atlas to T3), the longus capitis attachments, and the scalene origin levels and
 tubercles.
 
+
+## Anatomy home — whole body with muscles (`index.html`)
+
+- No new facts: the Muscular system shows the muscles of the five regional muscle pages; tapping one selects its region
+  and opens that page.
+- Skeleton rebuilt from BodyParts3D 3.0 (was 4.0 at 99 %): checked 2026-11-17 that 4.0 bones sit up to 10–20 mm from the
+  3.0 bones that the Z-Anatomy muscles were fitted to (e.g. clavicle +23 mm in z), which would leave muscles floating off
+  or cutting into the bones. All 215 bones exist in 3.0 under the same FMA ids.
+- Left muscles = right ones mirrored (Z-Anatomy does the same); the reflection, derived from `z-to-bp3d.json`, matches
+  a least-squares fit to Z-Anatomy's own left meshes (gluteus maximus, temporalis) to 0.0001 mm. Checked by eye at the
+  shoulders, knees, pelvis (back) and face that both sides sit on the bones.

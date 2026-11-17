@@ -38,14 +38,14 @@
       <h3>Systems</h3>
       <div class="chips scrollrow" id="systems">
         <button class="chip" aria-pressed="true" data-sys="skeletal">Skeletal</button>
-        <button class="chip" disabled>Muscular — coming</button>
+        <button class="chip" aria-pressed="false" data-sys="muscular">Muscular</button>
         <button class="chip" disabled>Joints and ligaments — coming</button>
         <button class="chip" disabled>Arteries and veins — coming</button>
         <button class="chip" disabled>Nerves — coming</button>
         <button class="chip" disabled>Organs — coming</button>
       </div>
     </div>
-    <p class="muted"><span class="swatch" style="background:var(--bone)"></span>bone &nbsp; <span class="swatch" style="background:var(--cart)"></span>cartilage (costal cartilages)</p>
+    <p class="muted"><span class="swatch" style="background:var(--bone)"></span>bone &nbsp; <span class="swatch" style="background:var(--cart)"></span>cartilage (costal cartilages)<span id="mus-key" hidden> &nbsp; <span class="swatch" style="background:#CC6677"></span><span class="swatch" style="background:#117733"></span><span class="swatch" style="background:#88CCEE"></span>muscles (one colour each, the same on both sides; different muscles that touch never share one) &nbsp; <span class="swatch" style="background:var(--fascia)"></span>tendons, aponeuroses, retinacula</span></p>
     <div>
       <h3>Detailed pages</h3>
       <nav class="mods" aria-label="Modules">
@@ -91,7 +91,7 @@
 </section>
 
 <footer>
-  <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). This overview uses a lighter version of each bone than the detailed pages. The four small sesamoid bones of the feet are not included yet. The model has costal cartilages 1–7 only (BodyParts3D does not include the 8th–10th).</p>
+  <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). Muscles, tendons and aponeuroses from Z-Anatomy, the libre 3D atlas of anatomy (CC BY-SA 4.0, built on BodyParts3D), moved into the BodyParts3D frame. This overview uses a lighter version of each bone and muscle than the detailed pages. The left-side muscles are mirror images of the right ones (as in Z-Anatomy), so they can sit slightly off the left bones. It shows the muscles of the regional muscle pages; those pages list what the model leaves out. The four small sesamoid bones of the feet are not included yet. The model has costal cartilages 1–7 only (BodyParts3D does not include the 8th–10th).</p>
 </footer>
 </div>
 
@@ -116,24 +116,27 @@ const REGIONS = [
   ['Pelvis', /hip bone|sacrum|coccyx|lumbar vertebra/i],
   ['Lower limbs', /femur|patella|tibia|fibula|talus|calcaneus|navicular|cuboid|cuneiform|metatars|toe/i],
 ];
-const v = new AtlasViewer(document.getElementById('v'));
+const v = new AtlasViewer(document.getElementById('v')); window.atlas = v;   // for tests
 let man = null, names = {}, sel = null;      // sel = {group, key}
+// muscles: loaded the first time the Muscular system is switched on (models/body-muscles, tools/zanat/body_muscles.py)
+let mus = null, musLoading = null;           // mus = {info: {key: {region, page, kind, side, colour}}, keys: [...]}
+const layers = {skeletal: true, muscular: false};
 
 // selection card over the model, and a "whole body" button
 const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
 const home = v.addOverlay(document.createElement('button')); home.className = 'tr'; home.textContent = '⟲ Whole body';
 home.onclick = () => { clear(); v.fit(null); v.animate(0, 0, 1, null); };
 
-function keysOf(g) { return man.parts.filter(p => g.re.test(p.name)).map(p => p.key); }
+function keysOf(g) { return g.keys || man.parts.filter(p => g.re.test(p.name)).map(p => p.key); }
 function clear() { sel = null; card.hidden = true; v.setFocus(null); }
 function select(key) {
-  const name = names[key], g = GROUPS.find(g => g.re.test(name)) || null;
+  const name = names[key], g = (mus && mus.info[key]) ? mus.group[mus.info[key].page] : GROUPS.find(g => g.re.test(name)) || null;
   if (g && sel && sel.group === g) { location.href = g.href; return; }      // second tap on the group: open it
   sel = {group: g, key};
   v.setFocus(g ? keysOf(g) : [key]);
   card.hidden = false;
   card.innerHTML = g
-    ? `<div class="what"><b>${g.name}</b><span>${name} · tap again to open</span></div><a class="go" href="${g.href}">Open →</a><button class="x" aria-label="Clear">×</button>`
+    ? `<div class="what"><b>${g.name}</b><span>${name}${mus && mus.info[key] && mus.info[key].side !== 'midline' ? ' (' + mus.info[key].side + ')' : ''} · tap again to open</span></div><a class="go" href="${g.href}">Open →</a><button class="x" aria-label="Clear">×</button>`
     : `<div class="what"><b>${name}</b><span>No detailed page yet</span></div><button class="x" aria-label="Clear">×</button>`;
   card.querySelector('.x').onclick = clear;
 }
@@ -148,6 +151,52 @@ for (const [label, re] of REGIONS) {
   };
   document.getElementById('regions').append(b);
 }
+/* systems: each is a layer of the model */
+const sysBtn = k => document.querySelector(`#systems [data-sys="${k}"]`);
+function applyLayers() {
+  for (const p of man.parts) v.setVisible(p.key, layers.skeletal);
+  if (mus) for (const k of mus.keys) v.setVisible(k, layers.muscular);
+  for (const k in layers) sysBtn(k).setAttribute('aria-pressed', layers[k]);
+  document.getElementById('mus-key').hidden = !layers.muscular;
+  if (sel) { const vis = k => (mus && mus.info[k]) ? layers.muscular : layers.skeletal; if (!vis(sel.key)) clear(); }
+}
+function loadMuscles() {
+  if (musLoading) return musLoading;
+  const b = sysBtn('muscular');
+  const base = 'models/body-muscles/';
+  musLoading = (async () => {
+    const meta = await (await fetch(base + 'muscles.json')).json();
+    const info = {}, M = meta.mirror;
+    await v.load(base + 'body-muscles.json', null, {fit: false,
+      onProgress: f => { b.textContent = `Muscular · loading ${Math.round(f * 100)}%`; },
+      extra: (m, items) => items.filter(it => meta.parts[it.key].mirror)
+        .map(it => ({key: it.key + '_l', m: v.mirrored(it.m, M.m, M.t), info: {name: it.info.name}}))});
+    const keys = [];
+    for (const [k, d] of Object.entries(meta.parts)) {
+      for (const left of d.mirror ? [false, true] : [false]) {
+        const key = left ? k + '_l' : k;
+        info[key] = {...d, side: d.mirror ? (left ? 'left' : 'right') : 'midline'};
+        names[key] = v.parts.get(k).info.name;
+        v.setColour(key, d.kind === 'muscle' ? d.colour : '--fascia');
+        keys.push(key);
+      }
+    }
+    // a tap on a muscle selects every muscle of its regional page (both sides); a second tap opens the page
+    const group = {};
+    for (const k of keys) { const d = info[k]; (group[d.page] = group[d.page] || {id: d.page, name: d.region, href: d.page, keys: []}).keys.push(k); }
+    mus = {info, keys, group};
+    b.textContent = 'Muscular';
+  })().catch(e => { b.textContent = 'Muscular · could not load'; musLoading = null; window.loadError = String(e); throw e; });
+  return musLoading;
+}
+document.querySelectorAll('#systems [data-sys]').forEach(b => b.onclick = async () => {
+  const k = b.dataset.sys, on = !layers[k];
+  if (!on && !Object.entries(layers).some(([j, x]) => j !== k && x)) return;   // keep at least one system shown
+  layers[k] = on;
+  if (k === 'muscular' && on && !mus) { b.setAttribute('aria-pressed', 'true'); try { await loadMuscles(); } catch (e) { layers.muscular = false; } }
+  applyLayers();
+});
+
 v.load('models/skeleton/skeleton.json').then(m => {
   man = m;
   for (const p of m.parts) { names[p.key] = p.name; v.setColour(p.key, /costal cartilage/i.test(p.name) ? '--cart' : '--bone'); }

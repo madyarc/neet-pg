@@ -96,7 +96,8 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
 - Bones come from **BodyParts3D** (© The Database Center for Life Science). The OBJ files state CC BY-SA 2.1 Japan; the
   2025 README says CC BY 4.0 — follow the stricter one: credit it in the footer; the simplified meshes we publish are
   under the same licence. Archives live in `sources-local/bp3d/` (not in git): 3.0 at 95 % reduction for detailed
-  pages, 4.0 at 99 % for the whole-body overview.
+  pages; the whole-body overview (`models/skeleton`) is also built from 3.0 (at 0.6 mm), so the Z-Anatomy muscles,
+  which match 3.0, sit on it (4.0 places bones up to ~20 mm differently).
 - `tools/bones-rs` (Rust; `cargo build --release`, binary `target/release/bones`): `bones build configs/<group>.json`
   reads the OBJs from the zips, welds, simplifies to an absolute error (mm), writes `NPM1` binaries + a manifest with
   bounding boxes and the **contacts** between parts (sutures, joints). Coordinates stay in the BodyParts3D body frame
@@ -115,6 +116,11 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
   Run `unzip -tq` on an archive before a build; if it fails, compare `sha256sum` with a `dd iflag=direct` read and
   replace the file with the direct copy. Re-hash tracked files against git (`git hash-object` vs the index) and run
   `git fsck` before pushing.
+- **Smoothness** (the whole body has ~600 parts with the muscles): models shown on the Anatomy home are built with
+  `"pack": true` (one `<name>.pack` file, one request); the viewer uploads each load's parts into shared buffers (one
+  draw call per part), resolves colours once, and picks by rendering only the tapped pixel. The muscle layer loads
+  only when the Muscular system is switched on. Left muscles are not downloaded: the page mirrors the right ones
+  (`tools/zanat/body_muscles.py`). Keep new layers to the same pattern.
 - `tools/bones/skull_points.py`: named sutures and points from the contacts. `tools/bones/assign_colours.py`: bone
   colours. The femur page still uses `tools/bones/build_femur.py` + `embed.py`.
 - Python scripts run with the venv `~/personal/buildenv` (numpy, pillow, selenium; run with `python -I`). Page tests:

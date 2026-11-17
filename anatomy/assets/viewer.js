@@ -10,6 +10,12 @@
  *   v.setVertexMarks('frontal', Uint32Array of vertex ids, '#000')   // e.g. sutures
  *   v.setMarkers([{p:[x,y,z], label:'Bregma', color:'#…'}])
  *   await v.loadPart('D:frontal', '../models/skull-detail/frontal.bin')     // one extra part from its own file
+ *   await v.load(url, null, {fit: false, onProgress: f => …, extra: man => [{key, m, info}]})   // a second layer
+ *   v.mirrored(key, newKey, {m: 3x3, t: [x,y,z]}, info) -> {key, m, info}   // a reflected copy (left from right)
+ *
+ * Smoothness: a model packed into one file (manifest parts with `offset`) is one request; each load's parts share
+ * one set of GPU buffers (32-bit indices), so a part costs one draw call; colours are resolved once, not per frame;
+ * a tap renders only the pixel under it.
  */
 'use strict';
 (function () {
@@ -22,19 +28,19 @@
   const SVGNS = 'http://www.w3.org/2000/svg';
   const b64u32 = s => { const b = Uint8Array.from(atob(s), c => c.charCodeAt(0)); return new Uint32Array(b.buffer); };
 
-  function decode(buf) {
-    const dv = new DataView(buf);
-    const magic = String.fromCharCode(...new Uint8Array(buf, 0, 4));
+  function decode(buf, o0 = 0) {
+    const dv = new DataView(buf, o0);
+    const magic = String.fromCharCode(...new Uint8Array(buf, o0, 4));
     if (magic !== 'NPM1') throw new Error('not an NPM1 mesh');
     const nv = dv.getUint32(4, true), nt = dv.getUint32(8, true);
     const lo = [dv.getFloat32(12, true), dv.getFloat32(16, true), dv.getFloat32(20, true)], span = dv.getFloat32(24, true);
     const ib = dv.getUint32(28, true);
-    let o = 32;
+    let o = o0 + 32;
     const q = new Uint16Array(buf.slice(o, o + nv * 6)); o += nv * 6;
     const pos = new Float32Array(nv * 3);
     for (let i = 0; i < nv * 3; i++) pos[i] = lo[i % 3] + q[i] / 65535 * span;
     const nrm = new Int8Array(buf.slice(o, o + nv * 3)); o += nv * 3;
-    o = (o + 3) & ~3;
+    o = o0 + ((o - o0 + 3) & ~3);
     const idx = ib === 2 ? new Uint16Array(buf.slice(o, o + nt * 6)) : new Uint32Array(buf.slice(o, o + nt * 12));
     return {nv, nt, pos, nrm, idx};
   }
@@ -67,11 +73,27 @@
       c = mix(c, vec3(dot(c, vec3(0.3,0.59,0.11))), DIM*0.75);
       gl_FragColor = vec4(c, ALPHA); }`;
 
+  /** fetch a binary, reporting the fraction received (when the server gives a length) */
+  async function fetchBuf(url, onProgress) {
+    const r = await fetch(url);
+    if (!r.ok) throw new Error(url + ': HTTP ' + r.status);
+    const total = +r.headers.get('content-length') || 0;
+    if (!onProgress || !total || !r.body) return r.arrayBuffer();
+    const out = new Uint8Array(total), rd = r.body.getReader(); let n = 0;
+    for (;;) {
+      const {done, value} = await rd.read(); if (done) break;
+      if (n + value.length > out.length) return new Blob([out.subarray(0, n), value]).arrayBuffer();   // length was wrong
+      out.set(value, n); n += value.length; onProgress(n / total);
+    }
+    return n === total ? out.buffer : out.slice(0, n).buffer;
+  }
+  const nextFrame = () => new Promise(r => requestAnimationFrame(() => r()));
+
   class AtlasViewer {
     constructor(host, opts = {}) {
       this.host = host; this.parts = new Map(); this.order = [];
       this.yaw = 0; this.pitch = 0; this.zoom = 1; this.pan = [0, 0]; this.centre = [0, 0, 0]; this.fitH = 200;
-      this.clip = null; this.markers = []; this.onPick = null; this.dimOthers = null; this.labelsOn = true;
+      this.clip = null; this.markers = []; this.onPick = null; this.dimOthers = null; this.labelsOn = true; this.contacts = [];
       host.classList.add('viewer');
       host.innerHTML = '<canvas></canvas><svg aria-hidden="true"></svg><div class="hint">drag · pinch/scroll · tap</div><div class="loading">Loading 3D model…</div>';
       this.c = host.querySelector('canvas'); this.svg = host.querySelector('svg'); this.loadingEl = host.querySelector('.loading');
@@ -89,24 +111,51 @@
       gl.enable(gl.DEPTH_TEST);
       this.bindInput();
       new ResizeObserver(() => this.resize()).observe(host);
-      new MutationObserver(() => { this.draw(); this.scheduleMarkers(); }).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+      new MutationObserver(() => { for (const p of this.parts.values()) p.rgb = rgb(p.colour); this.draw(); this.scheduleMarkers(); }).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
       this.resize();
     }
 
     /* ---------- loading ---------- */
-    async load(manifestUrl, only = null) {
+    async load(manifestUrl, only = null, opts = {}) {
       const base = manifestUrl.slice(0, manifestUrl.lastIndexOf('/') + 1);
       const man = await (await fetch(manifestUrl)).json();
-      this.manifest = man;
+      if (!this.manifest) this.manifest = man;
       const list = man.parts.filter(p => !only || only.includes(p.key));
-      await Promise.all(list.map(async p => {
-        const m = decode(await (await fetch(base + p.file)).arrayBuffer());
-        this.addPart(p.key, m, p);
-      }));
-      this.contacts = (man.contacts || []).map(c => ({a: c.a, b: c.b, va: b64u32(c.va), vb: b64u32(c.vb)}));
-      this.fit();
-      this.loadingEl.remove();
+      const prog = opts.onProgress || null;
+      let items;
+      if (list.length && list[0].offset !== undefined) {         // one packed file for the whole model
+        const buf = await fetchBuf(base + list[0].file, prog && (f => prog(f * 0.9)));
+        items = [];
+        for (let i = 0; i < list.length; i++) {
+          items.push({key: list[i].key, m: decode(buf, list[i].offset), info: list[i]});
+          if (i % 40 === 39) await nextFrame();                  // keep the page responsive while decoding
+        }
+      } else {
+        let done = 0;
+        items = await Promise.all(list.map(async p => {
+          const m = decode(await fetchBuf(base + p.file)); if (prog) prog(0.9 * ++done / list.length);
+          return {key: p.key, m, info: p};
+        }));
+      }
+      if (opts.extra) items = items.concat(opts.extra(man, items));
+      this.addParts(items);
+      if (prog) prog(1);
+      this.contacts = this.contacts.concat((man.contacts || []).map(c => ({a: c.a, b: c.b, va: b64u32(c.va), vb: b64u32(c.vb)})));
+      if (opts.fit !== false) this.fit();
+      if (this.loadingEl.isConnected) this.loadingEl.remove();
       return man;
+    }
+    /** a reflected copy of a loaded mesh: p' = M p + t (normals by M; M is a reflection, so orthonormal) */
+    mirrored(m, M, t) {
+      const pos = new Float32Array(m.pos.length), nrm = new Int8Array(m.nrm.length);
+      for (let i = 0; i < m.nv; i++) {
+        const x = m.pos[i*3], y = m.pos[i*3+1], z = m.pos[i*3+2], a = m.nrm[i*3], b = m.nrm[i*3+1], c = m.nrm[i*3+2];
+        for (let k = 0; k < 3; k++) {
+          pos[i*3+k] = M[k][0] * x + M[k][1] * y + M[k][2] * z + t[k];
+          nrm[i*3+k] = Math.max(-127, Math.min(127, Math.round(M[k][0] * a + M[k][1] * b + M[k][2] * c)));
+        }
+      }
+      return {nv: m.nv, nt: m.nt, pos, nrm, idx: m.idx};
     }
     /** add one more part from its own binary (e.g. a detailed copy of a bone over a lighter model) */
     async loadPart(key, url, info = {}) {
@@ -115,18 +164,36 @@
       if (this.loadingEl.isConnected) this.loadingEl.remove();
       return this.parts.get(key);
     }
-    addPart(key, m, info = {}) {
-      if (this.dead) return;
-      const gl = this.gl, buf = (data, target = gl.ARRAY_BUFFER) => { const b = gl.createBuffer(); gl.bindBuffer(target, b); gl.bufferData(target, data, gl.STATIC_DRAW); return b; };
-      if (m.idx instanceof Uint32Array && !this.u32) throw new Error('mesh needs 32-bit indices');
-      const vcol = new Float32Array(m.nv * 3).fill(-1);
-      const part = {key, info, m, colour: '#d9cfb6', visible: true,
-        bp: buf(m.pos), bn: buf(m.nrm), bc: buf(vcol), vcol, useVC: false, bi: buf(m.idx, gl.ELEMENT_ARRAY_BUFFER),
-        id: this.order.length + 1, bbox: info.bbox || null};
-      if (!part.bbox) { const lo = [1e9, 1e9, 1e9], hi = [-1e9, -1e9, -1e9];
-        for (let i = 0; i < m.nv; i++) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], m.pos[i*3+k]); hi[k] = Math.max(hi[k], m.pos[i*3+k]); }
-        part.bbox = [lo, hi]; }
-      this.parts.set(key, part); this.order.push(key); this.draw();
+    addPart(key, m, info = {}) { this.addParts([{key, m, info}]); }
+    /** upload parts into one shared set of buffers (one batch): drawing a part is then a single draw call */
+    addParts(items) {
+      if (this.dead || !items.length) return;
+      if (!this.u32) {                                    // no 32-bit indices: one batch per part (each < 65536 verts)
+        if (items.length > 1) { for (const it of items) this.addParts([it]); return; }
+        if (items[0].m.idx instanceof Uint32Array) throw new Error('mesh needs 32-bit indices');
+      }
+      const gl = this.gl, buf = (data, target, usage = gl.STATIC_DRAW) => { const b = gl.createBuffer(); gl.bindBuffer(target, b); gl.bufferData(target, data, usage); return b; };
+      let nv = 0, ni = 0;
+      for (const {m} of items) { nv += m.nv; ni += m.nt * 3; }
+      const pos = new Float32Array(nv * 3), nrm = new Int8Array(nv * 3), vcol = new Float32Array(nv * 3).fill(-1);
+      const idx = this.u32 ? new Uint32Array(ni) : new Uint16Array(ni);
+      const batch = {vcol};
+      let v0 = 0, i0 = 0;
+      for (const {key, m, info = {}} of items) {
+        pos.set(m.pos, v0 * 3); nrm.set(m.nrm, v0 * 3);
+        for (let i = 0; i < m.idx.length; i++) idx[i0 + i] = m.idx[i] + v0;
+        const part = {key, info, m, colour: '#d9cfb6', rgb: rgb('#d9cfb6'), visible: true, batch, v0, i0, count: m.nt * 3,
+          vcol: vcol.subarray(v0 * 3, (v0 + m.nv) * 3), useVC: false, id: this.order.length + 1, bbox: info.bbox || null};
+        if (!part.bbox) { const lo = [1e9, 1e9, 1e9], hi = [-1e9, -1e9, -1e9];
+          for (let i = 0; i < m.nv; i++) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], m.pos[i*3+k]); hi[k] = Math.max(hi[k], m.pos[i*3+k]); }
+          part.bbox = [lo, hi]; }
+        this.parts.set(key, part); this.order.push(key);
+        v0 += m.nv; i0 += m.nt * 3;
+      }
+      batch.bp = buf(pos, gl.ARRAY_BUFFER); batch.bn = buf(nrm, gl.ARRAY_BUFFER);
+      batch.bc = buf(vcol, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW); batch.bi = buf(idx, gl.ELEMENT_ARRAY_BUFFER);
+      batch.itype = this.u32 ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT; batch.isize = this.u32 ? 4 : 2;
+      this.draw();
     }
     /** frame the visible parts */
     fit(keys = null) {
@@ -140,17 +207,19 @@
     }
 
     /* ---------- appearance ---------- */
-    setColour(key, c) { const p = this.parts.get(key); if (p) { p.colour = c; this.draw(); } }
-    setVisible(key, on) { const p = this.parts.get(key); if (p) { p.visible = on; this.draw(); } }
+    setColour(key, c) { const p = this.parts.get(key); if (p && p.colour !== c) { p.colour = c; p.rgb = rgb(c); this.draw(); } }
+    setVisible(key, on) { const p = this.parts.get(key); if (p && p.visible !== on) { p.visible = on; this.draw(); } }
     /** dim every part except these keys (null = none dimmed) */
     setFocus(keys) { this.dimOthers = keys ? new Set(keys) : null; this.draw(); }
     /** colour some vertices of a part (others keep the part colour); list = [{verts: Uint32Array, colour}] */
     setVertexMarks(key, list) {
       const p = this.parts.get(key); if (!p) return;
+      const on = !!(list && list.length);
+      if (!on && !p.useVC) return;                        // nothing to clear
       p.vcol.fill(-1);
       for (const {verts, colour} of list || []) { const c = rgb(colour); for (const v of verts) p.vcol.set(c, v * 3); }
-      p.useVC = !!(list && list.length);
-      const gl = this.gl; gl.bindBuffer(gl.ARRAY_BUFFER, p.bc); gl.bufferData(gl.ARRAY_BUFFER, p.vcol, gl.DYNAMIC_DRAW);
+      p.useVC = on;
+      const gl = this.gl; gl.bindBuffer(gl.ARRAY_BUFFER, p.batch.bc); gl.bufferSubData(gl.ARRAY_BUFFER, p.v0 * 12, p.vcol);
       this.draw();
     }
     /** cut away everything on the side of the plane n·p > d (mm); null removes the cut */
@@ -215,26 +284,38 @@
       if (this.raf) return;
       this.raf = requestAnimationFrame(() => { this.raf = 0; this.render(0); this.scheduleMarkers(); });
     }
-    render(mode, target = null) {
+    render(mode, target = null, px = null) {
       const gl = this.gl, R = this.matrix(), s = this.scale(), L = this.loc;
       gl.bindFramebuffer(gl.FRAMEBUFFER, target);
       gl.viewport(0, 0, this.c.width, this.c.height);
+      if (px) { gl.enable(gl.SCISSOR_TEST); gl.scissor(px[0], px[1], 1, 1); }   // a tap: only the pixel under it
       gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
       gl.useProgram(this.pr);
       gl.uniformMatrix3fv(L.R, false, new Float32Array([R[0][0], R[1][0], R[2][0], R[0][1], R[1][1], R[2][1], R[0][2], R[1][2], R[2][2]]));
       gl.uniform3fv(L.C, this.centre); gl.uniform2f(L.S, 2 * s / this.w, 2 * s / this.h); gl.uniform2f(L.PN, this.pan[0], this.pan[1]);
       gl.uniform1f(L.MODE, mode); gl.uniform4fv(L.CLIP, this.clip || [0, 0, 0, -1e9]);
       const ghost = mode === 0 && this.dimOthers;
+      // state is set only when it changes: with hundreds of parts most calls would repeat the previous value
+      let curBatch = null, curUVC = -1, curDim = -1, curAlpha = -1;
+      for (const a of [L.p, L.nm, L.vc]) gl.enableVertexAttribArray(a);
       const drawPart = (key, alpha) => {
-        const p = this.parts.get(key);
-        gl.bindBuffer(gl.ARRAY_BUFFER, p.bp); gl.enableVertexAttribArray(L.p); gl.vertexAttribPointer(L.p, 3, gl.FLOAT, false, 0, 0);
-        gl.bindBuffer(gl.ARRAY_BUFFER, p.bn); gl.enableVertexAttribArray(L.nm); gl.vertexAttribPointer(L.nm, 3, gl.BYTE, true, 0, 0);
-        gl.bindBuffer(gl.ARRAY_BUFFER, p.bc); gl.enableVertexAttribArray(L.vc); gl.vertexAttribPointer(L.vc, 3, gl.FLOAT, false, 0, 0);
-        gl.uniform3fv(L.COL, rgb(p.colour)); gl.uniform1f(L.USEVC, p.useVC ? 1 : 0);
-        gl.uniform1f(L.DIM, this.dimOthers && !this.dimOthers.has(key) ? 1 : 0); gl.uniform1f(L.ALPHA, alpha);
-        gl.uniform3fv(L.IDC, [(p.id & 255) / 255, ((p.id >> 8) & 255) / 255, 0]);
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, p.bi);
-        gl.drawElements(gl.TRIANGLES, p.m.nt * 3, p.m.idx instanceof Uint32Array ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT, 0);
+        const p = this.parts.get(key), b = p.batch;
+        if (b !== curBatch) {
+          curBatch = b;
+          gl.bindBuffer(gl.ARRAY_BUFFER, b.bp); gl.vertexAttribPointer(L.p, 3, gl.FLOAT, false, 0, 0);
+          gl.bindBuffer(gl.ARRAY_BUFFER, b.bn); gl.vertexAttribPointer(L.nm, 3, gl.BYTE, true, 0, 0);
+          gl.bindBuffer(gl.ARRAY_BUFFER, b.bc); gl.vertexAttribPointer(L.vc, 3, gl.FLOAT, false, 0, 0);
+          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, b.bi);
+        }
+        if (mode === 1) gl.uniform3f(L.IDC, (p.id & 255) / 255, ((p.id >> 8) & 255) / 255, 0);
+        else if (mode === 0) {
+          gl.uniform3fv(L.COL, p.rgb);
+          const u = p.useVC ? 1 : 0, d = this.dimOthers && !this.dimOthers.has(key) ? 1 : 0;
+          if (u !== curUVC) { gl.uniform1f(L.USEVC, u); curUVC = u; }
+          if (d !== curDim) { gl.uniform1f(L.DIM, d); curDim = d; }
+          if (alpha !== curAlpha) { gl.uniform1f(L.ALPHA, alpha); curAlpha = alpha; }
+        }
+        gl.drawElements(gl.TRIANGLES, p.count, b.itype, p.i0 * b.isize);
       };
       let vis = this.order.filter(k => this.parts.get(k).visible);
       // labels test against the depth of what is drawn solid: with glass parts, only the selected ones
@@ -247,10 +328,11 @@
         for (const k of vis) if (!this.dimOthers.has(k)) drawPart(k, this.ghostAlpha ?? 0.16);
         gl.depthMask(true); gl.disable(gl.BLEND);
       }
+      if (px) gl.disable(gl.SCISSOR_TEST);
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
     /** off-screen pass (id or depth); returns RGBA bytes of the whole canvas */
-    offscreen(mode) {
+    offscreen(mode, px = null) {
       const gl = this.gl;
       if (!this.fb || this.fbW !== this.c.width || this.fbH !== this.c.height) {
         this.fb = gl.createFramebuffer(); const tex = gl.createTexture(); const rb = gl.createRenderbuffer();
@@ -262,20 +344,23 @@
         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, rb);
         gl.bindFramebuffer(gl.FRAMEBUFFER, null); this.fbW = this.c.width; this.fbH = this.c.height;
       }
-      this.render(mode, this.fb);
-      const px = new Uint8Array(this.c.width * this.c.height * 4);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb); gl.readPixels(0, 0, this.c.width, this.c.height, gl.RGBA, gl.UNSIGNED_BYTE, px);
+      this.render(mode, this.fb, px);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb);
+      let out;
+      if (px) { out = new Uint8Array(4); gl.readPixels(px[0], px[1], 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, out); }
+      else { out = new Uint8Array(this.c.width * this.c.height * 4); gl.readPixels(0, 0, this.c.width, this.c.height, gl.RGBA, gl.UNSIGNED_BYTE, out); }
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-      return px;
+      return out;
     }
     /** which part is under client point (x, y), and the 3D point there */
     pick(clientX, clientY) {
       const r = this.c.getBoundingClientRect();
       const X = Math.round((clientX - r.left) * this.dpr), Y = Math.round((r.bottom - clientY) * this.dpr);
-      const ids = this.offscreen(1), i = (Y * this.c.width + X) * 4;
-      const id = ids[i] + (ids[i + 1] << 8); if (!id) return null;
+      if (X < 0 || Y < 0 || X >= this.c.width || Y >= this.c.height) return null;
+      const ids = this.offscreen(1, [X, Y]);
+      const id = ids[0] + (ids[1] << 8); if (!id) return null;
       const key = this.order[id - 1];
-      const dep = this.offscreen(2), z = (dep[i] / 255 + dep[i + 1] / 65025 + dep[i + 2] / 16581375);
+      const dep = this.offscreen(2, [X, Y]), z = (dep[0] / 255 + dep[1] / 65025 + dep[2] / 16581375);
       const s = this.scale(), qx = (clientX - r.left - this.w / 2) / s + this.pan[0], qz = -(clientY - r.top - this.h / 2) / s + this.pan[1];
       const qy = (z * 2 - 1) * 2000;
       const R = this.matrix(), c = this.centre;   // R is orthonormal: inverse = transpose
