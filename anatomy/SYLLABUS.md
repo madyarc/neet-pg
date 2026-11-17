@@ -201,12 +201,12 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [x] **AN21.1** Identify and describe the salient features of sternum, typical rib and typical thoracic vertebra. — *sternum, typical rib: [Ribs and Sternum](thorax/ribs.html); typical thoracic vertebra: [The Vertebrae](back/vertebrae.html)*
 - [x] **AN21.2** Identify & describe the features of atypical ribs and atypical thoracic vertebrae. — *ribs 1, 2, 10, 11, 12: [Ribs and Sternum](thorax/ribs.html); T1, T9–T12: [The Vertebrae](back/vertebrae.html)*
 - [~] **AN21.3** Describe & demonstrate the boundaries of thoracic inlet, cavity and outlet along with its applied aspect.( Thoracic inlet Syndrome) — *boundaries of the openings: [The Thoracic Cage](thorax/thoracic-cage.html); cervical rib: [Ribs and Sternum](thorax/ribs.html)*
-- [ ] **AN21.4** Describe & demonstrate extent, attachments, direction of fibres, nerve supply and actions of intercostal muscles
+- [x] **AN21.4** Describe & demonstrate extent, attachments, direction of fibres, nerve supply and actions of intercostal muscles — *external, internal and innermost intercostals: [Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 - [ ] **AN21.5** Describe & demonstrate origin, course, relations and branches of a typical intercostal nerve
 - [ ] **AN21.6** Mention origin, course and branches/ tributaries of: 1) anterior & posterior intercostal vessels 2) internal thoracic vessels
 - [ ] **AN21.7** Mention the origin, course, relations and branches of 1) atypical intercostal nerve 2) superior intercostal artery, subcostal artery
 - [~] **AN21.8** Describe & demonstrate type, articular surfaces & movements of manubriosternal, costovertebral, costotransverse and xiphisternal joints — *[The Thoracic Cage](thorax/thoracic-cage.html) (joints)*
-- [ ] **AN21.9** Describe & demonstrate mechanics and types of respiration
+- [~] **AN21.9** Describe & demonstrate mechanics and types of respiration — *muscles of inspiration and expiration (quiet and forced): [Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 - [~] **AN21.10** Describe costochondral and interchondral joints — *[The Thoracic Cage](thorax/thoracic-cage.html) (joints)*
 - [ ] **AN21.11** Mention boundaries and contents of the superior, anterior, middle and posterior mediastinum
 
@@ -396,11 +396,11 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 44. Anterior abdominal wall
 
 - [ ] **AN44.1** Describe & demonstrate the Planes (transpyloric, transtubercular, subcostal, lateral vertical, linea alba, linea semilunaris), regions & Quadrants of abdomen
-- [ ] **AN44.2** Describe & identify the Fascia, nerves & blood vessels of anterior abdominal wall
-- [ ] **AN44.3** Describe the formation of rectus sheath and its contents
-- [ ] **AN44.4** Describe & demonstrate extent, boundaries, contents of Inguinal canal including Hesselbach’s triangle.
-- [ ] **AN44.5** Explain the anatomical basis of inguinal hernia.
-- [ ] **AN44.6** Describe & demonstrate attachments of muscles of anterior abdominal wall
+- [~] **AN44.2** Describe & identify the Fascia, nerves & blood vessels of anterior abdominal wall — *nerves of the wall and their plane (TAP block): [Muscles of the Trunk Wall](thorax/wall-muscles.html) (fascia and vessels not yet)*
+- [x] **AN44.3** Describe the formation of rectus sheath and its contents — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
+- [x] **AN44.4** Describe & demonstrate extent, boundaries, contents of Inguinal canal including Hesselbach’s triangle. — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
+- [x] **AN44.5** Explain the anatomical basis of inguinal hernia. — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
+- [x] **AN44.6** Describe & demonstrate attachments of muscles of anterior abdominal wall — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 - [ ] **AN44.7** Describe common abdominal incisions with example and their clinical importance
 
 ### 45. Posterior abdominal wall
@@ -431,13 +431,13 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN47.10** Describe sites of portosystemic anastomosis, describe its applied anatomy andanatomical correlations
 - [ ] **AN47.11** Explain the anatomic basis of hematemesis& caput medusae in portal hypertension
 - [ ] **AN47.12** Describe important nerve plexuses of posterior abdominal wall
-- [ ] **AN47.13** Describe & demonstrate the attachments, openings, nerve supply & action of the thoracoabdominal diaphragm
-- [ ] **AN47.14** Describe the abnormal openings of thoracoabdominal diaphragm and diaphragmatic hernia
+- [x] **AN47.13** Describe & demonstrate the attachments, openings, nerve supply & action of the thoracoabdominal diaphragm — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
+- [~] **AN47.14** Describe the abnormal openings of thoracoabdominal diaphragm and diaphragmatic hernia — *hiatal, Bochdalek and Morgagni hernias: [Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 
 ### 48. Pelvic wall and viscera
 
 - [ ] **AN48.1** Describe & demonstrate the position, features, important peritoneal and other relations, blood supply, nerve supply, lymphatic drainage and clinical aspects of important male & female pelvic viscera.
-- [ ] **AN48.2** Describe & identify the muscles of Pelvic diaphragm.
+- [x] **AN48.2** Describe & identify the muscles of Pelvic diaphragm. — *[Muscles of the Trunk Wall](thorax/wall-muscles.html) (puborectalis described, not separate in the model)*
 - [ ] **AN48.3** Describe & demonstrate the origin, course, important relations and branches of internal iliac artery
 - [ ] **AN48.4** Describe the branches of sacral plexus
 - [ ] **AN48.5** Explain the anatomical basis of suprapubic cystostomy, Urinary obstruction in benign prostatic hypertrophy, Retroverted uterus, Prolapse uterus, Internal and external haemorrhoids, Anal fistula, Vasectomy, Tubal pregnancy & Tubal ligation

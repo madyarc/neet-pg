@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muscles of the Trunk Wall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Muscles of the Trunk Wall</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="stack" aria-label="3D muscles">
+  <div class="tabs scrollrow" role="tablist" aria-label="What to show">
+    <button class="chip" role="tab" id="tab-muscles" aria-pressed="true">Muscles</button>
+    <button class="chip" role="tab" id="tab-nerves" aria-pressed="false">Nerve supply</button>
+    <button class="chip" role="tab" id="tab-walls" aria-pressed="false">Diaphragm, sheath, canal</button>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <div id="v"></div>
+      <div class="vbar scrollrow" id="views"></div>
+    </div>
+    <div class="panel stack">
+      <div id="pane-muscles" class="stack">
+        <div class="detail" id="detail"></div>
+        <div id="groups"></div>
+      </div>
+      <div id="pane-nerves" class="stack" hidden>
+        <div class="cap key desc" id="nerve-desc"></div>
+        <div class="legend" id="nerve-list"></div>
+      </div>
+      <div id="pane-walls" class="stack" hidden>
+        <div class="cap key desc" id="walls-desc"></div>
+        <div class="legend" id="walls-list"></div>
+        <div class="group-h">Openings of the diaphragm (tap a row)</div>
+        <table class="t" id="open"></table>
+        <div class="group-h">The intercostal space</div>
+        <p class="cap" id="ics"></p>
+        <div class="group-h">Rectus sheath (tap a row)</div>
+        <table class="t" id="sheath"></table>
+        <div class="group-h">Inguinal canal (tap a row)</div>
+        <table class="t" id="canal"></table>
+        <div class="group-h">Hernias and other clinical points</div>
+        <dl class="facts" id="clin"></dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script src="../assets/muscle-page.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — every statement checked in two independent sources (see anatomy/DATA-SOURCES.md,
+   "Muscles of the trunk wall"); fact sheets: sources-local/facts/thorax-wall-muscles.md, abdominal-wall-muscles.md ===================== */
+const LEFT = '<span class="pending">Left out (only one source).</span>';
+const DATA = {
+  lede: 'The muscles of the chest wall, the diaphragm, the anterolateral abdominal wall and the pelvic floor, on the thoracic cage, lumbar spine and pelvis (wall muscles of the right side; the diaphragm whole). The third tab has the diaphragm\'s openings, the intercostal space, the rectus sheath, the inguinal canal and hernias.',
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), the muscles of the thorax, abdomen and pelvis and the thoracic and lumbar nerves; checked against StatPearls (NCBI Bookshelf), open-access papers (including a 2024 Indian guideline on pleural procedures) and Wikipedia. Where they disagree, the better-supported wording is used.',
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, the inguinal ligament, the linea alba and the tendinous arch of levator ani from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones. Simplified meshes, shared under the same licences. The wall muscles of the right side are shown; the subcostales and puborectalis are not separate in the model. Attachment areas are approximate, and only those that fit the model well are drawn.',
+};
+const NERVES = {
+  ventral: ['Intercostal, subcostal and L1 nerves (ventral rami)', '--n-ventral-rami'],
+  phrenic: ['Phrenic nerve', '--n-phrenic'],
+  pelvic: ['Sacral plexus and pudendal branches', '--n-pelvic'],
+};
+const GROUPS = [
+  ['thorax', 'Thoracic wall'],
+  ['diaphragm', 'Diaphragm'],
+  ['abdomen', 'Anterolateral abdominal wall'],
+  ['pelvic', 'Pelvic floor (pelvic diaphragm)'],
+];
+const M = {
+  ext_intercostal: ['thorax', 'Lower border of a rib.', 'Upper border of the rib below.', 'ventral', 'Intercostal nerves.',
+    'Raise the ribs in inspiration.',
+    'The fibres run downwards and forwards. They reach from the tubercles of the ribs behind to the costochondral junctions in front, where a membrane replaces them. (Gray, 1918, doubted these roles; the modern view is given.)'],
+  int_intercostal: ['thorax', 'Inner surface of a rib and its cartilage, near the costal groove.', 'Upper border of the rib below.', 'ventral', 'Intercostal nerves.',
+    'The part between the bony ribs lowers the ribs in forced expiration; the parasternal part, between the costal cartilages, helps inspiration.',
+    'The fibres run at right angles to the external layer (downwards and backwards). They reach from the sternum back to the angles of the ribs, where a membrane replaces them.'],
+  innermost_intercostal: ['thorax', LEFT, LEFT, 'ventral', 'Intercostal nerves.', LEFT,
+    'The deepest of the three layers, separated from the internal intercostals by the intercostal nerve and vessels; in the same plane as the subcostales and transversus thoracis.'],
+  transversus_thoracis: ['thorax', LEFT, LEFT, 'ventral', 'Intercostal nerves.', 'Draws the costal cartilages down (forced expiration).',
+    'On the inner surface of the front of the chest wall, behind the sternum and costal cartilages; the anterior intercostal nerves run between it and the intercostal muscles.'],
+  diaphragm: ['diaphragm', 'Sternal part: back of the xiphoid process. Costal part: inner surfaces of the lower six ribs and their cartilages. Lumbar part: the crura (right: bodies of L1–L3; left: L1–L2; one source gives L2–L3) and the medial and lateral arcuate ligaments, which arch over psoas major and quadratus lumborum.',
+    'The central tendon: three leaflets, with no bony attachment, fused above with the fibrous pericardium.', 'phrenic',
+    'Phrenic nerve (C3, C4, C5; mainly C4), its only motor nerve. Sensory: the central part by the phrenic nerve, the periphery by the lower intercostal nerves.',
+    'The main muscle of inspiration: contraction pulls the central tendon down and enlarges the vertical diameter of the chest; with the tendon fixed on the abdominal viscera it raises the lower ribs. Quiet expiration is passive. Helps raise abdominal pressure in vomiting, micturition and defecation; the crura help prevent reflux at the oesophageal opening.',
+    'A dome-shaped musculotendinous partition; the right dome is higher than the left. Its openings are in the third tab.'],
+  ext_oblique: ['abdomen', 'Outer surfaces of the lower eight ribs (5–12).', 'Front half of the outer lip of the iliac crest; through its aponeurosis the linea alba, the pubic tubercle and the pubic crest. The thickened lower border of the aponeurosis is the inguinal ligament.',
+    'ventral', 'Lower intercostal nerves (T7–T11) and the subcostal nerve (T12).',
+    'Compresses the abdomen and flexes the trunk; one side: bends the trunk to that side and turns it to the opposite side.',
+    'The largest and most superficial flat muscle; its fibres run downwards and medially ("hands in pockets").'],
+  int_oblique: ['abdomen', 'Thoracolumbar fascia, the front two-thirds of the iliac crest and the lateral part (half to two-thirds) of the inguinal ligament.',
+    'Lower borders of ribs 10–12; through its aponeurosis the linea alba; its lowest fibres, with transversus abdominis, the pubic crest and pectineal line (the conjoint tendon).',
+    'ventral', 'Lower intercostal (T7–T11), subcostal (T12), iliohypogastric and ilioinguinal (L1) nerves.',
+    'Compresses the abdomen and flexes the trunk; one side: turns the trunk to the same side.',
+    'Its fibres run upwards and medially, at right angles to the external oblique. Its lowest fibres continue on the spermatic cord as the cremaster.'],
+  transversus_abd: ['abdomen', 'Inner surfaces of the lower six costal cartilages, the thoracolumbar fascia, the front three-quarters of the inner lip of the iliac crest and the lateral third of the inguinal ligament.',
+    'Through its aponeurosis the linea alba; its lowest fibres, with internal oblique, the pubic crest and pectineal line (the conjoint tendon).',
+    'ventral', 'Lower intercostal (T7–T11), subcostal (T12), iliohypogastric and ilioinguinal (L1) nerves.',
+    'Compresses the abdominal contents like a corset; helps forced expiration.',
+    'The deepest flat muscle, with horizontal fibres. The nerves of the wall run between it and the internal oblique: the plane of the TAP block.'],
+  rectus_abd: ['abdomen', 'Pubic crest and pubic symphysis.', 'Costal cartilages of ribs 5–7 (and the xiphoid process).',
+    'ventral', 'Lower intercostal (T7–T11) and subcostal (T12) nerves.', 'Flexes the trunk; compresses the abdomen; helps forced expiration.',
+    'Usually three tendinous intersections (at the umbilicus, at the xiphoid and midway between), attached to the front of the rectus sheath. The two muscles are separated by the linea alba.'],
+  pyramidalis: ['abdomen', 'Front of the pubis (pubic crest).', 'Linea alba, about midway between the umbilicus and the pubis.',
+    'ventral', 'Subcostal nerve (T12), usually; variable.', 'Tenses the linea alba.', 'In front of the lower rectus, inside the rectus sheath; often absent on one or both sides.'],
+  pubococcygeus: ['pelvic', 'Back of the body of the pubis and the front of the tendinous arch of levator ani.', 'Anococcygeal body and coccyx.',
+    'pelvic', 'Nerve to levator ani (S3–S4) on its upper surface, and branches of the pudendal nerve below.',
+    'Supports the pelvic viscera and resists raised abdominal pressure.',
+    'Part of levator ani; its medial edges bound the levator (urogenital) hiatus. <b>Puborectalis</b> (not separate in this model) is the U-shaped sling from the pubis round the back of the anorectal junction: it keeps the anorectal angle acute, a main factor in faecal continence, and relaxes to straighten the angle for defecation.'],
+  iliococcygeus: ['pelvic', 'Ischial spine and the back part of the tendinous arch of levator ani.', 'Anococcygeal body and coccyx.',
+    'pelvic', 'Nerve to levator ani (S3–S4) and pudendal branches.', 'Supports the pelvic viscera.', 'Part of levator ani.'],
+  coccygeus: ['pelvic', 'Ischial spine (and the sacrospinous ligament).', 'Side of the coccyx and the lowest part of the sacrum.',
+    'pelvic', 'Branches of the sacral plexus (S4, S5 in Gray; sources differ).', LEFT, 'The back part of the pelvic diaphragm, on the pelvic surface of the sacrospinous ligament.'],
+};
+const NERVE_TEXT = {
+  ventral: 'The intercostal nerves (ventral rami of T1–T11) supply the intercostal muscles and transversus thoracis; T12 is the subcostal nerve. The lower intercostal nerves (T7–T11), the subcostal nerve and the iliohypogastric and ilioinguinal nerves (L1) supply the abdominal wall, running between internal oblique and transversus abdominis.',
+  phrenic: 'C3, C4, C5 (mainly C4): the only motor nerve of the diaphragm, each nerve to its own half; it also carries sensation from the central part. <b>Referred pain:</b> irritation of the central part of the diaphragm is felt at the tip of the shoulder, because the supraclavicular nerves share roots C3–C4 (e.g. a subphrenic abscess; blood in the peritoneum, Kehr\'s sign; after laparoscopy). <b>Hiccups:</b> sudden contraction of the diaphragm (and intercostals) followed at once by closure of the glottis; the phrenic nerve carries the contraction, the vagus the glottic closure; most episodes are brief. <b>Phrenic nerve injury</b> (e.g. in cardiothoracic surgery, or by a tumour) paralyses that half: a raised hemidiaphragm on imaging, often well tolerated when one-sided.',
+  pelvic: 'Levator ani is supplied from above by direct sacral branches (the nerve to levator ani, S3–S4) and from below by branches of the pudendal nerve; coccygeus by sacral plexus branches (S4–S5 in Gray).',
+};
+const WALLS = {
+  intro: 'The parts that hold the trunk wall together, and its weak points. Tap a part, or a row of a table.',
+  parts: [
+    ['inguinal_lig', 'Inguinal ligament', 'The thickened, in-turned lower border of the external oblique aponeurosis, from the anterior superior iliac spine to the pubic tubercle; continuous below with the fascia lata. It is the floor of the inguinal canal; the lacunar ligament turns back from its medial end to the pectineal line.'],
+    ['linea_alba', 'Linea alba', 'The midline raphe from the xiphoid process to the pubic symphysis, where the aponeuroses of the three flat muscles interlace; narrow below the umbilicus. With few vessels and nerves it is a common route into the abdomen; its abnormal widening is diastasis recti.'],
+    ['tendinous_arch', 'Tendinous arch of levator ani', 'A thickened band on the obturator internus fascia, from the pubis to the ischial spine: the line from which levator ani arises.'],
+  ],
+  open: [
+    ['Caval opening', 'T8 (Gray: the T8/9 disc)', 'In the central tendon', 'Inferior vena cava and branches of the right phrenic nerve'],
+    ['Oesophageal opening', 'T10', 'In the muscular part, formed mainly by the right crus', 'Oesophagus, the anterior and posterior vagal trunks, oesophageal branches of the left gastric vessels'],
+    ['Aortic opening', 'T12', 'Behind the diaphragm, between the crura, behind the median arcuate ligament', 'Aorta, thoracic duct, azygos vein'],
+  ],
+  openNote: 'The splanchnic nerves pierce the crura; the sympathetic trunk passes behind the medial arcuate ligament.',
+  ics: 'The intercostal nerve and vessels run in the plane between the internal and innermost intercostals, in the costal groove along the lower border of the rib above: from above down vein, artery, nerve. A smaller collateral branch runs along the upper border of the rib below. So a needle for pleural access goes just above the upper border of the lower rib of the space (ultrasound-guided; the site is chosen by the guideline, not a fixed space number), and an intercostal nerve block aims at the lower margin of the rib, into the internal–innermost plane. <b>Accessory muscles of inspiration:</b> sternocleidomastoid and the scalenes, joined in harder breathing by the pectorals, serratus anterior and trapezius. <b>Forced expiration:</b> the abdominal muscles, the internal intercostals and transversus thoracis.',
+  sheath: [
+    ['Above the costal margin', 'External oblique aponeurosis only', 'None: the rectus lies on the costal cartilages', ['rectus_abd', 'ext_oblique']],
+    ['From the costal margin to the arcuate line', 'External oblique aponeurosis and the front lamina of the internal oblique aponeurosis', 'Back lamina of the internal oblique and the transversus abdominis aponeurosis', ['rectus_abd', 'int_oblique', 'transversus_abd']],
+    ['Below the arcuate line (below the umbilicus; its level varies)', 'All three aponeuroses', 'None: the rectus rests on the transversalis fascia', ['rectus_abd', 'ext_oblique', 'int_oblique', 'transversus_abd']],
+  ],
+  sheathNote: 'Contents: rectus abdominis, pyramidalis, the superior and inferior epigastric vessels (the inferior ones enter at the arcuate line) and the ends of the lower intercostal and subcostal nerves. Bleeding from an epigastric artery inside the sheath (rectus sheath haematoma) is linked to anticoagulants. The linea semilunaris, classically the lateral border of the rectus from the 9th costal cartilage to the pubic tubercle, is where a rare Spigelian hernia comes through.',
+  canal: [
+    ['Course and length', 'An oblique passage, about 4 cm long in adults (4–6 cm), just above the medial half of the inguinal ligament, running down and medially from the deep ring to the superficial ring. Contents: the spermatic cord (round ligament of the uterus in females) and the ilioinguinal nerve, which does not enter by the deep ring.', ['ext_oblique']],
+    ['Front wall', 'External oblique aponeurosis throughout, with internal oblique in its lateral part.', ['ext_oblique', 'int_oblique']],
+    ['Back wall', 'Transversalis fascia throughout, with the conjoint tendon medially.', ['transversus_abd', 'int_oblique']],
+    ['Roof', 'The arching lower fibres of internal oblique and transversus abdominis.', ['int_oblique', 'transversus_abd']],
+    ['Floor', 'The inguinal ligament, with the lacunar ligament medially.', ['inguinal_lig']],
+    ['Deep ring', 'An opening in the transversalis fascia about 1.25 cm above the inguinal ligament, near its middle, lateral to the inferior epigastric vessels.', ['transversus_abd']],
+    ['Superficial ring', 'A triangular opening in the external oblique aponeurosis, just above and lateral to the pubic tubercle.', ['ext_oblique']],
+    ['Coverings of the cord', 'External spermatic fascia (from the external oblique aponeurosis); cremaster and cremasteric fascia (from internal oblique); internal spermatic fascia (from the transversalis fascia). The cremaster, supplied by the genital branch of the genitofemoral nerve, raises the testis.', ['ext_oblique', 'int_oblique', 'transversus_abd']],
+  ],
+  clin: [
+    ['Inguinal hernia', '<b>Indirect</b>: lateral to the inferior epigastric vessels, through the deep ring and along the canal (it may reach the scrotum), through a patent processus vaginalis; the more common kind (about 2 : 1). <b>Direct</b>: medial to the vessels, through the back wall in the inguinal (Hesselbach\'s) triangle, from a weak transversalis fascia. Inguinal hernia is far commoner in men.'],
+    ['Inguinal (Hesselbach\'s) triangle', 'Medially the lateral border of rectus abdominis, laterally the inferior epigastric vessels, below the inguinal ligament: the site of a direct hernia.'],
+    ['Umbilical and incisional hernias', 'Umbilical hernias are common in infants and most close by themselves in early childhood; they usually contain fat or omentum. An incisional hernia comes through a previous surgical incision, most often a midline one, as a bulge at the scar.'],
+    ['Diaphragmatic hernias', 'A hiatal hernia takes the stomach up through the oesophageal opening; the sliding type is about 95 %, and it is linked to reflux. In congenital diaphragmatic hernia the viscera in the chest leave the lung underdeveloped; the posterolateral (Bochdalek) defect is the most common, mostly on the left; the anterior (Morgagni) defect is rare.'],
+    ['TAP block', 'Local anaesthetic between internal oblique and transversus abdominis blocks the nerves of the wall (lower thoracic to L1), for pain from the wall only.'],
+    ['Pelvic floor', 'Vaginal birth can tear (avulse) levator ani from the pubis, especially with forceps. Weak pelvic floor support lets the bladder (cystocele), rectum (rectocele) or uterus descend into the vagina: pelvic organ prolapse, for which vaginal childbirth is a risk factor.'],
+  ],
+};
+
+/* ===================== PAGE (shared logic: ../assets/muscle-page.js) ===================== */
+function buildWalls(api) {
+  const {v, focusOn, pressed, clearRows} = api, $ = id => document.getElementById(id);
+  const box = $('walls-list'); box.replaceChildren();
+  for (const [k, name, text] of WALLS.parts) {
+    if (!api.has(k)) continue;
+    const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--fascia)"></i><span>${name}</span>`;
+    b.onclick = () => { clearRows(); pressed('#walls-list button', x => x === k); $('walls-desc').innerHTML = `<b>${name}.</b> ${text}`; focusOn([k]); v.fit([k]); v.face([-0.3, -1, 0.2], {zoom: 1}); };
+    box.append(b);
+  }
+  const rowSel = (row, ks, text, dir) => { clearRows(); pressed('#walls-list button', () => false); row.setAttribute('aria-pressed', 'true');
+    $('walls-desc').innerHTML = text; focusOn(ks); v.fit(ks); v.face(dir, {zoom: 1}); };
+  const op = $('open');
+  op.innerHTML = '<tr><th>Opening</th><th>Level</th><th>Contents</th></tr>' + WALLS.open.map(([n, l, w, c], i) => `<tr data-k="op${i}" aria-pressed="false"><td>${n}</td><td>${l}</td><td>${c}</td></tr>`).join('') + `<tr><td colspan="3" class="note">${WALLS.openNote}</td></tr>`;
+  op.querySelectorAll('tr[data-k]').forEach((r, i) => r.onclick = () => { const O = WALLS.open[i]; rowSel(r, ['diaphragm'], `<b>${O[0]} (${O[1]}).</b> ${O[2]}. Transmits: ${O[3]}.`, [0, -0.3, 1]); });
+  $('ics').innerHTML = WALLS.ics;
+  const sh = $('sheath');
+  sh.innerHTML = '<tr><th>Level</th><th>Front wall</th><th>Back wall</th></tr>' + WALLS.sheath.map(([l, a, b], i) => `<tr data-k="sh${i}" aria-pressed="false"><td>${l}</td><td>${a}</td><td>${b}</td></tr>`).join('') + `<tr><td colspan="3" class="note">${WALLS.sheathNote}</td></tr>`;
+  sh.querySelectorAll('tr[data-k]').forEach((r, i) => r.onclick = () => { const S = WALLS.sheath[i]; rowSel(r, S[3], `<b>Rectus sheath, ${S[0].toLowerCase()}:</b> front wall: ${S[1]}; back wall: ${S[2]}.`, [-0.2, -1, 0.1]); });
+  const ca = $('canal');
+  ca.innerHTML = WALLS.canal.map(([n, t], i) => `<tr data-k="ca${i}" aria-pressed="false"><td>${n}</td><td>${t}</td></tr>`).join('');
+  ca.querySelectorAll('tr').forEach((r, i) => r.onclick = () => { const C = WALLS.canal[i]; rowSel(r, C[2], `<b>Inguinal canal, ${C[0].toLowerCase()}:</b> ${C[1]}`, [-0.4, -1, 0.1]); });
+  $('clin').innerHTML = WALLS.clin.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
+}
+MusclePage({
+  base: '../models/trunk-muscles/', manifest: 'trunk-muscles.json', DATA, GROUPS, NERVES, NERVE_TEXT, M, home: [-0.25, -1, 0.1],
+  extra: {key: 'walls', parts: WALLS.parts.map(p => p[0]), build: buildWalls,
+    enter(api) { document.getElementById('walls-desc').innerHTML = WALLS.intro; const ks = WALLS.parts.map(p => p[0]).filter(api.has);
+      api.focusOn(ks); api.v.fit(api.LIMB()); api.v.face([-0.25, -1, 0.1], {zoom: 1}); }},
+});
+</script>
+</body>
+</html>

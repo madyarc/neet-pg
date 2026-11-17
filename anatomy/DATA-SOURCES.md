@@ -437,3 +437,28 @@ lumborum's action with both sides together, rotatores outside the thoracic regio
 latissimus/serratus posterior inferior aponeuroses blend with the fascia as a whole, not the posterior layer; "the
 posterior and middle layers fuse" laterally; low back pain wording (mechanical vs non-specific; days to weeks is for a
 strain); occipital neuralgia "may be treated" with a nerve block; footer "better-supported wording".
+
+## Muscles of the Trunk Wall — `thorax/wall-muscles.html`
+
+**Meshes:** thoracic cage (both sides), lumbar spine, sacrum and both hip bones (BodyParts3D 3.0); the right
+intercostals (three layers), transversus thoracis, abdominal muscles, pyramidalis and pelvic-diaphragm muscles, the
+whole diaphragm, the inguinal ligament, linea alba and tendinous arch of levator ani from Z-Anatomy
+(`tools/zanat/trunk_muscles.py`). Not separate in Z-Anatomy: subcostales, puborectalis. **Attachment areas**
+(`tools/zanat/trunk-attach.json`): 25, each checked by eye. Not drawn: the intercostals (origin and insertion are the
+facing borders of neighbouring ribs, which proximity cannot separate), the diaphragm's costal and xiphoid origins, the
+pubococcygeus origin.
+
+**Sources:** fact sheets `sources-local/facts/thorax-wall-muscles.md` (262 quotes; Gray 1918 sections 117, 210, 211;
+StatPearls; 18 open-access papers incl. the 2024 ICS/NCCP pleural-procedure guideline, Formenti 2020, Park & Chang 2022)
+and `abdominal-wall-muscles.md` (362 quotes, 85 sources; Gray 1918 sections 118–119; StatPearls; Kriener 2023, Mehta
+2021, Wu 2022, Hori 2021, Salvador 2019, Roch 2021 and others; Wikipedia, not counted where it copies Gray). Disputes
+as the sheets advise: the intercostals' roles (modern view; Gray's dissent noted), caval opening T8 (Gray: T8/9 disc),
+left crus levels, costal origin of the diaphragm (lower six ribs), arcuate-line level, linea semilunaris (classic
+definition), thoracocentesis site (guideline, no fixed space), coccygeus nerve. Left out (single source): subcostales
+and transversus thoracis attachments, innermost intercostal fibres and extent, hiccups side, bilateral phrenic palsy
+severity, traumatic diaphragmatic hernia, the triangle-of-safety boundaries, external oblique interdigitations,
+cremasteric reflex arc, direct hernia in older people, incisional-hernia causes, coccygeus action.
+**Independent review (2026-11-17), 5 fixes:** "levator plate" removed (gap item); pelvic nerve text separates levator
+ani (S3–S4 + pudendal) from coccygeus (sacral plexus, S4–S5 in Gray); oesophageal opening "formed mainly by the right
+crus"; referred shoulder pain limited to the central diaphragm, supraclavicular roots C3–C4; left crus "L1–L2; one
+source L2–L3".
