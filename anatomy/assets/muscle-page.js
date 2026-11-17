@@ -5,7 +5,9 @@
  *     base: '../models/<group>-muscles/', manifest: '<group>-muscles.json',
  *     DATA: {lede, based, models}, GROUPS: [[key, name]], NERVES: {key: [name, '--n-token']}, NERVE_TEXT: {key: html},
  *     M: {key: [group, origin, insertion, nerveKey, nerveText, action, note]},
- *     home: [x, y, z] (optional view direction, default front),
+ *     home: [x, y, z] (optional view direction, default front), glassBones: true (a selection keeps only the bones it
+ *     attaches to solid: for packed regions such as the head, where the skull hides deep muscles), ghost: alpha of the rest,
+ *     keepSolid: {group: [parts kept solid when one of its muscles is selected]}, view: {muscle: [x, y, z] view direction on selection}, tint: {partKey: '--token'} (context parts not drawn as bone: '--cart', '--soft'),
  *     extra: {key: 'wrist', parts: [keys of connective parts shown in that tab], build(api), enter(api)}   // optional 3rd tab
  *   })
  * The page HTML has: #v #views #lede #based #models, tabs #tab-muscles #tab-nerves #tab-<extra>, panes #pane-…,
@@ -17,7 +19,7 @@ function MusclePage(cfg) {
   const {M, GROUPS, NERVES, NERVE_TEXT = {}, DATA, extra} = cfg;
   const $ = id => document.getElementById(id);
   const v = new AtlasViewer($('v'));
-  v.ghostAlpha = 0.12; window.atlas = v;   // for tests
+  v.ghostAlpha = cfg.ghost || 0.12; window.atlas = v;   // for tests
   const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
   let names = {}, colours = {}, attach = {}, tab = 'muscles', sel = null, group = null;
   const tabs = ['muscles', 'nerves'].concat(extra ? [extra.key] : []);
@@ -39,10 +41,10 @@ function MusclePage(cfg) {
       v.setVertexMarks(k, null);
       if (isMuscle(k)) v.setColour(k, tab === 'nerves' ? (nerveOf(k) ? NERVES[nerveOf(k)][1] : '--line') : (colours[k] || '--line'));
       else if (isFascia(k)) { v.setColour(k, '--fascia'); v.setVisible(k, extra && tab === extra.key); }
-      else v.setColour(k, '--bone');
+      else v.setColour(k, (cfg.tint || {})[k] || '--bone');
     }
   }
-  const focusOn = keys => v.setFocus(keys ? keys.concat(BONES()) : null);
+  const focusOn = (keys, solid) => v.setFocus(keys ? keys.concat(cfg.glassBones ? (solid || []) : BONES()) : null);
   const clearRows = () => document.querySelectorAll('table.t tr[data-k]').forEach(r => r.setAttribute('aria-pressed', 'false'));
 
   function showDetail(k) {
@@ -72,8 +74,9 @@ function MusclePage(cfg) {
     const byBone = {};
     for (const a of attach[k] || []) (byBone[a.bone] = byBone[a.bone] || []).push({verts: a.verts, colour: a.kind === 'ori' ? '--ori' : '--ins'});
     for (const b in byBone) v.setVertexMarks(b, byBone[b]);
-    focusOn([k]);
-    if (frame) v.fit([k].concat((attach[k] || []).map(a => a.bone)));
+    const ctx = ((cfg.keepSolid || {})[M[k] && M[k][0]] || []).filter(x => v.parts.has(x));
+    focusOn([k], Object.keys(byBone).concat(ctx));
+    if (frame) { v.fit([k].concat((attach[k] || []).map(a => a.bone), ctx)); if (cfg.view && cfg.view[k]) v.face(cfg.view[k], {zoom: 1}); }
     card.hidden = false;
     const hasA = attach[k] && attach[k].length;
     card.innerHTML = `<div class="what"><b>${names[k]}</b><span>${M[k] ? (tab === 'nerves' ? NERVES[nerveOf(k) || 'two'][0] : groupName(M[k][0])) : ''}</span></div>${hasA ? '<button class="go" id="peek" aria-pressed="false">See the bone</button>' : ''}<button class="x" aria-label="Clear">×</button>`;

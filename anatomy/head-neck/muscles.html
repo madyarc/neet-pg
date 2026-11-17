@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muscles of the Head and Neck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Muscles of the Head and Neck</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="stack" aria-label="3D muscles">
+  <div class="tabs scrollrow" role="tablist" aria-label="What to show">
+    <button class="chip" role="tab" id="tab-muscles" aria-pressed="true">Muscles</button>
+    <button class="chip" role="tab" id="tab-nerves" aria-pressed="false">Nerve supply</button>
+    <button class="chip" role="tab" id="tab-more" aria-pressed="false">Triangles, jaw, eye, clinical</button>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <div id="v"></div>
+      <div class="vbar scrollrow" id="views"></div>
+    </div>
+    <div class="panel stack">
+      <div id="pane-muscles" class="stack">
+        <div class="detail" id="detail"></div>
+        <div id="groups"></div>
+      </div>
+      <div id="pane-nerves" class="stack" hidden>
+        <div class="cap key desc" id="nerve-desc"></div>
+        <div class="legend" id="nerve-list"></div>
+      </div>
+      <div id="pane-more" class="stack" hidden>
+        <div class="cap key desc" id="more-desc"></div>
+        <div class="group-h">Triangles of the neck (tap a row)</div>
+        <table class="t" id="tri"></table>
+        <div class="group-h">Fascia</div>
+        <div class="legend" id="fascia-list"></div>
+        <dl class="facts" id="fascia-text"></dl>
+        <div class="group-h">Moving the mandible (tap a row)</div>
+        <table class="t" id="jaw"></table>
+        <div class="group-h">Testing the eye muscles: the H test (tap a row)</div>
+        <table class="t" id="eye"></table>
+        <div class="group-h">Muscles not in the model</div>
+        <table class="t" id="absent"></table>
+        <div class="group-h">Clinical points</div>
+        <dl class="facts" id="clin"></dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script src="../assets/muscle-page.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — every statement checked in two independent sources (see anatomy/DATA-SOURCES.md,
+   "Muscles of the head and neck"); fact sheets: sources-local/facts/hn-face-mastication.md, hn-neck.md,
+   hn-eye-tongue-pharynx-larynx.md ===================== */
+const LEFT = '<span class="pending">Left out (only one source).</span>';
+const DATA = {
+  lede: 'The muscles of the head and neck, right side: the face and scalp, mastication, the side and front of the neck, the prevertebral muscles, the eye, the tongue, the pharynx and the larynx. The muscles at the back of the neck are on <a href="../back/muscles.html">Muscles of the Back</a>; trapezius and levator scapulae on <a href="../upper-limb/muscles.html">Muscles of the Upper Limb</a>. Tap a muscle on the model or in the list.',
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), the muscles and fasciae of the head and neck, the organs of the senses and the cranial nerves; checked against StatPearls (NCBI Bookshelf), open-access anatomy and clinical papers and Wikipedia. Where sources disagree, the better-supported (usually the modern) wording is used.',
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, the laryngeal cartilages, the eyeball, the epicranial aponeurosis and the investing fascia from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones. Simplified meshes, shared under the same licences. The right side is shown. Tensor and levator veli palatini, musculus uvulae, palatoglossus, styloglossus, salpingopharyngeus and the intrinsic tongue muscles are not in the model (palatopharyngeus is). Attachment areas are approximate and drawn only where they fit the model well.',
+};
+const NERVES = {
+  facial: ['Facial nerve (VII)', '--n-facial'],
+  v3: ['Mandibular nerve (V3)', '--n-v3'],
+  two: ['Two nerves (see the muscle)', '--n-two'],
+  accessory: ['Spinal accessory nerve (XI)', '--n-accessory'],
+  c1: ['C1 fibres carried by the hypoglossal nerve', '--n-c1-xii'],
+  ansa: ['Ansa cervicalis (C1–C3)', '--n-cervical'],
+  ventral: ['Ventral rami of the cervical nerves', '--n-ventral-rami'],
+  oculomotor: ['Oculomotor nerve (III)', '--n-oculomotor'],
+  trochlear: ['Trochlear nerve (IV)', '--n-trochlear'],
+  abducens: ['Abducens nerve (VI)', '--n-abducens'],
+  hypoglossal: ['Hypoglossal nerve (XII)', '--n-hypoglossal'],
+  pharyngeal: ['Pharyngeal plexus (vagus)', '--n-pharyngeal'],
+  glossopharyngeal: ['Glossopharyngeal nerve (IX)', '--n-glossopharyngeal'],
+  recurrent: ['Recurrent laryngeal nerve (vagus)', '--n-recurrent-laryngeal'],
+  external: ['External laryngeal nerve (vagus)', '--n-ext-laryngeal'],
+};
+const GROUPS = [
+  ['scalp', 'Face: scalp, eyelids and nose'],
+  ['mouth', 'Face: mouth, and platysma'],
+  ['mast', 'Muscles of mastication'],
+  ['side', 'Side of the neck: sternocleidomastoid and the scalenes'],
+  ['supra', 'Suprahyoid muscles'],
+  ['infra', 'Infrahyoid (strap) muscles'],
+  ['prever', 'Prevertebral muscles'],
+  ['eye', 'Extraocular muscles and levator palpebrae'],
+  ['tongue', 'Tongue (extrinsic)'],
+  ['phar', 'Pharynx'],
+  ['lar', 'Larynx (intrinsic)'],
+];
+const M = {
+  occipitofrontalis: ['scalp', 'Occipital belly: the lateral part of a nuchal line of the occipital bone and the mastoid part of the temporal bone. Frontal belly: no bony attachment; it arises from the epicranial aponeurosis.',
+    'Frontal belly: skin of the eyebrow, blending with procerus, corrugator and orbicularis oculi. Occipital belly: ends in the epicranial aponeurosis.',
+    'facial', 'Facial nerve: temporal branch (frontal belly), posterior auricular branch (occipital belly).',
+    'Frontal belly: raises the eyebrows and wrinkles the forehead transversely; it is the only muscle that raises the eyebrows. Occipital belly: draws the scalp backward.',
+    'The two bellies are joined by the epicranial aponeurosis (galea aponeurotica). Sources differ on which nuchal line the occipital belly arises from.'],
+  orb_oculi: ['scalp', 'Medial side of the orbit: nasal part of the frontal bone, frontal process of the maxilla, and the medial palpebral ligament.',
+    'Lateral palpebral raphe (palpebral part); the orbital fibres form a complete ellipse round the orbit.',
+    'facial', 'Facial nerve: temporal and zygomatic branches.', 'Closes the eyelids (the sphincter of the eyelids); helps drain the tears.',
+    'Parts: orbital (thick, round the orbit) and palpebral (thin, in the lids, for gentle closure as in blinking), with a small lacrimal part behind the lacrimal sac. In a facial nerve palsy the eye on that side cannot close, and the cornea must be protected.'],
+  corrugator: ['scalp', 'Medial end of the superciliary arch.', 'Deep surface of the skin of the eyebrow, above the middle of the orbital margin.',
+    'facial', 'Facial nerve: temporal branch.', 'Draws the eyebrow down and medially, making vertical frown lines.', ''],
+  procerus: ['scalp', 'Fascia over the lower part of the nasal bone.', 'Skin of the lower forehead between the eyebrows.',
+    'facial', 'Facial nerve (sources differ on the branch: temporal or buccal).', 'Draws down the medial end of the eyebrow, making transverse wrinkles over the bridge of the nose.', ''],
+  nasalis: ['scalp', 'Maxilla.', 'Transverse part: an aponeurosis over the bridge of the nose. Alar part: the greater alar cartilage.',
+    'facial', 'Facial nerve (sources differ on the branch).', 'Compresses the nasal aperture; the alar part may flare the nostril.', 'Two parts: transverse (compressor naris) and alar.'],
+  orb_oris: ['mouth', 'Mostly from the other facial muscles that end in the lips (its deepest layer from buccinator) and from the skin, hardly from bone.',
+    'Skin and mucous membrane of the lips.', 'facial', 'Facial nerve: buccal branches (and the marginal mandibular branch for the lower lip).',
+    'Closes the lips, presses them against the teeth and purses (protrudes) them.', 'Not a simple sphincter: layers of fibres running in different directions round the mouth.'],
+  buccinator: ['mouth', 'Outer surfaces of the alveolar processes of the maxilla and mandible opposite the molars, and the pterygomandibular raphe behind.',
+    'Angle of the mouth (modiolus), blending with orbicularis oris.', 'facial', 'Buccal branch of the facial nerve. The buccal nerve of V3 is sensory to the cheek, not motor to this muscle.',
+    'Presses the cheek against the teeth, keeping food between them in chewing; blows out air (blowing, whistling); helps sucking in infants.',
+    'Forms the wall of the cheek; the parotid duct pierces it. When it is paralysed (facial palsy), food collects in the vestibule between the cheek and the teeth.'],
+  zyg_major: ['mouth', 'Lateral surface of the zygomatic bone.', 'Angle of the mouth (modiolus).', 'facial', 'Facial nerve: zygomatic and buccal branches.',
+    'Draws the angle of the mouth upward and laterally: smiling, laughing.', ''],
+  zyg_minor: ['mouth', 'Zygomatic bone, medial to zygomaticus major.', 'Upper lip.', 'facial', 'Facial nerve: zygomatic and buccal branches.', 'Raises the upper lip.', ''],
+  lev_lab_sup: ['mouth', 'Infraorbital margin, just above the infraorbital foramen.', 'Muscle and skin of the upper lip.', 'facial', 'Facial nerve (sources differ: buccal or zygomatic branch).', 'Raises the upper lip.', ''],
+  lev_lab_alae: ['mouth', 'Upper part of the frontal process of the maxilla.', 'Two slips: the ala of the nose and the upper lip.', 'facial', 'Facial nerve.', 'Raises the upper lip and dilates the nostril.', ''],
+  lev_ang_oris: ['mouth', 'Canine fossa of the maxilla, below the infraorbital foramen.', 'Angle of the mouth (modiolus).', 'facial', 'Facial nerve: buccal branch.', 'Raises the angle of the mouth.', 'Old name: caninus.'],
+  dep_ang_oris: ['mouth', 'Oblique line of the mandible.', 'Angle of the mouth (modiolus).', 'facial', 'Facial nerve: marginal mandibular branch.',
+    'Pulls the angle of the mouth down (sadness, frowning); the antagonist of levator anguli oris and zygomaticus.', 'Old name: triangularis.'],
+  dep_lab_inf: ['mouth', 'Lateral surface of the mandible, between the symphysis and the mental foramen.', 'Skin of the lower lip.', 'facial', 'Facial nerve: marginal mandibular branch.',
+    'Draws the lower lip down (and a little laterally).', ''],
+  mentalis: ['mouth', 'Front of the mandible near the midline (incisive fossa).', 'Skin of the chin.', 'facial', 'Facial nerve: marginal mandibular branch.',
+    'Raises and protrudes the lower lip and wrinkles the skin of the chin (pouting, doubt).', ''],
+  risorius: ['mouth', 'Fascia over the masseter and parotid; not from bone.', 'Angle of the mouth (modiolus).', 'facial', 'Facial nerve: buccal branch.', 'Draws the angle of the mouth laterally (a grin).', 'Often small or absent.'],
+  platysma: ['mouth', 'Fascia over the upper parts of pectoralis major and deltoid.', 'Lower border of the mandible and the skin of the lower face, blending with the muscles at the angle of the mouth and the lower lip.',
+    'facial', 'Facial nerve: cervical branch.', 'Wrinkles the skin of the neck; draws down the lower lip and the angle of the mouth; helps open the jaw against resistance.',
+    'Lies in the superficial fascia of the neck; counted with the muscles of facial expression.'],
+  masseter: ['mast', 'Superficial part: zygomatic process of the maxilla and the anterior two-thirds of the lower border of the zygomatic arch. Deep part: posterior third of the lower border and the medial surface of the arch.',
+    'Superficial part: angle and lower half of the lateral surface of the ramus. Deep part: upper half of the ramus up to the coronoid process.',
+    'v3', 'Masseteric nerve (anterior division of V3), through the mandibular notch.', 'Elevates the mandible (closes the jaw); the superficial fibres help protrusion.',
+    'Superficial fibres run down and back; the deep fibres are more vertical. Testing: clench the teeth and feel the masseter and temporalis contract; look for wasting at the angle and the temple.'],
+  temporalis: ['mast', 'Floor of the temporal fossa and the deep surface of the temporal fascia.', 'Coronoid process (apex, medial surface, anterior border) and the anterior border of the ramus.',
+    'v3', 'Deep temporal nerves (usually two; anterior division of V3).', 'Elevates the mandible (anterior, vertical fibres); retracts it (posterior, nearly horizontal fibres).',
+    'Fan-shaped; its tendon passes deep to the zygomatic arch.'],
+  lat_pterygoid: ['mast', 'Upper head: infratemporal surface and crest of the greater wing of the sphenoid. Lower (larger) head: lateral surface of the lateral pterygoid plate.',
+    'Pterygoid fovea on the front of the neck of the condyle, and the articular disc and capsule of the temporomandibular joint.',
+    'v3', 'Nerve to lateral pterygoid (anterior division of V3).',
+    'Protrudes the mandible (pulls the condyle and disc forward) and helps open the mouth. With the medial pterygoid of the same side, swings the jaw to the opposite side (grinding).',
+    'The only muscle of mastication with horizontal fibres.'],
+  med_pterygoid: ['mast', 'Mainly the medial surface of the lateral pterygoid plate; a small superficial slip from the maxillary tuberosity and the pyramidal process of the palatine bone.',
+    'Medial surface of the ramus and angle of the mandible.', 'v3', 'Nerve to medial pterygoid, from the main trunk of V3 (it also supplies tensor tympani and tensor veli palatini).',
+    'Elevates the mandible and helps protrude it; with the lateral pterygoid, moves the jaw from side to side.', 'With the masseter it forms a sling round the angle of the mandible.'],
+  scm: ['side', 'Sternal head: upper front of the manubrium. Clavicular head: medial third of the clavicle.', 'Lateral surface of the mastoid process and the lateral half of the superior nuchal line.',
+    'accessory', 'Spinal accessory nerve (XI); fibres from C2 and C3 (cervical plexus) carry proprioception.',
+    'One side: tilts the head toward the shoulder of the same side and turns the face to the opposite side. Both sides: flex the neck. With the head fixed: raise the thorax in forced inspiration.',
+    'It divides the side of the neck into the anterior and posterior triangles. Congenital muscular torticollis: a short, fibrosed SCM tilts the head to the same side with the chin turned to the opposite side; stretching (physiotherapy) is the first treatment.'],
+  scal_ant: ['side', 'Transverse processes of the cervical vertebrae (sources differ on the levels).', 'Scalene tubercle of the first rib, in front of the groove for the subclavian artery.',
+    'ventral', 'Ventral rami of the cervical nerves (sources differ on the exact roots).', 'Raises the first rib (accessory muscle of inspiration); bends the neck to the same side.',
+    'The landmark of the root of the neck: the phrenic nerve runs down on its front and the subclavian vein crosses the first rib in front of it; the subclavian artery and the brachial plexus pass behind it, between it and scalenus medius. It divides the subclavian artery into three parts (the second part behind it).'],
+  scal_med: ['side', 'Transverse processes of the cervical vertebrae (sources differ on the levels).', 'Upper surface of the first rib, behind the groove for the subclavian artery.',
+    'ventral', 'Ventral rami of the cervical nerves.', 'Raises the first rib; bends the neck to the same side.', 'The largest and longest scalene; in the floor of the posterior triangle.'],
+  scal_post: ['side', 'Transverse processes of the lower cervical vertebrae (sources differ on the levels).', 'Outer surface of the second rib.',
+    'ventral', 'Ventral rami of the cervical nerves.', 'Raises the second rib; bends the neck to the same side.', 'The smallest and deepest scalene.'],
+  digastric: ['supra', 'Posterior belly: mastoid notch of the temporal bone. Anterior belly: digastric fossa of the mandible, near the symphysis.',
+    'The intermediate tendon joins the bellies and is held to the body and greater horn of the hyoid by a fibrous loop.',
+    'two', 'Anterior belly: nerve to mylohyoid (V3). Posterior belly: facial nerve.', 'Depresses the mandible when the hyoid is fixed; raises the hyoid.',
+    'Two nerves because two pharyngeal arches: the anterior belly comes from the first arch, the posterior belly from the second.'],
+  stylohyoid: ['supra', 'Styloid process.', 'Body of the hyoid, at its junction with the greater horn.', 'facial', 'Facial nerve.', 'Draws the hyoid up and back.',
+    'Runs along the upper border of the posterior belly of digastric.'],
+  mylohyoid: ['supra', 'Mylohyoid line of the mandible.', 'Body of the hyoid (back fibres) and a median raphe from the symphysis to the hyoid.',
+    'v3', 'Nerve to mylohyoid (from the inferior alveolar nerve, V3).', 'Raises the hyoid, the floor of the mouth and the tongue; depresses the mandible when the hyoid is fixed.',
+    'The two muscles form the muscular floor of the mouth. It separates the sublingual space (above) from the submandibular space (below); the two spaces meet at its free back border.'],
+  geniohyoid: ['supra', 'Inferior mental spine (genial tubercle) behind the symphysis.', 'Front of the body of the hyoid.', 'c1', 'C1 fibres carried by the hypoglossal nerve.',
+    'Pulls the hyoid forward and up; helps depress the mandible.', ''],
+  sternohyoid: ['infra', 'Back of the manubrium and the medial end of the clavicle.', 'Lower border of the body of the hyoid.', 'ansa', 'Ansa cervicalis (C1–C3).', 'Depresses the hyoid.',
+    'Superficial layer of the strap muscles (with omohyoid).'],
+  sternothyroid: ['infra', 'Back of the manubrium, below sternohyoid.', 'Oblique line of the thyroid cartilage.', 'ansa', 'Ansa cervicalis (C1–C3).',
+    'Depresses the thyroid cartilage (larynx).', 'Deep to sternohyoid; surgeons reach the thyroid gland through the plane between the two.'],
+  thyrohyoid: ['infra', 'Oblique line of the thyroid cartilage.', 'Lower border of the greater horn of the hyoid.', 'c1', 'C1 fibres carried by the hypoglossal nerve (not the ansa).',
+    'Depresses the hyoid; with the hyoid fixed, raises the larynx.', 'Looks like an upward continuation of sternothyroid.'],
+  omohyoid: ['infra', 'Inferior belly: upper border of the scapula near the suprascapular notch.', 'Superior belly: lower border of the body of the hyoid, lateral to sternohyoid.',
+    'ansa', 'Ansa cervicalis.', 'Depresses the hyoid.',
+    'Two bellies joined by an intermediate tendon under the SCM, held down toward the clavicle by a sling of deep cervical fascia. The inferior belly divides the posterior triangle, the superior belly the anterior triangle. The most variable strap muscle.'],
+  longus_colli: ['prever', 'Front of the cervical vertebral column (it lies in the groove between the vertebral bodies and the anterior tubercles).', 'Its upper oblique part reaches the anterior tubercle of the atlas.',
+    'ventral', 'Ventral rami of the cervical nerves.', 'Flexes the neck.',
+    'Acute calcific tendinitis of its upper tendon causes neck pain and painful swallowing and can mimic a retropharyngeal abscess.'],
+  longus_capitis: ['prever', LEFT, LEFT,
+    'ventral', 'Ventral rami of C1–C3.', 'Flexes the head (and neck).', ''],
+  rect_cap_ant: ['prever', 'Front of the lateral mass of the atlas.', 'Basilar part of the occipital bone, just in front of the foramen magnum.',
+    'ventral', 'Ventral rami of C1 and C2.', 'Flexes the head.', ''],
+  rect_cap_lat: ['prever', 'Upper surface of the transverse process of the atlas.', 'Jugular process of the occipital bone.',
+    'ventral', 'Ventral rami of the upper cervical nerves.', LEFT, ''],
+  sup_rectus: ['eye', 'Common tendinous ring (upper part).', 'Sclera, upper surface, in front of the equator.', 'oculomotor', 'Oculomotor nerve, superior division.',
+    'Elevation (primary), intorsion (secondary), adduction (tertiary).', 'A pure elevator when the eye is turned out: tested by looking up and out.'],
+  inf_rectus: ['eye', 'Common tendinous ring (lower part, the tendon of Zinn).', 'Sclera, lower surface, in front of the equator.', 'oculomotor', 'Oculomotor nerve, inferior division.',
+    'Depression (primary), extorsion (secondary), adduction (tertiary).', 'A pure depressor when the eye is turned out: tested by looking down and out.'],
+  med_rectus: ['eye', 'Common tendinous ring.', 'Medial sclera; the closest of the recti to the cornea.', 'oculomotor', 'Oculomotor nerve, inferior division.', 'Adduction only.', 'Tested by looking in.'],
+  lat_rectus: ['eye', 'Common tendinous ring, by two heads.', 'Lateral sclera.', 'abducens', 'Abducens nerve (VI), its only muscle.', 'Abduction only.',
+    'The abducens nerve passes between its two heads. Tested by looking out.'],
+  sup_oblique: ['eye', 'Body of the sphenoid above and medial to the optic canal (not from the ring).', 'Sclera behind the equator, in the upper lateral quarter, after its tendon has turned round the trochlea.',
+    'trochlear', 'Trochlear nerve (IV), its only muscle.', 'Intorsion (primary), depression (secondary), abduction (tertiary).',
+    'Its tendon runs through the trochlea, a fibrocartilaginous pulley at the front of the orbital roof, and turns back to the eye. A pure depressor when the eye is turned in: tested by looking down and in.'],
+  inf_oblique: ['eye', 'Orbital surface of the maxilla near the front of the orbital floor, lateral to the lacrimal groove: the only extraocular muscle that does not arise at the back of the orbit.',
+    'Sclera behind the equator, low on the lateral side, under the lateral rectus.', 'oculomotor', 'Oculomotor nerve, inferior division.',
+    'Extorsion (primary), elevation (secondary), abduction (tertiary).', 'A pure elevator when the eye is turned in: tested by looking up and in.'],
+  lps: ['eye', 'Under surface of the lesser wing of the sphenoid, above and in front of the optic canal.', 'Skin of the upper lid and the superior tarsus.',
+    'oculomotor', 'Oculomotor nerve, superior division.', 'Raises the upper eyelid; the antagonist of orbicularis oculi.',
+    'Its smooth-muscle part, the superior tarsal (Müller\'s) muscle, runs from its under surface to the superior tarsus and is supplied by sympathetic fibres from the superior cervical ganglion.'],
+  genioglossus: ['tongue', 'Superior mental spine (genial tubercle) behind the symphysis.', 'Whole under surface of the tongue from root to tip, and the body of the hyoid (lowest fibres).',
+    'hypoglossal', 'Hypoglossal nerve.', 'Protrudes the tongue. One muscle alone protrudes it and pushes the tip to the opposite side; both together protrude it in the midline.',
+    'The largest tongue muscle. In a lower motor neuron hypoglossal palsy the protruded tongue deviates toward the side of the lesion (the healthy genioglossus pushes it over), with wasting and fasciculation on that side.'],
+  hyoglossus: ['tongue', 'Body and greater horn of the hyoid.', 'Side of the tongue.', 'hypoglossal', 'Hypoglossal nerve.', 'Depresses and retracts the tongue.',
+    'The hypoglossal nerve runs on its outer surface; the lingual artery passes deep to it.'],
+  sup_constrictor: ['phar', 'Medial pterygoid plate and its hamulus, the pterygomandibular raphe, the mandible near the back end of the mylohyoid line, and the side of the tongue.',
+    'Median pharyngeal raphe, up to the pharyngeal tubercle of the occipital bone.', 'pharyngeal', 'Pharyngeal plexus (vagus).',
+    'Constricts the upper pharynx; helps close off the nasopharynx.', 'The thinnest constrictor. The three constrictors are the circular muscles; stylo-, palato- and salpingopharyngeus are the longitudinal muscles.'],
+  mid_constrictor: ['phar', 'Greater and lesser horns of the hyoid and the stylohyoid ligament.', 'Median pharyngeal raphe.', 'pharyngeal', 'Pharyngeal plexus (vagus).',
+    'Constricts the middle pharynx.', 'Fan-shaped.'],
+  inf_constrictor: ['phar', 'Thyropharyngeus: oblique line and inferior horn of the thyroid cartilage. Cricopharyngeus: side of the cricoid cartilage.',
+    'Median pharyngeal raphe; the horizontal cricopharyngeus fibres run on into the circular muscle of the oesophagus.',
+    'pharyngeal', 'Pharyngeal plexus, with branches of the external and recurrent laryngeal nerves.',
+    'Constricts the lower pharynx; cricopharyngeus is the main part of the upper oesophageal sphincter.',
+    'The thickest constrictor. Killian\'s dehiscence is the weak area in the back wall between the oblique thyropharyngeus (above) and the horizontal cricopharyngeus (below).'],
+  stylopharyngeus: ['phar', 'Medial side of the base of the styloid process.', 'Pharyngeal wall and, with palatopharyngeus, the posterior border of the thyroid cartilage.',
+    'glossopharyngeal', 'Glossopharyngeal nerve (IX): the only pharyngeal muscle it supplies.', 'Raises and widens the pharynx (and raises the larynx) in swallowing.',
+    'Passes between the superior and middle constrictors.'],
+  palatopharyngeus: ['phar', 'Soft palate (palatine aponeurosis).', 'Posterior border of the thyroid cartilage and the side and back of the pharynx.',
+    'pharyngeal', 'Pharyngeal plexus (vagus).', 'Raises the pharynx and larynx in swallowing.', 'Forms the palatopharyngeal arch (posterior pillar of the fauces), behind the palatine tonsil.'],
+  post_cricoaryt: ['lar', 'Back of the cricoid lamina.', 'Back of the muscular process of the arytenoid.', 'recurrent', 'Recurrent laryngeal nerve.',
+    'Rotates the arytenoids outward: abducts the vocal folds and opens the glottis.', 'The only abductor of the vocal folds.'],
+  lat_cricoaryt: ['lar', 'Upper border of the arch of the cricoid.', 'Front of the muscular process of the arytenoid.', 'recurrent', 'Recurrent laryngeal nerve.',
+    'Rotates the arytenoids inward: adducts the vocal folds (closes the glottis).', 'The antagonist of the posterior cricoarytenoid.'],
+  trans_aryt: ['lar', 'Back of one arytenoid.', 'Back of the other arytenoid: a single, unpaired muscle.', 'recurrent', 'Recurrent laryngeal nerve.',
+    'Draws the arytenoids together, closing the back part of the glottis.', ''],
+  obl_aryt: ['lar', 'Muscular process of one arytenoid.', 'Apex of the other arytenoid; some fibres go on into the aryepiglottic fold.', 'recurrent', 'Recurrent laryngeal nerve.',
+    'Draws the arytenoids together; with the aryepiglottic fibres narrows the inlet of the larynx.', 'The two oblique arytenoids cross like an X. The model shows the aryepiglottic part.'],
+  thyroaryt: ['lar', 'Inner surface of the thyroid angle (lower half) and the cricothyroid ligament.', 'Front of the arytenoid; its deep part, vocalis, is attached to the vocal process along the vocal ligament.',
+    'recurrent', 'Recurrent laryngeal nerve.', 'Draws the arytenoids forward: shortens and relaxes the vocal folds (lowers the pitch).', ''],
+  cricothyroid: ['lar', 'Front and side of the arch of the cricoid.', 'Lower border of the thyroid lamina (straight part) and its inferior horn (oblique part).',
+    'external', 'External laryngeal nerve: the only intrinsic laryngeal muscle not supplied by the recurrent laryngeal nerve.',
+    'Tilts the cricoid and thyroid on each other, lengthening and tensing the vocal folds: raises the pitch.',
+    'The nerve runs with the superior thyroid artery (see Clinical points).'],
+};
+const NERVE_TEXT = {
+  facial: 'The nerve of the second pharyngeal arch: it supplies all the muscles of facial expression (with platysma), plus stylohyoid and the posterior belly of digastric. Its branches on the face: <b>temporal</b> (frontal belly, corrugator, upper orbicularis oculi), <b>zygomatic</b> (orbicularis oculi, the zygomatici), <b>buccal</b> (buccinator, orbicularis oris, the lip and nose muscles), <b>marginal mandibular</b> (the lower lip and chin) and <b>cervical</b> (platysma); the <b>posterior auricular</b> branch, given off before the parotid, supplies the occipital belly. Testing: raise the eyebrows, close the eyes tightly, show the teeth, puff out the cheeks or whistle.',
+  v3: 'The nerve of the first pharyngeal arch, the only division of the trigeminal with motor fibres. The main trunk gives the nerve to medial pterygoid; the anterior division gives the masseteric, deep temporal and lateral pterygoid nerves (and the sensory buccal nerve). The nerve to mylohyoid (from the inferior alveolar) supplies mylohyoid and the anterior belly of digastric.',
+  two: 'Digastric: anterior belly by the nerve to mylohyoid (V3, first arch), posterior belly by the facial nerve (second arch).',
+  accessory: 'Motor to sternocleidomastoid (and trapezius). It crosses the posterior triangle, where it is at risk, for example in a lymph node biopsy.',
+  c1: 'Fibres of the first cervical nerve that travel with the hypoglossal nerve and leave it to supply geniohyoid and thyrohyoid. They come from the spinal cord, not the hypoglossal nucleus.',
+  ansa: 'A loop on the front of the carotid sheath: superior root C1 (fibres that travelled with the hypoglossal nerve), inferior root C2 and C3. It supplies sternohyoid, sternothyroid and omohyoid (not thyrohyoid or geniohyoid). Old name: ansa hypoglossi.',
+  ventral: 'The scalenes and the prevertebral muscles are supplied by the ventral rami of the cervical nerves.',
+  oculomotor: 'Superior division: superior rectus and levator palpebrae superioris. Inferior division: medial rectus, inferior rectus and inferior oblique. Lateral rectus = VI, superior oblique = IV, the rest = III.',
+  trochlear: 'Superior oblique only. The only cranial nerve to leave the back of the brainstem, with the longest course inside the skull.',
+  abducens: 'Lateral rectus only.',
+  hypoglossal: 'All the muscles of the tongue, intrinsic and extrinsic, except palatoglossus (pharyngeal plexus). Styloglossus and the intrinsic muscles are not in the model.',
+  pharyngeal: 'The pharyngeal plexus (pharyngeal branches of IX and X, with sympathetic fibres; the motor fibres are vagal) supplies all the muscles of the pharynx except stylopharyngeus, and all the muscles of the soft palate except tensor veli palatini.',
+  glossopharyngeal: 'Stylopharyngeus, the only muscle supplied by IX.',
+  recurrent: 'All the intrinsic muscles of the larynx except cricothyroid. The left nerve loops under the arch of the aorta, the right under the subclavian artery.',
+  external: 'The external branch of the superior laryngeal nerve: cricothyroid only (and a branch to the inferior constrictor). It runs with the superior thyroid artery to the upper pole of the thyroid gland.',
+};
+const MORE = {
+  intro: 'Tap a row: the muscles that form or do it are shown on the model.',
+  tri: [
+    ['Anterior triangle', ['scm'], 'Between the midline of the neck, the anterior border of the SCM and the lower border of the mandible; apex at the sternum. The digastric and the superior belly of omohyoid divide it into four.'],
+    ['Muscular', ['scm', 'omohyoid', 'sternohyoid', 'sternothyroid'], 'Midline (hyoid to sternum), anterior border of the SCM, superior belly of omohyoid. Contains the strap muscles, with the thyroid gland, trachea, oesophagus and lower larynx deep to them.'],
+    ['Carotid', ['scm', 'omohyoid', 'digastric', 'stylohyoid'], 'Anterior border of the SCM, superior belly of omohyoid, posterior belly of digastric (with stylohyoid). Floor: thyrohyoid, hyoglossus, middle and inferior constrictors. Contains the common carotid artery and its division, branches of the external carotid, the internal jugular vein, the vagus and the hypoglossal nerve.'],
+    ['Submandibular (digastric)', ['digastric', 'stylohyoid', 'mylohyoid'], 'Lower border of the mandible and the two bellies of digastric. Floor: mylohyoid (hyoglossus behind). Contains mostly the submandibular gland, with the facial artery and vein and lymph nodes.'],
+    ['Submental', ['digastric', 'mylohyoid'], 'A single midline triangle between the anterior bellies of the two digastrics and the body of the hyoid. Floor: mylohyoid. Contains the submental lymph nodes and the veins that form the anterior jugular vein.'],
+    ['Posterior triangle', ['scm', 'scal_med', 'scal_post'], 'Posterior border of the SCM, anterior border of trapezius, middle third of the clavicle; apex on the occipital bone. Roof: investing fascia. Floor (under the prevertebral fascia): splenius capitis, levator scapulae, scalenus medius and posterior. Contains the accessory nerve, cervical plexus branches, the brachial plexus, the third part of the subclavian artery and the end of the external jugular vein. The inferior belly of omohyoid divides it into two.'],
+    ['Occipital', ['scm', 'omohyoid'], 'The upper, larger part, above the inferior belly of omohyoid. The accessory nerve crosses it obliquely to trapezius.'],
+    ['Subclavian (supraclavicular)', ['scm', 'omohyoid', 'scal_ant'], 'The lower part, between the inferior belly of omohyoid and the clavicle. Contains the third part of the subclavian artery, the brachial plexus close above it, and the end of the external jugular vein.'],
+  ],
+  fascia: [
+    ['epicranial_apon', 'Epicranial aponeurosis', 'Joins the frontal and occipital bellies of occipitofrontalis. Layers of the scalp: <b>S</b>kin, dense <b>C</b>onnective tissue (carrying the vessels and nerves), <b>A</b>poneurosis, <b>L</b>oose areolar tissue, <b>P</b>ericranium. The first three move as one over the loose layer, the plane of scalp flaps. The loose layer is the "danger area": its emissary veins connect with the intracranial venous sinuses, so infection can spread inward; a subgaleal haematoma collects here.'],
+    ['investing_fascia', 'Investing layer of the deep cervical fascia', 'Surrounds the neck like a collar and splits to enclose the SCM and trapezius; the roof of both triangles. Attached above to the superior nuchal line, mastoid process and the whole lower border of the mandible (and the hyoid in front); below to the acromion, clavicle and manubrium; behind to the ligamentum nuchae. It encloses the parotid gland. Above the manubrium it splits to form the suprasternal space.'],
+  ],
+  fasciaText: [
+    ['Pretracheal layer', 'Attached above to the hyoid; below it passes into the thorax and blends with the fibrous pericardium. Its visceral part encloses the thyroid gland, trachea and oesophagus; its muscular part the strap muscles.'],
+    ['Prevertebral layer', 'In front of the prevertebral muscles and the scalenes: the floor of the posterior triangle. It covers the brachial plexus and subclavian artery as they emerge between the scalenes; the phrenic nerve (on scalenus anterior, deep to the fascia) and the sympathetic trunk are enclosed in it.'],
+    ['Carotid sheath', 'Contains the common (and internal) carotid artery, the internal jugular vein and the vagus nerve; the ansa cervicalis lies on its front wall and the sympathetic trunk behind it. All three layers help form it; it runs from the base of the skull to the root of the neck.'],
+    ['Spaces', '<b>Retropharyngeal space</b>: behind the pharynx, between the buccopharyngeal fascia in front and the alar fascia behind; it holds the retropharyngeal lymph nodes, which regress in childhood, so a retropharyngeal abscess is mainly a disease of small children. <b>Danger space</b>: between the alar and prevertebral fasciae, from the skull base down the posterior mediastinum to the diaphragm; infection here can cause mediastinitis. <b>Prevertebral space</b>: behind the prevertebral fascia, holding the prevertebral muscles.'],
+  ],
+  jaw: [
+    ['Elevation (closing)', ['masseter', 'temporalis', 'med_pterygoid'], 'Masseter, temporalis (anterior fibres), medial pterygoid.'],
+    ['Depression (opening)', ['lat_pterygoid', 'digastric', 'mylohyoid', 'geniohyoid'], 'Lateral pterygoid (helps), digastric, mylohyoid, geniohyoid; gravity; platysma against resistance.'],
+    ['Protrusion', ['lat_pterygoid', 'med_pterygoid', 'masseter'], 'Lateral pterygoid (the main one), medial pterygoid, superficial masseter.'],
+    ['Retraction', ['temporalis'], 'Posterior fibres of temporalis.'],
+    ['Side to side (grinding)', ['lat_pterygoid', 'med_pterygoid'], 'The lateral and medial pterygoids of one side, then of the other: the jaw moves to the opposite side.'],
+    ['The joint', ['lat_pterygoid'], 'The articular disc splits the temporomandibular joint into two: the lower joint (disc and condyle) hinges, as in slight opening; in the upper joint (disc and temporal bone) the condyle and disc glide forward onto the articular tubercle, in wide opening and protrusion.'],
+  ],
+  eye: [
+    ['Looking out', ['lat_rectus'], 'Lateral rectus.'],
+    ['Looking in', ['med_rectus'], 'Medial rectus.'],
+    ['Up and out', ['sup_rectus'], 'Superior rectus: with the eye turned out it is a pure elevator.'],
+    ['Down and out', ['inf_rectus'], 'Inferior rectus: with the eye turned out it is a pure depressor.'],
+    ['Up and in', ['inf_oblique'], 'Inferior oblique: with the eye turned in it is a pure elevator.'],
+    ['Down and in', ['sup_oblique'], 'Superior oblique: with the eye turned in it is a pure depressor.'],
+  ],
+  eyeIntro: 'The patient follows a target drawn as a large H with the head still. The vertical recti pull at a small angle to the line of sight, so they act purely vertically when the eye is turned out; the obliques pull at a large angle, so they act purely vertically when the eye is turned in.',
+  absent: [
+    ['Tensor veli palatini', 'From the scaphoid fossa, the spine of the sphenoid and the auditory tube; its tendon winds round the pterygoid hamulus into the palatine aponeurosis. <b>V3</b> (nerve to medial pterygoid). Tenses the soft palate and opens the auditory tube in swallowing and yawning.'],
+    ['Levator veli palatini', 'From the petrous temporal bone and the auditory tube, into the upper surface of the palatine aponeurosis. Pharyngeal plexus. Raises the soft palate to close off the nasopharynx in swallowing: the main muscle of that closure.'],
+    ['Palatoglossus', 'From the palatine aponeurosis to the side of the tongue; forms the palatoglossal arch in front of the tonsil. <b>Pharyngeal plexus (vagus): the only tongue muscle not supplied by XII.</b> Raises the root of the tongue and narrows the opening into the pharynx.'],
+    ['Musculus uvulae', 'From the posterior nasal spine and the palatine aponeurosis to the uvula. Pharyngeal plexus in the standard account (one paper differs). Shortens the uvula.'],
+    ['Styloglossus', 'From the styloid process to the side of the tongue. Hypoglossal nerve. Draws the tongue up and back.'],
+    ['Salpingopharyngeus', 'From the cartilage of the auditory tube, blending with palatopharyngeus. Pharyngeal plexus. Raises the upper side of the pharynx in swallowing.'],
+    ['Intrinsic tongue muscles', 'Superior and inferior longitudinal (shorten the tongue; turn the tip up and down), transverse (narrows and lengthens it), vertical (flattens and broadens it). Hypoglossal nerve. They change its shape; the extrinsic muscles move it.'],
+  ],
+  clin: [
+    ['Facial palsy: LMN or UMN', 'A lower motor neuron lesion (Bell\'s palsy, the idiopathic and commonest facial palsy) weakens the whole of one side of the face, forehead included. An upper motor neuron lesion (such as a stroke) weakens the lower face on the opposite side and spares the forehead, because the part of the facial nucleus for the upper face gets input from both hemispheres. Brainstem lesions give the LMN pattern.'],
+    ['Oculomotor (III) palsy', 'Eye down and out (lateral rectus and superior oblique unopposed), ptosis, and a dilated pupil when the parasympathetic fibres are involved; pupil involvement suggests compression, such as a posterior communicating artery aneurysm. Diplopia.'],
+    ['Trochlear (IV) palsy', 'The affected eye is higher (hypertropia), with vertical diplopia worst looking down (reading, stairs); the head is tilted to the opposite side. The hypertropia increases when the head is tilted toward the affected side (Bielschowsky test). Its long course inside the skull makes the nerve vulnerable to injury.'],
+    ['Abducens (VI) palsy', 'Cannot abduct the eye; the eye turns in (esotropia), with horizontal diplopia. The commonest isolated ocular motor palsy in adults.'],
+    ['Ptosis: III palsy or Horner syndrome', 'III palsy: ptosis (often marked), the eye down and out, and a large pupil when the pupil is involved. Horner syndrome: partial ptosis (paralysis of the superior tarsal muscle), a small pupil (miosis) and loss of sweating on the same side.'],
+    ['Recurrent laryngeal nerve', 'One nerve cut: hoarse, breathy voice. Both cut: the vocal folds lie near the midline (the only abductor, posterior cricoarytenoid, is lost), so the airway narrows, with inspiratory stridor, while the voice may be fairly preserved. An injury to watch for in thyroid surgery.'],
+    ['External laryngeal nerve', 'Near the superior thyroid artery at the upper pole of the thyroid: injured in thyroid surgery, it weakens cricothyroid, so the voice is weak and tires and loses its high range. Often missed.'],
+    ['Zenker\'s diverticulum', 'A false pulsion diverticulum of mucosa and submucosa through Killian\'s dehiscence, above a cricopharyngeus that fails to relax. Older adults; dysphagia and regurgitation of undigested food.'],
+    ['Thoracic outlet syndrome', 'Compression of the brachial plexus, subclavian artery or vein at the outlet: in the scalene triangle (between scalenus anterior and medius above the first rib), the costoclavicular space or under pectoralis minor. Causes include a cervical rib and scalene variants. The interscalene brachial plexus block is given in the gap between scalenus anterior and medius.'],
+  ],
+};
+
+/* ===================== PAGE (shared logic: ../assets/muscle-page.js) ===================== */
+function buildMore(api) {
+  const {v, focusOn, pressed, clearRows} = api, $ = id => document.getElementById(id);
+  const names = () => api.names();
+  const rowTable = (id, rows, dir, pre) => {
+    const t = $(id);
+    t.innerHTML = rows.map(([n, , txt], i) => `<tr data-k="${id}${i}" aria-pressed="false"><td>${n}</td><td>${txt}</td></tr>`).join('');
+    t.querySelectorAll('tr').forEach((r, i) => r.onclick = () => {
+      const [n, ks, txt] = rows[i], has = ks.filter(api.has);
+      clearRows(); pressed('#fascia-list button', () => false); r.setAttribute('aria-pressed', 'true');
+      $('more-desc').innerHTML = `<b>${pre}${n}:</b> ${txt}`;
+      focusOn(has); v.fit(has); v.face(dir, {zoom: 1});
+    });
+  };
+  rowTable('tri', MORE.tri, [-0.6, -1, 0.05], 'Triangles of the neck, ');
+  rowTable('jaw', MORE.jaw, [-1, -0.3, 0], '');
+  rowTable('eye', MORE.eye, [-0.3, -1, 0.3], 'H test, ');
+  const box = $('fascia-list'); box.replaceChildren();
+  for (const [k, name, text] of MORE.fascia) {
+    if (!api.has(k)) continue;
+    const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--fascia)"></i><span>${name}</span>`;
+    b.onclick = () => { clearRows(); pressed('#fascia-list button', x => x === k); $('more-desc').innerHTML = `<b>${name}.</b> ${text}`;
+      focusOn([k]); v.fit([k]); v.face([-0.7, -1, 0.15], {zoom: 1}); };
+    box.append(b);
+  }
+  $('fascia-text').innerHTML = MORE.fasciaText.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
+  $('absent').innerHTML = MORE.absent.map(([a, b]) => `<tr><td>${a}</td><td>${b}</td></tr>`).join('');
+  $('clin').innerHTML = MORE.clin.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
+}
+MusclePage({
+  base: '../models/head-neck-muscles/', manifest: 'head-neck-muscles.json', DATA, GROUPS, NERVES, NERVE_TEXT, M, home: [-0.6, -1, 0.1], glassBones: true, ghost: 0.07,
+  keepSolid: {eye: ['eyeball'], lar: ['thyroid_cart', 'cricoid_cart', 'aryt_cart_r', 'aryt_cart_l'], phar: ['hyoid', 'thyroid_cart', 'cricoid_cart']},
+  view: Object.assign({}, ...[
+    [['sup_rectus', 'inf_rectus', 'med_rectus', 'lat_rectus', 'sup_oblique', 'inf_oblique', 'lps'], [-0.3, -0.5, 1]],
+    [['post_cricoaryt', 'trans_aryt', 'obl_aryt'], [0.3, 1, 0.4]], [['lat_cricoaryt', 'thyroaryt'], [-1, 0.1, 0.4]], [['cricothyroid'], [-0.8, -1, -0.4]],
+    [['digastric', 'mylohyoid', 'geniohyoid'], [-0.3, -0.5, -1]], [['lat_pterygoid'], [-0.4, -0.7, -1]], [['med_pterygoid'], [0.3, 1, -0.8]],
+    [['sup_constrictor', 'mid_constrictor', 'inf_constrictor', 'stylopharyngeus', 'palatopharyngeus'], [-0.5, 1, 0.1]],
+    [['genioglossus', 'hyoglossus', 'stylohyoid'], [-1, -0.2, 0]], [['longus_colli', 'longus_capitis', 'rect_cap_ant', 'rect_cap_lat'], [0, -1, -0.4]],
+    [['scal_ant', 'scal_med', 'scal_post', 'scm', 'omohyoid'], [-1, -0.5, 0.1]]].flatMap(([ks, d]) => ks.map(k => ({[k]: d})))),
+  tint: {thyroid_cart: '--cart', cricoid_cart: '--cart', aryt_cart_r: '--cart', aryt_cart_l: '--cart', epiglottis: '--cart', eyeball: '--soft'},
+  extra: {key: 'more', parts: MORE.fascia.map(p => p[0]), build: buildMore,
+    enter(api) { document.getElementById('more-desc').innerHTML = MORE.intro + ' ' + MORE.eyeIntro;
+      api.focusOn(null); api.v.fit(api.LIMB()); api.v.face([-0.6, -1, 0.1], {zoom: 1}); }},
+});
+</script>
+</body>
+</html>

@@ -462,3 +462,42 @@ cremasteric reflex arc, direct hernia in older people, incisional-hernia causes,
 ani (S3–S4 + pudendal) from coccygeus (sacral plexus, S4–S5 in Gray); oesophageal opening "formed mainly by the right
 crus"; referred shoulder pain limited to the central diaphragm, supraclavicular roots C3–C4; left crus "L1–L2; one
 source L2–L3".
+
+## Muscles of the Head and Neck — `head-neck/muscles.html`
+
+**Meshes:** skull, hyoid, C1–C7, T1–T2, manubrium, first and second ribs and costal cartilage, clavicles and right
+scapula (BodyParts3D 3.0); 57 right-side muscles, the thyroid, cricoid and arytenoid cartilages, the epiglottis, the right
+eyeball (sclera, cornea), the epicranial aponeurosis and the investing layer of the deep cervical fascia from Z-Anatomy
+(`tools/zanat/hn_muscles.py`; cartilages and eyeball exported by exact object name into `z-bp3d-extra.zip`). Not in
+Z-Anatomy: tensor and levator veli palatini, palatoglossus, musculus uvulae, styloglossus, salpingopharyngeus, the
+intrinsic tongue muscles (text only on the page). **Attachment areas** (`tools/zanat/hn_attach_spec.py` →
+`hn-attach.json`): 54 on 32 muscles, each checked by eye (`tools/test/muscle_sheet.py`). Dropped, with reasons in the
+spec's `_dropped`: the extraocular insertions (the muscles wrap the globe, so proximity marks far more than the
+insertion) and orbital origins, occipitofrontalis, procerus, zygomaticus major, levator labii superioris alaeque nasi,
+levator anguli oris, geniohyoid, genioglossus, longus capitis and colli, scalenus anterior, superior constrictor, lateral
+and posterior cricoarytenoid, thyroarytenoid; the SCM insertion (its occipital part is empty), the omohyoid scapular
+origin, the digastric fossa, sternohyoid and sternothyroid manubrial origins.
+
+**Sources:** fact sheets `sources-local/facts/hn-face-mastication.md` (383 quotes, 98 sources: Gray 1918 sections
+108–109 and the facial and trigeminal nerves; StatPearls; Wu 2022, Landfald 2025, Carré 2024, Okoń 2025/2026,
+Triantafyllou 2025, Zöchmeister 2026, Lindor 2025, Miyanaga 2026 and others; Wikipedia, not counted where it copies
+Gray), `hn-neck.md` (439 quotes, 88 sources: Gray 1918 sections 110–113, 145, 148, 210; StatPearls; Kikuta 2019, Feigl
+2020, Phan 2022, Malkidou 2025, Pereira Boog 2025, Nito 2025, Shawky 2017 and others) and
+`hn-eye-tongue-pharynx-larynx.md` (377 quotes: Gray 1918 orbit, tongue, palate, pharynx, larynx and cranial-nerve
+sections; StatPearls; open-access papers on eye-muscle actions, palsies, the tongue, the palate, Zenker's diverticulum
+and laryngeal nerve injury; Wikipedia). Disputes as the sheets advise: the facial-nerve branch for procerus, nasalis and
+levator labii superioris ("facial nerve" only); which nuchal line for the occipital belly; scalene origin levels and
+roots (roots left out); C1–C2 vs C1 for the superior root of the ansa (C1); the pharyngeal-plexus fibres (said to be
+vagal); Wikipedia's extraocular "Examination" paragraph (reversed positions) excluded. Left out (single source): the
+corneal reflex, the side of jaw deviation and the resistance tests for the pterygoids, an exaggerated jaw jerk, the
+galea's bony attachments, the vagus' position in the carotid sheath, contents of the suprasternal space, the floor of
+the subclavian triangle, rectus capitis lateralis action and roots, longus colli roots, UMN tongue deviation, Semon's
+law, VI as a false localising sign, injury percentages.
+**Independent review (2026-11-17), 4 fixes plus removals:** the phrenic nerve and sympathetic trunk are enclosed by the
+prevertebral fascia (the nerve deep to it, on scalenus anterior), not "on" it; III-palsy ptosis has a large pupil only
+when the pupil is involved; the pharyngeal muscles are called circular and longitudinal, without "outer/inner"; the
+models line no longer says "the palate muscles" are absent (palatopharyngeus is in the model). Removed as Gray-only
+(Wikipedia copies Gray): the eye-muscle angles (about 23°, 51–54°), the sternothyroid origin from the first costal
+cartilage, the longus colli extent (atlas to T3), the longus capitis attachments, and the scalene origin levels and
+tubercles.
+

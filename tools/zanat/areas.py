@@ -87,7 +87,7 @@ def main():
             d = a.get('d', spec.get('d', 3.0))
             allowed = np.ones(len(B), bool)
             if a.get('near'):
-                look = lambda n: (L.get(a['bone'], {}).get(n) or next(g[n] for g in L.values() if n in g))['p']
+                look = lambda n: (L.get(a['bone'], {}).get(n) or L.get(a['bone'][:-2] if a['bone'][-2:] in ('_r', '_l') else '', {}).get(n) or next(g[n] for g in L.values() if n in g))['p']   # temporal_r -> skull 'temporal' (right side)
                 pts = np.array([look(n) for n in a['near']])
                 allowed &= (((B[:, None, :] - pts[None]) ** 2).sum(-1).min(1) <= a.get('r', 20) ** 2)
             if 'zfrac' in a or 'frac' in a:   # part of the bone along an axis (default z): 0 = low end, 1 = high end

@@ -1,6 +1,6 @@
 """Export Z-Anatomy meshes into the BodyParts3D 3.0 body frame (mm) as OBJ files in one zip, so that
 tools/bones-rs can build them like BodyParts3D parts (config "files": ["Z_<slug>"]).
-usage: export.py blend transform.json out.zip index.tsv "collection substring" [...]
+usage: export.py blend transform.json out.zip index.tsv "collection substring" | "name:Exact object name" [...]
 Skips helper objects (.j .i .g .t .s), text and curves. Left objects are mirrored copies: their winding is flipped
 back so normals point outward."""
 import sys, os, re, json, zipfile, io, numpy as np
@@ -28,7 +28,8 @@ with zipfile.ZipFile(sys.argv[3], 'w', zipfile.ZIP_DEFLATED) as zf, open(sys.arg
         name = zblend.obname(ob)
         if re.search(r'\.(j|i|g|t|s)$', name): continue
         cs = coll.get(ob.addr_old, [])
-        if not any(w in c for w in wanted for c in cs): continue
+        exact = [w[5:] for w in wanted if w.startswith('name:')]      # 'name:Thyroid cartilage' picks one object
+        if not (name in exact or any(w in c for w in wanted if not w.startswith('name:') for c in cs)): continue
         me = ob.get_pointer(b'data')
         if me is None or me.code != b'ME' or me.get(b'totvert') < 4: continue
         V, F = zblend.mesh_arrays(me)

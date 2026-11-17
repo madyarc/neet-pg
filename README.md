@@ -29,6 +29,7 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | 15 | [Muscles of the Lower Limb](anatomy/lower-limb/muscles.html) | Lower limb | 50 muscles in 3D on the bones: checked attachment areas, nerve, action, clinical notes; colour by nerve supply; iliotibial tract, femoral triangle, adductor canal, pes anserinus, ankle retinacula, tarsal tunnel, layers of the sole, arches |
 | 16 | [Muscles of the Back](anatomy/back/muscles.html) | Back | 17 deep back muscles in 3D with checked attachment areas; dorsal vs ventral rami; three-layer thoracolumbar fascia; suboccipital triangle; head movements; clinical points |
 | 17 | [Muscles of the Trunk Wall](anatomy/thorax/wall-muscles.html) | Thorax, abdomen | Intercostals, diaphragm (openings T8/T10/T12, phrenic, referred pain, hernias), abdominal wall, rectus sheath, inguinal canal, direct vs indirect hernia, pelvic diaphragm; 25 checked attachment areas |
+| 18 | [Muscles of the Head and Neck](anatomy/head-neck/muscles.html) | Head and neck | 57 muscles in 3D: face and scalp, mastication, SCM and scalenes, supra- and infrahyoid, prevertebral, extraocular, tongue, pharynx, larynx; nerve supply; triangles of the neck, deep cervical fascia and spaces, jaw movements, the H test, palsies; 54 checked attachment areas |
 
 ### Ophthalmology — [`ophthalmology/`](ophthalmology/index.html)
 

@@ -30,6 +30,7 @@ const v = new AtlasViewer(document.getElementById('v'));
     for (const m in A) if (!focus || focus.includes(m)) for (const a of (Array.isArray(A[m]) ? A[m] : Object.entries(A[m]).map(([bone, verts]) => ({bone, verts, kind: 'ori'})))) (marks[a.bone] = marks[a.bone] || []).push({verts: a.verts, colour: a.kind === 'ins' ? '#d55e00' : '#0072b2'});
     for (const k in marks) v.setVertexMarks(k, marks[k]);
   }
+  if (q.get('hide')) for (const k of q.get('hide').split(',')) v.setVisible(k, false);
   if (q.get('hideax')) for (const k of v.order) if (k.startsWith('ax_')) v.setVisible(k, false);
   if (q.get('fit')) v.fit(q.get('fit').split(','));
   if (q.get('box')) { const b = q.get('box').split(',').map(Number); v.centre = [0, 1, 2].map(i => (b[i] + b[i + 3]) / 2);
