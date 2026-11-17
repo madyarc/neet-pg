@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muscles of the Back</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Muscles of the Back</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="stack" aria-label="3D muscles">
+  <div class="tabs scrollrow" role="tablist" aria-label="What to show">
+    <button class="chip" role="tab" id="tab-muscles" aria-pressed="true">Muscles</button>
+    <button class="chip" role="tab" id="tab-nerves" aria-pressed="false">Nerve supply</button>
+    <button class="chip" role="tab" id="tab-fascia" aria-pressed="false">Fascia, suboccipital triangle</button>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <div id="v"></div>
+      <div class="vbar scrollrow" id="views"></div>
+    </div>
+    <div class="panel stack">
+      <div id="pane-muscles" class="stack">
+        <div class="detail" id="detail"></div>
+        <div id="groups"></div>
+      </div>
+      <div id="pane-nerves" class="stack" hidden>
+        <div class="cap key desc" id="nerve-desc"></div>
+        <div class="legend" id="nerve-list"></div>
+      </div>
+      <div id="pane-fascia" class="stack" hidden>
+        <div class="cap key desc" id="fascia-desc"></div>
+        <div class="legend" id="fascia-list"></div>
+        <div class="group-h">Suboccipital triangle (tap a row)</div>
+        <table class="t" id="tri"></table>
+        <div class="group-h">Moving the head: muscles at the back of the neck (tap a row)</div>
+        <table class="t" id="head"></table>
+        <div class="group-h">Clinical points</div>
+        <dl class="facts" id="clin"></dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script src="../assets/muscle-page.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — every statement checked in two independent sources (see anatomy/DATA-SOURCES.md,
+   "Muscles of the back"); fact sheet: sources-local/facts/back-muscles.md ===================== */
+const LEFT = '<span class="pending">Left out (only one source).</span>';
+const DATA = {
+  lede: 'The muscles of the back proper, right side, from the sacrum to the skull: the intermediate layer, the splenius muscles, the erector spinae, the deep transversospinal and segmental muscles, the suboccipital muscles and quadratus lumborum. The superficial back muscles that move the arm (trapezius, latissimus dorsi, levator scapulae, rhomboids) are on <a href="../upper-limb/muscles.html">Muscles of the Upper Limb</a>.',
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), the deep muscles of the back, the suboccipital muscles and the posterior divisions of the spinal nerves; checked against StatPearls (NCBI Bookshelf), open-access anatomy papers and Wikipedia. Where they disagree, the better-supported wording is used.',
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles and the thoracolumbar fascia from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones. Simplified meshes, shared under the same licences. The right side is shown; the levatores costarum and semispinalis capitis are not in the model. Attachment areas are approximate, and only those that fit the model well are drawn.',
+};
+const NERVES = {
+  dorsal: ['Dorsal rami of the spinal nerves', '--n-dorsal-rami'],
+  ventral: ['Ventral rami of the spinal nerves', '--n-ventral-rami'],
+  two: ['Dorsal and ventral rami (see the muscle)', '--n-two'],
+};
+const GROUPS = [
+  ['intermediate', 'Intermediate layer: serratus posterior'],
+  ['splenius', 'Splenius muscles'],
+  ['erector', 'Erector spinae (lateral to medial)'],
+  ['transverso', 'Transversospinales'],
+  ['segmental', 'Short segmental muscles'],
+  ['subocc', 'Suboccipital muscles'],
+  ['paw', 'Posterior abdominal wall'],
+];
+const M = {
+  serr_post_sup: ['intermediate', 'Lower nuchal ligament and the spinous processes of C7–T3.', 'Upper borders of ribs 2–5, just lateral to their angles.',
+    'ventral', 'Intercostal nerves (ventral rami).', 'Raises the ribs (deep breathing).', 'Lies deep to the rhomboids.'],
+  serr_post_inf: ['intermediate', LEFT, 'Lower borders of the lower four ribs, just lateral to their angles.', 'ventral', 'Intercostal nerves (ventral rami).',
+    'Draws the lower ribs downwards and backwards.', 'Its part in breathing is disputed between sources.'],
+  splenius_cap: ['splenius', 'Lower half of the nuchal ligament and the spinous processes of C7–T3.', 'Mastoid process and the occipital bone below the lateral third of the superior nuchal line.',
+    'dorsal', 'Lateral branches of the cervical dorsal rami.', 'Both sides: extend the head and neck. One side: turns the face to the same side.', ''],
+  splenius_cerv: ['splenius', 'Spinous processes of T3–T6.', 'Posterior tubercles of the transverse processes of C1–C3.',
+    'dorsal', 'Lateral branches of the cervical dorsal rami.', 'Both sides: extend the neck. One side: rotates it to the same side.', ''],
+  iliocostalis: ['erector', 'The common tendon of the erector spinae: sacrum, lumbar spinous processes and the back of the iliac crest.',
+    'Angles of the ribs; its cervical part goes on to the transverse processes of C4–C6.', 'dorsal', 'Lateral branches of the dorsal rami.',
+    'Both sides: extend the column and hold it erect. One side: bends it to the same side.', 'The lateral column of the erector spinae.'],
+  longissimus: ['erector', 'The common erector spinae tendon; its cervical and head parts from the upper thoracic transverse processes (and, for the head part, the lower cervical articular processes).',
+    'Thoracic transverse processes and the ribs; the transverse processes of C2–C6; the back of the mastoid process (longissimus capitis).', 'dorsal', 'Lateral branches of the dorsal rami.',
+    'Both sides: extend the column and the head. One side: bends to the same side.', 'The intermediate and largest column.'],
+  spinalis: ['erector', 'Spinous processes.', 'Spinous processes higher up.',
+    'dorsal', 'Dorsal rami.', 'Extends the column.', 'The medial and smallest column, spine to spine; the exact levels differ between sources. Its head part is usually fused with semispinalis capitis.'],
+  semispinalis: ['transverso', 'Thoracis: transverse processes of T6–T10. Cervicis: transverse processes of the upper five or six thoracic vertebrae.',
+    'Thoracis: spinous processes of the upper four thoracic and lower two cervical vertebrae. Cervicis: spinous processes of C2–C5 (the slip to the axis is the largest).',
+    'dorsal', 'Dorsal rami.', 'Extends the column; rotates it to the opposite side.',
+    'The superficial layer of the transversospinales. <b>Semispinalis capitis</b> (not in the model) arises from the upper thoracic transverse processes and the articular processes of C4–C6, inserts between the superior and inferior nuchal lines, and roofs the suboccipital triangle; it extends the head.'],
+  multifidus: ['transverso', 'Sacrum; lumbar mammillary processes; thoracic transverse processes; articular processes of C4–C7.', 'Spinous processes 2–4 segments higher.',
+    'dorsal', 'The medial branch of each dorsal ramus (one segment per fascicle).', 'Rotates the column to the opposite side, extends it and steadies each segment.',
+    'Fills the groove beside the spines from the sacrum to the axis. In chronic low back pain the lumbar multifidus is often smaller and infiltrated by fat.'],
+  rotatores: ['transverso', 'Transverse processes.', 'Lamina of the vertebra above.', 'dorsal', 'Dorsal rami.', 'Help multifidus rotate the column to the opposite side.',
+    'The deepest layer, best developed in the thoracic region.'],
+  interspinales: ['segmental', 'Spinous process of one vertebra (one on each side of the interspinous ligament).', 'Spinous process of the next vertebra.',
+    'dorsal', 'Dorsal rami (medial branches).', LEFT, ''],
+  intertransversarii: ['segmental', 'Transverse process of one vertebra.', 'Transverse process of the next vertebra.',
+    'two', 'Mixed: partly ventral rami, partly dorsal rami.', 'Bend the column to the side and steady it.',
+    'An exception to the rule that the deep back muscles are supplied by dorsal rami. Only the lumbar ones are in the model.'],
+  rcp_major: ['subocc', 'Spinous process of the axis.', 'Lateral part of the inferior nuchal line and the bone below it.',
+    'dorsal', 'Suboccipital nerve (dorsal ramus of C1).', 'Extends the head; turns the face to the same side.', 'The superomedial boundary of the suboccipital triangle.'],
+  rcp_minor: ['subocc', 'Posterior tubercle of the atlas.', 'Medial part of the inferior nuchal line and the bone between it and the foramen magnum.',
+    'dorsal', 'Suboccipital nerve (dorsal ramus of C1).', 'Extends the head (weakly).',
+    'Medial to the suboccipital triangle, not a boundary. Research has found connective tissue linking it to the dura behind the upper spinal cord (the "myodural bridge").'],
+  obl_cap_sup: ['subocc', 'Upper surface of the transverse process of the atlas.', 'Occipital bone between the superior and inferior nuchal lines.',
+    'dorsal', 'Suboccipital nerve (dorsal ramus of C1).', 'At the atlanto-occipital joint: extends the head and bends it to the same side.', 'The superolateral boundary of the suboccipital triangle.'],
+  obl_cap_inf: ['subocc', 'Spinous process of the axis.', 'Transverse process of the atlas.',
+    'dorsal', 'Suboccipital nerve (C1), usually with a twig from C2.', 'Turns the atlas, and with it the head, to the same side at the atlanto-axial joint.',
+    'The larger oblique, and the only "capitis" muscle with no attachment to the skull. The inferolateral boundary of the suboccipital triangle; the greater occipital nerve (C2) winds round its lower border.'],
+  quad_lumb: ['paw', 'Iliolumbar ligament and the back part of the iliac crest.', 'Lower border of the 12th rib and the tips of the transverse processes of L1–L4.',
+    'ventral', 'Ventral rami of T12 and the upper lumbar nerves.', 'One side: bends the lumbar spine to the side and hitches up the pelvis; it steadies the 12th rib for the diaphragm.',
+    'A muscle of the posterior abdominal wall, not a deep back muscle. It lies between the anterior and middle layers of the thoracolumbar fascia.'],
+};
+const NERVE_TEXT = {
+  dorsal: '<b>The rule:</b> the deep (intrinsic) back muscles are supplied by the dorsal rami of the spinal nerves; the superficial and intermediate back muscles (and quadratus lumborum) by ventral rami. Each dorsal ramus splits into a lateral branch (to the erector spinae) and a medial branch (to multifidus and the transversospinales; the medial branch also supplies the facet joints, the basis of facet denervation). The <b>suboccipital nerve</b> is the dorsal ramus of C1: it supplies all four suboccipital muscles. The dorsal rami of C1, S4, S5 and Co1 do not split into medial and lateral branches.',
+  ventral: 'Serratus posterior superior and inferior (intercostal nerves) and quadratus lumborum (T12 and upper lumbar ventral rami) belong to the muscles supplied by ventral rami.',
+  two: 'The intertransversarii have a mixed supply, partly from ventral and partly from dorsal rami: a known exception to the rule.',
+};
+const FASCIA = {
+  intro: 'The thoracolumbar fascia binds the deep back muscles down and separates them from the limb muscles of the back. In the widely used model its lumbar part has three layers (Gray, 1918, and some modern authors count two). Tap a layer, or a row of a table.',
+  parts: [
+    ['tlf_post', 'Posterior layer', 'Attached to the lumbar and sacral spinous processes and the supraspinous ligament; it covers the erector spinae.'],
+    ['tlf_mid', 'Middle layer', 'Attached to the tips of the lumbar transverse processes; it lies between the erector spinae (behind) and quadratus lumborum (in front).'],
+    ['tlf_ant', 'Anterior layer', 'In front of quadratus lumborum; it blends medially with the fascia over psoas.'],
+  ],
+  union: 'The posterior and middle layers fuse at the lateral border of the erector spinae, where transversus abdominis (and internal oblique) arise from them. The aponeuroses of latissimus dorsi and serratus posterior inferior blend with the fascia. In the thorax the fascia is a thin single layer from the thoracic spinous processes to the angles of the ribs.',
+  tri: [
+    ['Superomedial boundary', ['rcp_major'], 'Rectus capitis posterior major.'],
+    ['Superolateral boundary', ['obl_cap_sup'], 'Obliquus capitis superior.'],
+    ['Inferolateral boundary', ['obl_cap_inf'], 'Obliquus capitis inferior.'],
+    ['Roof', ['semispinalis'], 'Dense fibro-fatty tissue under semispinalis capitis (not in the model).'],
+    ['Floor', ['rcp_major', 'obl_cap_sup', 'obl_cap_inf'], 'The posterior atlanto-occipital membrane and the posterior arch of the atlas.'],
+    ['Contents', ['rcp_major', 'obl_cap_sup', 'obl_cap_inf'], 'The vertebral artery (in the groove on the posterior arch of the atlas), the suboccipital nerve and the suboccipital venous plexus. The greater occipital nerve is not in it: it comes out below obliquus capitis inferior.'],
+  ],
+  head: [
+    ['Extension (atlanto-occipital joint, both sides)', ['rcp_major', 'rcp_minor', 'obl_cap_sup', 'splenius_cap', 'longissimus'], 'Rectus capitis posterior major and minor, obliquus capitis superior, splenius capitis, longissimus capitis, semispinalis capitis.'],
+    ['Bending the head to one side', ['obl_cap_sup', 'longissimus'], 'Obliquus capitis superior, longissimus capitis.'],
+    ['Turning the face to the same side (atlanto-axial joint)', ['obl_cap_inf', 'rcp_major', 'splenius_cap'], 'Obliquus capitis inferior (the main one), rectus capitis posterior major, splenius capitis. Rotation is the main movement at the atlanto-axial joint.'],
+    ['Turning the face to the opposite side', ['semispinalis', 'multifidus'], 'Semispinalis capitis and the transversospinal group.'],
+  ],
+  clin: [
+    ['Low back pain', 'Most (about 90 %) is mechanical, mostly with no specific cause, often put down to strain of the muscles or ligaments; a strain usually settles in days to weeks.'],
+    ['Nerve blocks', 'In an erector spinae plane block, local anaesthetic is placed deep to the erector spinae, on the transverse processes, to reach the dorsal rami; a quadratus lumborum block places it beside quadratus lumborum and the thoracolumbar fascia.'],
+    ['Suboccipital region', 'The triangle locates the vertebral artery, which is at risk in posterior approaches and needling here. The suboccipital muscles and the greater occipital nerve are implicated in cervicogenic headache; occipital neuralgia may be treated with a greater occipital nerve block.'],
+  ],
+};
+
+/* ===================== PAGE (shared logic: ../assets/muscle-page.js) ===================== */
+function buildFascia(api) {
+  const {v, focusOn, pressed, clearRows} = api, $ = id => document.getElementById(id);
+  const box = $('fascia-list'); box.replaceChildren();
+  for (const [k, name, text] of FASCIA.parts) {
+    if (!api.has(k)) continue;
+    const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--fascia)"></i><span>Thoracolumbar fascia: ${name.toLowerCase()}</span>`;
+    b.onclick = () => { clearRows(); pressed('#fascia-list button', x => x === k); $('fascia-desc').innerHTML = `<b>${name}.</b> ${text} ${FASCIA.union}`; focusOn([k]); v.fit([k]); v.face([0.6, 1, 0.2], {zoom: 1}); };
+    box.append(b);
+  }
+  const rowSel = (row, ks, text, dir) => { clearRows(); pressed('#fascia-list button', () => false); row.setAttribute('aria-pressed', 'true');
+    $('fascia-desc').innerHTML = text; focusOn(ks); v.fit(ks.concat(['c1', 'c2'])); v.face(dir, {zoom: 1}); };
+  const tri = $('tri');
+  tri.innerHTML = FASCIA.tri.map(([n, , t], i) => `<tr data-k="tr${i}" aria-pressed="false"><td>${n}</td><td>${t}</td></tr>`).join('');
+  tri.querySelectorAll('tr').forEach((r, i) => r.onclick = () => { const T = FASCIA.tri[i]; rowSel(r, T[1], `<b>Suboccipital triangle, ${T[0].toLowerCase()}:</b> ${T[2]}`, [0.3, 1, 0.3]); });
+  const head = $('head');
+  head.innerHTML = FASCIA.head.map(([n, , t], i) => `<tr data-k="hd${i}" aria-pressed="false"><td>${n}</td><td>${t}</td></tr>`).join('');
+  head.querySelectorAll('tr').forEach((r, i) => r.onclick = () => { const H = FASCIA.head[i]; rowSel(r, H[1], `<b>${H[0]}:</b> ${H[2]}`, [0.5, 1, 0.2]); });
+  $('clin').innerHTML = FASCIA.clin.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
+}
+MusclePage({
+  base: '../models/back-muscles/', manifest: 'back-muscles.json', DATA, GROUPS, NERVES, NERVE_TEXT, M, home: [0.35, 1, 0.1],
+  extra: {key: 'fascia', parts: FASCIA.parts.map(p => p[0]), build: buildFascia,
+    enter(api) { document.getElementById('fascia-desc').innerHTML = FASCIA.intro; const ks = FASCIA.parts.map(p => p[0]).filter(api.has);
+      api.focusOn(ks); api.v.fit(api.LIMB()); api.v.face([0.4, 1, 0.1], {zoom: 1}); }},
+});
+</script>
+</body>
+</html>

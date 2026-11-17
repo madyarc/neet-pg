@@ -14,7 +14,7 @@ const v = new AtlasViewer(document.getElementById('v'));
   let i = 0;
   const show = q.get('show') ? q.get('show').split(',') : null;
   for (const p of man.parts) {
-    const isBone = MUS ? !MUS.has(p.key) && !/retinac|aponeur|membrane|septum/i.test(p.name) : /bone|Right |phalanx|metacarpal/.test(p.name);
+    const isBone = MUS ? !MUS.has(p.key) && !/retinac|aponeur|membrane|septum|fascia|tract|tendon/i.test(p.name) : /bone|Right |phalanx|metacarpal/.test(p.name);
     v.setColour(p.key, isBone ? '#e8e0cc' : pal[i++ % pal.length]);
     if (show && !show.includes(p.key) && !isBone) v.setVisible(p.key, false);
   }

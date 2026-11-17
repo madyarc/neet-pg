@@ -69,7 +69,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 8. Features of individual bones (Upper Limb)
 
 - [x] **AN8.1** Identify the given bone, its side, anatomical position, joint formation, important features and clinical anatomy (clavicle, scapula, humerus, radius, ulna, carpal bones) — *features, joints, clinical points, left or right for every bone incl. the carpals: [Bones of the Upper Limb](upper-limb/bones.html)*
-- [~] **AN8.2** Demonstrate important muscle attachments on the given bone — *upper-limb and lower-limb muscle attachment areas: [Muscles of the Upper Limb](upper-limb/muscles.html), [Muscles of the Lower Limb](lower-limb/muscles.html)*
+- [~] **AN8.2** Demonstrate important muscle attachments on the given bone — *attachment areas: [Muscles of the Upper Limb](upper-limb/muscles.html), [Muscles of the Lower Limb](lower-limb/muscles.html), [Muscles of the Back](back/muscles.html)*
 - [x] **AN8.3** Identify and name various bones in articulated hand, Specify the parts of metacarpals and phalanges and enumerate the peculiarities of pisiform — *[Bones of the Upper Limb](upper-limb/bones.html)#hand, [The Upper Limb](upper-limb/upper-limb.html)*
 - [ ] **AN8.4** Describe scaphoid fracture and explain the anatomical basis of avascular necrosis
 
@@ -378,12 +378,12 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 42. Back Region
 
 - [ ] **AN42.1** Describe and demonstrate the contents of the vertebral canal
-- [ ] **AN42.2** Describe & demonstrate the boundaries and contents of Suboccipital triangle
+- [x] **AN42.2** Describe & demonstrate the boundaries and contents of Suboccipital triangle — *[Muscles of the Back](back/muscles.html) (Fascia, suboccipital triangle)*
 - [ ] **AN42.3** Describe the position, direction of fibres, relations, nerve supply, actions of semispinalis capitis and splenius capitis
 
 ### 43. Head & neck Joints, Histology, Development, Radiography & Surface marking
 
-- [ ] **AN43.1** Describe & demonstrate the movements with muscles producing the movements of atlantooccipital joint & atlantoaxial joint
+- [~] **AN43.1** Describe & demonstrate the movements with muscles producing the movements of atlantooccipital joint & atlantoaxial joint — *muscles at the back of the neck only: [Muscles of the Back](back/muscles.html)*
 - [ ] **AN43.2** Identify, describe and draw the microanatomy of pituitary gland, thyroid, parathyroid gland, tongue, salivary glands, tonsil, epiglottis, cornea, retina
 - [ ] **AN43.3** Identify, describe and draw microanatomy of olfactory epithelium, eyelid, lip, sclero-corneal junction, optic nerve, cochlea- organ of corti, pineal gland
 - [ ] **AN43.4** Describe the development and developmental basis of congenital anomalies of face, palate, tongue, branchial apparatus, pituitary gland, thyroid gland & eye
@@ -405,9 +405,9 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 45. Posterior abdominal wall
 
-- [ ] **AN45.1** Describe Thoracolumbar fascia, its different layers, their attachments and extents
+- [x] **AN45.1** Describe Thoracolumbar fascia, its different layers, their attachments and extents — *three layers, attachments, what lies between them: [Muscles of the Back](back/muscles.html)*
 - [ ] **AN45.2** Describe & demonstrate Lumbar plexus, its root value, formation, branches and clinical anatomy (compression/ injury to the rootlets of lumber plexus)
-- [ ] **AN45.3** Describe and demonstrate back muscles, nerve supply and action
+- [x] **AN45.3** Describe and demonstrate back muscles, nerve supply and action — *[Muscles of the Back](back/muscles.html)*
 
 ### 46. Male external genitalia
 

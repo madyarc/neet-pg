@@ -5,6 +5,7 @@
  *     base: '../models/<group>-muscles/', manifest: '<group>-muscles.json',
  *     DATA: {lede, based, models}, GROUPS: [[key, name]], NERVES: {key: [name, '--n-token']}, NERVE_TEXT: {key: html},
  *     M: {key: [group, origin, insertion, nerveKey, nerveText, action, note]},
+ *     home: [x, y, z] (optional view direction, default front),
  *     extra: {key: 'wrist', parts: [keys of connective parts shown in that tab], build(api), enter(api)}   // optional 3rd tab
  *   })
  * The page HTML has: #v #views #lede #based #models, tabs #tab-muscles #tab-nerves #tab-<extra>, panes #pane-…,
@@ -120,8 +121,9 @@ function MusclePage(cfg) {
     for (const t of tabs) { $('tab-' + t).setAttribute('aria-pressed', t === name); $('pane-' + t).hidden = t !== name; }
     document.querySelectorAll('[aria-pressed][data-k]').forEach(b => b.setAttribute('aria-pressed', 'false')); clearRows();
     paint(); focusOn(null);
-    if (name === 'muscles') { showDetail(null); v.fit(LIMB()); v.face([0, -1, 0], {zoom: 1}); }
-    if (name === 'nerves') { $('nerve-desc').innerHTML = 'Each muscle is coloured by the nerve that supplies it. Tap a nerve.'; v.fit(LIMB()); v.face([0, -1, 0], {zoom: 1}); }
+    const home = cfg.home || [0, -1, 0];   // the direction the model is first seen from (the back page: from behind)
+    if (name === 'muscles') { showDetail(null); v.fit(LIMB()); v.face(home, {zoom: 1}); }
+    if (name === 'nerves') { $('nerve-desc').innerHTML = 'Each muscle is coloured by the nerve that supplies it. Tap a nerve.'; v.fit(LIMB()); v.face(home, {zoom: 1}); }
     if (extra && name === extra.key) extra.enter(api);
   }
   for (const t of tabs) $('tab-' + t).onclick = () => setTab(t);

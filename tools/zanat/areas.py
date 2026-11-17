@@ -71,7 +71,9 @@ def main():
     here = os.path.dirname(os.path.abspath(sys.argv[1]))
     rel = lambda p: p if os.path.isabs(p) else os.path.join(here, p)
     man = json.load(open(rel(spec['manifest']))); base = os.path.dirname(rel(spec['manifest']))
-    L = json.load(open(rel(spec['landmarks']))) if spec.get('landmarks') else {}
+    L = {}
+    for lf in ([spec['landmarks']] if isinstance(spec.get('landmarks'), str) else spec.get('landmarks', [])):
+        for k, v in json.load(open(rel(lf))).items(): L.setdefault(k, {}).update(v)   # several landmark files merge
     files = {p['key']: os.path.join(base, p['file']) for p in man['parts']}
     cache, nbs = {}, {}
     mesh = lambda k: cache.setdefault(k, decode(files[k]))

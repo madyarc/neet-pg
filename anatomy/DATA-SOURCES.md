@@ -415,3 +415,25 @@ retinaculum on the calcaneus (→ binds the fibular tendons, two sources), FL/TP
 convention"), obturator externus "posterior branch", ITB syndrome "cyclists", fibularis tertius absence rates,
 gluteus maximus "three-quarters", superior fibular retinaculum tear, the phrase "true hamstring" (criteria kept). FHB
 origin reworded: the cuboid is agreed, the cuneiform differs.
+
+## Muscles of the Back — `back/muscles.html`
+
+**Meshes:** vertebral column, occipital and right temporal bones, right ribs and hip bone (BodyParts3D 3.0); 17 deep
+back muscles and the three layers of the thoracolumbar fascia from Z-Anatomy (`tools/zanat/back_muscles.py`). Not in
+the model: semispinalis capitis (absent from Z-Anatomy: text only) and levatores costarum (only their existence is
+two-sourced, so they were removed). **Attachment areas** (`tools/zanat/back-attach.json`): 36, each checked by eye;
+vertebral attachments limited to the spinous-process end (front–back axis). Left out: serratus posterior superior spinal
+origins, splenius cervicis insertions, semispinalis insertions, multifidus sacral origin, quadratus lumborum
+transverse-process insertions and iliac origin, rectus capitis posterior major occipital insertion (partial or sliver).
+
+**Sources:** fact sheet `sources-local/facts/back-muscles.md` (329 quotes, 64 sources): Gray 1918 (bartleby.com/107
+sections 115–118, 209), StatPearls abstracts, open-access papers (Zhang 2025, Hung 2024, Du 2025, Regan 2023, Homma
+2023, Shuang 2015 and others), Wikipedia (not counted where it copies Gray). Left out (single source or disputed):
+serratus posterior inferior origin levels and breathing role, spinalis levels and "inconstant" spinalis cervicis,
+levatores costarum details, interspinales action, root values of the splenii and quadratus lumborum, quadratus
+lumborum's action with both sides together, rotatores outside the thoracic region, semispinalis span in segments.
+**Independent review (2026-11-17), 7 fixes:** intertransversarii supply "mixed, partly ventral, partly dorsal rami"
+(the lumbar lateral/medial split is Gray only); longissimus capitis turning the face removed (Gray only); the
+latissimus/serratus posterior inferior aponeuroses blend with the fascia as a whole, not the posterior layer; "the
+posterior and middle layers fuse" laterally; low back pain wording (mechanical vs non-specific; days to weeks is for a
+strain); occipital neuralgia "may be treated" with a nerve block; footer "better-supported wording".
