@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pupil Reflexes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Colour tokens, one meaning each: --aff = afferent limb (retina to midbrain); --eff = efferent limb (Edinger–Westphal
+   to the pupil); --ray = light; --mark = the lesion. */
+html,body{margin:0} [hidden]{display:none!important}
+:root{
+  --bg:#f5f6f9; --surface:#ffffff; --ink:#1a2130; --muted:#5a6375; --line:#dce0e8; --accent:#2c56cc;
+  --mark:#cf3f33; --clin:#cc3311;
+  --aff:#1f8a8a; --eff:#a0522d; --ray:#d08a1a; --brain:#eceff4; --iris:#6b7f99; --pupil:#0d1117; --sclera:#ffffff;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+:root[data-theme="dark"]{
+  --bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c; --accent:#7d9dff;
+  --mark:#ff7b6f; --clin:#ff7b6f;
+  --aff:#4cc2c2; --eff:#e08a5c; --ray:#f0b04a; --brain:#1c222d; --iris:#7d93b0; --pupil:#000000; --sclera:#d9dee6; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,4vw,38px);line-height:1.1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h2{font-family:var(--f-display);font-weight:600;font-size:21px;margin:0 0 6px;text-wrap:balance}
+p{margin:0}
+a{color:var(--accent)}
+.back a{font-size:14px;color:var(--muted);text-decoration:none} .back a:hover{color:var(--accent)}
+.lede{max-width:72ch;color:var(--muted)}
+.muted{color:var(--muted);font-size:13.5px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.stack{display:flex;flex-direction:column;gap:12px}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.split{grid-template-columns:minmax(0,1fr)}}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.chips.wrapc{flex-wrap:wrap;overflow:visible}
+.chip{flex:none;font:500 13px var(--f-body);background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.chip[disabled]{opacity:.45;cursor:default}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cap{border-left:3px solid var(--line);padding:2px 0 2px 10px;font-size:14px;max-width:80ch}
+.cap.key{border-left-color:var(--accent)} .cap.warn{border-left-color:var(--clin)}
+.swatch{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.tag{font:500 10.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+footer{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:12px}
+svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--f-body);fill:var(--ink)}
+.lbl{font-size:11.5px;fill:var(--muted)}
+.lbl.b{font-weight:600;fill:var(--ink)}
+.limb{fill:none;stroke-width:3.5;stroke-linecap:round;transition:opacity .3s,stroke-width .3s}
+.pupil{transition:r var(--t,.45s) ease}
+.eyes{display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center}
+.eyes figcaption{font:600 13px var(--f-body)}
+.eyes .mm{font:500 12px var(--f-mono);color:var(--muted)}
+.state{font:600 15px var(--f-body)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600}
+.tablewrap{overflow-x:auto}
+tr.sel td{background:var(--bg)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Ophthalmology</a></nav>
+<header class="stack">
+  <h1>Pupil Reflexes</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split">
+  <div class="panel stack">
+    <div class="chips" id="conds" role="group" aria-label="Condition"></div>
+    <svg id="path" viewBox="0 -12 400 412" role="img" aria-label="The pathway of the pupillary light reflex, seen from above"></svg>
+    <div class="legend">
+      <span><i class="swatch" style="background:var(--aff)"></i>afferent (retina to midbrain)</span>
+      <span><i class="swatch" style="background:var(--eff)"></i>efferent (parasympathetic, in the oculomotor nerve, III)</span>
+      <span><i class="swatch" style="background:var(--mark)"></i>lesion</span>
+    </div>
+    <p class="muted">Seen from above, the patient facing the top of the screen. Schematic, not to scale.</p>
+  </div>
+
+  <div class="stack">
+    <div class="panel stack">
+      <div class="chips wrapc" id="acts" role="group" aria-label="Test"></div>
+      <div class="eyes" id="eyes"></div>
+      <p class="muted">Pupils drawn in the same left–right order as the diagram (the patient's left on the left), not as you would see them facing the patient. Sizes are schematic.</p>
+    </div>
+    <div class="panel stack" id="result" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="panel stack">
+  <h2>The pathway</h2>
+  <div class="stack" id="rules"></div>
+</section>
+
+<section class="panel stack">
+  <h2>Each pupil at a glance</h2>
+  <div class="tablewrap"><table id="table"></table></div>
+</section>
+
+<footer id="foot"></footer>
+</div>
+
+<script>
+"use strict";
+/* ================= DATA (every statement checked: see ophthalmology/DATA-SOURCES.md) ================= */
+/* Each condition: aff = how much light signal each eye's afferent limb carries (1 normal, 0 none);
+   eff = how well each pupil's efferent limb works for the light reflex; rest / min = schematic pupil sizes (mm) in dim
+   light and with full light drive; near = pupil size during the near response (null = not shown: not sourced);
+   slow = the reaction is slow (tonic); lesion = where to draw the lesion; shape = irregular pupils. */
+const CONDS = [
+  { key: 'normal', short: 'Normal', name: 'Normal pupils',
+    aff: { L: 1, R: 1 }, eff: { L: 1, R: 1 }, rest: { L: 5, R: 5 }, min: { L: 2.5, R: 2.5 }, near: { L: 3, R: 3 },
+    say: { L: 'Light in the left eye: <b>both</b> pupils constrict equally, the left directly, the right consensually.',
+           R: 'Light in the right eye: both pupils constrict equally.',
+           swing: 'Swinging the light from eye to eye: both pupils stay equally small; neither dilates as the light arrives.',
+           near: 'Looking at a near object: the eyes converge, the lenses accommodate and both pupils constrict (the near triad).',
+           none: 'Dim light: both pupils are equal and larger.' },
+    table: ['Equal', 'Both constrict, whichever eye is lit', 'Constrict', '—'] },
+  { key: 'on', short: 'Left optic nerve cut', name: 'Complete lesion of the left optic nerve (amaurotic pupil)', lesion: 'on',
+    aff: { L: 0, R: 1 }, eff: { L: 1, R: 1 }, rest: { L: 5, R: 5 }, min: { L: 2.5, R: 2.5 }, near: null,
+    say: { L: 'Light in the blind left eye: <b>neither</b> pupil constricts. No signal leaves the left eye, so neither Edinger–Westphal nucleus is driven.',
+           R: 'Light in the right eye: <b>both</b> pupils constrict. The left pupil\'s own nerve (oculomotor) is intact, so its consensual reflex survives.',
+           swing: 'Swinging light: both pupils constrict when the right eye is lit and both dilate fully when the light moves to the blind left eye.',
+           none: 'Dim light.' },
+    table: ['Equal', 'Light in the blind eye: neither constricts. Light in the other eye: both constrict', 'Not shown here', 'Optic nerve on the blind side'] },
+  { key: 'rapd', short: 'Left RAPD', name: 'Relative afferent pupillary defect, left eye (Marcus Gunn pupil)', lesion: 'rapd',
+    aff: { L: 0.45, R: 1 }, eff: { L: 1, R: 1 }, rest: { L: 5, R: 5 }, min: { L: 2.5, R: 2.5 }, near: null,
+    say: { L: 'Light in the left eye: both pupils constrict, but not fully: the damaged left optic nerve carries a weaker signal.',
+           R: 'Light in the right eye: both pupils constrict further.',
+           swing: 'The swinging light test: as the light moves from the right eye to the left, <b>both pupils dilate</b>; back to the right, both constrict. This is a left RAPD.',
+           none: 'Dim light.' },
+    table: ['Equal', 'Swinging light: both dilate when the light reaches the affected eye', 'Not shown here', 'Asymmetric disease of the retina or optic nerve; symmetrical disease of both eyes gives no RAPD'] },
+  { key: 'cn3', short: 'Left oculomotor palsy (pupil involved)', name: 'Left oculomotor (third) nerve palsy involving the pupil', lesion: 'cn3',
+    aff: { L: 1, R: 1 }, eff: { L: 0, R: 1 }, rest: { L: 7, R: 5 }, min: { L: 7, R: 2.5 }, near: null,
+    say: { L: 'Light in the left eye: the <b>right</b> pupil constricts (left afferent and right efferent are intact); the left pupil stays dilated.',
+           R: 'Light in the right eye: the right pupil constricts; the left stays dilated.',
+           swing: 'Whichever eye is lit, the left pupil stays dilated; the right pupil constricts each time.',
+           none: 'Dim light: the left pupil is dilated.' },
+    table: ['Affected pupil dilated', 'Affected pupil: no direct or consensual reaction. Light in the affected eye still constricts the other pupil', 'Not shown here', 'Oculomotor nerve (efferent limb)'] },
+  { key: 'ar', short: 'Argyll Robertson', name: 'Argyll Robertson pupils', lesion: 'ar', shape: 1,
+    aff: { L: 1, R: 1 }, eff: { L: 0, R: 0 }, rest: { L: 2, R: 2 }, min: { L: 2, R: 2 }, near: { L: 1.4, R: 1.4 },
+    say: { L: 'Light: little or no constriction.', R: 'Light: little or no constriction.',
+           swing: 'Swinging light: little or no reaction in either eye.',
+           near: 'Near object: the small pupils <b>constrict briskly</b>. Light–near dissociation.',
+           none: 'Small, irregular pupils, usually both.' },
+    table: ['Small, irregular, usually both', 'Little or none', 'Brisk', 'Thought to be the dorsal rostral midbrain, near the pretectal area; classically neurosyphilis'] },
+  { key: 'adie', short: 'Left Adie pupil', name: 'Adie tonic pupil, left', lesion: 'adie', slow: 'L',
+    aff: { L: 1, R: 1 }, eff: { L: 0.1, R: 1 }, rest: { L: 6.5, R: 5 }, min: { L: 6.5, R: 2.5 }, near: { L: 3.5, R: 3 },
+    say: { L: 'Light: the left pupil reacts poorly or sluggishly; the right constricts.', R: 'Light: the right pupil constricts; the left reacts poorly.',
+           swing: 'Swinging light: the left pupil hardly changes.',
+           near: 'Near object: the left pupil constricts <b>slowly</b> and stays constricted (tonic); when the patient looks away it re-dilates slowly.',
+           none: 'The left pupil is larger.' },
+    table: ['Affected pupil dilated, usually one side', 'Poor or sluggish', 'Slow, sustained (tonic)', 'Ciliary ganglion or short ciliary nerves (postganglionic)'] }
+];
+const TEXT = {
+  lede: 'Pick a condition, then shine a light in either eye, swing it from eye to eye, or show a near object. Watch both pupils and the parts of the pathway that carry the signal.',
+  rules: [
+    { k: 1, t: '<b>Afferent limb:</b> retina → optic nerve → chiasma → optic tract. The pupil fibres do not go to the lateral geniculate body; they leave the tract and end in the <b>pretectal nucleus</b> of the midbrain, at the level of the superior colliculus. Nasal-retina fibres cross at the chiasma to the opposite pretectal nucleus; temporal-retina fibres reach the nucleus on their own side.' },
+    { t: '<b>Both sides at once:</b> each pretectal nucleus sends fibres to <b>both</b> Edinger–Westphal nuclei. So light in one eye constricts both pupils: the <b>direct</b> reflex in the lit eye, the <b>consensual</b> reflex in the other.' },
+    { t: '<b>Efferent limb:</b> parasympathetic fibres from the Edinger–Westphal nucleus run in the <b>oculomotor nerve</b> to the <b>ciliary ganglion</b>; postganglionic fibres reach the sphincter pupillae in the short ciliary nerves.' },
+    { t: '<b>Where the lesion is decides the pattern.</b> An afferent (optic nerve) lesion changes the response <i>to light in that eye</i>, in both pupils. An efferent (oculomotor) lesion changes <i>that pupil</i>, whichever eye is lit.' },
+    { t: '<b>The near response</b> (accommodation, convergence, constriction of the pupils) takes a different afferent route, through the lateral geniculate body and the visual cortex. So a lesion of the light pathway in the midbrain can spare it: <b>light–near dissociation</b> (the Argyll Robertson pupil). The Adie pupil shows light–near dissociation too, but its lesion is in the ciliary ganglion, not the midbrain.' },
+    { w: 1, t: '<b>Argyll Robertson pupil:</b> classically neurosyphilis (late syphilis). The exact lesion is uncertain; it is thought to lie in the dorsal midbrain near the pretectal area.' },
+    { t: '<b>Adie tonic pupil:</b> damage to the ciliary ganglion or short ciliary nerves (postganglionic parasympathetic). The denervated sphincter is supersensitive: dilute pilocarpine (0.1–0.125%) constricts it, though this is not specific (some oculomotor palsies respond too). With reduced tendon reflexes it is the <b>Holmes–Adie syndrome</b>.' },
+    { t: '<b>An optic tract lesion</b> can give an RAPD in the eye that has lost its temporal field, which is the eye on the other side.' }
+  ],
+  foot: '<p><b>Based on:</b> EyeWiki (American Academy of Ophthalmology); StatPearls; open-access reviews in <i>Frontiers in Neuroscience</i>, <i>International Journal of Emergency Medicine</i> and <i>Community Eye Health</i>; Gray\'s <i>Anatomy</i> (1918); Wikipedia.</p><p><b>Models used:</b> the pathway is a schematic drawing, not to scale. Pupil sizes and the strength of each reaction are schematic, chosen to show the pattern, not measured values. The near response is shown only where the sources describe it.</p>'
+};
+/* ================= END DATA ================= */
+
+const NS = 'http://www.w3.org/2000/svg';
+const $ = id => document.getElementById(id);
+const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const M = (x, s) => s === 'L' ? x : 400 - x;
+const other = s => s === 'L' ? 'R' : 'L';
+
+let cur = { c: 0, act: 'none', lit: null, timer: null };
+const C = () => CONDS[cur.c];
+
+/* pupil sizes now: light drive reaches both Edinger–Westphal nuclei equally (bilateral connections) */
+function sizes() {
+  const c = C(), out = {};
+  const drive = cur.lit ? c.aff[cur.lit] : 0;
+  for (const e of 'LR') {
+    if (cur.act === 'near' && c.near) out[e] = c.near[e];
+    else out[e] = c.rest[e] - (c.rest[e] - c.min[e]) * drive * Math.min(1, c.eff[e]);
+  }
+  return out;
+}
+
+function drawPath() {
+  const c = C(), svg = $('path'); svg.textContent = '';
+  el('path', { d: 'M200 110 C 80 110 40 180 40 280 C 40 360 120 396 200 396 C 280 396 360 360 360 280 C 360 180 320 110 200 110 Z', fill: 'var(--brain)', stroke: 'var(--line)' }, svg);
+  const lab = (x, y, t, cls = 'lbl', a = 'start') => { el('text', { x, y, class: cls, 'text-anchor': a }, svg).textContent = t; };
+  const drive = cur.lit ? c.aff[cur.lit] : 0;
+  const on = (eye) => cur.lit === eye && c.aff[eye] > 0;           // afferent from this eye is carrying a signal
+  const effOn = e => drive > 0 && c.eff[e] > 0.5;                   // efferent to this pupil is working on light
+  const nearOn = cur.act === 'near' && c.near;
+  const limb = (d, col, active, extra = {}) => el('path', Object.assign({ d, class: 'limb', stroke: `var(--${col})`, opacity: active ? 1 : .28, 'stroke-width': active ? 4.5 : 3 }, extra), svg);
+  for (const s of 'LR') {
+    const o = other(s), cx = M(120, s);
+    el('circle', { cx, cy: 52, r: 30, fill: 'var(--surface)', stroke: 'var(--muted)', 'stroke-width': 1.2 }, svg);
+    if (cur.lit === s) el('path', { d: `M${cx} -4 L ${cx - 12} 22 L ${cx + 12} 22 Z`, fill: 'var(--ray)', opacity: .8 }, svg);
+    // afferent: optic nerve to chiasma, then to both tracts, then to both pretectal nuclei
+    limb(`M${cx} 82 L ${M(188, s)} 150`, 'aff', on(s));
+    limb(`M${M(188, s)} 150 L ${M(160, s)} 212 L ${M(176, s)} 262`, 'aff', on(s));          // temporal retina: same side
+    limb(`M${M(188, s)} 150 L ${M(240, s)} 212 L ${M(224, s)} 262`, 'aff', on(s), { 'stroke-dasharray': '0' }); // nasal retina: crosses
+    // to LGB (vision), faded
+    el('path', { d: `M${M(160, s)} 212 L ${M(120, s)} 240`, fill: 'none', stroke: nearOn ? 'var(--aff)' : 'var(--muted)', 'stroke-width': nearOn ? 3 : 1.5, 'stroke-dasharray': '3 3' }, svg);   // vision (and the near response) go via the LGB and cortex
+    el('ellipse', { cx: M(112, s), cy: 246, rx: 12, ry: 7, fill: 'var(--surface)', stroke: 'var(--muted)' }, svg);
+    // pretectal nucleus -> both EW nuclei
+    el('circle', { cx: M(176, s), cy: 266, r: 7, fill: 'var(--surface)', stroke: 'var(--aff)', 'stroke-width': 2 }, svg);
+    const pre = drive > 0;
+    limb(`M${M(176, s)} 272 L ${M(188, s)} 312`, 'aff', pre && c.key !== 'ar');
+    limb(`M${M(176, s)} 272 L ${M(212, s)} 312`, 'aff', pre && c.key !== 'ar');
+    el('circle', { cx: M(188, s), cy: 318, r: 7, fill: 'var(--surface)', stroke: 'var(--eff)', 'stroke-width': 2 }, svg);
+    // efferent: oculomotor nerve forward to the ciliary ganglion, short ciliary nerves to the pupil
+    limb(`M${M(188, s)} 325 C ${M(110, s)} 360 ${M(40, s)} 300 ${M(52, s)} 200 C ${M(60, s)} 140 ${M(80, s)} 110 ${M(92, s)} 98`, 'eff', effOn(s) || (nearOn && c.near[s] < c.rest[s]));
+    el('circle', { cx: M(92, s), cy: 96, r: 5, fill: 'var(--surface)', stroke: 'var(--eff)', 'stroke-width': 2 }, svg);
+    limb(`M${M(92, s)} 96 L ${M(104, s)} 78`, 'eff', effOn(s) || (nearOn && c.near[s] < c.rest[s]));
+  }
+  lab(84, 40, 'Left eye', 'lbl b', 'end'); lab(316, 40, 'Right eye', 'lbl b', 'start');
+  lab(206, 146, 'chiasma'); lab(104, 266, 'LGB (vision)', 'lbl', 'middle');
+  lab(150, 290, 'pretectal', 'lbl', 'end'); lab(150, 302, 'nucleus', 'lbl', 'end');
+  lab(200, 342, 'Edinger–Westphal', 'lbl', 'middle'); lab(200, 354, 'nuclei', 'lbl', 'middle');
+  lab(60, 206, 'III', 'lbl b'); lab(8, 122, 'ciliary', 'lbl'); lab(8, 134, 'ganglion', 'lbl');
+  // lesion marks
+  const X = (x, y) => { const g = el('g', { stroke: 'var(--mark)', 'stroke-width': 3.5, 'stroke-linecap': 'round' }, svg);
+    el('line', { x1: x - 8, y1: y - 8, x2: x + 8, y2: y + 8 }, g); el('line', { x1: x - 8, y1: y + 8, x2: x + 8, y2: y - 8 }, g); };
+  if (c.lesion === 'on') X(150, 116);
+  if (c.lesion === 'rapd') { el('circle', { cx: 150, cy: 116, r: 9, fill: 'none', stroke: 'var(--mark)', 'stroke-width': 3, 'stroke-dasharray': '4 3' }, svg); }
+  if (c.lesion === 'cn3') X(46, 240);
+  if (c.lesion === 'adie') X(92, 96);
+  if (c.lesion === 'ar') { el('ellipse', { cx: 200, cy: 290, rx: 46, ry: 14, fill: 'none', stroke: 'var(--mark)', 'stroke-width': 3, 'stroke-dasharray': '5 4' }, svg); }
+}
+
+function drawEyes() {
+  const box = $('eyes'); box.textContent = '';
+  const sz = sizes(), c = C();
+  for (const e of 'LR') {
+    const fig = document.createElement('figure'); fig.style.margin = 0;
+    const svg = el('svg', { viewBox: '-60 -34 120 68', role: 'img', 'aria-label': `${e === 'L' ? 'Left' : 'Right'} pupil, ${sz[e].toFixed(1)} mm` });
+    el('path', { d: 'M-56 0 Q 0 -44 56 0 Q 0 44 -56 0 Z', fill: 'var(--sclera)', stroke: 'var(--muted)' }, svg);
+    el('circle', { cx: 0, cy: 0, r: 24, fill: 'var(--iris)' }, svg);
+    const r = sz[e] * 2.4;   // 10 mm iris ≈ 24 units
+    const p = c.shape ? el('ellipse', { cx: 0.6, cy: -0.4, rx: r * 1.08, ry: r * 0.88, fill: 'var(--pupil)', transform: 'rotate(-20)' }, svg)
+                      : el('circle', { class: 'pupil', cx: 0, cy: 0, r: r, fill: 'var(--pupil)' }, svg);
+    if (c.slow === e) p.style.setProperty('--t', '3s');
+    if (cur.lit === e) el('circle', { cx: 9, cy: -9, r: 3.2, fill: '#fff', opacity: .9 }, svg);
+    fig.appendChild(svg);
+    const cap = document.createElement('figcaption'); cap.innerHTML = `${e === 'L' ? 'Left' : 'Right'} eye <span class="mm">${sz[e].toFixed(1)} mm</span>`;
+    fig.appendChild(cap); box.appendChild(fig);
+  }
+}
+/* keep the pupils animating: re-use the circles when possible so CSS transitions run */
+function updateEyes() {
+  const circles = $('eyes').querySelectorAll('circle.pupil, ellipse');
+  if (!circles.length) return drawEyes();
+  drawEyes();
+}
+
+function render() {
+  const c = C();
+  $('conds').querySelectorAll('.chip').forEach((b, i) => b.setAttribute('aria-pressed', i === cur.c));
+  $('acts').querySelectorAll('.chip').forEach(b => { b.setAttribute('aria-pressed', b.dataset.a === cur.act); if (b.dataset.a === 'near') b.disabled = !c.near; });
+  drawPath(); animateEyes();
+  const sayKey = cur.act === 'swing' ? 'swing' : cur.act === 'near' ? 'near' : cur.act === 'none' ? 'none' : cur.lit;
+  $('result').innerHTML = `<span class="tag">${c.short}</span><p class="state">${c.name}</p><p>${c.say[sayKey] || ''}</p>`
+    + (cur.act === 'swing' ? `<p class="muted">Light now on the ${cur.lit === 'L' ? 'left' : 'right'} eye.</p>` : '');
+  $('table').querySelectorAll('tbody tr').forEach((tr, i) => tr.classList.toggle('sel', i === cur.c));
+}
+/* pupils: change radius on existing elements so the transition (fast, or slow for a tonic pupil) is visible */
+function animateEyes() {
+  const c = C(), sz = sizes(), box = $('eyes');
+  const figs = box.querySelectorAll('figure');
+  if (figs.length !== 2 || box.dataset.c !== String(cur.c)) { box.dataset.c = cur.c; drawEyes(); return; }
+  [...'LR'].forEach((e, i) => {
+    const r = sz[e] * 2.4, p = figs[i].querySelector('.pupil, ellipse');
+    if (p.tagName === 'circle') { p.style.r = r + 'px'; p.setAttribute('r', r); } else { p.setAttribute('rx', r * 1.08); p.setAttribute('ry', r * 0.88); }
+    const glint = figs[i].querySelector('circle:not(.pupil):not([r="24"])');
+    if (glint) glint.remove();
+    if (cur.lit === e) el('circle', { cx: 9, cy: -9, r: 3.2, fill: '#fff', opacity: .9 }, figs[i].querySelector('svg'));
+    figs[i].querySelector('.mm').textContent = sz[e].toFixed(1) + ' mm';
+  });
+}
+
+function setAct(a) {
+  clearInterval(cur.timer); cur.timer = null; cur.act = a;
+  if (a === 'L' || a === 'R') cur.lit = a;
+  else if (a === 'swing') { cur.lit = 'R'; cur.timer = setInterval(() => { cur.lit = other(cur.lit); render(); }, 1800); }
+  else cur.lit = null;
+  render();
+}
+
+function init() {
+  $('lede').innerHTML = TEXT.lede;
+  CONDS.forEach((c, i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = c.short;
+    b.onclick = () => { cur.c = i; setAct(cur.act === 'near' && !c.near ? 'none' : cur.act); }; $('conds').appendChild(b); });
+  for (const [a, t] of [['none', 'Dim light'], ['L', 'Light: left eye'], ['R', 'Light: right eye'], ['swing', 'Swinging light'], ['near', 'Near object']]) {
+    const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.dataset.a = a; b.textContent = t;
+    b.onclick = () => setAct(a); $('acts').appendChild(b);
+  }
+  $('rules').innerHTML = TEXT.rules.map(x => `<p class="cap${x.k ? ' key' : x.w ? ' warn' : ''}">${x.t}</p>`).join('');
+  $('table').innerHTML = `<thead><tr><th>Condition</th><th>At rest</th><th>To light</th><th>To a near object</th><th>Lesion</th></tr></thead><tbody>${
+    CONDS.map(c => `<tr><td>${c.short}</td>${c.table.map(x => `<td>${x}</td>`).join('')}</tr>`).join('')}</tbody>`;
+  $('table').querySelectorAll('tbody tr').forEach((tr, i) => { tr.style.cursor = 'pointer'; tr.onclick = () => { cur.c = i; setAct('none'); }; });
+  $('foot').innerHTML = TEXT.foot;
+  setAct('none');
+}
+init();
+</script>
+</body>
+</html>

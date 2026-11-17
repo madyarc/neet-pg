@@ -12,7 +12,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 1. Visual Acuity Assessment
 
-- [~] **OP1.1** (Visual Pathway; Refractive Errors: optics of the eye) Describe the physiology of vision, optics of eye and anatomy of visual pathway.
+- [~] **OP1.1** (Visual Pathway; Pupil Reflexes; Refractive Errors: optics of the eye) Describe the physiology of vision, optics of eye and anatomy of visual pathway.
 - [x] **OP1.2** (Refractive Errors) Define,classify and describe the types and methods of correcting refractive errors.
 - [ ] **OP1.3** Demonstrate the steps in performing the visualacuity assessment for distance vision,near vision, colour vision,the pinhole test and the menace and blink reflexes *(skill)*
 - [~] **OP1.4** (Refractive Errors: principles; indications not covered) Enumerate the indications and describe the principlesofrefractive surgery
@@ -87,7 +87,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **OP9.2** Describe the etiopathogenesis, clinical features, management and screening protocol for Diabetic Retinopathy.
 - [ ] **OP9.3** Discuss the etiopathogenesis, clinical features and management of vascular occlusions of retina.
 - [ ] **OP9.4** Discuss the etiopathogenesis, clinical features and management of Hypertensive retinopathy, retinopathy of prematurity, Eales disease, retinal detachment, central serous retinopathy, cystoid macular edema, age related macular degeneration, retinitis pigmentosa and Retinoblastoma.
-- [~] **OP9.5** (Visual Pathway: anatomy and field defects) Describe and discuss the correlative anatomy,aetiology,clinical manifestations, diagnostic tests, imaging and treatment of diseases of the optic nerve and visual pathway
+- [~] **OP9.5** (Visual Pathway: anatomy and field defects; Pupil Reflexes: RAPD, Argyll Robertson, Adie) Describe and discuss the correlative anatomy,aetiology,clinical manifestations, diagnostic tests, imaging and treatment of diseases of the optic nerve and visual pathway
 
 ### 10. Miscellaneous
 

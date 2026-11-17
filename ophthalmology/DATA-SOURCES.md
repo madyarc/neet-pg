@@ -37,7 +37,34 @@ PMC12568719 names a non-existent "superior geniculate nucleus"; one EyeWiki page
 **Schematic choices (labelled on the page):** the macular-sparing radius (5°) and central-scotoma radius (12°) are drawn
 sizes, not data; sources give sparing of the central 2–10°.
 
-## 02 Refractive Errors — `refraction/refractive-errors.html`
+## 02 Pupil Reflexes — `neuro-ophthalmology/pupil-reflexes.html`
+
+Facts from `sources-local/facts/ophth-pathway.md`, sections 5–6.
+
+| Statement on the page | Sources |
+|---|---|
+| Afferent: retina → optic nerve → chiasma → tract → pretectal nucleus (not the LGB), level of superior colliculus; nasal fibres cross to the opposite pretectal nucleus | EyeWiki (Reflexes and the Eye); PMC12568719; PMC13015004; Wikipedia (Pupillary light reflex). Wikipedia's "ipsilateral pretectal nucleus" ignores the crossing: not used |
+| Each pretectal nucleus → both Edinger–Westphal nuclei; direct and consensual reflexes | EyeWiki; PMC12568719; PMC5365042 (*Community Eye Health*); Wikipedia |
+| Efferent: oculomotor nerve → ciliary ganglion → short ciliary nerves → sphincter pupillae | EyeWiki; PMC12568719; Gray 1918 (which calls the fibres "sympathetic", old usage) |
+| Complete optic nerve lesion: light in the blind eye, neither constricts; in the other eye, both | Wikipedia; PMC12568719; EyeWiki RAPD (both constrict when the good eye is lit) |
+| Oculomotor lesion: affected pupil dilated, no direct or consensual reaction; light in that eye constricts the other pupil | PMC12568719; Wikipedia; PMC13015004 |
+| RAPD: asymmetric retina / optic nerve disease; swinging light: both dilate on reaching the affected eye; symmetrical disease gives no RAPD | StatPearls (Marcus Gunn Pupil); EyeWiki (two pages, one source); PMC5365042; Wikipedia |
+| Near triad; near afferent route via LGB and visual cortex | EyeWiki; PMC12568719 |
+| Argyll Robertson: small, irregular, usually both; little or no light reaction, brisk near; neurosyphilis; lesion thought to be dorsal rostral midbrain / pretectal; cause uncertain | EyeWiki; PMC13015004; StatPearls; PMC12568719; Wikipedia |
+| Adie: dilated, usually one side; poor light reaction; slow tonic near reaction; ciliary ganglion / short ciliary nerves; dilute pilocarpine 0.1–0.125% (not specific); Holmes–Adie with reduced tendon reflexes | EyeWiki (Adie Pupil); PMC13015004; Wikipedia (Adie syndrome) |
+| Optic tract lesion: RAPD in the eye with temporal field loss | EyeWiki; PMC4181645 |
+
+**Left out (one source):** Argyll Robertson pupil size (<2 mm vs <3 mm); AR-like pupils in diabetes and other
+conditions (EyeWiki only); "tabes dorsalis, general paresis" (one review); Adie pupil "becomes smaller over time" and
+"aberrant reinnervation" / "post-inflammatory" cause (one source each); pupil equality in afferent defects (indirect).
+**Model:** pupil sizes and reaction strengths are schematic. The near response is shown only for normal, Argyll
+Robertson and Adie pupils, where the sources describe it.
+
+**Independent review (2026-11-16):** simulation logic and pathway drawing confirmed for every condition. Fixed: the
+near-response rule implied the Adie pupil is a midbrain lesion; it now says Adie's lesion is in the ciliary ganglion.
+The oculomotor condition is now named "involving the pupil", since the model shows a pupil-involving palsy.
+
+## 03 Refractive Errors — `refraction/refractive-errors.html`
 
 | Statement on the page | Sources |
 |---|---|
