@@ -1,0 +1,40 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../anatomy/assets/atlas.css">
+<style>html,body{margin:0;height:100%}#v{width:100vw;height:100vh}</style></head><body><div id="v"></div>
+<script src="../../anatomy/assets/viewer.js"></script>
+<script>
+/* dev view: ?m=manifest&dir=x,y,z&show=key,key&focus=key,key&marks=1 (contacts of focus muscles on bones) */
+const q = new URLSearchParams(location.search);
+const v = new AtlasViewer(document.getElementById('v'));
+(async () => {
+  const mp = q.get('m') || '../../anatomy/models/upper-limb-muscles/upper-limb-muscles.json';
+  const man = await v.load(mp);
+  let MUS = null; try { MUS = new Set(Object.keys((await (await fetch(mp.replace(/[^/]*$/, 'colours.json'))).json()).colours)); } catch (e) {}
+  const grp = {}; const cfgGroups = window.GROUPS || {};
+  const pal = ['#c0392b','#e67e22','#f1c40f','#27ae60','#16a085','#2980b9','#8e44ad','#d35400','#7f8c8d','#2c3e50'];
+  let i = 0;
+  const show = q.get('show') ? q.get('show').split(',') : null;
+  for (const p of man.parts) {
+    const isBone = MUS ? !MUS.has(p.key) && !/retinac|aponeur|membrane|septum/i.test(p.name) : /bone|Right |phalanx|metacarpal/.test(p.name);
+    v.setColour(p.key, isBone ? '#e8e0cc' : pal[i++ % pal.length]);
+    if (show && !show.includes(p.key) && !isBone) v.setVisible(p.key, false);
+  }
+  const focus = q.get('focus') ? q.get('focus').split(',') : null;
+  if (focus) v.setFocus(focus.concat(man.parts.filter(p => MUS ? !MUS.has(p.key) : /Right |bone|phalanx|metacarpal/.test(p.name)).map(p => p.key)));
+  if (q.get('marks') && focus) {
+    const marks = {};
+    for (const c of v.contacts) for (const [m, b, vb] of [[c.a, c.b, c.vb], [c.b, c.a, c.va]]) if (focus.includes(m) && v.parts.has(b)) (marks[b] = marks[b] || []).push({verts: vb, colour: '#d55e00'});
+    for (const k in marks) v.setVertexMarks(k, marks[k]);
+  }
+  if (q.get('areas')) {
+    const A = await (await fetch(q.get('areas'))).json(), marks = {};
+    for (const m in A) if (!focus || focus.includes(m)) for (const a of (Array.isArray(A[m]) ? A[m] : Object.entries(A[m]).map(([bone, verts]) => ({bone, verts, kind: 'ori'})))) (marks[a.bone] = marks[a.bone] || []).push({verts: a.verts, colour: a.kind === 'ins' ? '#d55e00' : '#0072b2'});
+    for (const k in marks) v.setVertexMarks(k, marks[k]);
+  }
+  if (q.get('hideax')) for (const k of v.order) if (k.startsWith('ax_')) v.setVisible(k, false);
+  if (q.get('fit')) v.fit(q.get('fit').split(','));
+  if (q.get('box')) { const b = q.get('box').split(',').map(Number); v.centre = [0, 1, 2].map(i => (b[i] + b[i + 3]) / 2);
+    v.fitH = Math.max(b[3] - b[0], b[4] - b[1], b[5] - b[2]) * 1.15; v.draw(); }
+  const d = (q.get('dir') || '0,-1,0').split(',').map(Number); v.face(d, {zoom: +(q.get('zoom') || 1)});
+  setTimeout(() => window.ready = true, 900);
+})();
+</script></body></html>

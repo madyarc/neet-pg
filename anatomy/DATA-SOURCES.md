@@ -322,3 +322,66 @@ clavicle (conoid tubercle), triquetrum and hamate (proximal/distal swapped); Rob
 (contradicts itself) and lateral cuneiform (triangular facet is the front one, Gray). Added from them: pisiform siding
 unreliable on some bones (White et al. via Bone Broke; eForensics); patella table test (Bone Broke; Radiopaedia
 excerpt), same direction as the facet rule. 1st metatarsal: no modern full rule; the fact (lateral tubercle) agrees.
+
+## Muscles of the Upper Limb — `upper-limb/muscles.html`
+
+**Meshes:** bones = BodyParts3D 3.0 (95 %), as `upper-limb.json`, plus right-side ribs, costal cartilages, sternum,
+vertebrae, sacrum, hip bone and occipital as context (coarse). Muscles, retinacula, palmar aponeurosis, interosseous
+membrane and arm septa = **Z-Anatomy** (CC BY-SA 4.0; https://github.com/Z-Anatomy/Models-of-human-anatomy,
+`Z-Anatomy.zip` → `Startup.blend`), read by `tools/zanat/export.py` and moved into the BodyParts3D frame with one
+similarity transform fitted on 24 bones (`tools/zanat/z-to-bp3d.json`; median bone residual 0.3–1.1 mm; Z muscles that
+BodyParts3D also has match it within 0.25–0.8 mm). Build: `tools/zanat/ul_muscles.py` → `configs/upper-limb-muscles.json`.
+A muscle's heads/parts are merged into one part. Colours: `tools/zanat/muscle_colours.py` (Tol "muted"; touching muscles
+never share). Palmaris brevis is not in Z-Anatomy (text only).
+
+**Attachment areas** (`tools/zanat/areas.py`, spec `tools/zanat/ul-attach.json`): bone vertices within 3–6 mm of the
+muscle **and** near the landmark (or part of the bone) the textbook names. Every area was checked by eye in contact
+sheets (`tools/test/attach_sheet.py`, 2026-11-17). Left out because the model does not show them reliably (listed in the
+spec's `_dropped`): palmar interossei (Z mesh incomplete), ED insertions, ECU/EPB/APB small areas, opponens pollicis
+insertion (two blobs), FDS radial head, serratus anterior insertion (landed on the dorsal surface), levator scapulae
+origins (laminae, not transverse processes), the axial origins of trapezius, latissimus dorsi and the rhomboids (the
+mesh misses most spinous processes), anconeus origin.
+
+**Sources:** fact sheets `sources-local/facts/ul-muscles-a.md` (pectoral, back, scapular, arm; 364 quotes) and
+`ul-muscles-b.md` (forearm, hand, retinacula, thumb, clinical), each fact with two independent sources: Gray 1918
+(bartleby.com/107 via web.archive.org, pages 120–126), StatPearls abstracts (Europe PMC), open-access papers (Europe PMC
+full text) and Wikipedia (MediaWiki API; not counted where it copies Gray). Disagreements resolved as in the sheets:
+modern wording for FDS heads (two), ECRB nerve (deep branch, variable), palmar interossei (three); root values only where
+two sources agree; no supraspinatus angle; trapezius C3–C4 "mainly sensory; sources differ". Left out (single source):
+supinator and extensor retinaculum attachments, FPB deep-head attachments, PAD/DAB, triangular space, triangle of
+auscultation, "regimental badge" area, Poland syndrome, reflexes, subscapularis tests, FDS tendon pairs in the tunnel.
+
+**Independent review (2026-11-17), 7 fixes:** subscapularis "guards the front of the joint" removed (single source);
+teres major: triangular space removed; thumb opposition row reduced to opponens pollicis (APB helping = Wikipedia
+only); pectoralis major "costal cartilages of the true ribs (upper six or seven)"; axillary nerve injury "fracture of
+the upper humerus" (not "surgical neck"); biceps rupture "bulge in the front of the arm (Popeye sign)"; latissimus
+"(climbing)" moved to the fixed-arm action.
+
+## Muscle Tissue — `general/muscle.html`
+
+Fact sheet `sources-local/facts/muscle-tissue.md` (255 quotes; Gray 1918 pages 102–104, 138, 183; StatPearls; open
+reviews incl. PMC12130008, PMC5642817, PMC4748971, PMC5806676, PMC7248366, PMC11668723, PMC11212792; Wikipedia).
+**Not on the page:** shunt and spurt muscles (AN3.3) — no open source defines them (MacConaill/Basmajian papers have no
+open full text); fusiform example; cardiac/smooth cell sizes; smooth-muscle regeneration and T tubules; single- vs
+multi-unit smooth muscle; Gray's 1918 theory of contraction (obsolete). Mammalian rule for T tubules noted (frog differs).
+**Independent review (2026-11-17), 5 fixes:** H zone drawn lighter than the overlap part of the A band (was darker);
+calcaneal tendon wording (the tendon starts as an aponeurosis); fixator definition without "proximal/distal"; "a modern
+review" (one source) keeps synergist and fixator apart; T tubules "at the A–I junctions (in mammals)".
+
+## Connective Tissue — `general/connective-tissue.html`
+
+Fact sheet `sources-local/facts/connective-tissue.md` (321 quotes; Gray 1918 pages 104–110; StatPearls; open papers
+incl. PMC10486581, PMC9496548, PMC7824244, PMC8963043, PMC3445147, PMC11818326, PMC12914158, PMC8269293, PMC6070248,
+PMC13160772; Wikipedia). Disagreements handled as the sheet advises: no parent group for adipose/reticular tissue;
+ligamenta flava "mostly elastic (about 70 %)"; aortic lamellae "about 50–60"; articular cartilage nourished from synovial
+fluid (Gray's older view noted); nasal cartilage = hyaline; "superficial fascia" in the classic sense, modern sense noted;
+vascularity of deep fascia left out. **Not on the page:** deep fascia absent in the face, Alport syndrome, fibrocartilage
+without perichondrium (one direct source: the table says so), sex differences in fat, infant brown-fat sites,
+interosseous membranes as deep fascia, plasma-cell Golgi "hof", PAS for reticular fibres.
+**Independent review (2026-11-17), 9 fixes:** elastic cartilage drawn with single cells (isogenous groups in elastic
+cartilage = Wikipedia only); fibrocartilage figure says the perichondrium is not drawn because it is unconfirmed;
+mast-cell granules get their own colour; removed "often lies along vessels" (mast cell), "basophilic cytoplasm" (plasma
+cell → "abundant cytoplasm"), "oval nucleus"/"little cytoplasm" (fibroblast, now the quoted wording), "black" for
+Verhoeff, vitreous body and nucleus pulposus for type II collagen, osteogenesis imperfecta (both quotes StatPearls = one
+publisher), "rows of fibroblasts" in dense regular tissue; section retitled "Kinds of connective tissue" (no parent group
+for adipose/reticular tissue).

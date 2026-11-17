@@ -23,6 +23,9 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | 09 | [The Lower Limb](anatomy/lower-limb/lower-limb.html) | Lower limb | Hip bone, femur and patella, tibia and fibula, foot assembled; the joints between them; arches of the foot |
 | 10 | [Bones of the Lower Limb](anatomy/lower-limb/bones.html) | Lower limb | Hip bone (with the pelvis), femur, patella, tibia, fibula and foot bones in detail: 88 landmarks, how to recognise each, ossification |
 | 11 | [The Femur: attachments and side](anatomy/lower-limb/femur.html) | Lower limb | 3D bone: 18 landmarks; left or right; 30 muscle and ligament attachments; neck fracture and blood supply; five ossification centres |
+| 12 | [Muscle Tissue](anatomy/general/muscle.html) | General / histology | Skeletal vs cardiac vs smooth; a sarcomere you can contract (I band and H zone shorten); triads vs dyads; fibre architecture; tendon vs aponeurosis; endo-, peri-, epimysium; fibre types |
+| 13 | [Connective Tissue](anatomy/general/connective-tissue.html) | General / histology | Cells and fibres; loose, dense, elastic, reticular, adipose tissue; collagen types and 67 nm banding; hyaline, elastic, fibrocartilage; tendon, aponeurosis, ligament; superficial and deep fascia |
+| 14 | [Muscles of the Upper Limb](anatomy/upper-limb/muscles.html) | Upper limb | 49 muscles in 3D on the bones (Z-Anatomy meshes): origin and insertion areas on the bone, nerve, action, clinical notes; colour by nerve supply; retinacula, carpal tunnel, extensor compartments, thumb movements |
 
 ### Ophthalmology — [`ophthalmology/`](ophthalmology/index.html)
 

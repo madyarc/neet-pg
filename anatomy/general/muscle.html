@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muscle Tissue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* page colours, one meaning each: --fibre (muscle cell / fibre), --nuc (nucleus), --disc (intercalated disc), --actin (thin
+   filaments), --myosin (thick filaments), --zline (Z disc), --ttub (T tubule), --sr (sarcoplasmic reticulum), --tendon
+   (tendon / aponeurosis), --sheath (connective-tissue sheath); --mark = what the chosen feature points at */
+:root{--fibre:#e6a4a0;--fibre-edge:#b5615b;--nuc:#3b4a8f;--disc:#1a1d24;--actin:#2f8f6a;--myosin:#c0532a;--zline:#1a1d24;
+  --ttub:#2f6fb5;--sr:#d4a72c;--tendon:#e9e1cc;--tendon-edge:#9c8f6d;--sheath:#7b8794}
+:root[data-theme="dark"]{--fibre:#a8605c;--fibre-edge:#e09a94;--nuc:#9fb0ff;--disc:#f2f2f2;--actin:#59c79a;--myosin:#ef8a5f;--zline:#f2f2f2;
+  --ttub:#6fa8e8;--sr:#e6c55a;--tendon:#5b5545;--tendon-edge:#c9bb93;--sheath:#a6b1bd}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:700px){.three{grid-template-columns:minmax(0,1fr)}}
+.three figure{margin:0;display:flex;flex-direction:column;gap:4px}
+.three figcaption{font:600 13px var(--f-body)}
+.dim{opacity:.25;transition:opacity .2s} .hi{transition:opacity .2s}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t tr[data-k]{cursor:pointer} table.t tr[aria-pressed="true"] td{background:var(--bg)}
+.scroll{overflow-x:auto}
+.slider{display:flex;align-items:center;gap:10px;font-size:14px}
+.slider input{flex:1}
+.bars{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font:500 12.5px var(--f-mono);align-items:center}
+.bars .b{height:10px;border-radius:3px}
+.arch{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:700px){.arch{grid-template-columns:minmax(0,1fr)}}
+.legend2{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--muted)}
+.legend2 i{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:4px}
+svg text{font:500 12px var(--f-body);fill:var(--ink)}
+svg .lab{font:600 12px var(--f-mono)}
+@media (max-width:600px){
+  #sarc .lab{font-size:22px}
+  #type-table tr:first-child{display:none}
+  #type-table tr{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;padding:8px 0;border-bottom:1px solid var(--line)}
+  #type-table th,#type-table td{border:0;padding:0}
+  #type-table th{grid-column:1/-1;margin-bottom:2px}
+  #type-table td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+  #type-table td{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Muscle Tissue</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="block panel" aria-labelledby="h-types">
+  <h2 id="h-types">Three kinds of muscle</h2>
+  <p class="cap key" id="types-cap"></p>
+  <div class="chips" id="type-chips"></div>
+  <div class="three" id="types"></div>
+  <p class="muted">Schematic, not to scale.</p>
+  <div class="scroll"><table class="t" id="type-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sarc">
+  <h2 id="h-sarc">The sarcomere: what shortens</h2>
+  <p class="cap key" id="sarc-cap"></p>
+  <svg class="fig" id="sarc" viewBox="0 0 600 250" role="img" aria-label="A sarcomere between two Z discs"></svg>
+  <div class="slider"><span>Relaxed</span><input type="range" id="contract" min="0" max="100" value="0" aria-label="Contraction"><span>Contracted</span></div>
+  <div class="bars" id="bars"></div>
+  <div class="chips" id="tub-chips"></div>
+  <p class="cap" id="tub-cap"></p>
+  <div class="legend2" id="sarc-legend"></div>
+  <p class="muted">Schematic, not to scale: the bars show relative lengths only.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-arch">
+  <h2 id="h-arch">How the fibres are arranged</h2>
+  <p class="cap key" id="arch-cap"></p>
+  <div class="chips" id="arch-chips"></div>
+  <div class="arch">
+    <svg class="fig" id="arch" viewBox="0 0 240 300" role="img" aria-label="Fibre arrangement"></svg>
+    <div class="stack"><div id="arch-text"></div><div class="legend2"><span><i style="background:var(--fibre)"></i>muscle fibres</span><span><i style="background:var(--tendon);border:1px solid var(--tendon-edge)"></i>tendon</span></div></div>
+  </div>
+  <p class="cap" id="arch-force"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-parts">
+  <h2 id="h-parts">Belly, tendon and aponeurosis; origin and insertion</h2>
+  <div id="parts"></div>
+  <div class="scroll"><table class="t" id="apon"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sheath">
+  <h2 id="h-sheath">The connective-tissue sheaths</h2>
+  <p class="cap key" id="sheath-cap"></p>
+  <div class="arch">
+    <svg class="fig" id="sheath" viewBox="0 0 240 240" role="img" aria-label="Cross-section of a muscle"></svg>
+    <div class="legend" id="sheath-list"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-roles">
+  <h2 id="h-roles">What a muscle does in a movement; fibre types</h2>
+  <div id="roles"></div>
+  <div class="scroll"><table class="t" id="ftypes"></table></div>
+  <p class="muted" id="ftypes-note"></p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p>Models used: all drawings are schematic, not to scale.</p>
+</footer>
+</div>
+
+<script>
+"use strict";
+/* ===================== DATA — every statement checked in two independent sources
+   (fact sheet sources-local/facts/muscle-tissue.md; log in anatomy/DATA-SOURCES.md, "Muscle Tissue") ===================== */
+const DATA = {
+  lede: 'Skeletal, cardiac and smooth muscle compared; the sarcomere and how it shortens; how fibres are arranged in a muscle; tendons, aponeuroses and the sheaths that hold a muscle together.',
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), Myology and the heart; checked against StatPearls (NCBI Bookshelf), open-access reviews of muscle structure and Wikipedia. Gray\'s 1918 account of how muscle contracts is outdated and is not used.',
+  typesCap: 'Tap a feature to find it in all three. Skeletal and cardiac muscle are striated because their sarcomeres line up; smooth muscle has no sarcomeres, so no striations.',
+  features: [
+    ['striae', 'Striations'],
+    ['nuc', 'Nuclei'],
+    ['disc', 'Branching and intercalated discs'],
+  ],
+  featureText: {
+    striae: 'Cross-striations: in skeletal and cardiac muscle, not in smooth muscle.',
+    nuc: 'Skeletal fibre: many nuclei at the edge, just under the sarcolemma (a fibre forms from fused myoblasts). Cardiac cell: usually one central nucleus, sometimes two. Smooth muscle cell: one central nucleus.',
+    disc: 'Cardiac cells branch and join their neighbours end to end at intercalated discs, seen as dark lines across the fibre. Each disc has three kinds of junction (fascia adherens, desmosomes, gap junctions), so the heart works as a functional syncytium.',
+  },
+  table: [
+    ['Striations', 'Yes', 'Yes', 'No'],
+    ['Cell shape', 'Long cylinders (fibres), about 10–100 µm wide, often centimetres long', 'Short, roughly rectangular cells joined end to end; branching', 'Spindle-shaped (fusiform)'],
+    ['Nuclei', 'Many, at the periphery', 'Usually one (sometimes two), central', 'One, central'],
+    ['Intercalated discs', 'No', 'Yes', 'No'],
+    ['Control', 'Voluntary', 'Involuntary; contracts rhythmically on its own', 'Involuntary'],
+    ['Nerve supply', 'Somatic motor nerves; motor end plates', 'Autonomic', 'Autonomic (smooth muscle also responds to hormones)'],
+    ['Where found', 'Attached to bones by tendons', 'Wall of the heart (myocardium) only', 'Walls of the gut, blood vessels, bladder, uterus and airways; iris (sphincter and dilator pupillae); arrector pili'],
+    ['Regeneration', 'Good, from satellite cells (muscle stem cells under the basal lamina)', 'Very limited in adults: an infarct heals with a scar', '—'],
+    ['T tubules', 'At the A–I junctions (in mammals): triads', 'At the Z lines: dyads', '—'],
+  ],
+  tableNote: 'Smooth muscle regeneration and T tubules: only one of our sources covers them, so they are left blank.',
+  sarcCap: 'A sarcomere runs from one Z disc to the next: the smallest contractile unit of striated muscle. Thin (actin) filaments are anchored in the Z discs; thick (myosin) filaments sit in the middle, cross-linked at the M line. Drag the slider: the thin filaments slide over the thick ones towards the M line. The I band and the H zone shorten; the A band (the length of the thick filaments) stays the same. The filaments themselves do not shorten.',
+  bands: {
+    I: 'I band: thin filaments only (light, isotropic); the Z disc bisects it.',
+    A: 'A band: the whole length of the thick filaments (dark, anisotropic).',
+    H: 'H zone: the middle of the A band, thick filaments only.',
+    S: 'Sarcomere: Z disc to Z disc.',
+  },
+  tubules: {
+    skeletal: '<b>Skeletal muscle:</b> T tubules (infoldings of the sarcolemma that carry the impulse inwards) lie at the A–I junctions, two per sarcomere. Each has a terminal cisterna of the sarcoplasmic reticulum (the calcium store) on either side: a <b>triad</b>.',
+    cardiac: '<b>Cardiac muscle:</b> T tubules lie at the Z lines, each paired with one cisterna: a <b>dyad</b>.',
+  },
+  filaments: 'Thin filaments are actin with tropomyosin and troponin; smooth muscle has tropomyosin but no troponin.',
+  archCap: 'Tap an arrangement. Long parallel fibres give a large range of movement but less force; short, numerous pennate fibres pack more fibres in, giving more force over a smaller range.',
+  arch: [
+    ['parallel', 'Parallel (strap)', 'The fibres run parallel to each other from origin to insertion, along the line of pull.', 'Sartorius.'],
+    ['fusiform', 'Fusiform', 'Parallel fibres in a spindle: thick in the middle, tapering at both ends.', ''],
+    ['unipennate', 'Unipennate', 'The fibres run obliquely to one side of a tendon, like half a feather.', 'The fibularis (peroneus) muscles.'],
+    ['bipennate', 'Bipennate', 'The fibres run obliquely to both sides of a central tendon.', 'Rectus femoris.'],
+    ['multipennate', 'Multipennate', 'The fibres run in several directions onto several internal tendons.', 'Deltoid, especially its acromial part.'],
+    ['convergent', 'Convergent (triangular)', 'A broad origin converging on a narrow insertion.', 'Pectoralis major.'],
+    ['circular', 'Circular (sphincter)', 'The fibres form rings round an opening and close it when they contract.', 'Orbicularis oculi (skeletal); sphincter pupillae (smooth).'],
+  ],
+  archNote: 'Real muscles often mix these patterns; a textbook label is a simplification.',
+  parts: '<p>A skeletal muscle has a fleshy contractile <b>belly</b> and fibrous attachments. A <b>tendon</b> is a cord or band of dense, parallel collagen fibres joining muscle to bone. An <b>aponeurosis</b> is the same tissue spread into a flat sheet: the difference is the shape, which lets it attach a muscle over a wide area. The gastrocnemius and soleus show both: their tendon begins as a flat aponeurosis and ends as the cord-like calcaneal (Achilles) tendon.</p><p>The <b>origin</b> is the more fixed attachment, usually proximal; the <b>insertion</b> is the more movable one, usually distal. Most muscles can pull from either end: in a chin-up the arm muscles move the trunk towards the fixed arms.</p>',
+  apon: [
+    ['Aponeurosis of the external oblique', 'Anterior abdominal wall'],
+    ['Bicipital aponeurosis', 'From the biceps tendon to the deep fascia of the forearm'],
+    ['Palmar aponeurosis', 'Palm'],
+    ['Plantar aponeurosis', 'Sole'],
+    ['Epicranial aponeurosis (galea aponeurotica)', 'Scalp'],
+  ],
+  sheathCap: 'Three continuous layers of connective tissue, which also run on into the tendon or aponeurosis. Tap one.',
+  sheaths: [
+    ['epi', 'Epimysium', 'Surrounds the whole muscle.'],
+    ['peri', 'Perimysium', 'Divides the muscle into fascicles (bundles of fibres) and carries the larger vessels and nerves.'],
+    ['endo', 'Endomysium', 'Lies between and around the individual fibres, with the capillaries and nerve branches. It forms a continuous network through the fascicle rather than a separate tube for each fibre.'],
+  ],
+  roles: '<p>In any movement a muscle plays a role, not a fixed part: the <b>prime mover (agonist)</b> mainly produces the movement; an <b>antagonist</b> opposes it; a <b>synergist</b> works with the prime mover; a <b>fixator</b> holds a joint or bone steady so that the prime mover can act. (Some sources merge synergists and fixators; Gray and a modern review keep them separate.)</p>',
+  ftypes: [
+    ['Type I', 'Slow-twitch', 'Oxidative; red'],
+    ['Type IIA', 'Fast-twitch', 'Fast oxidative'],
+    ['Type IIX', 'Fast-twitch', 'Fast glycolytic; white'],
+  ],
+  ftypesNote: 'Fibre types are classed by their myosin heavy chain. In humans the fibres once called IIB are IIX (true IIB occurs in rodents). The red/white and oxidative/glycolytic pairing is the classical scheme; speed and oxidative capacity do not always go together.',
+};
+
+/* ===================== PAGE ===================== */
+const $ = id => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, a = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); if (parent) parent.append(e); return e; };
+const pressed = (box, key) => box.querySelectorAll('[data-k]').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === key));
+function chips(box, list, onPick) {
+  for (const [k, name] of list) { const b = document.createElement('button'); b.className = 'chip'; b.dataset.k = k; b.setAttribute('aria-pressed', 'false'); b.textContent = name; b.onclick = () => onPick(k); box.append(b); }
+}
+$('lede').textContent = DATA.lede; $('based').innerHTML = DATA.based;
+
+/* ---------- three kinds ---------- */
+function drawTypes() {
+  const box = $('types');
+  const mk = (title, draw) => { const f = document.createElement('figure'); const s = el('svg', {viewBox: '0 0 300 170', class: 'fig', role: 'img', 'aria-label': title});
+    draw(s); const c = document.createElement('figcaption'); c.textContent = title; f.append(s, c); box.append(f); };
+  mk('Skeletal', s => {
+    el('rect', {x: 10, y: 45, width: 280, height: 80, rx: 14, fill: 'var(--fibre)', stroke: 'var(--fibre-edge)', 'stroke-width': 2, class: 'cell'}, s);
+    const g = el('g', {class: 'f-striae'}, s);
+    for (let x = 22; x < 284; x += 10) el('rect', {x, y: 47, width: 5, height: 76, fill: 'var(--fibre-edge)', opacity: .55}, g);
+    const n = el('g', {class: 'f-nuc'}, s);
+    for (const [x, y] of [[45, 50], [110, 120], [170, 50], [235, 120], [270, 50], [80, 50], [200, 120]]) el('ellipse', {cx: x, cy: y, rx: 13, ry: 4.5, fill: 'var(--nuc)'}, n);
+  });
+  mk('Cardiac', s => {
+    const cells = [[10, 60, 95, 50], [108, 60, 90, 50], [211, 30, 80, 42], [211, 98, 80, 42]];
+    const g = el('g', {class: 'f-cells'}, s);
+    for (const [x, y, w, h] of cells) el('rect', {x, y, width: w, height: h, rx: 6, fill: 'var(--fibre)', stroke: 'var(--fibre-edge)', 'stroke-width': 2}, g);
+    el('path', {d: 'M198 72 L211 51 M198 98 L211 119', stroke: 'var(--fibre)', 'stroke-width': 18, 'stroke-linecap': 'round', fill: 'none'}, g);
+    const st = el('g', {class: 'f-striae'}, s);
+    for (const [x, y, w, h] of cells) for (let xx = x + 8; xx < x + w - 6; xx += 10) el('rect', {x: xx, y: y + 2, width: 5, height: h - 4, fill: 'var(--fibre-edge)', opacity: .55}, st);
+    const d = el('g', {class: 'f-disc'}, s);
+    for (const p of ['M103 60 v14 h4 v12 h-4 v24', 'M205 30 v12 h4 v10 h-4 v20', 'M205 98 v12 h4 v10 h-4 v20']) el('path', {d: p, stroke: 'var(--disc)', 'stroke-width': 3.5, fill: 'none'}, d);
+    const n = el('g', {class: 'f-nuc'}, s);
+    for (const [x, y, w, h] of cells) el('ellipse', {cx: x + w / 2, cy: y + h / 2, rx: 11, ry: 5.5, fill: 'var(--nuc)'}, n);
+  });
+  mk('Smooth', s => {
+    const g = el('g', {class: 'f-cells'}, s), n = el('g', {class: 'f-nuc'}, s);
+    const rows = [[20, 40], [70, 62], [40, 86], [100, 108], [30, 128], [150, 40], [190, 74], [160, 118], [220, 100]];
+    for (const [x, y] of rows) {
+      el('path', {d: `M${x} ${y} Q ${x + 45} ${y - 13} ${x + 90} ${y} Q ${x + 45} ${y + 13} ${x} ${y} Z`, fill: 'var(--fibre)', stroke: 'var(--fibre-edge)', 'stroke-width': 1.5}, g);
+      el('ellipse', {cx: x + 45, cy: y, rx: 10, ry: 3, fill: 'var(--nuc)'}, n);
+    }
+  });
+  chips($('type-chips'), DATA.features, k => {
+    pressed($('type-chips'), k);
+    $('types-cap').innerHTML = DATA.featureText[k];
+    for (const f of ['striae', 'nuc', 'disc']) box.querySelectorAll('.f-' + f).forEach(g => g.setAttribute('class', 'f-' + f + (f === k ? ' hi' : ' dim')));
+    box.querySelectorAll('.f-cells, .cell').forEach(g => g.classList.toggle('dim', false));
+    $('type-table').querySelectorAll('tr[data-k]').forEach(r => r.setAttribute('aria-pressed', r.dataset.k === k));
+  });
+  $('types-cap').innerHTML = DATA.typesCap;
+  const rowKey = {Striations: 'striae', Nuclei: 'nuc', 'Intercalated discs': 'disc'};
+  $('type-table').innerHTML = '<tr><th></th><th>Skeletal</th><th>Cardiac</th><th>Smooth</th></tr>' +
+    DATA.table.map(r => `<tr${rowKey[r[0]] ? ` data-k="${rowKey[r[0]]}" aria-pressed="false"` : ''}><th scope="row">${r[0]}</th><td data-h="Skeletal">${r[1]}</td><td data-h="Cardiac">${r[2]}</td><td data-h="Smooth">${r[3]}</td></tr>`).join('');
+  $('type-table').querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => $('type-chips').querySelector(`[data-k="${r.dataset.k}"]`).click());
+  const note = document.createElement('p'); note.className = 'muted'; note.textContent = DATA.tableNote; $('type-table').parentElement.after(note);
+}
+
+/* ---------- sarcomere ---------- */
+const SARC = {A: 240, T: 150, S0: 520, S1: 330, mode: 'skeletal'};
+function drawSarc() {
+  const s = $('sarc'); s.replaceChildren();
+  const c = +$('contract').value / 100, S = SARC.S0 - c * (SARC.S0 - SARC.S1), M = 300, Zl = M - S / 2, Zr = M + S / 2, A0 = M - SARC.A / 2, A1 = M + SARC.A / 2;
+  const top = 40, bot = 170;
+  // bands
+  el('rect', {x: Zl, y: top, width: S, height: bot - top, fill: 'var(--fibre)', opacity: .35}, s);
+  const H0 = Zl + SARC.T, H1 = Zr - SARC.T;
+  // dark where thick and thin filaments overlap; the H zone (thick only) stays lighter
+  if (H1 > H0) { el('rect', {x: A0, y: top, width: H0 - A0, height: bot - top, fill: 'var(--fibre)', opacity: .7}, s);
+    el('rect', {x: H1, y: top, width: A1 - H1, height: bot - top, fill: 'var(--fibre)', opacity: .7}, s);
+    el('rect', {x: H0, y: top, width: H1 - H0, height: bot - top, fill: 'var(--fibre)', opacity: .2}, s); }
+  else el('rect', {x: A0, y: top, width: SARC.A, height: bot - top, fill: 'var(--fibre)', opacity: .7}, s);
+  // filaments
+  for (let i = 0; i < 6; i++) {
+    const y = top + 14 + i * 20;
+    if (i % 2 === 0) { el('line', {x1: Zl, y1: y, x2: Zl + SARC.T, y2: y, stroke: 'var(--actin)', 'stroke-width': 3}, s); el('line', {x1: Zr, y1: y, x2: Zr - SARC.T, y2: y, stroke: 'var(--actin)', 'stroke-width': 3}, s); }
+    else el('line', {x1: A0, y1: y, x2: A1, y2: y, stroke: 'var(--myosin)', 'stroke-width': 7, 'stroke-linecap': 'round'}, s);
+  }
+  el('line', {x1: M, y1: top - 4, x2: M, y2: bot + 4, stroke: 'var(--myosin)', 'stroke-width': 2, 'stroke-dasharray': '4 3'}, s);
+  for (const z of [Zl, Zr]) el('path', {d: `M${z} ${top - 8} l-5 10 l10 10 l-10 10 l10 10 l-10 10 l10 10 l-10 10 l10 10 l-10 10 l10 10 l-10 10 l10 10 l-5 10`, stroke: 'var(--zline)', 'stroke-width': 3, fill: 'none'}, s);
+  // tubules
+  const tubs = SARC.mode === 'skeletal' ? [A0, A1] : [Zl, Zr];
+  for (const x of tubs) {
+    el('rect', {x: x - 3, y: top - 22, width: 6, height: bot - top + 44, rx: 3, fill: 'var(--ttub)', opacity: .85}, s);
+    const sides = SARC.mode === 'skeletal' ? [-1, 1] : [1];
+    for (const sd of sides) el('rect', {x: x + (sd < 0 ? -15 : 6), y: top - 22, width: 9, height: bot - top + 44, rx: 4, fill: 'var(--sr)', opacity: .8}, s);
+  }
+  // labels
+  const lab = (x, t) => { const e = el('text', {x, y: 22, 'text-anchor': 'middle', class: 'lab'}, s); e.textContent = t; };
+  lab(Zl, 'Z'); lab(Zr, 'Z'); lab(M, 'M');
+  const brace = (x0, x1, y, t) => { el('path', {d: `M${x0} ${y - 5} V${y} H${x1} V${y - 5}`, stroke: 'var(--muted)', fill: 'none', 'stroke-width': 1.3}, s);
+    const e = el('text', {x: (x0 + x1) / 2, y: y + 15, 'text-anchor': 'middle', class: 'lab'}, s); e.textContent = t; };
+  brace(A0, A1, bot + 30, 'A band');
+  if (A0 - Zl > 14) { brace(Zl, A0, bot + 30, 'I'); brace(A1, Zr, bot + 30, 'I'); }
+  if (H1 - H0 > 14) brace(H0, H1, bot + 8, 'H');
+  // bars
+  const I = (S - SARC.A) / 2, H = Math.max(0, S - 2 * SARC.T), k = 0.42;
+  $('bars').innerHTML = [['Sarcomere', S, '--ink'], ['A band', SARC.A, '--myosin'], ['I band', I, '--actin'], ['H zone', H, '--fibre-edge']]
+    .map(([n, v, c]) => `<span>${n}</span><span class="b" style="width:${(v * k).toFixed(1)}px;max-width:100%;background:var(${c})"></span>`).join('');
+}
+function initSarc() {
+  $('sarc-cap').innerHTML = DATA.sarcCap;
+  $('contract').oninput = drawSarc;
+  chips($('tub-chips'), [['skeletal', 'Skeletal: triads'], ['cardiac', 'Cardiac: dyads']], k => { SARC.mode = k; pressed($('tub-chips'), k); $('tub-cap').innerHTML = DATA.tubules[k] + ' ' + DATA.filaments; drawSarc(); });
+  $('sarc-legend').innerHTML = [['--actin', 'thin filament (actin)'], ['--myosin', 'thick filament (myosin)'], ['--zline', 'Z disc'], ['--ttub', 'T tubule'], ['--sr', 'sarcoplasmic reticulum (terminal cisterna)']]
+    .map(([c, t]) => `<span><i style="background:var(${c})"></i>${t}</span>`).join('');
+  $('tub-chips').querySelector('[data-k="skeletal"]').click();
+}
+
+/* ---------- architecture ---------- */
+function drawArch(k) {
+  const s = $('arch'); s.replaceChildren();
+  const fib = (x1, y1, x2, y2) => el('line', {x1, y1, x2, y2, stroke: 'var(--fibre-edge)', 'stroke-width': 2.4, 'stroke-linecap': 'round'}, s);
+  const ten = (x, y, w, h) => el('rect', {x, y, width: w, height: h, rx: 3, fill: 'var(--tendon)', stroke: 'var(--tendon-edge)', 'stroke-width': 1.5}, s);
+  const body = d => el('path', {d, fill: 'var(--fibre)', opacity: .55}, s);
+  if (k === 'parallel') { ten(70, 20, 100, 22); ten(70, 258, 100, 22); body('M70 42 H170 V258 H70 Z'); for (let x = 78; x <= 162; x += 12) fib(x, 44, x, 256); }
+  if (k === 'fusiform') { ten(110, 10, 20, 40); ten(110, 250, 20, 40); body('M120 50 C 190 100 190 200 120 250 C 50 200 50 100 120 50 Z');
+    for (let i = -3; i <= 3; i++) { const bx = 120 + i * 17; el('path', {d: `M120 52 Q ${bx + i * 6} 150 120 248`, stroke: 'var(--fibre-edge)', 'stroke-width': 2.2, fill: 'none'}, s); } }
+  if (k === 'unipennate') { ten(150, 10, 16, 280); body('M150 40 L60 70 L60 270 L150 250 Z'); for (let y = 70; y <= 250; y += 18) fib(62, y, 149, y - 28); }
+  if (k === 'bipennate') { ten(112, 10, 16, 280); body('M112 40 L40 75 L40 260 L112 250 Z M128 40 L200 75 L200 260 L128 250 Z');
+    for (let y = 75; y <= 250; y += 18) { fib(42, y, 111, y - 30); fib(198, y, 129, y - 30); } }
+  if (k === 'multipennate') { ten(30, 20, 180, 14); ten(108, 262, 24, 28);
+    for (const x of [60, 120, 180]) ten(x - 4, 34, 8, 150); for (const x of [90, 150]) ten(x - 4, 110, 8, 155);
+    body('M30 34 H210 V265 H30 Z');
+    for (const x of [60, 120, 180]) for (let y = 60; y <= 170; y += 22) { fib(x + 4, y, x + 26, y + 26); fib(x - 4, y, x - 26, y + 26); }
+    for (const x of [90, 150]) for (let y = 130; y <= 250; y += 22) { fib(x + 4, y, x + 26, y - 26); fib(x - 4, y, x - 26, y - 26); } }
+  if (k === 'convergent') { ten(20, 30, 14, 240); ten(196, 136, 34, 28); body('M34 30 L196 136 L196 164 L34 270 Z');
+    for (let y = 40; y <= 260; y += 20) fib(36, y, 194, 150 + (y - 150) * 0.1); }
+  if (k === 'circular') { el('ellipse', {cx: 120, cy: 150, rx: 100, ry: 70, fill: 'var(--fibre)', opacity: .55}, s);
+    for (let r = 0; r < 5; r++) el('ellipse', {cx: 120, cy: 150, rx: 92 - r * 11, ry: 62 - r * 8, fill: 'none', stroke: 'var(--fibre-edge)', 'stroke-width': 2.2}, s);
+    el('ellipse', {cx: 120, cy: 150, rx: 36, ry: 20, fill: 'var(--bg)', stroke: 'var(--muted)', 'stroke-width': 1}, s);
+    const t = el('text', {x: 120, y: 154, 'text-anchor': 'middle'}, s); t.textContent = 'opening'; }
+  const a = DATA.arch.find(x => x[0] === k);
+  $('arch-text').innerHTML = `<h3>${a[1]}</h3><p>${a[2]}</p>${a[3] ? `<p><b>Example:</b> ${a[3]}</p>` : '<p class="muted">Our sources do not agree on a standard example.</p>'}`;
+  pressed($('arch-chips'), k);
+}
+
+/* ---------- sheaths ---------- */
+function drawSheath(k) {
+  const s = $('sheath'); s.replaceChildren();
+  const on = x => !k || k === x;
+  el('circle', {cx: 120, cy: 120, r: 112, fill: 'var(--fibre)', opacity: .25, stroke: 'var(--sheath)', 'stroke-width': on('epi') ? 7 : 3, 'stroke-opacity': on('epi') ? 1 : .35}, s);
+  const fasc = [[78, 80, 42], [160, 82, 40], [70, 162, 40], [150, 160, 44], [118, 122, 24]];
+  for (const [cx, cy, r] of fasc) {
+    el('circle', {cx, cy, r, fill: 'var(--fibre)', opacity: .35, stroke: 'var(--sheath)', 'stroke-width': on('peri') ? 4 : 1.6, 'stroke-opacity': on('peri') ? 1 : .35}, s);
+    for (let i = 0; i < 40; i++) { const a = i * 2.39996, d = Math.sqrt(i / 40) * (r - 8); const x = cx + d * Math.cos(a), y = cy + d * Math.sin(a);
+      el('circle', {cx: x, cy: y, r: 3.6, fill: 'var(--fibre)', stroke: 'var(--sheath)', 'stroke-width': on('endo') ? 1.6 : .5, 'stroke-opacity': on('endo') ? 1 : .4}, s); }
+  }
+  pressed($('sheath-list'), k);
+}
+
+/* ---------- init ---------- */
+drawTypes(); initSarc(); drawSarc();
+$('arch-cap').innerHTML = DATA.archCap + ' ' + DATA.archNote;
+chips($('arch-chips'), DATA.arch.map(a => [a[0], a[1]]), drawArch); drawArch('parallel');
+$('parts').innerHTML = DATA.parts;
+$('apon').innerHTML = '<tr><th>Aponeurosis</th><th>Where</th></tr>' + DATA.apon.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+$('sheath-cap').innerHTML = DATA.sheathCap;
+for (const [k, name, text] of DATA.sheaths) {
+  const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
+  b.innerHTML = `<i style="background:var(--sheath)"></i><span><b>${name}</b> — ${text}</span>`;
+  b.onclick = () => drawSheath(k); $('sheath-list').append(b);
+}
+drawSheath(null);
+$('roles').innerHTML = DATA.roles;
+$('ftypes').innerHTML = '<tr><th>Fibre type</th><th>Speed</th><th>Classical scheme</th></tr>' + DATA.ftypes.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
+$('ftypes-note').textContent = DATA.ftypesNote;
+new MutationObserver(drawSarc).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+window.ready = true;
+</script>
+</body>
+</html>

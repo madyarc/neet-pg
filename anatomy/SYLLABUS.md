@@ -20,22 +20,22 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN2.1** Describe parts, types, peculiarities of each type, blood and nerve supply of bones.
 - [ ] **AN2.2** Describe the laws of ossification, epiphysis, its various types and their importance
 - [ ] **AN2.3** Describe special features of a sesamoid bone
-- [ ] **AN2.4** Describe various types of cartilage with its structure & distribution in body
+- [x] **AN2.4** Describe various types of cartilage with its structure & distribution in body — *hyaline, elastic, fibrocartilage: structure and sites: [Connective Tissue](general/connective-tissue.html)*
 - [ ] **AN2.5** Describe & demonstrate various joints with possible movements, subtypes and examples
 - [ ] **AN2.6** Explain the concept of nerve supply of joints & Hilton’s law
 
 ### 3. General features of Muscle
 
-- [ ] **AN3.1** Classify & describe muscle tissue according to structure, size, shape, region & action
-- [ ] **AN3.2** Describe parts of skeletal muscle and differentiate between tendons and aponeuroses with examples
+- [x] **AN3.1** Classify & describe muscle tissue according to structure, size, shape, region & action — *fibre architecture with examples, functional roles, the three types: [Muscle Tissue](general/muscle.html)*
+- [x] **AN3.2** Describe parts of skeletal muscle and differentiate between tendons and aponeuroses with examples — *belly, tendon, aponeurosis (examples): [Muscle Tissue](general/muscle.html); tendon vs aponeurosis vs ligament: [Connective Tissue](general/connective-tissue.html)*
 - [ ] **AN3.3** Explain Shunt and spurt muscles with examples and role in joint movement
 
 ### 4. General features of skin and fascia
 
 - [ ] **AN4.1** Describe different types of skin & dermatomes in body
 - [ ] **AN4.2** Describe & demonstrate structure of skin with its appendages along with clinical anatomy
-- [ ] **AN4.3** Describe structure, contents and identify modifications of superficial fascia along with fat distribution in body
-- [ ] **AN4.4** Describe & demonstrate modifications of deep fascia with its location, function & examples
+- [~] **AN4.3** Describe structure, contents and identify modifications of superficial fascia along with fat distribution in body — *structure, contents, modifications, fat-free sites: [Connective Tissue](general/connective-tissue.html) (sex differences in fat not sourced)*
+- [~] **AN4.4** Describe & demonstrate modifications of deep fascia with its location, function & examples — *functions and modifications (septa, retinacula, aponeuroses, fibrous sheaths): [Connective Tissue](general/connective-tissue.html)*
 - [ ] **AN4.5** Explain principles of skin incisions and their surgical importance
 
 ### 5. General features of the cardiovascular system
@@ -69,13 +69,13 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 8. Features of individual bones (Upper Limb)
 
 - [x] **AN8.1** Identify the given bone, its side, anatomical position, joint formation, important features and clinical anatomy (clavicle, scapula, humerus, radius, ulna, carpal bones) — *features, joints, clinical points, left or right for every bone incl. the carpals: [Bones of the Upper Limb](upper-limb/bones.html)*
-- [ ] **AN8.2** Demonstrate important muscle attachments on the given bone
+- [~] **AN8.2** Demonstrate important muscle attachments on the given bone — *upper-limb muscle attachment areas on the bones: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [x] **AN8.3** Identify and name various bones in articulated hand, Specify the parts of metacarpals and phalanges and enumerate the peculiarities of pisiform — *[Bones of the Upper Limb](upper-limb/bones.html)#hand, [The Upper Limb](upper-limb/upper-limb.html)*
 - [ ] **AN8.4** Describe scaphoid fracture and explain the anatomical basis of avascular necrosis
 
 ### 9. Pectoral region
 
-- [ ] **AN9.1** Describe attachment, nerve supply & action of pectoralis major and pectoralis minor and describe clavipectoral fascia
+- [x] **AN9.1** Describe attachment, nerve supply & action of pectoralis major and pectoralis minor and describe clavipectoral fascia — *pectoralis major and minor; what pierces the clavipectoral fascia: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [ ] **AN9.2** Describe the location, extent, deep relations, structure, blood supply, lymphatic drainage, microanatomy and applied anatomy of breast
 - [ ] **AN9.3** Describe development of breast, associated age changes and congenital anomalies
 
@@ -88,16 +88,16 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN10.5** Explain variations in formation of brachial plexus
 - [ ] **AN10.6** Explain the anatomical basis of clinical features of Erb’s palsy and Klumpke’s paralysis
 - [ ] **AN10.7** Describe axillary lymph nodes, areas of drainage and anatomical basis of their enlargement
-- [ ] **AN10.8** Describe, identify and demonstrate the position, attachment, nerve supply and actions of trapezius and latissimus dorsi
+- [~] **AN10.8** Describe, identify and demonstrate the position, attachment, nerve supply and actions of trapezius and latissimus dorsi — *attachments, nerve and action of trapezius and latissimus dorsi: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [ ] **AN10.9** Describe the arterial anastomosis around the scapula and mention the boundaries of triangle of auscultation
-- [ ] **AN10.10** Describe and identify the deltoid and rotator cuff muscles along with their nerve supply and clinical anatomy
-- [ ] **AN10.11** Describe & demonstrate attachment, action and clinical anatomy of serratus anterior muscle
+- [x] **AN10.10** Describe and identify the deltoid and rotator cuff muscles along with their nerve supply and clinical anatomy — *deltoid and rotator cuff, nerves, axillary nerve injury, cuff tear: [Muscles of the Upper Limb](upper-limb/muscles.html)*
+- [x] **AN10.11** Describe & demonstrate attachment, action and clinical anatomy of serratus anterior muscle — *serratus anterior, winged scapula: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [ ] **AN10.12** Describe and demonstrate shoulder joint for– type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements, muscles involved, blood supply, nerve supply and applied anatomy
 - [ ] **AN10.13** Explain anatomical basis of Injury to axillary nerve during intramuscular injections
 
 ### 11. Arm & Cubital fossa
 
-- [ ] **AN11.1** Describe and demonstrate muscle groups of upper arm with emphasis on biceps and triceps brachii
+- [x] **AN11.1** Describe and demonstrate muscle groups of upper arm with emphasis on biceps and triceps brachii — *biceps, triceps, brachialis, coracobrachialis: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [ ] **AN11.2** Identify & describe origin, course, relations, branches (or tributaries), termination of important nerves and vessels in arm
 - [ ] **AN11.3** Describe the anatomical basis of Venipuncture of cubital veins
 - [ ] **AN11.4** Describe the anatomical basis of Saturday night paralysis
@@ -106,20 +106,20 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 12. Forearm & hand
 
-- [ ] **AN12.1** Describe and demonstrate important muscle groups of ventral forearm with attachments, nerve supply and actions
+- [x] **AN12.1** Describe and demonstrate important muscle groups of ventral forearm with attachments, nerve supply and actions — *[Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [ ] **AN12.2** Identify & describe origin, course, relations, branches (or tributaries), termination of important nerves and vessels of forearm
-- [ ] **AN12.3** Identify & describe flexor retinaculum with its attachments
-- [~] **AN12.4** Explain anatomical basis of carpal tunnel syndrome — *bony attachments of the flexor retinaculum: [The Upper Limb](upper-limb/upper-limb.html)*
-- [ ] **AN12.5** Identify & describe small muscles of hand. Also describe movements of thumb and muscles involved
-- [ ] **AN12.6** Describe & demonstrate movements of thumb and muscles involved
+- [x] **AN12.3** Identify & describe flexor retinaculum with its attachments — *attachments and what passes deep and superficial to it: [Muscles of the Upper Limb](upper-limb/muscles.html) (Wrist and thumb)*
+- [x] **AN12.4** Explain anatomical basis of carpal tunnel syndrome — *bony attachments: [The Upper Limb](upper-limb/upper-limb.html); contents and symptoms: [Muscles of the Upper Limb](upper-limb/muscles.html)*
+- [x] **AN12.5** Identify & describe small muscles of hand. Also describe movements of thumb and muscles involved — *thenar, hypothenar, adductor pollicis, lumbricals, interossei; thumb movements: [Muscles of the Upper Limb](upper-limb/muscles.html)*
+- [x] **AN12.6** Describe & demonstrate movements of thumb and muscles involved — *[Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [ ] **AN12.7** Identify & describe course and branches of important blood vessels and nerves in hand
-- [ ] **AN12.8** Describe anatomical basis of Claw hand
+- [x] **AN12.8** Describe anatomical basis of Claw hand — *claw hand: [Muscles of the Upper Limb](upper-limb/muscles.html) (Nerve supply, ulnar)*
 - [ ] **AN12.9** Identify & describe fibrous flexor sheaths, ulnar bursa, radial bursa and digital synovial sheaths
 - [ ] **AN12.10** Explain infection of fascial spaces of palm
-- [ ] **AN12.11** Identify, describe and demonstrate important muscle groups of dorsal forearm with attachments, nerve supply and actions
+- [x] **AN12.11** Identify, describe and demonstrate important muscle groups of dorsal forearm with attachments, nerve supply and actions — *[Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [ ] **AN12.12** Identify & describe origin, course, relations, branches (or tributaries), termination of important nerves and vessels of back of forearm
-- [ ] **AN12.13** Describe the anatomical basis of Wrist drop
-- [ ] **AN12.14** Identify & describe compartments deep to extensor retinaculum and describe the boundaries and contents of anatomical snuff box.
+- [x] **AN12.13** Describe the anatomical basis of Wrist drop — *wrist drop and PIN lesion: [Muscles of the Upper Limb](upper-limb/muscles.html) (Nerve supply, radial)*
+- [~] **AN12.14** Identify & describe compartments deep to extensor retinaculum and describe the boundaries and contents of anatomical snuff box. — *the six extensor compartments: [Muscles of the Upper Limb](upper-limb/muscles.html) (snuffbox not yet)*
 - [ ] **AN12.15** Identify & describe extensor expansion formation
 
 ### 13. General Features, Joints, radiographs & surface marking
@@ -562,14 +562,14 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 66. Connective tissue histology
 
-- [ ] **AN66.1** Describe & identify various types of connective tissue with functional correlation
-- [ ] **AN66.2** Describe the ultrastructure of connective tissue
+- [x] **AN66.1** Describe & identify various types of connective tissue with functional correlation — *[Connective Tissue](general/connective-tissue.html)*
+- [~] **AN66.2** Describe the ultrastructure of connective tissue — *collagen banding, fibroblast features: [Connective Tissue](general/connective-tissue.html)*
 
 ### 67. Muscle histology
 
-- [ ] **AN67.1** Describe & identify various types of muscle under the microscope
-- [ ] **AN67.2** Classify muscleand describe the structure-function correlation of the same
-- [ ] **AN67.3** Describe the ultrastructure of muscular tissue
+- [~] **AN67.1** Describe & identify various types of muscle under the microscope — *schematic comparison of the three types: [Muscle Tissue](general/muscle.html) (no micrographs)*
+- [x] **AN67.2** Classify muscleand describe the structure-function correlation of the same — *[Muscle Tissue](general/muscle.html)*
+- [x] **AN67.3** Describe the ultrastructure of muscular tissue — *sarcomere, filaments, triads vs dyads, smooth muscle dense bodies: [Muscle Tissue](general/muscle.html)*
 
 ### 68. Nervous tissue histology
 
@@ -591,7 +591,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 71. Bone & Cartilage
 
 - [ ] **AN71.1** Identify bone under the microscope; classify various types and describe the structure-function correlation of the same
-- [ ] **AN71.2** Identify cartilage under the microscope & describe various types and structure- function correlation of the same
+- [~] **AN71.2** Identify cartilage under the microscope & describe various types and structure- function correlation of the same — *types and structure: [Connective Tissue](general/connective-tissue.html) (no micrographs)*
 
 ### 72. Integumentary System
 

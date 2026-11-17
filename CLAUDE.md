@@ -101,10 +101,27 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
   reads the OBJs from the zips, welds, simplifies to an absolute error (mm), writes `NPM1` binaries + a manifest with
   bounding boxes and the **contacts** between parts (sutures, joints). Coordinates stay in the BodyParts3D body frame
   (mm; +x left, +y posterior, +z up), so separately built groups assemble without transforms.
+- **Muscles, ligaments, fasciae** come from **Z-Anatomy** (CC BY-SA 4.0, built on BodyParts3D; credit both). See
+  `tools/zanat/README.md`: `export.py` reads its `.blend` without Blender and writes the meshes, moved into the
+  BodyParts3D 3.0 frame by one fitted transform (`z-to-bp3d.json`: Z-Anatomy = BodyParts3D × 1.0327, shifted ~98 mm),
+  as OBJs in `sources-local/zanat/z-bp3d.zip`, so `bones build` uses them like BodyParts3D parts. Bones stay
+  BodyParts3D. Config options for mixed builds: per-part `group` + `contacts_across_groups_only` (bone–muscle contacts
+  only), per-part `error_mm`, `source` (manifest credit). Z-Anatomy's own origin/insertion patches are hand-drawn and
+  sometimes wrong: don't use them. Attachment areas: `tools/zanat/areas.py` (bone vertices near the muscle **and** near
+  the landmark the textbook names; proximity alone marks places a muscle only slides over). Check each in a screenshot
+  (`tools/test/muscle-dev.html`).
+- This machine flips single bits in RAM (suspected faulty memory). In Nov 2026 the cached (in-RAM) copy of the
+  BodyParts3D 3.0 zip had 60 bad entries while the copy on disk was intact (`dd iflag=direct` reads past the cache).
+  Run `unzip -tq` on an archive before a build; if it fails, compare `sha256sum` with a `dd iflag=direct` read and
+  replace the file with the direct copy. Re-hash tracked files against git (`git hash-object` vs the index) and run
+  `git fsck` before pushing.
 - `tools/bones/skull_points.py`: named sutures and points from the contacts. `tools/bones/assign_colours.py`: bone
   colours. The femur page still uses `tools/bones/build_femur.py` + `embed.py`.
-- Python scripts run with the venv `~/personal/buildenv` (numpy, pillow, playwright + headless Chromium inside it:
-  `PLAYWRIGHT_BROWSERS_PATH=0`). Pages that fetch models need a local http server to test (`python3 -m http.server`).
+- Python scripts run with the venv `~/personal/buildenv` (numpy, pillow, selenium; run with `python -I`). Page tests:
+  `tools/test/ffshot.py URL out.png [--phone] [--wait expr] [--js …]` — headless Firefox forced onto **software**
+  rendering (Mesa llvmpipe; it prints the renderer to confirm). Never test on the GPU: the AMD iGPU driver faulted
+  under browser rendering on this machine. Pages that fetch models need a local http server
+  (`python3 -m http.server 8765 --bind 127.0.0.1` in the repo root). (Older tools in `tools/test/` use Playwright.)
 - Every computed point or line (landmark, suture, fossa) is checked by eye in a screenshot before it ships, and is
   labelled approximate. If a rule can't place something reliably (e.g. the inion), leave it out.
 - Hand-placed landmarks: `tools/test/bone_views.py` (with `tools/test/bone-dev.html`) renders a bone from any direction

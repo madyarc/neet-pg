@@ -1,0 +1,38 @@
+# Z-Anatomy meshes (muscles, ligaments, fascia)
+
+Z-Anatomy (https://github.com/Z-Anatomy/Models-of-human-anatomy, `Z-Anatomy.zip` → `Startup.blend`, Blender 3.5
+format) is BodyParts3D extended with the muscles, tendons, ligaments, fasciae and bursae that BodyParts3D lacks
+(masseter, temporalis, facial muscles, rectus abdominis, latissimus dorsi…). Licence: CC BY-SA 4.0; credit both
+"BodyParts3D – The Database Center for Life Science – CC BY-SA 2.1 Japan" and "Z-Anatomy – The libre 3D atlas of
+anatomy – CC BY-SA 4.0". **Do not use** its inner ear (CC BY-NC-SA) or kidney (CC BY-NC) models, or the unlicensed
+"Brainder"/"White matter" brain models. Download and archive: `sources-local/zanat/` (not in git).
+
+## Reading the .blend without Blender
+
+`zblend.py` uses `blender-asset-tracer` (pip, in `~/personal/buildenv`). Blender 3.5 writes mesh arrays from temporary
+buffers whose addresses repeat across meshes, so a pointer must be resolved among the DATA blocks written right after
+its mesh (the library's global lookup returns the wrong block). Layers used: vdata type 0 (MVert, 16 bytes, co first),
+pdata type 25 (MPoly: loopstart, totloop), ldata type 26 (MLoop: v first). `world()` applies the object matrix.
+
+`inventory.py blend out.tsv`: every object with type, mesh, vertex count, modifiers, scale, translation, collections.
+
+## How Z-Anatomy relates to BodyParts3D (checked 2026-11-17)
+
+- **Same meshes, different frame.** Z-Anatomy world coordinates are metres; one similarity transform takes them to the
+  BodyParts3D 3.0 frame we build in (mm; +x left, +y posterior, +z up): `z-to-bp3d.json`, fitted by `fit.py` on 24
+  bones from skull to foot. Scale 968.34 mm per m (Z-Anatomy is BodyParts3D × 1.0327), rotation 0.12°, shift
+  (−3.2, −97.9, −13.4) mm. After it, Z bone vertices lie a median 0.3–1.1 mm from the BodyParts3D bone vertices
+  (mandible 3.1, sacrum 2.1: lightly edited in Z-Anatomy).
+- **Muscles that both have match**: supraspinatus median 0.25 mm, rectus femoris 0.78 mm (`compare.py` with `ZT=`).
+- **Lower resolution**: Z meshes are decimated (humerus 2143 vertices vs 8707 in BP3D 3.0 95 %). Keep using
+  BodyParts3D for bones; take only what BodyParts3D lacks, or a whole muscle set from Z for consistency.
+- **Left = mirrored right.** Each left object shares the right object's mesh with a mirrored matrix. BodyParts3D's left
+  bones are not exact mirrors, so Z left parts sit ~1.3–2 mm (median) off our left bones. Detail pages are right-sided.
+- **Attachment patches** (collection "2: Muscular insertions", objects `<muscle>.o*` / `.e*`): hand-drawn. Most sit on
+  the right bone (deltoid origins 0.2–0.3 mm, long head of biceps 0.2 mm, pectoralis major 0.3–0.7 mm, temporalis on
+  the mandible 0.55 mm), but some are misplaced or mislabelled: `Latissimus dorsi muscle.e` lies at the scapula's
+  inferior angle, not on the humerus. **Every patch must be checked against the text sources before use** (`attach.py`).
+- **Modifiers**: muscles have none (stored mesh = what Blender shows). Bursae, tendon sheaths, retinacula and the
+  plantar aponeurosis rely on Solidify (thickness) and/or Subsurf (smoothing); bursae are generic 178-vertex blobs.
+  Draw sheets double-sided, or apply thickness/subdivision ourselves.
+- **Helper objects**: `.j`, `.i` (2-vertex label anchors), `.g`, `.t`, `.s` (text labels, type font) — skip.

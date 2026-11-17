@@ -36,6 +36,12 @@ struct Config {
     max_tris: Option<usize>,
     #[serde(default = "default_contact")]
     contact_mm: f32,
+    /// only record contacts between parts of different `group`s (e.g. muscle–bone, not muscle–muscle)
+    #[serde(default)]
+    contacts_across_groups_only: bool,
+    /// credit line written into the manifest (default: BodyParts3D)
+    #[serde(default)]
+    source: Option<String>,
     parts: Vec<PartCfg>,
 }
 fn default_contact() -> f32 { 1.5 }
@@ -48,6 +54,12 @@ struct PartCfg {
     fma: String,
     /// OBJ file names (without .obj) inside the zip: BodyParts3D element ids (FJ...) or FMA ids
     files: Vec<String>,
+    /// e.g. "bone" or "muscle" (see contacts_across_groups_only)
+    #[serde(default)]
+    group: String,
+    /// per-part simplification error (mm), overriding the config's error_mm
+    #[serde(default)]
+    error_mm: Option<f32>,
 }
 
 #[derive(Serialize)]
@@ -250,7 +262,7 @@ fn build(cfg_path: &Path) -> Result<()> {
         }
         let m = weld(all);
         let src = m.idx.len() / 3;
-        let s = simplify(&m, cfg.error_mm, cfg.max_tris)?;
+        let s = simplify(&m, p.error_mm.unwrap_or(cfg.error_mm), cfg.max_tris)?;
         Ok((p.clone(), s, src))
     }).collect::<Result<_>>()?;
 
@@ -261,7 +273,7 @@ fn build(cfg_path: &Path) -> Result<()> {
         std::fs::File::create(out.join(&file))?.write_all(&bytes)?;
         parts.push(PartOut {
             key: p.key.clone(), name: p.name.clone(), fma: p.fma.clone(), file,
-            nverts: m.pos.len(), ntris: m.idx.len() / 3, source_tris: *src, error_mm: cfg.error_mm,
+            nverts: m.pos.len(), ntris: m.idx.len() / 3, source_tris: *src, error_mm: p.error_mm.unwrap_or(cfg.error_mm),
             bbox: bbox(&m.pos), bytes: bytes.len(),
         });
         eprintln!("{:<28} {:>7} -> {:>7} tris  {:>8} bytes", p.key, src, m.idx.len() / 3, bytes.len());
@@ -272,6 +284,7 @@ fn build(cfg_path: &Path) -> Result<()> {
     let grids: Vec<Grid> = meshes.par_iter().map(|(_, m, _)| Grid::new(&m.pos, d.max(0.5))).collect();
     let boxes: Vec<[[f32; 3]; 2]> = meshes.iter().map(|(_, m, _)| bbox(&m.pos)).collect();
     let pairs: Vec<(usize, usize)> = (0..meshes.len()).flat_map(|i| (i + 1..meshes.len()).map(move |j| (i, j)))
+        .filter(|&(i, j)| !cfg.contacts_across_groups_only || meshes[i].0.group != meshes[j].0.group)
         .filter(|&(i, j)| (0..3).all(|k| boxes[i][0][k] - d <= boxes[j][1][k] && boxes[j][0][k] - d <= boxes[i][1][k]))
         .collect();
     let b64 = base64::engine::general_purpose::STANDARD;
@@ -292,7 +305,7 @@ fn build(cfg_path: &Path) -> Result<()> {
 
     let man = Manifest {
         name: cfg.name.clone(),
-        source: "BodyParts3D, (c) The Database Center for Life Science, CC BY-SA 2.1 Japan".into(),
+        source: cfg.source.clone().unwrap_or_else(|| "BodyParts3D, (c) The Database Center for Life Science, CC BY-SA 2.1 Japan".into()),
         contact_mm: d, parts, contacts,
     };
     std::fs::write(out.join(format!("{}.json", cfg.name)), serde_json::to_string(&man)?)?;

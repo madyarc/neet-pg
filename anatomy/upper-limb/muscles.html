@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muscles of the Upper Limb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+.tabs{display:flex;gap:6px}
+.tabs .chip{font-size:13.5px;padding:6px 14px}
+.group-h{font:600 12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:12px 0 2px}
+.desc{min-height:3em}
+.mlist{display:flex;flex-wrap:wrap;gap:4px}
+.mlist button{font:500 12.5px var(--f-body);padding:4px 9px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:6px}
+.mlist button i{width:10px;height:10px;border-radius:2px;flex:none}
+.mlist button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.detail{display:flex;flex-direction:column;gap:8px}
+.detail h2{margin:0}
+.detail .sub{color:var(--muted);font-size:13px}
+dl.facts dt .swatch{margin-right:6px}
+.pending{color:var(--muted);font-style:italic}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t tr[data-k]{cursor:pointer} table.t tr[aria-pressed="true"] td{background:var(--bg)}
+.note{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Muscles of the Upper Limb</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="stack" aria-label="3D muscles">
+  <div class="tabs scrollrow" role="tablist" aria-label="What to show">
+    <button class="chip" role="tab" id="tab-muscles" aria-pressed="true">Muscles</button>
+    <button class="chip" role="tab" id="tab-nerves" aria-pressed="false">Nerve supply</button>
+    <button class="chip" role="tab" id="tab-wrist" aria-pressed="false">Wrist and thumb</button>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <div id="v"></div>
+      <div class="vbar scrollrow" id="views"></div>
+    </div>
+    <div class="panel stack">
+      <div id="pane-muscles" class="stack">
+        <div class="detail" id="detail"></div>
+        <div id="groups"></div>
+      </div>
+      <div id="pane-nerves" class="stack" hidden>
+        <div class="cap key desc" id="nerve-desc"></div>
+        <div class="legend" id="nerve-list"></div>
+      </div>
+      <div id="pane-wrist" class="stack" hidden>
+        <div class="cap key desc" id="wrist-desc"></div>
+        <div class="legend" id="wrist-list"></div>
+        <div class="group-h">Extensor compartments (tap one)</div>
+        <table class="t" id="comp"></table>
+        <div class="group-h">Movements of the thumb (tap one)</div>
+        <table class="t" id="thumb"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — every statement checked in two independent sources (see anatomy/DATA-SOURCES.md,
+   "Muscles of the upper limb"); fact sheets: sources-local/facts/ul-muscles-a.md, ul-muscles-b.md ===================== */
+const DATA = {
+  lede: 'The muscles of the right upper limb on its bones, from the shoulder girdle to the hand. Tap a muscle to see where it arises and inserts, its nerve and what it does; the attachment areas light up on the bone. Other muscles turn to glass so deep ones stay visible.',
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the muscles of the upper extremity; checked against StatPearls (NCBI Bookshelf), open-access anatomy papers and Wikipedia. Where they disagree, the modern wording is used.',
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, retinacula and aponeuroses from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones. Simplified meshes, shared under the same licences. The right limb is shown; muscle shapes are a single model, not every body. Attachment areas are approximate (where the muscle meets the bone near the landmark named in the text).',
+};
+/* nerve key -> [name, colour token] */
+const NERVES = {
+  median: ['Median nerve', '--n-median'],
+  ulnar: ['Ulnar nerve', '--n-ulnar'],
+  radial: ['Radial nerve and its branches', '--n-radial'],
+  musculocutaneous: ['Musculocutaneous nerve', '--n-musculocutaneous'],
+  axillary: ['Axillary nerve', '--n-axillary'],
+  plexus: ['Other branches of the brachial plexus', '--n-plexus'],
+  accessory: ['Accessory nerve', '--n-accessory'],
+  cervical: ['Cervical plexus (C3, C4)', '--n-cervical'],
+  two: ['Two nerves (see each muscle)', '--n-two'],
+};
+const GROUPS = [
+  ['pectoral', 'Front of the chest wall'],
+  ['back', 'Back: trunk to limb'],
+  ['scapular', 'Shoulder (scapular) muscles'],
+  ['arm', 'Arm'],
+  ['ffront', 'Front of the forearm'],
+  ['fback', 'Back of the forearm'],
+  ['hand', 'Hand'],
+];
+/* key: [group, origin, insertion, nerve key, nerve text, action, note]   (pending = facts not yet verified) */
+const M = {
+  pec_major: ['pectoral', 'Clavicular head: front of the medial half of the clavicle. Sternocostal head: front of the sternum, the costal cartilages of the true ribs (the upper six or seven) and the aponeurosis of the external oblique.',
+    'Lateral lip of the intertubercular (bicipital) groove, by a two-layered tendon.', 'plexus', 'Medial and lateral pectoral nerves (together C5–T1).',
+    'Adducts and medially rotates the arm; the clavicular head also flexes it.', 'Forms the front wall of the axilla.'],
+  pec_minor: ['pectoral', '3rd, 4th and 5th ribs, near their costal cartilages.', 'Medial border and upper surface of the coracoid process.', 'plexus',
+    'Medial pectoral nerve (C8, T1), which pierces the muscle on its way to pectoralis major.',
+    'Draws the scapula forwards and downwards; steadies it on the chest wall.', 'Part of the front wall of the axilla; it crosses the axillary artery (the artery\'s 2nd part lies behind it).'],
+  subclavius: ['pectoral', 'First rib and its costal cartilage, at their junction.', 'Subclavian groove on the under surface of the clavicle.', 'plexus',
+    'Nerve to subclavius (C5, C6), from the upper trunk.', 'Steadies the clavicle, pulling it down and towards the sternum.',
+    'The clavipectoral fascia encloses it and continues to pectoralis minor; this fascia is pierced by the cephalic vein, the thoracoacromial artery and vein, and the lateral pectoral nerve.'],
+  serratus_ant: ['pectoral', 'Fleshy slips from the outer surfaces of the upper 8 or 9 ribs.',
+    'Front (costal) surface of the medial border of the scapula, from the superior to the inferior angle; the lower, largest slips go to the inferior angle.', 'plexus',
+    'Long thoracic nerve (C5, C6, C7).', 'Protracts the scapula (pushing, punching); with trapezius rotates it upwards to raise the arm above the head; holds the medial border against the chest wall.',
+    '<b>Winged scapula:</b> with the long thoracic nerve injured (e.g. in axillary surgery), the medial border lifts off the chest wall, most clearly when pushing against a wall.'],
+  trapezius: ['back', 'External occipital protuberance, medial third of the superior nuchal line, ligamentum nuchae, and the spines of C7 and all thoracic vertebrae.',
+    'Upper fibres: back of the lateral third of the clavicle. Middle fibres: acromion and the upper lip of the spine of the scapula. Lower fibres: the medial end of the spine.',
+    'accessory', 'Spinal accessory nerve (cranial nerve XI); branches of C3 and C4 also reach it (mainly sensory; sources differ on whether they carry motor fibres).',
+    'Upper fibres raise the scapula (shrug), middle fibres retract it, lower fibres depress it; upper and lower fibres together rotate it upwards (with serratus anterior) to lift the arm above 90°.',
+    'An accessory nerve injury in the posterior triangle of the neck (e.g. lymph node biopsy) gives a drooping shoulder, weak abduction above 90° and lateral winging of the scapula.'],
+  lat_dorsi: ['back', 'Spines of T7–T12; through the thoracolumbar fascia, the lumbar and sacral spines and the iliac crest; the lower 3–4 ribs; often a slip from the inferior angle of the scapula.',
+    'Floor of the intertubercular groove; its tendon twists and passes in front of teres major.', 'plexus', 'Thoracodorsal nerve (C6, C7, C8), from the posterior cord.',
+    'Extends, adducts and medially rotates the arm; with the arms fixed it lifts the trunk (climbing).', ''],
+  lev_scap: ['back', 'Transverse processes of C1 and C2, and the posterior tubercles of the transverse processes of C3 and C4.',
+    'Medial border of the scapula, from the superior angle to the root of the spine.', 'cervical', 'C3 and C4 (cervical plexus), often also the dorsal scapular nerve.',
+    'Raises the scapula and rotates it downwards; with the shoulder fixed, bends the neck to the same side.', ''],
+  rhomb_major: ['back', 'Spines of T2–T5 and the supraspinous ligament.', 'Medial border of the scapula, from the root of the spine to the inferior angle.', 'plexus',
+    'Dorsal scapular nerve (C5).', 'Retracts the scapula, rotates it downwards and holds it against the chest wall.', 'A dorsal scapular nerve palsy gives a mild medial winging of the scapula.'],
+  rhomb_minor: ['back', 'Lower ligamentum nuchae and the spines of C7 and T1.', 'Medial border of the scapula at the root of the spine.', 'plexus',
+    'Dorsal scapular nerve (C5).', 'Retracts the scapula, rotates it downwards and holds it against the chest wall.', ''],
+
+  deltoid: ['scapular', 'Three parts: clavicular (lateral third of the clavicle), acromial (acromion) and spinal (lower lip of the spine of the scapula).',
+    'Deltoid tuberosity, at the middle of the lateral surface of the humerus.', 'axillary', 'Axillary nerve (C5, C6).',
+    'Acromial part abducts the arm (the main abductor up to 90°); clavicular part flexes and medially rotates it; spinal part extends and laterally rotates it.',
+    'The acromial part is multipennate, the most powerful part. An axillary nerve injury (shoulder dislocation, fracture of the upper humerus) weakens abduction and wastes the deltoid.'],
+  supraspinatus: ['scapular', 'Medial two-thirds of the supraspinous fossa.', 'Superior facet of the greater tubercle; the tendon passes under the acromion and blends with the joint capsule.',
+    'plexus', 'Suprascapular nerve (C5, C6).', 'Starts abduction of the arm and holds the head of the humerus in the glenoid cavity while the deltoid pulls.',
+    'A rotator cuff muscle. <b>Rotator cuff tear:</b> its tendon is the one most often torn; tears become common with age.'],
+  infraspinatus: ['scapular', 'Medial two-thirds of the infraspinous fossa.', 'Middle facet of the greater tubercle.', 'plexus',
+    'Suprascapular nerve (C5, C6), after it passes the spinoglenoid notch.', 'The main lateral rotator of the arm; steadies the joint from behind.',
+    'A rotator cuff muscle. The suprascapular nerve trapped at the suprascapular notch weakens supraspinatus and infraspinatus; at the spinoglenoid notch, infraspinatus only.'],
+  teres_minor: ['scapular', 'Upper two-thirds of the back of the lateral border of the scapula.', 'Inferior facet of the greater tubercle.', 'axillary',
+    'Axillary nerve.', 'Laterally rotates the arm; keeps the head of the humerus in the glenoid cavity.', 'A rotator cuff muscle; forms the upper border of the quadrangular space.'],
+  teres_major: ['scapular', 'Oval area on the back of the inferior angle of the scapula.', 'Medial lip of the intertubercular groove; its tendon lies behind that of latissimus dorsi.',
+    'plexus', 'Lower subscapular nerve.', 'Adducts, extends and medially rotates the arm, with latissimus dorsi.',
+    'Not a rotator cuff muscle. Forms the lower border of the quadrangular space: the quadrangular space (teres minor above, teres major below, long head of triceps medially, humerus laterally) carries the axillary nerve and posterior circumflex humeral vessels.'],
+  subscapularis: ['scapular', 'Medial two-thirds of the subscapular fossa.', 'Lesser tubercle of the humerus and the front of the joint capsule.', 'plexus',
+    'Upper and lower subscapular nerves (C5, C6).', 'Medially rotates and adducts the arm.',
+    'A rotator cuff muscle: supraspinatus, infraspinatus, teres minor and subscapularis blend with the joint capsule and hold the head of the humerus in the shallow glenoid cavity.'],
+
+  biceps: ['arm', 'Short head: tip of the coracoid process (with coracobrachialis). Long head: supraglenoid tubercle; its tendon runs inside the joint capsule (but outside the synovial cavity), then down the intertubercular groove.',
+    'Back of the radial tuberosity; and, by the bicipital aponeurosis, into the deep fascia of the forearm.', 'musculocutaneous', 'Musculocutaneous nerve.',
+    'Flexes the elbow and is the most powerful supinator of the forearm when the elbow is bent; weakly flexes the shoulder.',
+    'Most ruptures involve the long head, leaving a bulge in the front of the arm (the "Popeye" sign). The bicipital aponeurosis crosses in front of the brachial artery and median nerve; it can compress the median nerve (lacertus syndrome).'],
+  coracobrachialis: ['arm', 'Tip of the coracoid process, with the short head of biceps.', 'Middle of the medial border of the humerus.', 'musculocutaneous',
+    'Musculocutaneous nerve, which pierces the muscle.', 'Flexes and adducts the arm at the shoulder (weakly).', ''],
+  brachialis: ['arm', 'Lower half of the front of the humerus (embracing the deltoid insertion) and the intermuscular septa.', 'Tuberosity of the ulna and the front of the coronoid process.',
+    'musculocutaneous', 'Musculocutaneous nerve; usually also a branch of the radial nerve to its lateral part.',
+    'Flexes the elbow in every position of the forearm: the main flexor of the elbow.', 'Forms the floor of the cubital fossa.'],
+  triceps: ['arm', 'Long head: infraglenoid tubercle of the scapula. Lateral head: back of the humerus above the radial groove. Medial head: back of the humerus below the radial groove (deep, covered by the other two).',
+    'Upper surface of the olecranon, by a common tendon.', 'radial', 'Radial nerve.', 'The main extensor of the elbow; the long head also helps extend and adduct the arm.',
+    'The long head forms the medial border of the quadrangular space.'],
+  anconeus: ['arm', 'Back of the lateral epicondyle of the humerus.', 'Lateral side of the olecranon and the upper back of the ulna.', 'radial', 'Radial nerve.',
+    'Helps triceps extend the elbow (weakly) and steadies the joint.', ''],
+
+  pronator_teres: ['ffront', 'Two heads: humeral (just above the medial epicondyle, with the common flexor tendon) and ulnar (medial side of the coronoid process).',
+    'Middle of the lateral surface of the shaft of the radius.', 'median', 'Median nerve.',
+    'Pronates the forearm; helps flex the elbow.',
+    'The median nerve enters the forearm between its two heads; compression there is the pronator teres syndrome.'],
+  fcr: ['ffront', 'Medial epicondyle (common flexor tendon) and the forearm fascia.', 'Base of the 2nd metacarpal.', 'median', 'Median nerve.',
+    'Flexes and abducts (radially deviates) the wrist; helps pronate and flex the elbow.',
+    'Its tendon runs in its own canal in the lateral part of the flexor retinaculum, in the groove of the trapezium, not in the carpal tunnel proper.'],
+  palmaris_longus: ['ffront', 'Medial epicondyle (common flexor tendon).', 'Flexor retinaculum and palmar aponeurosis; the tendon passes in front of (superficial to) the retinaculum.',
+    'median', 'Median nerve.', 'Weak flexor of the wrist.', 'Often absent; reported rates vary with the population studied (about 2.5–26 %).'],
+  fcu: ['ffront', 'Two heads: humeral (medial epicondyle, common flexor tendon) and ulnar (medial margin of the olecranon and upper two-thirds of the posterior border of the ulna).',
+    'Pisiform; continued to the hook of the hamate and the base of the 5th metacarpal by the pisohamate and pisometacarpal ligaments.', 'ulnar', 'Ulnar nerve.',
+    'Flexes and adducts (ulnar-deviates) the wrist.',
+    'The ulnar nerve enters the forearm between its two heads (the cubital tunnel). The only muscle of the front of the forearm supplied wholly by the ulnar nerve.'],
+  fds: ['ffront', 'Two heads: humero-ulnar (medial epicondyle by the common flexor tendon, ulnar collateral ligament, coronoid process) and radial (upper front of the radius). Gray (1918) counts three.',
+    'Four tendons; each splits to let the profundus tendon through and inserts on the sides of the middle phalanx of a finger.', 'median', 'Median nerve.',
+    'Flexes the proximal interphalangeal (PIP) joints; helps flex the metacarpophalangeal (MCP) joints and the wrist.', ''],
+  fdp: ['ffront', 'Upper three-quarters of the front and medial surfaces of the ulna, and the interosseous membrane.',
+    'Four tendons pass through the split superficialis tendons to the bases of the distal phalanges of the medial four fingers.', 'two',
+    'Two nerves: the part for the index and middle fingers by the anterior interosseous branch of the median nerve; the part for the ring and little fingers by the ulnar nerve.',
+    'The only muscle that flexes the distal interphalangeal (DIP) joints; also flexes the PIP, MCP and wrist joints.', ''],
+  fpl: ['ffront', 'Front of the radius below its tuberosity, and the interosseous membrane.', 'Base of the distal phalanx of the thumb.', 'median',
+    'Anterior interosseous branch of the median nerve.', 'Flexes the thumb at its interphalangeal joint.', 'Its tendon runs through the carpal tunnel in its own synovial sheath.'],
+  pronator_quadratus: ['ffront', 'Lower quarter of the front of the ulna.', 'Lower quarter of the front of the radius.', 'median',
+    'Anterior interosseous nerve (its last branch).', 'Pronates the forearm; its deep fibres help hold the radius and ulna together.', ''],
+
+  brachioradialis: ['fback', 'Lateral supracondylar ridge of the humerus.', 'Lateral side of the radius at the base of its styloid process.', 'radial',
+    'Radial nerve, before it divides.', 'Flexes the elbow, most strongly with the forearm mid-way between pronation and supination.',
+    'A muscle of the back (extensor) compartment that flexes the elbow; it does not cross the wrist.'],
+  ecrl: ['fback', 'Lower part of the lateral supracondylar ridge.', 'Back of the base of the 2nd metacarpal.', 'radial', 'Radial nerve (before it divides).',
+    'Extends and abducts the wrist.', 'In the 2nd extensor compartment, with ECRB.'],
+  ecrb: ['fback', 'Lateral epicondyle (common extensor tendon).', 'Back of the base of the 3rd metacarpal.', 'radial',
+    'Deep branch of the radial nerve (variable; Gray gives the radial nerve itself).', 'Extends the wrist; abducts it slightly.',
+    'Tennis elbow (lateral epicondylitis) is an overuse tendinopathy of the common extensor origin, mainly where ECRB arises.'],
+  ed: ['fback', 'Lateral epicondyle (common extensor tendon).', 'Four tendons to the extensor expansions of the medial four fingers, ending on the middle and distal phalanges.',
+    'radial', 'Posterior interosseous nerve.', 'Extends the fingers, mainly at the MCP joints; then helps extend the wrist.', 'In the 4th extensor compartment, with extensor indicis.'],
+  edm: ['fback', 'Lateral epicondyle (common extensor tendon).', 'Extensor expansion of the little finger, joining the extensor digitorum tendon.', 'radial',
+    'Posterior interosseous nerve.', 'Extends the little finger.', 'In the 5th extensor compartment, over the distal radio-ulnar joint.'],
+  ecu: ['fback', 'Lateral epicondyle (common extensor tendon) and the posterior border of the ulna.', 'Base of the 5th metacarpal (the tubercle on its ulnar side).', 'radial',
+    'Posterior interosseous nerve.', 'Extends and adducts (ulnar-deviates) the wrist.', 'In the 6th extensor compartment, between the head and styloid process of the ulna.'],
+  supinator: ['fback', null, null, 'radial', 'Deep branch of the radial nerve.', 'Supinates the forearm (with biceps).',
+    'Has two layers; the deep branch of the radial nerve passes between them and comes out as the posterior interosseous nerve. Its detailed bony attachments are given by only one of our sources, so they are left out.'],
+  apl: ['fback', 'Back of the ulna, the interosseous membrane and the back of the radius (middle third).', 'Radial side of the base of the 1st metacarpal.', 'radial',
+    'Posterior interosseous nerve.', 'Abducts the thumb at its carpometacarpal joint; helps extend it.', 'In the 1st extensor compartment, with EPB (de Quervain tenosynovitis).'],
+  epb: ['fback', 'Back of the radius (below APL) and the interosseous membrane.', 'Base of the proximal phalanx of the thumb.', 'radial', 'Posterior interosseous nerve.',
+    'Extends the thumb at the MCP joint.', 'In the 1st extensor compartment, with APL.'],
+  epl: ['fback', 'Middle third of the back of the ulna and the interosseous membrane.', 'Base of the distal phalanx of the thumb.', 'radial', 'Posterior interosseous nerve.',
+    'Extends the thumb at the interphalangeal (and MCP) joints.', 'In the 3rd extensor compartment, on the ulnar side of the dorsal (Lister\'s) tubercle of the radius, which acts as a pulley.'],
+  ei: ['fback', 'Lower back of the ulna (below EPL) and the interosseous membrane.', 'Joins the extensor digitorum tendon to the index finger (extensor expansion).', 'radial',
+    'Posterior interosseous nerve.', 'Extends the index finger on its own.', 'In the 4th extensor compartment, with extensor digitorum.'],
+
+  apb: ['hand', 'Flexor retinaculum and the tubercle of the scaphoid (and trapezium).', 'Radial side of the base of the proximal phalanx of the thumb.', 'median',
+    'Recurrent (motor) branch of the median nerve.', 'Abducts the thumb: moves it forwards, at right angles to the palm.', 'One of the three thenar muscles.'],
+  fpb: ['hand', 'Superficial head: flexor retinaculum and the trapezium. (The deep head\'s attachments differ between sources and are left out.)',
+    'Base of the proximal phalanx of the thumb.', 'two', 'Two nerves, variable: the superficial head by the recurrent branch of the median, the deep head usually by the deep branch of the ulnar.',
+    'Flexes the thumb at the MCP joint.', 'One of the three thenar muscles.'],
+  op: ['hand', 'Flexor retinaculum and the tubercle of the trapezium.', 'Whole length of the lateral (radial) border of the 1st metacarpal.', 'median',
+    'Recurrent branch of the median nerve (usually).', 'Draws the 1st metacarpal across the palm and rotates it: the main part of opposition.', 'One of the three thenar muscles; lies deep to APB.'],
+  adductor_pollicis: ['hand', 'Oblique head: capitate and the bases of the 2nd and 3rd metacarpals. Transverse head: front of the shaft of the 3rd metacarpal.',
+    'Ulnar side of the base of the proximal phalanx of the thumb.', 'ulnar', 'Deep branch of the ulnar nerve.', 'Adducts the thumb (brings it back to the palm).',
+    'Lies deep, in its own (adductor) compartment.'],
+  adm: ['hand', 'Pisiform (and the FCU tendon).', 'Ulnar side of the base of the proximal phalanx of the little finger.', 'ulnar', 'Deep branch of the ulnar nerve.',
+    'Abducts the little finger.', 'A hypothenar muscle.'],
+  fdm: ['hand', 'Hook of the hamate and the flexor retinaculum.', 'Ulnar side of the base of the proximal phalanx of the little finger.', 'ulnar', 'Deep branch of the ulnar nerve.',
+    'Flexes the little finger at the MCP joint.', 'A hypothenar muscle.'],
+  odm: ['hand', 'Hook of the hamate and the flexor retinaculum.', 'Ulnar border of the shaft of the 5th metacarpal.', 'ulnar', 'Deep branch of the ulnar nerve.',
+    'Draws the 5th metacarpal forwards and rotates it towards the thumb, deepening the hollow of the palm.', 'A hypothenar muscle; the only one that inserts on the metacarpal.'],
+  lumbricals: ['hand', 'Four, from the profundus tendons in the palm: the 1st and 2nd from one tendon each (unipennate), the 3rd and 4th from two neighbouring tendons (bipennate).',
+    'Radial side of the extensor expansion of the index, middle, ring and little fingers.', 'two', 'Two nerves: the 1st and 2nd by the median, the 3rd and 4th by the deep branch of the ulnar (variable).',
+    'Flex the MCP joints and extend the interphalangeal joints.', ''],
+  palmar_interossei: ['hand', 'Each from the side of the metacarpal of the finger it moves (index, ring, little), on the side facing the middle finger.',
+    'The same side of the base of the proximal phalanx and the extensor expansion of that finger.', 'ulnar', 'Deep branch of the ulnar nerve.',
+    'Adduct the index, ring and little fingers towards the middle finger; help flex the MCP and extend the interphalangeal joints.',
+    'Usually counted as three; some sources add a small fourth one on the thumb.'],
+  dorsal_interossei: ['hand', 'Four, each from the adjacent sides of two metacarpals (bipennate).',
+    'Base of the proximal phalanx and the extensor expansion: index (radial side), middle (both sides), ring (ulnar side).', 'ulnar', 'Deep branch of the ulnar nerve.',
+    'Abduct the index, middle and ring fingers away from the middle finger; help flex the MCP and extend the interphalangeal joints.',
+    'The middle finger has two dorsal interossei and no palmar one.'],
+};
+/* nerve pane: what each nerve supplies, and the classic lesion */
+const NERVE_TEXT = {
+  median: 'Supplies the front of the forearm except FCU and the ulnar half of FDP (the deep muscles through its anterior interosseous branch), and in the hand the thenar muscles APB, OP and the superficial head of FPB, and the 1st and 2nd lumbricals. <b>Carpal tunnel syndrome:</b> the nerve is squeezed in the carpal tunnel: pain, numbness and tingling in the thumb, index, middle and lateral half of the ring finger, often worse at night; later weakness and wasting of the thenar muscles.',
+  ulnar: 'Supplies FCU and the ulnar half of FDP in the forearm, and in the hand the hypothenar muscles, adductor pollicis, the deep head of FPB, the 3rd and 4th lumbricals and all the interossei. <b>Claw hand:</b> with the ulnar intrinsics lost, the long extensors and flexors act unopposed: the MCP joints hyperextend and the interphalangeal joints flex, most in the ring and little fingers; the fingers cannot be spread or brought together against resistance. Common sites: the cubital tunnel at the elbow, Guyon\'s canal at the wrist.',
+  radial: 'Triceps and anconeus in the arm. In the forearm, brachioradialis and ECRL from the radial nerve itself; ECRB and supinator from its deep branch; all the other extensors of the forearm from the posterior interosseous nerve. <b>Wrist drop:</b> with the radial nerve damaged (e.g. a fracture of the shaft of the humerus, or prolonged pressure), the wrist and finger extensors are paralysed and the wrist hangs flexed. A lesion of the posterior interosseous nerve alone spares wrist extension (ECRL is supplied higher up) but weakens finger and thumb extension.',
+  two: 'FDP, the lumbricals and FPB are each supplied partly by the median and partly by the ulnar nerve.',
+  musculocutaneous: 'Supplies the three muscles of the front of the arm: coracobrachialis (which it pierces), biceps and brachialis.',
+  axillary: 'Passes through the quadrangular space with the posterior circumflex humeral vessels and supplies the deltoid and teres minor. <b>Injury</b> (dislocation of the shoulder, fracture of the upper humerus): weak abduction and wasting of the deltoid.',
+  plexus: 'Branches of the brachial plexus to the shoulder girdle: pectoral nerves (pectoralis major and minor), nerve to subclavius, long thoracic nerve (serratus anterior), dorsal scapular nerve (rhomboids), suprascapular nerve (supraspinatus, infraspinatus), thoracodorsal nerve (latissimus dorsi), upper and lower subscapular nerves (subscapularis, teres major). <b>Long thoracic nerve injury:</b> winged scapula.',
+  accessory: 'Cranial nerve XI: motor supply of trapezius. <b>Injury</b> in the posterior triangle of the neck: drooping shoulder, weak abduction above 90°, lateral winging of the scapula.',
+  cervical: 'C3 and C4 supply levator scapulae (often with the dorsal scapular nerve) and also reach trapezius.',
+};
+const WRIST = {
+  intro: 'At the wrist the deep fascia is thickened into two retinacula, which hold the tendons down. Tap one.',
+  parts: [
+    ['flexor_ret', 'Flexor retinaculum', 'Attached medially to the pisiform and the hook of the hamate, laterally to the tubercle of the scaphoid and the trapezium. It turns the hollow front of the carpus into the <b>carpal tunnel</b>, which carries the median nerve (just under the retinaculum) and nine tendons: four of FDS, four of FDP and FPL. In front of the retinaculum, not in the tunnel: the ulnar nerve and artery, and the palmaris longus tendon. FCR runs in its own canal in the retinaculum\'s lateral part. The short thenar and hypothenar muscles arise from it.'],
+    ['extensor_ret', 'Extensor retinaculum', 'A thickening of the deep fascia on the back of the forearm. Deep to it the extensor tendons run in six compartments (table below).'],
+    ['palmar_apon', 'Palmar aponeurosis', 'The deep fascia of the palm: continuous with the flexor retinaculum, it receives the palmaris longus tendon and gives origin to palmaris brevis (a small hypothenar skin muscle, not in this model). <b>Dupuytren\'s contracture:</b> a fibrosing disease of the palmar aponeurosis and the fascia of the fingers: painless nodules, then cords, then fixed flexion of the fingers, most often the ring and little fingers.'],
+    ['interosseous_membrane', 'Interosseous membrane', 'Joins the radius and ulna; many deep forearm muscles arise from it (FDP, FPL, APL, EPB, EPL, extensor indicis).'],
+  ],
+  comps: [
+    ['1', ['apl', 'epb'], 'APL, EPB', 'Lateral side of the styloid process of the radius. Inflamed in de Quervain tenosynovitis.'],
+    ['2', ['ecrl', 'ecrb'], 'ECRL, ECRB', ''],
+    ['3', ['epl'], 'EPL', 'On the ulnar side of the dorsal (Lister\'s) tubercle.'],
+    ['4', ['ed', 'ei'], 'ED, EI', ''],
+    ['5', ['edm'], 'EDM', 'Over the distal radio-ulnar joint.'],
+    ['6', ['ecu'], 'ECU', 'Between the head and the styloid process of the ulna.'],
+  ],
+  thumb: [
+    ['Flexion at the IP joint', ['fpl'], 'FPL', 'median (AIN)'],
+    ['Flexion at the MCP joint', ['fpb'], 'FPB', 'median / ulnar'],
+    ['Extension at the IP joint', ['epl'], 'EPL', 'PIN'],
+    ['Extension at the MCP joint', ['epb', 'epl'], 'EPB (and EPL)', 'PIN'],
+    ['Abduction', ['apb', 'apl'], 'APB, APL', 'median; PIN'],
+    ['Adduction', ['adductor_pollicis'], 'Adductor pollicis', 'ulnar (deep branch)'],
+    ['Opposition', ['op'], 'Opponens pollicis (with help from other short thumb muscles)', 'median (recurrent branch)'],
+  ],
+};
+
+/* ===================== PAGE ===================== */
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const v = new AtlasViewer(document.getElementById('v'));
+v.ghostAlpha = 0.12; window.atlas = v;   // for tests
+const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
+let man = null, names = {}, colours = {}, attach = {}, tab = 'muscles', sel = null, group = null;
+const isMuscle = k => k in M, isFascia = k => WRIST.parts.some(p => p[0] === k);
+const BONES = () => v.order.filter(k => !isMuscle(k) && !isFascia(k));
+const LIMB = () => v.order.filter(k => !k.startsWith('ax_'));   /* the limb itself: framing ignores the axial context bones */
+const views = [['Front', [0, -1, 0]], ['Lateral', [-1, 0, 0]], ['Back', [0, 1, 0]], ['Medial', [1, 0, 0]]];
+for (const [label, dir] of views) {
+  const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
+  b.onclick = () => v.face(dir, {zoom: v.zoom}); document.getElementById('views').append(b);
+}
+const pressed = (sel, test) => document.querySelectorAll(sel).forEach(b => b.setAttribute('aria-pressed', test(b.dataset.k)));
+const nerveOf = k => M[k] && M[k][3];
+const pending = k => !M[k] || M[k].length < 3;
+
+function paint() {
+  for (const k of v.order) {
+    v.setVertexMarks(k, null);
+    if (isMuscle(k)) v.setColour(k, tab === 'nerves' ? (nerveOf(k) ? NERVES[nerveOf(k)][1] : '--line') : (colours[k] || '--line'));
+    else if (isFascia(k)) { v.setColour(k, '--fascia'); v.setVisible(k, tab === 'wrist'); }
+    else v.setColour(k, '--bone');
+  }
+}
+function focusOn(keys) { v.setFocus(keys ? keys.concat(BONES()) : null); }
+
+/* ---------- muscles tab ---------- */
+function showDetail(k) {
+  const d = document.getElementById('detail');
+  if (!k) {
+    d.innerHTML = `<p class="cap key">${group ? `<b>${GROUPS.find(g => g[0] === group)[1]}.</b> Tap a muscle on the model or in the list.` : 'Tap a muscle on the model or in the list, or a group to frame it.'}</p>`;
+    return;
+  }
+  const m = M[k], g = GROUPS.find(x => x[0] === m[0])[1];
+  if (pending(k)) { d.innerHTML = `<h2>${names[k]}</h2><p class="sub">${g}</p><p class="pending">The facts for this muscle are still being checked in two sources; they will be added here.</p>`; return; }
+  const [, ori, ins, nk, ntext, act, note] = m;
+  const hasA = attach[k] && attach[k].length;
+  d.innerHTML = `<h2>${names[k]}</h2><p class="sub">${g}</p>
+    <dl class="facts">
+      <dt><span class="swatch" style="background:var(--ori)"></span>Origin</dt><dd>${ori || '<span class="pending">Left out (only one source).</span>'}</dd>
+      <dt><span class="swatch" style="background:var(--ins)"></span>Insertion</dt><dd>${ins || '<span class="pending">Left out (only one source).</span>'}</dd>
+      <dt><span class="swatch" style="background:var(${NERVES[nk][1]})"></span>Nerve</dt><dd>${ntext}</dd>
+      <dt>Action</dt><dd>${act}</dd>
+      ${note ? `<dt>Note</dt><dd>${note}</dd>` : ''}
+    </dl>
+    <p class="note">${hasA ? 'On the bones: origin in blue, insertion in orange. The areas are approximate, and only those that fit the model well are drawn.' : 'Its attachment areas are not drawn: the model does not show them reliably.'}</p>`;
+}
+function select(k, frame = false) {
+  if (sel && v.parts.has(sel)) v.setVisible(sel, true);
+  if (!k) { sel = null; card.hidden = true; pressed('.mlist button', () => false); paint(); focusOn(group ? GROUPS_KEYS(group) : null); showDetail(null); return; }
+  sel = k;
+  pressed('.mlist button', x => x === k);
+  paint();
+  const byBone = {};
+  for (const a of attach[k] || []) (byBone[a.bone] = byBone[a.bone] || []).push({verts: a.verts, colour: a.kind === 'ori' ? '--ori' : '--ins'});
+  for (const b in byBone) v.setVertexMarks(b, byBone[b]);
+  focusOn([k]);
+  if (frame) { v.fit([k].concat((attach[k] || []).map(a => a.bone))); }
+  card.hidden = false;
+  const hasA = attach[k] && attach[k].length;
+  card.innerHTML = `<div class="what"><b>${names[k]}</b><span>${M[k] ? (tab === 'nerves' ? NERVES[nerveOf(k) || 'two'][0] : GROUPS.find(g => g[0] === M[k][0])[1]) : ''}</span></div>${hasA ? '<button class="go" id="peek" aria-pressed="false">See the bone</button>' : ''}<button class="x" aria-label="Clear">×</button>`;
+  card.querySelector('.x').onclick = () => select(null);
+  const peek = card.querySelector('#peek');
+  if (peek) peek.onclick = () => { const on = peek.getAttribute('aria-pressed') !== 'true'; peek.setAttribute('aria-pressed', on);
+    peek.textContent = on ? 'Show the muscle' : 'See the bone'; v.setVisible(k, !on); };
+  if (tab === 'muscles') showDetail(k);
+}
+const GROUPS_KEYS = g => Object.keys(M).filter(k => M[k][0] === g && v.parts.has(k));
+function buildGroups() {
+  const box = document.getElementById('groups'); box.replaceChildren();
+  for (const [g, gname] of GROUPS) {
+    const h = document.createElement('button'); h.className = 'group-h'; h.style.cssText = 'background:none;border:0;padding:0;cursor:pointer;text-align:left';
+    h.textContent = gname + ' →'; h.onclick = () => { group = g; select(null); const ks = GROUPS_KEYS(g); v.fit(ks); };
+    const list = document.createElement('div'); list.className = 'mlist';
+    for (const k of GROUPS_KEYS(g)) {
+      const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
+      b.innerHTML = `<i style="background:${colours[k] || '#999'}"></i>${names[k]}`;
+      b.onclick = () => select(k, true);
+      list.append(b);
+    }
+    box.append(h, list);
+  }
+}
+
+/* ---------- nerves tab ---------- */
+function buildNerves() {
+  const box = document.getElementById('nerve-list'); box.replaceChildren();
+  for (const [nk, [name, tok]] of Object.entries(NERVES)) {
+    const ks = Object.keys(M).filter(k => nerveOf(k) === nk && v.parts.has(k));
+    if (!ks.length) continue;
+    const b = document.createElement('button'); b.dataset.k = nk; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(${tok})"></i><span>${name}</span><span class="n">${ks.length}</span>`;
+    b.onclick = () => {
+      pressed('#nerve-list button', x => x === nk); sel = null; card.hidden = true;
+      document.getElementById('nerve-desc').innerHTML = `<b>${name}.</b> ${NERVE_TEXT[nk] || ''} <span class="note">Muscles: ${ks.map(k => names[k]).join(', ')}.</span>`;
+      focusOn(ks); v.fit(ks);
+    };
+    box.append(b);
+  }
+}
+
+/* ---------- wrist tab ---------- */
+function buildWrist() {
+  const box = document.getElementById('wrist-list'); box.replaceChildren();
+  for (const [k, name, text] of WRIST.parts) {
+    if (!v.parts.has(k)) continue;
+    const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--fascia)"></i><span>${name}</span>`;
+    b.onclick = () => { clearRows(); pressed('#wrist-list button', x => x === k); document.getElementById('wrist-desc').innerHTML = `<b>${name}.</b> ${text}`; focusOn([k]); v.fit([k]); };
+    box.append(b);
+  }
+  const comp = document.getElementById('comp');
+  comp.innerHTML = '<tr><th>No.</th><th>Tendons</th><th>Where</th></tr>' + WRIST.comps.map(([n, ks, t, w]) => `<tr data-k="c${n}" aria-pressed="false"><td>${n}</td><td>${t}</td><td>${w}</td></tr>`).join('');
+  const thumb = document.getElementById('thumb');
+  thumb.innerHTML = '<tr><th>Movement</th><th>Muscles</th><th>Nerve</th></tr>' + WRIST.thumb.map(([mv, ks, t, n], i) => `<tr data-k="t${i}" aria-pressed="false"><td>${mv}</td><td>${t}</td><td>${n}</td></tr>`).join('');
+  const rowSel = (row, ks, text) => {
+    clearRows(); pressed('#wrist-list button', () => false); row.setAttribute('aria-pressed', 'true');
+    document.getElementById('wrist-desc').innerHTML = text; focusOn(ks); v.fit(ks.concat(['radius', 'ulna'].filter(b => v.parts.has(b)))); v.face([0, 1, 0.2], {zoom: 1});
+  };
+  comp.querySelectorAll('tr[data-k]').forEach((r, i) => r.onclick = () => { const c = WRIST.comps[i]; rowSel(r, c[1], `<b>Compartment ${c[0]}:</b> ${c[2]}. ${c[3]}`); });
+  thumb.querySelectorAll('tr[data-k]').forEach((r, i) => r.onclick = () => { const t = WRIST.thumb[i]; rowSel(r, t[1], `<b>${t[0]}:</b> ${t[2]} (${t[3]}).`); v.face([0, -1, 0], {zoom: 1}); });
+}
+function clearRows() { document.querySelectorAll('table.t tr[data-k]').forEach(r => r.setAttribute('aria-pressed', 'false')); }
+
+function setTab(name) {
+  if (sel && v.parts.has(sel)) v.setVisible(sel, true);
+  tab = name; sel = null; group = null; card.hidden = true;
+  for (const t of ['muscles', 'nerves', 'wrist']) {
+    document.getElementById('tab-' + t).setAttribute('aria-pressed', t === name);
+    document.getElementById('pane-' + t).hidden = t !== name;
+  }
+  pressed('.mlist button, #nerve-list button, #wrist-list button', () => false); clearRows();
+  paint(); focusOn(null);
+  if (name === 'muscles') { showDetail(null); v.fit(LIMB()); v.face([0, -1, 0], {zoom: 1}); }
+  if (name === 'nerves') { document.getElementById('nerve-desc').innerHTML = 'Each muscle is coloured by the nerve that supplies it. Tap a nerve.'; v.fit(LIMB()); v.face([0, -1, 0], {zoom: 1}); }
+  if (name === 'wrist') { document.getElementById('wrist-desc').innerHTML = WRIST.intro; const ks = ['flexor_ret', 'extensor_ret', 'palmar_apon'].filter(k => v.parts.has(k)); focusOn(ks); v.fit(ks.concat(['scaphoid', 'hamate', 'mc3'].filter(k => v.parts.has(k)))); v.face([0, -1, 0], {zoom: 1}); }
+}
+for (const t of ['muscles', 'nerves', 'wrist']) document.getElementById('tab-' + t).onclick = () => setTab(t);
+v.onPick = hit => {
+  if (!hit) { select(null); return; }
+  if (isMuscle(hit.key)) { if (tab === 'wrist') setTab('muscles'); select(hit.key); }
+};
+
+(async () => {
+  document.getElementById('lede').innerHTML = DATA.lede;
+  document.getElementById('based').innerHTML = DATA.based;
+  document.getElementById('models').innerHTML = DATA.models;
+  const base = '../models/upper-limb-muscles/';
+  const [c, a] = await Promise.all([fetch(base + 'colours.json').then(r => r.json()), fetch(base + 'attachments.json').then(r => r.ok ? r.json() : {}).catch(() => ({}))]);
+  colours = c.colours; attach = a;
+  man = await v.load(base + 'upper-limb-muscles.json');
+  for (const p of man.parts) names[p.key] = p.name;
+  buildGroups(); buildNerves(); buildWrist();
+  setTab('muscles');
+  window.ready = true;
+})().catch(e => { document.getElementById('detail').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>
