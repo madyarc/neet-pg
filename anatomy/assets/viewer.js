@@ -73,19 +73,24 @@
       c = mix(c, vec3(dot(c, vec3(0.3,0.59,0.11))), DIM*0.75);
       gl_FragColor = vec4(c, ALPHA); }`;
 
-  /** fetch a binary, reporting the fraction received (when the server gives a length) */
+  /** fetch a binary, reporting roughly the fraction received. The length the server gives can be the compressed size
+   *  (GitHub Pages gzips), while the stream yields decompressed bytes: collect every chunk, use the length only for
+   *  the progress figure. */
   async function fetchBuf(url, onProgress) {
     const r = await fetch(url);
     if (!r.ok) throw new Error(url + ': HTTP ' + r.status);
     const total = +r.headers.get('content-length') || 0;
     if (!onProgress || !total || !r.body) return r.arrayBuffer();
-    const out = new Uint8Array(total), rd = r.body.getReader(); let n = 0;
+    const zipped = /gzip|br|deflate/i.test(r.headers.get('content-encoding') || '');
+    const rd = r.body.getReader(), chunks = []; let n = 0;
     for (;;) {
       const {done, value} = await rd.read(); if (done) break;
-      if (n + value.length > out.length) return new Blob([out.subarray(0, n), value]).arrayBuffer();   // length was wrong
-      out.set(value, n); n += value.length; onProgress(n / total);
+      chunks.push(value); n += value.length;
+      onProgress(Math.min(0.99, n / (zipped ? total * 1.3 : total)));   // compressed: a rough guess
     }
-    return n === total ? out.buffer : out.slice(0, n).buffer;
+    const out = new Uint8Array(n); let o = 0;
+    for (const c of chunks) { out.set(c, o); o += c.length; }
+    return out.buffer;
   }
   const nextFrame = () => new Promise(r => requestAnimationFrame(() => r()));
 
