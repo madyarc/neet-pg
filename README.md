@@ -24,6 +24,13 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | 10 | [Bones of the Lower Limb](anatomy/lower-limb/bones.html) | Lower limb | Hip bone (with the pelvis), femur, patella, tibia, fibula and foot bones in detail: 88 landmarks, how to recognise each, ossification |
 | 11 | [The Femur: attachments and side](anatomy/lower-limb/femur.html) | Lower limb | 3D bone: 18 landmarks; left or right; 30 muscle and ligament attachments; neck fracture and blood supply; five ossification centres |
 
+### Ophthalmology — [`ophthalmology/`](ophthalmology/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [The Visual Pathway and Field Defects](ophthalmology/neuro-ophthalmology/visual-pathway.html) | Neuro-ophthalmology | 11 lesion sites from optic nerve to visual cortex, either side; fibres coloured by the half of the view they carry; both eyes' fields with the loss shaded (junctional scotoma, bitemporal, early pituitary/craniopharyngioma patterns, quadrantanopias, macular sparing) |
+| 02 | [Refractive Errors](ophthalmology/refraction/refractive-errors.html) | Refraction | Ray diagram in a schematic eye: myopia, hypermetropia (latent part shown with cycloplegia), astigmatism (types named live), presbyopia by age; correcting lens, pinhole, a letter blurred to match; accommodation, amblyopia, refractive surgery |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and
