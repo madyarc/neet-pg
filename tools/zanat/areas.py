@@ -8,7 +8,8 @@ Proximity alone is not enough: muscles that slide over bone (deltoid over the gr
 usage: areas.py spec.json
 spec = {"manifest": "...json", "landmarks": "...json", "out": "...json", "d": 3.0,
         "attach": {"<muscle>": [{"bone": "humerus", "kind": "ori"|"ins", "near": ["deltoid_tuberosity"], "r": 25,
-                                 "zmin": .., "zmax": .. (optional, mm), "zfrac": [lo, hi] (part of the bone's height, 0 = distal end),
+                                 "zmin": .., "zmax": .. (optional, mm), "zfrac": [lo, hi] (part of the bone's height, 0 = distal end) or "frac" + "axis",
+                                 "mesh": "other part to measure from",
                                  "d": .. (optional), "close": 2}]}}
 writes {"<muscle>": [{"bone", "kind", "verts": [ids]}]} and prints the vertex count of each area."""
 import sys, os, json, struct
@@ -76,8 +77,8 @@ def main():
     mesh = lambda k: cache.setdefault(k, decode(files[k]))
     out = {}
     for m, lst in spec['attach'].items():
-        M = mesh(m)[0]
         for a in lst:
+            M = mesh(a.get('mesh', m))[0]     # 'mesh': measure from another part (e.g. the calcaneal tendon)
             B, idx = mesh(a['bone'])
             if a['bone'] not in nbs: nbs[a['bone']] = neighbours(len(B), idx)
             nb = nbs[a['bone']]
@@ -87,9 +88,10 @@ def main():
                 look = lambda n: (L.get(a['bone'], {}).get(n) or next(g[n] for g in L.values() if n in g))['p']
                 pts = np.array([look(n) for n in a['near']])
                 allowed &= (((B[:, None, :] - pts[None]) ** 2).sum(-1).min(1) <= a.get('r', 20) ** 2)
-            if 'zfrac' in a:   # part of the bone along its length: 0 = lowest (distal in the hanging limb), 1 = highest
-                z0, z1 = B[:, 2].min(), B[:, 2].max(); f = (B[:, 2] - z0) / (z1 - z0)
-                allowed &= (f >= a['zfrac'][0]) & (f <= a['zfrac'][1])
+            if 'zfrac' in a or 'frac' in a:   # part of the bone along an axis (default z): 0 = low end, 1 = high end
+                ax = a.get('axis', 2); fr = a.get('frac', a.get('zfrac'))   # foot bones: axis 1 (+y = back), base of a metatarsal = high y
+                z0, z1 = B[:, ax].min(), B[:, ax].max(); f = (B[:, ax] - z0) / (z1 - z0)
+                allowed &= (f >= fr[0]) & (f <= fr[1])
             if 'zmin' in a: allowed &= B[:, 2] >= a['zmin']
             if 'zmax' in a: allowed &= B[:, 2] <= a['zmax']
             mask = near_mask(B, M, d) & allowed

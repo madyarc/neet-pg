@@ -8,26 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="../assets/atlas.css">
-<style>
-.tabs{display:flex;gap:6px}
-.tabs .chip{font-size:13.5px;padding:6px 14px}
-.group-h{font:600 12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:12px 0 2px}
-.desc{min-height:3em}
-.mlist{display:flex;flex-wrap:wrap;gap:4px}
-.mlist button{font:500 12.5px var(--f-body);padding:4px 9px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:6px}
-.mlist button i{width:10px;height:10px;border-radius:2px;flex:none}
-.mlist button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-.detail{display:flex;flex-direction:column;gap:8px}
-.detail h2{margin:0}
-.detail .sub{color:var(--muted);font-size:13px}
-dl.facts dt .swatch{margin-right:6px}
-.pending{color:var(--muted);font-style:italic}
-table.t{border-collapse:collapse;font-size:13.5px;width:100%}
-table.t th,table.t td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:top}
-table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-table.t tr[data-k]{cursor:pointer} table.t tr[aria-pressed="true"] td{background:var(--bg)}
-.note{font-size:13px;color:var(--muted)}
-</style>
+
 </head>
 <body>
 <div class="wrap">
@@ -77,6 +58,7 @@ table.t tr[data-k]{cursor:pointer} table.t tr[aria-pressed="true"] td{background
 </div>
 
 <script src="../assets/viewer.js"></script>
+<script src="../assets/muscle-page.js"></script>
 <script>
 "use strict";
 /* ===================== DATA — every statement checked in two independent sources (see anatomy/DATA-SOURCES.md,
@@ -289,164 +271,34 @@ const WRIST = {
   ],
 };
 
-/* ===================== PAGE ===================== */
-const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const v = new AtlasViewer(document.getElementById('v'));
-v.ghostAlpha = 0.12; window.atlas = v;   // for tests
-const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
-let man = null, names = {}, colours = {}, attach = {}, tab = 'muscles', sel = null, group = null;
-const isMuscle = k => k in M, isFascia = k => WRIST.parts.some(p => p[0] === k);
-const BONES = () => v.order.filter(k => !isMuscle(k) && !isFascia(k));
-const LIMB = () => v.order.filter(k => !k.startsWith('ax_'));   /* the limb itself: framing ignores the axial context bones */
-const views = [['Front', [0, -1, 0]], ['Lateral', [-1, 0, 0]], ['Back', [0, 1, 0]], ['Medial', [1, 0, 0]]];
-for (const [label, dir] of views) {
-  const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
-  b.onclick = () => v.face(dir, {zoom: v.zoom}); document.getElementById('views').append(b);
-}
-const pressed = (sel, test) => document.querySelectorAll(sel).forEach(b => b.setAttribute('aria-pressed', test(b.dataset.k)));
-const nerveOf = k => M[k] && M[k][3];
-const pending = k => !M[k] || M[k].length < 3;
-
-function paint() {
-  for (const k of v.order) {
-    v.setVertexMarks(k, null);
-    if (isMuscle(k)) v.setColour(k, tab === 'nerves' ? (nerveOf(k) ? NERVES[nerveOf(k)][1] : '--line') : (colours[k] || '--line'));
-    else if (isFascia(k)) { v.setColour(k, '--fascia'); v.setVisible(k, tab === 'wrist'); }
-    else v.setColour(k, '--bone');
-  }
-}
-function focusOn(keys) { v.setFocus(keys ? keys.concat(BONES()) : null); }
-
-/* ---------- muscles tab ---------- */
-function showDetail(k) {
-  const d = document.getElementById('detail');
-  if (!k) {
-    d.innerHTML = `<p class="cap key">${group ? `<b>${GROUPS.find(g => g[0] === group)[1]}.</b> Tap a muscle on the model or in the list.` : 'Tap a muscle on the model or in the list, or a group to frame it.'}</p>`;
-    return;
-  }
-  const m = M[k], g = GROUPS.find(x => x[0] === m[0])[1];
-  if (pending(k)) { d.innerHTML = `<h2>${names[k]}</h2><p class="sub">${g}</p><p class="pending">The facts for this muscle are still being checked in two sources; they will be added here.</p>`; return; }
-  const [, ori, ins, nk, ntext, act, note] = m;
-  const hasA = attach[k] && attach[k].length;
-  d.innerHTML = `<h2>${names[k]}</h2><p class="sub">${g}</p>
-    <dl class="facts">
-      <dt><span class="swatch" style="background:var(--ori)"></span>Origin</dt><dd>${ori || '<span class="pending">Left out (only one source).</span>'}</dd>
-      <dt><span class="swatch" style="background:var(--ins)"></span>Insertion</dt><dd>${ins || '<span class="pending">Left out (only one source).</span>'}</dd>
-      <dt><span class="swatch" style="background:var(${NERVES[nk][1]})"></span>Nerve</dt><dd>${ntext}</dd>
-      <dt>Action</dt><dd>${act}</dd>
-      ${note ? `<dt>Note</dt><dd>${note}</dd>` : ''}
-    </dl>
-    <p class="note">${hasA ? 'On the bones: origin in blue, insertion in orange. The areas are approximate, and only those that fit the model well are drawn.' : 'Its attachment areas are not drawn: the model does not show them reliably.'}</p>`;
-}
-function select(k, frame = false) {
-  if (sel && v.parts.has(sel)) v.setVisible(sel, true);
-  if (!k) { sel = null; card.hidden = true; pressed('.mlist button', () => false); paint(); focusOn(group ? GROUPS_KEYS(group) : null); showDetail(null); return; }
-  sel = k;
-  pressed('.mlist button', x => x === k);
-  paint();
-  const byBone = {};
-  for (const a of attach[k] || []) (byBone[a.bone] = byBone[a.bone] || []).push({verts: a.verts, colour: a.kind === 'ori' ? '--ori' : '--ins'});
-  for (const b in byBone) v.setVertexMarks(b, byBone[b]);
-  focusOn([k]);
-  if (frame) { v.fit([k].concat((attach[k] || []).map(a => a.bone))); }
-  card.hidden = false;
-  const hasA = attach[k] && attach[k].length;
-  card.innerHTML = `<div class="what"><b>${names[k]}</b><span>${M[k] ? (tab === 'nerves' ? NERVES[nerveOf(k) || 'two'][0] : GROUPS.find(g => g[0] === M[k][0])[1]) : ''}</span></div>${hasA ? '<button class="go" id="peek" aria-pressed="false">See the bone</button>' : ''}<button class="x" aria-label="Clear">×</button>`;
-  card.querySelector('.x').onclick = () => select(null);
-  const peek = card.querySelector('#peek');
-  if (peek) peek.onclick = () => { const on = peek.getAttribute('aria-pressed') !== 'true'; peek.setAttribute('aria-pressed', on);
-    peek.textContent = on ? 'Show the muscle' : 'See the bone'; v.setVisible(k, !on); };
-  if (tab === 'muscles') showDetail(k);
-}
-const GROUPS_KEYS = g => Object.keys(M).filter(k => M[k][0] === g && v.parts.has(k));
-function buildGroups() {
-  const box = document.getElementById('groups'); box.replaceChildren();
-  for (const [g, gname] of GROUPS) {
-    const h = document.createElement('button'); h.className = 'group-h'; h.style.cssText = 'background:none;border:0;padding:0;cursor:pointer;text-align:left';
-    h.textContent = gname + ' →'; h.onclick = () => { group = g; select(null); const ks = GROUPS_KEYS(g); v.fit(ks); };
-    const list = document.createElement('div'); list.className = 'mlist';
-    for (const k of GROUPS_KEYS(g)) {
-      const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
-      b.innerHTML = `<i style="background:${colours[k] || '#999'}"></i>${names[k]}`;
-      b.onclick = () => select(k, true);
-      list.append(b);
-    }
-    box.append(h, list);
-  }
-}
-
-/* ---------- nerves tab ---------- */
-function buildNerves() {
-  const box = document.getElementById('nerve-list'); box.replaceChildren();
-  for (const [nk, [name, tok]] of Object.entries(NERVES)) {
-    const ks = Object.keys(M).filter(k => nerveOf(k) === nk && v.parts.has(k));
-    if (!ks.length) continue;
-    const b = document.createElement('button'); b.dataset.k = nk; b.setAttribute('aria-pressed', 'false');
-    b.innerHTML = `<i style="background:var(${tok})"></i><span>${name}</span><span class="n">${ks.length}</span>`;
-    b.onclick = () => {
-      pressed('#nerve-list button', x => x === nk); sel = null; card.hidden = true;
-      document.getElementById('nerve-desc').innerHTML = `<b>${name}.</b> ${NERVE_TEXT[nk] || ''} <span class="note">Muscles: ${ks.map(k => names[k]).join(', ')}.</span>`;
-      focusOn(ks); v.fit(ks);
-    };
-    box.append(b);
-  }
-}
-
-/* ---------- wrist tab ---------- */
-function buildWrist() {
-  const box = document.getElementById('wrist-list'); box.replaceChildren();
+/* ===================== PAGE (shared logic: ../assets/muscle-page.js) ===================== */
+function buildWrist(api) {
+  const {v, focusOn, pressed, clearRows} = api, $ = id => document.getElementById(id);
+  const box = $('wrist-list'); box.replaceChildren();
   for (const [k, name, text] of WRIST.parts) {
-    if (!v.parts.has(k)) continue;
+    if (!api.has(k)) continue;
     const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
     b.innerHTML = `<i style="background:var(--fascia)"></i><span>${name}</span>`;
-    b.onclick = () => { clearRows(); pressed('#wrist-list button', x => x === k); document.getElementById('wrist-desc').innerHTML = `<b>${name}.</b> ${text}`; focusOn([k]); v.fit([k]); };
+    b.onclick = () => { clearRows(); pressed('#wrist-list button', x => x === k); $('wrist-desc').innerHTML = `<b>${name}.</b> ${text}`; focusOn([k]); v.fit([k]); };
     box.append(b);
   }
-  const comp = document.getElementById('comp');
+  const comp = $('comp');
   comp.innerHTML = '<tr><th>No.</th><th>Tendons</th><th>Where</th></tr>' + WRIST.comps.map(([n, ks, t, w]) => `<tr data-k="c${n}" aria-pressed="false"><td>${n}</td><td>${t}</td><td>${w}</td></tr>`).join('');
-  const thumb = document.getElementById('thumb');
+  const thumb = $('thumb');
   thumb.innerHTML = '<tr><th>Movement</th><th>Muscles</th><th>Nerve</th></tr>' + WRIST.thumb.map(([mv, ks, t, n], i) => `<tr data-k="t${i}" aria-pressed="false"><td>${mv}</td><td>${t}</td><td>${n}</td></tr>`).join('');
   const rowSel = (row, ks, text) => {
     clearRows(); pressed('#wrist-list button', () => false); row.setAttribute('aria-pressed', 'true');
-    document.getElementById('wrist-desc').innerHTML = text; focusOn(ks); v.fit(ks.concat(['radius', 'ulna'].filter(b => v.parts.has(b)))); v.face([0, 1, 0.2], {zoom: 1});
+    $('wrist-desc').innerHTML = text; focusOn(ks); v.fit(ks.concat(['radius', 'ulna'].filter(api.has))); v.face([0, 1, 0.2], {zoom: 1});
   };
   comp.querySelectorAll('tr[data-k]').forEach((r, i) => r.onclick = () => { const c = WRIST.comps[i]; rowSel(r, c[1], `<b>Compartment ${c[0]}:</b> ${c[2]}. ${c[3]}`); });
   thumb.querySelectorAll('tr[data-k]').forEach((r, i) => r.onclick = () => { const t = WRIST.thumb[i]; rowSel(r, t[1], `<b>${t[0]}:</b> ${t[2]} (${t[3]}).`); v.face([0, -1, 0], {zoom: 1}); });
 }
-function clearRows() { document.querySelectorAll('table.t tr[data-k]').forEach(r => r.setAttribute('aria-pressed', 'false')); }
-
-function setTab(name) {
-  if (sel && v.parts.has(sel)) v.setVisible(sel, true);
-  tab = name; sel = null; group = null; card.hidden = true;
-  for (const t of ['muscles', 'nerves', 'wrist']) {
-    document.getElementById('tab-' + t).setAttribute('aria-pressed', t === name);
-    document.getElementById('pane-' + t).hidden = t !== name;
-  }
-  pressed('.mlist button, #nerve-list button, #wrist-list button', () => false); clearRows();
-  paint(); focusOn(null);
-  if (name === 'muscles') { showDetail(null); v.fit(LIMB()); v.face([0, -1, 0], {zoom: 1}); }
-  if (name === 'nerves') { document.getElementById('nerve-desc').innerHTML = 'Each muscle is coloured by the nerve that supplies it. Tap a nerve.'; v.fit(LIMB()); v.face([0, -1, 0], {zoom: 1}); }
-  if (name === 'wrist') { document.getElementById('wrist-desc').innerHTML = WRIST.intro; const ks = ['flexor_ret', 'extensor_ret', 'palmar_apon'].filter(k => v.parts.has(k)); focusOn(ks); v.fit(ks.concat(['scaphoid', 'hamate', 'mc3'].filter(k => v.parts.has(k)))); v.face([0, -1, 0], {zoom: 1}); }
-}
-for (const t of ['muscles', 'nerves', 'wrist']) document.getElementById('tab-' + t).onclick = () => setTab(t);
-v.onPick = hit => {
-  if (!hit) { select(null); return; }
-  if (isMuscle(hit.key)) { if (tab === 'wrist') setTab('muscles'); select(hit.key); }
-};
-
-(async () => {
-  document.getElementById('lede').innerHTML = DATA.lede;
-  document.getElementById('based').innerHTML = DATA.based;
-  document.getElementById('models').innerHTML = DATA.models;
-  const base = '../models/upper-limb-muscles/';
-  const [c, a] = await Promise.all([fetch(base + 'colours.json').then(r => r.json()), fetch(base + 'attachments.json').then(r => r.ok ? r.json() : {}).catch(() => ({}))]);
-  colours = c.colours; attach = a;
-  man = await v.load(base + 'upper-limb-muscles.json');
-  for (const p of man.parts) names[p.key] = p.name;
-  buildGroups(); buildNerves(); buildWrist();
-  setTab('muscles');
-  window.ready = true;
-})().catch(e => { document.getElementById('detail').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+MusclePage({
+  base: '../models/upper-limb-muscles/', manifest: 'upper-limb-muscles.json', DATA, GROUPS, NERVES, NERVE_TEXT, M,
+  extra: {key: 'wrist', parts: WRIST.parts.map(p => p[0]), build: buildWrist,
+    enter(api) { document.getElementById('wrist-desc').innerHTML = WRIST.intro; const ks = ['flexor_ret', 'extensor_ret', 'palmar_apon'].filter(api.has);
+      api.focusOn(ks); api.v.fit(ks.concat(['scaphoid', 'hamate', 'mc3'].filter(api.has))); api.v.face([0, -1, 0], {zoom: 1}); }},
+});
 </script>
 </body>
 </html>

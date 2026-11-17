@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muscles of the Lower Limb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Muscles of the Lower Limb</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="stack" aria-label="3D muscles">
+  <div class="tabs scrollrow" role="tablist" aria-label="What to show">
+    <button class="chip" role="tab" id="tab-muscles" aria-pressed="true">Muscles</button>
+    <button class="chip" role="tab" id="tab-nerves" aria-pressed="false">Nerve supply</button>
+    <button class="chip" role="tab" id="tab-ankle" aria-pressed="false">Fascia, spaces and foot</button>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <div id="v"></div>
+      <div class="vbar scrollrow" id="views"></div>
+    </div>
+    <div class="panel stack">
+      <div id="pane-muscles" class="stack">
+        <div class="detail" id="detail"></div>
+        <div id="groups"></div>
+      </div>
+      <div id="pane-nerves" class="stack" hidden>
+        <div class="cap key desc" id="nerve-desc"></div>
+        <div class="legend" id="nerve-list"></div>
+      </div>
+      <div id="pane-ankle" class="stack" hidden>
+        <div class="cap key desc" id="ankle-desc"></div>
+        <div class="legend" id="ankle-list"></div>
+        <div class="group-h">Spaces of the thigh (tap one)</div>
+        <table class="t" id="spaces"></table>
+        <div class="group-h">Tarsal tunnel, front to back (tap one)</div>
+        <table class="t" id="tunnel"></table>
+        <div class="group-h">The four layers of the sole (tap one)</div>
+        <table class="t" id="layers"></table>
+        <div class="group-h">Muscles that hold up the arches (tap one)</div>
+        <table class="t" id="arches"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script src="../assets/muscle-page.js"></script>
+<script>
+"use strict";
+/* ===================== DATA — every statement checked in two independent sources (see anatomy/DATA-SOURCES.md,
+   "Muscles of the lower limb"); fact sheets: sources-local/facts/ll-muscles-a.md, ll-muscles-b.md ===================== */
+const LEFT = '<span class="pending">Left out (only one source).</span>';
+const DATA = {
+  lede: 'The muscles of the right lower limb on its bones, from the hip to the sole. Tap a muscle to see where it arises and inserts, its nerve and what it does; the attachment areas light up on the bone. Other muscles turn to glass so deep ones stay visible.',
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the muscles of the lower extremity; checked against StatPearls (NCBI Bookshelf), open-access anatomy papers and Wikipedia. Where they disagree, the modern wording is used.',
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, tendons, retinacula and the plantar aponeurosis from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones. Simplified meshes, shared under the same licences. The right limb is shown; muscle shapes are a single model, not every body. Attachment areas are approximate (where the muscle meets the bone near the landmark named in the text).',
+};
+const NERVES = {
+  femoral: ['Femoral nerve', '--n-femoral'],
+  obturator: ['Obturator nerve', '--n-obturator'],
+  sup_gluteal: ['Superior gluteal nerve', '--n-sup-gluteal'],
+  inf_gluteal: ['Inferior gluteal nerve', '--n-inf-gluteal'],
+  sciatic: ['Sciatic nerve', '--n-sciatic'],
+  tibial: ['Tibial nerve and its plantar branches', '--n-tibial'],
+  deep_fibular: ['Deep fibular nerve', '--n-deep-fibular'],
+  sup_fibular: ['Superficial fibular nerve', '--n-sup-fibular'],
+  plexus: ['Other branches of the lumbar and sacral plexuses', '--n-plexus'],
+  two: ['Two nerves (see each muscle)', '--n-two'],
+};
+const GROUPS = [
+  ['iliac', 'Iliac region'],
+  ['gluteal', 'Gluteal region'],
+  ['thigh_front', 'Front of the thigh'],
+  ['thigh_medial', 'Medial thigh'],
+  ['thigh_back', 'Back of the thigh'],
+  ['leg_front', 'Front of the leg'],
+  ['leg_lat', 'Lateral leg'],
+  ['leg_back', 'Back of the leg'],
+  ['dorsum', 'Dorsum of the foot'],
+  ['sole1', 'Sole: first layer'],
+  ['sole2', 'Sole: second layer'],
+  ['sole3', 'Sole: third layer'],
+  ['sole4', 'Sole: fourth layer'],
+];
+/* key: [group, origin, insertion, nerve key, nerve text, action, note]   (entries with only a group = still being checked) */
+const M = {
+  psoas_major: ['iliac', 'Transverse processes of the lumbar vertebrae; sides of the bodies of T12 and the lumbar vertebrae and the discs between them.',
+    'Lesser trochanter of the femur (with iliacus, as iliopsoas).', 'plexus', 'Direct branches of the lumbar plexus (which lies within the muscle).',
+    'Flexes the hip (with iliacus, the main hip flexor); acting from below, bends the lumbar spine forwards and to its own side.', ''],
+  iliacus: ['iliac', 'Iliac fossa and the inner lip of the iliac crest.', 'Into the lateral side of the psoas tendon, so to the lesser trochanter.',
+    'femoral', 'Femoral nerve (L2–L4).', 'Flexes the hip with psoas major.', ''],
+  glut_max: ['gluteal', 'Ilium behind the posterior gluteal line and the adjoining iliac crest; back of the lower sacrum and side of the coccyx; the sacrotuberous ligament.',
+    'Mostly into the iliotibial tract; its deep lower fibres into the gluteal tuberosity of the femur.', 'inf_gluteal', 'Inferior gluteal nerve (L5, S1, S2).',
+    'The main extensor of the hip (rising from sitting or stooping, climbing); laterally rotates the hip; steadies the knee through the iliotibial tract.',
+    'Weakness (inferior gluteal nerve injury) makes it hard to rise from a chair or climb stairs.'],
+  glut_med: ['gluteal', 'Outer surface of the ilium between the anterior and posterior gluteal lines, below the iliac crest.', 'Lateral surface of the greater trochanter.',
+    'sup_gluteal', 'Superior gluteal nerve (L4, L5, S1).', 'Abducts the hip; its anterior fibres rotate it medially; above all, holds the pelvis level when standing on one leg.',
+    'Weak with a superior gluteal nerve lesion: the Trendelenburg sign (Nerve supply tab).'],
+  glut_min: ['gluteal', 'Outer surface of the ilium between the anterior and inferior gluteal lines.', 'Anterior border of the greater trochanter.',
+    'sup_gluteal', 'Superior gluteal nerve.', 'Abducts and medially rotates the hip; steadies the pelvis and the head of the femur.', ''],
+  tfl: ['gluteal', 'Anterior superior iliac spine and the front of the outer lip of the iliac crest.', 'Between the two layers of the iliotibial tract, and through it to the lateral condyle of the tibia.',
+    'sup_gluteal', 'Superior gluteal nerve.', 'Tenses the fascia lata; flexes and abducts the hip; steadies the pelvis and, through the tract, the knee.', ''],
+  piriformis: ['gluteal', 'Front (pelvic surface) of the sacrum, between the anterior sacral foramina.', 'Upper border of the greater trochanter.',
+    'plexus', 'Nerve to piriformis (S1, S2).', 'Laterally rotates the extended hip; abducts the flexed hip.',
+    'Leaves the pelvis through the greater sciatic foramen and is the key to the gluteal region: the superior gluteal nerve and vessels pass above it; the inferior gluteal nerve and vessels, the sciatic nerve, the pudendal nerve and the nerve to obturator internus pass below it.'],
+  sup_gemellus: ['gluteal', 'Outer surface of the ischial spine.', 'With the obturator internus tendon, into the medial surface of the greater trochanter.',
+    'plexus', 'Nerve to obturator internus.', 'Laterally rotates the hip, with obturator internus.', ''],
+  obt_int: ['gluteal', 'Inner (pelvic) surface of the obturator membrane and the bone around the obturator foramen.', 'Medial surface of the greater trochanter, with the gemelli.',
+    'plexus', 'Nerve to obturator internus.', 'Laterally rotates the extended hip; abducts the flexed hip; steadies the head of the femur.',
+    'Turns at a right angle round the ischium, between the spine and the tuberosity, to leave the pelvis.'],
+  inf_gemellus: ['gluteal', 'Upper part of the ischial tuberosity.', 'With the obturator internus tendon, into the medial surface of the greater trochanter.',
+    'plexus', 'Nerve to quadratus femoris.', 'Laterally rotates the hip, with obturator internus.', ''],
+  quad_fem: ['gluteal', 'Lateral border of the ischial tuberosity.', 'Quadrate tubercle on the intertrochanteric crest.', 'plexus', 'Nerve to quadratus femoris.',
+    'Laterally rotates (and adducts) the hip.', 'Can be squeezed between the ischial tuberosity and the lesser trochanter (ischiofemoral impingement).'],
+  obt_ext: ['gluteal', 'Outer surface of the obturator membrane and the bone around the obturator foramen.', 'Trochanteric fossa of the femur.',
+    'obturator', 'Obturator nerve.', 'Laterally rotates the hip.', 'Its tendon runs behind the neck of the femur.'],
+  sartorius: ['thigh_front', 'Anterior superior iliac spine.', 'Upper medial surface of the tibia (pes anserinus), in front of gracilis and semitendinosus.',
+    'femoral', 'Femoral nerve (L2–L4).', 'Flexes, abducts and laterally rotates the hip; flexes the knee (the cross-legged "tailor\'s" position).',
+    'The longest muscle in the body; the lateral border of the femoral triangle; it covers the adductor canal.'],
+  rectus_fem: ['thigh_front', 'Two heads: straight head from the anterior inferior iliac spine; reflected head from the groove above the acetabulum.',
+    'Base of the patella (quadriceps tendon), then through the patellar ligament to the tibial tuberosity.', 'femoral', 'Femoral nerve (L2–L4).',
+    'Extends the knee and flexes the hip (it crosses both joints).', 'Part of the quadriceps. Its pull can avulse the anterior inferior iliac spine in adolescent kickers and sprinters.'],
+  vastus_lat: ['thigh_front', 'Upper femur, including the greater trochanter, by a broad aponeurosis.', 'Lateral border of the patella and the quadriceps tendon.',
+    'femoral', 'Femoral nerve (L2–L4).', 'Extends the knee.', 'The largest part of the quadriceps.'],
+  vastus_med: ['thigh_front', 'Lower intertrochanteric line, spiral line, medial lip of the linea aspera, medial supracondylar line and the adductor tendons.',
+    'Medial border of the patella and the quadriceps tendon.', 'femoral', 'Femoral nerve (L2–L4).', 'Extends the knee; its lowest fibres pull the patella medially.',
+    'Forms the anterolateral wall of the adductor canal.'],
+  vastus_int: ['thigh_front', 'Front and lateral surfaces of the upper two-thirds of the femoral shaft.', 'Deep part of the quadriceps tendon, to the patella.',
+    'femoral', 'Femoral nerve (L2–L4).', 'Extends the knee.', ''],
+  pectineus: ['thigh_medial', 'Pectineal line of the pubis.', 'Pectineal line of the femur (from the lesser trochanter to the linea aspera).',
+    'femoral', 'Femoral nerve (L2, L3); sometimes also the obturator or accessory obturator nerve.', 'Flexes and adducts the hip.', 'In the floor of the femoral triangle.'],
+  add_longus: ['thigh_medial', 'Front of the body of the pubis, just below the pubic crest.', 'Middle third of the linea aspera.',
+    'obturator', 'Obturator nerve (anterior branch).', 'Adducts the hip (helps flex it).', 'Its medial border is the medial border of the femoral triangle. The adductor most often injured (groin strain).'],
+  add_brevis: ['thigh_medial', 'Body and inferior ramus of the pubis.', 'Pectineal line and the upper linea aspera of the femur.',
+    'obturator', 'Obturator nerve.', 'Adducts (and helps flex) the hip.', ''],
+  add_magnus: ['thigh_medial', 'Adductor part: ischiopubic ramus. Hamstring part: ischial tuberosity.',
+    'Adductor part: below the greater trochanter, the linea aspera and the medial supracondylar line. Hamstring part: the adductor tubercle of the femur.',
+    'two', 'Two nerves: the adductor part by the obturator nerve (posterior branch); the hamstring part by the tibial part of the sciatic nerve.',
+    'Adducts the hip; the hamstring part also extends it.', 'A gap in its insertion, the adductor hiatus, lets the femoral vessels through to the popliteal fossa.'],
+  gracilis: ['thigh_medial', 'Lower body of the pubis near the symphysis and the inferior pubic ramus.', 'Upper medial surface of the tibia (pes anserinus), between sartorius and semitendinosus.',
+    'obturator', 'Obturator nerve (anterior branch; L2–L4).', 'Adducts the hip; flexes the knee and medially rotates the leg.',
+    'The only adductor that crosses the knee. Used as a muscle flap and, with semitendinosus, as a tendon graft.'],
+  biceps_fem: ['thigh_back', 'Long head: ischial tuberosity (with semitendinosus). Short head: lateral lip of the linea aspera and the lateral supracondylar line.',
+    'Head of the fibula; its tendon splits round the lateral collateral ligament.', 'two', 'Two nerves: the long head by the tibial part, the short head by the common fibular part of the sciatic nerve.',
+    'Flexes the knee and laterally rotates the leg (knee bent); the long head extends the hip.',
+    'Unlike the other hamstrings, the short head arises from the femur, crosses only the knee and has a different nerve. Biceps femoris is the hamstring most often strained. The common fibular nerve runs along its medial border.'],
+  semitend: ['thigh_back', 'Ischial tuberosity, by a tendon shared with the long head of biceps.', 'Upper medial surface of the tibia (pes anserinus), behind sartorius and below gracilis.',
+    'sciatic', 'Tibial part of the sciatic nerve.', 'Flexes the knee and medially rotates the leg (knee bent); extends the hip.', 'Its long tendon (often with gracilis) is a common graft for the anterior cruciate ligament.'],
+  semimemb: ['thigh_back', 'Ischial tuberosity, by a thick flat tendon.', 'Back of the medial condyle of the tibia; expansions form the oblique popliteal ligament.',
+    'sciatic', 'Tibial part of the sciatic nerve.', 'Flexes the knee, extends the hip and slightly rotates the leg medially.', 'The most medial hamstring.'],
+
+  tib_ant: ['leg_front', 'Lateral condyle and the upper half to two-thirds of the lateral surface of the tibia; the interosseous membrane.',
+    'Medial and under surfaces of the medial cuneiform and the base of the 1st metatarsal.', 'deep_fibular', 'Deep fibular nerve.',
+    'Dorsiflexes and inverts the foot.', ''],
+  ehl: ['leg_front', 'Middle part of the front of the fibula; the interosseous membrane.', 'Base of the distal phalanx of the great toe (upper side).',
+    'deep_fibular', 'Deep fibular nerve.', 'Extends the great toe; dorsiflexes the ankle.', 'Crosses the anterior tibial vessels from lateral to medial near the ankle.'],
+  edl: ['leg_front', 'Lateral condyle of the tibia; upper three-quarters of the front of the fibula; the interosseous membrane.',
+    'Four tendons to the dorsal digital expansions of toes 2–5, ending on their middle and distal phalanges.', 'deep_fibular', 'Deep fibular nerve.',
+    'Extends toes 2–5; dorsiflexes the ankle.', ''],
+  fib_tertius: ['leg_front', 'Lower third of the front of the fibula; the interosseous membrane.', 'Upper surface of the base of the 5th metatarsal.',
+    'deep_fibular', 'Deep fibular nerve (like the rest of the front of the leg).', 'Dorsiflexes and everts the foot.',
+    'Often described as a part of EDL; sometimes absent.'],
+  fib_longus: ['leg_lat', 'Head and upper two-thirds of the lateral surface of the fibula.', 'Lateral side of the base of the 1st metatarsal and the medial cuneiform.',
+    'sup_fibular', 'Superficial fibular nerve.', 'Everts and plantarflexes the foot; helps hold up the transverse arch.',
+    'Its tendon runs behind the lateral malleolus (behind FB), through a groove on the cuboid and obliquely across the sole. The common fibular nerve passes through a gap between its attachments to the head and shaft of the fibula.'],
+  fib_brevis: ['leg_lat', 'Lower two-thirds of the lateral surface of the fibula.', 'Tuberosity on the lateral side of the base of the 5th metatarsal.',
+    'sup_fibular', 'Superficial fibular nerve.', 'Everts and plantarflexes the foot.', 'Behind the lateral malleolus its tendon lies in front of the FL tendon, in a common sheath.'],
+  gastrocnemius: ['leg_back', 'Two heads: medial (larger) from the back of the medial femoral condyle; lateral from the lateral femoral condyle.',
+    'Through the calcaneal tendon, with soleus, into the back of the calcaneus.', 'tibial', 'Tibial nerve.',
+    'Plantarflexes the ankle; helps flex the knee (it crosses both joints).', 'With soleus it forms the triceps surae.'],
+  soleus: ['leg_back', 'Fibular part: back of the head and upper back of the fibula. Tibial part: the soleal line and the middle third of the medial border of the tibia. A tendinous arch between them carries the popliteal vessels and tibial nerve under it.',
+    'Through the calcaneal tendon into the calcaneus.', 'tibial', 'Tibial nerve.',
+    'Plantarflexes the ankle; steadies the leg on the foot in standing.', 'Its contraction pumps venous blood up the leg (the calf muscle pump).'],
+  plantaris: ['leg_back', 'Lower part of the lateral supracondylar line of the femur, above the lateral head of gastrocnemius.', 'Calcaneus, with or beside the calcaneal tendon.',
+    'tibial', 'Tibial nerve.', 'Weakly helps gastrocnemius.', 'A small belly and a long thin tendon between gastrocnemius and soleus; sometimes absent.'],
+  popliteus: ['leg_back', 'Lateral surface of the lateral femoral condyle, by a strong tendon.', 'Back of the tibia above the soleal line.',
+    'tibial', 'Tibial nerve.', '"Unlocks" the extended knee at the start of flexion: laterally rotates the femur on the fixed tibia (foot on the ground), or medially rotates the tibia (foot free).',
+    'Forms the lower part of the floor of the popliteal fossa.'],
+  fhl: ['leg_back', 'Lower two-thirds of the back of the fibula; the interosseous membrane.', 'Base of the distal phalanx of the great toe (sole side).',
+    'tibial', 'Tibial nerve.', 'Flexes the great toe; helps plantarflex the foot.', 'The last structure in the tarsal tunnel; runs under the sustentaculum tali and crosses FDL in the sole.'],
+  fdl: ['leg_back', 'Back of the tibia below the soleal line, medial to tibialis posterior.', 'Bases of the distal phalanges of toes 2–5, through the split tendons of FDB.',
+    'tibial', 'Tibial nerve.', 'Flexes toes 2–5; helps plantarflex the foot.',
+    'Crosses over tibialis posterior above the medial malleolus; in the sole it crosses FHL, receives quadratus plantae and gives origin to the lumbricals.'],
+  tib_post: ['leg_back', 'Back of the interosseous membrane and the neighbouring backs of the tibia and fibula.',
+    'Mainly the tuberosity of the navicular and the medial cuneiform; slips to the other tarsal bones and the bases of metatarsals 2–4.', 'tibial', 'Tibial nerve.',
+    'Inverts and plantarflexes the foot; the main dynamic support of the medial longitudinal arch.',
+    'The deepest muscle of the back of the leg; the first structure in the tarsal tunnel. Failure of its tendon is the commonest cause of flatfoot acquired in adults.'],
+  edb: ['dorsum', 'Upper and lateral surface of the front of the calcaneus (and the stem of the inferior extensor retinaculum).', 'Three tendons, joining the lateral sides of the EDL tendons of toes 2–4.',
+    'deep_fibular', 'Lateral terminal branch of the deep fibular nerve.', 'Helps EDL extend toes 2–4.', 'The little toe gets no tendon from it.'],
+  ehb: ['dorsum', 'With EDB, from the calcaneus.', 'Upper side of the base of the proximal phalanx of the great toe.', 'deep_fibular', 'Lateral terminal branch of the deep fibular nerve.',
+    'Extends the great toe at its metatarsophalangeal (MTP) joint.', 'The medial, largest tendon of the short extensor; it crosses the dorsalis pedis artery.'],
+  abd_hal: ['sole1', 'Medial process of the calcaneal tuberosity; the flexor retinaculum; the plantar aponeurosis.', 'Medial side of the base of the proximal phalanx of the great toe.',
+    'tibial', 'Medial plantar nerve.', 'Abducts and flexes the great toe.', 'It covers the start of the plantar vessels and nerves.'],
+  fdb: ['sole1', 'Medial process of the calcaneal tuberosity; the central plantar aponeurosis.', 'Four tendons to toes 2–5; each splits for the FDL tendon and inserts on the sides of the middle phalanx.',
+    'tibial', 'Medial plantar nerve.', LEFT, ''],
+  abd_dm: ['sole1', 'Lateral and medial processes of the calcaneal tuberosity; the plantar aponeurosis.', 'Lateral side of the base of the proximal phalanx of the 5th toe.',
+    'tibial', 'Lateral plantar nerve (its first branch, the inferior calcaneal nerve).', 'Abducts and flexes the little toe.',
+    'Entrapment of the inferior calcaneal nerve that supplies it is Baxter\'s neuropathy.'],
+  quad_plantae: ['sole2', 'Two heads from the under surface of the calcaneus, separated by the long plantar ligament.', 'The FDL tendon.',
+    'tibial', 'Lateral plantar nerve.', 'Straightens the oblique pull of FDL; helps flex toes 2–5.', ''],
+  lumbricals_f: ['sole2', 'Four, from the FDL tendons: the 1st from one tendon, the others from two neighbouring tendons.', 'Extensor expansions of toes 2–5, on their medial side.',
+    'tibial', '1st: medial plantar nerve; 2nd–4th: lateral plantar nerve.', 'Flex the MTP joints and extend the interphalangeal joints of toes 2–5.', ''],
+  fhb: ['sole3', 'Under surface of the cuboid and a slip of the tibialis posterior tendon; the cuneiform part differs between sources (lateral in Gray, medial in a modern paper).',
+    'Two heads to the medial and lateral sides of the base of the proximal phalanx of the great toe, each with a sesamoid bone.', 'tibial', 'Medial plantar nerve.',
+    'Flexes the great toe at its MTP joint.', 'The FHL tendon runs between its two heads.'],
+  add_hal: ['sole3', 'Oblique head: bases of metatarsals 2–4 and the sheath of the fibularis longus tendon. Transverse head: plantar ligaments of the MTP joints of the lateral toes.',
+    'Lateral side of the base of the proximal phalanx of the great toe.', 'tibial', 'Lateral plantar nerve.', 'Adducts the great toe towards the second.', ''],
+  fdm_f: ['sole3', 'Base of the 5th metatarsal and the sheath of fibularis longus.', 'Lateral side of the base of the proximal phalanx of the 5th toe.',
+    'tibial', 'Lateral plantar nerve.', LEFT, ''],
+  plantar_int: ['sole4', 'Three: from the bases and medial sides of metatarsals 3, 4 and 5.', 'Medial sides of the bases of the proximal phalanges of toes 3–5.',
+    'tibial', 'Lateral plantar nerve.', 'Adduct toes 3–5 towards the line of the second toe; help flex the MTP and extend the interphalangeal joints.',
+    'In the foot the line runs through the second toe (in the hand, the middle finger).'],
+  dorsal_int_f: ['sole4', 'Four, each from the adjacent sides of two metatarsals.', 'Bases of the proximal phalanges: the 1st on the medial side of the 2nd toe, the others on the lateral sides of toes 2, 3 and 4.',
+    'tibial', 'Lateral plantar nerve.', 'Abduct the toes away from the line of the second toe; help flex the MTP joints.', ''],
+};
+const NERVE_TEXT = {
+  femoral: 'Supplies the front of the thigh: iliacus, sartorius and the quadriceps (L2–L4), and pectineus.',
+  obturator: 'Supplies the medial thigh (L2–L4): adductor longus, brevis, the adductor part of magnus, gracilis, and obturator externus.',
+  sup_gluteal: 'L4, L5, S1. Leaves the pelvis above piriformis and runs between gluteus medius and minimus, supplying them and tensor fasciae latae. <b>Trendelenburg sign:</b> with the hip abductors paralysed, standing on the affected leg lets the pelvis drop on the opposite, unsupported side. <b>Injections</b> in the buttock go in the upper outer quadrant, away from the sciatic nerve; the ventrogluteal site (between the anterior superior iliac spine, the iliac crest and the greater trochanter) is also advised.',
+  inf_gluteal: 'L5, S1, S2. Leaves the pelvis below piriformis and supplies gluteus maximus. Injury weakens hip extension: rising from a chair and climbing stairs become hard.',
+  sciatic: 'L4–S3. Its tibial part supplies semitendinosus, semimembranosus, the long head of biceps and the hamstring part of adductor magnus; its common fibular part supplies the short head of biceps. The hamstrings that arise from the ischial tuberosity cross both hip and knee and are supplied by the tibial part.',
+  plexus: 'Direct branches: to psoas major from the lumbar plexus; nerves to piriformis, to obturator internus (with the superior gemellus) and to quadratus femoris (with the inferior gemellus) from the sacral plexus.',
+  tibial: 'Supplies all the muscles of the back of the leg (root value L4–S3) and, through its medial and lateral plantar branches (formed in the tarsal tunnel), the sole. Medial plantar nerve: abductor hallucis, FDB, FHB and the 1st lumbrical; lateral plantar nerve: all the other muscles of the sole.',
+  deep_fibular: 'Supplies the front of the leg (TA, EHL, EDL, fibularis tertius; root value L4–S1) and the short extensors on the dorsum of the foot.',
+  sup_fibular: 'Supplies fibularis longus and brevis (eversion). <b>Foot drop:</b> the common fibular nerve (L4–S2) winds round the neck of the fibula, where it is superficial and easily compressed (habitual leg crossing, prolonged positioning). It divides there into the deep and superficial fibular nerves, so a lesion loses dorsiflexion, toe extension and eversion: the foot drops, the gait becomes high-stepping, the side of the leg and the dorsum of the foot go numb, and inversion (tibial nerve) is kept. Foot drop has other causes too (L5 root, sciatic nerve).',
+};
+const ANKLE = {
+  intro: 'The iliotibial tract, the spaces of the thigh, and the ankle and foot: the retinacula that hold the tendons down, the tarsal tunnel and the sole. Tap a part, or a row of a table.',
+  parts: [
+    ['it_tract', 'Iliotibial tract', 'A long thickening of the fascia lata down the lateral thigh, from the iliac crest to the lateral condyle of the tibia (Gerdy\'s tubercle). Tensor fasciae latae and most of gluteus maximus insert into it; it steadies the lateral side of the knee. <b>Iliotibial band syndrome:</b> lateral knee pain in runners.'],
+    ['calc_tendon', 'Calcaneal (Achilles) tendon', 'The common tendon of gastrocnemius and soleus: the thickest and strongest tendon in the body; it inserts on the middle of the back of the calcaneus. <b>Rupture</b> gives sudden pain and a "pop", as if kicked in the calf. <b>Thompson test:</b> with the patient prone, squeezing the calf normally plantarflexes the foot; no movement means a rupture.'],
+    ['sup_ext_ret', 'Superior extensor retinaculum', 'A band above the ankle; the tendons of TA, EHL, EDL and fibularis tertius pass under it.'],
+    ['inf_ext_ret', 'Inferior extensor retinaculum', 'A Y-shaped band in front of the ankle, its stem attached laterally to the upper surface of the calcaneus. Under it pass TA, EHL, EDL, fibularis tertius, the dorsalis pedis vessels and the deep fibular nerve; compression of the nerve here is the anterior tarsal tunnel syndrome.'],
+    ['flex_ret_f', 'Flexor retinaculum', 'From the medial malleolus to the medial side of the calcaneus: the roof of the tarsal tunnel (table). The tibial nerve divides into the medial and lateral plantar nerves here; its compression is the tarsal tunnel syndrome.'],
+    ['sup_fib_ret', 'Superior fibular retinaculum', 'From the lateral malleolus to the lateral surface of the calcaneus; holds the FL and FB tendons in their groove behind the malleolus.'],
+    ['inf_fib_ret', 'Inferior fibular retinaculum', 'With the superior retinaculum, binds the tendons of fibularis longus and brevis on the lateral side of the ankle.'],
+    ['plantar_apon', 'Plantar aponeurosis', 'A strong band in three parts; the thick central part arises from the medial process of the calcaneal tuberosity and divides into five slips to the toes. It gives origin to FDB, sends septa up that divide the sole into compartments, and supports the longitudinal arch (the windlass mechanism). <b>Plantar fasciitis:</b> degenerative (not inflammatory) heel pain where it arises, worst with the first steps of the day.'],
+  ],
+  tunnel: [
+    ['Tibialis posterior tendon', ['tib_post']],
+    ['Flexor digitorum longus tendon', ['fdl']],
+    ['Posterior tibial artery and veins', []],
+    ['Tibial nerve', []],
+    ['Flexor hallucis longus tendon', ['fhl']],
+  ],
+  layers: [
+    ['1st', ['abd_hal', 'fdb', 'abd_dm'], 'Abductor hallucis, FDB, abductor digiti minimi'],
+    ['2nd', ['quad_plantae', 'lumbricals_f', 'fdl', 'fhl'], 'Quadratus plantae, lumbricals; the FDL and FHL tendons cross here'],
+    ['3rd', ['fhb', 'add_hal', 'fdm_f'], 'FHB, adductor hallucis, flexor digiti minimi brevis'],
+    ['4th', ['plantar_int', 'dorsal_int_f'], 'Plantar and dorsal interossei (the fibularis longus and tibialis posterior tendons run at this depth; their place in a layer is a convention)'],
+  ],
+  spaces: [
+    ['Femoral triangle', ['sartorius', 'add_longus', 'iliacus', 'psoas_major', 'pectineus'], 'Bounded by the inguinal ligament above, the medial border of sartorius laterally and the medial border of adductor longus medially; its floor, from lateral to medial, is iliacus, psoas major, pectineus and adductor longus. Its apex, where sartorius crosses adductor longus, leads into the adductor canal.'],
+    ['Adductor canal', ['vastus_med', 'add_longus', 'add_magnus', 'sartorius'], 'In the middle third of the thigh, from the apex of the femoral triangle to the adductor hiatus. Vastus medialis in front and laterally; adductor longus and magnus behind; roofed by a strong aponeurosis covered by sartorius.'],
+    ['Pes anserinus', ['sartorius', 'gracilis', 'semitend'], 'The tendons of sartorius, gracilis and semitendinosus (front to back) on the upper medial surface of the tibia: one muscle from each compartment of the thigh (femoral, obturator and sciatic nerves). Inflammation of the bursa under them is pes anserine bursitis.'],
+  ],
+  arches: [
+    ['Medial longitudinal', ['tib_post'], 'Tibialis posterior (the main dynamic support) and the plantar aponeurosis'],
+    ['Transverse', ['fib_longus'], 'Fibularis longus'],
+  ],
+  archNote: 'Ligaments and both long and short muscles support the arches; only the muscles that two of our sources name are listed.',
+};
+
+/* ===================== PAGE (shared logic: ../assets/muscle-page.js) ===================== */
+function buildAnkle(api) {
+  const {v, focusOn, pressed, clearRows} = api, $ = id => document.getElementById(id);
+  const box = $('ankle-list'); box.replaceChildren();
+  for (const [k, name, text] of ANKLE.parts) {
+    if (!api.has(k)) continue;
+    const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--fascia)"></i><span>${name}</span>`;
+    b.onclick = () => { clearRows(); pressed('#ankle-list button', x => x === k); $('ankle-desc').innerHTML = `<b>${name}.</b> ${text}`; focusOn([k]); v.fit([k]); };
+    box.append(b);
+  }
+  const rowSel = (row, ks, text, dir) => {
+    clearRows(); pressed('#ankle-list button', () => false); row.setAttribute('aria-pressed', 'true');
+    $('ankle-desc').innerHTML = text; focusOn(ks); v.fit(ks.length ? ks : ['tibia', 'calcaneus']); v.face(dir, {zoom: 1});
+  };
+  const sp = $('spaces');
+  sp.innerHTML = ANKLE.spaces.map(([n], i) => `<tr data-k="sp${i}" aria-pressed="false"><td>${n}</td></tr>`).join('');
+  sp.querySelectorAll('tr').forEach((r, i) => r.onclick = () => { const S = ANKLE.spaces[i]; rowSel(r, S[1], `<b>${S[0]}.</b> ${S[2]}`, [0.3, -1, 0.1]); });
+  const tun = $('tunnel');
+  tun.innerHTML = ANKLE.tunnel.map(([n, ks], i) => `<tr data-k="tu${i}" aria-pressed="false"><td>${i + 1}</td><td>${n}</td></tr>`).join('');
+  tun.querySelectorAll('tr').forEach((r, i) => r.onclick = () => rowSel(r, ANKLE.tunnel[i][1], `<b>Tarsal tunnel, ${i + 1} of 5:</b> ${ANKLE.tunnel[i][0]}. The tunnel lies under the flexor retinaculum, behind the medial malleolus.`, [1, 0.2, 0.1]));
+  const lay = $('layers');
+  lay.innerHTML = '<tr><th>Layer</th><th>Contents</th></tr>' + ANKLE.layers.map(([n, ks, t], i) => `<tr data-k="la${i}" aria-pressed="false"><td>${n}</td><td>${t}</td></tr>`).join('');
+  lay.querySelectorAll('tr[data-k]').forEach((r, i) => r.onclick = () => { const L = ANKLE.layers[i]; rowSel(r, L[1], `<b>${L[0]} layer of the sole:</b> ${L[2]}. The sole is described in four layers, from the surface inwards.`, [0, 0.2, -1]); });
+  const ar = $('arches');
+  ar.innerHTML = ANKLE.arches.map(([n, ks, t], i) => `<tr data-k="ar${i}" aria-pressed="false"><td>${n}</td><td>${t}</td></tr>`).join('') + `<tr><td colspan="2" class="note">${ANKLE.archNote}</td></tr>`;
+  ar.querySelectorAll('tr[data-k]').forEach((r, i) => r.onclick = () => { const A = ANKLE.arches[i]; rowSel(r, A[1].concat(i === 0 ? ['plantar_apon'] : []), `<b>${A[0]} arch:</b> ${A[2]}.`, [1, 0.3, -0.3]); });
+}
+MusclePage({
+  base: '../models/lower-limb-muscles/', manifest: 'lower-limb-muscles.json', DATA, GROUPS, NERVES, NERVE_TEXT, M,
+  extra: {key: 'ankle', parts: ANKLE.parts.map(p => p[0]), build: buildAnkle,
+    enter(api) { document.getElementById('ankle-desc').innerHTML = ANKLE.intro; const ks = ANKLE.parts.map(p => p[0]).filter(api.has);
+      api.focusOn(ks); api.v.fit(api.LIMB()); api.v.face([0, -1, 0], {zoom: 1}); }},
+});
+</script>
+</body>
+</html>

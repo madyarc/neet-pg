@@ -21,11 +21,15 @@ for m, lst in A.items():
     for a in lst:
         if not a['verts']: continue
         B = decode(os.path.join(base, a['bone'] + '.bin'))[0]
-        dv = B[a['verts']].mean(0) - B.mean(0); dv[2] = 0          # look from the side the area faces, level
-        n = np.linalg.norm(dv); dv = dv / n if n > 1e-6 else np.array([0, -1, 0]); dv[2] = 0.25
+        dv = B[a['verts']].mean(0) - B.mean(0); n = np.linalg.norm(dv)
+        dv = dv / n if n > 1e-6 else np.array([0, -1, 0.])
+        if abs(dv[2]) < 0.6:          # side-facing area: look from that side, nearly level
+            dv[2] = 0; dv = dv / max(np.linalg.norm(dv), 1e-6); dv[2] = 0.25
+        else: dv[:2] *= 0.3            # area faces up or down (e.g. the sole): look from above/below
         h = B[:, 2].max() - B[:, 2].min()
         P = B[a['verts']]; pad = 25.0
         box = np.concatenate([P.min(0) - pad, P.max(0) + pad])
+        if os.environ.get('DIR'): dv = np.array([float(x) for x in os.environ['DIR'].split(',')])   # fixed view, e.g. the sole: 0,0.05,-1
         jobs.append((m, a['bone'], a['kind'], dv, box))
 o = Options(); o.add_argument('-headless')
 for k, v in {'gfx.webrender.software': True, 'layers.acceleration.disabled': True, 'webgl.force-enabled': True}.items(): o.set_preference(k, v)

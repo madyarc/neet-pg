@@ -385,3 +385,33 @@ cell → "abundant cytoplasm"), "oval nucleus"/"little cytoplasm" (fibroblast, n
 Verhoeff, vitreous body and nucleus pulposus for type II collagen, osteogenesis imperfecta (both quotes StatPearls = one
 publisher), "rows of fibroblasts" in dense regular tissue; section retitled "Kinds of connective tissue" (no parent group
 for adipose/reticular tissue).
+
+## Muscles of the Lower Limb — `lower-limb/muscles.html`
+
+**Meshes:** bones = BodyParts3D 3.0 (as `lower-limb.json`) plus T12–L5 and the sacrum as context; 50 muscles, the
+iliotibial tract, calcaneal tendon, ankle retinacula and plantar aponeurosis from Z-Anatomy, moved into the BodyParts3D
+frame (`tools/zanat/ll_muscles.py` → `configs/lower-limb-muscles.json`; adductor minimus merged into adductor magnus,
+the EDL tendon into EDL). Shared page logic: `assets/muscle-page.js` (also used by the upper-limb page).
+
+**Attachment areas** (`tools/zanat/ll-attach.json`): 106 areas, each checked by eye (foot bones measured along the
+front–back axis; gastrocnemius and soleus insertions measured from the calcaneal tendon mesh; sole areas viewed from
+below). Left out (spec `_dropped`): EDL insertions, fibularis tertius, soleus tibial origin, tibialis posterior fibular
+origin, abductor hallucis and abductor digiti minimi calcaneal origins, pectineus insertion, adductor brevis origin, TFL
+origin, piriformis origin, gluteus minimus insertion.
+
+**Sources:** fact sheets `sources-local/facts/ll-muscles-a.md` (hip and thigh; 412 quotes, 115 sources) and
+`ll-muscles-b.md` (leg and foot; 349 quotes), each fact two independent sources: Gray 1918 (bartleby.com/107 pages
+127–131, 157, 212–213, via web.archive.org), StatPearls abstracts (Europe PMC), open-access papers, Wikipedia (not
+counted where it copies Gray). Root values only where two sources agree; fibularis tertius = deep fibular nerve (one
+StatPearls abstract says superficial: logged as an error). Left out (single source or conflicting): actions of FDB and
+flexor digiti minimi brevis, extensor retinaculum attachments, FHB's exact origin (sources differ — the page says so),
+roots of the gemelli, obturator internus and quadratus femoris, knee-jerk roots, gluteus maximus lurch, perforating
+openings in adductor magnus, the infant vastus lateralis injection site, "largest muscle", arch roles of adductor
+hallucis, tibialis anterior and FHB, the lateral arch.
+**Independent review (2026-11-17), 13 fixes:** removed single-source or gap items — soleus "main plantarflexor with the
+knee bent", popliteus tendon "inside the capsule", calcaneal tendon rupture "commonest", age band and "push-off sport",
+foot-drop causes "casts, fibular neck fracture" (→ habitual leg crossing, prolonged positioning), inferior fibular
+retinaculum on the calcaneus (→ binds the fibular tendons, two sources), FL/TP tendons as the 4th layer (now "by
+convention"), obturator externus "posterior branch", ITB syndrome "cyclists", fibularis tertius absence rates,
+gluteus maximus "three-quarters", superior fibular retinaculum tear, the phrase "true hamstring" (criteria kept). FHB
+origin reworded: the cuboid is agreed, the cuneiform differs.
