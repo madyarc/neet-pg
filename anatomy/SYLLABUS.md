@@ -159,18 +159,18 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 17. Hip Joint
 
-- [ ] **AN17.1** Describe and demonstrate the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements and muscles involved, blood and nerve supply, bursae around the hip joint
+- [x] **AN17.1** Describe and demonstrate the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements and muscles involved, blood and nerve supply, bursae around the hip joint — *3D capsule, ligaments, labrum, bursae, moving joint: [Joints of the Lower Limb](lower-limb/joints.html)*
 - [ ] **AN17.2** Describe anatomical basis of complications of fracture neck of femur
-- [ ] **AN17.3** Describe dislocation of hip joint and surgical hip replacement
+- [x] **AN17.3** Describe dislocation of hip joint and surgical hip replacement — *[Joints of the Lower Limb](lower-limb/joints.html) (Hip, Applied)*
 
 ### 18. Knee joint, Anterior compartment of leg & dorsum of foot
 
 - [x] **AN18.1** Describe and demonstrate major muscles of anterior compartment of leg with their attachment, nerve supply and actions — *[Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [ ] **AN18.2** Describe and demonstrate origin, course, relations, branches (or tributaries), termination of important nerves and vessels of anterior compartment of leg
 - [x] **AN18.3** Explain the anatomical basis of foot drop — *[Muscles of the Lower Limb](lower-limb/muscles.html) (Nerve supply, superficial fibular)*
-- [ ] **AN18.4** Describe and demonstrate the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements and muscles involved, nerve supply, bursae around the knee joint along with anastomosis around the knee joint
-- [~] **AN18.5** Explain the anatomical basis of locking and unlocking of the knee joint — *popliteus "unlocking": [Muscles of the Lower Limb](lower-limb/muscles.html)*
-- [ ] **AN18.6** Describe knee joint injuries with its applied anatomy
+- [x] **AN18.4** Describe and demonstrate the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements and muscles involved, nerve supply, bursae around the knee joint along with anastomosis around the knee joint — *3D capsule, cruciates, collaterals, menisci, bursae, moving joint: [Joints of the Lower Limb](lower-limb/joints.html)*
+- [x] **AN18.5** Explain the anatomical basis of locking and unlocking of the knee joint — *[Joints of the Lower Limb](lower-limb/joints.html) (Knee); popliteus: [Muscles of the Lower Limb](lower-limb/muscles.html)*
+- [x] **AN18.6** Describe knee joint injuries with its applied anatomy — *[Joints of the Lower Limb](lower-limb/joints.html) (Knee, Applied)*
 - [ ] **AN18.7** Explain anatomical basis of Osteoarthritis
 
 ### 19. Back of Leg & Sole
@@ -185,8 +185,8 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 20. General Features, Joints, radiographs & surface marking
 
-- [ ] **AN20.1** Describe and demonstrate the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements and muscles involved, blood and nerve supply of tibiofibular and ankle joint
-- [ ] **AN20.2** Describe the subtalar and transverse tarsal joints
+- [x] **AN20.1** Describe and demonstrate the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements and muscles involved, blood and nerve supply of tibiofibular and ankle joint — *[Joints of the Lower Limb](lower-limb/joints.html) (the ankle capsule is not in the 3D model)*
+- [x] **AN20.2** Describe the subtalar and transverse tarsal joints — *[Joints of the Lower Limb](lower-limb/joints.html) (Foot)*
 - [~] **AN20.3** Describe and demonstrate Fascia lata, Venous drainage, Lymphatic drainage, Retinacula & Dermatomes of lower limb — *iliotibial tract (fascia lata) and the ankle retinacula: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [ ] **AN20.4** Explain anatomical basis of enlarged inguinal lymph nodes
 - [ ] **AN20.5** Explain anatomical basis of varicose veins and deep vein thrombosis

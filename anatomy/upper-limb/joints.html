@@ -280,6 +280,7 @@ function pose(m, mi, f) {
   const mv = m.moves[mi];
   const xf = mv.axis ? AtlasViewer.rotation(mv.axis, f, m.pivot) : {m: [[1, 0, 0], [0, 1, 0], [0, 0, 1]], t: mv.slide.map(x => x * f)};
   for (const k of m.moving) v.setTransform(k, xf.m, xf.t);
+  for (const [k, fr] of Object.entries(m.partial || {})) { const x2 = AtlasViewer.rotation(mv.axis, f * fr, m.pivot); v.setTransform(k, x2.m, x2.t); }
   const was = moved; moved = Math.abs(f) > 0.01; if (was !== moved) applyVisibility();
   const L = 60;
   v.setLines(mv.axis ? [{a: m.pivot.map((c, i) => c - mv.axis[i] * L), b: m.pivot.map((c, i) => c + mv.axis[i] * L), color: '--axis'}] : null);

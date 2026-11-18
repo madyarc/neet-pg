@@ -575,3 +575,30 @@ tubercles.
   (`tools/zanat/export_mod.py`). Pivots fitted (`tools/joints/ul_axes.py`): humeral head sphere r 19.1 mm, trochlea circle
   r 10.1 mm, 2nd metacarpal head sphere r 7.0 mm, PIP circle r 3.2 mm; SC and AC pivots at the facing surfaces. Every
   movement direction checked in screenshots at both ends of its arc, and by the reviewer.
+
+## Joints of the Lower Limb — `lower-limb/joints.html`
+
+- Fact sheets: `sources-local/facts/joints-hip-knee.md` (483 quotes) and `sources-local/facts/joints-ankle-foot.md` (315
+  quotes), all script-checked against `sources-local/modern/joints-hip-knee/` and `…/joints-ankle-foot/`.
+- Source errors found and not used: StatPearls 32119474 (genicular arteries from the femoral); Wikipedia "Knee" (popliteus
+  helps lock the knee); Wikipedia "Anterior cruciate ligament" (blends with the medial meniscus; Gray: lateral);
+  StatPearls 32119497 (Chopart joint = talonavicular only).
+- Contested, stated on the page: importance of the artery of the ligament of the head; iliopsoas as a rotator (left out of
+  the rotator lists); unhappy-triad meniscus (classically medial, later lateral); talocalcaneonavicular type; spring
+  ligament elasticity; deltoid ligament part names; ankle nerves; number of syndesmosis ligaments; foot-joint nerves
+  (Gray only, attributed).
+- Left out: hip ranges and the 350 kg ligament strength; DDH risk factors; neck-fracture limb posture; Lachman angle;
+  "clergyman's knee"; circumflex fibular artery; posterior tibial recurrent artery; the quadriceps named as the locking
+  muscle (Gray says only "continued muscular action"); ankle capsule attachments; blood supply of the foot joints.
+- Independent review (2026-11-18), fixed: ligament-of-head artery importance attributed both ways; hip→knee referred pain
+  attributed to a review; posterior dislocation "blow on the bent knee", "shortened" removed; popliteal artery depth and
+  the knee muscle relations marked Gray; ACL tear mechanism removed, triad and meniscal mechanisms softened; meniscectomy
+  "raises the risk" of OA; syndesmosis ligament count and transverse ligament wording; long plantar ligament attributed
+  to Gray; acetabulum "about half (StatPearls ~40%)"; inversion "mainly at the subtalar and transverse tarsal joints";
+  "commonest ankle sprain"; middle genicular removed from the anastomosis; distinct text for the lateral iliofemoral band.
+- 3D: BodyParts3D 3.0 bones + Z-Anatomy joint parts with modifiers applied (`z-bp3d-joints-ll.zip`; pelvic ligaments,
+  triradiate cartilage and hip retinacula left out). Pivots (`tools/joints/ll_axes.py`): femoral head sphere r 23.3 mm;
+  knee condyle outline r 22.1 mm; talar dome outline r 27.8 mm (the facing surfaces alone gave r 8 mm, too small);
+  1st metatarsal head sphere r 11.5 mm; the inversion–eversion axis is placed schematically (up, forward, medially). The
+  patella stays still during knee flexion (moving it with the tibia left it floating). Directions checked in screenshots
+  and by the reviewer.

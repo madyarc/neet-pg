@@ -102,6 +102,7 @@ def mesh_polys(me):
         if blk is None or t != 26: continue
         raw = blk.raw_data(); stride = len(raw) // nl
         C = np.frombuffer(raw, np.uint8).reshape(nl, stride)[:, 0:4].copy().view(np.int32).ravel()
+    if V is None or P is None or C is None: return None, []        # no face data written (e.g. an empty helper)
     return V.astype(np.float64), [list(C[s:s + k]) for s, k in zip(*P)]
 
 def modifiers(ob):

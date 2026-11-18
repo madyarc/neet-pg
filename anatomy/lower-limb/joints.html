@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Joints of the Lower Limb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone, --move (the bone that moves), --axis, --capsule, --lig (ligaments and the
+   interosseous membrane), --cart (articular discs, labrum), --bursa */
+section.block{display:flex;flex-direction:column;gap:12px}
+.moves{display:flex;flex-direction:column;gap:10px}
+.move{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:center}
+.move .name{grid-column:1/-1;font:600 13.5px var(--f-body)}
+.move input[type=range]{width:100%;accent-color:var(--axis)}
+.play{font:600 13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+.play[aria-pressed="true"]{border-color:var(--axis);color:var(--axis)}
+.axiskey{display:inline-block;width:18px;height:0;border-top:3px solid var(--axis);vertical-align:middle;margin-right:6px}
+.layers .chip i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.plist{display:flex;flex-wrap:wrap;gap:6px}
+.plist button{font:500 12.5px var(--f-body);background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:4px 9px;cursor:pointer;text-align:left}
+.plist button i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px}
+.plist button[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+dl.jt{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr);gap:8px 14px;margin:0}
+dl.jt dt{font:600 12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.03em;padding-top:2px}
+dl.jt dd{margin:0}
+@media (max-width:600px){dl.jt{grid-template-columns:minmax(0,1fr)} dl.jt dt{padding-top:6px}}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Joints of the Lower Limb</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="The joints in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="joints" aria-label="Joint"></div>
+  </div>
+  <div class="panel stack">
+    <div class="chips layers" id="layers" aria-label="Show"></div>
+    <div id="ex-chips" class="chips"></div>
+    <div class="plist" id="plist" aria-label="Parts of this joint"></div>
+    <p class="cap key" id="pcap"></p>
+    <div class="moves" id="moves"></div>
+    <p class="note" id="mnote"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-joint">
+  <h2 id="h-joint"></h2>
+  <dl class="jt" id="jtext"></dl>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (every fact checked in two sources: anatomy/DATA-SOURCES.md) ===================== */
+const FOOT = ['talus', 'calcaneus', 'navicular', 'cun_med', 'cun_int', 'cun_lat', 'cuboid', 'mt1', 'mt2', 'mt3', 'mt4', 'mt5',
+  'pp1', 'dp1', 'pp2', 'mp2', 'dp2', 'pp3', 'mp3', 'dp3', 'pp4', 'mp4', 'dp4', 'pp5', 'mp5', 'dp5'];
+const LAYERS = [['capsule', 'Capsule', '--capsule'], ['lig', 'Ligaments', '--lig'], ['cart', 'Labrum, menisci', '--cart'], ['bursa', 'Bursae', '--bursa']];
+// each joint: the bones shown, its soft parts by layer, the examples (3D scenes, some with a movement), and its text
+const JOINTS = {
+  hip: {name: 'Hip', bones: ['hip', 'femur'],
+    soft: {capsule: ['articular_capsule_of_hip_joint'], lig: ['descending_part_of_iliofemoral_ligament', 'transverse_part_of_iliofemoral_ligament', 'pubofemoral_ligament', 'ischiofemoral_ligament', 'ligament_of_head_of_femur', 'transverse_acetabular_ligament'],
+      cart: ['acetabular_labrum'], bursa: ['iliopectineal_bursa', 'trochanteric_bursa_of_gluteus_maximus_muscle']},
+    ex: [{name: 'Hip joint', motion: 'hip', fit: ['articular_capsule_of_hip_joint'], zoom: 0.35, views: [[-1, 0, 0], [0, -1, 0], [0, -0.25, 1, 0.5]]}]},
+  knee: {name: 'Knee', bones: ['femur', 'patella', 'tibia', 'fibula'],
+    soft: {capsule: ['articular_capsule_of_knee_joint'], lig: ['anterior_cruciate_ligament', 'posterior_cruciate_ligament', 'superficial_part_of_tibial_collateral_ligament', 'deep_part_of_tibial_collateral_ligament', 'fibular_collateral_ligament', 'oblique_popliteal_ligament', 'arcuate_popliteal_ligament', 'transverse_ligament_of_knee', 'popliteofibular_ligament'],
+      cart: ['medial_meniscus', 'lateral_meniscus'], bursa: ['suprapatellar_bursa', 'subcutaneous_prepatellar_bursa', 'subcutaneous_infrapatellar_bursa', 'deep_infrapatellar_bursa', 'semimembranosus_bursa', 'anserine_bursa']},
+    ex: [{name: 'Knee joint', note: ' Here the patella stays still; in life it glides down over the femur as the knee bends.', motion: 'knee', fit: ['articular_capsule_of_knee_joint'], zoom: 0.45, views: [[-1, 0, 0]]}]},
+  tibiofibular: {name: 'Tibiofibular', bones: ['tibia', 'fibula'],
+    soft: {capsule: ['articular_capsule_of_superior_tibiofibular_joint'], lig: ['anterior_ligament_of_fibular_head', 'posterior_ligament_of_fibular_head', 'interosseous_membrane_of_leg', 'anterior_tibiofibular_ligament', 'posterior_tibiofibular_ligament', 'transverse_tibiofibular_ligament']},
+    ex: [{name: 'Tibiofibular joints', fit: ['tibia', 'fibula'], zoom: 1, views: [[-0.4, -1, 0]]}]},
+  ankle: {name: 'Ankle', bones: ['tibia', 'fibula'].concat(FOOT),
+    soft: {lig: ['posterior_tibiotalar_ligament', 'tibiocalcaneal_ligament', 'tibionavicular_ligament', 'anterior_talofibular_ligament', 'calcaneofibular_ligament', 'posterior_talofibular_ligament', 'anterior_tibiofibular_ligament', 'posterior_tibiofibular_ligament']},
+    ex: [{name: 'Ankle joint', motion: 'ankle', fit: ['talus', 'calcaneus'], zoom: 0.55, views: [[-1, 0, 0]]}]},
+  foot: {name: 'Foot', bones: FOOT,
+    soft: {lig: ['talocalcaneal_interosseous_ligament', 'anterior_talocalcaneal_ligament', 'lateral_talocalcaneal_ligament', 'medial_talocalcaneal_ligament', 'posterior_talocalcaneal_ligament', 'plantar_calcaneonavicular_ligament', 'calcaneonavicular_ligament', 'calcaneocuboid_ligament', 'long_plantar_ligament', 'plantar_calcaneocuboid_ligament', 'talonavicular_ligament', 'dorsal_tarsometatarsal_ligaments',
+      'collateral_metatarsophalangeal_ligaments', 'plantar_metatarsophalangeal_ligaments', 'deep_transverse_metatarsal_ligament'],
+      capsule: ['articular_capsules_of_metatarsophalangeal_joints', 'articular_capsule_of_interphalangeal_joint_of_great_toe', 'articular_capsules_of_proximal_interphalangeal_joints_of_foot', 'articular_capsules_of_distal_interphalangeal_joints_of_foot']},
+    ex: [{name: 'Subtalar and transverse tarsal joints (inversion, eversion)', motion: 'subtalar', fit: ['talus', 'calcaneus', 'navicular', 'cuboid'], zoom: 0.8, views: [[0, 1, 0.25]]},
+         {name: 'Metatarsophalangeal joint of the big toe', motion: 'mtp', fit: ['mt1', 'pp1', 'dp1'], zoom: 0.9, views: [[1, -0.2, 0.1]]}]},
+};
+// facts about each joint, shown under the model: [label, html]
+const TEXT = {
+  hip: [
+    ['Type', 'Synovial ball-and-socket joint between the head of the femur and the acetabulum.'],
+    ['Articular surfaces', 'The head of the femur, covered with cartilage except at the fovea (where the ligament of the head is attached); in the acetabulum only the horseshoe-shaped lunate surface is articular, and the central fossa holds fat. The acetabulum holds about half the head (StatPearls: about 40%); the labrum deepens it further.'],
+    ['Labrum', 'The acetabular labrum, a fibrocartilaginous rim on the margin of the acetabulum, deepens the socket and grips the head. The transverse acetabular ligament bridges the acetabular notch, leaving a foramen for vessels into the joint.'],
+    ['Capsule', 'In front it is attached to the whole intertrochanteric line, so the whole front of the neck is inside the joint; behind it stops on the neck about a finger-breadth short of the intertrochanteric crest, so part of the back of the neck is outside. Thick in front and above, thin behind and below. Some fibres run up the neck as retinacula, carrying vessels to the head; circular fibres form the zona orbicularis.'],
+    ['Ligaments', '<b>Iliofemoral</b> (Y-shaped): from the anterior inferior iliac spine to the intertrochanteric line, the strongest ligament of the body; it is tight in extension, prevents hyperextension and lets us stand with little muscular effort. <b>Pubofemoral:</b> limits abduction. <b>Ischiofemoral:</b> limits medial rotation. All three tighten in extension. <b>Ligament of the head of the femur:</b> from the fovea to the acetabular notch; weak as a ligament, it carries a small artery to the head (StatPearls: it matters only in children; Wikipedia: it may become the only supply after a neck fracture).'],
+    ['Relations', 'In front: iliopsoas (with its bursa), the femoral vessels and femoral nerve. Behind: the sciatic nerve, on the short lateral rotators (Gray 1918).'],
+    ['Movements, muscles', '<table class="t"><tr><th>Movement</th><th>Muscles</th></tr>' +
+      '<tr><td>Flexion</td><td>Iliopsoas (chief), rectus femoris, sartorius, pectineus</td></tr>' +
+      '<tr><td>Extension</td><td>Gluteus maximus (chief), hamstrings</td></tr>' +
+      '<tr><td>Abduction</td><td>Gluteus medius and minimus</td></tr>' +
+      '<tr><td>Adduction</td><td>Adductors longus, brevis and magnus, pectineus, gracilis</td></tr>' +
+      '<tr><td>Medial rotation</td><td>Anterior fibres of gluteus medius and minimus</td></tr>' +
+      '<tr><td>Lateral rotation</td><td>The short lateral rotators (piriformis, obturators, gemelli, quadratus femoris), gluteus maximus</td></tr></table>'],
+    ['Stability', 'Mainly the bony fit of the deep socket, with the labrum, the strong capsule and ligaments and the muscles: far more stable, and less mobile, than the shoulder.'],
+    ['Blood supply', 'Mainly the medial and lateral circumflex femoral arteries, through vessels running up the neck under the retinacula; the medial circumflex gives most of the supply to the head. Also the artery of the ligament of the head. Near the hip lie the trochanteric and cruciate anastomoses.'],
+    ['Nerves', 'Femoral, obturator, sciatic, and the nerve to quadratus femoris. The obturator and femoral nerves supply both the hip and the knee (a review notes that hip pain can be referred to the knee).'],
+    ['Bursae', 'The iliopsoas bursa, between the iliopsoas tendon and the front of the capsule, sometimes opens into the joint. The trochanteric bursa of gluteus maximus lies over the greater trochanter (trochanteric bursitis).'],
+    ['Applied', '<b>Posterior dislocation:</b> the commonest (about 90%), usually a blow on the bent knee (dashboard injury); the limb is flexed, adducted and medially rotated; the sciatic nerve may be injured; the risk of avascular necrosis rises with delayed reduction. <b>Anterior dislocation</b> (about 10%): from forced abduction and lateral rotation; the limb is abducted and laterally rotated.<br><b>Fracture of the neck of the femur:</b> inside the capsule, common in the elderly; the vessels running up the neck are torn, so the head may die (avascular necrosis).<br><b>Developmental dysplasia of the hip</b> (old name: congenital dislocation): screened with the Ortolani and Barlow tests; on an X-ray, Shenton\'s line is broken.<br><b>Hip replacement:</b> a total replacement replaces the acetabulum and the head; a hemiarthroplasty only the head (often for a displaced neck fracture in the elderly). The commonest reason is osteoarthritis. The posterior approach (through the short lateral rotators) dislocates more often; the lateral approach (splitting gluteus medius) can weaken the abductors and injure the superior gluteal nerve.<br><b>Trendelenburg sign:</b> standing on one leg, the pelvis drops on the opposite side because the abductors (gluteus medius and minimus) of the standing side are weak.']],
+  knee: [
+    ['Type', 'Synovial, modified hinge joint, the largest joint of the body; a compound joint: two tibiofemoral (condylar) parts and the patellofemoral joint.'],
+    ['Articular surfaces', 'The femoral condyles with the tibial condyles, through the menisci; the patellar surface of the femur with the back of the patella.'],
+    ['Capsule', 'Thin, but strengthened almost everywhere by tendons and expansions: the patellar retinacula (from the vasti) in front and the oblique popliteal ligament behind. Above the patella there is only synovial membrane (the suprapatellar pouch).'],
+    ['Synovial membrane', 'Forms the suprapatellar pouch above the patella, which usually opens into the joint; covers the infrapatellar fat pad; passes in front of the cruciate ligaments, which are therefore inside the capsule but outside the synovial cavity.'],
+    ['Ligaments', '<b>Patellar ligament:</b> from the apex of the patella to the tibial tuberosity (the patella is a sesamoid bone in the quadriceps tendon). <b>Tibial (medial) collateral:</b> broad and flat, from the medial epicondyle to the tibia; its deep fibres are attached to the medial meniscus; resists valgus force. <b>Fibular (lateral) collateral:</b> a rounded cord from the lateral epicondyle to the head of the fibula, separate from the capsule and the lateral meniscus (the popliteus tendon passes between); resists varus force. <b>Oblique popliteal:</b> an expansion of the semimembranosus tendon across the back of the capsule.'],
+    ['Cruciate ligaments', 'Inside the capsule, outside the synovial cavity; they cross like an X and are named by their tibial attachment. <b>Anterior:</b> from the front of the intercondylar area of the tibia, up, back and laterally to the lateral femoral condyle; prevents the tibia sliding forward (and checks medial rotation). <b>Posterior:</b> from the back of the intercondylar area, up, forward and medially to the medial femoral condyle; prevents the tibia sliding back; the stronger of the two.'],
+    ['Menisci', 'Two C-shaped fibrocartilages, wedge-shaped in section, with a thick outer edge attached to the capsule and a thin free inner edge. The medial is nearly semicircular and firmly attached to the capsule and the tibial collateral ligament, so it moves less; the lateral is nearly circular, more mobile, grooved by the popliteus tendon and not attached to the fibular collateral ligament. Only their outer part has a blood supply. The transverse ligament joins their front ends (it is sometimes absent).'],
+    ['Relations', 'Behind: the popliteal vessels and tibial nerve (Gray 1918: the artery deepest, on the capsule). Gray 1918 gives the other relations: laterally, the biceps femoris tendon, the popliteus tendon and the common fibular nerve; medially, sartorius, gracilis, semitendinosus and semimembranosus.'],
+    ['Movements, muscles', 'Flexion and extension, with rolling and gliding; medial and lateral rotation of the leg only when the knee is bent. Extension: quadriceps femoris. Flexion: the hamstrings (biceps femoris, semitendinosus, semimembranosus), helped by gracilis, sartorius and gastrocnemius. Medial rotation of the leg: popliteus, semitendinosus, semimembranosus, sartorius, gracilis.'],
+    ['Locking, unlocking', '<b>Locking</b> (screw-home): in the last part of extension the femur rotates medially on the fixed tibia (or the tibia laterally, if the foot is free) until the ligaments are tight; the knee is then stable for standing. It is caused by the shape of the condyles (the medial condylar surface is longer) and the tightening of the anterior cruciate ligament. <b>Unlocking:</b> popliteus rotates the femur laterally on the tibia so that flexion can begin.'],
+    ['Nerves', 'Femoral, obturator, tibial and common fibular nerves (the genicular nerves run with the genicular arteries). The nerves of the muscles that move the knee also supply it, as Hilton\'s law describes.'],
+    ['Anastomosis', 'Around the knee: the superior and inferior, medial and lateral genicular branches of the popliteal artery; the descending genicular branch of the femoral; the descending branch of the lateral circumflex femoral; the anterior tibial recurrent branch of the anterior tibial artery.'],
+    ['Bursae', 'Suprapatellar (opens into the joint), prepatellar (between patella and skin), superficial and deep infrapatellar, the pes anserinus bursa, and the bursa between the medial head of gastrocnemius and semimembranosus, which often opens into the joint.'],
+    ['Applied', '<b>Anterior cruciate tear:</b> the most often injured knee ligament; it does not heal. Tests: anterior drawer (knee at 90°) and Lachman (knee slightly bent; the most sensitive). <b>Posterior cruciate tear:</b> less common; a backward blow on the upper tibia with the knee bent (dashboard injury); posterior drawer test. <b>Medial collateral injury:</b> a valgus force (blow to the outside of the knee). <b>Unhappy triad:</b> anterior cruciate, medial collateral and a meniscus together, from a blow to the outside of the knee with the foot fixed; classically the medial meniscus, though later studies find the lateral more often.<br><b>Meniscal tears:</b> the medial is torn more often (it moves less), often by twisting of the knee; only tears in the outer part heal well; loss of a meniscus raises the risk of osteoarthritis.<br><b>Baker\'s cyst:</b> the gastrocnemius–semimembranosus bursa distended by fluid from the joint, usually from disease inside the joint; its rupture mimics deep vein thrombosis. <b>Housemaid\'s knee:</b> prepatellar bursitis from kneeling. <b>Osteoarthritis:</b> progressive loss of articular cartilage, commonest in older adults.']],
+  tibiofibular: [
+    ['Superior', 'A plane (gliding) synovial joint between the head of the fibula and the lateral condyle of the tibia, with a capsule and anterior and posterior ligaments of the head of the fibula. The common fibular nerve winds round the back of the fibular head next to it, so disease or dislocation of the joint can injure it (foot drop).'],
+    ['Middle', 'The interosseous membrane of the leg: a fibrous sheet between the tibia and fibula that separates the front and back muscles of the leg and continues below as the interosseous ligament of the inferior joint.'],
+    ['Inferior', 'A syndesmosis (fibrous joint) between the lower fibula and the fibular notch of the tibia, held by four ligaments: anterior and posterior inferior tibiofibular, inferior transverse and interosseous (some sources list only three; whether the transverse ligament is separate from the posterior is debated). It keeps the malleoli together as a stable socket for the talus; in dorsiflexion the wider front of the talus pushes them slightly apart.'],
+    ['Applied', '<b>High ankle sprain:</b> injury of the syndesmosis ligaments, usually by external rotation of the foot; less common than the usual lateral sprain but slower to recover.']],
+  ankle: [
+    ['Type', 'Synovial hinge joint (talocrural joint): dorsiflexion and plantarflexion.'],
+    ['Articular surfaces', 'The lower end of the tibia with the medial malleolus, and the lateral malleolus of the fibula, form a socket (mortise) for the trochlea of the talus: its upper surface and both sides.'],
+    ['Stability', 'The trochlea of the talus is wider in front than behind. In dorsiflexion the wide front is wedged between the malleoli and the joint is most stable; in plantarflexion the narrow back lies in the socket, the joint relies on its ligaments, and sprains are more likely.'],
+    ['Medial (deltoid) ligament', 'A strong triangular ligament from the medial malleolus fanning down to the navicular, the sustentaculum tali of the calcaneus and the talus, in superficial and deep layers (its parts are named differently by different sources). It resists eversion; it is so strong that an eversion force often breaks off the medial malleolus instead of tearing it.'],
+    ['Lateral ligaments', 'Three separate ligaments from the lateral malleolus: <b>anterior talofibular</b> (to the neck of the talus), <b>calcaneofibular</b> (down and back to the calcaneus; it crosses the ankle and subtalar joints) and <b>posterior talofibular</b> (to the back of the talus, the strongest). Together they resist inversion.'],
+    ['Relations', 'In front, from medial to lateral: tibialis anterior, extensor hallucis longus, anterior tibial vessels, deep fibular nerve, extensor digitorum longus, fibularis tertius. Behind the medial malleolus (under the flexor retinaculum): tibialis posterior, flexor digitorum longus, posterior tibial vessels, tibial nerve, flexor hallucis longus. Behind the lateral malleolus: fibularis longus and brevis.'],
+    ['Movements, muscles', 'Dorsiflexion: tibialis anterior, extensor hallucis longus, extensor digitorum longus, fibularis tertius. Plantarflexion: gastrocnemius and soleus through the calcaneal tendon (the main plantarflexors), helped by plantaris, tibialis posterior, the long toe flexors and fibularis longus and brevis. The range of plantarflexion is larger than that of dorsiflexion (values vary). Inversion and eversion take place mainly at the subtalar and transverse tarsal joints, not at the ankle joint.'],
+    ['Blood, nerves', 'Branches of the anterior tibial and fibular arteries. Deep fibular and tibial nerves (some sources add the superficial fibular, sural and saphenous).'],
+    ['Applied', '<b>Inversion (lateral) sprain:</b> the commonest ankle sprain, usually with the foot plantarflexed; the anterior talofibular ligament, the weakest, is torn first and most often, then the calcaneofibular; the posterior talofibular rarely. <b>Fractures:</b> bimalleolar (both malleoli), trimalleolar (also the back of the lower tibia); because the ligaments are so strong, dislocations are usually fracture-dislocations.']],
+  foot: [
+    ['Subtalar joint', 'The talocalcaneal joint: between the posterior facets of the talus and calcaneus. Behind the talonavicular joint, a canal between the two bones (the tarsal canal, opening laterally as the sinus tarsi) holds the interosseous talocalcaneal ligament, their main bond.'],
+    ['Talocalcaneonavicular', 'The rounded head of the talus fits a socket formed by the navicular, the calcaneus and the upper surface of the <b>spring ligament</b> (plantar calcaneonavicular ligament). Wikipedia calls it ball-and-socket; Gray 1918 called it a gliding joint.'],
+    ['Spring ligament', 'From the sustentaculum tali to the underside of the navicular: it supports the head of the talus and the medial longitudinal arch; when it fails the arch collapses (flatfoot). Whether it is elastic, as its name suggests, is disputed.'],
+    ['Transverse tarsal (Chopart)', 'Two joints in one line across the foot: talonavicular (medial) and calcaneocuboid (lateral). Ligaments: the bifurcate ligament (Y-shaped, from the calcaneus to the navicular and cuboid), the dorsal calcaneocuboid, and below, the short plantar (plantar calcaneocuboid) ligament; Gray 1918 also counts the long plantar ligament. A Chopart amputation passes through this joint.'],
+    ['Inversion, eversion', 'Inversion (sole turned to face medially) and eversion (sole turned laterally) take place mainly at the subtalar and transverse tarsal joints, working as one unit. Invertors: tibialis anterior and tibialis posterior. Evertors: fibularis longus, brevis and tertius.'],
+    ['Tarsometatarsal (Lisfranc)', 'Between the cuneiforms and cuboid and the bases of the metatarsals; the base of the 2nd metatarsal is wedged between the medial and lateral cuneiforms. The Lisfranc ligament runs from the medial cuneiform to the base of the 2nd metatarsal and is the main stabiliser of the midfoot (there is no ligament between the bases of the 1st and 2nd metatarsals). <b>Lisfranc injury</b> (sprain to fracture-dislocation, e.g. a twisting load on a plantarflexed foot) is often missed.'],
+    ['Metatarsophalangeal', 'Condyloid joints, each with a plantar plate and two collateral ligaments: flexion, extension, abduction and adduction. <b>Hallux valgus</b> (bunion): the big toe deviates laterally at the first MTP joint and the first metatarsal medially; much more common in women. <b>Turf toe:</b> a sprain of the plantar plate of the first MTP joint.'],
+    ['Interphalangeal', 'Hinge joints with a plantar and two collateral ligaments: flexion and extension only. The big toe has one, the other toes two.'],
+    ['Nerves', 'The intertarsal and tarsometatarsal joints are supplied by the deep fibular nerve (Gray 1918). No open source was found for the blood supply of the foot joints.']]};
+const PART = {
+  articular_capsule_of_hip_joint: 'In front to the intertrochanteric line, behind only part way along the neck. Thick in front and above, thin behind and below.',
+  acetabular_labrum: 'Fibrocartilaginous rim of the acetabulum: deepens the socket and grips the head of the femur.',
+  transverse_acetabular_ligament: 'Bridges the acetabular notch, leaving a foramen for vessels into the joint.',
+  descending_part_of_iliofemoral_ligament: 'Part of the Y-shaped iliofemoral ligament, the strongest ligament of the body: anterior inferior iliac spine to the intertrochanteric line; prevents hyperextension.',
+  transverse_part_of_iliofemoral_ligament: 'Upper (lateral) band of the Y-shaped iliofemoral ligament: anterior inferior iliac spine to the upper intertrochanteric line; with the rest of the ligament prevents hyperextension; also limits lateral rotation.',
+  pubofemoral_ligament: 'From the pubis to the lower capsule; limits abduction.',
+  ischiofemoral_ligament: 'From the ischium behind the acetabulum, spiralling into the capsule; limits medial rotation.',
+  ligament_of_head_of_femur: 'From the fovea of the head to the acetabular notch; weak as a ligament; carries a small artery to the head (its importance in adults is debated).',
+  iliopectineal_bursa: 'Iliopsoas bursa: between the iliopsoas tendon and the front of the capsule; sometimes opens into the joint.',
+  trochanteric_bursa_of_gluteus_maximus_muscle: 'Over the greater trochanter, under gluteus maximus: trochanteric bursitis.',
+  articular_capsule_of_knee_joint: 'Thin, strengthened by the patellar retinacula in front and the oblique popliteal ligament behind; above the patella only synovial membrane.',
+  anterior_cruciate_ligament: 'Front of the tibial intercondylar area, up, back and laterally to the lateral femoral condyle. Prevents the tibia sliding forward; the most often injured knee ligament.',
+  posterior_cruciate_ligament: 'Back of the tibial intercondylar area, up, forward and medially to the medial femoral condyle. Prevents the tibia sliding back; the stronger cruciate.',
+  superficial_part_of_tibial_collateral_ligament: 'Tibial (medial) collateral ligament: medial epicondyle to the tibia; resists valgus force.',
+  deep_part_of_tibial_collateral_ligament: 'Deep fibres of the tibial collateral ligament, attached to the medial meniscus.',
+  fibular_collateral_ligament: 'Lateral epicondyle to the head of the fibula: a rounded cord separate from the capsule and the lateral meniscus; resists varus force.',
+  oblique_popliteal_ligament: 'An expansion of the semimembranosus tendon across the back of the capsule.',
+  transverse_ligament_of_knee: 'Joins the front ends of the two menisci; sometimes absent.',
+  medial_meniscus: 'Nearly semicircular; firmly attached to the capsule and the tibial collateral ligament, so it moves less and is torn more often.',
+  lateral_meniscus: 'Nearly circular and more mobile; grooved by the popliteus tendon; not attached to the fibular collateral ligament.',
+  suprapatellar_bursa: 'Above the patella, under quadriceps; usually opens into the knee joint.',
+  subcutaneous_prepatellar_bursa: 'Between the patella and the skin; inflamed by kneeling (housemaid\'s knee).',
+  anserine_bursa: 'Under the tendons of sartorius, gracilis and semitendinosus (pes anserinus).',
+  articular_capsule_of_superior_tibiofibular_joint: 'Capsule of the superior tibiofibular joint (plane synovial joint).',
+  interosseous_membrane_of_leg: 'Fibrous sheet between tibia and fibula; separates the front and back muscles of the leg; continues below as the interosseous ligament of the inferior tibiofibular joint.',
+  anterior_tibiofibular_ligament: 'Anterior inferior tibiofibular ligament, part of the syndesmosis: torn in a high ankle sprain.',
+  posterior_tibiofibular_ligament: 'Posterior inferior tibiofibular ligament, part of the syndesmosis.',
+  transverse_tibiofibular_ligament: 'Inferior transverse ligament, with the posterior inferior tibiofibular ligament (some sources do not count it as separate).',
+  posterior_tibiotalar_ligament: 'Part of the medial (deltoid) ligament: medial malleolus to the talus.',
+  tibiocalcaneal_ligament: 'Part of the medial (deltoid) ligament: medial malleolus to the sustentaculum tali of the calcaneus.',
+  tibionavicular_ligament: 'Part of the medial (deltoid) ligament: medial malleolus to the navicular.',
+  anterior_talofibular_ligament: 'Lateral malleolus to the neck of the talus. The weakest lateral ligament: torn first and most often in an inversion sprain.',
+  calcaneofibular_ligament: 'Tip of the lateral malleolus down and back to the calcaneus; crosses both the ankle and subtalar joints. Next most often injured after the anterior talofibular.',
+  posterior_talofibular_ligament: 'Lateral malleolus to the back of the talus; the strongest lateral ligament, rarely injured.',
+  talocalcaneal_interosseous_ligament: 'In the tarsal canal and sinus tarsi between talus and calcaneus: the main bond of the subtalar joint.',
+  plantar_calcaneonavicular_ligament: 'The spring ligament: sustentaculum tali to the navicular; supports the head of the talus and the medial arch. Whether it is elastic is disputed.',
+  calcaneonavicular_ligament: 'One limb of the Y-shaped bifurcate ligament (calcaneus to navicular).',
+  calcaneocuboid_ligament: 'One limb of the Y-shaped bifurcate ligament (calcaneus to cuboid).',
+  long_plantar_ligament: 'On the underside of the calcaneocuboid joint, with the short plantar ligament.',
+  plantar_calcaneocuboid_ligament: 'Short plantar ligament: on the underside of the calcaneocuboid joint.',
+  articular_capsules_of_metatarsophalangeal_joints: 'Capsules of the metatarsophalangeal joints (condyloid joints).',
+  plantar_metatarsophalangeal_ligaments: 'Plantar plates of the metatarsophalangeal joints; a sprain of the first is turf toe.',
+};
+const DATA = {
+  lede: 'The joints of the hip, knee, leg, ankle and foot, on the bones of the right lower limb, with their capsules, ligaments, menisci and bursae. Pick a joint; turn the model, peel the capsule, tap a ligament, and make the joint move. General ideas (joint types, synovial joints, Hilton\'s law) are on the <a href="../general/joints.html">Joints</a> page.',
+  based: 'Based on: Gray\'s <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers. Where they differ, the page says so.',
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); capsules, ligaments, labrum, menisci and bursae from Z-Anatomy (CC BY-SA 4.0), smoothed and thickened as Z-Anatomy shows them. Articular cartilage and the ankle capsule are not in the model. The axes of movement are fitted to the model and approximate (the inversion–eversion axis is placed schematically); the movements are illustrations, not normal ranges.',
+  mnote: 'The bone that moves is darker; the line is the axis. Axes are fitted to the model and approximate; the arcs show the kind of movement, not its range. The capsule and ligaments are hidden while a joint moves (the model cannot stretch them).'};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v; v.ghostAlpha = 0.14;
+let motions = {}, cur = null, ex = null, anim = 0, names = {}, selPart = null, moved = false;
+const on = {capsule: true, lig: true, cart: true, bursa: false};
+const COL = {capsule: '--capsule', lig: '--lig', cart: '--cart', bursa: '--bursa'};
+const layerOf = k => { for (const l in JOINTS[cur].soft) if (JOINTS[cur].soft[l].includes(k)) return l; return null; };
+function softKeys() { return Object.values(JOINTS[cur].soft).flat(); }
+function applyVisibility() {
+  const J = JOINTS[cur], show = new Set(J.bones);
+  for (const k of v.order) {
+    const l = layerOf(k);
+    v.setVisible(k, l ? on[l] && !moved : show.has(k));
+  }
+}
+function resetPose() { for (const k of v.order) v.setTransform(k, null); v.setLines(null); moved = false; }
+function selectPart(k) {
+  selPart = k;
+  document.querySelectorAll('#plist button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === k));
+  v.setFocus(k ? [k] : null);
+  $('pcap').innerHTML = k ? `<b>${names[k]}.</b> ${PART[k] || ''}` : 'Tap a part of the joint, on the model or in the list.';
+}
+function showJoint(j, i = 0) {
+  cancelAnimationFrame(anim); anim = 0;
+  cur = j; ex = JOINTS[j].ex[i]; resetPose();
+  const J = JOINTS[j], m = ex.motion ? motions[ex.motion] : null, moving = new Set(m ? m.moving : []);
+  for (const k of v.order) { const l = layerOf(k); v.setColour(k, l ? COL[l] : moving.has(k) ? '--move' : '--bone'); }
+  applyVisibility(); selectPart(null);
+  v.fit(ex.fit || J.bones); if (ex.pivotCentre && m) v.centre = m.pivot.slice();
+  const w0 = (ex.views || [[0, -1, 0]])[0]; v.face(w0.slice(0, 3), {zoom: w0[3] || ex.zoom || 1});
+  document.querySelectorAll('#joints button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === j));
+  // layers present in this joint
+  const lb = $('layers'); lb.replaceChildren();
+  for (const [l, name, tok] of LAYERS) if (J.soft[l]) {
+    const b = document.createElement('button'); b.className = 'chip'; b.setAttribute('aria-pressed', on[l]);
+    b.innerHTML = `<i style="background:var(${tok})"></i>${name}`;
+    b.onclick = () => { on[l] = !on[l]; b.setAttribute('aria-pressed', on[l]); applyVisibility(); }; lb.append(b);
+  }
+  const pl = $('plist'); pl.replaceChildren();
+  for (const k of softKeys()) { const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(${COL[layerOf(k)]})"></i>${names[k]}`;
+    b.onclick = () => { const l = layerOf(k); if (!on[l]) { on[l] = true; showJoint.refreshLayers(); applyVisibility(); } selectPart(selPart === k ? null : k); };
+    pl.append(b); }
+  const exb = $('ex-chips'); exb.replaceChildren();
+  if (J.ex.length > 1) J.ex.forEach((e, n) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = e.name;
+    b.setAttribute('aria-pressed', n === i); b.onclick = () => showJoint(j, n); exb.append(b); });
+  buildMoves(m);
+  $('mnote').innerHTML = m ? `<span class="axiskey"></span>${DATA.mnote}${ex.note || ''}` : '';
+  $('h-joint').textContent = J.title || J.name + ' joint' + (j === 'foot' || j === 'tibiofibular' ? 's' : '');
+  $('jtext').innerHTML = (TEXT[j] || []).map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
+}
+showJoint.refreshLayers = () => document.querySelectorAll('#layers button').forEach((b, n) => {
+  const l = LAYERS.filter(x => JOINTS[cur].soft[x[0]])[n][0]; b.setAttribute('aria-pressed', on[l]); });
+function pose(m, mi, f) {
+  const mv = m.moves[mi];
+  const xf = mv.axis ? AtlasViewer.rotation(mv.axis, f, m.pivot) : {m: [[1, 0, 0], [0, 1, 0], [0, 0, 1]], t: mv.slide.map(x => x * f)};
+  for (const k of m.moving) v.setTransform(k, xf.m, xf.t);
+  for (const [k, fr] of Object.entries(m.partial || {})) { const x2 = AtlasViewer.rotation(mv.axis, f * fr, m.pivot); v.setTransform(k, x2.m, x2.t); }
+  const was = moved; moved = Math.abs(f) > 0.01; if (was !== moved) applyVisibility();
+  const L = 60;
+  v.setLines(mv.axis ? [{a: m.pivot.map((c, i) => c - mv.axis[i] * L), b: m.pivot.map((c, i) => c + mv.axis[i] * L), color: '--axis'}] : null);
+}
+function buildMoves(m) {
+  const box = $('moves'); box.replaceChildren();
+  if (!m) return;
+  let last = 0;
+  const stop = () => { cancelAnimationFrame(anim); anim = 0; box.querySelectorAll('.play').forEach(p => p.setAttribute('aria-pressed', 'false')); };
+  const others = i => {
+    box.querySelectorAll('.move').forEach((r, j) => { if (j !== i) r.querySelector('input').value = 0; });
+    const w = ex.views && ex.views[i]; if (i !== last && w) v.face(w.slice(0, 3), {zoom: w[3] || ex.zoom || 1});
+    last = i;
+  };
+  m.moves.forEach((mv, i) => {
+    const [a, b] = mv.arc;
+    const row = document.createElement('div'); row.className = 'move';
+    row.innerHTML = `<span class="name">${mv.name}</span><button class="play" aria-pressed="false">▶ Move</button>
+      <input type="range" min="${a}" max="${b}" step="0.5" value="0" aria-label="${mv.name}">`;
+    const rng = row.querySelector('input'), play = row.querySelector('.play');
+    rng.oninput = () => { stop(); others(i); pose(m, i, +rng.value); };
+    play.onclick = () => {
+      const go = play.getAttribute('aria-pressed') !== 'true'; stop(); if (!go) { rng.value = 0; pose(m, i, 0); return; }
+      others(i); play.setAttribute('aria-pressed', 'true');
+      const t0 = performance.now(), T = 3600;
+      const step = now => { const k = ((now - t0) % T) / T, s = Math.sin(k * 2 * Math.PI), f = s < 0 ? -s * a : s * b;
+        rng.value = f; pose(m, i, f); anim = requestAnimationFrame(step); };
+      anim = requestAnimationFrame(step);
+    };
+    box.append(row);
+  });
+}
+v.onPick = hit => { if (!hit) { selectPart(null); return; } if (layerOf(hit.key)) selectPart(hit.key); };
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  const [mo, man] = await Promise.all([fetch('../models/ll-joints/motions.json').then(r => r.json()), v.load('../models/ll-joints/ll-joints.json')]);
+  motions = mo.motions;
+  for (const p of man.parts) names[p.key] = p.name;
+  for (const [k, J] of Object.entries(JOINTS)) {
+    const b = document.createElement('button'); b.className = 'chip'; b.dataset.k = k; b.textContent = J.name;
+    b.onclick = () => showJoint(k); $('joints').append(b);
+  }
+  showJoint('hip');
+  window.J = {JOINTS, showJoint};   // for tests
+  window.ready = true;
+})().catch(e => { $('pcap').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>
