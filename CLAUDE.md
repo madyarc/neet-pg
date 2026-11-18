@@ -121,6 +121,11 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
   draw call per part), resolves colours once, and picks by rendering only the tapped pixel. The muscle layer loads
   only when the Muscular system is switched on. Left muscles are not downloaded: the page mirrors the right ones
   (`tools/zanat/body_muscles.py`). Keep new layers to the same pattern.
+- **Moving joints**: `AtlasViewer.setTransform(key, m, t)` moves a part rigidly (`AtlasViewer.rotation(axis, deg, pivot)`),
+  `setLines` draws an axis. `tools/joints/general_config.py` (model of the example joints) and `general_axes.py`
+  (pivots fitted to the joint surfaces: sphere for a head, circle for a trochlea or condyle outline; the joint space is
+  empty because cartilage is not modelled, so surfaces are picked relative to the narrowest gap) ->
+  `models/joints-general/motions.json`. Check every movement's direction in screenshots at both ends of its arc.
 - `tools/bones/skull_points.py`: named sutures and points from the contacts. `tools/bones/assign_colours.py`: bone
   colours. The femur page still uses `tools/bones/build_femur.py` + `embed.py`.
 - Python scripts run with the venv `~/personal/buildenv` (numpy, pillow, selenium; run with `python -I`). Page tests:

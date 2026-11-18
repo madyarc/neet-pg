@@ -512,3 +512,35 @@ tubercles.
 - Left muscles = right ones mirrored (Z-Anatomy does the same); the reflection, derived from `z-to-bp3d.json`, matches
   a least-squares fit to Z-Anatomy's own left meshes (gluteus maximus, temporalis) to 0.0001 mm. Checked by eye at the
   shoulders, knees, pelvis (back) and face that both sides sit on the bones.
+
+## Joints — `general/joints.html`
+
+- Fact sheet: `sources-local/facts/joints-general.md` (309 quotes, all script-checked against the downloads in
+  `sources-local/modern/joints/`: Gray 1918 pages 68–96, StatPearls abstracts, Wikipedia extracts with revision ids,
+  open-access papers). Wikipedia "Synovial joint", "Cartilaginous joint", "Syndesmosis" and "Synovial bursa" say they
+  include OpenStax text and were not used. Wikipedia sentences copied from Gray were not counted as a second source.
+- Hilton's law: not in Gray 1918; four independent wordings (Wikipedia; J Neurol 2020, PMC7914164; Edinburgh Med J 1925
+  quoting Hilton, PMC5316670; Biomed Res Int 2022, PMC9173899). The page uses Hilton's own words and notes that the
+  skin part is worded differently ("over the insertions" / "over the muscle" / "over the joint").
+- Disagreements stated on the page: functional vs structural mapping (StatPearls 1:1; Gray and Wikipedia put
+  syndesmoses among amphiarthroses, synchondroses among synarthroses); "permanent" first sternocostal synchondrosis
+  (Wikipedia) vs all synchondroses temporary (Gray); knee = modified hinge (StatPearls, Wikipedia) vs two condyloid
+  joints + patellofemoral (Gray 93); sternoclavicular = saddle (StatPearls, Wikipedia) vs double arthrodial (Gray);
+  plane joints non-axial vs multiaxial (two Wikipedia articles); condyloid = ellipsoid (Gray, Wikipedia).
+- Left out (one source or none): suture subtypes and which suture is which (Gray and Wikipedia conflict); forearm
+  interosseous membrane as a syndesmosis (Wikipedia only); a separate condylar/bicondylar type for knee and TMJ (no
+  downloaded source); close-packed/loose-packed positions; a general rule that every joint has an arterial
+  anastomosis (only elbow and knee examples); named mechanoreceptor types; distal radio-ulnar as a pivot.
+- Independent review (2026-11-17), fixed: menisci divide a joint only partly (only a complete disc makes two
+  cavities); "cartilage is not in the model" -> articular cartilage (costal cartilages, discs and menisci are);
+  synovium covers the non-cartilaginous surfaces; type B cells secrete the hyaluronan (the fluid is a plasma
+  ultrafiltrate); "suggests" a reflex arc; anastomosis "around joints such as"; plane-joint axis wording attributed;
+  manubriosternal "about a third of cases"; MCP joints "of the fingers"; thumb movement planes added (Gray 88 +
+  Wikipedia "Carpometacarpal joint"); pronation example relabelled proximal radio-ulnar; palm-facing definition of
+  pronation attributed to Wikipedia; Gray-only details removed or attributed (first costal cartilage continuity,
+  facet joints as plane, "nearly half a sphere", head of humerus vs glenoid, Hilton on contracture, the condylar note).
+- 3D: example joints from BodyParts3D 3.0 (bones, lower right teeth, costal cartilages, L4–L5 disc) and Z-Anatomy
+  (menisci, interpubic disc), `tools/joints/general_config.py`. Pivots and axes fitted to the joint surfaces by
+  `tools/joints/general_axes.py` (femoral head sphere r 23.3 mm; trochlea circle r 10.1 mm; knee condyle outline
+  r 20.9 mm, 22.5 mm above the lowest point; dens: vertical line through its centre because it is too short to fit).
+  Every movement direction was checked in screenshots at both ends of its arc, and again by the reviewer.

@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Joints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone, --move (the bone that moves), --axis (axis of movement), --cart (cartilage,
+   incl. discs and menisci), --lig (ligament / interosseous membrane), --tooth, --suture; the schematic adds --fluid (synovial fluid),
+   --syn (synovial membrane), --cap (fibrous capsule), --musc (muscle) */
+:root{--fluid:#cfe6f5;--syn:#d46a8c;--cap:#5a6375;--musc:#c96f68}
+:root[data-theme="dark"]{--fluid:#2a4458;--syn:#e58aa8;--cap:#a7b0c0;--musc:#9c4e48}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.moves{display:flex;flex-direction:column;gap:10px}
+.move{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:center}
+.move .name{grid-column:1/-1;font:600 13.5px var(--f-body)}
+.move input[type=range]{width:100%;accent-color:var(--axis)}
+.play{font:600 13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+.play[aria-pressed="true"]{border-color:var(--axis);color:var(--axis)}
+.axiskey{display:inline-block;width:18px;height:0;border-top:3px solid var(--axis);vertical-align:middle;margin-right:6px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.scroll{overflow-x:auto}
+svg text{font:500 12px var(--f-body);fill:var(--ink)}
+#syn{max-width:720px;margin:0 auto} #hilton{max-width:560px;margin:0 auto}
+#syn text{font-size:14px} #hilton text{font-size:14px}
+@media (max-width:600px){#syn text{font-size:17px}}
+.part{cursor:pointer}
+.part.dim{opacity:.25}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Joints</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="Kinds of joint in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="views" aria-label="View"></div>
+  </div>
+  <div class="panel stack">
+    <div id="kinds"></div>
+    <div id="ex-chips" class="chips"></div>
+    <div id="kind-text"></div>
+    <div class="moves" id="moves"></div>
+    <p class="note" id="kind-note"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-syn">
+  <h2 id="h-syn">Inside a synovial joint</h2>
+  <p class="cap key" id="syn-cap"></p>
+  <svg class="fig" id="syn" viewBox="0 0 640 340" role="img" aria-label="A synovial joint, schematic section"></svg>
+  <div class="chips" id="syn-chips" aria-label="Parts of the joint"></div>
+  <p class="muted">Schematic section, not to scale.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-mov">
+  <h2 id="h-mov">Words for movement</h2>
+  <div class="scroll"><table class="t stack" id="movt"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-stab">
+  <h2 id="h-stab">What keeps a joint stable</h2>
+  <div id="stab"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-nerve">
+  <h2 id="h-nerve">Nerves and vessels of a joint; Hilton's law</h2>
+  <svg class="fig" id="hilton" viewBox="0 0 440 222" role="img" aria-label="Hilton's law, schematic: one nerve supplies the muscle, the joint and the skin"></svg>
+  <p class="muted">Schematic.</p>
+  <div id="nerve"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-clin">
+  <h2 id="h-clin">Clinical</h2>
+  <div id="clin"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (every fact checked in two sources: anatomy/DATA-SOURCES.md) ===================== */
+const HAND = ['scaphoid', 'lunate', 'triquetral', 'pisiform', 'trapezium', 'trapezoid', 'capitate', 'hamate',
+  'mc1', 'mc2', 'mc3', 'mc4', 'mc5', 'pp1', 'dp1', 'pp2', 'mp2', 'dp2', 'pp3', 'mp3', 'dp3', 'pp4', 'mp4', 'dp4', 'pp5', 'mp5', 'dp5'];
+const TEETH = ['t_li1', 't_li2', 't_lc', 't_lp1', 't_lp2', 't_lm1', 't_lm2'];
+const TINT = {interpubic_disc: '--cart', disc_l4: '--cart', men_med: '--cart', men_lat: '--cart', cc1_r: '--cart', cc2_r: '--cart'};
+for (const t of TEETH) TINT[t] = '--tooth';
+// kinds of joint: each has one or more examples (a 3D scene); the synovial ones move (models/joints-general/motions.json)
+const CLASSES = [['fibrous', 'Fibrous'], ['cartilaginous', 'Cartilaginous'], ['synovial', 'Synovial']];
+const KINDS = {
+  suture: {cls: 'fibrous', name: 'Suture',
+    text: `<p>The edges of two bones are joined by a thin layer of fibrous tissue. Sutures are found only in the skull. They are immovable (synarthroses).</p>
+      <p>Sutures are grouped by the shape of the bone edges: interlocking, bevelled and overlapping, or flat. Textbooks disagree on the names of the groups and on which suture belongs to which, so they are not labelled here.</p>`,
+    ex: [{name: 'Sutures of the skull vault (dark lines)', show: ['frontal', 'parietal_r', 'parietal_l', 'occipital'], suture: true, view: [0, -0.35, 1]}]},
+  syndesmosis: {cls: 'fibrous', name: 'Syndesmosis',
+    text: `<p>Bones joined by a ligament or a membrane, with no joint cavity. Example: the inferior tibiofibular joint, where an interosseous ligament holds the lower ends of the tibia and fibula together.</p>
+      <p>Gray 1918 and Wikipedia count syndesmoses as slightly movable (amphiarthroses), although they are fibrous.</p>`,
+    ex: [{name: 'Inferior tibiofibular joint (the ligament is not in the model)', show: ['tibia', 'fibula', 'talus'], frameZ: 'low', view: [0, -1, 0]}]},
+  gomphosis: {cls: 'fibrous', name: 'Gomphosis',
+    text: `<p>A peg in a socket: the root of a tooth in its socket in the mandible or maxilla. The fibrous tissue that holds it is the periodontal ligament.</p>`,
+    ex: [{name: 'Lower teeth; the mandible is shown as glass so the roots are visible', show: ['mandible'].concat(TEETH), solid: TEETH, view: [-1, -0.6, 0.2]}]},
+  primary: {cls: 'cartilaginous', name: 'Primary (synchondrosis)',
+    text: `<p>The bones are joined by hyaline cartilage. Synchondroses are immovable (synarthroses).</p>
+      <p>Most are temporary: the cartilage turns to bone before adult life. Examples: the growth plate between the end and the shaft of a long bone; the joint between the occipital and sphenoid bones.</p>
+      <p>The first sternocostal joint (first costal cartilage with the manubrium) is a synchondrosis. Wikipedia calls it a permanent synchondrosis; Gray 1918 says all synchondroses are temporary.</p>`,
+    ex: [{name: 'First costal cartilage and the manubrium', show: ['manubrium', 'sternum_body', 'rib1_r', 'cc1_r', 'rib2_r', 'cc2_r'], solid: ['manubrium', 'rib1_r', 'cc1_r'], view: [-0.5, -1, 0.2]}]},
+  secondary: {cls: 'cartilaginous', name: 'Secondary (symphysis)',
+    text: `<p>A disc of fibrocartilage joins two bone surfaces, each covered with a thin layer of hyaline cartilage. Symphyses are slightly movable (amphiarthroses).</p>
+      <p>Examples: the pubic symphysis, the joints between the bodies of the vertebrae (the intervertebral discs) and the manubriosternal joint. All these examples lie in the midline.</p>
+      <p>The manubriosternal joint is not always a symphysis: in about a third of cases the disc is absorbed and it resembles a synovial joint (Gray 1918; 30% in a 2023 paper).</p>`,
+    ex: [{name: 'Pubic symphysis', show: ['hip', 'hip_l', 'interpubic_disc'], view: [0, -1, 0.15]},
+         {name: 'Intervertebral disc (L4–L5)', show: ['l4', 'l5', 'disc_l4'], view: [-1, 0, 0]}]},
+  plane: {cls: 'synovial', name: 'Plane',
+    text: `<p>Flat or nearly flat surfaces that only glide on each other. Examples: the acromioclavicular joint, and most joints between the carpal bones and between the tarsal bones.</p>
+      <p>Gray 1918 calls them gliding joints; Wikipedia calls them non-axial in one article and multiaxial in another.</p>`,
+    ex: [{name: 'Acromioclavicular joint, seen from above', show: ['clavicle', 'scapula'], motion: 'acromioclavicular', fit: ['clavicle'], zoom: 1.7, pivotCentre: true, views: [[0, -0.3, 1], [0, -0.3, 1]]}]},
+  hinge: {cls: 'synovial', name: 'Hinge',
+    text: `<p>Uniaxial: movement in one plane, flexion and extension. Examples: the elbow (between the humerus and the ulna) and the interphalangeal joints.</p>
+      <p>The knee is a modified hinge: mainly flexion and extension, with slight rotation. It is a compound joint (tibiofemoral and patellofemoral). Gray 1918 describes it as two condyloid joints plus the joint between patella and femur.</p>`,
+    ex: [{name: 'Elbow (humero-ulnar)', show: ['humerus', 'ulna', 'radius'].concat(HAND), motion: 'elbow', fit: ['humerus', 'ulna', 'radius'], zoom: 1.1, views: [[-1, 0, 0]]},
+         {name: 'Knee (patella not shown)', show: ['femur', 'tibia', 'fibula', 'men_med', 'men_lat'], motion: 'knee', zoom: 1.1, views: [[-1, 0, 0]]}]},
+  pivot: {cls: 'synovial', name: 'Pivot',
+    text: `<p>Uniaxial: rotation only. Examples: the median atlanto-axial joint, where the atlas turns around the dens of the axis (turning the head), and the proximal radio-ulnar joint, where the head of the radius turns.</p>
+      <p>Turning the radius is pronation and supination. Gray 1918: the radius turns forward in pronation and backward in supination. Wikipedia: in the anatomical position the palm faces forward in supination and backward in pronation.</p>`,
+    ex: [{name: 'Median atlanto-axial joint', show: ['c1', 'c2'], motion: 'atlantoaxial', zoom: 1.1, views: [[0, -0.6, 1]]},
+         {name: 'Proximal radio-ulnar joint (pronation)', show: ['humerus', 'ulna', 'radius'].concat(HAND), motion: 'radioulnar', fit: ['radius', 'ulna'].concat(HAND), zoom: 0.95, views: [[0, -1, 0.15]]}]},
+  ellipsoid: {cls: 'synovial', name: 'Ellipsoid (condyloid)',
+    text: `<p>An oval surface fits an elliptical hollow. Biaxial: flexion and extension, abduction and adduction, and circumduction. Example: the wrist (radiocarpal joint), where abduction and adduction are called radial and ulnar deviation. Gray 1918 and Wikipedia also give the metacarpophalangeal joints of the fingers and the atlanto-occipital joints.</p>
+      <p>Gray 1918 calls this type condyloid (articulatio ellipsoidea); Wikipedia treats condyloid, condylar and ellipsoid as names for the same type.</p>`,
+    ex: [{name: 'Wrist (radiocarpal)', show: ['radius', 'ulna'].concat(HAND), motion: 'wrist', fit: HAND, zoom: 0.6, pivotCentre: true, views: [[-1, 0, 0], [0, -1, 0]]}]},
+  saddle: {cls: 'synovial', name: 'Saddle',
+    text: `<p>Both surfaces are saddle-shaped and fit each other. Biaxial: movement in two planes. The best example is the carpometacarpal joint of the thumb, between the trapezium and the first metacarpal. At the thumb, flexion and extension are in the plane of the palm, and abduction and adduction at right angles to it (the thumb moves forward).</p>
+      <p>StatPearls and Wikipedia also call the sternoclavicular joint a saddle joint; Gray 1918 calls it a double gliding joint.</p>`,
+    ex: [{name: 'Carpometacarpal joint of the thumb', show: HAND, motion: 'thumb', zoom: 0.95, views: [[0, -1, 0], [-1, -0.2, 0]]}]},
+  ball: {cls: 'synovial', name: 'Ball and socket',
+    text: `<p>A rounded head fits a cup-shaped socket. Multiaxial: the bone moves about any number of axes through one centre: flexion and extension, abduction and adduction, rotation and circumduction. Examples: the hip and the shoulder.</p>`,
+    ex: [{name: 'Hip', show: ['hip', 'femur'], motion: 'hip', zoom: 0.8, views: [[-1, 0, 0], [0, -1, 0], [0, -0.25, 1, 1.8]]}]},
+};
+const DATA = {
+  lede: `A joint (articulation) is where two bones meet. Joints are grouped in two ways. By the tissue that joins the bones they are <b>fibrous</b>, <b>cartilaginous</b> or <b>synovial</b>. By how much they move they are synarthroses (immovable), amphiarthroses (slightly movable) or diarthroses (freely movable). Broadly, fibrous joints are immovable, cartilaginous joints slightly movable and synovial joints freely movable, with exceptions: syndesmoses (fibrous) are slightly movable and synchondroses (cartilaginous) immovable. Pick a kind of joint to see an example; the synovial ones move.`,
+  axes: `Synovial joints by axes: uniaxial (hinge, pivot), biaxial (ellipsoid, saddle), multiaxial (ball and socket); plane joints only glide.`,
+  note3d: 'The bone that moves is darker; the line is the axis it turns about (dashed: the direction it glides). The axes are fitted to the joint surfaces of the model and are approximate; the arcs show the kind of movement, not its normal range. Articular cartilage is not in the model, so the bones stand apart.',
+  synIntro: 'A synovial joint: the bone ends are covered with articular cartilage and enclosed in a capsule; the cavity holds synovial fluid. Tap a part.',
+  based: `Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (J Neurol 2020 and Edinburgh Medical Journal 1925 on Hilton's law, and others). Where these differ, the page says so.`,
+  models: `Models used: bones, teeth, costal cartilages and the intervertebral disc from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); menisci, interpubic disc from Z-Anatomy (CC BY-SA 4.0). Articular cartilage, capsules and most ligaments are not in the model. Axes are fitted to the model and approximate; the movements are illustrations, not normal ranges. The synovial joint and Hilton's law drawings are schematic.`,
+};
+/* ===================== schematic: inside a synovial joint ===================== */
+// parts of the schematic: key -> [label, text]; text is filled from the fact sheet
+const SYN = {
+  bone: ['Bone', 'The bone ends, covered where they meet by articular cartilage.'],
+  cart: ['Articular cartilage', 'Usually hyaline cartilage. It has no blood vessels and no nerves; it is fed by diffusion from the synovial fluid. One exception: the condyle of the temporomandibular joint is covered with fibrocartilage.'],
+  cavity: ['Joint cavity, synovial fluid', 'The fluid is filtered from blood plasma and contains hyaluronan (made by the synovial membrane) and lubricin. It is thick, like egg white. It lubricates the cartilage and feeds it.'],
+  syn: ['Synovial membrane', 'Lines the inner surface of the fibrous capsule and the non-cartilaginous surfaces inside the joint; it does not cover the articular cartilage. Its fibroblast-like (type B) cells secrete the hyaluronan of the synovial fluid. It also lines bursae and tendon sheaths.'],
+  cap: ['Fibrous capsule', 'The outer layer of the capsule, around the whole joint; the synovial membrane is its inner layer. Thickened parts of it form capsular ligaments. It carries nerve endings that sense joint position.'],
+  disc: ['Articular disc or meniscus', 'A plate of fibrocartilage inside some joints, e.g. the temporomandibular and sternoclavicular joints, and the menisci of the knee. A complete disc divides the joint into two cavities; menisci divide it only partly. Discs allow more kinds of movement.'],
+  lig: ['Ligament', 'Fibrous bands between the bones that strengthen the joint and give it passive stability. Some are thickenings of the capsule. Some lie inside the capsule but outside the synovial cavity, like the cruciate ligaments of the knee.'],
+  bursa: ['Bursa', 'A closed sac with a little viscid fluid, lined by synovial tissue, placed between surfaces that glide on each other (here a tendon over the capsule).'],
+};
+function drawSyn() {
+  const S = $('syn'), C = {bone: '--bone', cart: '--cart', cavity: '--fluid', syn: '--syn', cap: '--cap', disc: '--cart', lig: '--lig', bursa: '--fluid'};
+  const col = k => `var(${C[k]})`;
+  // shapes (viewBox 600 x 340): upper bone with a convex end, lower bone with a flat end, capsule from shaft to shaft
+  const shapes = {
+    cavity: `<path d="M206 118 C206 150 200 190 210 230 L390 230 C400 190 394 150 394 118 Z" fill="${col('cavity')}"/>`,
+    bone: `<path d="M240 0 L360 0 L360 118 C360 150 335 166 300 166 C265 166 240 150 240 118 Z" fill="${col('bone')}" stroke="var(--muted)" stroke-width="1"/>
+           <path d="M240 214 L360 214 L360 340 L240 340 Z" fill="${col('bone')}" stroke="var(--muted)" stroke-width="1"/>`,
+    cart: `<path d="M241 126 C245 154 268 166 300 166 C332 166 355 154 359 126 C362 162 336 178 300 178 C264 178 238 162 241 126 Z" fill="${col('cart')}"/>
+           <path d="M240 200 L360 200 L360 214 L240 214 Z" fill="${col('cart')}"/>`,
+    disc: `<path d="M212 180 L262 190 L212 200 Z" fill="${col('disc')}" stroke="var(--muted)" stroke-width=".8"/>
+           <path d="M388 180 L338 190 L388 200 Z" fill="${col('disc')}" stroke="var(--muted)" stroke-width=".8"/>`,
+    // the membrane lines the capsule and the bone inside it, up to the edge of the articular cartilage
+    syn: `<path d="M241 126 L240 104 C214 104 208 112 208 130 C206 160 204 196 212 228 C218 236 232 236 240 236 L240 214 M359 126 L360 104 C386 104 392 112 392 130 C394 160 396 196 388 228 C382 236 368 236 360 236 L360 214" fill="none" stroke="${col('syn')}" stroke-width="4"/>`,
+    cap: `<path d="M240 92 C204 92 196 104 196 130 C194 160 192 200 200 236 C208 248 224 250 240 250 M360 92 C396 92 404 104 404 130 C406 160 408 200 400 236 C392 248 376 250 360 250" fill="none" stroke="${col('cap')}" stroke-width="9"/>`,
+    lig: `<path d="M360 50 C430 70 440 150 440 190 C440 230 430 290 360 300" fill="none" stroke="${col('lig')}" stroke-width="10" stroke-linecap="round"/>`,
+    bursa: `<path d="M128 20 L142 20 L142 330 L128 330 Z" fill="var(--fascia)"/>
+            <ellipse cx="166" cy="170" rx="16" ry="42" fill="${col('bursa')}" stroke="${col('syn')}" stroke-width="3"/>`,
+  };
+  const labels = {bone: [462, 30], syn: [462, 96], cart: [462, 140], cavity: [462, 180], disc: [462, 228], cap: [462, 276], lig: [462, 312], bursa: [14, 120]};
+  const anchor = {bone: [340, 40], syn: [393, 120], cart: [356, 146], cavity: [300, 190], disc: [372, 190], cap: [404, 236], lig: [438, 250], bursa: [162, 132]};
+  const two = {cavity: ['Joint cavity,', 'synovial fluid'], disc: ['Articular disc', 'or meniscus'], lig: ['Ligament', '(outside the capsule)']};
+  let h = '';
+  for (const k of ['cavity', 'bone', 'cart', 'disc', 'syn', 'cap', 'lig', 'bursa']) h += `<g class="part" data-k="${k}" tabindex="0" role="button" aria-label="${SYN[k][0]}">${shapes[k]}</g>`;
+  for (const k in labels) {
+    const [lx, ly] = labels[k], [ax, ay] = anchor[k];
+    const t = two[k] ? `<tspan x="${lx}">${two[k][0]}</tspan><tspan x="${lx}" dy="18">${two[k][1]}</tspan>` : SYN[k][0];
+    h += `<g class="part" data-k="${k}"><line x1="${ax}" y1="${ay}" x2="${lx - 6}" y2="${ly - 4}" stroke="var(--muted)" stroke-width="1"/><text x="${lx}" y="${ly}">${t}</text></g>`;
+  }
+  h += `<text x="20" y="300" style="fill:var(--muted)">Tendon</text><line x1="66" y1="296" x2="126" y2="280" stroke="var(--muted)" stroke-width="1"/>`;
+  S.innerHTML = h;
+  const pick = k => {
+    S.querySelectorAll('.part').forEach(g => g.classList.toggle('dim', !!k && g.dataset.k !== k));
+    $('syn-cap').innerHTML = k ? `<b>${SYN[k][0]}.</b> ${SYN[k][1]}` : DATA.synIntro;
+    document.querySelectorAll('#syn-chips button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === k));
+  };
+  const chips = $('syn-chips'); chips.replaceChildren();
+  for (const k in SYN) { const b = document.createElement('button'); b.className = 'chip'; b.dataset.k = k; b.textContent = SYN[k][0];
+    b.onclick = () => pick(b.dataset.k); chips.append(b); }
+  S.querySelectorAll('.part').forEach(g => { g.onclick = e => { e.stopPropagation(); pick(g.dataset.k); };
+    g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') pick(g.dataset.k); }; });
+  S.onclick = () => pick(null); pick(null);
+}
+
+/* ===================== movements, stability, nerves, clinical ===================== */
+const MOVES = [
+  ['Gliding', 'One surface slides over another, without angular or rotatory movement.', 'Plane joints'],
+  ['Flexion, extension', 'Flexion bends: it decreases the angle between two parts. Extension straightens: it increases it.', 'Elbow, knee, hip'],
+  ['Abduction, adduction', 'Away from and towards the median plane of the body; for the fingers and toes, away from and towards the middle line of the hand or foot.', 'Hip, shoulder, wrist (radial and ulnar deviation)'],
+  ['Rotation', 'A bone turns about an axis without moving away from it, e.g. about its own long axis, as the humerus at the shoulder.', 'Shoulder, hip, atlanto-axial'],
+  ['Circumduction', 'The bone traces a cone: the apex is at the joint, the base at the far end of the bone. It combines flexion, extension, abduction and adduction; best seen at the shoulder and hip.', 'Shoulder, hip'],
+  ['Pronation, supination', 'Turning the forearm (the radius turns). In the anatomical position the palm faces forward in supination and backward in pronation (Wikipedia).', 'Radio-ulnar joints'],
+];
+const STAB = `<p>Mainly three things hold a joint together: the <b>shape of the bones</b>, the <b>ligaments and capsule</b>, and the <b>muscles</b> around it. The balance differs between joints, and mobility costs stability:</p>
+  <ul><li><b>Hip:</b> its stability comes mainly from the bones: the head of the femur fits closely into the acetabulum (over nearly half a sphere, in Gray 1918's words).</li>
+  <li><b>Shoulder:</b> the tendons of the rotator cuff muscles around it, the labrum and the ligaments keep it in place; Gray 1918 notes that the head of the humerus does not match the glenoid cavity in size. It is the joint that dislocates most often.</li></ul>`;
+const NERVE = `<p><b>Hilton's law</b> (John Hilton, 19th century): the nerve trunks that supply the muscles moving a joint also supply the joint itself and the skin over the insertions of those muscles. Sources word the skin part differently ("over the insertions", "over the muscle", "over the joint"); this is Hilton's own wording.</p>
+  <p><b>Why it matters:</b> joint, muscles and skin share a nerve, which suggests a simple reflex arc: muscles contract to protect the joint.</p>
+  <p><b>Example, the knee:</b> its nerves come from the femoral, obturator and sciatic nerves (tibial and common fibular branches), the nerves of the muscles that move it.</p>
+  <p><b>Referred pain:</b> the femoral and obturator nerves supply both the hip and the knee, so disease of the hip can be felt in the knee.</p>
+  <p><b>Nerve endings:</b> the capsule and ligaments are rich in nerve fibres: pain fibres, and mechanoreceptors that sense joint position (proprioception). Articular cartilage has no nerves.</p>
+  <p><b>Blood supply:</b> arteries form an anastomosis around joints such as the elbow and the knee. Articular cartilage has no vessels; it is fed from the synovial fluid and the vessels of the synovial membrane.</p>`;
+const CLIN = `<ul>
+  <li><b>Dislocation</b> (luxation): the bones of a joint are separated. <b>Subluxation</b> is a partial dislocation. The shoulder is the joint that dislocates most often.</li>
+  <li><b>Sprain:</b> a ligament is stretched or torn when a joint is forced beyond its range, e.g. an ankle sprain.</li>
+  <li><b>Charcot (neuropathic) joint:</b> when protective sensation and proprioception are lost (e.g. diabetic neuropathy), repeated unnoticed injury destroys the joint.</li>
+  <li><b>Osteoarthritis:</b> degenerative joint disease, with breakdown of the articular cartilage and the bone under it. It is the commonest form of arthritis.</li></ul>`;
+function drawHilton() {
+  // schematic: one nerve trunk with three branches: to a muscle that crosses the joint, to the joint, to the skin over the muscle's insertion
+  const S = $('hilton');
+  S.innerHTML = `
+    <line x1="8" y1="52" x2="432" y2="52" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 5"/>
+    <rect x="8" y="142" width="190" height="40" rx="18" fill="var(--bone)" stroke="var(--muted)"/>
+    <rect x="236" y="142" width="196" height="40" rx="18" fill="var(--bone)" stroke="var(--muted)"/>
+    <rect x="190" y="134" width="54" height="56" rx="12" fill="none" stroke="var(--cap)" stroke-width="5"/>
+    <path d="M40 140 C110 96 250 96 330 140" fill="none" stroke="var(--musc)" stroke-width="14" stroke-linecap="round" opacity=".85"/>
+    <path d="M110 0 L110 28 L110 106 M110 28 C170 36 205 80 214 132 M110 28 C210 22 300 26 330 52" fill="none" stroke="var(--ink)" stroke-width="2.5"/>
+    <circle cx="110" cy="106" r="4.5" fill="var(--ink)"/><circle cx="214" cy="132" r="4.5" fill="var(--ink)"/><circle cx="330" cy="52" r="4.5" fill="var(--ink)"/>
+    <text x="118" y="14">Nerve trunk</text>
+    <text x="8" y="44" style="fill:var(--muted)">Skin</text>
+    <text x="272" y="76">Skin over the</text><text x="272" y="92">muscle's insertion</text>
+    <text x="8" y="112">Muscle</text>
+    <text x="196" y="214">Joint (capsule)</text><line x1="216" y1="200" x2="216" y2="190" stroke="var(--muted)"/>`;
+}
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v; v.ghostAlpha = 0.14;
+let motions = {}, cur = null, ex = null, anim = 0;
+for (const [label, dir] of [['Front', [0, -1, 0]], ['Side', [-1, 0, 0]], ['Back', [0, 1, 0]], ['Above', [0, -0.001, 1]]]) {
+  const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
+  b.onclick = () => v.face(dir, {zoom: v.zoom}); $('views').append(b);
+}
+function resetPose() { for (const k of v.order) v.setTransform(k, null); v.setLines(null); }
+function showExample(kind, i) {
+  cancelAnimationFrame(anim); anim = 0;
+  cur = kind; ex = KINDS[kind].ex[i];
+  resetPose();
+  const show = new Set(ex.show), m = ex.motion ? motions[ex.motion] : null, moving = new Set(m ? m.moving : []);
+  for (const k of v.order) {
+    v.setVisible(k, show.has(k));
+    v.setColour(k, TINT[k] || (moving.has(k) ? '--move' : '--bone'));
+    v.setVertexMarks(k, null);
+  }
+  if (ex.suture) {          // the sutures: where the bones meet (contacts computed by tools/bones-rs)
+    const marks = {};
+    for (const c of v.contacts) if (show.has(c.a) && show.has(c.b)) {
+      (marks[c.a] = marks[c.a] || []).push({verts: c.va, colour: '--suture'}); (marks[c.b] = marks[c.b] || []).push({verts: c.vb, colour: '--suture'});
+    }
+    for (const k in marks) v.setVertexMarks(k, marks[k]);
+  }
+  v.setFocus(ex.solid || null);
+  // frame the shown parts (or ex.fit), at rest
+  if (ex.frameZ === 'low') {
+    v.fit(ex.show); const lo = Math.min(...ex.show.map(k => v.parts.get(k).bbox[0][2]));
+    v.centre = [v.centre[0], v.centre[1], lo + 60]; v.fitH = 150;
+  } else v.fit(ex.fit || ex.solid || ex.show);
+  if (ex.pivotCentre && m) v.centre = m.pivot.slice();
+  const w0 = (ex.views || [])[0] || ex.view || [0, -1, 0];
+  v.face(w0.slice(0, 3), {zoom: w0[3] || ex.zoom || 1});
+  buildMoves(m);
+  document.querySelectorAll('#kinds button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === kind));
+  const exs = KINDS[kind].ex, box = $('ex-chips'); box.replaceChildren();
+  if (exs.length > 1) exs.forEach((e, j) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = e.name;
+    b.setAttribute('aria-pressed', j === i); b.onclick = () => showExample(kind, j); box.append(b); });
+  $('kind-text').innerHTML = `<h3>${KINDS[kind].name}</h3>${KINDS[kind].text}${KINDS[kind].cls === 'synovial' ? `<p class="note">${DATA.axes}</p>` : ''}<p class="note">Shown: ${ex.name}.</p>`;
+  $('kind-note').innerHTML = m ? `<span class="axiskey"></span>${DATA.note3d}` : '';
+}
+function pose(m, mi, f) {        // f: degrees (rotation) or mm (slide)
+  const mv = m.moves[mi];
+  const xf = mv.axis ? AtlasViewer.rotation(mv.axis, f, m.pivot) : {m: [[1, 0, 0], [0, 1, 0], [0, 0, 1]], t: mv.slide.map(x => x * f)};
+  for (const k of m.moving) v.setTransform(k, xf.m, xf.t);
+  if (mv.axis) { const L = 70; v.setLines([{a: m.pivot.map((c, i) => c - mv.axis[i] * L), b: m.pivot.map((c, i) => c + mv.axis[i] * L), color: '--axis'}]); }
+  else v.setLines([{a: m.pivot, b: m.pivot.map((c, i) => c + mv.slide[i] * 25), color: '--axis', dash: '4 4'}]);
+}
+function buildMoves(m) {
+  const box = $('moves'); box.replaceChildren();
+  if (!m) return;
+  m.moves.forEach((mv, i) => {
+    const [a, b] = mv.arc || [-mv.mm, mv.mm];
+    const row = document.createElement('div'); row.className = 'move';
+    row.innerHTML = `<span class="name">${mv.name}</span><button class="play" aria-pressed="false">▶ Move</button>
+      <input type="range" min="${a}" max="${b}" step="0.5" value="0" aria-label="${mv.name}">`;
+    const rng = row.querySelector('input'), play = row.querySelector('.play');
+    rng.oninput = () => { stop(); others(i); pose(m, i, +rng.value); };
+    play.onclick = () => {
+      const on = play.getAttribute('aria-pressed') !== 'true'; stop(); if (!on) return;
+      others(i); play.setAttribute('aria-pressed', 'true');
+      const t0 = performance.now(), T = 3600;
+      const step = now => {   // 0 -> a -> b -> 0, eased
+        const k = ((now - t0) % T) / T, s = Math.sin(k * 2 * Math.PI);
+        const f = s < 0 ? -s * a : s * b; rng.value = f; pose(m, i, f);
+        anim = requestAnimationFrame(step);
+      };
+      anim = requestAnimationFrame(step);
+    };
+    box.append(row);
+  });
+  pose(m, 0, 0);
+  let last = 0;
+  function others(i) {
+    box.querySelectorAll('.move').forEach((r, j) => { if (j !== i) r.querySelector('input').value = 0; });
+    const w = ex.views && ex.views[i];   // [x, y, z, zoom?]
+    if (i !== last && w) v.face(w.slice(0, 3), {zoom: w[3] || ex.zoom || 1});   // the side this movement is best seen from
+    last = i;
+  }
+  function stop() { cancelAnimationFrame(anim); anim = 0; box.querySelectorAll('.play').forEach(p => p.setAttribute('aria-pressed', 'false')); }
+}
+function buildKinds() {
+  const box = $('kinds'); box.replaceChildren();
+  for (const [c, cname] of CLASSES) {
+    const g = document.createElement('div'); g.className = 'grp';
+    g.innerHTML = `<span class="lbl">${cname}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const [k, d] of Object.entries(KINDS)) if (d.cls === c) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.k = k; b.textContent = d.name;
+      b.onclick = () => showExample(k, 0); row.append(b);
+    }
+    g.append(row); box.append(g);
+  }
+}
+(async () => {
+  drawSyn(); drawHilton();
+  $('movt').innerHTML = '<tr><th>Movement</th><th>What happens</th><th>For example</th></tr>' +
+    MOVES.map(([a, b, c]) => `<tr><td data-h="Movement"><b>${a}</b></td><td data-h="What happens">${b}</td><td data-h="For example">${c}</td></tr>`).join('');
+  $('stab').innerHTML = STAB; $('nerve').innerHTML = NERVE; $('clin').innerHTML = CLIN;
+  $('lede').innerHTML = DATA.lede; $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  const [mo] = await Promise.all([fetch('../models/joints-general/motions.json').then(r => r.json()),
+    v.load('../models/joints-general/joints-general.json')]);
+  motions = mo.motions;
+  buildKinds(); showExample('ball', 0);
+  window.J = {KINDS, showExample};   // for tests
+  window.ready = true;
+})().catch(e => { $('kind-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

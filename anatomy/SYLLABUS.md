@@ -21,8 +21,8 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN2.2** Describe the laws of ossification, epiphysis, its various types and their importance
 - [ ] **AN2.3** Describe special features of a sesamoid bone
 - [x] **AN2.4** Describe various types of cartilage with its structure & distribution in body — *hyaline, elastic, fibrocartilage: structure and sites: [Connective Tissue](general/connective-tissue.html)*
-- [ ] **AN2.5** Describe & demonstrate various joints with possible movements, subtypes and examples
-- [ ] **AN2.6** Explain the concept of nerve supply of joints & Hilton’s law
+- [x] **AN2.5** Describe & demonstrate various joints with possible movements, subtypes and examples — *all subtypes with examples on real bones, the synovial types moving in 3D, synovial joint structure, movements, stability: [Joints](general/joints.html)*
+- [x] **AN2.6** Explain the concept of nerve supply of joints & Hilton’s law — *Hilton's law, nerve endings, referred pain hip → knee, blood supply: [Joints](general/joints.html)*
 
 ### 3. General features of Muscle
 

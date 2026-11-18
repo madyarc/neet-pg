@@ -46,10 +46,10 @@
   }
 
   const VS = `attribute vec3 p; attribute vec3 nm; attribute vec3 vc;
-    uniform mat3 R; uniform vec3 C; uniform vec2 S; uniform vec2 PN;
+    uniform mat3 R; uniform vec3 C; uniform vec2 S; uniform vec2 PN; uniform mat3 MR; uniform vec3 MT;
     varying vec3 vn; varying vec3 vp; varying vec3 vcol;
-    void main(){ vec3 q = R*(p - C); gl_Position = vec4((q.x-PN.x)*S.x, (q.z-PN.y)*S.y, q.y/2000.0, 1.0);
-      vn = R*nm; vp = p; vcol = vc; }`;
+    void main(){ vec3 w = MR*p + MT; vec3 q = R*(w - C); gl_Position = vec4((q.x-PN.x)*S.x, (q.z-PN.y)*S.y, q.y/2000.0, 1.0);
+      vn = R*(MR*nm); vp = w; vcol = vc; }`;
   const FS = `#ifdef GL_FRAGMENT_PRECISION_HIGH
     precision highp float;
     #else
@@ -112,7 +112,7 @@
       gl.useProgram(pr);
       this.loc = {};
       for (const a of ['p', 'nm', 'vc']) this.loc[a] = gl.getAttribLocation(pr, a);
-      for (const u of ['R', 'C', 'S', 'PN', 'COL', 'MODE', 'CLIP', 'USEVC', 'DIM', 'IDC', 'ALPHA']) this.loc[u] = gl.getUniformLocation(pr, u);
+      for (const u of ['R', 'C', 'S', 'PN', 'COL', 'MODE', 'CLIP', 'USEVC', 'DIM', 'IDC', 'ALPHA', 'MR', 'MT']) this.loc[u] = gl.getUniformLocation(pr, u);
       gl.enable(gl.DEPTH_TEST);
       this.bindInput();
       new ResizeObserver(() => this.resize()).observe(host);
@@ -212,6 +212,18 @@
     }
 
     /* ---------- appearance ---------- */
+    /** move a part rigidly: p' = m p + t (m: 3x3 rows, a rotation; null = back in place). See rotation(). */
+    setTransform(key, m, t) {
+      const p = this.parts.get(key); if (!p) return;
+      p.xf = m ? {m: new Float32Array([m[0][0], m[1][0], m[2][0], m[0][1], m[1][1], m[2][1], m[0][2], m[1][2], m[2][2]]), t: Float32Array.from(t)} : null;
+      this.draw();
+    }
+    /** rotation by deg about a unit axis through point c, as {m, t} for setTransform */
+    static rotation(axis, deg, c) {
+      const a = deg * Math.PI / 180, [x, y, z] = axis, co = Math.cos(a), si = Math.sin(a), k = 1 - co;
+      const m = [[co + x*x*k, x*y*k - z*si, x*z*k + y*si], [y*x*k + z*si, co + y*y*k, y*z*k - x*si], [z*x*k - y*si, z*y*k + x*si, co + z*z*k]];
+      return {m, t: [0, 1, 2].map(i => c[i] - (m[i][0] * c[0] + m[i][1] * c[1] + m[i][2] * c[2]))};
+    }
     setColour(key, c) { const p = this.parts.get(key); if (p && p.colour !== c) { p.colour = c; p.rgb = rgb(c); this.draw(); } }
     setVisible(key, on) { const p = this.parts.get(key); if (p && p.visible !== on) { p.visible = on; this.draw(); } }
     /** dim every part except these keys (null = none dimmed) */
@@ -230,6 +242,8 @@
     /** cut away everything on the side of the plane n·p > d (mm); null removes the cut */
     setClip(n, d) { this.clip = n ? [...n, d] : null; this.draw(); }
     setMarkers(list) { this.markers = list || []; this.draw(); }
+    /** straight lines over the model, e.g. an axis of movement: [{a: [x,y,z], b: [x,y,z], color, dash}] */
+    setLines(list) { this.lines = list || []; this.draw(); }
 
     /** put an element over the viewer (e.g. a selection card); taps on it do not reach the model */
     addOverlay(el) {
@@ -301,7 +315,8 @@
       gl.uniform1f(L.MODE, mode); gl.uniform4fv(L.CLIP, this.clip || [0, 0, 0, -1e9]);
       const ghost = mode === 0 && this.dimOthers;
       // state is set only when it changes: with hundreds of parts most calls would repeat the previous value
-      let curBatch = null, curUVC = -1, curDim = -1, curAlpha = -1;
+      let curBatch = null, curUVC = -1, curDim = -1, curAlpha = -1, curXf;
+      const ID = this.idXf || (this.idXf = {m: new Float32Array([1, 0, 0, 0, 1, 0, 0, 0, 1]), t: new Float32Array(3)});
       for (const a of [L.p, L.nm, L.vc]) gl.enableVertexAttribArray(a);
       const drawPart = (key, alpha) => {
         const p = this.parts.get(key), b = p.batch;
@@ -312,6 +327,8 @@
           gl.bindBuffer(gl.ARRAY_BUFFER, b.bc); gl.vertexAttribPointer(L.vc, 3, gl.FLOAT, false, 0, 0);
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, b.bi);
         }
+        const xf = p.xf || ID;
+        if (xf !== curXf) { gl.uniformMatrix3fv(L.MR, false, xf.m); gl.uniform3fv(L.MT, xf.t); curXf = xf; }
         if (mode === 1) gl.uniform3f(L.IDC, (p.id & 255) / 255, ((p.id >> 8) & 255) / 255, 0);
         else if (mode === 0) {
           gl.uniform3fv(L.COL, p.rgb);
@@ -381,6 +398,13 @@
     }
     drawMarkers(depth) {
       const svg = this.svg; svg.replaceChildren();
+      for (const l of this.lines || []) {
+        const [x1, y1] = this.toScreen(this.toCam(l.a)), [x2, y2] = this.toScreen(this.toCam(l.b));
+        const e = document.createElementNS(SVGNS, 'line');
+        for (const [k, val] of Object.entries({x1, y1, x2, y2, stroke: l.color && l.color.startsWith('--') ? css(l.color) : (l.color || css('--mark')),
+          'stroke-width': 2.5, 'stroke-linecap': 'round', 'stroke-dasharray': l.dash || ''})) e.setAttribute(k, val);
+        svg.append(e);
+      }
       if (!this.markers.length) return;
       const dots = [];
       for (const m of this.markers) {
