@@ -602,3 +602,29 @@ tubercles.
   1st metatarsal head sphere r 11.5 mm; the inversion–eversion axis is placed schematically (up, forward, medially). The
   patella stays still during knee flexion (moving it with the tibia left it floating). Directions checked in screenshots
   and by the reviewer.
+
+## Joints of the Jaw, Spine and Pelvis — `back/joints.html`
+
+- Fact sheets: `sources-local/facts/joints-tmj-cv.md` (297 quotes) and `sources-local/facts/joints-spine-pelvis.md`
+  (322 quotes), script-checked against `sources-local/modern/joints-tmj-cv/` and `…/joints-spine-pelvis/`. Wikipedia
+  articles citing OpenStax were excluded ("Condyloid joint", "Muscles of mastication", "Spinal column", "Cartilaginous
+  joint"), as were sentences copied from Gray.
+- Source errors not used: Wikipedia "Transverse ligament of atlas" (foramen "of the axis"); Wikipedia "Atlanto-axial
+  joint" (thick capsules); Wikipedia "Facet joint" lead (recurrent meningeal nerves); PMC9249043 (notochord as endoderm);
+  Wikipedia sacrotuberous attachment.
+- Contested, stated on the page: SI joint classification and cartilage; strongest SI ligament (interosseous vs Gray's
+  posterior); disc share of column length; ALL upper end; supraspinous lower end; which pubic ligament the abdominal
+  aponeuroses join; tectorial membrane layers; share of neck rotation at C1–C2; atlanto-occipital type (Gray only,
+  attributed).
+- Left out: "condylar" as the TMJ type (no source); reduction of TMJ dislocation (one group of papers only); "yes/no"
+  movement labels; ADI thresholds; degree values; cervical prolapse levels; L5–S1 → S1 example; SPD incidence.
+- Independent review (2026-11-18), fixed: a dens fracture no longer said to leave the dens "unheld" (only failure of
+  the transverse ligament does); **Z-Anatomy's "Lateral temporomandibular ligament.r" lies on the left side and ".l" on
+  the right** — the right one (".l") is now used; lumbar arc flexion larger than extension; the jaw glide starts after
+  the first 8° of opening (hinge first); RA wording; disc "attached all round to the capsule" (Gray only) removed;
+  TMJ dislocation "usually" anterior; sciatica "low lumbar discs"; lateral atlanto-axial joints "upper articular facets
+  of the axis"; L5 moves with the sacrum; ALL and pubic-aponeurosis disagreements stated; disc share attributed.
+- 3D: BodyParts3D 3.0 skull bones, vertebrae, discs, sacrum, hip bones + Z-Anatomy parts with modifiers applied
+  (`z-bp3d-joints-ax.zip`; Z-Anatomy has no ligaments of the atlas and axis, and its intertransverse ligaments have no
+  faces). Pivots (`tools/joints/ax_axes.py`): TMJ through both condyles; atlanto-occipital and sacro-iliac pivots put on
+  the midline; dens vertical line; L4–L5 disc centre.

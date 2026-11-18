@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Joints of the Jaw, Spine and Pelvis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone, --move (the bone that moves), --axis, --capsule, --lig (ligaments and the
+   interosseous membrane), --cart (articular discs, labrum), --bursa */
+section.block{display:flex;flex-direction:column;gap:12px}
+.moves{display:flex;flex-direction:column;gap:10px}
+.move{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:center}
+.move .name{grid-column:1/-1;font:600 13.5px var(--f-body)}
+.move input[type=range]{width:100%;accent-color:var(--axis)}
+.play{font:600 13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+.play[aria-pressed="true"]{border-color:var(--axis);color:var(--axis)}
+.axiskey{display:inline-block;width:18px;height:0;border-top:3px solid var(--axis);vertical-align:middle;margin-right:6px}
+.layers .chip i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.plist{display:flex;flex-wrap:wrap;gap:6px}
+.plist button{font:500 12.5px var(--f-body);background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:4px 9px;cursor:pointer;text-align:left}
+.plist button i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px}
+.plist button[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+dl.jt{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr);gap:8px 14px;margin:0}
+dl.jt dt{font:600 12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.03em;padding-top:2px}
+dl.jt dd{margin:0}
+@media (max-width:600px){dl.jt{grid-template-columns:minmax(0,1fr)} dl.jt dt{padding-top:6px}}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Joints of the Jaw, Spine and Pelvis</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="The joints in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="joints" aria-label="Joint"></div>
+  </div>
+  <div class="panel stack">
+    <div class="chips layers" id="layers" aria-label="Show"></div>
+    <div id="ex-chips" class="chips"></div>
+    <div class="plist" id="plist" aria-label="Parts of this joint"></div>
+    <p class="cap key" id="pcap"></p>
+    <div class="moves" id="moves"></div>
+    <p class="note" id="mnote"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-joint">
+  <h2 id="h-joint"></h2>
+  <dl class="jt" id="jtext"></dl>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (every fact checked in two sources: anatomy/DATA-SOURCES.md) ===================== */
+const VERT = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 't1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 't11', 't12', 'l1', 'l2', 'l3', 'l4', 'l5'];
+const DISCS = ['disc_c2', 'disc_c3', 'disc_c4', 'disc_c5', 'disc_c6', 'disc_c7', 'disc_t1', 'disc_t2', 'disc_t3', 'disc_t4', 'disc_t5', 'disc_t6', 'disc_t7', 'disc_t8', 'disc_t9', 'disc_t10', 'disc_t11', 'disc_t12', 'disc_l1', 'disc_l2', 'disc_l3', 'disc_l4', 'disc_l5'];
+const LAYERS = [['capsule', 'Capsule', '--capsule'], ['lig', 'Ligaments', '--lig'], ['cart', 'Discs', '--cart']];
+// each joint: the bones shown, its soft parts by layer, the examples (3D scenes, some with a movement), and its text
+const JOINTS = {
+  tmj: {name: 'Temporomandibular', bones: ['temporal_r', 'temporal_l', 'sphenoid', 'mandible'],
+    soft: {capsule: ['articular_capsule_of_temporomandibular_joint'], lig: ['lateral_temporomandibular_ligament', 'sphenomandibular_ligament', 'stylomandibular_ligament'], cart: ['articular_disc_of_temporomandibular_joint']},
+    ex: [{name: 'Temporomandibular joint', motion: 'tmj', fit: ['mandible', 'articular_capsule_of_temporomandibular_joint'], zoom: 0.9, views: [[-1, 0, 0], [-1, 0, 0]]}]},
+  cv: {name: 'Craniovertebral', bones: ['occipital', 'temporal_r', 'temporal_l', 'sphenoid', 'mandible', 'c1', 'c2', 'c3'], soft: {},
+    ex: [{name: 'Atlanto-occipital joints', motion: 'atlantooccipital', fit: ['c1', 'c2', 'occipital'], zoom: 1.1, views: [[-1, 0, 0]]},
+         {name: 'Atlanto-axial joints (skull hidden)', bones: ['c1', 'c2', 'c3'], motion: 'atlantoaxial', fit: ['c1', 'c2'], zoom: 1.0, views: [[0, -0.5, 1]]}]},
+  iv: {name: 'Intervertebral', bones: VERT.concat(DISCS, ['sacrum']),
+    soft: {lig: ['anterior_longitudinal_ligament', 'posterior_longitudinal_ligament', 'ligamenta_flava', 'interspinous_ligaments', 'supraspinous_ligament', 'nuchal_ligament'], cart: ['nucleus_pulposus_l3_l4', 'nucleus_pulposus_l4_l5', 'nucleus_pulposus_l5_s1']},
+    ex: [{name: 'Lumbar joints (L4 on L5)', motion: 'lumbar', fit: ['l3', 'l4', 'l5'], zoom: 0.9, views: [[-1, 0.15, 0], [0, 1, 0]]},
+         {name: 'Cervical region (ligamentum nuchae)', fit: ['c2', 'c3', 'c4', 'c5', 'c6', 'c7'], zoom: 0.9, views: [[-1, 0.2, 0]]}]},
+  si: {name: 'Sacro-iliac', bones: ['sacrum', 'hip', 'hip_l', 'l5'],
+    soft: {lig: ['anterior_sacro_iliac_ligament', 'interosseous_sacro_iliac_ligament', 'posterior_sacro_iliac_ligament', 'iliolumbar_ligament', 'sacrospinous_ligament', 'sacrotuberous_ligament']},
+    ex: [{name: 'Sacro-iliac joints (ligaments of the right side)', motion: 'sacroiliac', fit: ['sacrum', 'hip', 'hip_l'], zoom: 1.0, views: [[0, -1, 0.2]]},
+         {name: 'Sacro-iliac joint seen from the right (right hip bone hidden)', bones: ['sacrum', 'hip_l', 'l5'], motion: 'sacroiliac', fit: ['sacrum'], zoom: 0.9, views: [[-1, 0, 0]]}]},
+  pubic: {name: 'Pubic symphysis', bones: ['hip', 'hip_l', 'sacrum'],
+    soft: {lig: ['superior_pubic_ligament', 'inferior_pubic_ligament'], cart: ['interpubic_disc']},
+    ex: [{name: 'Pubic symphysis', fit: ['interpubic_disc', 'superior_pubic_ligament', 'inferior_pubic_ligament'], zoom: 0.35, views: [[0, -1, 0.15]]}]},
+};
+// facts about each joint, shown under the model: [label, html]
+const TEXT = {
+  tmj: [
+    ['Type', 'Synovial joint, ginglymo-arthrodial: a hinge and a gliding joint in one. The two temporomandibular joints work together, through the one mandible.'],
+    ['Articular surfaces', 'Above: the front part of the mandibular fossa and the articular tubercle (eminence) of the temporal bone. Below: the condyle (head) of the mandible, which is covered with fibrocartilage, not hyaline cartilage.'],
+    ['Articular disc', 'An oval plate of fibrocartilage, thin in the centre and thick at the edges; in front the lateral pterygoid is attached to it, behind it is joined to the temporal bone by loose (retrodiscal) tissue. It divides the joint into two cavities: the <b>upper</b> (disc–temporal bone) for gliding, the <b>lower</b> (condyle–disc) for the hinge movement; they do not communicate unless the disc is perforated.'],
+    ['Ligaments', 'The <b>lateral (temporomandibular) ligament</b>, the thickened outer part of the capsule, is the main ligament. Two accessory ligaments lie apart from the capsule: the <b>sphenomandibular</b> (spine of the sphenoid to the lingula of the mandible; a remnant of Meckel\'s cartilage) and the <b>stylomandibular</b> (styloid process to the angle of the mandible; it separates the parotid from the submandibular gland).'],
+    ['Relations', 'Behind: the auriculotemporal nerve, between the joint and the ear (at risk in surgery on the joint). In front: the lateral pterygoid, inserted into the disc, capsule and neck. Medially: the sphenomandibular ligament, with the maxillary vessels between it and the neck of the mandible.'],
+    ['Movements', 'Depression (opening) and elevation (closing), protrusion and retraction, and side-to-side (grinding). A slight opening is a hinge movement of the condyle on the disc (lower cavity); a wide opening adds a forward glide of the condyle and disc onto the articular tubercle (upper cavity). Protrusion is gliding in the upper cavity.'],
+    ['Muscles', '<table class="t"><tr><th>Movement</th><th>Muscles</th></tr>' +
+      '<tr><td>Opening</td><td>Lateral pterygoid (pulls the condyle and disc forward), digastric; gravity</td></tr>' +
+      '<tr><td>Closing</td><td>Masseter, temporalis, medial pterygoid</td></tr>' +
+      '<tr><td>Protrusion</td><td>Lateral pterygoids, with the medial pterygoids and superficial masseter</td></tr>' +
+      '<tr><td>Retraction</td><td>Posterior (horizontal) fibres of temporalis</td></tr>' +
+      '<tr><td>Side to side</td><td>The medial and lateral pterygoids of one side together, alternating with those of the other side; one side\'s pterygoids move the chin to the opposite side</td></tr></table>'],
+    ['Blood, nerves', 'Branches of the external carotid artery, mainly the superficial temporal. Auriculotemporal and masseteric branches of the mandibular nerve.'],
+    ['Applied', '<b>Dislocation:</b> usually anterior (other directions are rare): the condyle slips forward over the articular eminence and is locked in front of it; the mouth is stuck open and cannot close. Causes include wide opening such as yawning, dental extraction, seizures and lax ligaments.<br><b>Temporomandibular disorders:</b> pain and dysfunction of the joint and the chewing muscles. The commonest joint disorder is displacement of the disc, usually forward; when the disc slips back into place on opening there is a click.<br><b>Ankylosis:</b> fibrous or bony fusion of the condyle to the fossa.']],
+  cv: [
+    ['Atlanto-occipital', 'A pair of synovial joints between the occipital condyles and the upper facets of the lateral masses of the atlas, condyloid in Gray 1918. The anterior and posterior atlanto-occipital membranes join the edges of the foramen magnum to the arches of the atlas; the vertebral artery and the first cervical nerve pass under the edge of the posterior membrane.'],
+    ['Its movement', 'Flexion and extension of the head (nodding): about half of the flexion and extension of the head and neck happens here.'],
+    ['Its muscles', 'Flexion: longus capitis, rectus capitis anterior. Extension: rectus capitis posterior major, obliquus capitis superior, splenius capitis, sternocleidomastoid (both sides together).'],
+    ['Atlanto-axial', 'Three synovial joints. The <b>median</b> is a pivot: the dens turns in a ring formed by the anterior arch of the atlas and the transverse ligament; the larger back part of the ring holds the spinal cord. Two <b>lateral</b> joints lie between the lateral masses of the atlas and the upper articular facets of the axis.'],
+    ['Its movement', 'Rotation of the atlas, carrying the skull, around the dens: the largest single share of rotation of the neck (about half; sources give 40–70%). It is limited by the alar ligaments.'],
+    ['Its muscles', 'Turning the face to one side: obliquus capitis inferior and rectus capitis posterior major of the same side, with the sternocleidomastoid of the opposite side.'],
+    ['Ligaments', '<b>Transverse ligament of the atlas:</b> a strong band behind the dens, between the lateral masses, holding the dens against the anterior arch; the main stabiliser of the atlanto-axial joint. With an upper band (to the occipital bone) and a lower band (to the body of the axis) it forms the cruciform ligament. <b>Alar ligaments:</b> from the sides of the dens to the occipital condyles; they limit rotation. <b>Tectorial membrane:</b> the upward continuation of the posterior longitudinal ligament, from the body of the axis to the inside of the skull (one study: only its superficial layer). (These ligaments are not in the 3D model.)'],
+    ['Applied', '<b>Rheumatoid arthritis:</b> erosion of the dens and loosening of the transverse ligament can lead to atlanto-axial subluxation. <b>Down syndrome:</b> atlanto-axial instability is a recognised complication (on X-rays in up to about 1 in 5 children). If the transverse ligament fails, the dens is no longer held against the anterior arch and can compress the spinal cord; a widened gap between the dens and the anterior arch on X-ray suggests injury to the transverse ligament. Fractures of the dens (classed in three types) also make the joint unstable.']],
+  iv: [
+    ['Between the bodies', 'Symphyses (cartilaginous joints): each vertebral body is joined to the next by an intervertebral disc. Each joint moves only slightly, but together they move a great deal. There are 23 discs, from C2–C3 to L5–S1: none between the atlas and the axis. They make up about a quarter to a third of the length of the column (Gray 1918: a quarter; recent papers: a third).'],
+    ['The disc', '<b>Anulus fibrosus:</b> 15–25 concentric lamellae whose fibres run obliquely, crossing those of the next lamella like an X. <b>Nucleus pulposus:</b> a soft, water-rich gel, a remnant of the notochord, which spreads pressure outward under load. <b>End plates:</b> thin hyaline cartilage joining the disc to the bodies. In the adult the disc has almost no blood vessels (only the outer anulus) and is fed by diffusion through the end plates. Only the outer anulus has nerves, mainly the sinuvertebral nerve.'],
+    ['Facet joints', 'Synovial plane joints between the articular processes of neighbouring vertebrae. The direction of their facets decides the movements: in the neck, free flexion and extension, with side-bending always coupled to rotation; in the thorax, rotation is relatively free; in the lumbar region the facets lie nearly in the sagittal plane, so flexion and extension are free and rotation is restricted. Nerves: medial branches of the dorsal rami (each lumbar facet joint from two).'],
+    ['Uncovertebral joints', 'In the neck (C3–C7), between raised lips (uncinate processes) on the upper surface of each body and the body above; their degeneration narrows the intervertebral foramen.'],
+    ['Ligaments', '<b>Anterior longitudinal:</b> on the front of the bodies and discs, from the base of the skull/atlas (from the axis in Gray 1918) to the sacrum; widens as it descends. <b>Posterior longitudinal:</b> inside the canal on the back of the bodies, from the axis (continued above as the tectorial membrane) to the sacrum; wider over the discs; narrower and thinner than the anterior. <b>Ligamenta flava:</b> yellow, elastic, joining the laminae (axis to sacrum); stretched in flexion, their recoil helps straighten the column. <b>Interspinous:</b> thin sheets between spinous processes, well formed only in the lumbar region. <b>Supraspinous:</b> along the tips of the spinous processes from C7 down (to the sacrum in Gray 1918; indistinct below L4 in other accounts); above C7 it is replaced by the <b>ligamentum nuchae</b>, a midline sheet from the occipital bone to C7 for the attachment of muscles (trapezius, splenius capitis). <b>Intertransverse:</b> weak, between transverse processes (not in the 3D model).'],
+    ['Movements', 'Flexion, extension, lateral flexion and rotation. Rotation is freest in the (upper and middle) thoracic region and restricted in the lumbar region; lumbar flexion and extension are free.'],
+    ['Prolapsed disc', 'The nucleus pulposus is pushed out through a tear in a weakened, degenerating anulus and presses on a nerve root (low lumbar discs: sciatica). It is usually <b>posterolateral</b>, because the posterior longitudinal ligament is narrow and thin and covers only the middle of the back of the disc. About 95% of lumbar prolapses are at L4–L5 or L5–S1. A posterolateral lumbar prolapse presses on the root that crosses the disc to leave the canal one level lower (e.g. an L4–L5 disc on the L5 root, in Wikipedia\'s example).']],
+  si: [
+    ['Type', 'Between the auricular surfaces of the sacrum and ilium. Its front, lower part is synovial (capsule, a little fluid); behind and above, the very strong interosseous ligament binds the bones. Sources classify the whole joint differently: an amphiarthrosis with synovial features (Gray 1918, StatPearls) or a synovial plane joint (Wikipedia).'],
+    ['Articular surfaces', 'Ear-shaped surfaces with ridges and hollows that interlock. Two sources describe hyaline cartilage on the sacrum and fibrocartilage on the ilium; StatPearls describes both as hyaline.'],
+    ['Ligaments', '<b>Anterior sacro-iliac:</b> thin, a thickening of the front of the capsule. <b>Interosseous sacro-iliac:</b> short, very strong fibres between the sacral and iliac tuberosities, the strongest and main bond (Gray 1918 gave this role to the posterior ligament). <b>Posterior sacro-iliac:</b> superficial to it. Accessory: iliolumbar, sacrotuberous and sacrospinous ligaments.'],
+    ['Movements', 'Very small, a few degrees: mainly nutation (the base of the sacrum tilts forward and down) and counternutation (the reverse).'],
+    ['Function', 'It passes the weight of the trunk from the vertebral column, through the sacrum, to the hip bones and lower limbs; it is built for stability rather than movement.'],
+    ['In pregnancy', 'Hormones (relaxin) loosen the sacro-iliac and pubic ligaments, so the pelvic joints move more.'],
+    ['Applied', '<b>Ankylosing spondylitis</b> begins in the sacro-iliac joints: sacroiliitis is its earliest and commonest sign, with erosions and sclerosis on X-ray, and can end in bony fusion. The joint is a common source of low back pain (about 15–30%).']],
+  pubic: [
+    ['Type', 'Secondary cartilaginous joint (symphysis) in the midline between the two pubic bones.'],
+    ['Articular ends', 'Each surface is covered with a thin layer of hyaline cartilage; the two are joined by a fibrocartilaginous interpubic disc, which often has a small cavity.'],
+    ['Ligaments', 'Four: superior pubic and inferior (arcuate) pubic, anterior and posterior (weak). Gray 1918 has the aponeuroses of the abdominal muscles interwoven with the anterior ligament; Wikipedia gives them to the superior.'],
+    ['Movements', 'Very slight. In pregnancy the ligaments soften (relaxin) and the gap widens slightly.'],
+    ['Applied', 'Pain at the symphysis in pregnancy (part of pelvic girdle pain); separation after delivery (diastasis of the symphysis pubis); osteitis pubis, a non-infective inflammation of the joint causing groin pain.']]};
+const PART = {
+  articular_capsule_of_temporomandibular_joint: 'Loose; its outer part is thickened as the lateral ligament.',
+  articular_disc_of_temporomandibular_joint: 'Oval fibrocartilage plate, thin in the centre; divides the joint into an upper (gliding) and a lower (hinge) cavity. The lateral pterygoid is attached to its front.',
+  lateral_temporomandibular_ligament: 'The thickened outer part of the capsule: the main ligament of the joint.',
+  sphenomandibular_ligament: 'Accessory: spine of the sphenoid to the lingula of the mandible; a remnant of Meckel\'s cartilage. The maxillary vessels pass between it and the neck of the mandible.',
+  stylomandibular_ligament: 'Accessory: styloid process to the angle of the mandible; separates the parotid from the submandibular gland.',
+  anterior_longitudinal_ligament: 'On the front of the vertebral bodies and discs, from the base of the skull/atlas (from the axis in Gray 1918) to the sacrum; widens as it descends.',
+  posterior_longitudinal_ligament: 'Inside the vertebral canal on the back of the bodies, axis to sacrum; wider over the discs; narrow and thin, so discs usually prolapse beside it (posterolaterally).',
+  ligamenta_flava: 'Yellow elastic ligaments joining the laminae; stretched in flexion, their recoil helps straighten the column.',
+  interspinous_ligaments: 'Thin sheets between the spinous processes, well formed only in the lumbar region.',
+  supraspinous_ligament: 'Along the tips of the spinous processes from C7 down; above C7 replaced by the ligamentum nuchae.',
+  nuchal_ligament: 'Ligamentum nuchae: midline sheet from the occipital bone to C7; attachment for trapezius and splenius capitis.',
+  nucleus_pulposus_l3_l4: 'Nucleus pulposus: water-rich gel at the centre of the disc, a remnant of the notochord. In a prolapsed disc it is pushed out through the anulus.',
+  nucleus_pulposus_l4_l5: 'Nucleus pulposus: water-rich gel at the centre of the disc, a remnant of the notochord. L4–L5 is one of the two commonest levels of lumbar prolapse.',
+  nucleus_pulposus_l5_s1: 'Nucleus pulposus: water-rich gel at the centre of the disc, a remnant of the notochord. L5–S1 is one of the two commonest levels of lumbar prolapse.',
+  anterior_sacro_iliac_ligament: 'Thin: a thickening of the front of the capsule.',
+  interosseous_sacro_iliac_ligament: 'Short, very strong fibres between the sacral and iliac tuberosities: the strongest bond of the joint (modern sources).',
+  posterior_sacro_iliac_ligament: 'Behind, superficial to the interosseous ligament.',
+  iliolumbar_ligament: 'Accessory ligament of the sacro-iliac joint.',
+  sacrotuberous_ligament: 'Accessory ligament of the sacro-iliac joint.',
+  sacrospinous_ligament: 'Accessory ligament of the sacro-iliac joint.',
+  interpubic_disc: 'Fibrocartilage between the two hyaline-covered pubic surfaces; often has a small cavity.',
+  superior_pubic_ligament: 'Above the symphysis.',
+  inferior_pubic_ligament: 'Inferior (arcuate) pubic ligament, below the symphysis.',
+};
+const DATA = {
+  lede: 'The temporomandibular joint, the joints between the skull, atlas and axis, the joints of the vertebral column, the sacro-iliac joints and the pubic symphysis, in 3D. Pick a joint; turn the model, tap a ligament, and make the joint move. General ideas are on the <a href="../general/joints.html">Joints</a> page.',
+  based: 'Based on: Gray\'s <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers. Where they differ, the page says so.',
+  models: 'Models used: bones and intervertebral discs from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); capsule, ligaments, articular and interpubic discs and nucleus pulposus from Z-Anatomy (CC BY-SA 4.0), smoothed and thickened as Z-Anatomy shows them. The ligaments of the atlas and axis and the intertransverse ligaments are not in the model; the sacro-iliac ligaments are shown on the right side only. The axes of movement are fitted to the model and approximate; the movements are illustrations, not normal ranges.',
+  mnote: 'The bone that moves is darker; the line is the axis. Axes are fitted to the model and approximate; the arcs show the kind of movement, not its range. The capsule and ligaments are hidden while a joint moves (the model cannot stretch them).'};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v; v.ghostAlpha = 0.14;
+let motions = {}, cur = null, ex = null, anim = 0, names = {}, selPart = null, moved = false;
+const on = {capsule: true, lig: true, cart: true};
+const COL = {capsule: '--capsule', lig: '--lig', cart: '--cart'};
+const layerOf = k => { for (const l in JOINTS[cur].soft) if (JOINTS[cur].soft[l].includes(k)) return l; return null; };
+function softKeys() { return Object.values(JOINTS[cur].soft).flat(); }
+function applyVisibility() {
+  const J = JOINTS[cur], show = new Set((ex && ex.bones) || J.bones);   // an example may show fewer bones
+  for (const k of v.order) {
+    const l = layerOf(k);
+    v.setVisible(k, l ? on[l] && !moved : show.has(k));
+  }
+}
+function resetPose() { for (const k of v.order) v.setTransform(k, null); v.setLines(null); moved = false; }
+function selectPart(k) {
+  selPart = k;
+  document.querySelectorAll('#plist button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === k));
+  v.setFocus(k ? [k] : null);
+  $('pcap').innerHTML = k ? `<b>${names[k]}.</b> ${PART[k] || ''}` : 'Tap a part of the joint, on the model or in the list.';
+}
+function showJoint(j, i = 0) {
+  cancelAnimationFrame(anim); anim = 0;
+  cur = j; ex = JOINTS[j].ex[i]; resetPose();
+  const J = JOINTS[j], m = ex.motion ? motions[ex.motion] : null, moving = new Set(m ? m.moving : []);
+  for (const k of v.order) { const l = layerOf(k); v.setColour(k, l ? COL[l] : k.startsWith('disc_') ? '--cart' : moving.has(k) ? '--move' : '--bone'); }
+  applyVisibility(); selectPart(null);
+  v.fit(ex.fit || J.bones); if (ex.pivotCentre && m) v.centre = m.pivot.slice();
+  const w0 = (ex.views || [[0, -1, 0]])[0]; v.face(w0.slice(0, 3), {zoom: w0[3] || ex.zoom || 1});
+  document.querySelectorAll('#joints button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === j));
+  // layers present in this joint
+  const lb = $('layers'); lb.replaceChildren();
+  for (const [l, name, tok] of LAYERS) if (J.soft[l]) {
+    const b = document.createElement('button'); b.className = 'chip'; b.setAttribute('aria-pressed', on[l]);
+    b.innerHTML = `<i style="background:var(${tok})"></i>${name}`;
+    b.onclick = () => { on[l] = !on[l]; b.setAttribute('aria-pressed', on[l]); applyVisibility(); }; lb.append(b);
+  }
+  const pl = $('plist'); pl.replaceChildren();
+  for (const k of softKeys()) { const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(${COL[layerOf(k)]})"></i>${names[k]}`;
+    b.onclick = () => { const l = layerOf(k); if (!on[l]) { on[l] = true; showJoint.refreshLayers(); applyVisibility(); } selectPart(selPart === k ? null : k); };
+    pl.append(b); }
+  const exb = $('ex-chips'); exb.replaceChildren();
+  if (J.ex.length > 1) J.ex.forEach((e, n) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = e.name;
+    b.setAttribute('aria-pressed', n === i); b.onclick = () => showJoint(j, n); exb.append(b); });
+  buildMoves(m);
+  $('mnote').innerHTML = m ? `<span class="axiskey"></span>${DATA.mnote}${ex.note || ''}` : '';
+  $('h-joint').textContent = J.title || J.name + (j === 'pubic' ? '' : ' joint') + (j === 'tmj' || j === 'pubic' ? '' : 's');
+  $('jtext').innerHTML = (TEXT[j] || []).map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
+}
+showJoint.refreshLayers = () => document.querySelectorAll('#layers button').forEach((b, n) => {
+  const l = LAYERS.filter(x => JOINTS[cur].soft[x[0]])[n][0]; b.setAttribute('aria-pressed', on[l]); });
+function pose(m, mi, f) {
+  const mv = m.moves[mi];
+  const xf = mv.axis ? AtlasViewer.rotation(mv.axis, f, m.pivot) : {m: [[1, 0, 0], [0, 1, 0], [0, 0, 1]], t: mv.slide.map(x => x * f)};
+  if (mv.glide) { const g = Math.max(0, f - (mv.glideFrom || 0)); xf.t = xf.t.map((x, i) => x + mv.glide[i] * g); }   // the jaw first turns, then the condyle glides forward
+  for (const k of m.moving) v.setTransform(k, xf.m, xf.t);
+  for (const [k, fr] of Object.entries(m.partial || {})) { const x2 = AtlasViewer.rotation(mv.axis, f * fr, m.pivot); v.setTransform(k, x2.m, x2.t); }
+  const was = moved; moved = Math.abs(f) > 0.01; if (was !== moved) applyVisibility();
+  const L = 60;
+  v.setLines(mv.axis ? [{a: m.pivot.map((c, i) => c - mv.axis[i] * L), b: m.pivot.map((c, i) => c + mv.axis[i] * L), color: '--axis'}] : null);
+}
+function buildMoves(m) {
+  const box = $('moves'); box.replaceChildren();
+  if (!m) return;
+  let last = 0;
+  const stop = () => { cancelAnimationFrame(anim); anim = 0; box.querySelectorAll('.play').forEach(p => p.setAttribute('aria-pressed', 'false')); };
+  const others = i => {
+    box.querySelectorAll('.move').forEach((r, j) => { if (j !== i) r.querySelector('input').value = 0; });
+    const w = ex.views && ex.views[i]; if (i !== last && w) v.face(w.slice(0, 3), {zoom: w[3] || ex.zoom || 1});
+    last = i;
+  };
+  m.moves.forEach((mv, i) => {
+    const [a, b] = mv.arc || [-mv.mm / 4, mv.mm];   // a slide: mm (mostly forward)
+    const row = document.createElement('div'); row.className = 'move';
+    row.innerHTML = `<span class="name">${mv.name}</span><button class="play" aria-pressed="false">▶ Move</button>
+      <input type="range" min="${a}" max="${b}" step="0.5" value="0" aria-label="${mv.name}">`;
+    const rng = row.querySelector('input'), play = row.querySelector('.play');
+    rng.oninput = () => { stop(); others(i); pose(m, i, +rng.value); };
+    play.onclick = () => {
+      const go = play.getAttribute('aria-pressed') !== 'true'; stop(); if (!go) { rng.value = 0; pose(m, i, 0); return; }
+      others(i); play.setAttribute('aria-pressed', 'true');
+      const t0 = performance.now(), T = 3600;
+      const step = now => { const k = ((now - t0) % T) / T, s = Math.sin(k * 2 * Math.PI), f = s < 0 ? -s * a : s * b;
+        rng.value = f; pose(m, i, f); anim = requestAnimationFrame(step); };
+      anim = requestAnimationFrame(step);
+    };
+    box.append(row);
+  });
+}
+v.onPick = hit => { if (!hit) { selectPart(null); return; } if (layerOf(hit.key)) selectPart(hit.key); };
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  const [mo, man] = await Promise.all([fetch('../models/ax-joints/motions.json').then(r => r.json()), v.load('../models/ax-joints/ax-joints.json')]);
+  motions = mo.motions;
+  for (const p of man.parts) names[p.key] = p.name;
+  for (const [k, J] of Object.entries(JOINTS)) {
+    const b = document.createElement('button'); b.className = 'chip'; b.dataset.k = k; b.textContent = J.name;
+    b.onclick = () => showJoint(k); $('joints').append(b);
+  }
+  showJoint('tmj');
+  window.J = {JOINTS, showJoint};   // for tests
+  window.ready = true;
+})().catch(e => { $('pcap').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

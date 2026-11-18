@@ -311,9 +311,9 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [ ] **AN33.1** Describe & demonstrate extent, boundaries and contents of temporal and infratemporal fossae
 - [x] **AN33.2** Describe & demonstrate attachments, direction of fibres, nerve supply and actions of muscles of mastication — *attachments, fibre direction, V3 branches, actions: [Muscles of the Head and Neck](head-neck/muscles.html)*
-- [~] **AN33.3** Describe & demonstrate articulating surface, type & movements of temporomandibular joint — *movements and the muscles producing each; the two joint compartments (surfaces not covered): [Muscles of the Head and Neck](head-neck/muscles.html)*
+- [x] **AN33.3** Describe & demonstrate articulating surface, type & movements of temporomandibular joint — *surfaces, disc and compartments, ligaments, moving joint (turn then glide): [Joints of the Jaw, Spine and Pelvis](back/joints.html); muscles: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN33.4** Explain the clinical significance of pterygoid venous plexus
-- [ ] **AN33.5** Describe the features of dislocation of temporomandibular joint
+- [x] **AN33.5** Describe the features of dislocation of temporomandibular joint — *[Joints of the Jaw, Spine and Pelvis](back/joints.html) (TMJ, Applied)*
 
 ### 34. Submandibular region
 
@@ -383,7 +383,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 43. Head & neck Joints, Histology, Development, Radiography & Surface marking
 
-- [~] **AN43.1** Describe & demonstrate the movements with muscles producing the movements of atlantooccipital joint & atlantoaxial joint — *muscles at the back of the neck only: [Muscles of the Back](back/muscles.html)*
+- [x] **AN43.1** Describe & demonstrate the movements with muscles producing the movements of atlantooccipital joint & atlantoaxial joint — *nodding and turning in 3D, muscles, ligaments: [Joints of the Jaw, Spine and Pelvis](back/joints.html); [Muscles of the Back](back/muscles.html)*
 - [ ] **AN43.2** Identify, describe and draw the microanatomy of pituitary gland, thyroid, parathyroid gland, tongue, salivary glands, tonsil, epiglottis, cornea, retina
 - [ ] **AN43.3** Identify, describe and draw microanatomy of olfactory epithelium, eyelid, lip, sclero-corneal junction, optic nerve, cochlea- organ of corti, pineal gland
 - [ ] **AN43.4** Describe the development and developmental basis of congenital anomalies of face, palate, tongue, branchial apparatus, pituitary gland, thyroid gland & eye
@@ -456,9 +456,9 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 50. Vertebral column
 
 - [x] **AN50.1** Describe the curvatures of the vertebral column — *[The Vertebral Column](back/vertebral-column.html)*
-- [~] **AN50.2** Describe & demonstrate the type, articular ends, ligaments and movements of Intervertebral joints, Sacroiliac joints & Pubic symphysis — *intervertebral discs: [The Vertebral Column](back/vertebral-column.html)*
+- [x] **AN50.2** Describe & demonstrate the type, articular ends, ligaments and movements of Intervertebral joints, Sacroiliac joints & Pubic symphysis — *[Joints of the Jaw, Spine and Pelvis](back/joints.html); discs: [The Vertebral Column](back/vertebral-column.html)*
 - [ ] **AN50.3** Describe lumbar puncture (site, direction of the needle, structures pierced during the lumbar puncture)
-- [ ] **AN50.4** Explain the anatomical basis of Scoliosis, Lordosis, Prolapsed disc, Spondylolisthesis & Spina bifida
+- [~] **AN50.4** Explain the anatomical basis of Scoliosis, Lordosis, Prolapsed disc, Spondylolisthesis & Spina bifida — *prolapsed disc only: [Joints of the Jaw, Spine and Pelvis](back/joints.html)*
 
 ### 51. Sectional Anatomy
 
