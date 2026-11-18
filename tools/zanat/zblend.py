@@ -81,3 +81,38 @@ def world(ob, V):
     return V @ M[:3, :3] + M[3, :3]
 
 def obname(ob): return ob.id_name[2:].decode('utf-8', 'replace')
+
+def mesh_polys(me):
+    """V (n,3) object space and the polygons (lists of vertex ids, quads kept), for applying modifiers"""
+    nv, npoly, nl = me.get(b'totvert'), me.get(b'totpoly'), me.get(b'totloop')
+    V = P = C = None
+    for t, name, blk in layers(me, b'vdata'):
+        if blk is None: continue
+        raw = blk.raw_data()
+        if name == 'position': V = np.frombuffer(raw, np.float32, nv * 3).reshape(nv, 3)
+        elif t == 0 and V is None:
+            stride = len(raw) // nv
+            V = np.frombuffer(raw, np.uint8).reshape(nv, stride)[:, :12].copy().view(np.float32).reshape(nv, 3)
+    for t, name, blk in layers(me, b'pdata'):
+        if blk is None or t != 25: continue
+        raw = blk.raw_data(); stride = len(raw) // npoly
+        a = np.frombuffer(raw, np.uint8).reshape(npoly, stride)
+        P = (a[:, 0:4].copy().view(np.int32).ravel(), a[:, 4:8].copy().view(np.int32).ravel())
+    for t, name, blk in layers(me, b'ldata'):
+        if blk is None or t != 26: continue
+        raw = blk.raw_data(); stride = len(raw) // nl
+        C = np.frombuffer(raw, np.uint8).reshape(nl, stride)[:, 0:4].copy().view(np.int32).ravel()
+    return V.astype(np.float64), [list(C[s:s + k]) for s, k in zip(*P)]
+
+def modifiers(ob):
+    """[(type, {settings})] in stack order: Subsurf levels, Solidify thickness/offset"""
+    out = []
+    p = ob.get_pointer((b'modifiers', b'first'))
+    while p is not None:
+        t = p.dna_type_name.replace('ModifierData', ''); d = {}
+        if t == 'Subsurf': d = {'levels': p.get(b'renderLevels'), 'type': p.get(b'subdivType')}
+        if t == 'Solidify': d = {'offset': p.get(b'offset'), 'fac': p.get(b'offset_fac')}
+        out.append((t, d))
+        try: p = p.get_pointer(b'next')
+        except KeyError: p = p.get_pointer((b'modifier', b'next'))
+    return out

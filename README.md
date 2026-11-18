@@ -31,6 +31,7 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | 17 | [Muscles of the Trunk Wall](anatomy/thorax/wall-muscles.html) | Thorax, abdomen | Intercostals, diaphragm (openings T8/T10/T12, phrenic, referred pain, hernias), abdominal wall, rectus sheath, inguinal canal, direct vs indirect hernia, pelvic diaphragm; 25 checked attachment areas |
 | 18 | [Muscles of the Head and Neck](anatomy/head-neck/muscles.html) | Head and neck | 57 muscles in 3D: face and scalp, mastication, SCM and scalenes, supra- and infrahyoid, prevertebral, extraocular, tongue, pharynx, larynx; nerve supply; triangles of the neck, deep cervical fascia and spaces, jaw movements, the H test, palsies; 54 checked attachment areas |
 | 19 | [Joints](anatomy/general/joints.html) | General anatomy | Fibrous (suture, syndesmosis, gomphosis), cartilaginous (synchondrosis, symphysis) and synovial joints on BodyParts3D bones; the synovial types moving about fitted axes (plane, hinge incl. knee, pivot, ellipsoid, saddle, ball and socket); synovial joint structure; movements; stability; nerve supply and Hilton's law; clinical |
+| 20 | [Joints of the Upper Limb](anatomy/upper-limb/joints.html) | Upper limb | SC, AC, shoulder, elbow, radio-ulnar, wrist, hand joints in 3D with Z-Anatomy capsules, ligaments, discs, labrum and bursae (Blender modifiers applied); fitted movement axes; type, surfaces, capsule, ligaments, relations, movements and muscles, supply, applied; anastomosis around the elbow |
 
 ### Ophthalmology — [`ophthalmology/`](ophthalmology/index.html)
 

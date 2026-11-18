@@ -92,7 +92,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN10.9** Describe the arterial anastomosis around the scapula and mention the boundaries of triangle of auscultation
 - [x] **AN10.10** Describe and identify the deltoid and rotator cuff muscles along with their nerve supply and clinical anatomy — *deltoid and rotator cuff, nerves, axillary nerve injury, cuff tear: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [x] **AN10.11** Describe & demonstrate attachment, action and clinical anatomy of serratus anterior muscle — *serratus anterior, winged scapula: [Muscles of the Upper Limb](upper-limb/muscles.html)*
-- [ ] **AN10.12** Describe and demonstrate shoulder joint for– type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements, muscles involved, blood supply, nerve supply and applied anatomy
+- [x] **AN10.12** Describe and demonstrate shoulder joint for– type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements, muscles involved, blood supply, nerve supply and applied anatomy — *3D capsule, ligaments, labrum and bursae, moving joint, all headings: [Joints of the Upper Limb](upper-limb/joints.html)*
 - [ ] **AN10.13** Explain anatomical basis of Injury to axillary nerve during intramuscular injections
 
 ### 11. Arm & Cubital fossa
@@ -102,7 +102,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN11.3** Describe the anatomical basis of Venipuncture of cubital veins
 - [ ] **AN11.4** Describe the anatomical basis of Saturday night paralysis
 - [ ] **AN11.5** Identify & describe boundaries and contents of cubital fossa
-- [ ] **AN11.6** Describe the anastomosis around the elbow joint
+- [x] **AN11.6** Describe the anastomosis around the elbow joint — *the vessels that take part: [Joints of the Upper Limb](upper-limb/joints.html) (Elbow)*
 
 ### 12. Forearm & hand
 
@@ -126,8 +126,8 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [ ] **AN13.1** Describe and explain Fascia of upper limb and compartments, veins of upper limb and its lymphatic drainage
 - [ ] **AN13.2** Describe dermatomes of upper limb
-- [ ] **AN13.3** Identify & describe the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements, blood and nerve supply of elbow joint, proximal and distal radio-ulnar joints, wrist joint & first carpometacarpal joint
-- [ ] **AN13.4** Describe Sternoclavicular joint, Acromioclavicular joint, Carpometacarpal joints & Metacarpophalangealjoint
+- [~] **AN13.3** Identify & describe the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements, blood and nerve supply of elbow joint, proximal and distal radio-ulnar joints, wrist joint & first carpometacarpal joint — *all in 3D with text; no open source found for the radio-ulnar joints' blood and nerve supply or named first CMC ligaments: [Joints of the Upper Limb](upper-limb/joints.html)*
+- [x] **AN13.4** Describe Sternoclavicular joint, Acromioclavicular joint, Carpometacarpal joints & Metacarpophalangealjoint — *[Joints of the Upper Limb](upper-limb/joints.html)*
 - [ ] **AN13.5** Identify the bones and joints of upper limb seen in anteroposterior and lateral view radiographs of shoulder region, arm, elbow, forearm and hand
 - [ ] **AN13.6** Identify & demonstrate important bony landmarks of upper limb: Jugular notch, sternal angle, acromial angle, spine of the scapula, vertebral level of the medial end and Inferior angle of the scapula
 - [ ] **AN13.7** Identify & demonstrate surface projection of: Cephalic and basilic vein, Palpation of Brachial artery, Radial artery, Testing of muscles: Trapezius, pectoralis major, serratus anterior, latissimus dorsi, deltoid, biceps brachii, Brachioradialis

@@ -55,3 +55,13 @@ retinacula that join them to bone) into `configs/body-muscles.json` (right side 
 side, whether to mirror it, and its colour (Paul Tol muted; a muscle and its left twin share one; different muscles
 within 1 mm never do). The left side is made in the browser with the reflection in `muscles.json` (`mirror`):
 Z-Anatomy's left objects are its right meshes under one mirror matrix, checked to fit to 0.0001 mm.
+
+## Ligaments, capsules, discs, bursae (modifiers applied)
+
+Z-Anatomy stores most joint parts as coarse sheets that Blender smooths and thickens at render time (Subsurf at its
+render level, then Solidify, typically 0.5 mm). `export_mod.py` applies the same: `zblend.mesh_polys` keeps the quads,
+`zblend.modifiers` reads each object's stack (Subsurf `renderLevels`, Solidify `offset`, `offset_fac`), `zmods.py` does
+Catmull–Clark subdivision and a simple Solidify (two shells along the vertex normals, joined by a rim), in object space
+before the object's transform, as Blender does. Select objects with `"all:Joints,Right upper limb"` (every substring
+must match one of the object's collections) or `name:`. Upper limb: `z-bp3d-joints-ul.zip` / `z-index-joints-ul.tsv`,
+used by `tools/joints/ul_config.py` (keep these thin shells nearly unsimplified: per-part `error_mm` 0.05).

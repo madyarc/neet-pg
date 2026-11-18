@@ -544,3 +544,34 @@ tubercles.
   `tools/joints/general_axes.py` (femoral head sphere r 23.3 mm; trochlea circle r 10.1 mm; knee condyle outline
   r 20.9 mm, 22.5 mm above the lowest point; dens: vertical line through its centre because it is too short to fit).
   Every movement direction was checked in screenshots at both ends of its arc, and again by the reviewer.
+
+## Joints of the Upper Limb — `upper-limb/joints.html`
+
+- Fact sheets: `sources-local/facts/joints-shoulder.md` (349 quotes; SC, AC with coracoclavicular and coracoacromial
+  ligaments, glenohumeral joint) and `sources-local/facts/joints-elbow-hand.md` (439 quotes; elbow and anastomosis,
+  radio-ulnar joints, interosseous membrane, TFCC, wrist, carpus, CMC, MCP, IP). All quotes script-checked against the
+  downloads in `sources-local/modern/joints-shoulder/` and `…/joints-elbow-hand/`. Key extra source: DePalma 1963
+  (PMC2505212, the 2008 reprint).
+- Contested, stated on the page: SC type (saddle vs Gray's double plane); main SC restraint (costoclavicular vs
+  posterior capsule); supraspinatus starts abduction for 15° or 30°; timing of scapular rotation; transverse humeral
+  ligament (ligament vs tendon fibres); humero-radial type; carrying angle values and sex difference; elbow nerves
+  (radial absent from Gray); wrist cavity separate vs common with the midcarpal joint; 2nd–5th CMC type (plane vs
+  condyloid); opposition muscles (opponens vs Gray's flexors and adductor); thumb-base OA by sex; quadrate ligament's
+  existence.
+- Left out (one source or none): blood supply of the AC joint (none found); radio-ulnar joints' vessels and nerves (none);
+  named first CMC ligaments as fact (disputed); ranges of movement other than elbow and pronation–supination; the
+  three-point relationship at the elbow (Wikipedia only); Neer's stages; frozen-shoulder stage durations; Rockwood V
+  details; posterior shoulder dislocation from seizures; MCP collateral ligaments tight in flexion (not stated).
+- Independent review (2026-11-17), fixed: SC dislocation "rare" dropped; SC restraint dispute added to the part card;
+  shoulder-girdle muscles labelled as Gray's and as acting through the clavicle and scapula, clavicular head of SCM;
+  teres major as extensor marked Gray; abduction/scapular-rhythm rows made consistent with the timing dispute; subacromial
+  bursa opens "unless the tendon is torn right through"; Hilton's law "fits"; elbow extension limit removed (sources
+  differ); middle collateral artery marked Gray; carrying-angle sex difference "not in all studies"; quadrate ligament
+  disputed, not "thin"; oblique cord "sometimes" absent; palmaris longus and ECRB marked Gray; wrist ligament attachments
+  marked Gray and modern bands mentioned, duplicate radiocapitate part removed, title "Wrist and carpus"; 2nd–5th CMC type
+  attributed; thumb-base OA attributed; unrelated bursae (teres major, subcutaneous acromial, bicipitoradial) removed from
+  the lists; "subscapular bursa is not in the 3D model".
+- 3D: BodyParts3D 3.0 bones + 82 Z-Anatomy joint parts exported with their Blender Subsurf/Solidify modifiers applied
+  (`tools/zanat/export_mod.py`). Pivots fitted (`tools/joints/ul_axes.py`): humeral head sphere r 19.1 mm, trochlea circle
+  r 10.1 mm, 2nd metacarpal head sphere r 7.0 mm, PIP circle r 3.2 mm; SC and AC pivots at the facing surfaces. Every
+  movement direction checked in screenshots at both ends of its arc, and by the reviewer.

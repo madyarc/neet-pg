@@ -126,6 +126,8 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
   (pivots fitted to the joint surfaces: sphere for a head, circle for a trochlea or condyle outline; the joint space is
   empty because cartilage is not modelled, so surfaces are picked relative to the narrowest gap) ->
   `models/joints-general/motions.json`. Check every movement's direction in screenshots at both ends of its arc.
+  Regional joint pages: `tools/joints/ul_config.py` + `ul_axes.py` (shared fitting helpers in `fitlib.py`); ligaments and
+  capsules exported with their Blender modifiers applied (`tools/zanat/export_mod.py`, see its README section).
 - `tools/bones/skull_points.py`: named sutures and points from the contacts. `tools/bones/assign_colours.py`: bone
   colours. The femur page still uses `tools/bones/build_femur.py` + `embed.py`.
 - Python scripts run with the venv `~/personal/buildenv` (numpy, pillow, selenium; run with `python -I`). Page tests:
