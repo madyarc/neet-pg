@@ -8,6 +8,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* page-only schematic colours (no meaning elsewhere): skin, fat, muscle, peritoneum, stomach in the drawings */
+:root{--s-skin:#e9c9b0;--s-fat:#f3e3a6;--s-musc:#c98f8a;--s-perit:#a9cfc4;--s-stom:#e7b7c8;--s-line:#3c4556}
+:root[data-theme="dark"]{--s-skin:#8a6a55;--s-fat:#7d6f3c;--s-musc:#a86f6a;--s-perit:#3f6e63;--s-stom:#8c5468;--s-line:#aab3c2}
+.schem svg{width:100%;height:auto;display:block}
+.schem text{font:500 11px var(--f-body);fill:var(--ink)}
+.schem .sm{font-size:9.5px;fill:var(--muted)}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -47,10 +55,19 @@
         <p class="cap" id="ics"></p>
         <div class="group-h">Rectus sheath (tap a row)</div>
         <table class="t" id="sheath"></table>
+        <div class="group-h">Layers and fascia of the anterior abdominal wall (tap a row)</div>
+        <div class="schem" id="layers-svg"></div>
+        <table class="t" id="fascia"></table>
+        <div class="group-h">Arteries of the anterior abdominal wall (tap a row)</div>
+        <table class="t" id="wallvessels"></table>
+        <p class="note" id="ves-note"></p>
         <div class="group-h">Inguinal canal (tap a row)</div>
         <table class="t" id="canal"></table>
         <div class="group-h">Hernias and other clinical points</div>
         <dl class="facts" id="clin"></dl>
+        <div class="group-h">The diaphragm: development, abnormal openings and hernias</div>
+        <div class="schem" id="hiatal-svg"></div>
+        <dl class="facts" id="dia-clin"></dl>
       </div>
     </div>
   </div>
@@ -164,11 +181,34 @@ const WALLS = {
     ['Superficial ring', 'A triangular opening in the external oblique aponeurosis, just above and lateral to the pubic tubercle.', ['ext_oblique']],
     ['Coverings of the cord', 'External spermatic fascia (from the external oblique aponeurosis); cremaster and cremasteric fascia (from internal oblique); internal spermatic fascia (from the transversalis fascia). The cremaster, supplied by the genital branch of the genitofemoral nerve, raises the testis.', ['ext_oblique', 'int_oblique', 'transversus_abd']],
   ],
+  fascia: [
+    ['Skin and superficial fascia', 'The superficial fascia has two layers, the fatty Camper\'s fascia outside and the membranous Scarpa\'s fascia inside (Gray: clearly separate mainly near the groin, with the superficial vessels and nerves between them).', ['ext_oblique']],
+    ['Camper\'s fascia (fatty layer)', 'The superficial, fatty (areolar) layer of the superficial fascia, with a variable amount of fat.', ['ext_oblique']],
+    ['Scarpa\'s fascia (membranous layer)', 'The deep, membranous layer; deep to Camper\'s fascia and superficial to the external oblique. <b>Attachments:</b> loosely to the external oblique aponeurosis; firmly in the midline to the linea alba and pubic symphysis; below and laterally it fuses with the fascia lata of the thigh about a finger\'s breadth below the inguinal ligament. <b>Continuity:</b> over the penis and spermatic cord into the scrotum, where it helps form the dartos, and from there backward as the membranous layer of the superficial fascia of the perineum, <b>Colles\' fascia</b> (in the female into the labia majora and then to Colles\' fascia). Its firm attachments limit where fluid beneath it can spread: Colles linked this to the spread of urine from a ruptured urethra.', ['ext_oblique']],
+    ['Muscles', 'External oblique, internal oblique and transversus abdominis (and, in front, rectus abdominis in its sheath).', ['ext_oblique', 'int_oblique', 'transversus_abd', 'rectus_abd']],
+    ['Transversalis fascia', 'A thin aponeurotic membrane on the inner surface of transversus abdominis, between it and the extraperitoneal fat; part of the fascia lining the whole abdominal cavity. The deep inguinal ring is an opening in it, and below the arcuate line it is all that lies behind rectus abdominis.', ['transversus_abd', 'rectus_abd']],
+    ['Extraperitoneal fat', 'Connective tissue with a variable amount of fat, between the transversalis fascia and the parietal peritoneum; scanty on the front of the abdomen, abundant on the posterior wall, especially around the kidneys. The vessels that run into the mesenteries lie in it.', ['transversus_abd']],
+    ['Parietal peritoneum', 'The innermost layer of the wall.', ['transversus_abd']],
+  ],
+  vessels: [
+    ['Superior epigastric', 'Internal thoracic artery (one of its two end branches, at about the 6th–7th intercostal space)', 'Passes down through the gap between the sternal and costal origins of the diaphragm (the foramen of Morgagni) into the rectus sheath, behind rectus abdominis, and joins the inferior epigastric inside the sheath.', ['v_superior_epigastric_artery_r', 'v_internal_thoracic_artery_r']],
+    ['Musculophrenic', 'Internal thoracic artery (its other end branch)', 'Runs laterally along the costal margin and supplies the diaphragm.', ['v_musculophrenic_artery_r', 'v_internal_thoracic_artery_r']],
+    ['Inferior epigastric', 'External iliac artery, just above the inguinal ligament', 'Ascends along the medial side of the deep inguinal ring (so an indirect hernia is lateral to it), pierces the transversalis fascia, enters the rectus sheath at the arcuate line and runs up behind rectus abdominis to join the superior epigastric.', ['v_inferior_epigastric_artery_r', 'v_external_iliac_artery_r']],
+    ['Superficial epigastric', 'Femoral artery, just below the inguinal ligament', 'Runs up in the superficial fascia of the lower abdominal wall, supplying the skin and superficial fascia.', ['v_superficial_epigastric_artery_r', 'v_femoral_artery_r']],
+    ['Superficial circumflex iliac', 'Femoral artery (its smallest superficial branch), close to the superficial epigastric', 'Runs laterally, parallel to the inguinal ligament, toward the iliac crest; supplies the skin and superficial fascia of the groin. (Not in the 3D model: the femoral artery is lit.)', ['v_femoral_artery_r']],
+  ],
+  vesselsNote: 'The superior and inferior epigastric arteries meet inside the rectus sheath, a link between the subclavian and external iliac arteries that can carry collateral blood. Lit in 3D with their parent arteries (right side; the vessels download when you first tap a row).',
+  diaClin: [
+    ['Development', 'The diaphragm forms from several embryonic parts that normally fuse: the <b>septum transversum</b>, which gives the central tendon, and the paired <b>pleuroperitoneal folds (membranes)</b> at the sides, which separate the pleural cavities from the peritoneal cavity. It begins at the level of the neck and takes its nerve supply from C3–C5 there (the phrenic nerve), which it carries down as it descends.'],
+    ['Congenital diaphragmatic hernia', 'Abdominal viscera enter the chest through a developmental defect and the lung on that side stays underdeveloped (pulmonary hypoplasia). <b>Bochdalek</b>: posterolateral, where the pleuroperitoneal membrane fails to fuse; the commonest, mostly on the left, and the most severe. <b>Morgagni</b>: anterior, through the foramen of Morgagni, the small gap behind the xiphoid between the sternal and costal origins of the diaphragm (which normally transmits the superior epigastric vessels); rare.'],
+    ['Hiatal hernia: sliding and rolling', 'Stomach protrudes through the oesophageal opening. <b>Type I, sliding</b> (over 95 %): the gastro-oesophageal junction and the upper stomach slide up into the mediastinum; it goes with reflux. <b>Type II, paraoesophageal (rolling)</b>: the junction stays below the diaphragm and the fundus rolls up beside the oesophagus. <b>Type III</b> mixes the two; <b>type IV</b> also carries another organ (colon, small bowel, spleen). Large paraoesophageal hernias usually need surgery.'],
+    ['Eventration', 'Abnormal elevation of part or all of one half of the diaphragm, which is thin and weak (lacking muscle, or its nerve supply) but keeps its normal attachments; the diaphragm stays intact, with no defect.'],
+    ['Traumatic rupture', 'An uncommon injury (under 1 % of all trauma), from blunt or penetrating trauma, and a marker of severe injury. It is easily missed, and abdominal organs can herniate through the unrepaired tear later and strangulate.'],
+  ],
   clin: [
     ['Inguinal hernia', '<b>Indirect</b>: lateral to the inferior epigastric vessels, through the deep ring and along the canal (it may reach the scrotum), through a patent processus vaginalis; the more common kind (about 2 : 1). <b>Direct</b>: medial to the vessels, through the back wall in the inguinal (Hesselbach\'s) triangle, from a weak transversalis fascia. Inguinal hernia is far commoner in men.'],
     ['Inguinal (Hesselbach\'s) triangle', 'Medially the lateral border of rectus abdominis, laterally the inferior epigastric vessels, below the inguinal ligament: the site of a direct hernia.'],
     ['Umbilical and incisional hernias', 'Umbilical hernias are common in infants and most close by themselves in early childhood; they usually contain fat or omentum. An incisional hernia comes through a previous surgical incision, most often a midline one, as a bulge at the scar.'],
-    ['Diaphragmatic hernias', 'A hiatal hernia takes the stomach up through the oesophageal opening; the sliding type is about 95 %, and it is linked to reflux. In congenital diaphragmatic hernia the viscera in the chest leave the lung underdeveloped; the posterolateral (Bochdalek) defect is the most common, mostly on the left; the anterior (Morgagni) defect is rare.'],
     ['TAP block', 'Local anaesthetic between internal oblique and transversus abdominis blocks the nerves of the wall (lower thoracic to L1), for pain from the wall only.'],
     ['Pelvic floor', 'Vaginal birth can tear (avulse) levator ani from the pubis, especially with forceps. Weak pelvic floor support lets the bladder (cystocele), rectum (rectocele) or uterus descend into the vagina: pelvic organ prolapse, for which vaginal childbirth is a risk factor.'],
   ],
@@ -185,7 +225,7 @@ function buildWalls(api) {
     b.onclick = () => { clearRows(); pressed('#walls-list button', x => x === k); $('walls-desc').innerHTML = `<b>${name}.</b> ${text}`; focusOn([k]); v.fit([k]); v.face([-0.3, -1, 0.2], {zoom: 1}); };
     box.append(b);
   }
-  const rowSel = (row, ks, text, dir) => { clearRows(); pressed('#walls-list button', () => false); row.setAttribute('aria-pressed', 'true');
+  const rowSel = (row, ks, text, dir) => { vesselsShown = []; showVessels(api); v.setMarkers(null); clearRows(); pressed('#walls-list button', () => false); row.setAttribute('aria-pressed', 'true');
     $('walls-desc').innerHTML = text; focusOn(ks); v.fit(ks); v.face(dir, {zoom: 1}); };
   const op = $('open');
   op.innerHTML = '<tr><th>Opening</th><th>Level</th><th>Contents</th></tr>' + WALLS.open.map(([n, l, w, c], i) => `<tr data-k="op${i}" aria-pressed="false"><td>${n}</td><td>${l}</td><td>${c}</td></tr>`).join('') + `<tr><td colspan="3" class="note">${WALLS.openNote}</td></tr>`;
@@ -198,13 +238,64 @@ function buildWalls(api) {
   ca.innerHTML = WALLS.canal.map(([n, t], i) => `<tr data-k="ca${i}" aria-pressed="false"><td>${n}</td><td>${t}</td></tr>`).join('');
   ca.querySelectorAll('tr').forEach((r, i) => r.onclick = () => { const C = WALLS.canal[i]; rowSel(r, C[2], `<b>Inguinal canal, ${C[0].toLowerCase()}:</b> ${C[1]}`, [-0.4, -1, 0.1]); });
   $('clin').innerHTML = WALLS.clin.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
+  $('dia-clin').innerHTML = WALLS.diaClin.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
+  $('layers-svg').innerHTML = LAYERS_SVG; $('hiatal-svg').innerHTML = HIATAL_SVG;
+  const fa = $('fascia');
+  fa.innerHTML = WALLS.fascia.map(([n, t], i) => `<tr data-k="fa${i}" aria-pressed="false"><td>${n}</td><td>${t}</td></tr>`).join('');
+  fa.querySelectorAll('tr').forEach((r, i) => r.onclick = () => { const F = WALLS.fascia[i];
+    rowSel(r, F[2], `<b>${F[0]}.</b> ${F[1]}`, [-0.3, -1, 0.1]); });
+  const wv = $('wallvessels');
+  wv.innerHTML = '<tr><th>Artery</th><th>From</th><th>Course</th></tr>' + WALLS.vessels.map(([n, f, c], i) => `<tr data-k="wv${i}" aria-pressed="false"><td>${n}</td><td>${f}</td><td>${c}</td></tr>`).join('');
+  $('ves-note').textContent = WALLS.vesselsNote;
+  wv.querySelectorAll('tr[data-k]').forEach((r, i) => r.onclick = async () => {
+    const V = WALLS.vessels[i];
+    rowSel(r, ['rectus_abd'], `<b>${V[0]} artery.</b> From the ${V[1].charAt(0).toLowerCase() + V[1].slice(1)}. ${V[2]}`, [-0.3, -1, 0.1]);
+    try { await loadVessels(api); } catch (e) { $('ves-note').textContent = 'Could not load the vessels: ' + e.message; window.loadError = String(e); return; }
+    if (r.getAttribute('aria-pressed') !== 'true') return;      // the reader moved on
+    vesselsShown = VESSEL_KEYS; showVessels(api);
+    const lit = V[3].filter(k => api.has(k));
+    api.v.setFocus(lit); api.v.fit(lit);
+    api.v.setMarkers(lit.map(k => { const m = api.v.parts.get(k).m, i = Math.floor(m.nv / 2) * 3; return {p: [m.pos[i], m.pos[i + 1], m.pos[i + 2]], label: api.v.parts.get(k).info.name.replace(' artery', ''), always: true, color: getComputedStyle(document.documentElement).getPropertyValue('--artery').trim()}; })); api.v.face([-0.35, -1, 0.05], {zoom: 0.7});
+    for (const k of VESSEL_KEYS) api.v.setColour(k, lit.includes(k) ? (k.includes('vein') ? '--vein' : '--artery') : '--line');
+  });
 }
-MusclePage({
+/* vessels of the wall: from the whole-body vessel pack (right side), fetched on the first tap of a vessel row */
+const VESSEL_KEYS = ['v_superior_epigastric_artery_r', 'v_internal_thoracic_artery_r', 'v_musculophrenic_artery_r', 'v_inferior_epigastric_artery_r',
+  'v_external_iliac_artery_r', 'v_superficial_epigastric_artery_r', 'v_femoral_artery_r'];
+let vesselsShown = [], vesLoad = null;
+function loadVessels(api) {
+  return vesLoad = vesLoad || api.v.load('../models/body-vessels/body-vessels.json', VESSEL_KEYS, {fit: false}).catch(e => { vesLoad = null; throw e; });
+}
+function showVessels(api) { for (const k of VESSEL_KEYS) if (api.has(k)) { api.v.setVisible(k, vesselsShown.includes(k)); api.v.setColour(k, '--artery'); } }
+const LAYERS_SVG = (() => {
+  const L = [['Skin', '--s-skin', 10], ['Camper\'s fascia (fatty)', '--s-fat', 16], ['Scarpa\'s fascia (membranous)', '--fascia', 5], ['External oblique', '--s-musc', 12], ['Internal oblique', '--s-musc', 12],
+    ['Transversus abdominis', '--s-musc', 12], ['Transversalis fascia', '--fascia', 5], ['Extraperitoneal fat', '--s-fat', 10], ['Parietal peritoneum', '--s-perit', 5]];
+  let y = 6, out = '';
+  for (const [n, c, h] of L) { out += `<rect x="10" y="${y}" width="150" height="${h}" fill="var(${c})" stroke="var(--surface)" stroke-width=".8"/><line x1="160" y1="${y + h / 2}" x2="176" y2="${y + h / 2}" stroke="var(--muted)" stroke-width=".8"/><text x="180" y="${y + h / 2 + 3.5}" class="sm">${n}</text>`; y += h + 2; }
+  return `<svg viewBox="0 0 360 ${y + 18}" role="img" aria-label="Layers of the anterolateral abdominal wall from skin to peritoneum">
+    <text x="10" y="${y + 12}" class="sm">outside (top) to inside (bottom); schematic, not to scale</text>${out}</svg>`;
+})();
+const HIATAL_SVG = (() => {
+  const panel = (x, title, gej, fundusUp) => `
+    <text x="${x + 6}" y="14">${title}</text>
+    <line x1="${x}" y1="80" x2="${x + 42}" y2="80" stroke="var(--s-musc)" stroke-width="6"/><line x1="${x + 70}" y1="80" x2="${x + 170}" y2="80" stroke="var(--s-musc)" stroke-width="6"/>
+    <path d="M${x + 56} 24 L${x + 56} ${gej}" stroke="var(--s-line)" stroke-width="9" stroke-linecap="round" fill="none"/>
+    ${fundusUp ? `<path d="M${x + 56} ${gej} Q${x + 56} 130 ${x + 110} 128 Q${x + 150} 118 ${x + 140} 96 Q${x + 120} 84 ${x + 96} 92 Q${x + 86} 60 ${x + 100} 46 Q${x + 120} 36 ${x + 112} 64 Q${x + 104} 84 ${x + 86} 84 Q${x + 70} 88 ${x + 66} 100" fill="var(--s-stom)" stroke="var(--s-line)" stroke-width="1"/>`
+      : `<path d="M${x + 50} ${gej} Q${x + 40} ${gej + 20} ${x + 60} ${gej + 28} L${x + 62} 88 Q${x + 60} 132 ${x + 112} 130 Q${x + 152} 120 ${x + 140} 96 Q${x + 120} 84 ${x + 100} 96 Q${x + 80} 80 ${x + 72} 64 Q${x + 66} ${gej} ${x + 50} ${gej}" fill="var(--s-stom)" stroke="var(--s-line)" stroke-width="1"/>`}
+    <circle cx="${x + 56}" cy="${gej}" r="4" fill="var(--surface)" stroke="var(--s-line)" stroke-width="1.5"/>`;
+  return `<svg viewBox="0 0 360 150" role="img" aria-label="Schematic of a sliding and a paraoesophageal hiatal hernia">
+    ${panel(4, 'Sliding (type I)', 52, false)}${panel(186, 'Rolling (type II)', 96, true)}
+    <text x="4" y="146" class="sm">Circle: gastro-oesophageal junction; red-brown: diaphragm. Schematic.</text></svg>`;
+})();
+const page = MusclePage({
   base: '../models/trunk-muscles/', manifest: 'trunk-muscles.json', DATA, GROUPS, NERVES, NERVE_TEXT, M, home: [-0.25, -1, 0.1],
-  extra: {key: 'walls', parts: WALLS.parts.map(p => p[0]), build: buildWalls,
-    enter(api) { document.getElementById('walls-desc').innerHTML = WALLS.intro; const ks = WALLS.parts.map(p => p[0]).filter(api.has);
+  extra: {key: 'walls', parts: WALLS.parts.map(p => p[0]).concat(VESSEL_KEYS), build: buildWalls,
+    enter(api) { vesselsShown = []; showVessels(api); document.getElementById('walls-desc').innerHTML = WALLS.intro; const ks = WALLS.parts.map(p => p[0]).filter(api.has);
       api.focusOn(ks); api.v.fit(api.LIMB()); api.v.face([-0.25, -1, 0.1], {zoom: 1}); }},
 });
+/* the shared page logic repaints connective parts (and so the vessels) on an empty tap: keep the vessels as they were */
+const prevPick = page.v.onPick;
+page.v.onPick = hit => { prevPick(hit); if (!hit) { vesselsShown = []; showVessels(page); page.v.setMarkers(null); } };
 </script>
 </body>
 </html>

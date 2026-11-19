@@ -180,6 +180,12 @@ instead of Wikipedia's "70 %"; (7) sacral fusion starts around puberty (StatPear
 (`tools/spine/landmarks/`), checked in two oblique views each; vertebral-foramen centres of T6 and L3 set between the
 back of the body and the laminae (picking from above sees through the canal).
 
+- Additions (2026-11-18; `fill-trunk.md` Part G): "Deformities and defects" tab: scoliosis (3D S-bend, Cobb angle),
+  hyperlordosis, spondylolysis/spondylolisthesis (3D slip, L5 pars marked approximately: L5 vertices nearest
+  [±19, −55, 940] mm, checked in three views; Meyerding grades), spina bifida types (drawings). Gray p. 25; StatPearls
+  28613518, 28722876, 30020705, 30855876, 31424775, 29763083, 32644691, 32965845, 31536302; PMC13585927,
+  PMC12558799; Wikipedia. Bends and slips are schematic rigid transforms. Review fixed: scoliosis drawing was mirrored;
+  myelomeningocele "commonest of the open forms"; AFP in the open forms; isthmic "commonest" attributed to Wikipedia.
 ## Thorax — `thorax/thoracic-cage.html`, `thorax/ribs.html` (2026-11-14)
 
 **Sources.** Gray 1918: 107/26–29 (thorax, sternum, ribs, costal cartilages), 107/76–77 (costovertebral and sternocostal
@@ -200,6 +206,19 @@ plane; false ribs: Gray 8–12 (8–10 vertebrochondral, 11–12 floating) vs St
 `configs/thorax-detail.json` (0.04 mm: right ribs 1, 2, 6, 10, 11, 12 and the sternum). BodyParts3D has no cartilages
 for ribs 8–10. 29 hand-placed landmarks (`tools/thorax/landmarks/`), checked in two views each.
 
+- Additions (2026-11-18; `sources-local/facts/fill-trunk.md` Parts A–D, H; 276 quotes, script-checked): inlet,
+  cavity and mediastinum (schematic + 3D sternal-angle line), structures through the inlet lit in 3D, thoracic outlet
+  syndrome (forms, cervical rib, three spaces lit in 3D), all thoracic joints incl. xiphisternal, costochondral,
+  interchondral, breathing (pump-handle, bucket-handle, diaphragm; animated). Gray pp. 26–28, 76–78, 117, 237–240;
+  StatPearls 30969641, 30085590, 30137860, 31334942, 32491382, 31082045, 30422526, 29262242, 30855912, 31082185,
+  29083651; PMC13205449, PMC13681301, PMC5154401, PMC13750572, PMC12464809, PMC13385665, PMC12160079, PMC13491613,
+  PMC11706305, PMC11727880; Wikipedia. TOS percentages: neurogenic 80–95 %+ (sources differ), arterial <1 %; venous
+  2–3 % (PMC13205449) vs 4–20 % (Wikipedia) not shown.
+- Wikipedia "Rib cage" cites OpenStax and is excluded: the statements it supported in the older sheet (`thorax.md` G6)
+  are re-sourced with StatPearls, attributed to Gray ("vertebrosternal", "vertebrochondral", "vertebral ribs",
+  intra-articular ligament) or removed (Part H). Rib 10 meeting one vertebra: Gray always, StatPearls a variant.
+- Independent review (2026-11-18), fixed: mediastinum drawing line at T4/T5; single-source TOS space details
+  removed; brachiocephalic trunk added to the inlet; bucket-handle ribs 7–10.
 ## Upper limb — `upper-limb/upper-limb.html`, `upper-limb/bones.html` (2026-11-14)
 
 **Sources.** Gray 1918: 107/49–56 (clavicle to phalanges); Wikipedia "Clavicle", "Scapula", "Humerus", "Radius (bone)",
@@ -504,6 +523,13 @@ ani (S3–S4 + pudendal) from coccygeus (sacral plexus, S4–S5 in Gray); oesoph
 crus"; referred shoulder pain limited to the central diaphragm, supraclavicular roots C3–C4; left crus "L1–L2; one
 source L2–L3".
 
+- Additions (2026-11-18; `fill-trunk.md` Parts E–F): anterior abdominal wall layers (Camper, Scarpa with attachments
+  and continuity, transversalis fascia, extraperitoneal fat), wall arteries in 3D (right side of the body-vessels pack;
+  the superficial circumflex iliac artery is not in the model), diaphragm development, Bochdalek/Morgagni, sliding vs
+  rolling hiatal hernia (types I–IV), eventration, traumatic rupture. Gray pp. 117, 118, 135, 148, 156, 157;
+  StatPearls 31985930, 30247850, 29939686, 30725841, 32965871, 32310536, 32809332, 29262087; PMC12213017,
+  PMC13509838, PMC13179270, PMC13448060; Wikipedia (Gray copies not counted). Left out: "sternocostal triangle" (in no
+  source read), hiatal type II "rarest" (one source).
 ## Muscles of the Head and Neck — `head-neck/muscles.html`
 
 **Meshes:** skull, hyoid, C1–C7, T1–T2, manubrium, first and second ribs and costal cartilage, clavicles and right

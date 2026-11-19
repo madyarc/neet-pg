@@ -9,6 +9,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="../assets/atlas.css">
 <style>
+/* page-only schematic colours (no meaning elsewhere): mediastinal parts, muscle (diaphragm in the drawing, neck and shoulder muscles in 3D), dimension arrows */
+:root{--s-sup:#cfe3f5;--s-ant:#f5e3c4;--s-mid:#f3cfd3;--s-post:#d5ecd4;--s-musc:#c98f8a;--s-arrow:#5b3fa8;--s-line:#3c4556}
+:root[data-theme="dark"]{--s-sup:#29425c;--s-ant:#584a2c;--s-mid:#5a3238;--s-post:#2f4d33;--s-musc:#a86f6a;--s-arrow:#b9a4f0;--s-line:#aab3c2}
 .tabs{display:flex;gap:6px}
 .tabs .chip{font-size:13.5px;padding:6px 14px}
 .group-h{font:600 12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:10px 0 2px}
@@ -17,6 +20,13 @@
 .vgrid{display:flex;flex-wrap:wrap;gap:4px}
 .vgrid button{font:500 12px var(--f-mono);min-width:38px;padding:5px 6px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
 .vgrid button[aria-pressed="true"]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.schem svg{width:100%;height:auto;display:block}
+.schem text{font:500 11px var(--f-body);fill:var(--ink)}
+.schem .sm{font-size:9.5px;fill:var(--muted)}
+.anim-bar{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+.anim-bar input{flex:1;min-width:0;accent-color:var(--accent)}
+.subrow{display:flex;flex-wrap:wrap;gap:6px}
+.subrow .chip{font-size:12.5px;padding:4px 10px}
 </style>
 </head>
 <body>
@@ -32,7 +42,8 @@
   <div class="tabs scrollrow" role="tablist" aria-label="What to show">
     <button class="chip" role="tab" id="tab-regions" aria-pressed="true">Ribs</button>
     <button class="chip" role="tab" id="tab-curves" aria-pressed="false">Sternum and joints</button>
-    <button class="chip" role="tab" id="tab-discs" aria-pressed="false">Openings</button>
+    <button class="chip" role="tab" id="tab-discs" aria-pressed="false">Inlet, cavity, outlet</button>
+    <button class="chip" role="tab" id="tab-breath" aria-pressed="false">Breathing</button>
   </div>
   <div class="split">
     <div class="panel">
@@ -52,6 +63,16 @@
       </div>
       <div id="pane-discs" class="stack" hidden>
         <div class="cap key desc" id="disc-desc"></div>
+        <div class="legend" id="open-list"></div>
+        <div class="subrow" id="tos-spaces" hidden></div>
+        <div class="schem" id="open-schem" hidden></div>
+        <p class="note" id="open-note"></p>
+      </div>
+      <div id="pane-breath" class="stack" hidden>
+        <div class="cap key desc" id="breath-desc"></div>
+        <div class="schem" id="breath-schem"></div>
+        <div class="anim-bar"><button class="btn" id="breath-play" aria-pressed="false">Play</button><span>Expiration</span><input type="range" id="breath-s" min="0" max="1000" value="0" aria-label="From expiration to inspiration"><span>Inspiration</span></div>
+        <div class="legend" id="breath-list"></div>
       </div>
     </div>
   </div>
@@ -59,37 +80,61 @@
 
 <footer>
   <p id="based"></p>
-  <p>Models used: 3D bones and costal cartilages from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). BodyParts3D has costal cartilages 1–7 only, so the cartilages of ribs 8–10 are missing from the model.</p>
+  <p id="models"></p>
 </footer>
 </div>
 
 <script src="../assets/viewer.js"></script>
 <script>
 "use strict";
-/* ===================== DATA — checked in Gray's 1918, Wikipedia and StatPearls (see anatomy/DATA-SOURCES.md) ===================== */
+/* ===================== DATA — checked in Gray's 1918, Wikipedia, StatPearls and open-access papers
+   (see anatomy/DATA-SOURCES.md; fact sheets sources-local/facts/thorax.md and fill-trunk.md) ===================== */
 const DATA = {
-  lede: 'An osseo-cartilaginous cage that holds and protects the main organs of breathing and circulation: the 12 thoracic vertebrae behind, 12 pairs of ribs at the sides, the costal cartilages and the sternum in front. Tap a rib to select it, tap again to open it.',
-  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the thorax, sternum, ribs, costal cartilages and their joints; cross-checked with Wikipedia\'s articles and StatPearls (NCBI Bookshelf).',
+  lede: 'An osseo-cartilaginous cage that holds and protects the main organs of breathing and circulation: the 12 thoracic vertebrae behind, 12 pairs of ribs at the sides, the costal cartilages and the sternum in front. Tap a rib to select it, tap again to open it. The other tabs have the joints, the openings and the cavity, thoracic outlet syndrome, and how the ribs move in breathing.',
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the thorax, sternum, ribs, costal cartilages and their joints, the mechanism of the thorax and of respiration, the pleurae and the mediastinum; cross-checked with Wikipedia\'s articles, StatPearls (NCBI Bookshelf) and open-access reviews (thoracic outlet syndrome, the sternum, the costovertebral joints, rib kinematics).',
+  models: 'Models used: 3D bones and costal cartilages from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). BodyParts3D has costal cartilages 1–7 only, so the cartilages of ribs 8–10 are missing from the model. Vessels, nerves and the neck and shoulder muscles (shown only in the third tab) from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D); the outlet structures are shown on the right side only. The trachea, oesophagus, lungs, pleura, the phrenic nerve and the medial and lateral cords of the brachial plexus are not in the models. The plane of the sternal angle and the breathing drawings are schematic.',
   regionsIntro: 'Twelve ribs on each side (a cervical or lumbar rib may add one; there may be only eleven). They lengthen from the first to the seventh and then shorten. Tap a group or a rib.',
   regions: [
-    ['true', 'True ribs — 1 to 7', 'Joined behind to the vertebral column and in front to the sternum, each through its own costal cartilage (vertebrosternal ribs). Gray: the eighth cartilage sometimes reaches the sternum, more often on the right.'],
-    ['false', 'False ribs (vertebrochondral) — 8 to 10', 'False ribs are ribs 8–12 (Gray): ribs 8–10 join the cartilage of the rib above (vertebrochondral), and 11–12 float. Some texts (StatPearls) call only 8–10 false. The cartilages of ribs 8–10 are not in this model.'],
-    ['floating', 'Floating ribs — 11 and 12', 'Free at their front ends, which end in the abdominal wall (vertebral ribs).'],
+    ['true', 'True ribs — 1 to 7', 'Joined behind to the vertebral column and in front directly to the sternum, each through its own costal cartilage (Gray 1918 calls them vertebrosternal ribs). The eighth cartilage sometimes reaches the sternum too (Gray: more often on the right).'],
+    ['false', 'False ribs (vertebrochondral) — 8 to 10', 'Ribs 8–10 reach the sternum only indirectly: their cartilages join the cartilage above (Gray 1918 calls them vertebrochondral). Gray counts ribs 8–12 as false ribs; StatPearls calls only 8–10 false. The cartilages of ribs 8–10 are not in this model.'],
+    ['floating', 'Floating ribs — 11 and 12', 'They have no attachment to the sternum: their front ends are free (Gray 1918 calls them vertebral ribs).'],
     ['cart', 'Costal cartilages', 'Bars of hyaline cartilage that carry the ribs forward and make the chest wall elastic. Cartilages 1–7 reach the sternum; 8–10 join the cartilage above; 11 and 12 are free. They tend to ossify superficially in old age.'],
     ['sternum', 'Sternum', 'Manubrium, body and xiphoid process, in the middle of the front of the chest.'],
     ['vertebra', 'Thoracic vertebrae', 'The 12 thoracic vertebrae form the back of the cage.'],
   ],
-  curvesIntro: 'Joints of the cage. Tap one.',
+  curvesIntro: 'Joints of the cage: type, the surfaces that meet, and how they move. Tap one.',
   curves: [
-    ['costovertebral', 'Joints of the heads of the ribs', 'Each head meets the bodies of two neighbouring vertebrae and the disc between them; ribs 1, 10, 11 and 12 meet only one vertebra. Synovial plane joints (Gray: arthrodial) with a capsule and a radiate ligament; an intra-articular ligament from the crest of the head to the disc splits each into two cavities (not in ribs 1, 10, 11, 12).',
+    ['costovertebral', 'Joints of the heads of the ribs (costovertebral)', '<b>Type:</b> synovial plane joints (Gray: gliding or arthrodial). <b>Surfaces:</b> the two facets on the head of the rib meet the bodies of two neighbouring vertebrae and the disc between them; ribs 1, 11 and 12 meet only one vertebra, and rib 10 may too (Gray: always; StatPearls: a variant). A capsule and a radiate ligament hold them; Gray 1918: an intra-articular ligament from the crest of the head to the disc splits each into two cavities, except in ribs 1, 10, 11 and 12. <b>Movements:</b> only slight gliding, but the frequency of movement is very great. In the upper ribs the neck turns about its own axis, which raises and lowers the front end of the rib (the pump-handle movement: see the Breathing tab).',
       ['rib6_r', 't5', 't6']],
-    ['costotransverse', 'Costotransverse joints', 'The articular part of the tubercle meets the transverse process: a synovial plane joint. Absent in ribs 11 and 12.', ['rib6_r', 't6']],
+    ['costotransverse', 'Costotransverse joints', '<b>Type:</b> synovial plane joints with a small cavity and a weak capsule. <b>Surfaces:</b> the articular facet of the tubercle of the rib meets the costal facet on the transverse process of its own vertebra. Absent in ribs 11 and 12. Held by the costotransverse (ligament of the neck), superior costotransverse and lateral costotransverse (Gray: ligament of the tubercle) ligaments. <b>Movements:</b> slight gliding. In ribs 7–10 the facets are flat, so the tubercle glides up and down: this allows the bucket-handle movement (Breathing tab).', ['rib6_r', 't6']],
     ['sternocostal', 'Sternocostal joints', 'Cartilages 2–7 meet the sternum at synovial plane joints (Gray: arthrodial); the second has two cavities. The first cartilage is directly united with the manubrium: a primary cartilaginous joint (synchondrosis), with no cavity.',
       ['manubrium', 'sternum_body', 'xiphoid', 'cc1_r', 'cc2_r', 'cc3_r', 'cc4_r', 'cc5_r', 'cc6_r', 'cc7_r']],
-    ['manubriosternal', 'Manubriosternal joint', 'A secondary cartilaginous joint (symphysis) at the sternal angle: manubrium and body are joined by fibrocartilage. They sometimes fuse by bone, more often with age.', ['manubrium', 'sternum_body']],
-    ['interchondral', 'Interchondral joints', 'The touching borders of cartilages 6, 7 and 8 meet at small facets, each in a synovial capsule. Cartilages 9 and 10 are more often joined only by ligamentous fibres (Gray).', ['cc6_r', 'cc7_r']],
+    ['manubriosternal', 'Manubriosternal joint', '<b>Type:</b> a secondary cartilaginous joint (symphysis) at the sternal angle. <b>Surfaces:</b> the lower border of the manubrium and the upper border of the body, joined by fibrocartilage; the second costal cartilages meet the sternum at this level. They sometimes fuse by bone, more often with age. <b>Movements:</b> slight. As the upper ribs rise in inspiration they carry the sternum upward and forward, and the body moves a little on the manubrium at this joint; stiffening of the joint is one of the joint changes linked to reduced chest movement.', ['manubrium', 'sternum_body']],
+    ['xiphisternal', 'Xiphisternal joint', '<b>Type:</b> a cartilaginous joint (called the xiphisternal symphysis; Wikipedia: a synchondrosis). <b>Surfaces:</b> the lower end of the body of the sternum and the upper end of the xiphoid process. The xiphoid stays largely cartilaginous for long; the joint usually ossifies around the age of 40 (Gray: sometimes before 30, more often after 40, and sometimes never). Its movements are not described in the sources used.', ['sternum_body', 'xiphoid']],
+    ['costochondral', 'Costochondral joints', '<b>Type:</b> primary cartilaginous joints (synchondroses): the bone of the rib and its hyaline costal cartilage are united directly. <b>Surfaces:</b> the lateral end of each costal cartilage fits into a cup-shaped pit in the front (sternal) end of the rib, and the periosteum of the rib holds the two together. Tap the cartilages 1–7 in the model: each meets its rib at its outer end.',
+      ['rib1_r', 'rib2_r', 'rib3_r', 'rib4_r', 'rib5_r', 'rib6_r', 'rib7_r', 'cc1_r', 'cc2_r', 'cc3_r', 'cc4_r', 'cc5_r', 'cc6_r', 'cc7_r']],
+    ['interchondral', 'Interchondral joints', '<b>Type:</b> synovial plane joints, each in a thin capsule lined by synovial membrane and strengthened by interchondral ligaments. <b>Surfaces:</b> small, smooth, oblong facets on the touching borders of costal cartilages 6, 7 and 8 (Gray: sometimes 9 and 10; Wikipedia: synovial from the 6th to the 9th). The 9th and 10th cartilages are more often joined only by fibrous tissue. Together they make the costal margin. Cartilages 8–10 are not in this model.', ['cc6_r', 'cc7_r', 'rib8_r', 'rib9_r', 'rib10_r']],
   ],
-  discs: 'The upper opening (superior thoracic aperture) is formed by T1 behind, the first rib on each side and the upper border of the manubrium in front. It is kidney-shaped, wider from side to side, and slopes downward and forward, so its front is lower than its back. Gray: about 5 cm front to back and 10 cm across; Wikipedia: 6.5 × 11 cm. Wikipedia notes it is also called the thoracic inlet, and clinically the thoracic outlet. The lower opening is formed by T12, ribs 11 and 12, and the cartilages of ribs 7–10, which meet in the subcostal angle with the xiphoid process at its apex; the diaphragm closes it (Gray).',
+  openIntro: 'The two openings of the cage, the cavity between them, and the clinical "thoracic outlet". Tap a topic.',
+  open: [
+    ['inlet', 'Superior thoracic aperture (inlet)', 'Formed by T1 behind, the first rib on each side and the upper border of the manubrium in front. It is kidney-shaped, wider from side to side, and slopes downward and forward, so its front is lower than its back. Gray: about 5 cm front to back and 10 cm across; Wikipedia: 6.5 × 11 cm. Also called the thoracic inlet, and clinically the thoracic outlet (as in thoracic outlet syndrome).'],
+    ['through', 'Structures passing through the inlet', 'Between the neck and the superior mediastinum run: the trachea, in the midline behind the manubrium, with the oesophagus behind it; the thoracic duct; the left common carotid and left subclavian arteries, which with the brachiocephalic trunk arise from the arch of the aorta in the superior mediastinum; the brachiocephalic veins; the vagus, phrenic and left recurrent laryngeal nerves; lymph vessels. On each side the apex of the lung, covered by the cupula of the pleura, rises through the inlet into the root of the neck, above the level of the first rib. <b>Lit in 3D:</b> the arteries, veins and vagus nerves that are in the models (the trachea, oesophagus, lungs and phrenic nerve are not).'],
+    ['cavity', 'Thoracic cavity and the mediastinum', 'The cavity has a <b>pleural cavity</b> on each side, round each lung, and the <b>mediastinum</b> between them, from the sternum to the vertebral column; the two pleural cavities do not communicate. The mediastinum holds all the thoracic viscera except the lungs. A plane from the sternal angle back to the lower border of T4 (the T4/T5 disc) divides it into the <b>superior mediastinum</b> above and the <b>inferior mediastinum</b> below; the inferior part is divided by the pericardium into <b>anterior</b> (in front of it), <b>middle</b> (the pericardium and heart) and <b>posterior</b> (behind it) parts. The line on the model shows the plane (schematic).'],
+    ['outlet', 'Inferior thoracic aperture', 'Formed by T12, ribs 11 and 12, and the cartilages of ribs 7–10, which meet in the subcostal angle with the xiphoid process at its apex. It is wider from side to side and is closed by the diaphragm, which forms the floor of the thorax (Gray).'],
+    ['tos', 'Thoracic outlet syndrome', 'Compression of the nerves (brachial plexus), the subclavian artery or the subclavian vein as they pass from the lower neck over the first rib and under the clavicle to the axilla, bounded by the first rib, the scalene muscles and the clavicle. <b>Three forms:</b> <b>neurogenic</b>, by far the most common (about 80–95 % or more of cases; sources differ: pain, paraesthesia and weakness of the arm and hand; compression of the lower trunk, C8–T1, can weaken and waste the small muscles of the hand); <b>venous</b> (swelling, pain and heaviness or bluish discoloration of the arm) and <b>arterial</b> (the rarest: under 1 % of cases). <b>Cervical rib:</b> an extra rib from C7, in about 0.2–1 % of people (sources differ), on one or both sides; most cause no symptoms, but a cervical rib, or the fibrous band of an incomplete one, can narrow the outlet and cause TOS. Tap a space below.'],
+  ],
+  tosSpaces: [
+    ['isc', 'Interscalene triangle', 'Scalenus anterior in front, scalenus medius (and posterior) behind, the first rib below. Through it pass the brachial plexus (roots and trunks) and the subclavian artery. The subclavian vein runs in front of scalenus anterior, outside the triangle.'],
+    ['cc', 'Costoclavicular space', 'The narrow space between the clavicle above and the first rib below, through which the subclavian vessels and the brachial plexus pass to the axilla. Narrowing here is called costoclavicular syndrome.'],
+    ['pm', 'Retropectoralis minor (subcoracoid) space', 'The space behind pectoralis minor. Compression of the brachial plexus beneath pectoralis minor is called pectoralis minor syndrome; it is now thought to be a common site of nerve compression in neurogenic TOS.'],
+  ],
+  breathIntro: 'Breathing in enlarges the chest in three directions. Drag the slider (or Play) to move the schematic from expiration to inspiration; tap a row to light the ribs in 3D.',
+  breath: [
+    ['pump', 'Pump-handle movement: front to back (ribs 2–6)', 'The ribs slope downward to the front, so when a rib is raised about its neck its front end rises and is pushed forward, carrying the sternum upward and forward: the anteroposterior diameter of the chest increases. This dominates in the upper ribs (2–6; Gray: chiefly 3–6). The first rib, fixed rigidly to the manubrium, hardly moves in quiet breathing.', ['rib2_r', 'rib3_r', 'rib4_r', 'rib5_r', 'rib6_r', 'rib2_l', 'rib3_l', 'rib4_l', 'rib5_l', 'rib6_l', 'manubrium', 'sternum_body']],
+    ['bucket', 'Bucket-handle movement: side to side (ribs 7–10)', 'The lower ribs (7–10) are raised and move outward, like the handle of a bucket lifted from its side: the transverse diameter increases. The flat costotransverse facets of ribs 7–10 allow it. In fact most ribs combine both movements; the pump-handle part is larger above, the bucket-handle part below.', ['rib7_r', 'rib8_r', 'rib9_r', 'rib10_r', 'rib7_l', 'rib8_l', 'rib9_l', 'rib10_l']],
+    ['dia', 'Diaphragm: top to bottom (vertical diameter)', 'The diaphragm, the main muscle of inspiration, contracts and its dome descends, increasing the vertical diameter of the chest. Quiet expiration is passive: the elastic recoil of the lungs and chest wall; in forced expiration the abdominal muscles push the viscera and diaphragm back up. (The diaphragm itself is on the <a href="wall-muscles.html">trunk-wall muscles</a> page.)', ['rib7_r', 'rib8_r', 'rib9_r', 'rib10_r', 'rib11_r', 'rib12_r', 'rib7_l', 'rib8_l', 'rib9_l', 'rib10_l', 'rib11_l', 'rib12_l', 'xiphoid', 't12']],
+    ['types', 'Types of respiration', '<b>Abdominal (diaphragmatic) breathing:</b> driven mainly by the diaphragm, whose descent pushes the abdominal wall out, so the abdomen visibly moves. <b>Thoracic (costal) breathing:</b> the movement is mainly of the ribs, with the intercostal muscles and, in harder breathing, the accessory muscles of the upper chest and neck.', null],
+  ],
 };
 
 /* region of each part, colour per region (Paul Tol "light"; discs = cartilage) */
@@ -102,25 +147,89 @@ const TYPE_OF = k => { const m = /^rib(\d+)_/.exec(k); if (m) { const n = +m[1];
 const TYPE_TITLE = {first: 'First rib', second: 'Second rib', twelfth: 'Twelfth rib', typical: 'Typical rib', sternum: 'Sternum', vertebra: 'Thoracic vertebra'};
 const HREF = t => t === 'vertebra' ? '../back/vertebrae.html#thoracic' : 'ribs.html#' + t;
 
+/* extra layers, loaded only when a topic of the third tab needs them (right-side keys; '_l' = mirrored copy) */
+const PLEX = ['n_roots_of_brachial_plexus_r', 'n_superior_trunk_of_brachial_plexus_r', 'n_middle_trunk_of_brachial_plexus_r', 'n_inferior_trunk_of_brachial_plexus_r'];
+const DIVS = ['n_anterior_division_of_superior_trunk_of_brachial_plexus_r', 'n_anterior_division_of_middle_trunk_of_brachial_plexus_r', 'n_anterior_division_of_inferior_trunk_of_brachial_plexus_r',
+  'n_posterior_division_of_superior_trunk_of_brachial_plexus_r', 'n_posterior_division_of_middle_trunk_of_brachial_plexus_r', 'n_posterior_division_of_inferior_trunk_of_brachial_plexus_r'];
+const LAYERS = {
+  vessels: {base: '../models/body-vessels/', meta: 'vessels.json', model: 'body-vessels.json', colour: d => '--' + d.kind,
+    keys: ['v_left_common_carotid_artery', 'v_left_subclavian_artery', 'v_brachiocephalic_trunk', 'v_left_brachiocephalic_vein', 'v_right_brachiocephalic_vein',
+      'v_right_subclavian_artery', 'v_axillary_artery_r', 'v_right_subclavian_vein', 'v_axillary_vein_r'], mirror: []},
+  nerves: {base: '../models/body-nerves/', meta: 'nerves.json', model: 'body-nerves.json', colour: () => '--nerve',
+    keys: ['n_vagus_nerve_x_r', 'n_vagus_nerve_x_l', ...PLEX, ...DIVS, 'n_posterior_cord_of_brachial_plexus_r'], mirror: []},
+  muscles: {base: '../models/body-muscles/', meta: 'muscles.json', model: 'body-muscles.json', colour: () => '--s-musc',
+    keys: ['m_scal_ant', 'm_scal_med', 'm_scal_post', 'm_subclavius', 'm_pec_minor'], mirror: []},
+  limb: {base: '../models/upper-limb/', model: 'upper-limb.json', colour: () => '--bone', keys: ['clavicle']},
+};
+const SHOW = {   // which extra parts each topic lights, and the view
+  through: {layers: ['vessels', 'nerves'], keys: ['v_left_common_carotid_artery', 'v_left_subclavian_artery', 'v_brachiocephalic_trunk', 'v_left_brachiocephalic_vein', 'v_right_brachiocephalic_vein', 'n_vagus_nerve_x_r', 'n_vagus_nerve_x_l'],
+    bones: ['rib1_r', 'rib1_l', 't1', 'manubrium'], dir: [0.15, -1, 0.9]},
+  tos: {layers: ['vessels', 'nerves', 'muscles', 'limb'], keys: ['m_scal_ant', 'm_scal_med', 'm_scal_post', 'm_subclavius', 'm_pec_minor', 'clavicle', 'v_right_subclavian_artery', 'v_axillary_artery_r',
+    'v_right_subclavian_vein', 'v_axillary_vein_r', ...PLEX, ...DIVS, 'n_posterior_cord_of_brachial_plexus_r'], bones: ['rib1_r', 'rib2_r', 't1', 'manubrium'], dir: [-0.8, -1, 0.35]},
+  isc: {keys: ['m_scal_ant', 'm_scal_med', 'm_scal_post', 'v_right_subclavian_artery', ...PLEX], bones: ['rib1_r'], dir: [-1, -0.45, 0.25]},
+  cc: {keys: ['clavicle', 'm_subclavius', 'm_scal_ant', 'v_right_subclavian_vein', 'v_right_subclavian_artery', ...DIVS], bones: ['rib1_r'], dir: [-0.6, -1, 0.2]},
+  pm: {keys: ['m_pec_minor', 'v_axillary_artery_r', 'v_axillary_vein_r', 'n_posterior_cord_of_brachial_plexus_r', ...DIVS], bones: ['rib2_r', 'rib3_r', 'rib4_r'], dir: [-0.7, -1, 0.1]},
+};
+
 /* ===================== PAGE ===================== */
 const v = new AtlasViewer(document.getElementById('v'));
+window.atlas = v;
 const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
-let man = null, names = {}, tab = 'regions', picked = null;
-const views = [['Front', [0, -1, 0]], ['Left side', [1, 0, 0]], ['Back', [0, 1, 0]], ['Right side', [-1, 0, 0]]];
+const $ = id => document.getElementById(id);
+let man = null, names = {}, tab = 'regions', picked = null, BASE = [];
+const extra = {};            // key -> colour token, for parts of the extra layers
+let shown = new Set();       // extra parts shown now
+const views = [['Front', [0, -1, 0]], ['Left side', [1, 0, 0]], ['Back', [0, 1, 0]], ['Right side', [-1, 0, 0]], ['Above', [0, -0.25, 1]]];
 for (const [label, dir] of views) {
   const b = document.createElement('button'); b.className = 'btn'; b.textContent = label;
-  b.onclick = () => v.face(dir, {zoom: 1}); document.getElementById('views').append(b);
+  b.onclick = () => v.face(dir, {zoom: 1}); $('views').append(b);
 }
 const pressed = (sel, key) => document.querySelectorAll(sel).forEach(b => b.setAttribute('aria-pressed', b.dataset.k === key));
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 
 function paint(focus = null) {
-  for (const k of v.order) { v.setColour(k, COLOURS[REGION_OF(k)]); v.setVertexMarks(k, null); }
-  v.setFocus(focus);
+  for (const k of BASE) { v.setColour(k, COLOURS[REGION_OF(k)]); v.setVertexMarks(k, null); }
+  for (const k in extra) { v.setColour(k, extra[k]); v.setVisible(k, shown.has(k)); }
+  v.setFocus(focus); v.setLines(null); v.setMarkers(null);
 }
 function typeTitle(t) { return TYPE_TITLE[t] || t; }
 
-/* tap a vertebra: select it; tap again (or the button) to open its type's page */
+/* the extra layers: one packed file each, fetched once, only the listed parts decoded */
+const loading = {};
+function loadLayer(name) {
+  if (loading[name]) return loading[name];
+  const L = LAYERS[name];
+  return loading[name] = (async () => {
+    const meta = L.meta ? await (await fetch(L.base + L.meta)).json() : null;
+    const M = meta && meta.mirror;
+    await v.load(L.base + L.model, L.keys.filter(k => !k.endsWith('_l') || !meta || meta.parts[k]), {fit: false,
+      extra: (m, items) => items.filter(it => meta && meta.parts[it.key] && meta.parts[it.key].mirror && L.mirror.includes(it.key))
+        .map(it => ({key: it.key + '_l', m: v.mirrored(it.m, M.m, M.t), info: {name: it.info.name}}))});
+    for (const k of L.keys) if (v.parts.has(k)) {
+      extra[k] = L.colour(meta ? meta.parts[k] : {}); names[k] = v.parts.get(k).info.name; v.setColour(k, extra[k]); v.setVisible(k, shown.has(k));
+    }
+  })().catch(e => { loading[name] = null; throw e; });
+}
+async function showTopic(key) {
+  const S = SHOW[key];
+  shown = new Set();
+  if (S && S.layers) {
+    $('open-note').textContent = 'Loading the vessels, nerves and muscles…';
+    try { await Promise.all(S.layers.map(loadLayer)); $('open-note').textContent = ''; }
+    catch (e) { $('open-note').textContent = 'Could not load the extra 3D layers: ' + e.message; window.loadError = String(e); }
+  }
+  if (tab !== 'discs') return;
+  const keys = S ? S.keys.filter(k => v.parts.has(k)) : [];
+  shown = new Set(keys);
+  paint();
+  return keys;
+}
+
+/* tap a part: select it; tap again (or the button) to open its type's page */
 function pick(key) {
+  if (key in extra) { picked = null; v.setFocus([key]); card.hidden = false;
+    card.innerHTML = `<div class="what"><b>${names[key]}</b><span>${key.startsWith('v_') ? (extra[key] === '--vein' ? 'Vein' : 'Artery') : key.startsWith('n_') ? 'Nerve' : key === 'clavicle' ? 'Bone' : 'Muscle'}</span></div><button class="x" aria-label="Clear">×</button>`;
+    card.querySelector('.x').onclick = clearPick; return; }
   const t = TYPE_OF(key);
   if (!t) { picked = null; v.setFocus([key]); card.hidden = false; card.innerHTML = `<div class="what"><b>${names[key]}</b><span>Costal cartilage</span></div><button class="x" aria-label="Clear">×</button>`; card.querySelector('.x').onclick = clearPick; return; }
   if (picked === key) { location.href = HREF(t); return; }
@@ -131,22 +240,22 @@ function pick(key) {
   card.innerHTML = `<div class="what"><b>${names[key]}</b><span>${typeTitle(t)} · tap again to open</span></div><a class="go" href="${HREF(t)}">Open →</a><button class="x" aria-label="Clear">×</button>`;
   card.querySelector('.x').onclick = clearPick;
 }
-function clearPick() { picked = null; card.hidden = true; pressed('#vgrid button', null); paint(); }
+function clearPick() { picked = null; card.hidden = true; pressed('#vgrid button', null); if (tab !== 'discs') shown = new Set(); paint(); }
 
 function buildRegions() {
-  const box = document.getElementById('reg-list'); box.replaceChildren();
+  const box = $('reg-list'); box.replaceChildren();
   for (const [key, name, text] of DATA.regions) {
     const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
     b.innerHTML = `<i style="background:${COLOURS[key].startsWith('--') ? 'var(' + COLOURS[key] + ')' : COLOURS[key]}"></i><span>${name}</span>`;
     b.onclick = () => {
       clearPick(); pressed('#reg-list button', key);
-      document.getElementById('reg-desc').innerHTML = `<b>${name}.</b> ${text}`;
-      const keys = v.order.filter(k => REGION_OF(k) === key);
+      $('reg-desc').innerHTML = `<b>${name}.</b> ${text}`;
+      const keys = BASE.filter(k => REGION_OF(k) === key);
       v.setFocus(keys); v.fit(keys); v.face([0.6, -1, 0], {zoom: 1});
     };
     box.append(b);
   }
-  const g = document.getElementById('vgrid'); g.replaceChildren();
+  const g = $('vgrid'); g.replaceChildren();
   const SEQ = [...[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(i => 'rib' + i + '_r'), 'manubrium', 'sternum_body', 'xiphoid'];
   for (const k of SEQ.filter(k => v.parts.has(k))) {
     const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
@@ -156,52 +265,183 @@ function buildRegions() {
   }
 }
 function buildCurves() {
-  const box = document.getElementById('curve-list'); box.replaceChildren();
+  const box = $('curve-list'); box.replaceChildren();
   for (const [key, name, text, keys] of DATA.curves) {
     const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
     b.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${name}</span>`;
     b.onclick = () => {
       pressed('#curve-list button', key);
-      document.getElementById('curve-desc').innerHTML = `<b>${name}.</b> ${text}`;
+      $('curve-desc').innerHTML = `<b>${name}.</b> ${text}`;
       v.setFocus(keys);
     };
     box.append(b);
   }
 }
-function selectDisc(key) {
-  setTab('discs', false);
-  v.setFocus([key]);
-  document.getElementById('disc-desc').innerHTML = `<b>${names[key]}.</b> ${DATA.discs}`;
+
+/* ----- third tab: inlet, cavity, outlet, TOS ----- */
+const MEDIASTINUM_SVG = `<svg viewBox="-22 0 382 220" role="img" aria-label="Schematic side view of the divisions of the mediastinum">
+  <path d="M40 30 Q38 120 58 200 L300 200 Q318 120 312 30 Z" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+  <path d="M40 30 L312 30 L312 110 L40 80 Z" fill="var(--s-sup)"/>
+  <path d="M40 80 L118 89 Q100 150 62 196 Q44 140 42 80 Z" fill="var(--s-ant)"/>
+  <ellipse cx="172" cy="150" rx="64" ry="46" fill="var(--s-mid)"/>
+  <path d="M238 103 L312 110 L312 196 L232 196 Q254 150 238 103 Z" fill="var(--s-post)"/>
+  <rect x="30" y="26" width="14" height="52" rx="4" fill="var(--bone)" stroke="var(--s-line)" stroke-width=".8"/>
+  <rect x="34" y="82" width="14" height="96" rx="4" fill="var(--bone)" stroke="var(--s-line)" stroke-width=".8"/>
+  ${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<rect x="312" y="${24 + i * 22}" width="22" height="18" rx="3" fill="var(--bone)" stroke="var(--s-line)" stroke-width=".8"/>`).join('')}
+  <path d="M58 200 Q170 150 300 200" fill="none" stroke="var(--s-musc)" stroke-width="5"/>
+  <line x1="44" y1="80" x2="312" y2="110" stroke="var(--s-line)" stroke-width="1.6" stroke-dasharray="5 4"/>
+  <text x="150" y="58">Superior mediastinum</text>
+  <text x="52" y="126" class="sm">Anterior</text>
+  <text x="152" y="146">Middle</text><text x="128" y="160" class="sm">pericardium, heart</text>
+  <text x="256" y="146" class="sm">Posterior</text>
+  <text x="-20" y="74" class="sm">sternal</text><text x="-20" y="86" class="sm">angle</text>
+  <text x="338" y="103" class="sm">T4</text><text x="338" y="125" class="sm">T5</text>
+  <text x="150" y="214" class="sm">diaphragm</text>
+  <text x="2" y="20" class="sm">front</text><text x="326" y="20" class="sm">back</text>
+</svg><p class="note">Schematic, not to scale (sagittal view, front on the left).</p>`;
+function buildOpen() {
+  const box = $('open-list'); box.replaceChildren();
+  for (const [key, name, text] of DATA.open) {
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${name}</span>`;
+    b.onclick = () => openTopic(key);
+    box.append(b);
+  }
+  const sp = $('tos-spaces'); sp.replaceChildren();
+  for (const [key, name] of DATA.tosSpaces) {
+    const b = document.createElement('button'); b.className = 'chip'; b.dataset.k = key; b.setAttribute('aria-pressed', 'false'); b.textContent = name;
+    b.onclick = () => tosSpace(key); sp.append(b);
+  }
+}
+async function openTopic(key) {
+  clearPick(); pressed('#open-list button', key); pressed('#tos-spaces button', null);
+  const [, name, text] = DATA.open.find(o => o[0] === key);
+  $('disc-desc').innerHTML = `<b>${name}.</b> ${text}`;
+  $('tos-spaces').hidden = key !== 'tos';
+  $('open-schem').hidden = key !== 'cavity'; $('open-schem').innerHTML = key === 'cavity' ? MEDIASTINUM_SVG : '';
+  shown = new Set(); paint();
+  if (key === 'inlet') { const ks = BASE.filter(k => /^(rib1_|t1$|manubrium$)/.test(k)); v.setFocus(ks); v.fit(null); v.face([0, -0.5, 1], {zoom: 1}); }
+  if (key === 'outlet') { const ks = BASE.filter(k => /^(t12$|rib11_|rib12_|rib7_|rib8_|rib9_|rib10_|xiphoid$|cc7_)/.test(k)); v.setFocus(ks); v.fit(null); v.face([0, -0.5, -1], {zoom: 1}); }
+  if (key === 'cavity') {
+    const mb = v.parts.get('manubrium').bbox, t4 = v.parts.get('t4').bbox, z = (mb[0][2] + v.parts.get('sternum_body').bbox[1][2]) / 2;
+    const a = [0, mb[0][1] + 4, z], b = [0, t4[0][1], t4[0][2]];
+    v.setFocus(BASE.filter(k => /^(manubrium|sternum_body|xiphoid|t4|t5)$/.test(k)));
+    v.setLines([{a, b, color: '--mark', dash: '6 5'}]);
+    v.setMarkers([{p: [a[0], a[1] - 4, a[2]], label: 'Sternal angle', always: true}, {p: b, label: 'T4/T5 disc'}, {p: [0, (a[1] + b[1]) / 2, z + 32], label: 'Superior mediastinum', always: true}, {p: [0, (a[1] + b[1]) / 2, z - 70], label: 'Inferior mediastinum', always: true}]);
+    v.fit(null); v.face([1, -0.05, 0.05], {zoom: 1});
+  }
+  if (key === 'through' || key === 'tos') {
+    const ks = await showTopic(key); if (!ks) return;
+    if (!$('open-list').querySelector(`[data-k="${key}"][aria-pressed="true"]`)) return;   // the reader moved on
+    const S = SHOW[key];
+    v.setFocus(ks.concat(S.bones)); v.fit(ks.filter(k => !k.startsWith('n_vagus')).concat(S.bones)); v.face(S.dir, {zoom: 0.95});
+  }
+}
+async function tosSpace(key) {
+  pressed('#tos-spaces button', key);
+  const [, name, text] = DATA.tosSpaces.find(o => o[0] === key);
+  $('disc-desc').innerHTML = `<b>${name}.</b> ${text} <a href="#" id="tos-back">Back to thoracic outlet syndrome</a>`;
+  $('tos-back').onclick = e => { e.preventDefault(); openTopic('tos'); };
+  await Promise.all(SHOW.tos.layers.map(loadLayer));
+  const S = SHOW[key], ks = S.keys.filter(k => v.parts.has(k));
+  shown = new Set(SHOW.tos.keys.filter(k => v.parts.has(k))); paint();
+  v.setFocus(ks.concat(S.bones)); v.fit(ks.concat(S.bones)); v.face(S.dir, {zoom: 0.9});
+}
+
+/* ----- fourth tab: breathing (schematic animation) ----- */
+let breathS = 0, playing = false, raf = 0;
+function breathSvg(s) {
+  // three small panels; s = 0 (expiration) … 1 (inspiration); movements exaggerated for clarity
+  const rad = d => d * Math.PI / 180;
+  // 1. pump handle, side view (front = left): rib hinged at the spine end V, sternal end S
+  const V = [104, 40], L = 80, a0 = rad(32), a = a0 - rad(14) * s;              // rib slope below horizontal
+  const S = [V[0] - L * Math.cos(a), V[1] + L * Math.sin(a)];
+  const st = [[S[0] - 3, S[1] - 34], [S[0] + 3 - 4 * s, S[1] + 22]];
+  // 2. bucket handle, front view: handle from the vertebral end (top) to the sternal end (bottom), hanging laterally
+  const cx = 180, top = 44, bot = 96, w = 34 + 14 * s, mid = 92 - 14 * s;
+  const arc = side => `M${cx} ${top} Q${cx + side * (w + 26)} ${mid} ${cx} ${bot}`;
+  const half = 0.25 * (cx - (w + 26)) + 0.5 * cx + 0.25 * cx;   // x of the arc at its widest (quadratic midpoint)
+  const xw = cx + (w + 26) / 2;
+  // 3. diaphragm, front view: dome apex descends
+  const dx = 300, dy = 58 + 22 * s;
+  const f = n => n.toFixed(1);
+  return `<svg viewBox="0 0 360 150" role="img" aria-label="Schematic: pump-handle, bucket-handle and diaphragm movements">
+    <text x="60" y="14">Pump handle</text><text x="152" y="14">Bucket handle</text><text x="268" y="14">Diaphragm</text>
+    <text x="8" y="26" class="sm">side view, front left</text><text x="148" y="26" class="sm">front view</text><text x="262" y="26" class="sm">front view</text>
+    <rect x="104" y="30" width="10" height="100" rx="3" fill="var(--bone)" stroke="var(--s-line)" stroke-width=".8"/>
+    <line x1="${V[0]}" y1="${V[1]}" x2="${f(S[0])}" y2="${f(S[1])}" stroke="#77AADD" stroke-width="5" stroke-linecap="round"/>
+    <line x1="${f(st[0][0])}" y1="${f(st[0][1])}" x2="${f(st[1][0])}" y2="${f(st[1][1])}" stroke="#EEDD88" stroke-width="6" stroke-linecap="round"/>
+    <line x1="${f(S[0])}" y1="${f(S[1] + 30)}" x2="104" y2="${f(S[1] + 30)}" stroke="var(--s-arrow)" stroke-width="1.6" marker-start="url(#ah)" marker-end="url(#ah)"/>
+    <text x="${f((S[0] + 104) / 2 - 8)}" y="${f(S[1] + 44)}" class="sm">AP</text>
+    <circle cx="${cx}" cy="${top}" r="4" fill="var(--bone)" stroke="var(--s-line)"/><circle cx="${cx}" cy="${bot}" r="4" fill="var(--bone)" stroke="var(--s-line)"/>
+    <path d="${arc(1)}" fill="none" stroke="#EE8866" stroke-width="5"/><path d="${arc(-1)}" fill="none" stroke="#EE8866" stroke-width="5"/>
+    <line x1="${f(2 * cx - xw)}" y1="${f(mid / 2 + (top + bot) / 4 + 30)}" x2="${f(xw)}" y2="${f(mid / 2 + (top + bot) / 4 + 30)}" stroke="var(--s-arrow)" stroke-width="1.6" marker-start="url(#ah)" marker-end="url(#ah)"/>
+    <text x="${cx - 26}" y="${f(mid / 2 + (top + bot) / 4 + 44)}" class="sm">transverse</text>
+    <path d="M${dx - 46} 112 Q${dx - 46} ${f(dy)} ${dx} ${f(dy)} Q${dx + 46} ${f(dy)} ${dx + 46} 112" fill="none" stroke="var(--s-musc)" stroke-width="5"/>
+    <line x1="${dx - 52}" y1="34" x2="${dx + 52}" y2="34" stroke="var(--line)" stroke-width="1.5"/>
+    <line x1="${dx}" y1="36" x2="${dx}" y2="${f(dy - 4)}" stroke="var(--s-arrow)" stroke-width="1.6" marker-start="url(#ah)" marker-end="url(#ah)"/>
+    <text x="${dx + 4}" y="${f((36 + dy) / 2)}" class="sm">vertical</text>
+    <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="var(--s-arrow)"/></marker></defs>
+  </svg><p class="note">Schematic, not to scale; the movements are exaggerated. Blue: an upper rib; orange: a lower rib; red-brown: the diaphragm; yellow: the sternum.</p>`;
+}
+function drawBreath() { $('breath-schem').innerHTML = breathSvg(breathS); }
+function stopPlay() { playing = false; cancelAnimationFrame(raf); $('breath-play').textContent = 'Play'; $('breath-play').setAttribute('aria-pressed', 'false'); }
+$('breath-s').oninput = e => { stopPlay(); breathS = e.target.value / 1000; drawBreath(); };
+$('breath-play').onclick = () => {
+  if (playing) { stopPlay(); return; }
+  playing = true; $('breath-play').textContent = 'Pause'; $('breath-play').setAttribute('aria-pressed', 'true');
+  const t0 = performance.now() - Math.acos(1 - 2 * breathS) / (2 * Math.PI) * 4000;
+  const step = now => { if (!playing) return; breathS = (1 - Math.cos(2 * Math.PI * (now - t0) / 4000)) / 2; $('breath-s').value = Math.round(breathS * 1000); drawBreath(); raf = requestAnimationFrame(step); };
+  raf = requestAnimationFrame(step);
+};
+function buildBreath() {
+  const box = $('breath-list'); box.replaceChildren();
+  const sw = {pump: '#77AADD', bucket: '#EE8866', dia: 'var(--s-musc)', types: 'var(--line)'};
+  for (const [key, name, text, keys] of DATA.breath) {
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:${sw[key]}"></i><span>${name}</span>`;
+    b.onclick = () => {
+      pressed('#breath-list button', key);
+      $('breath-desc').innerHTML = `<b>${name}.</b> ${text}`;
+      v.setFocus(keys ? keys.filter(k => v.parts.has(k)) : null);
+      v.face(key === 'pump' ? [-1, -0.25, 0.1] : [0, -1, 0.1], {zoom: 1});
+    };
+    box.append(b);
+  }
+  drawBreath();
 }
 
 function setTab(name, move = true) {
-  tab = name; clearPick();
-  for (const t of ['regions', 'curves', 'discs']) {
-    document.getElementById('tab-' + t).setAttribute('aria-pressed', t === name);
-    document.getElementById('pane-' + t).hidden = t !== name;
+  tab = name; stopPlay(); shown = new Set(); clearPick();
+  for (const t of ['regions', 'curves', 'discs', 'breath']) {
+    $('tab-' + t).setAttribute('aria-pressed', t === name);
+    $('pane-' + t).hidden = t !== name;
   }
-  pressed('#reg-list button', null); pressed('#curve-list button', null);
+  pressed('#reg-list button', null); pressed('#curve-list button', null); pressed('#open-list button', null); pressed('#breath-list button', null);
+  $('tos-spaces').hidden = true; $('open-schem').hidden = true; $('open-note').textContent = '';
   paint();
-  if (name === 'regions') { document.getElementById('reg-desc').innerHTML = DATA.regionsIntro; if (move) { v.fit(null); v.face([0, -1, 0], {zoom: 1}); } }
-  if (name === 'curves') { document.getElementById('curve-desc').innerHTML = DATA.curvesIntro; if (move) { v.fit(null); v.face([-0.6, -1, 0.2], {zoom: 1}); } }
+  if (name === 'regions') { $('reg-desc').innerHTML = DATA.regionsIntro; if (move) { v.fit(null); v.face([0, -1, 0], {zoom: 1}); } }
+  if (name === 'curves') { $('curve-desc').innerHTML = DATA.curvesIntro; if (move) { v.fit(null); v.face([-0.6, -1, 0.2], {zoom: 1}); } }
   if (name === 'discs') {
-    document.getElementById('disc-desc').innerHTML = DATA.discs;
-    v.setFocus(v.order.filter(k => /^(rib1_|t1$|t12$|rib11_|rib12_|manubrium|xiphoid|cc7_)/.test(k)));
+    $('disc-desc').innerHTML = DATA.openIntro;
+    v.setFocus(BASE.filter(k => /^(rib1_|t1$|t12$|rib11_|rib12_|manubrium|xiphoid|cc7_)/.test(k)));
     if (move) { v.fit(null); v.face([0, -1, 0.6], {zoom: 1}); }
   }
+  if (name === 'breath') { $('breath-desc').innerHTML = DATA.breathIntro; if (move) { v.fit(null); v.face([0, -1, 0.1], {zoom: 1}); } }
 }
-for (const t of ['regions', 'curves', 'discs']) document.getElementById('tab-' + t).onclick = () => setTab(t);
+for (const t of ['regions', 'curves', 'discs', 'breath']) $('tab-' + t).onclick = () => setTab(t);
 v.onPick = hit => hit ? pick(hit.key) : clearPick();
 
 (async () => {
-  document.getElementById('lede').innerHTML = DATA.lede;
-  document.getElementById('based').innerHTML = DATA.based;
+  $('lede').innerHTML = DATA.lede;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
   man = await v.load('../models/thorax/thorax.json');
   for (const p of man.parts) names[p.key] = p.name;
-  buildRegions(); buildCurves();
+  BASE = man.parts.map(p => p.key);
+  buildRegions(); buildCurves(); buildOpen(); buildBreath();
   setTab('regions');
   window.ready = true;
-})().catch(e => { document.getElementById('reg-desc').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+})().catch(e => { $('reg-desc').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
 </script>
 </body>
 </html>

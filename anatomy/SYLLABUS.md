@@ -200,14 +200,14 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [x] **AN21.1** Identify and describe the salient features of sternum, typical rib and typical thoracic vertebra. — *sternum, typical rib: [Ribs and Sternum](thorax/ribs.html); typical thoracic vertebra: [The Vertebrae](back/vertebrae.html)*
 - [x] **AN21.2** Identify & describe the features of atypical ribs and atypical thoracic vertebrae. — *ribs 1, 2, 10, 11, 12: [Ribs and Sternum](thorax/ribs.html); T1, T9–T12: [The Vertebrae](back/vertebrae.html)*
-- [~] **AN21.3** Describe & demonstrate the boundaries of thoracic inlet, cavity and outlet along with its applied aspect.( Thoracic inlet Syndrome) — *boundaries of the openings: [The Thoracic Cage](thorax/thoracic-cage.html); cervical rib: [Ribs and Sternum](thorax/ribs.html)*
+- [x] **AN21.3** Describe & demonstrate the boundaries of thoracic inlet, cavity and outlet along with its applied aspect.( Thoracic inlet Syndrome) — *boundaries, structures through the inlet in 3D, mediastinum divisions, thoracic outlet syndrome (forms, cervical rib, interscalene, costoclavicular and retropectoralis minor spaces in 3D): [The Thoracic Cage](thorax/thoracic-cage.html)*
 - [x] **AN21.4** Describe & demonstrate extent, attachments, direction of fibres, nerve supply and actions of intercostal muscles — *external, internal and innermost intercostals: [Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 - [ ] **AN21.5** Describe & demonstrate origin, course, relations and branches of a typical intercostal nerve
 - [ ] **AN21.6** Mention origin, course and branches/ tributaries of: 1) anterior & posterior intercostal vessels 2) internal thoracic vessels
 - [ ] **AN21.7** Mention the origin, course, relations and branches of 1) atypical intercostal nerve 2) superior intercostal artery, subcostal artery
-- [~] **AN21.8** Describe & demonstrate type, articular surfaces & movements of manubriosternal, costovertebral, costotransverse and xiphisternal joints — *[The Thoracic Cage](thorax/thoracic-cage.html) (joints)*
-- [~] **AN21.9** Describe & demonstrate mechanics and types of respiration — *muscles of inspiration and expiration (quiet and forced): [Muscles of the Trunk Wall](thorax/wall-muscles.html)*
-- [~] **AN21.10** Describe costochondral and interchondral joints — *[The Thoracic Cage](thorax/thoracic-cage.html) (joints)*
+- [x] **AN21.8** Describe & demonstrate type, articular surfaces & movements of manubriosternal, costovertebral, costotransverse and xiphisternal joints — *type, surfaces and movements of the costovertebral, costotransverse, manubriosternal and xiphisternal joints (no source describes xiphisternal movement): [The Thoracic Cage](thorax/thoracic-cage.html)*
+- [x] **AN21.9** Describe & demonstrate mechanics and types of respiration — *pump-handle, bucket-handle and diaphragm (animated, ribs in 3D), quiet and forced breathing, abdominal and thoracic types: [The Thoracic Cage](thorax/thoracic-cage.html); muscles: [Muscles of the Trunk Wall](thorax/wall-muscles.html)*
+- [x] **AN21.10** Describe costochondral and interchondral joints — *costochondral (primary cartilaginous) and interchondral (synovial) joints: [The Thoracic Cage](thorax/thoracic-cage.html)*
 - [ ] **AN21.11** Mention boundaries and contents of the superior, anterior, middle and posterior mediastinum
 
 ### 22. Heart & Pericardium
@@ -396,7 +396,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 44. Anterior abdominal wall
 
 - [ ] **AN44.1** Describe & demonstrate the Planes (transpyloric, transtubercular, subcostal, lateral vertical, linea alba, linea semilunaris), regions & Quadrants of abdomen
-- [~] **AN44.2** Describe & identify the Fascia, nerves & blood vessels of anterior abdominal wall — *nerves of the wall and their plane (TAP block): [Muscles of the Trunk Wall](thorax/wall-muscles.html) (fascia and vessels not yet)*
+- [x] **AN44.2** Describe & identify the Fascia, nerves & blood vessels of anterior abdominal wall — *fascial layers (Camper, Scarpa and its continuity with Colles, transversalis, extraperitoneal fat), wall arteries in 3D, nerves and TAP plane: [Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 - [x] **AN44.3** Describe the formation of rectus sheath and its contents — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 - [x] **AN44.4** Describe & demonstrate extent, boundaries, contents of Inguinal canal including Hesselbach’s triangle. — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 - [x] **AN44.5** Explain the anatomical basis of inguinal hernia. — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
@@ -432,7 +432,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN47.11** Explain the anatomic basis of hematemesis& caput medusae in portal hypertension
 - [ ] **AN47.12** Describe important nerve plexuses of posterior abdominal wall
 - [x] **AN47.13** Describe & demonstrate the attachments, openings, nerve supply & action of the thoracoabdominal diaphragm — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
-- [~] **AN47.14** Describe the abnormal openings of thoracoabdominal diaphragm and diaphragmatic hernia — *hiatal, Bochdalek and Morgagni hernias: [Muscles of the Trunk Wall](thorax/wall-muscles.html)*
+- [x] **AN47.14** Describe the abnormal openings of thoracoabdominal diaphragm and diaphragmatic hernia — *development, Bochdalek and Morgagni hernias, sliding vs rolling hiatal hernia, eventration, traumatic rupture: [Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 
 ### 48. Pelvic wall and viscera
 
@@ -458,7 +458,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [x] **AN50.1** Describe the curvatures of the vertebral column — *[The Vertebral Column](back/vertebral-column.html)*
 - [x] **AN50.2** Describe & demonstrate the type, articular ends, ligaments and movements of Intervertebral joints, Sacroiliac joints & Pubic symphysis — *[Joints of the Jaw, Spine and Pelvis](back/joints.html); discs: [The Vertebral Column](back/vertebral-column.html)*
 - [ ] **AN50.3** Describe lumbar puncture (site, direction of the needle, structures pierced during the lumbar puncture)
-- [~] **AN50.4** Explain the anatomical basis of Scoliosis, Lordosis, Prolapsed disc, Spondylolisthesis & Spina bifida — *prolapsed disc only: [Joints of the Jaw, Spine and Pelvis](back/joints.html)*
+- [x] **AN50.4** Explain the anatomical basis of Scoliosis, Lordosis, Prolapsed disc, Spondylolisthesis & Spina bifida — *scoliosis, hyperlordosis, spondylolysis/spondylolisthesis (3D), spina bifida types: [The Vertebral Column](back/vertebral-column.html); prolapsed disc: [Joints of the Jaw, Spine and Pelvis](back/joints.html)*
 
 ### 51. Sectional Anatomy
 

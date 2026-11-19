@@ -17,6 +17,14 @@
 .vgrid{display:flex;flex-wrap:wrap;gap:4px}
 .vgrid button{font:500 12px var(--f-mono);min-width:38px;padding:5px 6px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
 .vgrid button[aria-pressed="true"]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+/* page-only schematic colours (no meaning elsewhere): skin, CSF, guide lines */
+:root{--s-skin:#e9c9b0;--s-csf:#cfe6f5;--s-line:#3c4556;--s-arrow:#5b3fa8}
+:root[data-theme="dark"]{--s-skin:#8a6a55;--s-csf:#2b4a60;--s-line:#aab3c2;--s-arrow:#b9a4f0}
+.schem svg{width:100%;height:auto;display:block}
+.schem text{font:500 11px var(--f-body);fill:var(--ink)}
+.schem .sm{font-size:9.5px;fill:var(--muted)}
+.subrow{display:flex;flex-wrap:wrap;gap:6px}
+.subrow .chip{font-size:12.5px;padding:4px 10px}
 </style>
 </head>
 <body>
@@ -33,6 +41,7 @@
     <button class="chip" role="tab" id="tab-regions" aria-pressed="true">Regions</button>
     <button class="chip" role="tab" id="tab-curves" aria-pressed="false">Curves</button>
     <button class="chip" role="tab" id="tab-discs" aria-pressed="false">Discs</button>
+    <button class="chip" role="tab" id="tab-clin" aria-pressed="false">Deformities and defects</button>
   </div>
   <div class="split">
     <div class="panel">
@@ -53,13 +62,19 @@
       <div id="pane-discs" class="stack" hidden>
         <div class="cap key desc" id="disc-desc"></div>
       </div>
+      <div id="pane-clin" class="stack" hidden>
+        <div class="cap key desc" id="clin-desc"></div>
+        <div class="subrow" id="clin-toggle" hidden><button class="chip" data-k="0" aria-pressed="true">Normal</button><button class="chip" data-k="1" aria-pressed="false">Show the change (schematic)</button></div>
+        <div class="schem" id="clin-schem"></div>
+        <div class="legend" id="clin-list"></div>
+      </div>
     </div>
   </div>
 </section>
 
 <footer>
   <p id="based"></p>
-  <p>Models used: 3D bones and discs from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). BodyParts3D models the sacrum and coccyx as one piece.</p>
+  <p>Models used: 3D bones and discs from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). BodyParts3D models the sacrum and coccyx as one piece. In the last tab the bent and slipped columns are schematic (each vertebra moved as a whole, exaggerated), and the pars interarticularis points are approximate.</p>
 </footer>
 </div>
 
@@ -69,7 +84,7 @@
 /* ===================== DATA — checked in Gray's 1918, Wikipedia and StatPearls (see anatomy/DATA-SOURCES.md) ===================== */
 const DATA = {
   lede: 'Usually 33 vertebrae: 7 cervical, 12 thoracic, 5 lumbar, 5 sacral (fused into the sacrum) and 4 coccygeal (the coccyx). Turn the column, tap a vertebra to select it, tap it again to open it.',
-  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the vertebral column and its joints; cross-checked with Wikipedia\'s articles and StatPearls (NCBI Bookshelf).',
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the vertebral column and its joints; cross-checked with Wikipedia\'s articles, StatPearls (NCBI Bookshelf) and open-access reviews (scoliosis, posture).',
   regionsIntro: 'The cervical, thoracic and lumbar vertebrae stay separate throughout life (Gray: true or movable vertebrae); the sacral and coccygeal ones unite in the adult into the sacrum and coccyx (false or fixed vertebrae). Tap a region or a vertebra.',
   regions: [
     ['cervical', 'Cervical — 7', 'The smallest movable vertebrae, recognised by a foramen in each transverse process. C1 (atlas), C2 (axis) and C7 are atypical. The number of cervical vertebrae very rarely changes.'],
@@ -91,6 +106,16 @@ const DATA = {
   discs: 'The intervertebral discs lie between the bodies of neighbouring vertebrae, from the axis to the sacrum, and are the chief bonds between them. Each has an outer ring, the annulus fibrosus (layers of fibrous tissue and fibrocartilage whose fibres cross like an X), and a soft, elastic centre, the nucleus pulposus, a remnant of the notochord. Gray: the discs are thicker in front in the cervical and lumbar regions, adding to their forward curves, and make up about a quarter of the length of the column (below the axis). Wikipedia: 23 discs.',
 };
 
+const CLIN = {
+  intro: 'How the column can go wrong in shape or development. Tap a condition; then switch between the normal column and the change (schematic).',
+  items: [
+    ['scoliosis', 'Scoliosis', '<b>A sideways curvature of the column combined with rotation of the vertebrae</b>: a three-dimensional deformity. It is confirmed on an X-ray when the Cobb angle (between the end plates of the most tilted vertebrae at the ends of the curve) is 10° or more. <b>Idiopathic</b> scoliosis, of unknown cause, is the commonest (about 65–85 % of cases; sources differ), and its adolescent form is the commonest in children. Other causes are <b>congenital</b> (malformed vertebrae) and <b>neuromuscular</b> disease. Severe curves can affect the heart and lungs. Screening uses the forward-bend (Adam\'s) test. (Gray notes a slight normal lateral curve, convex to the right.)'],
+    ['lordosis', 'Lordosis and hyperlordosis', '<b>Lordosis</b> is the normal forward convexity of the cervical and lumbar curves (see the Curves tab); the lumbar curve is more marked in the female. <b>Hyperlordosis</b> (hollow back) is an exaggerated inward (forward-convex) lumbar curve; it is linked to a higher body mass index (excess abdominal fat).'],
+    ['spondy', 'Spondylolysis and spondylolisthesis', '<b>Pars interarticularis</b>: the narrow bridge of bone on each side of the vertebral arch, between the superior and inferior articular processes. <b>Spondylolysis</b> is a defect there, usually a stress (fatigue) fracture from repeated loading in extension and rotation, as in adolescent athletes; it is almost always in the lower lumbar spine, most often at L5. <b>Spondylolisthesis</b> is the forward slip of a vertebra on the one below, most important at L5–S1. When the pars defects are on both sides the vertebra can slip forward: <b>isthmic</b> spondylolisthesis (Wikipedia: the commonest type). Other types are dysplastic (congenital), degenerative (arthritis and instability of the facet joints, without a pars defect, in older adults), traumatic, pathological and iatrogenic (after surgery). <b>Meyerding grades</b>, by the slip as a share of the width of the vertebra below: I under 25 %, II 25–50 %, III 50–75 %, IV 75–100 %, and over 100 % spondyloptosis. The slip can narrow the canal and the foramina and compress nerve roots.'],
+    ['bifida', 'Spina bifida', 'A neural tube defect: the two halves of the vertebral arch (the laminae) fail to unite, leaving a cleft in the arch, through which the spinal membranes, and often the cord itself, may protrude. <b>Spina bifida occulta</b> (closed): the mildest; a hidden bony defect with skin over it, often marked only by a tuft of hair, a dimple, a haemangioma or a fatty lump. <b>Meningocele</b>: a sac of meninges filled with CSF protrudes through the defect, the cord stays in the canal; usually no lasting neurological problems; the least common form. <b>Myelomeningocele</b>: the spinal cord itself protrudes into the sac, exposed; the commonest of the open (cystic) forms, with weakness or paralysis of the lower limbs, bladder and bowel dysfunction, and often hydrocephalus and Chiari II malformation. Risk is raised by too little folic acid before pregnancy; raised maternal serum alpha-fetoprotein (in the open forms, not in occulta) and ultrasound detect it before birth. The lit area on the model shows where the laminae meet in the midline (schematic).'],
+    ['disc', 'Prolapsed intervertebral disc', 'The nucleus pulposus pushes out through a tear in the annulus fibrosus, usually posterolaterally, and presses on a nerve root; commonest at L4–L5 and L5–S1. In 3D, with the root it compresses, on the <a href="joints.html">joints of the spine</a> page.'],
+  ],
+};
 /* region of each part, colour per region (Paul Tol "light"; discs = cartilage) */
 const REGION_OF = k => k.startsWith('disc') ? 'disc' : k === 'sacrum' ? 'sacral' : {c: 'cervical', t: 'thoracic', l: 'lumbar'}[k[0]];
 const COLOURS = {cervical: '#77AADD', thoracic: '#EE8866', lumbar: '#BBCC33', sacral: '#EEDD88', disc: '--cart'};
@@ -101,6 +126,7 @@ const TYPE_TITLE = {atlas: 'Atlas', axis: 'Axis', c7: 'Vertebra prominens', cerv
 
 /* ===================== PAGE ===================== */
 const v = new AtlasViewer(document.getElementById('v'));
+window.atlas = v;   // for tests
 const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
 let man = null, names = {}, tab = 'regions', picked = null;
 const views = [['Front', [0, -1, 0]], ['Left side', [1, 0, 0]], ['Back', [0, 1, 0]], ['Right side', [-1, 0, 0]]];
@@ -172,8 +198,8 @@ function selectDisc(key) {
 }
 
 function setTab(name, move = true) {
-  tab = name; clearPick();
-  for (const t of ['regions', 'curves', 'discs']) {
+  tab = name; clearPick(); deform(null, 0); clinKey = null; pressed('#clin-list button', null); $('clin-toggle').hidden = true; $('clin-schem').innerHTML = '';
+  for (const t of ['regions', 'curves', 'discs', 'clin']) {
     document.getElementById('tab-' + t).setAttribute('aria-pressed', t === name);
     document.getElementById('pane-' + t).hidden = t !== name;
   }
@@ -186,16 +212,140 @@ function setTab(name, move = true) {
     v.setFocus(v.order.filter(k => k.startsWith('disc')));
     if (move) { v.fit(null); v.face([-1, -0.3, 0], {zoom: 1}); }
   }
+  if (name === 'clin') { $('clin-desc').innerHTML = CLIN.intro; if (move) { v.fit(null); v.face([0, 1, 0], {zoom: 1}); } }
 }
-for (const t of ['regions', 'curves', 'discs']) document.getElementById('tab-' + t).onclick = () => setTab(t);
+for (const t of ['regions', 'curves', 'discs', 'clin']) document.getElementById('tab-' + t).onclick = () => setTab(t);
 v.onPick = hit => hit ? pick(hit.key) : clearPick();
+
+/* ----- last tab: deformities and defects ----- */
+const $ = id => document.getElementById(id);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+let clinKey = null, amount = 0, animId = 0;
+const zc = k => { const b = v.parts.get(k).bbox; return (b[0][2] + b[1][2]) / 2; };
+const yc = k => { const b = v.parts.get(k).bbox; return (b[0][1] + b[1][1]) / 2; };
+const xcen = k => { const b = v.parts.get(k).bbox; return [(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2, (b[0][2] + b[1][2]) / 2]; };
+/* move each vertebra and disc as a whole along a schematic curve (k = 0 normal … 1 full change) */
+function deform(type, k) {
+  if (!man) return;
+  const bot = v.parts.get('l5').bbox[0][2], top = v.parts.get('t1').bbox[1][2], t12 = zc('t12');
+  for (const key of v.order) {
+    if (key === 'sacrum' || !type || k === 0) { v.setTransform(key, null); continue; }
+    const c = xcen(key), z = c[2];
+    if (type === 'scoliosis') {          // right thoracic, left lumbar S-curve seen from behind (+x = body's left)
+      const A = 24 * k, L = top - bot, t = Math.max(0, Math.min(1, (z - bot) / L));
+      const f = A * Math.sin(2 * Math.PI * t), slope = z > top || z < bot ? 0 : A * 2 * Math.PI / L * Math.cos(2 * Math.PI * t);
+      const R = AtlasViewer.rotation([0, 1, 0], Math.atan(slope) * 180 / Math.PI, c);
+      v.setTransform(key, R.m, [R.t[0] + f, R.t[1], R.t[2]]);
+    } else if (type === 'lordosis') {    // deeper forward (−y) bow of the lumbar segment between L5 and T12
+      if (z <= bot || z >= t12) { v.setTransform(key, null); continue; }
+      const B = 14 * k, L = t12 - bot, t = (z - bot) / L, g = -B * Math.sin(Math.PI * t), slope = -B * Math.PI / L * Math.cos(Math.PI * t);
+      const R = AtlasViewer.rotation([1, 0, 0], -Math.atan(slope) * 180 / Math.PI, c);
+      v.setTransform(key, R.m, [R.t[0], R.t[1] + g, R.t[2]]);
+    } else if (type === 'spondy') {      // L5 and everything above slips forward on S1 (about grade II)
+      const s = key === 'disc_l5' ? -7 * k : z > v.parts.get('disc_l5').bbox[1][2] - 2 ? -14 * k : 0;
+      v.setTransform(key, s ? [[1, 0, 0], [0, 1, 0], [0, 0, 1]] : null, [0, s, 0]);
+    }
+  }
+}
+function animateTo(target) {
+  const from = amount, t0 = performance.now(), id = ++animId, dur = matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 700;
+  const step = now => { if (id !== animId) return; const e = Math.min(1, (now - t0) / dur); amount = from + (target - from) * (e < .5 ? 2 * e * e : 1 - (-2 * e + 2) ** 2 / 2);
+    deform(clinKey, amount); if (e < 1) requestAnimationFrame(step); else if (clinKey === 'spondy') parsMarks(); };
+  requestAnimationFrame(step);
+}
+/* pars interarticularis of L5, both sides: the L5 vertex nearest a point placed from the L3 landmarks of the detailed
+   spine (between the superior and inferior articular processes), moved down to L5 — approximate, checked by eye */
+function parsMarks() {
+  const p = v.parts.get('l5'), m = p.m, dy = amount * -14, out = [];
+  for (const side of [-1, 1]) {
+    const est = [side * 19, -55, 940];
+    let best = 0, bd = 1e18;
+    for (let i = 0; i < m.nv; i++) { const d = (m.pos[i * 3] - est[0]) ** 2 + (m.pos[i * 3 + 1] - est[1]) ** 2 + (m.pos[i * 3 + 2] - est[2]) ** 2; if (d < bd) { bd = d; best = i; } }
+    out.push({p: [m.pos[best * 3], m.pos[best * 3 + 1] + dy, m.pos[best * 3 + 2]], label: side < 0 ? 'Pars interarticularis (approx.)' : '', color: css('--mark')});
+  }
+  v.setMarkers(out);
+}
+const SB = (x, title, kind) => {
+  // cross-section seen from below: body in front (top of the drawing), arch behind with a midline cleft; skin at the bottom
+  const sac = kind === 'occ' ? '' : `<path d="M${x + 48} 112 Q${x + 30} 150 ${x + 60} 158 Q${x + 90} 150 ${x + 72} 112 Z" fill="var(--s-csf)" stroke="var(--dura)" stroke-width="2.5"/>`;
+  const cord = kind === 'mmc' ? `<ellipse cx="${x + 60}" cy="140" rx="9" ry="7" fill="var(--nerve)" stroke="var(--s-line)" stroke-width=".6"/>` : `<ellipse cx="${x + 60}" cy="82" rx="9" ry="7" fill="var(--nerve)" stroke="var(--s-line)" stroke-width=".6"/>`;
+  const skin = kind === 'occ' ? `<path d="M${x} 122 L${x + 120} 122" stroke="var(--s-skin)" stroke-width="7"/><text x="${x + 56}" y="138" class="sm">hair</text><path d="M${x + 60} 118 l-4 -8 M${x + 60} 118 l0 -9 M${x + 60} 118 l4 -8" stroke="var(--s-line)" stroke-width=".8"/>`
+    : kind === 'mc' ? `<path d="M${x} 122 L${x + 40} 122 Q${x + 26} 166 ${x + 60} 166 Q${x + 94} 166 ${x + 80} 122 L${x + 120} 122" fill="none" stroke="var(--s-skin)" stroke-width="5"/>`
+    : `<path d="M${x} 122 L${x + 40} 122 M${x + 80} 122 L${x + 120} 122" stroke="var(--s-skin)" stroke-width="7"/>`;
+  return `<text x="${x + 4}" y="14">${title}</text>
+    <ellipse cx="${x + 60}" cy="44" rx="30" ry="18" fill="var(--bone)" stroke="var(--s-line)" stroke-width=".8"/>
+    <path d="M${x + 38} 58 L${x + 30} 92 Q${x + 34} 104 ${x + 52} 108 M${x + 82} 58 L${x + 90} 92 Q${x + 86} 104 ${x + 68} 108" fill="none" stroke="var(--bone)" stroke-width="9" stroke-linecap="round"/>
+    <ellipse cx="${x + 60}" cy="${kind === 'mmc' ? 120 : 84}" rx="15" ry="${kind === 'mmc' ? 10 : 14}" fill="var(--s-csf)" stroke="var(--dura)" stroke-width="2"/>${sac}${cord}${skin}`;
+};
+const SCHEM = {
+  scoliosis: () => { let b = ''; for (let i = 0; i < 17; i++) { const t = i / 16, x = 90 - 26 * Math.sin(2 * Math.PI * t), sl = -26 * 2 * Math.PI * Math.cos(2 * Math.PI * t) / 160, a = Math.atan(sl) * 180 / Math.PI;
+      b += `<rect x="${(x - 11).toFixed(1)}" y="${(170 - t * 160 - 4).toFixed(1)}" width="22" height="8" rx="2" fill="var(--bone)" stroke="var(--s-line)" stroke-width=".7" transform="rotate(${a.toFixed(1)} ${x.toFixed(1)} ${(170 - t * 160).toFixed(1)})"/>`; }
+    return `<svg viewBox="0 0 360 190" role="img" aria-label="Schematic of a scoliotic curve and the Cobb angle">${b}
+      ${[0.5, 1].map(t => { const x = 90 - 26 * Math.sin(2 * Math.PI * t), y = 170 - 160 * t, a = Math.atan(-26 * 2 * Math.PI * Math.cos(2 * Math.PI * t) / 160);
+        return `<line x1="${(x + 14 * Math.cos(a)).toFixed(1)}" y1="${(y + 14 * Math.sin(a)).toFixed(1)}" x2="${(x - 70 * Math.cos(a)).toFixed(1)}" y2="${(y - 70 * Math.sin(a)).toFixed(1)}" stroke="var(--s-arrow)" stroke-width="1.4"/>`; }).join('')}
+      <text x="14" y="54" class="sm">Cobb</text>
+      <text x="205" y="40">Seen from behind</text><text x="205" y="58" class="sm">right thoracic curve,</text><text x="205" y="70" class="sm">left lumbar curve</text>
+      <text x="205" y="100">Cobb angle</text><text x="205" y="114" class="sm">angle between the end plates of the</text><text x="205" y="126" class="sm">most tilted vertebrae at the two ends</text><text x="205" y="138" class="sm">of a curve; scoliosis if 10° or more</text>
+      <text x="205" y="176" class="sm">Schematic, not to scale.</text></svg>`; },
+  lordosis: () => { const col = (x0, B, title) => { let b = `<text x="${x0 - 30}" y="14">${title}</text>`; for (let i = 0; i < 8; i++) { const t = i / 7, z = 160 - t * 130, x = x0 - B * Math.sin(Math.PI * Math.min(1, t * 1.6)) * (t < .63 ? 1 : 1);
+      b += `<rect x="${(x - 12).toFixed(1)}" y="${(z - 7).toFixed(1)}" width="24" height="13" rx="3" fill="var(--bone)" stroke="var(--s-line)" stroke-width=".7"/>`; } return b; };
+    return `<svg viewBox="0 0 360 180" role="img" aria-label="Schematic of a normal and an exaggerated lumbar curve">${col(90, 10, 'Normal')}${col(250, 24, 'Hyperlordosis')}
+      <text x="8" y="176" class="sm">Side view, front on the left; lumbar region; schematic.</text></svg>`; },
+  spondy: () => `<svg viewBox="0 0 360 170" role="img" aria-label="Schematic of an L5 on S1 spondylolisthesis with a pars defect">
+      <path d="M60 110 L170 104 L200 160 L70 160 Z" fill="var(--bone)" stroke="var(--s-line)" stroke-width=".8"/><text style="fill:#1a2130" x="110" y="148">S1</text>
+      ${[0, 1, 2, 3].map(i => `<line x1="${60 + i * 27.5}" y1="${110 - i * 1.5}" x2="${60 + i * 27.5}" y2="${104 - i * 1.5}" stroke="var(--s-arrow)" stroke-width="1.2"/>`).join('')}
+      <text x="70" y="122" class="sm" style="fill:#3c4556">I</text><text x="95" y="120" class="sm" style="fill:#3c4556">II</text><text x="121" y="118" class="sm" style="fill:#3c4556">III</text><text x="149" y="117" class="sm" style="fill:#3c4556">IV</text>
+      <rect x="34" y="58" width="104" height="40" rx="5" fill="var(--bone)" stroke="var(--s-line)" stroke-width=".8"/><text style="fill:#1a2130" x="76" y="83">L5</text>
+      <path d="M140 72 L176 70 L184 60" fill="none" stroke="var(--bone)" stroke-width="9" stroke-linecap="round"/>
+      <path d="M196 64 L214 64 L240 74" fill="none" stroke="var(--bone)" stroke-width="9" stroke-linecap="round"/>
+      <line x1="188" y1="54" x2="192" y2="72" stroke="var(--mark)" stroke-width="2.4"/><text x="196" y="50" class="sm">pars defect</text>
+      <path d="M70 14 L180 14 L178 48 L68 50 Z" fill="var(--bone)" stroke="var(--s-line)" stroke-width=".8" opacity=".6"/><text style="fill:#1a2130" x="110" y="36">L4</text>
+      <line x1="34" y1="100" x2="60" y2="100" stroke="var(--s-arrow)" stroke-width="1.4"/><text x="226" y="110" class="sm">L5 slips forward (left)</text><text x="226" y="122" class="sm">on S1.</text>
+      <text x="226" y="140" class="sm">Grades: the slip as a share</text><text x="226" y="152" class="sm">of the S1 width (quarters).</text>
+      <text x="8" y="166" class="sm">Side view, front on the left; schematic.</text></svg>`,
+  bifida: () => `<svg viewBox="0 0 380 198" role="img" aria-label="Schematic cross-sections of spina bifida occulta, meningocele and myelomeningocele">
+      ${SB(0, 'Occulta', 'occ')}${SB(128, 'Meningocele', 'mc')}${SB(256, 'Myelomeningocele', 'mmc')}
+      <text x="4" y="180" class="sm">Cross-sections, body at the top, back of the trunk at the bottom; schematic.</text><text x="4" y="194" class="sm">Yellow: spinal cord; grey outline: meninges; blue: CSF; pink-brown: skin.</text></svg>`,
+};
+function buildClin() {
+  const box = $('clin-list'); box.replaceChildren();
+  for (const [key, name] of CLIN.items) {
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--mark);border-radius:50%"></i><span>${name}</span>`;
+    b.onclick = () => showClin(key); box.append(b);
+  }
+  $('clin-toggle').querySelectorAll('button').forEach(b => b.onclick = () => {
+    $('clin-toggle').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    v.setMarkers(null); animId++; animateTo(+b.dataset.k);
+    if (clinKey === 'spondy' && b.dataset.k === '0') setTimeout(parsMarks, 750);
+  });
+}
+function showClin(key) {
+  clearPick(); animId++; amount = 0; deform(null, 0); v.setMarkers(null);
+  clinKey = key; pressed('#clin-list button', key);
+  const [, name, text] = CLIN.items.find(c => c[0] === key);
+  $('clin-desc').innerHTML = `<b>${name}.</b> ${text}`;
+  $('clin-schem').innerHTML = SCHEM[key] ? SCHEM[key]() : '';
+  const movable = ['scoliosis', 'lordosis', 'spondy'].includes(key);
+  $('clin-toggle').hidden = !movable;
+  $('clin-toggle').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x.dataset.k === '0'));
+  const lumbar = v.order.filter(k => /^(l\d|disc_l|disc_t12|t12|sacrum)/.test(k));
+  if (key === 'scoliosis') { v.setFocus(v.order.filter(k => /^(t|l|disc_t|disc_l|sacrum)/.test(k))); v.fit(null); v.face([0, 1, 0], {zoom: 1}); }
+  if (key === 'lordosis') { v.setFocus(lumbar); v.fit(lumbar); v.face([-1, 0, 0], {zoom: 0.8}); }
+  if (key === 'spondy') { const ks = ['l4', 'disc_l4', 'l5', 'disc_l5', 'sacrum']; v.setFocus(ks); v.fit(ks); v.face([-1, 0.35, 0.15], {zoom: 1}); parsMarks(); }
+  if (key === 'bifida') {
+    const ks = ['l4', 'l5', 'sacrum']; v.setFocus(ks); v.fit(ks); v.face([0, 1, 0.2], {zoom: 1});
+    const b = v.parts.get('l5').bbox; v.setMarkers([{p: [0, b[1][1] - 6, (b[0][2] + b[1][2]) / 2], label: 'Laminae unite here (schematic)', color: css('--mark'), always: true}]);
+  }
+  if (key === 'disc') { const ks = ['l4', 'disc_l4', 'l5', 'disc_l5', 'sacrum']; v.setFocus(ks); v.fit(ks); v.face([-1, 0.3, 0.1], {zoom: 1}); }
+}
 
 (async () => {
   document.getElementById('lede').innerHTML = DATA.lede;
   document.getElementById('based').innerHTML = DATA.based;
   man = await v.load('../models/spine/spine.json');
   for (const p of man.parts) names[p.key] = p.name;
-  buildRegions(); buildCurves();
+  buildRegions(); buildCurves(); buildClin();
   setTab('regions');
   window.ready = true;
 })().catch(e => { document.getElementById('reg-desc').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
