@@ -42,11 +42,11 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [ ] **AN5.1** Differentiate between blood vascular and lymphatic system
 - [ ] **AN5.2** Differentiate between pulmonary and systemic circulation
-- [ ] **AN5.3** Describegeneral differences between arteries, veins and sinuses
-- [ ] **AN5.4** Explain functional and gross structural differences between elastic, muscular arteries and arterioles
-- [ ] **AN5.5** Describe portal system giving examples
-- [ ] **AN5.6** Describe the concept of anastomoses and collateral circulation, its different sites & significance of end arteries
-- [ ] **AN5.7** Explain function of meta-arterioles, precapillary sphincters, arterio-venous anastomoses
+- [x] **AN5.3** Describegeneral differences between arteries, veins and sinuses — *[Blood Vessels](general/blood-vessels.html)*
+- [x] **AN5.4** Explain functional and gross structural differences between elastic, muscular arteries and arterioles — *[Blood Vessels](general/blood-vessels.html)*
+- [x] **AN5.5** Describe portal system giving examples — *[Blood Vessels](general/blood-vessels.html)*
+- [x] **AN5.6** Describe the concept of anastomoses and collateral circulation, its different sites & significance of end arteries — *[Blood Vessels](general/blood-vessels.html)*
+- [x] **AN5.7** Explain function of meta-arterioles, precapillary sphincters, arterio-venous anastomoses — *[Blood Vessels](general/blood-vessels.html)*
 - [ ] **AN5.8** Describe thrombosis, infarction & aneurysm
 
 ### 6. General Features of lymphatic system

@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blood Vessels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --artery, --vein, --heart, --bone. The schematics add the coats of the wall:
+   --t-endo (endothelium), --t-musc (smooth muscle), --t-el (elastic tissue), --t-adv (connective tissue: adventitia, dura), --bm (basement membrane), lumens --lumen-a/-c/-v */
+:root{--t-endo:#e98f86;--t-musc:#c96f68;--t-el:#2f3b52;--t-adv:#d3dbe6;--lumen-a:#f6d4d8;--lumen-v:#d6e0f3;--lumen-c:#e6dcef;--bm:#8a93a3}
+:root[data-theme="dark"]{--t-endo:#f0a59d;--t-musc:#9c4e48;--t-el:#c8d0de;--t-adv:#46505f;--lumen-a:#4a2a30;--lumen-v:#28344c;--lumen-c:#3a3044;--bm:#7d8696}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.scroll{overflow-x:auto}
+svg text{font:500 12px var(--f-body);fill:var(--ink)}
+.walls{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.wall{background:none;border:1px solid var(--line);border-radius:10px;padding:8px;cursor:pointer;color:var(--ink);font:600 13px var(--f-body);display:flex;flex-direction:column;align-items:center;gap:4px}
+.wall[aria-pressed="true"]{border-color:var(--accent)}
+.wall svg{width:100%;max-width:140px;height:auto}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:12px;height:12px;border-radius:3px}
+#micro{max-width:760px;margin:0 auto}
+#micro text{font-size:13px}
+@media (max-width:600px){#micro text{font-size:17px}}
+.toggles{display:flex;flex-wrap:wrap;gap:8px}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Blood Vessels</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="Blood vessels in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-wall">
+  <h2 id="h-wall">The wall: arteries, veins and sinuses</h2>
+  <div class="key" id="wall-key"></div>
+  <div class="walls" id="walls"></div>
+  <p class="cap" id="wall-cap"></p>
+  <p class="muted">Cross-sections, schematic, not to scale.</p>
+  <div class="scroll"><table class="t stack" id="cmp"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-art">
+  <h2 id="h-art">Elastic arteries, muscular arteries, arterioles</h2>
+  <div class="scroll"><table class="t stack" id="arts"></table></div>
+  <p class="note" id="arts-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-cap">
+  <h2 id="h-cap">Capillaries and sinusoids</h2>
+  <div id="cap-text"></div>
+  <svg class="fig" id="caps" viewBox="0 0 600 210" role="img" aria-label="Three kinds of capillary, schematic cross-sections"></svg>
+  <p class="muted">Schematic, not to scale.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-micro">
+  <h2 id="h-micro">Microcirculation: metarterioles, precapillary sphincters, arteriovenous anastomoses</h2>
+  <div class="toggles" id="micro-tog"></div>
+  <svg class="fig" id="micro" viewBox="0 0 760 320" role="img" aria-label="Microcirculation, schematic: arteriole, metarteriole, capillaries with precapillary sphincters, venule and an arteriovenous anastomosis"></svg>
+  <p class="cap" id="micro-cap"></p>
+  <p class="muted">Schematic. The moving dots show where blood flows, not its speed.</p>
+  <div id="micro-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-clin">
+  <h2 id="h-clin">Clinical</h2>
+  <div id="clin"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (every fact checked in two sources: anatomy/DATA-SOURCES.md) ===================== */
+// topics shown in 3D: the named vessels are lit, the rest turn to glass. names: exact model names (both sides unless right:true)
+const TOPICS = [
+  {grp: 'Two circulations', id: 'sysart', name: 'Systemic arteries', sel: d => d.circuit === 'systemic' && d.kind === 'artery', heart: true, view: [0, -1, 0],
+    text: `<p><b>Arteries carry blood away from the heart, veins carry it back to the heart.</b> The names go by the direction of flow, not by how much oxygen the blood holds.</p>
+      <p>The <b>systemic circulation</b> starts at the left ventricle: the aorta and its branches take blood to the whole body.</p>`},
+  {grp: 'Two circulations', id: 'sysvein', name: 'Systemic veins', sel: d => d.circuit !== 'pulmonary' && d.kind === 'vein', heart: true, view: [0, -1, 0],
+    text: `<p>Systemic veins return the blood to the heart. Veins are larger and more numerous than arteries, so the venous system holds most of the blood: about 70–75 % of it at any time.</p>`},
+  {grp: 'Two circulations', id: 'pulm', name: 'Pulmonary circulation', sel: d => d.circuit === 'pulmonary', heart: true, view: [0, -1, 0], zoom: 1,
+    text: `<p>The <b>pulmonary circulation</b> runs from the right ventricle through the lungs and back. The pulmonary trunk and arteries carry deoxygenated blood from the right ventricle to the lungs. The pulmonary veins, usually four (two from each lung), carry oxygenated blood to the left atrium. Their number varies.</p>
+      <p>So the pulmonary arteries are arteries although their blood is deoxygenated, and the pulmonary veins are veins although theirs is oxygenated. Here they keep the artery and vein colours.</p>`},
+  {grp: 'Portal system', id: 'portal', name: 'Hepatic portal system', sel: d => d.circuit === 'portal', also: ['Superior mesenteric artery', 'Splenic artery', 'Abdominal aorta'], view: [0, -1, 0.1],
+    text: `<p>In a <b>portal system</b> blood passes through two capillary beds in a row, joined by veins, before it returns to the heart. Products of the first region reach the second in high concentration.</p>
+      <p>The <b>hepatic portal system</b> drains the abdominal part of the digestive tract (except the lowest part of the rectum and the lower anal canal), the spleen, the pancreas and the gallbladder. Its blood passes through the capillaries of these organs, then through the sinusoids of the liver; hepatic veins take it to the inferior vena cava.</p>
+      <p>The <b>portal vein</b> is formed behind the neck of the pancreas by the superior mesenteric and splenic veins. It brings about 75 % of the liver's blood; the rest comes from the hepatic artery. Shown: the right and middle colic and right gastro-omental veins, which join the superior mesenteric vein (the superior mesenteric and splenic arteries and the aorta are lit for orientation only). The inferior mesenteric vein usually ends in the splenic vein; it may also end at the junction of the splenic and superior mesenteric veins, or in the superior mesenteric vein.</p>
+      <p>Another portal system is the <b>hypophyseal</b>: portal vessels carry hormones of the hypothalamus from the median eminence to the anterior pituitary (not in the model).</p>`},
+  {grp: 'Arteries and veins', id: 'elastic', name: 'Elastic arteries', names: ['Ascending aorta', 'Aortic arch', 'Thoracic aorta', 'Abdominal aorta', 'Brachiocephalic trunk', 'Pulmonary trunk', 'Bifurcation of pulmonary trunk', 'Right pulmonary artery', 'Left pulmonary artery'], heart: true, view: [-0.4, -1, 0],
+    text: `<p><b>Elastic arteries</b> are those nearest the heart: the aorta, its large branches such as the brachiocephalic trunk, and the pulmonary arteries. Their media is mostly elastic laminae alternating with smooth muscle. They stretch when the ventricles contract and recoil when they relax, keeping the pressure steadier and the flow continuous.</p>`},
+  {grp: 'Arteries and veins', id: 'muscular', name: 'Muscular arteries', names: ['Brachial artery', 'Radial artery', 'Femoral artery'], right: true, view: [0, -1, 0],
+    text: `<p><b>Muscular (distributing) arteries</b> are the medium-sized named arteries, for example the radial and femoral arteries. Their media is mainly smooth muscle. They carry blood to the organs and narrow or widen to control how much each receives.</p>
+      <p>Gray 1918 does not use these two terms; it groups the femoral and carotid with the larger arteries that have elastic layers in the media.</p>`},
+  {grp: 'Arteries and veins', id: 'comitantes', name: 'Venae comitantes', names: ['Brachial veins', 'Radial veins', 'Ulnar veins', 'Brachial artery', 'Radial artery', 'Ulnar artery'], right: true, view: [0, -1, 0], zoom: 1,
+    text: `<p>The smaller arteries of the limbs (radial, ulnar, brachial, tibial, fibular) are usually accompanied by a <b>pair of veins</b>, one on each side: the venae comitantes. Larger arteries such as the axillary, subclavian, femoral and popliteal usually have only one vein. Shown: the arm and forearm.</p>`},
+  {grp: 'Arteries and veins', id: 'sinuses', name: 'Dural venous sinuses', names: ['Superior sagittal sinus', 'Inferior sagittal sinus', 'Straight sinus', 'Transverse sinus', 'Sigmoid sinus', 'Occipital sinus', 'Superior petrosal sinus', 'Inferior petrosal sinus', 'Cavernous sinus', 'Anterior intercavernous sinus', 'Posterior intercavernous sinus', 'Internal jugular vein'], view: [-1, -0.3, 0.3],
+    text: `<p>The <b>dural venous sinuses</b> drain the blood of the brain. They are channels between the two layers of the dura mater, lined by endothelium. They have no muscular coat and no valves. The internal jugular vein is shown too.</p>`},
+  {grp: 'Arteries and veins', id: 'superficial', name: 'Superficial veins of the lower limb', names: ['Great saphenous vein', 'Small saphenous vein'], right: true, view: [-0.3, -1, 0],
+    text: `<p>Most veins have <b>valves</b>, folds of the inner coat (usually two cusps), that stop blood flowing back. They are most numerous in the limbs, especially the lower limb, where blood must rise against gravity. The cerebral veins, the dural sinuses, the vertebral (spinal) veins and the superior vena cava have none. Shown: the great and small saphenous veins.</p>`},
+  {grp: 'Anastomoses', id: 'willis', name: 'Circle of Willis', names: ['Internal carotid artery', 'Anterior cerebral artery', 'Anterior communicating artery', 'Posterior communicating artery', 'Posterior cerebral artery', 'Basilar artery', 'Vertebral artery'], view: [0, -0.001, -1], zoom: 1, region: 'Head and neck', fit: ['Anterior cerebral artery', 'Anterior communicating artery', 'Posterior communicating artery', 'Posterior cerebral artery', 'Basilar artery'],
+    text: `<p>An <b>anastomosis</b> is a communication between vessels. When one vessel is blocked or tied, its anastomoses enlarge and carry a <b>collateral circulation</b>. Anastomoses join arteries, veins, or an artery to a vein.</p>
+      <p>The <b>circle of Willis</b>, at the base of the brain (seen from below), is formed by branches of the internal carotid and vertebral arteries (the two vertebral arteries join to form the basilar artery). It links the anterior and posterior circulations of the brain, so if a vessel is blocked, one can partly supply the other's territory. Tap a vessel to name it. The model's anterior communicating artery is incomplete (only half is stored in Z-Anatomy).</p>`},
+  {grp: 'Anastomoses', id: 'palmar', name: 'Palmar arches', names: ['Superficial palmar arch', 'Deep palmar arch', 'Radial artery', 'Ulnar artery'], right: true, view: [0, -1, 0], zoom: 1, fit: ['Superficial palmar arch', 'Deep palmar arch'],
+    text: `<p>The <b>superficial palmar arch</b> is formed mainly by the ulnar artery and completed by a branch of the radial artery. The <b>deep palmar arch</b> is formed mainly by the end of the radial artery, completed by the deep palmar branch of the ulnar artery.</p>`},
+  {grp: 'Anastomoses', id: 'scapular', name: 'Around the scapula', names: ['Suprascapular artery', 'Transverse cervical artery', 'Deep branch of transverse cervical artery', 'Subscapular artery', 'Circumflex scapular artery', 'Axillary artery', 'Right subclavian artery'], right: true, view: [-0.6, 1, 0.2], zoom: 1.1,
+    text: `<p>Around the scapula, branches of the subclavian artery (the suprascapular artery and the descending branch of the transverse cervical artery, named “deep branch” in the model) join the subscapular artery, a branch of the axillary. This links the first part of the subclavian artery with the third part of the axillary artery, a route for blood if the artery between them is blocked. Seen from behind.</p>`},
+  {grp: 'Anastomoses', id: 'knee', name: 'Around the knee', names: ['Popliteal artery', 'Superior medial genicular artery', 'Superior lateral genicular artery', 'Inferior medial genicular artery', 'Inferior lateral genicular artery', 'Middle genicular artery', 'Patellar anastomosis', 'Descending branch of lateral circumflex femoral artery'], right: true, view: [-0.3, -1, 0], zoom: 1, fit: ['Superior medial genicular artery', 'Superior lateral genicular artery', 'Inferior medial genicular artery', 'Inferior lateral genicular artery', 'Patellar anastomosis'],
+    text: `<p>In the limbs, anastomoses are most numerous and largest <b>around the joints</b>: branches of the artery above join branches of the vessels below. Around and above the patella, on the ends of the femur and tibia, the vessels form a network (the genicular arteries are shown). The elbow has a similar anastomosis.</p>`},
+  {grp: 'Anastomoses', id: 'marginal', name: 'Marginal artery of the colon', names: ['Marginal artery', 'Superior mesenteric artery', 'Inferior mesenteric artery', 'Ileocolic artery', 'Right colic artery', 'Middle colic artery', 'Left colic artery', 'Abdominal aorta'], view: [0, -1, 0], zoom: 1.1,
+    text: `<p>The <b>marginal artery</b> runs along the colon and joins the territory of the superior mesenteric artery to that of the inferior mesenteric artery. Sources differ on how reliable it is: StatPearls says it is poorly developed in about half of people, Wikipedia that it is almost always present.</p>`},
+  {grp: 'End arteries', id: 'retina', name: 'Central artery of the retina', names: ['Central retinal artery', 'Ophthalmic artery', 'Internal carotid artery'], right: true, view: [-0.6, -1, 0.3], zoom: 1, region: 'Head and neck', fit: ['Central retinal artery', 'Ophthalmic artery'],
+    text: `<p>An <b>end artery</b> does not anastomose with its neighbours, so it is the only supply of its territory, and blocking it kills that territory (infarction). In an <b>anatomical (true) end artery</b> there are no anastomoses; in a <b>functional end artery</b> there are some, but too small to keep the tissue alive.</p>
+      <p>The <b>central artery of the retina</b> is a true end artery: its branches do not anastomose. Its occlusion is an emergency that causes sudden, severe loss of vision.</p>`},
+  {grp: 'End arteries', id: 'kidney', name: 'Kidney', names: ['Right renal artery', 'Anterior branch of renal artery', 'Posterior branch of renal artery', 'Intrarenal arteries of right kidney'], view: [0, -1, 0], zoom: 0.8, right: true, fit: ['Intrarenal arteries of right kidney', 'Anterior branch of renal artery', 'Posterior branch of renal artery'],
+    text: `<p>The arteries inside the <b>kidney</b> do not anastomose with each other: they are end arteries. The <b>spleen</b> (branches of the splenic artery) is another example. Shown: the right kidney's arteries.</p>`},
+  {grp: 'End arteries', id: 'brain', name: 'Central branches in the brain', names: ['Proximal lateral striate branches', 'Distal lateral striate branches', 'Middle cerebral artery (M1-segment)', 'Internal carotid artery'], right: true, view: [0, -1, 0.2], zoom: 1, region: 'Head and neck', fit: ['Proximal lateral striate branches', 'Distal lateral striate branches', 'Middle cerebral artery (M1-segment)'],
+    text: `<p>The small <b>central (perforating) branches</b> that enter the brain substance, such as the lateral striate branches of the middle cerebral artery, have little or no collateral supply. Gray 1918 calls them terminal arteries; a recent review calls them functional end arteries. Their territory is easily damaged when they are blocked.</p>`},
+];
+const WALLS = {
+  elastic: {name: 'Elastic artery', text: 'Aorta, pulmonary trunk and the largest branches. Three coats; the media is thick and made of many elastic laminae alternating with smooth muscle. The largest vessels have their own small vessels (vasa vasorum) in the outer coat.'},
+  muscular: {name: 'Muscular artery', text: 'Medium-sized named arteries (radial, femoral). The media is mainly smooth muscle, bounded by an internal elastic lamina (inside) and an external elastic lamina (outside).'},
+  arteriole: {name: 'Arteriole', text: 'The smallest arteries, with a wall mainly of smooth muscle. They are the main resistance vessels: the largest fall in pressure in the systemic circulation is across them.'},
+  capillary: {name: 'Capillary', text: 'A single layer of endothelium on its basement membrane, no muscle; about 5–10 µm across, between the arterioles and the venules.'},
+  vein: {name: 'Vein', text: 'The same three coats, but the media is thin and weak; in large veins the adventitia is the thickest coat. The wall is thin. Most veins have valves.'},
+  sinus: {name: 'Dural venous sinus', text: 'A channel between the two layers of the dura mater, lined by endothelium. No muscle coat and no valves.'},
+};
+const CMP = [
+  ['Carries blood', 'Away from the heart', 'To the heart', 'From the brain'],
+  ['Wall', 'Three coats; thicker media (muscle and elastic tissue)', 'Three coats; thin, weak media; in large veins the adventitia is the thickest coat', 'Dura mater lined by endothelium; no muscle coat'],
+  ['Elastic tissue', 'A distinct internal elastic lamina; an external one in medium and large arteries', 'A thin elastic network in place of the internal lamina', '—'],
+  ['Lumen', 'Narrower', 'Wider', '—'],
+  ['Valves', '—', 'Most veins; most numerous in the lower limb. None in the cerebral veins, dural sinuses, vertebral veins, superior vena cava', 'None'],
+  ['Blood held', '—', 'Most of the blood (about 70–75 %)', '—'],
+];
+const ARTS = [
+  ['Elastic (conducting)', 'Nearest the heart: aorta, brachiocephalic trunk, pulmonary arteries', 'Mostly elastic laminae alternating with smooth muscle', 'Stretch in systole, recoil in diastole: steadier pressure, continuous flow'],
+  ['Muscular (distributing)', 'Medium-sized named arteries: radial, femoral', 'Mainly smooth muscle; internal and external elastic laminae', 'Distribute blood to the organs; contract or relax to control the flow to each'],
+  ['Arterioles', 'The smallest arteries, about 10–50 µm (sources differ)', 'Mainly smooth muscle', 'Main resistance vessels; set the flow into the capillaries and the blood pressure; under autonomic control'],
+];
+const CAPTEXT = `<p>A capillary wall is one layer of endothelial cells on a basement membrane. The diameter is about 5–10 µm. Three kinds:</p>
+  <ul><li><b>Continuous</b>: the cells form an unbroken lining. In muscle, and in the brain, where tightly joined cells form the blood–brain barrier.</li>
+  <li><b>Fenestrated</b>: the cells have pores (fenestrae, about 60 nm), over a continuous basement membrane. In endocrine glands and the glomeruli of the kidney.</li>
+  <li><b>Sinusoidal (discontinuous)</b>: wide, irregular channels with gaps between the cells and a broken basement membrane, so blood cells can pass. In the spleen, bone marrow and liver. The liver sinusoids have a fenestrated lining (sources classify them differently).</li></ul>`;
+const MICRO = {
+  intro: 'Blood flows: arteriole → (metarteriole, where present) → capillaries → venule → vein.',
+  text: `<p>A <b>metarteriole</b> is a short vessel between an arteriole and the capillaries. Instead of a continuous muscle coat it has single smooth muscle cells spaced apart.</p>
+    <p>A <b>precapillary sphincter</b> is a band of smooth muscle (or contractile cells) where a capillary leaves. It sets how many capillaries receive blood. Their existence has long been debated; they are well shown in the mesentery and the brain.</p>
+    <p>An <b>arteriovenous anastomosis</b> joins an artery directly to a vein, bypassing the capillaries. It is short, with a thick muscular wall and dense sympathetic nerves. They are most plentiful in the fingers and the hairless skin of the hands and feet. They open when the body is hot, sending blood to the skin to lose heat, and close in the cold. A <b>glomus body</b> is a small arteriovenous anastomosis in a capsule, mostly in the fingers and toes.</p>`,
+  states: {
+    open: 'Sphincters relaxed: blood flows through all the capillaries.',
+    closed: 'Sphincters contracted: blood flows through only a few capillaries.',
+    avaOpen: 'Arteriovenous anastomosis open (warm): much of the blood goes straight from artery to vein, bypassing the capillaries.',
+  },
+};
+const CLIN = `<ul>
+  <li><b>Infarction</b>: death of tissue from too little blood. Occlusion of an end artery kills its territory: central retinal artery occlusion causes sudden, severe loss of vision; occlusion of a coronary artery causes myocardial infarction.</li>
+  <li><b>Portal hypertension</b>: raised pressure in the portal system (StatPearls and Wikipedia: a hepatic venous pressure gradient above 5 mm Hg). The commonest cause is cirrhosis. Collaterals then open where portal and systemic veins meet:
+    <ul><li>lower oesophagus: the left gastric vein drains back through oesophageal veins to the azygos system (oesophageal varices);</li>
+    <li>anorectal: the superior rectal vein (portal) with the middle and inferior rectal veins (systemic);</li>
+    <li>paraumbilical veins to the veins of the abdominal wall (caput medusae);</li>
+    <li>retroperitoneal: veins of the gut with renal and other retroperitoneal veins.</li></ul></li>
+  <li><b>Varicose veins</b>: enlarged, twisted superficial veins, usually in the legs; the usual cause is weak or incompetent valves.</li>
+  <li><b>Aneurysm</b>: a permanent, localised widening of an artery.</li>
+  <li><b>Atherosclerosis</b>: fatty (atheromatous) plaques in the walls of arteries.</li>
+</ul>`;
+const DATA = {
+  lede: `Arteries carry blood from the heart, veins return it, and capillaries join the two. Pick a topic to light its vessels in the whole-body model: the circulations, the portal system, kinds of artery and vein, anastomoses and end arteries; tap a vessel to name it. Below: the wall of each kind of vessel, capillaries and the microcirculation.`,
+  note3d: 'Vessels from Z-Anatomy, drawn as tubes along its vessel curves; calibres approximate. The left-side vessels are mirror images of the right ones. Arteries red, veins blue, heart brown.',
+  avascular: 'Some tissues have no blood vessels: epidermis and other epithelia, cartilage, the cornea.',
+  based: `Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (on arterial structure, the microcirculation, capillary types, end arteries, arteriovenous anastomoses, portal hypertension). Where these differ, the page says so.`,
+  models: `Models used: heart and blood vessels from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), whose vessels are curves with a radius; here each is a tube swept along its curve (approximate calibre). Bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan). The wall, capillary and microcirculation drawings are schematic.`,
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let info = {}, names = {}, cur = null, bones = null, bonesOn = false;
+function keysFor(t) {
+  const ks = [];
+  for (const k in info) {
+    const d = info[k], n = names[k];
+    if (t.right && d.side === 'left') continue;
+    if (t.sel ? (t.sel(d) || (t.heart && d.kind === 'heart') || (t.also || []).includes(n)) : (t.names.includes(n) || (t.heart && d.kind === 'heart'))) ks.push(k);
+  }
+  return ks;
+}
+function showTopic(id) {
+  const t = TOPICS.find(t => t.id === id); cur = t;
+  const ks = keysFor(t), focus = new Set(ks);
+  // a topic with a region hides the vessels elsewhere (seen through, they would wash out a small scene)
+  for (const k in info) v.setVisible(k, !t.region || focus.has(k) || info[k].region === t.region);
+  const fk = t.fit ? ks.filter(k => t.fit.includes(names[k])) : ks;
+  v.setFocus(ks); v.fit(fk.length ? fk : ks); v.face(t.view, {zoom: t.zoom || 1});
+  $('topic-text').innerHTML = t.text; $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id));
+}
+function buildTopics() {
+  const box = $('topics'), grps = [...new Set(TOPICS.map(t => t.grp))];
+  for (const g of grps) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !info[hit.key]) { $('pick').textContent = ''; return; }
+  const d = info[hit.key];
+  $('pick').textContent = `${names[hit.key]}${d.side === 'left' || d.side === 'right' ? ' (' + d.side + ')' : ''}: ${d.kind === 'heart' ? 'heart' : d.kind}${d.circuit === 'portal' ? ', portal system' : d.circuit === 'pulmonary' ? ', pulmonary circulation' : ''}`;
+};
+async function loadVessels() {
+  const base = '../models/body-vessels/';
+  const meta = await (await fetch(base + 'vessels.json')).json(), M = meta.mirror;
+  await v.load(base + 'body-vessels.json', null, {
+    extra: (m, items) => items.filter(it => meta.parts[it.key].mirror)
+      .map(it => ({key: it.key + '_l', m: v.mirrored(it.m, M.m, M.t), info: {name: it.info.name}}))});
+  for (const [k, d] of Object.entries(meta.parts)) for (const left of d.mirror ? [false, true] : [false]) {
+    const key = left ? k + '_l' : k;
+    info[key] = {...d, side: d.mirror ? (left ? 'left' : 'right') : d.side};
+    names[key] = v.parts.get(k).info.name;
+    v.setColour(key, '--' + d.kind);
+  }
+}
+async function toggleBones(b) {
+  bonesOn = !bonesOn; b.setAttribute('aria-pressed', bonesOn);
+  if (bonesOn && !bones) {
+    b.textContent = 'Bones · loading';
+    const m = await v.load('../models/skeleton/skeleton.json', null, {fit: false});
+    bones = m.parts.map(p => p.key);
+    for (const p of m.parts) v.setColour(p.key, /costal cartilage/i.test(p.name) ? '--cart' : '--bone');
+    b.textContent = 'Bones';
+    if (cur) showTopic(cur.id);
+  }
+  if (bones) for (const k of bones) v.setVisible(k, bonesOn);
+}
+
+/* ===================== schematics ===================== */
+const KEY = [['--t-endo', 'Endothelium (intima)'], ['--t-el', 'Elastic tissue'], ['--t-musc', 'Smooth muscle (media)'], ['--t-adv', 'Connective tissue (adventitia; dura)'], ['--bm', 'Basement membrane'], ['--lumen-a', 'Lumen, arterial side'], ['--lumen-c', 'Lumen, capillary'], ['--lumen-v', 'Lumen, venous side']];
+// rings from the outside in: [radius, colour]; each ring is drawn as a disc over the previous one
+const RINGS = {
+  elastic: {lumen: '--lumen-a', rings: [[62, '--t-adv'], [56, '--t-musc'], ...[53, 49, 45, 41, 37, 33].map(r => [r, 'el']), [31, '--t-endo'], [28, 'lumen']]},
+  muscular: {lumen: '--lumen-a', rings: [[54, '--t-adv'], [44, '--t-el'], [42, '--t-musc'], [24, '--t-el'], [22, '--t-endo'], [19, 'lumen']]},
+  arteriole: {lumen: '--lumen-a', rings: [[22, '--t-adv'], [18, '--t-musc'], [12, '--t-endo'], [9, 'lumen']]},
+  capillary: {lumen: '--lumen-c', rings: [[11, '--bm'], [10, '--t-endo'], [6, 'lumen']]},
+  vein: {lumen: '--lumen-v', rings: [[58, '--t-adv'], [40, '--t-musc'], [35, 'net'], [34, '--t-endo'], [31, 'lumen']], squash: .72},
+};
+function wallSvg(k) {
+  if (k === 'sinus')   // a triangular channel split off between the two layers of the dura
+    return `<svg viewBox="0 0 140 140"><path d="M4 30 L136 30 L136 44 L84 44 L70 112 L56 44 L4 44 Z" fill="var(--t-adv)"/><path d="M4 18 L136 18 L136 30 L4 30 Z" fill="var(--t-adv)" opacity=".7"/>
+      <path d="M60 46 L80 46 L70 96 Z" fill="var(--lumen-v)" stroke="var(--t-endo)" stroke-width="2.5"/></svg>`;
+  const w = RINGS[k], sq = w.squash || 1;
+  let s = '<svg viewBox="0 0 140 140">';
+  for (const [r, c] of w.rings) {
+    if (c === 'net') { s += `<ellipse cx="70" cy="70" rx="${r}" ry="${r * sq}" fill="var(--t-musc)" stroke="var(--t-el)" stroke-width="1.4" stroke-dasharray="3 4"/>`; continue; }
+    if (c === 'el') { s += `<ellipse cx="70" cy="70" rx="${r}" ry="${r * sq}" fill="none" stroke="var(--t-el)" stroke-width="1.6"/>`; continue; }
+    s += `<ellipse cx="70" cy="70" rx="${r}" ry="${r * sq}" fill="var(${c === 'lumen' ? w.lumen : c})"/>`;
+  }
+  return s + '</svg>';
+}
+function buildWalls() {
+  $('wall-key').innerHTML = KEY.map(([c, n]) => `<span><i style="background:var(${c})"></i>${n}</span>`).join('');
+  const box = $('walls');
+  for (const k in WALLS) {
+    const b = document.createElement('button'); b.className = 'wall'; b.dataset.k = k;
+    b.innerHTML = wallSvg(k) + `<span>${WALLS[k].name}</span>`;
+    b.onclick = () => { $('wall-cap').innerHTML = `<b>${WALLS[k].name}.</b> ${WALLS[k].text}`;
+      box.querySelectorAll('.wall').forEach(x => x.setAttribute('aria-pressed', x === b)); };
+    box.append(b);
+  }
+  $('wall-cap').textContent = 'Tap a vessel. Arteries and veins have three coats: the intima (endothelium), the media (muscle and elastic tissue) and the adventitia (connective tissue). Capillaries have only the endothelium.';
+  $('cmp').innerHTML = '<tr><th></th><th>Artery</th><th>Vein</th><th>Dural venous sinus</th></tr>' +
+    CMP.map(r => `<tr><td data-h=""><b>${r[0]}</b></td><td data-h="Artery">${r[1]}</td><td data-h="Vein">${r[2]}</td><td data-h="Sinus">${r[3]}</td></tr>`).join('');
+  $('arts').innerHTML = '<tr><th>Kind</th><th>Where</th><th>Media</th><th>Job</th></tr>' +
+    ARTS.map(r => `<tr><td data-h="Kind"><b>${r[0]}</b></td><td data-h="Where">${r[1]}</td><td data-h="Media">${r[2]}</td><td data-h="Job">${r[3]}</td></tr>`).join('');
+  $('arts-note').innerHTML = 'Sources differ on where elastic arteries end and muscular ones begin (e.g. the carotid arteries): only the clear examples are given. ' + DATA.avascular;
+}
+function drawCaps() {
+  // three cross-sections: a ring of endothelial cells (arcs) on a basement membrane (outer line)
+  const one = (cx, kind, label) => {
+    let s = `<circle cx="${cx}" cy="95" r="44" fill="var(--lumen-c)"/>`;
+    const n = 6, gaps = kind === 'sin' ? 9 : 0;
+    for (let i = 0; i < n; i++) {
+      const a0 = i / n * 2 * Math.PI + (gaps ? 0.15 : 0.02), a1 = (i + 1) / n * 2 * Math.PI - (gaps ? 0.15 : 0.02);
+      const arc = (r, a, b) => `${cx + r * Math.cos(a)} ${95 + r * Math.sin(a)}`;
+      s += `<path d="M${arc(44, a0)} A44 44 0 0 1 ${arc(44, a1)} L${arc(52, a1)} A52 52 0 0 0 ${arc(52, a0)} Z" fill="var(--t-endo)" stroke="var(--surface)" stroke-width="1"/>`;
+      if (kind === 'fen') { const am = (a0 + a1) / 2; s += `<circle cx="${cx + 48 * Math.cos(am)}" cy="${95 + 48 * Math.sin(am)}" r="3" fill="var(--lumen-c)"/>`; }
+    }
+    if (kind === 'sin') { for (let i = 0; i < 8; i++) { const a = i / 8 * 2 * Math.PI; s += `<path d="M${cx + 56 * Math.cos(a)} ${95 + 56 * Math.sin(a)} A56 56 0 0 1 ${cx + 56 * Math.cos(a + 0.45)} ${95 + 56 * Math.sin(a + 0.45)}" fill="none" stroke="var(--bm)" stroke-width="2"/>`; } }
+    else s += `<circle cx="${cx}" cy="95" r="56" fill="none" stroke="var(--bm)" stroke-width="2"/>`;
+    return s + `<text x="${cx}" y="180" text-anchor="middle">${label[0]}</text><text x="${cx}" y="198" text-anchor="middle" style="fill:var(--muted)">${label[1]}</text>`;
+  };
+  $('caps').innerHTML = one(100, 'cont', ['Continuous', 'muscle, brain']) + one(300, 'fen', ['Fenestrated', 'endocrine glands, kidney']) + one(500, 'sin', ['Sinusoidal', 'liver, spleen, marrow']) +
+    `<text x="300" y="20" text-anchor="middle" style="fill:var(--muted)">endothelial cells; outer line: basement membrane</text>`;
+  $('cap-text').innerHTML = CAPTEXT;
+}
+/* microcirculation: arteriole (left) -> metarteriole -> capillaries -> venule (right); an AV anastomosis below.
+   Every capillary drains into the venule; the last one leaves the end of the metarteriole without a sphincter */
+let micro = {sph: true, ava: false}, dots = [], microAnim = 0;
+const CX = [200, 260, 320, 380];
+const MP = {
+  art: 'M20 90 L160 90', meta: 'M160 90 L380 90', ven: 'M600 90 L740 90',
+  caps: CX.map((x, i) => { const D = 250 - i * 30; return `M${x} 92 C${x} ${D} 560 ${D} 602 92`; }),
+  ava: 'M90 90 C110 330 650 330 670 90',
+};
+const capOpen = i => !micro.sph || i === CX.length - 1;
+function drawMicro() {
+  const S = $('micro');
+  let h = `<defs><linearGradient id="g-cap" x1="0" x2="1"><stop offset="0" stop-color="var(--artery)"/><stop offset="1" stop-color="var(--vein)"/></linearGradient></defs>`;
+  h += `<path d="${MP.ava}" fill="none" stroke="var(--t-musc)" stroke-width="${micro.ava ? 16 : 22}" stroke-linecap="round" opacity=".85"/>`;
+  h += `<path d="${MP.ava}" fill="none" stroke="url(#g-cap)" stroke-width="${micro.ava ? 8 : 1.5}" stroke-linecap="round"/>`;
+  for (const [i, d] of MP.caps.entries()) h += `<path d="${d}" fill="none" stroke="url(#g-cap)" stroke-width="5" opacity="${capOpen(i) ? 1 : .35}"/>`;
+  h += `<path d="${MP.art}" fill="none" stroke="var(--artery)" stroke-width="16" stroke-linecap="round"/>
+    <path d="${MP.meta}" fill="none" stroke="var(--artery)" stroke-width="9" stroke-linecap="round"/>
+    <path d="${MP.ven}" fill="none" stroke="var(--vein)" stroke-width="18" stroke-linecap="round"/>`;
+  for (const x of [176, 230, 290, 350]) h += `<circle cx="${x}" cy="84" r="4" fill="var(--t-musc)"/>`;   // scattered muscle cells
+  for (const x of CX.slice(0, -1))   // the sphincter where each capillary leaves the metarteriole
+    h += `<ellipse cx="${x}" cy="100" rx="${micro.sph ? 8 : 7}" ry="${micro.sph ? 4 : 6}" fill="none" stroke="var(--t-musc)" stroke-width="${micro.sph ? 5 : 2.5}"/>`;
+  h += `<text x="20" y="64">Arteriole</text><text x="200" y="64">Metarteriole</text><text x="660" y="64">Venule</text>
+    <text x="410" y="240" text-anchor="middle">Capillaries</text><text x="420" y="40" style="fill:var(--muted)">Precapillary sphincters</text>
+    <line x1="430" y1="46" x2="326" y2="98" stroke="var(--muted)" stroke-width="1"/>
+    <text x="380" y="300" text-anchor="middle">Arteriovenous anastomosis</text>`;
+  h += `<g id="dots"></g>`;
+  S.innerHTML = h;
+  $('micro-cap').textContent = MICRO.intro + ' ' + (micro.ava ? MICRO.states.avaOpen + ' ' : '') + (micro.sph ? MICRO.states.closed : MICRO.states.open);
+  startDots();
+}
+function startDots() {
+  cancelAnimationFrame(microAnim);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const S = $('micro'), g = S.querySelector('#dots'), mk = d => { const p = document.createElementNS('http://www.w3.org/2000/svg', 'path'); p.setAttribute('d', d); return p; };
+  const routes = [];
+  MP.caps.forEach((d, i) => { if (capOpen(i)) routes.push([mk(MP.art), mk(`M160 90 L${CX[i]} 90`), mk(d), mk(MP.ven)]); });
+  if (micro.ava) routes.push([mk(MP.ava)], [mk(MP.ava)]);
+  const L = routes.map(r => r.map(p => p.getTotalLength()));
+  dots = [];
+  for (let i = 0; i < 26; i++) { const r = i % routes.length; dots.push({r, t: Math.random()}); }
+  g.innerHTML = dots.map(() => '<circle r="3.5" fill="var(--ink)" opacity=".55"/>').join('');
+  const cs = [...g.children];
+  let last = performance.now();
+  const step = now => {
+    const dt = Math.min(50, now - last) / 1000; last = now;
+    dots.forEach((d, i) => {
+      d.t = (d.t + dt * 0.18) % 1;
+      const segs = routes[d.r], ls = L[d.r], tot = ls.reduce((a, b) => a + b, 0);
+      let s = d.t * tot, j = 0; while (j < ls.length - 1 && s > ls[j]) { s -= ls[j]; j++; }
+      const p = segs[j].getPointAtLength(Math.min(s, ls[j])); cs[i].setAttribute('cx', p.x); cs[i].setAttribute('cy', p.y);
+    });
+    microAnim = requestAnimationFrame(step);
+  };
+  microAnim = requestAnimationFrame(step);
+}
+function buildMicro() {
+  const tog = $('micro-tog');
+  const add = (label, key, on, off) => {
+    const b = document.createElement('button'); b.className = 'chip';
+    const set = () => { b.textContent = micro[key] ? on : off; b.setAttribute('aria-pressed', key === 'ava' ? micro.ava : !micro.sph); };
+    b.onclick = () => { micro[key] = !micro[key]; set(); drawMicro(); }; set(); tog.append(b);
+  };
+  add('sph', 'sph', 'Sphincters: contracted (tap to relax)', 'Sphincters: relaxed (tap to contract)');
+  add('ava', 'ava', 'Arteriovenous anastomosis: open, warm (tap to close)', 'Arteriovenous anastomosis: closed, cold (tap to open)');
+  $('micro-text').innerHTML = MICRO.text;
+  drawMicro();
+}
+
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models; $('clin').innerHTML = CLIN;
+  buildWalls(); drawCaps(); buildMicro();
+  const bar = $('vbar');
+  const bb = document.createElement('button'); bb.className = 'chip'; bb.textContent = 'Bones'; bb.setAttribute('aria-pressed', 'false');
+  bb.onclick = () => toggleBones(bb).catch(e => { bb.textContent = 'Bones · could not load'; window.loadError = String(e); });
+  bar.append(bb);
+  buildTopics();
+  await loadVessels();
+  showTopic('sysart');
+  window.J = {TOPICS, showTopic, keysFor};   // for tests
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

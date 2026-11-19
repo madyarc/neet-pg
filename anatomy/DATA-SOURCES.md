@@ -513,6 +513,12 @@ tubercles.
   a least-squares fit to Z-Anatomy's own left meshes (gluteus maximus, temporalis) to 0.0001 mm. Checked by eye at the
   shoulders, knees, pelvis (back) and face that both sides sit on the bones.
 
+- Heart and vessels layer (2026-11-18): no facts, only the model. Z-Anatomy vessels are Bezier curves with a radius;
+  `tools/zanat/export_curves.py` sweeps a tube along each (radius = bevel depth × point radius, as Blender draws them);
+  242 of 257 left curves are exact mirrors of the right ones and are mirrored by the page. Checked by eye: whole body
+  front, heart and great vessels, neck, brain arteries from above, hands and feet; colour by kind (artery, vein,
+  heart) from Z-Anatomy's collections ("Systemic arteries", "Pulmonary veins", ...).
+
 ## Joints — `general/joints.html`
 
 - Fact sheet: `sources-local/facts/joints-general.md` (309 quotes, all script-checked against the downloads in
@@ -628,3 +634,28 @@ tubercles.
   (`z-bp3d-joints-ax.zip`; Z-Anatomy has no ligaments of the atlas and axis, and its intertransverse ligaments have no
   faces). Pivots (`tools/joints/ax_axes.py`): TMJ through both condyles; atlanto-occipital and sacro-iliac pivots put on
   the midline; dens vertical line; L4–L5 disc centre.
+
+## Blood Vessels — `general/blood-vessels.html`
+
+- Fact sheet: `sources-local/facts/vessels-general.md` (289 quotes), script-checked against
+  `sources-local/modern/vessels-general/` (downloads 2026-11-18). Gray 1918 Angiology pages, StatPearls, Wikipedia,
+  open-access papers (arterial wall PMC11853455, PMC13604391; microcirculation PMC10164225; capillary types PMC9221661,
+  PMC5725833; end arteries PMC3367227, PMC13204756; AV anastomoses PMC13678282; portal veins PMC9254532, PMC6011069;
+  portal hypertension PMC13645364; venous valves PMC13212415). Excluded: Wikipedia "Tunica intima", "Tunica media",
+  "Tunica externa" (OpenStax notice), "Vein" and "Circulatory system" (cite OpenStax); sentences copied from Gray.
+- Contested, stated on the page: elastic vs muscular examples (Gray puts femoral and carotid with the lamellated
+  arteries); arteriole size; liver sinusoids (discontinuous vs fenestrated); IMV ending; marginal artery
+  (poorly developed in half, StatPearls, vs almost always present, Wikipedia); brain perforators (terminal, Gray, vs
+  functional end arteries); existence of precapillary sphincters outside the mesentery and brain.
+- Left out (one source): umbilical arteries, pulmonary vein count 3–5, no external elastic lamina in veins, arteries
+  without valves, Gray's long list of valveless veins, actual/potential anastomoses, coronary arteries as functional
+  end arteries, thoroughfare channels, renal "arterial portal" (Wikipedia contradicts itself), left gastro-omental vein
+  ending, IMV percentages, blood share of arteries and capillaries, Allen test, aortic-to-capillary size ratio.
+- Independent review (2026-11-18), fixed: portal drainage limit (lower anal canal, not the whole canal); middle
+  cerebral artery no longer lit in the circle of Willis; microcirculation drawing redrawn so every capillary drains
+  into the venule (the metarteriole no longer runs on to the venule: thoroughfare channels are single-source);
+  size ratio removed; "another" portal system; collateral flow "partly"; artery wall "thicker media (muscle and
+  elastic tissue)"; model name of the transverse cervical branch; orientation arteries in the portal view said so;
+  schematic: basement membrane on the capillary, venous elastic network dashed, capillary lumen colour.
+- 3D: the Anatomy home's heart and vessels model (`models/body-vessels`), no new build. Topics light vessels by their
+  Z-Anatomy names; checked each in a screenshot (circle of Willis from below with the vessels outside the head hidden).
