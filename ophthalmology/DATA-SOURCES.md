@@ -37,6 +37,13 @@ PMC12568719 names a non-existent "superior geniculate nucleus"; one EyeWiki page
 **Schematic choices (labelled on the page):** the macular-sparing radius (5°) and central-scotoma radius (12°) are drawn
 sizes, not data; sources give sparing of the central 2–10°.
 
+- Physiology of vision (2026-11-18; fact sheet `sources-local/facts/fill-op.md`, 277 quotes, script-checked):
+  retinal layers from Gray 1918 p.225 and Wikipedia; rods and cones StatPearls 29261952, PMC10828017, PMC11221215,
+  Wikipedia; phototransduction PMC9790638, PMC9796346, Wikipedia; dark adaptation PMC9796346, PMC8911214, Wikipedia
+  (cone plateau 5 vs 9–10 min shown); colour PMC11221215, Wikipedia. Drawings schematic; curves are bell shapes, not
+  data. RPE described by structure only (its functions and the ELM wording were Wikipedia only). Source error not
+  used: PMC4727664 reverses the effect of cGMP.
+
 ## 02 Pupil Reflexes — `neuro-ophthalmology/pupil-reflexes.html`
 
 Facts from `sources-local/facts/ophth-pathway.md`, sections 5–6.
@@ -93,6 +100,29 @@ amblyopia type is commonest; minimum corneal thickness 480 µm.
 **Model (labelled on the page):** a single-lens schematic eye of +60 D in a medium of index 1.336, so its relaxed length
 is about 22.3 mm (shorter than a real eye, whose principal planes lie behind the cornea); the page therefore shows only
 changes in length. The correcting lens is treated as if on the cornea. The eye may use all of its accommodation.
+
+- Candidacy and contraindications (2026-11-18, `fill-op.md`): PMC12286648 (Cureus 2025), PMC10974391 (J Clin Med 2024),
+  PMC13668166, Wikipedia LASIK / Refractive surgery; ranges per source with year (Eye Vis 2014, J Clin Med 2024,
+  Front Ophthalmol 2026 for the EVO ICL label). SMILE: FDA approval 2016 only (its dioptre range had one source).
+  Pregnancy/breastfeeding apply to corneal laser only, as in the sources. Lens exchange PMC7856935, PMC4655463; phakic
+  IOL StatPearls 32809598 ("an option").
+
+## 04 Diseases of the Optic Nerve — `neuro-ophthalmology/optic-nerve.html`
+
+- Fact sheet `sources-local/facts/fill-op.md`. StatPearls (8 chapters); PMC13485077, PMC12938181, PMC12214357,
+  PMC5398730, PMC9187153, PMC6166610, PMC10661278, PMC11510045, PMC9428633, PMC9750907, PMC12650965, PMC12178413,
+  PMC5365044, PMC13260974; Wikipedia. Treatments carry their trial/guideline: ONTT 1988–91/1992, IIHTT 2014, IIH
+  consensus 2018, IONDT 1995, BSR 2020, EMA 2015 (idebenone), Indian optic neuritis consensus 2026.
+- Disagreements shown: fellow-eye NAION 15–25 %; pallor onset 2–6 weeks; "secondary vs consecutive" atrophy terms.
+  Left out (one source): appearance of each atrophy type, chalky-white disc in arteritic AION, ICL dioptre range,
+  methanol antidotes, painless onset/severe swelling as atypical neuritis features. Source error not used:
+  PMC10661278 says P100 latency is "reduced" in optic neuritis.
+- Photos (Wikimedia Commons, licence read on each file page): Häggström (CC0), Trobe (CC BY 3.0), Manaviat et al.
+  (CC BY 2.0).
+- Independent review (2026-11-18), fixed: SMILE range removed; RPE function removed; neuritis onset "over days";
+  atypical features cut to those with two sources; LASIK/PRK ranges separated; phakic IOL "an option"; pregnancy
+  limited to laser; NAION advice and GCA wording; PMR "associated"; idebenone "EMA, disease-specific"; toxic
+  neuropathy and primary atrophy wording; normal fundus caption; ONTT MS figure attributed.
 
 ## Independent review (2026-11-16)
 

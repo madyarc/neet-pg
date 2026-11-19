@@ -67,6 +67,11 @@ dl.facts dt{font-weight:600} dl.facts dd{margin:0}
 table{border-collapse:collapse;width:100%;font-size:14px}
 th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
 .tablewrap{overflow-x:auto}
+.split.cand{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
+@media (max-width:820px){.split.cand{grid-template-columns:minmax(0,1fr)}}
+.proc{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:start;font-size:14px;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.proc b.st{font:600 12px var(--f-mono);text-transform:uppercase;padding:2px 6px;border-radius:4px;border:1px solid currentColor}
+.st.ok{color:var(--accent)} .st.no{color:var(--clin)} .st.wait{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -118,6 +123,17 @@ th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertic
 <section class="panel stack">
   <h2>Correcting the error</h2>
   <div class="stack" id="surgery"></div>
+</section>
+
+<section class="panel stack">
+  <h2>Who can have refractive surgery?</h2>
+  <p class="muted">Tick what applies to a patient and see which procedures stay open. A teaching sketch of the main rules in the sources, not a clinical decision tool.</p>
+  <div class="split cand">
+    <div class="toggles" id="cand" style="flex-direction:column;align-items:flex-start"></div>
+    <div class="stack" id="candout" aria-live="polite"></div>
+  </div>
+  <div class="stack" id="indic"></div>
+  <div class="tablewrap"><table id="ranges"></table></div>
 </section>
 
 <footer id="foot"></footer>
@@ -227,8 +243,42 @@ const TEXT = {
     { w: 1, t: '<b>Safety limit:</b> after LASIK at least 250 µm of stroma must be left under the flap; many surgeons now prefer 300 µm. Corneas too thin for this, or errors too high for laser, can be treated with a <b>phakic IOL</b>: a lens implanted in addition to the eye\'s own lens, which needs an anterior chamber about 3 mm deep or more.' },
     { t: '<b>Pinhole test:</b> a pinhole lets through only a narrow central pencil of light, which deepens the focus and cuts the blur of any refractive error. If vision improves through a pinhole, an uncorrected refractive error is likely; if not, look for another cause (macular disease, media opacity, amblyopia). Try the Pinhole box above.' }
   ],
-  foot: '<p><b>Based on:</b> StatPearls; EyeWiki (American Academy of Ophthalmology); International Myopia Institute reports (<i>IOVS</i> 2019, 2023); open-access reviews in <i>J Clin Med</i>, <i>Front Med</i> and others; Wikipedia.</p><p><b>Models used:</b> a single-lens schematic eye of +60 D (not the Gullstrand eye); the lens is treated as if on the cornea; ray heights enlarged; the letter blur is computed from the blur circle, not measured. Amplitudes of accommodation are approximate classic values.</p>'
+  foot: '<p><b>Based on:</b> StatPearls; EyeWiki (American Academy of Ophthalmology); International Myopia Institute reports (<i>IOVS</i> 2019, 2023); open-access reviews in <i>J Clin Med</i>, <i>Front Med</i>, <i>Eye and Vision</i>, <i>Indian J Ophthalmol</i>, <i>Front Ophthalmol</i>, <i>Cureus</i> and others; Wikipedia.</p><p><b>Models used:</b> a single-lens schematic eye of +60 D (not the Gullstrand eye); the lens is treated as if on the cornea; ray heights enlarged; the letter blur is computed from the blur circle, not measured. Amplitudes of accommodation are approximate classic values.</p>'
 };
+/* Refractive surgery candidacy (teaching sketch). Each factor lists its effect on: laser (corneal laser: LASIK, PRK, SMILE),
+   pIOL (phakic IOL / ICL), rle (refractive lens exchange). 'no' = ruled out, 'wait' = not now, 'ok' = an option. */
+const FACTORS = [
+  { id: 'unstable', label: 'Refraction changed in the past year (young patient, progressing myopia)', laser: 'wait', pIOL: 'wait', rle: 'wait', why: 'Surgery needs a refraction that has been stable for at least a year.' },
+  { id: 'preg', label: 'Pregnant or breastfeeding', laser: 'wait', why: 'Hormonal changes make the refraction unstable: no corneal laser now. (The sources discuss this for laser surgery only.)' },
+  { id: 'kc', label: 'Keratoconus or abnormal corneal topography', laser: 'no', why: 'Keratoconus (or a topography suggesting it) rules out corneal laser surgery: thinning the cornea further risks ectasia.' },
+  { id: 'thin', label: 'Thin cornea', laser: 'no', pIOL: 'ok', why: 'Too little cornea to remove safely; a phakic IOL is an option.' },
+  { id: 'auto', label: 'Uncontrolled autoimmune or collagen vascular disease, poorly controlled diabetes', laser: 'no', why: 'Corneal healing is impaired.' },
+  { id: 'inf', label: 'Active eye infection or inflammation', laser: 'wait', pIOL: 'wait', rle: 'wait', why: 'Treat these first.' },
+  { id: 'high', label: 'Error too high for the laser', laser: 'no', pIOL: 'ok', rle: 'ok', why: 'Very high errors are not suitable for laser; a phakic IOL is an option, and lens exchange another.' },
+  { id: 'shallow', label: 'Shallow anterior chamber', pIOL: 'no', rle: 'ok', why: 'A phakic IOL needs a deep enough chamber (US label for the EVO ICL: at least 3.0 mm); lens exchange is an option, especially in high hypermetropes.' },
+  { id: 'presby', label: 'Presbyopic and wants to be free of reading glasses', rle: 'ok', why: 'Lens exchange with a multifocal or accommodating IOL treats the refractive error and presbyopia together.' }
+];
+const PROCS = [
+  { k: 'laser', n: 'Corneal laser (LASIK, PRK, SMILE)', base: 'ok', note: 'For low to moderate errors.' },
+  { k: 'pIOL', n: 'Phakic IOL (e.g. ICL)', base: 'ok', note: 'A lens added in front of the eye\'s own lens; keeps accommodation. Needs a clear lens, open angle, deep enough chamber and a healthy endothelium.' },
+  { k: 'rle', n: 'Refractive lens exchange (clear lens extraction)', base: 'ok', note: 'The clear natural lens is replaced by an IOL. Accommodation is lost (a multifocal or accommodating IOL can give near vision as well); in young high myopes the risk of retinal detachment makes many prefer a phakic IOL.' }
+];
+const RANGES = {
+  head: ['Procedure', 'Upper limits as given in the source', 'Source (year)'],
+  rows: [
+    ['Excimer laser in general', 'About +6 D to −12 D', 'Review, <i>Eye and Vision</i> (2014)'],
+    ['LASIK', 'Myopia up to −12 to −14 D', 'Wikipedia (2026 revision)'],
+    ['LASIK and PRK', 'A current trend to lower upper limits, about −8 to −10 D (higher-order aberrations)', 'Wikipedia (2026 revision)'],
+    ['Transepithelial PRK (one laser\'s table)', 'Myopia −10 D (cylinder −6 D); hypermetropia +3 D', 'Review, <i>J Clin Med</i> (2024)'],
+    ['SMILE', 'Approved by the US FDA in 2016 (for myopia, with or without astigmatism)', 'Reviews, <i>J Clin Med</i> (2024), <i>Cureus</i> (2025)'],
+    ['Phakic IOL (EVO ICL, USA)', 'Age 21–60 (expanded from 21–45 in November 2025); anterior chamber ≥ 3.0 mm; refraction stable ±0.5 D for a year', 'Review, <i>Front Ophthalmol</i> (2026)']
+  ],
+  note: 'Limits differ between lasers, licences and countries and change over time; the exam asks for the principle (low–moderate errors: laser; high errors or thin corneas: phakic IOL; presbyopic or very high errors: lens exchange), not one number.'
+};
+const INDIC = [
+  { k: 1, t: '<b>Who is a candidate:</b> a patient who wants to be free of glasses or contact lenses, with a refractive error in the treatable range, a refraction stable for at least a year, and a healthy eye. Screening looks for keratoconus (corneal topography/tomography) and measures corneal thickness (pachymetry).' },
+  { w: 1, t: '<b>Contraindications</b> (ruled out or deferred): keratoconus and other ectatic disease; a cornea too thin; unstable refraction (young patients, progressing myopia); pregnancy and breastfeeding; uncontrolled autoimmune and collagen vascular disease, poorly controlled diabetes; active eye infection or inflammation (treat first).' }
+];
 /* ================= END DATA ================= */
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -380,6 +430,28 @@ function init() {
   render();
 }
 init();
+
+function candidacy() {
+  const sel = new Set();
+  const box = $('cand');
+  for (const f of FACTORS) { const lab = document.createElement('label'); const cb = document.createElement('input'); cb.type = 'checkbox';
+    cb.onchange = () => { cb.checked ? sel.add(f.id) : sel.delete(f.id); out(); }; lab.append(cb, ' ' + f.label); box.appendChild(lab); }
+  const rank = { ok: 0, wait: 1, no: 2 };
+  const out = () => {
+    const html = PROCS.map(p => {
+      let st = p.base; const why = [];
+      for (const f of FACTORS) if (sel.has(f.id) && f[p.k] && rank[f[p.k]] > rank[st]) st = f[p.k];
+      for (const f of FACTORS) if (sel.has(f.id) && f[p.k] === st) why.push(f.why);
+      const word = st === 'ok' ? 'option' : st === 'wait' ? 'not now' : 'ruled out';
+      return `<div class="proc"><b class="st ${st}">${word}</b><div><b>${p.n}</b><br><span class="muted">${p.note}</span>${why.length ? `<br>${[...new Set(why)].join(' ')}` : ''}</div></div>`;
+    }).join('');
+    $('candout').innerHTML = html;
+  };
+  out();
+  $('indic').innerHTML = INDIC.map(x => `<p class="cap${x.k ? ' key' : x.w ? ' warn' : ''}">${x.t}</p>`).join('');
+  $('ranges').innerHTML = `<thead><tr>${RANGES.head.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${RANGES.rows.map(r => `<tr>${r.map(x => `<td>${x}</td>`).join('')}</tr>`).join('')}</tbody><caption class="muted" style="caption-side:bottom;text-align:left;padding-top:6px">${RANGES.note}</caption>`;
+}
+candidacy();
 </script>
 </body>
 </html>

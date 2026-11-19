@@ -558,6 +558,16 @@ tubercles.
   r 20.9 mm, 22.5 mm above the lowest point; dens: vertical line through its centre because it is too short to fit).
   Every movement direction was checked in screenshots at both ends of its arc, and again by the reviewer.
 
+- Additions (2026-11-18; fact sheet `sources-local/facts/fill-ul.md`, 101 quotes, script-checked): triangle of
+  auscultation, lumbar triangle, trapezius test, anatomical snuffbox (Gray 121/151, StatPearls 29489241, 30969656,
+  30085536, 28846224, PMC6549589, 7815005, 12275635, 12900228, 10072784, 12246593, 13340701, 4481793, 11329012,
+  9866992, 6221869, 8514418, 10692986, 10329327, Wikipedia). Snuffbox 3D: Z-Anatomy radial artery, cephalic vein and
+  superficial branch of the radial nerve, read by byte range from the whole-body packs; labels approximate. Left out:
+  latissimus dorsi bedside test (one vague source), ECRL/ECRB in the floor, "abducted" thumb, artery "crossed by EPL"
+  (Gray only). Review (2026-11-18) fixed those wordings and "after an injury".
+- Shared `assets/muscle-page.js`: "By bone" view (all five muscle pages) built from the existing checked attachment
+  areas; no new facts.
+
 ## Joints of the Upper Limb — `upper-limb/joints.html`
 
 - Fact sheets: `sources-local/facts/joints-shoulder.md` (349 quotes; SC, AC with coracoclavicular and coracoacromial
@@ -588,6 +598,13 @@ tubercles.
   (`tools/zanat/export_mod.py`). Pivots fitted (`tools/joints/ul_axes.py`): humeral head sphere r 19.1 mm, trochlea circle
   r 10.1 mm, 2nd metacarpal head sphere r 7.0 mm, PIP circle r 3.2 mm; SC and AC pivots at the facing surfaces. Every
   movement direction checked in screenshots at both ends of its arc, and by the reviewer.
+
+- Additions (2026-11-18, `fill-ul.md` part C): distal radio-ulnar nerves (AIN, PIN, dorsal cutaneous branch of ulnar)
+  and articular disc vessels; thumb CMC ligaments (main stabiliser disputed: anterior oblique vs dorsoradial, both
+  stated) and nerves. Sources PMC12398336, 12209593, 11912921, 13668832, 12777731, 8817812, 11929737, 10843995,
+  11682352, 12591505, 13065628, Wikipedia. Left out: proximal radio-ulnar joint nerves (one source) and arteries
+  (none), DRUJ capsule arteries. Review fixed "mainly" (disc supply; one source) and removed a verification note from
+  the page.
 
 ## Joints of the Lower Limb — `lower-limb/joints.html`
 

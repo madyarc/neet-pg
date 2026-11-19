@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Optic Nerve Diseases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Colour tokens, one meaning each: --fundus = the retina seen through the pupil; --disc = a healthy optic disc;
+   --hot = a hyperaemic (redder) disc; --pale = disc pallor (lost nerve fibres); --swell = the blurred rim of a
+   swollen disc; --haem = a haemorrhage; --vessel = retinal vessels; --seen / --lost = a part of the field that is /
+   is not seen. */
+html,body{margin:0} [hidden]{display:none!important}
+:root{
+  --bg:#f5f6f9; --surface:#ffffff; --ink:#1a2130; --muted:#5a6375; --line:#dce0e8; --accent:#2c56cc;
+  --clin:#cc3311;
+  --fundus:#d9774f; --disc:#f2c48d; --hot:#e8875f; --pale:#f6f1e4; --swell:#f0d3a8; --haem:#8e1b1b; --vessel:#9e2f2f;
+  --seen:#cfe0f5; --lost:#3a3f4b;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+:root[data-theme="dark"]{
+  --bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c; --accent:#7d9dff;
+  --clin:#ff7b6f;
+  --fundus:#b9603d; --disc:#e8b47a; --hot:#d9744c; --pale:#efe9da; --swell:#e3c294; --haem:#6e1010; --vessel:#7f2222;
+  --seen:#2a4466; --lost:#05070a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,4vw,38px);line-height:1.1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h2{font-family:var(--f-display);font-weight:600;font-size:21px;margin:0 0 6px;text-wrap:balance}
+h3{font-size:15px;margin:0 0 4px}
+p{margin:0}
+a{color:var(--accent)}
+.back a{font-size:14px;color:var(--muted);text-decoration:none} .back a:hover{color:var(--accent)}
+.lede{max-width:72ch;color:var(--muted)}
+.muted{color:var(--muted);font-size:13.5px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.stack{display:flex;flex-direction:column;gap:12px}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.split{grid-template-columns:minmax(0,1fr)}}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.chip{flex:none;font:500 13px var(--f-body);background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cap{border-left:3px solid var(--line);padding:2px 0 2px 10px;font-size:14px;max-width:80ch}
+.cap.key{border-left-color:var(--accent)} .cap.warn{border-left-color:var(--clin)}
+.swatch{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.tag{font:500 10.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+footer{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:12px}
+svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--f-body);fill:var(--ink)}
+.lbl{font-size:11px;fill:var(--muted)}
+.views{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:end}
+@media (max-width:520px){.views{grid-template-columns:minmax(0,1fr) minmax(0,1fr)} .views figure:first-child{grid-column:1 / -1;max-width:260px;justify-self:center;width:100%}}
+figure{margin:0;text-align:center}
+figcaption{font:600 13px var(--f-body)}
+dl.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+dl.facts dt{font-weight:600} dl.facts dd{margin:0}
+.toggles{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px}
+.toggles label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.toggles input{accent-color:var(--accent);width:17px;height:17px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600}
+.tablewrap{overflow-x:auto}
+tr.sel td{background:var(--bg)}
+.photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.photos img{width:100%;height:auto;border-radius:8px;display:block;background:#000}
+.photos figcaption{font:400 12.5px var(--f-body);color:var(--muted);text-align:left;margin-top:4px}
+.photos figcaption b{color:var(--ink)}
+.types{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.types .panel{background:var(--bg)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Ophthalmology</a></nav>
+<header class="stack">
+  <h1>Diseases of the Optic Nerve</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split">
+  <div class="panel stack">
+    <div class="chips" id="conds" role="group" aria-label="Condition"></div>
+    <div class="views">
+      <figure><svg id="disc" viewBox="-60 -60 120 133" role="img" aria-label="Schematic optic disc of the affected eye"></svg><figcaption id="disccap">Optic disc</figcaption></figure>
+      <figure><svg id="fL" viewBox="-62 -68 124 130" role="img" aria-label="Visual field of the left eye"></svg><figcaption>Left eye field</figcaption></figure>
+      <figure><svg id="fR" viewBox="-62 -68 124 130" role="img" aria-label="Visual field of the right eye"></svg><figcaption>Right eye field</figcaption></figure>
+    </div>
+    <div class="toggles" id="opts"></div>
+    <div class="legend">
+      <span><i class="swatch" style="background:var(--seen)"></i>field seen</span>
+      <span><i class="swatch" style="background:var(--lost)"></i>not seen</span>
+      <span><i class="swatch" style="background:var(--haem)"></i>haemorrhage</span>
+      <span><i class="swatch" style="background:var(--pale);border:1px solid var(--line)"></i>pallor</span>
+    </div>
+    <p class="muted">Schematic, not to scale: the disc drawing shows the signs the sources describe, not a real eye; field defects are typical patterns (real ones vary). The disc is the affected eye's (the right eye when only one is affected).</p>
+  </div>
+  <div class="panel stack" id="card" aria-live="polite"></div>
+</section>
+
+<section class="panel stack">
+  <h2>Side by side</h2>
+  <div class="tablewrap"><table id="table"></table></div>
+</section>
+
+<section class="panel stack">
+  <h2>Optic atrophy: the end stage</h2>
+  <div class="stack" id="atrophy"></div>
+  <div class="types" id="types"></div>
+</section>
+
+<section class="panel stack">
+  <h2>Tests</h2>
+  <div class="stack" id="tests"></div>
+</section>
+
+<section class="panel stack">
+  <h2>Fundus photographs</h2>
+  <div class="photos" id="photos"></div>
+</section>
+
+<footer id="foot"></footer>
+</div>
+
+<script>
+"use strict";
+/* ================= DATA (every statement checked: see ophthalmology/DATA-SOURCES.md) ================= */
+/* disc: drawing of the affected disc. swell 0–1 (whole disc), sector 'sup' (upper sector only), pale 'all' | 'temporal',
+   hot = hyperaemic, haem = haemorrhages, telang = small tortuous vessels round the disc, cupless = no cup.
+   field: per eye 'none' | 'central' | 'cecocentral' | 'blindspot' | 'altInf' | null (not drawn). */
+const CONDS = [
+  { key: 'normal', short: 'Normal disc', name: 'Normal optic disc',
+    disc: {}, field: { L: 'none', R: 'none' },
+    rows: [['Disc', 'Where the ganglion-cell axons leave the eye as the optic nerve (drawn schematically; compare the photograph below).'],
+           ['Field', 'Full, with a blind spot on the temporal side: the disc has no photoreceptors.']],
+    about: [] },
+  { key: 'on', short: 'Optic neuritis', name: 'Optic neuritis', opt: { id: 'papillitis', label: 'Front of the nerve inflamed (papillitis)' },
+    disc: o => o.papillitis ? { swell: 0.6 } : {}, field: { L: 'none', R: 'central' }, rapd: 'R',
+    rows: [['Who', 'Young adults (typically 20–45 years). Linked with multiple sclerosis (MS) and with antibody diseases: NMOSD (aquaporin-4) and MOGAD.'],
+           ['Symptoms', 'Loss of vision in one eye over days (peaking in 7–10 days), pain on moving the eye (often a few days before the loss), dull colours (dyschromatopsia), reduced contrast.'],
+           ['Signs', 'Relative afferent pupillary defect (RAPD) in a one-sided case. Disc normal when the inflammation is behind the eye (retrobulbar neuritis), swollen when it involves the front of the nerve (papillitis).'],
+           ['Field', 'Central or centrocaecal scotoma is the commonest; altitudinal, arcuate or general loss also occur.'],
+           ['Tests', 'MRI of brain and orbits with contrast (gadolinium): the nerve enhances, and white-matter plaques show the MS risk; CT has no role. OCT: nerve-fibre and ganglion-cell layers. VEP: delayed P100 in demyelination. AQP4 and MOG antibodies when atypical.'],
+           ['Treatment', '<b>Optic Neuritis Treatment Trial (ONTT; enrolled 1988–1991, main report 1992):</b> IV methylprednisolone 1 g a day for 3 days, then oral prednisone, speeds recovery but does not change the final vision. Oral prednisone <i>alone</i> gave more recurrences. The Indian consensus statement (2026) strongly discourages oral steroids alone. NMOSD and MOGAD: a longer oral steroid taper after the IV course.']],
+    about: [{ w: 1, t: 'In the ONTT (as reported in a 2026 review), about half of the patients with a first typical attack had developed MS by 15 years. Brain lesions on MRI indicate a high risk of MS.' },
+            { t: 'Features that differ from the typical picture, for example both eyes affected or poor recovery, are "atypical": they point to other causes such as NMOSD or MOGAD and need a wider search (review of the ONTT era, 2026; Indian consensus statement, 2026).' }] },
+  { key: 'pap', short: 'Papilloedema', name: 'Papilloedema', opt: { id: 'chronic', label: 'Long-standing (chronic)' },
+    disc: o => o.chronic ? { swell: 0.8, pale: 'all', cupless: 1 } : { swell: 1, haem: 1, cupless: 1 }, field: o => o.chronic ? { L: 'blindspot', R: 'blindspot', note: 'Later: further field loss and loss of vision.' } : { L: 'blindspot', R: 'blindspot' }, both: 1,
+    rows: [['Meaning', 'Swelling of the optic disc caused by raised intracranial pressure (ICP). Other disc swellings are "disc oedema", not papilloedema.'],
+           ['Causes', 'Brain tumours and other masses, haemorrhage, head injury, meningitis, hydrocephalus, venous sinus thrombosis, and idiopathic intracranial hypertension (IIH).'],
+           ['Symptoms', 'Headache, transient visual obscurations (greying-out lasting seconds), double vision from a sixth-nerve palsy, pulse-synchronous tinnitus.'],
+           ['Signs', 'Usually both eyes (asymmetric or one-sided in about 1 in 10). Early: acuity and colour vision are normal, the disc margin blurs (often first below), venous pulsation is lost. Later: an elevated disc with haemorrhages. Long-standing: the disc turns grey and pale (secondary optic atrophy).'],
+           ['Field', 'An enlarged blind spot: the commonest and often the only early change.'],
+           ['Tests', 'Brain imaging (MRI) to look for a cause; lumbar puncture for the opening pressure and the CSF. IIH needs normal imaging and normal CSF. Swelling is graded on the Frisén scale (1982).'],
+           ['Treatment (IIH)', '<b>IIH consensus guidelines (2018):</b> weight loss is the only disease-modifying treatment. <b>IIH Treatment Trial (2014):</b> acetazolamide with a low-salt weight-reducing diet gave a modest gain in field over diet alone. Failing or fast-falling vision needs surgery (CSF shunt, optic nerve sheath fenestration); the guidelines (2018) call the role of venous sinus stenting not yet established.']],
+    about: [{ w: 1, t: 'IIH mainly affects overweight women of childbearing age, but it also occurs in men and children.' }] },
+  { key: 'naion', short: 'NAION', name: 'Non-arteritic anterior ischaemic optic neuropathy (NAION)',
+    disc: { swell: 0.9, sector: 'sup', haem: 1, cupless: 1 }, field: { L: 'none', R: 'altInf' }, rapd: 'R',
+    rows: [['Who', 'Over 50: the commonest cause of a swollen disc and of acute optic neuropathy at that age. Risk factors: hypertension, diabetes, high lipids, obstructive sleep apnoea, a fall in blood pressure at night; erectile-dysfunction drugs (sildenafil) have been implicated. A small, crowded disc with little or no cup ("disc at risk").'],
+           ['Symptoms', 'Sudden, <b>painless</b> loss in one eye, often noticed on waking.'],
+           ['Signs', 'RAPD. Sectoral or diffuse disc swelling with haemorrhages beside the disc; no cup. Pallor follows in a few weeks.'],
+           ['Field', 'Typically a loss of the lower half (inferior altitudinal); central loss also occurs. In the drawing the upper sector of the disc is swollen: the lower field is seen by the upper retina.'],
+           ['Tests', 'ESR, CRP (and temporal artery biopsy if giant cell arteritis is possible) to exclude the arteritic form; OCT shows the swelling, then thinning.'],
+           ['Treatment', 'No proven treatment: control the vascular risk factors (which include a fall in blood pressure at night). <b>Ischemic Optic Neuropathy Decompression Trial (IONDT, 1995):</b> optic nerve sheath decompression did not help and may harm; it was abandoned.']],
+    about: [{ t: 'The other eye is affected later in about 15–25% of patients.' },
+            { t: 'Pain with a swollen disc is not typical of NAION: think of giant cell arteritis.' }] },
+  { key: 'aaion', short: 'Arteritic AION', name: 'Arteritic anterior ischaemic optic neuropathy (giant cell arteritis)',
+    disc: { swell: 1, cupless: 1 }, field: { L: null, R: null }, rapd: 'R',
+    rows: [['Cause', 'Giant cell arteritis (temporal arteritis): a granulomatous vasculitis of large and medium arteries in people over 50.'],
+           ['Symptoms', 'Loss of vision with headache, jaw claudication (pain on chewing), scalp tenderness, weight loss, fatigue, aching muscles. It is associated with polymyalgia rheumatica.'],
+           ['Signs', 'A swollen disc in an older patient with these symptoms. Field: varies; not drawn.'],
+           ['Tests', 'ESR and CRP (raised: the hallmark), temporal artery biopsy (the gold standard).'],
+           ['Treatment', 'An emergency: start high-dose steroids as soon as it is suspected, without waiting for the biopsy (steroids do not stop the biopsy from confirming it later). <b>British Society for Rheumatology guideline (2020):</b> with visual loss, IV methylprednisolone 0.5–1 g daily for up to 3 days, then oral prednisolone; without, oral prednisolone 40–60 mg daily. Tocilizumab (IL-6 receptor blocker) spares steroids. The taper lasts months to years.']],
+    about: [{ w: 1, t: 'Every patient over 50 with an ischaemic optic neuropathy must be checked for giant cell arteritis: steroids are started early to prevent blindness.' }] },
+  { key: 'lhon', short: 'LHON', name: 'Leber hereditary optic neuropathy (LHON)', opt: { id: 'later', label: 'Months later (second eye)' },
+    disc: o => ({ hot: 1, telang: 1, swell: 0.35 }), field: o => o.later ? { L: 'central', R: 'central' } : { L: 'none', R: 'central' },
+    rows: [['Cause', 'A mitochondrial DNA mutation, inherited from the mother. Three point mutations (m.11778 in ND4, m.3460 in ND1, m.14484 in ND6) cause about 90%; 11778 is usually the most frequent.'],
+           ['Who', 'Mostly young men (15–35 years); not every carrier loses sight, men far more often than women. Smoking and heavy drinking raise the risk.'],
+           ['Symptoms', 'Painless loss of central vision in one eye, then the other, usually within a year; colour vision lost.'],
+           ['Signs', 'In the acute stage the disc may look red and swollen, with small tortuous vessels round it (telangiectatic microangiopathy); it may also look normal. Optic atrophy follows.'],
+           ['Field', 'Central scotoma.'],
+           ['Tests', 'Genetic testing for the mtDNA mutations; OCT.'],
+           ['Treatment', 'Idebenone: the only disease-specific drug approved by the <b>European Medicines Agency (2015)</b>; avoid smoking and alcohol; genetic counselling. Most patients keep a severe loss.']],
+    about: [] },
+  { key: 'tox', short: 'Toxic / nutritional', name: 'Toxic and nutritional optic neuropathy',
+    disc: { pale: 'temporal' }, field: { L: 'cecocentral', R: 'cecocentral' }, both: 1,
+    rows: [['Causes', 'Drugs, above all ethambutol (dose-related); methanol; tobacco and alcohol with a poor diet; deficiency of B vitamins (such as thiamine and B12).'],
+           ['Symptoms', 'Slow, painless loss in <b>both eyes alike</b>, over months; dull colours.'],
+           ['Signs', '<b>No RAPD</b> (the damage is symmetrical). The disc looks normal at first; later the temporal side turns pale. The damage is in the papillomacular bundle (fibres from the macula).'],
+           ['Field', 'Central or centrocaecal scotomas (centre to blind spot).'],
+           ['Tests', 'History of drugs, alcohol, tobacco, diet and work; blood levels of vitamin B12 (or methanol).'],
+           ['Treatment', 'Remove the cause: stop the drug (ethambutol loss may partly recover if it is stopped early); stop tobacco and alcohol; a good diet with B-vitamin supplements. Methanol is an emergency: vision loss can be severe.']],
+    about: [] },
+  { key: 'atro', short: 'Optic atrophy', name: 'Optic atrophy',
+    disc: { pale: 'all' }, field: { L: null, R: null },
+    rows: [['Meaning', 'The end stage of damage to the ganglion-cell axons anywhere from the retina to the lateral geniculate body: the disc turns pale.'],
+           ['When', 'Pallor appears some weeks after the damage (the sources give 2–6 weeks).'],
+           ['Field', 'Depends on the cause; not drawn.'],
+           ['Types', 'Primary, secondary and consecutive: see below.']],
+    about: [] }
+];
+const ATROPHY = {
+  intro: [{ k: 1, t: 'The <b>pale disc</b> is the sign. It says that nerve fibres have been lost, not why.' }],
+  types: [
+    { h: 'Primary', t: 'No swelling of the disc came before. Causes: compression of the optic nerve or chiasma, hereditary optic neuropathy, nutritional optic atrophy.' },
+    { h: 'Secondary', t: 'After long-standing swelling of the disc: chronic papilloedema, papillitis, anterior ischaemic optic neuropathy.' },
+    { h: 'Consecutive', t: 'After disease of the retina and choroid: retinitis pigmentosa, central retinal artery occlusion.' }
+  ],
+  note: 'Terms differ: some authors call atrophy after retinal disease "secondary or consecutive"; here "secondary" means after disc swelling.'
+};
+const TESTS = [
+  { k: 1, t: '<b>Perimetry (visual fields):</b> the pattern points to the site: central and centrocaecal scotomas (optic neuritis, toxic and hereditary neuropathies), an altitudinal defect (ischaemic), an enlarged blind spot (papilloedema), bitemporal and homonymous defects (chiasma and beyond; see <a href="visual-pathway.html">the visual pathway</a>).' },
+  { t: '<b>OCT (optical coherence tomography):</b> measures the retinal nerve-fibre layer round the disc and the ganglion-cell layer at the macula: thick when the disc is swollen, thin after fibres are lost.' },
+  { t: '<b>VEP (visual evoked potential):</b> scalp electrodes over the occipital lobe record the response to a visual pattern. A <b>delayed P100</b> (longer latency) means slowed conduction (demyelination); a <b>smaller</b> response means lost axons. It also tests vision in infants, non-verbal patients and suspected malingering.' },
+  { t: '<b>MRI:</b> brain and orbits with contrast in optic neuritis (the inflamed nerve, and white-matter plaques that show the MS risk; CT has no role); brain imaging in papilloedema to find a cause.' },
+  { t: '<b>Blood tests:</b> ESR and CRP in anyone over 50 with an ischaemic optic neuropathy; AQP4 and MOG antibodies in atypical optic neuritis; vitamin B12; mitochondrial DNA for LHON.' }
+];
+const PHOTOS = [
+  { src: '../img/fundus-normal.jpg', alt: 'Fundus photograph of a normal left eye', cap: '<b>Normal fundus</b> (left eye), for comparison.', credit: 'Mikael Häggström, <a href="https://commons.wikimedia.org/wiki/File:Fundus_photograph_of_normal_left_eye.jpg">Wikimedia Commons</a>, CC0.' },
+  { src: '../img/fundus-papilloedema.jpg', alt: 'Fundus photograph of papilloedema', cap: '<b>Papilloedema:</b> swollen disc with blurred margins and haemorrhages.', credit: 'Jonathan Trobe, MD, University of Michigan Kellogg Eye Center, <a href="https://commons.wikimedia.org/wiki/File:Papilledema.jpg">Wikimedia Commons</a>, CC BY 3.0.' },
+  { src: '../img/fundus-atrophy.jpg', alt: 'Fundus photograph of optic atrophy (arrow)', cap: '<b>Optic atrophy</b> (right eye, Wolfram syndrome): pale disc (arrow).', credit: 'Manaviat, Rashidi &amp; Mohammadi, <i>Cases Journal</i> 2009, <a href="https://commons.wikimedia.org/wiki/File:Photographic_image_of_the_patient_right_eye_showing_optic_atrophy_without_diabetic_retinopathy_Wolfram_syndrome.jpg">Wikimedia Commons</a>, CC BY 2.0; resized.' }
+];
+const TEXT = {
+  lede: 'Choose a disease to see the disc (schematic), what each eye\'s field loses, and how it presents, is tested and is treated. The trial or guideline behind each treatment is named with its year.',
+  foot: '<p><b>Based on:</b> StatPearls; open-access reviews in <i>Biomedicines</i>, <i>Frontiers in Neurology</i>, <i>Eye and Brain</i>, <i>Cureus</i>, <i>Vision</i>, <i>Pharmaceuticals</i>, <i>Diagnostics</i>, <i>Community Eye Health</i> and others; the Indian consensus statement on optic neuritis (<i>Indian J Ophthalmol</i> 2026); IIH consensus guidelines (<i>J Neurol Neurosurg Psychiatry</i> 2018); Wikipedia.</p><p><b>Models used:</b> the discs and fields are schematic drawings, not to scale; field defects are typical patterns. Photographs from Wikimedia Commons, credited under each (resized).</p>'
+};
+/* ================= END DATA ================= */
+
+const NS = 'http://www.w3.org/2000/svg';
+const $ = id => document.getElementById(id);
+const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+let cur = { c: 1, o: {} };
+const C = () => CONDS[cur.c];
+const val = (x) => typeof x === 'function' ? x(cur.o) : x;
+
+/* the disc of a RIGHT eye seen by the examiner: temporal side (towards the macula) on the left of the picture */
+function drawDisc(d) {
+  const svg = $('disc'); svg.textContent = '';
+  el('circle', { cx: 0, cy: 0, r: 58, fill: 'var(--fundus)' }, svg);
+  el('circle', { cx: 0, cy: 0, r: 58 }, el('clipPath', { id: 'fund' }, el('defs', {}, svg)));
+  const R = 17, sw = d.swell || 0;
+  // vessels: four arcades leaving the disc centre (drawn over the swelling, hidden where it is thick)
+  const arc = [['M-1 -3 C -2 -22 -32 -36 -56 -16', 1.8], ['M-1 3 C -2 22 -32 36 -56 16', 1.8], ['M1 -3 C 8 -18 18 -34 26 -54', 1.5], ['M1 3 C 8 18 18 34 26 54', 1.5], ['M2 -1 C 18 -4 36 -8 56 -6', 1.1], ['M2 1 C 18 4 36 8 56 6', 1.1]];
+  // swollen rim: a soft halo that blurs the margin
+  if (sw) {
+    const sup = d.sector === 'sup';
+    const g = el('g', {}, svg);
+    if (sup) el('path', { d: `M ${-R - 9 * sw} 0 A ${R + 9 * sw} ${R + 9 * sw} 0 0 1 ${R + 9 * sw} 0 Z`, fill: 'var(--swell)', opacity: .85 }, g);
+    else el('circle', { cx: 0, cy: 0, r: R + 9 * sw, fill: 'var(--swell)', opacity: .85 }, g);
+    if (!sup) el('circle', { cx: 0, cy: 0, r: R + 4 * sw, fill: 'var(--swell)' }, g);
+  }
+  el('circle', { cx: 0, cy: 0, r: R, fill: d.hot ? 'var(--hot)' : 'var(--disc)' }, svg);
+  if (d.pale === 'all') el('circle', { cx: 0, cy: 0, r: R, fill: 'var(--pale)' }, svg);
+  if (d.pale === 'temporal') el('path', { d: `M 0 ${-R} A ${R} ${R} 0 0 0 0 ${R} Z`, fill: 'var(--pale)' }, svg);
+  if (!d.cupless) el('circle', { cx: 1, cy: 0, r: 6.5, fill: 'var(--pale)', opacity: d.pale ? 0 : .9 }, svg);
+  for (const [p, w] of arc) el('path', { 'clip-path': 'url(#fund)', d: p, fill: 'none', stroke: 'var(--vessel)', 'stroke-width': w, 'stroke-linecap': 'round', opacity: sw > 0.7 ? .55 : 1 }, svg);
+  if (d.telang) for (let k = 0; k < 9; k++) { const a = k / 9 * 2 * Math.PI, r1 = R + 2, r2 = R + 10;
+    el('path', { d: `M ${Math.cos(a) * r1} ${Math.sin(a) * r1} q ${Math.cos(a + 1) * 4} ${Math.sin(a + 1) * 4} ${Math.cos(a) * (r2 - r1)} ${Math.sin(a) * (r2 - r1)}`, fill: 'none', stroke: 'var(--vessel)', 'stroke-width': .9 }, svg); }
+  if (d.haem) { const spots = d.sector === 'sup' ? [[-14, -24, -30]] : [[-24, -10, 20], [18, -22, -50], [-6, 27, 80], [24, 14, 30]];
+    for (const [x, y, rot] of spots) el('ellipse', { cx: x, cy: y, rx: 6, ry: 2.2, transform: `rotate(${rot} ${x} ${y})`, fill: 'var(--haem)' }, svg); }
+  const t = el('text', { x: 0, y: 69, 'text-anchor': 'middle', class: 'lbl', 'font-size': 6.5 }, svg); t.textContent = '← temporal · nasal →';
+}
+
+/* field of one eye, as the patient sees it (temporal side outward). 1 unit = 1 degree × S */
+function drawField(id, eye, kind) {
+  const svg = $(id); svg.textContent = '';
+  const S = 0.6, sgnT = eye === 'L' ? -1 : 1;
+  if (kind == null) { el('circle', { cx: 0, cy: 0, r: 56, fill: 'none', stroke: 'var(--line)', 'stroke-dasharray': '3 3' }, svg);
+    const t = el('text', { x: 0, y: 4, 'text-anchor': 'middle', class: 'lbl' }, svg); t.textContent = 'not drawn'; return; }
+  const cid = id + 'c'; const cp = el('clipPath', { id: cid }, el('defs', {}, svg)); el('circle', { cx: 0, cy: 0, r: 56 }, cp);
+  const g = el('g', { 'clip-path': `url(#${cid})` }, svg);
+  el('rect', { x: -60, y: -60, width: 120, height: 120, fill: 'var(--seen)' }, g);
+  const bx = sgnT * 15 * S, by = 1.5 * S;
+  if (kind === 'altInf') el('rect', { x: -60, y: 0, width: 120, height: 60, fill: 'var(--lost)' }, g);
+  if (kind === 'central') el('circle', { cx: 0, cy: 0, r: 10 * S, fill: 'var(--lost)' }, g);
+  if (kind === 'cecocentral') el('ellipse', { cx: bx / 2, cy: by / 2, rx: (Math.abs(bx) / 2 + 6 * S), ry: 6 * S, fill: 'var(--lost)' }, g);
+  const big = kind === 'blindspot';
+  el('ellipse', { cx: bx, cy: by, rx: (big ? 7 : 2.75) * S, ry: (big ? 9 : 3.75) * S, fill: 'var(--lost)', opacity: big ? 1 : .7 }, g);
+  el('circle', { cx: 0, cy: 0, r: 56, fill: 'none', stroke: 'var(--muted)', 'stroke-width': .8 }, svg);
+  el('line', { x1: -56, y1: 0, x2: 56, y2: 0, stroke: 'var(--muted)', 'stroke-width': .5, 'stroke-dasharray': '2 3' }, svg);
+  el('line', { x1: 0, y1: -56, x2: 0, y2: 56, stroke: 'var(--muted)', 'stroke-width': .5, 'stroke-dasharray': '2 3' }, svg);
+  el('circle', { cx: 0, cy: 0, r: 1.6, fill: 'var(--ink)' }, svg);
+  const tl = el('text', { x: sgnT * 60, y: -58, 'text-anchor': sgnT < 0 ? 'start' : 'end', class: 'lbl', 'font-size': 8 }, svg); tl.textContent = 'temporal';
+}
+
+function render() {
+  const c = C();
+  $('conds').querySelectorAll('.chip').forEach((b, i) => b.setAttribute('aria-pressed', i === cur.c));
+  const opts = $('opts'); opts.textContent = '';
+  if (c.opt) { const lab = document.createElement('label'); const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = !!cur.o[c.opt.id];
+    cb.onchange = () => { cur.o[c.opt.id] = cb.checked; render(); }; lab.append(cb, ' ' + c.opt.label); opts.appendChild(lab); }
+  drawDisc(val(c.disc));
+  const f = val(c.field); drawField('fL', 'L', f.L); drawField('fR', 'R', f.R);
+  $('disccap').textContent = c.both ? 'Disc (both eyes alike)' : 'Optic disc';
+  const list = a => (a || []).map(x => `<p class="cap${x.k ? ' key' : x.w ? ' warn' : ''}">${x.t}</p>`).join('');
+  $('card').innerHTML = `<span class="tag">${c.short}</span><h2>${c.name}</h2>
+    <dl class="facts">${c.rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
+    ${f.note ? `<p class="muted">${f.note}</p>` : ''}${list(c.about)}`;
+  $('table').querySelectorAll('tbody tr').forEach((tr, i) => tr.classList.toggle('sel', i + 1 === cur.c));
+}
+
+function init() {
+  $('lede').innerHTML = TEXT.lede;
+  CONDS.forEach((c, i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = c.short;
+    b.onclick = () => { cur.c = i; cur.o = {}; render(); }; $('conds').appendChild(b); });
+  const T = [
+    ['Optic neuritis', 'Young adults', 'Days; pain on eye movement', 'Normal (retrobulbar) or swollen', 'Central / centrocaecal', 'IV methylprednisolone speeds recovery (ONTT 1992)'],
+    ['Papilloedema', 'Any; IIH: overweight young women', 'Headache, obscurations; acuity normal early', 'Both swollen', 'Enlarged blind spot', 'Treat the cause; IIH: weight loss, acetazolamide (IIHTT 2014)'],
+    ['NAION', 'Over 50, vascular risk', 'Sudden, painless, on waking', 'Swollen (sector), crowded, no cup', 'Inferior altitudinal', 'None proven; decompression harmful (IONDT 1995)'],
+    ['Arteritic AION', 'Over 50, GCA', 'Headache, jaw claudication', 'Swollen', 'Varies', 'Steroids at once (BSR 2020)'],
+    ['LHON', 'Young men', 'Painless, one eye then the other', 'Red, small tortuous vessels, or normal', 'Central', 'Idebenone (EMA 2015)'],
+    ['Toxic / nutritional', 'Drug, toxin, diet history', 'Slow, both eyes alike; no RAPD', 'Normal, then temporal pallor', 'Centrocaecal, both', 'Remove the cause; B vitamins']];
+  $('table').innerHTML = `<thead><tr><th>Disease</th><th>Who</th><th>Onset</th><th>Disc</th><th>Field</th><th>Treatment</th></tr></thead><tbody>${T.map(r => `<tr>${r.map(x => `<td>${x}</td>`).join('')}</tr>`).join('')}</tbody>`;
+  $('table').querySelectorAll('tbody tr').forEach((tr, i) => { tr.style.cursor = 'pointer'; tr.onclick = () => { cur.c = i + 1; cur.o = {}; render(); }; });
+  $('atrophy').innerHTML = ATROPHY.intro.map(x => `<p class="cap key">${x.t}</p>`).join('');
+  $('types').innerHTML = ATROPHY.types.map(x => `<div class="panel"><h3>${x.h}</h3><p style="font-size:14px">${x.t}</p></div>`).join('') + `<p class="muted" style="grid-column:1/-1">${ATROPHY.note}</p>`;
+  $('tests').innerHTML = TESTS.map(x => `<p class="cap${x.k ? ' key' : ''}">${x.t}</p>`).join('');
+  $('photos').innerHTML = PHOTOS.map(p => `<figure><img src="${p.src}" alt="${p.alt}" loading="lazy" width="480"><figcaption>${p.cap} ${p.credit}</figcaption></figure>`).join('');
+  $('foot').innerHTML = TEXT.foot;
+  render();
+}
+init();
+</script>
+</body>
+</html>

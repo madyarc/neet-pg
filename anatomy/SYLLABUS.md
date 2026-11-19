@@ -69,7 +69,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 8. Features of individual bones (Upper Limb)
 
 - [x] **AN8.1** Identify the given bone, its side, anatomical position, joint formation, important features and clinical anatomy (clavicle, scapula, humerus, radius, ulna, carpal bones) — *features, joints, clinical points, left or right for every bone incl. the carpals: [Bones of the Upper Limb](upper-limb/bones.html)*
-- [~] **AN8.2** Demonstrate important muscle attachments on the given bone — *attachment areas: [Muscles of the Upper Limb](upper-limb/muscles.html), [Muscles of the Lower Limb](lower-limb/muscles.html), [Muscles of the Back](back/muscles.html), [Muscles of the Head and Neck](head-neck/muscles.html)*
+- [x] **AN8.2** Demonstrate important muscle attachments on the given bone — *all attachment areas on a chosen bone, by bone or by muscle: Muscles of the [Upper Limb](upper-limb/muscles.html), [Lower Limb](lower-limb/muscles.html), [Back](back/muscles.html), [Trunk Wall](thorax/wall-muscles.html), [Head and Neck](head-neck/muscles.html)*
 - [x] **AN8.3** Identify and name various bones in articulated hand, Specify the parts of metacarpals and phalanges and enumerate the peculiarities of pisiform — *[Bones of the Upper Limb](upper-limb/bones.html)#hand, [The Upper Limb](upper-limb/upper-limb.html)*
 - [ ] **AN8.4** Describe scaphoid fracture and explain the anatomical basis of avascular necrosis
 
@@ -88,7 +88,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN10.5** Explain variations in formation of brachial plexus
 - [ ] **AN10.6** Explain the anatomical basis of clinical features of Erb’s palsy and Klumpke’s paralysis
 - [ ] **AN10.7** Describe axillary lymph nodes, areas of drainage and anatomical basis of their enlargement
-- [~] **AN10.8** Describe, identify and demonstrate the position, attachment, nerve supply and actions of trapezius and latissimus dorsi — *attachments, nerve and action of trapezius and latissimus dorsi: [Muscles of the Upper Limb](upper-limb/muscles.html)*
+- [~] **AN10.8** Describe, identify and demonstrate the position, attachment, nerve supply and actions of trapezius and latissimus dorsi — *position, attachments, nerve, actions, triangle of auscultation, lumbar triangle, trapezius test (no latissimus dorsi test found in two open sources): [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [ ] **AN10.9** Describe the arterial anastomosis around the scapula and mention the boundaries of triangle of auscultation
 - [x] **AN10.10** Describe and identify the deltoid and rotator cuff muscles along with their nerve supply and clinical anatomy — *deltoid and rotator cuff, nerves, axillary nerve injury, cuff tear: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [x] **AN10.11** Describe & demonstrate attachment, action and clinical anatomy of serratus anterior muscle — *serratus anterior, winged scapula: [Muscles of the Upper Limb](upper-limb/muscles.html)*
@@ -119,14 +119,14 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [x] **AN12.11** Identify, describe and demonstrate important muscle groups of dorsal forearm with attachments, nerve supply and actions — *[Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [ ] **AN12.12** Identify & describe origin, course, relations, branches (or tributaries), termination of important nerves and vessels of back of forearm
 - [x] **AN12.13** Describe the anatomical basis of Wrist drop — *wrist drop and PIN lesion: [Muscles of the Upper Limb](upper-limb/muscles.html) (Nerve supply, radial)*
-- [~] **AN12.14** Identify & describe compartments deep to extensor retinaculum and describe the boundaries and contents of anatomical snuff box. — *the six extensor compartments: [Muscles of the Upper Limb](upper-limb/muscles.html) (snuffbox not yet)*
+- [x] **AN12.14** Identify & describe compartments deep to extensor retinaculum and describe the boundaries and contents of anatomical snuff box. — *six extensor compartments; snuffbox boundaries, floor, roof and contents in 3D: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [ ] **AN12.15** Identify & describe extensor expansion formation
 
 ### 13. General Features, Joints, radiographs & surface marking
 
 - [ ] **AN13.1** Describe and explain Fascia of upper limb and compartments, veins of upper limb and its lymphatic drainage
 - [ ] **AN13.2** Describe dermatomes of upper limb
-- [~] **AN13.3** Identify & describe the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements, blood and nerve supply of elbow joint, proximal and distal radio-ulnar joints, wrist joint & first carpometacarpal joint — *all in 3D with text; no open source found for the radio-ulnar joints' blood and nerve supply or named first CMC ligaments: [Joints of the Upper Limb](upper-limb/joints.html)*
+- [~] **AN13.3** Identify & describe the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements, blood and nerve supply of elbow joint, proximal and distal radio-ulnar joints, wrist joint & first carpometacarpal joint — *all in 3D with text; distal radio-ulnar nerves and disc supply, thumb CMC ligaments and nerves; no two open sources for the proximal radio-ulnar joint's own nerves and arteries: [Joints of the Upper Limb](upper-limb/joints.html)*
 - [x] **AN13.4** Describe Sternoclavicular joint, Acromioclavicular joint, Carpometacarpal joints & Metacarpophalangealjoint — *[Joints of the Upper Limb](upper-limb/joints.html)*
 - [ ] **AN13.5** Identify the bones and joints of upper limb seen in anteroposterior and lateral view radiographs of shoulder region, arm, elbow, forearm and hand
 - [ ] **AN13.6** Identify & demonstrate important bony landmarks of upper limb: Jugular notch, sternal angle, acromial angle, spine of the scapula, vertebral level of the medial end and Inferior angle of the scapula

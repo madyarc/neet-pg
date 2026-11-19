@@ -46,6 +46,9 @@
         <table class="t" id="comp"></table>
         <div class="group-h">Movements of the thumb (tap one)</div>
         <table class="t" id="thumb"></table>
+        <div class="group-h">Anatomical snuffbox (tap a row)</div>
+        <table class="t" id="snuff"></table>
+        <p class="note" id="snuff-note"></p>
       </div>
     </div>
   </div>
@@ -64,9 +67,9 @@
 /* ===================== DATA — every statement checked in two independent sources (see anatomy/DATA-SOURCES.md,
    "Muscles of the upper limb"); fact sheets: sources-local/facts/ul-muscles-a.md, ul-muscles-b.md ===================== */
 const DATA = {
-  lede: 'The muscles of the right upper limb on its bones, from the shoulder girdle to the hand. Tap a muscle to see where it arises and inserts, its nerve and what it does; the attachment areas light up on the bone. Other muscles turn to glass so deep ones stay visible.',
+  lede: 'The muscles of the right upper limb on its bones, from the shoulder girdle to the hand. Tap a muscle to see where it arises and inserts, its nerve and what it does; the attachment areas light up on the bone. Other muscles turn to glass so deep ones stay visible. Or pick a bone (or tap one) to see every attachment on it.',
   based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the muscles of the upper extremity; checked against StatPearls (NCBI Bookshelf), open-access anatomy papers and Wikipedia. Where they disagree, the modern wording is used.',
-  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, retinacula and aponeuroses from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones. Simplified meshes, shared under the same licences. The right limb is shown; muscle shapes are a single model, not every body. Attachment areas are approximate (where the muscle meets the bone near the landmark named in the text).',
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, retinacula and aponeuroses, and the radial artery, cephalic vein and superficial branch of the radial nerve shown with the snuffbox, from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones. Simplified meshes, shared under the same licences. The right limb is shown; muscle shapes are a single model, not every body. Attachment areas are approximate (where the muscle meets the bone near the landmark named in the text).',
 };
 /* nerve key -> [name, colour token] */
 const NERVES = {
@@ -108,10 +111,11 @@ const M = {
     'Upper fibres: back of the lateral third of the clavicle. Middle fibres: acromion and the upper lip of the spine of the scapula. Lower fibres: the medial end of the spine.',
     'accessory', 'Spinal accessory nerve (cranial nerve XI); branches of C3 and C4 also reach it (mainly sensory; sources differ on whether they carry motor fibres).',
     'Upper fibres raise the scapula (shrug), middle fibres retract it, lower fibres depress it; upper and lower fibres together rotate it upwards (with serratus anterior) to lift the arm above 90°.',
-    'An accessory nerve injury in the posterior triangle of the neck (e.g. lymph node biopsy) gives a drooping shoulder, weak abduction above 90° and lateral winging of the scapula.'],
+    '<b>Position:</b> a flat, triangular, superficial muscle covering the back of the neck and shoulder. <b>Test:</b> the patient shrugs the shoulders against resistance. An accessory nerve injury in the posterior triangle of the neck (e.g. lymph node biopsy) gives a drooping shoulder, weak abduction above 90° and lateral winging of the scapula. <b>Triangle of auscultation:</b> a gap bounded by the lower border of trapezius, latissimus dorsi and the medial border of the scapula; its floor is partly rhomboid major, with the 6th and 7th ribs and intercostal muscles deeper. Folding the arms across the chest and bending forward draws the scapula forwards and enlarges it. The muscle layer is thin here, so breath sounds are heard well; it is the site of the rhomboid intercostal block.'],
   lat_dorsi: ['back', 'Spines of T7–T12; through the thoracolumbar fascia, the lumbar and sacral spines and the iliac crest; the lower 3–4 ribs; often a slip from the inferior angle of the scapula.',
     'Floor of the intertubercular groove; its tendon twists and passes in front of teres major.', 'plexus', 'Thoracodorsal nerve (C6, C7, C8), from the posterior cord.',
-    'Extends, adducts and medially rotates the arm; with the arms fixed it lifts the trunk (climbing).', ''],
+    'Extends, adducts and medially rotates the arm; with the arms fixed it lifts the trunk (climbing).',
+    '<b>Position:</b> a broad, flat, triangular muscle covering the lumbar region and the lower half of the back of the thorax, narrowing to a tendon at the humerus. Its upper border bounds the triangle of auscultation (see trapezius). <b>Lumbar triangle of Petit</b> (inferior lumbar triangle): between the lateral margin of latissimus dorsi (behind), the posterior border of the external oblique (in front) and the iliac crest (base); its floor is the internal oblique. A hernia through it (Petit\'s hernia) is rare.'],
   lev_scap: ['back', 'Transverse processes of C1 and C2, and the posterior tubercles of the transverse processes of C3 and C4.',
     'Medial border of the scapula, from the superior angle to the root of the spine.', 'cervical', 'C3 and C4 (cervical plexus), often also the dorsal scapular nerve.',
     'Raises the scapula and rotates it downwards; with the shoulder fixed, bends the neck to the same side.', ''],
@@ -245,7 +249,7 @@ const NERVE_TEXT = {
   cervical: 'C3 and C4 supply levator scapulae (often with the dorsal scapular nerve) and also reach trapezius.',
 };
 const WRIST = {
-  intro: 'At the wrist the deep fascia is thickened into two retinacula, which hold the tendons down. Tap one.',
+  intro: 'At the wrist the deep fascia is thickened into two retinacula, which hold the tendons down. Tap one, or a row below (extensor compartments, thumb movements, the anatomical snuffbox).',
   parts: [
     ['flexor_ret', 'Flexor retinaculum', 'Attached medially to the pisiform and the hook of the hamate, laterally to the tubercle of the scaphoid and the trapezium. It turns the hollow front of the carpus into the <b>carpal tunnel</b>, which carries the median nerve (just under the retinaculum) and nine tendons: four of FDS, four of FDP and FPL. In front of the retinaculum, not in the tunnel: the ulnar nerve and artery, and the palmaris longus tendon. FCR runs in its own canal in the retinaculum\'s lateral part. The short thenar and hypothenar muscles arise from it.'],
     ['extensor_ret', 'Extensor retinaculum', 'A thickening of the deep fascia on the back of the forearm. Deep to it the extensor tendons run in six compartments (table below).'],
@@ -269,6 +273,21 @@ const WRIST = {
     ['Adduction', ['adductor_pollicis'], 'Adductor pollicis', 'ulnar (deep branch)'],
     ['Opposition', ['op'], 'Opponens pollicis (with help from other short thumb muscles)', 'median (recurrent branch)'],
   ],
+  /* anatomical snuffbox: [row, text, parts to keep solid] (fact sheet sources-local/facts/fill-ul.md, part B) */
+  snuff: [
+    ['Borders', 'Medial (ulnar side): the tendon of <b>extensor pollicis longus</b>. Lateral (radial side): the tendons of <b>abductor pollicis longus</b> and <b>extensor pollicis brevis</b>. Proximal: the styloid process of the radius. It shows best with the thumb extended.', ['epl', 'epb', 'apl']],
+    ['Floor', 'From proximal to distal: the styloid process of the radius, the <b>scaphoid</b>, the <b>trapezium</b> and the base of the first metacarpal.', []],
+    ['Roof', 'Skin; the cephalic vein begins in it.', ['v_cephalic_vein_r']],
+    ['Contents', 'The <b>radial artery</b>, on the floor deep to the tendons (it lies on the scaphoid and trapezium, then passes between the heads of the first dorsal interosseous; the model shows it only as far as the snuffbox); the beginning of the <b>cephalic vein</b>; the <b>superficial branch of the radial nerve</b>. The radial pulse can be felt here, and the artery here is used for catheter access (distal radial access).', ['v_radial_artery_r', 'v_cephalic_vein_r', 'n_superficial_branch_of_radial_nerve_r']],
+    ['Clinical', 'Tenderness in the snuffbox after an injury suggests a <b>fracture of the scaphoid</b>, which lies in its floor.', []],
+  ],
+  // 3D extras, downloaded only when the snuffbox is opened (a few kB each, read from the whole-body packs)
+  snuffParts: [['../models/body-vessels/body-vessels.json', 'v_radial_artery_r', '--artery'], ['../models/body-vessels/body-vessels.json', 'v_cephalic_vein_r', '--vein'],
+    ['../models/body-nerves/body-nerves.json', 'n_superficial_branch_of_radial_nerve_r', '--nerve']],
+  snuffCentre: [-281, -114, 809],   // approximate centre of the box on this model (between the EPL and EPB tendons at the scaphoid)
+  snuffLabels: [['epl', 'EPL (medial border)'], ['epb', 'EPB'], ['apl', 'APL'], ['radius', 'Radial styloid'], ['scaphoid', 'Scaphoid'], ['trapezium', 'Trapezium'],
+    ['mc1', 'Base of 1st metacarpal'], ['v_radial_artery_r', 'Radial artery'], ['v_cephalic_vein_r', 'Cephalic vein'], ['n_superficial_branch_of_radial_nerve_r', 'Superficial branch of radial nerve']],
+  snuffNote: 'Artery red, vein blue, nerve yellow; the three tendons are drawn pale. The vessels and nerve are whole-body models placed on these bones; each label sits at the point of its part nearest the box (approximate), and is faded when that point is hidden behind something.',
 };
 
 /* ===================== PAGE (shared logic: ../assets/muscle-page.js) ===================== */
@@ -279,7 +298,7 @@ function buildWrist(api) {
     if (!api.has(k)) continue;
     const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
     b.innerHTML = `<i style="background:var(--fascia)"></i><span>${name}</span>`;
-    b.onclick = () => { clearRows(); pressed('#wrist-list button', x => x === k); $('wrist-desc').innerHTML = `<b>${name}.</b> ${text}`; focusOn([k]); v.fit([k]); };
+    b.onclick = () => { clearSnuff(api); clearRows(); pressed('#wrist-list button', x => x === k); $('wrist-desc').innerHTML = `<b>${name}.</b> ${text}`; focusOn([k]); v.fit([k]); };
     box.append(b);
   }
   const comp = $('comp');
@@ -287,16 +306,76 @@ function buildWrist(api) {
   const thumb = $('thumb');
   thumb.innerHTML = '<tr><th>Movement</th><th>Muscles</th><th>Nerve</th></tr>' + WRIST.thumb.map(([mv, ks, t, n], i) => `<tr data-k="t${i}" aria-pressed="false"><td>${mv}</td><td>${t}</td><td>${n}</td></tr>`).join('');
   const rowSel = (row, ks, text) => {
-    clearRows(); pressed('#wrist-list button', () => false); row.setAttribute('aria-pressed', 'true');
+    clearSnuff(api); clearRows(); pressed('#wrist-list button', () => false); row.setAttribute('aria-pressed', 'true');
     $('wrist-desc').innerHTML = text; focusOn(ks); v.fit(ks.concat(['radius', 'ulna'].filter(api.has))); v.face([0, 1, 0.2], {zoom: 1});
   };
   comp.querySelectorAll('tr[data-k]').forEach((r, i) => r.onclick = () => { const c = WRIST.comps[i]; rowSel(r, c[1], `<b>Compartment ${c[0]}:</b> ${c[2]}. ${c[3]}`); });
   thumb.querySelectorAll('tr[data-k]').forEach((r, i) => r.onclick = () => { const t = WRIST.thumb[i]; rowSel(r, t[1], `<b>${t[0]}:</b> ${t[2]} (${t[3]}).`); v.face([0, -1, 0], {zoom: 1}); });
+  const snuff = $('snuff');
+  snuff.innerHTML = WRIST.snuff.map(([h, t], i) => `<tr data-k="s${i}" aria-pressed="false"><th scope="row">${h}</th><td>${t}</td></tr>`).join('');
+  snuff.querySelectorAll('tr[data-k]').forEach((r, i) => r.onclick = () => showSnuff(api, r, WRIST.snuff[i]));
+}
+/* the anatomical snuffbox in 3D: the artery, vein and nerve are read (by byte range when the server allows it) from the
+   whole-body vessel and nerve packs, only when the reader first opens it */
+let snuffLoading = null;
+function loadSnuff(api) {
+  if (snuffLoading) return snuffLoading;
+  snuffLoading = (async () => {
+    const mans = {};
+    for (const [url, key] of WRIST.snuffParts) {
+      if (api.has(key)) continue;
+      mans[url] = mans[url] || await fetch(url).then(r => r.json());
+      const info = mans[url].parts.find(p => p.key === key); if (!info) continue;
+      const file = url.slice(0, url.lastIndexOf('/') + 1) + info.file, end = info.offset + info.bytes - 1;
+      let buf = null;
+      try { const r = await fetch(file, {headers: {Range: `bytes=${info.offset}-${end}`}});
+        const b = await r.arrayBuffer(); buf = r.status === 206 ? b : b.slice(info.offset, end + 1); } catch (e) { buf = null; }
+      if (!buf || String.fromCharCode(...new Uint8Array(buf, 0, 4)) !== 'NPM1')   // a range the server did not honour as asked
+        buf = (await fetch(file).then(r => r.arrayBuffer())).slice(info.offset, end + 1);
+      const u = URL.createObjectURL(new Blob([buf]));
+      try { await api.v.loadPart(key, u, {name: info.name, bbox: info.bbox}); } finally { URL.revokeObjectURL(u); }
+    }
+  })();
+  snuffLoading.catch(() => { snuffLoading = null; });
+  return snuffLoading;
+}
+const SNUFF_TENDONS = ['epl', 'epb', 'apl'];
+let snuffOn = false, snuffColours = {};
+function clearSnuff(api) {   // back to the muscle colours (the tendons are drawn neutral in the snuffbox, away from artery/vein/nerve colours)
+  if (!snuffOn) return; snuffOn = false;
+  api.v.setMarkers(null);
+  const c = snuffColours;
+  for (const k of SNUFF_TENDONS) if (api.has(k) && c[k]) api.v.setColour(k, c[k]);
+}
+function nearest(v, key, c) {
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos; let best = 0, bd = 1e18;
+  for (let i = 0; i < pos.length; i += 3) { const d = (pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2; if (d < bd) { bd = d; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+async function showSnuff(api, row, [h, text, keys]) {
+  const {v, focusOn, pressed, clearRows} = api, $ = id => document.getElementById(id);
+  clearRows(); pressed('#wrist-list button', () => false); row.setAttribute('aria-pressed', 'true');
+  $('wrist-desc').innerHTML = `<b>Anatomical snuffbox, ${h.toLowerCase()}:</b> ${text}`;
+  $('snuff-note').textContent = 'Loading the vessels and nerve…';
+  try { await loadSnuff(api); $('snuff-note').textContent = WRIST.snuffNote; }
+  catch (e) { $('snuff-note').textContent = 'Could not load the vessels and nerve: ' + e.message; }
+  if (row.getAttribute('aria-pressed') !== 'true') return;    // the reader moved on while loading
+  for (const [, k, tok] of WRIST.snuffParts) if (api.has(k)) { v.setColour(k, tok); v.setVisible(k, true); }
+  if (!snuffOn) { snuffColours = Object.fromEntries(SNUFF_TENDONS.filter(api.has).map(k => [k, v.parts.get(k).colour])); snuffOn = true; }
+  for (const k of SNUFF_TENDONS) if (api.has(k)) v.setColour(k, '--soft');
+  focusOn(keys.concat(WRIST.snuffParts.map(x => x[1])).filter(api.has));
+  const c = WRIST.snuffCentre, css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+  v.setMarkers(WRIST.snuffLabels.filter(([k]) => api.has(k)).map(([k, label]) => ({p: nearest(v, k, c), label, color: css('--mark'), always: true})));
+  v.fit(['scaphoid', 'trapezium', 'mc1'].filter(api.has)); v.centre = c.slice();
+  v.face([-1, 0.15, 0.3], {zoom: 1.3});
 }
 MusclePage({
   base: '../models/upper-limb-muscles/', manifest: 'upper-limb-muscles.json', DATA, GROUPS, NERVES, NERVE_TEXT, M,
-  extra: {key: 'wrist', parts: WRIST.parts.map(p => p[0]), build: buildWrist,
-    enter(api) { document.getElementById('wrist-desc').innerHTML = WRIST.intro; const ks = ['flexor_ret', 'extensor_ret', 'palmar_apon'].filter(api.has);
+  extra: {key: 'wrist', parts: WRIST.parts.map(p => p[0]).concat(WRIST.snuffParts.map(p => p[1])), build: buildWrist,
+    colours: Object.fromEntries(WRIST.snuffParts.map(p => [p[1], p[2]])),
+    leave(api) { clearSnuff(api); },
+    enter(api) { clearSnuff(api); document.getElementById('wrist-desc').innerHTML = WRIST.intro; const ks = ['flexor_ret', 'extensor_ret', 'palmar_apon'].filter(api.has);
       api.focusOn(ks); api.v.fit(ks.concat(['scaphoid', 'hamate', 'mc3'].filter(api.has))); api.v.face([0, -1, 0], {zoom: 1}); }},
 });
 </script>

@@ -10,12 +10,14 @@
 <style>
 /* Colour tokens, one meaning each: --fl / --fr = the LEFT / RIGHT half of what the patient sees (visual hemifield),
    and every nerve fibre drawn in that colour carries that half; --lost = a part of the field that is not seen;
-   --mark = the chosen lesion. */
+   --mark = the chosen lesion. Physiology section: --cS / --cM / --cL = short-, middle- and long-wavelength cones;
+   --rod = rods; --cur = what is happening now in a step-through (the active step, the time marker). */
 html,body{margin:0} [hidden]{display:none!important}
 :root{
   --bg:#f5f6f9; --surface:#ffffff; --ink:#1a2130; --muted:#5a6375; --line:#dce0e8; --accent:#2c56cc;
   --mark:#cf3f33; --clin:#cc3311;
   --fl:#c9a227; --fr:#8e3b8e; --lost:#3a3f4b; --brain:#eceff4;
+  --cS:#5b4fcf; --cM:#2e8b57; --cL:#d9822b; --rod:#6e7687; --cur:#0f8fa8;
   --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
   --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
@@ -23,7 +25,8 @@ html,body{margin:0} [hidden]{display:none!important}
 :root[data-theme="dark"]{
   --bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c; --accent:#7d9dff;
   --mark:#ff7b6f; --clin:#ff7b6f;
-  --fl:#e3c04a; --fr:#c77bc7; --lost:#05070a; --brain:#1c222d; color-scheme:dark}
+  --fl:#e3c04a; --fr:#c77bc7; --lost:#05070a; --brain:#1c222d;
+  --cS:#9b90ff; --cM:#5cc28a; --cL:#f0a258; --rod:#a3abbb; --cur:#3cc7e0; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
@@ -74,6 +77,20 @@ tr.sel td{background:var(--bg)}
 .legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
 .themebtn{font:500 13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.layer{cursor:pointer} .layer:focus-visible rect{stroke:var(--accent);stroke-width:2}
+.layer.on rect.band{stroke:var(--cur);stroke-width:2.5}
+.steps{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.steps li{border-left:3px solid var(--line);padding:3px 0 3px 10px;font-size:14px;color:var(--muted)}
+.steps li.done{color:var(--ink)} .steps li.now{border-left-color:var(--cur);color:var(--ink);background:var(--bg)}
+.ctl{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 10px;align-items:center;font-size:14px}
+.ctl input[type=range]{width:100%;accent-color:var(--accent)}
+.ctl output{font:500 13px var(--f-mono);min-width:7ch;text-align:right}
+.bars{display:grid;grid-template-columns:auto minmax(0,1fr) 5ch;gap:4px 8px;align-items:center;font-size:13px}
+.bars .bar{height:12px;border-radius:3px;background:var(--line);position:relative;overflow:hidden}
+.bars .bar i{position:absolute;top:0;bottom:0;border-radius:3px}
+.bars .num{font:500 12px var(--f-mono);text-align:right}
+h2.sec{font-size:26px;margin-top:6px}
+@media (max-width:600px){#dark .lbl,#spec .lbl{font-size:15px} #photo .lbl{font-size:13px}}
 </style>
 </head>
 <body>
@@ -116,6 +133,60 @@ tr.sel td{background:var(--bg)}
   <div class="tablewrap"><table id="table"></table></div>
 </section>
 
+<section class="stack" id="physio">
+  <h2 class="sec">Physiology of vision</h2>
+  <p class="lede">Before the pathway: how the retina turns light into a signal. Tap a layer, step through the light response, run the clock in the dark, and move along the spectrum.</p>
+</section>
+
+<section class="split">
+  <div class="panel stack">
+    <h2>The retina, layer by layer</h2>
+    <svg id="layers" viewBox="0 0 400 330" role="img" aria-label="Schematic cross-section of the retina with ten layers"></svg>
+    <p class="muted">Schematic, not to scale: layer thicknesses are drawn equal.</p>
+  </div>
+  <div class="stack">
+    <div class="panel stack" id="layerinfo" aria-live="polite"></div>
+    <div class="panel stack">
+      <h2>Rods and cones</h2>
+      <div class="tablewrap"><table id="rodcone"></table></div>
+    </div>
+  </div>
+</section>
+
+<section class="split">
+  <div class="panel stack">
+    <h2>Phototransduction: what light does to a rod</h2>
+    <svg id="photo" viewBox="0 0 400 260" role="img" aria-label="Schematic rod outer segment showing the light response"></svg>
+    <div class="chips wrapc" id="photobtn" role="group" aria-label="Step through"></div>
+    <p class="muted">Schematic. Cones use the same cascade with their own opsins.</p>
+  </div>
+  <div class="panel stack">
+    <ol class="steps" id="steps"></ol>
+    <div class="stack" id="photonotes"></div>
+  </div>
+</section>
+
+<section class="split">
+  <div class="panel stack">
+    <h2>Dark adaptation</h2>
+    <svg id="dark" viewBox="0 0 400 240" role="img" aria-label="Schematic dark adaptation curve: threshold against time in the dark"></svg>
+    <div class="ctl"><label for="tdark">Time in the dark</label><input type="range" id="tdark" min="0" max="40" step="0.5" value="3"><output id="tdarko"></output></div>
+    <p class="muted">Schematic curve (shape from the sources, not measured data). Lower = more sensitive.</p>
+  </div>
+  <div class="panel stack" id="darkinfo" aria-live="polite"></div>
+</section>
+
+<section class="split">
+  <div class="panel stack">
+    <h2>Colour vision</h2>
+    <svg id="spec" viewBox="0 0 400 220" role="img" aria-label="Schematic sensitivity curves of the three cone types and rods"></svg>
+    <div class="ctl"><label for="wl">Wavelength</label><input type="range" id="wl" min="400" max="680" step="5" value="560"><output id="wlo"></output></div>
+    <div class="bars" id="bars"></div>
+    <p class="muted">Curves are schematic bell shapes centred on the peaks the sources give (about 420, 530 and 560 nm; rods about 500 nm); real curves are broader and differ between people.</p>
+  </div>
+  <div class="panel stack" id="colourinfo"></div>
+</section>
+
 <footer id="foot"></footer>
 </div>
 
@@ -133,7 +204,7 @@ const TEXT = {
     { t: '<b>Lateral geniculate body:</b> lesions here are rare. They give homonymous defects on the other side, often sector-shaped; they may be congruous or incongruous (not shown on the diagram).' },
     { t: '<b>The normal field</b> reaches about 60° on the nasal side, more than 90° on the temporal side, about 60° up and about 70° down (the figures vary between sources and tests). <b>The blind spot</b> is the optic disc, which has no photoreceptors. The disc lies on the nasal side of the retina, so the blind spot lies on the temporal side of the field, about 15° from the centre and just below the horizontal.' }
   ],
-  foot: '<p><b>Based on:</b> EyeWiki (American Academy of Ophthalmology); StatPearls; open-access reviews in <i>Eye</i>, <i>Frontiers in Ophthalmology</i>, <i>Neurology: Clinical Practice</i> and <i>Community Eye Health</i>; Gray\'s <i>Anatomy</i> (1918); Wikipedia.</p><p><b>Models used:</b> the pathway is a schematic drawing, not to scale. Field outlines, the size of the spared centre and the blind spot are approximate. Real defects are often partial; each site here shows the classic, complete pattern.</p>'
+  foot: '<p><b>Based on:</b> EyeWiki (American Academy of Ophthalmology); StatPearls; open-access reviews in <i>Eye</i>, <i>Frontiers in Ophthalmology</i>, <i>Neurology: Clinical Practice</i> and <i>Community Eye Health</i>; Gray\'s <i>Anatomy</i> (1918); Wikipedia. Physiology of vision: reviews in <i>J Physiol</i> (2022), <i>Front Neurosci</i> (2024), <i>J Clin Med</i> (2022); StatPearls; Gray 1918; Wikipedia.</p><p><b>Models used:</b> the pathway is a schematic drawing, not to scale. Field outlines, the size of the spared centre and the blind spot are approximate. Real defects are often partial; each site here shows the classic, complete pattern. Physiology drawings (retinal layers, outer segment, dark-adaptation curve, sensitivity curves) are schematic.</p>'
 };
 /* Field cells: eye L/R × half t (temporal) / n (nasal) × u (upper) / d (lower). cut(side, other) returns the lost cells.
    at = marker position on the LEFT side (mirrored for the right); mid = one marker on the midline; scot = a central
@@ -200,6 +271,61 @@ const SITES = [
     why: 'The centre of the field is often spared. This is thought to be due to the double blood supply of the occipital pole (posterior and middle cerebral arteries), so an occlusion of the posterior cerebral artery alone leaves the macular area working; the exact mechanism is still debated.',
     note: 'Macular sparing points to the cortex, but it can occasionally occur with lesions further forward.',
     tcause: 'Posterior cerebral artery infarct' }
+];
+/* ---- Physiology of vision ---- */
+/* retinal layers from the vitreous (inner, top of the drawing) to the choroid (outer, bottom) */
+const LAYERS = [
+  { n: 'Inner limiting membrane', t: 'A basement membrane formed by the foot-plates of Müller cells (the supporting cells that run through the retina).' },
+  { n: 'Nerve fibre layer', t: 'Axons of the ganglion cells running to the optic disc, where they leave as the optic nerve.' },
+  { n: 'Ganglion cell layer', t: 'Cell bodies of the ganglion cells: the last neurons of the retina, whose axons form the optic nerve.' },
+  { n: 'Inner plexiform layer', t: 'Synapses of bipolar cells with ganglion cells and amacrine cells.' },
+  { n: 'Inner nuclear layer', t: 'Cell bodies of the bipolar, horizontal and amacrine cells.' },
+  { n: 'Outer plexiform layer', t: 'Synapses of the rods and cones with bipolar and horizontal cells.' },
+  { n: 'Outer nuclear layer', t: 'Cell bodies of the rods and cones.' },
+  { n: 'External limiting membrane', t: 'Formed by Müller cells at the bases of the rods and cones.' },
+  { n: 'Rods and cones (inner and outer segments)', t: 'The photoreceptors. Their outer segments hold the visual pigment (rhodopsin in rods), which light bleaches.', key: 1 },
+  { n: 'Retinal pigment epithelium', t: 'A single layer of pigmented cells, the outermost layer of the retina, against the choroid.' }
+];
+const RETINA_NOTE = 'The retina is <b>inverted</b>: light crosses all the inner layers before it reaches the rods and cones at the back. The signal then runs the other way: photoreceptors → bipolar cells → ganglion cells → nerve fibre layer → optic nerve. (Gray 1918 counts the same structures as a pigmented layer plus seven layers, with the two limiting membranes described separately.)';
+const RODCONE = [
+  ['', 'Rods', 'Cones'],
+  ['Number (each eye)', 'Roughly 100–120 million', 'About 6 million'],
+  ['Pigment', 'Rhodopsin', 'Three cone opsins (S, M, L)'],
+  ['Peak sensitivity', 'About 500 nm', 'About 420 (S), 530 (M), 560 nm (L)'],
+  ['Works in', 'Dim light: night vision, no colour', 'Bright light: colour and fine detail'],
+  ['Sensitivity', 'Can respond to a single photon', 'Less sensitive'],
+  ['Where', 'Outside the fovea', 'Concentrated at the fovea; only cones at its centre']
+];
+const RODCONE_NOTE = 'Counts vary between sources (cones 4–7 million, rods 75–150 million).';
+const PHOTO = {
+  dark: 'In the dark, <b>cGMP</b> is high and holds cGMP-gated cation channels in the outer segment open. Sodium (and calcium) flows in: the <b>dark current</b>. The rod stays depolarised and releases <b>glutamate</b> all the time.',
+  steps: [
+    'A photon is absorbed: <b>11-cis retinal</b> (made from vitamin A) straightens to <b>all-trans retinal</b>, and rhodopsin becomes active (<b>metarhodopsin II</b>).',
+    'Metarhodopsin II activates many molecules of the G protein <b>transducin</b>.',
+    'Each transducin activates <b>phosphodiesterase (PDE)</b>.',
+    'PDE breaks down <b>cGMP</b>; its level falls.',
+    'Without cGMP the <b>channels close</b>: the dark current stops.',
+    'The rod <b>hyperpolarises</b> (becomes more negative inside).',
+    'It releases <b>less glutamate</b>; the bipolar cells read this change as the signal.'
+  ],
+  notes: [
+    { k: 1, t: '<b>Amplification</b> at two steps: one active rhodopsin turns on many transducins, and each PDE breaks down many cGMP molecules. That is how a rod can respond to a single photon.' },
+    { t: 'Light <b>bleaches</b> rhodopsin; the pigment has to be rebuilt from retinal, which comes from vitamin A, before the rod is fully sensitive again: that is dark adaptation.' }
+  ]
+};
+/* schematic dark-adaptation curve: log threshold above the fully dark-adapted value; cone and rod branches */
+const DARK = { coneStart: 3.2, conePlateau: 2.2, coneTau: 1.6, rodStart: 4.6, rodFinal: 0, rodTau: 7.5, rodDelay: 2 };
+const DARK_TEXT = [
+  { k: 1, t: '<b>Two phases.</b> After bright light, sensitivity first improves quickly and levels off: the <b>cones</b>. A slower second phase follows: the <b>rods</b>. The bend between them is the <b>rod–cone break</b>.' },
+  { t: '<b>Timing:</b> the cone phase levels off within about 5–10 minutes (sources differ: about 5 minutes in one review, 9–10 minutes in another); the rods take 30 minutes or more to reach full sensitivity.' },
+  { t: '<b>Light adaptation</b>, going from dark into bright light, is much faster: seconds.' },
+  { w: 1, t: 'Dark adaptation slows with age, and with lack of vitamin A, which is needed to rebuild the pigment.' }
+];
+const PEAKS = { S: 420, M: 530, L: 560, rod: 500 };
+const COLOUR_TEXT = [
+  { k: 1, t: '<b>Trichromatic theory</b> (Young, early 19th century; developed by Helmholtz): three types of receptor, and every colour is a mixture of their signals. It explains colour mixing and matches the three cone types (S, M, L), but not everything: for example, coloured afterimages.' },
+  { t: '<b>Opponent-process theory</b> (Hering): colours are coded in opposing pairs: red against green, blue against yellow, and black against white.' },
+  { t: '<b>Both are right, at different levels.</b> Trichromacy is set by the cones; opponent signals are built after them, in the retina (ganglion cells) and the lateral geniculate body: L − M (red–green) and S − (L + M) (blue–yellow). Use the slider: the cones respond in a ratio, and the two opponent signals swing either way.' }
 ];
 /* ================= END DATA ================= */
 
@@ -369,6 +495,124 @@ function init() {
   render();
 }
 init();
+
+/* ================= Physiology of vision ================= */
+function physio() {
+  // layers
+  const svg = $('layers'); const N = LAYERS.length, top = 30, h = 27;
+  let sel = 8;
+  const fills = ['var(--bg)', 'var(--surface)'];
+  const drawLayers = () => {
+    svg.textContent = '';
+    const t1 = el('text', { x: 6, y: 16, class: 'lbl' }, svg); t1.textContent = 'vitreous: light enters here ↓';
+    LAYERS.forEach((L, i) => {
+      const g = el('g', { class: 'layer' + (i === sel ? ' on' : ''), tabindex: 0, role: 'button', 'aria-label': L.n }, svg);
+      el('rect', { class: 'band', x: 4, y: top + i * h, width: 392, height: h - 2, rx: 4, fill: i === 9 ? 'var(--muted)' : fills[i % 2], stroke: 'var(--line)' }, g);
+      const tx = el('text', { x: 14, y: top + i * h + h / 2 + 3, class: 'lbl', 'font-size': 11.5 }, g); tx.textContent = `${i + 1}  ${L.n}`;
+      if (i === 9) tx.style.fill = 'var(--surface)';
+      const go = () => { sel = i; drawLayers(); info(); };
+      g.addEventListener('click', go); g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+    });
+    // light arrow down, signal arrow up
+    const yb = top + N * h + 14; const t2 = el('text', { x: 6, y: yb, class: 'lbl' }, svg); t2.textContent = 'choroid';
+  };
+  const info = () => { const L = LAYERS[sel];
+    $('layerinfo').innerHTML = `<span class="tag">Layer ${sel + 1} of 10 · from the vitreous outward</span><h2>${L.n}</h2><p>${L.t}</p><p class="cap key">${RETINA_NOTE}</p>`; };
+  drawLayers(); info();
+  $('rodcone').innerHTML = `<thead><tr>${RODCONE[0].map(x => `<th>${x}</th>`).join('')}</tr></thead><tbody>${RODCONE.slice(1).map(r => `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody>` + `<caption class="muted" style="caption-side:bottom;text-align:left;padding-top:6px">${RODCONE_NOTE}</caption>`;
+
+  // phototransduction
+  let step = 0;   // 0 = dark, 1..7 = after that step
+  const P = $('photo');
+  const drawPhoto = () => {
+    P.textContent = '';
+    const lit = step > 0;
+    el('rect', { x: 20, y: 30, width: 360, height: 150, rx: 18, fill: 'var(--brain)', stroke: 'var(--muted)' }, P);
+    const lab = (x, y, t, cls = 'lbl', a = 'middle') => { const e = el('text', { x, y, class: cls, 'text-anchor': a }, P); e.textContent = t; return e; };
+    lab(380, 22, 'rod outer segment (schematic)', 'lbl', 'end');
+    // disc membrane
+    el('line', { x1: 40, y1: 80, x2: 360, y2: 80, stroke: 'var(--muted)', 'stroke-width': 3 }, P);
+    const node = (x, y, t, on, r = 20) => { el('circle', { cx: x, cy: y, r, fill: on ? 'var(--cur)' : 'var(--surface)', stroke: on ? 'var(--cur)' : 'var(--muted)', 'stroke-width': 1.5 }, P);
+      const e = lab(x, y + 4, t, 'lbl'); e.style.fontSize = '10.5px'; if (on) e.style.fill = 'var(--surface)'; };
+    if (lit) { el('path', { d: 'M60 6 L80 40 L72 40 L88 64', fill: 'none', stroke: 'var(--ink)', 'stroke-width': 2 }, P); lab(30, 14, 'photon', 'lbl', 'start'); }
+    node(85, 80, step >= 1 ? 'Meta II' : 'Rh', step >= 1);
+    node(165, 80, 'Gt', step >= 2);
+    node(245, 80, 'PDE', step >= 3);
+    // cGMP dots: many in the dark, few after step 4
+    const n = step >= 4 ? 3 : 12;
+    for (let k = 0; k < n; k++) el('circle', { cx: 210 + (k % 6) * 22, cy: 120 + Math.floor(k / 6) * 16, r: 4, fill: 'var(--accent)', opacity: .8 }, P);
+    lab(275, 160, step >= 4 ? 'cGMP low' : 'cGMP high', 'lbl');
+    // channel in the cell membrane at the bottom
+    el('line', { x1: 20, y1: 196, x2: 380, y2: 196, stroke: 'var(--muted)', 'stroke-width': 3 }, P);
+    const open = step < 5;
+    el('rect', { x: 92, y: 186, width: 10, height: 20, fill: 'var(--muted)' }, P); el('rect', { x: open ? 112 : 103, y: 186, width: 10, height: 20, fill: 'var(--muted)' }, P);
+    lab(132, 216, open ? 'channel open' : 'channel closed', 'lbl', 'start');
+    if (open) { el('path', { d: 'M107 252 L107 208 M101 216 L107 208 L113 216', fill: 'none', stroke: 'var(--accent)', 'stroke-width': 2 }, P); lab(132, 236, 'Na⁺ flows in: dark current', 'lbl', 'start'); }
+    lab(380, 216, step >= 6 ? 'cell hyperpolarised' : 'cell depolarised', 'lbl', 'end');
+    lab(380, 236, step >= 7 ? 'less glutamate' : 'glutamate released', 'lbl', 'end');
+    $('steps').innerHTML = `<li class="${step === 0 ? 'now' : 'done'}"><b>Dark.</b> ${PHOTO.dark}</li>` + PHOTO.steps.map((t, i) => `<li class="${i + 1 === step ? 'now' : i + 1 < step ? 'done' : ''}">${i + 1}. ${t}</li>`).join('');
+    $('photobtn').querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === String(step) || (b.dataset.k === 'next' && false)));
+  };
+  const btn = (t, k, f) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = t; b.dataset.k = k; b.onclick = f; $('photobtn').appendChild(b); };
+  btn('Dark', '0', () => { step = 0; drawPhoto(); });
+  btn('Next step →', 'next', () => { step = Math.min(7, step + 1); drawPhoto(); });
+  btn('All steps (light)', '7', () => { step = 7; drawPhoto(); });
+  $('photonotes').innerHTML = PHOTO.notes.map(x => `<p class="cap${x.k ? ' key' : ''}">${x.t}</p>`).join('');
+  drawPhoto();
+
+  // dark adaptation
+  const D = DARK, cone = t => D.conePlateau + (D.coneStart - D.conePlateau) * Math.exp(-t / D.coneTau);
+  const rod = t => D.rodFinal + (D.rodStart - D.rodFinal) * Math.exp(-Math.max(0, t - D.rodDelay) / D.rodTau);
+  const X = t => 50 + t / 40 * 330, Y = v => 200 - v / 5 * 170;
+  const drawDark = (tn) => {
+    const g = $('dark'); g.textContent = '';
+    el('line', { x1: 50, y1: 20, x2: 50, y2: 200, stroke: 'var(--muted)' }, g); el('line', { x1: 50, y1: 200, x2: 385, y2: 200, stroke: 'var(--muted)' }, g);
+    for (const m of [0, 10, 20, 30, 40]) { const t = el('text', { x: X(m), y: 216, class: 'lbl', 'text-anchor': 'middle' }, g); t.textContent = m; }
+    const tt = el('text', { x: 218, y: 234, class: 'lbl', 'text-anchor': 'middle' }, g); tt.textContent = 'minutes in the dark (schematic)';
+    const ty = el('text', { x: 14, y: 110, class: 'lbl', 'text-anchor': 'middle', transform: 'rotate(-90 14 110)' }, g); ty.textContent = 'threshold (log)';
+    let dc = '', dr = '';
+    for (let k = 0; k <= 80; k++) { const t = k / 2; dc += (k ? 'L' : 'M') + X(t).toFixed(1) + ' ' + Y(cone(t)).toFixed(1); dr += (k ? 'L' : 'M') + X(t).toFixed(1) + ' ' + Y(rod(t)).toFixed(1); }
+    el('path', { d: dc, fill: 'none', stroke: 'var(--muted)', 'stroke-width': 1.2, 'stroke-dasharray': '2 3' }, g);
+    el('path', { d: dr, fill: 'none', stroke: 'var(--rod)', 'stroke-width': 1.2, 'stroke-dasharray': '4 3' }, g);
+    let dm = ''; for (let k = 0; k <= 80; k++) { const t = k / 2; dm += (k ? 'L' : 'M') + X(t).toFixed(1) + ' ' + Y(Math.min(cone(t), rod(t))).toFixed(1); }
+    el('path', { d: dm, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 2.4 }, g);
+    // rod–cone break
+    let tb = 0; for (let t = 0; t < 40; t += 0.05) if (rod(t) < cone(t)) { tb = t; break; }
+    el('circle', { cx: X(tb), cy: Y(cone(tb)), r: 4, fill: 'none', stroke: 'var(--ink)' }, g);
+    const tbx = el('text', { x: X(tb) + 8, y: Y(cone(tb)) - 8, class: 'lbl' }, g); tbx.textContent = 'rod–cone break';
+    const c1 = el('text', { x: X(30), y: Y(cone(30)) - 6, class: 'lbl', 'text-anchor': 'middle' }, g); c1.textContent = 'cones';
+    const r1 = el('text', { x: X(33), y: Y(rod(33)) - 8, class: 'lbl', 'text-anchor': 'middle' }, g); r1.textContent = 'rods'; r1.style.fill = 'var(--rod)';
+    el('line', { x1: X(tn), y1: 20, x2: X(tn), y2: 200, stroke: 'var(--cur)', 'stroke-width': 2 }, g);
+    const who = cone(tn) <= rod(tn) ? 'cones' : 'rods';
+    $('tdarko').textContent = tn + ' min';
+    $('darkinfo').innerHTML = `<span class="tag">${tn} min in the dark</span><h2>Now: the ${who} set the threshold</h2>` + DARK_TEXT.map(x => `<p class="cap${x.k ? ' key' : x.w ? ' warn' : ''}">${x.t}</p>`).join('');
+  };
+  $('tdark').oninput = e => drawDark(+e.target.value); drawDark(3);
+
+  // colour
+  const sens = (wl, pk, w = 42) => Math.exp(-((wl - pk) ** 2) / (2 * w * w));
+  const Xs = wl => 30 + (wl - 380) / 320 * 355, Ys = v => 180 - v * 150;
+  const drawSpec = wl => {
+    const g = $('spec'); g.textContent = '';
+    el('line', { x1: 30, y1: 180, x2: 388, y2: 180, stroke: 'var(--muted)' }, g);
+    for (const m of [400, 450, 500, 550, 600, 650, 700]) { const t = el('text', { x: Xs(m), y: 196, class: 'lbl', 'text-anchor': 'middle' }, g); t.textContent = m; }
+    const tt = el('text', { x: 208, y: 214, class: 'lbl', 'text-anchor': 'middle' }, g); tt.textContent = 'wavelength (nm)';
+    for (const [k, col, dash] of [['rod', 'var(--rod)', '4 3'], ['S', 'var(--cS)', ''], ['M', 'var(--cM)', ''], ['L', 'var(--cL)', '']]) {
+      let d = ''; for (let w = 380; w <= 700; w += 4) d += (w === 380 ? 'M' : 'L') + Xs(w).toFixed(1) + ' ' + Ys(sens(w, PEAKS[k])).toFixed(1);
+      el('path', { d, fill: 'none', stroke: col, 'stroke-width': 2, 'stroke-dasharray': dash }, g);
+      const t = el('text', { x: Xs(PEAKS[k]), y: Ys(1) - 6 - (k === 'rod' ? 10 : 0), class: 'lbl', 'text-anchor': 'middle' }, g); t.textContent = k === 'rod' ? 'rods' : k; t.style.fill = col;
+    }
+    el('line', { x1: Xs(wl), y1: 20, x2: Xs(wl), y2: 180, stroke: 'var(--cur)', 'stroke-width': 2 }, g);
+    $('wlo').textContent = wl + ' nm';
+    const s = sens(wl, PEAKS.S), m = sens(wl, PEAKS.M), l = sens(wl, PEAKS.L);
+    const rows = [['S', s, 'var(--cS)'], ['M', m, 'var(--cM)'], ['L', l, 'var(--cL)']].map(([k, v, c]) => `<span>${k} cones</span><span class="bar"><i style="left:0;width:${(v * 100).toFixed(0)}%;background:${c}"></i></span><span class="num">${v.toFixed(2)}</span>`).join('');
+    const opp = (name, v) => { const w = Math.min(50, Math.abs(v) * 50); return `<span>${name}</span><span class="bar"><i style="left:${v >= 0 ? 50 : 50 - w}%;width:${w}%;background:var(--ink)"></i><i style="left:50%;width:1px;background:var(--muted)"></i></span><span class="num">${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(2)}</span>`; };
+    $('bars').innerHTML = rows + opp('L − M', l - m) + opp('S − (L+M)', s - (l + m) / 2);
+  };
+  $('wl').oninput = e => drawSpec(+e.target.value); drawSpec(560);
+  $('colourinfo').innerHTML = COLOUR_TEXT.map(x => `<p class="cap${x.k ? ' key' : ''}">${x.t}</p>`).join('') + '<p class="muted">The opponent bars are a toy calculation from the schematic curves (S − (L+M) uses the average of L and M), to show the idea, not real cell responses.</p>';
+}
+physio();
 </script>
 </body>
 </html>

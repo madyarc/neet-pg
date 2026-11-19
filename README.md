@@ -43,6 +43,7 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | 01 | [The Visual Pathway and Field Defects](ophthalmology/neuro-ophthalmology/visual-pathway.html) | Neuro-ophthalmology | 11 lesion sites from optic nerve to visual cortex, either side; fibres coloured by the half of the view they carry; both eyes' fields with the loss shaded (junctional scotoma, bitemporal, early pituitary/craniopharyngioma patterns, quadrantanopias, macular sparing) |
 | 02 | [Pupil Reflexes](ophthalmology/neuro-ophthalmology/pupil-reflexes.html) | Neuro-ophthalmology | Light-reflex pathway (afferent and efferent limbs coloured); light in either eye, swinging light, near object; normal, optic nerve lesion, RAPD, oculomotor palsy, Argyll Robertson, Adie; comparison table |
 | 03 | [Refractive Errors](ophthalmology/refraction/refractive-errors.html) | Refraction | Ray diagram in a schematic eye: myopia, hypermetropia (latent part shown with cycloplegia), astigmatism (types named live), presbyopia by age; correcting lens, pinhole, a letter blurred to match; accommodation, amblyopia, refractive surgery |
+| 04 | [Diseases of the Optic Nerve](ophthalmology/neuro-ophthalmology/optic-nerve.html) | Neuro-ophthalmology | Schematic disc and both fields for optic neuritis, papilloedema/IIH, NAION vs arteritic AION, LHON, toxic optic neuropathy, atrophy; comparison table; tests; trial-dated treatments; Commons fundus photos |
 
 ## Syllabus
 
