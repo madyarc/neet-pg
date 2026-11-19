@@ -86,3 +86,10 @@ Same pipeline as the vessels: `export_curves.py ... z-bp3d-nerves.zip z-index-ne
 ganglia and the cochlear nerve (`z-bp3d-nerve-mesh.zip`). `body_nerves.py config|post` -> `configs/body-nerves.json`,
 `anatomy/models/body-nerves/nerves.json` (kind, group: cranial / brachial / lumbosacral / spinal / autonomic, region,
 side, mirror). Z-Anatomy has no phrenic nerve, no inferior gluteal nerve and no spinal cord mesh.
+
+## Lymph nodes (whole body)
+
+`export_mod.py ... z-bp3d-lymph.zip z-index-lymph.tsv "all:Lymphoid organs"` (158 objects: node groups as small
+blobs, palatine tonsil, thymus, spleen), `body_lymph.py config|post` -> `configs/body-lymph.json`,
+`anatomy/models/body-lymph/lymph.json`. Right + midline built, the page mirrors the right groups that have a left twin.
+Z-Anatomy has no lymphatic vessels and no thoracic duct.

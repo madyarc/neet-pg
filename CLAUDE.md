@@ -121,7 +121,7 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
   draw call per part, or per run of same-coloured neighbours), resolves colours once, and picks by rendering only the tapped pixel. The muscle layer loads
   only when the Muscular system is switched on. Left muscles are not downloaded: the page mirrors the right ones
   (`tools/zanat/body_muscles.py`). Keep new layers to the same pattern. The heart and vessels layer
-  (`tools/zanat/export_curves.py` + `body_vessels.py`) and the nerves layer (`body_nerves.py`) work the same way; the viewer draws neighbouring parts of one
+  (`tools/zanat/export_curves.py` + `body_vessels.py`) the nerves layer (`body_nerves.py`) and the lymph layer (`body_lymph.py`) work the same way; the viewer draws neighbouring parts of one
   colour with a single call, so order a layer's parts by colour.
 - **Moving joints**: `AtlasViewer.setTransform(key, m, t)` moves a part rigidly (`AtlasViewer.rotation(axis, deg, pivot)`),
   `setLines` draws an axis. `tools/joints/general_config.py` (model of the example joints) and `general_axes.py`
@@ -157,7 +157,7 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
 
 - **One meaning per colour, everywhere** (tokens in `atlas.css`): `--bone`, `--suture`, `--mark` (selected point),
   `--ori` / `--ins` / `--lig` (muscle origin, insertion, ligament — Okabe–Ito, colour-blind safe), `--cart` / `--centre` /
-  `--plate` (cartilage, secondary ossification centre, growth plate), `--artery` / `--vein` / `--heart`, `--nerve` / `--dura`. Never reuse a meaning colour for something else.
+  `--plate` (cartilage, secondary ossification centre, growth plate), `--artery` / `--vein` / `--heart`, `--nerve` / `--dura`, `--lymph`. Never reuse a meaning colour for something else.
 - Bone identity colours (assembled regions): Paul Tol's "light" palette, assigned by `assign_colours.py` so that bones
   that touch never share a colour (copied to `anatomy/models/skull/colours.json` for the bone pages); bones are also **named on the model**, so nothing depends on colour alone.
 - Selecting a part shows the rest as faint glass, so deep parts (sphenoid, ethmoid) are visible whole.

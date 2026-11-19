@@ -523,6 +523,9 @@ tubercles.
   for the dural sac (no spinal cord in Z-Anatomy); no phrenic or inferior gluteal nerve in Z-Anatomy. Checked by eye:
   whole body front, with muscles, with vessels at the shoulder and the thigh.
 
+- Lymph layer (2026-11-18): no facts; Z-Anatomy node groups (small blobs at their usual sites), tonsil, thymus,
+  spleen. No lymphatic vessels or thoracic duct in Z-Anatomy.
+
 ## Joints — `general/joints.html`
 
 - Fact sheet: `sources-local/facts/joints-general.md` (309 quotes, all script-checked against the downloads in
