@@ -8,6 +8,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* page-only tokens for the schematics (no meaning colours reused) */
+:root{--s-a:#9fd0ea;--s-b:#e6d690;--s-c:#8fd0c3;--s-d:#d7b3dc;--s-lost:#b8452f;--s-kept:#8a93a3;--s-pap:#c97a6a}
+:root[data-theme="dark"]{--s-a:#2d6585;--s-b:#7a6a2a;--s-c:#2c7366;--s-d:#6d4475;--s-lost:#ff8a6e;--s-kept:#7c8596;--s-pap:#d8988a}
+#more-fig svg{width:100%;height:auto;display:block;font:10.5px var(--f-body);fill:var(--ink)}
+#more-fig svg text{fill:var(--ink)} #more-fig svg .m{fill:var(--muted)} #more-fig svg .b{font-weight:600}
+#more-fig .row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+#more-fig .row button{font:12.5px var(--f-body);padding:4px 9px;border:1px solid var(--line);border-radius:14px;background:none;color:var(--ink);cursor:pointer}
+#more-fig .row button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+#more-fig .cap{margin-top:4px}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -22,7 +33,7 @@
   <div class="tabs scrollrow" role="tablist" aria-label="What to show">
     <button class="chip" role="tab" id="tab-muscles" aria-pressed="true">Muscles</button>
     <button class="chip" role="tab" id="tab-nerves" aria-pressed="false">Nerve supply</button>
-    <button class="chip" role="tab" id="tab-more" aria-pressed="false">Triangles, jaw, eye, clinical</button>
+    <button class="chip" role="tab" id="tab-more" aria-pressed="false">Nerves, spaces, clinical</button>
   </div>
   <div class="split">
     <div class="panel">
@@ -40,11 +51,29 @@
       </div>
       <div id="pane-more" class="stack" hidden>
         <div class="cap key desc" id="more-desc"></div>
+        <p class="note" id="more-pick"></p>
+        <div id="more-fig" hidden></div>
+        <div class="group-h">Facial nerve: course and palsy (tap a row)</div>
+        <table class="t" id="t-facial"></table>
+        <div class="group-h">Horner syndrome (tap a row)</div>
+        <table class="t" id="t-horner"></table>
+        <div class="group-h">Squint (strabismus) and the III, IV, VI nerves (tap a row)</div>
+        <table class="t" id="t-squint"></table>
         <div class="group-h">Triangles of the neck (tap a row)</div>
         <table class="t" id="tri"></table>
         <div class="group-h">Fascia</div>
         <div class="legend" id="fascia-list"></div>
         <dl class="facts" id="fascia-text"></dl>
+        <div class="group-h">Fascial spaces (tap a row)</div>
+        <table class="t" id="t-spaces"></table>
+        <div class="group-h">Pharynx: vessels, lymph, nerves (tap a row)</div>
+        <table class="t" id="t-phar"></table>
+        <div class="group-h">Larynx: wall, cavity, vessels, nerves (tap a row)</div>
+        <table class="t" id="t-lar"></table>
+        <div class="group-h">Tongue (tap a row)</div>
+        <table class="t" id="t-tongue"></table>
+        <div class="group-h">Surface: pulses, jugular veins, vertebral levels (tap a row)</div>
+        <table class="t" id="t-surface"></table>
         <div class="group-h">Moving the mandible (tap a row)</div>
         <table class="t" id="jaw"></table>
         <div class="group-h">Testing the eye muscles: the H test (tap a row)</div>
@@ -75,7 +104,7 @@ const LEFT = '<span class="pending">Left out (only one source).</span>';
 const DATA = {
   lede: 'The muscles of the head and neck, right side: the face and scalp, mastication, the side and front of the neck, the prevertebral muscles, the eye, the tongue, the pharynx and the larynx. The muscles at the back of the neck are on <a href="../back/muscles.html">Muscles of the Back</a>; trapezius and levator scapulae on <a href="../upper-limb/muscles.html">Muscles of the Upper Limb</a>. Tap a muscle on the model or in the list.',
   based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), the muscles and fasciae of the head and neck, the organs of the senses and the cranial nerves; checked against StatPearls (NCBI Bookshelf), open-access anatomy and clinical papers and Wikipedia. Where sources disagree, the better-supported (usually the modern) wording is used.',
-  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, the laryngeal cartilages, the eyeball, the epicranial aponeurosis and the investing fascia from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones. Simplified meshes, shared under the same licences. The right side is shown. Tensor and levator veli palatini, musculus uvulae, palatoglossus, styloglossus, salpingopharyngeus and the intrinsic tongue muscles are not in the model (palatopharyngeus is). Attachment areas are approximate and drawn only where they fit the model well.',
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, the laryngeal cartilages, the eyeball, the epicranial aponeurosis and the investing fascia from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones. Simplified meshes, shared under the same licences. The right side is shown. Tensor and levator veli palatini, musculus uvulae, palatoglossus, styloglossus, salpingopharyngeus and the intrinsic tongue muscles are not in the model (palatopharyngeus is). Attachment areas are approximate and drawn only where they fit the model well. On the last tab, nerves, vessels and lymph nodes come from the Z-Anatomy whole-body layers (right side; not every small branch is modelled), loaded only when a topic needs them; labels, pulse points and vertebral-level points are approximate, and the diagrams are schematic, not to scale.',
 };
 const NERVES = {
   facial: ['Facial nerve (VII)', '--n-facial'],
@@ -330,16 +359,367 @@ const MORE = {
   ],
 };
 
+/* ===================== DATA — extra-tab topics (nerves, spaces, viscera, surface). Every statement checked in two
+   independent sources: fact sheet sources-local/facts/fill-hn.md (see anatomy/DATA-SOURCES.md). Layers: parts of the
+   whole-body nerve, vessel and lymph packs (right side), loaded only when a topic needs them. ===================== */
+const N = k => 'ax_n_' + k, VS = k => 'ax_v_' + k, LY = k => 'ax_l_' + k;
+const NV = {facial: N('facial_nerve_vii_r'), chorda: N('chorda_tympani_r'), lingual: N('lingual_nerve_r'), symp: N('sympathetic_trunk_r'),
+  ganglia: N('ganglia_of_sympathetic_trunk_r'), iii: N('oculomotor_nerve_iii_r'), iv: N('trochlear_nerve_iv_r'), vi: N('abducens_nerve_vi_r'),
+  ix: N('glossopharyngeal_nerve_ix_r'), x: N('vagus_nerve_x_r'), xii: N('hypoglossal_nerve_xii_r')};
+const VE = {cca: VS('right_common_carotid_artery'), eca: VS('external_carotid_artery_r'), ica: VS('internal_carotid_artery_r'),
+  ascphar: VS('ascending_pharyngeal_artery_r'), facial: VS('facial_artery_r'), maxillary: VS('maxillary_artery_r'),
+  descpal: VS('descending_palatine_artery_r'), sta: VS('superficial_temporal_artery_r'), staf: VS('frontal_branch_of_superficial_temporal_artery_r'),
+  ita: VS('inferior_thyroid_artery_r'), ijv: VS('internal_jugular_vein_r'), ejv: VS('external_jugular_vein_r'), lingv: VS('lingual_vein_r'),
+  stv: VS('superior_thyroid_vein_r')};
+const LN = {retro: LY('retropharyngeal_nodes_r'), jd: LY('jugulodigastric_node_r'), sup: LY('lateral_superior_jugular_node_r'),
+  inf: LY('inferior_deep_lateral_cervical_nodes_r'), smd: LY('submandibular_nodes_r'), smt: LY('submental_nodes_r'), tonsil: LY('palatine_tonsil_r')};
+const EOM = ['sup_rectus', 'inf_rectus', 'med_rectus', 'lat_rectus', 'sup_oblique', 'inf_oblique', 'lps'];
+// points on the model for labels (computed from the meshes; approximate)
+const PTS = {
+  carotid: [-31.3, -97.4, 1413.4], facial: [-31.6, -138.2, 1448.7], sta: [-61.2, -101.2, 1513.6],
+  hyoid: [-0.7, -135.7, 1438.1], thyroid: [-0.2, -128.6, 1416.7], cricoid: [2.7, -117.3, 1402.1],
+  c3: [-0.8, -98.0, 1452.9], c4: [-2.7, -97.6, 1437.5], c5: [-1.9, -96.6, 1420.1], c6: [-2.9, -94.8, 1404.7],
+};
+// a topic: [title, short line, {text, n: nerve keys, v: vessel keys, l: lymph keys, m: muscles/bones shown solid, dir, fig, labels, marks}]
+const TOPICS = {
+  't-facial': [
+    ['Course in 3D', 'Pons → internal acoustic meatus → facial canal → stylomastoid foramen → parotid',
+      {n: [NV.facial, NV.chorda, NV.lingual], m: ['temporal_r', 'mandible'], dir: [-1, -0.25, 0.15], fig: 'facial', labels: true,
+       text: 'The nerve leaves the pons with the acoustic nerve and enters the <b>internal acoustic meatus</b>; at its bottom it enters the <b>facial canal</b> in the temporal bone. It runs lateralward, then bends sharply backward (the <b>geniculum</b>, with the <b>geniculate ganglion</b>) and arches down behind the tympanic cavity to the <b>stylomastoid foramen</b>. The <b>chorda tympani</b> leaves it a few millimetres above the foramen, crosses the middle ear and joins the <b>lingual nerve</b> (both drawn). Outside, the nerve runs forward in the <b>parotid gland</b>, crosses the external carotid artery and divides into its five branches. The model shows the main nerve and the chorda; the branches inside the canal are in the schematic.'}],
+    ['Branches in order', 'GSPN, nerve to stapedius, chorda tympani, then outside the skull',
+      {n: [NV.facial, NV.chorda], m: ['temporal_r'], dir: [-1, -0.25, 0.15], fig: 'facial', labels: true,
+       text: '<b>In the canal:</b> the <b>greater petrosal nerve</b> from the geniculate ganglion (secretomotor to the <b>lacrimal gland</b>, through the pterygopalatine ganglion); the <b>nerve to stapedius</b>, opposite the pyramidal eminence near the second bend; the <b>chorda tympani</b> (taste from the anterior two-thirds of the tongue; secretomotor to the submandibular and sublingual glands through the submandibular ganglion). <b>At the stylomastoid foramen:</b> posterior auricular, digastric (posterior belly), stylohyoid. <b>On the face:</b> temporal, zygomatic, buccal, marginal mandibular, cervical (muscles listed on the Nerve supply tab).'}],
+    ['Localising a lesion', 'Tears, hyperacusis and taste tell the level',
+      {n: [NV.facial, NV.chorda], m: ['temporal_r'], dir: [-1, -0.25, 0.15], fig: 'facial',
+       text: 'The three branches inside the canal allow a <b>topographic diagnosis</b>: <b>lacrimation</b> (Schirmer test; greater petrosal nerve), the <b>stapedial reflex</b> (hyperacusis; nerve to stapedius) and <b>taste</b> on the front two-thirds of the tongue (chorda tympani). A lesion stops the branches given off at or below it: proximal to the geniculate ganglion the eye is dry; above the stylomastoid foramen taste is lost, with possible hyperacusis; at the foramen or in the parotid only the facial muscles are weak. Tap a level on the schematic.'}],
+    ['Bell\'s palsy and Bell\'s phenomenon', 'Idiopathic LMN palsy, the commonest; protect the cornea',
+      {n: [NV.facial], m: ['temporal_r', 'orb_oculi'], dir: [-0.6, -1, 0.1],
+       text: '<b>Bell\'s palsy</b> is the commonest paralysis of the facial nerve, of unknown cause and diagnosed by excluding other causes. It is a lower motor neuron palsy: the whole of one side, forehead included. Most patients recover on their own. The first priority is <b>protecting the cornea</b> when the eye does not close. <b>Bell\'s phenomenon</b> is a normal reflex: on trying to close the eyes, the eyeball moves up and out, protecting the cornea; it matters most in facial palsy, where the lid no longer covers the eye.'}],
+    ['Ramsay Hunt syndrome', 'Herpes zoster of the geniculate ganglion',
+      {n: [NV.facial], m: ['temporal_r'], dir: [-1, -0.25, 0.15],
+       text: 'Reactivation of <b>varicella-zoster virus</b> in the <b>geniculate ganglion</b> (herpes zoster oticus). Classic triad on one side: <b>facial paralysis, ear pain and vesicles</b> (in the ear canal; also possible on the face, scalp, palate or tongue). Hearing loss and vertigo mean the vestibulocochlear nerve is involved too.'}],
+    ['Other causes', 'Trauma, tumours, infections, stroke',
+      {n: [NV.facial], m: ['temporal_r', 'mandible'], dir: [-1, -0.25, 0.15],
+       text: 'The causes span trauma, iatrogenic injury, tumours, infection, autoimmune and ischaemic disease. <b>Temporal bone fractures</b> (with hyperacusis, altered taste and a dry eye). <b>Tumours</b> along the course, for example <b>parotid tumours</b> (examine the parotid). Infection: <b>Lyme disease</b> and zoster (Ramsay Hunt). A <b>stroke</b> gives the upper motor neuron pattern that spares the forehead (see Clinical points).'}],
+  ],
+  't-horner': [
+    ['The three-neuron pathway', 'Hypothalamus → C8–T1 → superior cervical ganglion → eye',
+      {n: [NV.symp, NV.ganglia], v: [VE.cca, VE.ica, VE.eca], glass: [VE.cca, VE.eca], m: ['rib1_r'], fit: [VE.ica, VE.cca, 'c1', 't1', 'rib1_r'], dir: [-0.8, -1, 0.1], fig: 'horner', labels: true,
+       text: '<b>First neuron:</b> from the posterolateral hypothalamus down the brainstem (uncrossed) to the ciliospinal centre of Budge in the spinal cord at C8–T1 (some sources to T2). <b>Second neuron:</b> leaves at T1, passes over the <b>apex of the lung</b> and ascends in the <b>sympathetic trunk</b> (behind the carotid sheath) to the <b>superior cervical ganglion</b> in the upper neck (Gray: opposite C2–C3; StatPearls: C3–C4). <b>Third neuron:</b> up the wall of the <b>internal carotid artery</b> to the cavernous sinus, into the orbit with V1, to the dilator pupillae and the superior tarsal (Müller\'s) muscle. The sweat fibres for the face follow the <b>external carotid</b>. The model shows the trunk with its ganglia and the carotids.'}],
+    ['Signs', 'Partial ptosis, miosis, anhidrosis; apparent enophthalmos',
+      {n: [NV.symp, NV.ganglia], m: ['lps', 'eyeball', 'c1', 'c3'], fit: ['eyeball', 'lps', 'c3', 'mandible'], dir: [-0.6, -1, 0.2],
+       text: 'On the side of the lesion: <b>partial ptosis</b> (the superior tarsal muscle is paralysed), <b>miosis</b> (the dilator pupillae is paralysed) with a pupil that still reacts normally to light, and <b>anhidrosis</b> of the face in some patients. The eye may look sunken, but this is an <b>apparent enophthalmos</b>, from the narrowed palpebral fissure of the drooping lid. (Ptosis with a large pupil is a III palsy instead: see Clinical points.)'}],
+    ['Causes at each neuron', 'Lateral medulla / cord; Pancoast tumour; carotid dissection',
+      {n: [NV.symp, NV.ganglia], v: [VE.ica, VE.cca], m: ['rib1_r'], fit: [VE.ica, VE.cca, 'c1', 't1', 'rib1_r'], dir: [-1, -0.25, 0.1], fig: 'horner', labels: true,
+       text: '<b>Central (first neuron):</b> lateral medullary infarction, spinal cord lesions (syringomyelia, trauma, tumour); sweating is often lost over the whole half of the body. <b>Preganglionic (second neuron):</b> <b>Pancoast tumour</b> at the lung apex, trauma or surgery at the base of the neck; anhidrosis of the face. <b>Postganglionic (third neuron):</b> <b>internal carotid dissection</b> (a painful Horner syndrome), cavernous sinus lesions (with a VI palsy); facial sweating is spared or nearly so, because the sweat fibres run on the external carotid. Tap a neuron on the schematic.'}],
+  ],
+  't-squint': [
+    ['III, IV and VI in 3D', 'The three nerves to the eye muscles',
+      {n: [NV.iii, NV.iv, NV.vi], m: EOM.concat(['eyeball']), dir: [-0.5, -0.4, 1], labels: true,
+       text: 'Oculomotor (III): all the extraocular muscles except lateral rectus and superior oblique, and also levator palpebrae superioris. Trochlear (IV): superior oblique. Abducens (VI): lateral rectus. Their palsies are on the Clinical points list below; a palsy causes a <b>paralytic squint</b>.'}],
+    ['Phoria and tropia', 'Latent vs manifest',
+      {m: EOM.concat(['eyeball']), dir: [-0.3, -1, 0.3], fig: 'phoria',
+       text: 'A <b>heterophoria</b> (phoria) is a <b>latent</b> deviation, held straight by fusion; it appears only when binocular vision is broken, for example by covering one eye. A <b>heterotropia</b> (tropia) is a <b>manifest</b> deviation, present with both eyes open. A phoria can decompensate into a tropia with fatigue, illness or visual stress.'}],
+    ['Direction: eso, exo, hyper, hypo', 'Which way the eye turns',
+      {m: EOM.concat(['eyeball']), dir: [-0.3, -1, 0.3], fig: 'direction',
+       text: '<b>Eso-</b>: turned in, toward the nose (convergent). <b>Exo-</b>: turned out (divergent). <b>Hyper-</b>: higher than the fellow eye; <b>hypo-</b>: lower. Each prefix takes -tropia (manifest) or -phoria (latent): left hypertropia, intermittent esotropia, exophoria.'}],
+    ['Concomitant vs paralytic', 'Same angle in every gaze, or not',
+      {n: [NV.iii, NV.iv, NV.vi], m: EOM.concat(['eyeball']), dir: [-0.5, -0.4, 1], fig: 'comitant',
+       text: '<b>Concomitant (comitant)</b>: the angle of deviation is the same in all positions of gaze; most childhood squints, linked to refractive and sensory causes; it can lead to amblyopia. <b>Incomitant</b>: the angle varies with the direction of gaze; usually from a <b>paralysis</b> of a nerve or muscle (paralytic squint) or a mechanical restriction. An acquired squint in an adult often brings diplopia.'}],
+    ['Secondary deviation', 'The deviation when the paretic eye fixes',
+      {n: [NV.iii, NV.iv, NV.vi], m: EOM.concat(['eyeball']), dir: [-0.5, -0.4, 1],
+       text: 'In a paralytic squint the deviation depends on which eye fixes. The <b>secondary deviation</b> is the deviation seen when the <b>paretic eye</b> fixes; it is characteristic of paralytic squint.'}],
+  ],
+  't-spaces': [
+    ['Parapharyngeal space', 'Inverted pyramid beside the pharynx',
+      {n: [NV.ix, NV.x, NV.xii, NV.symp], v: [VE.ica, VE.ijv, VE.ascphar], m: ['sup_constrictor', 'med_pterygoid', 'hyoid'], fit: ['sup_constrictor', 'med_pterygoid', 'hyoid', VE.ica], dir: [-1, 0.5, 0], labels: true,
+       text: 'Also called the lateral pharyngeal space: an <b>inverted pyramid</b> from the skull base to the greater horn of the hyoid, with the pharynx medially. The styloid process and its fascia divide it: the <b>pre-styloid</b> part (fat and salivary tissue, the maxillary and ascending pharyngeal arteries) and the <b>post-styloid</b> part (internal carotid artery, internal jugular vein, nerves IX, X and XII, the sympathetic trunk, lymph nodes). Tonsillar (quinsy) and dental infections spread into it.'}],
+    ['Submandibular space and Ludwig\'s angina', 'Below mylohyoid; with the sublingual and submental spaces',
+      {l: [LN.smd, LN.smt], v: [VE.facial], m: ['mylohyoid', 'digastric', 'mandible', 'hyoid'], dir: [-0.3, -0.6, -1], labels: true,
+       text: 'The <b>submandibular space</b> lies on the outer (lower) surface of <b>mylohyoid</b>, between the bellies of digastric; the sublingual space is above mylohyoid, and the two meet at its back border. <b>Ludwig\'s angina</b> is a spreading cellulitis of the floor of the mouth, usually on both sides, involving the <b>sublingual, submental and submandibular spaces</b>; usually from a lower molar tooth. The danger is the airway: airway management, intravenous antibiotics and drainage of any abscess.'}],
+    ['Peritonsillar space and quinsy', 'Between the tonsil capsule and the superior constrictor',
+      {l: [LN.tonsil, LN.jd], m: ['sup_constrictor', 'palatopharyngeus'], dir: [0.3, -1, 0.1], labels: true,
+       text: 'A potential space between the <b>capsule of the palatine tonsil</b> (medially) and the <b>superior constrictor</b> (laterally), with palatoglossus in front and palatopharyngeus behind. Pus here, behind the tonsil, is a <b>peritonsillar abscess (quinsy)</b>, the commonest deep neck space infection; it can spread to the parapharyngeal space.'}],
+    ['Pretracheal space', 'In front of the trachea, to the anterior mediastinum',
+      {m: ['sternohyoid', 'sternothyroid', 'thyroid_cart', 'cricoid_cart', 'manubrium'], fit: ['sternothyroid', 'thyroid_cart', 'cricoid_cart'], dir: [-0.5, -1, 0.1],
+       text: 'In front of the trachea, running down from the thyroid gland into the superior mediastinum. A neck infection that enters it spreads to the <b>anterior mediastinum</b> (the retropharyngeal and danger spaces lead to the posterior mediastinum). The trachea and thyroid gland are not in the model.'}],
+    ['Masticator space', 'Around the muscles of mastication',
+      {m: ['masseter', 'temporalis', 'lat_pterygoid', 'med_pterygoid', 'mandible'], dir: [-1, -0.3, 0],
+       text: 'The space that holds the <b>muscles of mastication</b> (masseter, temporalis and the pterygoids, shown). Dental (odontogenic) infections reach it and can spread on into the infratemporal fossa.'}],
+    ['Parotid space', 'The parotid gland, with the facial nerve and external carotid',
+      {n: [NV.facial], v: [VE.eca], m: ['masseter', 'mandible'], dir: [-1, -0.3, 0], labels: true,
+       text: 'Lateral to the parapharyngeal space, enclosed by the investing fascia: the <b>parotid gland</b>, with the <b>facial nerve</b> running forward through it and crossing the <b>external carotid artery</b> (both shown; the gland is not in the model).'}],
+  ],
+  't-phar': [
+    ['Arteries', 'Ascending pharyngeal, facial (palatine, tonsillar), maxillary (descending palatine)',
+      {v: [VE.eca, VE.ascphar, VE.facial, VE.maxillary, VE.descpal], lp: {[VE.ascphar]: [-29.8, -121.9, 1488.9]}, m: ['sup_constrictor', 'mid_constrictor', 'inf_constrictor'], dir: [-0.6, 0.4, 0.1], labels: true,
+       text: '<b>Ascending pharyngeal artery</b>, the smallest branch of the external carotid, runs up between the internal carotid and the pharynx and supplies the constrictors and their mucosa. The <b>facial artery</b> gives the <b>ascending palatine</b> and <b>tonsillar</b> branches, which pierce the superior constrictor to the tonsil and soft palate (not drawn separately). The <b>maxillary artery</b> gives the <b>descending palatine</b> artery.'}],
+    ['Veins', 'Pharyngeal venous plexus → internal jugular',
+      {v: [VE.ijv, VE.lingv], m: ['sup_constrictor', 'mid_constrictor', 'inf_constrictor'], dir: [-0.6, 0.4, 0.1],
+       text: 'The veins form the <b>pharyngeal venous plexus</b> on the outer surface of the pharynx (not in the model), which drains into the <b>internal jugular vein</b> (shown) and also toward the facial vein.'}],
+    ['Lymph', 'Retropharyngeal and deep cervical nodes',
+      {l: [LN.retro, LN.jd, LN.sup, LN.tonsil], v: [VE.ijv], m: ['sup_constrictor', 'mid_constrictor', 'inf_constrictor'], dir: [-0.6, 0.4, 0.1], labels: true,
+       text: 'From the upper pharynx (and the nasopharynx and auditory tube) to the <b>retropharyngeal nodes</b>, then to the upper deep cervical nodes; from the lower part to the <b>deep cervical nodes</b> along the internal jugular vein. The <b>palatine tonsil</b> drains to the uppermost deep cervical node (the jugulodigastric), which swells in quinsy.'}],
+    ['Sensory nerves', 'Glossopharyngeal; vagus for the lower part',
+      {n: [NV.ix, NV.x], m: ['sup_constrictor', 'mid_constrictor', 'inf_constrictor', 'stylopharyngeus'], fit: ['sup_constrictor', 'mid_constrictor', 'inf_constrictor', 'temporal_r'], dir: [-0.6, 0.4, 0.1], labels: true,
+       text: 'The <b>glossopharyngeal nerve</b> is the nerve of ordinary sensation to the mucosa of the pharynx, fauces and palatine tonsil. The lowest part (laryngopharynx) is supplied by the <b>vagus</b> too. The muscles\' motor supply is on the Nerve supply tab.'}],
+  ],
+  't-lar': [
+    ['Wall: cartilages and membranes', 'Thyrohyoid membrane, quadrangular membrane, conus elasticus',
+      {m: ['thyroid_cart', 'cricoid_cart', 'aryt_cart_r', 'aryt_cart_l', 'epiglottis', 'hyoid'], dir: [-0.8, -1, 0.1], fig: 'larynx',
+       text: 'The cartilages (in the model) are held together by fibro-elastic membranes (schematic below). The <b>thyrohyoid membrane</b> joins the hyoid to the thyroid cartilage; its thin side parts are pierced by the <b>internal laryngeal nerve</b> and the superior laryngeal vessels. The <b>quadrangular membrane</b> runs from the side of the epiglottis to the arytenoid; its free lower border is the vestibular ligament (in the vestibular, "false", fold). The <b>conus elasticus</b> (cricothyroid membrane) rises from the upper border of the cricoid to the vocal ligament (in the vocal, "true", fold). Its front part, the median cricothyroid ligament, lies just under the skin between the two cricothyroid muscles: it is cut in an emergency <b>cricothyrotomy</b>.'}],
+    ['Cavity', 'Vestibule, ventricle, infraglottic cavity',
+      {m: ['thyroid_cart', 'cricoid_cart', 'aryt_cart_r', 'aryt_cart_l', 'epiglottis'], dir: [-0.8, -1, 0.1], fig: 'larynx',
+       text: 'The cavity runs from the inlet to the lower border of the cricoid, where it continues as the trachea. The <b>vestibule</b> lies above the vestibular folds; the <b>ventricle</b> is the recess between the vestibular and vocal folds; the <b>infraglottic cavity</b> lies below the vocal folds. (Gray 1918 uses "vestibule" for everything above the vocal folds.) The mucous membrane continues above with that of the pharynx and below with that of the trachea.'}],
+    ['Sensory nerves', 'Internal laryngeal above the vocal folds, recurrent below',
+      {n: [NV.x], m: ['thyroid_cart', 'cricoid_cart', 'hyoid'], fit: ['thyroid_cart', 'cricoid_cart', 'hyoid', 'c2', 'c7'], dir: [-0.8, -1, 0.1], fig: 'larynx', labels: true,
+       text: 'Above the vocal folds the mucosa is supplied by the <b>internal laryngeal nerve</b> (sensory branch of the superior laryngeal nerve, from the vagus), which pierces the thyrohyoid membrane; below the vocal folds by the <b>recurrent laryngeal nerve</b>. Only the vagus itself is in the model.'}],
+    ['Arteries', 'Superior and inferior laryngeal',
+      {v: [VE.eca, VE.ita, VE.stv], m: ['thyroid_cart', 'cricoid_cart', 'hyoid'], dir: [-0.8, -1, 0.1], labels: true,
+       text: 'The <b>superior laryngeal artery</b>, usually from the superior thyroid artery, goes with the internal laryngeal nerve through the thyrohyoid membrane; the <b>inferior laryngeal artery</b> comes from the <b>inferior thyroid artery</b> (shown). The superior thyroid and laryngeal arteries are not in the model.'}],
+  ],
+  't-tongue': [
+    ['Surface: sulcus terminalis, papillae', 'Two-thirds in front, one-third behind',
+      {m: ['genioglossus', 'hyoglossus', 'mandible', 'hyoid'], dir: [-1, -0.2, 0], fig: 'tongue',
+       text: 'A V-shaped <b>sulcus terminalis</b> divides the tongue into the front two-thirds (oral part) and the back third (pharyngeal part), which differ in structure and development. At its apex is the <b>foramen caecum</b>, the upper end of the thyroglossal duct, from which the thyroid gland grew down. Just in front of the sulcus are the 8–12 <b>vallate papillae</b>; <b>fungiform papillae</b> (red, mostly on the tip and sides) and <b>filiform papillae</b> (the only ones without taste buds) cover the rest; <b>foliate papillae</b> also carry taste buds. The back third is smoother, with lymphoid follicles (the lingual tonsil).'}],
+    ['Nerves and the pharyngeal arches', 'Arch 1: V3 + VII; arch 3: IX; arch 4: X; muscles: XII',
+      {n: [NV.lingual, NV.chorda, NV.ix, NV.xii], m: ['genioglossus', 'hyoglossus', 'hyoid'], fit: ['genioglossus', 'hyoglossus', 'mandible', 'hyoid'], dir: [-1, -0.2, 0], fig: 'tongue', labels: true,
+       text: 'The mucosa is supplied by the nerves of the arches it develops from. <b>Front two-thirds (first arch):</b> general sensation by the <b>lingual nerve (V3)</b>; taste by the <b>chorda tympani (VII)</b>, which travels in the lingual nerve. <b>Back third (third arch):</b> taste and general sensation by the <b>glossopharyngeal nerve (IX)</b>, which also supplies the vallate papillae although they lie just in front of the sulcus. <b>Near the epiglottis (fourth arch):</b> the <b>vagus</b> (internal laryngeal). The <b>muscles</b> come from the <b>occipital somites</b> (myotomes) and are supplied by the <b>hypoglossal nerve (XII)</b>, except palatoglossus (vagus).'}],
+    ['Vessels', 'Lingual artery and lingual veins',
+      {v: [VE.eca, VE.lingv, VE.ijv], m: ['genioglossus', 'hyoglossus', 'hyoid'], dir: [-1, -0.2, 0], labels: true,
+       text: 'The <b>lingual artery</b> arises from the external carotid at the tip of the greater horn of the hyoid, between the superior thyroid and facial arteries, and runs deep to hyoglossus to the tip (not in the model). The <b>lingual veins</b> (shown) drain into the <b>internal jugular vein</b>.'}],
+    ['Lymph', 'Tip → submental; margins → submandibular; back → deep cervical',
+      {l: [LN.smt, LN.smd, LN.jd, LN.sup], v: [VE.ijv], lab: {[LN.smt]: 'Submental', [LN.smd]: 'Submandibular', [LN.jd]: 'Jugulodigastric', [LN.sup]: 'Upper deep cervical'}, m: ['genioglossus', 'hyoglossus', 'mylohyoid', 'hyoid'], fit: ['genioglossus', 'hyoglossus', 'mylohyoid', 'hyoid', VE.ijv], dir: [-0.8, -0.6, -0.3], labels: true,
+       text: 'The <b>tip</b> drains to the <b>submental nodes</b>; the <b>margins</b> of the front two-thirds to the <b>submandibular nodes</b> (and the upper deep cervical, jugulodigastric, node); the <b>back of the tongue</b>, from the region of the vallate papillae, to the <b>upper deep cervical nodes</b>, first the jugulodigastric. The nodes are shown in 3D (right side).'}],
+  ],
+  't-surface': [
+    ['Carotid pulse', 'Under the anterior border of SCM, at the upper border of the thyroid cartilage',
+      {v: [VE.cca, VE.eca, VE.ica], m: ['thyroid_cart', 'hyoid', 'cricoid_cart'], fit: [VE.cca, VE.eca, 'hyoid', 'thyroid_cart'], dir: [-1, -0.45, 0], marks: [['carotid', 'Carotid pulse (approximate)']],
+       text: 'Felt just deep to the <b>anterior border of sternocleidomastoid</b> at the level of the <b>upper border of the thyroid cartilage</b>, about C4. The common carotid divides into the internal and external carotids near this level (a little higher in the model).'}],
+    ['Facial pulse', 'Where the artery crosses the lower border of the mandible',
+      {v: [VE.facial], m: ['mandible', 'masseter'], dir: [-1, -0.6, 0], marks: [['facial', 'Facial pulse (approximate)']], labels: true,
+       text: 'The facial artery is felt as it crosses the <b>lower border of the mandible</b>, just in front of the <b>anterior border of masseter</b>, then runs toward the angle of the mouth.'}],
+    ['Superficial temporal pulse', 'In front of the tragus, over the root of the zygomatic arch',
+      {v: [VE.sta, VE.staf], m: ['temporal_r', 'zygomatic_r', 'mandible'], dir: [-1, -0.2, 0.2], marks: [['sta', 'Superficial temporal pulse (approximate)']], labels: true,
+       text: 'Felt in front of the <b>tragus</b>, where the artery crosses the <b>posterior end of the zygomatic arch</b>.'}],
+    ['Internal and external jugular veins', 'Deep in the carotid sheath; superficial over SCM, from the angle of the mandible',
+      {v: [VE.ijv, VE.ejv, VE.cca], m: ['clavicle', 'thyroid_cart'], fit: [VE.ijv, VE.ejv, 'scm'], dir: [-1, -0.6, 0], labels: true,
+       text: 'The <b>internal jugular vein</b> runs down in the <b>carotid sheath</b>, lateral to the carotid arteries, along sternocleidomastoid; its surface line is just lateral to that of the carotid. Its pulsation (the JVP) is <b>seen, not felt</b>. The <b>external jugular vein</b> (shown) is superficial: it begins in the parotid at the level of the <b>angle of the mandible</b>, runs down over <b>sternocleidomastoid</b> just under platysma, pierces the deep fascia low in the neck and ends in the <b>subclavian vein</b>.'}],
+    ['Hyoid, thyroid, cricoid: vertebral levels', 'Hyoid C3–C4, thyroid C4–C5, cricoid C6',
+      {m: ['hyoid', 'thyroid_cart', 'cricoid_cart', 'c3', 'c4', 'c5', 'c6'], dir: [-1, -0.15, 0], marks: [['hyoid', 'Hyoid'], ['thyroid', 'Thyroid cartilage'], ['cricoid', 'Cricoid'], ['c3', 'C3'], ['c4', 'C4'], ['c5', 'C5'], ['c6', 'C6']],
+       text: '<b>Hyoid</b>: in the angle below the chin; opposite C4 in Gray 1918 and StatPearls, C3 in Wikipedia (sources differ). <b>Thyroid cartilage</b>: C4–C5; its upper border is where the common carotid divides. <b>Cricoid cartilage</b>: opposite <b>C6</b>, where the pharynx becomes the oesophagus and the larynx the trachea. The points are approximate.'}],
+  ],
+};
+
+/* ===================== schematics (schematic, not to scale) ===================== */
+const tx = (x, y, t, a = {}) => `<text x="${x}" y="${y}"${a.anchor ? ` text-anchor="${a.anchor}"` : ''}${a.cls ? ` class="${a.cls}"` : ''}${a.id ? ` id="${a.id}"` : ''}>${t}</text>`;
+const FIG = {
+  facial() {
+    // main trunk on y=110; branches leave at x: GSPN 110, stapedius 175, chorda 215; foramen 240
+    const fn = (id, x, y, t) => tx(x, y, t, {id, cls: 'b', anchor: 'middle'});
+    return {
+      intro: 'Tap a level of the lesion. Red = lost, grey = kept. The ladder follows from the order in which the branches leave the nerve.',
+      buttons: [['a', 'Proximal to the geniculate ganglion'], ['b', 'Between the ganglion and the nerve to stapedius'], ['c', 'Between the nerve to stapedius and the chorda'], ['d', 'At the stylomastoid foramen or in the parotid']],
+      svg: `<svg viewBox="0 0 360 215" role="img" aria-label="Facial nerve course and branches, schematic">
+        <rect x="8" y="96" width="34" height="28" rx="5" fill="var(--s-kept)" opacity=".35"/>${tx(25, 114, 'Pons', {anchor: 'middle'})}
+        <path d="M42 110 H240" stroke="var(--nerve)" stroke-width="4" fill="none"/>
+        <path d="M240 110 L268 110 M268 110 L345 72 M268 110 L345 92 M268 110 L345 112 M268 110 L345 132 M268 110 L345 152" stroke="var(--nerve)" stroke-width="2.5" fill="none"/>
+        <path d="M110 110 V52" stroke="var(--nerve)" stroke-width="2.5"/><path d="M175 110 V78" stroke="var(--nerve)" stroke-width="2.5"/><path d="M215 110 V160" stroke="var(--nerve)" stroke-width="2.5"/>
+        <circle cx="110" cy="110" r="7" fill="var(--nerve)"/>
+        ${tx(64, 135, 'internal', {anchor: 'middle', cls: 'm'})}${tx(64, 147, 'acoustic', {anchor: 'middle', cls: 'm'})}${tx(64, 159, 'meatus', {anchor: 'middle', cls: 'm'})}
+        ${tx(114, 135, 'geniculate', {anchor: 'middle', cls: 'm'})}${tx(114, 147, 'ganglion', {anchor: 'middle', cls: 'm'})}
+        ${tx(143, 102, 'facial canal', {anchor: 'middle', cls: 'm'})}
+        ${tx(246, 135, 'stylomastoid', {anchor: 'middle', cls: 'm'})}${tx(246, 147, 'foramen', {anchor: 'middle', cls: 'm'})}
+        ${tx(312, 178, 'in the parotid:', {anchor: 'middle', cls: 'm'})}${tx(312, 190, '5 branches', {anchor: 'middle', cls: 'm'})}
+        ${tx(110, 30, 'Greater petrosal n.', {anchor: 'middle', cls: 'm'})}${fn('f-tear', 110, 45, 'tears')}
+        ${tx(175, 56, 'n. to stapedius', {anchor: 'middle', cls: 'm'})}${fn('f-hyper', 175, 71, 'stapedius')}
+        ${tx(215, 176, 'chorda tympani', {anchor: 'middle', cls: 'm'})}${fn('f-taste', 205, 191, 'taste, front ⅔ of tongue')}
+        ${fn('f-face', 306, 62, 'facial muscles')}
+        <g id="f-x" style="display:none"><path d="M-7 -7 L7 7 M7 -7 L-7 7" stroke="var(--s-lost)" stroke-width="3.5"/></g>
+      </svg>`,
+      init(box) {
+        const X = {a: 85, b: 142, c: 195, d: 248}, at = {tear: 110, hyper: 175, taste: 215, face: 300};
+        const set = k => {
+          box.querySelectorAll('.row button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === k));
+          const g = box.querySelector('#f-x'); g.style.display = ''; g.setAttribute('transform', `translate(${X[k]} 110)`);
+          const lost = [];
+          for (const [f, x] of Object.entries(at)) { const on = x > X[k]; box.querySelector('#f-' + f).style.fill = `var(${on ? '--s-lost' : '--s-kept'})`; if (on) lost.push(f); }
+          const words = {tear: 'tears (dry eye)', hyper: 'stapedius (hyperacusis)', taste: 'taste on the front two-thirds of the tongue', face: 'all facial muscles on that side'};
+          box.querySelector('.cap').innerHTML = `<b>Lost:</b> ${lost.map(f => words[f]).join('; ')}.`;
+        };
+        return set;
+      },
+    };
+  },
+  horner() {
+    return {
+      intro: 'Tap a neuron: its path is drawn in red, with where its lesions come from.',
+      buttons: [['1', 'First neuron'], ['2', 'Second neuron'], ['3', 'Third neuron']],
+      svg: `<svg viewBox="0 0 360 250" role="img" aria-label="Sympathetic pathway to the eye, schematic">
+        ${tx(60, 18, 'Hypothalamus', {anchor: 'middle', cls: 'b'})}
+        <path id="h-1" d="M60 26 V200" stroke="var(--nerve)" stroke-width="4" fill="none"/>
+        ${tx(70, 110, 'brainstem', {cls: 'm'})}${tx(70, 205, 'cord C8–T1', {cls: 'm'})}
+        <path id="h-2" d="M60 200 Q100 236 135 214 Q150 170 170 96" stroke="var(--nerve)" stroke-width="4" fill="none"/>
+        ${tx(140, 238, 'over the lung apex', {cls: 'm'})}${tx(150, 160, 'sympathetic trunk', {cls: 'm'})}
+        <circle cx="170" cy="92" r="7" fill="var(--nerve)"/>${tx(182, 96, 'superior cervical ganglion', {cls: 'm'})}
+        <path id="h-3" d="M170 85 Q185 50 225 40 L300 30 M170 92 Q230 110 300 128" stroke="var(--nerve)" stroke-width="4" fill="none"/>
+        ${tx(176, 58, 'on the internal carotid', {anchor: 'end', cls: 'm'})}${tx(232, 56, 'cavernous sinus, V1', {cls: 'm'})}
+        ${tx(305, 34, 'eye', {cls: 'b'})}${tx(180, 140, 'on the external carotid', {cls: 'm'})}${tx(306, 132, 'face sweat', {cls: 'b'})}
+      </svg>`,
+      init(box) {
+        const why = {
+          1: '<b>Central.</b> Lateral medullary infarction; spinal cord lesions (syringomyelia, trauma, tumour). Sweating often lost over the whole half of the body.',
+          2: '<b>Preganglionic.</b> Pancoast tumour at the lung apex; trauma or surgery at the base of the neck. Anhidrosis of the face.',
+          3: '<b>Postganglionic.</b> Internal carotid dissection (painful Horner syndrome); cavernous sinus lesions (with a VI palsy). Facial sweating spared or nearly so: the sweat fibres run on the external carotid.'};
+        return k => {
+          box.querySelectorAll('.row button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === k));
+          for (const i of ['1', '2', '3']) box.querySelector('#h-' + i).setAttribute('stroke', `var(${i === k ? '--s-lost' : '--nerve'})`);
+          box.querySelector('.cap').innerHTML = why[k];
+        };
+      },
+    };
+  },
+  phoria() {
+    const eye = (x, y, dx) => `<circle cx="${x}" cy="${y}" r="16" fill="var(--surface)" stroke="var(--muted)" stroke-width="1.5"/><circle cx="${x + dx}" cy="${y}" r="6" fill="var(--ink)"/>`;
+    const cover = (x, y) => `<rect x="${x - 20}" y="${y - 20}" width="40" height="40" rx="6" fill="var(--s-kept)" opacity=".55"/>`;
+    return {svg: `<svg viewBox="0 0 360 150" role="img" aria-label="Phoria and tropia, schematic">
+      ${tx(10, 16, 'Phoria (latent)', {cls: 'b'})}
+      ${eye(40, 46, 0)}${eye(85, 46, 0)}${tx(62, 80, 'both open: straight', {anchor: 'middle', cls: 'm'})}
+      ${eye(170, 46, 0)}${eye(215, 46, -7)}${cover(215, 46)}${tx(192, 80, 'one covered: it drifts', {anchor: 'middle', cls: 'm'})}
+      ${tx(10, 106, 'Tropia (manifest)', {cls: 'b'})}
+      ${eye(40, 128, 0)}${eye(85, 128, -7)}${tx(130, 132, 'one eye turned with both eyes open', {cls: 'm'})}
+    </svg>`};
+  },
+  direction() {
+    const pair = (x, lbl, dx, dy) => `<circle cx="${x}" cy="40" r="13" fill="var(--surface)" stroke="var(--muted)" stroke-width="1.5"/><circle cx="${x}" cy="40" r="5" fill="var(--ink)"/>
+      <circle cx="${x + 32}" cy="40" r="13" fill="var(--surface)" stroke="var(--muted)" stroke-width="1.5"/><circle cx="${x + 32 + dx}" cy="${40 + dy}" r="5" fill="var(--ink)"/>${tx(x + 16, 72, lbl, {anchor: 'middle', cls: 'b'})}`;
+    return {svg: `<svg viewBox="0 0 360 90" role="img" aria-label="Eso, exo, hyper and hypo deviations of the left eye, schematic">
+      ${pair(14, 'eso (in)', -6, 0)}${pair(102, 'exo (out)', 6, 0)}${pair(190, 'hyper (up)', 0, -6)}${pair(278, 'hypo (down)', 0, 6)}
+      ${tx(180, 88, 'the patient\'s left eye (on your right) deviates; you face the patient', {anchor: 'middle', cls: 'm'})}
+    </svg>`};
+  },
+  comitant() {
+    const bars = (x0, hs) => hs.map((h, i) => `<rect x="${x0 + i * 34}" y="${90 - h}" width="24" height="${h}" fill="var(--s-a)"/>${tx(x0 + i * 34 + 12, 104, ['left', 'ahead', 'right'][i], {anchor: 'middle', cls: 'm'})}`).join('');
+    return {svg: `<svg viewBox="0 0 360 120" role="img" aria-label="Angle of deviation by direction of gaze, schematic">
+      ${tx(20, 16, 'Concomitant: same angle', {cls: 'b'})}${bars(30, [40, 40, 40])}
+      ${tx(200, 16, 'Incomitant: varies with gaze', {cls: 'b'})}${bars(210, [14, 30, 62])}
+      ${tx(180, 118, 'bar = angle of deviation in each direction of gaze (illustrative)', {anchor: 'middle', cls: 'm'})}
+    </svg>`};
+  },
+  larynx() {
+    return {svg: `<svg viewBox="0 0 340 272" role="img" aria-label="Coronal section of the larynx, schematic">
+      <path d="M118 40 L162 40 L176 112 L210 128 L210 146 L156 156 L124 156 L70 146 L70 128 L104 112 Z" fill="var(--s-a)" opacity=".55"/>
+      <path d="M124 156 L156 156 L204 200 L76 200 Z" fill="var(--s-b)" opacity=".6"/>
+      <rect x="70" y="14" width="140" height="10" rx="5" fill="var(--bone)" stroke="var(--muted)" stroke-width=".8"/>${tx(222, 23, 'hyoid', {cls: 'm'})}
+      <path d="M72 26 L70 62 M208 26 L210 62" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 3"/>${tx(62, 40, 'thyrohyoid', {anchor: 'end', cls: 'm'})}${tx(62, 52, 'membrane', {anchor: 'end', cls: 'm'})}
+      <path d="M68 62 L60 172 M212 62 L220 172" stroke="var(--cart)" stroke-width="9" stroke-linecap="round"/>${tx(230, 100, 'thyroid', {cls: 'm'})}${tx(230, 112, 'cartilage', {cls: 'm'})}
+      <path d="M72 200 Q140 214 208 200 L208 226 L72 226 Z" fill="var(--cart)"/>${tx(222, 220, 'cricoid', {cls: 'm'})}
+      <path d="M118 30 Q140 22 162 30 L150 58 L130 58 Z" fill="var(--cart)"/>${tx(222, 40, 'epiglottis', {cls: 'm'})}
+      <path d="M118 40 L104 112 M162 40 L176 112" stroke="var(--s-d)" stroke-width="4"/>
+      <path d="M104 112 L70 128 L70 146 L124 156 M176 112 L210 128 L210 146 L156 156" stroke="var(--muted)" stroke-width="1.5" fill="none"/>
+      <path d="M124 156 L76 200 M156 156 L204 200" stroke="var(--s-c)" stroke-width="4"/>
+      ${tx(140, 92, 'vestibule', {anchor: 'middle', cls: 'b'})}${tx(54, 140, 'ventricle', {anchor: 'end', cls: 'b'})}
+      ${tx(140, 186, 'infraglottic', {anchor: 'middle', cls: 'b'})}${tx(140, 198, 'cavity', {anchor: 'middle', cls: 'b'})}
+      ${tx(96, 104, 'vestibular fold', {anchor: 'end', cls: 'm'})}${tx(140, 170, 'vocal folds', {anchor: 'middle', cls: 'm'})}
+      <rect x="6" y="236" width="12" height="9" fill="var(--s-d)"/>${tx(22, 244, 'quadrangular membrane', {cls: 'm'})}
+      <rect x="176" y="236" width="12" height="9" fill="var(--s-c)"/>${tx(192, 244, 'conus elasticus', {cls: 'm'})}
+      <rect x="6" y="254" width="12" height="9" fill="var(--s-a)"/>${tx(22, 262, 'above vocal folds: internal laryngeal', {cls: 'm'})}
+      <rect x="216" y="254" width="12" height="9" fill="var(--s-b)"/>${tx(232, 262, 'below: recurrent', {cls: 'm'})}
+    </svg>`};
+  },
+  tongue() {
+    const vall = [[96, 132], [112, 122], [126, 112], [140, 104], [154, 112], [168, 122], [184, 132]].map(([x, y]) => `<circle cx="${x}" cy="${y + 8}" r="4.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="1"/>`).join('');
+    const fung = [[118, 262], [140, 270], [162, 262], [96, 238], [184, 238], [82, 206], [198, 206]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3" fill="var(--s-pap)"/>`).join('');
+    return {svg: `<svg viewBox="0 0 320 300" role="img" aria-label="Dorsum of the tongue with nerve territories, schematic">
+      <path d="M60 40 Q140 22 220 40 L232 96 Q248 180 210 250 Q140 300 70 250 Q32 180 48 96 Z" fill="var(--s-c)"/>
+      <path d="M41 140 L140 96 L239 140 Q246 190 210 250 Q140 300 70 250 Q34 190 41 140 Z" fill="var(--s-a)"/>
+      <path d="M60 40 Q140 22 220 40 L218 30 Q140 12 62 30 Z" fill="var(--s-d)"/>
+      <path d="M41 140 L140 96 L239 140" stroke="var(--ink)" stroke-width="2" fill="none"/>
+      <circle cx="140" cy="96" r="4" fill="var(--ink)"/>${vall}${fung}
+      ${tx(150, 90, 'foramen caecum', {cls: 'm'})}${tx(244, 140, 'sulcus', {cls: 'm'})}${tx(244, 152, 'terminalis', {cls: 'm'})}
+      ${tx(140, 160, 'vallate papillae (IX)', {anchor: 'middle', cls: 'm'})}${tx(140, 224, 'fungiform (tip, sides)', {anchor: 'middle', cls: 'm'})}
+      ${tx(140, 200, 'Front ⅔ — arch 1', {anchor: 'middle', cls: 'b'})}${tx(140, 216, 'V3: touch · VII: taste', {anchor: 'middle', cls: 'm'})}
+      ${tx(140, 60, 'Back ⅓ — arch 3: IX (taste and touch)', {anchor: 'middle', cls: 'b'})}
+      ${tx(140, 10, 'near the epiglottis — arch 4: X (internal laryngeal)', {anchor: 'middle', cls: 'm'})}
+    </svg>`};
+  },
+};
+
 /* ===================== PAGE (shared logic: ../assets/muscle-page.js) ===================== */
+const TINT = {thyroid_cart: '--cart', cricoid_cart: '--cart', aryt_cart_r: '--cart', aryt_cart_l: '--cart', epiglottis: '--cart', eyeball: '--soft'};
+const LAYERS = {
+  n: {base: '../models/body-nerves/', man: 'body-nerves.json', colour: () => '--nerve'},
+  v: {base: '../models/body-vessels/', man: 'body-vessels.json', colour: k => /vein/.test(k) ? '--vein' : '--artery'},
+  l: {base: '../models/body-lymph/', man: 'body-lymph.json', colour: () => '--lymph'},
+};
+const LNAMES = {}, layerLoad = {};
+let shownLayer = [];
 function buildMore(api) {
   const {v, focusOn, pressed, clearRows} = api, $ = id => document.getElementById(id);
-  const names = () => api.names();
+  const fig = $('more-fig');
+  const hideLayers = () => {
+    for (const k of shownLayer) v.setVisible(k, false);
+    shownLayer = []; v.setMarkers([]); fig.hidden = true; fig.replaceChildren(); $('more-pick').textContent = '';
+  };
+  const loadLayer = sys => layerLoad[sys] || (layerLoad[sys] = (async () => {
+    const L = LAYERS[sys], want = new Set();
+    for (const rows of Object.values(TOPICS)) for (const [, , t] of rows) for (const k of t[sys] || []) want.add(k.slice(3));
+    await v.load(L.base + L.man, [...want], {fit: false, extra: (m, items) => {
+      for (const it of items) { it.key = 'ax_' + it.key; LNAMES[it.key] = it.info.name; }
+      return [];
+    }});
+    for (const k of want) { const key = 'ax_' + k; if (!v.parts.has(key)) continue; TINT[key] = L.colour(k); v.setColour(key, TINT[key]); v.setVisible(key, false); }
+  })().catch(e => { layerLoad[sys] = null; throw e; }));
+  // a label on each shown layer part: the vertex nearest the middle of its bounding box (approximate)
+  const labelAt = (k, box) => {
+    const p = v.parts.get(k), m = p.m, c = (box.lp && box.lp[k]) || p.bbox[0].map((lo, i) => lo < box[0][i] || p.bbox[1][i] > box[1][i] ? (box[0][i] + box[1][i]) / 2 : (lo + p.bbox[1][i]) / 2);
+    let best = 0, bd = 1e18;
+    for (let i = 0; i < m.nv; i++) { const d = (m.pos[i*3] - c[0]) ** 2 + (m.pos[i*3+1] - c[1]) ** 2 + (m.pos[i*3+2] - c[2]) ** 2; if (d < bd) { bd = d; best = i; } }
+    return [m.pos[best*3], m.pos[best*3+1], m.pos[best*3+2]];
+  };
+  let token = 0;
+  async function showTopic(id, i, row) {
+    const [name, , t] = TOPICS[id][i], my = ++token;
+    hideLayers(); clearRows(); pressed('#fascia-list button', () => false); row.setAttribute('aria-pressed', 'true');
+    $('more-desc').innerHTML = `<b>${name}.</b> ${t.text}`;
+    if (t.fig) {
+      const f = FIG[t.fig](); fig.hidden = false;
+      fig.innerHTML = (f.intro ? `<p class="note">${f.intro}</p>` : '') + (f.buttons ? `<div class="row">${f.buttons.map(([k, l]) => `<button data-k="${k}" aria-pressed="false">${l}</button>`).join('')}</div>` : '') +
+        f.svg + (f.init ? '<p class="cap key"></p>' : '') + '<p class="note">Schematic, not to scale.</p>';
+      if (f.init) { const set = f.init(fig); fig.querySelectorAll('.row button').forEach(b => b.onclick = () => set(b.dataset.k)); set(f.buttons[0][0]); }
+    }
+    const sys = ['n', 'v', 'l'].filter(s => t[s] && t[s].length);
+    if (sys.length) {
+      $('more-pick').textContent = 'Loading the nerves, vessels or lymph nodes…';
+      try { await Promise.all(sys.map(loadLayer)); } catch (e) { $('more-pick').textContent = 'Could not load that layer: ' + e.message; return; }
+      if (my !== token) return;
+      $('more-pick').textContent = '';
+    }
+    const lay = sys.flatMap(s => t[s]).filter(k => v.parts.has(k)), solid = (t.m || []).filter(api.has);
+    for (const k of lay) { v.setColour(k, TINT[k]); v.setVisible(k, true); }
+    shownLayer = lay;
+    focusOn(lay.filter(k => !(t.glass || []).includes(k)).concat(solid));
+    const fk = t.fit ? t.fit.filter(k => v.parts.has(k)) : lay.length ? lay.concat(solid) : solid;
+    v.fit(fk); v.face(t.dir, {zoom: 1});
+    const box = [[1e9, 1e9, 1e9], [-1e9, -1e9, -1e9]];
+    for (const k of fk) { const b = v.parts.get(k).bbox; for (let i = 0; i < 3; i++) { box[0][i] = Math.min(box[0][i], b[0][i]); box[1][i] = Math.max(box[1][i], b[1][i]); } }
+    const marks = (t.marks || []).map(([p, label]) => ({p: PTS[p], label, color: '--mark', always: true}));
+    box.lp = t.lp;
+    if (t.labels || t.lab) for (const k of lay) { if (t.lab && !t.lab[k]) continue; marks.push({p: labelAt(k, box), label: (t.lab && t.lab[k]) || LNAMES[k], color: TINT[k], always: true}); }
+    v.setMarkers(marks);
+  }
+  for (const id of Object.keys(TOPICS)) {
+    const tb = $(id);
+    tb.innerHTML = TOPICS[id].map(([n, sub], i) => `<tr data-k="${id}${i}" aria-pressed="false"><td>${n}</td><td>${sub}</td></tr>`).join('');
+    tb.querySelectorAll('tr').forEach((r, i) => r.onclick = () => showTopic(id, i, r));
+  }
+  // the page's own rows hide the layers first
   const rowTable = (id, rows, dir, pre) => {
     const t = $(id);
     t.innerHTML = rows.map(([n, , txt], i) => `<tr data-k="${id}${i}" aria-pressed="false"><td>${n}</td><td>${txt}</td></tr>`).join('');
     t.querySelectorAll('tr').forEach((r, i) => r.onclick = () => {
       const [n, ks, txt] = rows[i], has = ks.filter(api.has);
-      clearRows(); pressed('#fascia-list button', () => false); r.setAttribute('aria-pressed', 'true');
+      hideLayers(); token++; clearRows(); pressed('#fascia-list button', () => false); r.setAttribute('aria-pressed', 'true');
       $('more-desc').innerHTML = `<b>${pre}${n}:</b> ${txt}`;
       focusOn(has); v.fit(has); v.face(dir, {zoom: 1});
     });
@@ -352,13 +732,23 @@ function buildMore(api) {
     if (!api.has(k)) continue;
     const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
     b.innerHTML = `<i style="background:var(--fascia)"></i><span>${name}</span>`;
-    b.onclick = () => { clearRows(); pressed('#fascia-list button', x => x === k); $('more-desc').innerHTML = `<b>${name}.</b> ${text}`;
+    b.onclick = () => { hideLayers(); token++; clearRows(); pressed('#fascia-list button', x => x === k); $('more-desc').innerHTML = `<b>${name}.</b> ${text}`;
       focusOn([k]); v.fit([k]); v.face([-0.7, -1, 0.15], {zoom: 1}); };
     box.append(b);
   }
   $('fascia-text').innerHTML = MORE.fasciaText.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
   $('absent').innerHTML = MORE.absent.map(([a, b]) => `<tr><td>${a}</td><td>${b}</td></tr>`).join('');
   $('clin').innerHTML = MORE.clin.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
+  // leaving the tab, or tapping a muscle (which switches tabs), hides the layers; a tap on a layer part names it
+  for (const t of ['muscles', 'nerves']) $('tab-' + t).addEventListener('click', () => { hideLayers(); token++; });
+  const prevPick = v.onPick;
+  v.onPick = hit => {
+    if (hit && LNAMES[hit.key]) { $('more-pick').textContent = 'Tapped: ' + LNAMES[hit.key] + ' (right side).'; return; }
+    if (!hit && shownLayer.length) return;
+    if (hit) { hideLayers(); token++; }
+    prevPick(hit);
+  };
+  api.hideLayers = () => { hideLayers(); token++; };
 }
 MusclePage({
   base: '../models/head-neck-muscles/', manifest: 'head-neck-muscles.json', DATA, GROUPS, NERVES, NERVE_TEXT, M, home: [-0.6, -1, 0.1], glassBones: true, ghost: 0.07,
@@ -370,9 +760,9 @@ MusclePage({
     [['sup_constrictor', 'mid_constrictor', 'inf_constrictor', 'stylopharyngeus', 'palatopharyngeus'], [-0.5, 1, 0.1]],
     [['genioglossus', 'hyoglossus', 'stylohyoid'], [-1, -0.2, 0]], [['longus_colli', 'longus_capitis', 'rect_cap_ant', 'rect_cap_lat'], [0, -1, -0.4]],
     [['scal_ant', 'scal_med', 'scal_post', 'scm', 'omohyoid'], [-1, -0.5, 0.1]]].flatMap(([ks, d]) => ks.map(k => ({[k]: d})))),
-  tint: {thyroid_cart: '--cart', cricoid_cart: '--cart', aryt_cart_r: '--cart', aryt_cart_l: '--cart', epiglottis: '--cart', eyeball: '--soft'},
+  tint: TINT,
   extra: {key: 'more', parts: MORE.fascia.map(p => p[0]), build: buildMore,
-    enter(api) { document.getElementById('more-desc').innerHTML = MORE.intro + ' ' + MORE.eyeIntro;
+    enter(api) { if (api.hideLayers) api.hideLayers(); document.getElementById('more-desc').innerHTML = MORE.intro + ' ' + MORE.eyeIntro;
       api.focusOn(null); api.v.fit(api.LIMB()); api.v.face([-0.6, -1, 0.1], {zoom: 1}); }},
 });
 </script>

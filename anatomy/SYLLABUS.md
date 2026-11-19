@@ -270,10 +270,10 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [x] **AN28.1** Describe & demonstrate muscles of facial expression and their nerve supply — *all the muscles of facial expression with their facial-nerve branches: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN28.2** Describe sensory innervation of face
 - [ ] **AN28.3** Describe & demonstrate origin /formation, course, branches /tributaries of facial vessels
-- [~] **AN28.4** Describe & demonstrate branches of facial nerve with distribution — *the five facial branches and posterior auricular, by muscle (course not covered): [Muscles of the Head and Neck](head-neck/muscles.html)*
+- [x] **AN28.4** Describe & demonstrate branches of facial nerve with distribution — *course and branches in 3D and schematic: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN28.5** Describe cervical lymph nodes and lymphatic drainage of head, face and neck
 - [x] **AN28.6** Identify superficial muscles of face, their nerve supply and actions — *attachments, branches and actions: [Muscles of the Head and Neck](head-neck/muscles.html)*
-- [~] **AN28.7** Explain the anatomical basis of facial nerve palsy — *LMN (Bell's) vs UMN facial palsy, forehead sparing, buccinator: [Muscles of the Head and Neck](head-neck/muscles.html)*
+- [x] **AN28.7** Explain the anatomical basis of facial nerve palsy — *localising the lesion by level, Bell's palsy and phenomenon, Ramsay Hunt, causes: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN28.8** Explain surgical importance of deep facial vein
 - [ ] **AN28.9** Describe & demonstrate the parts, borders, surfaces, contents, relations and nerve supply of parotid gland with course of its duct and surgical importance
 - [ ] **AN28.10** Explain the anatomical basis of Frey’s syndrome
@@ -298,9 +298,9 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [x] **AN31.1** Describe & identify extra ocular muscles of eyeball, along with a note on its attachment, action and clinical anatomy — *attachments, nerves, primary/secondary/tertiary actions, H test: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN31.2** Describe & demonstrate nerves and vessels in the orbit
-- [~] **AN31.3** Describe anatomical basis of Horner’s syndrome — *ptosis from the superior tarsal muscle; Horner vs III ptosis: [Muscles of the Head and Neck](head-neck/muscles.html)*
+- [x] **AN31.3** Describe anatomical basis of Horner’s syndrome — *three-neuron pathway, signs, causes and sweating pattern by level, sympathetic trunk in 3D: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN31.4** Describe the components of lacrimal apparatus
-- [~] **AN31.5** Explain the anatomical basis of oculomotor, trochlear and abducent nerve palsies along with strabismus — *III, IV, VI palsy signs and diplopia (strabismus types not covered): [Muscles of the Head and Neck](head-neck/muscles.html)*
+- [~] **AN31.5** Explain the anatomical basis of oculomotor, trochlear and abducent nerve palsies along with strabismus — *III, IV, VI palsies; phoria/tropia, eso/exo/hyper/hypo, concomitant vs paralytic, secondary deviation; III/IV/VI in 3D (primary vs secondary deviation not found in two open sources): [Muscles of the Head and Neck](head-neck/muscles.html)*
 
 ### 32. Anterior Triangle
 
@@ -332,13 +332,13 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN35.7** Describe the course and branches of IX, X, XI & XII nerve in the neck
 - [ ] **AN35.8** Describe the anatomically relevant clinical features of Thyroid swellings
 - [ ] **AN35.9** Describe the clinical features of compression of subclavian artery and lower trunk of brachial plexus by cervical rib
-- [~] **AN35.10** Describe the fascial spaces of neck — *retropharyngeal, danger, prevertebral and suprasternal spaces: [Muscles of the Head and Neck](head-neck/muscles.html)*
+- [x] **AN35.10** Describe the fascial spaces of neck — *retropharyngeal, danger, prevertebral, suprasternal, parapharyngeal, submandibular (Ludwig's angina), peritonsillar, pretracheal, masticator and parotid spaces: [Muscles of the Head and Neck](head-neck/muscles.html)*
 
 ### 36. Mouth, Pharynx & Palate
 
 - [ ] **AN36.1** Describe and demonstrate the structures of the vestibule of the mouth and oral cavity proper.
 - [ ] **AN36.2** Describe the 1) morphology, relations, blood supply andapplied anatomy of palatine tonsil 2) composition of soft palate
-- [~] **AN36.3** Describe and demonstrate the muscles, nerve supply, blood supply and lymphatic drainage of the pharynx — *muscles and nerve supply; Killian's dehiscence (vessels and lymphatics not covered): [Muscles of the Head and Neck](head-neck/muscles.html)*
+- [x] **AN36.3** Describe and demonstrate the muscles, nerve supply, blood supply and lymphatic drainage of the pharynx — *muscles, nerve supply, arteries, veins, lymph nodes in 3D, sensory supply: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN36.4** Describe the components and functions of Waldeyer’s lymphatic ring
 - [ ] **AN36.5** Describe the pharyngeal spaces. Also describe the boundaries and clinical significance of pyriform fossa
 - [ ] **AN36.6** Describe the anatomical basis of tonsillitis, tonsillectomy, adenoids and peri-tonsillar abscess
@@ -352,13 +352,13 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 38. Larynx
 
-- [~] **AN38.1** Describe & demonstrate the morphology, identify structure of the wall, nerve supply, blood supply and actions of intrinsic and extrinsic muscles of the larynx — *intrinsic muscles, nerves, actions; RLN and external laryngeal injury (structure of the wall not covered): [Muscles of the Head and Neck](head-neck/muscles.html)*
+- [x] **AN38.1** Describe & demonstrate the morphology, identify structure of the wall, nerve supply, blood supply and actions of intrinsic and extrinsic muscles of the larynx — *cartilages, membranes, cavity, intrinsic and extrinsic muscles, nerves, sensory supply, arteries: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN38.2** Describe the anatomical aspects of laryngitis
 - [ ] **AN38.3** Describe anatomical basis of recurrent laryngeal nerve injury
 
 ### 39. Tongue
 
-- [~] **AN39.1** Describe & demonstrate the morphology, nerve supply, embryological basis of nerve supply, blood supply, lymphatic drainage and actions of extrinsic and intrinsic muscles of tongue — *extrinsic and intrinsic muscles, nerve supply, hypoglossal palsy (vessels and lymphatics not covered): [Muscles of the Head and Neck](head-neck/muscles.html)*
+- [x] **AN39.1** Describe & demonstrate the morphology, nerve supply, embryological basis of nerve supply, blood supply, lymphatic drainage and actions of extrinsic and intrinsic muscles of tongue — *surface, papillae, nerve supply by pharyngeal arch, muscles, vessels, lymph drainage in 3D: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN39.2** Explain the anatomical basis of hypoglossal nerve palsy
 
 ### 40. Organs of hearing and equilibrium
@@ -387,7 +387,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN43.2** Identify, describe and draw the microanatomy of pituitary gland, thyroid, parathyroid gland, tongue, salivary glands, tonsil, epiglottis, cornea, retina
 - [ ] **AN43.3** Identify, describe and draw microanatomy of olfactory epithelium, eyelid, lip, sclero-corneal junction, optic nerve, cochlea- organ of corti, pineal gland
 - [ ] **AN43.4** Describe the development and developmental basis of congenital anomalies of face, palate, tongue, branchial apparatus, pituitary gland, thyroid gland & eye
-- [~] **AN43.5** Demonstrate- 1) Testing of muscles of facial expression, extraocular muscles, muscles of mastication, 2) Palpation of carotid arteries, facial artery, superficial temporal artery, 3) Location of internal and external jugular veins, 4) Location of hyoid bone, thyroid cartilage and cricoid cartilage with their vertebral levels — *testing facial, extraocular and masticatory muscles (palpation of arteries not covered): [Muscles of the Head and Neck](head-neck/muscles.html)*
+- [x] **AN43.5** Demonstrate- 1) Testing of muscles of facial expression, extraocular muscles, muscles of mastication, 2) Palpation of carotid arteries, facial artery, superficial temporal artery, 3) Location of internal and external jugular veins, 4) Location of hyoid bone, thyroid cartilage and cricoid cartilage with their vertebral levels — *testing facial, extraocular and masticatory muscles; carotid, facial and superficial temporal pulses, jugular veins and hyoid/thyroid/cricoid levels in 3D: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN43.6** Demonstrate surface projection of- Thyroid gland, Parotid gland and duct, Pterion, Common carotid artery, Internal jugular vein, Subclavian vein, External jugular vein, Facial artery in the face & accessory nerve
 - [ ] **AN43.7** Identify the anatomical structures in 1) Plain x-ray skull, 2) AP view and lateral view 3) Plain x-ray cervical spine-AP and lateral view 4) Plain x- ray of paranasal sinuses
 - [ ] **AN43.8** Describe the anatomical route used for carotid angiogram and vertebral angiogram

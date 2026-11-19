@@ -569,6 +569,21 @@ cartilage, the longus colli extent (atlas to T3), the longus capitis attachments
 tubercles.
 
 
+- Additions (2026-11-18; fact sheet `sources-local/facts/fill-hn.md`, 257 quotes, script-checked; Gray 1918 sections
+  144, 168, 177, 202, 204, 205, 216, 236, 242–244, 279–280; 26 StatPearls abstracts; 18 open-access papers incl.
+  PMC10884764 (facial palsy task force), PMC5398733 (Horner), PMC8356106 (tonsil), PMC11857515, PMC13346026 (deep neck
+  spaces), PMC1766559 (tongue lymph), PMC10052824 (external jugular); Wikipedia, Gray copies excluded): last tab rows
+  for the facial nerve course and lesion levels, Horner pathway, squint types, neck spaces, pharynx, larynx and tongue
+  supply, pulse points and vertebral levels. 3D from the whole-body nerve, vessel and lymph layers (right side, loaded
+  on demand); pulse and level markers computed from the meshes, approximate. Not in the model: greater petrosal nerve,
+  nerve to stapedius, tonsillar, ascending palatine, lingual, superior thyroid and laryngeal arteries.
+- Disagreements shown: superior cervical ganglion level (Gray C2–C3, StatPearls C3–C4); hyoid level (C4 Gray and
+  StatPearls, C3 Wikipedia); Gray's wider "vestibule" of the larynx. Left out (one source): primary vs secondary
+  deviation definition, external jugular surface line to mid-clavicle, laryngeal epithelium, V2 to the nasopharynx and
+  tonsil, referred ear pain after tonsillectomy, molar roots below the mylohyoid line, maxillary pharyngeal branch,
+  Ramsay Hunt tinnitus, retropharyngeal abscess age.
+- Independent review (2026-11-18), fixed: those single-source sentences; tongue schematic (IX area follows the sulcus
+  terminalis); verification notes moved off the page; carotid and temporal pulse markers and labels.
 ## Anatomy home — whole body with muscles (`index.html`)
 
 - No new facts: the Muscular system shows the muscles of the five regional muscle pages; tapping one selects its region
