@@ -65,3 +65,16 @@ Catmull–Clark subdivision and a simple Solidify (two shells along the vertex n
 before the object's transform, as Blender does. Select objects with `"all:Joints,Right upper limb"` (every substring
 must match one of the object's collections) or `name:`. Upper limb: `z-bp3d-joints-ul.zip` / `z-index-joints-ul.tsv`,
 used by `tools/joints/ul_config.py` (keep these thin shells nearly unsimplified: per-part `error_mm` 0.05).
+
+## Heart and vessels (whole body)
+
+Z-Anatomy draws most vessels as Bezier curves with a round bevel (`Curve.ext2` = bevel depth, times each point's
+radius; 0.5 mm × radius in Z-Anatomy). `export_curves.py` reads the splines (BezTriple knots and handles, radius,
+`Nurb.radius_interp`) and sweeps a closed tube along each (minimum-twist frames, 6/8/12 sides by radius, centreline
+thinned where straight), into `z-bp3d-vessels.zip` / `z-index-vessels.tsv`. Left curves that are the right curve under
+the x -> -x mirror (242 of 257) are skipped and mirrored by the page; the others are exported. One point of the
+central retinal artery has a negative radius: radii are clamped to 0.05 mm. The heart chambers, valves and the few
+venous sinuses that are meshes come through `export_mod.py "all:Cardiovascular system"` (`z-bp3d-heart.zip`).
+`body_vessels.py config|post` -> `configs/body-vessels.json`, `anatomy/models/body-vessels/vessels.json` (kind:
+artery / vein / heart, region, side, mirror). Parts are ordered by kind so the viewer draws each colour's run with one
+call (876 parts in 7 calls).

@@ -318,8 +318,8 @@
       let curBatch = null, curUVC = -1, curDim = -1, curAlpha = -1, curXf;
       const ID = this.idXf || (this.idXf = {m: new Float32Array([1, 0, 0, 0, 1, 0, 0, 0, 1]), t: new Float32Array(3)});
       for (const a of [L.p, L.nm, L.vc]) gl.enableVertexAttribArray(a);
-      const drawPart = (key, alpha) => {
-        const p = this.parts.get(key), b = p.batch;
+      const drawPart = (key, alpha, merged = null) => {
+        const p = merged || this.parts.get(key), b = p.batch;
         if (b !== curBatch) {
           curBatch = b;
           gl.bindBuffer(gl.ARRAY_BUFFER, b.bp); gl.vertexAttribPointer(L.p, 3, gl.FLOAT, false, 0, 0);
@@ -342,7 +342,21 @@
       let vis = this.order.filter(k => this.parts.get(k).visible);
       // labels test against the depth of what is drawn solid: with glass parts, only the selected ones
       if (mode === 2 && this.dimOthers) vis = vis.filter(k => this.dimOthers.has(k));
-      if (!ghost) { for (const k of vis) drawPart(k, 1); }
+      if (!ghost && mode !== 1) {
+        // runs of parts that sit next to each other in one batch with the same colour and placement are drawn with
+        // one call (the vessels are ordered by kind for this); picking (mode 1) still draws each part with its id
+        let run = null;
+        const flush = () => { if (run) { drawPart(run.k, 1, {...run.p, count: run.count}); run = null; } };
+        for (const k of vis) {
+          const p = this.parts.get(k);
+          if (run && p.batch === run.p.batch && p.i0 === run.p.i0 + run.count && !p.useVC && !run.p.useVC && p.xf === run.p.xf &&
+              p.rgb[0] === run.p.rgb[0] && p.rgb[1] === run.p.rgb[1] && p.rgb[2] === run.p.rgb[2] &&
+              (!this.dimOthers || this.dimOthers.has(k) === this.dimOthers.has(run.k))) { run.count += p.count; continue; }
+          flush(); run = {p, k, count: p.count};
+        }
+        flush();
+      }
+      else if (!ghost) { for (const k of vis) drawPart(k, 1); }
       else {
         // selected parts solid; the rest as faint glass over them, so bones deep in the skull stay visible
         for (const k of vis) if (this.dimOthers.has(k)) drawPart(k, 1);
