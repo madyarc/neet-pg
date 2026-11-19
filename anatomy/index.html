@@ -41,11 +41,11 @@
         <button class="chip" aria-pressed="false" data-sys="muscular">Muscular</button>
         <button class="chip" disabled>Joints and ligaments — coming</button>
         <button class="chip" aria-pressed="false" data-sys="vascular">Heart and vessels</button>
-        <button class="chip" disabled>Nerves — coming</button>
+        <button class="chip" aria-pressed="false" data-sys="nervous">Nerves</button>
         <button class="chip" disabled>Organs — coming</button>
       </div>
     </div>
-    <p class="muted"><span class="swatch" style="background:var(--bone)"></span>bone &nbsp; <span class="swatch" style="background:var(--cart)"></span>cartilage (costal cartilages)<span id="mus-key" hidden> &nbsp; <span class="swatch" style="background:#CC6677"></span><span class="swatch" style="background:#117733"></span><span class="swatch" style="background:#88CCEE"></span>muscles (one colour each, the same on both sides; different muscles that touch never share one) &nbsp; <span class="swatch" style="background:var(--fascia)"></span>tendons, aponeuroses, retinacula</span><span id="ves-key" hidden> &nbsp; <span class="swatch" style="background:var(--artery)"></span>arteries (pulmonary arteries too) &nbsp; <span class="swatch" style="background:var(--vein)"></span>veins and venous sinuses &nbsp; <span class="swatch" style="background:var(--heart)"></span>heart</span></p>
+    <p class="muted"><span class="swatch" style="background:var(--bone)"></span>bone &nbsp; <span class="swatch" style="background:var(--cart)"></span>cartilage (costal cartilages)<span id="mus-key" hidden> &nbsp; <span class="swatch" style="background:#CC6677"></span><span class="swatch" style="background:#117733"></span><span class="swatch" style="background:#88CCEE"></span>muscles (one colour each, the same on both sides; different muscles that touch never share one) &nbsp; <span class="swatch" style="background:var(--fascia)"></span>tendons, aponeuroses, retinacula</span><span id="ves-key" hidden> &nbsp; <span class="swatch" style="background:var(--artery)"></span>arteries (pulmonary arteries too) &nbsp; <span class="swatch" style="background:var(--vein)"></span>veins and venous sinuses &nbsp; <span class="swatch" style="background:var(--heart)"></span>heart</span><span id="ner-key" hidden> &nbsp; <span class="swatch" style="background:var(--nerve)"></span>nerves and ganglia &nbsp; <span class="swatch" style="background:var(--dura)"></span>spinal dura (the spinal cord is not in the model)</span></p>
     <div>
       <h3>Detailed pages</h3>
       <nav class="mods" aria-label="Modules">
@@ -101,7 +101,7 @@
 </section>
 
 <footer>
-  <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). Muscles, tendons and aponeuroses from Z-Anatomy, the libre 3D atlas of anatomy (CC BY-SA 4.0, built on BodyParts3D), moved into the BodyParts3D frame. The heart and blood vessels are also from Z-Anatomy, where most vessels are curves with a radius: here each is a tube swept along its curve (calibre approximate); the heart is shown by its four chambers. This overview uses a lighter version of each bone and muscle than the detailed pages. The left-side muscles and most left-side vessels are mirror images of the right ones (as in Z-Anatomy), so they can sit slightly off the left bones. It shows the muscles of the regional muscle pages; those pages list what the model leaves out. The four small sesamoid bones of the feet are not included yet. The model has costal cartilages 1–7 only (BodyParts3D does not include the 8th–10th).</p>
+  <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). Muscles, tendons and aponeuroses from Z-Anatomy, the libre 3D atlas of anatomy (CC BY-SA 4.0, built on BodyParts3D), moved into the BodyParts3D frame. The heart, blood vessels and nerves are also from Z-Anatomy, where vessels and nerves are curves with a radius: here each is a tube swept along its curve (calibre approximate); Z-Anatomy has no phrenic or inferior gluteal nerve and no spinal cord (its spinal dura is shown); the heart is shown by its four chambers. This overview uses a lighter version of each bone and muscle than the detailed pages. The left-side muscles and most left-side vessels and nerves are mirror images of the right ones (as in Z-Anatomy), so they can sit slightly off the left bones. It shows the muscles of the regional muscle pages; those pages list what the model leaves out. The four small sesamoid bones of the feet are not included yet. The model has costal cartilages 1–7 only (BodyParts3D does not include the 8th–10th).</p>
 </footer>
 </div>
 
@@ -131,8 +131,7 @@ let man = null, names = {}, sel = null;      // sel = {group, key}
 // muscles: loaded the first time the Muscular system is switched on (models/body-muscles, tools/zanat/body_muscles.py)
 let mus = null, musLoading = null;           // mus = {info: {key: {region, page, kind, side, colour}}, keys: [...]}
 // heart and vessels: loaded the first time that system is switched on (models/body-vessels, tools/zanat/body_vessels.py)
-let ves = null, vesLoading = null;           // ves = {info: {key: {kind, region, side}}, keys: [...]}
-const layers = {skeletal: true, muscular: false, vascular: false};
+const layers = {skeletal: true, muscular: false, vascular: false, nervous: false};
 
 // selection card over the model, and a "whole body" button
 const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
@@ -144,10 +143,11 @@ function clear() { sel = null; card.hidden = true; v.setFocus(null); }
 function select(key) {
   const name = names[key], g = (mus && mus.info[key]) ? mus.group[mus.info[key].page] : GROUPS.find(g => g.re.test(name)) || null;
   if (g && sel && sel.group === g) { location.href = g.href; return; }      // second tap on the group: open it
-  if (ves && ves.info[key]) {                  // vessels have no detailed page yet: name, kind and side
-    const d = ves.info[key];
+  const xs = extraOf(key);
+  if (xs) {                                    // vessels and nerves have no detailed page yet: name, kind and side
+    const d = extra[xs].info[key], what = xs === 'nervous' ? (d.kind === 'nerve' ? 'nerve' : d.kind === 'dura' ? 'spinal dura' : 'ganglion') : d.kind;
     sel = {group: null, key}; v.setFocus([key]); card.hidden = false;
-    card.innerHTML = `<div class="what"><b>${name}</b><span>${d.side !== 'midline' ? d.side + ' · ' : ''}${{artery: 'artery', vein: 'vein', heart: 'heart'}[d.kind]} · ${d.region.toLowerCase()} · no detailed page yet</span></div><button class="x" aria-label="Clear">×</button>`;
+    card.innerHTML = `<div class="what"><b>${name}</b><span>${d.side !== 'midline' ? d.side + ' · ' : ''}${what} · ${d.region.toLowerCase()} · no detailed page yet</span></div><button class="x" aria-label="Clear">×</button>`;
     card.querySelector('.x').onclick = clear; return;
   }
   sel = {group: g, key};
@@ -175,10 +175,11 @@ function applyLayers() {
   for (const p of man.parts) v.setVisible(p.key, layers.skeletal);
   if (mus) for (const k of mus.keys) v.setVisible(k, layers.muscular);
   for (const k in layers) sysBtn(k).setAttribute('aria-pressed', layers[k]);
-  if (ves) for (const k of ves.keys) v.setVisible(k, layers.vascular);
+  for (const sx in extra) for (const k of extra[sx].keys) v.setVisible(k, layers[sx]);
   document.getElementById('mus-key').hidden = !layers.muscular;
   document.getElementById('ves-key').hidden = !layers.vascular;
-  if (sel) { const vis = k => (mus && mus.info[k]) ? layers.muscular : (ves && ves.info[k]) ? layers.vascular : layers.skeletal; if (!vis(sel.key)) clear(); }
+  document.getElementById('ner-key').hidden = !layers.nervous;
+  if (sel) { const vis = k => (mus && mus.info[k]) ? layers.muscular : extraOf(k) ? layers[extraOf(k)] : layers.skeletal; if (!vis(sel.key)) clear(); }
 }
 function loadMuscles() {
   if (musLoading) return musLoading;
@@ -209,15 +210,21 @@ function loadMuscles() {
   })().catch(e => { b.textContent = 'Muscular · could not load'; musLoading = null; window.loadError = String(e); throw e; });
   return musLoading;
 }
-function loadVessels() {
-  if (vesLoading) return vesLoading;
-  const b = sysBtn('vascular');
-  const base = 'models/body-vessels/';
-  vesLoading = (async () => {
-    const meta = await (await fetch(base + 'vessels.json')).json();
+/* extra layers (vessels, nerves): packed right side + midline, left side mirrored here; loaded when first switched on */
+const EXTRA = {
+  vascular: {label: 'Heart and vessels', base: 'models/body-vessels/', meta: 'vessels.json', model: 'body-vessels.json', colour: d => '--' + d.kind},
+  nervous: {label: 'Nerves', base: 'models/body-nerves/', meta: 'nerves.json', model: 'body-nerves.json', colour: d => d.kind === 'dura' ? '--dura' : '--nerve'},
+};
+const extra = {}, extraLoading = {};     // extra[sys] = {info: {key: {kind, region, side, ...}}, keys: [...]}
+const extraOf = k => Object.keys(extra).find(s => extra[s].info[k]);
+function loadExtra(sys) {
+  if (extraLoading[sys]) return extraLoading[sys];
+  const L = EXTRA[sys], b = sysBtn(sys);
+  extraLoading[sys] = (async () => {
+    const meta = await (await fetch(L.base + L.meta)).json();
     const info = {}, M = meta.mirror, keys = [];
-    await v.load(base + 'body-vessels.json', null, {fit: false,
-      onProgress: f => { b.textContent = `Heart and vessels · loading ${Math.round(f * 100)}%`; },
+    await v.load(L.base + L.model, null, {fit: false,
+      onProgress: f => { b.textContent = `${L.label} · loading ${Math.round(f * 100)}%`; },
       extra: (m, items) => items.filter(it => meta.parts[it.key].mirror)
         .map(it => ({key: it.key + '_l', m: v.mirrored(it.m, M.m, M.t), info: {name: it.info.name}}))});
     for (const [k, d] of Object.entries(meta.parts)) {
@@ -225,21 +232,21 @@ function loadVessels() {
         const key = left ? k + '_l' : k;
         info[key] = {...d, side: d.mirror ? (left ? 'left' : 'right') : d.side};
         names[key] = v.parts.get(k).info.name;
-        v.setColour(key, '--' + d.kind);
+        v.setColour(key, L.colour(d));
         keys.push(key);
       }
     }
-    ves = {info, keys};
-    b.textContent = 'Heart and vessels';
-  })().catch(e => { b.textContent = 'Heart and vessels · could not load'; vesLoading = null; window.loadError = String(e); throw e; });
-  return vesLoading;
+    extra[sys] = {info, keys};
+    b.textContent = L.label;
+  })().catch(e => { b.textContent = `${L.label} · could not load`; extraLoading[sys] = null; window.loadError = String(e); throw e; });
+  return extraLoading[sys];
 }
 document.querySelectorAll('#systems [data-sys]').forEach(b => b.onclick = async () => {
   const k = b.dataset.sys, on = !layers[k];
   if (!on && !Object.entries(layers).some(([j, x]) => j !== k && x)) return;   // keep at least one system shown
   layers[k] = on;
   if (k === 'muscular' && on && !mus) { b.setAttribute('aria-pressed', 'true'); try { await loadMuscles(); } catch (e) { layers.muscular = false; } }
-  if (k === 'vascular' && on && !ves) { b.setAttribute('aria-pressed', 'true'); try { await loadVessels(); } catch (e) { layers.vascular = false; } }
+  if (EXTRA[k] && on && !extra[k]) { b.setAttribute('aria-pressed', 'true'); try { await loadExtra(k); } catch (e) { layers[k] = false; } }
   applyLayers();
 });
 

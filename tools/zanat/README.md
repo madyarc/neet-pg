@@ -78,3 +78,11 @@ venous sinuses that are meshes come through `export_mod.py "all:Cardiovascular s
 `body_vessels.py config|post` -> `configs/body-vessels.json`, `anatomy/models/body-vessels/vessels.json` (kind:
 artery / vein / heart, region, side, mirror). Parts are ordered by kind so the viewer draws each colour's run with one
 call (876 parts in 7 calls).
+
+## Nerves (whole body)
+
+Same pipeline as the vessels: `export_curves.py ... z-bp3d-nerves.zip z-index-nerves.tsv "7: Nervous system" --no-left`
+(127 curves, 120 mirrored on the page), plus `export_mod.py` for the spinal dura, a spinal ganglion, the sympathetic
+ganglia and the cochlear nerve (`z-bp3d-nerve-mesh.zip`). `body_nerves.py config|post` -> `configs/body-nerves.json`,
+`anatomy/models/body-nerves/nerves.json` (kind, group: cranial / brachial / lumbosacral / spinal / autonomic, region,
+side, mirror). Z-Anatomy has no phrenic nerve, no inferior gluteal nerve and no spinal cord mesh.

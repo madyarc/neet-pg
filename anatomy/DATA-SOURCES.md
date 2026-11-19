@@ -519,6 +519,10 @@ tubercles.
   front, heart and great vessels, neck, brain arteries from above, hands and feet; colour by kind (artery, vein,
   heart) from Z-Anatomy's collections ("Systemic arteries", "Pulmonary veins", ...).
 
+- Nerves layer (2026-11-18): no facts. Z-Anatomy nerve curves swept into tubes like the vessels; spinal dura shown
+  for the dural sac (no spinal cord in Z-Anatomy); no phrenic or inferior gluteal nerve in Z-Anatomy. Checked by eye:
+  whole body front, with muscles, with vessels at the shoulder and the thigh.
+
 ## Joints — `general/joints.html`
 
 - Fact sheet: `sources-local/facts/joints-general.md` (309 quotes, all script-checked against the downloads in
