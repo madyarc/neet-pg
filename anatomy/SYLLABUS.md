@@ -136,22 +136,22 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 14. Features of individual bones (Lower Limb)
 
 - [x] **AN14.1** Identify the given bone, its side, anatomical position, joint formation, important features and clinical anatomy (hip bone, femur, tibia fibula, tarsal bones) — *features, joints, and left or right for each bone: [Bones of the Lower Limb](lower-limb/bones.html), [The Femur](lower-limb/femur.html)*
-- [~] **AN14.2** Identify & describe joints formed by the given bone — *bones meeting at each joint: [The Lower Limb](lower-limb/lower-limb.html) (Joints)*
+- [x] **AN14.2** Identify & describe joints formed by the given bone — *joints formed by each bone: [Bones of the Lower Limb](lower-limb/bones.html); moving joints: [Joints of the Lower Limb](lower-limb/joints.html)*
 - [x] **AN14.3** Describe the importance of ossification of lower end of femur & upper end of tibia, and explain violation of law of ossification in fibula — *[Bones of the Lower Limb](lower-limb/bones.html) (femur, tibia, fibula), [The Femur](lower-limb/femur.html)*
-- [~] **AN14.4** Identify and name various bones in the articulated foot with individual muscle attachment — *bones and main attachments: [Bones of the Lower Limb](lower-limb/bones.html)#foot; checked muscle attachment areas: [Muscles of the Lower Limb](lower-limb/muscles.html)*
+- [x] **AN14.4** Identify and name various bones in the articulated foot with individual muscle attachment — *muscle attachments bone by bone: [Bones of the Lower Limb](lower-limb/bones.html)#foot; attachment areas: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 
 ### 15. Front & Medial side of thigh
 
 - [ ] **AN15.1** Describe and demonstrate origin, course, relations, branches (or tributaries), termination of important nerves and vessels of anterior thigh
 - [x] **AN15.2** Describe and demonstrate major muscles with their attachment, nerve supply and actions — *[Muscles of the Lower Limb](lower-limb/muscles.html)*
-- [~] **AN15.3** Describe and demonstrate boundaries, floor, roof and contents of femoral triangle — *muscular boundaries and floor: [Muscles of the Lower Limb](lower-limb/muscles.html) (contents not yet)*
+- [x] **AN15.3** Describe and demonstrate boundaries, floor, roof and contents of femoral triangle — *boundaries, floor, roof, femoral sheath and canal, contents in 3D: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [ ] **AN15.4** Explain anatomical basis of Psoas abscess & Femoral hernia
-- [~] **AN15.5** Describe and demonstrate adductor canal with its contents — *walls and roof: [Muscles of the Lower Limb](lower-limb/muscles.html) (contents not yet)*
+- [x] **AN15.5** Describe and demonstrate adductor canal with its contents — *walls, roof and contents in 3D: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 
 ### 16. Gluteal region & back of thigh
 
 - [x] **AN16.1** Describe and demonstrate major muscles with their attachment, nerve supply and actions. — *[Muscles of the Lower Limb](lower-limb/muscles.html)*
-- [~] **AN16.2** Describeanddemonstrate structures under thecover of gluteus maximus. Also explain the anatomical basis of sciatic nerve injury during gluteal intramuscular injections — *gluteal injection sites and the sciatic nerve; structures above and below piriformis: [Muscles of the Lower Limb](lower-limb/muscles.html)*
+- [x] **AN16.2** Describeanddemonstrate structures under thecover of gluteus maximus. Also explain the anatomical basis of sciatic nerve injury during gluteal intramuscular injections — *structures under gluteus maximus in 3D, above and below piriformis, anastomoses, injections: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [x] **AN16.3** Explain the anatomical basis of Trendelenburg sign — *[Muscles of the Lower Limb](lower-limb/muscles.html) (Nerve supply, superior gluteal)*
 - [x] **AN16.4** Describe and demonstrate the hamstrings group of muscles with their attachment, nerve supply and actions — *[Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [ ] **AN16.5** Describe and demonstrate the origin, course, relations, branches (or tributaries), termination of important nerves and vessels on the back of thigh
@@ -177,17 +177,17 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [x] **AN19.1** Describe and demonstrate the major muscles of back of leg with their attachment, nerve supply and actions — *[Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [ ] **AN19.2** Describe and demonstrate the origin, course, relations, branches (or tributaries), termination of important nerves and vessels of back of leg
-- [~] **AN19.3** Explain the concept of “Peripheral heart” — *soleus as the calf muscle pump: [Muscles of the Lower Limb](lower-limb/muscles.html)*
+- [x] **AN19.3** Explain the concept of “Peripheral heart” — *calf muscle pump, valves, perforators, deep and superficial veins in 3D, varicose veins and DVT: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [x] **AN19.4** Explain the anatomical basis of rupture of calcaneal tendon — *[Muscles of the Lower Limb](lower-limb/muscles.html) (Fascia, spaces and foot)*
-- [~] **AN19.5** Describe factors maintaining importance arches of the foot with its importance — *bones and supports of each arch: [The Lower Limb](lower-limb/lower-limb.html); muscles that support them: [Muscles of the Lower Limb](lower-limb/muscles.html)*
-- [~] **AN19.6** Explain the anatomical basis of Flat foot & Club foot — *tibialis posterior dysfunction and acquired flatfoot: [Muscles of the Lower Limb](lower-limb/muscles.html) (club foot not yet)*
-- [~] **AN19.7** Explain the anatomical basis of Metatarsalgia & Plantar fasciitis — *plantar fasciitis: [Muscles of the Lower Limb](lower-limb/muscles.html) (metatarsalgia not yet)*
+- [x] **AN19.5** Describe factors maintaining importance arches of the foot with its importance — *bones, ligaments, plantar aponeurosis, muscles; importance: [The Lower Limb](lower-limb/lower-limb.html) (Arches)*
+- [x] **AN19.6** Explain the anatomical basis of Flat foot & Club foot — *flexible and rigid flat foot, spring ligament, club foot (CTEV): [The Lower Limb](lower-limb/lower-limb.html) (Arches); tibialis posterior: [Muscles of the Lower Limb](lower-limb/muscles.html)*
+- [x] **AN19.7** Explain the anatomical basis of Metatarsalgia & Plantar fasciitis — *metatarsalgia, Morton's neuroma: [The Lower Limb](lower-limb/lower-limb.html); plantar fasciitis: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 
 ### 20. General Features, Joints, radiographs & surface marking
 
 - [x] **AN20.1** Describe and demonstrate the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements and muscles involved, blood and nerve supply of tibiofibular and ankle joint — *[Joints of the Lower Limb](lower-limb/joints.html) (the ankle capsule is not in the 3D model)*
 - [x] **AN20.2** Describe the subtalar and transverse tarsal joints — *[Joints of the Lower Limb](lower-limb/joints.html) (Foot)*
-- [~] **AN20.3** Describe and demonstrate Fascia lata, Venous drainage, Lymphatic drainage, Retinacula & Dermatomes of lower limb — *iliotibial tract (fascia lata) and the ankle retinacula: [Muscles of the Lower Limb](lower-limb/muscles.html)*
+- [x] **AN20.3** Describe and demonstrate Fascia lata, Venous drainage, Lymphatic drainage, Retinacula & Dermatomes of lower limb — *fascia lata, saphenous opening, retinacula, veins and lymph nodes in 3D, schematic dermatome map: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [ ] **AN20.4** Explain anatomical basis of enlarged inguinal lymph nodes
 - [ ] **AN20.5** Explain anatomical basis of varicose veins and deep vein thrombosis
 - [ ] **AN20.6** Identify the bones and joints of lower limb seen in anteroposterior and lateral view radiographs of various regions of lower limb

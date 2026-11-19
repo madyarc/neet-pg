@@ -416,6 +416,27 @@ convention"), obturator externus "posterior branch", ITB syndrome "cyclists", fi
 gluteus maximus "three-quarters", superior fibular retinaculum tear, the phrase "true hamstring" (criteria kept). FHB
 origin reworded: the cuboid is agreed, the cuneiform differs.
 
+- Additions (2026-11-18; fact sheet `sources-local/facts/fill-ll.md`, 510 quotes, script-checked; parts reused from
+  the joints, ll-muscles-b and vessels sheets): extra-tab table "Vessels, nerves and lymph nodes in 3D" (femoral
+  triangle, sheath and canal, adductor canal, under gluteus maximus, injections, calf pump, veins, perforators, lymph
+  nodes, dermatomes). Parts load from body-vessels / body-nerves / body-lymph / ax-joints / ll-joints by byte range
+  (whole file if the server ignores Range). Labels computed from the meshes, approximate. Lymph-node groups drawn
+  three times enlarged about their centres; not shown in the femoral-triangle views (the model puts them in front of
+  the femoral vein). Dermatome map schematic (maps differ).
+- Disagreements shown: deep inguinal nodes 1–3 (Gray) vs 3–5 (Wikipedia); back wall of the femoral ring; nerve to
+  vastus medialis in the adductor canal (disputed); L3 key point. Left out (one source): soleal venous sinuses, tight
+  deep fascia in the pump, fascia lata attachments beyond the iliac crest and knee, popliteal/anterior tibial node
+  details, nerve to quadratus femoris among the gluteal structures.
+- Independent review (2026-11-18), fixed: injection wording (mainly the common fibular part), DVT start (deep calf
+  vein; soleal veins in bedridden patients), trochanteric anastomosis "around" the neck and head, soleus wording,
+  labels and framing in the gluteal and femoral views.
+- Also from `fill-ll.md` (2026-11-18): `lower-limb.html` Arches tab "What holds them up, and what goes wrong" (factors,
+  importance, flat foot, club foot, metatarsalgia, Morton's neuroma; stirrup = medial arch raised, lateral arch
+  supported, one review; transverse arch from fibularis longus per Gray); `bones.html` "Joints it forms" per bone and
+  the foot's "Muscle attachments, bone by bone" (rearranged checked facts; sacro-iliac classification contested).
+  Left out: arches protecting plantar vessels and nerves (no source), plantar plate tears (one source),
+  "osteochondrosis" for Freiberg disease (not in the sources).
+
 ## Muscles of the Back — `back/muscles.html`
 
 **Meshes:** vertebral column, occipital and right temporal bones, right ribs and hip bone (BodyParts3D 3.0); 17 deep

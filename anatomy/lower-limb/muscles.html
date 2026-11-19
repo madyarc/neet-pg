@@ -8,6 +8,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* page-only colours for the schematic dermatome map (no meaning elsewhere) */
+:root{--dm-l1:#e7d27c;--dm-l2:#f2b38a;--dm-l3:#e58fa0;--dm-l4:#b996d6;--dm-l5:#86b3e0;--dm-s1:#7fcdb8;--dm-s2:#b5d38a;--dm-s3:#d9c2a6}
+:root[data-theme="dark"]{--dm-l1:#8f7f35;--dm-l2:#9a6440;--dm-l3:#934455;--dm-l4:#6c4d8a;--dm-l5:#3f6890;--dm-s1:#357d6b;--dm-s2:#5f7d3c;--dm-s3:#7d6a54}
+#derm svg{width:100%;max-width:420px;height:auto;display:block}
+#derm svg text{font:500 11px var(--f-mono);fill:var(--ink)}
+#derm .outline{fill:none;stroke:var(--ink);stroke-width:1.2}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -43,6 +51,10 @@
         <div class="legend" id="ankle-list"></div>
         <div class="group-h">Spaces of the thigh (tap one)</div>
         <table class="t" id="spaces"></table>
+        <div class="group-h">Vessels, nerves and lymph nodes in 3D (tap one)</div>
+        <table class="t" id="nv"></table>
+        <p class="note" id="nv-note"></p>
+        <div id="derm" hidden></div>
         <div class="group-h">Tarsal tunnel, front to back (tap one)</div>
         <table class="t" id="tunnel"></table>
         <div class="group-h">The four layers of the sole (tap one)</div>
@@ -69,8 +81,8 @@
 const LEFT = '<span class="pending">Left out (only one source).</span>';
 const DATA = {
   lede: 'The muscles of the right lower limb on its bones, from the hip to the sole. Tap a muscle to see where it arises and inserts, its nerve and what it does; the attachment areas light up on the bone. Other muscles turn to glass so deep ones stay visible.',
-  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the muscles of the lower extremity; checked against StatPearls (NCBI Bookshelf), open-access anatomy papers and Wikipedia. Where they disagree, the modern wording is used.',
-  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, tendons, retinacula and the plantar aponeurosis from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones. Simplified meshes, shared under the same licences. The right limb is shown; muscle shapes are a single model, not every body. Attachment areas are approximate (where the muscle meets the bone near the landmark named in the text).',
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the muscles of the lower extremity; and its chapters on the femoral artery, the veins and the lymphatics of the lower extremity; checked against StatPearls (NCBI Bookshelf), open-access anatomy and clinical papers and Wikipedia. Where they disagree, the modern wording is used.',
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, tendons, retinacula, the plantar aponeurosis, ligaments, bursae, vessels, nerves and lymph-node groups from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones (vessels and nerves are curves drawn as tubes; node groups are small clusters at approximate places). Simplified meshes, shared under the same licences. The right limb is shown; muscle shapes are a single model, not every body. Attachment areas are approximate (where the muscle meets the bone near the landmark named in the text).',
 };
 const NERVES = {
   femoral: ['Femoral nerve', '--n-femoral'],
@@ -278,6 +290,93 @@ const ANKLE = {
   archNote: 'Ligaments and both long and short muscles support the arches; only the muscles that two of our sources name are listed.',
 };
 
+/* ===================== VESSELS, NERVES AND LYMPH NODES (fact sheet: sources-local/facts/fill-ll.md) =====================
+   Parts come from the whole-body packs; only the listed parts are fetched (byte ranges), when a row is first tapped.
+   topic: id, name, solid muscles, glass (kept as glass on purpose), parts (vessels v_, nerves n_, nodes l_, ligaments, bursae),
+   labels [[part, label, z (mm) or null = centre]], view direction, fit keys, text */
+const NV = {
+  note: 'The vessels, nerves and nodes are one model (Z-Anatomy), not every body; node groups are drawn as small clusters at approximate places, enlarged three times so they can be seen. The model has no nerve to vastus medialis and no descending genicular artery.',
+  topics: [
+    {id: 'ft', name: 'Femoral triangle: roof and contents', solid: ['sartorius', 'add_longus', 'iliacus', 'psoas_major', 'pectineus'],
+      parts: ['n_femoral_nerve_r', 'v_femoral_artery_r', 'v_femoral_vein_r', 'v_great_saphenous_vein_r', 'v_deep_femoral_artery_r', 'v_deep_femoral_vein_r'],
+      labels: [['n_femoral_nerve_r', 'Femoral nerve', 815], ['v_femoral_artery_r', 'Femoral artery', 770], ['v_femoral_vein_r', 'Femoral vein', 750],
+        ['v_great_saphenous_vein_r', 'Great saphenous vein', 790]],
+      view: [0.15, -1, 0.05], fit: ['iliacus', 'pectineus', 'add_longus'],
+      text: '<b>Roof:</b> skin, superficial fascia (holding the superficial inguinal nodes and the upper end of the great saphenous vein) and the fascia lata, whose saphenous opening is closed by the cribriform fascia. <b>Contents, lateral to medial:</b> the femoral nerve (outside the femoral sheath), the femoral artery, the femoral vein and, medial to the vein, the femoral canal with lymphatics and deep inguinal nodes (NAVEL: nerve, artery, vein, empty space, lymphatics; the nodes are shown in the lymph-node row). Here the artery gives off the profunda femoris and the vein receives the deep femoral and great saphenous veins. Boundaries and floor: see the femoral triangle row above.'},
+    {id: 'sheath', name: 'Femoral sheath and femoral canal', solid: ['pectineus', 'iliacus', 'psoas_major'],
+      parts: ['n_femoral_nerve_r', 'v_femoral_artery_r', 'v_femoral_vein_r'],
+      labels: [['n_femoral_nerve_r', 'Femoral nerve (outside)', 800], ['v_femoral_artery_r', 'Artery: lateral compartment', 815], ['v_femoral_vein_r', 'Vein: intermediate', 805]],
+      view: [0.1, -1, 0.15], fit: ['pectineus', 'iliacus'],
+      text: '<b>Femoral sheath:</b> a funnel of abdominal fascia carried down behind the inguinal ligament (transversalis fascia in front of the vessels, iliac fascia behind), enclosing the first 4 cm or so of the femoral vessels. Two partitions divide it into three compartments: <b>lateral</b>, the femoral artery; <b>intermediate</b>, the femoral vein; <b>medial</b>, the <b>femoral canal</b>, with lymphatics and a lymph node in loose fat. The femoral nerve is outside the sheath. <b>Femoral canal:</b> conical; its upper opening, the <b>femoral ring</b>, is bounded by the inguinal ligament in front, the pectineal ligament (Gray: pectineus and its fascia) behind, the lacunar ligament medially and the femoral vein laterally. A femoral hernia enters through this ring.'},
+    {id: 'fl', name: 'Fascia lata and saphenous opening', solid: [], fascia: ['it_tract'],
+      parts: ['v_great_saphenous_vein_r', 'v_femoral_vein_r', 'l_superolateral_superficial_inguinal_nodes_r', 'l_superomedial_superficial_inguinal_nodes_r', 'l_inferior_superficial_inguinal_nodes_r'],
+      labels: [['v_great_saphenous_vein_r', 'Great saphenous vein', 760], ['v_femoral_vein_r', 'Femoral vein', 805], ['it_tract', 'Iliotibial tract', 600],
+        ['l_inferior_superficial_inguinal_nodes_r', 'Superficial inguinal nodes', null]],
+      view: [0.2, -1, 0.05], fit: ['it_tract', 'v_femoral_vein_r'],
+      text: '<b>Fascia lata</b> is the deep fascia of the thigh, a sleeve round the thigh muscles. It is attached above to the iliac crest and below to the bony points around the knee: the condyles of the femur and tibia and the head of the fibula. It is thickest laterally, where it receives gluteus maximus and tensor fasciae latae and forms the iliotibial tract. <b>Saphenous opening</b> (fossa ovalis): an oval gap in its upper medial part, below the inguinal ligament, closed by the cribriform fascia; the great saphenous vein (with smaller vessels and lymphatics) passes through it to join the femoral vein.'},
+    {id: 'ac', name: 'Adductor canal: contents', solid: ['vastus_med', 'add_longus', 'add_magnus'], glass: ['sartorius'],
+      parts: ['v_femoral_artery_r', 'v_femoral_vein_r', 'n_saphenous_nerve_r'],
+      labels: [['v_femoral_artery_r', 'Femoral artery', 620], ['v_femoral_vein_r', 'Femoral vein', [600, [1, -1, 0]]], ['n_saphenous_nerve_r', 'Saphenous nerve', 640]],
+      view: [0.6, -1, 0.05], fit: ['vastus_med', 'add_longus'],
+      text: 'The canal runs through the middle third of the thigh, from the apex of the femoral triangle to the adductor hiatus; its walls are in the adductor canal row above (sartorius, shown as glass, lies on its roof). <b>Contents:</b> the femoral artery and vein and the saphenous nerve. The <b>nerve to vastus medialis</b> also runs in it (Gray; a cadaver study found it in its own sheath beside the saphenous nerve), though StatPearls notes that some authors dispute this. The <b>descending genicular artery</b> arises from the femoral artery just before the hiatus; its saphenous branch goes with the saphenous nerve. Neither is in the 3D model. Through the hiatus the vessels become the popliteal artery and vein.'},
+    {id: 'glut', name: 'Under gluteus maximus', glass: ['glut_max', 'glut_med', 'glut_min'],
+      solid: ['piriformis', 'sup_gemellus', 'obt_int', 'inf_gemellus', 'quad_fem', 'obt_ext', 'biceps_fem', 'semitend', 'semimemb'],
+      parts: ['sacrotuberous_ligament', 'sacrospinous_ligament', 'trochanteric_bursa_of_gluteus_maximus_muscle',
+        'v_superior_gluteal_artery_r', 'v_inferior_gluteal_artery_r', 'v_internal_pudendal_artery_r', 'v_superior_gluteal_veins_r', 'v_inferior_gluteal_veins_r', 'v_internal_pudendal_vein_r',
+        'v_medial_circumflex_femoral_artery_r', 'v_lateral_circumflex_femoral_artery_r', 'v_perforating_femoral_arteries_r',
+        'n_sciatic_nerve_r', 'n_posterior_femoral_cutaneous_nerve_r', 'n_pudendal_nerve_r', 'n_superior_gluteal_nerve_r'],
+      labels: [['n_sciatic_nerve_r', 'Sciatic nerve', [790, [0, 1, 0]]], ['n_posterior_femoral_cutaneous_nerve_r', 'Posterior femoral cutaneous n.', [760, [0, 1, 0]]], ['n_pudendal_nerve_r', 'Pudendal nerve', 820],
+        ['v_superior_gluteal_artery_r', 'Superior gluteal artery', 890], ['v_inferior_gluteal_artery_r', 'Inferior gluteal artery', 830],
+        ['sacrotuberous_ligament', 'Sacrotuberous lig.', 800], ['trochanteric_bursa_of_gluteus_maximus_muscle', 'Trochanteric bursa', null], ['piriformis', 'Piriformis', 870]],
+      view: [-0.25, 1, 0.1], fit: ['piriformis', 'quad_fem', 'glut_med', 'sacrotuberous_ligament'], zoom: 0.75,
+      text: 'Gluteus maximus (with gluteus medius and minimus) is shown as glass. The space under it lies between the muscle behind and the back of the hip joint and upper femur in front, from the sciatic notch down to the hamstring origin on the ischial tuberosity, with the sacrotuberous ligament on its medial side. <b>Muscles:</b> the back part and tendon of gluteus medius, piriformis, the gemelli and obturator internus, quadratus femoris, obturator externus, and the origins of the hamstrings from the ischial tuberosity. <b>Ligaments:</b> the sacrotuberous ligament on its medial side (the sacrospinous ligament is also shown). <b>Vessels and nerves</b> (through the greater sciatic foramen): above piriformis, the superior gluteal vessels and nerve; below it, the inferior gluteal vessels and nerve, the sciatic nerve, the posterior femoral cutaneous nerve, the internal pudendal vessels, the pudendal nerve and the nerve to obturator internus. <b>Bursa:</b> a large bursa separates the muscle from the greater trochanter (shown). <b>Anastomoses:</b> the <b>cruciate</b> anastomosis below the trochanter (inferior gluteal, medial and lateral circumflex femoral and first perforating arteries) and the <b>trochanteric</b> anastomosis (superior gluteal artery with ascending branches of the circumflex femoral arteries), around the neck and head of the femur. The model has no inferior gluteal nerve (Z-Anatomy does not include it).'},
+    {id: 'inj', name: 'Gluteal injections and the sciatic nerve', glass: ['glut_max', 'glut_med'], solid: ['piriformis', 'quad_fem', 'obt_int', 'sup_gemellus', 'inf_gemellus'],
+      parts: ['n_sciatic_nerve_r', 'n_superior_gluteal_nerve_r', 'v_superior_gluteal_artery_r', 'v_inferior_gluteal_artery_r'],
+      labels: [['n_sciatic_nerve_r', 'Sciatic nerve', 770], ['n_superior_gluteal_nerve_r', 'Superior gluteal nerve', 900]],
+      view: [-0.2, 1, 0.05], fit: ['glut_max'],
+      text: 'The sciatic nerve leaves the pelvis below piriformis and runs down under gluteus maximus, on the short rotators (gemelli, obturator internus, quadratus femoris), in the interval between the greater trochanter and the ischial tuberosity, lateral to the tuberosity. A gluteal injection placed outside the safe area can injure it by the needle or by the drug itself (post-injection sciatic neuropathy), often affecting mainly its common fibular (peroneal) part. Injections are therefore given in the <b>upper outer quadrant</b>; the ventrogluteal site is regarded as safer still (Nerve supply tab, superior gluteal nerve).'},
+    {id: 'sv', name: 'Superficial veins: great and small saphenous', solid: [],
+      parts: ['v_great_saphenous_vein_r', 'v_small_saphenous_vein_r', 'v_dorsal_venous_arch_of_foot_r', 'v_femoral_vein_r', 'v_popliteal_vein_r', 'n_saphenous_nerve_r', 'n_sural_nerve_r'],
+      labels: [['v_great_saphenous_vein_r', 'Great saphenous vein', 300], ['v_small_saphenous_vein_r', 'Small saphenous vein', 250], ['v_dorsal_venous_arch_of_foot_r', 'Dorsal venous arch', null],
+        ['v_femoral_vein_r', 'Femoral vein', 700], ['v_popliteal_vein_r', 'Popliteal vein', 470], ['n_saphenous_nerve_r', 'Saphenous nerve', 200], ['n_sural_nerve_r', 'Sural nerve', 150]],
+      view: [0.8, 0.5, 0.1], fit: null,
+      text: '<b>Great saphenous vein</b>, the longest vein in the body: from the medial end of the dorsal venous arch of the foot, in front of the medial malleolus, up the medial side of the leg with the saphenous nerve, behind the medial condyles of the tibia and femur and up the medial thigh; through the saphenous opening it ends in the femoral vein (the saphenofemoral junction) just below the inguinal ligament, about 3–4 cm lateral to the pubic tubercle. <b>Small saphenous vein:</b> from the lateral end of the arch, behind the lateral malleolus, up the back of the calf with the sural nerve, and ends in the popliteal vein, between the heads of gastrocnemius (its ending varies). Both lie in the superficial fascia, outside the deep fascia.'},
+    {id: 'dv', name: 'Deep veins and perforators', solid: [],
+      parts: ['v_plantar_venous_arch_r', 'v_medial_plantar_veins_r', 'v_lateral_plantar_veins_r', 'v_posterior_tibial_veins_r', 'v_fibular_veins_r', 'v_anterior_tibial_veins_r',
+        'v_popliteal_vein_r', 'v_femoral_vein_r', 'v_deep_femoral_vein_r', 'v_external_iliac_vein_r'],
+      labels: [['v_posterior_tibial_veins_r', 'Posterior tibial veins', 200], ['v_fibular_veins_r', 'Fibular veins', 160], ['v_anterior_tibial_veins_r', 'Anterior tibial veins', 250],
+        ['v_popliteal_vein_r', 'Popliteal vein', 450], ['v_femoral_vein_r', 'Femoral vein', 650], ['v_deep_femoral_vein_r', 'Deep femoral vein', 700], ['v_external_iliac_vein_r', 'External iliac vein', 880]],
+      view: [0.3, 1, 0.05], fit: null,
+      text: 'The deep veins run with the arteries. In the calf, the posterior tibial (which receive the fibular veins) and anterior tibial veins, with the veins inside soleus and gastrocnemius, drain into the popliteal vein; it continues as the femoral vein through the adductor hiatus, and the femoral vein becomes the external iliac vein behind the inguinal ligament. Deep veins have numerous valves. <b>Perforator veins</b> pierce the deep fascia to join the superficial to the deep veins; their valves stop blood flowing back from deep to superficial veins when the muscles contract, so normal flow in them is from superficial to deep. (The small "perforating veins" of the model run with the perforating arteries of the thigh and are not shown.)'},
+    {id: 'pump', name: 'The "peripheral heart": calf muscle pump', solid: ['soleus'], glass: ['gastrocnemius'],
+      parts: ['v_posterior_tibial_veins_r', 'v_fibular_veins_r', 'v_popliteal_vein_r', 'v_small_saphenous_vein_r', 'v_great_saphenous_vein_r'],
+      labels: [['soleus', 'Soleus (soleal veins inside)', [250, [0, 1, 0]]], ['v_popliteal_vein_r', 'Popliteal vein', 470], ['v_small_saphenous_vein_r', 'Small saphenous vein', 200], ['v_great_saphenous_vein_r', 'Great saphenous vein', 300]],
+      view: [0.2, 1, 0.05], fit: ['soleus', 'gastrocnemius'],
+      text: 'Standing, blood in the leg veins must rise against gravity. When the calf muscles contract they squeeze the deep veins and drive the blood upward; valves stop it falling back, and perforator valves stop it being pushed out into the superficial veins. <b>Soleus:</b> veins run inside it (the soleal veins), and its contraction squeezes the blood out of them toward the heart. <b>Failure:</b> when valves are incompetent, the venous pressure stays high (venous hypertension): superficial veins dilate and twist (<b>varicose veins</b>), and chronic venous insufficiency follows with leg swelling, skin changes and ulcers. <b>Deep vein thrombosis</b> usually begins in a deep calf vein and spreads upward; in bedridden patients, whose calf pump is idle, the soleal veins tend to be the first site. DVT accounts for most pulmonary emboli.'},
+    {id: 'lymph', name: 'Lymph nodes of the lower limb', solid: [],
+      parts: ['l_superolateral_superficial_inguinal_nodes_r', 'l_superomedial_superficial_inguinal_nodes_r', 'l_inferior_superficial_inguinal_nodes_r',
+        'l_proximal_deep_inguinal_node_r', 'l_intermediate_deep_inguinal_node_r', 'l_superficial_popliteal_nodes_r', 'l_deep_popliteal_nodes_r',
+        'v_great_saphenous_vein_r', 'v_small_saphenous_vein_r', 'v_femoral_vein_r'],
+      labels: [['l_superolateral_superficial_inguinal_nodes_r', 'Superficial inguinal (upper)', null], ['l_inferior_superficial_inguinal_nodes_r', 'Superficial inguinal (lower)', null],
+        ['l_proximal_deep_inguinal_node_r', 'Deep inguinal', null], ['l_superficial_popliteal_nodes_r', 'Popliteal', null]],
+      view: [0.8, -0.6, 0.05], fit: ['v_femoral_vein_r', 'l_superolateral_superficial_inguinal_nodes_r', 'l_superficial_popliteal_nodes_r', 'l_deep_popliteal_nodes_r'],
+      text: '<b>Superficial lymphatics</b> follow the superficial veins: most run with the great saphenous vein to the superficial inguinal nodes; those of the lateral side of the leg and foot run with the small saphenous vein to the popliteal nodes first. <b>Superficial inguinal nodes</b>, in a chain just below the inguinal ligament and around the upper end of the great saphenous vein, drain the lower limb and also the skin of the abdominal wall below the umbilicus, the buttock, the perineum, the external genitalia and the anal canal below the pectinate line; they drain to the deep nodes. <b>Deep inguinal nodes</b> lie under the fascia lata, medial to the femoral vein (one to three, Gray; three to five, Wikipedia); the highest, in the femoral ring, is the node of Cloquet (often absent). They receive the deep lymphatics that run with the femoral vessels and drain to the external iliac nodes.'},
+    {id: 'derm', name: 'Dermatomes (schematic map)', solid: [], parts: [], derm: true, view: [0, -1, 0], fit: null,
+      text: 'A dermatome is the skin supplied by one spinal nerve. On the limbs the dermatomes run lengthwise, and maps differ between authors (StatPearls notes that an evidence-based 2008 map contested the classic ones; Wikipedia: the precise areas are as individual as fingerprints), so the map is <b>schematic</b>. The markers are the standard key sensory points used to test each root, drawn on the bone beneath the skin point (approximate).'},
+  ],
+  /* key sensory points: [root, text, how the point is placed on the model] */
+  keyPoints: [
+    ['L2', 'Front of the medial thigh, midway between the midpoint of the inguinal ligament and the medial femoral epicondyle'],
+    ['L3', 'Medial femoral epicondyle (condyle), above the knee'],
+    ['L4', 'Medial malleolus'],
+    ['L5', 'Dorsum of the foot at the third metatarsophalangeal joint'],
+    ['S1', 'Lateral side of the heel (calcaneus)'],
+    ['S2', 'Midpoint of the popliteal fossa'],
+    ['S3', 'Ischial tuberosity (or the infragluteal fold)'],
+  ],
+  dermBands: 'Schematic bands (front and back of the right lower limb): L1 groin; L2 front of the upper thigh; L3 lower and medial thigh to the knee; L4 knee, medial leg and medial side of the foot and big toe; L5 front and lateral side of the leg and the dorsum of the foot (toes 2–4); S1 sole, lateral border of the foot and back of the lower leg; S2 a strip down the back of the thigh and leg; S3 the buttock near the ischial tuberosity.',
+};
+
 /* ===================== PAGE (shared logic: ../assets/muscle-page.js) ===================== */
 function buildAnkle(api) {
   const {v, focusOn, pressed, clearRows} = api, $ = id => document.getElementById(id);
@@ -286,11 +385,11 @@ function buildAnkle(api) {
     if (!api.has(k)) continue;
     const b = document.createElement('button'); b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
     b.innerHTML = `<i style="background:var(--fascia)"></i><span>${name}</span>`;
-    b.onclick = () => { clearRows(); pressed('#ankle-list button', x => x === k); $('ankle-desc').innerHTML = `<b>${name}.</b> ${text}`; focusOn([k]); v.fit([k]); };
+    b.onclick = () => { nvBack(v); clearRows(); pressed('#ankle-list button', x => x === k); $('ankle-desc').innerHTML = `<b>${name}.</b> ${text}`; focusOn([k]); v.fit([k]); };
     box.append(b);
   }
   const rowSel = (row, ks, text, dir) => {
-    clearRows(); pressed('#ankle-list button', () => false); row.setAttribute('aria-pressed', 'true');
+    nvBack(v); clearRows(); pressed('#ankle-list button', () => false); row.setAttribute('aria-pressed', 'true');
     $('ankle-desc').innerHTML = text; focusOn(ks); v.fit(ks.length ? ks : ['tibia', 'calcaneus']); v.face(dir, {zoom: 1});
   };
   const sp = $('spaces');
@@ -305,13 +404,155 @@ function buildAnkle(api) {
   const ar = $('arches');
   ar.innerHTML = ANKLE.arches.map(([n, ks, t], i) => `<tr data-k="ar${i}" aria-pressed="false"><td>${n}</td><td>${t}</td></tr>`).join('') + `<tr><td colspan="2" class="note">${ANKLE.archNote}</td></tr>`;
   ar.querySelectorAll('tr[data-k]').forEach((r, i) => r.onclick = () => { const A = ANKLE.arches[i]; rowSel(r, A[1].concat(i === 0 ? ['plantar_apon'] : []), `<b>${A[0]} arch:</b> ${A[2]}.`, [1, 0.3, -0.3]); });
+  buildNV(api);
 }
-MusclePage({
+
+/* leave a vessel topic: hide its parts, show the fascia parts of this tab again */
+function nvBack(v) { nvOff(v); for (const k of ANKLE.parts.map(p => p[0])) if (v.parts.has(k)) v.setVisible(k, true); }
+/* in a vessel topic the muscles are drawn plain (--soft) so the vessels stand out; their own colours come back after */
+const nvSaved = {};
+function nvMuscles(v, solid) {
+  for (const [k, c] of Object.entries(nvSaved)) { v.setColour(k, c); delete nvSaved[k]; }
+  for (const k of solid) if (v.parts.has(k)) { if (!(k in nvSaved)) nvSaved[k] = v.parts.get(k).colour; v.setColour(k, '--soft'); }
+}
+/* ----- vessels, nerves, lymph nodes: parts fetched from the whole-body packs on first use ----- */
+const NV_KEYS = [...new Set(NV.topics.flatMap(t => t.parts))];
+const NV_SET = new Set(NV_KEYS);
+const NV_LAYER = k => k.startsWith('v_') ? ['../models/body-vessels/', 'body-vessels.json'] : k.startsWith('n_') ? ['../models/body-nerves/', 'body-nerves.json']
+  : k.startsWith('l_') ? ['../models/body-lymph/', 'body-lymph.json'] : k.includes('bursa') ? ['../models/ll-joints/', 'll-joints.json'] : ['../models/ax-joints/', 'ax-joints.json'];
+const NV_COLOUR = k => k.startsWith('v_') ? (/vein/.test(k) ? '--vein' : '--artery') : k.startsWith('n_') ? '--nerve' : k.startsWith('l_') ? '--lymph' : k.includes('bursa') ? '--bursa' : '--lig';
+let nvTopic = null, nvQueue = Promise.resolve();
+const nvMans = {};
+const isNPM = b => b.byteLength > 4 && String.fromCharCode(...new Uint8Array(b, 0, 4)) === 'NPM1';
+/* fetch only the needed parts: a byte range of the pack when the server allows it, else the whole pack once */
+async function nvFetch(v, keys) {
+  const need = keys.filter(k => !v.parts.has(k)), groups = {};
+  for (const k of need) { const [b, m] = NV_LAYER(k); (groups[b + m] = groups[b + m] || {base: b, man: m, keys: []}).keys.push(k); }
+  for (const g of Object.values(groups)) {
+    const man = nvMans[g.base + g.man] = nvMans[g.base + g.man] || await fetch(g.base + g.man).then(r => { if (!r.ok) throw new Error(g.man + ': ' + r.status); return r.json(); });
+    const list = man.parts.filter(p => g.keys.includes(p.key));
+    if (!list.length) continue;
+    const url = g.base + list[0].file;
+    let whole = null, ranged = false;
+    try {
+      const p = list[0], r = await fetch(url, {headers: {Range: `bytes=${p.offset}-${p.offset + p.bytes - 1}`}});
+      if (r.status === 206) { const b = await r.arrayBuffer(); ranged = isNPM(b) && b.byteLength === p.bytes; if (ranged) await addBuf(v, p, b); }
+      else if (r.ok) whole = await r.arrayBuffer();
+    } catch (e) { ranged = false; }
+    if (!ranged && !whole) whole = await fetch(url).then(r => r.arrayBuffer());
+    const rest = ranged ? list.slice(1) : list;
+    const bufs = await Promise.all(rest.map(async p => {
+      if (whole) return whole.slice(p.offset, p.offset + p.bytes);
+      const r = await fetch(url, {headers: {Range: `bytes=${p.offset}-${p.offset + p.bytes - 1}`}});
+      const b = await r.arrayBuffer();
+      return r.status === 206 && isNPM(b) ? b : (whole = whole || await fetch(url).then(x => x.arrayBuffer())).slice(p.offset, p.offset + p.bytes);
+    }));
+    for (let i = 0; i < rest.length; i++) await addBuf(v, rest[i], bufs[i]);
+  }
+}
+async function addBuf(v, p, buf) {
+  const u = URL.createObjectURL(new Blob([buf]));
+  try { await v.loadPart(p.key, u, p); } finally { URL.revokeObjectURL(u); }
+  v.setVisible(p.key, false);
+}
+/* a point on a part for its label: the vertex nearest height z (mm), or the centre of its box */
+function nvPoint(v, k, z) {
+  const p = v.parts.get(k); if (!p) return null;
+  if (z == null) return p.bbox[0].map((x, i) => (x + p.bbox[1][i]) / 2);
+  const P = p.m.pos, dir = Array.isArray(z) ? z[1] : null; if (dir) z = z[0];
+  let best = 0, bd = 1e9;
+  for (let i = 0; i < P.length / 3; i++) {   // nearest to height z; with a direction, the outermost vertex within 4 mm of z
+    const dz = Math.abs(P[i * 3 + 2] - z), d = dir ? (dz > 4 ? 1e6 + dz : -(P[i * 3] * dir[0] + P[i * 3 + 1] * dir[1] + P[i * 3 + 2] * dir[2])) : dz;
+    if (d < bd) { bd = d; best = i; } }
+  return [P[best * 3], P[best * 3 + 1], P[best * 3 + 2]];
+}
+function nvOff(v) {
+  nvTopic = null; nvMuscles(v, []);
+  for (const k of NV_KEYS) if (v.parts.has(k)) v.setVisible(k, false);
+  v.setMarkers([]);
+  document.getElementById('derm').hidden = true;
+  document.querySelectorAll('#nv tr[data-k]').forEach(r => r.setAttribute('aria-pressed', 'false'));
+}
+function keyPointMarkers(v) {
+  const vert = (k, f) => { const p = v.parts.get(k); if (!p) return null; const P = p.m.pos; let b = 0;
+    for (let i = 1; i < P.length / 3; i++) if (f(P, i) < f(P, b)) b = i; return [P[b * 3], P[b * 3 + 1], P[b * 3 + 2]]; };
+  const pts = {L2: [-53.8, -110, 644], L3: [-35, -73, 429], L4: [-56, -72, 65],
+    L5: vert('mt3', (P, i) => P[i * 3 + 1] - 0.3 * P[i * 3 + 2]),       // front (and upper) end of the 3rd metatarsal head
+    S1: vert('calcaneus', (P, i) => P[i * 3]),                          // most lateral point of the calcaneus
+    S2: [-76, -45, 455], S3: [-67, -48, 781]};
+  return NV.keyPoints.filter(([r]) => pts[r]).map(([r]) => ({p: pts[r], label: r + ' (approx.)', always: true}));
+}
+function dermSvg() {
+  const band = (c, d) => `<path d="${d}" style="fill:var(${c})"/>`;
+  const leg = 'M30 20 L150 20 L132 150 L118 290 L125 335 L75 335 L82 290 L62 150 Z';
+  const lab = (x, y, t) => `<text x="${x}" y="${y}" text-anchor="middle">${t}</text>`;
+  const F = (dx) => `translate(${dx} 0)`;
+  return `<svg viewBox="0 0 420 370" role="img" aria-label="Schematic dermatome map of the right lower limb, front and back">
+    <defs><clipPath id="legclip"><path d="${leg}"/></clipPath></defs>
+    <g transform="${F(10)}"><g clip-path="url(#legclip)">
+      ${band('--dm-l1', 'M0 20 H200 V45 H0 Z')}${band('--dm-l2', 'M0 45 H200 V100 H0 Z')}${band('--dm-l3', 'M0 100 H200 V152 H0 Z')}
+      ${band('--dm-l4', 'M98 152 H200 V340 H98 Z')}${band('--dm-l5', 'M0 152 H98 V290 H0 Z M60 290 H110 V340 H60 Z')}${band('--dm-s1', 'M0 290 H86 V340 H0 Z')}
+    </g><path class="outline" d="${leg}"/>
+      ${lab(90, 37, 'L1')}${lab(90, 77, 'L2')}${lab(95, 130, 'L3')}${lab(112, 230, 'L4')}${lab(86, 230, 'L5')}${lab(80, 326, 'S1')}
+      ${lab(90, 362, 'Front')}${lab(28, 160, 'lat.')}${lab(158, 160, 'med.')}</g>
+    <g transform="${F(220)}"><g clip-path="url(#legclip)">
+      ${band('--dm-s3', 'M0 20 H75 V60 H0 Z')}${band('--dm-l5', 'M110 40 H200 V150 H110 Z')}${band('--dm-s2', 'M78 20 H108 V250 H78 Z')}
+      ${band('--dm-s1', 'M95 220 H200 V340 H95 Z M60 300 H200 V340 H60 Z')}
+    </g><path class="outline" d="${leg}"/>
+      ${lab(50, 45, 'S3')}${lab(93, 120, 'S2')}${lab(140, 100, 'L5')}${lab(112, 285, 'S1')}
+      ${lab(90, 362, 'Back')}${lab(28, 160, 'med.')}${lab(158, 160, 'lat.')}</g>
+  </svg><p class="note">Schematic, not to scale; borders overlap and maps differ between sources. Uncoloured areas of the back view are not drawn. ${NV.dermBands}</p>
+  <table class="t"><tr><th>Root</th><th>Key sensory point</th></tr>${NV.keyPoints.map(([r, t]) => `<tr><td>${r}</td><td>${t}</td></tr>`).join('')}</table>`;
+}
+function buildNV(api) {
+  const {v} = api, $ = id => document.getElementById(id);
+  $('nv-note').textContent = NV.note;
+  const tb = $('nv');
+  tb.innerHTML = NV.topics.map(t => `<tr data-k="${t.id}" aria-pressed="false"><td>${t.name}</td></tr>`).join('');
+  tb.querySelectorAll('tr').forEach((r, i) => r.onclick = () => showNV(api, NV.topics[i], r));
+}
+function showNV(api, t, row) {
+  const {v, clearRows, pressed, focusOn} = api, $ = id => document.getElementById(id);
+  clearRows(); pressed('#ankle-list button', () => false); row.setAttribute('aria-pressed', 'true');
+  nvTopic = t.id;
+  $('ankle-desc').innerHTML = `<b>${t.name}.</b> ${t.text}` + (t.parts.length && t.parts.some(k => !v.parts.has(k)) ? ' <span class="note">(loading the vessels and nerves…)</span>' : '');
+  $('derm').hidden = !t.derm; if (t.derm && !$('derm').innerHTML) $('derm').innerHTML = dermSvg();
+  nvQueue = nvQueue.then(() => nvFetch(v, t.parts)).then(() => {
+    if (nvTopic !== t.id) return;
+    $('ankle-desc').innerHTML = `<b>${t.name}.</b> ${t.text}`;
+    for (const k of NV_KEYS) if (v.parts.has(k)) { const on = t.parts.includes(k); v.setVisible(k, on); if (on) v.setColour(k, NV_COLOUR(k)); }
+    for (const k of ANKLE.parts.map(p => p[0])) if (v.parts.has(k)) v.setVisible(k, (t.fascia || []).includes(k));
+    nvMuscles(v, t.solid);
+    focusOn(t.solid.concat(t.parts, t.fascia || []).filter(k => v.parts.has(k)));
+    v.fit(t.fit ? t.fit.filter(k => v.parts.has(k)) : api.LIMB().filter(k => !NV_SET.has(k) || t.parts.includes(k)));
+    v.face(t.view, {zoom: t.zoom || 1});
+    /* node groups are tiny (a few mm): drawn three times enlarged about their centres */
+    for (const k of t.parts) if (k.startsWith('l_')) { const c = nvPoint(v, k, null), m = [[3, 0, 0], [0, 3, 0], [0, 0, 3]];
+      v.setTransform(k, m, c.map((x, i) => x - 3 * x)); }
+    v.setMarkers(t.derm ? keyPointMarkers(v) : (t.labels || []).map(([k, label, z]) => ({p: nvPoint(v, k, z), label, always: true})).filter(m => m.p));
+  }).catch(e => { $('ankle-desc').innerHTML = `<b>${t.name}.</b> ${t.text} <span class="pending">Could not load the 3D parts: ${e.message}</span>`; });
+}
+const PAGE = MusclePage({
   base: '../models/lower-limb-muscles/', manifest: 'lower-limb-muscles.json', DATA, GROUPS, NERVES, NERVE_TEXT, M,
-  extra: {key: 'ankle', parts: ANKLE.parts.map(p => p[0]), build: buildAnkle,
-    enter(api) { document.getElementById('ankle-desc').innerHTML = ANKLE.intro; const ks = ANKLE.parts.map(p => p[0]).filter(api.has);
-      api.focusOn(ks); api.v.fit(api.LIMB()); api.v.face([0, -1, 0], {zoom: 1}); }},
+  extra: {key: 'ankle', parts: ANKLE.parts.map(p => p[0]).concat(NV_KEYS), build: buildAnkle,
+    enter(api) { nvOff(api.v); document.getElementById('ankle-desc').innerHTML = ANKLE.intro; const ks = ANKLE.parts.map(p => p[0]).filter(api.has);
+      api.focusOn(ks); api.v.fit(api.LIMB().filter(k => !NV_SET.has(k))); api.v.face([0, -1, 0], {zoom: 1}); }},
 });
+/* leaving the tab (any way: tab button, or a tapped muscle): forget the topic; the page has already repainted */
+new MutationObserver(() => {
+  if (!document.getElementById('pane-ankle').hidden) return;
+  nvTopic = null; PAGE.v.setMarkers([]); for (const k in nvSaved) delete nvSaved[k];
+  document.querySelectorAll('#nv tr[data-k]').forEach(r => r.setAttribute('aria-pressed', 'false'));
+}).observe(document.getElementById('pane-ankle'), {attributes: true, attributeFilter: ['hidden']});
+/* in a vessel topic: tapping a vessel, nerve or node names it; tapping empty space keeps the view */
+{ const v = PAGE.v, base = v.onPick;
+  v.onPick = hit => {
+    if (nvTopic && (!hit || NV_SET.has(hit.key))) {
+      if (hit) document.getElementById('nv-note').innerHTML = `<b>Tapped:</b> ${(v.parts.get(hit.key).info || {}).name || hit.key}. ` + NV.note;
+      return;
+    }
+    base(hit);
+  }; }
 </script>
 </body>
 </html>

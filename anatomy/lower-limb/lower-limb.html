@@ -53,6 +53,8 @@
       <div id="pane-discs" class="stack" hidden>
         <div class="cap key desc" id="disc-desc"></div>
         <div class="legend" id="arch-list"></div>
+        <div class="group-h">What holds them up, and what goes wrong</div>
+        <div class="legend" id="factor-list"></div>
       </div>
     </div>
   </div>
@@ -70,7 +72,7 @@
 /* ===================== DATA — checked in Gray's 1918, Wikipedia and StatPearls (see anatomy/DATA-SOURCES.md) ===================== */
 const DATA = {
   lede: 'The bones of the right lower limb: the hip bone, the femur and patella, the tibia and fibula, and the foot. Tap a bone to select it, tap it again to open it.',
-  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the bones of the lower extremity and the foot; cross-checked with Wikipedia\'s articles and StatPearls (NCBI Bookshelf).',
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the bones of the lower extremity and the foot; cross-checked with Wikipedia\'s articles, StatPearls (NCBI Bookshelf) and open-access reviews (foot arches and their muscles, flat foot, club foot, metatarsalgia, Morton\'s neuroma).',
   regionsIntro: 'Thirty-one bones on each side, with two sesamoid bones under the big toe. Tap a group or a bone.',
   regions: [
     ['hip', 'Hip bone', 'Ilium, ischium and pubis fused into one bone. The two hip bones, with the sacrum and coccyx, form the pelvis and attach the lower limb to the trunk.'],
@@ -94,6 +96,16 @@ const DATA = {
     ['medial', 'Medial longitudinal arch', 'Higher than the lateral: calcaneus, talus, navicular, the three cuneiforms and the first three metatarsals. The talus is at its summit; it rests on the calcaneal tuberosity behind and the heads of the first three metatarsals in front. Its keystone is the head of the talus (StatPearls), though many studies name the navicular. The spring (plantar calcaneonavicular) ligament supports the head of the talus; the tibialis posterior, flexor hallucis longus and plantar aponeurosis also support it.', ['calcaneus', 'talus', 'navicular', 'cun_med', 'cun_int', 'cun_lat', 'mt1', 'mt2', 'mt3']],
     ['lateral', 'Lateral longitudinal arch', 'Low and solid: calcaneus, cuboid and the 4th and 5th metatarsals. The cuboid is its keystone. Held by the long plantar and short plantar (plantar calcaneocuboid) ligaments and the fibularis longus tendon.', ['calcaneus', 'cuboid', 'mt4', 'mt5']],
     ['transverse', 'Transverse arch', 'Across the foot: the three cuneiforms, the cuboid and the bases of the five metatarsals; maintained mainly by the tendon of the fibularis (peroneus) longus and the transverse head of the adductor hallucis. Its keystone is the recessed intermediate cuneiform, with the base of the 2nd metatarsal locked into it (sources name either one).', ['cun_med', 'cun_int', 'cun_lat', 'cuboid', 'mt1', 'mt2', 'mt3', 'mt4', 'mt5']],
+  ],
+  /* what holds the arches up, why they matter, and what goes wrong (fact sheet: sources-local/facts/fill-ll.md) */
+  archFactors: [
+    ['bones', 'Bones: the shape of the arches', 'The arches are built of the tarsal and metatarsal bones themselves; ligaments and tendons strengthen them. Across the foot the cuneiforms are wedge-shaped, and the base of the 2nd metatarsal is locked into the recess between the medial and lateral cuneiforms (the keystone: see the transverse arch).', ['cun_med', 'cun_int', 'cun_lat', 'cuboid', 'mt2']],
+    ['ligs', 'Ligaments and the plantar aponeurosis', '<b>Medial arch:</b> the spring (plantar calcaneonavicular) ligament holds up the head of the talus at the weakest point, the talonavicular joint, and is itself supported from below by the tibialis posterior tendon; the <b>plantar aponeurosis</b> runs from the heel to the toes; extending the big toe tightens it and deepens the arch (the windlass mechanism). <b>Lateral arch:</b> the long plantar and the short plantar (plantar calcaneocuboid) ligaments. <b>Transverse arch:</b> the interosseous, plantar and dorsal ligaments between the bones.', ['talus', 'navicular', 'calcaneus', 'cuboid']],
+    ['muscles', 'Muscles: tendons that sling the arches', '<b>Tibialis anterior and fibularis longus</b> act together as a "tendon stirrup" under the midfoot: one inserts on the medial cuneiform and 1st metatarsal from the medial side, the other reaches the same bones from the lateral side across the sole; together they raise the medial longitudinal arch and support the lateral arch (one review). The fibularis longus tendon, stretched across the sole, also strengthens the transverse arch. <b>Tibialis posterior</b> is the main dynamic support of the medial arch (Muscles page). The long flexors (flexor hallucis longus, flexor digitorum longus) and the <b>short muscles of the sole</b> also support the arches; the transverse head of adductor hallucis supports the transverse arch.', ['cun_med', 'mt1', 'navicular', 'cuboid', 'calcaneus']],
+    ['why', 'Why the arches matter', 'The arches let the foot carry the body\'s weight standing; their elastic soft tissues (above all the plantar aponeurosis) spread and absorb the force of each foot strike; and stiffened by the muscles, the arched foot becomes a lever for push-off in walking, running and jumping.', null],
+    ['flat', 'Flat foot (pes planus)', 'Loss of the medial longitudinal arch, so the sole touches or nearly touches the ground. Babies are normally flat-footed; the arch develops in early childhood. In flat foot the head of the talus sinks medially and downward, stretching the spring ligament and the tibialis posterior tendon. <b>Flexible</b> (supple) flat foot: the arch is gone on standing but reappears on tiptoe (or when the big toe is pulled up: Jack\'s test); <b>rigid</b> flat foot: the arch cannot be restored, for example with a tarsal coalition. In adults, tibialis posterior tendon dysfunction is the commonest cause of acquired flat foot (Muscles page).', ['talus', 'navicular', 'calcaneus', 'cun_med', 'mt1']],
+    ['club', 'Club foot (talipes equinovarus, CTEV)', 'A congenital deformity, roughly 1 to 4 per 1000 live births (rates vary between populations). Four parts, often remembered as CAVE: <b>cavus</b> of the midfoot (a high arch, the forefoot pronated), <b>adductus</b> of the forefoot, <b>varus</b> of the heel (inversion at the subtalar joint) and <b>equinus</b> at the ankle (the talus plantarflexed under the tibia). The bones around the talus (the navicular, calcaneus and the forefoot) are turned inward and downward under it; the calcaneal (Achilles) tendon is tight. Treatment by the Ponseti method: serial manipulation and casting, usually ending with a tenotomy of the calcaneal tendon, then a brace.', ['talus', 'calcaneus', 'navicular', 'cuboid']],
+    ['meta', 'Metatarsalgia and Morton\'s neuroma', '<b>Metatarsalgia</b> is pain under the metatarsal heads (the ball of the foot), often from overload: a short 1st metatarsal or a long 2nd one puts extra pressure on the 2nd metatarsal head. Causes include Morton\'s neuroma, stress fractures and Freiberg disease of a metatarsal head. <b>Morton\'s neuroma</b> is not a true tumour but a compressive neuropathy of a plantar interdigital nerve under the deep transverse metatarsal ligament, most often in the <b>third web space</b> (between the 3rd and 4th metatarsal heads; Wikipedia also names the second). Pressure across the metatarsal heads (squeezing the forefoot, which compresses the transverse arch) reproduces the pain, sometimes with a painful click (Mulder\'s sign).', ['mt2', 'mt3', 'mt4']],
   ],
 };
 
@@ -179,7 +191,7 @@ function buildArches() {
     const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
     b.innerHTML = `<i style="background:${COLOURS.foot}"></i><span>${name}</span>`;
     b.onclick = () => {
-      pressed('#arch-list button', key);
+      pressed('#arch-list button', key); pressed('#factor-list button', null);
       document.getElementById('disc-desc').innerHTML = `<b>${name}.</b> ${text}`;
       v.setFocus(keys); v.face([1, -0.3, 0.05], {zoom: 1});
     };
@@ -187,6 +199,20 @@ function buildArches() {
   }
 }
 
+function buildFactors() {
+  const box = document.getElementById('factor-list'); box.replaceChildren();
+  for (const [key, name, text, keys] of DATA.archFactors) {
+    const b = document.createElement('button'); b.dataset.k = key; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = `<i style="background:var(--line)"></i><span>${name}</span>`;
+    b.onclick = () => {
+      pressed('#arch-list button', null); pressed('#factor-list button', key);
+      document.getElementById('disc-desc').innerHTML = `<b>${name}.</b> ${text}`;
+      const foot = v.order.filter(k => REGION_OF(k) === 'foot');
+      v.setFocus(keys || foot); v.fit(foot); v.face(key === 'meta' ? [0.2, -0.4, 1] : [1, -0.3, 0.05], {zoom: 1});
+    };
+    box.append(b);
+  }
+}
 function setTab(name, move = true) {
   tab = name; clearPick();
   for (const t of ['regions', 'curves', 'discs']) {
@@ -198,7 +224,7 @@ function setTab(name, move = true) {
   if (name === 'regions') { document.getElementById('reg-desc').innerHTML = DATA.regionsIntro; if (move) { v.fit(null); v.face([0, -1, 0], {zoom: 1}); } }
   if (name === 'curves') { document.getElementById('curve-desc').innerHTML = DATA.curvesIntro; if (move) { v.fit(null); v.face([0.5, -1, 0], {zoom: 1}); } }
   if (name === 'discs') {
-    document.getElementById('disc-desc').innerHTML = DATA.archesIntro; pressed('#arch-list button', null);
+    document.getElementById('disc-desc').innerHTML = DATA.archesIntro; pressed('#arch-list button', null); pressed('#factor-list button', null);
     if (move) { v.fit(v.order.filter(k => REGION_OF(k) === 'foot')); v.face([1, -0.3, 0.05], {zoom: 1}); }
   }
 }
@@ -210,7 +236,7 @@ v.onPick = hit => hit ? pick(hit.key) : clearPick();
   document.getElementById('based').innerHTML = DATA.based;
   man = await v.load('../models/lower-limb/lower-limb.json');
   for (const p of man.parts) names[p.key] = p.name;
-  buildRegions(); buildCurves(); buildArches();
+  buildRegions(); buildCurves(); buildArches(); buildFactors();
   setTab('regions');
   window.ready = true;
 })().catch(e => { document.getElementById('reg-desc').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
