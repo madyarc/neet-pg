@@ -11,11 +11,12 @@
 <style>
 /* page colours, one meaning each: --collagen (collagen fibres), --elastic (elastic fibres), --reticular (reticular fibres),
    --nucleus (cell nuclei), --cyto (cytoplasm), --ground (ground substance / cartilage matrix), --fat (fat), --skin,
-   --musc (muscle), --perich (perichondrium), --granule (mast-cell granules); --fascia and --bone come from atlas.css; --mark = the part you picked */
+   --musc (muscle), --perich (perichondrium), --granule (mast-cell granules), --er (rough endoplasmic reticulum), --lyso (lysosomes /
+   phagosomes), --micro (fibrillin microfibrils); --fascia, --bone and --vein come from atlas.css; --mark = the part you picked */
 :root{--collagen:#e39b9b;--elastic:#4a2f6b;--reticular:#222;--nucleus:#3b4a8f;--cyto:#c8b6e2;--ground:#eef1f6;--fat:#f3d98b;
-  --skin:#e8b9a0;--musc:#c96f68;--perich:#8a7f6a;--granule:#7a2e4f}
+  --skin:#e8b9a0;--musc:#c96f68;--perich:#8a7f6a;--granule:#7a2e4f;--er:#4f7f34;--lyso:#b8681f;--micro:#23807f}
 :root[data-theme="dark"]{--collagen:#b86a6a;--elastic:#c5a8f0;--reticular:#e8e8e8;--nucleus:#9fb0ff;--cyto:#6d5a8c;--ground:#232a36;--fat:#9c8640;
-  --skin:#9d6f58;--musc:#9c4e48;--perich:#c4b796;--granule:#e08ab0}
+  --skin:#9d6f58;--musc:#9c4e48;--perich:#c4b796;--granule:#e08ab0;--er:#8fc46a;--lyso:#eaa05c;--micro:#5cc4c2}
 section.block{display:flex;flex-direction:column;gap:12px}
 .fig{width:100%;height:auto;display:block}
 .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
@@ -25,11 +26,20 @@ section.block{display:flex;flex-direction:column;gap:12px}
 .three figure{margin:0;display:flex;flex-direction:column;gap:4px;cursor:pointer;border:1px solid transparent;border-radius:8px;padding:4px}
 .three figure[aria-pressed="true"]{border-color:var(--accent)}
 .three figcaption{font:600 13px var(--f-body)}
+.legend2{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--muted)}
+.legend2 i{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:4px}
 .dim{opacity:.18;transition:opacity .2s}
 table.t{border-collapse:collapse;font-size:13.5px;width:100%}
 table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
 table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .scroll{overflow-x:auto}
+figure.micro{margin:0;display:flex;flex-direction:column;gap:6px}
+.micros{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+@media (max-width:760px){.micros{grid-template-columns:minmax(0,1fr)}}
+figure.micro img{width:100%;max-width:640px;height:auto;display:block;border-radius:8px;border:1px solid var(--line)}
+figure.micro figcaption{font-size:13.5px;line-height:1.45}
+.press{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:700px){.press{grid-template-columns:minmax(0,1fr)}}
 svg text{font:500 12px var(--f-body);fill:var(--ink)}
 @media (max-width:600px){
   table.stack tr:first-child{display:none}
@@ -54,6 +64,17 @@ svg text{font:500 12px var(--f-body);fill:var(--ink)}
   <div class="chips" id="loose-chips"></div>
   <svg class="fig" id="loose" viewBox="0 0 600 300" role="img" aria-label="Loose connective tissue, schematic"></svg>
   <p class="muted">Schematic, not to scale.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-em">
+  <h2 id="h-em">Under the electron microscope</h2>
+  <p class="cap" id="em-intro"></p>
+  <div class="chips" id="em-chips"></div>
+  <div class="two">
+    <svg class="fig" id="em" style="max-width:440px" viewBox="0 0 300 200" role="img" aria-label="Electron-microscope features, schematic"></svg>
+    <div><p class="cap" id="em-text"></p><div class="legend2" id="em-legend"></div></div>
+  </div>
+  <p class="muted">Schematic drawings of what the electron microscope shows, not to scale.</p>
 </section>
 
 <section class="block panel" aria-labelledby="h-types">
@@ -83,6 +104,21 @@ svg text{font:500 12px var(--f-body);fill:var(--ink)}
   <p class="muted">Schematic, not to scale. Tap a type.</p>
   <div class="scroll"><table class="t stack" id="cart"></table></div>
   <div id="cart-notes"></div>
+  <h3>Cartilage under the light microscope</h3>
+  <div class="micros">
+    <figure class="micro">
+      <img src="img/hyaline-cartilage-he.jpg" width="640" height="480" loading="lazy" alt="Light micrograph of hyaline cartilage of the trachea, H&amp;E, with chondrocytes in groups inside a pale glassy matrix">
+      <figcaption id="hyal-cap"></figcaption>
+    </figure>
+    <figure class="micro">
+      <img src="img/elastic-cartilage.jpg" width="640" height="480" loading="lazy" alt="Light micrograph of elastic cartilage: chondrocytes in lacunae surrounded by a dense network of dark elastic fibres">
+      <figcaption id="elas-cap"></figcaption>
+    </figure>
+    <figure class="micro">
+      <img src="img/fibrocartilage.jpg" width="640" height="361" loading="lazy" alt="Light micrograph of fibrocartilage: rows of cells between wavy bundles of collagen">
+      <figcaption id="fibro-cap"></figcaption>
+    </figure>
+  </div>
 </section>
 
 <section class="block panel" aria-labelledby="h-ten">
@@ -101,6 +137,24 @@ svg text{font:500 12px var(--f-body);fill:var(--ink)}
   <h3>Modifications of the deep fascia</h3>
   <div class="scroll"><table class="t" id="mods"></table></div>
   <p class="cap" id="fat-notes"></p>
+
+  <h3>Where the fat goes: women and men</h3>
+  <div class="press">
+    <svg class="fig" id="fatdist" style="max-width:300px;margin:0 auto" viewBox="0 0 260 230" role="img" aria-label="Gynoid and android fat distribution, schematic"></svg>
+    <div class="stack"><p class="cap" id="fatdist-text"></p><p class="cap" id="pads"></p></div>
+  </div>
+
+  <h3>Fascial sheaths and the investing layer</h3>
+  <p class="cap" id="invest"></p>
+  <div class="scroll"><table class="t stack" id="sheaths"></table></div>
+
+  <h3>Deep fascia, venous return and compartment syndrome</h3>
+  <div class="chips" id="calf-chips"></div>
+  <div class="press">
+    <svg class="fig" id="calf" style="max-width:300px;margin:0 auto" viewBox="0 0 260 230" role="img" aria-label="A fascial compartment with a deep vein, schematic"></svg>
+    <div class="stack"><p class="cap" id="calf-text"></p><div class="legend2" id="calf-legend"></div></div>
+  </div>
+  <p class="muted">Schematic, not to scale.</p>
 </section>
 
 <section class="block panel" aria-labelledby="h-syn">
@@ -111,6 +165,7 @@ svg text{font:500 12px var(--f-body);fill:var(--ink)}
 <footer>
   <p id="based"></p>
   <p>Models used: all drawings are schematic, not to scale.</p>
+  <p id="images"></p>
 </footer>
 </div>
 
@@ -119,7 +174,7 @@ svg text{font:500 12px var(--f-body);fill:var(--ink)}
 /* ===================== DATA — every statement checked in two independent sources
    (fact sheet sources-local/facts/connective-tissue.md; log in anatomy/DATA-SOURCES.md, "Connective Tissue") ===================== */
 const DATA = {
-  lede: 'Cells, fibres and ground substance; the kinds of connective tissue and where they are; collagen; the three cartilages; tendons, aponeuroses and ligaments; superficial and deep fascia.',
+  lede: 'Cells, fibres and ground substance, and what the electron microscope shows; the kinds of connective tissue and where they are; collagen; the three cartilages; tendons, aponeuroses and ligaments; superficial and deep fascia, fat distribution, fascial sheaths and compartments.',
   based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), introduction and fasciae; checked against StatPearls (NCBI Bookshelf), open-access histology and fascia papers, and Wikipedia. Where Gray (1918) is outdated (e.g. the nutrition of articular cartilage), the modern view is used.',
   looseCap: 'Connective tissue is cells, fibres (collagen, elastic, reticular) and ground substance; the fibres and ground substance together are the extracellular matrix. Tap a part.',
   loose: [
@@ -163,7 +218,7 @@ const DATA = {
   ],
   cart: [
     ['Fibres in the matrix', 'Type II collagen, fine fibrils (glassy matrix)', 'Type II collagen and many elastic fibres', 'Thick bundles of type I collagen (some type II)'],
-    ['Perichondrium', 'Present, except on articular cartilage', 'Present', 'Not confirmed by two of our sources'],
+    ['Perichondrium', 'Present, except on articular cartilage', 'Present', 'Absent'],
     ['Cells', 'In lacunae; isogenous groups', 'In lacunae', 'In rows between the collagen bundles; little matrix'],
     ['Where', 'Articular and costal cartilage; nose; larynx (thyroid, cricoid); trachea', 'Pinna, epiglottis, corniculate cartilage', 'Intervertebral disc (anulus fibrosus), pubic symphysis, menisci, articular discs, labra'],
   ],
@@ -189,6 +244,31 @@ const DATA = {
     ['Fibrous (flexor) sheaths', 'Over the flexor tendons of the fingers and toes'],
   ],
   fatNotes: '<b>Fat in the superficial fascia:</b> thicker on the trunk than on the limbs; none in the eyelids, penis and scrotum; in the scalp it is a dense fibro-fatty layer.',
+  emIntro: 'Tap a cell or fibre: what the electron microscope adds to the picture above.',
+  em: [
+    ['fibroblast', 'Fibroblast', 'An active fibroblast is full of rough endoplasmic reticulum and Golgi: it is making and exporting collagen and ground substance. The resting fibrocyte has less of both. The collagen fibrils it makes are cross-banded every 67 nm (see Collagen).'],
+    ['mast', 'Mast cell', 'The cytoplasm is packed with dense granules, each wrapped in its own membrane. They hold the histamine and heparin that are released in type I hypersensitivity.'],
+    ['plasma', 'Plasma cell', 'The cytoplasm is filled with rough endoplasmic reticulum, the machinery for making antibody, a protein the cell secretes; the nucleus is eccentric.'],
+    ['macrophage', 'Macrophage', 'What the macrophage swallows is held in a phagosome; the phagosome fuses with a lysosome, and the lysosomal enzymes digest the contents.'],
+    ['elasticf', 'Elastic fibre', 'An amorphous core of elastin with fibrillin microfibrils around it; the microfibrils are the scaffold on which the elastin is laid down. (Marfan syndrome is a defect of fibrillin.)'],
+  ],
+  fatDist: '<b>Gynoid</b> (lower-body) fat lies on the hips and thighs: the typical pattern in women, who also carry more of their fat under the skin. <b>Android</b> (central) fat lies round the trunk and abdomen and the internal organs: the typical pattern in men, who carry more visceral fat. After the menopause the female pattern tends to shift towards the android one.',
+  pads: '<b>Named fat pads.</b> The <b>buccal fat pad</b> (Bichat\'s) lies in the cheek on the buccinator, deep to the masseter. The <b>ischioanal (ischiorectal) fossa</b>, beside the anal canal below the pelvic diaphragm, is filled with fat. <b>Orbital fat</b> surrounds the eyeball, separated from it by the fascia bulbi (Tenon\'s capsule).',
+  invest: 'In the neck the deep (cervical) fascia has three layers: the <b>investing layer</b>, a collar round the whole neck that splits to enclose the trapezius and the sternocleidomastoid, and the <b>pretracheal</b> and <b>prevertebral</b> layers. Around the main vessels the deep fascia forms <b>sheaths</b>.',
+  sheaths: [
+    ['Carotid sheath', 'Carotid artery, internal jugular vein, vagus nerve', 'The layers of the deep cervical fascia contribute to it; it runs from the base of the skull to the root of the neck'],
+    ['Axillary sheath', 'Axillary artery and the brachial plexus (Gray, 1918, includes the axillary vein)', 'Continuous above with the deep cervical fascia: the prevertebral layer carried under the clavicle (Gray, 1918)'],
+    ['Femoral sheath', 'Femoral artery and vein, just below the inguinal ligament', 'A fascial tube: the fasciae lining the abdomen carried down behind the inguinal ligament, transversalis fascia in front and iliac fascia behind, for about 4 cm (Gray, 1918)'],
+  ],
+  calf: [
+    ['rest', 'At rest', 'The deep fascia wraps the muscles of a compartment tightly and does not stretch. The deep veins run inside the compartment; the superficial veins lie outside it, joined to the deep veins by perforating veins that pierce the fascia.'],
+    ['pump', 'Muscles contract', 'The contracting calf muscles, held in by the tight fascia, squeeze the deep veins against the fascia and drive the blood upwards: the calf muscle pump that returns venous blood from the leg. Valves in the perforating veins stop the blood escaping outwards into the superficial veins.'],
+    ['acs', 'Compartment syndrome', '<b>Compartment syndrome:</b> the pressure inside a closed osteofascial compartment (bounded by bone and deep fascia) rises; the inelastic fascia cannot give way, so the raised pressure squeezes the vessels, the local circulation fails, and the tissue becomes ischaemic and can die. It is a surgical emergency.'],
+  ],
+  hyalCap: '<b>Hyaline cartilage of the trachea, H&amp;E, high power.</b> Look for the smooth, glassy matrix; the chondrocytes, each in its own space (lacuna); and the isogenous groups of two, four or more cells (here mostly two to four), each group the offspring of one cell.',
+  elasCap: '<b>Elastic cartilage, high power (stain not stated).</b> Look for the chondrocytes in their lacunae and the dense network of dark elastic fibres running through the matrix between them.',
+  fibroCap: '<b>Fibrocartilage, high power (stain not stated).</b> Look for the dense, wavy bundles of collagen that fill most of the field, with the cells scattered in short rows between them.',
+  images: 'Images (resized), via Wikimedia Commons: <a href="https://commons.wikimedia.org/wiki/File:Cartilage01.JPG">hyaline cartilage</a> (trachea, H&amp;E) and <a href="https://commons.wikimedia.org/wiki/File:Cart_elastico_400.JPG">elastic cartilage</a> by Ganímedes, CC BY-SA 3.0; <a href="https://commons.wikimedia.org/wiki/File:Connective_Tissue_Fibrocartilage_(41140134634).jpg">fibrocartilage</a> by Berkshire Community College Bioscience Image Library, CC0.',
   syn: [
     ['Joint capsule', 'The capsule of a synovial joint: an outer fibrous layer (dense irregular tissue, thickened in places into ligaments) and an inner synovial membrane.'],
     ['Synovial membrane', 'Lines the capsule but not the articular cartilage; also lines bursae and tendon sheaths. Its fibroblast-like cells make the synovial fluid, rich in hyaluronan.'],
@@ -294,7 +374,7 @@ function drawCarts() {
     const f = document.createElement('figure'); f.dataset.k = k; f.setAttribute('aria-pressed', 'false'); f.tabIndex = 0;
     const s = el('svg', {viewBox: '0 0 300 190', class: 'fig', role: 'img', 'aria-label': name}); rnd = k.length * 5;
     el('rect', {x: 0, y: 14, width: 300, height: 176, rx: 6, fill: 'var(--ground)', stroke: 'var(--line)'}, s);
-    if (k === 'fibro') { const t = el('text', {x: 6, y: 11, style: 'font-size:10px;fill:var(--muted)'}, s); t.textContent = 'perichondrium not drawn: not confirmed by two sources'; }
+    if (k === 'fibro') { const t = el('text', {x: 6, y: 11, style: 'font-size:10px;fill:var(--muted)'}, s); t.textContent = 'no perichondrium'; }
     if (k !== 'fibro') { el('rect', {x: 0, y: 0, width: 300, height: 14, rx: 4, fill: 'var(--perich)'}, s); const t = el('text', {x: 6, y: 11, style: 'font-size:10px;fill:var(--surface)'}, s); t.textContent = 'perichondrium'; }
     if (k === 'elastic') for (let i = 0; i < 26; i++) { const x = R() * 300, y = 20 + R() * 165; el('path', {d: `M${x} ${y} q 15 ${R() * 20 - 10} 30 0 t 30 0`, stroke: 'var(--elastic)', 'stroke-width': 1.4, fill: 'none'}, s); }
     if (k === 'fibro') { for (let y = 26; y < 190; y += 22) el('path', {d: `M0 ${y} Q 150 ${y - 6} 300 ${y}`, stroke: 'var(--collagen)', 'stroke-width': 10, fill: 'none'}, s);
@@ -323,10 +403,115 @@ function drawLimb(k) {
   $('layer-text').innerHTML = L && L[3] ? `<b>${L[1]}.</b> ${L[3]}` : (L ? `<b>${L[1]}.</b>` : 'Superficial fascia lies under the skin; the deep fascia wraps the muscles.');
 }
 
+/* ---------- electron microscope ---------- */
+function drawEM(k) {
+  const s = $('em'); s.replaceChildren(); rnd = 5;
+  el('rect', {width: 300, height: 200, rx: 8, fill: 'var(--ground)'}, s);
+  const lab = (x, y, t, a = 'start') => { const e = el('text', {x, y, 'text-anchor': a}, s); e.textContent = t; };
+  const ptr = (x1, y1, x2, y2) => el('line', {x1, y1, x2, y2, stroke: 'var(--muted)', 'stroke-width': 1}, s);
+  const rer = (x, y, w, bend) => { el('path', {d: `M${x} ${y} q ${w / 2} ${bend} ${w} 0`, stroke: 'var(--er)', 'stroke-width': 2, fill: 'none'}, s);
+    for (let i = 1; i < 8; i++) { const t = i / 8; el('circle', {cx: x + w * t, cy: y + 2 * bend * t * (1 - t) - 2.5, r: 1.3, fill: 'var(--er)'}, s); } };
+  let legend = [];
+  if (k === 'fibroblast') {
+    el('path', {d: 'M20 110 Q 150 40 280 100 Q 150 170 20 110 Z', fill: 'var(--cyto)'}, s);
+    el('ellipse', {cx: 150, cy: 104, rx: 38, ry: 15, fill: 'var(--nucleus)'}, s);
+    for (const [x, y] of [[60, 98], [70, 112], [205, 90], [215, 104], [205, 118]]) rer(x, y, 40, -4);
+    for (let i = 0; i < 4; i++) el('path', {d: `M${98 - i * 3} ${126 + i * 5} q 14 ${6 + i} 28 0`, stroke: 'var(--ink)', 'stroke-width': 1.4, fill: 'none'}, s);
+    ptr(80, 94, 70, 40); lab(40, 34, 'rough ER'); ptr(110, 134, 100, 172); lab(80, 186, 'Golgi');
+    legend = [['--nucleus', 'nucleus'], ['--er', 'rough ER (dots = ribosomes)']];
+  }
+  if (k === 'mast') {
+    el('ellipse', {cx: 150, cy: 100, rx: 95, ry: 75, fill: 'var(--cyto)'}, s);
+    el('circle', {cx: 150, cy: 100, r: 22, fill: 'var(--nucleus)'}, s);
+    for (let i = 0; i < 70; i++) { const a = R() * 6.283, d = 30 + R() * 52; const x = 150 + Math.cos(a) * d * 1.1, y = 100 + Math.sin(a) * d * .82;
+      el('circle', {cx: x, cy: y, r: 5, fill: 'var(--granule)', stroke: 'var(--ink)', 'stroke-width': .8}, s); }
+    ptr(232, 70, 262, 30); lab(296, 22, 'membrane-bound granules', 'end');
+    legend = [['--nucleus', 'nucleus'], ['--granule', 'granule (outline = its membrane)']];
+  }
+  if (k === 'plasma') {
+    el('ellipse', {cx: 150, cy: 100, rx: 105, ry: 70, fill: 'var(--cyto)'}, s);
+    for (let r = 0; r < 6; r++) rer(70 + r * 4, 52 + r * 17, 120 - r * 2, r < 3 ? 6 : -6);
+    el('circle', {cx: 222, cy: 100, r: 28, fill: 'var(--ground)', stroke: 'var(--nucleus)', 'stroke-width': 3}, s);
+    for (let i = 0; i < 7; i++) { const a = i * 0.898; el('circle', {cx: 222 + Math.cos(a) * 18, cy: 100 + Math.sin(a) * 18, r: 4, fill: 'var(--nucleus)'}, s); }
+    ptr(110, 70, 100, 22); lab(60, 16, 'rough ER'); ptr(240, 76, 262, 30); lab(296, 22, 'eccentric nucleus', 'end');
+    legend = [['--nucleus', 'nucleus'], ['--er', 'rough ER']];
+  }
+  if (k === 'macrophage') {
+    el('path', {d: 'M40 100 Q 50 30 130 38 Q 230 20 262 90 Q 280 160 180 172 Q 70 186 40 100 Z', fill: 'var(--cyto)'}, s);
+    el('ellipse', {cx: 105, cy: 105, rx: 26, ry: 20, fill: 'var(--nucleus)'}, s);
+    el('circle', {cx: 190, cy: 92, r: 22, fill: 'var(--ground)', stroke: 'var(--ink)', 'stroke-width': 1.2}, s);
+    el('path', {d: 'M180 86 l8 -6 l10 8 l-4 10 l-12 0 Z', fill: 'var(--muted)'}, s);
+    for (const [x, y] of [[150, 140], [215, 140], [160, 60], [235, 115]]) el('circle', {cx: x, cy: y, r: 7, fill: 'var(--lyso)'}, s);
+    el('circle', {cx: 208, cy: 74, r: 7, fill: 'var(--lyso)'}, s);
+    ptr(206, 108, 230, 186); lab(296, 196, 'phagosome (swallowed particle)', 'end');
+    ptr(158, 56, 140, 18); lab(60, 14, 'lysosomes');
+    legend = [['--nucleus', 'nucleus'], ['--lyso', 'lysosome'], ['--ground', 'phagosome']];
+  }
+  if (k === 'elasticf') {
+    el('circle', {cx: 110, cy: 100, r: 62, fill: 'var(--elastic)'}, s);
+    for (let i = 0; i < 46; i++) { const a = i / 46 * 6.283; el('circle', {cx: 110 + Math.cos(a) * 68, cy: 100 + Math.sin(a) * 68, r: 3, fill: 'var(--micro)'}, s); }
+    for (let i = 0; i < 9; i++) { const a = R() * 6.283, d = R() * 48; el('circle', {cx: 110 + Math.cos(a) * d, cy: 100 + Math.sin(a) * d, r: 2.5, fill: 'var(--micro)'}, s); }
+    ptr(150, 70, 200, 50); lab(204, 54, 'elastin core'); ptr(172, 128, 200, 150); lab(204, 154, 'fibrillin'); lab(204, 168, 'microfibrils');
+    lab(110, 192, 'cross-section of one fibre', 'middle');
+    legend = [['--elastic', 'amorphous elastin'], ['--micro', 'fibrillin microfibrils']];
+  }
+  const it = DATA.em.find(x => x[0] === k); $('em-text').innerHTML = `<b>${it[1]}.</b> ${it[2]}`;
+  $('em-legend').innerHTML = legend.map(([c, t]) => `<span><i style="background:var(${c});border:1px solid var(--line)"></i>${t}</span>`).join('');
+  pressed($('em-chips'), k);
+}
+
+/* ---------- fat distribution ---------- */
+function drawFatDist() {
+  const s = $('fatdist');
+  const body = (cx, label, fat) => {
+    el('circle', {cx, cy: 22, r: 13, fill: 'var(--surface)', stroke: 'var(--muted)', 'stroke-width': 1.5}, s);
+    el('path', {d: `M${cx - 22} 42 H${cx + 22} L${cx + 26} 112 L${cx + 22} 196 H${cx + 4} L${cx} 122 L${cx - 4} 196 H${cx - 22} L${cx - 26} 112 Z`, fill: 'var(--surface)', stroke: 'var(--muted)', 'stroke-width': 1.5}, s);
+    fat(cx);
+    const t = el('text', {x: cx, y: 214, 'text-anchor': 'middle', style: 'font-weight:600'}, s); t.textContent = label[0];
+    const u = el('text', {x: cx, y: 228, 'text-anchor': 'middle', style: 'font-size:11px;fill:var(--muted)'}, s); u.textContent = label[1];
+  };
+  body(65, ['Gynoid', 'typical of women'], cx => { el('ellipse', {cx, cy: 118, rx: 36, ry: 22, fill: 'var(--fat)', opacity: .9}, s);
+    el('ellipse', {cx: cx - 14, cy: 148, rx: 15, ry: 22, fill: 'var(--fat)', opacity: .9}, s); el('ellipse', {cx: cx + 14, cy: 148, rx: 15, ry: 22, fill: 'var(--fat)', opacity: .9}, s); });
+  body(195, ['Android', 'typical of men'], cx => { el('ellipse', {cx, cy: 84, rx: 34, ry: 28, fill: 'var(--fat)', opacity: .9}, s);
+    el('ellipse', {cx, cy: 84, rx: 13, ry: 11, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.2, 'stroke-dasharray': '3 2'}, s); });
+  const n = el('text', {x: 130, y: 84, 'text-anchor': 'middle', style: 'font-size:10.5px;fill:var(--muted)'}, s); n.textContent = 'visceral';
+  el('line', {x1: 150, y1: 84, x2: 186, y2: 84, stroke: 'var(--muted)', 'stroke-width': 1}, s);
+}
+
+/* ---------- calf compartment ---------- */
+function drawCalf(k) {
+  const s = $('calf'); s.replaceChildren();
+  const cx = 130, cy = 112;
+  el('circle', {cx, cy, r: 104, fill: 'var(--skin)'}, s);
+  el('circle', {cx, cy, r: 96, fill: 'var(--fat)'}, s);
+  el('circle', {cx, cy, r: 80, fill: 'var(--musc)', opacity: k === 'rest' ? .75 : 1}, s);
+  el('circle', {cx, cy, r: 80, fill: 'none', stroke: 'var(--fascia)', 'stroke-width': 6}, s);
+  el('line', {x1: cx - 80, y1: cy, x2: cx + 80, y2: cy, stroke: 'var(--fascia)', 'stroke-width': 3}, s);
+  const flat = k === 'rest' ? 1 : .35;
+  el('circle', {cx, cy, r: 11, fill: 'var(--bone)', stroke: 'var(--muted)'}, s);
+  el('ellipse', {cx: cx - 28, cy, rx: 13, ry: 13 * flat, fill: 'var(--vein)', stroke: 'var(--surface)', 'stroke-width': 1.5}, s);
+  el('ellipse', {cx: cx + 28, cy, rx: 13, ry: 13 * flat, fill: 'var(--vein)', stroke: 'var(--surface)', 'stroke-width': 1.5}, s);
+  el('circle', {cx: cx + 64, cy: cy - 63, r: 7, fill: 'var(--vein)'}, s);
+  el('path', {d: `M${cx + 56} ${cy - 52} L${cx + 36} ${cy - 10}`, stroke: 'var(--vein)', 'stroke-width': 4}, s);
+  el('path', {d: `M${cx + 49} ${cy - 44} l-6 4 m6 -4 l2 7`, stroke: 'var(--surface)', 'stroke-width': 1.6, fill: 'none'}, s);
+  const lab = (x, y, t, a = 'start') => { const e = el('text', {x, y, 'text-anchor': a, style: 'font-size:11px'}, s); e.textContent = t; };
+  if (k === 'pump') for (const x of [cx - 28, cx + 28]) { el('circle', {cx: x, cy: cy + 26, r: 7, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.4}, s); el('circle', {cx: x, cy: cy + 26, r: 2, fill: 'var(--ink)'}, s); }
+  if (k === 'pump') lab(cx, cy + 52, 'blood driven upwards', 'middle');
+  if (k === 'acs') { for (let i = 0; i < 8; i++) { const a = i * 0.785 + 0.39, r1 = 62, r2 = 76;
+      el('path', {d: `M${cx + Math.cos(a) * r1} ${cy + Math.sin(a) * r1} L${cx + Math.cos(a) * r2} ${cy + Math.sin(a) * r2}`, stroke: 'var(--ink)', 'stroke-width': 2, 'marker-end': 'url(#ah)'}, s); }
+    lab(cx, cy + 30, 'pressure rises; fascia', 'middle'); lab(cx, cy + 43, 'does not stretch', 'middle'); }
+  const d = el('defs', {}, s); const m = el('marker', {id: 'ah', viewBox: '0 0 6 6', refX: 5, refY: 3, markerWidth: 5, markerHeight: 5, orient: 'auto'}, d); el('path', {d: 'M0 0 L6 3 L0 6 Z', fill: 'var(--ink)'}, m);
+  const it = DATA.calf.find(x => x[0] === k); $('calf-text').innerHTML = it[2];
+  pressed($('calf-chips'), k);
+}
+
 /* ---------- init ---------- */
 drawLoose();
 for (const [k, name] of DATA.loose) { const b = document.createElement('button'); b.className = 'chip'; b.dataset.k = k; b.setAttribute('aria-pressed', 'false'); b.textContent = name; b.onclick = () => pickLoose(k); $('loose-chips').append(b); }
 $('loose-cap').innerHTML = DATA.looseCap;
+$('em-intro').innerHTML = DATA.emIntro;
+for (const [k, name] of DATA.em) { const b = document.createElement('button'); b.className = 'chip'; b.dataset.k = k; b.setAttribute('aria-pressed', 'false'); b.textContent = name; b.onclick = () => drawEM(k); $('em-chips').append(b); }
+drawEM('mast');
 $('types-intro').innerHTML = DATA.typesIntro;
 for (const [k, name] of DATA.types) { const b = document.createElement('button'); b.className = 'chip'; b.dataset.k = k; b.setAttribute('aria-pressed', 'false'); b.textContent = name; b.onclick = () => drawType(k); $('type-chips').append(b); }
 drawType('loose');
@@ -345,6 +530,13 @@ for (const [k, name, tok] of DATA.layers) { const b = document.createElement('bu
 drawLimb(null); $('fascia-cap').innerHTML = DATA.fasciaCap;
 $('mods').innerHTML = '<tr><th>Modification</th><th>Examples</th></tr>' + DATA.mods.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
 $('fat-notes').innerHTML = DATA.fatNotes;
+drawFatDist(); $('fatdist-text').innerHTML = DATA.fatDist + ' <span class="muted">Schematic.</span>'; $('pads').innerHTML = DATA.pads;
+$('invest').innerHTML = DATA.invest;
+$('sheaths').innerHTML = '<tr><th>Sheath</th><th>Encloses</th><th>Formed by</th></tr>' + DATA.sheaths.map(r => `<tr><td data-h="Sheath"><b>${r[0]}</b></td><td data-h="Encloses">${r[1]}</td><td data-h="Formed by">${r[2]}</td></tr>`).join('');
+for (const [k, name] of DATA.calf) { const b = document.createElement('button'); b.className = 'chip'; b.dataset.k = k; b.setAttribute('aria-pressed', 'false'); b.textContent = name; b.onclick = () => drawCalf(k); $('calf-chips').append(b); }
+$('calf-legend').innerHTML = [['--fascia', 'deep fascia'], ['--bone', 'bone'], ['--musc', 'muscle'], ['--vein', 'veins (deep inside, superficial outside; perforator with valve)'], ['--fat', 'superficial fascia (fat)']].map(([c, t]) => `<span><i style="background:var(${c})"></i>${t}</span>`).join('');
+drawCalf('rest');
+$('hyal-cap').innerHTML = DATA.hyalCap; $('elas-cap').innerHTML = DATA.elasCap; $('fibro-cap').innerHTML = DATA.fibroCap; $('images').innerHTML = DATA.images;
 $('syn').innerHTML = DATA.syn.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
 window.ready = true;
 </script>

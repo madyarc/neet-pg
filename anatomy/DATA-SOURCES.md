@@ -368,6 +368,11 @@ multi-unit smooth muscle; Gray's 1918 theory of contraction (obsolete). Mammalia
 calcaneal tendon wording (the tendon starts as an aponeurosis); fixator definition without "proximal/distal"; "a modern
 review" (one source) keeps synergist and fixator apart; T tubules "at the A–I junctions (in mammals)".
 
+- Micrographs added 2026-11-18 (Wikimedia Commons, resized to 640 px; licences read from the Commons API):
+  File:Musc_est_long_400.JPG (Ganímedes, CC BY-SA 3.0), File:Cardiocyte_(myocyte).jpg (Lazar.zenit, CC BY-SA 4.0),
+  File:Musc_liso_400.JPG (Andrea Mazza, CC BY-SA 3.0); each states the tissue and H&E. Captions use features already
+  verified in `muscle-tissue.md` E1–E4. Review (2026-11-18): skeletal caption reworded (fibre borders not visible).
+
 ## Connective Tissue — `general/connective-tissue.html`
 
 Fact sheet `sources-local/facts/connective-tissue.md` (321 quotes; Gray 1918 pages 104–110; StatPearls; open papers
@@ -385,6 +390,21 @@ cell → "abundant cytoplasm"), "oval nucleus"/"little cytoplasm" (fibroblast, n
 Verhoeff, vitreous body and nucleus pulposus for type II collagen, osteogenesis imperfecta (both quotes StatPearls = one
 publisher), "rows of fibroblasts" in dense regular tissue; section retitled "Kinds of connective tissue" (no parent group
 for adipose/reticular tissue).
+
+- Additions (2026-11-18; fact sheet `sources-local/facts/fill-histo.md`, 62 quotes, script-checked; Gray 1918
+  pp. 108, 111, 120, 149, 157, 227; StatPearls; PMC5291139, PMC11506611, PMC6406103, PMC10358300, PMC2224023,
+  PMC5385471, PMC11642339, PMC8875079, PMC8963043, PMC12079772; Wikipedia, Gray copies excluded): gynoid vs android
+  fat, buccal / ischioanal / orbital fat, investing layer and the pretracheal and prevertebral layers, carotid, axillary
+  and femoral sheaths (Gray includes the axillary vein, Wikipedia not: both given; which layers form the carotid sheath
+  varies), calf compartment drawing (pump, compartment syndrome), EM schematics of fibroblast, mast cell, plasma cell,
+  macrophage, elastic fibre. Fibrocartilage perichondrium now "absent" (PMC8963043, PMC12079772).
+- Cartilage micrographs: File:Cartilage01.JPG (Ganímedes, CC BY-SA 3.0, H&E, trachea), File:Cart_elastico_400.JPG
+  (Ganímedes, CC BY-SA 3.0, stain not stated), File:Connective_Tissue_Fibrocartilage_(41140134634).jpg (Berkshire
+  Community College Bioscience Image Library, CC0, stain not stated); chosen because the uploader names the tissue and
+  the textbook features are visible (selection notes: `fill-histo.md` Part E).
+- Left out (one source): visceral fat as harmful, oestrogen as cause, buttocks in gynoid fat, infrapatellar fat pad,
+  compartment pressures and "opened"/nerves, plasma-cell Golgi. Review (2026-11-18) fixed captions (isogenous groups of
+  two, four or more; fibrocartilage cells in short rows), the bone in the compartment drawing, sheath wording.
 
 ## Muscles of the Lower Limb — `lower-limb/muscles.html`
 

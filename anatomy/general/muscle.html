@@ -22,6 +22,11 @@ section.block{display:flex;flex-direction:column;gap:12px}
 @media (max-width:700px){.three{grid-template-columns:minmax(0,1fr)}}
 .three figure{margin:0;display:flex;flex-direction:column;gap:4px}
 .three figcaption{font:600 13px var(--f-body)}
+.micros{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.micros{grid-template-columns:minmax(0,1fr)}}
+.micros figure{margin:0;display:flex;flex-direction:column;gap:6px}
+.micros img{width:100%;height:auto;display:block;border-radius:8px;border:1px solid var(--line)}
+.micros figcaption{font-size:13.5px;line-height:1.45}
 .dim{opacity:.25;transition:opacity .2s} .hi{transition:opacity .2s}
 table.t{border-collapse:collapse;font-size:13.5px;width:100%}
 table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
@@ -65,6 +70,8 @@ svg .lab{font:600 12px var(--f-mono)}
   <div class="three" id="types"></div>
   <p class="muted">Schematic, not to scale.</p>
   <div class="scroll"><table class="t" id="type-table"></table></div>
+  <h3>Under the light microscope</h3>
+  <div class="micros" id="micros"></div>
 </section>
 
 <section class="block panel" aria-labelledby="h-sarc">
@@ -115,6 +122,7 @@ svg .lab{font:600 12px var(--f-mono)}
 <footer>
   <p id="based"></p>
   <p>Models used: all drawings are schematic, not to scale.</p>
+  <p id="images"></p>
 </footer>
 </div>
 
@@ -123,7 +131,7 @@ svg .lab{font:600 12px var(--f-mono)}
 /* ===================== DATA — every statement checked in two independent sources
    (fact sheet sources-local/facts/muscle-tissue.md; log in anatomy/DATA-SOURCES.md, "Muscle Tissue") ===================== */
 const DATA = {
-  lede: 'Skeletal, cardiac and smooth muscle compared; the sarcomere and how it shortens; how fibres are arranged in a muscle; tendons, aponeuroses and the sheaths that hold a muscle together.',
+  lede: 'Skeletal, cardiac and smooth muscle compared, in drawings and real micrographs; the sarcomere and how it shortens; how fibres are arranged in a muscle; tendons, aponeuroses and the sheaths that hold a muscle together.',
   based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), Myology and the heart; checked against StatPearls (NCBI Bookshelf), open-access reviews of muscle structure and Wikipedia. Gray\'s 1918 account of how muscle contracts is outdated and is not used.',
   typesCap: 'Tap a feature to find it in all three. Skeletal and cardiac muscle are striated because their sarcomeres line up; smooth muscle has no sarcomeres, so no striations.',
   features: [
@@ -191,6 +199,12 @@ const DATA = {
     ['Type IIA', 'Fast-twitch', 'Fast oxidative'],
     ['Type IIX', 'Fast-twitch', 'Fast glycolytic; white'],
   ],
+  micros: [
+    ['skeletal-muscle-he.jpg', 640, 480, 'Skeletal muscle in longitudinal section, H&E', '<b>Skeletal muscle, longitudinal section, H&amp;E.</b> Look for the cross-striations running across the long parallel fibres, and the many elongated nuclei along the fibres (in each fibre they lie at its edge, though the fibre borders are hard to see at this power).'],
+    ['cardiac-muscle-he.jpg', 640, 427, 'Cardiac muscle, H&E, with central nuclei', '<b>Cardiac muscle, H&amp;E.</b> Look for one oval nucleus in the centre of each cell (compare the edge nuclei of skeletal muscle). The striations are faint in this picture and the intercalated discs are not clearly seen.'],
+    ['smooth-muscle-he.jpg', 640, 480, 'Smooth muscle of the urinary bladder, H&E', '<b>Smooth muscle of the urinary bladder, H&amp;E.</b> Look for spindle-shaped cells with no cross-striations, each with one elongated nucleus in its middle.'],
+  ],
+  images: 'Images (resized), via Wikimedia Commons: <a href="https://commons.wikimedia.org/wiki/File:Musc_est_long_400.JPG">skeletal muscle</a> by Ganímedes, CC BY-SA 3.0; <a href="https://commons.wikimedia.org/wiki/File:Cardiocyte_(myocyte).jpg">cardiac muscle</a> by Lazar.zenit, CC BY-SA 4.0; <a href="https://commons.wikimedia.org/wiki/File:Musc_liso_400.JPG">smooth muscle</a> by Andrea Mazza, CC BY-SA 3.0.',
   ftypesNote: 'Fibre types are classed by their myosin heavy chain. In humans the fibres once called IIB are IIX (true IIB occurs in rodents). The red/white and oxidative/glycolytic pairing is the classical scheme; speed and oxidative capacity do not always go together.',
 };
 
@@ -346,6 +360,8 @@ function drawSheath(k) {
 
 /* ---------- init ---------- */
 drawTypes(); initSarc(); drawSarc();
+$('micros').innerHTML = DATA.micros.map(([f, w, h, alt, cap]) => `<figure><img src="img/${f}" width="${w}" height="${h}" loading="lazy" alt="${alt}"><figcaption>${cap}</figcaption></figure>`).join('');
+$('images').innerHTML = DATA.images;
 $('arch-cap').innerHTML = DATA.archCap + ' ' + DATA.archNote;
 chips($('arch-chips'), DATA.arch.map(a => [a[0], a[1]]), drawArch); drawArch('parallel');
 $('parts').innerHTML = DATA.parts;

@@ -34,8 +34,8 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [ ] **AN4.1** Describe different types of skin & dermatomes in body
 - [ ] **AN4.2** Describe & demonstrate structure of skin with its appendages along with clinical anatomy
-- [~] **AN4.3** Describe structure, contents and identify modifications of superficial fascia along with fat distribution in body — *structure, contents, modifications, fat-free sites: [Connective Tissue](general/connective-tissue.html) (sex differences in fat not sourced)*
-- [~] **AN4.4** Describe & demonstrate modifications of deep fascia with its location, function & examples — *functions and modifications (septa, retinacula, aponeuroses, fibrous sheaths): [Connective Tissue](general/connective-tissue.html)*
+- [x] **AN4.3** Describe structure, contents and identify modifications of superficial fascia along with fat distribution in body — *structure, contents, modifications, fat-free sites, gynoid vs android fat, named fat pads: [Connective Tissue](general/connective-tissue.html)*
+- [x] **AN4.4** Describe & demonstrate modifications of deep fascia with its location, function & examples — *septa, retinacula, aponeuroses, fibrous sheaths; investing layer; carotid, axillary and femoral sheaths; calf pump and compartment syndrome: [Connective Tissue](general/connective-tissue.html)*
 - [ ] **AN4.5** Explain principles of skin incisions and their surgical importance
 
 ### 5. General features of the cardiovascular system
@@ -563,11 +563,11 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 66. Connective tissue histology
 
 - [x] **AN66.1** Describe & identify various types of connective tissue with functional correlation — *[Connective Tissue](general/connective-tissue.html)*
-- [~] **AN66.2** Describe the ultrastructure of connective tissue — *collagen banding, fibroblast features: [Connective Tissue](general/connective-tissue.html)*
+- [x] **AN66.2** Describe the ultrastructure of connective tissue — *EM of fibroblast, mast cell, plasma cell, macrophage; elastic fibre; collagen banding: [Connective Tissue](general/connective-tissue.html)*
 
 ### 67. Muscle histology
 
-- [~] **AN67.1** Describe & identify various types of muscle under the microscope — *schematic comparison of the three types: [Muscle Tissue](general/muscle.html) (no micrographs)*
+- [x] **AN67.1** Describe & identify various types of muscle under the microscope — *schematic comparison plus light micrographs of all three types: [Muscle Tissue](general/muscle.html)*
 - [x] **AN67.2** Classify muscleand describe the structure-function correlation of the same — *[Muscle Tissue](general/muscle.html)*
 - [x] **AN67.3** Describe the ultrastructure of muscular tissue — *sarcomere, filaments, triads vs dyads, smooth muscle dense bodies: [Muscle Tissue](general/muscle.html)*
 
@@ -591,7 +591,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 71. Bone & Cartilage
 
 - [ ] **AN71.1** Identify bone under the microscope; classify various types and describe the structure-function correlation of the same
-- [~] **AN71.2** Identify cartilage under the microscope & describe various types and structure- function correlation of the same — *types and structure: [Connective Tissue](general/connective-tissue.html) (no micrographs)*
+- [x] **AN71.2** Identify cartilage under the microscope & describe various types and structure- function correlation of the same — *types, structure, perichondrium (absent in fibrocartilage) and light micrographs of hyaline, elastic and fibrocartilage: [Connective Tissue](general/connective-tissue.html)*
 
 ### 72. Integumentary System
 
