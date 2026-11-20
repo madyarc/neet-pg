@@ -136,7 +136,7 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
   `tools/test/ffshot.py URL out.png [--phone] [--wait expr] [--js …]` — headless Firefox forced onto **software**
   rendering (Mesa llvmpipe; it prints the renderer to confirm). Never test on the GPU: the AMD iGPU driver faulted
   under browser rendering on this machine. Pages that fetch models need a local http server
-  (`python3 -m http.server 8765 --bind 127.0.0.1` in the repo root). That server does not gzip but GitHub Pages does (so `Content-Length` is the compressed size): after a change to how models are downloaded, also load the live page once it is deployed. (Older tools in `tools/test/` use Playwright.)
+  (`python3 -m http.server 8765 --bind 127.0.0.1` in the repo root). That server does not gzip but GitHub Pages does (so `Content-Length` is the compressed size): after a change to how models are downloaded, also load the live page once it is deployed. Byte-range requests do not help there: with gzip, GitHub Pages applies the range to the compressed file (checked 2026-11-20), so a page that asks for a range must check what it got (the `NPM1` header) and fall back to the whole file. (Older tools in `tools/test/` use Playwright.)
 - Every computed point or line (landmark, suture, fossa) is checked by eye in a screenshot before it ships, and is
   labelled approximate. If a rule can't place something reliably (e.g. the inion), leave it out.
 - Hand-placed landmarks: `tools/test/bone_views.py` (with `tools/test/bone-dev.html`) renders a bone from any direction
