@@ -100,6 +100,25 @@ Neither models the small foramina: the sphenoid has one opening per side, at the
 where Gray places the foramen ovale; rotundum, spinosum, optic canal etc. are not holes in the mesh. Foramina will be
 shown as labelled markers at text-checked positions, never as invented holes.
 
+- Additions (2026-11-18/20; fact sheet `sources-local/facts/fill-skull.md`, 206 quotes, script-checked against
+  `sources-local/modern/fill-skull/`; Gray 1918 pp. 13, 17, 18, 31–47, 49, 144, 171, 193, 200, 202, 204; StatPearls
+  (basilar fractures, Battle sign, dural sinuses, cavernous sinus, tentorium, falx, MMA, greater petrosal nerve, CN V,
+  jugular foramen, ossification); open-access papers PMC10080110, PMC10080008, PMC6168052, PMC6050782, PMC6837784,
+  PMC10462404, PMC3353710, PMC5913417, PMC11831567, PMC6959958, PMC13384707, PMC5111326, PMC11807260, PMC10971245,
+  PMC6108977, PMC11176318, PMC13613290, PMC12649854; Wikipedia, Gray copies not counted; "Cranial cavity" excluded
+  (cites OpenStax)): falx and tentorium compartments with the dural sinuses in 3D, middle meningeal artery, further
+  floor foramina, related structures and fracture signs per fossa, a "Base, from below" view, jugular foramen schemes,
+  a "How the bones form" tab; "formed in" line per bone on `skull-bones.html`. 3D vessels and nerves from the home
+  layers, loaded on demand; points placed on the mesh from the textbook wording, approximate.
+- Disagreements shown: Battle's sign fossa; Gray's 3 vs the modern 2-part jugular foramen; clavicle membrane vs mixed;
+  sphenoid membrane parts (Gray 35 vs Gray 17, same wording on both pages); fontanelle closure incl. the lateral
+  fontanelles (Gray vs Wikipedia); chorda tympani canal. Attributed (one source): foramen caecum vein, posterior
+  ethmoidal nerve, inferior concha in cartilage, fate of Meckel's cartilage (Gray; Wikipedia copies him). Left out:
+  venous plexus of the carotid canal, hypoglossal canal artery and plexus, falx cerebelli on the occipital crest.
+- Independent review (2026-11-20), fixed: tentorium borders (free → anterior clinoid, attached → posterior clinoid);
+  mandible "mostly in membrane"; straight sinus second source PMC6168052; inferior petrosal sinus in the pars nervosa;
+  label and marker positions in the MMA and posterior-fossa views. The home vessels model now mirrors the cavernous
+  sinus (`tools/zanat/body_vessels.py`).
 ## Bones of the Skull — `head-neck/skull-bones.html`
 
 **Sources.** Gray 1918, chapter on each bone (bartleby 107/31–45, with 46 and 47), and the Wikipedia article on each

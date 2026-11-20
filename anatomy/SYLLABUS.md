@@ -254,10 +254,10 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [x] **AN26.1** Describe & demonstrate anatomical position of skull, Identify and locate individual skull bones in skull — *[The Skull](head-neck/skull.html), [Bones of the Skull](head-neck/skull-bones.html)*
 - [ ] **AN26.2** Describe & demonstrate the features of norma frontalis, verticalis, occipitalis, lateralis and basalis
-- [~] **AN26.3** Describe & demonstrate cranial cavity, its subdivisions, foramina and structures passing through them — *fossae: [The Skull](head-neck/skull.html); foramina of each bone: [Bones of the Skull](head-neck/skull-bones.html)*
+- [x] **AN26.3** Describe & demonstrate cranial cavity, its subdivisions, foramina and structures passing through them — *cranial cavity, dural folds (supra- and infratentorial), sinuses and foramina with contents in 3D: [The Skull](head-neck/skull.html); foramina on each bone: [Bones of the Skull](head-neck/skull-bones.html)*
 - [x] **AN26.4** Describe & demonstrate morphological features of mandible — *[Bones of the Skull](head-neck/skull-bones.html)#mandible*
 - [x] **AN26.5** Describe & demonstrate features of typical and atypical cervical vertebrae (atlas and axis) — *[The Vertebrae](back/vertebrae.html)*
-- [~] **AN26.6** Explain the concept of bones that ossify in membrane — *ossification of each skull bone (membrane or cartilage): [Bones of the Skull](head-neck/skull-bones.html)*
+- [x] **AN26.6** Explain the concept of bones that ossify in membrane — *membrane vs cartilage bones, mixed bones, mandible and Meckel's cartilage, clavicle, fontanelles: [The Skull](head-neck/skull.html#ossif); each bone: [Bones of the Skull](head-neck/skull-bones.html)*
 - [x] **AN26.7** Describe & demonstrate the features of the 7th cervical vertebra — *[The Vertebrae](back/vertebrae.html)*
 
 ### 27. Scalp
@@ -288,8 +288,8 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 30. Cranial cavity
 
-- [~] **AN30.1** Describe the cranial fossae & identify related structures — *[The Skull](head-neck/skull.html)*
-- [~] **AN30.2** Describe & identify major foramina with structures passing through them — *foramina of the cranial floor with their contents: [The Skull](head-neck/skull.html) (Foramina); on each bone: [Bones of the Skull](head-neck/skull-bones.html)*
+- [x] **AN30.1** Describe the cranial fossae & identify related structures — *fossae, related structures and fracture signs, with sinuses, arteries and nerves in 3D: [The Skull](head-neck/skull.html#inside)*
+- [x] **AN30.2** Describe & identify major foramina with structures passing through them — *foramina of the cranial floor and external base with their contents in 3D: [The Skull](head-neck/skull.html#foramina); on each bone: [Bones of the Skull](head-neck/skull-bones.html)*
 - [ ] **AN30.3** Describe & identify dural folds & dural venous sinuses
 - [ ] **AN30.4** Describe clinical importance of dural venous sinuses
 - [ ] **AN30.5** Explain effect of pituitary tumours on visual pathway

@@ -20,6 +20,7 @@ OUT = os.path.join(ROOT, 'anatomy', 'models', 'body-vessels')
 HEART = {'Right atrium', 'Right ventricle', 'Left atrium', 'Left ventricle'}
 MESH_VEINS = {'Cavernous sinus.r', 'Basilar venous plexus'}
 MESH_ARTERIES = {'Pulmonary trunk', 'Anterior communicating artery'}
+HEAD_MESH = {'Cavernous sinus.r', 'Basilar venous plexus', 'Anterior communicating artery'}
 # veins of the hepatic portal system in the model (the portal vein, its three main tributaries and the gut veins that join them)
 PORTAL = {'Hepatic portal vein', 'Splenic vein', 'Superior mesenteric vein', 'Inferior mesenteric vein', 'Right colic vein',
           'Middle colic vein', 'Right gastro-omental vein', 'Left gastro-omental vein'}
@@ -91,7 +92,8 @@ def post():
     cfg = json.load(open(os.path.join(CFG, 'body-vessels.json')))
     src = {}
     for r in rows('z-index-vessels.tsv'): src[r['file']] = (r['object'], r['collections'], r['mirror'] == '1')
-    for r in rows('z-index-heart.tsv'): src[r['file']] = (r['object'], r['collections'], False)
+    # mesh objects: the cavernous sinus .l is the .r mesh mirrored (export_mod.py: mirrored=1), so the page mirrors .r
+    for r in rows('z-index-heart.tsv'): src[r['file']] = (r['object'], r['collections'], r['object'] == 'Cavernous sinus.r')
     Q, t = mirror()
     info = {}
     for p in cfg['parts']:
@@ -100,7 +102,8 @@ def post():
         k = kind(o, cs)
         circ = ('heart' if k == 'heart' else 'pulmonary' if ('Pulmonary arteries' in cs or 'Pulmonary veins' in cs or o == 'Pulmonary trunk')
                 else 'portal' if o in PORTAL else 'systemic')
-        info[p['key']] = {'kind': k, 'circuit': circ, 'region': region(cs), 'side': side, 'mirror': mir}
+        reg = 'Head and neck' if o in HEAD_MESH else region(cs)   # these meshes' collections do not name the head
+        info[p['key']] = {'kind': k, 'circuit': circ, 'region': reg, 'side': side, 'mirror': mir}
     out = {'note': 'written by tools/zanat/body_vessels.py post', 'mirror': {'m': Q.tolist(), 't': t.tolist()},
            'parts': info}
     json.dump(out, open(os.path.join(OUT, 'vessels.json'), 'w'), indent=0)

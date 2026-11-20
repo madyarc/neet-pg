@@ -81,7 +81,10 @@
  *   parts: [[name, text]], landmarks: [[key, name, text]] (positions in ../models/skull-detail/landmarks.json),
  *   joins: [[part key, text]] (Gray's list of articulations; part keys from the skull model; '' = not in the model),
  *   joinsNote, ossification, clinical (optional)
+ * FORMED[type]: how the bone ossifies — membrane, cartilage or both (fact sheet sources-local/facts/fill-skull.md, part E)
  */
+const FORMED = {frontal: 'membrane', parietal: 'membrane', occipital: 'both', temporal: 'both', sphenoid: 'both', ethmoid: 'cartilage', nasal: 'membrane', maxilla: 'membrane', lacrimal: 'membrane', zygomatic: 'membrane', palatine: 'membrane', concha: 'cartilage', vomer: 'membrane', mandible: 'membrane', hyoid: 'cartilage'};
+const FORMED_TEXT = {membrane: 'formed in membrane (intramembranous)', cartilage: 'formed in cartilage (endochondral)', both: 'partly in membrane, partly in cartilage'};
 const BONES = {
   frontal: {short: 'Frontal', name: 'Frontal bone', part: 'frontal', group: 'cranium', view: [0.35, -1, 0.15],
     intro: 'The bone of the forehead. A vertical part, the squama, forms the forehead; a horizontal part forms the roofs of the orbits and of the nasal cavities.',
@@ -209,7 +212,7 @@ const BONES = {
     joins: [['vomer', 'Vomer'], ['ethmoid', 'Ethmoid'], ['frontal', 'Frontal'], ['occipital', 'Occipital'], ['parietal_r', 'Right parietal'], ['parietal_l', 'Left parietal'],
       ['temporal_r', 'Right temporal'], ['temporal_l', 'Left temporal'], ['zygomatic_r', 'Right zygomatic'], ['zygomatic_l', 'Left zygomatic'], ['palatine_r', 'Right palatine'], ['palatine_l', 'Left palatine']],
     joinsNote: 'Gray: the sphenoid articulates with twelve bones — the vomer, ethmoid, frontal and occipital, and the paired parietals, temporals, zygomatics and palatines.',
-    ossification: 'Most of the bone is ossified in cartilage; the lateral pterygoid plate and the medial plate (except its hamulus) are ossified in membrane. At birth the bone is in three pieces. It fuses with the occipital later (Gray: by the 25th year; modern CT studies: usually in adolescence).'},
+    ossification: 'Most of the bone is ossified in cartilage; the medial pterygoid plate (except its hamulus) is ossified in membrane. Gray\'s sphenoid chapter (after Fawcett) also puts the lateral pterygoid plate and the outer parts of the greater wing in membrane, while his chapter on the development of the skull derives them from cartilage. At birth the bone is in three pieces. It fuses with the occipital later (Gray: by the 25th year; modern CT studies: usually in adolescence).'},
 
   ethmoid: {short: 'Ethmoid', name: 'Ethmoid bone', part: 'ethmoid', group: 'cranium', view: [0.25, -1, 0.3],
     intro: 'A single, light, spongy bone at the front of the base of the cranium, between the two orbits and at the roof of the nose.',
@@ -470,7 +473,7 @@ function writeFacts(b) {
   let h = '<h2>About the bone</h2><dl>';
   for (const [n, t] of b.parts) h += `<dt>${esc(n)}</dt><dd>${t}</dd>`;
   h += '</dl>';
-  if (b.ossification) h += `<div><h3>Ossification</h3><p>${b.ossification}</p></div>`;
+  if (b.ossification) h += `<div><h3>Ossification <span class="muted">· ${FORMED_TEXT[FORMED[cur]]}</span></h3><p>${b.ossification} <a href="skull.html#ossif">Membrane and cartilage bones of the skull →</a></p></div>`;
   if (b.clinical) h += `<div class="cap warn"><b>Clinical.</b> ${b.clinical}</div>`;
   box.innerHTML = h;
 }
