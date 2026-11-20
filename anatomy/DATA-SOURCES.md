@@ -784,3 +784,25 @@ tubercles.
   schematic: basement membrane on the capillary, venous elastic network dashed, capillary lumen colour.
 - 3D: the Anatomy home's heart and vessels model (`models/body-vessels`), no new build. Topics light vessels by their
   Z-Anatomy names; checked each in a screenshot (circle of Willis from below with the vessels outside the head hidden).
+
+## Nerves, Vessels and Lymph Nodes of the Upper Limb — `upper-limb/nerves-vessels.html`
+
+- Fact sheet `sources-local/facts/fill-ulnv.md` (764 quotes, script-checked against `sources-local/modern/fill-ulnv/`,
+  downloads 2026-11-20): Gray 1918 pages 122–126, 148–152, 172, 178, 209–211, 289–290; StatPearls; Wikipedia; open
+  papers (axilla review PMC11909697; brachial plexus PMC8695258, PMC10793125, PMC10982913; deltoid injection
+  PMC13208304, PMC11379345; hand of benediction PMC9616636; epitrochlear nodes PMC6823563; dermatomes PMC12097171;
+  others in the sheet). Excluded: Wikipedia sentences copied from or credited to Gray.
+- Contested, stated on the page: ribs of the medial wall (4 or 5); brachial vein ending; median nerve roots (C6–T1 or
+  C5–T1, C5 dashed in the diagram); axillary nerve level and injection site; middle finger in the hand of benediction;
+  radial branch completing the superficial arch; posterior interosseous artery course; superficial arch level (Gray vs
+  Kaplan's line); dermatome maps.
+- Left out (one source): what passes through the axillary apex, Erb's point, wrist flexion in the waiter's tip, prefixed
+  and postfixed rates, "75 % of breast lymph", Guyon zones, brachial blood pressure, lateral thoracic artery supply,
+  ASIA use of the Foerster map.
+- Model `models/ul-nv` (`tools/upper-limb/nv_config.py`): right upper-limb bones, muscles (glass), Z-Anatomy vessels,
+  nerves and nodes, keys and `error_mm` as the whole-body configs; 852 KB pack. Z-Anatomy's apical and "lateral
+  axillary" nodes are misplaced and hidden; it has no lateral or medial cord and no superior thoracic artery (said on
+  the page). The model's palmar arches lie further apart than the surface marking: approximate.
+- Independent review (2026-11-20), fixed: venepuncture wording ("receives a communicating branch"), Klumpke Horner
+  "when T1 is involved", muscles-glass toggle bug in injury views, arch distance note, T1/T2 dermatome bands, median
+  roots in the diagram, cubital fossa labels, deltoid-injection note, phone hint for the plexus diagram.

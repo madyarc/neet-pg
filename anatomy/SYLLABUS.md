@@ -81,56 +81,56 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 10. Axilla, Shoulder and Scapular region
 
-- [ ] **AN10.1** Identify & describe boundaries and contents of axilla
-- [ ] **AN10.2** Identify, describe and demonstrate the origin, extent, course, parts, relations and branches of axillary artery & tributaries of axillary vein
-- [ ] **AN10.3** Describe, identify and demonstrate formation, branches, relations, area of supply of branches, course and relations of terminal branches of brachial plexus
-- [ ] **AN10.4** Describe the anatomical groups of axillary lymph nodes and specify their areas of drainage
-- [ ] **AN10.5** Explain variations in formation of brachial plexus
-- [ ] **AN10.6** Explain the anatomical basis of clinical features of Erb’s palsy and Klumpke’s paralysis
-- [ ] **AN10.7** Describe axillary lymph nodes, areas of drainage and anatomical basis of their enlargement
+- [x] **AN10.1** Identify & describe boundaries and contents of axilla — *walls, apex, base and contents in 3D: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
+- [x] **AN10.2** Identify, describe and demonstrate the origin, extent, course, parts, relations and branches of axillary artery & tributaries of axillary vein — *three parts, branches, relations, vein tributaries in 3D: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
+- [x] **AN10.3** Describe, identify and demonstrate formation, branches, relations, area of supply of branches, course and relations of terminal branches of brachial plexus — *roots to branches in 3D and a plexus diagram, terminal nerves' courses and supply: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
+- [x] **AN10.4** Describe the anatomical groups of axillary lymph nodes and specify their areas of drainage — *node groups in 3D and their drainage: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
+- [x] **AN10.5** Explain variations in formation of brachial plexus — *prefixed and postfixed plexus, common variations: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
+- [x] **AN10.6** Explain the anatomical basis of clinical features of Erb’s palsy and Klumpke’s paralysis — *Erb and Klumpke: roots, mechanism, posture, in 3D: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
+- [x] **AN10.7** Describe axillary lymph nodes, areas of drainage and anatomical basis of their enlargement — *node groups, drainage and why they enlarge: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
 - [~] **AN10.8** Describe, identify and demonstrate the position, attachment, nerve supply and actions of trapezius and latissimus dorsi — *position, attachments, nerve, actions, triangle of auscultation, lumbar triangle, trapezius test (no latissimus dorsi test found in two open sources): [Muscles of the Upper Limb](upper-limb/muscles.html)*
-- [ ] **AN10.9** Describe the arterial anastomosis around the scapula and mention the boundaries of triangle of auscultation
+- [x] **AN10.9** Describe the arterial anastomosis around the scapula and mention the boundaries of triangle of auscultation — *scapular anastomosis in 3D; triangle of auscultation: [Muscles of the Upper Limb](upper-limb/muscles.html); in brief: [Blood Vessels](general/blood-vessels.html): [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
 - [x] **AN10.10** Describe and identify the deltoid and rotator cuff muscles along with their nerve supply and clinical anatomy — *deltoid and rotator cuff, nerves, axillary nerve injury, cuff tear: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [x] **AN10.11** Describe & demonstrate attachment, action and clinical anatomy of serratus anterior muscle — *serratus anterior, winged scapula: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [x] **AN10.12** Describe and demonstrate shoulder joint for– type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements, muscles involved, blood supply, nerve supply and applied anatomy — *3D capsule, ligaments, labrum and bursae, moving joint, all headings: [Joints of the Upper Limb](upper-limb/joints.html)*
-- [ ] **AN10.13** Explain anatomical basis of Injury to axillary nerve during intramuscular injections
+- [x] **AN10.13** Explain anatomical basis of Injury to axillary nerve during intramuscular injections — *axillary nerve and deltoid injections: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
 
 ### 11. Arm & Cubital fossa
 
 - [x] **AN11.1** Describe and demonstrate muscle groups of upper arm with emphasis on biceps and triceps brachii — *biceps, triceps, brachialis, coracobrachialis: [Muscles of the Upper Limb](upper-limb/muscles.html)*
-- [ ] **AN11.2** Identify & describe origin, course, relations, branches (or tributaries), termination of important nerves and vessels in arm
-- [ ] **AN11.3** Describe the anatomical basis of Venipuncture of cubital veins
-- [ ] **AN11.4** Describe the anatomical basis of Saturday night paralysis
-- [ ] **AN11.5** Identify & describe boundaries and contents of cubital fossa
+- [x] **AN11.2** Identify & describe origin, course, relations, branches (or tributaries), termination of important nerves and vessels in arm — *brachial artery, nerves and veins of the arm in 3D: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
+- [x] **AN11.3** Describe the anatomical basis of Venipuncture of cubital veins — *median cubital vein, variations, risks: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
+- [x] **AN11.4** Describe the anatomical basis of Saturday night paralysis — *Saturday night palsy: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
+- [x] **AN11.5** Identify & describe boundaries and contents of cubital fossa — *boundaries, floor, roof, contents in 3D: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
 - [x] **AN11.6** Describe the anastomosis around the elbow joint — *the vessels that take part: [Joints of the Upper Limb](upper-limb/joints.html) (Elbow)*
 
 ### 12. Forearm & hand
 
 - [x] **AN12.1** Describe and demonstrate important muscle groups of ventral forearm with attachments, nerve supply and actions — *[Muscles of the Upper Limb](upper-limb/muscles.html)*
-- [ ] **AN12.2** Identify & describe origin, course, relations, branches (or tributaries), termination of important nerves and vessels of forearm
+- [x] **AN12.2** Identify & describe origin, course, relations, branches (or tributaries), termination of important nerves and vessels of forearm — *radial and ulnar arteries, median, ulnar and radial nerves in the forearm: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
 - [x] **AN12.3** Identify & describe flexor retinaculum with its attachments — *attachments and what passes deep and superficial to it: [Muscles of the Upper Limb](upper-limb/muscles.html) (Wrist and thumb)*
 - [x] **AN12.4** Explain anatomical basis of carpal tunnel syndrome — *bony attachments: [The Upper Limb](upper-limb/upper-limb.html); contents and symptoms: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [x] **AN12.5** Identify & describe small muscles of hand. Also describe movements of thumb and muscles involved — *thenar, hypothenar, adductor pollicis, lumbricals, interossei; thumb movements: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [x] **AN12.6** Describe & demonstrate movements of thumb and muscles involved — *[Muscles of the Upper Limb](upper-limb/muscles.html)*
-- [ ] **AN12.7** Identify & describe course and branches of important blood vessels and nerves in hand
+- [x] **AN12.7** Identify & describe course and branches of important blood vessels and nerves in hand — *palmar arches, median and ulnar nerves in the hand, recurrent branch: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
 - [x] **AN12.8** Describe anatomical basis of Claw hand — *claw hand: [Muscles of the Upper Limb](upper-limb/muscles.html) (Nerve supply, ulnar)*
 - [ ] **AN12.9** Identify & describe fibrous flexor sheaths, ulnar bursa, radial bursa and digital synovial sheaths
 - [ ] **AN12.10** Explain infection of fascial spaces of palm
 - [x] **AN12.11** Identify, describe and demonstrate important muscle groups of dorsal forearm with attachments, nerve supply and actions — *[Muscles of the Upper Limb](upper-limb/muscles.html)*
-- [ ] **AN12.12** Identify & describe origin, course, relations, branches (or tributaries), termination of important nerves and vessels of back of forearm
+- [x] **AN12.12** Identify & describe origin, course, relations, branches (or tributaries), termination of important nerves and vessels of back of forearm — *posterior interosseous nerve and artery: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
 - [x] **AN12.13** Describe the anatomical basis of Wrist drop — *wrist drop and PIN lesion: [Muscles of the Upper Limb](upper-limb/muscles.html) (Nerve supply, radial)*
 - [x] **AN12.14** Identify & describe compartments deep to extensor retinaculum and describe the boundaries and contents of anatomical snuff box. — *six extensor compartments; snuffbox boundaries, floor, roof and contents in 3D: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [ ] **AN12.15** Identify & describe extensor expansion formation
 
 ### 13. General Features, Joints, radiographs & surface marking
 
-- [ ] **AN13.1** Describe and explain Fascia of upper limb and compartments, veins of upper limb and its lymphatic drainage
-- [ ] **AN13.2** Describe dermatomes of upper limb
+- [x] **AN13.1** Describe and explain Fascia of upper limb and compartments, veins of upper limb and its lymphatic drainage — *compartments, superficial and deep veins, lymph drainage: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
+- [x] **AN13.2** Describe dermatomes of upper limb — *schematic dermatome map (maps differ): [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
 - [~] **AN13.3** Identify & describe the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements, blood and nerve supply of elbow joint, proximal and distal radio-ulnar joints, wrist joint & first carpometacarpal joint — *all in 3D with text; distal radio-ulnar nerves and disc supply, thumb CMC ligaments and nerves; no two open sources for the proximal radio-ulnar joint's own nerves and arteries: [Joints of the Upper Limb](upper-limb/joints.html)*
 - [x] **AN13.4** Describe Sternoclavicular joint, Acromioclavicular joint, Carpometacarpal joints & Metacarpophalangealjoint — *[Joints of the Upper Limb](upper-limb/joints.html)*
 - [ ] **AN13.5** Identify the bones and joints of upper limb seen in anteroposterior and lateral view radiographs of shoulder region, arm, elbow, forearm and hand
 - [ ] **AN13.6** Identify & demonstrate important bony landmarks of upper limb: Jugular notch, sternal angle, acromial angle, spine of the scapula, vertebral level of the medial end and Inferior angle of the scapula
-- [ ] **AN13.7** Identify & demonstrate surface projection of: Cephalic and basilic vein, Palpation of Brachial artery, Radial artery, Testing of muscles: Trapezius, pectoralis major, serratus anterior, latissimus dorsi, deltoid, biceps brachii, Brachioradialis
+- [~] **AN13.7** Identify & demonstrate surface projection of: Cephalic and basilic vein, Palpation of Brachial artery, Radial artery, Testing of muscles: Trapezius, pectoralis major, serratus anterior, latissimus dorsi, deltoid, biceps brachii, Brachioradialis — *cephalic and basilic surface lines, brachial and radial pulses: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html); trapezius test: [Muscles of the Upper Limb](upper-limb/muscles.html) (other muscle tests not yet)*
 - [ ] **AN13.8** Describe development of upper limb
 
 ### 14. Features of individual bones (Lower Limb)

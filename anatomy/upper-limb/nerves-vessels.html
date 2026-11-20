@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nerves, Vessels and Lymph Nodes of the Upper Limb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --artery, --vein, --nerve, --lymph, --bone, --soft (muscles as context).
+   The dermatome map has its own tokens --d-c4 … --d-t2 (schematic bands, used nowhere else); the plexus diagram uses --nerve
+   for the path picked and --line for the rest. */
+:root{--d-c4:#d9c7ea;--d-c5:#b7d3ef;--d-c6:#bfe3c4;--d-c7:#f3e3a8;--d-c8:#f5c7a6;--d-t1:#ecb8c7;--d-t2:#c9ced8}
+:root[data-theme="dark"]{--d-c4:#5c4a72;--d-c5:#3c5a7a;--d-c6:#3f6447;--d-c7:#71663a;--d-c8:#7a5238;--d-t1:#74404f;--d-t2:#4a515e}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+#topics{display:flex;flex-direction:column;gap:10px}
+#topic-text p+p,#topic-text p+ul,#topic-text ul+p{margin-top:8px}
+#topic-text ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t tr[data-k]{cursor:pointer}
+table.t tr[aria-pressed="true"] td{background:var(--bg)}
+.scroll{overflow-x:auto}
+svg text{font:500 12px var(--f-body);fill:var(--ink)}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:12px;height:12px;border-radius:3px}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+#plexus{max-width:820px;min-width:680px;margin:0 auto}
+#plexus .p{fill:none;stroke:var(--line);stroke-width:5;stroke-linecap:round}
+#plexus .p.on{stroke:var(--nerve)}
+#plexus .p.some{stroke-dasharray:8 7}
+#plexus text.h{font:600 11px var(--f-mono);fill:var(--muted);text-transform:uppercase}
+#plexus .br{cursor:pointer}
+#plexus .br text{font-size:12.5px}
+#plexus .br.on text{font-weight:700}
+.derm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:440px;width:100%;margin:0 auto}
+.derm svg{width:100%;height:auto;display:block}
+.derm svg path{stroke:var(--surface);stroke-width:1.5;cursor:pointer}
+.derm svg path.on{stroke:var(--ink);stroke-width:2.5}
+.derm svg text{font-size:12px}
+@media (max-width:600px){.derm svg text{font-size:17px}}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Nerves, Vessels and Lymph Nodes of the Upper Limb</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="Nerves, vessels and lymph nodes in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-plexus">
+  <h2 id="h-plexus">The brachial plexus, step by step</h2>
+  <p class="cap key" id="plexus-cap"></p>
+  <div class="scroll"><svg class="fig" id="plexus" viewBox="0 0 820 400" role="img" aria-label="Schematic of the brachial plexus: roots, trunks, divisions, cords and branches"></svg></div>
+  <p class="muted" id="plexus-note"></p>
+  <div class="scroll"><table class="t stack" id="branches"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lesions">
+  <h2 id="h-lesions">Nerve injuries</h2>
+  <p class="muted">Tap a row to light the nerve and the site in 3D.</p>
+  <div class="scroll"><table class="t stack" id="lesions"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-derm">
+  <h2 id="h-derm">Dermatomes of the upper limb</h2>
+  <div class="key" id="derm-key"></div>
+  <div class="derm" id="derm"></div>
+  <p class="cap" id="derm-cap"></p>
+  <p class="muted" id="derm-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-lymph">
+  <h2 id="h-lymph">Lymph nodes and lymphatic drainage</h2>
+  <div class="scroll"><table class="t stack" id="nodes"></table></div>
+  <div id="lymph-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fascia">
+  <h2 id="h-fascia">Fascia, compartments and veins</h2>
+  <div id="fascia-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-ulnv.md, anatomy/DATA-SOURCES.md) ===================== */
+const A = k => 'v_' + k + (/^right_/.test(k) || k === 'brachiocephalic_trunk' ? '' : '_r');   // vessel key
+const N = k => 'n_' + k + '_r', L = k => 'l_' + k + '_r', MU = k => 'm_' + k;
+// a topic: lit = parts drawn in their own colour (artery/vein/nerve/node), soft = muscles drawn solid (--soft) as landmarks,
+// solid = bones kept solid; everything else is glass. labels: [key, text, optional point to start the search from]
+const AX_BR = ['thoraco_acromial_artery', 'pectoral_branches_of_thoraco_acromial_artery', 'lateral_thoracic_artery', 'subscapular_artery', 'circumflex_scapular_artery', 'thoracodorsal_artery', 'anterior_circumflex_humeral_artery', 'posterior_circumflex_humeral_artery'].map(A);
+const PLEXUS = ['roots_of_brachial_plexus', 'superior_trunk_of_brachial_plexus', 'middle_trunk_of_brachial_plexus', 'inferior_trunk_of_brachial_plexus',
+  'anterior_division_of_superior_trunk_of_brachial_plexus', 'anterior_division_of_middle_trunk_of_brachial_plexus', 'anterior_division_of_inferior_trunk_of_brachial_plexus',
+  'posterior_division_of_superior_trunk_of_brachial_plexus', 'posterior_division_of_middle_trunk_of_brachial_plexus', 'posterior_division_of_inferior_trunk_of_brachial_plexus',
+  'posterior_cord_of_brachial_plexus'].map(N);
+// Z-Anatomy's apical group lies low, behind the vein (not at the apex), and its "lateral axillary" cluster sits beside the
+// central one; both are left out. Its "brachial nodes", along the vein, stand for the lateral (humeral, brachial) group.
+const NODES = ['anterior_axillary_nodes', 'posterior_axillary_nodes', 'brachial_nodes', 'central_axillary_nodes', 'interpectoral_nodes', 'infraclavicular_nodes', 'supraclavicular_nodes'].map(L);
+const AX_CONTENT = [A('axillary_artery'), A('axillary_vein'), ...PLEXUS, N('median_nerve'), N('ulnar_nerve'), N('radial_nerve'), N('musculocutaneous_nerve'), N('axillary_nerve'), N('long_thoracic_nerve')];
+const AX_FIT = [A('axillary_artery'), A('axillary_vein'), 'right_clavicle', MU('teres_major')];
+const TOPICS = [
+  {grp: 'Axilla', id: 'wall-ant', name: 'Front wall',
+    lit: AX_CONTENT, soft: ['pec_major', 'pec_minor', 'subclavius'].map(MU), solid: ['right_clavicle'], fit: AX_FIT, view: [-0.3, -1, 0], zoom: 0.6,
+    labels: [[MU('pec_major'), 'Pectoralis major'], [MU('pec_minor'), 'Pectoralis minor'], [MU('subclavius'), 'Subclavius']],
+    text: `<p>The <b>axilla</b> (armpit) is a pyramidal space between the upper lateral chest wall and the medial side of the arm, with an apex, a base and four walls.</p>
+<p><b>Front wall:</b> pectoralis major over the whole wall and pectoralis minor; in the deeper layer, subclavius and the clavipectoral fascia. Its lower border is the anterior axillary fold.</p>`},
+  {grp: 'Axilla', id: 'wall-post', name: 'Back wall',
+    lit: AX_CONTENT, soft: ['subscapularis', 'teres_major', 'lat_dorsi'].map(MU), solid: ['right_scapula'], fit: AX_FIT, view: [-0.3, -1, 0], zoom: 0.75,
+    labels: [[MU('subscapularis'), 'Subscapularis'], [MU('teres_major'), 'Teres major'], [MU('lat_dorsi'), 'Latissimus dorsi', [-150, -60, 1200]]],
+    text: `<p><b>Back wall:</b> subscapularis above, teres major and latissimus dorsi below. The posterior axillary fold is formed by latissimus dorsi, with teres major.</p>`},
+  {grp: 'Axilla', id: 'wall-side', name: 'Medial and lateral walls',
+    lit: AX_CONTENT, soft: ['serratus_ant', 'coracobrachialis', 'biceps'].map(MU), solid: ['right_humerus', 'right_second_rib', 'right_third_rib', 'right_fourth_rib'], fit: AX_FIT, view: [-0.3, -1, 0], zoom: 0.75,
+    labels: [[MU('serratus_ant'), 'Serratus anterior (medial)'], [MU('coracobrachialis'), 'Coracobrachialis (lateral)'], [MU('biceps'), 'Biceps, short head (lateral)', [-160, -100, 1260]], ['right_humerus', 'Humerus: intertubercular groove (lateral)', [-170, -100, 1310]]],
+    text: `<p><b>Medial wall:</b> serratus anterior over the upper four ribs (five in one review) and their intercostal muscles. The long thoracic nerve runs down on serratus anterior here.</p>
+<p><b>Lateral wall</b> (narrow): the humerus at the intertubercular groove, with coracobrachialis and biceps.</p>`},
+  {grp: 'Axilla', id: 'apex', name: 'Apex and contents',
+    lit: AX_CONTENT, solid: ['right_clavicle', 'right_first_rib', 'right_scapula'], fit: AX_FIT, view: [-0.3, -1, 0.5], zoom: 0.75,
+    labels: [['right_clavicle', 'Clavicle', [-80, -110, 1370]], ['right_first_rib', 'First rib (outer border)', [-90, -100, 1340]], ['right_scapula', 'Scapula (upper border)', [-100, -60, 1350]], [A('axillary_artery'), 'Axillary artery'], [A('axillary_vein'), 'Axillary vein'], [N('posterior_cord_of_brachial_plexus'), 'Brachial plexus']],
+    text: `<p><b>Apex</b> (cervico-axillary canal): the gap bounded by the outer border of the 1st rib, the superior border of the scapula and the back of the clavicle; it opens up into the root of the neck. <b>Base:</b> skin and the axillary fascia, between the anterior and posterior folds.</p>
+<p><b>Contents:</b> the axillary artery and vein, the brachial plexus (cords and branches), lymph nodes, fat and loose areolar tissue; also the long thoracic and intercostobrachial nerves (the latter crosses the axilla to the medial side of the arm). The vein lies on the medial side of the artery.</p>`},
+  {grp: 'Axilla', id: 'axart', name: 'Axillary artery',
+    lit: [A('axillary_artery'), A('right_subclavian_artery'), A('brachial_artery'), ...AX_BR], soft: [MU('pec_minor')], solid: ['right_first_rib'],
+    fit: [A('axillary_artery'), ...AX_BR], view: [-0.3, -1, 0], zoom: 0.8,
+    labels: [[A('axillary_artery'), 'Axillary artery'], [MU('pec_minor'), 'Pectoralis minor'], [A('thoraco_acromial_artery'), 'Thoraco-acromial'], [A('lateral_thoracic_artery'), 'Lateral thoracic'], [A('subscapular_artery'), 'Subscapular'], [A('circumflex_scapular_artery'), 'Circumflex scapular'], [A('thoracodorsal_artery'), 'Thoracodorsal'], [A('anterior_circumflex_humeral_artery'), 'Anterior circumflex humeral'], [A('posterior_circumflex_humeral_artery'), 'Posterior circumflex humeral']],
+    text: `<p>The <b>axillary artery</b> continues the subclavian at the outer border of the 1st rib and becomes the brachial artery at the lower border of teres major. Pectoralis minor, in front of it, divides it into three parts: the 1st above (medial to) the muscle, the 2nd behind it, the 3rd below (lateral to) it.</p>
+<ul><li><b>1st part, one branch:</b> superior thoracic (small; to the pectorals and upper chest wall).</li>
+<li><b>2nd part, two:</b> thoraco-acromial (a short trunk that pierces the clavipectoral fascia and divides into pectoral, deltoid, acromial and clavicular branches; the last two small and not always present) and lateral thoracic (along the lower border of pectoralis minor).</li>
+<li><b>3rd part, three:</b> subscapular (the largest: divides into the circumflex scapular, through the triangular space, and the thoracodorsal, with its nerve to latissimus dorsi), posterior circumflex humeral (with the axillary nerve through the quadrangular space, round the surgical neck) and the smaller anterior circumflex humeral.</li></ul>
+<p><b>Relations:</b> the cords of the brachial plexus lie lateral, medial and behind the 2nd part and are named from that; the vein is medial to the artery throughout; the two roots of the median nerve join in front of the 3rd part. Origins vary, and several branches may share a trunk. The superior thoracic artery is not in the model.</p>`},
+  {grp: 'Axilla', id: 'axvein', name: 'Axillary vein',
+    lit: ['axillary_vein', 'basilic_vein', 'brachial_veins', 'cephalic_vein', 'right_subclavian_vein', 'lateral_thoracic_vein', 'thoracodorsal_vein', 'subscapular_vein', 'circumflex_scapular_vein', 'anterior_circumflex_humeral_vein', 'posterior_circumflex_humeral_vein'].map(A),
+    solid: ['right_first_rib'], fit: [A('axillary_vein'), A('right_subclavian_vein')], view: [-0.3, -1, 0], zoom: 0.65,
+    labels: [[A('axillary_vein'), 'Axillary vein'], [A('right_subclavian_vein'), 'Subclavian vein'], [A('cephalic_vein'), 'Cephalic vein', [-110, -95, 1320]], [A('basilic_vein'), 'Basilic vein', [-150, -70, 1240]], [A('brachial_veins'), 'Brachial veins', [-150, -75, 1240]]],
+    text: `<p>The <b>axillary vein</b> begins at the lower border of teres major as the continuation of the basilic vein, joined by the brachial veins (Gray: they join it near subscapularis). It ends at the outer border of the 1st rib, where it becomes the <b>subclavian vein</b>, which lies in front of scalenus anterior (the artery behind it) and joins the internal jugular vein to form the brachiocephalic vein.</p>
+<p><b>Tributaries:</b> veins matching the branches of the axillary artery, the brachial veins and, near its end, the <b>cephalic vein</b>. It lies medial to the artery.</p>`},
+  {grp: 'Axilla', id: 'nodes', name: 'Lymph nodes',
+    lit: [...NODES, A('axillary_vein')], soft: [MU('pec_minor')], fit: NODES, view: [-0.4, -1, 0], zoom: 0.8,
+    labels: [[L('anterior_axillary_nodes'), 'Anterior (pectoral)'], [L('posterior_axillary_nodes'), 'Posterior (subscapular)'], [L('brachial_nodes'), 'Lateral (humeral)'], [L('central_axillary_nodes'), 'Central'], [L('interpectoral_nodes'), 'Interpectoral'], [L('infraclavicular_nodes'), 'Infraclavicular'], [L('supraclavicular_nodes'), 'Supraclavicular']],
+    text: `<p>About 20–30 or more <b>axillary lymph nodes</b> (sources differ on the number) in five groups; see the table below for where each lies and what it drains. In outline: the <b>anterior</b> (pectoral), <b>posterior</b> (subscapular) and <b>lateral</b> (humeral) groups drain to the <b>central</b> group, and all groups to the <b>apical</b> group, whose efferents form the subclavian lymph trunk.</p>
+<p>Surgeons count three levels by pectoralis minor (shown pale): I below and lateral to it, II behind it (central, interpectoral), III above and medial to it (apical). Also shown: the interpectoral nodes (between the pectoral muscles), the infraclavicular nodes beside the end of the cephalic vein, and the supraclavicular nodes.</p>`},
+  {grp: 'Axilla', id: 'scapular', name: 'Scapular anastomosis',
+    lit: ['right_subclavian_artery', 'thyrocervical_trunk', 'suprascapular_artery', 'transverse_cervical_artery', 'deep_branch_of_transverse_cervical_artery', 'axillary_artery', 'subscapular_artery', 'circumflex_scapular_artery', 'thoracodorsal_artery'].map(A),
+    solid: ['right_scapula'], fit: ['right_scapula', A('suprascapular_artery')], view: [-0.5, 1, 0.2], zoom: 0.8,
+    labels: [[A('suprascapular_artery'), 'Suprascapular'], [A('deep_branch_of_transverse_cervical_artery'), 'Deep (descending) branch of transverse cervical'], [A('circumflex_scapular_artery'), 'Circumflex scapular'], [A('subscapular_artery'), 'Subscapular'], [A('thoracodorsal_artery'), 'Thoracodorsal'], [A('right_subclavian_artery'), 'Subclavian']],
+    text: `<p>Around the scapula, branches of the <b>subclavian</b> artery (the suprascapular, from the thyrocervical trunk, and the dorsal scapular artery, which Gray and the model call the deep or descending branch of the transverse cervical) join the <b>subscapular</b> artery from the axillary, with its circumflex scapular and thoracodorsal branches; posterior intercostal arteries join in too. Seen from behind.</p>
+<ul><li>The suprascapular artery crosses above the superior transverse scapular ligament (the nerve passes below it) into the supraspinous fossa, then round the neck of the scapula into the infraspinous fossa.</li>
+<li>The dorsal scapular artery runs down the medial border, under the rhomboids, to the inferior angle.</li>
+<li>The circumflex scapular artery winds round the lateral border into the infraspinous fossa.</li></ul>
+<p><b>Why it matters:</b> the network joins the 1st part of the subclavian to the 3rd part of the axillary artery, so it can carry blood to the limb if the artery between them is blocked slowly or tied; the subscapular artery is its chief channel, so the axillary artery is tied most safely above the origin of the subscapular. In coarctation of the aorta, the scapular, intercostal and internal thoracic arteries enlarge as collaterals.</p>
+<p>The <b>triangle of auscultation</b>, on the back near the scapula, is described on <a href="muscles.html">Muscles of the Upper Limb</a> (trapezius).</p>`},
+  {grp: 'Brachial plexus', id: 'plexus', name: 'Roots, trunks, divisions, cords',
+    lit: [...PLEXUS, A('right_subclavian_artery'), A('axillary_artery')], soft: [MU('scal_ant'), MU('scal_med')], solid: ['right_first_rib'],
+    fit: PLEXUS, view: [-1, -0.7, 0.2], zoom: 0.7,
+    labels: [[N('roots_of_brachial_plexus'), 'Roots (C5–T1)'], [N('superior_trunk_of_brachial_plexus'), 'Upper trunk'], [N('middle_trunk_of_brachial_plexus'), 'Middle trunk'], [N('inferior_trunk_of_brachial_plexus'), 'Lower trunk'], [N('anterior_division_of_middle_trunk_of_brachial_plexus'), 'Divisions'], [N('posterior_cord_of_brachial_plexus'), 'Posterior cord'], [MU('scal_ant'), 'Scalenus anterior'], [MU('scal_med'), 'Scalenus medius'], [A('right_subclavian_artery'), 'Subclavian artery']],
+    text: `<p>The <b>brachial plexus</b> is formed by the ventral rami of <b>C5, C6, C7, C8 and T1</b>. From the neck to the axilla: <b>roots → trunks → divisions → cords → branches</b>.</p>
+<ul><li><b>Trunks:</b> upper (C5 + C6), middle (C7), lower (C8 + T1). The roots and trunks come out between scalenus anterior and scalenus medius, into the posterior triangle of the neck.</li>
+<li><b>Divisions:</b> each trunk splits into an anterior and a posterior division, behind the clavicle.</li>
+<li><b>Cords:</b> lateral (anterior divisions of the upper and middle trunks), medial (anterior division of the lower trunk), posterior (all three posterior divisions). They are named by where they lie around the axillary artery (its 2nd part, behind pectoralis minor).</li></ul>
+<p>The model (Z-Anatomy) stores the roots, trunks, divisions and the posterior cord, but has no separate lateral and medial cords: its nerves start at the divisions. The diagram below the model shows the full pattern.</p>`},
+  {grp: 'Brachial plexus', id: 'rootbr', name: 'Branches of roots and trunks',
+    lit: [...PLEXUS, N('dorsal_scapular_nerve'), N('long_thoracic_nerve'), N('suprascapular_nerve'), N('subclavian_nerve')], soft: [MU('serratus_ant'), MU('rhomb_major'), MU('rhomb_minor'), MU('supraspinatus'), MU('infraspinatus'), MU('subclavius')], solid: ['right_scapula'],
+    fit: [N('long_thoracic_nerve'), N('suprascapular_nerve'), N('dorsal_scapular_nerve')], view: [-1, -0.3, 0.2], zoom: 0.65,
+    labels: [[N('dorsal_scapular_nerve'), 'Dorsal scapular'], [N('long_thoracic_nerve'), 'Long thoracic'], [N('suprascapular_nerve'), 'Suprascapular'], [N('subclavian_nerve'), 'Nerve to subclavius']],
+    text: `<p><b>From the roots:</b> the dorsal scapular nerve (mainly C5; some sources add C4) to the rhomboids, and the long thoracic nerve (C5, C6, C7), which runs down on serratus anterior and supplies it.</p>
+<p><b>From the upper trunk:</b> the suprascapular nerve (C5, C6) to supraspinatus and infraspinatus, and the nerve to subclavius (C5, C6).</p>
+<p>The long thoracic nerve's long superficial course on the chest wall makes it easy to injure (e.g. in axillary surgery): serratus anterior is paralysed and the scapula wings (see Nerve injuries below).</p>`},
+  {grp: 'Brachial plexus', id: 'cordbr', name: 'Branches of the cords',
+    lit: [...PLEXUS, ...['lateral_pectoral_nerve', 'medial_pectoral_nerve', 'musculocutaneous_nerve', 'median_nerve', 'ulnar_nerve', 'medial_brachial_cutaneous_nerve', 'medial_antebrachial_cutaneous_nerve', 'superior_subscapular_nerve', 'inferior_subscapular_nerve', 'thoracodorsal_nerve', 'axillary_nerve', 'radial_nerve'].map(N), A('axillary_artery')],
+    fit: [N('posterior_cord_of_brachial_plexus'), N('lateral_pectoral_nerve'), N('thoracodorsal_nerve'), N('axillary_nerve')], view: [-0.3, -1, 0], zoom: 0.8,
+    labels: [[N('lateral_pectoral_nerve'), 'Lateral pectoral'], [N('medial_pectoral_nerve'), 'Medial pectoral'], [N('musculocutaneous_nerve'), 'Musculocutaneous', [-180, -85, 1240]], [N('median_nerve'), 'Median', [-140, -85, 1280]], [N('ulnar_nerve'), 'Ulnar', [-140, -75, 1260]], [N('superior_subscapular_nerve'), 'Upper subscapular'], [N('inferior_subscapular_nerve'), 'Lower subscapular'], [N('thoracodorsal_nerve'), 'Thoracodorsal'], [N('axillary_nerve'), 'Axillary'], [N('radial_nerve'), 'Radial', [-140, -65, 1260]]],
+    text: `<ul><li><b>Lateral cord:</b> lateral pectoral nerve, musculocutaneous nerve, lateral root of the median nerve.</li>
+<li><b>Medial cord:</b> medial pectoral nerve, medial cutaneous nerve of the arm, medial cutaneous nerve of the forearm, ulnar nerve, medial root of the median nerve.</li>
+<li><b>Posterior cord:</b> upper and lower subscapular nerves, thoracodorsal nerve, axillary nerve, radial nerve.</li></ul>
+<p>The five <b>terminal branches</b> are the musculocutaneous, axillary, radial, median and ulnar nerves. Their usual root values: musculocutaneous C5–C7; axillary C5–C6; radial C5–T1; median C6–T1 (some sources include C5); ulnar C8–T1.</p>
+<p>The <b>intercostobrachial nerve</b> is not from the plexus: it is the lateral cutaneous branch of the 2nd intercostal nerve, crosses the axilla to the skin of the upper medial arm, and is at risk in axillary surgery (not in the model).</p>`},
+  {grp: 'Nerves of the limb', id: 'mcn', name: 'Musculocutaneous',
+    lit: [N('musculocutaneous_nerve'), N('lateral_antebrachial_cutaneous_nerve')], soft: [MU('coracobrachialis')], solid: ['right_humerus'],
+    view: [-0.4, -1, 0], zoom: 0.9, labels: [[N('musculocutaneous_nerve'), 'Musculocutaneous nerve'], [N('lateral_antebrachial_cutaneous_nerve'), 'Lateral cutaneous nerve of forearm'], [MU('coracobrachialis'), 'Coracobrachialis'], [MU('biceps'), 'Biceps'], [MU('brachialis'), 'Brachialis']],
+    text: `<p>The <b>musculocutaneous nerve</b> (lateral cord; C5–C7) pierces coracobrachialis, runs down between biceps and brachialis and supplies all three muscles of the front of the arm. Lateral to the biceps tendon it becomes the <b>lateral cutaneous nerve of the forearm</b>.</p>
+<p><b>Variation:</b> a communicating branch between the musculocutaneous and median nerves in the arm is found in about 1 in 5 arms in two cadaver series.</p>`},
+  {grp: 'Nerves of the limb', id: 'axn', name: 'Axillary',
+    lit: [N('axillary_nerve'), N('muscular_branches_of_axillary_nerve'), N('superior_lateral_brachial_cutaneous_nerve'), A('posterior_circumflex_humeral_artery')], soft: [MU('teres_minor'), MU('teres_major')], solid: ['right_humerus', 'right_scapula'],
+    fit: [N('axillary_nerve'), N('muscular_branches_of_axillary_nerve'), N('superior_lateral_brachial_cutaneous_nerve')], view: [-0.4, 1, 0], zoom: 0.7,
+    labels: [[N('axillary_nerve'), 'Axillary nerve'], [A('posterior_circumflex_humeral_artery'), 'Posterior circumflex humeral artery'], [N('superior_lateral_brachial_cutaneous_nerve'), 'Upper lateral cutaneous nerve of arm'], [MU('teres_minor'), 'Teres minor'], [MU('teres_major'), 'Teres major'], ['right_humerus', 'Surgical neck of humerus', [-185, -70, 1290]]],
+    text: `<p>The <b>axillary nerve</b> (posterior cord; C5, C6) passes behind the axillary artery and back through the <b>quadrangular space</b> with the posterior circumflex humeral artery, then winds round the <b>surgical neck of the humerus</b> under the deltoid. It supplies <b>deltoid</b> and <b>teres minor</b>, and through the upper lateral cutaneous nerve of the arm the skin over the lower deltoid (the "regimental badge" area). Seen from behind; the deltoid is left out so the nerve can be seen.</p>
+<p>A fracture of the surgical neck, a dislocation of the shoulder, or an injection placed too low in the deltoid can injure it (see Nerve injuries).</p>`},
+  {grp: 'Nerves of the limb', id: 'radial', name: 'Radial',
+    lit: [N('radial_nerve'), N('muscular_branches_of_radial_nerve'), N('deep_branch_of_radial_nerve'), N('superficial_branch_of_radial_nerve'), N('posterior_interosseous_nerve_of_forearm'), N('dorsal_digital_branches_of_radial_nerve'), N('posterior_antebrachial_cutaneous_nerve'), N('inferior_lateral_brachial_cutaneous_nerve'), A('deep_brachial_artery')],
+    solid: ['right_humerus', 'right_radius'], view: [-0.6, 0.8, 0], zoom: 1,
+    labels: [[N('radial_nerve'), 'Radial nerve (radial groove)', [-190, -55, 1170]], [A('deep_brachial_artery'), 'Profunda brachii artery'], [N('deep_branch_of_radial_nerve'), 'Deep branch', [-235, -80, 1020]], [N('superficial_branch_of_radial_nerve'), 'Superficial branch', [-250, -100, 950]], [N('posterior_interosseous_nerve_of_forearm'), 'Posterior interosseous nerve']],
+    text: `<p>The <b>radial nerve</b> (posterior cord; C5–T1) runs behind the axillary and brachial arteries, then in the <b>radial (spiral) groove</b> of the humerus with the profunda brachii artery, between the heads of triceps. It pierces the lateral intermuscular septum and comes to lie in front of the lateral epicondyle, between brachialis and brachioradialis, where it divides into a <b>superficial</b> (sensory) and a <b>deep</b> branch; the deep branch becomes the <b>posterior interosseous nerve</b> (see Back of the forearm).</p>
+<p><b>Supply:</b> triceps, anconeus, brachioradialis, extensor carpi radialis longus (and part of brachialis) from the nerve itself; the other extensors of the forearm from the deep branch. The nerves on the humerus are also shown on <a href="upper-limb.html">The Upper Limb</a>.</p>`},
+  {grp: 'Nerves of the limb', id: 'median', name: 'Median',
+    lit: [N('median_nerve'), N('anterior_interosseous_nerve_of_forearm'), N('muscular_branches_of_median_nerve'), N('palmar_branch_of_median_nerve'), N('common_palmar_digital_branches_of_median_nerve'), N('proper_palmar_digital_branches_of_median_nerve'), A('brachial_artery')],
+    soft: [MU('pronator_teres'), MU('flexor_ret')], view: [0, -1, 0], zoom: 1,
+    labels: [[N('median_nerve'), 'Median nerve', [-150, -80, 1220]], [A('brachial_artery'), 'Brachial artery', [-150, -80, 1220]], [MU('pronator_teres'), 'Pronator teres'], [N('anterior_interosseous_nerve_of_forearm'), 'Anterior interosseous nerve'], [MU('flexor_ret'), 'Flexor retinaculum'], [N('proper_palmar_digital_branches_of_median_nerve'), 'Digital branches']],
+    text: `<p><b>In the arm</b> the median nerve (two roots, from the lateral and medial cords) runs with the brachial artery: lateral to it above, medial to it at the elbow (Gray: it crosses usually in front of the artery about the middle of the arm). It gives no muscular branches in the arm.</p>
+<p><b>In the forearm</b> it enters between the two heads of pronator teres, runs down deep to FDS on FDP, and near the wrist becomes superficial between the tendons of FDS and FCR, behind palmaris longus. Branches: muscular (the superficial flexors except FCU), the <b>anterior interosseous nerve</b> (FPL, the lateral half of FDP, pronator quadratus) and the <b>palmar cutaneous branch</b>, which passes in front of the flexor retinaculum to the skin of the thenar eminence.</p>
+<p><b>In the hand</b> it passes through the carpal tunnel; see "Median and ulnar nerves in the hand".</p>`},
+  {grp: 'Nerves of the limb', id: 'ulnar', name: 'Ulnar',
+    lit: [N('ulnar_nerve'), N('muscular_branches_of_ulnar_nerve'), N('dorsal_branch_of_ulnar_nerve'), N('palmar_branch_of_ulnar_nerve'), N('superficial_branch_of_ulnar_nerve'), N('deep_branch_of_ulnar_nerve'), N('common_palmar_digital_branches_of_ulnar_nerve'), N('proper_palmar_digital_branches_of_ulnar_nerve'), N('dorsal_digital_branches_of_ulnar_nerve')],
+    soft: [MU('fcu')], solid: ['right_humerus', 'right_pisiform'], view: [0.6, -0.8, 0], zoom: 1,
+    labels: [[N('ulnar_nerve'), 'Ulnar nerve (behind medial epicondyle)', [-185, -60, 1055]], [MU('fcu'), 'Flexor carpi ulnaris'], [N('dorsal_branch_of_ulnar_nerve'), 'Dorsal branch'], [N('superficial_branch_of_ulnar_nerve'), 'Superficial branch'], [N('deep_branch_of_ulnar_nerve'), 'Deep branch'], ['right_pisiform', 'Pisiform']],
+    text: `<p><b>In the arm</b> the ulnar nerve (medial cord; C8, T1) lies medial to the axillary and brachial arteries, pierces the medial intermuscular septum about mid-arm and passes <b>behind the medial epicondyle</b> with the superior ulnar collateral artery; its first branches arise at the elbow.</p>
+<p><b>In the forearm</b> it enters between the two heads of FCU (the cubital tunnel), runs on FDP under cover of FCU, with the ulnar artery on its lateral side in the lower forearm. It supplies FCU and the medial half of FDP, and gives a palmar cutaneous branch and a <b>dorsal branch</b> (a few cm above the wrist: 5 cm in Gray, 7.5 cm in Wikipedia) that winds back under FCU to the skin of the medial back of the hand and medial 1½ fingers.</p>
+<p><b>At the wrist</b> it passes in front of the flexor retinaculum, lateral to the pisiform, through Guyon's canal; see "Median and ulnar nerves in the hand".</p>`},
+  {grp: 'Arm and forearm', id: 'brachial', name: 'Brachial artery',
+    lit: ['brachial_artery', 'deep_brachial_artery', 'superior_ulnar_collateral_artery', 'inferior_ulnar_collateral_artery', 'radial_collateral_artery', 'middle_collateral_artery', 'radial_artery', 'ulnar_artery'].map(A).concat([N('median_nerve')]),
+    solid: ['right_humerus'], fit: [A('brachial_artery')], view: [0.2, -1, 0], zoom: 0.8,
+    labels: [[A('brachial_artery'), 'Brachial artery', [-160, -80, 1200]], [A('deep_brachial_artery'), 'Profunda brachii'], [A('superior_ulnar_collateral_artery'), 'Superior ulnar collateral'], [A('inferior_ulnar_collateral_artery'), 'Inferior ulnar collateral'], [N('median_nerve'), 'Median nerve', [-170, -85, 1150]]],
+    text: `<p>The <b>brachial artery</b> continues the axillary from the lower border of teres major. It lies medial to the humerus above and in front of it below, and ends in the cubital fossa, about the neck of the radius, by dividing into the <b>radial</b> and <b>ulnar</b> arteries. It can divide higher than usual.</p>
+<p><b>Branches:</b> the profunda brachii (deep artery of the arm), which runs with the radial nerve in the radial groove; the superior ulnar collateral, which runs with the ulnar nerve behind the medial epicondyle; the inferior ulnar collateral; a nutrient artery to the humerus; muscular branches. The collateral branches join the anastomosis around the elbow (see <a href="joints.html">Joints of the Upper Limb</a>).</p>
+<p>The median nerve is lateral to the artery above and medial to it at the elbow. Two <b>brachial veins</b> (venae comitantes) run with it; sources differ on where they end (the basilic or axillary vein, near the lower border of teres major or subscapularis).</p>
+<p><b>Pulse:</b> the artery can be felt along the medial border of biceps, and at the elbow just medial to the biceps tendon.</p>`},
+  {grp: 'Arm and forearm', id: 'cubital', name: 'Cubital fossa',
+    lit: [A('brachial_artery'), A('radial_artery'), A('ulnar_artery'), N('median_nerve'), N('radial_nerve'), N('superficial_branch_of_radial_nerve'), N('deep_branch_of_radial_nerve'), A('median_cubital_vein'), A('cephalic_vein'), A('basilic_vein')],
+    soft: [MU('pronator_teres'), MU('brachioradialis')], centre: [-215, -90, 1030],
+    fit: [MU('pronator_teres'), A('median_cubital_vein')], view: [0, -1, 0], zoom: 0.65,
+    labels: [[MU('pronator_teres'), 'Pronator teres (medial)', [-195, -110, 990]], [MU('brachioradialis'), 'Brachioradialis (lateral)', [-245, -95, 1020]], [MU('biceps'), 'Biceps tendon', [-218, -100, 1065]], [A('brachial_artery'), 'Brachial artery', [-205, -90, 1080]], [N('median_nerve'), 'Median nerve', [-200, -88, 1040]], [N('radial_nerve'), 'Radial nerve', [-235, -80, 1050]], [A('median_cubital_vein'), 'Median cubital vein', [-212, -125, 1020]]],
+    text: `<p>The <b>cubital fossa</b> is the triangular hollow in front of the elbow.</p>
+<ul><li><b>Boundaries:</b> above, a line joining the two epicondyles; laterally, the medial border of brachioradialis; medially, the lateral border of pronator teres; the apex points down.</li>
+<li><b>Floor:</b> brachialis above, supinator below.</li>
+<li><b>Roof:</b> skin, superficial fascia with the median cubital vein (and cutaneous nerves of the forearm), and deep fascia strengthened by the bicipital aponeurosis.</li>
+<li><b>Contents, lateral to medial:</b> the radial nerve (deep, under brachioradialis, dividing into its superficial and deep branches), the biceps tendon, the brachial artery (dividing into radial and ulnar), the median nerve.</li></ul>
+<p>The ulnar nerve is not in the fossa: it passes behind the medial epicondyle. The <b>bicipital aponeurosis</b> lies between the median cubital vein (above it) and the brachial artery and median nerve (below it).</p>
+<p><b>Venepuncture:</b> the <b>median cubital vein</b>, which joins the cephalic to the basilic vein across the front of the elbow and receives a communicating branch from the deep veins, is the usual first choice: large and superficial; a tourniquet above makes the veins stand out. The pattern of the cubital veins varies a lot (e.g. an "M" pattern, where the median antebrachial vein divides into median cephalic and median basilic veins); frequencies differ between populations. Nerve injury (the cutaneous nerves of the forearm; rarely the median nerve) is uncommon but reported, because nerves lie close to the veins.</p>`},
+  {grp: 'Arm and forearm', id: 'forearm', name: 'Radial and ulnar arteries',
+    lit: ['brachial_artery', 'radial_artery', 'ulnar_artery', 'ulnar_recurrent_artery', 'common_interosseous_artery', 'palmar_carpal_branch_of_radial_artery'].map(A).concat([N('ulnar_nerve'), N('median_nerve')]),
+    solid: ['right_radius', 'right_ulna'], fit: [A('radial_artery'), A('ulnar_artery')], view: [0, -1, 0], zoom: 0.8,
+    labels: [[A('radial_artery'), 'Radial artery', [-265, -115, 840]], [A('ulnar_artery'), 'Ulnar artery', [-240, -120, 840]], [N('ulnar_nerve'), 'Ulnar nerve', [-235, -120, 870]], [A('common_interosseous_artery'), 'Common interosseous'], [A('ulnar_recurrent_artery'), 'Ulnar recurrent']],
+    text: `<p>The <b>radial artery</b>, the smaller terminal branch, runs down the lateral side of the forearm: under brachioradialis above, then between the tendons of brachioradialis and FCR, covered only by skin and fascia. Branches: radial recurrent (elbow anastomosis), palmar carpal, superficial palmar. At the wrist it winds round the lateral side of the carpus under the thumb tendons, across the anatomical snuffbox, and passes between the two heads of the 1st dorsal interosseous into the palm. <b>Radial pulse:</b> at the wrist over the lower end of the radius, lateral to the FCR tendon; also in the snuffbox.</p>
+<p>The <b>ulnar artery</b>, the larger terminal branch, lies deep in its upper half (under pronator teres, FCR, palmaris longus and FDS; the median nerve crosses it, separated by the deep head of pronator teres), then on FDP between FCU and FDS, with the ulnar nerve on its medial side. It passes in front of the flexor retinaculum, lateral to the pisiform. Branches: anterior and posterior ulnar recurrent (elbow anastomosis), and the <b>common interosseous</b>, which divides into the anterior interosseous artery (with the anterior interosseous nerve on the front of the interosseous membrane, between FDP and FPL) and the posterior interosseous artery.</p>`},
+  {grp: 'Arm and forearm', id: 'back', name: 'Back of the forearm',
+    lit: [A('posterior_interosseous_artery'), A('recurrent_interosseous_artery'), A('common_interosseous_artery'), N('deep_branch_of_radial_nerve'), N('posterior_interosseous_nerve_of_forearm')],
+    soft: [MU('supinator')], solid: ['right_radius', 'right_ulna'], fit: [A('posterior_interosseous_artery'), N('posterior_interosseous_nerve_of_forearm'), MU('supinator')], view: [-0.3, 1, 0], zoom: 0.8,
+    labels: [[MU('supinator'), 'Supinator'], [N('deep_branch_of_radial_nerve'), 'Deep branch of radial nerve', [-235, -85, 1020]], [N('posterior_interosseous_nerve_of_forearm'), 'Posterior interosseous nerve'], [A('posterior_interosseous_artery'), 'Posterior interosseous artery'], [A('recurrent_interosseous_artery'), 'Recurrent interosseous']],
+    text: `<p>The <b>deep branch of the radial nerve</b> winds round the lateral side of the radius between the two layers of <b>supinator</b> and comes out as the <b>posterior interosseous nerve</b> (PIN). It can be compressed at the upper edge of supinator (the arcade of Frohse).</p>
+<p>The PIN supplies the muscles of the back of the forearm except brachioradialis, ECRL and anconeus (from the radial nerve itself); ECRB and supinator are supplied from the deep branch before it becomes the PIN. It ends on the back of the wrist. <b>PIN lesion:</b> weak extension of the fingers and thumb (finger drop), with wrist extension spared.</p>
+<p>The <b>posterior interosseous artery</b>, from the common interosseous, passes to the back of the forearm at the upper border of the interosseous membrane (Gray: above it; a recent study: through it), appears between supinator and APL, and runs down between the superficial and deep extensors with the nerve. It gives the recurrent interosseous artery to the elbow anastomosis. Seen from behind.</p>`},
+  {grp: 'Arm and forearm', id: 'veins', name: 'Superficial veins',
+    lit: ['cephalic_vein', 'basilic_vein', 'median_cubital_vein', 'median_antebrachial_vein', 'dorsal_venous_network_of_hand', 'axillary_vein'].map(A).concat([L('supratrochlear_nodes'), L('infraclavicular_nodes')]),
+    view: [0, -1, 0], zoom: 0.8, labels: [[A('cephalic_vein'), 'Cephalic vein', [-200, -110, 1200]], [A('basilic_vein'), 'Basilic vein', [-200, -90, 960]], [A('median_cubital_vein'), 'Median cubital vein'], [A('median_antebrachial_vein'), 'Median antebrachial vein'], [A('dorsal_venous_network_of_hand'), 'Dorsal venous network'], [L('supratrochlear_nodes'), 'Supratrochlear nodes'], [L('infraclavicular_nodes'), 'Infraclavicular nodes']],
+    text: `<p>The <b>superficial veins</b> lie in the superficial fascia; the <b>deep veins</b> are paired venae comitantes of the arteries. Both have valves, and the two sets communicate freely.</p>
+<ul><li><b>Cephalic vein</b>: from the radial (lateral) end of the dorsal venous network, over the snuffbox, up the radial border of the forearm, lateral to biceps, then in the groove between deltoid and pectoralis major (deltopectoral groove) to end in the axillary vein just below the clavicle (through the clavipectoral fascia).</li>
+<li><b>Basilic vein</b>: from the ulnar end of the dorsal network, up the medial side of the forearm, medial to biceps; it pierces the deep fascia a little below the middle of the arm and continues as the axillary vein at the lower border of teres major.</li>
+<li><b>Median cubital vein</b>: joins the cephalic to the basilic in front of the elbow. <b>Median antebrachial vein</b>: from the front of the hand, up the front of the forearm to the basilic or median cubital vein.</li></ul>
+<p>Lymph from the ulnar side of the hand and forearm passes through the <b>supratrochlear</b> nodes, beside the basilic vein above the medial epicondyle; some vessels on the lateral side follow the cephalic vein to the <b>infraclavicular</b> (deltopectoral) nodes. Node positions approximate (Z-Anatomy).</p>`},
+  {grp: 'Hand', id: 'arches', name: 'Palmar arches',
+    lit: ['radial_artery', 'ulnar_artery', 'superficial_palmar_arch', 'deep_palmar_arch', 'common_palmar_digital_arteries', 'proper_palmar_digital_arteries', 'palmar_metacarpal_arteries'].map(A),
+    fit: [A('superficial_palmar_arch'), A('deep_palmar_arch'), A('common_palmar_digital_arteries')], view: [0, -1, 0], zoom: 0.8,
+    labels: [[A('superficial_palmar_arch'), 'Superficial palmar arch', [-258, -140, 768]], [A('deep_palmar_arch'), 'Deep palmar arch', [-262, -118, 797]], [A('common_palmar_digital_arteries'), 'Common palmar digital'], [A('proper_palmar_digital_arteries'), 'Proper palmar digital', [-300, -180, 690]], [A('radial_artery'), 'Radial artery', [-270, -120, 840]], [A('ulnar_artery'), 'Ulnar artery', [-240, -122, 840]]],
+    text: `<p>The <b>superficial palmar arch</b> is formed mainly by the <b>ulnar artery</b>, completed by a branch of the radial (usually named the superficial palmar branch; Gray: the radialis indicis). It lies under the palmar aponeurosis, on the flexor tendons and the digital nerves. It gives three common palmar digital arteries, each dividing into two proper palmar digital arteries for the adjacent sides of the fingers, and a digital artery to the medial side of the little finger.</p>
+<p>The <b>deep palmar arch</b> is formed mainly by the end of the <b>radial artery</b>, completed by the deep palmar branch of the ulnar; it lies on the bases of the metacarpals, under the flexor tendons, about 1 cm (a finger's breadth) proximal to the superficial arch, with the deep branch of the ulnar nerve. It gives the palmar metacarpal arteries, which join the common digital arteries.</p>
+<p><b>Surface marking</b> (approximate): the deep arch lies about a finger's breadth proximal to the superficial arch; Gray puts the summit of the superficial arch level with the ulnar border of the outstretched thumb, other sources relate it to Kaplan's cardinal line (from the first web space to the hook of the hamate). In the model the two arches lie further apart than this: positions approximate.</p>
+<p>The superficial arch is often incomplete; the deep arch usually complete. The Allen test checks the collateral flow through the hand before the radial artery is punctured or harvested.</p>`},
+  {grp: 'Hand', id: 'handn', name: 'Median and ulnar nerves in the hand',
+    lit: [N('median_nerve'), N('common_palmar_digital_branches_of_median_nerve'), N('proper_palmar_digital_branches_of_median_nerve'), N('ulnar_nerve'), N('superficial_branch_of_ulnar_nerve'), N('deep_branch_of_ulnar_nerve'), N('common_palmar_digital_branches_of_ulnar_nerve'), N('proper_palmar_digital_branches_of_ulnar_nerve'), N('communicating_branch_of_median_nerve_with_ulnar_nerve')],
+    soft: [MU('apb'), MU('op'), MU('fpb')], solid: ['right_pisiform', 'right_hamate'], fit: [MU('flexor_ret'), N('common_palmar_digital_branches_of_median_nerve'), N('deep_branch_of_ulnar_nerve')], view: [0, -1, 0], zoom: 0.8,
+    labels: [[N('median_nerve'), 'Median nerve', [-260, -130, 830]], [N('ulnar_nerve'), 'Ulnar nerve', [-240, -125, 830]], [N('deep_branch_of_ulnar_nerve'), 'Deep branch of ulnar'], [N('superficial_branch_of_ulnar_nerve'), 'Superficial branch of ulnar'], [MU('apb'), 'Thenar muscles']],
+    text: `<p>The <b>median nerve</b> enters the palm through the carpal tunnel, under the flexor retinaculum, with the long flexor tendons. It gives a <b>recurrent (thenar, motor) branch</b>, which usually arises just beyond the retinaculum and turns back into the thenar muscles (abductor pollicis brevis, opponens pollicis, superficial head of FPB); its course varies and it can be cut in carpal tunnel release (the "million dollar nerve"). Its digital branches supply the palmar skin of the lateral 3½ digits and the 1st and 2nd lumbricals.</p>
+<p>The <b>ulnar nerve</b> and artery enter the hand in front of the flexor retinaculum, lateral to the pisiform, through <b>Guyon's canal</b>. The nerve divides into a <b>superficial branch</b> (palmaris brevis; skin of the medial 1½ digits) and a <b>deep (motor) branch</b> (hypothenar muscles, all the interossei, 3rd and 4th lumbricals, adductor pollicis, deep head of FPB), which runs with the deep palmar arch. A ganglion or repeated pressure (e.g. cycling) can compress it in the canal.</p>
+<p>The flexor retinaculum is glass here so the nerve in the tunnel shows; the thenar muscles are pale.</p>`},
+];
+/* plexus diagram: branch rows (from = node(s) of the diagram it leaves; roots = usual root values where two sources agree) */
+const PBRANCH = [
+  {id: 'dsn', name: 'Dorsal scapular nerve', from: ['C5'], fromText: 'Root', y: 34, roots: 'mainly C5', r: ['C5'], text: 'Rhomboids.'},
+  {id: 'ltn', name: 'Long thoracic nerve', from: ['C5', 'C6', 'C7'], fromText: 'Roots', y: 55, roots: 'C5, C6, C7', r: ['C5', 'C6', 'C7'], text: 'Serratus anterior.'},
+  {id: 'ssn', name: 'Suprascapular nerve', from: ['upper'], fromText: 'Upper trunk', y: 76, roots: 'C5, C6', r: ['C5', 'C6'], text: 'Supraspinatus, infraspinatus.'},
+  {id: 'nts', name: 'Nerve to subclavius', from: ['upper'], fromText: 'Upper trunk', y: 97, roots: 'C5, C6', r: ['C5', 'C6'], text: 'Subclavius.'},
+  {id: 'lpn', name: 'Lateral pectoral nerve', from: ['lateral'], fromText: 'Lateral cord', y: 118, roots: '—', text: 'Pectoralis major.'},
+  {id: 'mcn', name: 'Musculocutaneous nerve', from: ['lateral'], fromText: 'Lateral cord', y: 139, roots: 'C5–C7', r: ['C5', 'C6', 'C7'], text: 'Coracobrachialis, biceps, brachialis; skin of the lateral forearm.'},
+  {id: 'usn', name: 'Upper subscapular nerve', from: ['posterior'], fromText: 'Posterior cord', y: 166, roots: 'C5, C6', r: ['C5', 'C6'], text: 'Subscapularis.'},
+  {id: 'tdn', name: 'Thoracodorsal nerve', from: ['posterior'], fromText: 'Posterior cord', y: 187, roots: '— (sources differ)', text: 'Latissimus dorsi.'},
+  {id: 'lsn', name: 'Lower subscapular nerve', from: ['posterior'], fromText: 'Posterior cord', y: 208, roots: 'C5, C6', r: ['C5', 'C6'], text: 'Subscapularis, teres major.'},
+  {id: 'axn', name: 'Axillary nerve', from: ['posterior'], fromText: 'Posterior cord', y: 229, roots: 'C5, C6', r: ['C5', 'C6'], text: 'Deltoid, teres minor; skin over the lower deltoid.'},
+  {id: 'rad', name: 'Radial nerve', from: ['posterior'], fromText: 'Posterior cord', y: 250, roots: 'C5–T1', text: 'Triceps, anconeus and the extensors of the back of the forearm, brachioradialis; skin of the back of the arm, forearm and radial side of the back of the hand.'},
+  {id: 'med', name: 'Median nerve', from: ['lateral', 'medial'], fromText: 'Lateral and medial cords (two roots)', y: 277, roots: 'C6–T1 (some sources: C5–T1)', r: ['C6', 'C7', 'C8', 'T1'], some: ['C5'], text: 'Most of the front of the forearm (not FCU and the ulnar half of FDP); thenar muscles, 1st and 2nd lumbricals; skin of the lateral 3½ digits.'},
+  {id: 'uln', name: 'Ulnar nerve', from: ['medial'], fromText: 'Medial cord', y: 298, roots: 'C8, T1', r: ['C8', 'T1'], text: 'FCU and the ulnar half of FDP; most small muscles of the hand; skin of the medial 1½ digits.'},
+  {id: 'mpn', name: 'Medial pectoral nerve', from: ['medial'], fromText: 'Medial cord', y: 319, roots: 'C8, T1', r: ['C8', 'T1'], text: 'Pectoralis minor and major.'},
+  {id: 'mca', name: 'Medial cutaneous n. of arm', from: ['medial'], fromText: 'Medial cord', y: 340, roots: '—', text: 'Skin of the medial arm.'},
+  {id: 'mcf', name: 'Medial cutaneous n. of forearm', from: ['medial'], fromText: 'Medial cord', y: 361, roots: '—', text: 'Skin of the medial forearm.'},
+];
+const PLEXUS_INTRO = 'Tap a branch (or a table row) to light its path back to the roots (on a phone, swipe the diagram sideways to reach the branches). Muscles are listed in the table; root values are those two sources agree on ("—" where they differ or give none).';
+const PLEXUS_NOTE = 'Schematic, not to scale. <b>Variations:</b> a <b>prefixed</b> plexus has a contribution from C4 (some definitions add that T1 is small or absent); a <b>postfixed</b> plexus has one from T2. The prefixed type is the commoner; reported rates vary widely between studies. Variations of the cords and branches are common (e.g. the musculocutaneous–median communication, in about 1 in 5 arms); those of the roots and trunks are rarer.';
+/* nerve injuries: 3D view of each (same fields as a topic) */
+const LESIONS = [
+  {id: 'erb', name: "Erb's (Erb–Duchenne) palsy", site: 'Upper trunk, C5–C6 (sometimes C7)', sign: '"Waiter\'s tip": arm adducted and medially rotated, elbow extended, forearm pronated',
+    lit: [N('roots_of_brachial_plexus'), N('superior_trunk_of_brachial_plexus'), N('suprascapular_nerve'), N('axillary_nerve'), N('musculocutaneous_nerve')], soft: [MU('scal_ant'), MU('scal_med')],
+    fit: [N('superior_trunk_of_brachial_plexus'), N('suprascapular_nerve'), N('axillary_nerve')], view: [-1, -0.7, 0.2], zoom: 0.9,
+    labels: [[N('superior_trunk_of_brachial_plexus'), 'Upper trunk (C5, C6)'], [N('suprascapular_nerve'), 'Suprascapular'], [N('axillary_nerve'), 'Axillary'], [N('musculocutaneous_nerve'), 'Musculocutaneous', [-180, -85, 1240]]],
+    text: `<p><b>Erb's palsy</b> is an injury of the upper roots, C5 and C6 (the upper trunk), sometimes C7. It is the commonest pattern of brachial plexus birth injury.</p>
+      <p><b>Mechanism:</b> a force that widens the angle between the neck and the shoulder (head pulled away, shoulder pushed down): at birth with shoulder dystocia; in adults a fall on the shoulder or a motorcycle accident.</p>
+      <p><b>Result:</b> the C5–C6 muscles are paralysed, chiefly deltoid and biceps (also those of the suprascapular and musculocutaneous nerves), with numbness over the lateral arm. The limb hangs in the <b>"waiter's tip"</b> posture: arm adducted and medially rotated, elbow extended, forearm pronated.</p>`},
+  {id: 'klumpke', name: "Klumpke's (Dejerine–Klumpke) palsy", site: 'Lower trunk, C8–T1', sign: 'Claw hand, wasting of the small hand muscles; numb ulnar side of forearm and hand; Horner syndrome if T1 is torn',
+    lit: [N('roots_of_brachial_plexus'), N('inferior_trunk_of_brachial_plexus'), N('ulnar_nerve'), N('median_nerve')], soft: [MU('scal_ant'), MU('scal_med')], solid: ['right_first_rib'],
+    fit: [N('inferior_trunk_of_brachial_plexus'), N('roots_of_brachial_plexus'), 'right_first_rib'], view: [-1, -0.7, 0.2], zoom: 0.7,
+    labels: [[N('inferior_trunk_of_brachial_plexus'), 'Lower trunk (C8, T1)'], ['right_first_rib', 'First rib']],
+    text: `<p><b>Klumpke's palsy</b> is an injury of the lower roots, C8 and T1 (the lower trunk); much less common than Erb's.</p>
+      <p><b>Mechanism:</b> traction on the raised (abducted) arm: a baby delivered pulled by an arm above the head; an adult catching a branch while falling.</p>
+      <p><b>Result:</b> paralysis and wasting of the small muscles of the hand, giving a <b>claw hand</b>; numbness along the ulnar side of the forearm and hand; and <b>Horner syndrome</b> (ptosis, miosis, loss of sweating) when T1 is involved.</p>`},
+  {id: 'inj', name: 'Deltoid injection', site: 'Axillary nerve, under the deltoid', sign: 'Weak abduction, deltoid wasting; numb "regimental badge" skin',
+    lit: [N('axillary_nerve'), N('muscular_branches_of_axillary_nerve'), N('superior_lateral_brachial_cutaneous_nerve'), A('posterior_circumflex_humeral_artery')], solid: ['right_humerus', 'right_scapula'],
+    fit: ['right_humerus', N('axillary_nerve')], view: [-1, 0.2, 0], zoom: 1.6, centre: [-175, -60, 1300],
+    labels: [['right_scapula', 'Acromion', [-159, -39, 1351]], [N('muscular_branches_of_axillary_nerve'), 'Axillary nerve (under deltoid)'], [A('posterior_circumflex_humeral_artery'), 'Posterior circumflex humeral'], ['right_humerus', 'Surgical neck', [-185, -70, 1290]]],
+    text: `<p>The <b>axillary nerve</b>, with the posterior circumflex humeral vessels, runs round the surgical neck of the humerus under the deltoid. An <b>injection placed too low</b> in the deltoid can injure it (lower still, the radial nerve); one placed too high can enter the subacromial bursa.</p>
+      <p>Its distance below the acromion varies between people, and studies differ: about 5 cm in cadaver studies summarised in a 2026 paper, a mean of about 8 cm in another series. Raising (abducting) the arm brings it nearer the acromion, so the arm should hang relaxed at the side.</p>
+      <p><b>Site:</b> guidelines (including the CDC's, as summarised in that 2026 paper) give the thick central part of the deltoid, about 2–3 fingerbreadths (3–5 cm) below the acromion; some studies advise lower. <b>Injury:</b> weak abduction and lateral rotation, wasting of the deltoid, numbness over the lower deltoid ("regimental badge"). Seen from the side; the deltoid is left out, and the model shows the nerve only as far as the back of the humerus. The deltoid site itself is not marked: it is not drawn from measurements.</p>`},
+  {id: 'sat', name: 'Saturday night palsy', site: 'Radial nerve, radial groove of the humerus', sign: 'Wrist drop (with finger and thumb drop); triceps usually spared',
+    lit: [N('radial_nerve'), N('deep_branch_of_radial_nerve'), N('superficial_branch_of_radial_nerve'), N('posterior_interosseous_nerve_of_forearm'), N('muscular_branches_of_radial_nerve')], solid: ['right_humerus'],
+    fit: ['right_humerus'], view: [-0.6, 0.8, 0], zoom: 1,
+    labels: [[N('radial_nerve'), 'Radial nerve in the radial groove', [-190, -55, 1170]]],
+    text: `<p><b>Saturday night palsy</b>: the radial nerve is pressed against the <b>radial (spiral) groove</b> of the humerus, typically with the arm hung over the back of a chair while drunk or deeply asleep. ("Honeymoon palsy" is the same lesion from another person sleeping on the arm.)</p>
+      <p><b>Result:</b> <b>wrist drop</b> with finger and thumb drop, because the wrist and finger extensors are paralysed and the flexors hold the wrist bent; numbness on the back of the hand on the thumb side. <b>Triceps is usually spared</b>, because its branches leave the nerve above the groove. Recovery is the rule, usually within weeks to a few months.</p>
+      <p>A fracture of the shaft of the humerus can injure the nerve at the same place. A lesion of the posterior interosseous nerve alone gives finger drop without true wrist drop (ECRL is supplied higher up).</p>`},
+  {id: 'claw', name: 'Claw hand (ulnar)', site: 'Ulnar nerve (elbow or wrist)', sign: 'MCP joints hyperextended, IP joints flexed, worst in the ring and little fingers',
+    lit: [N('ulnar_nerve'), N('deep_branch_of_ulnar_nerve'), N('superficial_branch_of_ulnar_nerve'), N('common_palmar_digital_branches_of_ulnar_nerve'), N('proper_palmar_digital_branches_of_ulnar_nerve'), N('dorsal_branch_of_ulnar_nerve'), N('muscular_branches_of_ulnar_nerve')],
+    soft: [MU('palmar_interossei'), MU('dorsal_interossei'), MU('lumbricals')], solid: ['right_pisiform'], fit: [N('deep_branch_of_ulnar_nerve'), MU('dorsal_interossei'), MU('lumbricals')], view: [0, -1, 0], zoom: 0.8,
+    labels: [[N('ulnar_nerve'), 'Ulnar nerve', [-240, -125, 840]], [N('deep_branch_of_ulnar_nerve'), 'Deep branch (to the interossei)'], [MU('lumbricals'), 'Lumbricals'], [MU('dorsal_interossei'), 'Interossei', [-280, -120, 760]]],
+    text: `<p><b>Claw hand</b>: with the ulnar-supplied small muscles paralysed (the 3rd and 4th lumbricals and the interossei), the long extensors and flexors act unopposed: the MCP joints hyperextend and the interphalangeal joints flex, most in the ring and little fingers. The fingers cannot be spread or brought together.</p>
+      <p><b>Ulnar paradox:</b> the claw is worse with a low lesion (at the wrist) than a high one (at the elbow), because a high lesion also paralyses the ulnar half of FDP, which bends the fingers. Common sites: behind the medial epicondyle (cubital tunnel) and Guyon's canal at the wrist.</p>`},
+  {id: 'ape', name: 'Ape hand (median)', site: 'Median nerve, at the wrist or above', sign: 'Thumb cannot be opposed or abducted; thenar wasting',
+    lit: [N('median_nerve'), N('common_palmar_digital_branches_of_median_nerve'), N('proper_palmar_digital_branches_of_median_nerve')], soft: [MU('apb'), MU('op'), MU('fpb')],
+    fit: [MU('apb'), MU('op'), N('common_palmar_digital_branches_of_median_nerve')], view: [0, -1, 0], zoom: 0.9,
+    labels: [[MU('apb'), 'Thenar muscles'], [N('median_nerve'), 'Median nerve', [-260, -130, 830]]],
+    text: `<p><b>Ape hand (ape thumb)</b>: a median nerve injury at the wrist or above paralyses the thenar muscles, so the thumb cannot be opposed or abducted; with time the thenar eminence wastes.</p>`},
+  {id: 'bened', name: 'Hand of benediction (pointing finger)', site: 'Median nerve above the elbow', sign: 'On making a fist the index finger stays straight (the middle finger too, in classical teaching)',
+    lit: [N('median_nerve'), N('anterior_interosseous_nerve_of_forearm'), N('muscular_branches_of_median_nerve'), A('brachial_artery')], soft: [MU('fds'), MU('fdp')], fit: [N('median_nerve')], view: [0, -1, 0], zoom: 1,
+    labels: [[N('median_nerve'), 'Median nerve (above the elbow)', [-185, -85, 1120]], [MU('fds'), 'Flexor digitorum superficialis'], [MU('fdp'), 'Flexor digitorum profundus']],
+    text: `<p>With the median nerve injured <b>above the elbow</b>, FDS and the lateral half of FDP (to the index and middle fingers) are paralysed, while the ulnar half of FDP still bends the ring and little fingers. On trying to make a fist, the <b>index finger stays straight</b>.</p>
+      <p>Sources differ on the middle finger: classical teaching says the index and middle fingers both stay extended (the "hand of benediction"); a 2022 case series found only the index points, the middle finger can still bend ("pointing index"). Do not confuse it with the ulnar claw.</p>`},
+  {id: 'cts', name: 'Carpal tunnel syndrome', site: 'Median nerve in the carpal tunnel', sign: 'Pain, numbness, tingling in the lateral 3½ digits, worse at night; later thenar weakness and wasting',
+    lit: [N('median_nerve'), N('common_palmar_digital_branches_of_median_nerve'), N('proper_palmar_digital_branches_of_median_nerve'), N('palmar_branch_of_median_nerve')], solid: ['right_pisiform', 'right_hamate', 'right_scaphoid', 'right_trapezium'],
+    fit: [MU('flexor_ret'), N('common_palmar_digital_branches_of_median_nerve'), N('palmar_branch_of_median_nerve')], view: [0, -1, 0], zoom: 0.75,
+    labels: [[N('median_nerve'), 'Median nerve (under the retinaculum, glass)', [-258, -128, 815]], [N('palmar_branch_of_median_nerve'), 'Palmar cutaneous branch', [-255, -135, 850]], [N('proper_palmar_digital_branches_of_median_nerve'), 'Digital branches', [-300, -180, 690]]],
+    text: `<p><b>Carpal tunnel syndrome</b>: the median nerve is squeezed under the flexor retinaculum. Pain, numbness and tingling in the thumb, index, middle and lateral half of the ring finger, often worse at night; later weakness and wasting of the thenar muscles. Skin over the thenar eminence is spared, because the palmar cutaneous branch passes in front of the retinaculum, not through the tunnel. Bedside tests: Phalen's (wrist flexion) and Tinel's (tapping over the nerve). The tunnel's walls and contents are on <a href="muscles.html">Muscles of the Upper Limb</a> and <a href="upper-limb.html">The Upper Limb</a>.</p>`},
+  {id: 'wing', name: 'Winged scapula', site: 'Long thoracic nerve', sign: 'Medial border of the scapula lifts off the chest wall, most clearly when pushing against a wall',
+    lit: [N('long_thoracic_nerve'), N('roots_of_brachial_plexus')], soft: [MU('serratus_ant')], solid: ['right_scapula'], fit: [N('long_thoracic_nerve'), MU('serratus_ant')], view: [-1, -0.2, 0.1], zoom: 0.8,
+    labels: [[N('long_thoracic_nerve'), 'Long thoracic nerve', [-110, -110, 1220]], [MU('serratus_ant'), 'Serratus anterior']],
+    text: `<p>The <b>long thoracic nerve</b> (C5–C7) runs a long course down the surface of serratus anterior, where it is easily injured (axillary surgery, heavy loads on the shoulder). With serratus anterior paralysed the <b>medial border of the scapula lifts off</b> the chest wall (medial winging), most clearly when the patient pushes against a wall. Winging from an accessory nerve injury (trapezius) is lateral.</p>`},
+];
+/* lymph node groups: [group, where, drains, drains to] */
+const NODE_ROWS = [
+  ['Anterior (pectoral)', 'Along the lower border of pectoralis minor, with the lateral thoracic vessels', 'Front and side of the chest wall, most of the breast, the abdominal wall above the umbilicus', 'Central, apical'],
+  ['Posterior (subscapular)', 'On the back wall, along the subscapular vessels', 'Back of the trunk and lower neck', 'Central, apical'],
+  ['Lateral (humeral)', 'Along the medial and back side of the axillary vein', 'Most of the upper limb (not the vessels that follow the cephalic vein)', 'Central, apical'],
+  ['Central', 'A few large nodes in the fat near the base of the axilla', 'The anterior, posterior and lateral groups', 'Apical'],
+  ['Apical', 'At the apex, behind and above pectoralis minor', 'All the other groups; the vessels along the cephalic vein', 'Subclavian lymph trunk'],
+  ['Interpectoral (Rotter)', 'Between pectoralis major and minor', 'Part of the breast: cancer can spread to them', '—'],
+  ['Infraclavicular (deltopectoral)', 'One or two beside the cephalic vein, in the groove between deltoid and pectoralis major, below the clavicle', 'Superficial lymph vessels of the lateral side of the limb (with the cephalic vein)', '—'],
+  ['Supratrochlear (epitrochlear, cubital)', 'One or two above the medial epicondyle, medial to the basilic vein', 'Mainly the ulnar side of the hand and forearm', 'Along the basilic vein to the lateral axillary nodes'],
+];
+const LYMPH_TEXT = `<p>Superficial lymph vessels of the limb run with the superficial veins; deep ones follow the arteries. Most of the limb's lymph reaches the <b>lateral axillary</b> group; vessels with the cephalic vein go to the infraclavicular and apical nodes. The <b>subclavian lymph trunk</b>, from the apical nodes, ends at the junction of the internal jugular and subclavian veins or in the jugular trunk (on the right through the right lymphatic duct, on the left it may join the thoracic duct).</p>
+  <p><b>Why nodes enlarge:</b> a node enlarges with disease in the area it drains, so an enlarged group points to its territory: an infected hand or finger (lateral axillary, or supratrochlear for the ulnar side), cancer spreading from the breast (most breast lymph goes to the axillary nodes, so they are the first site of spread and the main prognostic factor; surgeons sample them by level, e.g. the sentinel node). An enlarged supratrochlear node is almost always abnormal: hand and forearm infection, or a general disease (lymphoma, HIV, sarcoidosis, syphilis, tuberculosis).</p>
+  <p class="muted">3D: lymph nodes are under "Axilla → Lymph nodes" and "Arm and forearm → Superficial veins". Positions are from the Z-Anatomy model and approximate; its apical group lies low behind the vein rather than at the apex, so it is left out of the 3D.</p>`;
+const DERM = [
+  ['C4', 'over the top of the shoulder (the acromioclavicular joint).'],
+  ['C5', 'the lateral side of the arm (test point: the lateral side of the cubital fossa).'],
+  ['C6', 'the lateral side of the forearm and the thumb.'],
+  ['C7', 'the middle finger.'],
+  ['C8', 'the little finger and the ulnar side of the hand.'],
+  ['T1', 'the medial side of the forearm (test point near the medial epicondyle).'],
+  ['T2', 'the upper medial arm, up to the axilla.'],
+];
+const DERM_INTRO = 'A dermatome is the strip of skin supplied by one spinal nerve; in the limbs the strips run lengthwise and neighbouring ones overlap. Tap a level.';
+const DERM_NOTE = 'Schematic bands in the usual teaching pattern, not traced from one map; most of the palm and the index and ring fingers are left blank, because maps assign them differently (one puts the index with C7 and the ring finger with C8). Published maps differ (Foerster 1933, from cutting nerve roots; Keegan and Garrett 1948, from disc prolapse; an evidence-based map by Lee and colleagues, 2008), because of different methods, overlap and variation between people. A root (dermatome) loss differs from the area of a peripheral nerve: e.g. the median nerve supplies the palmar skin of the lateral 3½ digits.';
+const FASCIA_TEXT = `<p><b>Arm:</b> the deep fascia (brachial fascia) sends medial and lateral intermuscular septa to the supracondylar ridges of the humerus, dividing the arm into an <b>anterior (flexor)</b> compartment (biceps, brachialis, coracobrachialis; musculocutaneous nerve) and a <b>posterior (extensor)</b> compartment (triceps, with anconeus; radial nerve). The ulnar nerve pierces the medial septum.</p>
+  <p><b>Forearm:</b> the antebrachial fascia, with the interosseous membrane and an intermuscular septum, makes an <b>anterior (flexor-pronator)</b> and a <b>posterior (extensor)</b> compartment; some count the "mobile wad" (brachioradialis, ECRL, ECRB) as a third. At the wrist the fascia thickens into the flexor and extensor retinacula (see <a href="muscles.html">Muscles of the Upper Limb</a>).</p>
+  <p><b>Veins:</b> superficial veins (dorsal venous network, cephalic, basilic, median cubital, median antebrachial) in the superficial fascia; deep veins as paired venae comitantes; both have valves and they connect freely. Their 3D course is under "Arm and forearm → Superficial veins".</p>
+  <p><b>Surface marking</b> (approximate): the cephalic vein runs from the snuffbox up the radial border of the forearm, lateral to biceps, to the deltopectoral groove below the clavicle; the basilic vein from the ulnar side of the back of the hand up the medial forearm, medial to biceps, to mid-arm, where it goes deep. <b>Pulses:</b> brachial along the medial border of biceps and medial to the biceps tendon at the elbow; radial at the wrist lateral to the FCR tendon, and in the snuffbox.</p>`;
+const DATA = {
+  lede: 'The nerves, vessels and lymph nodes of the right upper limb in 3D, from the root of the neck to the fingers. Pick a topic to light its parts (the rest turns to glass) and tap a part to name it. Below: the brachial plexus step by step, nerve injuries, dermatomes, lymph nodes, fascia and veins.',
+  note3d: 'Arteries red, veins blue, nerves yellow, lymph nodes green, bones cream; muscles pale grey (switch "All muscles" on to see them all as glass). Vessels and nerves are Z-Anatomy curves drawn as tubes: calibres and node positions approximate. The model has no separate lateral and medial cords and no superior thoracic artery.',
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (axilla and axillary artery anatomy, brachial plexus variations and injuries, deltoid injection sites, cubital veins, palmar arches, lymph nodes, dermatome maps). Where these differ, the page says so.",
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, vessels, nerves and lymph nodes from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones; vessels and nerves are tubes swept along Z-Anatomy curves. Simplified meshes, shared under the same licences. The right limb is shown. The plexus diagram and dermatome map are schematic, not to scale.',
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let kind = {}, names = {}, cur = null, musclesOn = false;
+const COL = {bone: '--bone', muscle: '--soft', artery: '--artery', vein: '--vein', nerve: '--nerve', node: '--lymph'};
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+function anchor(key, near, view) {   // the vertex of a part nearest to a point (default: 25 mm in front of the part's centroid, seen from the topic's view)
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos; let c = near;
+  if (!c) { c = [0, 0, 0]; for (let i = 0; i < pos.length; i++) c[i % 3] += pos[i] / (pos.length / 3);
+    const n = view || [0, -1, 0], l = Math.hypot(...n); c = c.map((x, i) => x + 25 * n[i] / l); }
+  let best = 0, bd = 1e18;
+  for (let i = 0; i < pos.length; i += 3) { const d = (pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2; if (d < bd) { bd = d; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+function showTopic(id) {
+  const t = typeof id === 'object' ? id : TOPICS.find(t => t.id === id); cur = t;
+  const lit = (t.lit || []).filter(k => v.parts.has(k)), soft = (t.soft || []).filter(k => v.parts.has(k)), solid = (t.solid || []).filter(k => v.parts.has(k));
+  for (const k in kind) {
+    const isMus = kind[k] === 'muscle';
+    v.setVisible(k, !isMus || musclesOn || soft.includes(k));
+  }
+  v.setFocus(lit.concat(soft, solid));
+  const fk = (t.fit || lit).filter(k => v.parts.has(k));
+  v.fit(fk); if (t.centre) v.centre = t.centre.slice();
+  v.face(t.view || [0, -1, 0], {zoom: t.zoom || 1});
+  v.setMarkers((t.labels || []).filter(([k]) => v.parts.has(k)).map(([k, label, near]) => ({p: anchor(k, near, t.view), label, color: css(kind[k] === 'muscle' ? '--muted' : kind[k] === 'bone' ? '--ink' : COL[kind[k]]), always: true})));
+  $('topic-text').innerHTML = t.text; $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === t.id));
+  document.querySelectorAll('#lesions tr[data-k]').forEach(r => r.setAttribute('aria-pressed', r.dataset.k === t.id));
+}
+function buildTables() {
+  $('branches').innerHTML = '<tr><th>Branch</th><th>From</th><th>Roots</th><th>Supplies</th></tr>' + PBRANCH.map(b =>
+    `<tr data-k="${b.id}" aria-pressed="false"><td data-h=""><b>${b.name}</b></td><td data-h="From">${b.fromText}</td><td data-h="Roots">${b.roots}</td><td data-h="Supplies">${b.text}</td></tr>`).join('');
+  $('branches').querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => pickBranch(r.dataset.k));
+  $('lesions').innerHTML = '<tr><th>Injury</th><th>Nerve, site</th><th>What is seen</th></tr>' + LESIONS.map(l =>
+    `<tr data-k="${l.id}" aria-pressed="false"><td data-h=""><b>${l.name}</b></td><td data-h="Nerve">${l.site}</td><td data-h="Seen">${l.sign}</td></tr>`).join('');
+  $('lesions').querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => { showTopic(LESIONS.find(l => l.id === r.dataset.k)); $('v').scrollIntoView({behavior: 'smooth', block: 'start'}); });
+  $('nodes').innerHTML = '<tr><th>Group</th><th>Where</th><th>Drains</th><th>Drains to</th></tr>' + NODE_ROWS.map(r =>
+    `<tr><td data-h=""><b>${r[0]}</b></td><td data-h="Where">${r[1]}</td><td data-h="Drains">${r[2]}</td><td data-h="To">${r[3]}</td></tr>`).join('');
+}
+function buildTopics() {
+  const box = $('topics'), grps = [...new Set(TOPICS.map(t => t.grp))];
+  for (const g of grps) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !kind[hit.key]) { $('pick').textContent = ''; return; }
+  $('pick').textContent = `${names[hit.key]}: ${kind[hit.key] === 'node' ? 'lymph nodes' : kind[hit.key]}`;
+};
+async function loadModel() {
+  const base = '../models/ul-nv/';
+  const meta = await (await fetch(base + 'nv.json')).json();
+  const man = await v.load(base + 'ul-nv.json');
+  for (const p of man.parts) { names[p.key] = p.name.replace(/^Right /, ''); kind[p.key] = meta.parts[p.key].kind; v.setColour(p.key, COL[kind[p.key]]); }
+}
+
+/* ===================== dermatome map (schematic) ===================== */
+// one outline of the right limb (front view: lateral = left of the figure); the back view is its mirror image.
+// Regions are simple bands, not traced from any one published map.
+const DERM_SHAPES = {
+  C4: 'M44 52 C50 22 80 10 100 10 C120 10 150 22 156 52 Z',
+  C5: 'M44 52 L100 52 L100 250 L52 250 Z',
+  T2: 'M100 52 L156 52 L152 150 L100 150 Z',
+  C6: 'M52 250 L98 250 L96 410 L62 410 Z M62 418 L72 430 L66 462 L52 500 L40 496 L48 462 Z',
+  T1: 'M100 150 L152 150 L148 250 L136 410 L96 410 L98 250 L100 250 Z',
+  C7: 'M82 478 L98 478 L97 552 L84 552 Z',
+  C8: 'M118 410 L136 410 L134 476 L118 476 Z M118 478 L132 478 L130 524 L119 524 Z',
+  x: 'M62 410 L118 410 L118 476 L64 476 Z M65 478 L80 478 L79 538 L67 538 Z M100 478 L116 478 L115 544 L102 544 Z',
+};
+const DERM_LABEL = {C4: [100, 38], C5: [74, 150], T2: [126, 102], C6: [78, 330], T1: [118, 300], C7: [90, 570], C8: [146, 446]};
+function drawDerm() {
+  const box = $('derm');
+  const one = (title, flip) => {
+    let s = `<svg viewBox="0 0 200 600" role="img" aria-label="Dermatomes, ${title}, schematic"><g transform="${flip ? 'translate(200 0) scale(-1 1)' : ''}">`;
+    for (const k in DERM_SHAPES) s += k === 'x' ? `<path d="${DERM_SHAPES[k]}" fill="var(--bg)" style="stroke:var(--line)"/>` : `<path data-d="${k}" d="${DERM_SHAPES[k]}" fill="var(--d-${k.toLowerCase()})"/>`;
+    s += '</g>';
+    for (const k in DERM_LABEL) { const [x, y] = DERM_LABEL[k]; s += `<text x="${flip ? 200 - x : x}" y="${y}" text-anchor="middle">${k}</text>`; }
+    return s + `<text x="100" y="594" text-anchor="middle" style="fill:var(--muted)">${title}</text></svg>`;
+  };
+  box.innerHTML = one('Front (palm forward)', false) + one('Back', true);
+  $('derm-key').innerHTML = DERM.map(d => `<button class="chip" data-d="${d[0]}" aria-pressed="false"><i style="background:var(--d-${d[0].toLowerCase()});display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px"></i>${d[0]}</button>`).join('');
+  const pick = k => {
+    const d = DERM.find(x => x[0] === k);
+    box.querySelectorAll('path[data-d]').forEach(p => p.classList.toggle('on', p.dataset.d === k));
+    $('derm-key').querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.d === k));
+    $('derm-cap').innerHTML = `<b>${k}:</b> ${d[1]}`;
+  };
+  $('derm-key').querySelectorAll('.chip').forEach(b => b.onclick = () => pick(b.dataset.d));
+  box.querySelectorAll('path[data-d]').forEach(p => p.onclick = () => pick(p.dataset.d));
+  $('derm-cap').textContent = DERM_INTRO;
+}
+
+/* ===================== plexus schematic ===================== */
+// columns: roots, trunks, divisions, cords, branches. Each node: [id, column, y]; each link from -> to
+const PX = {roots: 50, trunks: 210, divs: 330, cords: 470, br: 600};
+function plexusLayout() {
+  const P = {}, Y = {C5: 50, C6: 100, C7: 160, C8: 220, T1: 270};
+  for (const r in Y) P[r] = [PX.roots, Y[r]];
+  Object.assign(P, {upper: [PX.trunks, 80], middle: [PX.trunks, 160], lower: [PX.trunks, 245],
+    'upper-a': [PX.divs, 62], 'upper-p': [PX.divs, 98], 'middle-a': [PX.divs, 142], 'middle-p': [PX.divs, 178], 'lower-a': [PX.divs, 262], 'lower-p': [PX.divs, 228],
+    lateral: [PX.cords, 95], posterior: [PX.cords, 185], medial: [PX.cords, 270]});
+  return P;
+}
+const PLINKS = [['C5', 'upper'], ['C6', 'upper'], ['C7', 'middle'], ['C8', 'lower'], ['T1', 'lower'],
+  ['upper', 'upper-a'], ['upper', 'upper-p'], ['middle', 'middle-a'], ['middle', 'middle-p'], ['lower', 'lower-a'], ['lower', 'lower-p'],
+  ['upper-a', 'lateral'], ['middle-a', 'lateral'], ['upper-p', 'posterior'], ['middle-p', 'posterior'], ['lower-p', 'posterior'], ['lower-a', 'medial']];
+function drawPlexus() {
+  const P = plexusLayout(), S = $('plexus');
+  let h = ['Roots', 'Trunks', 'Divisions', 'Cords', 'Branches'].map((t, i) => `<text class="h" x="${[PX.roots, PX.trunks, PX.divs, PX.cords, PX.br][i] - 20}" y="18">${t}</text>`).join('');
+  const line = (a, b, id) => `<path class="p" data-l="${id}" d="M${a[0]} ${a[1]} C${(a[0] + b[0]) / 2} ${a[1]} ${(a[0] + b[0]) / 2} ${b[1]} ${b[0]} ${b[1]}"/>`;
+  for (const [a, b] of PLINKS) h += line(P[a], P[b], a + '>' + b);
+  for (const br of PBRANCH) for (const f of br.from) h += line(P[f], [PX.br, br.y], f + '>' + br.id);
+  for (const r of ['C5', 'C6', 'C7', 'C8', 'T1']) h += `<text x="${PX.roots - 40}" y="${P[r][1] + 4}">${r}</text>`;
+  for (const [k, t] of [['upper', 'Upper'], ['middle', 'Middle'], ['lower', 'Lower'], ['lateral', 'Lateral'], ['posterior', 'Posterior'], ['medial', 'Medial']])
+    h += `<text x="${P[k][0] - 18}" y="${P[k][1] - 9}" style="fill:var(--muted)">${t}</text>`;
+  for (const k of ['upper-a', 'upper-p', 'middle-a', 'middle-p', 'lower-a', 'lower-p']) h += `<text x="${P[k][0] - 4}" y="${P[k][1] + 4}" text-anchor="end" style="fill:var(--muted);font-size:10.5px">${k.endsWith('a') ? 'ant.' : 'post.'}</text>`;
+  for (const br of PBRANCH) h += `<g class="br" data-b="${br.id}" tabindex="0" role="button"><rect x="${PX.br - 4}" y="${br.y - 11}" width="214" height="20" fill="transparent"/><text x="${PX.br + 6}" y="${br.y + 4}">${br.name}</text></g>`;
+  S.innerHTML = h;
+  S.querySelectorAll('.br').forEach(g => { g.onclick = () => pickBranch(g.dataset.b); g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickBranch(g.dataset.b); } }; });
+}
+function rootsOf(n) { return /^[CT]\d$/.test(n) ? [n] : [...new Set(PLINKS.filter(l => l[1] === n).flatMap(l => rootsOf(l[0])))]; }
+function pickBranch(id) {
+  // light the route from the branch's root values only; roots that only some sources include are dashed
+  const br = PBRANCH.find(b => b.id === id), ok = br.r || ['C5', 'C6', 'C7', 'C8', 'T1'], some = br.some || [];
+  const on = new Set(br.from.map(f => f + '>' + br.id)), dash = new Set();
+  const mark = n => { for (const [a, b] of PLINKS) if (b === n) {
+    const rs = rootsOf(a), main = rs.some(r => ok.includes(r)), extra = rs.some(r => some.includes(r));
+    if (main) on.add(a + '>' + b); else if (extra) dash.add(a + '>' + b); else continue;
+    mark(a); } };
+  br.from.forEach(mark);
+  $('plexus').querySelectorAll('.p').forEach(p => { p.classList.toggle('on', on.has(p.dataset.l) || dash.has(p.dataset.l)); p.classList.toggle('some', dash.has(p.dataset.l)); });
+  $('plexus').querySelectorAll('.br').forEach(g => g.classList.toggle('on', g.dataset.b === id));
+  $('plexus-cap').innerHTML = `<b>${br.name}</b> (from the ${br.fromText.toLowerCase()}; roots: ${br.roots}): ${br.text} The lit line is its route from those roots${br.some ? ' (dashed: ' + br.some.join(', ') + ', in some sources)' : ''}.`;
+  document.querySelectorAll('#branches tr[data-k]').forEach(r => r.setAttribute('aria-pressed', r.dataset.k === id));
+}
+
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('plexus-cap').textContent = PLEXUS_INTRO; $('plexus-note').innerHTML = PLEXUS_NOTE; drawPlexus();
+  $('derm-note').textContent = DERM_NOTE; drawDerm();
+  $('lymph-text').innerHTML = LYMPH_TEXT; $('fascia-text').innerHTML = FASCIA_TEXT;
+  buildTables();
+  const bar = $('vbar');
+  const mb = document.createElement('button'); mb.className = 'chip'; mb.textContent = 'All muscles (glass)'; mb.setAttribute('aria-pressed', 'false');
+  mb.onclick = () => { musclesOn = !musclesOn; mb.setAttribute('aria-pressed', musclesOn); if (cur) showTopic(cur); };
+  bar.append(mb);
+  for (const [label, dir] of [['Front', [0, -1, 0]], ['Back', [0, 1, 0]], ['Lateral', [-1, 0, 0]], ['Medial', [1, 0, 0]]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic(TOPICS[0].id);
+  window.J = {TOPICS, LESIONS, showTopic, pickBranch, lesion: id => showTopic(LESIONS.find(l => l.id === id))};   // for tests
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

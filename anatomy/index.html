@@ -96,6 +96,8 @@
           <p>Temporomandibular, atlanto-occipital and atlanto-axial, intervertebral and facet joints, sacro-iliac joints and the pubic symphysis in 3D; the jaw opening with its glide, nodding and turning the head; prolapsed disc; TMJ dislocation.</p></div></a>
         <a class="mod" href="general/blood-vessels.html"><span class="num">23</span><div><h3>Blood Vessels</h3>
           <p>Systemic, pulmonary and portal circulations on the whole-body vessel model; the wall of arteries, veins and sinuses; elastic and muscular arteries, arterioles, capillary types; anastomoses and end arteries in 3D; metarterioles, precapillary sphincters and arteriovenous anastomoses; portal hypertension.</p></div></a>
+        <a class="mod" href="upper-limb/nerves-vessels.html"><span class="num">24</span><div><h3>Nerves, Vessels and Lymph Nodes of the Upper Limb</h3>
+          <p>Axilla, axillary artery and vein, brachial plexus with its branches and variations, scapular anastomosis, axillary nodes, arm, forearm and hand vessels and nerves, cubital fossa in 3D; Erb, Klumpke, Saturday night palsy, claw and ape hand, winging, carpal tunnel; dermatomes.</p></div></a>
       </nav>
     </div>
   </div>
@@ -147,6 +149,15 @@ function select(key) {
   const xs = extraOf(key);
   if (xs) {                                    // vessels and nerves have no detailed page yet: name, kind and side
     const d = extra[xs].info[key], what = xs === 'lymphatic' ? (d.kind === 'node' ? 'lymph nodes' : 'lymphoid organ') : xs === 'nervous' ? (d.kind === 'nerve' ? 'nerve' : d.kind === 'dura' ? 'spinal dura' : 'ganglion') : d.kind;
+    const page = REGION_PAGES[d.region];
+    if (page) {                                // a regional nerves-and-vessels page: first tap selects the region, second opens it
+      const gp = {id: 'nv-' + d.region, name: page.name, href: page.href,
+        keys: Object.values(extra).flatMap(x => x.keys.filter(k => x.info[k].region === d.region))};
+      if (sel && sel.group && sel.group.id === gp.id) { location.href = gp.href; return; }
+      sel = {group: gp, key}; v.setFocus(gp.keys); card.hidden = false;
+      card.innerHTML = `<div class="what"><b>${gp.name}</b><span>${name}${d.side !== 'midline' ? ' (' + d.side + ')' : ''} · tap again to open</span></div><a class="go" href="${gp.href}">Open →</a><button class="x" aria-label="Clear">×</button>`;
+      card.querySelector('.x').onclick = clear; return;
+    }
     sel = {group: null, key}; v.setFocus([key]); card.hidden = false;
     card.innerHTML = `<div class="what"><b>${name}</b><span>${d.side !== 'midline' ? d.side + ' · ' : ''}${what} · ${d.region.toLowerCase()} · no detailed page yet</span></div><button class="x" aria-label="Clear">×</button>`;
     card.querySelector('.x').onclick = clear; return;
@@ -218,6 +229,8 @@ const EXTRA = {
   lymphatic: {label: 'Lymph nodes', base: 'models/body-lymph/', meta: 'lymph.json', model: 'body-lymph.json', colour: d => '--lymph'},
   nervous: {label: 'Nerves', base: 'models/body-nerves/', meta: 'nerves.json', model: 'body-nerves.json', colour: d => d.kind === 'dura' ? '--dura' : '--nerve'},
 };
+// regions whose vessels, nerves and nodes have a detailed page
+const REGION_PAGES = {'Upper limb': {name: 'Nerves, vessels and lymph nodes of the upper limb', href: 'upper-limb/nerves-vessels.html'}};
 const extra = {}, extraLoading = {};     // extra[sys] = {info: {key: {kind, region, side, ...}}, keys: [...]}
 const extraOf = k => Object.keys(extra).find(s => extra[s].info[k]);
 function loadExtra(sys) {
