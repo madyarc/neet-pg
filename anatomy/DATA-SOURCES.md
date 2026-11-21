@@ -834,3 +834,28 @@ tubercles.
   causes of obturator neuropathy, eleven single-source statements sourced twice, attributed or cut, division of the
   posterior tibial artery and tibial nerve in the sole, tarsal tunnel wording, Gray's pudendal plexus roots, nerve
   contrast on bone, row highlighting.
+
+## The Heart — `thorax/heart.html`
+
+- Fact sheet `sources-local/facts/fill-heart.md` (398 quotes, script-checked against `sources-local/modern/fill-heart/`,
+  downloads 2026-11-21): Gray 1918 pages 137, 138, 142, 166, 210, 284; StatPearls; Wikipedia; open papers PMC12175212,
+  PMC12060931, PMC11179863, PMC13363422, PMC4743947, PMC3537199, PMC11775805, PMC12861964, PMC13329930, PMC7330354,
+  PMC7712333, PMC11602569, PMC12789789, PMC9579841, PMC6221866, PMC8008978, PMC9848245, PMC6524010.
+- Excluded: Wikipedia "Heart" and "Cardiac conduction system" (OpenStax notice) and "Coronary circulation" (cites an
+  OpenStax author); Wikipedia sentences copied from Gray.
+- Contested, stated on the page: coronary dominance frequencies (six series); SA nodal artery from the RCA (60–68 %) or
+  the circumflex; AV nodal artery from the RCA (72 % to about 90 %); supply of the posteromedial papillary muscle;
+  coronary sinus length; two (Gray) or three right-ventricular papillary muscles; whether the coronary arteries
+  anastomose; arteries of the pericardium (Gray vs Wikipedia).
+- Left out (one source): vagal and sympathetic nerves and aortic branches to the pericardium, limbus of the fossa ovalis,
+  left fascicles, Beck's triad.
+- Surface points: Gray 284 applied to the model's own ribs, second source PMC8008978.
+- Model `models/heart` (`tools/thorax/heart_config.py`): Z-Anatomy chambers, valve cusps (with chordae), papillary
+  muscles, coronary arteries, cardiac veins, great-vessel roots; BodyParts3D sternum, ribs and cartilages 1–7; 73 parts,
+  522 KB pack. Z-Anatomy has no pericardium, fibrous skeleton or conducting tissue: schematics instead; the SA and AV
+  node points are approximate. Chambers are cut open with the viewer's clip plane.
+- Independent review (2026-11-21), fixed: fibrous-skeleton and right-atrium schematics were mirrored (now match the 3D
+  views); posteromedial papillary muscle supply; pericardial arteries attributed; territory labels; SA nodal artery
+  "most often" behind the SVC; heart position on the chest; single-source details attributed or cut; mitral point and
+  text agree; infarct wording.
+

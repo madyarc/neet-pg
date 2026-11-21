@@ -212,13 +212,13 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 22. Heart & Pericardium
 
-- [ ] **AN22.1** Describe & demonstrate subdivisions, sinuses in pericardium, blood supply and nerve supply of pericardium
-- [ ] **AN22.2** Describe & demonstrate external and internal features of each chamber of heart
-- [ ] **AN22.3** Describe & demonstrate origin, course and branches of coronary arteries
-- [ ] **AN22.4** Describe anatomical basis of ischaemic heart disease
-- [ ] **AN22.5** Describe & demonstrate the formation, course, tributaries and termination of coronary sinus
-- [ ] **AN22.6** Describe the fibrous skeleton of heart
-- [ ] **AN22.7** Mention the parts, position and arterial supply of the conducting system of heart
+- [x] **AN22.1** Describe & demonstrate subdivisions, sinuses in pericardium, blood supply and nerve supply of pericardium — *layers, sinuses, arteries and phrenic nerves (schematic), tamponade: [The Heart](thorax/heart.html)*
+- [x] **AN22.2** Describe & demonstrate external and internal features of each chamber of heart — *each chamber cut open in 3D, valves from above; crista, pectinate muscles, fossa ovalis and moderator band: [The Heart](thorax/heart.html)*
+- [x] **AN22.3** Describe & demonstrate origin, course and branches of coronary arteries — *origin, course and branches in 3D; dominance, with the differing figures: [The Heart](thorax/heart.html)*
+- [x] **AN22.4** Describe anatomical basis of ischaemic heart disease — *territories by artery (schematic, dominance toggle), conduction blocks, papillary-muscle rupture, angina: [The Heart](thorax/heart.html)*
+- [x] **AN22.5** Describe & demonstrate the formation, course, tributaries and termination of coronary sinus — *formation, course, tributaries and termination in 3D: [The Heart](thorax/heart.html)*
+- [x] **AN22.6** Describe the fibrous skeleton of heart — *rings, trigones and central fibrous body (schematic): [The Heart](thorax/heart.html)*
+- [x] **AN22.7** Mention the parts, position and arterial supply of the conducting system of heart — *nodes (approximate points in 3D), bundle and branches, nodal arteries: [The Heart](thorax/heart.html)*
 
 ### 23. Mediastinum
 
@@ -248,7 +248,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN25.6** Mention development of aortic arch arteries, SVC, IVC and coronary sinus
 - [ ] **AN25.7** Identify structures seen on a plain x-ray chest (PA view)
 - [ ] **AN25.8** Identify and describe in brief a barium swallow
-- [ ] **AN25.9** Demonstrate surface marking of lines of pleural reflection, lung borders and fissures, trachea, heart borders, apex beat & surface projection of valves of heart
+- [~] **AN25.9** Demonstrate surface marking of lines of pleural reflection, lung borders and fissures, trachea, heart borders, apex beat & surface projection of valves of heart — *heart borders, apex beat, valve positions and auscultation areas: [The Heart](thorax/heart.html); pleura and lungs not yet*
 
 ### 26. Skull osteology
 

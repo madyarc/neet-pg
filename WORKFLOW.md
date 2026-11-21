@@ -8,15 +8,14 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 25 is finished, committed, pushed and tested on the live site (2026-11-21).
-- Waiting for the user to say "proceed" before starting module 26 (heart).
+- Module 26 is finished, committed, pushed and tested on the live site (2026-11-21).
+- Waiting for the user to say "proceed" before starting module 27 (nerves and vessels of the thorax and abdomen).
 - Local test server: may still run on 127.0.0.1:8765; start it again if a test can't connect.
 
 ## Next (the plan, in order)
 
 | # | Module | Page | Model | Notes |
 |---|--------|------|-------|-------|
-| 26 | Heart | anatomy/thorax/heart.html | from body-vessels heart parts | chambers, valves, coronary vessels, conducting system |
 | 27 | Nerves and vessels of the thorax and abdomen | anatomy/thorax/… and abdomen | own pack | no phrenic nerve, no thoracic duct in Z-Anatomy |
 | 28 | Nerves and vessels of the head and neck | anatomy/head-neck/nerves-vessels.html | own pack | cranial nerves, circle of Willis, dural sinuses |
 
@@ -28,10 +27,11 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
 - AN13.3: the proximal radio-ulnar joint's own nerve and artery supply.
 - AN31.5: the definition of primary versus secondary deviation.
 - AN20.8: the anterior tibial pulse at the ankle has one source (Gray 291); the other four pulses are done (module 25).
+- AN25.9: heart borders, apex and valve areas done (module 26); pleura and lung markings still to do (module 27).
 - AN13.7: surface lines and pulses are done (module 24); the muscle tests for pectoralis major, serratus anterior,
   latissimus dorsi, deltoid, biceps and brachioradialis are not. Could go on the upper-limb muscles page.
 
-Progress: anatomy 140 covered, 6 partial, 270 not started; ophthalmology 6 covered, 1 partial, 55 not started.
+Progress: anatomy 147 covered, 7 partial, 262 not started; ophthalmology 6 covered, 1 partial, 55 not started.
 
 ## Steps for every module (do them in this order, tick them here as they finish)
 
@@ -76,6 +76,12 @@ builds at the same time.
 
 ## Log (newest first)
 
+- 2026-11-21: Module 26 (the heart): 398 quotes, 73-part 522 KB model `models/heart` (tools/thorax/heart_config.py),
+  reviewer found 11 problems (two mirrored schematics among them), 10 fixed, conducting-tissue colour kept; AN22.1–22.7
+  ticked, AN25.9 partial; heart parts on the Anatomy home open the page.
+- 2026-11-21: check_quotes.py used to skip quote keys with brackets or apostrophes silently; now it reports them
+  (SKIPPED). Re-ran every fill sheet: the skipped quotes all match their sources (fill-ll has one 42-word quote).
+- 2026-11-21: Licence: code AGPL-3.0-or-later (LICENSE), content CC BY-SA 4.0 (LICENSE-CONTENT), README section.
 - 2026-11-21: Module 25 (nerves, vessels and lymph nodes of the lower limb): 636 quotes, 209-part 865 KB model
   `models/ll-nv` (tools/lower-limb/nv_config.py), reviewer found 12 problems, all fixed; 10 competencies ticked, AN20.8
   partial; lower-limb vessels, nerves and nodes on the Anatomy home open the page.
