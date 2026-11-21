@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nerves and Vessels of the Abdomen and Pelvis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --artery, --vein (portal and systemic veins alike, as on the Blood Vessels page),
+   --nerve, --lymph, --bone, --soft (muscles as context). The schematics use the same tokens; --line and --muted draw
+   outlines, and numbered rings in --ink mark the portosystemic sites. Nothing else has its own colour. */
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+#topics{display:flex;flex-direction:column;gap:10px}
+#topic-text p+p,#topic-text p+ul,#topic-text ul+p{margin-top:8px}
+#topic-text ul{margin:4px 0 0;padding-left:20px}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t tr[data-k]{cursor:pointer}
+table.t tr[aria-pressed="true"] td{background:var(--bg)}
+.scroll{overflow-x:auto}
+svg text{font:500 12px var(--f-body);fill:var(--ink)}
+svg text.h{font:600 11px var(--f-mono);fill:var(--muted)}
+svg text.s{font:400 11px var(--f-body);fill:var(--muted)}
+svg .vb{fill:var(--bone);stroke:var(--muted);stroke-width:1}
+svg .art{stroke:var(--artery);fill:none;stroke-linecap:round}
+svg .artf{fill:var(--artery)}
+svg .nrv{stroke:var(--nerve);fill:none;stroke-linecap:round}
+svg .nrvf{fill:var(--nerve);stroke:var(--muted);stroke-width:.8}
+svg .net{stroke:var(--nerve);fill:none;stroke-width:1.6;stroke-dasharray:3 3}
+svg .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg g.hit{cursor:pointer}
+svg g.hit:hover text,svg g.hit.sel text{font-weight:700}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+#levels,#plex{max-width:640px;min-width:600px;margin:0 auto}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Nerves and Vessels of the Abdomen and Pelvis</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="Nerves, vessels and lymph nodes of the abdomen and pelvis in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-levels">
+  <h2 id="h-levels">Branches of the abdominal aorta by vertebral level</h2>
+  <p class="cap" id="levels-cap"></p>
+  <div class="scroll"><svg class="fig" id="levels" viewBox="0 0 640 560" role="img" aria-label="Front view schematic of the abdominal aorta on the lumbar vertebrae with the level of each branch"></svg></div>
+  <div class="scroll"><table class="t stack" id="branches"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-iia">
+  <h2 id="h-iia">Internal iliac artery: branches</h2>
+  <p class="muted">Tap a row to see the artery in 3D (branches the model lacks are marked).</p>
+  <div class="scroll"><table class="t stack" id="iia"></table></div>
+  <p class="muted" id="iia-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-psa">
+  <h2 id="h-psa">Portosystemic anastomoses and portal hypertension</h2>
+  <div class="scroll"><table class="t stack" id="psa"></table></div>
+  <div class="prose" id="ph-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-plex">
+  <h2 id="h-plex">Autonomic plexuses of the posterior abdominal wall</h2>
+  <p class="cap" id="plex-cap"></p>
+  <div class="scroll"><svg class="fig" id="plex" viewBox="0 0 640 600" role="img" aria-label="Front view schematic of the coeliac, aortic and hypogastric plexuses and the sympathetic trunks"></svg></div>
+  <div class="prose" id="plex-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-nerves">
+  <h2 id="h-nerves">Lumbar plexus and the pelvic branches of the sacral plexus</h2>
+  <p class="muted" id="nerves-intro"></p>
+  <div class="scroll"><table class="t stack" id="nerves"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lymph">
+  <h2 id="h-lymph">Lymph nodes of the abdomen and pelvis</h2>
+  <div class="scroll"><table class="t stack" id="nodes"></table></div>
+  <p class="muted" id="lymph-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-clin">
+  <h2 id="h-clin">Clinical anatomy</h2>
+  <p class="muted">Tap a row to see the structures in 3D.</p>
+  <div class="scroll"><table class="t stack" id="clin"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-abnv.md, anatomy/DATA-SOURCES.md) ===================== */
+const V = k => 'v_' + k, N = k => 'n_' + k + '_r', L = k => 'l_' + k, MU = k => 'm_' + k;
+const LEFT = k => k + '_l';   // the page's mirrored copy of a right-side part
+const both = keys => keys.concat(keys.map(LEFT));
+const VERT = ['eleventh_thoracic_vertebra', 'twelfth_thoracic_vertebra', 'first_lumbar_vertebra', 'second_lumbar_vertebra', 'third_lumbar_vertebra', 'fourth_lumbar_vertebra', 'fifth_lumbar_vertebra'];
+const PELVIS = ['sacrum', 'right_hip_bone', 'left_hip_bone'];
+const COEL = ['coeliac_trunk', 'left_gastric_artery', 'splenic_artery', 'common_hepatic_artery', 'proper_hepatic_artery', 'gastroduodenal_artery'].map(V);
+const SMA = ['superior_mesenteric_artery', 'inferior_pancreaticoduodenal_artery', 'anterior_inferior_pancreaticoduodenal_artery', 'middle_colic_artery', 'right_colic_artery', 'ileocolic_artery', 'colic_branch_of_ileocolic_artery', 'ileal_branch_of_ileocolic_artery', 'appendicular_artery'].map(V);
+const IMA = ['inferior_mesenteric_artery', 'left_colic_artery', 'ascending_branch_of_left_colic_artery', 'descending_branch_of_left_colic_artery', 'sigmoid_arteries', 'superior_anorectal_artery'].map(V);
+const PAIRED = ['right_renal_artery', 'left_renal_artery', 'anterior_branch_of_renal_artery_r', 'posterior_branch_of_renal_artery_r', 'anterior_branch_of_renal_artery_l', 'posterior_branch_of_renal_artery_l', 'right_testicular_artery_r', 'left_testicular_artery', 'inferior_phrenic_artery', 'lumbar_arteries_r', 'lumbar_arteries_l', 'median_sacral_artery', 'inferior_suprarenal_artery_r', 'inferior_suprarenal_artery_l'].map(V);
+const ILIAC = ['common_iliac_artery_r', 'common_iliac_artery_l'].map(V).concat(both(['external_iliac_artery_r', 'internal_iliac_artery_r', 'inferior_epigastric_artery_r'].map(V)));
+const IIA = ['internal_iliac_artery_r', 'anterior_division_of_internal_iliac_artery_r', 'posterior_division_of_internal_iliac_artery_r', 'iliolumbar_artery_r', 'iliacus_branch_of_iliolumbar_artery_r', 'lumbar_branch_of_iliolumbar_artery_r', 'spinal_branch_of_iliolumbar_artery_r', 'superior_gluteal_artery_r', 'inferior_gluteal_artery_r', 'internal_pudendal_artery_r', 'obturator_artery_r'].map(V);
+const PORTAL = ['hepatic_portal_vein', 'splenic_vein', 'superior_mesenteric_vein', 'inferior_mesenteric_vein', 'right_gastro_omental_vein', 'left_gastro_omental_vein', 'middle_colic_vein', 'right_colic_vein', 'sigmoid_veins'].map(V);
+const CAVAL = ['inferior_vena_cava_abdominal_part', 'inferior_vena_cava_thoracic_part', 'hepatic_veins', 'right_renal_vein', 'left_renal_vein', 'right_testicular_vein', 'left_testicular_vein', 'lumbar_veins_r', 'lumbar_veins_l', 'right_ascending_lumbar_vein', 'left_ascending_lumbar_vein', 'common_iliac_vein_r', 'common_iliac_vein_l'].map(V).concat(both(['external_iliac_vein_r', 'internal_iliac_vein_r'].map(V)));
+const LUMBAR = ['iliohypogastric_nerve', 'ilio_inguinal_nerve', 'genitofemoral_nerve', 'femoral_branch_of_genitofemoral_nerve', 'genital_branch_of_genitofemoral_nerve', 'lateral_femoral_cutaneous_nerve', 'femoral_nerve', 'obturator_nerve'].map(N);
+const SACRAL = ['sciatic_nerve', 'superior_gluteal_nerve', 'posterior_femoral_cutaneous_nerve', 'anterior_root_of_posterior_femoral_cutaneous_nerve', 'posterior_root_of_posterior_femoral_cutaneous_nerve', 'nerve_to_piriformis_muscle', 'nerve_to_quadratus_femoris_muscle', 'pudendal_nerve'].map(N);
+const PREAORTIC = ['coeliac_nodes', 'splenic_nodes', 'superior_pancreatic_nodes', 'inferior_pancreatic_nodes', 'right_gastric_nodes', 'right_gastro_omental_nodes', 'suprapyloric_node', 'subpyloric_nodes', 'retropyloric_nodes', 'superior_pancreaticoduodenal_nodes', 'cystic_node', 'central_superior_mesenteric_nodes', 'juxta_intestinal_mesenteric_nodes', 'paracolic_superior_mesenteric_nodes', 'ileocolic_nodes', 'precaecal_nodes', 'retrocaecal_nodes', 'appendicular_nodes', 'right_colic_nodes', 'middle_colic_nodes', 'left_colic_nodes', 'sigmoid_nodes', 'pararectal_nodes'].map(L);
+const LUMBNODES = ['lateral_aortic_nodes', 'pre_aortic_nodes', 'retro_aortic_nodes', 'lateral_caval_nodes', 'precaval_nodes', 'retrocaval_nodes', 'intermediate_lumbar_nodes'].map(L);
+const PELVNODES = ['lateral_common_iliac_nodes', 'medial_common_iliac_nodes', 'intermediate_common_iliac_nodes', 'prevesical_nodes', 'postvesical_nodes'].map(L).concat(both(['medial_external_iliac_nodes_r', 'intermediate_external_iliac_nodes_r', 'inferior_epigastric_nodes_r', 'obturator_nodes_r', 'lateral_sacral_nodes_r', 'superior_gluteal_nodes_r', 'inferior_gluteal_nodes_r', 'lateral_vesical_nodes_r'].map(L)));
+const FRONT = [0, -1, 0.05], BACK = [0, 1, 0.05], FROM_LEFT = [1, -0.35, 0.1], OBLIQUE = [0.45, -1, 0.15];
+// a topic: lit = parts drawn in their own colour; soft = muscles drawn solid (--soft); glass = muscles shown as glass; solid = bones kept solid; everything else is glass.
+// labels: [key, text, optional point (mm, body frame: +x = body's left, +y = back, +z = up) to start the search from]
+const TOPICS = [
+  {grp: 'Aorta', id: 'aorta', name: 'Abdominal aorta',
+    lit: [V('abdominal_aorta'), V('coeliac_trunk'), V('superior_mesenteric_artery'), V('inferior_mesenteric_artery'), V('common_iliac_artery_r'), V('common_iliac_artery_l'), V('inferior_vena_cava_abdominal_part'), V('left_renal_vein')].concat(PAIRED),
+    solid: VERT, fit: [V('abdominal_aorta'), V('common_iliac_artery_r'), V('common_iliac_artery_l'), 'twelfth_thoracic_vertebra'], view: FRONT, zoom: 1.0,
+    labels: [[V('abdominal_aorta'), 'Abdominal aorta', [30, -140, 1140]], [V('coeliac_trunk'), 'Coeliac trunk', [25, -130, 1100]], [V('superior_mesenteric_artery'), 'Superior mesenteric', [15, -150, 1075]], [V('left_renal_artery'), 'Renal arteries', [30, -115, 1068]], [V('inferior_mesenteric_artery'), 'Inferior mesenteric', [25, -130, 1005]], [V('common_iliac_artery_l'), 'Common iliac (bifurcation)', [25, -125, 960]], [V('inferior_vena_cava_abdominal_part'), 'IVC (on its right)', [-25, -125, 1000]], [V('left_testicular_artery'), 'Gonadal', [45, -120, 980]]],
+    text: `<p>The <b>abdominal aorta</b> begins at the <b>aortic hiatus</b> of the diaphragm at the level of <b>T12</b>, runs down in front of the lumbar vertebrae, slightly to the left of the midline with the inferior vena cava on its right, and ends at <b>L4</b> by dividing into the two <b>common iliac arteries</b>.</p>
+<ul><li><b>Unpaired, to the gut</b> (from the front): coeliac trunk (T12), superior mesenteric (L1), inferior mesenteric (L3).</li>
+<li><b>Paired visceral</b>: middle suprarenal, renal (L1–L2) and gonadal arteries.</li>
+<li><b>Parietal</b>: inferior phrenic (paired, the highest), four pairs of lumbar arteries, and the small unpaired median sacral.</li></ul>
+<p><b>Relations</b>: the <b>left renal vein</b> crosses in front of it just below the origin of the superior mesenteric artery; the right renal artery passes behind the IVC; the coeliac plexus surrounds the coeliac trunk in front of it. Levels and the branch table: below the model. Levels vary between people; the model's are approximate.</p>`},
+  {grp: 'Aorta', id: 'coeliac', name: 'Coeliac trunk',
+    lit: COEL.concat([V('abdominal_aorta'), V('hepatic_portal_vein'), V('splenic_vein'), L('coeliac_nodes')]), solid: ['twelfth_thoracic_vertebra', 'first_lumbar_vertebra'], fit: COEL, view: [0.1, -1, 0.35], zoom: 1.15,
+    labels: [[V('coeliac_trunk'), 'Coeliac trunk', [7, -125, 1098]], [V('left_gastric_artery'), 'Left gastric', [12, -142, 1122]], [V('splenic_artery'), 'Splenic (to the left)', [60, -110, 1110]], [V('common_hepatic_artery'), 'Common hepatic', [-10, -145, 1100]], [V('proper_hepatic_artery'), 'Hepatic artery proper', [-60, -158, 1112]], [V('gastroduodenal_artery'), 'Gastroduodenal', [-28, -170, 1085]], [V('hepatic_portal_vein'), 'Portal vein', [-8, -130, 1135]]],
+    text: `<p>The <b>coeliac trunk</b> is a short artery (about 1.3 cm) from the front of the aorta just below the aortic hiatus, at about <b>T12</b> (T12–L1). It supplies the <b>foregut</b>: the stomach, liver, spleen, pancreas (part) and the upper duodenum. Classically it divides into three (the "tripod of Haller"); variations are common.</p>
+<ul><li><b>Left gastric</b>, the smallest: up and to the left to the cardia, gives oesophageal branches, then runs along the lesser curvature and joins the right gastric.</li>
+<li><b>Splenic</b>, the largest: tortuous, to the left along the upper border of the pancreas with the splenic vein, to the spleen; gives pancreatic, short gastric and left gastro-omental branches.</li>
+<li><b>Common hepatic</b>: gives the right gastric and the gastroduodenal artery (which gives the right gastro-omental and superior pancreaticoduodenal arteries) and continues as the hepatic artery proper.</li></ul>`},
+  {grp: 'Aorta', id: 'sma', name: 'Superior mesenteric artery',
+    lit: SMA.concat([V('marginal_artery'), V('abdominal_aorta'), V('superior_mesenteric_vein'), V('left_renal_vein'), V('splenic_vein')]), solid: ['first_lumbar_vertebra', 'second_lumbar_vertebra', 'third_lumbar_vertebra'], fit: SMA, view: [-0.2, -1, 0.1], zoom: 0.95,
+    labels: [[V('superior_mesenteric_artery'), 'SMA', [5, -150, 1060]], [V('superior_mesenteric_vein'), 'SMV (on its right)', [-35, -135, 1035]], [V('left_renal_vein'), 'Left renal vein', [10, -118, 1058]], [V('middle_colic_artery'), 'Middle colic', [-40, -135, 1055]], [V('right_colic_artery'), 'Right colic', [-45, -135, 1028]], [V('ileocolic_artery'), 'Ileocolic', [-25, -136, 995]], [V('appendicular_artery'), 'Appendicular', [-40, -108, 935]], [V('marginal_artery'), 'Marginal artery', [-60, -115, 1060]]],
+    text: `<p>The <b>superior mesenteric artery</b> (SMA) arises from the front of the aorta about 1 cm below the coeliac trunk, at <b>L1</b>. It passes down behind the neck of the pancreas and the splenic vein, then <b>in front of the left renal vein, the uncinate process and the third part of the duodenum</b>. The <b>superior mesenteric vein</b> lies on its right.</p>
+<ul><li><b>Supplies the midgut</b>: from the lower duodenum through the jejunum, ileum, caecum, appendix and ascending colon to the proximal transverse colon (about half to two thirds of it: sources differ).</li>
+<li><b>Branches</b>: inferior pancreaticoduodenal; jejunal and ileal (intestinal) branches forming arcades; middle colic; right colic; ileocolic, with the appendicular artery.</li>
+<li>The colic branches of the SMA and IMA join in the <b>marginal artery</b> along the colon.</li></ul>
+<p>The angle between the SMA and the aorta explains two compression syndromes: of the left renal vein (<b>nutcracker</b>) and of the third part of the duodenum (<b>SMA syndrome</b>): Clinical anatomy below.</p>`},
+  {grp: 'Aorta', id: 'ima', name: 'Inferior mesenteric artery',
+    lit: IMA.concat([V('marginal_artery'), V('abdominal_aorta'), V('inferior_mesenteric_vein'), V('common_iliac_artery_l')]), solid: ['third_lumbar_vertebra', 'fourth_lumbar_vertebra', 'fifth_lumbar_vertebra', 'sacrum'], fit: IMA, view: [0.3, -1, 0.1], zoom: 0.95,
+    labels: [[V('inferior_mesenteric_artery'), 'Inferior mesenteric artery', [15, -128, 1005]], [V('left_colic_artery'), 'Left colic', [30, -131, 1004]], [V('sigmoid_arteries'), 'Sigmoid arteries', [40, -125, 945]], [V('superior_anorectal_artery'), 'Superior rectal', [-5, -90, 880]], [V('inferior_mesenteric_vein'), 'IMV (on its left)', [25, -125, 1040]], [V('common_iliac_artery_l'), 'Left common iliac', [20, -122, 955]]],
+    text: `<p>The <b>inferior mesenteric artery</b> (IMA) arises from the front of the aorta at about <b>L3</b> (the level varies: L3 in about 60 % in a meta-analysis), a few centimetres above the bifurcation, behind / below the third part of the duodenum. It runs down and to the left and continues into the pelvis as the <b>superior rectal artery</b>.</p>
+<ul><li><b>Supplies the hindgut</b>: the distal transverse colon, descending and sigmoid colon and the upper rectum.</li>
+<li><b>Branches</b>: left colic; sigmoid arteries (most often two or three); superior rectal (its continuation).</li>
+<li>Its branches join the middle colic artery of the SMA through the <b>marginal artery</b>.</li></ul>`},
+  {grp: 'Aorta', id: 'paired', name: 'Renal, gonadal and parietal branches',
+    lit: PAIRED.concat([V('abdominal_aorta'), V('inferior_vena_cava_abdominal_part'), V('left_renal_vein'), V('right_renal_vein')]), solid: VERT, fit: [V('abdominal_aorta'), V('right_renal_artery'), V('left_renal_artery'), V('lumbar_arteries_l'), V('lumbar_arteries_r')], view: FRONT, zoom: 0.9,
+    labels: [[V('right_renal_artery'), 'Right renal', [-20, -112, 1062]], [V('left_renal_artery'), 'Left renal', [25, -112, 1068]], [V('left_testicular_artery'), 'Gonadal arteries', [40, -118, 990]], [V('inferior_phrenic_artery'), 'Inferior phrenic', [-40, -125, 1170]], [V('lumbar_arteries_l'), 'Lumbar arteries', [50, -85, 1020]], [V('median_sacral_artery'), 'Median sacral', [0, -75, 900]]],
+    text: `<ul><li><b>Renal arteries</b>: from the sides of the aorta just below the SMA, at L1–L2. The right is longer and passes <b>behind the IVC</b>; each lies behind its renal vein and divides into several branches before the hilum.</li>
+<li><b>Gonadal (testicular / ovarian) arteries</b>: slender, from the front of the aorta a little below the renal arteries (about L2), to the testis or the ovary; the ovarian artery runs in the suspensory ligament of the ovary.</li>
+<li><b>Middle suprarenal arteries</b>: from the sides of the aorta at about the level of the SMA (not in the model; its inferior suprarenal arteries, from the renal arteries, are).</li>
+<li><b>Inferior phrenic arteries</b>: to the under surface of the diaphragm; from the aorta just above the coeliac trunk or from the trunk itself; they give the superior suprarenal arteries.</li>
+<li><b>Lumbar arteries</b>: usually four pairs (Gray 1918: from the back of the aorta opposite the upper four lumbar vertebrae); a lumbar vein runs with each.</li>
+<li><b>Median sacral artery</b>: small, from the back of the aorta just above its bifurcation; it continues the line of the aorta down the sacrum.</li></ul>`},
+  {grp: 'Aorta', id: 'iliac', name: 'Common and external iliac arteries',
+    lit: ILIAC.concat([V('abdominal_aorta'), V('common_iliac_vein_r'), V('common_iliac_vein_l'), V('inferior_vena_cava_abdominal_part')]), solid: ['fourth_lumbar_vertebra', 'fifth_lumbar_vertebra'].concat(PELVIS), fit: ILIAC, view: FRONT, zoom: 0.95,
+    labels: [[V('common_iliac_artery_r'), 'Right common iliac', [-20, -128, 955]], [V('common_iliac_artery_l'), 'Left common iliac', [25, -125, 955]], [LEFT(V('external_iliac_artery_r')), 'External iliac', [45, -118, 895]], [V('internal_iliac_artery_r'), 'Internal iliac', [-30, -100, 915]], [V('common_iliac_vein_l'), 'Left common iliac vein', [0, -118, 965]], [V('inferior_epigastric_artery_r'), 'Inferior epigastric', [-40, -150, 950]]],
+    text: `<p>The aorta divides at <b>L4</b> into the two <b>common iliac arteries</b>, each about 4–5 cm long (Gray 5 cm, Wikipedia 4 cm). Each runs down and out and divides at the pelvic brim, <b>in front of the sacroiliac joint</b> (opposite the lumbosacral disc) into the <b>external iliac</b> (to the lower limb) and the <b>internal iliac</b> (to the pelvis).</p>
+<ul><li>The IVC begins at L5, below the aortic bifurcation, so the <b>right common iliac artery crosses in front of the beginning of the IVC and the left common iliac vein</b>.</li>
+<li>The <b>external iliac artery</b>, the main artery of the lower limb, becomes the <b>femoral artery</b> under the inguinal ligament, at the mid-inguinal point. The thigh is on <a href="../lower-limb/nerves-vessels.html">Nerves, Vessels and Lymph Nodes of the Lower Limb</a>.</li></ul>`},
+  {grp: 'Pelvis', id: 'intil', name: 'Internal iliac artery',
+    lit: IIA.concat([V('common_iliac_artery_r'), V('external_iliac_artery_r'), V('internal_iliac_vein_r'), N('obturator_nerve')]), glass: [MU('piriformis')], solid: ['right_hip_bone', 'sacrum', 'fifth_lumbar_vertebra'], fit: IIA, view: FROM_LEFT, zoom: 1.05,
+    labels: [[V('internal_iliac_artery_r'), 'Internal iliac artery', [-25, -105, 925]], [V('posterior_division_of_internal_iliac_artery_r'), 'Posterior division', [-30, -80, 900]], [V('anterior_division_of_internal_iliac_artery_r'), 'Anterior division', [-30, -90, 885]], [V('iliolumbar_artery_r'), 'Iliolumbar', [-35, -75, 915]], [V('superior_gluteal_artery_r'), 'Superior gluteal', [-50, -55, 900]], [V('inferior_gluteal_artery_r'), 'Inferior gluteal', [-48, -60, 840]], [V('internal_pudendal_artery_r'), 'Internal pudendal', [-38, -66, 815]], [V('obturator_artery_r'), 'Obturator', [-45, -95, 835]], [MU('piriformis'), 'Piriformis', [-60, -50, 855]]],
+    text: `<p>The <b>internal iliac artery</b> is the main artery of the <b>pelvis</b>: it supplies the pelvic walls and viscera, the perineum and external genitalia, the buttock and the medial thigh. It arises at the common iliac bifurcation in front of the sacroiliac joint (opposite the lumbosacral joint), is short, and runs down to the upper border of the <b>greater sciatic foramen</b>, where it usually divides into an <b>anterior</b> and a <b>posterior division</b>. Seen from inside the pelvis (from the left); right side.</p>
+<ul><li><b>Posterior division</b> (to the wall): iliolumbar, lateral sacral and <b>superior gluteal</b> (the largest branch, its continuation; leaves above piriformis).</li>
+<li><b>Anterior division</b> (to the viscera, perineum and buttock): umbilical artery with the superior vesical, inferior vesical (male) or vaginal and uterine (female), middle rectal, obturator, internal pudendal and inferior gluteal.</li></ul>
+<p>The branching is very variable (in some people the superior gluteal arises from the anterior trunk). The table below the model lists each branch.</p>`},
+  {grp: 'Veins', id: 'ivc', name: 'Inferior vena cava',
+    lit: CAVAL, solid: VERT.concat(['sacrum']), fit: [V('inferior_vena_cava_abdominal_part'), V('common_iliac_vein_r'), V('common_iliac_vein_l'), V('hepatic_veins')], view: FRONT, zoom: 1.0,
+    labels: [[V('inferior_vena_cava_abdominal_part'), 'Inferior vena cava', [-20, -135, 1110]], [V('hepatic_veins'), 'Hepatic veins', [-15, -125, 1190]], [V('left_renal_vein'), 'Renal veins', [25, -125, 1058]], [V('right_testicular_vein'), 'Right gonadal vein', [-45, -118, 1000]], [V('left_testicular_vein'), 'Left gonadal vein', [45, -118, 1000]], [V('common_iliac_vein_r'), 'Common iliac veins (L5)', [-20, -120, 955]], [V('lumbar_veins_l'), 'Lumbar veins', [55, -75, 1020]], [V('left_ascending_lumbar_vein'), 'Ascending lumbar vein', [25, -90, 1000]]],
+    text: `<p>The <b>inferior vena cava</b> (IVC) is formed at <b>L5</b> by the two <b>common iliac veins</b>, behind the right common iliac artery. It runs up on the right side of the vertebral column, to the right of the aorta, and passes through the <b>central tendon of the diaphragm at T8</b> to the right atrium. It has <b>no valves</b> (only a rudimentary valve at its opening into the atrium).</p>
+<ul><li><b>Tributaries</b>: common iliac, lumbar, right gonadal, renal, right suprarenal, inferior phrenic and hepatic veins.</li>
+<li><b>The left side is asymmetric</b>: the IVC lies on the right, so the left renal vein is longer, and the left gonadal and suprarenal veins end in the left renal vein, not in the IVC.</li>
+<li><b>Behind it</b>: the right renal artery and the right sympathetic trunk.</li>
+<li>The <b>lumbar and ascending lumbar veins</b> join the azygos system: a route from the IVC to the superior vena cava if the IVC is blocked.</li></ul>`},
+  {grp: 'Veins', id: 'renalv', name: 'Renal and gonadal veins',
+    lit: [V('left_renal_vein'), V('left_testicular_vein'), V('abdominal_aorta'), V('superior_mesenteric_artery'), V('left_renal_artery')], solid: ['first_lumbar_vertebra', 'second_lumbar_vertebra'], fit: [V('left_renal_vein'), V('superior_mesenteric_artery')], view: [1, -0.12, 0.05], zoom: 1.5, centre: [10, -118, 1050],
+    labels: [[V('left_renal_vein'), 'Left renal vein', [20, -116, 1058]], [V('superior_mesenteric_artery'), 'SMA (in front)', [0, -150, 1050]], [V('abdominal_aorta'), 'Aorta (behind)', [10, -100, 1040]], [V('left_testicular_vein'), 'Left gonadal vein', [40, -116, 1020]]],
+    text: `<p>The <b>renal veins</b> lie in front of the renal arteries and end in the IVC. The <b>left renal vein</b> is about three times as long as the right: it crosses <b>in front of the aorta, just below the origin of the SMA</b>, in the angle between the two arteries. It receives the <b>left gonadal</b>, left suprarenal and left inferior phrenic veins. Seen from the left (front of the body to the left of the picture).</p>
+<ul><li><b>Gonadal veins</b>: the pampiniform plexus of the spermatic cord forms the testicular vein; the <b>right ends in the IVC</b>, the <b>left in the left renal vein</b>. The ovarian veins end the same way.</li>
+<li><b>Variant</b>: a <b>retro-aortic left renal vein</b> passes behind the aorta.</li></ul>
+<p>Why this matters: compression of the left renal vein between the SMA and the aorta (<b>nutcracker syndrome</b>), and left-sided <b>varicocele</b>: Clinical anatomy below.</p>`},
+  {grp: 'Veins', id: 'portal', name: 'Portal vein',
+    lit: PORTAL.concat([V('inferior_vena_cava_abdominal_part'), V('superior_mesenteric_artery'), V('splenic_artery')]), solid: ['first_lumbar_vertebra', 'second_lumbar_vertebra'], fit: PORTAL, view: [0, -1, 0.15], zoom: 1.0,
+    labels: [[V('hepatic_portal_vein'), 'Portal vein', [-10, -132, 1135]], [V('splenic_vein'), 'Splenic vein', [55, -115, 1110]], [V('superior_mesenteric_vein'), 'Superior mesenteric vein', [-35, -160, 1000]], [V('inferior_mesenteric_vein'), 'Inferior mesenteric vein', [25, -150, 985]], [V('right_gastro_omental_vein'), 'Right gastro-omental', [-20, -150, 1065]], [V('middle_colic_vein'), 'Middle colic', [-45, -133, 1045]], [V('right_colic_vein'), 'Right colic', [-52, -122, 995]], [V('sigmoid_veins'), 'Sigmoid veins', [45, -150, 950]]],
+    text: `<p>The <b>portal vein</b> carries blood from the <b>abdominal digestive tract</b> (except the lower rectum), <b>spleen, pancreas and gallbladder</b> to the liver, which it supplies with about <b>75 %</b> of its blood (the rest: hepatic artery). The blood passes through two capillary beds: in the gut and in the liver sinusoids; the hepatic veins then take it to the IVC.</p>
+<ul><li><b>Formation</b>: behind the <b>neck of the pancreas</b>, by the union of the <b>superior mesenteric and splenic veins</b>; about 8 cm long.</li>
+<li><b>Course</b>: up to the porta hepatis, where it divides into right and left branches that run into the liver with the branches of the hepatic artery.</li>
+<li><b>Tributaries</b>: splenic vein (which receives the short gastric, left gastro-omental, pancreatic and usually the <b>inferior mesenteric</b> vein), superior mesenteric vein (with the right gastro-omental, middle and right colic, ileocolic and intestinal veins), and directly the <b>left and right gastric</b>, cystic and <b>paraumbilical</b> veins. The IMV may end instead at the splenic–superior mesenteric junction or in the SMV.</li>
+<li>The model has no left gastric, cystic or paraumbilical vein; all veins are blue.</li></ul>`},
+  {grp: 'Veins', id: 'psa', name: 'Portosystemic anastomoses',
+    lit: PORTAL.concat(['azygos_vein', 'hemi_azygos_vein', 'inferior_vena_cava_abdominal_part', 'inferior_vena_cava_thoracic_part', 'left_renal_vein', 'internal_pudendal_vein_r', 'internal_iliac_vein_r', 'inferior_epigastric_vein_r'].map(V)).concat([LEFT(V('inferior_epigastric_vein_r'))]),
+    solid: ['first_lumbar_vertebra', 'fifth_lumbar_vertebra'], fit: [V('hepatic_portal_vein'), V('hemi_azygos_vein'), V('inferior_mesenteric_vein'), V('internal_pudendal_vein_r')], view: [0.25, -1, 0.1], zoom: 1.05,
+    labels: [[V('hemi_azygos_vein'), '1 Oesophageal (approx.)', [5, -75, 1170]], [V('inferior_epigastric_vein_r'), '2 Umbilical (approx.)', [-30, -158, 1000]], [V('internal_pudendal_vein_r'), '3 Anorectal (approx.)', [-25, -85, 820]], [V('left_renal_vein'), '4 Retroperitoneal', [15, -115, 1058]], [V('hepatic_portal_vein'), 'Portal vein', [-10, -132, 1135]]],
+    text: `<p>Where portal and systemic veins meet, blood can bypass the liver when the portal pressure rises. The four main sites (numbered on the model; the small connecting veins themselves are not in it, so the markers are approximate):</p>
+<ul><li><b>1 Oesophagogastric</b>: the left gastric vein (portal) with the oesophageal veins that drain to the azygos and hemiazygos veins (systemic): <b>oesophageal varices</b>; the commonest and most important site.</li>
+<li><b>2 Paraumbilical</b>: the paraumbilical veins (to the left branch of the portal vein) with the epigastric veins of the abdominal wall: <b>caput medusae</b>.</li>
+<li><b>3 Anorectal</b>: the superior rectal vein (to the IMV, portal) with the middle and inferior rectal veins (internal iliac and internal pudendal, systemic): anorectal varices.</li>
+<li><b>4 Retroperitoneal</b>: veins of the colon and duodenum (mesenteric veins) with retroperitoneal veins such as the left renal vein.</li></ul>
+<p>Table and portal hypertension: below the model.</p>`},
+  {grp: 'Nerves', id: 'lumbar', name: 'Lumbar plexus',
+    lit: both(LUMBAR), glass: both([MU('psoas_major'), MU('quad_lumb')]), solid: VERT.concat(PELVIS), fit: [N('iliohypogastric_nerve'), N('obturator_nerve'), LEFT(N('iliohypogastric_nerve')), 'fifth_lumbar_vertebra'], view: FRONT, zoom: 1.05,
+    labels: [[N('iliohypogastric_nerve'), 'Iliohypogastric (L1)', [-75, -85, 1030]], [N('ilio_inguinal_nerve'), 'Ilioinguinal (L1)', [-85, -100, 970]], [N('genitofemoral_nerve'), 'Genitofemoral (L1–2)', [-30, -100, 1010]], [N('lateral_femoral_cutaneous_nerve'), 'Lat. femoral cutaneous (L2–3)', [-100, -100, 950]], [N('femoral_nerve'), 'Femoral (L2–4)', [-55, -110, 940]], [N('obturator_nerve'), 'Obturator (L2–4)', [-35, -95, 930]], [LEFT(MU('psoas_major')), 'Psoas major', [50, -100, 1000]]],
+    text: `<p>The <b>lumbar plexus</b> is formed by the ventral rami of <b>L1–L4</b> (L1 often receives a branch from T12) inside <b>psoas major</b>, in front of the lumbar transverse processes. Its branches leave psoas at different borders, which helps to name them:</p>
+<ul><li><b>Lateral border</b>: iliohypogastric (L1), ilioinguinal (L1), lateral femoral cutaneous (L2, L3), femoral (L2–L4).</li>
+<li><b>Front</b>: genitofemoral (L1, L2).</li>
+<li><b>Medial border</b>: obturator (L2–L4) and the lumbosacral trunk (L4, L5) to the sacral plexus.</li></ul>
+<p>The upper branches supply the lower abdominal wall and groin; the femoral and obturator nerves the front and medial thigh. Their course in the thigh, the root chart and their injuries are on <a href="../lower-limb/nerves-vessels.html">Nerves, Vessels and Lymph Nodes of the Lower Limb</a>. Lesions of the plexus and of its roots: Clinical anatomy below. Both sides shown.</p>`},
+  {grp: 'Nerves', id: 'sacral', name: 'Sacral plexus: pelvic branches',
+    lit: SACRAL.concat([V('superior_gluteal_artery_r'), V('inferior_gluteal_artery_r'), V('internal_pudendal_artery_r')]), soft: [MU('piriformis')], solid: ['sacrum', 'right_hip_bone'], fit: [MU('piriformis'), N('superior_gluteal_nerve'), N('pudendal_nerve'), 'sacrum'], view: FROM_LEFT, zoom: 1.0,
+    labels: [[N('sciatic_nerve'), 'Sciatic (L4–S3)', [-55, -55, 840]], [N('superior_gluteal_nerve'), 'Superior gluteal (L4–S1)', [-70, -65, 895]], [N('pudendal_nerve'), 'Pudendal (S2–S4)', [-20, -70, 830]], [N('nerve_to_piriformis_muscle'), 'Nerve to piriformis (S1–2)', [-40, -50, 870]], [N('nerve_to_quadratus_femoris_muscle'), 'N. to quadratus femoris', [-55, -75, 860]], [N('posterior_femoral_cutaneous_nerve'), 'Post. femoral cutaneous', [-40, -45, 800]], [MU('piriformis'), 'Piriformis', [-65, -50, 850]]],
+    text: `<p>The <b>sacral plexus</b> is formed by the <b>lumbosacral trunk</b> (L4, L5) and the ventral rami of <b>S1–S3</b> (S4 in most modern accounts). It lies on the back wall of the pelvis on <b>piriformis</b>. Seen from inside the pelvis (from the left); right side.</p>
+<ul><li><b>Out through the greater sciatic foramen</b> to the buttock and limb: superior gluteal (above piriformis), inferior gluteal, sciatic, posterior femoral cutaneous, nerves to quadratus femoris and to obturator internus, pudendal (below piriformis).</li>
+<li><b>Staying in the pelvis</b>: nerve to piriformis, muscular branches of S4 to levator ani and coccygeus, the <b>pelvic splanchnic nerves</b> (S2–S4, parasympathetic) and the coccygeal plexus (S4, S5 and the coccygeal nerve: anococcygeal nerves to the skin over the coccyx).</li>
+<li>The <b>perforating cutaneous nerve</b> (S2, S3) pierces the sacrotuberous ligament to the skin of the lower buttock.</li></ul>
+<p>The limb branches are on <a href="../lower-limb/nerves-vessels.html">the lower-limb page</a>; roots of each: the table below the model. The model has no lumbosacral trunk, inferior gluteal nerve or pelvic splanchnic nerves.</p>`},
+  {grp: 'Nerves', id: 'pudendal', name: 'Pudendal nerve',
+    lit: [N('pudendal_nerve'), V('internal_pudendal_artery_r'), V('internal_pudendal_vein_r'), N('sciatic_nerve')], soft: [MU('piriformis')], solid: ['right_hip_bone'], fit: [N('pudendal_nerve'), V('internal_pudendal_artery_r')], view: [1, 0.45, 0.15], zoom: 1.3,
+    labels: [[N('pudendal_nerve'), 'Pudendal nerve', [-20, -65, 840]], [V('internal_pudendal_artery_r'), 'Internal pudendal artery', [-40, -62, 820]], [MU('piriformis'), 'Piriformis', [-65, -50, 850]], ['right_hip_bone', 'Ischial spine (approx.)', [-45, -60, 815]]],
+    text: `<p>The <b>pudendal nerve</b> (ventral rami of <b>S2–S4</b>) is the nerve of the perineum. It leaves the pelvis through the <b>greater sciatic foramen below piriformis</b> (between piriformis and coccygeus), crosses the <b>sacrospinous ligament / ischial spine</b>, and re-enters through the <b>lesser sciatic foramen</b> into the <b>pudendal (Alcock's) canal</b>, a sheath of obturator internus fascia on the lateral wall of the ischio-anal fossa, with the internal pudendal vessels. Seen from inside the pelvis (from the left and behind); right side.</p>
+<ul><li><b>Branches</b>: inferior rectal (external anal sphincter, perianal skin); perineal (the perineal muscles, the external urethral sphincter, posterior scrotal or labial skin); dorsal nerve of the penis or clitoris.</li>
+<li>It controls the <b>external anal and urethral sphincters</b> and carries sensation from the external genitalia.</li>
+<li>A <b>pudendal block</b> is made at the level of the ischial spine (for perineal procedures and pudendal pain). Injury and entrapment: Clinical anatomy below.</li></ul>`},
+  {grp: 'Nerves', id: 'auto', name: 'Autonomic plexuses',
+    lit: both([N('sympathetic_trunk'), N('ganglia_of_sympathetic_trunk')]).concat([V('abdominal_aorta'), V('coeliac_trunk'), V('superior_mesenteric_artery'), V('inferior_mesenteric_artery'), V('common_iliac_artery_r'), V('common_iliac_artery_l'), V('left_renal_artery'), V('right_renal_artery')]),
+    solid: VERT.concat(['sacrum']), fit: [V('abdominal_aorta'), V('common_iliac_artery_r'), V('common_iliac_artery_l'), 'fifth_lumbar_vertebra'], view: FRONT, zoom: 0.95,
+    labels: [[V('coeliac_trunk'), 'Coeliac plexus (approx.)', [0, -130, 1098]], [V('abdominal_aorta'), 'Aortic plexus (on the aorta)', [12, -125, 1030]], [V('common_iliac_artery_l'), 'Sup. hypogastric (approx.)', [0, -118, 945]], ['sacrum', 'Inferior hypogastric (approx.)', [-25, -60, 830]], [N('sympathetic_trunk'), 'Sympathetic trunk', [-15, -75, 1100]]],
+    text: `<p>The model has <b>no autonomic plexuses</b> (and its sympathetic trunk stops at L1): the labels mark where they lie, approximately. The diagram below the model shows them.</p>
+<ul><li><b>Coeliac plexus</b> (solar plexus): around the coeliac trunk and the root of the SMA, on the front of the aorta: two coeliac ganglia, which receive the <b>greater and lesser splanchnic nerves</b>, and vagal fibres.</li>
+<li><b>Abdominal aortic plexus</b>: on the aorta, from the coeliac plexus; it continues down as the inferior mesenteric and superior hypogastric plexuses.</li>
+<li><b>Superior hypogastric plexus</b>: in front of L5 and the sacral promontory, between the common iliac arteries; divides into the right and left <b>hypogastric nerves</b>.</li>
+<li><b>Inferior hypogastric (pelvic) plexuses</b>: beside the rectum (and vagina), formed by the hypogastric nerves and the <b>pelvic splanchnic nerves</b> (S2–S4); they supply the pelvic organs.</li>
+<li><b>Lumbar sympathetic trunk</b>: four ganglia on each side along the medial border of psoas, continuous below with the sacral trunk; the two trunks end at the <b>ganglion impar</b> in front of the coccyx.</li></ul>`},
+  {grp: 'Nerves', id: 'cauda', name: 'Cauda equina and nerve roots',
+    lit: ['n_cauda_equina'].concat(LUMBAR), glass: [MU('psoas_major')], solid: [], fit: ['n_cauda_equina', 'second_lumbar_vertebra', 'sacrum'], view: [-1, -0.25, 0.05], zoom: 1.1,
+    labels: [['n_cauda_equina', 'Cauda equina', [-10, -50, 980]], ['second_lumbar_vertebra', 'L2 vertebra', [-30, -100, 1027]], [N('femoral_nerve'), 'Lumbar plexus (in psoas)', [-50, -105, 960]]],
+    text: `<p>Below the end of the spinal cord, the lumbar and sacral nerve roots run down the vertebral canal as the <b>cauda equina</b> before leaving through their foramina; outside, their ventral rami form the lumbar and sacral plexuses. Seen from the right; the vertebrae are glass.</p>
+<p>So a <b>root</b> can be compressed in the canal or foramen (usually by a disc), and the <b>plexus</b> itself in psoas or the retroperitoneum: the two give similar pain in the back, groin and leg. Clinical anatomy below.</p>`},
+  {grp: 'Lymph nodes', id: 'preaortic', name: 'Pre-aortic and visceral nodes',
+    lit: PREAORTIC.concat([V('abdominal_aorta'), V('coeliac_trunk'), V('superior_mesenteric_artery'), V('inferior_mesenteric_artery')]), solid: VERT, fit: PREAORTIC, view: FRONT, zoom: 0.95,
+    labels: [[L('coeliac_nodes'), 'Coeliac nodes', [10, -125, 1098]], [L('central_superior_mesenteric_nodes'), 'Superior mesenteric nodes', [-8, -150, 1026]], [L('juxta_intestinal_mesenteric_nodes'), 'Mesenteric nodes', [3, -154, 943]], [L('left_colic_nodes'), 'Colic nodes', [42, -121, 1027]], [L('ileocolic_nodes'), 'Ileocolic nodes', [-6, -122, 1064]], [L('pararectal_nodes'), 'Pararectal nodes', [0, -46, 776]]],
+    text: `<p>The <b>pre-aortic nodes</b> lie in front of the aorta round the origins of the <b>coeliac, superior mesenteric and inferior mesenteric arteries</b>, and drain the gut those arteries supply (the coeliac nodes: stomach, duodenum, liver, gallbladder, pancreas and spleen). The nodes along each branch (gastric, hepatic, splenic; mesenteric, ileocolic, colic) drain to them. Their efferents form the <b>intestinal trunk</b> to the cisterna chyli. Node positions are from the Z-Anatomy model and approximate.</p>`},
+  {grp: 'Lymph nodes', id: 'lumbnodes', name: 'Lumbar (para-aortic) nodes',
+    lit: LUMBNODES.concat([V('abdominal_aorta'), V('inferior_vena_cava_abdominal_part'), V('left_testicular_vein'), V('right_testicular_vein')]), glass: both([MU('psoas_major')]), solid: VERT, fit: LUMBNODES, view: FRONT, zoom: 0.95,
+    labels: [[L('lateral_aortic_nodes'), 'Para-aortic nodes', [-12, -126, 1064]], [L('pre_aortic_nodes'), 'Pre-aortic nodes', [-7, -123, 1066]], [L('retro_aortic_nodes'), 'Retro-aortic nodes', [8, -105, 1057]], [L('lateral_caval_nodes'), 'Caval nodes', [-8, -127, 1066]], [V('left_testicular_vein'), 'Gonadal vessels', [40, -118, 990]]],
+    text: `<p>The <b>lumbar (periaortic) nodes</b> lie on each side of, in front of and behind the aorta: <b>lateral aortic (para-aortic)</b>, pre-aortic and retro-aortic groups. The lateral aortic nodes receive the <b>iliac nodes</b> and the <b>testis or ovary</b> (and other pelvic organs). Their efferents form the right and left <b>lumbar trunks</b>, which join the intestinal trunk at the <b>cisterna chyli</b>, the start of the thoracic duct. The gonads therefore drain to para-aortic nodes, not to the internal iliac nodes. Node positions approximate.</p>`},
+  {grp: 'Lymph nodes', id: 'pelvnodes', name: 'Iliac and pelvic nodes',
+    lit: PELVNODES.concat(both([V('external_iliac_artery_r'), V('internal_iliac_artery_r')])).concat([V('common_iliac_artery_r'), V('common_iliac_artery_l')]), solid: ['fifth_lumbar_vertebra'].concat(PELVIS), fit: PELVNODES, view: [0.2, -1, 0.15], zoom: 1.0,
+    labels: [[L('lateral_common_iliac_nodes'), 'Common iliac nodes', [0, -120, 963]], [L('medial_external_iliac_nodes_r'), 'External iliac nodes', [-26, -114, 891]], [L('obturator_nodes_r'), 'Obturator nodes', [-48, -80, 836]], [L('lateral_sacral_nodes_r'), 'Sacral nodes', [-23, -44, 865]], [L('lateral_vesical_nodes_r'), 'Vesical nodes', [-30, -100, 807]]],
+    text: `<p>The <b>external iliac nodes</b> lie along the external iliac vessels and receive the inguinal nodes. The <b>internal iliac nodes</b> lie round the internal iliac vessels and drain the pelvic organs (the upper rectum among them), but <b>not the ovary or testis</b>. The iliac nodes drain up through the <b>common iliac nodes</b> to the lateral aortic nodes. Node positions approximate.</p>`},
+];
+/* branches of the abdominal aorta (levels: StatPearls, Gray 1918, Wikipedia; they vary between people) */
+const BRANCHES = [
+  {name: 'Inferior phrenic', level: 'T12 (just above the coeliac)', kind: 'Parietal, paired', to: 'Diaphragm; superior suprarenal branches', topic: 'paired', key: 'inferior_phrenic_artery', y: 1},
+  {name: 'Coeliac trunk', level: 'T12 (T12–L1)', kind: 'Visceral, unpaired', to: 'Foregut: stomach, liver, spleen, pancreas, upper duodenum', topic: 'coeliac', key: 'coeliac_trunk', y: 2},
+  {name: 'Superior mesenteric', level: 'L1', kind: 'Visceral, unpaired', to: 'Midgut: lower duodenum to the proximal transverse colon', topic: 'sma', key: 'superior_mesenteric_artery', y: 3},
+  {name: 'Middle suprarenal', level: 'L1 (level of the SMA)', kind: 'Visceral, paired', to: 'Suprarenal glands (not in the model)', topic: 'paired', key: null, y: 3.4},
+  {name: 'Renal', level: 'L1–L2', kind: 'Visceral, paired', to: 'Kidneys (and suprarenal, ureter)', topic: 'paired', key: 'left_renal_artery', y: 3.9},
+  {name: 'Gonadal', level: 'L2 (below the renal)', kind: 'Visceral, paired', to: 'Testis or ovary', topic: 'paired', key: 'left_testicular_artery', y: 4.6},
+  {name: 'Lumbar (4 pairs)', level: 'L1–L4 (Gray 1918)', kind: 'Parietal, paired', to: 'Back muscles, abdominal wall, vertebral canal', topic: 'paired', key: 'lumbar_arteries_l', y: 5.3},
+  {name: 'Inferior mesenteric', level: 'L3', kind: 'Visceral, unpaired', to: 'Hindgut: distal transverse colon to the upper rectum', topic: 'ima', key: 'inferior_mesenteric_artery', y: 6},
+  {name: 'Median sacral', level: 'Just above the bifurcation', kind: 'Parietal, unpaired', to: 'Down the sacrum (the line of the aorta)', topic: 'paired', key: 'median_sacral_artery', y: 7.2},
+  {name: 'Common iliac (bifurcation)', level: 'L4', kind: 'Terminal, paired', to: 'Pelvis (internal iliac) and lower limb (external iliac)', topic: 'iliac', key: 'common_iliac_artery_l', y: 7.6},
+];
+const LEVELS_CAP = 'Schematic, front view: the patient\'s right is on your left (the IVC side). Unpaired gut branches leave the front of the aorta (dots); paired branches leave its sides; lumbar arteries leave its back. Levels are the usual ones and vary. Tap a branch to see it in 3D (on a phone, swipe the diagram sideways).';
+/* internal iliac branches: [division, branch, course and supply, model key or null] */
+const IIA_ROWS = [
+  ['Posterior', 'Iliolumbar', 'The first branch of the posterior division; divides into a lumbar and an iliac branch.', 'iliolumbar_artery_r'],
+  ['Posterior', 'Lateral sacral (usually two)', 'Usually two (superior and inferior).', null],
+  ['Posterior', 'Superior gluteal', 'The largest branch, continuing the posterior division; leaves through the greater sciatic foramen above piriformis to the gluteal region.', 'superior_gluteal_artery_r'],
+  ['Anterior', 'Umbilical → superior vesical', 'The part of the fetal umbilical artery that stays open gives the superior vesical artery (or arteries) to the upper bladder, with branches to the ductus deferens; the rest of the umbilical artery becomes the medial umbilical ligament.', null],
+  ['Anterior', 'Inferior vesical (male) / vaginal (female)', 'Base of the bladder, prostate, seminal vesicles; the vaginal artery corresponds to it in the female. Often shares a trunk with the middle rectal.', null],
+  ['Anterior', 'Middle rectal', 'To the rectum; joins the superior and inferior rectal arteries.', null],
+  ['Anterior', 'Uterine (female)', 'Medially to the cervix, crossing <b>above and in front of the ureter</b> ("water under the bridge"); up the side of the uterus in the broad ligament; joins the ovarian artery.', null],
+  ['Anterior', 'Obturator', 'Through the obturator canal to the medial thigh; its pubic branch joins the inferior epigastric (an abnormal obturator artery: <a href="../lower-limb/nerves-vessels.html">lower-limb page</a>, femoral hernia).', 'obturator_artery_r'],
+  ['Anterior', 'Internal pudendal', 'Out below piriformis, round the ischial spine, in through the lesser sciatic foramen to the pudendal canal; supplies the perineum and external genitalia.', 'internal_pudendal_artery_r'],
+  ['Anterior', 'Inferior gluteal', 'Out below piriformis (between piriformis and coccygeus) to the buttock and back of the thigh, with the sciatic nerve.', 'inferior_gluteal_artery_r'],
+];
+const IIA_NOTE = 'Branching varies (Gray 1918, StatPearls, Wikipedia and a CT study of 2024 all say so). Branches of the internal iliac artery join branches of the aorta, e.g. the uterine artery with the ovarian artery and the middle rectal with the superior rectal (from the IMA).';
+/* portosystemic anastomoses: [site, portal vein, systemic vein, in portal hypertension, 3D topic] */
+const PSA_ROWS = [
+  ['1 Lower oesophagus and cardia', 'Left gastric vein', 'Oesophageal veins → azygos and hemiazygos', '<b>Oesophageal (and gastric) varices</b>: bleeding causes haematemesis'],
+  ['2 Umbilicus', 'Paraumbilical veins (to the left branch of the portal vein)', 'Epigastric veins of the abdominal wall', '<b>Caput medusae</b>: dilated veins radiating from the umbilicus'],
+  ['3 Anorectal junction', 'Superior rectal vein → IMV', 'Middle rectal (internal iliac) and inferior rectal (internal pudendal) veins', 'Anorectal varices (not the same as haemorrhoids)'],
+  ['4 Retroperitoneum', 'Veins of the colon and duodenum (mesenteric veins)', 'Renal and other retroperitoneal veins', 'Retroperitoneal collaterals'],
+];
+const PH_TEXT = `<p><b>Portal hypertension</b> is raised pressure in the portal system (a hepatic venous pressure gradient above 5 mm Hg; clinically significant from 10 mm Hg: StatPearls). The commonest cause is <b>cirrhosis</b> (resistance in the liver); others are prehepatic (portal vein thrombosis) or posthepatic (Budd–Chiari syndrome, constrictive pericarditis). As the pressure rises, collaterals open at the anastomoses above and divert portal blood to the superior and inferior venae cavae.</p>
+<ul><li><b>Haematemesis</b>: the submucosal veins of the lower oesophagus (and of the stomach) dilate into thin-walled <b>varices</b>, which can rupture and bleed into the upper gastrointestinal tract, so the patient vomits blood. Variceal bleeding is the commonest fatal complication of cirrhosis (StatPearls). Gastric varices are less common than oesophageal ones but bleed more severely.</li>
+<li><b>Caput medusae</b>: the paraumbilical veins reopen and carry portal blood to the veins of the abdominal wall, which dilate and radiate from the umbilicus.</li></ul>`;
+const PLEX_CAP = 'Schematic, front view (the patient\'s right on your left), not to scale. Nerves yellow, aorta and its branches red. The plexuses lie on the aorta and its branches; the sympathetic trunks run down beside the vertebral bodies. On a phone, swipe the diagram sideways.';
+const PLEX_TEXT = `<ul><li><b>Sympathetic inflow</b>: the greater and lesser splanchnic nerves (from the thoracic sympathetic trunk) end in the coeliac and aorticorenal ganglia; lumbar splanchnic nerves (L1–L2) from the lumbar ganglia join the aortic and superior hypogastric plexuses. The pelvic organs and hindgut get their sympathetic supply this way.</li>
+<li><b>Parasympathetic inflow</b>: the vagus to the coeliac plexus (foregut and midgut); the <b>pelvic splanchnic nerves (S2–S4)</b> to the inferior hypogastric plexuses, for the hindgut from about the splenic flexure, the bladder, rectum and erectile tissue.</li>
+<li><b>Applied</b>: a <b>coeliac plexus block</b> (or splanchnic nerve block / neurolysis) relieves intractable upper abdominal pain, especially from pancreatic cancer. The superior hypogastric plexus lies close to the aortic bifurcation, IMA, ureters and iliac vessels, so it is at risk in rectal, vascular and gynaecological surgery; damage to the pelvic plexuses causes urinary and sexual dysfunction.</li></ul>`;
+/* nerves: [nerve, roots, course, supply, 3D keys] */
+const NERVE_ROWS = [
+  ['Iliohypogastric', 'L1 (T12)', 'Lateral border of psoas, across quadratus lumborum', 'Lower abdominal wall', [N('iliohypogastric_nerve')]],
+  ['Ilioinguinal', 'L1', 'Lateral border of psoas, below the iliohypogastric', 'Groin and lower abdominal wall', [N('ilio_inguinal_nerve')]],
+  ['Genitofemoral', 'L1, L2', 'Through the front of psoas', 'Genital branch: cremaster, scrotal (mons) skin; femoral branch: skin of the upper front of the thigh', [N('genitofemoral_nerve'), N('genital_branch_of_genitofemoral_nerve'), N('femoral_branch_of_genitofemoral_nerve')]],
+  ['Lateral femoral cutaneous', 'L2, L3', 'Lateral border of psoas, across iliacus to the ASIS', 'Skin of the lateral thigh', [N('lateral_femoral_cutaneous_nerve')]],
+  ['Femoral', 'L2–L4 (dorsal divisions)', 'Lateral border of psoas, between psoas and iliacus, under the inguinal ligament', 'Quadriceps, sartorius (pectineus); skin of the front of the thigh and medial leg', [N('femoral_nerve')]],
+  ['Obturator', 'L2–L4 (ventral divisions)', 'Medial border of psoas, side wall of the pelvis, obturator canal', 'Adductors; skin of the medial thigh', [N('obturator_nerve')]],
+  ['Lumbosacral trunk', 'L4, L5', 'Medial border of psoas, over the pelvic brim', 'Joins the sacral plexus (not in the model)', null],
+  ['Nerve to quadratus femoris', 'L4–S1', 'Out below piriformis', 'Quadratus femoris, gemellus inferior, hip joint', [N('nerve_to_quadratus_femoris_muscle')]],
+  ['Nerve to obturator internus', 'L5–S2', 'Out below piriformis, round the ischial spine, back in through the lesser sciatic foramen', 'Obturator internus, gemellus superior (not in the model)', null],
+  ['Nerve to piriformis', 'S1, S2', 'Into the front of piriformis', 'Piriformis', [N('nerve_to_piriformis_muscle')]],
+  ['Pudendal', 'S2–S4', 'Below piriformis, round the ischial spine, pudendal canal', 'Perineum: external anal and urethral sphincters, genital skin', [N('pudendal_nerve')]],
+  ['Perforating cutaneous', 'S2, S3', 'Pierces the sacrotuberous ligament', 'Skin of the lower medial buttock (not in the model)', null],
+  ['Pelvic splanchnic', 'S2–S4', 'To the inferior hypogastric plexus', 'Parasympathetic: pelvic organs, hindgut (not in the model)', null],
+  ['Coccygeal plexus', 'S4, S5, Co', '—', 'Coccygeus, part of levator ani; anococcygeal nerves to the skin over the coccyx (not in the model)', null],
+];
+const NERVES_INTRO = 'Roots, where each nerve goes and what it supplies. The limb branches of the sacral plexus (superior and inferior gluteal, sciatic, posterior femoral cutaneous) are on the lower-limb page with their roots. Tap a row to see the nerve.';
+/* lymph node groups: [group, where, drains, drains to] */
+const NODE_ROWS = [
+  ['Pre-aortic: coeliac, superior and inferior mesenteric', 'In front of the aorta at the origins of the three gut arteries', 'The gut supplied by each artery (coeliac: stomach, duodenum, liver, gallbladder, pancreas, spleen; inferior mesenteric: descending and sigmoid colon, upper rectum)', 'Intestinal trunk → cisterna chyli', 'preaortic'],
+  ['Lateral aortic (para-aortic)', 'Beside the aorta, on psoas and the crura', 'Iliac nodes; testis or ovary and other pelvic organs', 'Lumbar trunks → cisterna chyli', 'lumbnodes'],
+  ['Common iliac', 'Round the common iliac artery', 'Internal and external iliac nodes', 'Lateral aortic', 'pelvnodes'],
+  ['External iliac', 'Along the external iliac vessels', 'Inguinal nodes', 'Common iliac', 'pelvnodes'],
+  ['Internal iliac', 'Round the internal iliac vessels', 'Pelvic organs, e.g. the upper rectum (not the ovary or testis)', 'Common iliac', 'pelvnodes'],
+];
+const LYMPH_NOTE = 'The cisterna chyli receives the intestinal and the two lumbar trunks and begins the thoracic duct. The inguinal nodes are on the lower-limb page. Node positions in the model are approximate; the model has no lymph vessels.';
+/* clinical anatomy: 3D view like a topic */
+const CLIN = [
+  {id: 'c-aaa', name: 'Abdominal aortic aneurysm', anat: 'Abdominal aorta', sign: 'A permanent dilatation to at least 1.5 times the normal diameter; commonest in older men; usually silent until it ruptures, and rupture (pain in the abdomen or back) is often fatal',
+    lit: [V('abdominal_aorta'), V('common_iliac_artery_r'), V('common_iliac_artery_l'), V('right_renal_artery'), V('left_renal_artery'), V('inferior_vena_cava_abdominal_part')], solid: VERT, fit: [V('abdominal_aorta')], view: FRONT, zoom: 1.1,
+    labels: [[V('abdominal_aorta'), 'Abdominal aorta', [30, -140, 1020]], [V('left_renal_artery'), 'Renal arteries', [30, -115, 1068]]],
+    text: `<p>An <b>abdominal aortic aneurysm</b> (AAA) is a permanent localised dilatation of the abdominal aorta to at least <b>1.5 times</b> its normal diameter. It is commonest in <b>older men</b>, usually causes <b>no symptoms</b> and is found incidentally or when it <b>ruptures</b>: severe pain in the abdomen or back, with a very high mortality. About half of popliteal aneurysms come with an AAA (<a href="../lower-limb/nerves-vessels.html">lower-limb page</a>).</p>`},
+  {id: 'c-sma', name: 'Superior mesenteric artery syndrome', anat: 'Third part of the duodenum between the SMA and the aorta', sign: 'Obstruction of the upper small bowel, usually after weight loss (loss of the fat between the vessels)',
+    lit: [V('superior_mesenteric_artery'), V('abdominal_aorta'), V('left_renal_vein'), V('superior_mesenteric_vein')], solid: ['first_lumbar_vertebra', 'second_lumbar_vertebra', 'third_lumbar_vertebra'], fit: [V('superior_mesenteric_artery'), V('abdominal_aorta')], view: [1, -0.4, 0.1], zoom: 1.3,
+    labels: [[V('superior_mesenteric_artery'), 'SMA', [0, -150, 1040]], [V('abdominal_aorta'), 'Aorta', [10, -100, 1030]], [V('abdominal_aorta'), 'Duodenum, 3rd part (approx.)', [5, -125, 1020]]],
+    text: `<p>In <b>SMA syndrome</b> the <b>third part of the duodenum</b>, which crosses between the SMA in front and the aorta behind, is compressed between them, causing obstruction of the upper small bowel. The fat that normally keeps the angle open is lost, so it usually follows <b>weight loss</b>; it is rare. Seen from the left.</p>`},
+  {id: 'c-nut', name: 'Nutcracker syndrome', anat: 'Left renal vein between the SMA and the aorta', sign: 'Haematuria, left flank pain, proteinuria, varicocele or pelvic varices',
+    lit: [V('left_renal_vein'), V('superior_mesenteric_artery'), V('abdominal_aorta'), V('left_testicular_vein')], solid: ['first_lumbar_vertebra', 'second_lumbar_vertebra'], fit: [V('left_renal_vein'), V('superior_mesenteric_artery')], view: [1, -0.12, 0.05], zoom: 1.5, centre: [10, -118, 1050],
+    labels: [[V('left_renal_vein'), 'Left renal vein', [20, -116, 1058]], [V('superior_mesenteric_artery'), 'SMA', [0, -150, 1050]], [V('abdominal_aorta'), 'Aorta', [10, -100, 1040]], [V('left_testicular_vein'), 'Left gonadal vein', [40, -116, 1020]]],
+    text: `<p><b>Nutcracker syndrome</b> is symptomatic compression of the <b>left renal vein</b>, usually between the <b>SMA and the aorta</b> (anterior nutcracker; less often a retro-aortic vein between the aorta and the spine). The raised pressure in the vein causes <b>haematuria</b>, left flank pain, proteinuria, and varicocele or pelvic varices through the left gonadal vein. Compression seen on imaging without symptoms (nutcracker phenomenon) is a normal variant.</p>`},
+  {id: 'c-var', name: 'Left varicocele', anat: 'Left testicular vein into the left renal vein', sign: 'Dilated pampiniform plexus, mostly on the left',
+    lit: [V('left_testicular_vein'), V('right_testicular_vein'), V('left_renal_vein'), V('inferior_vena_cava_abdominal_part')], solid: VERT.concat(PELVIS), fit: [V('left_testicular_vein'), V('right_testicular_vein')], view: FRONT, zoom: 0.9,
+    labels: [[V('left_testicular_vein'), 'Left testicular vein', [40, -116, 1000]], [V('right_testicular_vein'), 'Right testicular vein', [-42, -116, 1000]]],
+    text: `<p>A <b>varicocele</b> is an abnormal enlargement of the <b>pampiniform plexus</b>. Most clinically detected varicoceles are on the <b>left</b>: the left testicular vein ends in the higher-pressure left renal vein, the right in the IVC. Compression of the left renal vein (nutcracker) can add to it.</p>`},
+  {id: 'c-plex', name: 'Lumbar plexus lesion (plexopathy)', anat: 'Lumbar plexus in psoas / retroperitoneum', sign: 'Pain in the back, groin and thigh with weakness and numbness; can mimic a root lesion',
+    lit: LUMBAR, glass: [MU('psoas_major'), MU('iliacus')], solid: VERT.concat(PELVIS), fit: [N('femoral_nerve'), N('obturator_nerve'), MU('psoas_major')], view: FRONT, zoom: 1.0,
+    labels: [[MU('psoas_major'), 'Psoas major (plexus inside)', [-45, -100, 990]], [N('femoral_nerve'), 'Femoral nerve', [-55, -110, 940]], [N('obturator_nerve'), 'Obturator nerve', [-35, -95, 930]]],
+    text: `<p>The lumbar plexus lies inside psoas in the retroperitoneum, so it can be damaged by <b>trauma, tumours</b> of the retroperitoneum, <b>diabetes</b> (diabetic radiculoplexus neuropathy), a <b>haematoma in the psoas compartment</b> and surgery. The result is pain in the low back, groin and thigh with weakness and numbness that do not fit a single root (when the femoral fibres are involved: weak hip flexion and knee extension, a reduced knee jerk, numbness of the front of the thigh), so it is easily mistaken for a root lesion.</p>`},
+  {id: 'c-root', name: 'Root compression and cauda equina syndrome', anat: 'Lumbosacral roots in the vertebral canal and foramina', sign: 'Root: pain in a dermatome, numbness, weakness, lost reflex. Cauda equina: saddle anaesthesia, bladder and bowel dysfunction: an emergency',
+    lit: ['n_cauda_equina'].concat(LUMBAR), solid: [], fit: ['n_cauda_equina', 'third_lumbar_vertebra', 'sacrum'], view: [-1, -0.25, 0.05], zoom: 1.1,
+    labels: [['n_cauda_equina', 'Cauda equina', [-10, -50, 980]], ['fifth_lumbar_vertebra', 'L5–S1 disc (approximate)', [-20, -90, 915]]],
+    text: `<p>A lumbar <b>root</b> (radiculopathy) is usually compressed by a <b>disc herniation</b> or other degenerative changes of the spine: low back pain radiating in the <b>dermatome</b> of that root, with numbness, weakness and loss of its reflex. A far-lateral (extraforaminal) disc presses on the exiting root beside psoas and can mimic a plexus lesion (a 2026 review).</p>
+<p><b>Cauda equina syndrome</b>: compression of many roots below the conus (most often by a large disc herniation, typically low lumbar): back and leg pain, <b>saddle anaesthesia</b>, <b>bladder and bowel dysfunction</b>, sexual dysfunction and leg weakness. It is a surgical emergency: delay causes permanent loss of function.</p>`},
+  {id: 'c-pud', name: 'Pudendal nerve injury and entrapment', anat: 'Pudendal nerve at the ischial spine and in the pudendal canal', sign: 'Childbirth injury: perineal numbness, faecal (urinary) incontinence. Entrapment: perineal pain worse on sitting',
+    lit: [N('pudendal_nerve'), V('internal_pudendal_artery_r')], soft: [MU('piriformis')], solid: ['right_hip_bone'], fit: [N('pudendal_nerve')], view: [1, 0.45, 0.15], zoom: 1.3,
+    labels: [[N('pudendal_nerve'), 'Pudendal nerve', [-20, -65, 840]], ['right_hip_bone', 'Ischial spine (approx.)', [-45, -60, 815]]],
+    text: `<p>The <b>pudendal nerve</b> is stretched or injured most often in <b>childbirth</b>: loss of sensation in its territory, <b>faecal</b> (and urinary) <b>incontinence</b> and sexual dysfunction. <b>Pudendal neuralgia</b> from entrapment, commonest where the nerve passes between the sacrospinous and sacrotuberous ligaments at the ischial spine, or in the pudendal canal, causes burning <b>perineal pain made worse by sitting</b>; reported causes include cycling, pelvic surgery, childbirth and chronic constipation.</p>`},
+];
+const DATA = {
+  lede: 'The arteries, veins, nerves and lymph nodes of the posterior abdominal wall and pelvis in 3D: the abdominal aorta and its branches, the internal iliac artery, the inferior vena cava, the portal vein, the lumbar and sacral plexuses and the node groups. Pick a topic to light its parts (the rest turns to glass) and tap a part to name it. Below: aortic branch levels, internal iliac branches, portosystemic anastomoses, the autonomic plexuses, a nerve table, lymph nodes and clinical anatomy.',
+  note3d: 'Arteries red, veins blue (portal and systemic veins alike), nerves yellow, lymph nodes green, bones cream, muscles pale grey. Vessels and nerves are Z-Anatomy curves drawn as tubes: calibres, vertebral levels and node positions approximate. Left-sided limb vessels, nerves, nodes and muscles are mirror images of the right ones. The model has no autonomic plexuses (its sympathetic trunk stops at L1), lumbosacral trunk, pelvic splanchnic or inferior gluteal nerve, no left gastric, superior rectal or paraumbilical vein, no middle suprarenal, lateral sacral, vesical, middle rectal or uterine artery, and no organs.',
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (lumbar plexus anatomy and disorders, internal iliac artery variants, coeliac trunk variations, inferior mesenteric artery meta-analysis, renal veins, portosystemic anastomoses, the superior hypogastric plexus, pelvic neurovascular anatomy, the sacral plexus, pudendal nerve entrapment). Where these differ, the page says so.",
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, vessels, nerves and lymph nodes from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones; vessels and nerves are tubes swept along Z-Anatomy curves; left-sided parts of the pelvis and limbs are mirrored from the right. Simplified meshes, shared under the same licences. The two diagrams are schematic and not to scale; markers for the plexuses and the portosystemic sites are approximate.',
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let kind = {}, names = {}, cur = null, musclesOn = false;
+const COL = {bone: '--bone', muscle: '--soft', artery: '--artery', vein: '--vein', nerve: '--nerve', node: '--lymph'};
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+function anchor(key, near, view) {   // the vertex of a part nearest to a point (default: 25 mm in front of the part's centroid, seen from the topic's view)
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos; let c = near;
+  if (!c) { c = [0, 0, 0]; for (let i = 0; i < pos.length; i++) c[i % 3] += pos[i] / (pos.length / 3);
+    const n = view || [0, -1, 0], l = Math.hypot(...n); c = c.map((x, i) => x + 25 * n[i] / l); }
+  let best = 0, bd = 1e18;
+  for (let i = 0; i < pos.length; i += 3) { const d = (pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2; if (d < bd) { bd = d; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+function showTopic(id) {
+  const t = typeof id === 'object' ? id : TOPICS.find(t => t.id === id); cur = t;
+  const has = k => v.parts.has(k);
+  const lit = (t.lit || []).filter(has), soft = (t.soft || []).filter(has), solid = (t.solid || []).filter(has);
+  const glass = (t.glass || []).filter(has);
+  for (const k in kind) v.setVisible(k, kind[k] !== 'muscle' || musclesOn || soft.includes(k) || glass.includes(k));
+  v.setFocus(lit.concat(soft, solid));
+  const fk = (t.fit || lit).filter(has);
+  v.fit(fk.length ? fk : lit); if (t.centre) v.centre = t.centre.slice();
+  v.face(t.view || FRONT, {zoom: t.zoom || 1});
+  v.setMarkers((t.labels || []).filter(([k]) => has(k)).map(([k, label, near]) => ({p: anchor(k, near, t.view), label, color: css(kind[k] === 'muscle' ? '--muted' : kind[k] === 'bone' ? '--ink' : COL[kind[k]]), always: true})));
+  $('topic-text').innerHTML = t.text || `<p><b>${t.name}:</b> ${t.where || ''}</p>`;
+  $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === t.id));
+  document.querySelectorAll('table.t tr[data-k]').forEach(r => r.setAttribute('aria-pressed', r.dataset.k === t.id));
+}
+const toView = () => $('v').scrollIntoView({behavior: 'smooth', block: 'start'});
+function rowsTo(id, head, rows, cell, onTap) {
+  $(id).innerHTML = '<tr>' + head.map(h => `<th>${h}</th>`).join('') + '</tr>' + rows.map((r, i) => `<tr${onTap ? ` data-k="${id}-${i}" aria-pressed="false"` : ''}>${cell(r).map((c, j) => `<td data-h="${j ? head[j] : ''}">${c}</td>`).join('')}</tr>`).join('');
+  if (onTap) $(id).querySelectorAll('tr[data-k]').forEach((tr, i) => tr.onclick = e => { if (e.target.closest('a')) return; onTap(rows[i], `${id}-${i}`);
+    document.querySelectorAll('table.t tr[data-k]').forEach(r => r.setAttribute('aria-pressed', r === tr)); toView(); });
+}
+function partView(id, name, keys, text, view, extra = {}) {   // a quick 3D view of a few parts (table rows)
+  showTopic(Object.assign({id, name, lit: keys, fit: keys, view: view || FRONT, zoom: 1.0, labels: [[keys[0], name]], where: text}, extra));
+}
+function buildTables() {
+  rowsTo('branches', ['Branch', 'Level', 'Type', 'Supplies'], BRANCHES, b => [`<b>${b.name}</b>`, b.level, b.kind, b.to], b => { showTopic(b.topic); });
+  rowsTo('iia', ['Division', 'Branch', 'Course and supply'], IIA_ROWS, r => [r[0], `<b>${r[1]}</b>${r[3] ? '' : ' <span class="muted">(not in the model)</span>'}`, r[2]],
+    r => r[3] ? partView('iia-' + r[1], r[1], [V(r[3]), V('internal_iliac_artery_r')], r[2], FROM_LEFT, {soft: [MU('piriformis')], solid: ['right_hip_bone', 'sacrum'], zoom: 1.1}) : showTopic('intil'));
+  rowsTo('psa', ['Site', 'Portal side', 'Systemic side', 'In portal hypertension'], PSA_ROWS, r => [`<b>${r[0]}</b>`, r[1], r[2], r[3]], () => showTopic('psa'));
+  rowsTo('nerves', ['Nerve', 'Roots', 'Course', 'Supplies'], NERVE_ROWS, r => [`<b>${r[0]}</b>`, r[1], r[2], r[3]],
+    r => r[4] ? partView('n-' + r[0], r[0], r[4], `${r[1]}. ${r[3]}`, /pudendal|piriformis|quadratus/i.test(r[0]) ? FROM_LEFT : FRONT, {soft: [MU('psoas_major'), MU('piriformis')], solid: ['sacrum', 'right_hip_bone', 'fifth_lumbar_vertebra']}) : showTopic(/Lumbosacral/.test(r[0]) ? 'lumbar' : 'sacral'));
+  rowsTo('nodes', ['Group', 'Where', 'Drains', 'Drains to'], NODE_ROWS, r => [`<b>${r[0]}</b>`, r[1], r[2], r[3]], r => showTopic(r[4]));
+  rowsTo('clin', ['Condition', 'Structure', 'What is seen'], CLIN, c => [`<b>${c.name}</b>`, c.anat, c.sign], c => showTopic(c));
+  // the clinical rows carry their own ids
+  $('clin').querySelectorAll('tr[data-k]').forEach((tr, i) => tr.dataset.k = CLIN[i].id);
+}
+function buildTopics() {
+  const box = $('topics'), grps = [...new Set(TOPICS.map(t => t.grp))];
+  for (const g of grps) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !kind[hit.key]) { $('pick').textContent = ''; return; }
+  $('pick').textContent = `${names[hit.key]}: ${kind[hit.key] === 'node' ? 'lymph nodes' : kind[hit.key]}`;
+};
+async function loadModel() {
+  const base = '../models/abd-nv/';
+  const meta = await (await fetch(base + 'nv.json')).json(), M = meta.mirror;
+  const man = await v.load(base + 'abd-nv.json', null, {
+    extra: (m, items) => items.filter(it => meta.parts[it.key].mirror)
+      .map(it => ({key: LEFT(it.key), m: v.mirrored(it.m, M.m, M.t), info: {name: it.info.name}}))});
+  for (const p of man.parts) {
+    const d = meta.parts[p.key];
+    for (const left of d.mirror ? [false, true] : [false]) {
+      const key = left ? LEFT(p.key) : p.key;
+      kind[key] = d.kind;
+      names[key] = d.mirror ? p.name.replace(/^Right /, '').replace(/ \(right\)$/i, '') + (left ? ' (left)' : ' (right)') : p.name;
+      v.setColour(key, COL[d.kind]);
+    }
+  }
+}
+
+/* ===================== schematics (front view: the patient's right on the viewer's left) ===================== */
+const VB = [['T12', 0], ['L1', 1], ['L2', 2], ['L3', 3], ['L4', 4], ['L5', 5]];
+function spine(x0, y0, h, gap) {   // vertebral bodies as rounded boxes with their names on the viewer's left
+  let s = '';
+  VB.forEach(([n, i]) => { const y = y0 + i * (h + gap); s += `<rect class="vb" x="${x0}" y="${y}" width="110" height="${h}" rx="8"/><text class="h" x="${x0 - 10}" y="${y + h / 2 + 4}" text-anchor="end">${n}</text>`; });
+  const ys = y0 + 6 * (h + gap);
+  s += `<path class="vb" d="M${x0 - 10},${ys} L${x0 + 120},${ys} L${x0 + 85},${ys + 95} L${x0 + 25},${ys + 95} Z"/><text class="h" x="${x0 - 10}" y="${ys + 30}" text-anchor="end">Sacrum</text>`;
+  return s;
+}
+function drawLevels() {
+  const S = $('levels'), X0 = 205, Y0 = 40, H = 58, G = 10, AX = 275;   // aorta just to the viewer's right of the midline (patient's left)
+  const yAt = u => Y0 + u * (H + G) / 1.2;   // u: 0 = top of T12 ... (scaled so the rows fit)
+  let s = `<text class="h" x="16" y="18">PATIENT'S RIGHT</text><text class="h" x="624" y="18" text-anchor="end">PATIENT'S LEFT</text>`;
+  s += spine(X0, Y0, H, G);
+  const bif = Y0 + 4 * (H + G) + H * 0.5;   // L4
+  const yR0 = Y0 + (H + G) + H * 0.8;
+  s += `<path class="art" d="M${AX},${yR0} L${AX - 130},${yR0 + 8}" style="stroke-width:6"/>`;   // right renal, behind the IVC
+  s += `<path d="M${AX - 48},${bif + 60} L${AX - 48},${Y0 - 22}" style="stroke:var(--vein);stroke-width:16;fill:none;stroke-linecap:round"/><text class="s" x="${AX - 48}" y="${Y0 - 28}" text-anchor="middle">IVC</text>`;
+  s += `<path class="art" d="M${AX},${Y0 - 22} L${AX},${bif}" style="stroke-width:16"/>`;
+  s += `<path class="art" d="M${AX},${bif} Q${AX - 25},${bif + 40} ${AX - 70},${bif + 95}" style="stroke-width:11"/><path class="art" d="M${AX},${bif} Q${AX + 25},${bif + 40} ${AX + 70},${bif + 95}" style="stroke-width:11"/>`;
+  s += `<path class="art" d="M${AX},${bif - 6} L${AX},${bif + 150}" style="stroke-width:3"/>`;   // median sacral (drawn from just above the bifurcation)
+  const yT12 = Y0 + H * 0.55, yL1 = Y0 + (H + G) + H * 0.35, yR = Y0 + (H + G) + H * 0.8, yG = Y0 + 2 * (H + G) + H * 0.3, yL3 = Y0 + 3 * (H + G) + H * 0.4;
+  // paired lateral branches
+  s += `<path class="art" d="M${AX - 6},${yT12 - 14} Q${AX - 40},${yT12 - 30} ${AX - 90},${yT12 - 42}" style="stroke-width:3"/><path class="art" d="M${AX + 6},${yT12 - 14} Q${AX + 40},${yT12 - 30} ${AX + 90},${yT12 - 42}" style="stroke-width:3"/>`;   // inferior phrenic
+  s += `<path class="art" d="M${AX},${yR - 4} L${AX + 120},${yR - 6}" style="stroke-width:6"/>`;   // left renal (slightly higher; the right one is drawn behind the IVC above)
+  s += `<path class="art" d="M${AX - 6},${yL1} L${AX - 60},${yL1 - 14}" style="stroke-width:2.2"/><path class="art" d="M${AX + 6},${yL1} L${AX + 60},${yL1 - 14}" style="stroke-width:2.2"/>`;   // middle suprarenal
+  s += `<path class="art" d="M${AX - 4},${yG} Q${AX - 40},${yG + 60} ${AX - 60},${bif + 110}" style="stroke-width:2"/><path class="art" d="M${AX + 4},${yG} Q${AX + 40},${yG + 60} ${AX + 60},${bif + 110}" style="stroke-width:2"/>`;   // gonadal
+  for (let i = 1; i <= 4; i++) { const y = Y0 + i * (H + G) + H * 0.55; s += `<path class="art" d="M${AX - 8},${y} L${AX - 36},${y}" style="stroke-width:2;stroke-dasharray:3 2"/><path class="art" d="M${AX + 8},${y} L${AX + 36},${y}" style="stroke-width:2;stroke-dasharray:3 2"/>`; }
+  // unpaired anterior branches: dots
+  for (const y of [yT12, yL1 - 8, yL3]) s += `<circle class="artf" cx="${AX}" cy="${y}" r="8" style="stroke:var(--ink);stroke-width:1.5"/>`;
+  // labels on the viewer's right, joined by leaders
+  const LX = 430;
+  const pts = {inferior_phrenic_artery: [AX + 90, yT12 - 42], coeliac_trunk: [AX + 7, yT12], superior_mesenteric_artery: [AX + 7, yL1 - 8], null: [AX + 60, yL1 - 14], left_renal_artery: [AX + 120, yR - 6], left_testicular_artery: [AX + 40, yG + 50], lumbar_arteries_l: [AX + 36, Y0 + 3 * (H + G) + H * 0.55], inferior_mesenteric_artery: [AX + 7, yL3], median_sacral_artery: [AX + 2, bif + 120], common_iliac_artery_l: [AX + 50, bif + 70]};
+  BRANCHES.forEach((b, i) => {
+    const y = 40 + i * 50, p = pts[b.key] || pts.null;
+    s += `<g class="hit" data-i="${i}" tabindex="0" role="button" aria-label="${b.name}, ${b.level}"><path class="lead" d="M${p[0] + 2},${p[1]} L${LX - 8},${y - 4}"/><text x="${LX}" y="${y}">${b.name}</text><text class="s" x="${LX}" y="${y + 15}">${b.level}</text></g>`;
+  });
+  S.innerHTML = s;
+  const pick = i => { S.querySelectorAll('g.hit').forEach(g => g.classList.toggle('sel', +g.dataset.i === i)); showTopic(BRANCHES[i].topic); toView(); };
+  S.querySelectorAll('g.hit').forEach(g => { g.onclick = () => pick(+g.dataset.i); g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(+g.dataset.i); } }; });
+}
+function drawPlex() {
+  const S = $('plex'), X0 = 150, Y0 = 70, H = 52, G = 10, AX = 213;   // aorta slightly to the patient's left
+  let s = `<text class="h" x="${X0 - 10}" y="18" text-anchor="end">PATIENT'S RIGHT</text><text class="h" x="${X0 + 120}" y="18">PATIENT'S LEFT</text>`;
+  s += spine(X0, Y0, H, G);
+  const yL1 = Y0 + (H + G) + 10, yIMA = Y0 + 3 * (H + G) + 20, bif = Y0 + 4 * (H + G) + 26, yProm = Y0 + 5 * (H + G) + 30, ySac = Y0 + 6 * (H + G);
+  s += `<path class="art" d="M${AX},${Y0 - 40} L${AX},${bif}" style="stroke-width:14;opacity:.85"/>`;
+  s += `<path class="art" d="M${AX},${bif} Q${AX - 30},${bif + 40} ${AX - 95},${bif + 110}" style="stroke-width:9;opacity:.85"/><path class="art" d="M${AX},${bif} Q${AX + 30},${bif + 40} ${AX + 95},${bif + 110}" style="stroke-width:9;opacity:.85"/>`;
+  for (const y of [yL1 - 22, yL1 + 6, yIMA]) s += `<circle class="artf" cx="${AX}" cy="${y}" r="7" style="stroke:var(--ink);stroke-width:1.5"/>`;
+  // sympathetic trunks beside the vertebral bodies, ganglia, converging on the coccyx (ganglion impar)
+  const trunk = (x, sgn) => `<path class="nrv" d="M${x},${Y0 - 40} L${x},${ySac} Q${x + sgn * -8},${ySac + 60} ${X0 + 55},${ySac + 110}" style="stroke-width:3"/>` + [0, 1, 2, 3].map(i => `<ellipse class="nrvf" cx="${x}" cy="${Y0 + (i + 1) * (H + G) + H / 2}" rx="5" ry="8"/>`).join('');
+  s += trunk(X0 - 4, -1) + trunk(X0 + 114, 1) + `<circle class="nrvf" cx="${X0 + 55}" cy="${ySac + 110}" r="6"/>`;
+  // splanchnic nerves from above into the coeliac ganglia; ganglia either side of the coeliac trunk
+  s += `<path class="nrv" d="M${X0 - 4},${Y0 - 30} Q${AX - 60},${Y0 - 10} ${AX - 32},${yL1 - 22}" style="stroke-width:2.2"/><path class="nrv" d="M${X0 + 114},${Y0 - 30} Q${AX + 60},${Y0 - 10} ${AX + 32},${yL1 - 22}" style="stroke-width:2.2"/>`;
+  s += `<path class="nrv" d="M${X0 - 4},${Y0 - 10} Q${AX - 55},${Y0 + 30} ${AX - 30},${yL1 + 4}" style="stroke-width:1.6"/><path class="nrv" d="M${X0 + 114},${Y0 - 10} Q${AX + 55},${Y0 + 30} ${AX + 30},${yL1 + 4}" style="stroke-width:1.6"/>`;
+  s += `<ellipse class="nrvf" cx="${AX - 26}" cy="${yL1 - 18}" rx="12" ry="16"/><ellipse class="nrvf" cx="${AX + 26}" cy="${yL1 - 18}" rx="12" ry="16"/>`;
+  // aortic plexus (net on the aorta between SMA and IMA), superior hypogastric plexus, hypogastric nerves, inferior hypogastric plexuses, pelvic splanchnic nerves
+  s += `<path class="net" d="M${AX - 10},${yL1 + 12} L${AX + 10},${yL1 + 40} L${AX - 10},${yL1 + 70} L${AX + 10},${yL1 + 100} L${AX - 10},${yL1 + 130} L${AX + 10},${yIMA - 10}"/><path class="net" d="M${AX + 10},${yL1 + 12} L${AX - 10},${yL1 + 40} L${AX + 10},${yL1 + 70} L${AX - 10},${yL1 + 100} L${AX + 10},${yL1 + 130} L${AX - 10},${yIMA - 10}"/>`;
+  s += `<path class="nrv" d="M${X0 + 4},${Y0 + 2 * (H + G) + 20} Q${AX - 30},${Y0 + 2 * (H + G) + 40} ${AX - 9},${Y0 + 2 * (H + G) + 60}" style="stroke-width:1.4"/><path class="nrv" d="M${X0 + 106},${Y0 + 2 * (H + G) + 20} Q${AX + 30},${Y0 + 2 * (H + G) + 40} ${AX + 9},${Y0 + 2 * (H + G) + 60}" style="stroke-width:1.4"/>`;   // lumbar splanchnic
+  s += `<path class="net" d="M${AX - 14},${bif + 4} L${AX + 10},${yProm - 20} L${AX - 18},${yProm} L${AX + 6},${yProm + 12}"/><path class="net" d="M${AX + 6},${bif + 4} L${AX - 14},${yProm - 20} L${AX + 12},${yProm} L${AX - 10},${yProm + 12}"/>`;
+  const ihpR = [X0 + 10, ySac + 70], ihpL = [X0 + 100, ySac + 70];
+  s += `<path class="nrv" d="M${AX - 4},${yProm + 14} Q${AX - 40},${ySac + 20} ${ihpR[0] + 10},${ihpR[1] - 10}" style="stroke-width:2.4"/><path class="nrv" d="M${AX + 4},${yProm + 14} Q${AX + 10},${ySac + 20} ${ihpL[0] - 4},${ihpL[1] - 10}" style="stroke-width:2.4"/>`;
+  s += `<ellipse class="nrvf" cx="${ihpR[0]}" cy="${ihpR[1]}" rx="16" ry="11"/><ellipse class="nrvf" cx="${ihpL[0]}" cy="${ihpL[1]}" rx="16" ry="11"/>`;
+  for (let i = 0; i < 3; i++) { const y = ySac + 22 + i * 18; s += `<path class="nrv" d="M${X0 + 30},${y} Q${ihpR[0] + 6},${y + 10} ${ihpR[0] + 4},${ihpR[1]}" style="stroke-width:1.4"/><path class="nrv" d="M${X0 + 80},${y} Q${ihpL[0] - 6},${y + 10} ${ihpL[0] - 4},${ihpL[1]}" style="stroke-width:1.4"/>`; }
+  const lab = [
+    [AX + 30, yL1 - 18, 380, 84, 'Coeliac ganglia and plexus', 'around the coeliac trunk and SMA'],
+    [X0 + 114, Y0 - 30, 380, 44, 'Greater and lesser splanchnic', 'from the thoracic sympathetic trunk'],
+    [AX + 10, yL1 + 70, 380, 150, 'Abdominal aortic plexus', 'on the aorta, below the coeliac plexus'],
+    [X0 + 106, Y0 + 2 * (H + G) + 20, 380, 205, 'Lumbar splanchnic nerves', 'from the lumbar ganglia'],
+    [AX + 10, yProm, 380, 290, 'Superior hypogastric plexus', 'in front of L5 and the promontory'],
+    [ihpL[0] + 14, ihpL[1], 380, 420, 'Inferior hypogastric plexus', 'beside the rectum; hypogastric nerves in'],
+    [X0 + 80, ySac + 40, 380, 470, 'Pelvic splanchnic nerves', 'S2–S4, parasympathetic'],
+    [X0 + 114, Y0 + 3 * (H + G) + H / 2, 380, 245, 'Sympathetic trunk', 'lumbar ganglia, medial to psoas'],
+    [X0 + 61, ySac + 110, 380, 540, 'Ganglion impar', 'trunks meet in front of the coccyx'],
+  ];
+  for (const [px, py, lx, ly, a, b] of lab) s += `<path class="lead" d="M${px + 2},${py} L${lx - 8},${ly - 4}"/><text x="${lx}" y="${ly}">${a}</text><text class="s" x="${lx}" y="${ly + 15}">${b}</text>`;
+  s += `<text class="s" x="${AX}" y="${Y0 - 46}" text-anchor="middle">aorta</text>`;
+  S.innerHTML = s;
+}
+
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('levels-cap').textContent = LEVELS_CAP; $('plex-cap').textContent = PLEX_CAP; $('plex-text').innerHTML = PLEX_TEXT;
+  $('iia-note').textContent = IIA_NOTE; $('ph-text').innerHTML = PH_TEXT; $('nerves-intro').textContent = NERVES_INTRO; $('lymph-note').textContent = LYMPH_NOTE;
+  drawLevels(); drawPlex(); buildTables();
+  const bar = $('vbar');
+  const mb = document.createElement('button'); mb.className = 'chip'; mb.textContent = 'All muscles (glass)'; mb.setAttribute('aria-pressed', 'false');
+  mb.onclick = () => { musclesOn = !musclesOn; mb.setAttribute('aria-pressed', musclesOn); if (cur) showTopic(cur); };
+  bar.append(mb);
+  for (const [label, dir] of [['Front', [0, -1, 0]], ['Back', [0, 1, 0]], ['Right', [-1, 0, 0]], ['Left', [1, 0, 0]]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic('aorta');
+  window.J = {TOPICS, CLIN, showTopic, clin: id => showTopic(CLIN.find(c => c.id === id))};   // for tests
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

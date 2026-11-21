@@ -8,16 +8,15 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 26 is finished, committed, pushed and tested on the live site (2026-11-21).
-- Waiting for the user to say "proceed" before starting module 27 (nerves and vessels of the thorax and abdomen).
+- Modules 27 and 28 are finished, committed, pushed and tested on the live site (2026-11-21).
+- Waiting for the user to say "proceed" before starting module 29 (nerves and vessels of the head and neck).
 - Local test server: may still run on 127.0.0.1:8765; start it again if a test can't connect.
 
 ## Next (the plan, in order)
 
 | # | Module | Page | Model | Notes |
 |---|--------|------|-------|-------|
-| 27 | Nerves and vessels of the thorax and abdomen | anatomy/thorax/… and abdomen | own pack | no phrenic nerve, no thoracic duct in Z-Anatomy |
-| 28 | Nerves and vessels of the head and neck | anatomy/head-neck/nerves-vessels.html | own pack | cranial nerves, circle of Willis, dural sinuses |
+| 29 | Nerves and vessels of the head and neck | anatomy/head-neck/nerves-vessels.html | own pack | cranial nerves, circle of Willis, dural sinuses |
 
 For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap on the home page opens the page.
 
@@ -27,11 +26,13 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
 - AN13.3: the proximal radio-ulnar joint's own nerve and artery supply.
 - AN31.5: the definition of primary versus secondary deviation.
 - AN20.8: the anterior tibial pulse at the ankle has one source (Gray 291); the other four pulses are done (module 25).
-- AN25.9: heart borders, apex and valve areas done (module 26); pleura and lung markings still to do (module 27).
+- AN25.9: heart borders, apex and valve areas done (module 26); pleura and lung markings still to do (not yet built: a lungs and pleura module).
+- AN23.2 (thoracic duct tributaries), AN23.3 (hemiazygos origin), AN47.12 (secondary plexuses), AN48.3 (internal iliac
+  relations): Gray only (Wikipedia copies Gray); modules 27–28.
 - AN13.7: surface lines and pulses are done (module 24); the muscle tests for pectoralis major, serratus anterior,
   latissimus dorsi, deltoid, biceps and brachioradialis are not. Could go on the upper-limb muscles page.
 
-Progress: anatomy 147 covered, 7 partial, 262 not started; ophthalmology 6 covered, 1 partial, 55 not started.
+Progress: anatomy 161 covered, 11 partial, 244 not started; ophthalmology 6 covered, 1 partial, 55 not started.
 
 ## Steps for every module (do them in this order, tick them here as they finish)
 
@@ -76,6 +77,9 @@ builds at the same time.
 
 ## Log (newest first)
 
+- 2026-11-21: Modules 27 (thorax: 402 quotes, 887 KB thorax-nv) and 28 (abdomen and pelvis: 651 quotes, 860 KB abd-nv),
+  built in parallel; reviews found 11 and 9 problems, all fixed. 14 competencies ticked, 4 partial. Home: Trunk parts
+  open the thorax/abdomen/limb page via tools/home/region_pages.py; sigmoid veins tagged portal.
 - 2026-11-21: Module 26 (the heart): 398 quotes, 73-part 522 KB model `models/heart` (tools/thorax/heart_config.py),
   reviewer found 11 problems (two mirrored schematics among them), 10 fixed, conducting-tissue colour kept; AN22.1–22.7
   ticked, AN25.9 partial; heart parts on the Anatomy home open the page.

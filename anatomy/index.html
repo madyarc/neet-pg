@@ -102,6 +102,10 @@
           <p>Lumbar and sacral plexus, femoral, obturator and sciatic nerves, femoral and profunda arteries, popliteal fossa, leg and foot vessels and nerves in 3D; blood supply of the femoral head, psoas abscess, femoral hernia, inguinal nodes, varicose veins and perforators; foot drop and other nerve injuries; pulses and surface markings.</p></div></a>
         <a class="mod" href="thorax/heart.html"><span class="num">26</span><div><h3>The Heart</h3>
           <p>Pericardium and its sinuses, each chamber cut open in 3D, valves, coronary arteries and dominance, territories and ischaemic heart disease, coronary sinus and cardiac veins, fibrous skeleton, conducting system and its arteries; heart borders, apex beat and valve areas on the chest.</p></div></a>
+        <a class="mod" href="thorax/nerves-vessels.html"><span class="num">27</span><div><h3>Nerves, Vessels and Lymphatics of the Thorax</h3>
+          <p>Intercostal nerves and vessels, internal thoracic vessels, the mediastinum and its contents, aortic arch and descending aorta, SVC and azygos veins, thoracic duct, sympathetic trunk and splanchnic nerves, phrenic nerve; chest drains, coarctation, SVC obstruction.</p></div></a>
+        <a class="mod" href="abdomen-pelvis/nerves-vessels.html"><span class="num">28</span><div><h3>Nerves and Vessels of the Abdomen and Pelvis</h3>
+          <p>Abdominal aorta and its branches, IVC, renal and portal veins, portosystemic anastomoses and portal hypertension, autonomic plexuses, lumbar plexus, internal iliac artery, sacral plexus and pudendal nerve, lymph node groups in 3D.</p></div></a>
       </nav>
     </div>
   </div>
@@ -236,16 +240,26 @@ const EXTRA = {
 // regions whose vessels, nerves and nodes have a detailed page
 const REGION_PAGES = {'Upper limb': {name: 'Nerves, vessels and lymph nodes of the upper limb', href: 'upper-limb/nerves-vessels.html'},
   'Lower limb': {name: 'Nerves, vessels and lymph nodes of the lower limb', href: 'lower-limb/nerves-vessels.html'},
-  'Heart': {name: 'The heart', href: 'thorax/heart.html'}};
+  'Heart': {name: 'The heart', href: 'thorax/heart.html'},
+  'Thorax': {name: 'Nerves, vessels and lymphatics of the thorax', href: 'thorax/nerves-vessels.html'},
+  'Abdomen and pelvis': {name: 'Nerves and vessels of the abdomen and pelvis', href: 'abdomen-pelvis/nerves-vessels.html'}};
+// Z-Anatomy files thorax, abdomen, pelvis (and axillary and inguinal nodes) under "Trunk": which page each such part opens
+// (written by tools/home/region_pages.py from the regional models); loaded with the first extra layer
+let PAGE_OF = {}, pagesLoading = null;
+const loadPages = () => pagesLoading || (pagesLoading = fetch('models/region-pages.json').then(r => r.json()).then(j => { PAGE_OF = j; }).catch(() => {}));
 // the heart's chambers, coronary arteries, cardiac veins and pulmonary trunk open the heart page, not their region's
 const HEART_RE = /^v_(left|right)_(atrium|ventricle)$|^v_pulmonary_trunk$|coronary|cardiac_vein|interventricular_artery|^v_marginal_artery$|^v_circumflex_artery_of_heart$/;
-function regionOf(layer, k) { return layer === 'vascular' && HEART_RE.test(k) ? 'Heart' : extra[layer].info[k].region; }
+function regionOf(layer, k) {
+  if (layer === 'vascular' && HEART_RE.test(k.replace(/_l$/, ''))) return 'Heart';
+  return PAGE_OF[k] || PAGE_OF[k.replace(/_l$/, '')] || extra[layer].info[k].region;
+}
 const extra = {}, extraLoading = {};     // extra[sys] = {info: {key: {kind, region, side, ...}}, keys: [...]}
 const extraOf = k => Object.keys(extra).find(s => extra[s].info[k]);
 function loadExtra(sys) {
   if (extraLoading[sys]) return extraLoading[sys];
   const L = EXTRA[sys], b = sysBtn(sys);
   extraLoading[sys] = (async () => {
+    loadPages();
     const meta = await (await fetch(L.base + L.meta)).json();
     const info = {}, M = meta.mirror, keys = [];
     await v.load(L.base + L.model, null, {fit: false,

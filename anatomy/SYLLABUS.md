@@ -202,13 +202,13 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [x] **AN21.2** Identify & describe the features of atypical ribs and atypical thoracic vertebrae. — *ribs 1, 2, 10, 11, 12: [Ribs and Sternum](thorax/ribs.html); T1, T9–T12: [The Vertebrae](back/vertebrae.html)*
 - [x] **AN21.3** Describe & demonstrate the boundaries of thoracic inlet, cavity and outlet along with its applied aspect.( Thoracic inlet Syndrome) — *boundaries, structures through the inlet in 3D, mediastinum divisions, thoracic outlet syndrome (forms, cervical rib, interscalene, costoclavicular and retropectoralis minor spaces in 3D): [The Thoracic Cage](thorax/thoracic-cage.html)*
 - [x] **AN21.4** Describe & demonstrate extent, attachments, direction of fibres, nerve supply and actions of intercostal muscles — *external, internal and innermost intercostals: [Muscles of the Trunk Wall](thorax/wall-muscles.html)*
-- [ ] **AN21.5** Describe & demonstrate origin, course, relations and branches of a typical intercostal nerve
-- [ ] **AN21.6** Mention origin, course and branches/ tributaries of: 1) anterior & posterior intercostal vessels 2) internal thoracic vessels
-- [ ] **AN21.7** Mention the origin, course, relations and branches of 1) atypical intercostal nerve 2) superior intercostal artery, subcostal artery
+- [x] **AN21.5** Describe & demonstrate origin, course, relations and branches of a typical intercostal nerve — *course, bundle order, branches; needle, drain and nerve-block sites (schematic): [Nerves, Vessels and Lymphatics of the Thorax](thorax/nerves-vessels.html)*
+- [x] **AN21.6** Mention origin, course and branches/ tributaries of: 1) anterior & posterior intercostal vessels 2) internal thoracic vessels — *posterior and anterior intercostal and internal thoracic vessels in 3D: [Nerves, Vessels and Lymphatics of the Thorax](thorax/nerves-vessels.html)*
+- [x] **AN21.7** Mention the origin, course, relations and branches of 1) atypical intercostal nerve 2) superior intercostal artery, subcostal artery — *atypical nerves table; superior intercostal and subcostal arteries in 3D: [Nerves, Vessels and Lymphatics of the Thorax](thorax/nerves-vessels.html)*
 - [x] **AN21.8** Describe & demonstrate type, articular surfaces & movements of manubriosternal, costovertebral, costotransverse and xiphisternal joints — *type, surfaces and movements of the costovertebral, costotransverse, manubriosternal and xiphisternal joints (no source describes xiphisternal movement): [The Thoracic Cage](thorax/thoracic-cage.html)*
 - [x] **AN21.9** Describe & demonstrate mechanics and types of respiration — *pump-handle, bucket-handle and diaphragm (animated, ribs in 3D), quiet and forced breathing, abdominal and thoracic types: [The Thoracic Cage](thorax/thoracic-cage.html); muscles: [Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 - [x] **AN21.10** Describe costochondral and interchondral joints — *costochondral (primary cartilaginous) and interchondral (synovial) joints: [The Thoracic Cage](thorax/thoracic-cage.html)*
-- [ ] **AN21.11** Mention boundaries and contents of the superior, anterior, middle and posterior mediastinum
+- [x] **AN21.11** Mention boundaries and contents of the superior, anterior, middle and posterior mediastinum — *boundaries and contents of the four parts (schematic and 3D): [Nerves, Vessels and Lymphatics of the Thorax](thorax/nerves-vessels.html)*
 
 ### 22. Heart & Pericardium
 
@@ -223,18 +223,18 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 23. Mediastinum
 
 - [ ] **AN23.1** Describe & demonstrate the external appearance, relations, blood supply, nerve supply, lymphatic drainage and applied anatomy of oesophagus
-- [ ] **AN23.2** Describe & demonstrate the extent, relations and tributaries of thoracic duct and enumerate its applied anatomy.
-- [ ] **AN23.3** Describe & demonstrate origin, course, relations, tributaries and termination of superior vena cava, azygos, hemiazygos andaccessory hemiazygos veins
-- [ ] **AN23.4** Mention the extent, branches and relations of arch of aorta & descending thoracic aorta
-- [ ] **AN23.5** Identify & Mention the location and extent of thoracic sympathetic chain
-- [ ] **AN23.6** Describe the splanchnic nerves
+- [~] **AN23.2** Describe & demonstrate the extent, relations and tributaries of thoracic duct and enumerate its applied anatomy. — *course and termination (approximate line), territories, chylothorax: [Nerves, Vessels and Lymphatics of the Thorax](thorax/nerves-vessels.html); tributaries beyond the cisterna chyli have one source*
+- [~] **AN23.3** Describe & demonstrate origin, course, relations, tributaries and termination of superior vena cava, azygos, hemiazygos andaccessory hemiazygos veins — *SVC, brachiocephalic and azygos veins in 3D, crossing levels, SVC obstruction: [Nerves, Vessels and Lymphatics of the Thorax](thorax/nerves-vessels.html); hemiazygos origin has one source*
+- [x] **AN23.4** Mention the extent, branches and relations of arch of aorta & descending thoracic aorta — *arch and descending aorta, branches, relations, coarctation: [Nerves, Vessels and Lymphatics of the Thorax](thorax/nerves-vessels.html)*
+- [x] **AN23.5** Identify & Mention the location and extent of thoracic sympathetic chain — *thoracic sympathetic trunk and ganglia in 3D: [Nerves, Vessels and Lymphatics of the Thorax](thorax/nerves-vessels.html)*
+- [x] **AN23.6** Describe the splanchnic nerves — *greater, lesser and least splanchnic nerves: [Nerves, Vessels and Lymphatics of the Thorax](thorax/nerves-vessels.html)*
 
 ### 24. Lungs & Trachea
 
 - [ ] **AN24.1** Mention the blood supply, lymphatic drainage and nerve supply of pleura, extent of pleura and describe the pleural recesses and their applied anatomy
 - [ ] **AN24.2** Identify side, external features and relations of structures which form root of lung & bronchial tree and their clinical correlate
 - [ ] **AN24.3** Describe a bronchopulmonary segment with its clinical anatomy
-- [ ] **AN24.4** Identify phrenic nerve & describe its formation & distribution
+- [x] **AN24.4** Identify phrenic nerve & describe its formation & distribution — *formation, course and distribution (approximate lines; not in the model): [Nerves, Vessels and Lymphatics of the Thorax](thorax/nerves-vessels.html)*
 - [ ] **AN24.5** Mention the blood supply, lymphatic drainage and nerve supply of lungs
 - [ ] **AN24.6** Describethe extent, length, relations, bloodsupply, lymphatic drainageand nerve supply of trachea
 
@@ -406,7 +406,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 45. Posterior abdominal wall
 
 - [x] **AN45.1** Describe Thoracolumbar fascia, its different layers, their attachments and extents — *three layers, attachments, what lies between them: [Muscles of the Back](back/muscles.html)*
-- [ ] **AN45.2** Describe & demonstrate Lumbar plexus, its root value, formation, branches and clinical anatomy (compression/ injury to the rootlets of lumber plexus)
+- [x] **AN45.2** Describe & demonstrate Lumbar plexus, its root value, formation, branches and clinical anatomy (compression/ injury to the rootlets of lumber plexus) — *formation, roots, branches, plexopathy and root compression: [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html); limb course: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
 - [x] **AN45.3** Describe and demonstrate back muscles, nerve supply and action — *[Muscles of the Back](back/muscles.html)*
 
 ### 46. Male external genitalia
@@ -426,11 +426,11 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN47.5** Describe & demonstrate major viscera of abdomen under following headings (anatomical position, external and internal features, important peritoneal and other relations, blood supply, nerve supply, lymphatic drainage and applied aspects)
 - [ ] **AN47.6** Explain the anatomical basis of Splenic notch, Accessory spleens, Kehr’s sign, Different types of vagotomy, Liver biopsy (site of needle puncture), Referred pain in cholecystitis, Obstructive jaundice, Referred pain around umbilicus, Radiating pain of kidney to groin & Lymphatic spread in carcinoma stomach
 - [ ] **AN47.7** Demonstrate boundaries of Calot's triangle and mention its clinical importance
-- [ ] **AN47.8** Describe & identify the formation, course relations and tributaries of Portal vein, Inferior vena cava & Renal vein
-- [ ] **AN47.9** Describe & identify the origin, course, important relations and branches of Abdominal aorta, Coeliac trunk, Superior mesenteric, Inferior mesenteric & Common iliac artery
-- [ ] **AN47.10** Describe sites of portosystemic anastomosis, describe its applied anatomy andanatomical correlations
-- [ ] **AN47.11** Explain the anatomic basis of hematemesis& caput medusae in portal hypertension
-- [ ] **AN47.12** Describe important nerve plexuses of posterior abdominal wall
+- [x] **AN47.8** Describe & identify the formation, course relations and tributaries of Portal vein, Inferior vena cava & Renal vein — *portal vein, IVC, renal and gonadal veins in 3D: [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html)*
+- [x] **AN47.9** Describe & identify the origin, course, important relations and branches of Abdominal aorta, Coeliac trunk, Superior mesenteric, Inferior mesenteric & Common iliac artery — *aortic branch levels, coeliac trunk, SMA, IMA, iliac arteries in 3D: [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html)*
+- [x] **AN47.10** Describe sites of portosystemic anastomosis, describe its applied anatomy andanatomical correlations — *the four sites in 3D: [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html)*
+- [x] **AN47.11** Explain the anatomic basis of hematemesis& caput medusae in portal hypertension — *haematemesis and caput medusae: [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html)*
+- [~] **AN47.12** Describe important nerve plexuses of posterior abdominal wall — *coeliac, aortic and hypogastric plexuses (schematic): [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html); secondary plexuses have one source*
 - [x] **AN47.13** Describe & demonstrate the attachments, openings, nerve supply & action of the thoracoabdominal diaphragm — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 - [x] **AN47.14** Describe the abnormal openings of thoracoabdominal diaphragm and diaphragmatic hernia — *development, Bochdalek and Morgagni hernias, sliding vs rolling hiatal hernia, eventration, traumatic rupture: [Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 
@@ -438,8 +438,8 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [ ] **AN48.1** Describe & demonstrate the position, features, important peritoneal and other relations, blood supply, nerve supply, lymphatic drainage and clinical aspects of important male & female pelvic viscera.
 - [x] **AN48.2** Describe & identify the muscles of Pelvic diaphragm. — *[Muscles of the Trunk Wall](thorax/wall-muscles.html) (puborectalis described, not separate in the model)*
-- [ ] **AN48.3** Describe & demonstrate the origin, course, important relations and branches of internal iliac artery
-- [ ] **AN48.4** Describe the branches of sacral plexus
+- [~] **AN48.3** Describe & demonstrate the origin, course, important relations and branches of internal iliac artery — *divisions and branches in 3D: [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html); relations have one source*
+- [x] **AN48.4** Describe the branches of sacral plexus — *pelvic branches, pudendal nerve: [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html); limb branches: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
 - [ ] **AN48.5** Explain the anatomical basis of suprapubic cystostomy, Urinary obstruction in benign prostatic hypertrophy, Retroverted uterus, Prolapse uterus, Internal and external haemorrhoids, Anal fistula, Vasectomy, Tubal pregnancy & Tubal ligation
 - [ ] **AN48.6** Describe the neurological basis of Automatic bladder
 - [ ] **AN48.7** Mention the lobes involved in benign prostatic hypertrophy & prostatic cancer

@@ -859,3 +859,49 @@ tubercles.
   "most often" behind the SVC; heart position on the chest; single-source details attributed or cut; mitral point and
   text agree; infarct wording.
 
+## Nerves, Vessels and Lymphatics of the Thorax — `thorax/nerves-vessels.html`
+
+- Fact sheet `sources-local/facts/fill-thnv.md` (402 quotes, script-checked against `sources-local/modern/fill-thnv/`,
+  downloads 2026-11-21): Gray 1918 pages 142, 148, 153, 172, 176, 181, 205, 210, 211, 217, 239; 26 StatPearls
+  abstracts; open papers (ICS/NCCP pleural procedures guideline 2024, azygos system review 2025, PMC13624812 on the
+  thoracoabdominal nerves, PMC11409315 on coarctation collaterals, others in the sheet); Wikipedia. Excluded as Gray
+  copies (Part N): Costocervical trunk, Subcostal arteries and nerve, Parasternal and Thoracic lymph nodes, parts of
+  Hemiazygos, Thoracic aorta, Intercostal nerves and arteries, Mediastinum, Accessory hemiazygos. No OpenStax.
+- Contested, stated on the page: thoracic duct start (L2 or T12) and arch height; right lymphatic duct ending (Gray vs
+  Wikipedia); internal thoracic artery distance from the sternum; posterior mediastinum level; hemiazygos (T8/T9) and
+  accessory hemiazygos (T7/T8) crossing levels; lesser splanchnic roots; intercostal muscle layer of the bundle.
+- Single source, attributed: typical 3rd–6th nerves (Gray); arch behind the 2nd right sternocostal joint (Gray).
+- Left out (one source): tributaries of the thoracic duct beyond the cisterna chyli, hemiazygos origin, subcostal artery
+  course, oesophageal relations of the aorta, drainage of each node group, transverse cervical collateral.
+- Model `models/thorax-nv` (`tools/thorax/nv_config.py`): 136 parts, 887 KB pack, left side mirrored. Z-Anatomy has no
+  thoracic duct and no phrenic nerve: approximate lines (`fill-thnv-scripts/paths.py`), checked in screenshots. Its
+  "superior intercostal vein" parts are all the intercostal veins of a side, and its thoracic/abdominal aorta split is
+  at about T10 (said on the page).
+- Independent review (2026-11-21), fixed: right lymphatic duct ending, atypical nerves second source, rib notching
+  second source, hemiazygos origin removed from the levels chart, needle path in the intercostal schematic, bronchial
+  arteries, labels on hidden parts, phrenic sensory wording, six single-source statements cut, visuals.
+
+## Nerves and Vessels of the Abdomen and Pelvis — `abdomen-pelvis/nerves-vessels.html`
+
+- Fact sheet `sources-local/facts/fill-abnv.md` (651 quotes, script-checked against `sources-local/modern/fill-abnv/`,
+  downloads 2026-11-21; reuses fill-llnv sections with their files copied): Gray 1918 pages 154–156, 173, 174, 180, 212,
+  213, 218–220; 36 StatPearls abstracts; 13 open papers; 99 Wikipedia articles (none with an OpenStax notice or Betts
+  citation). Excluded as Gray copies: Abdominal aorta relations, Lumbar arteries, Celiac ganglia, Abdominal aortic
+  plexus, Ganglion impar, Internal iliac relations and collaterals, Internal iliac length.
+- Contested, stated on the page: common iliac length (Gray 5 cm, Wikipedia 4 cm); share of the transverse colon from
+  the SMA (half or two-thirds); sacral plexus to S3 or S4; IMA origin level (about 60 % at L3).
+- Single source, attributed: variceal bleeding as the commonest fatal complication of cirrhosis (StatPearls); far-lateral
+  disc mimicking a plexus lesion (2026 review); lumbar artery origins (Gray).
+- Left out (one source): AAA "85 % infrarenal" and smoking, portal vein valves, cisterna chyli level, IVC tributary
+  levels, coeliac bifurcation rate, Wilkie's name, pudendal block in labour, secondary autonomic plexuses, internal
+  iliac relations and collaterals, portal vein free-edge relation, gonadal vein angles, prolonged sitting in pudendal
+  entrapment.
+- Model `models/abd-nv` (`tools/abdomen-pelvis/nv_config.py`): 171 parts, 860 KB pack, 51 left parts mirrored in the
+  page. Z-Anatomy has no autonomic plexuses and its sympathetic trunk stops at L1: plexus markers approximate.
+- Independent review (2026-11-21), fixed: AAA and popliteal aneurysm direction, aortic plexus position, six unsourced
+  statements sourced or cut, five single-source statements attributed or cut, "paired visceral" wording, iliac
+  arteries drawn in front of the IVC, table row highlighting, portal and IVC labels.
+- Home page: `tools/home/region_pages.py` writes `models/region-pages.json`, so "Trunk" parts open the thorax, abdomen,
+  upper-limb or lower-limb page whose model contains them. The sigmoid veins are now tagged portal in
+  `models/body-vessels/vessels.json` (Gray 173, Wikipedia "Inferior mesenteric vein").
+

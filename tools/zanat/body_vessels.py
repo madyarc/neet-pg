@@ -23,7 +23,7 @@ MESH_ARTERIES = {'Pulmonary trunk', 'Anterior communicating artery'}
 HEAD_MESH = {'Cavernous sinus.r', 'Basilar venous plexus', 'Anterior communicating artery'}
 # veins of the hepatic portal system in the model (the portal vein, its three main tributaries and the gut veins that join them)
 PORTAL = {'Hepatic portal vein', 'Splenic vein', 'Superior mesenteric vein', 'Inferior mesenteric vein', 'Right colic vein',
-          'Middle colic vein', 'Right gastro-omental vein', 'Left gastro-omental vein'}
+          'Middle colic vein', 'Right gastro-omental vein', 'Left gastro-omental vein', 'Sigmoid veins'}
 
 
 def rows(fn):
