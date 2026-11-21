@@ -806,3 +806,31 @@ tubercles.
 - Independent review (2026-11-20), fixed: venepuncture wording ("receives a communicating branch"), Klumpke Horner
   "when T1 is involved", muscles-glass toggle bug in injury views, arch distance note, T1/T2 dermatome bands, median
   roots in the diagram, cubital fossa labels, deltoid-injection note, phone hint for the plexus diagram.
+
+## Nerves, Vessels and Lymph Nodes of the Lower Limb — `lower-limb/nerves-vessels.html`
+
+- Fact sheet `sources-local/facts/fill-llnv.md` (636 quotes, script-checked against `sources-local/modern/fill-llnv/`
+  and the folders of the reused fill-ll, joints-hip-knee and ll-muscles-b sections; downloads 2026-11-21): Gray 1918
+  pages 127, 155–162, 173, 179, 212, 213, 291, 292; StatPearls (about 30 chapters); Wikipedia; open papers (lumbar
+  plexus ultrasound and disorders 2026, profunda femoris 2025, femoral vein landmarks 2025, saphenofemoral junction
+  2026, sciatic division meta-analysis 2026, psoas abscess reviews, Japanese Hernia Society groin hernia guideline 2024,
+  corona mortis 2025, popliteal aneurysm reviews, femoral neck fracture vascular consensus 2026, incompetent
+  perforators 2024, obturator neuropathy PMC13463367, inguinal node metastases 2026). Excluded: Wikipedia sentences
+  copied from or credited to Gray; no OpenStax notice in any article used.
+- Contested, stated on the page: sciatic roots (L4–S3, one StatPearls chapter L4–S4); extent of the sacral plexus
+  (Gray to S3 with a separate pudendal plexus from parts of S2–S3, S4–S5 and coccygeal); profunda origin 2–5 cm below
+  the inguinal ligament; direction in which the popliteal vein crosses the artery (Gray followed).
+- Single source, attributed on the page: anterior tibial pulse at the front of the ankle (Gray 291); order of structures
+  behind the medial malleolus (Gray 162).
+- Left out (one source): Hunterian perforator, Virchow's triad, Trendelenburg test, the "superficial femoral" misnomer,
+  testis drainage, node size cut-offs, corona mortis frequencies, tarsal and arcuate branches, number of popliteal nodes,
+  femoral pulse depth, prone position for the popliteal pulse, risk factors for varicose veins.
+- Model `models/ll-nv` (`tools/lower-limb/nv_config.py`): right lower-limb bones with hip bone, sacrum and L5, muscles
+  (glass), Z-Anatomy vessels, nerves and nodes, keys and `error_mm` as the whole-body configs; 209 parts, 865 KB pack.
+  Z-Anatomy lacks the inferior gluteal nerve, lumbosacral trunk, plexus roots, superficial circumflex iliac vessels,
+  descending genicular artery and medial calcaneal nerve (said on the page).
+- Independent review (2026-11-21), fixed: popliteal fossa and femoral hernia views (muscles as glass, hidden labels),
+  "four pulses plus the anterior tibial (Gray)", Cloquet's node at the femoral ring, popliteal node numbers removed,
+  causes of obturator neuropathy, eleven single-source statements sourced twice, attributed or cut, division of the
+  posterior tibial artery and tibial nerve in the sole, tarsal tunnel wording, Gray's pudendal plexus roots, nerve
+  contrast on bone, row highlighting.

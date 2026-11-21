@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nerves, Vessels and Lymph Nodes of the Lower Limb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --artery, --vein, --nerve, --lymph, --bone, --soft (muscles as context).
+   The root chart uses --nerve for the roots a nerve takes and --line for the empty grid; nothing else has its own colour. */
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+#topics{display:flex;flex-direction:column;gap:10px}
+#topic-text p+p,#topic-text p+ul,#topic-text ul+p{margin-top:8px}
+#topic-text ul{margin:4px 0 0;padding-left:20px}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t tr[data-k]{cursor:pointer}
+table.t tr[aria-pressed="true"] td{background:var(--bg)}
+.scroll{overflow-x:auto}
+svg text{font:500 12px var(--f-body);fill:var(--ink)}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+#roots{max-width:760px;min-width:620px;margin:0 auto}
+#roots .cell{fill:var(--bg);stroke:var(--line);stroke-width:1}
+#roots .cell.on{fill:var(--nerve);stroke:var(--nerve)}
+#roots .cell.some{fill:var(--bg);stroke:var(--nerve);stroke-width:2;stroke-dasharray:4 3}
+#roots text.h{font:600 11px var(--f-mono);fill:var(--muted)}
+#roots .row{cursor:pointer}
+#roots .row:hover text,#roots .row.sel text{font-weight:700}
+#roots .row.sel rect.bgr{fill:var(--bg)}
+#roots .split{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 3}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Nerves, Vessels and Lymph Nodes of the Lower Limb</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="Nerves, vessels and lymph nodes in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-roots">
+  <h2 id="h-roots">Lumbar and sacral plexuses: root values</h2>
+  <p class="cap" id="roots-cap"></p>
+  <div class="scroll"><svg class="fig" id="roots" viewBox="0 0 760 420" role="img" aria-label="Chart of the spinal roots (T12 to S4) that form each main nerve of the lower limb"></svg></div>
+  <p class="muted" id="roots-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-lesions">
+  <h2 id="h-lesions">Nerve injuries</h2>
+  <p class="muted">Tap a row to light the nerve and the site in 3D.</p>
+  <div class="scroll"><table class="t stack" id="lesions"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pulses">
+  <h2 id="h-pulses">Pulses and surface marking</h2>
+  <p class="muted">Tap a row to see the vessel or nerve in 3D. Surface lines are Gray's (1918) and approximate; the anatomy behind each is in the topics above.</p>
+  <div class="scroll"><table class="t stack" id="pulses"></table></div>
+  <div class="scroll"><table class="t stack" id="surface"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lymph">
+  <h2 id="h-lymph">Lymph nodes and enlarged inguinal nodes</h2>
+  <div class="scroll"><table class="t stack" id="nodes"></table></div>
+  <div class="prose" id="lymph-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-veins">
+  <h2 id="h-veins">Varicose veins and deep vein thrombosis</h2>
+  <div class="prose" id="veins-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-llnv.md, anatomy/DATA-SOURCES.md) ===================== */
+const A = k => 'v_' + k + (/^(abdominal_aorta|inferior_vena_cava_abdominal_part|descending_branch_of_lateral_circumflex_femoral_artery)$/.test(k) ? '' : '_r');   // vessel key
+const N = k => 'n_' + k + '_r', L = k => 'l_' + k + '_r', MU = k => 'm_' + k;
+// a topic: lit = parts drawn in their own colour (artery/vein/nerve/node), soft = muscles drawn solid (--soft) as landmarks,
+// solid = bones kept solid, glass = muscles shown as glass; everything else is glass. labels: [key, text, optional point (mm, body frame) to start the search from]
+const FEM_BR = ['femoral_nerve', 'anterior_cutaneous_branches_of_femoral_nerve', 'saphenous_nerve', 'infrapatellar_branch_of_saphenous_nerve', 'medial_crural_cutaneous_branches_of_saphenous_nerve'].map(N);
+const OBT_BR = ['obturator_nerve', 'anterior_branch_of_obturator_nerve', 'posterior_branch_of_obturator_nerve'].map(N);
+const LUMBAR = ['iliohypogastric_nerve', 'ilio_inguinal_nerve', 'genitofemoral_nerve', 'femoral_branch_of_genitofemoral_nerve', 'genital_branch_of_genitofemoral_nerve', 'lateral_femoral_cutaneous_nerve', 'femoral_nerve', 'obturator_nerve'].map(N);
+const SACRAL = ['sciatic_nerve', 'superior_gluteal_nerve', 'posterior_femoral_cutaneous_nerve', 'anterior_root_of_posterior_femoral_cutaneous_nerve', 'posterior_root_of_posterior_femoral_cutaneous_nerve', 'pudendal_nerve', 'nerve_to_piriformis_muscle', 'nerve_to_quadratus_femoris_muscle'].map(N);
+const CIRC = ['deep_femoral_artery', 'medial_circumflex_femoral_artery', 'lateral_circumflex_femoral_artery', 'descending_branch_of_lateral_circumflex_femoral_artery', 'perforating_femoral_arteries'].map(A);
+const GENIC = ['superior_lateral_genicular_artery', 'superior_medial_genicular_artery', 'middle_genicular_artery', 'inferior_lateral_genicular_artery', 'inferior_medial_genicular_artery'].map(A);
+const NODES = ['superolateral_superficial_inguinal_nodes', 'superomedial_superficial_inguinal_nodes', 'inferior_superficial_inguinal_nodes', 'proximal_deep_inguinal_node', 'intermediate_deep_inguinal_node', 'superficial_popliteal_nodes', 'deep_popliteal_nodes', 'medial_external_iliac_nodes', 'intermediate_external_iliac_nodes'].map(L);
+const FOOT = ['right_talus', 'right_calcaneus', 'navicular_bone_of_right_foot', 'right_cuboid_bone', 'right_medial_cuneiform_bone', 'right_intermediate_cuneiform_bone', 'right_lateral_cuneiform_bone', 'right_first_metatarsal_bone', 'right_second_metatarsal_bone', 'right_third_metatarsal_bone', 'right_fourth_metatarsal_bone', 'right_fifth_metatarsal_bone'];
+const FRONT = [0, -1, 0.05], BACK = [0, 1, 0.05], MEDIAL = [1, -0.3, 0.05], LATERAL = [-1, -0.2, 0.05];
+const TOPICS = [
+  {grp: 'Plexuses', id: 'lumbar', name: 'Lumbar plexus',
+    lit: LUMBAR, solid: ['fifth_lumbar_vertebra'], fit: [N('genitofemoral_nerve'), N('obturator_nerve'), N('iliohypogastric_nerve'), 'right_hip_bone'], view: [0.2, -1, 0.15], zoom: 0.85,
+    labels: [[N('iliohypogastric_nerve'), 'Iliohypogastric', [-80, -90, 1010]], [N('ilio_inguinal_nerve'), 'Ilioinguinal', [-100, -120, 900]], [N('genitofemoral_nerve'), 'Genitofemoral', [-30, -100, 1000]], [N('lateral_femoral_cutaneous_nerve'), 'Lateral femoral cutaneous', [-120, -140, 850]], [N('femoral_nerve'), 'Femoral', [-60, -120, 900]], [N('obturator_nerve'), 'Obturator', [-45, -100, 880]]],
+    text: `<p>The <b>lumbar plexus</b> is formed by the ventral rami of <b>L1–L4</b> (L1 often receives a branch from T12), inside <b>psoas major</b>, in front of the lumbar transverse processes. Its larger branches leave psoas at different points and reach the thigh under the inguinal ligament, except the obturator nerve, which leaves the pelvis through the obturator foramen.</p>
+<ul><li>From the lateral border of psoas: the <b>iliohypogastric</b> (L1), <b>ilioinguinal</b> (L1), <b>lateral femoral cutaneous</b> (L2, L3) and <b>femoral</b> (L2–L4) nerves.</li>
+<li>Through its front: the <b>genitofemoral</b> nerve (L1, L2).</li>
+<li>From its medial border: the <b>obturator</b> nerve (L2–L4) and, from L4 and L5, the lumbosacral trunk, which crosses the pelvic brim to the sacral plexus.</li></ul>
+<p>The upper nerves serve the lower abdomen and groin; the femoral and obturator nerves the front and medial thigh. Root values: the chart below the model.</p>`},
+  {grp: 'Plexuses', id: 'sacral', name: 'Sacral plexus',
+    lit: SACRAL.concat([A('superior_gluteal_artery'), A('inferior_gluteal_artery')]), soft: [MU('piriformis')], solid: ['sacrum', 'right_hip_bone'], fit: [MU('piriformis'), N('superior_gluteal_nerve'), 'sacrum'], view: [-0.2, 1, 0.1], zoom: 0.9,
+    labels: [[N('sciatic_nerve'), 'Sciatic', [-55, -20, 800]], [N('superior_gluteal_nerve'), 'Superior gluteal', [-80, -60, 900]], [N('posterior_femoral_cutaneous_nerve'), 'Posterior femoral cutaneous', [-50, -20, 760]], [N('pudendal_nerve'), 'Pudendal', [-20, -40, 830]], [MU('piriformis'), 'Piriformis', [-70, -40, 870]], [A('superior_gluteal_artery'), 'Superior gluteal artery', [-60, -35, 905]], [A('inferior_gluteal_artery'), 'Inferior gluteal artery', [-45, -35, 840]]],
+    text: `<p>The <b>sacral plexus</b> is formed by the <b>lumbosacral trunk</b> (all of L5 and part of L4) and the ventral rami of <b>S1–S3</b>; most accounts add S4 (Gray puts S4 with a separate pudendal plexus). It lies on the back wall of the pelvis, on <b>piriformis</b>; its main branches leave the pelvis through the greater sciatic foramen. Seen from behind, with gluteus maximus removed.</p>
+<ul><li>Above piriformis: the <b>superior gluteal</b> nerve (L4–S1) with the superior gluteal vessels.</li>
+<li>Below piriformis: the <b>sciatic</b> (L4–S3), <b>inferior gluteal</b> (L5–S2), <b>posterior femoral cutaneous</b> (S1–S3) and <b>pudendal</b> (S2–S4) nerves.</li></ul>
+<p>The model has <b>no inferior gluteal nerve</b> (it supplies gluteus maximus) and no lumbosacral trunk. The structures under gluteus maximus and gluteal injections are on <a href="muscles.html">Muscles of the Lower Limb</a>.</p>`},
+  {grp: 'Front of the thigh', id: 'femn', name: 'Femoral and saphenous nerves',
+    lit: FEM_BR.concat([A('femoral_artery'), A('great_saphenous_vein')]), soft: [MU('iliacus')], solid: ['right_femur', 'right_hip_bone'], fit: [N('femoral_nerve'), N('saphenous_nerve')], view: [0.5, -1, 0.05], zoom: 0.95,
+    labels: [[N('femoral_nerve'), 'Femoral nerve', [-75, -135, 820]], [N('anterior_cutaneous_branches_of_femoral_nerve'), 'Anterior cutaneous branches', [-57, -132, 650]], [N('saphenous_nerve'), 'Saphenous nerve', [-45, -100, 250]], [N('infrapatellar_branch_of_saphenous_nerve'), 'Infrapatellar branch', [-70, -105, 330]], [A('femoral_artery'), 'Femoral artery', [-55, -140, 800]], [MU('iliacus'), 'Iliacus', [-100, -100, 900]]],
+    text: `<p>The <b>femoral nerve</b> (L2–L4, dorsal divisions), the largest branch of the lumbar plexus, runs down between psoas major and iliacus, behind the iliac fascia, and enters the thigh under the inguinal ligament, <b>lateral to the femoral artery</b> and <b>outside the femoral sheath</b>. It soon splits into an anterior and a posterior division; the lateral circumflex femoral artery passes between them.</p>
+<ul><li><b>Anterior division:</b> sartorius, and the anterior cutaneous nerves (intermediate and medial cutaneous nerves of the thigh).</li>
+<li><b>Posterior division:</b> the quadriceps (rectus femoris and the three vasti) and the <b>saphenous nerve</b>.</li>
+<li>The nerve to <b>pectineus</b> arises near the inguinal ligament.</li></ul>
+<p><b>Saphenous nerve:</b> its longest, purely sensory branch. It runs with the femoral artery through the adductor canal, becomes superficial on the medial side of the knee and then runs with the <b>great saphenous vein</b> down the medial leg to the medial side of the foot. Skin supplied by the femoral nerve: front and medial thigh, medial leg (to the big toe).</p>`},
+  {grp: 'Front of the thigh', id: 'obtn', name: 'Obturator nerve',
+    lit: OBT_BR.concat([A('obturator_artery')]), solid: ['right_femur'], fit: [N('anterior_branch_of_obturator_nerve'), N('posterior_branch_of_obturator_nerve'), N('obturator_nerve')], view: [0.6, -1, 0.05], zoom: 0.95,
+    labels: [[N('obturator_nerve'), 'Obturator nerve', [-40, -95, 900]], [N('anterior_branch_of_obturator_nerve'), 'Anterior branch (in front of adductor brevis)', [-35, -125, 700]], [N('posterior_branch_of_obturator_nerve'), 'Posterior branch (behind it)', [-48, -112, 740]], [A('obturator_artery'), 'Obturator artery', [-45, -80, 840]]],
+    text: `<p>The <b>obturator nerve</b> (L2–L4, ventral divisions) comes out of the <b>medial border of psoas</b>, runs along the lateral wall of the pelvis to the <b>obturator canal</b> and enters the medial thigh, where it divides into an <b>anterior</b> and a <b>posterior branch</b> on either side of <b>adductor brevis</b> (the posterior one between adductor brevis and magnus). The level of the division varies.</p>
+<p><b>Supply:</b> the adductors (longus, brevis and the adductor part of magnus), gracilis and usually obturator externus (pectineus sometimes); the skin of the upper medial thigh; branches to the hip and the knee.</p>`},
+  {grp: 'Front of the thigh', id: 'femart', name: 'Femoral artery and branches',
+    lit: ['external_iliac_artery', 'femoral_artery', 'superficial_epigastric_artery', 'superficial_external_pudendal_artery', 'deep_external_pudendal_artery', 'deep_femoral_artery', 'popliteal_artery'].map(A).concat([N('femoral_nerve'), A('femoral_vein')]),
+    soft: [MU('inguinal_lig')], solid: ['right_hip_bone', 'right_femur'], fit: [A('femoral_artery'), A('external_iliac_artery')], view: [0.15, -1, 0.05], zoom: 0.9,
+    labels: [[A('external_iliac_artery'), 'External iliac artery', [-45, -115, 900]], [A('femoral_artery'), 'Femoral artery', [-58, -140, 780]], [A('superficial_epigastric_artery'), 'Superficial epigastric', [-60, -180, 900]], [A('superficial_external_pudendal_artery'), 'Superficial external pudendal', [-30, -155, 790]], [A('deep_femoral_artery'), 'Profunda femoris', [-75, -120, 760]], [MU('inguinal_lig'), 'Inguinal ligament', [-70, -150, 860]], [A('femoral_vein'), 'Femoral vein (medial)', [-45, -140, 800]]],
+    text: `<p>The <b>femoral artery</b> continues the external iliac artery behind the inguinal ligament at the <b>mid-inguinal point</b> (midway between the anterior superior iliac spine and the pubic symphysis). It runs through the <b>femoral triangle</b> (upper third of the thigh) and the <b>adductor canal</b> (middle third), then through the opening in adductor magnus (the <b>adductor hiatus</b>, at the junction of the middle and lower thirds of the thigh) to become the <b>popliteal artery</b>.</p>
+<ul><li><b>Relations in the triangle:</b> superficial (skin, fascia, superficial inguinal nodes in front); the femoral vein medial; the femoral nerve lateral; behind, psoas (which separates it from the hip joint), pectineus and adductor longus. In the adductor canal it is deeper, under sartorius, with the saphenous nerve.</li>
+<li><b>Branches:</b> superficial epigastric, superficial circumflex iliac, superficial and deep external pudendal (small branches to the skin of the groin, lower abdomen and external genitalia), the <b>profunda femoris</b>, muscular branches, and the descending genicular (to the knee).</li></ul>
+<p>Clinicians call it the <b>common femoral</b> artery above the origin of the profunda and the <b>superficial femoral</b> artery below it. The model has no superficial circumflex iliac or descending genicular artery.</p>`},
+  {grp: 'Front of the thigh', id: 'profunda', name: 'Profunda femoris and circumflex arteries',
+    lit: CIRC.concat([A('femoral_artery'), A('obturator_artery')]), solid: ['right_femur', 'right_hip_bone'], fit: CIRC, view: [0.8, -1, 0.05], zoom: 0.9,
+    labels: [[A('deep_femoral_artery'), 'Profunda femoris', [-75, -115, 760]], [A('medial_circumflex_femoral_artery'), 'Medial circumflex femoral', [-80, -95, 805]], [A('lateral_circumflex_femoral_artery'), 'Lateral circumflex femoral', [-115, -120, 805]], [A('descending_branch_of_lateral_circumflex_femoral_artery'), 'Descending branch (to the knee)', [-110, -115, 600]], [A('perforating_femoral_arteries'), 'Perforating arteries', [-95, -100, 680]], [A('femoral_artery'), 'Femoral artery', [-55, -140, 700]]],
+    text: `<p>The <b>profunda femoris</b> (deep femoral artery), the largest branch of the femoral artery, arises from its lateral or back side a few centimetres (about 2–5 cm) below the inguinal ligament. It runs behind the femoral vessels and then behind adductor longus, and supplies the thigh muscles and the hip.</p>
+<ul><li><b>Lateral circumflex femoral:</b> passes laterally between the divisions of the femoral nerve; its descending branch runs down to the knee anastomosis.</li>
+<li><b>Medial circumflex femoral:</b> winds backward round the medial side of the femur to the back of the hip; the main artery of the femoral head ("Back of the thigh → Blood supply of the femoral head").</li>
+<li><b>Perforating arteries</b> (usually three, and the end of the profunda as a fourth): pierce adductor magnus to the back of the thigh ("Back of the thigh → Perforating arteries").</li></ul>
+<p>Its branches link with the gluteal and popliteal arteries, so it is an important collateral route when the femoral artery is blocked.</p>`},
+  {grp: 'Front of the thigh', id: 'femvein', name: 'Femoral vein and saphenous junction',
+    lit: ['femoral_vein', 'great_saphenous_vein', 'deep_femoral_vein', 'external_iliac_vein', 'superficial_epigastric_vein', 'external_pudendal_veins', 'popliteal_vein'].map(A).concat([L('inferior_superficial_inguinal_nodes')]),
+    soft: [MU('inguinal_lig')], solid: ['right_hip_bone', 'right_femur'], fit: [A('femoral_vein'), A('superficial_epigastric_vein')], view: [0.35, -1, 0.05], zoom: 1.1,
+    labels: [[A('femoral_vein'), 'Femoral vein', [-50, -130, 720]], [A('great_saphenous_vein'), 'Great saphenous vein', [-35, -145, 740]], [A('deep_femoral_vein'), 'Deep femoral vein', [-75, -120, 720]], [A('external_iliac_vein'), 'External iliac vein', [-35, -125, 880]], [A('superficial_epigastric_vein'), 'Superficial epigastric vein', [-45, -180, 900]], [A('external_pudendal_veins'), 'External pudendal veins', [-15, -155, 780]], [MU('inguinal_lig'), 'Inguinal ligament', [-70, -150, 860]]],
+    text: `<p>The <b>femoral vein</b> continues the popliteal vein at the adductor hiatus, runs up with the artery (behind it low in the femoral triangle, medial to it at the top), receives the <b>deep femoral</b> and <b>great saphenous</b> veins, and becomes the <b>external iliac vein</b> behind the inguinal ligament. It is a deep vein and has valves. Just below the mid-inguinal point it lies medial to the femoral pulse, which is used to find it for a central venous line.</p>
+<p><b>Saphenofemoral junction:</b> the great saphenous vein passes through the <b>saphenous opening</b> in the fascia lata to join the femoral vein about <b>4 cm below and lateral to the pubic tubercle</b>. Near the junction it receives the <b>superficial epigastric</b>, <b>superficial circumflex iliac</b> and <b>superficial (and deep) external pudendal</b> veins. The opening, the femoral triangle and sheath are on <a href="muscles.html">Muscles of the Lower Limb</a>.</p>`},
+  {grp: 'Groin', id: 'psoas', name: 'Psoas abscess',
+    lit: [N('femoral_nerve'), A('external_iliac_artery'), A('femoral_artery')], soft: [MU('psoas_major'), MU('iliacus'), MU('inguinal_lig')], solid: ['fifth_lumbar_vertebra', 'right_hip_bone', 'right_femur'], fit: [MU('psoas_major'), MU('iliacus')], view: [0.2, -1, 0.1], zoom: 0.85,
+    labels: [[MU('psoas_major'), 'Psoas major (in its sheath)', [-40, -90, 980]], [MU('iliacus'), 'Iliacus', [-100, -100, 900]], ['fifth_lumbar_vertebra', 'Lumbar vertebrae and discs', [-20, -100, 940]], [MU('inguinal_lig'), 'Inguinal ligament', [-70, -150, 860]], [N('femoral_nerve'), 'Femoral nerve (behind the iliac fascia)', [-75, -135, 820]]],
+    text: `<p>A <b>psoas (iliopsoas) abscess</b> is pus in the iliopsoas compartment. It is <b>primary</b> (organisms carried by blood or lymph) or <b>secondary</b> (spread from a neighbouring focus); causes include <b>tuberculosis of the lumbar spine</b> (Pott's disease) and vertebral osteomyelitis.</p>
+<p><b>Anatomical basis:</b> psoas lies along the lumbar vertebrae and discs, inside the iliac fascia, so infection of a disc or vertebra (e.g. tuberculosis) can spread into its sheath, and the pus is usually kept inside the iliopsoas compartment. Following the muscle, it tracks down <b>behind the inguinal ligament</b> and appears as a <b>swelling in the groin and upper medial thigh</b> (the femoral triangle). The femoral nerve runs in the same compartment, behind the iliac fascia, so it can be affected (a femoral nerve lesion).</p>`},
+  {grp: 'Groin', id: 'hernia', name: 'Femoral hernia',
+    lit: [A('femoral_artery'), A('femoral_vein'), N('femoral_nerve'), A('obturator_artery'), A('inferior_epigastric_artery'), L('proximal_deep_inguinal_node'), L('intermediate_deep_inguinal_node')],
+    soft: [MU('pectineus'), MU('inguinal_lig')], solid: ['right_hip_bone'], fit: [MU('pectineus'), A('femoral_vein'), A('inferior_epigastric_artery')], view: [0.3, -1, 0.15], zoom: 1.8, centre: [-45, -135, 815],
+    labels: [[A('femoral_vein'), 'Femoral vein (lateral)', [-47, -142, 790]], [L('proximal_deep_inguinal_node'), 'Femoral canal (deep inguinal node)', [-43, -146, 811]], [MU('inguinal_lig'), 'Inguinal ligament (in front)', [-60, -150, 845]], [MU('pectineus'), 'Pectineus (behind)', [-40, -125, 800]], [A('inferior_epigastric_artery'), 'Inferior epigastric artery', [-40, -140, 880]], [A('obturator_artery'), 'Obturator artery', [-45, -90, 840]], ['right_hip_bone', 'Pubic tubercle', [-25, -150, 830]]],
+    text: `<p>A <b>femoral hernia</b> is abdominal contents pushed through the <b>femoral ring</b> into the <b>femoral canal</b>, the medial compartment of the femoral sheath, so it bulges <b>below the inguinal ligament</b>. The ring is bounded by the inguinal ligament in front, the pectineal (Cooper's) ligament and pectineus behind, the lacunar ligament medially and the femoral vein laterally.</p>
+<ul><li>Its neck lies <b>below and lateral to the pubic tubercle</b> (an inguinal hernia: above and medial to it).</li>
+<li>Uncommon (a few per cent of groin hernias) and <b>commoner in women</b>, especially older women who have had children.</li>
+<li>The ring is narrow and unyielding, so femoral hernias have the <b>highest rate of strangulation</b> of the groin hernias; once stuck they often need emergency surgery.</li></ul>
+<p><b>Abnormal obturator artery</b> ("corona mortis"): an obturator artery arising from the inferior epigastric may curve along the lacunar ligament round the neck of the sac, and bleeds badly if cut at repair (it lies behind the pubis, linking the obturator and inferior epigastric vessels). The canal itself is on <a href="muscles.html">Muscles of the Lower Limb</a> (femoral sheath). Positions approximate.</p>`},
+  {grp: 'Back of the thigh', id: 'sciatic', name: 'Sciatic nerve',
+    lit: [N('sciatic_nerve'), N('tibial_nerve'), N('common_fibular_nerve'), N('posterior_femoral_cutaneous_nerve')], soft: [MU('piriformis'), MU('add_magnus'), MU('quad_fem')], solid: ['right_hip_bone', 'right_femur'], fit: [N('sciatic_nerve'), MU('piriformis')], view: [-0.15, 1, 0.05], zoom: 0.9,
+    labels: [[N('sciatic_nerve'), 'Sciatic nerve', [-55, -45, 680]], [MU('piriformis'), 'Piriformis', [-70, -40, 870]], [N('tibial_nerve'), 'Tibial nerve', [-75, -40, 470]], [N('common_fibular_nerve'), 'Common fibular nerve', [-100, -45, 450]], [N('posterior_femoral_cutaneous_nerve'), 'Posterior femoral cutaneous', [-45, -15, 700]], [MU('add_magnus'), 'Adductor magnus', [-60, -70, 650]], ['right_femur', 'Greater trochanter', [-140, -60, 820]]],
+    text: `<p>The <b>sciatic nerve</b> (L4–S3), the largest nerve in the body, leaves the pelvis through the greater sciatic foramen <b>below piriformis</b> and descends between the <b>greater trochanter and the ischial tuberosity</b>, then down the back of the thigh on adductor magnus, under the long head of biceps femoris. Seen from behind; the hamstrings and gluteal muscles are glass.</p>
+<ul><li>It is two nerves bound together, the <b>tibial</b> and the <b>common fibular</b>; they usually separate at the upper angle of the popliteal fossa, but the level varies (outside the usual site in about a third of limbs in a 2026 meta-analysis; anywhere from the pelvis down). When it divides in the pelvis, the common fibular part may pass through piriformis.</li>
+<li><b>Branches in the thigh:</b> the hamstrings (semitendinosus, semimembranosus, long head of biceps and the hamstring part of adductor magnus) from the tibial part; the short head of biceps from the common fibular part.</li></ul>
+<p>The skin of the back of the thigh is supplied by the <b>posterior femoral cutaneous nerve</b> (S1–S3), which leaves below piriformis and runs down the back of the thigh to the popliteal fossa. Gluteal injections and the sciatic nerve: <a href="muscles.html">Muscles of the Lower Limb</a>.</p>`},
+  {grp: 'Back of the thigh', id: 'perf', name: 'Perforating arteries and anastomoses',
+    lit: CIRC.concat(['inferior_gluteal_artery', 'superior_gluteal_artery', 'popliteal_artery', 'femoral_artery'].map(A)), soft: [MU('quad_fem'), MU('piriformis')], solid: ['right_femur', 'right_hip_bone'], fit: [A('perforating_femoral_arteries'), A('inferior_gluteal_artery'), A('medial_circumflex_femoral_artery')], view: [-0.2, 1, 0.05], zoom: 0.9,
+    labels: [[A('perforating_femoral_arteries'), 'Perforating arteries', [-95, -95, 680]], [A('inferior_gluteal_artery'), 'Inferior gluteal', [-50, -35, 800]], [A('superior_gluteal_artery'), 'Superior gluteal', [-60, -35, 905]], [A('medial_circumflex_femoral_artery'), 'Medial circumflex femoral', [-90, -75, 800]], [A('lateral_circumflex_femoral_artery'), 'Lateral circumflex femoral', [-130, -70, 800]], [A('popliteal_artery'), 'Popliteal artery', [-80, -40, 500]], [MU('quad_fem'), 'Quadratus femoris', [-80, -50, 790]]],
+    text: `<p>The <b>perforating arteries</b> are branches of the profunda femoris (usually three, and the end of the profunda as a fourth) that <b>pierce adductor magnus</b> close to the femur to reach the back of the thigh; they supply the hamstrings. They join one another, the circumflex femoral and inferior gluteal arteries above and the muscular branches of the popliteal below, a chain of anastomoses down the back of the thigh.</p>
+<ul><li><b>Cruciate anastomosis</b> (behind the upper femur): the inferior gluteal artery, the medial and lateral circumflex femoral arteries and the first perforating artery.</li>
+<li><b>Trochanteric anastomosis</b> (a ring round the neck of the femur): the superior gluteal artery with the ascending branches of the medial and lateral circumflex femoral arteries.</li></ul>
+<p>Together they join the branches of the internal iliac artery to the profunda femoris, a collateral route if the femoral artery is tied or blocked. More on <a href="muscles.html">Muscles of the Lower Limb</a> (under gluteus maximus).</p>`},
+  {grp: 'Back of the thigh', id: 'head', name: 'Blood supply of the femoral head',
+    lit: ['medial_circumflex_femoral_artery', 'lateral_circumflex_femoral_artery', 'deep_femoral_artery', 'obturator_artery'].map(A), solid: ['right_femur', 'right_hip_bone'], fit: CIRC, view: [-0.5, 1, 0.1], zoom: 1.3, centre: [-95, -75, 790],
+    labels: [[A('medial_circumflex_femoral_artery'), 'Medial circumflex femoral', [-95, -70, 790]], [A('lateral_circumflex_femoral_artery'), 'Lateral circumflex femoral', [-130, -80, 800]]],
+    text: `<p>The femoral head is supplied mainly by the <b>medial and lateral circumflex femoral arteries</b> (from the profunda), whose <b>retinacular branches</b> run up along the <b>neck</b> to the head; the <b>medial circumflex femoral</b> gives most of it. A small twig of the <b>obturator artery</b> reaches the head along the ligament of the head. Seen from behind.</p>
+<p><b>Fracture of the neck of femur</b> (AN17.2): neck fractures are <b>intracapsular</b> and common in the elderly. A displaced fracture tears the retinacular vessels running on the neck, so the head loses most of its blood: <b>avascular necrosis</b> of the head and <b>non-union</b> of the fracture are the typical complications (both frequent; reported rates vary widely with the fracture and its treatment). More on <a href="joints.html">Joints of the Lower Limb</a> (hip).</p>`},
+  {grp: 'Knee and leg', id: 'fossa', name: 'Popliteal fossa',
+    lit: [A('popliteal_artery'), A('popliteal_vein'), N('tibial_nerve'), N('common_fibular_nerve'), A('small_saphenous_vein'), L('superficial_popliteal_nodes'), L('deep_popliteal_nodes'), N('sciatic_nerve')],
+    glass: [MU('biceps_fem'), MU('semitend'), MU('semimemb'), MU('gastrocnemius'), MU('plantaris')], solid: ['right_femur', 'right_tibia', 'right_fibula'], fit: [A('popliteal_artery'), MU('gastrocnemius')], view: [0, 1, 0.05], zoom: 0.85, centre: [-80, -40, 450],
+    labels: [[MU('biceps_fem'), 'Biceps femoris (upper lateral)', [-110, -40, 520]], [MU('semimemb'), 'Semimembranosus (upper medial)', [-45, -25, 580]], [MU('gastrocnemius'), 'Gastrocnemius heads (below)', [-80, -20, 360]], [N('tibial_nerve'), 'Tibial nerve', [-80, -30, 440]], [N('common_fibular_nerve'), 'Common fibular nerve', [-110, -45, 420]], [A('popliteal_vein'), 'Popliteal vein', [-75, -35, 470]], [A('popliteal_artery'), 'Popliteal artery (deepest)', [-78, -45, 500]], [A('small_saphenous_vein'), 'Small saphenous vein', [-85, 0, 420]]],
+    text: `<p>The <b>popliteal fossa</b> is the diamond-shaped space behind the knee. Seen from behind.</p>
+<ul><li><b>Boundaries:</b> above and laterally, <b>biceps femoris</b>; above and medially, <b>semitendinosus and semimembranosus</b>; below, the <b>lateral</b> (with plantaris) and <b>medial heads of gastrocnemius</b>.</li>
+<li><b>Roof:</b> skin, superficial fascia (with the small saphenous vein and the end of the posterior femoral cutaneous nerve), and the deep (popliteal) fascia.</li>
+<li><b>Floor</b> (from above down): the popliteal surface of the femur, the capsule of the knee with the oblique popliteal ligament, and the fascia over popliteus.</li>
+<li><b>Contents:</b> the popliteal artery and vein, the tibial and common fibular nerves, the end of the small saphenous vein, the popliteal lymph nodes and fat.</li></ul>
+<p><b>Relations, superficial to deep:</b> tibial nerve, popliteal vein, <b>popliteal artery</b> (deepest, on the floor). The vein lies lateral to the artery above and medial below, crossing behind it; the tibial nerve also crosses from lateral to medial. The common fibular nerve runs down the lateral side along the biceps tendon.</p>
+<p><b>Swellings:</b> a <b>Baker's (popliteal) cyst</b> is a distended bursa between semimembranosus and the medial head of gastrocnemius, filled from the knee joint, usually with disease inside the knee (<a href="joints.html">Joints of the Lower Limb</a>); a popliteal aneurysm: "Popliteal artery".</p>`},
+  {grp: 'Knee and leg', id: 'popa', name: 'Popliteal artery',
+    lit: [A('popliteal_artery'), ...GENIC, A('anterior_tibial_artery'), A('posterior_tibial_artery'), A('fibular_artery'), A('femoral_artery')], solid: ['right_femur', 'right_tibia', 'right_fibula', 'right_patella'], fit: [A('popliteal_artery'), ...GENIC], view: [-0.3, 1, 0.05], zoom: 1.0,
+    labels: [[A('popliteal_artery'), 'Popliteal artery', [-80, -45, 500]], [A('superior_lateral_genicular_artery'), 'Superior lateral genicular', [-110, -70, 470]], [A('superior_medial_genicular_artery'), 'Superior medial genicular', [-50, -70, 470]], [A('middle_genicular_artery'), 'Middle genicular', [-75, -45, 445]], [A('inferior_lateral_genicular_artery'), 'Inferior lateral genicular', [-110, -60, 415]], [A('inferior_medial_genicular_artery'), 'Inferior medial genicular', [-50, -60, 395]], [A('anterior_tibial_artery'), 'Anterior tibial', [-95, -60, 340]], [A('posterior_tibial_artery'), 'Posterior tibial', [-80, -45, 320]]],
+    text: `<p>The <b>popliteal artery</b> continues the femoral artery at the adductor hiatus, runs down through the popliteal fossa on its floor (the deepest structure there), and ends at the <b>lower border of popliteus</b> by dividing into the <b>anterior and posterior tibial arteries</b>.</p>
+<ul><li><b>Branches:</b> muscular (the sural arteries to gastrocnemius, soleus and plantaris) and <b>five genicular arteries</b>: superior lateral and medial, middle (pierces the oblique popliteal ligament to the cruciate ligaments and synovial membrane), inferior lateral and medial. They form the anastomosis around the knee (<a href="joints.html">Joints of the Lower Limb</a>).</li></ul>
+<p><b>Popliteal aneurysm:</b> a dilatation to more than 1.5 times the normal diameter. It is the commonest peripheral (limb) aneurysm, often <b>bilateral</b> and often found with an <b>abdominal aortic aneurysm</b>, mostly in older men. Most are silent when found; the danger is thrombosis in the sac and <b>emboli</b> to the leg (acute limb ischaemia).</p>`},
+  {grp: 'Knee and leg', id: 'ant', name: 'Front of the leg',
+    lit: [A('anterior_tibial_artery'), A('anterior_tibial_veins'), N('deep_fibular_nerve'), N('muscular_branches_of_deep_fibular_nerve'), N('common_fibular_nerve'), A('dorsalis_pedis_artery')], solid: ['right_tibia', 'right_fibula', ...FOOT], fit: [A('anterior_tibial_artery'), N('deep_fibular_nerve')], view: [-0.2, -1, 0.05], zoom: 0.9,
+    labels: [[A('anterior_tibial_artery'), 'Anterior tibial artery', [-95, -80, 250]], [N('deep_fibular_nerve'), 'Deep fibular nerve', [-100, -85, 200]], [N('common_fibular_nerve'), 'Common fibular nerve (neck of fibula)', [-118, -55, 370]], [A('dorsalis_pedis_artery'), 'Dorsalis pedis', [-78, -125, 50]], ['right_fibula', 'Fibula', [-115, -50, 300]]],
+    text: `<p>The <b>anterior tibial artery</b> begins at the lower border of popliteus, passes forward <b>above the interosseous membrane</b> and runs down on the membrane (upper two thirds) and then the tibia, between tibialis anterior and the long extensors (EDL above, EHL lower down), with its venae comitantes and the deep fibular nerve. In front of the ankle, midway between the malleoli, it becomes the <b>dorsalis pedis</b>. It supplies the anterior compartment; its recurrent branches join the knee anastomosis and its malleolar branches the network round the ankle.</p>
+<p>The <b>deep fibular nerve</b> starts where the common fibular nerve divides at the <b>neck of the fibula</b>, passes forward through EDL to the interosseous membrane and runs with the anterior tibial artery to the front of the ankle. It supplies <b>tibialis anterior, EHL, EDL and fibularis tertius</b> (dorsiflexion, toe extension) and, on the foot, the short extensors; its skin is the <b>first web space</b>. Muscles: <a href="muscles.html">Muscles of the Lower Limb</a>.</p>`},
+  {grp: 'Knee and leg', id: 'dp', name: 'Dorsum of the foot',
+    lit: ['dorsalis_pedis_artery', 'arcuate_artery', 'lateral_tarsal_artery', 'deep_plantar_artery', 'dorsal_metatarsal_arteries', 'anterior_tibial_artery', 'dorsal_venous_arch_of_foot'].map(A).concat([N('deep_fibular_nerve'), N('dorsal_digital_branches_of_deep_fibular_nerve')]),
+    solid: FOOT, fit: [A('dorsalis_pedis_artery'), A('dorsal_metatarsal_arteries'), A('arcuate_artery')], view: [-0.1, -0.7, 1], zoom: 0.65,
+    labels: [[A('dorsalis_pedis_artery'), 'Dorsalis pedis', [-78, -125, 50]], [A('deep_plantar_artery'), 'Deep plantar branch (to the sole)', [-84, -130, 40]], [N('dorsal_digital_branches_of_deep_fibular_nerve'), 'Deep fibular nerve (first web space)', [-85, -170, 20]], [A('dorsal_venous_arch_of_foot'), 'Dorsal venous arch', [-90, -110, 48]], ['right_first_metatarsal_bone', 'First metatarsal', [-65, -150, 30]]],
+    text: `<p>The <b>dorsalis pedis artery</b> continues the anterior tibial artery in front of the ankle and runs forward on the medial side of the dorsum to the <b>proximal end of the first intermetatarsal space</b>. There it divides into the <b>first dorsal metatarsal artery</b> and the <b>deep plantar artery</b>, which dives into the sole and joins the plantar arterial arch. The tendon of <b>EHL lies on its medial side</b>; the first tendon of EDL and the end of the deep fibular nerve on its lateral side. Seen from above.</p>
+<p><b>Pulse:</b> just lateral to the EHL tendon on the dorsum of the foot (see Pulses below).</p>`},
+  {grp: 'Knee and leg', id: 'lat', name: 'Lateral side of the leg',
+    lit: [N('common_fibular_nerve'), N('superficial_fibular_nerve'), N('deep_fibular_nerve'), N('medial_dorsal_cutaneous_nerve_of_foot'), N('intermediate_dorsal_cutaneous_nerve_of_foot'), N('dorsal_digital_branches_of_superficial_fibular_nerve'), A('fibular_artery')],
+    soft: [MU('fib_longus'), MU('biceps_fem')], solid: ['right_fibula', 'right_tibia', ...FOOT], fit: [N('superficial_fibular_nerve'), N('common_fibular_nerve')], view: LATERAL, zoom: 0.75,
+    labels: [[N('common_fibular_nerve'), 'Common fibular nerve (round the neck of the fibula)', [-120, -55, 380]], [N('superficial_fibular_nerve'), 'Superficial fibular nerve', [-115, -65, 220]], [N('intermediate_dorsal_cutaneous_nerve_of_foot'), 'Its cutaneous branches (dorsum of foot)', [-115, -100, 50]], [MU('fib_longus'), 'Fibularis longus', [-125, -50, 300]], [MU('biceps_fem'), 'Biceps tendon', [-115, -40, 430]]],
+    text: `<p>The <b>common fibular nerve</b> (L4–S2) runs down the lateral side of the popliteal fossa along the biceps tendon, passes behind the head of the fibula and winds round its <b>neck</b>, where it is superficial and easily injured, and divides into the deep and superficial fibular nerves. Seen from the side.</p>
+<p>The <b>superficial fibular nerve</b> runs in the lateral compartment between the fibulares and EDL, supplies <b>fibularis longus and brevis</b> (eversion), pierces the deep fascia in the lower leg and supplies the skin of the lower lateral leg and <b>most of the dorsum of the foot</b> (not the first web space, which is deep fibular). Its muscles are supplied by branches of the fibular artery, which itself lies in the posterior compartment. Foot drop: Nerve injuries below.</p>`},
+  {grp: 'Knee and leg', id: 'post', name: 'Back of the leg',
+    lit: ['posterior_tibial_artery', 'fibular_artery', 'posterior_tibial_veins', 'fibular_veins', 'calcaneal_branches_of_posterior_tibial_artery', 'calcaneal_branches_of_fibular_artery', 'popliteal_artery'].map(A).concat([N('tibial_nerve')]),
+    solid: ['right_tibia', 'right_fibula', 'right_calcaneus', 'right_talus'], fit: [A('posterior_tibial_artery'), N('tibial_nerve'), A('fibular_artery')], view: [0.2, 1, 0.05], zoom: 0.9,
+    labels: [[N('tibial_nerve'), 'Tibial nerve', [-70, -40, 250]], [A('posterior_tibial_artery'), 'Posterior tibial artery', [-72, -48, 200]], [A('fibular_artery'), 'Fibular artery', [-100, -40, 200]], [A('popliteal_artery'), 'Popliteal artery', [-78, -45, 420]], ['right_tibia', 'Medial malleolus', [-60, -60, 65]]],
+    text: `<p>The <b>tibial nerve</b> (L4–S3) runs down the middle of the popliteal fossa, passes under the arch of soleus with the popliteal artery and runs down the back of the leg on the deep muscles with the <b>posterior tibial vessels</b>. Behind the medial malleolus, under the flexor retinaculum (the tarsal tunnel), it divides into the <b>medial and lateral plantar nerves</b>. It supplies <b>all the muscles of the back of the leg</b> (gastrocnemius, soleus, plantaris, popliteus, tibialis posterior, the long toe flexors) and gives the medial sural cutaneous nerve. Seen from behind; the calf muscles are glass.</p>
+<p>The <b>posterior tibial artery</b>, from the lower border of popliteus, runs down on tibialis posterior, FDL and then the tibia, under the deep transverse fascia, with the tibial nerve. <b>Behind the medial malleolus</b> it passes under the flexor retinaculum (tarsal tunnel) with the tibial nerve and the tendons of tibialis posterior, FDL and FHL (Gray gives the order, medial to lateral: tibialis posterior and FDL, the artery with its veins, the nerve, FHL). It ends as the <b>medial and lateral plantar arteries</b>.</p>
+<p>The <b>fibular (peroneal) artery</b> arises from the first part of the posterior tibial (the tibioperoneal trunk), about 2.5 cm below popliteus, and runs down along the medial side of the fibula. It lies in the posterior compartment but its muscular branches supply the lateral compartment; a perforating branch pierces the interosseous membrane above the ankle, and calcaneal branches end on the heel.</p>`},
+  {grp: 'Knee and leg', id: 'sural', name: 'Sural nerve and small saphenous vein',
+    lit: [N('sural_nerve'), N('medial_sural_cutaneous_nerve'), N('sural_communicating_branch_of_common_fibular_nerve'), N('tibial_nerve'), N('common_fibular_nerve'), A('small_saphenous_vein'), A('popliteal_vein')], solid: ['right_fibula', 'right_tibia', 'right_calcaneus'], fit: [N('sural_nerve'), A('small_saphenous_vein')], view: [-0.4, 1, 0.05], zoom: 0.9,
+    labels: [[N('medial_sural_cutaneous_nerve'), 'Medial sural cutaneous (tibial)', [-75, -20, 430]], [N('sural_communicating_branch_of_common_fibular_nerve'), 'Sural communicating (common fibular)', [-100, -10, 350]], [N('sural_nerve'), 'Sural nerve', [-95, -10, 180]], [A('small_saphenous_vein'), 'Small saphenous vein', [-90, -5, 250]], [A('popliteal_vein'), 'Popliteal vein', [-75, -35, 470]], ['right_fibula', 'Lateral malleolus', [-115, -60, 45]]],
+    text: `<p>The <b>sural nerve</b> is formed in the calf by the <b>medial sural cutaneous nerve</b> (from the tibial) and the <b>sural communicating branch</b> of the common fibular nerve; the level and pattern vary. It runs down beside the calcaneal tendon with the <b>small saphenous vein</b>, behind the lateral malleolus, and along the lateral side of the foot (as the lateral dorsal cutaneous nerve). It is purely sensory (back and lateral side of the lower leg, lateral foot and heel), easy to find, and so used for <b>nerve biopsy</b> and <b>nerve grafts</b>.</p>
+<p>The <b>small saphenous vein</b> begins behind the lateral malleolus, runs up the back of the calf with the sural nerve and ends in the popliteal vein (the ending varies); details on <a href="muscles.html">Muscles of the Lower Limb</a>.</p>`},
+  {grp: 'Knee and leg', id: 'sole', name: 'Sole of the foot',
+    lit: ['medial_plantar_artery', 'lateral_plantar_artery', 'plantar_arch', 'deep_plantar_artery', 'superficial_branch_of_medial_plantar_artery', 'plantar_metatarsal_arteries', 'posterior_tibial_artery'].map(A).concat([N('medial_plantar_nerve'), N('lateral_plantar_nerve'), N('tibial_nerve')]),
+    solid: FOOT, fit: [A('plantar_arch'), N('medial_plantar_nerve'), N('lateral_plantar_nerve')], view: [0.1, 0.3, -1], zoom: 1.0,
+    labels: [[A('medial_plantar_artery'), 'Medial plantar artery', [-65, -90, 15]], [A('lateral_plantar_artery'), 'Lateral plantar artery', [-90, -80, 10]], [A('plantar_arch'), 'Plantar arch', [-85, -105, 10]], [N('medial_plantar_nerve'), 'Medial plantar nerve', [-68, -80, 18]], [N('lateral_plantar_nerve'), 'Lateral plantar nerve', [-85, -70, 15]]],
+    text: `<p>After passing behind the medial malleolus under the flexor retinaculum, the tibial nerve divides into the <b>medial and lateral plantar nerves</b>; the posterior tibial artery divides into the medial and lateral plantar arteries deep to abductor hallucis (Gray). The <b>deep plantar branch of the dorsalis pedis</b> joins the plantar arterial arch in the sole, which crosses the foot to the first intermetatarsal space. Seen from below.</p>
+<p><b>Plantar nerves:</b> the medial plantar nerve supplies abductor hallucis, flexor digitorum brevis, flexor hallucis brevis and the first lumbrical; the lateral plantar nerve all the other muscles of the sole. Their compression behind the medial malleolus is the tarsal tunnel syndrome (<a href="muscles.html">Muscles of the Lower Limb</a>).</p>`},
+  {grp: 'Lymph and veins', id: 'nodes', name: 'Lymph nodes',
+    lit: NODES.concat([A('great_saphenous_vein'), A('femoral_vein'), A('small_saphenous_vein'), A('external_iliac_vein'), A('popliteal_vein')]), soft: [MU('inguinal_lig')], solid: ['right_hip_bone'], fit: [L('superolateral_superficial_inguinal_nodes'), L('superomedial_superficial_inguinal_nodes'), L('medial_external_iliac_nodes'), L('inferior_superficial_inguinal_nodes')], view: [0.3, -1, 0.05], zoom: 1.0,
+    labels: [[L('superolateral_superficial_inguinal_nodes'), 'Superficial inguinal: upper (superolateral)'], [L('superomedial_superficial_inguinal_nodes'), 'Superficial inguinal: upper (superomedial)'], [L('inferior_superficial_inguinal_nodes'), 'Superficial inguinal: lower (along the saphenous vein)'], [L('proximal_deep_inguinal_node'), 'Deep inguinal'], [L('medial_external_iliac_nodes'), 'External iliac'], [A('great_saphenous_vein'), 'Great saphenous vein', [-40, -145, 740]]],
+    text: `<p>The <b>superficial inguinal nodes</b> lie in the superficial fascia below the inguinal ligament: an <b>upper</b> row along the ligament and a <b>lower</b> group round the end of the great saphenous vein. They drain to the <b>deep inguinal nodes</b> (under the fascia lata, medial to the femoral vein; the highest, Cloquet's node, at the femoral ring, often absent), and these to the <b>external iliac</b> nodes. The popliteal nodes, behind the knee, are in "Popliteal fossa". What each group drains: the table below the model. Node positions are from the Z-Anatomy model and approximate.</p>`},
+  {grp: 'Lymph and veins', id: 'perfv', name: 'Veins and perforators',
+    lit: ['great_saphenous_vein', 'small_saphenous_vein', 'femoral_vein', 'popliteal_vein', 'posterior_tibial_veins', 'anterior_tibial_veins', 'fibular_veins', 'dorsal_venous_arch_of_foot'].map(A), solid: ['right_femur', 'right_tibia', 'right_fibula'], fit: [A('great_saphenous_vein')], view: [0.9, -0.5, 0.05], zoom: 1.0,
+    labels: [[A('great_saphenous_vein'), 'Dodd (lower thigh)', [-40, -110, 540]], [A('great_saphenous_vein'), 'Boyd (knee)', [-45, -80, 390]], [A('great_saphenous_vein'), 'Cockett (lower leg)', [-55, -80, 150]]],
+    text: `<p><b>Perforator veins</b> pierce the deep fascia and carry blood from the superficial to the deep veins; their valves stop it flowing back out when the calf contracts. Three named groups (the labels mark their usual levels on the great saphenous vein, approximate, not drawn in the model): <b>Dodd</b> in the lower third of the thigh, <b>Boyd</b> at the knee, <b>Cockett</b> in the lower two thirds of the leg (medial, to the posterior tibial veins). The model's "perforating veins" run with the perforating arteries of the thigh and are not these. The calf pump and deep veins: <a href="muscles.html">Muscles of the Lower Limb</a>; varicose veins and DVT: below.</p>`},
+  {grp: 'Lymph and veins', id: 'pulses', name: 'Pulses',
+    lit: ['femoral_artery', 'popliteal_artery', 'posterior_tibial_artery', 'anterior_tibial_artery', 'dorsalis_pedis_artery'].map(A), solid: ['right_hip_bone', 'right_femur', 'right_tibia', 'right_fibula', 'right_patella', ...FOOT], fit: [A('femoral_artery'), A('posterior_tibial_artery')], view: [0.8, -0.8, 0.05], zoom: 0.75,
+    labels: [[A('femoral_artery'), 'Femoral: mid-inguinal point', [-55, -150, 830]], [A('popliteal_artery'), 'Popliteal: knee flexed', [-80, -45, 420]], [A('posterior_tibial_artery'), 'Posterior tibial: behind the medial malleolus', [-60, -45, 45]], [A('anterior_tibial_artery'), 'Anterior tibial: front of the ankle', [-80, -95, 75]], [A('dorsalis_pedis_artery'), 'Dorsalis pedis: lateral to EHL', [-78, -130, 45]]],
+    text: `<p>The four pulses commonly felt (femoral, popliteal, posterior tibial, dorsalis pedis), plus the anterior tibial at the front of the ankle (Gray), marked on their arteries (approximate). Where and how to feel each: the table "Pulses and surface marking" below.</p>`},
+];
+/* nerve injuries: 3D view of each (same fields as a topic) */
+const LESIONS = [
+  {id: 'drop', name: 'Foot drop', site: 'Common fibular nerve at the neck of the fibula', sign: 'Foot drops, toes drag, high-stepping (steppage) gait; numb lateral leg and dorsum of foot; inversion kept',
+    lit: [N('common_fibular_nerve'), N('deep_fibular_nerve'), N('superficial_fibular_nerve'), A('anterior_tibial_artery')], fit: [N('common_fibular_nerve'), N('superficial_fibular_nerve')], view: LATERAL, zoom: 0.9,
+    labels: [[N('common_fibular_nerve'), 'Common fibular nerve (neck of fibula)', [-120, -55, 380]], [N('deep_fibular_nerve'), 'Deep fibular (dorsiflexors)', [-100, -85, 200]], [N('superficial_fibular_nerve'), 'Superficial fibular (evertors)', [-115, -65, 220]]],
+    text: `<p>The <b>common fibular nerve</b> winds round the neck of the fibula, where it is superficial and easily compressed (habitual leg crossing, long positioning, plaster casts) or injured (fracture of the fibular neck). Fibular neuropathy is the commonest compressive neuropathy of the lower limb.</p>
+<p><b>Result:</b> the dorsiflexors (deep fibular) and evertors (superficial fibular) are weak, so the <b>foot drops</b> and the toes drag; the patient lifts the knee high to clear the foot (<b>steppage gait</b>). Numbness on the lateral leg and dorsum of the foot. <b>Inversion is kept</b> (tibialis posterior, tibial nerve). Foot drop also has other causes (L5 root, sciatic nerve). More on <a href="muscles.html">Muscles of the Lower Limb</a> (Nerve supply).</p>`},
+  {id: 'tib', name: 'Tibial nerve lesion', site: 'Tibial nerve (knee, leg) or at the ankle (tarsal tunnel)', sign: 'Weak plantarflexion and toe flexion; numb sole',
+    lit: [N('tibial_nerve'), N('medial_plantar_nerve'), N('lateral_plantar_nerve')], solid: ['right_tibia', 'right_fibula', 'right_calcaneus'], fit: [N('tibial_nerve')], view: BACK, zoom: 0.9,
+    labels: [[N('tibial_nerve'), 'Tibial nerve', [-70, -40, 250]], [N('medial_plantar_nerve'), 'Plantar nerves (sole)', [-68, -60, 30]]],
+    text: `<p>A <b>tibial nerve</b> lesion above the ankle weakens <b>plantarflexion and toe flexion</b> (the calf muscles) and numbs the <b>sole</b>; At the ankle, compression in the <b>tarsal tunnel</b> affects the plantar nerves: pain and abnormal sensation in the sole.</p>`},
+  {id: 'fem', name: 'Femoral nerve lesion', site: 'Femoral nerve in the pelvis or groin', sign: 'Weak knee extension (and hip flexion); reduced or absent knee jerk; numb front of thigh and medial leg',
+    lit: FEM_BR, soft: [MU('psoas_major'), MU('iliacus')], solid: ['right_hip_bone', 'right_femur'], fit: [N('femoral_nerve')], view: FRONT, zoom: 0.9,
+    labels: [[N('femoral_nerve'), 'Femoral nerve', [-75, -135, 820]], [MU('iliacus'), 'Iliacus', [-100, -100, 900]], [N('saphenous_nerve'), 'Saphenous nerve (medial leg)', [-45, -100, 250]]],
+    text: `<p>A <b>femoral nerve</b> lesion weakens the quadriceps (<b>knee extension</b>) and hip flexion, reduces or abolishes the <b>knee (patellar) jerk</b>, and numbs the <b>front of the thigh and the medial leg</b> (saphenous nerve). Causes include retroperitoneal bleeding (a haematoma in the psoas compartment), a psoas abscess, pelvic masses, diabetes and pelvic or hip surgery.</p>`},
+  {id: 'obt', name: 'Obturator nerve lesion', site: 'Obturator nerve (pelvic wall, obturator canal)', sign: 'Weak adduction; pain or numbness of the medial thigh',
+    lit: OBT_BR, soft: [MU('add_longus'), MU('add_brevis'), MU('add_magnus'), MU('gracilis')], solid: ['right_hip_bone', 'right_femur'], fit: [N('obturator_nerve'), MU('add_longus')], view: [0.8, -1, 0.05], zoom: 0.9,
+    labels: [[N('obturator_nerve'), 'Obturator nerve', [-40, -95, 900]], [MU('add_longus'), 'Adductors', [-45, -130, 700]]],
+    text: `<p>An <b>obturator nerve</b> lesion (most often entrapment in the obturator canal; reported after pelvic trauma, hip surgery, prolonged labour and obturator hernia, less often from space-occupying lesions) weakens <b>adduction</b> of the thigh and causes pain or numbness in the <b>groin and medial thigh</b>. The nerve also gives branches to the hip and knee joints.</p>`},
+  {id: 'sgn', name: 'Superior gluteal nerve and Trendelenburg sign', site: 'Superior gluteal nerve in the buttock', sign: 'Standing on the affected leg, the pelvis drops on the opposite side',
+    lit: [N('superior_gluteal_nerve'), A('superior_gluteal_artery')], soft: [MU('piriformis')], solid: ['right_hip_bone', 'sacrum', 'right_femur'], fit: [MU('piriformis'), N('superior_gluteal_nerve')], view: [-0.6, 1, 0.1], zoom: 0.9,
+    labels: [[N('superior_gluteal_nerve'), 'Superior gluteal nerve', [-80, -60, 900]], [MU('piriformis'), 'Piriformis', [-70, -40, 870]]],
+    text: `<p>The <b>superior gluteal nerve</b> (L4–S1) leaves the pelvis above piriformis and supplies gluteus medius, gluteus minimus and tensor fasciae latae, the abductors that hold the pelvis level when standing on one leg. With them weak, the pelvis drops on the opposite, unsupported side (<b>positive Trendelenburg sign</b>). The sign, its other causes and the safe injection sites are on <a href="muscles.html">Muscles of the Lower Limb</a> (Nerve supply) and <a href="joints.html">Joints of the Lower Limb</a> (hip).</p>`},
+  {id: 'sci', name: 'Sciatic nerve lesion', site: 'Sciatic nerve in the buttock or thigh', sign: 'Weak knee flexion (high lesion) and all movements below the knee; numb leg (except medial side) and foot',
+    lit: [N('sciatic_nerve'), N('tibial_nerve'), N('common_fibular_nerve')], soft: [MU('piriformis')], solid: ['right_hip_bone', 'right_femur'], fit: [N('sciatic_nerve'), MU('piriformis')], view: BACK, zoom: 0.9,
+    labels: [[N('sciatic_nerve'), 'Sciatic nerve', [-55, -45, 700]], [MU('piriformis'), 'Piriformis', [-70, -40, 870]]],
+    text: `<p>The <b>sciatic nerve</b> supplies the hamstrings and, through its tibial and common fibular parts, all the muscles of the leg and foot and most of the skin below the knee (the medial side is saphenous). A lesion therefore weakens knee flexion (if high) and every movement below the knee, with numbness of the leg and foot.</p>
+<p><b>Causes:</b> a <b>gluteal injection</b> outside the safe area (often mainly the common fibular part, so foot drop) and <b>posterior dislocation of the hip</b> (<a href="joints.html">Joints of the Lower Limb</a>). The safe injection quadrant: <a href="muscles.html">Muscles of the Lower Limb</a>.</p>`},
+  {id: 'mer', name: 'Meralgia paresthetica', site: 'Lateral femoral cutaneous nerve near the ASIS / inguinal ligament', sign: 'Burning pain, tingling or numbness of the outer thigh; no weakness',
+    lit: [N('lateral_femoral_cutaneous_nerve')], soft: [MU('sartorius'), MU('tfl'), MU('inguinal_lig')], solid: ['right_hip_bone', 'right_femur'], fit: [N('lateral_femoral_cutaneous_nerve')], view: [-0.3, -1, 0.05], zoom: 0.9,
+    labels: [[N('lateral_femoral_cutaneous_nerve'), 'Lateral femoral cutaneous nerve', [-120, -150, 820]], ['right_hip_bone', 'Anterior superior iliac spine', [-125, -140, 870]], [MU('sartorius'), 'Sartorius', [-90, -145, 760]]],
+    text: `<p>The <b>lateral femoral cutaneous nerve</b> (L2, L3) is purely sensory. It runs to the anterior superior iliac spine and enters the thigh under the inguinal ligament, where it can be compressed: <b>meralgia paresthetica</b>, pain and abnormal sensation of the outer (anterolateral) thigh, with no weakness.</p>`},
+];
+/* pulses: [id, artery, where and how, 3D topic-like view] */
+const PULSES = [
+  {id: 'p-fem', name: 'Femoral', where: 'Just below the inguinal ligament at the mid-inguinal point (midway between the ASIS and the pubic symphysis). The femoral vein lies just medial to it.',
+    lit: [A('femoral_artery'), A('femoral_vein'), N('femoral_nerve')], soft: [MU('inguinal_lig')], solid: ['right_hip_bone', 'right_femur'], fit: [A('femoral_artery')], view: FRONT, zoom: 1.6, centre: [-50, -140, 820],
+    labels: [[A('femoral_artery'), 'Femoral pulse', [-55, -165, 805]], [A('femoral_vein'), 'Vein (medial)', [-42, -145, 815]], [N('femoral_nerve'), 'Nerve (lateral)', [-72, -140, 820]], ['right_hip_bone', 'ASIS', [-125, -140, 870]], ['right_hip_bone', 'Pubic symphysis', [-8, -150, 800]]]},
+  {id: 'p-pop', name: 'Popliteal', where: 'Deep in the popliteal fossa: felt with the knee flexed.',
+    lit: [A('popliteal_artery'), A('popliteal_vein'), N('tibial_nerve')], solid: ['right_femur', 'right_tibia', 'right_fibula'], fit: [A('popliteal_artery')], view: BACK, zoom: 1.6, centre: [-80, -40, 440],
+    labels: [[A('popliteal_artery'), 'Popliteal pulse (deep)', [-78, -45, 430]], [N('tibial_nerve'), 'Tibial nerve (superficial)', [-80, -30, 460]]]},
+  {id: 'p-pt', name: 'Posterior tibial', where: 'Behind the medial malleolus, about halfway between it and the calcaneal (Achilles) tendon.',
+    lit: [A('posterior_tibial_artery'), N('tibial_nerve')], solid: ['right_tibia', 'right_calcaneus', 'right_talus', 'right_fibula'], fit: [A('posterior_tibial_artery')], view: [1, 0.9, 0.1], zoom: 1.6, centre: [-60, -50, 60],
+    labels: [[A('posterior_tibial_artery'), 'Posterior tibial pulse', [-58, -45, 55]], ['right_tibia', 'Medial malleolus', [-55, -65, 70]], ['right_calcaneus', 'Heel', [-65, -15, 25]]]},
+  {id: 'p-at', name: 'Anterior tibial', where: 'In front of the ankle, midway between the malleoli, where it crosses the ankle and continues as the dorsalis pedis; Gray describes it as superficial here (position approximate).',
+    lit: [A('anterior_tibial_artery'), A('dorsalis_pedis_artery'), N('deep_fibular_nerve')], solid: ['right_tibia', 'right_fibula', ...FOOT], fit: [A('dorsalis_pedis_artery')], view: [-0.1, -1, 0.4], zoom: 1.1, centre: [-80, -95, 75],
+    labels: [[A('anterior_tibial_artery'), 'Anterior tibial at the ankle', [-82, -95, 80]], ['right_tibia', 'Medial malleolus', [-55, -65, 70]], ['right_fibula', 'Lateral malleolus', [-115, -60, 45]]]},
+  {id: 'p-dp', name: 'Dorsalis pedis', where: 'On the dorsum of the foot just lateral to the tendon of extensor hallucis longus (medial to the first EDL tendon), towards the proximal end of the first intermetatarsal space.',
+    lit: [A('dorsalis_pedis_artery'), A('deep_plantar_artery'), N('deep_fibular_nerve')], soft: [MU('ehl')], solid: FOOT, fit: [A('dorsalis_pedis_artery')], view: [-0.1, -0.7, 1], zoom: 1.1, centre: [-78, -120, 45],
+    labels: [[A('dorsalis_pedis_artery'), 'Dorsalis pedis pulse', [-78, -128, 45]], [MU('ehl'), 'EHL tendon (medial)', [-68, -140, 45]]]},
+];
+/* surface lines (Gray 1918 surface markings; each end point checked against a second source): [structure, line] */
+const SURFACE = [
+  {id: 's-mip', name: 'Mid-inguinal point', line: 'Midway between the anterior superior iliac spine and the pubic symphysis: the femoral artery enters the thigh here.', ref: 'p-fem'},
+  {id: 's-fa', name: 'Femoral artery', line: 'Upper two thirds of a line from the mid-inguinal point to the adductor tubercle, with the thigh flexed, abducted and laterally rotated; the artery passes through the adductor hiatus several cm above the tubercle.', ref: 'femart'},
+  {id: 's-fn', name: 'Femoral nerve', line: 'Just lateral to the femoral artery (pulse) at the inguinal ligament.', ref: 'femn'},
+  {id: 's-so', name: 'Saphenous opening', line: 'Its centre about 4 cm below and lateral to the pubic tubercle (the saphenofemoral junction).', ref: 'femvein'},
+  {id: 's-pa', name: 'Popliteal artery', line: 'From the adductor hiatus (junction of the middle and lower thirds of the thigh, medially) obliquely to the middle of the popliteal fossa, then straight down to the lower border of popliteus.', ref: 'popa'},
+  {id: 's-ata', name: 'Anterior tibial artery', line: 'From the medial side of the head of the fibula to midway between the malleoli.', ref: 'ant'},
+  {id: 's-dp', name: 'Dorsalis pedis artery', line: 'From midway between the malleoli to the proximal end of the first intermetatarsal space.', ref: 'dp'},
+  {id: 's-pta', name: 'Posterior tibial artery', line: 'From the end of the popliteal artery (about 2.5 cm below the centre of the fossa) to midway between the medial malleolus and the heel.', ref: 'post'},
+  {id: 's-sci', name: 'Sciatic nerve', line: 'From midway between the ischial tuberosity and the greater trochanter down the middle of the back of the thigh to the upper angle of the popliteal fossa.', ref: 'sciatic'},
+  {id: 's-tib', name: 'Tibial nerve', line: 'Straight down through the middle of the popliteal fossa, then along the line of the posterior tibial artery.', ref: 'post'},
+  {id: 's-cfn', name: 'Common fibular nerve', line: 'Along the biceps femoris tendon to the back of the head of the fibula, then round its neck.', ref: 'lat'},
+  {id: 's-dfn', name: 'Deep fibular nerve', line: 'Along the line of the anterior tibial artery.', ref: 'ant'},
+  {id: 's-gsv', name: 'Great saphenous vein', line: 'From in front of the medial malleolus up the medial leg and thigh (behind the knee\'s medial condyles) to the saphenous opening.', ref: 'perfv'},
+  {id: 's-ssv', name: 'Small saphenous vein', line: 'From behind the lateral malleolus up the middle of the back of the calf to the popliteal fossa.', ref: 'sural'},
+];
+/* lymph node groups: [group, where, drains, drains to] */
+const NODE_ROWS = [
+  ['Superficial inguinal, upper row', 'Just below and along the inguinal ligament, in the superficial fascia', 'Skin of the abdominal wall below the umbilicus, buttock, perineum, external genitalia (scrotum, penis; vulva), anal canal below the pectinate line', 'Deep inguinal'],
+  ['Superficial inguinal, lower group', 'Round the end of the great saphenous vein', 'The superficial lymph vessels of the lower limb (those running with the great saphenous vein)', 'Deep inguinal'],
+  ['Deep inguinal', 'Under the fascia lata, medial to the femoral vein; the highest (Cloquet\'s) at the femoral ring, often absent', 'Deep lymph vessels with the femoral vessels; the superficial inguinal nodes', 'External iliac'],
+  ['Popliteal', 'In the fat of the popliteal fossa', 'The lateral side of the leg and foot (vessels with the small saphenous vein)', '—'],
+];
+const LYMPH_TEXT = `<p><b>Why inguinal nodes enlarge</b> (AN20.4): a node enlarges with infection or cancer in the area it drains, so an enlarged inguinal node means examining its whole territory: the foot, leg and thigh (an infected wound), the lower abdominal wall and buttock, the perineum and external genitalia (<b>sexually transmitted infections</b> such as syphilis, chancroid and lymphogranuloma venereum) and the anal canal below the pectinate line; and <b>cancers</b> that spread to them, e.g. of the vulva and anal canal, and skin cancers of the leg such as melanoma. Most of the lower limb drains straight to the inguinal nodes; the lateral side of the leg and foot goes to the popliteal nodes first.</p>
+<p class="muted">Node groups and the superficial lymph vessels in 3D, with the femoral canal: also on <a href="muscles.html">Muscles of the Lower Limb</a>. Node positions are from the Z-Anatomy model and approximate.</p>`;
+const VEINS_TEXT = `<p>The calf muscle pump, valves, superficial and deep veins and the outline of varicose veins and DVT are on <a href="muscles.html">Muscles of the Lower Limb</a> ("peripheral heart"). Added here:</p>
+<ul><li><b>Where the superficial veins meet the deep ones:</b> the <b>saphenofemoral junction</b> (great saphenous into femoral vein, about 4 cm below and lateral to the pubic tubercle), the saphenopopliteal junction (small saphenous into popliteal vein) and the <b>perforators</b> (Dodd: lower thigh; Boyd: knee; Cockett: lower leg). Reflux through an incompetent junction is called junctional reflux.</li>
+<li><b>Varicose veins</b> are dilated, twisted superficial veins of the saphenous veins or their tributaries, and reflux in the great and small saphenous veins is looked for. When <b>perforator valves</b> fail, the calf pushes blood outward into the superficial veins on each contraction; this worsens varicose veins and contributes to <b>venous ulcers</b>, and incompetent perforators may be closed as part of treatment.</li>
+<li><b>Deep vein thrombosis</b> usually starts in a deep vein of the calf and spreads upward (to the popliteal and femoral veins); immobility (bed rest, casts, long travel) favours it by slowing the venous flow (stasis).</li></ul>`;
+const ROOTS = ['T12', 'L1', 'L2', 'L3', 'L4', 'L5', 'S1', 'S2', 'S3', 'S4'];
+/* root chart: [nerve, plexus, roots, roots only some sources include, model key(s) or null, caption] */
+const ROOT_ROWS = [
+  ['Iliohypogastric', 'lumbar', ['L1'], ['T12'], [N('iliohypogastric_nerve')], 'Lower abdominal wall.'],
+  ['Ilioinguinal', 'lumbar', ['L1'], [], [N('ilio_inguinal_nerve')], 'Groin and lower abdominal wall.'],
+  ['Genitofemoral', 'lumbar', ['L1', 'L2'], [], [N('genitofemoral_nerve'), N('femoral_branch_of_genitofemoral_nerve'), N('genital_branch_of_genitofemoral_nerve')], 'Comes through the front of psoas.'],
+  ['Lateral femoral cutaneous', 'lumbar', ['L2', 'L3'], [], [N('lateral_femoral_cutaneous_nerve')], 'Purely sensory, outer thigh (meralgia paresthetica).'],
+  ['Femoral', 'lumbar', ['L2', 'L3', 'L4'], [], FEM_BR, 'Dorsal divisions; front of the thigh (quadriceps), skin of the front and medial thigh and medial leg.'],
+  ['Obturator', 'lumbar', ['L2', 'L3', 'L4'], [], OBT_BR, 'Ventral divisions; adductors, skin of the medial thigh.'],
+  ['Lumbosacral trunk', 'link', ['L4', 'L5'], [], null, 'All of L5 and part of L4; joins the sacral plexus (not in the model).'],
+  ['Superior gluteal', 'sacral', ['L4', 'L5', 'S1'], [], [N('superior_gluteal_nerve')], 'Gluteus medius and minimus, tensor fasciae latae.'],
+  ['Inferior gluteal', 'sacral', ['L5', 'S1', 'S2'], [], null, 'Gluteus maximus (not in the model).'],
+  ['Posterior femoral cutaneous', 'sacral', ['S1', 'S2', 'S3'], [], [N('posterior_femoral_cutaneous_nerve'), N('anterior_root_of_posterior_femoral_cutaneous_nerve'), N('posterior_root_of_posterior_femoral_cutaneous_nerve')], 'Skin of the back of the thigh.'],
+  ['Sciatic', 'sacral', ['L4', 'L5', 'S1', 'S2', 'S3'], [], [N('sciatic_nerve')], 'Hamstrings; all muscles below the knee through its two parts.'],
+  ['  Tibial part', 'sacral', ['L4', 'L5', 'S1', 'S2', 'S3'], [], [N('tibial_nerve')], 'Ventral divisions; back of the leg and the sole.'],
+  ['  Common fibular part', 'sacral', ['L4', 'L5', 'S1', 'S2'], [], [N('common_fibular_nerve'), N('deep_fibular_nerve'), N('superficial_fibular_nerve')], 'Dorsal divisions; front and lateral side of the leg.'],
+  ['Pudendal', 'sacral', ['S2', 'S3', 'S4'], [], [N('pudendal_nerve')], 'Perineum (not covered here).'],
+];
+const ROOTS_INTRO = 'Filled squares: the roots that two sources agree each nerve takes (dashed: only in some). Tap a nerve to light it in 3D (on a phone, swipe the chart sideways if needed).';
+const ROOTS_NOTE = 'Root values vary between people and studies (e.g. the obturator nerve L3–L4 or L3–L5 in some); the classical values are shown. One StatPearls chapter gives the sciatic nerve L4–S4; Gray, another StatPearls chapter and Wikipedia give L4–S3. Gray takes the sacral plexus to S3 and makes a separate pudendal plexus from parts of S2 and S3, all of S4 and S5 and the coccygeal nerve; other sources give the sacral plexus as L4–S4. Schematic.';
+const DATA = {
+  lede: 'The nerves, vessels and lymph nodes of the right lower limb in 3D, from the lumbar plexus to the toes. Pick a topic to light its parts (the rest turns to glass) and tap a part to name it. Below: the root values of the lumbar and sacral plexuses, nerve injuries, pulses and surface marking, lymph nodes, and varicose veins and DVT.',
+  note3d: 'Arteries red, veins blue, nerves yellow, lymph nodes green, bones cream; muscles pale grey (switch "All muscles" on to see them all as glass). Vessels and nerves are Z-Anatomy curves drawn as tubes: calibres and node positions approximate. The model has no inferior gluteal nerve, no lumbosacral trunk or plexus roots, no superficial circumflex iliac vessels, no descending genicular artery and no medial calcaneal nerve; its small toe vessels are left out.',
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (lumbar plexus anatomy and disorders, profunda femoris and femoral vein landmarks, the saphenofemoral junction, sciatic nerve division, psoas abscess, groin hernia guideline (Japanese Hernia Society 2024), corona mortis, popliteal aneurysm, femoral neck fracture vascular injury, varicose veins and perforators, inguinal node metastases). Where these differ, the page says so.",
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, vessels, nerves and lymph nodes from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones; vessels and nerves are tubes swept along Z-Anatomy curves. Simplified meshes, shared under the same licences. The right limb is shown. The root chart is schematic; pulse markers and the perforator levels are approximate.',
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let kind = {}, names = {}, cur = null, musclesOn = false;
+const COL = {bone: '--bone', muscle: '--soft', artery: '--artery', vein: '--vein', nerve: '--nerve', node: '--lymph'};
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+function anchor(key, near, view) {   // the vertex of a part nearest to a point (default: 25 mm in front of the part's centroid, seen from the topic's view)
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos; let c = near;
+  if (!c) { c = [0, 0, 0]; for (let i = 0; i < pos.length; i++) c[i % 3] += pos[i] / (pos.length / 3);
+    const n = view || [0, -1, 0], l = Math.hypot(...n); c = c.map((x, i) => x + 25 * n[i] / l); }
+  let best = 0, bd = 1e18;
+  for (let i = 0; i < pos.length; i += 3) { const d = (pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2; if (d < bd) { bd = d; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+function showTopic(id) {
+  const t = typeof id === 'object' ? id : TOPICS.find(t => t.id === id); cur = t;
+  const lit = (t.lit || []).filter(k => v.parts.has(k)), soft = (t.soft || []).filter(k => v.parts.has(k)), solid = (t.solid || []).filter(k => v.parts.has(k));
+  const glass = (t.glass || []).filter(k => v.parts.has(k));
+  for (const k in kind) {
+    const isMus = kind[k] === 'muscle';
+    v.setVisible(k, !isMus || musclesOn || soft.includes(k) || glass.includes(k));
+  }
+  v.setFocus(lit.concat(soft, solid));
+  const fk = (t.fit || lit).filter(k => v.parts.has(k));
+  v.fit(fk.length ? fk : lit); if (t.centre) v.centre = t.centre.slice();
+  v.face(t.view || [0, -1, 0], {zoom: t.zoom || 1});
+  v.setMarkers((t.labels || []).filter(([k]) => v.parts.has(k)).map(([k, label, near]) => ({p: anchor(k, near, t.view), label, color: css(kind[k] === 'muscle' ? '--muted' : kind[k] === 'bone' ? '--ink' : COL[kind[k]]), always: true})));
+  if (t.text) $('topic-text').innerHTML = t.text;
+  else $('topic-text').innerHTML = `<p><b>${t.name}:</b> ${t.where || t.line || ''}</p>`;
+  $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === t.id));
+  document.querySelectorAll('table.t tr[data-k]').forEach(r => r.setAttribute('aria-pressed', r.dataset.k === t.id));
+}
+const toView = () => $('v').scrollIntoView({behavior: 'smooth', block: 'start'});
+function buildTables() {
+  $('lesions').innerHTML = '<tr><th>Injury</th><th>Nerve, site</th><th>What is seen</th></tr>' + LESIONS.map(l =>
+    `<tr data-k="${l.id}" aria-pressed="false"><td data-h=""><b>${l.name}</b></td><td data-h="Nerve">${l.site}</td><td data-h="Seen">${l.sign}</td></tr>`).join('');
+  $('lesions').querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => { showTopic(LESIONS.find(l => l.id === r.dataset.k)); toView(); });
+  $('pulses').innerHTML = '<tr><th>Pulse</th><th>Where and how to feel it</th></tr>' + PULSES.map(p =>
+    `<tr data-k="${p.id}" aria-pressed="false"><td data-h=""><b>${p.name}</b></td><td data-h="Where">${p.where}</td></tr>`).join('');
+  $('pulses').querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => { showTopic(PULSES.find(p => p.id === r.dataset.k)); toView(); });
+  $('surface').innerHTML = '<tr><th>Surface marking</th><th>Line (Gray 1918, approximate)</th></tr>' + SURFACE.map(s =>
+    `<tr data-k="${s.id}" aria-pressed="false"><td data-h=""><b>${s.name}</b></td><td data-h="Line">${s.line}</td></tr>`).join('');
+  $('surface').querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => {
+    const s = SURFACE.find(x => x.id === r.dataset.k), base = TOPICS.find(t => t.id === s.ref) || PULSES.find(p => p.id === s.ref);
+    showTopic(base); $('topic-text').insertAdjacentHTML('afterbegin', `<p class="note"><b>Surface marking, ${s.name}:</b> ${s.line}</p>`);
+    document.querySelectorAll('table.t tr[data-k]').forEach(x => x.setAttribute('aria-pressed', x === r)); toView(); });
+  $('nodes').innerHTML = '<tr><th>Group</th><th>Where</th><th>Drains</th><th>Drains to</th></tr>' + NODE_ROWS.map(r =>
+    `<tr><td data-h=""><b>${r[0]}</b></td><td data-h="Where">${r[1]}</td><td data-h="Drains">${r[2]}</td><td data-h="To">${r[3]}</td></tr>`).join('');
+}
+function buildTopics() {
+  const box = $('topics'), grps = [...new Set(TOPICS.map(t => t.grp))];
+  for (const g of grps) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !kind[hit.key]) { $('pick').textContent = ''; return; }
+  $('pick').textContent = `${names[hit.key]}: ${kind[hit.key] === 'node' ? 'lymph nodes' : kind[hit.key]}`;
+};
+async function loadModel() {
+  const base = '../models/ll-nv/';
+  const meta = await (await fetch(base + 'nv.json')).json();
+  const man = await v.load(base + 'll-nv.json');
+  for (const p of man.parts) { names[p.key] = p.name.replace(/^Right /, ''); kind[p.key] = meta.parts[p.key].kind; v.setColour(p.key, COL[kind[p.key]]); }
+}
+
+/* ===================== root chart (schematic) ===================== */
+function drawRoots() {
+  const S = $('roots'), X0 = 230, W = 50, Y0 = 46, H = 26;
+  let h = ROOTS.map((r, i) => `<text class="h" x="${X0 + i * W + W / 2}" y="30" text-anchor="middle">${r}</text>`).join('');
+  h += `<line class="split" x1="${X0 + 6 * W - 0.5}" y1="20" x2="${X0 + 6 * W - 0.5}" y2="${Y0 + ROOT_ROWS.length * H}"/>`;
+  ROOT_ROWS.forEach((row, j) => {
+    const y = Y0 + j * H;
+    h += `<g class="row" data-j="${j}" tabindex="0" role="button" aria-label="${row[0].trim()}"><rect class="bgr" x="0" y="${y - 2}" width="${X0 + ROOTS.length * W}" height="${H}" fill="transparent"/>`;
+    h += `<text x="${row[0].startsWith(' ') ? 22 : 6}" y="${y + 15}">${row[0].trim()}</text>`;
+    ROOTS.forEach((r, i) => { const c = row[2].includes(r) ? 'cell on' : row[3].includes(r) ? 'cell some' : 'cell';
+      h += `<rect class="${c}" x="${X0 + i * W + 4}" y="${y + 2}" width="${W - 8}" height="${H - 8}" rx="3"/>`; });
+    h += '</g>';
+  });
+  h += `<text class="h" x="${X0 + 3 * W}" y="${Y0 + ROOT_ROWS.length * H + 22}" text-anchor="middle">lumbar</text><text class="h" x="${X0 + 8 * W}" y="${Y0 + ROOT_ROWS.length * H + 22}" text-anchor="middle">sacral</text>`;
+  S.setAttribute('viewBox', `0 0 760 ${Y0 + ROOT_ROWS.length * H + 32}`);
+  S.innerHTML = h;
+  const pick = j => {
+    const row = ROOT_ROWS[j];
+    S.querySelectorAll('.row').forEach(g => g.classList.toggle('sel', +g.dataset.j === j));
+    const roots = row[2].length > 1 ? row[2][0] + '–' + row[2][row[2].length - 1] : row[2][0];
+    $('roots-cap').innerHTML = `<b>${row[0].trim()}</b> (${roots}${row[3].length ? '; some sources add ' + row[3].join(', ') : ''}): ${row[5]}`;
+    if (row[4]) { showTopic({id: 'root-' + j, name: row[0].trim(), lit: row[4], solid: ['right_hip_bone', 'sacrum', 'fifth_lumbar_vertebra', 'right_femur'], fit: row[4].concat(['right_hip_bone']), view: row[1] === 'lumbar' ? [0.2, -1, 0.1] : [-0.2, 1, 0.1], zoom: 0.7,
+      labels: [[row[4][0], row[0].trim()]], where: `${roots}. ${row[5]}`}); }
+  };
+  S.querySelectorAll('.row').forEach(g => { g.onclick = () => pick(+g.dataset.j); g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(+g.dataset.j); } }; });
+}
+
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('roots-cap').textContent = ROOTS_INTRO; $('roots-note').textContent = ROOTS_NOTE; drawRoots();
+  $('lymph-text').innerHTML = LYMPH_TEXT; $('veins-text').innerHTML = VEINS_TEXT;
+  buildTables();
+  const bar = $('vbar');
+  const mb = document.createElement('button'); mb.className = 'chip'; mb.textContent = 'All muscles (glass)'; mb.setAttribute('aria-pressed', 'false');
+  mb.onclick = () => { musclesOn = !musclesOn; mb.setAttribute('aria-pressed', musclesOn); if (cur) showTopic(cur); };
+  bar.append(mb);
+  for (const [label, dir] of [['Front', [0, -1, 0]], ['Back', [0, 1, 0]], ['Lateral', [-1, 0, 0]], ['Medial', [1, 0, 0]]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic(TOPICS[2].id);
+  window.J = {TOPICS, LESIONS, PULSES, SURFACE, showTopic, lesion: id => showTopic(LESIONS.find(l => l.id === id)), pulse: id => showTopic(PULSES.find(p => p.id === id))};   // for tests
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

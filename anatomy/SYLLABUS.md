@@ -142,10 +142,10 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 15. Front & Medial side of thigh
 
-- [ ] **AN15.1** Describe and demonstrate origin, course, relations, branches (or tributaries), termination of important nerves and vessels of anterior thigh
+- [x] **AN15.1** Describe and demonstrate origin, course, relations, branches (or tributaries), termination of important nerves and vessels of anterior thigh — *femoral, saphenous and obturator nerves, femoral and profunda arteries, femoral vein and saphenofemoral junction in 3D: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
 - [x] **AN15.2** Describe and demonstrate major muscles with their attachment, nerve supply and actions — *[Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [x] **AN15.3** Describe and demonstrate boundaries, floor, roof and contents of femoral triangle — *boundaries, floor, roof, femoral sheath and canal, contents in 3D: [Muscles of the Lower Limb](lower-limb/muscles.html)*
-- [ ] **AN15.4** Explain anatomical basis of Psoas abscess & Femoral hernia
+- [x] **AN15.4** Explain anatomical basis of Psoas abscess & Femoral hernia — *psoas abscess and femoral hernia: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
 - [x] **AN15.5** Describe and demonstrate adductor canal with its contents — *walls, roof and contents in 3D: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 
 ### 16. Gluteal region & back of thigh
@@ -154,19 +154,19 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [x] **AN16.2** Describeanddemonstrate structures under thecover of gluteus maximus. Also explain the anatomical basis of sciatic nerve injury during gluteal intramuscular injections — *structures under gluteus maximus in 3D, above and below piriformis, anastomoses, injections: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [x] **AN16.3** Explain the anatomical basis of Trendelenburg sign — *[Muscles of the Lower Limb](lower-limb/muscles.html) (Nerve supply, superior gluteal)*
 - [x] **AN16.4** Describe and demonstrate the hamstrings group of muscles with their attachment, nerve supply and actions — *[Muscles of the Lower Limb](lower-limb/muscles.html)*
-- [ ] **AN16.5** Describe and demonstrate the origin, course, relations, branches (or tributaries), termination of important nerves and vessels on the back of thigh
-- [ ] **AN16.6** Describe and demonstrate the boundaries, roof, floor, contents and relations of popliteal fossa with its clinical anatomy
+- [x] **AN16.5** Describe and demonstrate the origin, course, relations, branches (or tributaries), termination of important nerves and vessels on the back of thigh — *sciatic nerve and its division, perforating arteries, cruciate and trochanteric anastomoses in 3D: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
+- [x] **AN16.6** Describe and demonstrate the boundaries, roof, floor, contents and relations of popliteal fossa with its clinical anatomy — *boundaries, roof, floor, contents and relations in 3D, popliteal aneurysm, Baker's cyst: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
 
 ### 17. Hip Joint
 
 - [x] **AN17.1** Describe and demonstrate the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements and muscles involved, blood and nerve supply, bursae around the hip joint — *3D capsule, ligaments, labrum, bursae, moving joint: [Joints of the Lower Limb](lower-limb/joints.html)*
-- [ ] **AN17.2** Describe anatomical basis of complications of fracture neck of femur
+- [x] **AN17.2** Describe anatomical basis of complications of fracture neck of femur — *blood supply of the femoral head, avascular necrosis, non-union: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
 - [x] **AN17.3** Describe dislocation of hip joint and surgical hip replacement — *[Joints of the Lower Limb](lower-limb/joints.html) (Hip, Applied)*
 
 ### 18. Knee joint, Anterior compartment of leg & dorsum of foot
 
 - [x] **AN18.1** Describe and demonstrate major muscles of anterior compartment of leg with their attachment, nerve supply and actions — *[Muscles of the Lower Limb](lower-limb/muscles.html)*
-- [ ] **AN18.2** Describe and demonstrate origin, course, relations, branches (or tributaries), termination of important nerves and vessels of anterior compartment of leg
+- [x] **AN18.2** Describe and demonstrate origin, course, relations, branches (or tributaries), termination of important nerves and vessels of anterior compartment of leg — *deep fibular nerve, anterior tibial artery, dorsalis pedis in 3D: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
 - [x] **AN18.3** Explain the anatomical basis of foot drop — *[Muscles of the Lower Limb](lower-limb/muscles.html) (Nerve supply, superficial fibular)*
 - [x] **AN18.4** Describe and demonstrate the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements and muscles involved, nerve supply, bursae around the knee joint along with anastomosis around the knee joint — *3D capsule, cruciates, collaterals, menisci, bursae, moving joint: [Joints of the Lower Limb](lower-limb/joints.html)*
 - [x] **AN18.5** Explain the anatomical basis of locking and unlocking of the knee joint — *[Joints of the Lower Limb](lower-limb/joints.html) (Knee); popliteus: [Muscles of the Lower Limb](lower-limb/muscles.html)*
@@ -176,7 +176,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 19. Back of Leg & Sole
 
 - [x] **AN19.1** Describe and demonstrate the major muscles of back of leg with their attachment, nerve supply and actions — *[Muscles of the Lower Limb](lower-limb/muscles.html)*
-- [ ] **AN19.2** Describe and demonstrate the origin, course, relations, branches (or tributaries), termination of important nerves and vessels of back of leg
+- [x] **AN19.2** Describe and demonstrate the origin, course, relations, branches (or tributaries), termination of important nerves and vessels of back of leg — *tibial nerve, posterior tibial and fibular arteries, sural nerve, small saphenous vein in 3D: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
 - [x] **AN19.3** Explain the concept of “Peripheral heart” — *calf muscle pump, valves, perforators, deep and superficial veins in 3D, varicose veins and DVT: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [x] **AN19.4** Explain the anatomical basis of rupture of calcaneal tendon — *[Muscles of the Lower Limb](lower-limb/muscles.html) (Fascia, spaces and foot)*
 - [x] **AN19.5** Describe factors maintaining importance arches of the foot with its importance — *bones, ligaments, plantar aponeurosis, muscles; importance: [The Lower Limb](lower-limb/lower-limb.html) (Arches)*
@@ -188,12 +188,12 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [x] **AN20.1** Describe and demonstrate the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements and muscles involved, blood and nerve supply of tibiofibular and ankle joint — *[Joints of the Lower Limb](lower-limb/joints.html) (the ankle capsule is not in the 3D model)*
 - [x] **AN20.2** Describe the subtalar and transverse tarsal joints — *[Joints of the Lower Limb](lower-limb/joints.html) (Foot)*
 - [x] **AN20.3** Describe and demonstrate Fascia lata, Venous drainage, Lymphatic drainage, Retinacula & Dermatomes of lower limb — *fascia lata, saphenous opening, retinacula, veins and lymph nodes in 3D, schematic dermatome map: [Muscles of the Lower Limb](lower-limb/muscles.html)*
-- [ ] **AN20.4** Explain anatomical basis of enlarged inguinal lymph nodes
-- [ ] **AN20.5** Explain anatomical basis of varicose veins and deep vein thrombosis
+- [x] **AN20.4** Explain anatomical basis of enlarged inguinal lymph nodes — *drainage areas of the inguinal node groups and why they enlarge: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
+- [x] **AN20.5** Explain anatomical basis of varicose veins and deep vein thrombosis — *saphenous junctions and named perforators: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html); calf pump and DVT: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [ ] **AN20.6** Identify the bones and joints of lower limb seen in anteroposterior and lateral view radiographs of various regions of lower limb
 - [ ] **AN20.7** Identify & demonstrate important bony landmarks of lower limb: - Vertebral levels of highest point of iliac crest, posterior superior iliac spines, iliac tubercle, pubic tubercle, ischial tuberosity, adductor tubercle, -Tibial tuberosity, head of fibula, -Medial and lateral malleoli, Condyles of femur and tibia, sustentaculum tali, tuberosity of fifth metatarsal, tuberosity of the navicular
-- [ ] **AN20.8** Identify & demonstrate palpation of femoral, popliteal, posterior tibial, anterior tibial & dorsalis pedis arteries in a simulated environment
-- [ ] **AN20.9** Demonstrate surface projection of: femoral, popliteal, dorsalis pedis, post tibial arteries, Mid inguinal point, femoral nerve, Saphenous opening, Sciatic, tibial, common peroneal & deep peroneal nerve, Great and small saphenous veins
+- [~] **AN20.8** Identify & demonstrate palpation of femoral, popliteal, posterior tibial, anterior tibial & dorsalis pedis arteries in a simulated environment — *femoral, popliteal, posterior tibial and dorsalis pedis pulses in 3D; the anterior tibial pulse at the ankle has one source (Gray): [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
+- [x] **AN20.9** Demonstrate surface projection of: femoral, popliteal, dorsalis pedis, post tibial arteries, Mid inguinal point, femoral nerve, Saphenous opening, Sciatic, tibial, common peroneal & deep peroneal nerve, Great and small saphenous veins — *surface lines (Gray 1918, approximate): [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
 - [ ] **AN20.10** Describe basic concept of development of lower limb
 
 ### 21. Thoracic cage
