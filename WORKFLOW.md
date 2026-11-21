@@ -1,0 +1,84 @@
+# Workflow and progress log
+
+Claude reads this file first in every session and updates it after every step (start of a module, fact sheet
+done, build done, review done, commit). It is the single place to recall where the work stands. Rules for the
+content itself are in CLAUDE.md; this file is about the flow and the state.
+
+Last updated: 2026-11-21
+
+## Now
+
+- Nothing is running. Module 24 is finished, committed (e751f03), pushed and tested on the live site.
+- Waiting for the user to say "proceed" before starting module 25 (lower limb nerves, vessels and lymph nodes).
+- The local test server is not running (the machine rebooted). Start it when a test needs it (see "Testing").
+
+## Next (the plan, in order)
+
+| # | Module | Page | Model | Notes |
+|---|--------|------|-------|-------|
+| 25 | Nerves, vessels and lymph nodes of the lower limb | anatomy/lower-limb/nerves-vessels.html | models/ll-nv | copy tools/upper-limb/nv_config.py; Z-Anatomy has no inferior gluteal nerve |
+| 26 | Heart | anatomy/thorax/heart.html | from body-vessels heart parts | chambers, valves, coronary vessels, conducting system |
+| 27 | Nerves and vessels of the thorax and abdomen | anatomy/thorax/… and abdomen | own pack | no phrenic nerve, no thoracic duct in Z-Anatomy |
+| 28 | Nerves and vessels of the head and neck | anatomy/head-neck/nerves-vessels.html | own pack | cranial nerves, circle of Willis, dural sinuses |
+
+For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap on the home page opens the page.
+
+## Still partly covered (searched twice, no two open sources)
+
+- AN10.8: the bedside test for latissimus dorsi.
+- AN13.3: the proximal radio-ulnar joint's own nerve and artery supply.
+- AN31.5: the definition of primary versus secondary deviation.
+- AN13.7: surface lines and pulses are done (module 24); the muscle tests for pectoralis major, serratus anterior,
+  latissimus dorsi, deltoid, biceps and brachioradialis are not. Could go on the upper-limb muscles page.
+
+Progress: anatomy 130 covered, 5 partial, 281 not started; ophthalmology 6 covered, 1 partial, 55 not started.
+
+## Steps for every module (do them in this order, tick them here as they finish)
+
+1. Plan: list the competencies (SYLLABUS.md), the 3D parts needed, and what Z-Anatomy lacks.
+2. Fact sheet `sources-local/facts/<name>.md`: two independent open sources per fact; passes
+   `sources-local/facts/check_quotes.py` with 0 bad quotes. Check every `wp_` file's title matches its request.
+3. Model: config script, `bones build` (through `tools/capped`), post step, check the pack size.
+4. Page: build it; test desktop, phone and dark theme with ffshot (through `tools/capped`); look at the screenshots.
+5. Independent reviewer agent (give it the page and the fact sheet, not my conclusions); fix everything it finds.
+6. Docs: SYLLABUS.md ticks with italic notes, DATA-SOURCES.md, README.md row, root index.html counts, CLAUDE.md if
+   a new pattern appeared.
+7. Integrity checks (git hash-object vs index, control-character scan, `git fsck`), commit, push, live test.
+8. Update this file, then report to the user and wait for "proceed".
+
+## Resource rules (the machine ran out of memory before)
+
+The last long session's terminal reached 11.3 GB, mostly from several agents each running headless Firefox or
+builds at the same time.
+
+- The whole session is capped at 4 GB. Start Claude with `claude-4g` (in ~/.local/bin), which puts Claude and
+  everything it starts in one 4 GB cgroup. Without it, the cap can be set by hand on the terminal's cgroup
+  (`memory.max` under /sys/fs/cgroup/…/app-org.kde.konsole-*.scope/tab(*).scope).
+- Every heavy command goes through `tools/capped` (default 2.5 GB, `--mem` to change): Blender exports,
+  `bones build`, `tools/test/ffshot.py`, large Python jobs. It holds a lock, so only one heavy job runs at a time even
+  when agents work in parallel.
+- At most two agents at once, and only when their work is independent. Tell each agent to use `tools/capped`.
+- Don't print big files into the context: read with offsets, grep, or summaries. Large downloads stay on disk.
+- Clean up after each module: delete my own screenshots and temporary files in the scratchpad.
+
+## Testing
+
+- Server: `cd ~/personal/neet-pg && python3 -m http.server 8765 --bind 127.0.0.1` (run in the background, once).
+- Screens: `tools/capped ~/personal/buildenv/bin/python -I tools/test/ffshot.py URL OUT.png [--phone] [--js …]`.
+  It must print llvmpipe (software rendering). Never the GPU, Chrome or Playwright. Leave the user's own Firefox alone.
+- Byte ranges don't work on GitHub Pages under gzip; pages check the `NPM1` header and fall back to the whole file.
+
+## Briefs for agents
+
+- Fill or module agents: tools/agents/fill-brief.md (rules, sources, models, files not to edit, testing, reply format).
+- Reviewer agents: give the page path, the fact sheet path and CLAUDE.md content rules; ask for errors with the quote
+  that disproves each claim.
+
+## Log (newest first)
+
+- 2026-11-21: Memory fix. Session cap 4 GB, `tools/capped` for heavy jobs, `claude-4g` launcher, pip cache cleared
+  (2.6 GB), this file and tools/agents/fill-brief.md added.
+- Module 24 (e751f03): nerves, vessels and lymph nodes of the upper limb; 764 quotes; 18 competencies ticked.
+- Partly-ticked items completed (aef5008 and earlier): lower limb, trunk, skull, head and neck, histology,
+  ophthalmology fills; whole-body vessel, nerve and lymph layers on the home page.
+- Module 23: Blood Vessels (general), with the vascular home layer.

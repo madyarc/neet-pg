@@ -1,0 +1,8 @@
+#!/bin/sh
+# Run one heavy job (Blender export, `bones build`, ffshot.py, big Python) with a RAM cap, one at a time.
+#   tools/capped [--mem 2500M] command args...
+# Jobs queue on a lock, so parallel agents never run two browsers/builds at once. The cap kills only this job.
+MEM=2500M
+[ "$1" = "--mem" ] && { MEM=$2; shift 2; }
+LOCK="${XDG_RUNTIME_DIR:-/tmp}/neet-pg-heavy.lock"
+exec flock "$LOCK" systemd-run --user --scope -q -p MemoryHigh="$MEM" -p MemoryMax="$MEM" -p MemorySwapMax=256M -- "$@"
