@@ -56,6 +56,8 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
 2. **Cite sources** on the page (footer) and in the subject's `DATA-SOURCES.md`. The footer is for students: a short
    "Based on:" line with the textbooks, and a "Models used:" line for simplifications and 3D-model credits. Verification
    notes, URLs and corrections go in `DATA-SOURCES.md` only.
+   **Licence:** code is AGPL-3.0 (`LICENSE`), content CC BY-SA 4.0 (`LICENSE-CONTENT`); see README "Licence". Only add
+   material whose licence allows that (public domain, CC0, CC BY, CC BY-SA); never NC, ND or all-rights-reserved files.
 3. If sources disagree, use the more authoritative or more recent one, and say so on the page if it matters for the exam.
 4. If something can't be verified, **leave it out**.
 5. **Label approximations**: schematic areas, simplified models, hand-placed points ("approximate", "schematic, not to scale").

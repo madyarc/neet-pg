@@ -79,7 +79,23 @@ The anatomy pages load model files, which browsers block when a page is opened s
 ## Credits
 
 3D bones: BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan.
-The simplified meshes embedded in the pages are shared under the same licence.
+The simplified meshes embedded in the pages are shared under the same licence. Muscles, vessels, nerves and lymph nodes:
+Z-Anatomy, CC BY-SA 4.0 (built on BodyParts3D).
+
+## Licence
+
+This project stays open: anyone may use, copy, change and share it, but every copy and every changed version must stay
+open under the same terms.
+
+| What | Licence |
+|---|---|
+| Code: JavaScript and CSS (including the scripts and styles inside the HTML pages), `anatomy/assets/`, `tools/` | [GNU AGPL-3.0 or later](LICENSE): changed versions, including ones run as a website, must publish their source under the AGPL |
+| Content: page text, diagrams, data, syllabus files, notes | [CC BY-SA 4.0](LICENSE-CONTENT): credit this project and share changed versions under the same licence |
+| 3D models in `anatomy/models/` | adapted from BodyParts3D (CC BY-SA 2.1 Japan) and Z-Anatomy (CC BY-SA 4.0); shared under the same licences |
+| Photos and micrographs in `img/` folders | the licence of each file, listed in that subject's `DATA-SOURCES.md` |
+
+Quotes from Gray's *Anatomy* (1918) are in the public domain. Content based on Wikipedia follows its CC BY-SA licence,
+which these terms keep.
 
 ## Adding to it
 
