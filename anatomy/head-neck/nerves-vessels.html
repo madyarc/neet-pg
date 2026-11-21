@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nerves, Vessels and Lymph Nodes of the Head and Neck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --artery, --vein (veins and venous sinuses), --nerve, --lymph, --bone,
+   --cart (cartilage), --soft (muscles and soft tissue as context), --fascia (the galea aponeurotica), --dura (dura mater),
+   --clin (a clinical point: compression, infection, injury). The selected level uses --pick.
+   Page-only tokens, used for nothing else: --skin (skin in the scalp section), --pick (the selected node level). */
+:root{--skin:#f1d3bf;--pick:#d07a12}
+:root[data-theme="dark"]{--skin:#7a5a48;--pick:#f0a347;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+#topics{display:flex;flex-direction:column;gap:10px}
+#topic-text p+p,#topic-text p+ul,#topic-text ul+p{margin-top:8px}
+#topic-text ul{margin:4px 0 0;padding-left:20px}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t tr[data-k]{cursor:pointer}
+table.t tr[aria-pressed="true"] td{background:var(--bg)}
+.scroll{overflow-x:auto}
+.scroll,.schbox{scrollbar-color:var(--line) transparent}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+svg.sch{max-width:640px;margin:0 auto}
+.schbox{overflow-x:auto}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:520px}.schbox svg.sch.narrow{min-width:0}.swipe{display:inline}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch .bone{fill:var(--bone);stroke:var(--muted);stroke-width:1}
+svg.sch .cart{fill:var(--cart);stroke:var(--muted);stroke-width:1}
+svg.sch .mus{fill:var(--soft);stroke:var(--muted);stroke-width:.8}
+svg.sch .skin{fill:var(--skin);stroke:var(--muted);stroke-width:.8}
+svg.sch .fas{fill:var(--fascia);stroke:var(--muted);stroke-width:.8}
+svg.sch .dura{fill:none;stroke:var(--dura);stroke-width:3}
+svg.sch .duraf{fill:var(--dura);stroke:var(--muted);stroke-width:.8}
+svg.sch .art{fill:var(--artery)}
+svg.sch .artl{stroke:var(--artery);stroke-width:7;fill:none;stroke-linecap:round}
+svg.sch .artt{stroke:var(--artery);stroke-width:3.5;fill:none;stroke-linecap:round}
+svg.sch .vn{fill:var(--vein)}
+svg.sch .vnl{stroke:var(--vein);stroke-width:6;fill:none;stroke-linecap:round}
+svg.sch .vnt{stroke:var(--vein);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .vnbox{fill:var(--surface);stroke:var(--vein);stroke-width:2}
+svg.sch .nv{fill:var(--nerve);stroke:var(--ink);stroke-width:.5}
+svg.sch .nvl{stroke:var(--nerve);stroke-width:4;fill:none;stroke-linecap:round}
+svg.sch .lym{fill:var(--lymph);fill-opacity:.55;stroke:var(--lymph);stroke-width:1.5}
+svg.sch .clin{stroke:var(--clin);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .clinf{fill:var(--clin)}
+svg.sch .clinbox{fill:var(--surface);stroke:var(--clin);stroke-width:2}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .arrow{stroke:var(--muted);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+svg.sch .dash{stroke-dasharray:6 4}
+svg.sch .out{fill:none;stroke:var(--muted);stroke-width:1.2}
+svg.sch .reg{fill:var(--soft);fill-opacity:.7;stroke:var(--muted);stroke-width:1;cursor:pointer}
+svg.sch .reg.sel{fill:var(--pick);fill-opacity:.35;stroke:var(--pick);stroke-width:2}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+@media (max-width:600px){
+  table.stack tr:first-child,table.stack tr.hd{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Nerves, Vessels and Lymph Nodes of the Head and Neck</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="Nerves, vessels and lymph nodes of the head and neck in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-scalp">
+  <h2 id="h-scalp">The scalp: layers, vessels and nerves</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="scalp-svg" viewBox="0 0 600 430" role="img" aria-label="Schematic vertical section through the scalp and skull: skin, dense connective tissue with the vessels and nerves, the galea aponeurotica, the loose areolar layer with an emissary vein passing through the skull to the superior sagittal sinus, the pericranium, the bone and the dura"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale: a vertical cut through the scalp at the vertex, surface at the top.</p>
+    </div>
+    <div class="prose" id="scalp-text"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="scalp-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-spread">
+  <h2 id="h-spread">The danger area: how infection reaches the dural sinuses</h2>
+  <div class="schbox"><svg class="fig sch" id="spread-svg" viewBox="0 0 640 400" role="img" aria-label="Flow chart of the venous routes from the face and scalp to the cavernous sinus and the other dural venous sinuses"></svg></div>
+  <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>A flow chart of the connections, not a map. Tap a box to see those veins in 3D.</p>
+  <div class="prose" id="spread-text"></div>
+  <div class="scroll"><table class="t stack" id="emissary-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cav">
+  <h2 id="h-cav">Cavernous sinus and the drainage of the dural sinuses</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="cav-svg" viewBox="0 0 600 380" role="img" aria-label="Schematic coronal section through the two cavernous sinuses and the pituitary seen from the front: the internal carotid artery and abducent nerve inside each sinus, the oculomotor, trochlear, ophthalmic and maxillary nerves in its lateral wall"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic coronal section seen from the front, as in the 3D "Front" view: the patient's right sinus is on your left.</p>
+    </div>
+    <div class="prose" id="cav-text"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="sinus-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sub">
+  <h2 id="h-sub">Subclavian artery: three parts, branches and the cervical rib</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="sub-svg" viewBox="0 0 620 430" role="img" aria-label="Schematic front view of the right root of the neck: the subclavian artery arching over the first rib behind scalenus anterior, its three parts and branches, the subclavian vein in front of the muscle and the brachial plexus behind and above the artery"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic front view of the right side, as in the 3D "Front" view: the midline (trachea) is on your right, the shoulder on your left. Dashed red: the costocervical trunk, behind the muscle.</p>
+      <div class="toggles" id="sub-tg"></div>
+    </div>
+    <div class="prose" id="sub-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cn">
+  <h2 id="h-cn">Glossopharyngeal, vagus, accessory and hypoglossal nerves in the neck</h2>
+  <p class="muted">Tap a row to see the nerve in 3D.</p>
+  <div class="scroll"><table class="t stack" id="cn-table"></table></div>
+  <div class="two">
+    <div class="prose" id="rln-text"></div>
+    <div>
+      <div class="schbox"><svg class="fig sch narrow" id="tongue-svg" viewBox="0 0 420 250" role="img" aria-label="Schematic of the protruded tongue seen from the front in a right hypoglossal nerve lesion and in a left-sided stroke: in both the tip points to the patient's right"></svg></div>
+      <p class="muted">Schematic, face seen from the front: the patient's right is on your left.</p>
+      <div class="prose" id="xii-text"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lym">
+  <h2 id="h-lym">Lymph nodes of the head and neck</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="lev-svg" viewBox="0 0 560 440" role="img" aria-label="Schematic of the right side of the neck seen from the right, face to the right, divided into the clinical node levels I to VI"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, approximate borders. The right side seen from the right, as in the 3D "Right" view: the face is on your right. Tap a level to light its nodes in 3D.</p>
+    </div>
+    <div class="prose" id="lym-text"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="node-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-surf">
+  <h2 id="h-surf">Surface projection and the route of carotid and vertebral angiograms</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="surf-svg" viewBox="0 0 560 440" role="img" aria-label="Schematic of the right side of the head and neck seen from the right with the surface lines of the common carotid artery, internal and external jugular veins, facial artery and accessory nerve"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, approximate lines; the right side seen from the right, face on your right. Dashed: a line given by Gray (1918) only.</p>
+      <div class="toggles" id="surf-tg"></div>
+    </div>
+    <div class="prose" id="surf-text"></div>
+  </div>
+  <div class="prose" id="angio-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-erb">
+  <h2 id="h-erb">Erb's and Klumpke's palsy: the neck level</h2>
+  <div class="prose" id="erb-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-hnnv.md, anatomy/DATA-SOURCES.md) ===================== */
+const V = k => 'v_' + k, N = k => 'n_' + k, LN = k => 'l_' + k, MU = k => 'm_' + k;
+const L = k => k + '_l';                 // the mirrored (left) copy of a right-only part
+const BOTH = k => [k, L(k)];
+const R = k => V(k + '_r');
+const SKULL = ['frontal_bone', 'right_parietal_bone', 'left_parietal_bone', 'occipital_bone', 'right_temporal_bone', 'left_temporal_bone', 'sphenoid_bone', 'ethmoid', 'right_maxilla', 'left_maxilla', 'right_zygomatic_bone', 'left_zygomatic_bone', 'right_nasal_bone', 'left_nasal_bone', 'vomer'];
+const CERV = ['atlas', 'axis', 'third_cervical_vertebra', 'fourth_cervical_vertebra', 'fifth_cervical_vertebra', 'sixth_cervical_vertebra', 'seventh_cervical_vertebra', 'first_thoracic_vertebra'];
+const ROOT = ['right_clavicle', 'right_first_rib', 'manubrium'];
+const SINUSES = [V('superior_sagittal_sinus'), V('inferior_sagittal_sinus'), V('straight_sinus'), V('occipital_sinus'), ...BOTH(R('transverse_sinus')), ...BOTH(R('sigmoid_sinus')), ...BOTH(R('superior_petrosal_sinus')), ...BOTH(R('inferior_petrosal_sinus')), ...BOTH(R('cavernous_sinus')), V('anterior_intercavernous_sinus'), V('posterior_intercavernous_sinus'), V('basilar_venous_plexus')];
+const CAV = [...BOTH(R('cavernous_sinus')), V('anterior_intercavernous_sinus'), V('posterior_intercavernous_sinus')];
+const WILLIS = [...BOTH(R('internal_carotid_artery')), ...BOTH(R('anterior_cerebral_artery')), V('anterior_communicating_artery'), ...BOTH(R('middle_cerebral_artery_m1_segment')), ...BOTH(R('posterior_communicating_artery')), ...BOTH(R('posterior_cerebral_artery')), V('basilar_artery')];
+const ECA_BR = ['external_carotid_artery', 'facial_artery', 'occipital_artery', 'ascending_pharyngeal_artery', 'superficial_temporal_artery', 'frontal_branch_of_superficial_temporal_artery', 'maxillary_artery', 'transverse_facial_artery'].map(R);
+const FACIAL_A = ['facial_artery', 'submental_artery', 'inferior_labial_artery', 'superior_labial_artery', 'angular_artery'].map(R);
+const FACIAL_V = ['angular_vein', 'facial_vein', 'superior_labial_vein', 'inferior_labial_veins', 'submental_vein', 'anterior_division_of_retromandibular_vein'].map(R).concat([V('common_facial_vein_r')]);
+const MAXA = ['maxillary_artery', 'middle_meningeal_artery', 'accessory_branch_of_middle_meningeal_artery', 'inferior_alveolar_artery', 'anterior_deep_temporal_artery', 'posterior_deep_temporal_artery', 'buccal_artery', 'posterior_superior_alveolar_artery', 'infra_orbital_artery', 'descending_palatine_artery', 'artery_of_pterygoid_canal'].map(R);
+const OA = ['ophthalmic_artery', 'central_retinal_artery', 'lacrimal_artery', 'supra_orbital_artery', 'supratrochlear_artery', 'anterior_ethmoidal_artery', 'posterior_ethmoidal_artery', 'short_posterior_ciliary_arteries', 'long_posterior_ciliary_arteries'].map(R);
+const ORB_N = ['optic_nerve_ii', 'oculomotor_nerve_iii', 'trochlear_nerve_iv', 'abducens_nerve_vi', 'ophthalmic_nerve', 'trigeminal_nerve_v'].map(k => N(k + '_r'));
+const SUBA = [V('right_subclavian_artery'), V('brachiocephalic_trunk'), V('aortic_arch'), V('right_common_carotid_artery'), R('vertebral_artery'), R('thyrocervical_trunk'), R('inferior_thyroid_artery'), R('transverse_cervical_artery'), R('suprascapular_artery'), R('costocervical_trunk'), R('supreme_intercostal_artery'), R('deep_cervical_artery'), R('internal_thoracic_artery')];
+const BP = ['roots_of_brachial_plexus', 'superior_trunk_of_brachial_plexus', 'middle_trunk_of_brachial_plexus', 'inferior_trunk_of_brachial_plexus'].map(k => N(k + '_r'));
+const SYMP = [N('sympathetic_trunk_r'), N('ganglia_of_sympathetic_trunk_r'), N('sympathetic_nerves_r')];
+const SCAL = [MU('scal_ant'), MU('scal_med')];
+const NODES = {   // Z-Anatomy node groups (right side; mirrored on the page)
+  occ: LN('occipital_nodes_r'), mast: LN('mastoid_nodes_r'), pre: LN('pre_auricular_nodes_r'), par: LN('superficial_parotid_nodes_r'), ipar: LN('intraglandular_parotid_nodes_r'), infa: LN('infra_auricular_nodes_r'),
+  buc: LN('bucinator_node_r'), nasl: LN('nasolabial_node_r'), mand: LN('mandibular_node_r'), smd: LN('submandibular_nodes_r'), smt: LN('submental_nodes_r'),
+  jd: LN('jugulodigastric_node_r'), lsj: LN('lateral_superior_jugular_node_r'), aij: LN('anterior_inferior_jugular_nodes_r'), idl: LN('inferior_deep_lateral_cervical_nodes_r'),
+  scl: LN('supraclavicular_nodes_r'), slc: LN('superficial_lateral_cervical_nodes_r'), retro: LN('retropharyngeal_nodes_r'),
+  pret: LN('pretracheal_nodes_r'), thy: LN('thyroid_nodes_r'), para: LN('paratracheal_cervical_nodes'), sac: LN('superficial_anterior_cervical_nodes')};
+const FRONT = [0, -1, 0.08], BACK = [0, 1, 0.08], RIGHT = [-1, 0, 0.05], LEFT = [1, 0, 0.05], RF = [-1, -0.55, 0.12], BELOW = [0, -0.15, -1];
+// a topic: lit = parts in their own colour; soft = muscles shown (--soft); solid = bones kept solid; everything else glass.
+// labels: [key or null, text, point to start the search from (mm, BodyParts3D frame: +x left, +y back, +z up)]
+const TOPICS = [
+  {grp: 'Arteries', id: 'cca', name: 'Common carotid and its division',
+    lit: [V('right_common_carotid_artery'), V('left_common_carotid_artery'), V('brachiocephalic_trunk'), V('aortic_arch'), ...BOTH(R('internal_carotid_artery')), ...BOTH(R('external_carotid_artery')), ...BOTH(R('internal_jugular_vein')), N('vagus_nerve_x_r'), N('vagus_nerve_x_l'), N('sympathetic_trunk_r')], solid: ['hyoid_bone', 'right_first_rib'], fit: [V('right_common_carotid_artery'), R('external_carotid_artery'), 'hyoid_bone', 'manubrium'], view: [-0.6, -1, 0.05], zoom: 0.95,
+    labels: [[V('right_common_carotid_artery'), 'Common carotid', [-22, -132, 1395]], [R('internal_carotid_artery'), 'Internal carotid', [-30, -122, 1490]], [R('external_carotid_artery'), 'External carotid', [-38, -104, 1455]], [R('internal_jugular_vein'), 'Internal jugular vein', [-40, -125, 1400]], [V('brachiocephalic_trunk'), 'Brachiocephalic trunk', [-8, -118, 1345]]],
+    text: `<p>The <b>right common carotid</b> begins behind the right sternoclavicular joint from the <b>brachiocephalic trunk</b>; the <b>left</b> comes from the <b>arch of the aorta</b>, so it has a short thoracic part. Each runs up in the <b>carotid sheath</b> with the <b>internal jugular vein</b> lateral to it and the <b>vagus</b> between and behind them; the sympathetic trunk lies behind the sheath.</p>
+<ul><li>It divides at the <b>upper border of the thyroid cartilage</b> into the internal and external carotid. On CT the division is most often at C3 (44% of sides) or C4 (27%).</li>
+<li>As a rule it gives <b>no other branch</b> (Gray 1918); the internal carotid also has no branches in the neck.</li>
+<li><b>Carotid sinus:</b> the dilated start of the internal carotid at the division; <b>baroreceptors</b>, nerve from the <b>glossopharyngeal</b> (carotid sinus nerve). The <b>carotid body</b> lies behind the division.</li></ul>`},
+  {grp: 'Arteries', id: 'eca', name: 'External carotid and its branches',
+    lit: [...ECA_BR, V('right_common_carotid_artery'), R('internal_carotid_artery')], solid: ['mandible', 'hyoid_bone'], fit: [R('external_carotid_artery'), R('facial_artery'), R('superficial_temporal_artery'), R('occipital_artery')], view: RIGHT, zoom: 1.0,
+    labels: [[R('external_carotid_artery'), 'External carotid', [-40, -104, 1450]], [R('facial_artery'), 'Facial', [-36, -152, 1452]], [R('occipital_artery'), 'Occipital', [-50, -60, 1520]], [R('ascending_pharyngeal_artery'), 'Ascending pharyngeal', [-30, -112, 1478]], [R('maxillary_artery'), 'Maxillary', [-36, -125, 1500]], [R('superficial_temporal_artery'), 'Superficial temporal', [-66, -100, 1560]]],
+    text: `<p>The <b>external carotid</b> begins at the upper border of the thyroid cartilage (Gray 1918: at first nearer the surface and the midline than the internal carotid), runs up into the <b>parotid gland</b> and ends <b>behind the neck of the mandible</b> as the <b>maxillary</b> (the larger) and <b>superficial temporal</b> arteries.</p>
+<ul><li><b>Eight branches:</b> in front <b>superior thyroid, lingual, facial</b>; behind <b>occipital, posterior auricular</b>; medial <b>ascending pharyngeal</b>; terminal <b>maxillary, superficial temporal</b>.</li>
+<li>The lingual arises at the tip of the greater horn of the hyoid, between the superior thyroid and the facial.</li></ul>
+<p class="muted">Z-Anatomy has no superior thyroid, lingual or posterior auricular artery: they are not in the model.</p>`},
+  {grp: 'Arteries', id: 'facA', name: 'Facial artery',
+    lit: [...FACIAL_A, R('external_carotid_artery'), R('facial_vein')], solid: ['mandible', 'right_maxilla'], fit: [R('facial_artery'), R('angular_artery'), 'mandible'], view: [-0.75, -1, 0.05], zoom: 1.0,
+    labels: [[R('facial_artery'), 'Facial artery (over the mandible)', [-36, -152, 1450]], [R('superior_labial_artery'), 'Superior labial', [-24, -178, 1481]], [R('inferior_labial_artery'), 'Inferior labial', [-24, -170, 1460]], [R('angular_artery'), 'Angular', [-14, -176, 1530]], [R('submental_artery'), 'Submental', [-20, -158, 1443]], [R('facial_vein'), 'Facial vein', [-35, -145, 1470]]],
+    text: `<p>The <b>facial artery</b> arises from the external carotid. It reaches the face by hooking round the <b>lower border of the mandible at the front of masseter</b>, where its <b>pulse</b> is felt, and runs, <b>tortuous</b>, to beside the <b>angle of the mouth</b> and up the <b>side of the nose</b>.</p>
+<ul><li>In the neck Gray (1918) has it pass deep to the posterior belly of digastric and stylohyoid and groove the submandibular gland, with small branches there (ascending palatine, tonsillar, glandular, submental).</li>
+<li>On the face: <b>inferior and superior labial</b>, <b>lateral nasal</b> and, classically, the <b>angular artery</b> to the medial angle of the eye. In CT-angiography series it more often ends earlier, as the lateral nasal artery.</li>
+<li>The <b>facial vein</b> runs behind it on a <b>straighter course</b>.</li></ul>`},
+  {grp: 'Arteries', id: 'maxA', name: 'Maxillary artery',
+    lit: MAXA, soft: [], solid: [], fit: [R('maxillary_artery'), R('middle_meningeal_artery'), R('inferior_alveolar_artery')], view: RIGHT, zoom: 1.1,
+    labels: [[R('maxillary_artery'), 'Maxillary artery', [-38, -128, 1498]], [R('middle_meningeal_artery'), 'Middle meningeal', [-30, -108, 1520]], [R('inferior_alveolar_artery'), 'Inferior alveolar', [-34, -140, 1470]], [R('posterior_superior_alveolar_artery'), 'Posterior superior alveolar', [-32, -136, 1505]]],
+    text: `<p>The <b>maxillary artery</b>, the larger terminal branch of the external carotid, begins <b>behind the neck of the mandible</b> in the parotid, runs forward between the ramus and the sphenomandibular ligament, passes superficial or deep to the <b>lateral pterygoid</b> and enters the <b>pterygopalatine fossa</b>. It is described in <b>three parts</b> and supplies the jaws and teeth, the muscles of mastication, the nose and palate.</p>
+<p>Its veins form the <b>pterygoid venous plexus</b> around it (next group). The <b>middle meningeal artery</b> and foramen spinosum: <a href="skull.html">The Skull</a>.</p>`},
+  {grp: 'Arteries', id: 'scalpA', name: 'Arteries of the scalp',
+    lit: [R('superficial_temporal_artery'), R('frontal_branch_of_superficial_temporal_artery'), R('occipital_artery'), R('supra_orbital_artery'), R('supratrochlear_artery'), R('ophthalmic_artery'), R('external_carotid_artery'), R('internal_carotid_artery')], solid: [], fit: [R('superficial_temporal_artery'), R('occipital_artery'), R('supra_orbital_artery')], view: [-1, -0.3, 0.35], zoom: 0.85,
+    labels: [[R('supratrochlear_artery'), 'Supratrochlear (ICA)', [-12, -175, 1552]], [R('supra_orbital_artery'), 'Supraorbital (ICA)', [-26, -176, 1565]], [R('superficial_temporal_artery'), 'Superficial temporal (ECA)', [-68, -95, 1590]], [R('occipital_artery'), 'Occipital (ECA)', [-45, -15, 1580]]],
+    text: `<p>Five arteries on each side supply the scalp: <b>two from the internal carotid</b> through the ophthalmic artery (<b>supratrochlear, supraorbital</b>) and <b>three from the external carotid</b> (<b>superficial temporal</b> with frontal and parietal branches, <b>posterior auricular</b>, <b>occipital</b>), with veins of the same names. They run in the dense connective tissue (section below). Z-Anatomy has no posterior auricular artery.</p>`},
+  {grp: 'Arteries', id: 'ica', name: 'Internal carotid',
+    lit: [...BOTH(R('internal_carotid_artery')), V('right_common_carotid_artery'), V('left_common_carotid_artery'), ...WILLIS, ...BOTH(R('ophthalmic_artery')), ...BOTH(R('cavernous_sinus'))], solid: [], fit: [R('internal_carotid_artery'), L(R('internal_carotid_artery')), R('middle_cerebral_artery_m1_segment'), L(R('middle_cerebral_artery_m1_segment'))], view: FRONT, zoom: 0.85,
+    labels: [[R('internal_carotid_artery'), 'Internal carotid (neck: no branches)', [-30, -100, 1455]], [R('cavernous_sinus'), 'Through the cavernous sinus', [-14, -112, 1534]], [R('ophthalmic_artery'), 'Ophthalmic', [-15, -140, 1537]], [R('middle_cerebral_artery_m1_segment'), 'Middle cerebral', [-28, -121, 1546]], [R('anterior_cerebral_artery'), 'Anterior cerebral', [-6, -128, 1550]]],
+    text: `<p>The <b>internal carotid</b> has <b>no branches in the neck</b>. It enters the <b>carotid canal</b>, passes through the <b>cavernous sinus</b> (with the abducent nerve beside it), gives the <b>ophthalmic artery</b> and ends as the <b>anterior and middle cerebral</b> arteries. Gray (1918) divides it into cervical, petrous, cavernous and cerebral parts.</p>
+<p>At the skull base IX, X, XI and XII lie between it and the internal jugular vein (Gray). The <b>circle of Willis</b>: <a href="../general/blood-vessels.html">Blood Vessels</a>.</p>`},
+  {grp: 'Arteries', id: 'vert', name: 'Vertebral and basilar',
+    lit: [...BOTH(R('vertebral_artery')), V('basilar_artery'), ...BOTH(R('posterior_inferior_cerebellar_artery')), R('anterior_spinal_artery'), ...BOTH(R('posterior_cerebral_artery')), V('right_subclavian_artery'), V('left_subclavian_artery'), V('brachiocephalic_trunk')], solid: [], fit: [R('vertebral_artery'), L(R('vertebral_artery')), V('basilar_artery')], view: [-0.6, 1, 0.1], zoom: 0.95,
+    labels: [[R('vertebral_artery'), 'V1: to C6', [-30, -92, 1385]], [R('vertebral_artery'), 'V2: transverse foramina C6–C1', [-25, -84, 1430]], [R('vertebral_artery'), 'V3: over the arch of the atlas', [-30, -62, 1488]], [V('basilar_artery'), 'Basilar', [0, -101, 1528]], [R('posterior_inferior_cerebellar_artery'), 'PICA', [-30, -40, 1510]]],
+    text: `<p>The <b>vertebral artery</b> is the <b>first branch</b> of the subclavian (first part). It is described in four parts:</p>
+<ul><li><b>V1</b> from its origin to the transverse process of <b>C6</b> (it does not normally pass through C7's foramen);</li>
+<li><b>V2</b> up through the <b>transverse foramina of C6–C1</b>;</li>
+<li><b>V3</b> from the atlas, across its <b>posterior arch</b> and the suboccipital triangle;</li>
+<li><b>V4</b> through the <b>foramen magnum</b>, inside the skull. The two join at the lower border of the pons as the <b>basilar artery</b>, which divides into the two posterior cerebral arteries.</li></ul>
+<p>It supplies the upper spinal cord, brainstem, cerebellum and back of the brain; branches include the <b>anterior spinal</b> and <b>posterior inferior cerebellar (PICA)</b> arteries. Seen here from behind.</p>`},
+  {grp: 'Arteries', id: 'subA', name: 'Subclavian artery',
+    lit: SUBA, soft: SCAL, solid: ['right_first_rib', 'seventh_cervical_vertebra', 'first_thoracic_vertebra'], fit: [V('right_subclavian_artery'), R('thyrocervical_trunk'), R('vertebral_artery'), 'right_first_rib'], view: FRONT, zoom: 1.15, centre: [-45, -100, 1365],
+    labels: [[V('right_subclavian_artery'), 'Subclavian artery', [-60, -110, 1358]], [R('vertebral_artery'), 'Vertebral', [-26, -92, 1385]], [R('thyrocervical_trunk'), 'Thyrocervical trunk', [-40, -100, 1372]], [R('internal_thoracic_artery'), 'Internal thoracic', [-28, -120, 1335]], [MU('scal_ant'), 'Scalenus anterior', [-34, -104, 1385]], [R('suprascapular_artery'), 'Suprascapular', [-75, -100, 1362]]],
+    text: `<p>Right from the <b>brachiocephalic trunk</b>, left from the <b>arch</b>. It arches over the first rib behind the clavicle, passes between <b>scalenus anterior and medius</b> and becomes the axillary artery at the <b>outer border of the first rib</b>. Its parts and branches are in the section below.</p>`},
+  {grp: 'Veins', id: 'facV', name: 'Facial vein and the danger area',
+    lit: [...FACIAL_V, R('superior_ophthalmic_vein'), R('inferior_ophthalmic_vein'), ...CAV, R('internal_jugular_vein'), R('maxillary_veins')], solid: ['mandible', 'right_maxilla'], fit: [R('facial_vein'), R('angular_vein'), R('cavernous_sinus'), R('common_facial_vein')], view: [-0.8, -1, 0.1], zoom: 1.0,
+    labels: [[R('angular_vein'), 'Angular vein', [-18, -178, 1520]], [R('facial_vein'), 'Facial vein', [-34, -148, 1460]], [R('superior_ophthalmic_vein'), 'Superior ophthalmic vein', [-20, -165, 1543]], [R('cavernous_sinus'), 'Cavernous sinus', [-14, -112, 1535]], [V('common_facial_vein_r'), 'Common facial vein', [-30, -104, 1465]], [null, 'Pterygoid plexus (approximate, not modelled)', [-34, -128, 1496]]],
+    text: `<p>The <b>facial vein</b> begins at the medial angle of the eye as the <b>angular vein</b> (from the supratrochlear and supraorbital veins), runs down behind the facial artery on a straighter course, crosses the mandible at the front of masseter and, below it, joins the <b>anterior division of the retromandibular vein</b> as the <b>common facial vein</b>, which ends in the <b>internal jugular</b>.</p>
+<ul><li>The angular vein joins the <b>superior ophthalmic vein</b>, which drains into the <b>cavernous sinus</b>.</li>
+<li>The <b>deep facial vein</b> (present in about half of dissected sides; not in the model) joins the facial vein to the <b>pterygoid plexus</b>.</li></ul>
+<p>The routes of infection are in the section "The danger area" below.</p>`},
+  {grp: 'Veins', id: 'ptery', name: 'Pterygoid plexus region',
+    lit: [R('maxillary_veins'), R('maxillary_artery'), R('retromandibular_vein'), R('inferior_ophthalmic_vein'), ...CAV, R('facial_vein')], soft: [], solid: [], fit: [R('maxillary_veins'), R('maxillary_artery'), R('cavernous_sinus')], view: RIGHT, zoom: 0.9,
+    labels: [[null, 'Pterygoid plexus (approximate, not modelled)', [-34, -128, 1496]], [R('maxillary_veins'), 'Maxillary vein', [-38, -112, 1490]], [R('retromandibular_vein'), 'Retromandibular vein', [-45, -104, 1495]], [R('inferior_ophthalmic_vein'), 'Inferior ophthalmic vein', [-18, -140, 1528]], [R('cavernous_sinus'), 'Cavernous sinus', [-14, -112, 1535]]],
+    text: `<p>The <b>pterygoid venous plexus</b> lies in the <b>infratemporal fossa</b>, between temporalis and lateral pterygoid and partly between the two pterygoids, wrapped round the <b>maxillary artery</b>; its tributaries match that artery's branches. It drains by the short <b>maxillary vein</b> into the retromandibular vein. Z-Anatomy does not model the plexus: the marker is placed by hand (approximate).</p>
+<ul><li><b>Connections:</b> to the <b>cavernous sinus</b> by emissary veins through the <b>foramen ovale</b>, the <b>foramen lacerum</b> and the <b>foramen of Vesalius</b>; to the <b>inferior ophthalmic vein</b> through the inferior orbital fissure; to the <b>facial vein</b> by the deep facial vein.</li>
+<li><b>Clinical importance:</b> infection of the face, teeth or infratemporal region can spread through it to the cavernous sinus (cavernous sinus thrombosis).</li></ul>`},
+  {grp: 'Veins', id: 'ejv', name: 'Retromandibular and external jugular',
+    lit: [R('retromandibular_vein'), R('anterior_division_of_retromandibular_vein'), R('posterior_division_of_retromandibular_vein'), R('superficial_temporal_veins'), R('maxillary_veins'), R('posterior_auricular_vein'), R('external_jugular_vein'), V('right_subclavian_vein'), R('facial_vein'), V('common_facial_vein_r'), R('internal_jugular_vein')], soft: [MU('scm')], solid: ['mandible', 'right_clavicle'], fit: [R('external_jugular_vein'), R('retromandibular_vein'), R('superficial_temporal_veins')], view: RIGHT, zoom: 0.95,
+    labels: [[R('retromandibular_vein'), 'Retromandibular vein', [-46, -104, 1493]], [R('external_jugular_vein'), 'External jugular vein', [-48, -100, 1420]], [R('posterior_auricular_vein'), 'Posterior auricular vein', [-62, -80, 1515]], [V('right_subclavian_vein'), 'Subclavian vein', [-60, -110, 1350]], [MU('scm'), 'Sternocleidomastoid', [-45, -118, 1400]]],
+    text: `<p>The <b>retromandibular vein</b> forms in the parotid from the <b>superficial temporal</b> and <b>maxillary</b> veins. Its <b>anterior division</b> joins the facial vein (common facial vein); its <b>posterior division</b> joins the <b>posterior auricular vein</b> to form the <b>external jugular vein</b>.</p>
+<p>The <b>external jugular</b> starts near the <b>angle of the mandible</b>, runs down over <b>sternocleidomastoid</b> just under platysma, pierces the deep fascia above the clavicle and ends in the <b>subclavian vein</b>.</p>`},
+  {grp: 'Veins', id: 'ijv', name: 'Internal jugular vein',
+    lit: [R('internal_jugular_vein'), R('sigmoid_sinus'), R('inferior_petrosal_sinus'), V('common_facial_vein_r'), R('lingual_vein'), R('superior_thyroid_vein'), V('right_subclavian_vein'), V('right_brachiocephalic_vein'), V('right_common_carotid_artery'), R('internal_carotid_artery'), N('vagus_nerve_x_r')], solid: ['right_clavicle', 'mandible'], fit: [R('internal_jugular_vein'), R('sigmoid_sinus'), V('right_brachiocephalic_vein')], view: RF, zoom: 0.95,
+    labels: [[R('internal_jugular_vein'), 'Internal jugular vein', [-36, -108, 1410]], [R('sigmoid_sinus'), 'Sigmoid sinus', [-52, -70, 1515]], [V('common_facial_vein_r'), 'Common facial', [-30, -104, 1465]], [R('superior_thyroid_vein'), 'Superior thyroid vein', [-30, -108, 1428]], [V('right_brachiocephalic_vein'), 'Brachiocephalic vein', [-20, -122, 1338]], [V('right_common_carotid_artery'), 'Common carotid', [-22, -112, 1390]]],
+    text: `<p>The <b>internal jugular vein</b> continues the <b>sigmoid sinus</b> at the <b>jugular foramen</b> (superior bulb), runs down in the <b>carotid sheath</b>, lateral to the internal and then the common carotid, under sternocleidomastoid, and joins the <b>subclavian vein behind the sternal end of the clavicle</b> to form the <b>brachiocephalic vein</b>. A pair of valves lies a little above its end (inferior bulb).</p>
+<ul><li><b>Tributaries:</b> inferior petrosal sinus, pharyngeal veins, <b>common facial</b>, <b>lingual</b>, <b>superior and middle thyroid</b> veins (the occipital sometimes).</li>
+<li><b>Relations:</b> the vagus between and behind vein and artery; IX and XII pass forward between them; XI crosses the vein; the <b>deep cervical lymph nodes</b> lie along it.</li>
+<li>It is a site for <b>central venous lines</b>. Its pulsation (JVP) is seen, not felt: <a href="muscles.html">Muscles of the Head and Neck</a> (palpation).</li></ul>`},
+  {grp: 'Veins', id: 'bcv', name: 'Subclavian and brachiocephalic veins',
+    lit: [V('right_subclavian_vein'), V('left_subclavian_vein'), V('right_brachiocephalic_vein'), V('left_brachiocephalic_vein'), V('superior_vena_cava'), ...BOTH(R('internal_jugular_vein')), ...BOTH(R('external_jugular_vein')), V('right_subclavian_artery')], soft: [MU('scal_ant')], solid: ['right_first_rib', 'left_first_rib'], fit: [V('right_subclavian_vein'), V('left_subclavian_vein'), V('superior_vena_cava')], view: FRONT, zoom: 1.0,
+    labels: [[V('right_subclavian_vein'), 'Subclavian vein (in front of scalenus anterior)', [-60, -114, 1350]], [V('left_brachiocephalic_vein'), 'Left brachiocephalic (long)', [8, -126, 1338]], [V('right_brachiocephalic_vein'), 'Right brachiocephalic (short)', [-20, -124, 1335]], [V('superior_vena_cava'), 'Superior vena cava', [-15, -122, 1300]], [V('right_subclavian_artery'), 'Subclavian artery (behind the muscle)', [-45, -100, 1362]]],
+    text: `<p>The <b>subclavian vein</b> continues the axillary at the outer border of the first rib, lies <b>behind the clavicle</b> and <b>in front of scalenus anterior</b> (the artery is behind the muscle), and joins the internal jugular behind the sternal end of the clavicle. It receives the <b>external jugular vein</b>. It is a site for central venous lines.</p>
+<p>The <b>brachiocephalic veins</b> form behind the sternoclavicular joints; the <b>left (about 6 cm)</b> crosses behind the manubrium and is more than twice as long as the <b>right (about 2.5 cm)</b>; they join behind the first right costal cartilage as the <b>superior vena cava</b>. The thoracic duct ends near the left venous angle: <a href="../thorax/nerves-vessels.html">Thorax</a>.</p>`},
+  {grp: 'Veins', id: 'sinus', name: 'Dural venous sinuses',
+    lit: [...SINUSES, ...BOTH(R('internal_jugular_vein'))], solid: [], fit: [V('superior_sagittal_sinus'), R('sigmoid_sinus'), L(R('sigmoid_sinus'))], view: [-1, 0.1, 0.25], zoom: 0.9,
+    labels: [[V('superior_sagittal_sinus'), 'Superior sagittal', [0, -100, 1630]], [V('inferior_sagittal_sinus'), 'Inferior sagittal', [0, -100, 1580]], [V('straight_sinus'), 'Straight', [0, -70, 1546]], [R('transverse_sinus'), 'Transverse', [-40, -36, 1527]], [R('sigmoid_sinus'), 'Sigmoid', [-52, -68, 1513]], [R('cavernous_sinus'), 'Cavernous', [-14, -112, 1535]], [R('internal_jugular_vein'), 'Internal jugular', [-33, -96, 1480]]],
+    text: `<p>The sinuses lie between the two layers of the dura (Wikipedia: they have no valves); most of their blood leaves by the <b>internal jugular vein</b>. The drainage path is in the section below; the dural folds and the sinuses inside the skull: <a href="skull.html">The Skull</a> ("Inside: cranial fossae").</p>`},
+  {grp: 'Veins', id: 'cav', name: 'Cavernous sinus and its contents',
+    lit: [...CAV, ...BOTH(R('internal_carotid_artery')), ...BOTH(N('oculomotor_nerve_iii_r')), ...BOTH(N('trochlear_nerve_iv_r')), ...BOTH(N('abducens_nerve_vi_r')), ...BOTH(N('ophthalmic_nerve_r')), ...BOTH(N('maxillary_nerve_r')), ...BOTH(N('trigeminal_nerve_v_r')), ...BOTH(R('superior_ophthalmic_vein')), ...BOTH(R('superior_petrosal_sinus')), ...BOTH(R('inferior_petrosal_sinus'))], solid: [], fit: [R('cavernous_sinus'), L(R('cavernous_sinus')), R('superior_ophthalmic_vein')], view: [0, -0.4, 1], zoom: 1.2, centre: [0, -118, 1535],
+    labels: [[R('cavernous_sinus'), 'Cavernous sinus', [-15, -110, 1538]], [N('oculomotor_nerve_iii_r'), 'Oculomotor (III)', [-19, -130, 1545]], [N('ophthalmic_nerve_r'), 'Ophthalmic (V1)', [-20, -130, 1540]], [R('superior_ophthalmic_vein'), 'Superior ophthalmic vein', [-20, -150, 1541]]],
+    text: `<p>Seen from above, the face towards the bottom of the view (the right sinus on your left). A <b>cavernous sinus</b> lies on each side of the body of the sphenoid (the sella and pituitary), from the <b>superior orbital fissure</b> to the <b>apex of the petrous temporal</b>; the <b>intercavernous sinuses</b> join the two. The internal carotid and VI run <b>through</b> it (hidden inside it in this view); III, IV, V1 and V2 are in its <b>lateral wall</b> (the schematic below).</p>`},
+  {grp: 'Orbit', id: 'oa', name: 'Ophthalmic artery',
+    lit: [...OA, R('internal_carotid_artery'), N('optic_nerve_ii_r')], solid: [], fit: [R('ophthalmic_artery'), R('supra_orbital_artery'), R('lacrimal_artery'), R('internal_carotid_artery')], view: [-0.35, -0.5, 1], zoom: 1.6, centre: [-18, -145, 1538],
+    labels: [[R('ophthalmic_artery'), 'Ophthalmic artery', [-14, -128, 1537]], [N('optic_nerve_ii_r'), 'Optic nerve', [-20, -145, 1538]], [R('central_retinal_artery'), 'Central retinal', [-30, -156, 1525]], [R('lacrimal_artery'), 'Lacrimal', [-36, -156, 1540]], [R('supra_orbital_artery'), 'Supraorbital', [-24, -175, 1550]], [R('supratrochlear_artery'), 'Supratrochlear', [-12, -172, 1548]]],
+    text: `<p>Seen from above, the eye towards the bottom of the view. The <b>ophthalmic artery</b> is the first branch of the internal carotid after the cavernous sinus. It enters the orbit through the <b>optic canal below and lateral to the optic nerve</b>, then (Gray) crosses over the nerve to the medial wall and ends as the supratrochlear and dorsal nasal arteries.</p>
+<ul><li><b>Ocular branches:</b> the <b>central artery of the retina</b> (the first and one of the smallest; it runs in the dural sheath below the optic nerve and then enters the nerve), the ciliary arteries, muscular branches.</li>
+<li><b>Orbital branches:</b> lacrimal (to the lacrimal gland), ethmoidal, palpebral, <b>supraorbital</b> and <b>supratrochlear</b> (to the forehead and scalp).</li>
+<li>The central retinal artery's branches are the only supply to most of the retina: its occlusion causes <b>sudden, severe loss of vision</b>.</li></ul>`},
+  {grp: 'Orbit', id: 'ov', name: 'Ophthalmic veins',
+    lit: [R('superior_ophthalmic_vein'), R('inferior_ophthalmic_vein'), R('angular_vein'), R('facial_vein'), ...CAV, R('maxillary_veins')], solid: [], fit: [R('superior_ophthalmic_vein'), R('inferior_ophthalmic_vein'), R('angular_vein'), R('cavernous_sinus'), R('facial_vein')], view: [-1, -0.9, 0.3], zoom: 0.8,
+    labels: [[R('superior_ophthalmic_vein'), 'Superior ophthalmic vein', [-22, -160, 1545]], [R('inferior_ophthalmic_vein'), 'Inferior ophthalmic vein', [-18, -140, 1527]], [R('angular_vein'), 'Angular vein', [-18, -178, 1520]], [R('cavernous_sinus'), 'Cavernous sinus', [-15, -110, 1535]]],
+    text: `<p>The <b>superior ophthalmic vein</b> begins at the medial angle of the orbit, where it joins the <b>angular vein</b>, and passes through the <b>superior orbital fissure</b> to the <b>cavernous sinus</b>: a path for infection from the danger area of the face. The <b>inferior ophthalmic vein</b> drains to the cavernous sinus and, through the <b>inferior orbital fissure</b>, to the <b>pterygoid plexus</b>.</p>`},
+  {grp: 'Orbit', id: 'orbN', name: 'Nerves of the orbit',
+    lit: [...ORB_N, R('ophthalmic_artery')], solid: [], fit: [N('optic_nerve_ii_r'), N('ophthalmic_nerve_r'), N('oculomotor_nerve_iii_r'), N('trochlear_nerve_iv_r')], view: [-0.35, -0.5, 1], zoom: 1.2, centre: [-18, -140, 1538],
+    labels: [[N('optic_nerve_ii_r'), 'Optic (II)', [-18, -145, 1536]], [N('oculomotor_nerve_iii_r'), 'Oculomotor (III)', [-20, -150, 1530]], [N('trochlear_nerve_iv_r'), 'Trochlear (IV)', [-16, -140, 1542]], [N('abducens_nerve_vi_r'), 'Abducent (VI)', [-25, -135, 1525]], [N('ophthalmic_nerve_r'), 'Ophthalmic (V1)', [-26, -165, 1552]]],
+    text: `<p>Seen from above, the eye towards the bottom of the view. The <b>optic nerve</b> leaves through the <b>optic canal</b> with the ophthalmic artery. III, IV, VI and the branches of V1 come through the <b>superior orbital fissure</b> (its contents inside and outside the tendinous ring: <a href="skull.html">The Skull</a>).</p>
+<ul><li><b>III</b> (two divisions) supplies all the extraocular muscles except <b>superior oblique (IV)</b> and <b>lateral rectus (VI)</b>; it also carries the parasympathetic fibres to the <b>ciliary ganglion</b> (behind the eye, between the optic nerve and lateral rectus), whose short ciliary nerves supply the <b>sphincter pupillae</b> and <b>ciliary muscle</b>.</li>
+<li><b>V1</b> divides into <b>lacrimal</b> (the smallest), <b>frontal</b> (which divides into supraorbital and supratrochlear) and <b>nasociliary</b> (which passes within the tendinous ring).</li></ul>
+<p class="muted">Muscles, actions and palsies of III, IV and VI: <a href="muscles.html">Muscles of the Head and Neck</a>; the pupil pathway: <a href="../../ophthalmology/neuro-ophthalmology/pupil-reflexes.html">Pupil reflexes</a>.</p>`},
+  {grp: 'Nerves in the neck', id: 'ix', name: 'Glossopharyngeal (IX)',
+    lit: [N('glossopharyngeal_nerve_ix_r'), R('internal_carotid_artery'), R('external_carotid_artery'), R('internal_jugular_vein')], soft: [], solid: ['hyoid_bone'], fit: [N('glossopharyngeal_nerve_ix_r'), R('internal_carotid_artery')], view: RIGHT, zoom: 1.2,
+    labels: [[N('glossopharyngeal_nerve_ix_r'), 'Glossopharyngeal (IX)', [-28, -100, 1490]], [R('internal_carotid_artery'), 'Internal carotid', [-26, -100, 1460]], [R('external_carotid_artery'), 'External carotid', [-40, -104, 1460]], [R('internal_jugular_vein'), 'Internal jugular', [-34, -90, 1480]]],
+    text: null},
+  {grp: 'Nerves in the neck', id: 'x', name: 'Vagus (X)',
+    lit: [N('vagus_nerve_x_r'), N('vagus_nerve_x_l'), ...BOTH(R('internal_jugular_vein')), V('right_common_carotid_artery'), V('left_common_carotid_artery'), V('right_subclavian_artery'), V('aortic_arch'), V('brachiocephalic_trunk')], solid: ['right_first_rib', 'left_first_rib'], fit: [R('internal_jugular_vein'), L(R('internal_jugular_vein')), V('aortic_arch')], view: [0, 1, 0.1], zoom: 1.0,
+    labels: [[N('vagus_nerve_x_r'), 'Right vagus', [-26, -55, 1420]], [N('vagus_nerve_x_l'), 'Left vagus', [24, -55, 1420]], [V('right_subclavian_artery'), 'Right recurrent (under subclavian)', [-35, -75, 1360]], [V('aortic_arch'), 'Left recurrent (under the arch)', [22, -50, 1320]]],
+    text: null},
+  {grp: 'Nerves in the neck', id: 'xi', name: 'Accessory (XI)',
+    lit: [N('accessory_nerve_xi_r'), R('internal_jugular_vein')], soft: [MU('scm')], solid: ['mandible', 'right_clavicle', ...CERV.slice(0, 4)], fit: [N('accessory_nerve_xi_r'), MU('scm')], view: [-1, 0.25, 0.1], zoom: 0.95,
+    labels: [[N('accessory_nerve_xi_r'), 'Accessory nerve (XI)', [-45, -70, 1440]], [N('accessory_nerve_xi_r'), 'Across the posterior triangle', [-55, -40, 1380]], [MU('scm'), 'Sternocleidomastoid', [-50, -110, 1420]], [R('internal_jugular_vein'), 'Internal jugular', [-34, -92, 1480]]],
+    text: null},
+  {grp: 'Nerves in the neck', id: 'xii', name: 'Hypoglossal (XII)',
+    lit: [N('hypoglossal_nerve_xii_r'), R('internal_carotid_artery'), R('external_carotid_artery'), R('occipital_artery'), R('internal_jugular_vein'), N('vagus_nerve_x_r')], soft: [MU('digastric')], solid: ['hyoid_bone'], fit: [N('hypoglossal_nerve_xii_r'), R('external_carotid_artery'), 'hyoid_bone'], view: RIGHT, zoom: 0.9,
+    labels: [[N('hypoglossal_nerve_xii_r'), 'Hypoglossal (XII)', [-25, -130, 1458]], [MU('digastric'), 'Posterior belly of digastric', [-40, -100, 1480]], [R('external_carotid_artery'), 'External carotid', [-38, -104, 1455]]],
+    text: null},
+  {grp: 'Nerves in the neck', id: 'symp', name: 'Cervical sympathetic chain',
+    lit: [...SYMP, R('internal_carotid_artery'), V('right_common_carotid_artery'), R('inferior_thyroid_artery'), R('vertebral_artery'), V('right_subclavian_artery')], solid: [...CERV, 'right_first_rib'], fit: ['atlas', 'first_thoracic_vertebra', R('internal_carotid_artery')], view: [-1, -0.3, 0.05], zoom: 1.25, centre: [-15, -80, 1415],
+    labels: [[N('ganglia_of_sympathetic_trunk_r'), 'Superior cervical ganglion', [-15, -82, 1440]], [N('ganglia_of_sympathetic_trunk_r'), 'Middle (C6)', [-24, -100, 1408]], [N('ganglia_of_sympathetic_trunk_r'), 'Inferior / stellate', [-20, -85, 1380]], [R('inferior_thyroid_artery'), 'Inferior thyroid artery', [-36, -103, 1392]]],
+    text: `<p>The sympathetic chain runs from the base of the skull to the coccyx. In the neck it lies <b>behind the carotid sheath</b>, on longus capitis and longus colli, with <b>three ganglia</b>:</p>
+<ul><li><b>Superior cervical ganglion</b>, the largest, opposite <b>C2–C3</b>, behind the carotid sheath on longus capitis; its fibres climb the <b>internal carotid</b> (internal carotid plexus) to the head and eye.</li>
+<li><b>Middle</b>, at <b>C6</b>, by the <b>inferior thyroid artery</b>.</li>
+<li><b>Inferior</b>, between the C7 transverse process and the neck of the first rib, usually fused with the first thoracic ganglion as the <b>stellate (cervicothoracic) ganglion</b> (in up to 80%), behind the origin of the vertebral artery.</li></ul>
+<p>Gray (1918) describes cardiac branches from each ganglion. Horner syndrome: <a href="muscles.html">Muscles of the Head and Neck</a>. In the model the ganglia are one part and the markers are approximate; its superior ganglion ends lower (about C3–C4) than the textbook C2–C3.</p>`},
+  {grp: 'Nerves in the neck', id: 'bp', name: 'Brachial plexus roots and trunks',
+    lit: [...BP, V('right_subclavian_artery'), V('right_subclavian_vein')], soft: SCAL, solid: ['right_first_rib', 'right_clavicle', 'sixth_cervical_vertebra', 'seventh_cervical_vertebra', 'first_thoracic_vertebra'], fit: [...BP, 'right_first_rib'], view: [-0.7, -1, 0.15], zoom: 1.2,
+    labels: [[N('roots_of_brachial_plexus_r'), 'Roots C5–T1', [-30, -82, 1405]], [N('superior_trunk_of_brachial_plexus_r'), 'Upper trunk (C5–C6): Erb', [-70, -80, 1390]], [N('inferior_trunk_of_brachial_plexus_r'), 'Lower trunk (C8–T1): Klumpke', [-62, -86, 1365]], [V('right_subclavian_artery'), 'Subclavian artery', [-55, -105, 1356]], [MU('scal_ant'), 'Scalenus anterior', [-34, -104, 1390]]],
+    text: `<p>The roots (C5–T1) and trunks pass <b>between scalenus anterior and medius</b> with the subclavian artery; the vein stays in front of scalenus anterior. The <b>lower trunk</b> lies behind the artery on the first rib, where a <b>cervical rib</b> can press on both. Erb's and Klumpke's palsy: the section at the bottom of the page.</p>`},
+  {grp: 'Lymph nodes', id: 'ring', name: 'Superficial ring of groups',
+    lit: ['occ', 'mast', 'pre', 'par', 'ipar', 'infa', 'buc', 'nasl', 'mand', 'smd', 'smt'].map(k => NODES[k]), solid: [], fit: [NODES.occ, NODES.smt, NODES.pre, NODES.buc], view: [-1, -0.2, 0.1], zoom: 1.0,
+    labels: [[NODES.occ, 'Occipital', [-34, -12, 1526]], [NODES.mast, 'Mastoid (posterior auricular)', [-58, -84, 1496]], [NODES.pre, 'Preauricular', [-62, -113, 1524]], [NODES.par, 'Parotid', [-52, -110, 1487]], [NODES.buc, 'Buccal (facial)', [-28, -168, 1483]], [NODES.smd, 'Submandibular', [-8, -150, 1439]], [NODES.smt, 'Submental', [-16, -165, 1436]]],
+    text: `<p>Groups of nodes ring the junction of head and neck: <b>occipital, mastoid (posterior auricular), preauricular and parotid, facial (buccal), submandibular, submental</b>. Each drains the region next to it; the back of the scalp drains to the occipital and mastoid nodes, the front of the scalp to the parotid nodes. All lymph of the head and neck ends in the <b>deep cervical nodes</b>, directly or through these groups.</p>
+<p class="muted">Node positions are Z-Anatomy's and approximate.</p>`},
+  {grp: 'Lymph nodes', id: 'deep', name: 'Deep cervical chain',
+    lit: ['jd', 'lsj', 'aij', 'idl', 'scl', 'retro', 'slc', 'pret', 'thy', 'para', 'sac'].map(k => NODES[k]).concat([R('internal_jugular_vein')]), soft: [], solid: ['mandible', 'hyoid_bone', 'right_clavicle'], fit: [NODES.jd, NODES.scl, R('internal_jugular_vein')], view: RF, zoom: 0.95,
+    labels: [[NODES.jd, 'Jugulodigastric', [-32, -97, 1469]], [NODES.lsj, 'Upper deep cervical', [-29, -106, 1443]], [NODES.aij, 'Lower deep cervical', [-28, -117, 1389]], [NODES.scl, 'Supraclavicular', [-31, -117, 1357]], [NODES.retro, 'Retropharyngeal', [-12, -112, 1482]], [NODES.pret, 'Pretracheal', [-9, -122, 1389]], [R('internal_jugular_vein'), 'Internal jugular vein', [-34, -100, 1420]]],
+    text: `<p>The <b>deep cervical nodes</b> form a chain along the <b>carotid sheath and internal jugular vein</b> from the skull base to the root of the neck, under sternocleidomastoid. The <b>jugulodigastric node</b>, where the posterior belly of digastric crosses the vein, receives lymph from the <b>tonsil</b>, mouth and pharynx. Their efferents form the <b>jugular trunk</b> (Gray: on the left into the thoracic duct, on the right into the venous angle).</p>`},
+];
+// the four nerves of the neck, rows of a table (tap a row = that topic)
+const CN_ROWS = [
+  ['ix', 'IX Glossopharyngeal', 'Jugular foramen', 'Gray (1918): forward between the internal jugular vein and internal carotid, down in front of the artery, curving forward round stylopharyngeus between the internal and external carotids, under hyoglossus to the tonsil and back of the tongue.', 'Its only muscle, <b>stylopharyngeus</b>; the <b>carotid sinus and body</b> (sinus nerve); pharyngeal, tonsillar and lingual branches (taste and sensation, back third of the tongue).'],
+  ['x', 'X Vagus', 'Jugular foramen', 'Straight down in the <b>carotid sheath</b>, between and behind the internal jugular vein and the internal / common carotid.', '<b>Pharyngeal</b> (pharynx, soft palate); <b>superior laryngeal</b>: internal (sensation above the vocal folds), external (<b>cricothyroid</b>, pitch); cardiac; the <b>recurrent laryngeal</b> (below).'],
+  ['xi', 'XI Accessory (spinal part)', 'Up through the foramen magnum, out through the jugular foramen', 'Down alongside the internal jugular vein (Gray: in front of it in two-thirds), behind digastric, to <b>sternocleidomastoid</b> (supplies it; through or deep to it), then across the <b>posterior triangle</b>, superficial, to <b>trapezius</b>.', 'Sternocleidomastoid and trapezius (with C2–C4 sensory fibres). It is long and superficial: injury is mostly surgical (iatrogenic), e.g. in neck dissection, and causes shoulder dysfunction (Wikipedia: wasting of the shoulder muscles, winging of the scapula, weak abduction).'],
+  ['xii', 'XII Hypoglossal', 'Hypoglossal canal', 'Down deep to the internal carotid and internal jugular, close to the vagus, then forward between vein and artery; emerges from behind the posterior belly of digastric near the angle of the mandible; hooks round the <b>occipital artery</b>, crosses the <b>external carotid</b> and the loop of the lingual artery, on hyoglossus into the tongue.', 'All tongue muscles except <b>palatoglossus</b>. C1 fibres run with it (superior root of the ansa cervicalis: <a href="muscles.html">Muscles</a>).'],
+];
+const SCALP_ROWS = [   // front to back
+  ['Front (forehead)', 'Supratrochlear and supraorbital (ophthalmic, from the internal carotid)', 'Supratrochlear and supraorbital (frontal nerve, V1)', 'Parotid (preauricular) nodes'],
+  ['Temple', 'Superficial temporal (external carotid)', 'Zygomaticotemporal (V2) in front; auriculotemporal (V3) behind', 'Parotid (preauricular) nodes'],
+  ['Behind the ear', 'Posterior auricular (external carotid)', 'Lesser occipital (C2; C3 in the review)', 'Mastoid (posterior auricular) nodes'],
+  ['Back of the head', 'Occipital (external carotid)', 'Greater occipital (dorsal ramus of C2), to the vertex', 'Occipital nodes'],
+];
+const EMISSARY = [   // [name, through, joins]
+  ['Parietal', 'Parietal foramen', 'Superior sagittal sinus ↔ veins of the scalp'],
+  ['Mastoid', 'Mastoid foramen', 'Sigmoid (Gray: transverse) sinus ↔ posterior auricular or occipital vein'],
+  ['Condylar', 'Condylar canal (inconstant)', 'Gray: sigmoid (transverse) sinus ↔ deep veins of the neck'],
+  ['Foramen ovale, foramen lacerum, foramen of Vesalius', 'Those foramina', 'Cavernous sinus ↔ pterygoid plexus'],
+  ['Foramen caecum', 'Foramen caecum', 'Gray: superior sagittal sinus ↔ veins of the nasal cavity (the foramen: The Skull)'],
+];
+const SINUS_ROWS = [
+  ['Superior sagittal', 'Attached border of the falx, from the foramen caecum back to the internal occipital protuberance', 'Confluence, then a transverse sinus (Gray: usually the right)', V('superior_sagittal_sinus')],
+  ['Inferior sagittal + great cerebral vein', 'Free border of the falx', 'Straight sinus (where falx meets tentorium), to the confluence / the other transverse sinus', V('straight_sinus')],
+  ['Transverse', 'Attached margin of the tentorium', 'Sigmoid sinus', R('transverse_sinus')],
+  ['Sigmoid', 'Groove on the mastoid part of the temporal', 'Internal jugular vein at the jugular foramen', R('sigmoid_sinus')],
+  ['Superior petrosal', 'Back of the cavernous sinus, along the tentorium', 'Transverse / sigmoid sinus', R('superior_petrosal_sinus')],
+  ['Inferior petrosal', 'Back of the cavernous sinus, through the jugular foramen', 'Superior bulb of the internal jugular vein', R('inferior_petrosal_sinus')],
+  ['Cavernous', 'Each side of the sphenoid body; joined by the intercavernous sinuses', 'Superior and inferior petrosal sinuses; emissary veins to the pterygoid plexus', R('cavernous_sinus')],
+];
+const NODE_ROWS = [   // [group, where, drains, keys]
+  ['Occipital', 'Back of the head, at the edge of trapezius', 'Occipital scalp', [NODES.occ]],
+  ['Mastoid (posterior auricular)', 'Behind the ear (Gray: on the mastoid attachment of sternocleidomastoid)', 'Scalp behind and above the ear', [NODES.mast]],
+  ['Preauricular and parotid', 'In front of the ear and in the parotid region (Gray: in front of the tragus)', 'Front of the scalp, side of the face and ear', [NODES.pre, NODES.par, NODES.ipar, NODES.infa]],
+  ['Submandibular', 'Under the body of the mandible, on the submandibular gland', 'The facial and submental nodes; Gray adds the cheek, side of the nose, upper lip, lateral lower lip and gums', [NODES.smd]],
+  ['Submental', 'Between the anterior bellies of digastric, on mylohyoid', 'Central lower lip, floor of the mouth, tip of the tongue, chin', [NODES.smt]],
+  ['Retropharyngeal', 'Behind the upper pharynx, in front of the atlas', 'Nasopharynx (Gray: also the nasal cavity and auditory tube)', [NODES.retro]],
+  ['Deep cervical (jugulodigastric to supraclavicular)', 'Along the internal jugular vein under sternocleidomastoid', 'Everything above, directly or through the other groups', [NODES.jd, NODES.lsj, NODES.aij, NODES.idl, NODES.scl]],
+];
+const LEVELS = [   // [id, name, extent, sends, model groups (approximate mapping)]
+  ['I', 'Ia submental, Ib submandibular', 'Below the mandible: between the anterior bellies of digastric (Ia), the submandibular triangle (Ib)', 'Floor of mouth, front of tongue, lips', [NODES.smt, NODES.smd]],
+  ['II', 'Upper jugular (jugulodigastric)', 'Upper third of the internal jugular vein: skull base to hyoid', 'Oral cavity, oropharynx (tonsil, tongue base), nasopharynx: the commonest first station', [NODES.jd]],
+  ['III', 'Middle jugular', 'Middle third of the vein: hyoid to cricoid (the model has no separate group: its upper deep group spans II–III)', 'Oral cavity, pharynx, larynx', [NODES.lsj]],
+  ['IV', 'Lower jugular', 'Lower third of the vein: cricoid to clavicle', 'Larynx, hypopharynx, thyroid, cervical oesophagus', [NODES.aij, NODES.idl, NODES.scl]],
+  ['V', 'Posterior triangle', 'Behind sternocleidomastoid, in front of trapezius, above the clavicle (with the supraclavicular nodes)', 'Nasopharynx, oropharynx, skin of the back of the scalp and neck', [NODES.slc]],
+  ['VI', 'Anterior (central) compartment', 'Pre- and paratracheal, prelaryngeal, perithyroid nodes', 'Thyroid', [NODES.pret, NODES.thy, NODES.para, NODES.sac]],
+];
+const SCALP_TEXT = `<p>Five layers, <b>SCALP</b>: <b>S</b>kin, dense <b>C</b>onnective tissue, the epicranial <b>A</b>poneurosis (galea), <b>L</b>oose areolar tissue, <b>P</b>ericranium. The first three are bound together and move as one over the loose layer.</p>
+<ul><li>The <b>dense connective tissue</b> carries the <b>arteries, veins and nerves</b> (table below); the arteries come from both carotids.</li>
+<li>The <b>loose areolar layer</b> lets the scalp slide; it holds the <b>emissary veins</b>, which join the scalp veins through the skull to the dural sinuses and diploic veins. Blood and pus spread easily in it and infection can pass into the skull, so it is often called the <b>danger area of the scalp</b> (Wikipedia adds that the name is debated).</li></ul>
+<p class="muted">Two further teaching points (a scalp wound bleeds freely because the dense layer holds the vessels open; a wound through the aponeurosis gapes) are in only one of our sources, Wikipedia, and are left out. The muscle (occipitofrontalis) and its facial-nerve supply: <a href="muscles.html">Muscles of the Head and Neck</a>.</p>`;
+const SPREAD_TEXT = `<p>The <b>danger area (triangle) of the face</b> runs from the angle of the mouth to the root of the nose. A boil of the upper lip or nose, sinusitis or dental infection can spread along these veins to the <b>cavernous sinus</b> (cavernous sinus thrombosis), the meninges or the brain.</p>
+<ul><li><b>Valves:</b> Gray (1918) and many textbooks say the facial vein has no valves; dissection studies found valves in most facial and angular veins (though none in the inferior ophthalmic vein). What carries infection is the <b>communication</b> with the cavernous sinus and the direction of flow.</li>
+<li><b>Emissary veins</b> (table) pass through openings in the skull and join the sinuses to veins outside; they are valveless (StatPearls), so blood and infection can travel either way. Some are always present, others not. The foramina themselves are shown on <a href="skull.html">The Skull</a>.</li></ul>`;
+const CAV_TEXT = `<p><b>Contents:</b> the <b>internal carotid artery</b> (with its sympathetic plexus) and the <b>abducent nerve (VI)</b> run <b>through</b> the sinus; in its <b>lateral wall</b>, from above down: <b>oculomotor (III), trochlear (IV), ophthalmic (V1)</b> and <b>maxillary (V2)</b> (V2 low down, at the edge of the wall). Gray (1918) places the artery on the medial wall.</p>
+<ul><li><b>In:</b> superior and inferior ophthalmic veins, sphenoparietal sinus, superficial middle cerebral vein. <b>Out:</b> superior and inferior petrosal sinuses; emissary veins to the pterygoid plexus. The intercavernous sinuses join the two sides.</li>
+<li><b>Cavernous sinus thrombosis</b>, usually from infection (of the face, paranasal sinuses, orbit, pharynx or ear): <b>fever, headache, periorbital swelling</b> and <b>ophthalmoplegia</b> (the nerves of the sinus); visual loss, diplopia or stroke can follow. Wikipedia adds proptosis, chemosis and ptosis.</li>
+<li>A tear of the internal carotid inside the sinus makes a <b>carotid–cavernous fistula</b>.</li></ul>`;
+const SUB_TEXT = `<p><b>Three parts</b>, by <b>scalenus anterior</b>: the <b>first</b> from the origin to its medial border, the <b>second</b> behind it, the <b>third</b> from its lateral border to the outer border of the first rib.</p>
+<ul><li><b>First part:</b> <b>vertebral</b> (the first branch), <b>internal thoracic</b>, <b>thyrocervical trunk</b> (inferior thyroid, transverse cervical, suprascapular). The <b>costocervical trunk</b> comes from the first part on the left, usually the <b>second part on the right</b>.</li>
+<li><b>Relations:</b> the <b>subclavian vein</b> lies in front, below, separated from the artery by scalenus anterior (with the phrenic nerve on the muscle). The <b>brachial plexus</b> trunks lie above and behind; the <b>lower trunk</b> lies behind the third part on the first rib.</li>
+<li><b>Subclavian steal:</b> a block before the vertebral origin; blood runs back down the vertebral artery to the arm, taken from the brain.</li></ul>
+<p><b>Cervical rib</b> (from C7; 0.5–1% in StatPearls, 0.2–0.5% in Wikipedia), usually symptomless, can press on the <b>lower trunk</b> and the <b>subclavian artery</b> (thoracic outlet syndrome; switch it on in the diagram):</p>
+<ul><li><b>Nerve (lower trunk, C8–T1):</b> weakness and wasting of the <b>small muscles of the hand</b> (a 2026 review adds numbness of the medial forearm and the ulnar side of the hand).</li>
+<li><b>Artery:</b> narrowing with <b>dilatation beyond it</b>, clot and <b>emboli to the hand</b>, weak pulses (Wikipedia: pain, coldness and pallor; the radial pulse lost with the arm abducted and rotated, Adson's sign).</li></ul>`;
+const RLN_TEXT = `<p><b>Recurrent laryngeal nerve.</b> The <b>right</b> hooks under the <b>right subclavian artery</b>, the <b>left</b> under the <b>arch of the aorta</b> (by the ligamentum arteriosum: <a href="../thorax/nerves-vessels.html">Thorax</a>). Both run up in the <b>groove between trachea and oesophagus</b>, close to the <b>inferior thyroid artery</b> (in front of, behind or between its branches), and enter the larynx below the inferior constrictor, behind the cricothyroid joint. It supplies <b>all intrinsic muscles of the larynx except cricothyroid</b>, and sensation <b>below the vocal folds</b>. Z-Anatomy has no separate recurrent nerve: it is part of the model's vagus.</p>
+<ul><li><b>Injury</b> is a classic complication of <b>thyroid surgery</b> (also of other neck and chest surgery and cancers). A rare <b>non-recurrent</b> nerve, almost only on the right with an aberrant right subclavian artery, comes straight off the vagus and is easily cut.</li>
+<li><b>One side:</b> a <b>hoarse</b>, weak voice; breathing is usually spared.</li>
+<li><b>Both sides:</b> the folds lie near the midline (<b>paramedian</b>); the airway narrows: <b>inspiratory stridor</b> and breathlessness, which after surgery may need urgent airway care.</li>
+<li>The left nerve's longer path through the chest exposes it to chest disease (Wikipedia: lung cancer, hoarseness usually left-sided).</li></ul>`;
+const XII_TEXT = `<p><b>Hypoglossal palsy.</b> A <b>lower motor neuron</b> lesion (the nerve or nucleus) makes the protruded tongue <b>deviate to the same (paralysed) side</b>, with <b>wasting</b> (and fasciculation) of that half. An <b>upper motor neuron</b> lesion (stroke) makes it deviate <b>away from the side of the brain lesion</b>, without wasting. A 2026 review lists tumours at the skull base as the commonest cause of a lower lesion, and internal carotid dissection (the nerve lies close to the artery below the skull).</p>`;
+const LYM_TEXT = `<p><b>Clinical levels</b> (American Academy of Otolaryngology, 2002; used for neck dissection): I submental and submandibular; II, III and IV the upper, middle and lower thirds of the internal jugular chain (borders at the hyoid and cricoid); V the posterior triangle with the supraclavicular nodes; VI the central compartment.</p>
+<ul><li>The <b>left supraclavicular (Virchow's) node</b> receives the thoracic duct's lymph: its enlargement (Troisier's sign) points to a cancer <b>below the diaphragm</b>, especially of the stomach.</li>
+<li>Level II is the commonest first station for oral cavity, oropharynx and nasopharynx cancers; retropharyngeal or level V nodes suggest the nasopharynx; level VI the thyroid.</li></ul>
+<p class="muted">Which Z-Anatomy groups belong to which level is approximate: the model's supraclavicular group lies in front of the lower internal jugular vein and is lit with level IV (it sits at the IV/Vb border); its upper deep group spans levels II–III.</p>`;
+const SURF_TEXT = `<ul><li><b>Common carotid:</b> from behind the <b>sternoclavicular joint</b> up under the <b>anterior border of sternocleidomastoid</b> to the <b>upper border of the thyroid cartilage</b>, where it divides. Gray (1918) continues the line to a point midway between the mastoid tip and the angle of the mandible, over the external carotid (dashed).</li>
+<li><b>Internal jugular vein:</b> just <b>lateral and parallel</b> to the carotid line, under sternocleidomastoid, to behind the sternal end of the clavicle.</li>
+<li><b>External jugular vein:</b> from the <b>angle of the mandible</b> down over sternocleidomastoid to the subclavian vein above the clavicle (Gray: to its middle).</li>
+<li><b>Subclavian vein:</b> behind the medial part of the clavicle, in front of the artery (not drawn: hidden by the clavicle).</li>
+<li><b>Facial artery:</b> over the lower border of the mandible <b>at the front of masseter</b>, beside the <b>angle of the mouth</b>, up the side of the nose towards the medial angle of the eye.</li>
+<li><b>Accessory nerve</b> (Gray's line, dashed): from below the mastoid, through sternocleidomastoid, across the posterior triangle to trapezius.</li></ul>
+<p class="muted">The subclavian artery's surface line (an arc above the clavicle) is given only by Gray (1918) and is left out. Thyroid, parotid and pterion markings belong to other pages.</p>`;
+const ANGIO_TEXT = `<p><b>Carotid and vertebral angiograms.</b> A catheter is passed from a distant artery, classically the <b>femoral</b> (transfemoral, still the standard) and now often the <b>radial</b>, up the aorta to the <b>arch</b>, and each branch is entered in turn: the <b>common, internal and external carotids</b> for a carotid angiogram; the <b>subclavian</b> and then its first branch, the <b>vertebral artery</b>, for a vertebral angiogram (from the right radial route the catheter reaches the arch through the right subclavian and brachiocephalic trunk; the left vertebral is entered through the left subclavian).</p>`;
+const ERB_TEXT = `<p>In the neck the brachial plexus roots (C5–T1) and trunks run <b>between scalenus anterior and medius</b> (see the "Brachial plexus" topic in 3D).</p>
+<ul><li><b>Erb's palsy</b>: the <b>upper trunk (C5–C6</b>, sometimes C7) is torn when the <b>angle between the neck and shoulder</b> is forced open (birth injury, falls); the commonest birth plexus injury.</li>
+<li><b>Klumpke's palsy</b>: the <b>lower trunk (C8–T1)</b>, torn by traction on the <b>raised arm</b> (hyperabduction): weakness and wasting of the small hand muscles, C8–T1 numbness (Wikipedia: claw hand; <b>Horner syndrome</b> if T1 is involved).</li></ul>
+<p>Mechanism, deformity and muscles in 3D: <a href="../upper-limb/nerves-vessels.html#h-lesions">Nerves and Vessels of the Upper Limb</a>.</p>`;
+const DATA = {
+  lede: 'The arteries, veins, nerves and lymph nodes of the head and neck in 3D: the carotid, vertebral and subclavian arteries, the veins of the face, the jugular veins and the dural sinuses, the vessels and nerves of the orbit, the glossopharyngeal, vagus, accessory and hypoglossal nerves, the cervical sympathetic chain and the node groups. Pick a topic to light its parts (the rest turns to glass) and tap a part to name it. Below: the scalp, the danger area of the face, the cavernous sinus, the subclavian artery and cervical rib, nerve injuries, lymph node levels, surface lines and angiography.',
+  note3d: 'Arteries red, veins and venous sinuses blue, nerves and ganglia yellow, lymph nodes green, bones cream, cartilage grey, muscles pale grey. Vessels and nerves are Z-Anatomy curves drawn as tubes: calibres and node positions approximate. Parts Z-Anatomy has on the right only are mirrored to the left. Not in the model: the pterygoid plexus and deep facial vein, the superior thyroid, lingual and posterior auricular arteries, a separate recurrent laryngeal nerve, the cervical plexus and phrenic nerve, lymph vessels. Z-Anatomy\'s glossopharyngeal part has an unnamed strand running down the neck to about C7.',
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (scalp innervation review, facial vein dissections, cavernous sinus anatomy, vertebral artery and carotid bifurcation studies, cervical rib and thoracic outlet reviews, recurrent laryngeal nerve meta-analysis, vocal fold paralysis review, hypoglossal palsy review, neck node level reviews, cerebral angiography trials); neck node levels: American Academy of Otolaryngology (2002).",
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); muscles, vessels, nerves and lymph nodes from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones; vessels and nerves are tubes swept along Z-Anatomy curves; right-only parts mirrored. The pterygoid plexus marker and the ganglion levels are hand-placed and approximate. Schematics are not to scale. Simplified meshes, shared under the same licences.',
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let kind = {}, names = {}, cur = null;
+const COL = {bone: '--bone', cart: '--cart', muscle: '--soft', artery: '--artery', vein: '--vein', nerve: '--nerve', ganglion: '--nerve', node: '--lymph'};
+const WHAT = {bone: 'bone', cart: 'cartilage', muscle: 'muscle', artery: 'artery', vein: 'vein / venous sinus', nerve: 'nerve', ganglion: 'ganglia', node: 'lymph nodes'};
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+function anchor(key, near, view) {   // the vertex of a part nearest to a point (default: 25 mm in front of the part's centroid)
+  if (!key) return near;
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos; let c = near;
+  if (!c) { c = [0, 0, 0]; for (let i = 0; i < pos.length; i++) c[i % 3] += pos[i] / (pos.length / 3);
+    const n = view || [0, -1, 0], l = Math.hypot(...n); c = c.map((x, i) => x + 25 * n[i] / l); }
+  let best = 0, bd = 1e18;
+  for (let i = 0; i < pos.length; i += 3) { const d = (pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2; if (d < bd) { bd = d; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+function showTopic(id) {
+  const t = typeof id === 'object' ? id : TOPICS.find(t => t.id === id); cur = t;
+  const has = k => v.parts.has(k);
+  const lit = (t.lit || []).filter(has), soft = (t.soft || []).filter(has), solid = (t.solid || []).filter(has);
+  for (const k in kind) v.setVisible(k, kind[k] !== 'muscle' || soft.includes(k));
+  v.setFocus(lit.concat(soft, solid));
+  const fk = (t.fit || lit).filter(has);
+  v.fit(fk.length ? fk : lit); if (t.centre) v.centre = t.centre.slice();
+  v.face(t.view || FRONT, {zoom: t.zoom || 1});
+  v.setMarkers((t.labels || []).filter(([k]) => !k || (has(k) && v.parts.get(k).visible !== false && (lit.includes(k) || soft.includes(k) || solid.includes(k)))).map(([k, label, near]) => ({p: anchor(k, near, t.view), label,
+    color: css(!k ? '--vein' : kind[k] === 'muscle' || kind[k] === 'cart' ? '--muted' : kind[k] === 'bone' ? '--ink' : COL[kind[k]]), always: true})).filter(m => m.p));
+  $('topic-text').innerHTML = t.text || cnText(t.id) || `<p><b>${t.name}:</b> ${t.where || ''}</p>`;
+  $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === t.id));
+}
+function cnText(id) {
+  const r = CN_ROWS.find(r => r[0] === id); if (!r) return '';
+  return `<p><b>${r[1]}</b>. Exit: ${r[2]}.</p><ul><li><b>Course:</b> ${r[3]}</li><li><b>Supplies / branches:</b> ${r[4]}</li></ul>` +
+    (id === 'x' ? '<p>Seen from behind. The recurrent laryngeal nerve and its injury: the text beside the tongue diagram below.</p>' : id === 'xii' ? '<p>Hypoglossal palsy: below the table.</p>' : id === 'ix' ? '<p class="muted">Z-Anatomy\'s glossopharyngeal part also has a thin unnamed strand running down the back of the neck to about C7: it is not part of the textbook course; follow only the upper part (to the stylopharyngeus and the tongue).</p>' : '');
+}
+const toView = () => $('v').scrollIntoView({behavior: 'smooth', block: 'start'});
+function buildTopics() {
+  const box = $('topics');
+  for (const g of [...new Set(TOPICS.map(t => t.grp))]) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !kind[hit.key]) { $('pick').textContent = ''; return; }
+  $('pick').textContent = `${names[hit.key]}: ${WHAT[kind[hit.key]]}`;
+};
+async function loadModel() {
+  const base = '../models/hn-nv/';
+  const meta = await (await fetch(base + 'kinds.json')).json(), M = meta.mirror;
+  const man = await v.load(base + 'hn-nv.json', null, {
+    extra: (m, items) => items.filter(it => meta.parts[it.key] && meta.parts[it.key].mirror)
+      .map(it => ({key: L(it.key), m: v.mirrored(it.m, M.m, M.t), info: {name: it.info.name}}))});
+  for (const [k, d] of Object.entries(meta.parts)) for (const left of d.mirror ? [false, true] : [false]) {
+    const key = left ? L(k) : k, p = v.parts.get(key); if (!p) continue;
+    let nm = p.info.name;
+    if (d.mirror) nm = (left ? 'Left ' : 'Right ') + nm.replace(/^(Right|Left) /i, '').replace(/^./, c => c.toLowerCase());
+    names[key] = nm; kind[key] = d.kind; v.setColour(key, COL[d.kind]);
+  }
+  return man;
+}
+
+/* ===================== schematics ===================== */
+const T = (x, y, s, cls = '', anchor = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--muted)"/></marker></defs>';
+function drawScalp() {   // vertical section, surface at the top; labels on the right
+  const S = $('scalp-svg'), X0 = 20, X1 = 380;
+  const band = (y, h, cls) => `<rect x="${X0}" y="${y}" width="${X1 - X0}" height="${h}" class="${cls}"/>`;
+  let h = band(30, 40, 'skin');
+  for (let x = 40; x < X1; x += 28) h += `<path class="lead" d="M${x} 30 L${x + 4} 62"/>`;                 // hair follicles in the skin
+  h += band(70, 55, 'mus') + band(125, 18, 'fas');
+  h += `<rect x="${X0}" y="143" width="${X1 - X0}" height="42" fill="none" stroke="var(--muted)" stroke-width=".8" stroke-dasharray="3 3"/>`;
+  h += `<rect x="${X0}" y="185" width="${X1 - X0}" height="6" style="fill:var(--line);stroke:var(--muted);stroke-width:.8"/>`;   // pericranium
+  h += band(191, 22, 'bone') + `<rect x="${X0}" y="213" width="${X1 - X0}" height="26" class="bone" style="fill-opacity:.55"/>` + band(239, 20, 'bone');
+  h += `<path class="dura" d="M${X0} 266 L${X1} 266"/>`;
+  h += `<path class="vn" d="M230 268 L290 268 L260 312 Z"/><path class="dura" d="M260 312 L260 360"/>`;     // superior sagittal sinus in the falx
+  h += `<circle cx="90" cy="98" r="8" class="art"/><circle cx="112" cy="98" r="9" class="vn"/><circle cx="133" cy="98" r="5" class="nv"/>`;
+  h += `<circle cx="300" cy="96" r="8" class="art"/><circle cx="322" cy="96" r="9" class="vn"/>`;
+  h += `<path class="vnt" d="M322 105 L322 120 C320 150 300 170 285 190 L272 262"/>`;                       // emissary vein to the sinus
+  h += `<path class="vnt" d="M150 226 L210 226"/><circle cx="150" cy="226" r="4" class="vn"/>`;              // diploic vein
+  h += `<path class="clin dash" d="M40 164 L260 164"/>` + T(45, 178, 'pus or blood spreads here', 's');
+  h += T(90, 120, 'artery, vein, nerve', 's') + T(306, 178, 'emissary vein', 's', 'end');
+  const lab = [[52, 'Skin (S)'], [100, 'Dense connective tissue (C)'], [136, 'Aponeurosis, galea (A)'], [162, 'Loose areolar tissue (L)'], [190, 'Pericranium (P)'], [228, 'Skull (diploë, diploic veins)'], [268, 'Dura'], [300, 'Superior sagittal sinus']];
+  for (const [y, s] of lab) h += lead(X1, y, X1 + 14, y) + T(X1 + 18, y + 4, s);
+  h += lead(276, 292, X1, 300);                                                                          // to the sinus
+  h += T(X1 + 18, 116, 'vessels and nerves', 's') + T(X1 + 18, 178, 'emissary veins: "danger area"', 's');
+  S.setAttribute('viewBox', '0 0 600 370');
+  S.innerHTML = h;
+}
+function drawSpread() {   // flow chart of venous routes (not anatomical positions)
+  const S = $('spread-svg');
+  const box = (x, y, w, s, cls, k) => `<g data-k="${k}" style="cursor:pointer"><rect x="${x}" y="${y}" width="${w}" height="40" rx="8" class="${cls}"/>${T(x + w / 2, y + 17, s[0], '', 'middle')}${s[1] ? T(x + w / 2, y + 32, s[1], 's', 'middle') : ''}</g>`;
+  const ar = d => `<path class="arrow" d="${d}"/>`;
+  let h = DEFS;
+  h += box(10, 20, 170, ['Upper lip and nose', 'the danger area'], 'clinbox', 'facV') + box(230, 20, 170, ['Angular and facial veins', 'drain to the IJV'], 'vnbox', 'facV') + box(450, 20, 180, ['Superior ophthalmic vein', 'superior orbital fissure'], 'vnbox', 'ov');
+  h += box(10, 120, 170, ['Cheek, teeth, jaws', 'infratemporal region'], 'clinbox', 'ptery') + box(230, 120, 170, ['Deep facial vein', 'facial vein ↔ plexus'], 'vnbox', 'ptery') + box(450, 120, 180, ['Pterygoid plexus', 'around the maxillary artery'], 'vnbox', 'ptery');
+  h += box(10, 220, 170, ['Cavernous sinus', 'thrombosis'], 'clinbox', 'cav') + box(230, 220, 170, ['Emissary veins', 'ovale, lacerum, Vesalius'], 'vnbox', 'ptery') + box(450, 220, 180, ['Inferior ophthalmic vein', 'inferior orbital fissure'], 'vnbox', 'ov');
+  h += box(10, 330, 170, ['Scalp (loose layer)', 'the danger area of the scalp'], 'clinbox', 'sinus') + box(230, 330, 170, ['Emissary veins', 'parietal, mastoid, condylar'], 'vnbox', 'sinus') + box(450, 330, 180, ['Sagittal and sigmoid sinuses', 'meningitis, thrombosis'], 'clinbox', 'sinus');
+  h += ar('M180 40 L228 40') + ar('M400 40 L448 40') + ar('M180 140 L228 140') + ar('M400 140 L448 140') + ar('M180 350 L228 350') + ar('M400 350 L448 350');
+  h += ar('M540 60 L540 92 L205 92 L205 232 L182 232');                                // superior ophthalmic vein to the cavernous sinus
+  h += ar('M500 160 L500 190 L315 190 L315 218');                                       // pterygoid plexus to its emissary veins
+  h += ar('M230 248 L182 248');                                                         // emissary veins to the cavernous sinus
+  h += ar('M580 160 L580 218');                                                         // pterygoid plexus to the inferior ophthalmic vein
+  h += ar('M540 260 L540 296 L95 296 L95 262');                                         // inferior ophthalmic vein to the cavernous sinus
+  S.setAttribute('viewBox', '0 0 640 385');
+  S.innerHTML = h;
+  S.querySelectorAll('g[data-k]').forEach(g => g.onclick = () => { showTopic(g.dataset.k); toView(); });
+}
+function drawCav() {   // coronal section from the front: the patient's right sinus on the viewer's left
+  const S = $('cav-svg');
+  let h = `<path class="bone" d="M220 250 L255 250 Q300 296 345 250 L380 250 L392 360 L208 360 Z"/>` + T(300, 376, 'Body of the sphenoid', 's', 'middle');
+  h += `<ellipse cx="300" cy="238" rx="40" ry="28" class="mus"/>` + T(300, 242, 'Pituitary', '', 'middle');
+  h += `<path class="out" d="M300 210 L300 160"/>` + T(306, 170, 'stalk', 's');
+  for (const side of [-1, 1]) {
+    const f = x => 300 + side * x;
+    h += `<path style="fill:var(--vein);fill-opacity:.2;stroke:var(--vein);stroke-width:2" d="M${f(80)} 205 Q${f(85)} 182 ${f(125)} 182 L${f(172)} 182 Q${f(186)} 240 ${f(170)} 300 L${f(92)} 300 Q${f(80)} 290 ${f(80)} 205 Z"/>`;
+    h += `<path class="dura" d="M${f(172)} 182 Q${f(186)} 240 ${f(170)} 300"/>`;                       // lateral wall
+    h += `<circle cx="${f(118)}" cy="250" r="20" class="art"/>`;                                        // internal carotid
+    h += `<circle cx="${f(150)}" cy="262" r="7" class="nv"/>`;                                          // abducent lateral to it
+    for (const [y, r] of [[198, 8], [217, 5], [240, 8], [282, 8]]) h += `<circle cx="${f(178)}" cy="${y}" r="${r}" class="nv"/>`;
+    h += `<path class="out" d="M${f(176)} 150 Q${f(240)} 170 ${f(248)} 270"/>`;                          // temporal lobe
+  }
+  const lx = 300 - 178;
+  h += lead(lx - 8, 198, 62, 176) + T(58, 172, 'Oculomotor (III)', '', 'end');
+  h += lead(lx - 6, 217, 62, 202) + T(58, 206, 'Trochlear (IV)', '', 'end');
+  h += lead(lx - 8, 240, 62, 232) + T(58, 236, 'Ophthalmic (V1)', '', 'end');
+  h += lead(lx - 8, 282, 62, 290) + T(58, 294, 'Maxillary (V2)', '', 'end');
+  h += lead(182, 240, 215, 122) + T(215, 114, 'Internal carotid artery', '', 'middle');
+  h += lead(150, 268, 150, 322) + T(150, 336, 'Abducent (VI)', '', 'middle');
+  h += T(120, 60, 'Patient’s RIGHT', 'h', 'middle') + T(480, 60, 'Patient’s LEFT', 'h', 'middle') + T(300, 60, 'midline', 'h', 'middle');
+  h += T(440, 140, 'Temporal lobe', 's', 'middle') + T(430, 322, 'Cavernous sinus', 's', 'middle');
+  S.setAttribute('viewBox', '-90 40 690 345');
+  S.innerHTML = h;
+}
+function drawSub(rib) {   // front view of the right root of the neck: the shoulder on the viewer's left, the midline on the right
+  const S = $('sub-svg');
+  let h = `<path class="cart" d="M552 250 L590 250 L590 420 L552 420 Z"/>`;                                // trachea (midline)
+  h += `<path class="bone" d="M470 296 Q300 250 80 326 L84 342 Q300 268 474 312 Z"/>`;                     // first rib
+  // a cervical rib lies below and behind the artery and lower trunk, which arch over it: drawn first
+  if (rib) h += `<path class="bone" style="stroke:var(--clin);stroke-width:2" d="M322 236 Q250 262 176 312 L170 300 Q244 248 320 222 Z"/>`;
+  h += `<path class="mus" style="fill-opacity:.6" d="M250 92 L292 92 L286 290 L232 300 Z"/>` + T(226, 84, 'Scalenus medius', 's', 'end');
+  // brachial plexus trunks: from between the scalenes, laterally and down, above and behind the artery; the lower trunk on the rib
+  h += `<path class="nvl" d="M300 128 C260 165 180 205 40 236"/><path class="nvl" d="M302 168 C262 200 190 232 40 258"/><path class="nvl" d="M306 226 C270 262 200 296 40 306"/>`;
+  // the artery: brachiocephalic trunk (midline) → over the rib, behind scalenus anterior → outer border of the rib
+  h += `<path class="artl" d="M540 340 C500 300 440 262 365 255 C300 250 200 282 92 318"/><path class="artl" d="M540 340 L540 420"/><path class="artl" d="M540 340 L530 152"/>`;
+  h += `<path class="artt dash" d="M362 254 L336 214"/>`;                                                  // costocervical, behind the muscle
+  h += `<path class="mus" d="M332 100 L362 100 L388 282 L352 286 Z"/>`;                                     // scalenus anterior, in front of the artery
+  h += `<path class="artt" d="M452 268 L440 120"/><path class="artt" d="M412 262 L405 192 M405 192 L470 156 M405 192 L300 176 M405 192 L232 212"/><path class="artt" d="M424 265 L418 372"/>`;
+  // veins: the internal jugular, lateral to the common carotid, joins the subclavian vein (in front of scalenus anterior)
+  // behind the clavicle; the brachiocephalic vein continues down and medially
+  h += `<path class="vnl" d="M500 114 L498 330"/><path class="vnl" d="M40 360 C150 340 300 330 400 328 C450 328 480 330 498 334"/><path class="vnl" d="M498 334 L516 425"/>`;
+  h += `<path class="bone" style="fill-opacity:.25" d="M20 392 Q260 362 540 382 L540 398 Q260 380 20 410 Z"/>` + T(30, 424, 'Clavicle (see-through)', 's');
+  h += T(347, 92, 'Scalenus anterior', '', 'middle') + T(425, 112, 'Vertebral', '', 'middle') + T(462, 166, 'Inferior thyroid', 's', 'end') + T(560, 142, 'Common carotid', 's', 'middle');
+  h += T(500, 104, 'Internal jugular', 's', 'middle');
+  h += T(296, 172, 'Transverse cervical', 's', 'end') + T(228, 208, 'Suprascapular', 's', 'end') + T(426, 388, 'Internal thoracic', 's');
+  h += T(400, 214, 'Thyrocervical', 's', 'end') + T(160, 352, 'Subclavian vein', 's') + T(534, 446, 'Brachiocephalic trunk', 's', 'end');
+  h += lead(512, 405, 470, 405) + T(466, 409, 'Brachiocephalic v.', 's', 'end');
+  h += T(452, 306, '1st part', 'h', 'middle') + T(370, 244, '2nd', 'h', 'middle') + T(190, 272, '3rd part', 'h', 'middle');
+  h += T(10, 226, 'Upper trunk', 's') + T(10, 250, 'Middle trunk', 's') + T(10, 296, 'Lower trunk (C8–T1)', 's');
+  h += lead(300, 300, 300, 372) + T(306, 376, 'First rib', 's');
+  if (rib) h += `<path class="clin" d="M150 300 l14 -12 M196 290 l12 -12 M120 316 l12 -12"/>` + T(10, 112, 'Cervical rib (from C7): presses on the', 's') + T(10, 126, 'artery and the lower trunk from below', 's');
+  S.setAttribute('viewBox', '0 70 620 400');
+  S.innerHTML = h;
+}
+function drawTongue() {   // two panels, face from the front: the patient's right on the viewer's left
+  const S = $('tongue-svg');
+  const panel = (ox, title, sub, wasted) => {
+    let h = `<path class="skin" d="M${ox + 20} 60 Q${ox + 100} 30 ${ox + 180} 60 L${ox + 180} 95 Q${ox + 100} 115 ${ox + 20} 95 Z"/>`;
+    h += `<path style="fill:var(--soft);stroke:var(--muted);stroke-width:1.2" d="M${ox + 60} 90 C${ox + 55} 150 ${ox + 50} 190 ${ox + 70} 205 C${ox + 95} 220 ${ox + 125} 185 ${ox + 140} 90 Z"/>`;
+    if (wasted) h += `<path class="lead" d="M${ox + 68} 110 q8 6 0 12 q-8 6 0 12 q8 6 0 12"/>` + T(ox + 20, 232, 'right half wasted', 's');
+    h += `<path class="lead dash" d="M${ox + 100} 100 L${ox + 100} 215"/>` + T(ox + 104, 112, 'midline', 's');
+    h += T(ox + 100, 20, title, '', 'middle') + T(ox + 100, 36, sub, 's', 'middle');
+    return h;
+  };
+  S.innerHTML = panel(0, 'Right XII cut (LMN)', 'deviates to the right', true) + panel(210, 'Left-sided stroke (UMN)', 'to the right, no wasting', false) + T(10, 252, 'patient’s RIGHT', 'h') + T(410, 252, 'LEFT', 'h', 'end');
+  S.setAttribute('viewBox', '0 0 420 260');
+}
+// shared outline of the right side of the head and neck, seen from the right (face on the viewer's right)
+function neckOutline(scm = true) {
+  let h = `<path class="out" d="M150 300 C110 240 105 120 190 70 C260 30 360 40 410 95 C425 115 430 140 428 160 L455 190 L432 205 L440 222 L434 232 L438 245 C432 262 420 270 412 272 C400 282 375 288 360 292 C352 320 360 360 372 402"/>`;
+  h += `<path class="out" d="M150 300 C150 340 145 380 140 405"/>`;
+  h += `<ellipse cx="235" cy="175" rx="14" ry="24" class="out"/>` + T(235, 142, 'Ear', 's', 'middle');
+  h += `<path class="bone" style="fill-opacity:.6" d="M258 205 L270 205 L276 252 Q330 268 404 260 L406 272 Q330 282 266 264 Z"/>` + T(330, 258, 'Mandible', 's', 'middle');
+  h += `<path class="bone" style="fill-opacity:.6" d="M216 204 L230 204 L238 238 L226 242 Z"/>` + T(210, 236, 'Mastoid', 's', 'end');
+  if (scm) h += `<path class="mus" style="fill-opacity:.55" d="M218 212 L242 210 L382 400 L340 404 Z"/>`;
+  h += `<path class="out" d="M168 250 Q170 330 178 402"/>` + T(162, 330, 'Trapezius', 's', 'end');
+  h += `<path class="bone" style="fill-opacity:.6" d="M170 400 L380 396 L380 408 L170 412 Z"/>` + T(180, 428, 'Clavicle', 's');
+  h += `<rect x="330" y="296" width="24" height="8" rx="3" class="bone"/>`;
+  h += `<path class="cart" d="M334 316 L360 314 L358 344 L338 346 Z"/><rect x="338" y="352" width="22" height="8" rx="3" class="cart"/>`;
+  h += lead(356, 300, 470, 300) + T(474, 304, 'Hyoid', 's') + lead(360, 330, 470, 330) + T(474, 334, 'Thyroid cartilage', 's') + lead(360, 356, 470, 360) + T(474, 364, 'Cricoid', 's');
+  return h;
+}
+function drawLevels(sel) {
+  const S = $('lev-svg');
+  const reg = {
+    I: 'M300 270 Q352 282 404 270 L362 292 L354 298 L300 296 Z',
+    II: 'M220 214 L244 212 L308 300 L272 300 Z',
+    III: 'M272 300 L308 300 L349 355 L312 355 Z',
+    IV: 'M312 355 L349 355 L380 398 L340 400 Z',
+    V: 'M218 214 L168 252 Q170 330 178 398 L338 398 Z',
+    VI: 'M356 306 L362 300 Q360 350 370 398 L352 398 Z',
+  };
+  let h = neckOutline(false);
+  for (const [k, d] of Object.entries(reg)) h += `<path class="reg${sel === k ? ' sel' : ''}" data-k="${k}" d="${d}"/>`;
+  for (const [k, x, y] of [['I', 336, 288], ['II', 262, 268], ['III', 310, 334], ['IV', 346, 386], ['V', 230, 350]]) h += T(x, y, k, 'h', 'middle');
+  h += lead(368, 380, 410, 392) + T(414, 396, 'VI (in front)', 'h');
+  h += T(20, 20, 'RIGHT SIDE, FROM THE RIGHT', 'h') + T(540, 20, 'face →', 'h', 'end');
+  S.innerHTML = h;
+  S.querySelectorAll('.reg').forEach(p => p.onclick = () => pickLevel(p.dataset.k));
+}
+function pickLevel(k) {
+  const L_ = LEVELS.find(r => r[0] === k);
+  drawLevels(k);
+  document.querySelectorAll('#node-table tr[data-k]').forEach(x => x.setAttribute('aria-pressed', x.dataset.k === 'L' + k));
+  showTopic({id: 'lev-' + k, name: 'Level ' + k, lit: L_[4], solid: ['hyoid_bone'], fit: [...L_[4], 'mandible', 'hyoid_bone', 'right_clavicle'], view: RIGHT, zoom: 0.9,
+    labels: [[L_[4][0], 'Level ' + k + ': ' + L_[1].split(',')[0]]], where: `${L_[2]}. Receives: ${L_[3]}. <span class="muted">(Which Z-Anatomy groups belong to the level is approximate.)</span>`});
+  toView();
+}
+function drawSurf(show) {
+  const S = $('surf-svg');
+  let h = neckOutline(true);
+  if (show.vein) {
+    h += `<path class="vnt" d="M350 400 L306 318 L240 222"/>` + T(232, 300, 'Internal jugular', 's', 'end') + lead(236, 296, 288, 290);
+    h += `<path class="vnt" d="M290 262 L252 400"/>` + T(226, 398, 'External jugular', 's', 'end') + lead(228, 394, 254, 392);
+  }
+  if (show.art) {
+    h += `<path class="artt" d="M364 398 L322 318"/><path class="artt dash" d="M322 318 L250 248"/>` + T(392, 384, 'Common carotid', 's') + lead(390, 380, 358, 386);
+    h += T(196, 270, 'Gray’s line, over the', 's', 'end') + T(196, 283, 'external carotid', 's', 'end') + lead(198, 272, 262, 262);
+    h += `<path class="artt" d="M338 272 Q368 254 414 244 Q428 214 420 160"/>` + T(452, 150, 'Facial artery', 's') + lead(450, 146, 424, 168);
+  }
+  if (show.nerve) h += `<path class="nvl dash" d="M268 258 L279 308 L172 352"/>` + T(160, 372, 'Accessory nerve (Gray)', 's', 'end');
+  h += T(20, 20, 'RIGHT SIDE, FROM THE RIGHT', 'h') + T(540, 20, 'face →', 'h', 'end');
+  S.innerHTML = h;
+}
+const row = (cells, heads, k) => `<tr${k ? ` data-k="${k}" aria-pressed="false"` : ''}>` + cells.map((c, i) => `<td data-h="${heads[i]}">${i === 0 ? '<b>' + c + '</b>' : c}</td>`).join('') + '</tr>';
+function buildTables() {
+  $('scalp-table').innerHTML = '<tr><th>Region</th><th>Artery</th><th>Nerve</th><th>Lymph nodes</th></tr>' + SCALP_ROWS.map(r => row(r, ['', 'Artery', 'Nerve', 'Nodes'])).join('');
+  $('emissary-table').innerHTML = '<tr><th>Emissary vein</th><th>Through</th><th>Joins</th></tr>' + EMISSARY.map(r => row(r, ['', 'Through', 'Joins'])).join('');
+  $('sinus-table').innerHTML = '<tr><th>Sinus</th><th>Where</th><th>Drains to</th></tr>' + SINUS_ROWS.map((r, i) => row(r.slice(0, 3), ['', 'Where', 'Drains to'], 's' + i)).join('');
+  $('sinus-table').querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => {
+    const s = SINUS_ROWS[+r.dataset.k.slice(1)], base = TOPICS.find(t => t.id === 'sinus');
+    $('sinus-table').querySelectorAll('tr[data-k]').forEach(x => x.setAttribute('aria-pressed', x === r));
+    showTopic({id: 'sin-' + r.dataset.k, name: s[0], lit: [...SINUSES, ...BOTH(R('internal_jugular_vein'))], fit: base.fit, view: base.view, zoom: base.zoom, labels: [[s[3], s[0]]], where: `${s[1]}. Drains to: ${s[2]}.`});
+    v.setFocus([s[3], L(s[3])].filter(k => v.parts.has(k))); toView(); });
+  $('cn-table').innerHTML = '<tr><th>Nerve</th><th>Exit</th><th>Course in the neck</th><th>Supplies / branches</th></tr>' + CN_ROWS.map(r => row(r.slice(1), ['', 'Exit', 'Course', 'Supplies'], r[0])).join('');
+  $('cn-table').querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => {
+    $('cn-table').querySelectorAll('tr[data-k]').forEach(x => x.setAttribute('aria-pressed', x === r)); showTopic(r.dataset.k); toView(); });
+  $('node-table').innerHTML = '<tr><th>Group</th><th>Where</th><th>Drains</th></tr>' + NODE_ROWS.map((r, i) => row(r.slice(0, 3), ['', 'Where', 'Drains'], 'n' + i)).join('') +
+    '<tr class="hd"><th>Level</th><th>Extent</th><th>Main sources of spread</th></tr>' + LEVELS.map(r => row([r[0] + ' ' + r[1], r[2], r[3]], ['', 'Extent', 'Spreads from'], 'L' + r[0])).join('');
+  $('node-table').querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => {
+    if (r.dataset.k[0] === 'L') return pickLevel(r.dataset.k.slice(1));
+    const n = NODE_ROWS[+r.dataset.k.slice(1)];
+    $('node-table').querySelectorAll('tr[data-k]').forEach(x => x.setAttribute('aria-pressed', x === r));
+    showTopic({id: 'node-' + r.dataset.k, name: n[0], lit: n[3], solid: ['hyoid_bone'], fit: [...n[3], 'mandible', 'hyoid_bone', 'right_clavicle'], view: RIGHT, zoom: 0.9, labels: [[n[3][0], n[0].split(/[(]/)[0].trim()]], where: `${n[1]}. Drains: ${n[2]}.`}); toView(); });
+}
+
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('scalp-text').innerHTML = SCALP_TEXT; $('spread-text').innerHTML = SPREAD_TEXT; $('cav-text').innerHTML = CAV_TEXT; $('sub-text').innerHTML = SUB_TEXT;
+  $('rln-text').innerHTML = RLN_TEXT; $('xii-text').innerHTML = XII_TEXT; $('lym-text').innerHTML = LYM_TEXT; $('surf-text').innerHTML = SURF_TEXT;
+  $('angio-text').innerHTML = ANGIO_TEXT; $('erb-text').innerHTML = ERB_TEXT;
+  drawScalp(); drawSpread(); drawCav(); drawTongue(); drawLevels(null); buildTables();
+  let rib = false; drawSub(rib);
+  const rb = document.createElement('button'); rb.className = 'chip'; rb.textContent = 'Cervical rib'; rb.setAttribute('aria-pressed', 'false');
+  rb.onclick = () => { rib = !rib; rb.setAttribute('aria-pressed', rib); drawSub(rib); }; $('sub-tg').append(rb);
+  const surf = {art: true, vein: true, nerve: true};
+  for (const [k, label] of [['art', 'Arteries'], ['vein', 'Veins'], ['nerve', 'Accessory nerve']]) {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = label; b.setAttribute('aria-pressed', 'true');
+    b.onclick = () => { surf[k] = !surf[k]; b.setAttribute('aria-pressed', surf[k]); drawSurf(surf); }; $('surf-tg').append(b);
+  }
+  drawSurf(surf);
+  const bar = $('vbar');
+  for (const [label, dir] of [['Front', [0, -1, 0]], ['Back', [0, 1, 0]], ['Right', [-1, 0, 0]], ['Left', [1, 0, 0]], ['Above', [0, 0, 1]]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic('cca');
+  window.J = {TOPICS, showTopic, names, kind};   // for tests
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

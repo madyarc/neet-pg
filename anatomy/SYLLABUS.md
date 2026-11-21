@@ -262,19 +262,19 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 27. Scalp
 
-- [ ] **AN27.1** Describe & demonstrate the layers of scalp, its blood supply, nerve supply and surgical importance.
-- [ ] **AN27.2** Describe emissary veins with its role in the spread of infection from extracranial route to intracranial venous sinuses
+- [~] **AN27.1** Describe & demonstrate the layers of scalp, its blood supply, nerve supply and surgical importance. — *layers, vessels, nerves, lymph and the danger layer in [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html); bleeding and gaping of scalp wounds have one source*
+- [x] **AN27.2** Describe emissary veins with its role in the spread of infection from extracranial route to intracranial venous sinuses — *emissary veins and routes of infection: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 
 ### 28. Face & parotid region
 
 - [x] **AN28.1** Describe & demonstrate muscles of facial expression and their nerve supply — *all the muscles of facial expression with their facial-nerve branches: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN28.2** Describe sensory innervation of face
-- [ ] **AN28.3** Describe & demonstrate origin /formation, course, branches /tributaries of facial vessels
+- [x] **AN28.3** Describe & demonstrate origin /formation, course, branches /tributaries of facial vessels — *facial artery and vein in 3D: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 - [x] **AN28.4** Describe & demonstrate branches of facial nerve with distribution — *course and branches in 3D and schematic: [Muscles of the Head and Neck](head-neck/muscles.html)*
-- [ ] **AN28.5** Describe cervical lymph nodes and lymphatic drainage of head, face and neck
+- [x] **AN28.5** Describe cervical lymph nodes and lymphatic drainage of head, face and neck — *node groups, levels I–VI, Virchow's node: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 - [x] **AN28.6** Identify superficial muscles of face, their nerve supply and actions — *attachments, branches and actions: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [x] **AN28.7** Explain the anatomical basis of facial nerve palsy — *localising the lesion by level, Bell's palsy and phenomenon, Ramsay Hunt, causes: [Muscles of the Head and Neck](head-neck/muscles.html)*
-- [ ] **AN28.8** Explain surgical importance of deep facial vein
+- [x] **AN28.8** Explain surgical importance of deep facial vein — *deep facial vein, pterygoid plexus, danger area: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 - [ ] **AN28.9** Describe & demonstrate the parts, borders, surfaces, contents, relations and nerve supply of parotid gland with course of its duct and surgical importance
 - [ ] **AN28.10** Explain the anatomical basis of Frey’s syndrome
 
@@ -282,7 +282,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [ ] **AN29.1** Describe and demonstrate the boundaries, subdivisions and contents of posterior triangle of neck
 - [ ] **AN29.2** Describe & demonstrate attachments, nerve supply, relations and actions of sternocleidomastoid
-- [ ] **AN29.3** Explain anatomical basis of Erb’s & Klumpke’s palsy
+- [x] **AN29.3** Explain anatomical basis of Erb’s & Klumpke’s palsy — *neck-level summary in [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html); full account in [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
 - [ ] **AN29.4** Explain anatomical basis of wry neck
 - [ ] **AN29.5** Describe & demonstrate attachments of 1) inferior belly of omohyoid, 2)scalenus anterior, 3) scalenus medius & 4) levator scapulae
 
@@ -290,14 +290,14 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [x] **AN30.1** Describe the cranial fossae & identify related structures — *fossae, related structures and fracture signs, with sinuses, arteries and nerves in 3D: [The Skull](head-neck/skull.html#inside)*
 - [x] **AN30.2** Describe & identify major foramina with structures passing through them — *foramina of the cranial floor and external base with their contents in 3D: [The Skull](head-neck/skull.html#foramina); on each bone: [Bones of the Skull](head-neck/skull-bones.html)*
-- [ ] **AN30.3** Describe & identify dural folds & dural venous sinuses
-- [ ] **AN30.4** Describe clinical importance of dural venous sinuses
+- [x] **AN30.3** Describe & identify dural folds & dural venous sinuses — *sinus drainage in [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html); dural folds in [The Skull](head-neck/skull.html)*
+- [x] **AN30.4** Describe clinical importance of dural venous sinuses — *cavernous sinus contents and thrombosis: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 - [ ] **AN30.5** Explain effect of pituitary tumours on visual pathway
 
 ### 31. Orbit
 
 - [x] **AN31.1** Describe & identify extra ocular muscles of eyeball, along with a note on its attachment, action and clinical anatomy — *attachments, nerves, primary/secondary/tertiary actions, H test: [Muscles of the Head and Neck](head-neck/muscles.html)*
-- [ ] **AN31.2** Describe & demonstrate nerves and vessels in the orbit
+- [x] **AN31.2** Describe & demonstrate nerves and vessels in the orbit — *ophthalmic artery and veins, orbital nerves: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 - [x] **AN31.3** Describe anatomical basis of Horner’s syndrome — *three-neuron pathway, signs, causes and sweating pattern by level, sympathetic trunk in 3D: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN31.4** Describe the components of lacrimal apparatus
 - [~] **AN31.5** Explain the anatomical basis of oculomotor, trochlear and abducent nerve palsies along with strabismus — *III, IV, VI palsies; phoria/tropia, eso/exo/hyper/hypo, concomitant vs paralytic, secondary deviation; III/IV/VI in 3D (primary vs secondary deviation not found in two open sources): [Muscles of the Head and Neck](head-neck/muscles.html)*
@@ -312,7 +312,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN33.1** Describe & demonstrate extent, boundaries and contents of temporal and infratemporal fossae
 - [x] **AN33.2** Describe & demonstrate attachments, direction of fibres, nerve supply and actions of muscles of mastication — *attachments, fibre direction, V3 branches, actions: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [x] **AN33.3** Describe & demonstrate articulating surface, type & movements of temporomandibular joint — *surfaces, disc and compartments, ligaments, moving joint (turn then glide): [Joints of the Jaw, Spine and Pelvis](back/joints.html); muscles: [Muscles of the Head and Neck](head-neck/muscles.html)*
-- [ ] **AN33.4** Explain the clinical significance of pterygoid venous plexus
+- [x] **AN33.4** Explain the clinical significance of pterygoid venous plexus — *pterygoid plexus and the danger area: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 - [x] **AN33.5** Describe the features of dislocation of temporomandibular joint — *[Joints of the Jaw, Spine and Pelvis](back/joints.html) (TMJ, Applied)*
 
 ### 34. Submandibular region
@@ -325,13 +325,13 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [x] **AN35.1** Describe the parts, extent, attachments, modifications of deep cervical fascia — *investing, pretracheal, prevertebral layers and carotid sheath: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN35.2** Describe & demonstrate location, parts, borders, surfaces, relations, blood supply & applied anatomy of thyroid gland. Also describe the parathyroid glands in brief.
-- [ ] **AN35.3** Demonstrate & describe the origin, parts, course & branches subclavian artery
-- [ ] **AN35.4** Describe & demonstrate origin, course, relations, tributaries and termination of internal jugular & brachiocephalic veins
-- [ ] **AN35.5** Describe and demonstrate extent, drainage & applied anatomy of cervical lymph nodes
-- [ ] **AN35.6** Describe and demonstrate the extent, formation, relation & branches of cervical sympathetic chain
-- [ ] **AN35.7** Describe the course and branches of IX, X, XI & XII nerve in the neck
+- [x] **AN35.3** Demonstrate & describe the origin, parts, course & branches subclavian artery — *parts and branches in 3D: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
+- [x] **AN35.4** Describe & demonstrate origin, course, relations, tributaries and termination of internal jugular & brachiocephalic veins — *IJV, subclavian and brachiocephalic veins: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
+- [x] **AN35.5** Describe and demonstrate extent, drainage & applied anatomy of cervical lymph nodes — *extent, drainage, levels I–VI: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
+- [x] **AN35.6** Describe and demonstrate the extent, formation, relation & branches of cervical sympathetic chain — *cervical sympathetic chain in 3D: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
+- [x] **AN35.7** Describe the course and branches of IX, X, XI & XII nerve in the neck — *IX–XII in the neck: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 - [ ] **AN35.8** Describe the anatomically relevant clinical features of Thyroid swellings
-- [ ] **AN35.9** Describe the clinical features of compression of subclavian artery and lower trunk of brachial plexus by cervical rib
+- [x] **AN35.9** Describe the clinical features of compression of subclavian artery and lower trunk of brachial plexus by cervical rib — *cervical rib compression: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 - [x] **AN35.10** Describe the fascial spaces of neck — *retropharyngeal, danger, prevertebral, suprasternal, parapharyngeal, submandibular (Ludwig's angina), peritonsillar, pretracheal, masticator and parotid spaces: [Muscles of the Head and Neck](head-neck/muscles.html)*
 
 ### 36. Mouth, Pharynx & Palate
@@ -354,12 +354,12 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [x] **AN38.1** Describe & demonstrate the morphology, identify structure of the wall, nerve supply, blood supply and actions of intrinsic and extrinsic muscles of the larynx — *cartilages, membranes, cavity, intrinsic and extrinsic muscles, nerves, sensory supply, arteries: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [ ] **AN38.2** Describe the anatomical aspects of laryngitis
-- [ ] **AN38.3** Describe anatomical basis of recurrent laryngeal nerve injury
+- [x] **AN38.3** Describe anatomical basis of recurrent laryngeal nerve injury — *unilateral and bilateral RLN injury: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 
 ### 39. Tongue
 
 - [x] **AN39.1** Describe & demonstrate the morphology, nerve supply, embryological basis of nerve supply, blood supply, lymphatic drainage and actions of extrinsic and intrinsic muscles of tongue — *surface, papillae, nerve supply by pharyngeal arch, muscles, vessels, lymph drainage in 3D: [Muscles of the Head and Neck](head-neck/muscles.html)*
-- [ ] **AN39.2** Explain the anatomical basis of hypoglossal nerve palsy
+- [x] **AN39.2** Explain the anatomical basis of hypoglossal nerve palsy — *LMN vs UMN tongue deviation: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 
 ### 40. Organs of hearing and equilibrium
 
@@ -388,9 +388,9 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN43.3** Identify, describe and draw microanatomy of olfactory epithelium, eyelid, lip, sclero-corneal junction, optic nerve, cochlea- organ of corti, pineal gland
 - [ ] **AN43.4** Describe the development and developmental basis of congenital anomalies of face, palate, tongue, branchial apparatus, pituitary gland, thyroid gland & eye
 - [x] **AN43.5** Demonstrate- 1) Testing of muscles of facial expression, extraocular muscles, muscles of mastication, 2) Palpation of carotid arteries, facial artery, superficial temporal artery, 3) Location of internal and external jugular veins, 4) Location of hyoid bone, thyroid cartilage and cricoid cartilage with their vertebral levels — *testing facial, extraocular and masticatory muscles; carotid, facial and superficial temporal pulses, jugular veins and hyoid/thyroid/cricoid levels in 3D: [Muscles of the Head and Neck](head-neck/muscles.html)*
-- [ ] **AN43.6** Demonstrate surface projection of- Thyroid gland, Parotid gland and duct, Pterion, Common carotid artery, Internal jugular vein, Subclavian vein, External jugular vein, Facial artery in the face & accessory nerve
+- [~] **AN43.6** Demonstrate surface projection of- Thyroid gland, Parotid gland and duct, Pterion, Common carotid artery, Internal jugular vein, Subclavian vein, External jugular vein, Facial artery in the face & accessory nerve — *common carotid, IJV, EJV, facial artery and accessory nerve lines in [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html); subclavian vein only as behind the clavicle; glands and pterion not yet*
 - [ ] **AN43.7** Identify the anatomical structures in 1) Plain x-ray skull, 2) AP view and lateral view 3) Plain x-ray cervical spine-AP and lateral view 4) Plain x- ray of paranasal sinuses
-- [ ] **AN43.8** Describe the anatomical route used for carotid angiogram and vertebral angiogram
+- [x] **AN43.8** Describe the anatomical route used for carotid angiogram and vertebral angiogram — *carotid and vertebral angiogram routes: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 - [ ] **AN43.9** Identify anatomical structures in carotid angiogram and vertebral angiogram
 
 ### 44. Anterior abdominal wall

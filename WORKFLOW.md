@@ -8,15 +8,18 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Modules 27 and 28 are finished, committed, pushed and tested on the live site (2026-11-21).
-- Waiting for the user to say "proceed" before starting module 29 (nerves and vessels of the head and neck).
-- Local test server: may still run on 127.0.0.1:8765; start it again if a test can't connect.
+- Module 29 done and committed 2026-11-21. Waiting for the user's "proceed" before module 30.
+- Local test server: 127.0.0.1:8765.
 
 ## Next (the plan, in order)
 
 | # | Module | Page | Model | Notes |
 |---|--------|------|-------|-------|
-| 29 | Nerves and vessels of the head and neck | anatomy/head-neck/nerves-vessels.html | own pack | cranial nerves, circle of Willis, dural sinuses |
+| 30 | Lungs, pleura and trachea | anatomy/thorax/lungs.html | own pack | finishes AN25.9 (pleura and lung markings) |
+| 31 | Abdominal organs | anatomy/abdomen-pelvis/ | own pack | |
+| 32 | Head and neck regions and organs | anatomy/head-neck/ | own pack | parotid, thyroid, nose, tonsil, ear, AN43.6 glands |
+| 33 | Neuroanatomy | | | |
+| 34 | Histology, embryology, genetics | | | |
 
 For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap on the home page opens the page.
 
@@ -29,10 +32,12 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
 - AN25.9: heart borders, apex and valve areas done (module 26); pleura and lung markings still to do (not yet built: a lungs and pleura module).
 - AN23.2 (thoracic duct tributaries), AN23.3 (hemiazygos origin), AN47.12 (secondary plexuses), AN48.3 (internal iliac
   relations): Gray only (Wikipedia copies Gray); modules 27–28.
+- AN27.1: scalp wound bleeding and gaping (Wikipedia only); AN43.6: subclavian artery line (Gray only), glands and
+  pterion not yet (module 29).
 - AN13.7: surface lines and pulses are done (module 24); the muscle tests for pectoralis major, serratus anterior,
   latissimus dorsi, deltoid, biceps and brachioradialis are not. Could go on the upper-limb muscles page.
 
-Progress: anatomy 161 covered, 11 partial, 244 not started; ophthalmology 6 covered, 1 partial, 55 not started.
+Progress: anatomy 178 covered, 12 partial, 223 not started; ophthalmology 6 covered, 1 partial, 55 not started.
 
 ## Steps for every module (do them in this order, tick them here as they finish)
 
@@ -76,6 +81,10 @@ builds at the same time.
   that disproves each claim.
 
 ## Log (newest first)
+
+- 2026-11-21: Module 29 (head and neck NV): 610 quotes, 204-part 884 KB `models/hn-nv` (tools/head-neck/nv_config.py);
+  review found 9 groups (3D node levels, subclavian schematic, ~30 single-source lines), all fixed; 18 ticked, AN27.1
+  and AN43.6 partial. Home: 'Head and neck' parts open the page.
 
 - 2026-11-21: Modules 27 (thorax: 402 quotes, 887 KB thorax-nv) and 28 (abdomen and pelvis: 651 quotes, 860 KB abd-nv),
   built in parallel; reviews found 11 and 9 problems, all fixed. 14 competencies ticked, 4 partial. Home: Trunk parts

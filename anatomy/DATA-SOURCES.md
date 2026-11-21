@@ -905,3 +905,33 @@ tubercles.
   upper-limb or lower-limb page whose model contains them. The sigmoid veins are now tagged portal in
   `models/body-vessels/vessels.json` (Gray 173, Wikipedia "Inferior mesenteric vein").
 
+
+## Nerves, Vessels and Lymph Nodes of the Head and Neck — `head-neck/nerves-vessels.html`
+
+- Fact sheet `sources-local/facts/fill-hnnv.md` (610 quotes, script-checked against `sources-local/modern/fill-hnnv/`,
+  downloads 2026-11-21): Gray 1918; StatPearls abstracts; open-access papers (scalp innervation, facial vein
+  dissections, carotid bifurcation CT, vertebral artery, subclavian imaging, interscalene triangle, neurogenic and
+  cervical-rib thoracic outlet syndrome, recurrent laryngeal nerve variants, bilateral vocal fold paralysis,
+  hypoglossal palsy, accessory nerve injury, three on neck node levels, a transradial angiography trial); 105
+  Wikipedia articles (none with an OpenStax notice or Betts citation). Excluded as Gray copies: the whole Subclavian
+  artery and Facial artery articles and parts of about 15 others (listed in the sheet header). Node levels: AAO 2002.
+- Contested, stated on the page: facial vein valves (Gray none, dissections in most); cervical rib frequency
+  (0.5–1 % StatPearls, 0.2–0.5 % Wikipedia); internal carotid on the medial wall of or through the cavernous sinus;
+  carotid division level by CT (C3 in 44 %, C4 in 27 % of sides).
+- Single source, attributed: external carotid position at its start, condylar and foramen-caecum emissary links,
+  submandibular, mastoid, preauricular and retropharyngeal node details (Gray); cavernous sinus thrombosis eye signs,
+  sinus valves, cervical-rib vascular signs, accessory palsy signs (Wikipedia); cervical-rib numbness and hypoglossal
+  palsy causes (2026 review).
+- Left out (one source): scalp wound bleeding and gaping, the surgical plane of the scalp, third occipital nerve, ICA
+  segments C1–C7, lacrimal artery course, retinal artery emboli, grey rami, subclavian artery surface line,
+  Erb's 90 % and waiter's tip, supraclavicular nodes in lung and breast cancer, and others (sheet part S).
+- Model `models/hn-nv` (`tools/head-neck/nv_config.py`): 204 parts, 884 KB pack, 137 left parts mirrored in the page.
+  Z-Anatomy has no cervical plexus, phrenic nerve, pterygoid plexus or deep facial vein: the plexus marker is
+  approximate; the superior cervical ganglion ends lower than in textbooks; one thin glossopharyngeal strand runs
+  down to about C7 (noted on the page).
+- Independent review (2026-11-21), fixed: 3D node levels III–V lit the wrong groups; subclavian schematic (cervical rib
+  in front of the artery, common carotid medial, subclavian vein ending on an artery, label overlaps); about 30
+  single-source statements attributed or cut; hidden and dropped 3D labels; accessory nerve sentence; level
+  highlight and tongue colours; wrong link targets.
+- Home page: head and neck vessels, nerves and nodes open this page; the common facial vein (filed under Trunk) via
+  `models/region-pages.json`.
