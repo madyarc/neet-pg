@@ -138,7 +138,7 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
   colours. The femur page still uses `tools/bones/build_femur.py` + `embed.py`.
 - **Memory**: the machine has run out of RAM during long sessions. Heavy jobs (Blender exports, `bones build`,
   ffshot.py, large Python) run through `tools/capped` (RAM cap, one job at a time); at most two agents at once; start
-  Claude with `claude-4g` (whole session capped at 4 GB). Details in `WORKFLOW.md`.
+  Claude with `claude-8g` (whole session capped at 8 GB). Details in `WORKFLOW.md`.
 - Python scripts run with the venv `~/personal/buildenv` (numpy, pillow, selenium; run with `python -I`). Page tests:
   `tools/test/ffshot.py URL out.png [--phone] [--wait expr] [--js …]` — headless Firefox forced onto **software**
   rendering (Mesa llvmpipe; it prints the renderer to confirm). Never test on the GPU: the AMD iGPU driver faulted

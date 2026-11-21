@@ -51,10 +51,10 @@ Progress: anatomy 130 covered, 5 partial, 281 not started; ophthalmology 6 cover
 The last long session's terminal reached 11.3 GB, mostly from several agents each running headless Firefox or
 builds at the same time.
 
-- The whole session is capped at 4 GB. Start Claude with `claude-4g` (in ~/.local/bin), which puts Claude and
-  everything it starts in one 4 GB cgroup. Without it, the cap can be set by hand on the terminal's cgroup
+- The whole session is capped at 8 GB. Start Claude with `claude-8g` (in ~/.local/bin), which puts Claude and
+  everything it starts in one 8 GB cgroup. Without it, the cap can be set by hand on the terminal's cgroup
   (`memory.max` under /sys/fs/cgroup/…/app-org.kde.konsole-*.scope/tab(*).scope).
-- Every heavy command goes through `tools/capped` (default 2.5 GB, `--mem` to change): Blender exports,
+- Every heavy command goes through `tools/capped` (default 4 GB, `--mem` to change): Blender exports,
   `bones build`, `tools/test/ffshot.py`, large Python jobs. It holds a lock, so only one heavy job runs at a time even
   when agents work in parallel.
 - At most two agents at once, and only when their work is independent. Tell each agent to use `tools/capped`.
@@ -76,7 +76,7 @@ builds at the same time.
 
 ## Log (newest first)
 
-- 2026-11-21: Memory fix. Session cap 4 GB, `tools/capped` for heavy jobs, `claude-4g` launcher, pip cache cleared
+- 2026-11-21: Memory fix. Session cap 8 GB (first 4 GB), `tools/capped` for heavy jobs, `claude-8g` launcher, pip cache cleared
   (2.6 GB), this file and tools/agents/fill-brief.md added.
 - Module 24 (e751f03): nerves, vessels and lymph nodes of the upper limb; 764 quotes; 18 competencies ticked.
 - Partly-ticked items completed (aef5008 and earlier): lower limb, trunk, skull, head and neck, histology,
