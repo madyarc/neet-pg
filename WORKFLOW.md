@@ -29,6 +29,9 @@ Last updated: 2026-11-21
 - Module 44 (abdominopelvic: sheet fill-abdo2; bony-pelvis, imaging-abdomen, surface-sections + ap.js/css)
   [x] build (492 quotes, 7 Commons radiographs, sections cut from 3D models) [ ] review (running) [ ] fixes
   [ ] docs [ ] commit.
+- Module 45 (limb leftovers AN8.4, 9.2–9.3, 12.9/10/15, 13.5/6/8, 18.7, 20.6/7/10: sheet fill-limbs3; breast.html,
+  radiographs-landmarks per limb, embryology/limb-development.html + additions) [ ] build (running) [ ] review [ ] fixes
+  [ ] docs [ ] commit. Then 46: AN23.1, 26.2, 42.1, 43.7, 43.9, 82.1; then partials.
 - Module 42 (genetics: AN73.1–75.5) started 2026-11-22: sheet fill-genetics, pages in anatomy/genetics/.
   [x] build (688 quotes; chromosomes-karyotype, inheritance-pedigrees, aberrations-clinical; 6 Commons images;
   tokens --mat --pat --mut --probe; check_quotes.py now maps MLP- keys) [x] review (26 findings: Punnett titles AA, CFTR 7q and splice
