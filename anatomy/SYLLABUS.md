@@ -12,14 +12,14 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 1. Anatomical terminology
 
-- [ ] **AN1.1** Describe & Demonstrate normal anatomical position, various planes, relation, comparison, laterality & movements in the human body
-- [ ] **AN1.2** Describe composition of bone and bone marrow
+- [x] **AN1.1** Describe & Demonstrate normal anatomical position, various planes, relation, comparison, laterality & movements in the human body — *position, planes, terms of relation and laterality, six movements on sliders: [Anatomical Terms and Bone](general/terminology-bone.html)*
+- [x] **AN1.2** Describe composition of bone and bone marrow — *composition (acid and burning experiments), red vs yellow marrow with age: [Anatomical Terms and Bone](general/terminology-bone.html)*
 
 ### 2. General features of bones & Joints
 
-- [ ] **AN2.1** Describe parts, types, peculiarities of each type, blood and nerve supply of bones.
-- [ ] **AN2.2** Describe the laws of ossification, epiphysis, its various types and their importance
-- [ ] **AN2.3** Describe special features of a sesamoid bone
+- [x] **AN2.1** Describe parts, types, peculiarities of each type, blood and nerve supply of bones. — *parts of a long bone, bone types, nutrient, periosteal and epiphyseal supply, nerves: [Anatomical Terms and Bone](general/terminology-bone.html)*
+- [x] **AN2.2** Describe the laws of ossification, epiphysis, its various types and their importance — *ossification stepper, laws of ossification with the fibula exception (Gray), nutrient-canal direction, four epiphysis types: [Anatomical Terms and Bone](general/terminology-bone.html)*
+- [x] **AN2.3** Describe special features of a sesamoid bone — *sesamoid bones, the patella as the largest: [Anatomical Terms and Bone](general/terminology-bone.html)*
 - [x] **AN2.4** Describe various types of cartilage with its structure & distribution in body — *hyaline, elastic, fibrocartilage: structure and sites: [Connective Tissue](general/connective-tissue.html)*
 - [x] **AN2.5** Describe & demonstrate various joints with possible movements, subtypes and examples — *all subtypes with examples on real bones, the synovial types moving in 3D, synovial joint structure, movements, stability: [Joints](general/joints.html)*
 - [x] **AN2.6** Explain the concept of nerve supply of joints & Hilton’s law — *Hilton's law, nerve endings, referred pain hip → knee, blood supply: [Joints](general/joints.html)*
@@ -28,32 +28,32 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [x] **AN3.1** Classify & describe muscle tissue according to structure, size, shape, region & action — *fibre architecture with examples, functional roles, the three types: [Muscle Tissue](general/muscle.html)*
 - [x] **AN3.2** Describe parts of skeletal muscle and differentiate between tendons and aponeuroses with examples — *belly, tendon, aponeurosis (examples): [Muscle Tissue](general/muscle.html); tendon vs aponeurosis vs ligament: [Connective Tissue](general/connective-tissue.html)*
-- [ ] **AN3.3** Explain Shunt and spurt muscles with examples and role in joint movement
+- [ ] **AN3.3** Explain Shunt and spurt muscles with examples and role in joint movement — *not covered: no downloadable open source found (J Anat 1959/1978 papers are scans only)*
 
 ### 4. General features of skin and fascia
 
-- [ ] **AN4.1** Describe different types of skin & dermatomes in body
-- [ ] **AN4.2** Describe & demonstrate structure of skin with its appendages along with clinical anatomy
+- [x] **AN4.1** Describe different types of skin & dermatomes in body — *thick and thin skin, dermatome key points: [Skin and Lymphatics](general/skin-lymphatics.html)*
+- [x] **AN4.2** Describe & demonstrate structure of skin with its appendages along with clinical anatomy — *skin layers, appendages, clinical points: [Skin and Lymphatics](general/skin-lymphatics.html)*
 - [x] **AN4.3** Describe structure, contents and identify modifications of superficial fascia along with fat distribution in body — *structure, contents, modifications, fat-free sites, gynoid vs android fat, named fat pads: [Connective Tissue](general/connective-tissue.html)*
 - [x] **AN4.4** Describe & demonstrate modifications of deep fascia with its location, function & examples — *septa, retinacula, aponeuroses, fibrous sheaths; investing layer; carotid, axillary and femoral sheaths; calf pump and compartment syndrome: [Connective Tissue](general/connective-tissue.html)*
-- [ ] **AN4.5** Explain principles of skin incisions and their surgical importance
+- [x] **AN4.5** Explain principles of skin incisions and their surgical importance — *Langer's lines, relaxed skin tension lines and incisions (with the 2025 critique): [Skin and Lymphatics](general/skin-lymphatics.html)*
 
 ### 5. General features of the cardiovascular system
 
-- [ ] **AN5.1** Differentiate between blood vascular and lymphatic system
-- [ ] **AN5.2** Differentiate between pulmonary and systemic circulation
+- [x] **AN5.1** Differentiate between blood vascular and lymphatic system — *blood vs lymphatic vascular system: [Blood Vessels](general/blood-vessels.html)*
+- [x] **AN5.2** Differentiate between pulmonary and systemic circulation — *pulmonary vs systemic circulation, pressures: [Blood Vessels](general/blood-vessels.html)*
 - [x] **AN5.3** Describegeneral differences between arteries, veins and sinuses — *[Blood Vessels](general/blood-vessels.html)*
 - [x] **AN5.4** Explain functional and gross structural differences between elastic, muscular arteries and arterioles — *[Blood Vessels](general/blood-vessels.html)*
 - [x] **AN5.5** Describe portal system giving examples — *[Blood Vessels](general/blood-vessels.html)*
 - [x] **AN5.6** Describe the concept of anastomoses and collateral circulation, its different sites & significance of end arteries — *[Blood Vessels](general/blood-vessels.html)*
 - [x] **AN5.7** Explain function of meta-arterioles, precapillary sphincters, arterio-venous anastomoses — *[Blood Vessels](general/blood-vessels.html)*
-- [ ] **AN5.8** Describe thrombosis, infarction & aneurysm
+- [x] **AN5.8** Describe thrombosis, infarction & aneurysm — *Virchow triad, thrombus to embolus to infarct, white vs red infarcts, aneurysm types: [Blood Vessels](general/blood-vessels.html)*
 
 ### 6. General Features of lymphatic system
 
-- [ ] **AN6.1** Describe the components and functions of the lymphatic system
-- [ ] **AN6.2** Describe structure of lymph capillaries & mechanism of lymph circulation
-- [ ] **AN6.3** Explain the concept of lymphoedema and spread of tumors via lymphatics and venous system
+- [x] **AN6.1** Describe the components and functions of the lymphatic system — *components and functions, the two ducts and their territories: [Skin and Lymphatics](general/skin-lymphatics.html)*
+- [x] **AN6.2** Describe structure of lymph capillaries & mechanism of lymph circulation — *lymph capillaries (anchoring filaments, flap valves) and lymph flow: [Skin and Lymphatics](general/skin-lymphatics.html)*
+- [x] **AN6.3** Explain the concept of lymphoedema and spread of tumors via lymphatics and venous system — *lymphoedema, sentinel node, tumour spread: [Skin and Lymphatics](general/skin-lymphatics.html)*
 
 ### 7. Introduction to the nervous system
 

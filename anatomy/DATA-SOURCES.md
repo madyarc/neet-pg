@@ -1344,3 +1344,36 @@ tubercles.
   variants; Wikipedia copies counted as second sources; over-claims and mis-credits; colour meanings (`--mat`, `--pat`,
   `--mut`, `--clin`) and dark-theme contrast; mitotic non-disjunction, frameshift and ΔF508 drawings; pedigree layout and
   the consanguinity line; label collisions; XLH flow arrows; image credits; phone layouts.
+
+## General Anatomy: Terms, Bone, Skin and Lymphatics — `general/terminology-bone.html`, `general/skin-lymphatics.html`, additions to `general/blood-vessels.html`
+
+- Fact sheet `sources-local/facts/fill-general2.md` (309 quotes, script-checked against `sources-local/modern/fill-general2/`,
+  downloads 2026-11-22): Gray 1918 (pages 1, 17, 18, 50, 59, 60, 62, 71, 85, 95, 96, 133, 141, 165, 175, 176, 234);
+  StatPearls abstracts; open-access papers PMC4917311, PMC11759331, PMC11083575, PMC12097171, PMC12714326, PMC2107348,
+  PMC9892216, PMC12631335, PMC12411914, PMC9767978, PMC11763355, PMC12827920, PMC13577710, PMC7375305; Wikipedia.
+- Excluded: Wikipedia "Anatomical terms of motion", "Lymph capillary" and "Circulatory system" (OpenStax). Not counted
+  where they copy Gray 1918 (6- and 7-word checks): Coracoid process, Flat bone, Greater trochanter, Irregular bone,
+  Nutrient artery (its lead copies Gray, so the nutrient artery's branching is Gray only), Nutrient canal, Right
+  lymphatic duct, Sesamoid bone, Supraclavicular nodes. Wikipedia "Dermatome" and PMC12097171 share the
+  international-standard key-point wording; Wikipedia "Pseudoaneurysm" shares the clot-wall phrase with StatPearls.
+- Contested, shown on the page: bone classes (four, Gray, vs five, StatPearls); adult red-marrow sites; Langer's lines
+  (cut along them, Wikipedia, vs a 2025 review calling them cadaver artefacts and favouring relaxed skin tension lines);
+  lymphatics in the CNS (Gray vs StatPearls); the lungs in the right-duct territory; lymphatics "open" vs a "closed
+  system"; who proposed Virchow's triad; the wall of a false aneurysm (two StatPearls chapters); cisterna chyli level
+  (StatPearls chapters differ); the right lymphatic duct's ending is variable.
+- Single source, attributed on the page: Gray only — the epiphysis that appears first unites last (fibula exception),
+  branching of the nutrient artery, one-epiphysis bones, nail parts, bone-type features, lymph valves closer than in
+  veins; Wikipedia only — ipsilateral/contralateral, the aberrant epiphysis and epiphysis examples, epiphyseal arteries,
+  upper tibial centre, the 20/17/3 litre and 25/8 mm Hg figures, hypoxic vasoconstriction, white vs red infarcts,
+  saccular aneurysm, dissecting aneurysm; StatPearls only — the ≥150% aneurysm definition, elephantiasis sites. The
+  "to the elbow I go, from the knee I flee" mnemonic is shown only as a memory aid.
+- Left out (no second source): pneumatic bones, sesamoid "no periosteum" features, traction epiphyses ossifying later,
+  pitting vs non-pitting lymphoedema, a general "carcinoma spreads by lymph" rule, metaphyseal arteries, the fabella.
+  AN3.3 (shunt and spurt muscles) is not covered: the only sources are 1959–1979 J Anat papers available as scans only,
+  and one 2024 paper (PMC11395053) uses the terms the other way round.
+- No images; every figure is a data-drawn schematic (Commons dermatome maps were Gray's or OpenStax).
+- New colour tokens: `--redmarrow` #730d14 / #cf1723 and `--clot` #541244 / #bd2898, one hue in both themes, at least
+  ΔE 24 from every atlas token (including `--n-*`); infarcts are hatched, not coloured.
+- Independent review 2026-11-22, fixed: aneurysm wall layers drawn in the wrong order; ipsilateral/contralateral sides
+  swapped; the nutrient-artery Wikipedia copy counted as a second source; the S1 dermatome band; colour hues and clashes;
+  lymph-territory encoding aligned with the thorax page; attribution slips; label clipping.

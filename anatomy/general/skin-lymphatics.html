@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<script>window.addEventListener("error",e=>{window.loadError=window.loadError||String(e.message)})</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Skin and Lymphatics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours, one meaning each. atlas.css: --accent (UI selection: the chosen dermatome, line or territory), --lymph (lymph, lymph
+   vessels and nodes), --artery / --vein (blood), --clin (clinical points), --ink/--muted/--line.
+   Shared with other pages, same value and meaning: --fluid (body fluid: here interstitial fluid), --t-endo (endothelium;
+   blood-vessels.html), --collagen (collagen: dermis; histology pages), --cyto (epithelial cells: epidermis; histology pages),
+   --fat (fat: hypodermis; histology pages). No new tokens. */
+:root{--fluid:#d9edc6;--t-endo:#e98f86;--collagen:#e39b9b;--cyto:#c8b6e2;--fat:#f3e3a6}
+:root[data-theme="dark"]{--fluid:#4e6638;--t-endo:#f0a59d;--collagen:#b86a6a;--cyto:#6d5a8c;--fat:#7d6f3c;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.prose p{margin:0 0 8px;max-width:80ch}
+.prose ul{margin:4px 0 8px;padding-left:20px}
+.prose h3{font-size:15px;margin:0 0 4px}
+.scroll{overflow-x:auto}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+.jump{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13.5px}
+svg.sch{max-width:560px;margin:0 auto}
+svg.sch.small{max-width:380px}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.l,svg.sch text.s{paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .body{fill:var(--surface);stroke:var(--ink);stroke-width:1.4}
+svg.sch .flow{stroke:var(--ink);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+.step{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.step .chips{flex:1;min-width:0}
+.step .btn{white-space:nowrap}
+.find{font-size:14px;min-height:5em}
+.find h3{font-size:15px;margin:0 0 4px}
+.clin{color:var(--clin);font-weight:600}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t td:first-child{font-weight:600}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> <span class="muted" style="font-size:13px">· General: <a href="terminology-bone.html">Terms and bone</a> · <span aria-current="page">Skin and lymphatics</span> · <a href="joints.html">Joints</a> · <a href="muscle.html">Muscle</a> · <a href="blood-vessels.html">Blood vessels</a></span></nav>
+
+<header class="stack">
+  <h1>Skin and Lymphatics</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-skin">Skin and its appendages</a> <a href="#h-derm">Dermatomes</a> <a href="#h-langer">Langer's lines and incisions</a> <a href="#h-lym">The lymphatic system</a> <a href="#h-cap">Lymph capillaries and lymph flow</a> <a href="#h-oed">Lymphoedema and tumour spread</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-skin">
+  <h2 id="h-skin">Skin: structure, types and appendages</h2>
+  <div class="two">
+    <div class="prose" id="skin-text"></div>
+    <div class="stack">
+      <svg class="fig sch small" id="nail-svg" viewBox="0 0 380 200" role="img" aria-label="A nail in section along the finger: root under the skin fold, body, free edge, lunula"></svg>
+      <p class="muted">Schematic, not to scale: a fingertip cut along its length.</p>
+    </div>
+  </div>
+  <div class="scroll"><table id="skin-table"></table></div>
+  <div class="prose" id="skin-clin"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-derm">
+  <h2 id="h-derm">Dermatomes</h2>
+  <div class="chips" id="derm-tg" aria-label="Dermatome"></div>
+  <div class="two">
+    <svg class="fig sch small" id="derm-svg" viewBox="0 0 330 430" role="img" aria-label="A body from the front in the anatomical position: the key point (dot) and approximate band of the chosen dermatome on the right side"></svg>
+    <div class="prose find" id="derm-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic: the dots are the standard key sensory points; the shaded bands are approximate, and maps differ between authors.</p>
+  <div class="prose" id="derm-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-langer">
+  <h2 id="h-langer">Langer's lines and the principles of skin incisions</h2>
+  <div class="chips" id="lg-tg" aria-label="Demonstration"></div>
+  <div class="two">
+    <svg class="fig sch" id="lg-svg" viewBox="0 0 420 260" role="img" aria-label="A patch of skin with the direction of its collagen fibres; round holes or an incision along or across that direction"></svg>
+    <div class="prose find" id="lg-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic. Thin lines: the main direction of the collagen fibres of the dermis (Langer's lines).</p>
+  <div class="prose" id="lg-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lym">
+  <h2 id="h-lym">The lymphatic system: parts, jobs and drainage</h2>
+  <div class="two">
+    <div class="prose" id="lym-text"></div>
+    <div class="stack">
+      <div class="chips" id="duct-tg" aria-label="Duct"></div>
+      <svg class="fig sch small" id="duct-svg" viewBox="0 0 330 430" role="img" aria-label="Body from the front: the territory drained by the chosen duct, the duct and the vein junction where it ends"></svg>
+      <div class="key" id="duct-key"></div>
+      <p class="muted">Schematic: the territories are the textbook approximation; the duct paths are drawn simply (the thoracic duct's course: <a href="../thorax/nerves-vessels.html">Thorax nerves and vessels</a>).</p>
+    </div>
+  </div>
+  <div class="prose find" id="duct-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cap">
+  <h2 id="h-cap">Lymph capillaries and how lymph moves</h2>
+  <div class="step" id="cap-step"></div>
+  <div class="two">
+    <svg class="fig sch" id="cap-svg" viewBox="0 0 440 300" role="img" aria-label="Tissue with a blood capillary and a blind-ended lymph capillary whose endothelial cells overlap and are tied to collagen fibres by anchoring filaments; the chosen step is shown"></svg>
+    <div class="prose find" id="cap-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="cap-key"></div>
+  <p class="muted">Schematic, not to scale. Lymph node structure: <a href="../histology/lymphoid-bone-skin.html#h-lym">Lymphoid Organs, Bone and Skin</a>.</p>
+  <div class="scroll"><table id="cap-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-oed">
+  <h2 id="h-oed">Lymphoedema and the spread of tumours</h2>
+  <div class="prose" id="oed-text"></div>
+  <div class="scroll"><table id="spread-table"></table></div>
+  <div class="prose" id="spread-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script>
+"use strict";
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-general2.md, Part B; anatomy/DATA-SOURCES.md).
+   Single-source details are attributed in the text. ===================== */
+const LEDE = 'Skin: its layers in brief, thick and thin skin, nails and the other appendages; dermatomes and their landmarks; Langer\'s lines and where to cut; the lymphatic system — its parts and jobs, the territories of the two ducts, how lymph capillaries take up fluid and how lymph moves; lymphoedema and how tumours spread by lymph and veins. Before: <a href="terminology-bone.html">terms and bone</a>. Microscopic structure of skin and lymphoid organs: <a href="../histology/lymphoid-bone-skin.html">Lymphoid Organs, Bone and Skin</a>.';
+
+const SKIN_TEXT = `<p>The skin is an outer <b>epidermis</b> — stratified epithelium with <b>no blood vessels</b> — on the <b>dermis</b> (corium), vascular connective tissue; the <b>hypodermis</b> (subcutaneous tissue) lies beneath (Gray; StatPearls). It protects against injury, drying, ultraviolet light and microbes, helps control temperature and water loss, and carries sensory endings (Gray; StatPearls). The epidermal layers and cells under the microscope: <a href="../histology/lymphoid-bone-skin.html#h-skin">histology page</a>; superficial fascia: <a href="connective-tissue.html#h-fascia">Connective Tissue</a>.</p>
+<p><b>Two types of skin</b>: <b>thick (hairless) skin</b> on the palms and soles, with an extra layer, the stratum lucidum; <b>thin skin</b> everywhere else (StatPearls; Gray). Thickness varies: very thin in the eyelids (Gray); among thin-skin regions the back is thickest (StatPearls; Gray: thicker behind than in front). Gray: the ridges of the palms and soles (fingerprints) increase grip; large furrows opposite joints follow the folds made by movement.</p>
+<p><b>Appendages</b>: nails, hairs, sweat glands and sebaceous glands — all from ectoderm, while the dermis is mesodermal (Gray; StatPearls for nails). <b>Nails</b> are plates of keratinized cells that protect the backs of the fingertips and help grip and fine movements (StatPearls). Gray names the parts: the <b>root</b> in a groove of skin, the exposed <b>body</b> and the <b>free edge</b>; the nail grows in length from the root and in thickness from the part under the <b>lunula</b> (Gray 1918, one source for the parts and growth). <b>Sebaceous glands</b> are holocrine; sebum lubricates and protects the skin (StatPearls; histology page).</p>`;
+const SKIN_HEAD = ['', 'Thick skin', 'Thin skin'];
+const SKIN_ROWS = [
+  ['Where', 'Palms and soles (hairless)', 'Everywhere else'],
+  ['Stratum lucidum', 'Present', 'Absent'],
+  ['Hairs, sebaceous glands', 'None (histology page)', 'Present (histology page)'],
+  ['Surface', 'Ridges in curves (fingerprints) that increase grip (Gray)', 'Gray (of the skin surface generally): a network of fine linear furrows dividing it into small polygonal areas'],
+];
+const SKIN_CLIN = `<h3>Clinical points</h3><ul>
+<li><span class="clin">Shingles</span> (herpes zoster) gives pain and rash in the band of one <b>dermatome</b>; Head mapped dermatomes from it in 1893 (Wikipedia; review PMC12097171 for Head). See below.</li>
+<li><span class="clin">Nail changes</span> can come from disease of the nail itself or show a systemic disease (StatPearls).</li>
+<li><span class="clin">Acne</span>: the sebaceous gland is central to acne vulgaris (StatPearls, one source).</li>
+<li><span class="clin">Scars</span>: tension on a wound drives hypertrophic scars and keloids; where an incision is placed matters (see Langer's lines below).</li></ul>`;
+
+/* dermatomes: key sensory points (Wikipedia "Dermatome"; review PMC12097171 — both reproduce the international standard key points) */
+const DERM = {
+  C5: ['C5', 'Lateral side of the antecubital fossa, just above the elbow crease.'],
+  C6: ['C6', '<b>Thumb</b>: the back of the proximal phalanx of the thumb; the band runs down the radial (lateral) side of the forearm and hand (review).'],
+  T4: ['T4', '<b>Nipple</b> level: the fourth intercostal space in the midclavicular line, at the level of the nipples.'],
+  T10: ['T10', '<b>Umbilicus</b>: the midclavicular line at the level of the umbilicus.'],
+  T12: ['T12', 'The midpoint of the inguinal ligament, in the midclavicular line.'],
+  L1: ['L1', '<b>Inguinal region</b> (groin): the key point lies midway between those of T12 (midpoint of the inguinal ligament) and L2 (front of the thigh); the review: L1 wraps forward to the groin over the inguinal canal.'],
+  S1: ['S1', '<b>Lateral heel</b>: the key point is on the lateral side of the calcaneus; the band covers the sole and spreads up the back of the leg (review) — the "lateral foot". From the front only the lateral border of the foot and heel is visible; the sole and the back of the leg are not. The front of the lateral leg is <b>L5</b>, not S1 (review).'],
+};
+const DERM_TEXT = `<p>A <b>dermatome</b> is the area of skin supplied by the sensory fibres of a <b>single spinal nerve</b> (its dorsal root) (Wikipedia; review PMC12097171; StatPearls). <b>Adjacent dermatomes overlap</b> (review, after Foerster and Keegan and Garrett). Maps differ between authors: an evidence-based map (2008) contested some classic ones (StatPearls; review). An area supplied by a single <i>peripheral nerve</i> is a peripheral nerve field, not a dermatome (Wikipedia).</p>
+<p>The landmarks to know: <b>C6</b> thumb, <b>T4</b> nipple, <b>T10</b> umbilicus, <b>L1</b> inguinal region, <b>S1</b> lateral heel and sole. Herpes zoster follows a dermatome (Wikipedia; review).</p>`;
+
+/* Langer's lines */
+const LG = {
+  holes: ['Langer\'s method', '<h3>Round holes become ovals</h3><p>Karl Langer (1861) punched many round holes in the skin of cadavers; each hole stretched into an <b>oval</b>, and the long axes, joined up, gave his "cleavage lines" (Wikipedia; review PMC12714326, 2025). They follow the main direction of the <b>collagen fibres of the dermis</b> (Wikipedia); the review adds that they also reflect muscle stiffening in rigor mortis.</p>'],
+  along: ['Incision along', '<h3>An incision along the lines</h3><p>The cut runs <b>parallel</b> to the lines. Wikipedia: incisions parallel to Langer\'s lines may heal better and produce less scarring. The drawing shows the edges lying together (schematic).</p>'],
+  across: ['Incision across', '<h3>An incision across the lines</h3><p>The cut runs <b>across</b> the lines. Wikipedia: such incisions tend to pucker and remain obvious, and keloids are more common. The review: tension on a wound drives hypertrophic scars and keloids. The drawing shows the edges pulled apart (schematic).</p>'],
+};
+const LG_TEXT = `<h3>Principles of skin incisions</h3><ul>
+<li><b>Place the incision where skin tension across it is least</b> — classically <b>along Langer's lines</b> (Wikipedia), in practice along <b>natural creases, folds and wrinkles</b> and the <b>relaxed skin tension lines</b> (Borges, 1984: visible when the skin is relaxed and found by pinching) (review PMC12714326; Wikipedia).</li>
+<li><b>Sources disagree on Langer's lines as a guide.</b> Wikipedia and many textbooks advise cutting along them. The 2025 review calls them cadaver artefacts that are "not suitable guides for surgical incisions": on the scalp and forehead they run at right angles to the relaxed skin tension lines, and crow's-feet wrinkles cross them. Both agree that a low-tension line gives the better scar. For the exam: incisions along Langer's lines (or skin creases) heal better with less scarring (Wikipedia).</li>
+<li><b>Close without tension</b>: deep (absorbable) sutures take the tension off the skin edges; pulling skin sutures tight to close a gap leads to breakdown (StatPearls; review: suture so that tension falls on the subcutaneous tissue and fascia). Where a good line cannot be used, Z-incisions and Z-plasties reduce tension (review).</li>
+<li>Line up the skin edges precisely to keep the scar small (StatPearls, one source).</li></ul>`;
+
+/* lymphatic system */
+const LYM_TEXT = `<p><b>Parts</b> (Gray; StatPearls): <b>lymph</b>; networks of blind-ended <b>lymph capillaries</b> in the tissues; <b>collecting vessels</b> that carry lymph to the great veins at the root of the neck; <b>lymph nodes</b> on the way, which filter the lymph and add lymphocytes to it; two terminal channels, the <b>thoracic duct</b> and the <b>right lymphatic duct</b>; and the lymphoid organs — primary: bone marrow, thymus; secondary: spleen, tonsils, nodes, mucosal lymphoid tissue (StatPearls).</p>
+<p><b>Jobs</b> (StatPearls; Gray): (1) <b>fluid balance</b> — return of tissue fluid and leaked plasma proteins to the blood; (2) <b>absorption of fat</b> — the lacteals of the small intestine carry milky <b>chyle</b>; (3) <b>immunity</b> — antigens and immune cells are carried to the nodes, which filter the lymph.</p>
+<p><b>Lymph</b> is a clear, watery, colourless to yellowish fluid of about the composition of plasma, with lymphocytes (Gray; StatPearls). Wikipedia's figures: of about 20 litres filtered from the blood capillaries a day, about 17 are reabsorbed and about 3 return as lymph (one source).</p>
+<p><b>No lymph capillaries</b> in the epidermis, cartilage, nails and hair and other tissues without blood vessels (Gray; StatPearls), nor in bone marrow (StatPearls). The <b>central nervous system</b>: Gray (1918) thought lymphatics "probably absent" there and in the meninges; StatPearls notes they have since been found in the cranial meninges.</p>`;
+const DUCT = {
+  right: ['Right lymphatic duct', '<h3>Right lymphatic duct</h3><p>Drains the <b>right upper quarter</b>: the right side of the head and neck, the <b>right upper limb</b> and the right side of the thorax (Gray; StatPearls; review). It is short — 1–2 cm (StatPearls; Gray about 1.25 cm) — and usually opens at or near the junction of the <b>right internal jugular and subclavian veins</b> (StatPearls; review), but its <b>ending is variable</b>: Wikipedia says it forms various combinations with these veins and direct entry at the junction is uncommon (see <a href="../thorax/nerves-vessels.html#h-lym">Thorax nerves and vessels</a>). Gray and the review also give it the right lung (the review: most lymph from both lungs) — sources differ for the lungs.</p>'],
+  thor: ['Thoracic duct', '<h3>Thoracic duct</h3><p>The larger duct: it drains <b>all the rest</b> — both lower limbs, the abdomen and pelvis, the left side of the thorax, the <b>left upper limb</b> and the left side of the head and neck (Gray; StatPearls). It begins at the <b>cisterna chyli</b> (Gray: on the second lumbar vertebra; StatPearls chapters differ — L2 in one, L1–L2 in another, which says it is present in 40–60%), is <b>38–45 cm</b> long (Gray; StatPearls), and ends at the junction of the <b>left subclavian and left internal jugular veins</b> (Gray; StatPearls; review), where a pair of valves stops blood entering it (Gray; StatPearls).</p>'],
+};
+
+/* lymph capillary stepper */
+const CAP = {s: 0};
+const CAP_STEPS = [
+  ['Fluid leaves the blood', '<h3>1. Fluid filters into the tissues</h3><p>Fluid leaks out of the <b>blood capillaries</b> into the tissue spaces (interstitial fluid), carrying some plasma protein (StatPearls). Most returns to the blood; the rest must be removed by lymphatics (StatPearls; Wikipedia).</p>'],
+  ['Tissue pressure rises', '<h3>2. The flaps open</h3><p>A <b>lymph capillary</b> is a <b>blind-ended</b> tube of one layer of thin endothelium (Gray; StatPearls) with <b>no continuous basement membrane</b> (StatPearls; Leak and Burke 1968, by electron microscopy). Neighbouring endothelial cells <b>overlap</b>; when the pressure of the tissue fluid exceeds that inside, the overlapping edges swing open like one-way doors (StatPearls; Wikipedia).</p>'],
+  ['Anchoring filaments', '<h3>3. Anchoring filaments hold it open</h3><p>Fine <b>anchoring filaments</b> tie the outer surface of the endothelium to the surrounding <b>collagen fibres</b> (Leak and Burke 1968; Wikipedia). When the tissue swells, they are pulled, separating the endothelial cells and opening the junctions wider (Wikipedia). Fluid, <b>proteins</b>, cells, bacteria and debris enter (StatPearls).</p>'],
+  ['Flaps close', '<h3>4. Lymph cannot get out again</h3><p>When the pressure inside the capillary is higher, the overlapping edges press together, so lymph cannot leak back (StatPearls; Wikipedia). Lymph capillaries have <b>no valves</b> of their own (Gray; StatPearls); the overlapping cells act as the valve.</p>'],
+  ['Collecting vessel', '<h3>5. Collecting vessels and valves move it on</h3><p>Capillaries join <b>collecting vessels</b> with a thin coat of <b>smooth muscle</b> and many paired <b>semilunar valves</b> (Gray; Wikipedia; StatPearls) — much closer together than in veins, which gives full vessels a beaded look (Gray 1918, one source). There is <b>no central pump</b> (Wikipedia): lymph is moved by <b>contraction of the vessel wall</b>, <b>squeezing by skeletal muscles</b> and <b>breathing</b> (StatPearls; Wikipedia), and the pulsation of nearby arteries (Wikipedia). The valves keep the flow one way, through the nodes, to the veins of the neck.</p>'],
+];
+const CAP_HEAD = ['', 'Blood capillary', 'Lymph capillary'];
+const CAP_ROWS = [
+  ['Shape', 'Part of a network between arterioles and venules (Gray)', 'Begins blindly in the tissues (Gray; StatPearls)'],
+  ['Wall', 'Endothelium on a basement membrane (Blood Vessels page)', 'Thin endothelium, overlapping cells, no continuous basement membrane; anchoring filaments (StatPearls; Leak and Burke; Wikipedia)'],
+  ['Size', '5–10 µm (Blood Vessels page)', 'Larger than blood capillaries (StatPearls, one source)'],
+  ['Carries', 'Blood', 'Tissue fluid with protein, cells and particles (StatPearls)'],
+];
+
+/* lymphoedema and spread */
+const OED_TEXT = `<h3>Lymphoedema</h3><p>Swelling from <b>protein-rich fluid</b> that builds up in the tissues when lymph drainage fails (StatPearls; review PMC12631335). Patients have swelling, heaviness, skin thickening and recurrent infections (StatPearls).</p><ul>
+<li><b>Primary</b>: a developmental or genetic fault of the lymphatics, e.g. <b>Milroy disease</b> (StatPearls; review; Wikipedia); Wikipedia also lists Turner syndrome.</li>
+<li><b>Secondary</b> (acquired): after <b>surgery</b> or <b>radiotherapy</b> for cancer — the commonest cause in Western countries, most notably after node dissection or radiotherapy for breast cancer (Wikipedia) — and after infection, trauma or tumour (StatPearls; Wikipedia; review).</li>
+<li><b>Lymphatic filariasis</b> (<i>Wuchereria bancrofti</i>, <i>Brugia</i>) remains a leading cause worldwide and a common cause in the tropics; repeated inflammation leads to chronic lymphoedema and <b>elephantiasis</b> of the limbs, breasts, vulva and scrotum (StatPearls, one source for elephantiasis and its sites); filariasis as a cause: StatPearls; review; Wikipedia.</li></ul>`;
+const SPREAD_HEAD = ['Route', 'How', 'Examples'];
+const SPREAD_ROWS = [
+  ['Lymphatic', 'Tumour cells enter lymph vessels and reach the regional nodes first (Wikipedia; StatPearls: a major route of metastasis)', 'Breast cancer staged by the <b>sentinel node</b>, the first node(s) a tumour drains to, which is involved before the rest of the basin (StatPearls; Wikipedia)'],
+  ['Thoracic duct', 'Abdominal tumours can spread up the thoracic duct to the left supraclavicular nodes (review PMC11763355; Wikipedia)', '<b>Virchow\'s node</b>: an enlarged, hard left supraclavicular node (Troisier\'s sign), classically from gastric cancer (StatPearls; Wikipedia)'],
+  ['Blood', 'Tumour cells enter blood vessels (Wikipedia: blood, lymph or both)', '<b>Sarcomas</b> spread mainly through the blood to the <b>lungs</b>; their node metastases are uncommon (two cohort studies, bone and soft-tissue sarcoma)'],
+  ['Vertebral venous plexus', 'A network of <b>valveless</b> veins round the vertebral column joining pelvic and trunk veins to those of the spine and skull (Wikipedia; two reviews)', 'Cancer of the prostate (and rectum) reaching the vertebrae or brain (Wikipedia, one source for the organs)'],
+];
+
+const BASED = 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918): the skin, the lymphatic system, the thoracic duct; StatPearls (NCBI Bookshelf); open-access papers (dermatome key points, Malays J Med Sci 2025; incision lines, Plast Reconstr Surg Glob Open 2025; lymphatic anchoring filaments, J Cell Biol 1968; lymphatic anatomy, lymphoedema, Virchow\'s node, sarcoma spread and the vertebral venous plexus reviews); Wikipedia (not the OpenStax-derived "Lymph capillary"). Single-source details are named in the text.';
+const MODELS = 'Models used: all drawings are schematic, not to scale; dermatome bands and drainage territories are approximate.';
+
+/* ===================== PAGE ===================== */
+const $ = id => document.getElementById(id);
+const T = (x, y, s, cls = '', a = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${a}">${s}</text>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink)"/></marker>'
+  + '<marker id="arl" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--lymph)"/></marker>'
+  + '<pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" style="fill:var(--surface)"/><line x1="0" y1="0" x2="0" y2="7" style="stroke:var(--lymph);stroke-width:3"/></pattern>'
+  + '<linearGradient id="g-cap" x1="0" x2="1"><stop offset="0" style="stop-color:var(--artery)"/><stop offset="1" style="stop-color:var(--vein)"/></linearGradient></defs>';
+function toggles(id, items, onSel, start) {
+  const box = $(id); box.innerHTML = '';
+  for (const [k, label] of items) {
+    const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = label; b.dataset.k = k; b.setAttribute('aria-pressed', String(k === start));
+    b.onclick = () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); onSel(k); };
+    box.append(b);
+  }
+  onSel(start);
+}
+function stepper(id, labels, onStep, state) {
+  const box = $(id); box.innerHTML = '';
+  const prev = document.createElement('button'); prev.className = 'btn'; prev.type = 'button'; prev.textContent = '◀ Back'; prev.setAttribute('aria-label', 'Previous step');
+  const next = document.createElement('button'); next.className = 'btn'; next.type = 'button'; next.textContent = 'Next ▶'; next.setAttribute('aria-label', 'Next step');
+  const row = document.createElement('div'); row.className = 'chips'; row.setAttribute('aria-label', 'Steps');
+  const go = i => { state.s = Math.max(0, Math.min(labels.length - 1, i)); row.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', String(j === state.s))); prev.disabled = state.s === 0; next.disabled = state.s === labels.length - 1; onStep(); };
+  labels.forEach((l, i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.onclick = () => go(i); row.append(b); });
+  prev.onclick = () => go(state.s - 1); next.onclick = () => go(state.s + 1);
+  box.append(prev, row, next); go(state.s);
+}
+function table(id, head, rows) {
+  const t = $(id); t.classList.add('t', 'stack');
+  t.innerHTML = '<tr>' + head.map(x => `<th>${x}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + r.map((c, i) => `<td data-h="${head[i]}">${c}</td>`).join('') + '</tr>').join('');
+}
+const key = (id, items) => { $(id).innerHTML = items.map(([c, l]) => `<span><i style="background:${c.startsWith('--') || c.startsWith('url') ? (c.startsWith('url') ? 'repeating-linear-gradient(45deg,var(--lymph) 0 3px,var(--surface) 3px 6px)' : 'var(' + c + ')') : c}"></i>${l}</span>`).join(''); };
+
+/* front view of the body (anatomical position); cx = midline. The subject's right side is on the viewer's left. */
+function frontPaths(cx) {
+  return [`M${cx} 20 a22 22 0 1 0 0.01 0 z`, `M${cx - 9} 63 h18 v10 h-18 z`,
+    `M${cx - 42} 78 Q${cx} 70 ${cx + 42} 78 L${cx + 36} 150 L${cx + 34} 212 L${cx - 34} 212 L${cx - 36} 150 Z`,
+    `M${cx - 44} 80 L${cx - 58} 150 L${cx - 62} 205 L${cx - 52} 207 L${cx - 46} 152 L${cx - 36} 100 Z`,
+    `M${cx + 44} 80 L${cx + 58} 150 L${cx + 62} 205 L${cx + 52} 207 L${cx + 46} 152 L${cx + 36} 100 Z`,
+    `M${cx - 63} 205 q-2 22 6 30 q8 2 10 -6 l-1 -24 z`, `M${cx - 63} 212 q-9 4 -9 14 q3 2 6 -3 z`,
+    `M${cx + 63} 205 q2 22 -6 30 q-8 2 -10 -6 l1 -24 z`, `M${cx + 63} 212 q9 4 9 14 q-3 2 -6 -3 z`,
+    `M${cx - 34} 212 L${cx - 30} 300 L${cx - 26} 395 L${cx - 8} 395 L${cx - 4} 300 L${cx - 2} 222 Z`,
+    `M${cx + 34} 212 L${cx + 30} 300 L${cx + 26} 395 L${cx + 8} 395 L${cx + 4} 300 L${cx + 2} 222 Z`,
+    `M${cx - 28} 395 q-6 12 2 16 h18 q4 -6 -2 -16 z`, `M${cx + 28} 395 q6 12 -2 16 h-18 q-4 -6 2 -16 z`];
+}
+const BX = 130;
+const bodyFill = (fill) => frontPaths(BX).map(d => `<path d="${d}" style="fill:${fill}"/>`).join('');
+const bodyLines = () => frontPaths(BX).map(d => `<path d="${d}" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>`).join('');
+const clip = id => `<clipPath id="${id}">${frontPaths(BX).map(d => `<path d="${d}"/>`).join('')}</clipPath>`;
+
+/* ---------- nail ---------- */
+function drawNail() {
+  let h = DEFS;
+  h += `<path d="M20 150 L300 150 Q360 150 360 110 Q356 76 300 70 L20 70 Z" style="fill:var(--collagen);opacity:.5;stroke:var(--ink);stroke-width:1.2"/>`;   /* finger tip, dermis */
+  h += `<path d="M20 70 L150 70 Q170 70 178 62" style="fill:none;stroke:var(--cyto);stroke-width:8"/>`;   /* skin fold epidermis */
+  h += `<path d="M120 78 L300 66 Q336 64 352 72" style="fill:none;stroke:var(--ink);stroke-width:7;stroke-linecap:round;opacity:.75"/>`;   /* nail */
+  h += `<path d="M178 74 Q195 68 214 72" style="fill:none;stroke:var(--surface);stroke-width:4;opacity:.9"/>`;
+  h += T(120, 44, 'root (under the fold)', 'l', 'middle') + `<path class="lead" d="M130 48 L132 74"/>`;
+  h += T(196, 112, 'lunula', 'l', 'middle') + `<path class="lead" d="M196 100 L196 74"/>`;
+  h += T(262, 44, 'body', 'l', 'middle') + `<path class="lead" d="M262 48 L262 66"/>`;
+  h += T(346, 44, 'free edge', 'l', 'end') + `<path class="lead" d="M340 48 L350 68"/>`;
+  h += T(24, 62, 'nail fold (skin)', 's l') + T(292, 142, 'nail bed and dermis', 's l', 'middle');
+  h += T(20, 190, 'Parts: Gray 1918. Proximal ←  → fingertip', 's');
+  $('nail-svg').innerHTML = h;
+}
+
+/* ---------- dermatomes ---------- */
+const DP = {   /* key point, label position, band path (right side of the body = viewer's left) */
+  C5: [[BX - 54, 146], [BX - 120, 140], `M${BX - 44} 82 L${BX - 58} 150 L${BX - 50} 152 L${BX - 40} 100 Z`],
+  C6: [[BX - 70, 222], [BX - 122, 250], `M${BX - 58} 150 L${BX - 63} 205 L${BX - 72} 226 L${BX - 64} 230 L${BX - 56} 206 L${BX - 52} 152 Z`],
+  T4: [[BX - 20, 106], [BX + 60, 100], `M${BX - 39} 100 L${BX + 39} 100 L${BX + 38} 114 L${BX - 38} 114 Z`],
+  T10: [[BX - 20, 172], [BX + 60, 176], `M${BX - 36} 165 L${BX + 36} 165 L${BX + 35} 180 L${BX - 35} 180 Z`],
+  T12: [[BX - 19, 207], [BX + 60, 204], `M${BX - 35} 196 L${BX + 35} 196 L${BX + 34} 210 L${BX - 34} 210 Z`],
+  L1: [[BX - 20, 224], [BX + 60, 232], `M${BX - 34} 206 L${BX - 4} 222 L${BX - 6} 236 L${BX - 33} 224 Z M${BX + 34} 206 L${BX + 4} 222 L${BX + 6} 236 L${BX + 33} 224 Z`],
+  S1: [[BX - 31, 404], [BX - 120, 380], `M${BX - 36} 396 L${BX - 25} 396 L${BX - 23} 412 L${BX - 36} 412 Z`],
+};
+function drawDerm(k) {
+  const [[px, py], [lx, ly], band] = DP[k];
+  let h = DEFS + clip('cl-d') + `<g clip-path="url(#cl-d)"><path d="${band}" style="fill:var(--accent);fill-opacity:.35"/></g>` + bodyLines();
+  h += `<circle cx="${px}" cy="${py}" r="5" style="fill:var(--accent);stroke:var(--surface);stroke-width:1.5"/>`;
+  h += `<path class="lead" d="M${px} ${py} L${lx + (lx < px ? 30 : -4)} ${ly - 4}"/>` + T(lx, ly, k, 'l', lx < px ? 'start' : 'start');
+  h += T(BX - 64, 424, 'RIGHT', 'h', 'middle') + T(BX + 64, 424, 'LEFT', 'h', 'middle');
+  $('derm-svg').innerHTML = h; $('derm-find').innerHTML = `<h3>${k}</h3><p>${DERM[k][1]}</p><p class="muted">Key points: Wikipedia and review PMC12097171 (both follow the international standard for neurological examination).</p>`;
+}
+
+/* ---------- Langer's lines ---------- */
+function drawLg(k) {
+  let h = DEFS + `<rect x="10" y="10" width="400" height="230" rx="10" style="fill:var(--cyto);opacity:.35;stroke:var(--line)"/>`;
+  for (let y = 26; y < 236; y += 16) h += `<path d="M14 ${y} Q110 ${y - 5} 210 ${y} T406 ${y}" style="fill:none;stroke:var(--collagen);stroke-width:1.6"/>`;
+  if (k === 'holes') for (const [x, y] of [[80, 70], [180, 120], [300, 80], [110, 180], [250, 190], [350, 160]]) {
+    h += `<circle cx="${x}" cy="${y}" r="9" style="fill:none;stroke:var(--muted);stroke-dasharray:2 2"/><ellipse cx="${x}" cy="${y}" rx="16" ry="5" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.2"/>`;
+  }
+  if (k === 'holes') h += T(210, 252, 'dashed: the round punch; solid: the oval hole', 's', 'middle');
+  if (k === 'along') h += `<path d="M110 125 Q210 118 310 125 Q210 130 110 125 Z" style="fill:var(--collagen);stroke:var(--ink);stroke-width:1.4"/>` + T(210, 106, 'along the lines', 'l', 'middle');
+  if (k === 'across') h += `<path d="M210 40 Q250 125 210 210 Q170 125 210 40 Z" style="fill:var(--collagen);stroke:var(--ink);stroke-width:1.4"/>` + `<path class="flow" d="M236 125 L276 125"/><path class="flow" d="M184 125 L144 125"/>` + T(300, 60, 'across the lines', 'l', 'middle');
+  $('lg-svg').innerHTML = h; $('lg-find').innerHTML = LG[k][1];
+}
+
+/* ---------- ducts ---------- */
+function drawDuct(k) {
+  let h = DEFS + clip('cl-l');
+  /* right upper quarter: right side of head and neck, right upper limb, right side of the thorax (above about the diaphragm) */
+  const ruq = `M${BX} 0 L${BX} 140 L${BX - 36} 140 L${BX - 46} 152 L${BX - 64} 260 L${BX - 90} 260 L${BX - 90} 0 Z`;
+  h += `<g clip-path="url(#cl-l)">${bodyFill('var(--surface)')}<path d="${ruq}" style="fill:var(--lymph);fill-opacity:.75"/></g>` + bodyLines();
+  h += `<path d="M${BX} 140 L${BX - 36} 140" style="stroke:var(--muted);stroke-dasharray:3 3"/>`;
+  /* veins at the root of the neck (schematic): subclavian (horizontal) and internal jugular (vertical) on each side */
+  h += `<path d="M${BX - 40} 82 L${BX - 8} 82 M${BX + 8} 82 L${BX + 40} 82 M${BX - 12} 52 L${BX - 10} 84 M${BX + 12} 52 L${BX + 10} 84" style="stroke:var(--vein);stroke-width:4;fill:none"/>`;
+  const duct = (d, on) => `<path d="${d}" style="fill:none;stroke:var(--ink);stroke-width:${on ? 7 : 3};opacity:${on ? 1 : .4}"/><path d="${d}" style="fill:none;stroke:var(--surface);stroke-width:${on ? 3.5 : 1.2};opacity:${on ? 1 : .4}"/>`;
+  h += duct(`M${BX - 24} 102 Q${BX - 18} 92 ${BX - 11} 85`, k === 'right');
+  h += `<ellipse cx="${BX + 2}" cy="196" rx="6" ry="10" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.2"/>`;
+  h += duct(`M${BX + 2} 186 L${BX + 2} 130 Q${BX + 2} 110 ${BX + 14} 100 Q${BX + 22} 76 ${BX + 11} 85`, k === 'thor');
+  h += `<path class="lead" d="M${BX + 8} 198 L${BX + 70} 236"/>` + T(BX + 72, 240, 'cisterna chyli', 's l');
+  h += `<path class="lead" d="M${BX + 12} 80 L${BX + 64} 46"/>` + T(BX + 66, 44, 'left venous angle', 's l');
+  h += `<path class="lead" d="M${BX - 12} 80 L${BX - 60} 64"/>` + T(4, 60, 'right venous angle', 's l');
+  h += T(BX - 64, 424, 'RIGHT', 'h', 'middle') + T(BX + 64, 424, 'LEFT', 'h', 'middle');
+  $('duct-svg').innerHTML = h; $('duct-find').innerHTML = DUCT[k][1];
+}
+
+/* ---------- lymph capillary ---------- */
+function drawCap() {
+  const s = CAP.s; let h = DEFS;
+  h += `<rect x="0" y="0" width="440" height="300" style="fill:var(--fluid);opacity:${s >= 1 ? .9 : .5}"/>`;
+  /* collagen fibres */
+  for (const [x1, y1, x2, y2] of [[0, 40, 440, 30], [0, 270, 440, 282], [60, 0, 90, 300]]) h += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke:var(--collagen);stroke-width:5;opacity:.85"/>`;
+  /* blood capillary (left, vertical) */
+  h += `<rect x="20" y="60" width="26" height="200" rx="13" style="fill:url(#g-cap);opacity:.85"/><rect x="20" y="60" width="26" height="200" rx="13" style="fill:none;stroke:var(--t-endo);stroke-width:3"/>`;
+  if (s === 0) for (const y of [100, 150, 200]) h += `<path class="flow" d="M50 ${y} L96 ${y}"/>`;
+  /* lymph capillary: blind end at left (x=150), runs right; walls of overlapping cells */
+  const open = s === 1 || s === 2, top = 110, bot = 190, x0 = 150, x1 = s === 4 ? 300 : 430;
+  h += `<path d="M${x1} ${top} L${x0 + 30} ${top} Q${x0} ${top} ${x0} ${(top + bot) / 2} Q${x0} ${bot} ${x0 + 30} ${bot} L${x1} ${bot}" style="fill:var(--lymph);fill-opacity:.25;stroke:none"/>`;
+  for (const [y, sgn] of [[top, -1], [bot, 1]]) for (let x = x0 + 30; x < x1 - 20; x += 60) {
+    const lift = open ? -12 * sgn : 0;   /* the overlapping edge swings into the lumen */
+    h += `<path d="M${x} ${y} L${x + 52} ${y}" style="stroke:var(--t-endo);stroke-width:6"/>`;
+    h += `<path d="M${x + 44} ${y + 4 * sgn * -1} L${x + 70} ${y + lift}" style="stroke:var(--t-endo);stroke-width:6;stroke-linecap:round"/>`;
+    if (s === 2) h += `<line x1="${x + 24}" y1="${y}" x2="${x + 80}" y2="${sgn < 0 ? 38 : 272}" style="stroke:var(--ink);stroke-width:1.2"/>`;
+    if (open) h += `<path class="flow" d="M${x + 76} ${y + (sgn < 0 ? -30 : 30)} L${x + 62} ${y + sgn * 2}"/>`;
+  }
+  h += `<path d="M${x0 + 30} ${top} Q${x0} ${top} ${x0} ${(top + bot) / 2} Q${x0} ${bot} ${x0 + 30} ${bot}" style="fill:none;stroke:var(--t-endo);stroke-width:6"/>`;
+  if (s === 3) for (const x of [220, 330]) h += `<path class="flow" d="M${x} 150 L${x + 60} 150"/>`;
+  if (s === 4) {   /* collecting vessel with valves and smooth muscle */
+    h += `<path d="M300 100 L430 96 M300 200 L430 204" style="stroke:var(--t-endo);stroke-width:6"/><path d="M300 100 L430 96 M300 200 L430 204" style="stroke:var(--ink);stroke-width:1;stroke-dasharray:2 3;transform:translate(0,-6px)"/>`;
+    h += `<path d="M300 106 L300 194" style="stroke:var(--t-endo);stroke-width:0"/><rect x="300" y="106" width="130" height="88" style="fill:var(--lymph);fill-opacity:.25"/>`;
+    for (const x of [340, 400]) h += `<path d="M${x} 104 Q${x + 22} 132 ${x + 26} 146 M${x} 196 Q${x + 22} 168 ${x + 26} 154" style="fill:none;stroke:var(--t-endo);stroke-width:4"/>`;
+    h += `<path class="flow" d="M320 150 L420 150"/>` + T(370, 88, 'valves', 'l', 'middle') + T(370, 222, 'collecting vessel', 'l', 'middle');
+  }
+  h += T(6, 50, 'blood capillary', 's l') + T(x0 + 4, 92, 'blind end', 's l', 'middle') + T(250, 180, s === 4 ? 'lymph capillary' : 'lymph', 'l', 'middle');
+  if (s === 2) h += T(250, 22, 'anchoring filaments to collagen', 's l', 'middle');
+  if (s === 1 || s === 2) h += T(380, 70, 'fluid in', 's l', 'middle');
+  $('cap-svg').innerHTML = h; $('cap-find').innerHTML = CAP_STEPS[s][1];
+}
+
+/* ---------- init ---------- */
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').textContent = MODELS;
+$('skin-text').innerHTML = SKIN_TEXT; drawNail(); table('skin-table', SKIN_HEAD, SKIN_ROWS); $('skin-clin').innerHTML = SKIN_CLIN;
+toggles('derm-tg', Object.entries(DERM).map(([k, v]) => [k, v[0]]), drawDerm, 'C6'); $('derm-text').innerHTML = DERM_TEXT;
+toggles('lg-tg', Object.entries(LG).map(([k, v]) => [k, v[0]]), drawLg, 'holes'); $('lg-text').innerHTML = LG_TEXT;
+$('lym-text').innerHTML = LYM_TEXT;
+toggles('duct-tg', Object.entries(DUCT).map(([k, v]) => [k, v[0]]), drawDuct, 'right');
+key('duct-key', [['--lymph', 'right lymphatic duct territory (filled, as on the thorax page)'], ['--surface', 'thoracic duct territory (unfilled)'], ['--vein', 'veins at the root of the neck'], ['--ink', 'the chosen duct (bold outline)']]);
+stepper('cap-step', CAP_STEPS.map(s => s[0]), drawCap, CAP);
+key('cap-key', [['--fluid', 'tissue (interstitial) fluid'], ['--t-endo', 'endothelium'], ['--lymph', 'lymph'], ['--collagen', 'collagen fibres'], ['--ink', 'anchoring filaments (thin lines)']]);
+table('cap-table', CAP_HEAD, CAP_ROWS);
+$('oed-text').innerHTML = OED_TEXT; table('spread-table', SPREAD_HEAD, SPREAD_ROWS);
+window.ready = true;
+</script>
+</body>
+</html>

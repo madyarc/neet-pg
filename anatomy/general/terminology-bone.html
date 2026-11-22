@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<script>window.addEventListener("error",e=>{window.loadError=window.loadError||String(e.message)})</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Anatomical Terms and Bone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours, one meaning each. atlas.css: --accent (UI selection: the chosen plane, term, part or step), --bone (bone), --cart
+   (cartilage), --centre (secondary ossification centre), --plate (growth plate), --artery (nutrient artery), --ink/--muted/--line.
+   Shared with other pages, same value and meaning: --fat (fat: yellow marrow; histology pages), --collagen (collagen: the organic
+   part of bone; histology pages), --tendon / --tendon-edge (tendon), --fibre (muscle fibres) (muscle.html); --fascia (atlas: membranes — here the periosteum).
+   New (checked with colcheck3.py and by hand against the atlas --n-* tokens): --redmarrow (red, blood-forming marrow; one hue in both themes). */
+:root{--fat:#f3e3a6;--collagen:#e39b9b;--tendon:#e9e1cc;--tendon-edge:#9c8f6d;--fibre:#e6a4a0;--redmarrow:#730d14}
+:root[data-theme="dark"]{--fat:#7d6f3c;--collagen:#b86a6a;--tendon:#5b5545;--tendon-edge:#c9bb93;--fibre:#a8605c;--redmarrow:#cf1723;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.prose p{margin:0 0 8px;max-width:80ch}
+.prose ul{margin:4px 0 8px;padding-left:20px}
+.prose h3{font-size:15px;margin:0 0 4px}
+.scroll{overflow-x:auto}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+.jump{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13.5px}
+svg.sch{max-width:640px;margin:0 auto}
+svg.sch.small{max-width:360px}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.l,svg.sch text.s{paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .body{fill:var(--surface);stroke:var(--ink);stroke-width:1.4}
+svg.sch .ghost{fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 3}
+svg.sch .hl{stroke:var(--accent);stroke-width:2.6;fill:none}
+svg.sch .arr{stroke:var(--accent);stroke-width:2.2;fill:none;marker-end:url(#arr)}
+svg.sch .art{stroke:var(--artery);stroke-width:3;fill:none;marker-end:url(#arra)}
+svg.sch text.dk{fill:#1a2130}
+.step{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.step .chips{flex:1;min-width:0}
+.step .btn{white-space:nowrap}
+.find{font-size:14px;min-height:5em}
+.find h3{font-size:15px;margin:0 0 4px}
+.slider{display:flex;align-items:center;gap:10px;font-size:13.5px}
+.slider input{flex:1;min-width:0}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t td:first-child{font-weight:600}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> <span class="muted" style="font-size:13px">· General: <span aria-current="page">Terms and bone</span> · <a href="skin-lymphatics.html">Skin and lymphatics</a> · <a href="joints.html">Joints</a> · <a href="muscle.html">Muscle</a> · <a href="blood-vessels.html">Blood vessels</a></span></nav>
+
+<header class="stack">
+  <h1>Anatomical Terms and Bone</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-pos">Position and planes</a> <a href="#h-terms">Terms of relation</a> <a href="#h-mov">Movements</a> <a href="#h-comp">What bone is made of</a> <a href="#h-parts">Parts, types, supply</a> <a href="#h-oss">Ossification and its laws</a> <a href="#h-epi">Types of epiphysis</a> <a href="#h-ses">Sesamoid bones</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-pos">
+  <h2 id="h-pos">The anatomical position and the planes</h2>
+  <div class="chips" id="plane-tg" aria-label="Plane"></div>
+  <div class="two">
+    <svg class="fig sch" id="plane-svg" viewBox="0 0 420 430" role="img" aria-label="A body in the anatomical position, from the front and from the side, with the chosen plane drawn on both views"></svg>
+    <div class="prose find" id="plane-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic. A plane that faces you is shaded; a plane seen edge-on is a line.</p>
+  <div class="prose" id="pos-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-terms">
+  <h2 id="h-terms">Terms of relation and comparison</h2>
+  <div class="chips" id="term-tg" aria-label="Pair of terms"></div>
+  <div class="two">
+    <svg class="fig sch" id="term-svg" viewBox="0 0 420 430" role="img" aria-label="The same two views with arrows for the chosen pair of terms"></svg>
+    <div class="prose find" id="term-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="term-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mov">
+  <h2 id="h-mov">Terms of movement</h2>
+  <div class="chips" id="mov-tg" aria-label="Movement"></div>
+  <div class="two">
+    <div class="stack">
+      <svg class="fig sch small" id="mov-svg" viewBox="0 0 300 300" role="img" aria-label="The chosen movement: the fixed part, the moving part at its two ends (dashed) and now (solid)"></svg>
+      <div class="slider"><span id="mov-l"></span><input type="range" id="mov-r" min="-100" max="100" value="0" aria-label="Movement"><span id="mov-rr"></span></div>
+    </div>
+    <div class="prose find" id="mov-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic; angles approximate. Joint types and the movements each allows, on real bones in 3D: <a href="joints.html#h-mov">Joints</a>.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-comp">
+  <h2 id="h-comp">What bone is made of; red and yellow marrow</h2>
+  <div class="chips" id="comp-tg" aria-label="Experiment"></div>
+  <div class="two">
+    <svg class="fig sch" id="comp-svg" viewBox="0 0 420 230" role="img" aria-label="A bar of bone's weight: mineral about two-thirds, organic about one-third; and what is left after acid or burning"></svg>
+    <div class="prose find" id="comp-find" aria-live="polite"></div>
+  </div>
+  <h3>Marrow: newborn and adult</h3>
+  <div class="two">
+    <svg class="fig sch" id="marrow-svg" viewBox="0 0 420 300" role="img" aria-label="Two long bones in section: a newborn's full of red marrow, an adult's with yellow marrow in the shaft and red marrow in the upper end"></svg>
+    <div class="prose" id="marrow-text"></div>
+  </div>
+  <div class="key" id="marrow-key"></div>
+  <p class="muted">Schematic, not to scale. Bone histology (osteons, cells, periosteum layers): <a href="../histology/lymphoid-bone-skin.html#h-bone">Lymphoid Organs, Bone and Skin</a>.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-parts">
+  <h2 id="h-parts">A long bone: parts, blood and nerve supply; types of bone</h2>
+  <div class="chips" id="part-tg" aria-label="Part"></div>
+  <div class="two">
+    <svg class="fig sch small" id="part-svg" viewBox="0 0 360 440" role="img" aria-label="A growing long bone in section with its parts; the chosen part is outlined"></svg>
+    <div class="prose find" id="part-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="part-key"></div>
+  <p class="muted">Schematic, not to scale: a growing bone, so the growth plates are still open.</p>
+  <h3>Types of bone by shape</h3>
+  <div class="scroll"><table id="type-table"></table></div>
+  <p class="muted" id="type-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-oss">
+  <h2 id="h-oss">Ossification of a long bone, step by step</h2>
+  <div class="step" id="oss-step"></div>
+  <div class="two">
+    <svg class="fig sch small" id="oss-svg" viewBox="0 0 360 400" role="img" aria-label="The chosen stage of endochondral ossification of a long bone"></svg>
+    <div class="prose find" id="oss-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="oss-key"></div>
+  <p class="muted">Schematic, not to scale.</p>
+  <h3>The laws of ossification and the nutrient foramen</h3>
+  <div class="chips" id="law-tg" aria-label="Limb"></div>
+  <div class="two">
+    <svg class="fig sch" id="law-svg" viewBox="0 0 420 446" role="img" aria-label="Bones of the arm and forearm, or the thigh and leg: arrows show the direction of each nutrient canal; the growing ends are marked"></svg>
+    <div class="prose find" id="law-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic. Arrows: the direction in which the nutrient canal runs through the cortex, from the surface inward.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-epi">
+  <h2 id="h-epi">Types of epiphysis</h2>
+  <div class="scroll"><table id="epi-table"></table></div>
+  <p class="muted" id="epi-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ses">
+  <h2 id="h-ses">Sesamoid bones</h2>
+  <div class="chips" id="ses-tg" aria-label="Patella"></div>
+  <div class="two">
+    <svg class="fig sch small" id="ses-svg" viewBox="0 0 360 330" role="img" aria-label="The knee from the side: the quadriceps tendon with and without the patella, and the distance from the knee to its line of pull"></svg>
+    <div class="prose find" id="ses-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, not to scale: the lines show how the patella moves the tendon's line of pull forward.</p>
+  <div class="prose" id="ses-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script>
+"use strict";
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-general2.md, Part A; anatomy/DATA-SOURCES.md).
+   Single-source details are attributed in the text. ===================== */
+const LEDE = 'The anatomical position, the planes and the words for position and movement; then bone: what it is made of, red and yellow marrow, the parts of a long bone and its blood and nerve supply, types of bone, how a long bone ossifies, the laws of ossification and the nutrient foramen, the types of epiphysis, and sesamoid bones. Next: <a href="skin-lymphatics.html">skin and lymphatics</a>.';
+
+const PLANES = {
+  median: ['Median', '<h3>Median (midsagittal) plane</h3><p>A vertical plane from front to back through the middle of the body: it divides the body into <b>right and left halves</b>. Gray: it passes approximately through the sagittal suture of the skull.</p>'],
+  sagittal: ['Sagittal', '<h3>Sagittal (parasagittal) planes</h3><p>Any vertical plane <b>parallel to the median plane</b>: it divides the body into right and left parts (unequal unless it is the median plane). Gray: named after the sagittal suture.</p>'],
+  coronal: ['Coronal', '<h3>Coronal (frontal) plane</h3><p>A vertical plane <b>at right angles to the median plane</b>: it divides the body into <b>front (anterior) and back (posterior)</b> parts. Gray: it passes roughly through the coronal suture.</p>'],
+  transverse: ['Transverse', '<h3>Transverse (horizontal, axial) plane</h3><p>A plane <b>at right angles to both</b> the median and coronal planes, parallel to the ground: it divides the body into <b>upper (superior) and lower (inferior)</b> parts. Also called the axial plane (Wikipedia).</p>'],
+};
+const POS_TEXT = `<p><b>The anatomical position</b>: the body erect, looking forward, the arms hanging by the sides with the <b>palms facing forward</b> (forearms supine; thumbs pointing away from the body), the feet together or slightly apart (Gray; Wikipedia for the feet and thumbs). Every description of position refers to this posture, whatever the body is doing: the hand stays <b>distal</b> to the shoulder even when the elbow is bent and the hand is near the shoulder (Wikipedia).</p>`;
+
+const TERMS = {
+  antpost: ['Anterior / posterior', ['Anterior (ventral)', 'Towards the front'], ['Posterior (dorsal)', 'Towards the back']],
+  supinf: ['Superior / inferior', ['Superior (cranial)', 'Nearer the head; higher'], ['Inferior (caudal)', 'Nearer the feet; lower']],
+  medlat: ['Medial / lateral', ['Medial', 'Nearer the median plane'], ['Lateral', 'Farther from the median plane']],
+  proxdist: ['Proximal / distal', ['Proximal', 'In a limb: nearer the attached end (root) of the limb'], ['Distal', 'In a limb: farther from the attached end']],
+  supdeep: ['Superficial / deep', ['Superficial', 'Nearer the surface'], ['Deep', 'Farther from the surface']],
+  intext: ['Internal / external', ['Internal', 'Inside: used for the walls of cavities and hollow organs'], ['External', 'Outside: the same']],
+  lat: ['Ipsilateral / contralateral', ['Ipsilateral', 'On the same side as another structure'], ['Contralateral', 'On the opposite side']],
+};
+const TERM_FIND = {
+  antpost: 'Front and back of the body or limbs (Gray). The side view shows them: the arrow points forward for anterior.',
+  supinf: 'Relative levels: superior is higher, nearer the head; inferior lower, nearer the feet (Gray: "superior or cephalic", "inferior or caudal").',
+  medlat: 'Nearer to or farther from the <b>median plane</b> (Gray). In the anatomical position the thumb is on the lateral side of the hand, the little finger on the medial side.',
+  proxdist: 'Used in the limbs: nearer to or farther from the <b>attached end</b> of the limb (Gray). The elbow is proximal to the wrist; the toes are distal to the ankle.',
+  supdeep: 'Depth from the surface only (Gray): skin is superficial to muscle, muscle superficial to bone. The inset is a section through a limb.',
+  intext: 'Gray reserves internal and external almost entirely for the <b>walls of cavities and hollow organs</b> (inner and outer surface of the wall) — not as a synonym for medial and lateral.',
+  lat: 'Ipsilateral: on the same side; contralateral: on the opposite side — e.g. the left side of the brain controls the right arm and leg (Wikipedia, one source). In the drawing (front view: the subject\'s left is on your right): a structure on the left side is ipsilateral to the left arm and contralateral to the right arm.',
+};
+
+/* movements: [label, range in degrees, end labels, text]. Definitions: Gray 1918 (kinds of movement, ankle, intertarsal, radioulnar)
+   and StatPearls; the Wikipedia "Anatomical terms of motion" article is not used (it cites OpenStax). */
+const MOVES = {
+  flex: ['Flexion / extension', 'Extended', 'Flexed', '<h3>Flexion and extension (elbow)</h3><p>Angular movements <b>forward and backward</b> (Gray): <b>flexion bends</b> the joint, decreasing the angle between the two parts; <b>extension straightens</b> it. Hinge joints allow flexion and extension only (Gray). The elbow, seen from the side: the forearm swings forward in flexion.</p>'],
+  abd: ['Abduction / adduction', 'Adducted', 'Abducted', '<h3>Abduction and adduction (shoulder)</h3><p>Movement <b>away from</b> (abduction) and <b>towards</b> (adduction) the <b>median plane</b>; for the fingers and toes, away from and towards the middle line of the hand or foot (Gray). Seen from the front: the right arm moves out to the side.</p>'],
+  rot: ['Medial / lateral rotation', 'Lateral rotation', 'Medial rotation', '<h3>Rotation (shoulder)</h3><p>A bone turns about its own long axis (Gray: rotation). Seen from above with the elbow bent: in <b>medial (internal) rotation</b> the forearm swings towards the trunk, in <b>lateral (external) rotation</b> away from it, while the humerus turns in place. <b>Circumduction</b> combines flexion, extension, abduction and adduction (Gray; more on the <a href="joints.html#h-mov">Joints</a> page).</p>'],
+  pron: ['Supination / pronation', 'Supinated', 'Pronated', '<h3>Supination and pronation (forearm)</h3><p>The <b>radius rotates</b> round the ulna at the radio-ulnar joints: rotation forward is <b>pronation</b>, backward is <b>supination</b> (Gray; StatPearls: the elbow complex allows flexion, extension, pronation and supination). In the anatomical position the forearm is supine and the palm faces forward (Wikipedia). Seen from the front; in the drawing the radius crosses the ulna when pronated (schematic).</p>'],
+  dorsi: ['Dorsiflexion / plantarflexion', 'Plantarflexed', 'Dorsiflexed', '<h3>Dorsiflexion and plantarflexion (ankle)</h3><p><b>Dorsiflexion</b> brings the dorsum of the foot towards the front of the leg; in <b>plantarflexion</b> the heel is drawn up and the toes pointed (Gray, who calls it "extension"; StatPearls). They happen at the ankle (talocrural) joint. StatPearls: dorsiflexion is the most stable position of the ankle, because the wider front of the talus fits between the malleoli. Seen from the side.</p>'],
+  inv: ['Inversion / eversion', 'Everted', 'Inverted', '<h3>Inversion and eversion (foot)</h3><p>The sole is carried <b>medially</b> (inversion) or <b>laterally</b> (eversion). Gray 1918 (one source for these two terms): they take place mainly in the <b>tarsal joints</b>, most at the transverse tarsal joint (talus and calcaneus behind, navicular and cuboid in front) — not at the ankle joint. The right foot seen from behind: medial is to your left.</p>'],
+};
+
+/* bone composition (Gray 1918; Wikipedia "Hydroxyapatite") */
+const COMP = {
+  whole: ['Fresh bone', '<h3>Mineral and organic</h3><p>Bone is an <b>organic</b> part (Gray: "animal", ossein — collagen) and an <b>inorganic, mineral</b> part (Gray: "earthy") intimately combined. About <b>two-thirds</b> of its weight is mineral, mainly <b>calcium phosphate as hydroxyapatite</b> (Wikipedia: 65–70% of the mass), about one-third organic (Gray: burning loses about a third of the weight). Gray\'s analysis: calcium phosphate about 58% of the weight, calcium carbonate about 7%.</p>'],
+  acid: ['Soaked in acid', '<h3>Acid removes the mineral</h3><p>Gray: after a long soak in dilute mineral acid the bone keeps its shape but becomes <b>perfectly flexible</b> — a rib can be tied in a knot. The mineral gives <b>hardness and rigidity</b>.</p>'],
+  burn: ['Burnt', '<h3>Burning removes the organic part</h3><p>Gray: after burning (calcination) the bone keeps its form but is <b>white and brittle</b>, has lost about one-third of its weight and crumbles at a touch. The organic matter (ossein) gives <b>toughness</b>.</p>'],
+};
+const MARROW_TEXT = `<p><b>Red marrow</b> makes blood cells; <b>yellow marrow</b> is mostly fat (review: about 95% fat cells). At <b>birth</b> the marrow is almost all red; with age it is progressively replaced by yellow marrow (Wikipedia; review PMC11083575), starting in the long bones.</p>
+<p><b>In adults</b>, red marrow lies mainly in the axial skeleton — Gray: vertebrae, the diploë of the skull, sternum and ribs; Wikipedia: pelvis, sternum, cranium, ribs, vertebrae, scapulae, and variably the <b>proximal ends of the femur and humerus</b>. The review puts it, by about 40 years, only in the ribs, sternum, some vertebrae, sacrum and coccyx. The shafts of the long bones hold <b>yellow</b> marrow (Gray; Wikipedia). In chronic hypoxia yellow marrow can turn back into red (Wikipedia).</p>`;
+
+/* long-bone parts */
+const PARTS = {
+  dia: ['Diaphysis', '<h3>Diaphysis (shaft)</h3><p>A tube of thick <b>compact bone</b> round the <b>medullary cavity</b>; the compact wall thins towards the ends (Gray). It ossifies from the <b>primary centre</b>.</p>'],
+  epi: ['Epiphysis', '<h3>Epiphysis (end)</h3><p>Each end, developed from a separate (secondary) centre of ossification: <b>cancellous bone</b> in a thin shell of compact bone (Gray), covered by articular cartilage where it forms a joint.</p>'],
+  meta: ['Metaphysis', '<h3>Metaphysis</h3><p>The part between the epiphysis and the diaphysis — "the neck portion" of a long bone (Wikipedia). Wikipedia places the growth plate within the metaphysis (as its cartilaginous component).</p>'],
+  plate: ['Growth plate', '<h3>Growth plate (epiphyseal cartilage, physis)</h3><p>A plate of <b>hyaline cartilage</b> between epiphysis and shaft, where the bone grows in length; it persists until growth stops, then ossifies, leaving an <b>epiphyseal line</b> (Gray; Wikipedia).</p>'],
+  cart: ['Articular cartilage', '<h3>Articular cartilage</h3><p>Hyaline cartilage covering the joint surfaces of the epiphyses (Wikipedia). It has no periosteum over it. Cartilage types: <a href="connective-tissue.html#h-cart">Connective Tissue</a>.</p>'],
+  peri: ['Periosteum', '<h3>Periosteum</h3><p>The membrane covering the outer surface of the bone except the articular surfaces (Wikipedia); the <b>endosteum</b> lines the medullary cavity. Its periosteal arteries supply the compact bone (Gray; Wikipedia; review PMC11759331); it is richly supplied with nerves (Gray) and pain-sensitive (Wikipedia: nociceptors). In the drawing it is shown along the shaft and the sides of the ends.</p>'],
+  med: ['Medullary cavity', '<h3>Medullary cavity</h3><p>The central canal of the shaft, filled with marrow — as are the spaces of the cancellous bone (Gray).</p>'],
+  nut: ['Nutrient artery', '<h3>Nutrient artery</h3><p>The main artery of the shaft: it enters through the <b>nutrient foramen</b> (usually near the middle of the shaft) and runs <b>obliquely</b> through the compact bone (Gray; humerus study PMC4917311). Gray 1918 (one source for this): it divides into branches running up and down in the marrow, which anastomose with the other vessels of the bone and send twigs into its canals. It matters in fracture healing (review PMC11759331).</p>'],
+};
+const SUPPLY_TEXT = `<p><b>Blood supply:</b> the <b>nutrient artery</b> (above) to the marrow; <b>periosteal arteries</b> to the compact (cortical) bone (Wikipedia; review PMC11759331: they supplement the nutrient artery and supply the shaft where there is no nutrient foramen; Gray); <b>epiphyseal arteries</b> entering the ends (Wikipedia, one source); and many vessels through apertures near the articular ends (Gray 1918). The veins are large in cancellous bone and leave mainly at the ends (Gray).</p>
+<p><b>Nerve supply:</b> the <b>periosteum</b> is richly supplied with nerves (Gray) and is very sensitive to pain — it has nociceptors (Wikipedia); nerves also accompany the nutrient arteries into the bone (Gray 1918, one source).</p>`;
+const TYPES = [
+  ['Long', 'A shaft and two ends; in the limbs', 'Clavicle, humerus, radius, ulna, femur, tibia, fibula, metacarpals, metatarsals, phalanges'],
+  ['Short', 'Strength and compactness with limited movement; cancellous bone in a thin crust of compact bone', 'Carpal and tarsal bones'],
+  ['Flat', 'Broad plates for protection or muscle attachment: two layers of compact bone with cancellous bone (diploë in the skull) between', 'Occipital, parietal, frontal, nasal, lacrimal, vomer; scapula, hip bone, sternum, ribs'],
+  ['Irregular', 'Shapes that fit none of the other classes', 'Vertebrae, sacrum, coccyx, temporal, sphenoid, ethmoid, zygomatic, maxilla, mandible, palatine, inferior nasal concha, hyoid'],
+  ['Sesamoid', 'Small bones developed in a tendon near a joint (see below)', 'Patella (the largest); pisiform'],
+];
+const TYPE_NOTE = 'Features: Gray 1918. Gray 1918 has four classes (long, short, flat, irregular) and notes that some count the patella and other sesamoids as short bones; StatPearls lists five, adding sesamoid. Examples: Gray 1918; carpals and tarsals also Wikipedia; pisiform: Wikipedia.';
+
+/* ossification steps */
+const OSS = {s: 0};
+const OSS_STEPS = [
+  ['Cartilage model', '<h3>1. A cartilage model</h3><p>Limb bones are preceded by <b>rods of cartilage</b> — <b>endochondral</b> (Gray: intracartilaginous) ossification. Bones of the roof and sides of the skull (Gray; StatPearls) and the clavicle (StatPearls) form directly in membrane — <b>intramembranous</b> ossification, without a cartilage model.</p>'],
+  ['Primary centre', '<h3>2. Primary centre in the shaft</h3><p>Bone first appears in the <b>middle of the shaft</b>: the <b>primary centre</b> of the diaphysis, the first to appear (Gray; Wikipedia). A thin layer of bone also forms under the perichondrium (Gray).</p>'],
+  ['Shaft ossifies', '<h3>3. The shaft ossifies towards the ends</h3><p>Ossification spreads from the centre of the shaft towards the extremities (Gray). The ends are still cartilage.</p>'],
+  ['Secondary centres', '<h3>4. Secondary centres in the ends</h3><p><b>Secondary centres</b> appear in the epiphyses, mostly <b>after birth</b> (Wikipedia); the centre for the lower femur appears in the 9th month of fetal life (Wikipedia; Gray), and Wikipedia gives the same for the upper tibia.</p>'],
+  ['Growth plates', '<h3>5. Growth at the growth plates</h3><p>Between each epiphysis and the shaft a plate of cartilage persists (Gray: epiphysial cartilage). It keeps growing ahead of the ossification behind it, so the bone <b>grows in length</b> (Gray; Wikipedia).</p>'],
+  ['Fusion', '<h3>6. Fusion</h3><p>When growth ends the plate ossifies: the epiphysis fuses with the shaft and only an <b>epiphyseal line</b> remains (Gray; Wikipedia). Ossification as a whole runs from the sixth–seventh embryonic week to about 25 years (StatPearls).</p>'],
+];
+const LAW = {sel: 'upper'};
+const LAW_ITEMS = {
+  upper: ['Arm and forearm', '<h3>Upper limb: "towards the elbow"</h3><p>The nutrient canals of the humerus, radius and ulna are directed <b>towards the elbow</b>, because the epiphyses at the elbow unite with the shafts <b>before</b> those at the shoulder and wrist (Gray). So the <b>growing ends</b> — the ends that unite last — are the <b>upper end of the humerus</b> and the <b>lower ends of the radius and ulna</b> (Wikipedia). Two studies of dry humeri found the foramina directed towards the elbow, away from the growing upper end (PMC4917311; PMC11759331).</p>'],
+  lower: ['Thigh and leg', '<h3>Lower limb: "away from the knee"</h3><p>The nutrient canals are directed <b>away from the knee</b>: <b>upward in the femur</b>, <b>downward in the tibia and fibula</b> (Gray; Gray\'s femur and fibula pages). The upper epiphysis of the femur and the lower epiphyses of the tibia and fibula unite first (Gray), so the growing ends are the <b>lower end of the femur</b> and the <b>upper end of the tibia</b> (Wikipedia). One study notes anomalous foramina are frequent in the femur (PMC4917311).</p>'],
+};
+const LAW_TEXT = '<p><b>The rules</b> (Gray 1918): the centre for the <b>shaft appears first</b>. The epiphyses unite with the shaft in times that "vary inversely with the dates at which their ossifications began" — <b>the epiphysis that begins to ossify first unites last</b> — with the <b>exception of the fibula</b>, whose lower epiphysis is the first to ossify and also unites first (about 20 years; the upper about 25). This order "regulates the direction of the nutrient arteries": the nutrient canal points <b>away from the growing end</b> (Gray; Wikipedia; two humerus studies). The "first to appear, last to unite" wording is Gray\'s alone among our sources.</p><p>Memory aid: <b>to the elbow I go, from the knee I flee</b>.</p><p>Where a bone has <b>only one epiphysis</b>, the nutrient artery points to the other end — towards the acromial end of the clavicle, the distal ends of the first metacarpal and first metatarsal, the proximal ends of the other metacarpals and metatarsals (Gray 1918, one source).</p>';
+
+/* types of epiphysis: Gray 1918 (after Parsons) names three; Wikipedia four; examples Wikipedia */
+const EPI_HEAD = ['Type', 'What it is', 'Examples (Wikipedia)'];
+const EPI_ROWS = [
+  ['Pressure', 'At the articular ends; transmits "the weight of the body from bone to bone" (Gray, after Parsons; Wikipedia)', 'Head of the femur, head of the humerus, condyles of the femur and tibia'],
+  ['Traction', 'Non-articular; where muscles are inserted — Gray: "originally sesamoid structures though not necessarily sesamoid bones" (Gray; Wikipedia)', 'Greater and lesser tubercles of the humerus; greater and lesser trochanters of the femur'],
+  ['Atavistic', 'A part that was once a separate bone but has lost that role and appears separately only as an ossification in early life (Gray; Wikipedia)', 'Coracoid process of the scapula; os trigonum (posterior tubercle of the talus)'],
+  ['Aberrant', 'An epiphysis that is not always present, a deviation from the norm (Wikipedia only)', 'Head of the first metacarpal; bases of the other metacarpals'],
+];
+const EPI_NOTE = 'Gray 1918 gives Parsons\' three types; the fourth (aberrant) and all the examples come from Wikipedia alone. Gray describes two centres for the coracoid process and five for the femur (one each for the trochanters), which fits their being separate ossifications.';
+
+/* sesamoid */
+const SES = {sel: 'with'};
+const SES_ITEMS = {
+  with: ['With the patella', '<h3>With the patella</h3><p>The patella holds the quadriceps tendon forward, so the line of pull lies <b>farther from the knee</b>: the quadriceps acts at a greater angle with more leverage (Gray; StatPearls: it increases the moment arm of the patellar ligament). It also protects the front of the joint (Gray; StatPearls).</p>'],
+  without: ['Without', '<h3>Without the patella (for comparison)</h3><p>The tendon would lie against the femur: its line of pull closer to the knee, with a shorter lever arm, and rubbing on the bone (StatPearls: the patella protects the tendon from friction).</p>'],
+};
+const SES_TEXT = `<p>A <b>sesamoid bone</b> is a bone embedded in a <b>tendon</b> (or muscle) near a joint (StatPearls; Wikipedia). It acts as a <b>pulley</b>: a smooth surface for the tendon to slide over, reducing friction and stress and improving leverage (StatPearls; Wikipedia).</p>
+<ul><li>The <b>patella</b>, in the tendon of quadriceps femoris, is the <b>largest sesamoid bone</b> (StatPearls; Wikipedia). Gray (1918) counts it as a sesamoid because it develops in a tendon, its ossification centre has a knotty outline, and it is mainly dense cancellous bone.</li>
+<li>Others (Wikipedia): the <b>pisiform</b> (in flexor carpi ulnaris), two at the head of the <b>first metacarpal</b>, two at the head of the <b>first metatarsal</b> (in flexor hallucis brevis). Sesamoids are commonest in the hand, wrist and foot; up to 42 have been reported in one person (StatPearls).</li>
+<li>The patellae are counted among the 206 bones; the smaller sesamoids are not (Gray).</li></ul>`;
+
+const BASED = 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918): introduction, osteology (bone, ossification, laws of ossification, epiphyses after Parsons), femur, fibula, patella, joints; StatPearls (NCBI Bookshelf); open-access papers on humeral nutrient foramina (Med Sci Monit 2016; a 2025 study) and on marrow adipose tissue (Cells 2024); Wikipedia (not the OpenStax-citing "Anatomical terms of motion"). Single-source details are named in the text.';
+const MODELS = 'Models used: all drawings are schematic, not to scale; angles in the movement drawings are approximate.';
+
+/* ===================== PAGE ===================== */
+const $ = id => document.getElementById(id);
+const T = (x, y, s, cls = '', a = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${a}">${s}</text>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--accent)"/></marker>'
+  + '<marker id="arra" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--artery)"/></marker>'
+  + '<pattern id="thatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><rect width="5" height="5" style="fill:var(--tendon)"/><line x1="0" y1="0" x2="0" y2="5" style="stroke:var(--tendon-edge);stroke-width:1.6"/></pattern><pattern id="spongy" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" style="fill:var(--bone)"/><circle cx="4" cy="4" r="1.6" style="fill:var(--surface)"/></pattern></defs>';
+function toggles(id, items, onSel, start) {
+  const box = $(id); box.innerHTML = '';
+  for (const [k, label] of items) {
+    const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = label; b.dataset.k = k; b.setAttribute('aria-pressed', String(k === start));
+    b.onclick = () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); onSel(k); };
+    box.append(b);
+  }
+  onSel(start);
+}
+function stepper(id, labels, onStep, state) {
+  const box = $(id); box.innerHTML = '';
+  const prev = document.createElement('button'); prev.className = 'btn'; prev.type = 'button'; prev.textContent = '◀ Back'; prev.setAttribute('aria-label', 'Previous step');
+  const next = document.createElement('button'); next.className = 'btn'; next.type = 'button'; next.textContent = 'Next ▶'; next.setAttribute('aria-label', 'Next step');
+  const row = document.createElement('div'); row.className = 'chips'; row.setAttribute('aria-label', 'Steps');
+  const go = i => { state.s = Math.max(0, Math.min(labels.length - 1, i)); row.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', String(j === state.s))); prev.disabled = state.s === 0; next.disabled = state.s === labels.length - 1; onStep(); };
+  labels.forEach((l, i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.onclick = () => go(i); row.append(b); });
+  prev.onclick = () => go(state.s - 1); next.onclick = () => go(state.s + 1);
+  box.append(prev, row, next); go(state.s);
+}
+function table(id, head, rows) {
+  const t = $(id); t.classList.add('t', 'stack');
+  t.innerHTML = '<tr>' + head.map(x => `<th>${x}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + r.map((c, i) => `<td data-h="${head[i]}">${c}</td>`).join('') + '</tr>').join('');
+}
+const key = (id, items) => { $(id).innerHTML = items.map(([c, l]) => `<span><i style="background:${c.startsWith('--') ? 'var(' + c + ')' : c}"></i>${l}</span>`).join(''); };
+
+/* ---------- body figures: front view centred at x=105, side view at x=315 (facing right = anterior) ---------- */
+function frontBody(cx) {
+  return `<circle class="body" cx="${cx}" cy="42" r="22"/>
+  <path class="body" d="M${cx - 9} 63 h18 v10 h-18 z"/>
+  <path class="body" d="M${cx - 42} 78 Q${cx} 70 ${cx + 42} 78 L${cx + 36} 150 L${cx + 34} 212 L${cx - 34} 212 L${cx - 36} 150 Z"/>
+  <path class="body" d="M${cx - 44} 80 L${cx - 58} 150 L${cx - 62} 205 L${cx - 52} 207 L${cx - 46} 152 L${cx - 36} 100 Z"/>
+  <path class="body" d="M${cx + 44} 80 L${cx + 58} 150 L${cx + 62} 205 L${cx + 52} 207 L${cx + 46} 152 L${cx + 36} 100 Z"/>
+  <path class="body" d="M${cx - 63} 205 q-2 22 6 30 q8 2 10 -6 l-1 -24 z"/><path class="body" d="M${cx - 63} 212 q-9 4 -9 14 q3 2 6 -3 z"/>
+  <path class="body" d="M${cx + 63} 205 q2 22 -6 30 q-8 2 -10 -6 l1 -24 z"/><path class="body" d="M${cx + 63} 212 q9 4 9 14 q-3 2 -6 -3 z"/>
+  <path class="body" d="M${cx - 34} 212 L${cx - 30} 300 L${cx - 26} 395 L${cx - 8} 395 L${cx - 4} 300 L${cx - 2} 222 Z"/>
+  <path class="body" d="M${cx + 34} 212 L${cx + 30} 300 L${cx + 26} 395 L${cx + 8} 395 L${cx + 4} 300 L${cx + 2} 222 Z"/>
+  <path class="body" d="M${cx - 28} 395 q-6 12 2 16 h18 q4 -6 -2 -16 z"/><path class="body" d="M${cx + 28} 395 q6 12 -2 16 h-18 q-4 -6 2 -16 z"/>`;
+}
+function sideBody(cx) {
+  return `<circle class="body" cx="${cx}" cy="42" r="22"/><path class="body" d="M${cx + 21} 38 l7 6 l-6 3"/>
+  <path class="body" d="M${cx - 7} 63 h14 v10 h-14 z"/>
+  <path class="body" d="M${cx - 22} 76 Q${cx + 4} 70 ${cx + 26} 80 Q${cx + 30} 140 ${cx + 22} 212 L${cx - 22} 212 Q${cx - 28} 140 ${cx - 22} 76 Z"/>
+  <path class="body" d="M${cx - 8} 80 L${cx - 10} 150 L${cx - 8} 205 L${cx + 4} 205 L${cx + 6} 150 L${cx + 8} 84 Z"/>
+  <path class="body" d="M${cx - 9} 205 q-2 22 6 28 q10 0 8 -8 l-1 -20 z"/>
+  <path class="body" d="M${cx - 20} 212 L${cx - 16} 300 L${cx - 12} 392 L${cx + 6} 392 L${cx + 8} 300 L${cx + 20} 212 Z"/>
+  <path class="body" d="M${cx - 14} 392 l-2 16 h46 q2 -8 -10 -12 l-28 -4 z"/>`;
+}
+const FX = 105, SX = 315;
+function bodies() { return DEFS + frontBody(FX) + sideBody(SX) + T(FX, 425, 'FRONT', 'h', 'middle') + T(FX - 72, 425, 'RIGHT', 'h', 'middle') + T(FX + 72, 425, 'LEFT', 'h', 'middle') + T(SX, 425, 'SIDE (facing right)', 'h', 'middle'); }
+
+function drawPlane(k) {
+  let h = bodies(); const A = 'var(--accent)';
+  const vline = (x, lab) => `<line x1="${x}" y1="6" x2="${x}" y2="414" style="stroke:${A};stroke-width:2.6;stroke-dasharray:7 4"/>` + (lab ? T(x + 4, 14, lab, 's l') : '');
+  const hline = (cx, w) => `<line x1="${cx - w}" y1="150" x2="${cx + w}" y2="150" style="stroke:${A};stroke-width:2.6;stroke-dasharray:7 4"/>`;
+  const face = cx => `<rect x="${cx - 80}" y="8" width="160" height="404" rx="6" style="fill:${A};fill-opacity:.14;stroke:${A};stroke-width:1.6"/>`;
+  if (k === 'median') h += vline(FX, 'median') + face(SX);
+  if (k === 'sagittal') h += vline(FX - 22, 'sagittal') + vline(FX, '') .replace('stroke-width:2.6', 'stroke-width:1;opacity:.35') + face(SX);
+  if (k === 'coronal') h += face(FX) + vline(SX, 'coronal');
+  if (k === 'transverse') h += hline(FX, 90) + hline(SX, 70) + T(FX + 92, 146, 'transverse', 's l', 'end');
+  $('plane-svg').innerHTML = h;
+  $('plane-find').innerHTML = PLANES[k][1];
+}
+
+function drawTerm(k) {
+  let h = bodies();
+  const ar = (x1, y1, x2, y2) => `<path class="arr" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+  const lab = (x, y, s, a = 'middle') => T(x, y, s, 'l', a);
+  if (k === 'antpost') h += ar(SX + 4, 140, SX + 64, 140) + lab(SX + 64, 132, 'anterior', 'end') + ar(SX - 4, 140, SX - 64, 140) + lab(SX - 64, 132, 'posterior', 'start');
+  if (k === 'supinf') h += ar(FX + 100, 200, FX + 100, 90) + lab(FX + 100, 84, 'superior') + ar(FX + 100, 230, FX + 100, 340) + lab(FX + 100, 356, 'inferior');
+  if (k === 'medlat') h += `<line x1="${FX}" y1="70" x2="${FX}" y2="410" style="stroke:var(--muted);stroke-dasharray:3 4"/>` + ar(FX - 52, 250, FX - 8, 250) + lab(FX - 30, 244, 'medial') + ar(FX - 58, 250, FX - 98, 250) + lab(FX - 98, 266, 'lateral', 'start') + T(FX - 60, 234, 'thumb', 's l', 'end');
+  if (k === 'proxdist') h += `<path class="arr" d="M${FX + 72} 190 L${FX + 56} 96"/>` + lab(FX + 70, 90, 'proximal', 'start') + `<path class="arr" d="M${FX + 74} 196 L${FX + 80} 236"/>` + lab(FX + 84, 252, 'distal', 'start');
+  if (k === 'supdeep') { const x = 210, y = 300; h += `<circle cx="${x}" cy="${y}" r="44" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.4"/><circle cx="${x}" cy="${y}" r="38" style="fill:var(--fibre);opacity:.7"/><circle cx="${x}" cy="${y}" r="14" style="fill:var(--bone);stroke:var(--ink);stroke-width:1"/>`
+      + ar(x + 64, y - 54, x + 8, y - 6) + lab(x + 66, y - 60, 'deep', 'start') + ar(x - 20, y + 14, x - 76, y + 50) + lab(x - 78, y + 66, 'superficial', 'middle') + T(x + 40, y + 60, 'skin · muscle · bone', 's l', 'start'); }
+  if (k === 'intext') { const x = 210, y = 300; h += `<ellipse cx="${x}" cy="${y}" rx="40" ry="30" style="fill:var(--surface);stroke:var(--ink);stroke-width:8;stroke-opacity:.35"/>` + ar(x, y, x + 30, y - 2).replace('M210 300', 'M210 300') + lab(x, y + 4, 'internal') + ar(x + 46, y + 22, x + 76, y + 40) + lab(x + 76, y + 56, 'external') + T(x, y - 40, 'wall of a hollow organ', 's l', 'middle'); }
+  if (k === 'lat') h += `<circle cx="${FX + 8}" cy="40" r="6" style="fill:var(--accent)"/>` + `<path class="arr" d="M${FX + 10} 46 Q${FX - 40} 120 ${FX - 60} 190"/>` + lab(FX - 100, 206, 'contralateral', 'start') + `<path class="arr" d="M${FX + 12} 48 Q${FX + 40} 110 ${FX + 58} 190"/>` + lab(FX + 66, 188, 'ipsilateral', 'start') + T(FX + 16, 26, 'left side', 's l', 'start');
+  $('term-svg').innerHTML = h;
+  const t = TERMS[k]; $('term-find').innerHTML = `<h3>${t[1][0]} / ${t[2][0]}</h3><p>${TERM_FIND[k]}</p>`;
+}
+
+/* ---------- movements ---------- */
+let MOV = 'flex';
+const rad = d => d * Math.PI / 180;
+const seg = (x, y, len, deg, w, cls = 'body') => { const x2 = x + len * Math.sin(rad(deg)), y2 = y + len * Math.cos(rad(deg));
+  return {d: `<line x1="${x}" y1="${y}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" style="stroke:var(--ink);stroke-width:${w + 2.8};stroke-linecap:round"/><line x1="${x}" y1="${y}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" style="stroke:var(--surface);stroke-width:${w};stroke-linecap:round"/>`, x2, y2}; };
+const gseg = (x, y, len, deg) => { const x2 = x + len * Math.sin(rad(deg)), y2 = y + len * Math.cos(rad(deg)); return `<line class="ghost" x1="${x}" y1="${y}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`; };
+function drawMove() {
+  const v = +$('mov-r').value / 100, m = MOVES[MOV]; let h = DEFS;
+  if (MOV === 'flex') { const t = (v + 1) / 2, a = 180 - 140 * t;   /* forearm angle: 0 = straight down (deg from vertical, + = forward/right) */
+    const fa = 140 * t;
+    h += T(150, 18, 'Right elbow, from the side; front →', 's', 'middle');
+    const ua = seg(110, 50, 110, 0, 16); h += ua.d + gseg(110, 160, 100, 0) + gseg(110, 160, 100, 140);
+    const fo = seg(110, 160, 100, fa, 13); h += fo.d + `<circle cx="110" cy="160" r="5" style="fill:var(--accent)"/>`;
+    h += T(118, 276, 'extended', 's l') + T(200, 112, 'flexed', 's l');
+  }
+  if (MOV === 'abd') { const t = (v + 1) / 2, a = -90 * t;
+    h += T(150, 18, 'Right shoulder, from the front', 's', 'middle');
+    h += `<path class="body" d="M178 60 L262 60 L252 230 L188 230 Z"/>` + `<circle class="body" cx="220" cy="38" r="18"/>`;
+    h += gseg(174, 66, 150, 0) + gseg(174, 66, 150, -90);
+    h += seg(174, 66, 150, a, 14).d + `<circle cx="174" cy="66" r="5" style="fill:var(--accent)"/>` + `<line x1="220" y1="28" x2="220" y2="290" style="stroke:var(--muted);stroke-dasharray:3 4"/>` + T(224, 286, 'median plane', 's l') + T(24, 52, 'abducted', 's l') + T(166, 236, 'adducted', 's l', 'end');
+  }
+  if (MOV === 'rot') { /* + = medial (towards the trunk) */
+    h += T(150, 18, 'Right shoulder from above, elbow bent; front ↓', 's', 'middle');
+    const ra = v > 0 ? 60 * v : 60 * v;
+    h += `<ellipse class="body" cx="245" cy="104" rx="52" ry="36"/>` + T(245, 108, 'trunk', 's', 'middle');
+    h += `<circle class="body" cx="140" cy="110" r="16"/>` + gseg(140, 110, 110, 0) + gseg(140, 110, 110, 60) + gseg(140, 110, 110, -60);
+    h += seg(140, 110, 110, ra, 12).d + `<circle cx="140" cy="110" r="5" style="fill:var(--accent)"/>`;
+    h += T(140, 240, 'neutral', 's l', 'middle') + T(236, 190, 'medial rotation', 's l', 'middle') + T(40, 190, 'lateral rotation', 's l', 'middle');
+  }
+  if (MOV === 'pron') { const pron = v > 0;
+    h += T(150, 18, 'Right forearm and hand, from the front', 's', 'middle');
+    const ux = 175, rx = 125;   /* ulna medial (viewer's right for the right limb seen from the front? no: subject's right limb on viewer's left; medial = towards midline = viewer's right) */
+    h += `<line x1="${ux}" y1="40" x2="${ux}" y2="200" style="stroke:var(--bone);stroke-width:12;stroke-linecap:round"/>` + T(ux + 10, 60, 'ulna', 's l');
+    h += pron ? `<line x1="${rx}" y1="40" x2="${ux + 6}" y2="200" style="stroke:var(--bone);stroke-width:14;stroke-linecap:round;stroke-opacity:.95"/>` : `<line x1="${rx}" y1="40" x2="${rx}" y2="200" style="stroke:var(--bone);stroke-width:14;stroke-linecap:round"/>`;
+    h += T(rx - 10, 60, 'radius', 's l', 'end');
+    h += `<path class="body" d="M118 205 h66 v52 q-33 18 -66 0 z" style="fill:${pron ? 'var(--surface)' : 'var(--line)'}"/>`;
+    const thumbX = pron ? 190 : 110;
+    h += `<path class="body" d="M${thumbX} 210 q${pron ? 16 : -16} 10 ${pron ? 14 : -14} 34"/>` + T(thumbX + (pron ? 18 : -18), 260, 'thumb', 's l', pron ? 'start' : 'end');
+    h += T(150, 290, pron ? 'palm faces backward' : 'palm faces forward', 'l', 'middle') + T(250, 120, 'medial →', 's', 'end');
+  }
+  if (MOV === 'dorsi') { const a = v > 0 ? 20 * v : 50 * v;   /* + dorsiflexion */
+    h += T(150, 18, 'Right ankle, from the side; front →', 's', 'middle');
+    h += seg(130, 30, 170, 0, 18).d;
+    const fx = 130, fy = 205, ang = 90 + a;  /* foot points forward (right) */
+    h += gseg(fx, fy, 110, 90 + 20) + gseg(fx, fy, 110, 90 - 50);
+    h += `<line x1="${fx}" y1="${fy}" x2="${fx - 26}" y2="${fy + 14}" style="stroke:var(--ink);stroke-width:12;stroke-linecap:round"/>`;
+    h += seg(fx, fy, 110, ang, 12).d + `<circle cx="${fx}" cy="${fy}" r="5" style="fill:var(--accent)"/>`;
+    h += T(238, 160, 'dorsiflexed', 's l') + T(212, 292, 'plantarflexed', 's l');
+  }
+  if (MOV === 'inv') { const a = 25 * v;  /* + inversion: sole turns medially (viewer's left, seen from behind) */
+    h += T(150, 18, 'Right foot, from behind; medial ←', 's', 'middle');
+    h += `<path class="body" d="M132 30 h36 l-2 170 h-32 z"/>`;
+    const cx = 150, cy = 214;
+    h += `<g transform="rotate(${a.toFixed(1)} ${cx} ${cy - 6})"><path class="body" d="M${cx - 30} ${cy} q30 -16 60 0 q4 30 -30 46 q-34 -16 -30 -46 z"/><line x1="${cx - 30}" y1="${cy + 40}" x2="${cx + 30}" y2="${cy + 40}" style="stroke:var(--accent);stroke-width:3"/></g>`;
+    h += T(cx, 292, 'sole', 's l', 'middle') + T(60, 250, 'inversion: sole medial', 's l', 'middle') + T(244, 250, 'eversion: sole lateral', 's l', 'middle');
+  }
+  $('mov-svg').innerHTML = h;
+}
+function setMove(k) { MOV = k; $('mov-l').textContent = MOVES[k][1]; $('mov-rr').textContent = MOVES[k][2]; $('mov-find').innerHTML = MOVES[k][3]; $('mov-r').value = MOVES[k][4] ?? 0; drawMove(); }
+
+/* ---------- composition ---------- */
+function drawComp(k) {
+  const W = 380, x0 = 20, min = 0.67; let h = DEFS;
+  h += T(x0, 22, 'WEIGHT OF BONE (APPROXIMATE)', 'h');
+  const mW = W * min, oW = W - mW, gone = s => s ? 'opacity:.15' : '';
+  h += `<rect x="${x0}" y="32" width="${mW}" height="40" style="fill:var(--bone);stroke:var(--ink);stroke-width:1;${gone(k === 'acid')}"/>` + `<rect x="${x0 + mW}" y="32" width="${oW}" height="40" style="fill:var(--collagen);stroke:var(--ink);stroke-width:1;${gone(k === 'burn')}"/>`;
+  h += T(x0 + mW / 2, 57, 'mineral ≈ ⅔ (hydroxyapatite)', 'dk', 'middle') + T(x0 + mW + oW / 2, 57, 'organic ≈ ⅓', 'dk', 'middle');
+  /* a rib: knotted after acid, cracked after burning */
+  if (k === 'whole') h += `<path d="M60 160 Q200 100 340 160" style="fill:none;stroke:var(--bone);stroke-width:16;stroke-linecap:round"/><path d="M60 160 Q200 100 340 160" style="fill:none;stroke:var(--ink);stroke-width:1"/>` + T(200, 200, 'a rib: hard and tough', 'l', 'middle');
+  if (k === 'acid') h += `<path d="M60 170 C140 90 230 210 200 150 C170 100 260 110 340 170" style="fill:none;stroke:var(--collagen);stroke-width:16;stroke-linecap:round"/>` + T(200, 214, 'flexible: can be tied in a knot', 'l', 'middle');
+  if (k === 'burn') h += `<path d="M60 160 Q130 125 190 122" style="fill:none;stroke:var(--bone);stroke-width:16;stroke-linecap:round"/><path d="M206 121 Q270 125 340 160" style="fill:none;stroke:var(--bone);stroke-width:16;stroke-linecap:round"/><path d="M194 108 l6 10 l-6 8 l8 10" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>` + T(200, 200, 'white and brittle: crumbles', 'l', 'middle');
+  $('comp-svg').innerHTML = h; $('comp-find').innerHTML = COMP[k][1];
+}
+function drawMarrow() {
+  let h = DEFS;
+  const bone = (x, adult) => {
+    let s = `<path d="M${x - 26} 30 q26 -22 52 0 l-12 40 v170 l12 30 q-26 22 -52 0 l12 -30 v-170 z" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.3"/>`;
+    s += `<path d="M${x - 20} 36 q20 -14 40 0 l-10 34 h-20 z" style="fill:var(--redmarrow);opacity:.85"/>`;   /* upper end */
+    s += `<rect x="${x - 9}" y="70" width="18" height="170" style="fill:var(--${adult ? 'fat' : 'redmarrow'});opacity:.85"/>`;
+    s += `<path d="M${x - 20} 266 q20 14 40 0 l-10 -26 h-20 z" style="fill:var(--${adult ? 'fat' : 'redmarrow'});opacity:.85"/>`;
+    return s;
+  };
+  h += bone(100, false) + T(100, 296, 'NEWBORN', 'h', 'middle') + bone(250, true) + T(250, 296, 'ADULT', 'h', 'middle');
+  h += T(130, 150, 'red marrow', 'l') + T(280, 150, 'yellow marrow', 'l') + T(280, 167, '(shaft)', 's l') + T(280, 46, 'red, variably', 'l') + T(280, 63, '(upper end)', 's l');
+  $('marrow-svg').innerHTML = h;
+}
+
+/* ---------- long bone ---------- */
+function longBone(opt = {}) {
+  /* x centre 180; ends 30–100 (upper) and 340–410 (lower); stage-dependent fills */
+  const c = 180, st = opt.stage ?? 9, sel = opt.sel, dim = p => sel && sel !== p ? 'opacity:.28' : '';
+  const cartFill = 'var(--cart)', boneFill = 'url(#spongy)';
+  let h = '';
+  const endU = `M${c - 60} 90 q-6 -70 60 -70 q66 0 60 70 l-26 28 h-68 z`, endL = `M${c - 60} 350 q-6 70 60 70 q66 0 60 -70 l-26 -28 h-68 z`;
+  const shaft = `M${c - 34} 118 h68 v204 h-68 z`;
+  if (st <= 0) return `<path d="${endU}" style="fill:${cartFill};stroke:var(--ink);stroke-width:1.3"/><path d="${shaft}" style="fill:${cartFill};stroke:var(--ink);stroke-width:1.3"/><path d="${endL}" style="fill:${cartFill};stroke:var(--ink);stroke-width:1.3"/>` + T(c + 72, 230, 'hyaline cartilage', 'l');
+  /* ends */
+  const endsBone = st >= 5;
+  for (const [d, cy] of [[endU, 58], [endL, 382]]) {
+    h += `<g style="${dim('epi')}"><path d="${d}" style="fill:${endsBone ? boneFill : cartFill};stroke:var(--ink);stroke-width:1.3"/>`;
+    if (st >= 3 && !endsBone) h += `<circle cx="${c}" cy="${cy}" r="${st >= 4 ? 26 : 12}" style="fill:var(--centre)"/>`;
+    if (st === 4) h += `<circle cx="${c}" cy="${cy}" r="26" style="fill:url(#spongy);opacity:.6"/>`;
+    h += '</g>';
+  }
+  /* articular cartilage caps */
+  if (st >= 3) h += `<g style="${dim('cart')}"><path d="M${c - 58} 66 q4 -46 58 -46 q54 0 58 46" style="fill:none;stroke:var(--cart);stroke-width:7"/><path d="M${c - 58} 374 q4 46 58 46 q54 0 58 -46" style="fill:none;stroke:var(--cart);stroke-width:7"/></g>`;
+  /* shaft */
+  const shaftBone = st >= 1;
+  h += `<g style="${dim('dia')}">`;
+  if (!shaftBone) h += `<path d="${shaft}" style="fill:${cartFill}"/>`;
+  else if (st === 1) h += `<path d="${shaft}" style="fill:${cartFill}"/><rect x="${c - 34}" y="196" width="68" height="48" style="fill:var(--bone)"/>`;
+  else h += `<path d="${shaft}" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.3"/>`;
+  h += '</g>';
+  /* medullary cavity */
+  if (st >= 2) h += `<g style="${dim('med')}"><rect x="${c - 18}" y="${st >= 3 ? 124 : 150}" width="36" height="${st >= 3 ? 192 : 140}" rx="6" style="fill:var(--redmarrow);opacity:.75"/></g>`;
+  /* metaphysis outline (the flared parts) */
+  h += `<g style="${dim('meta')}"><path d="M${c - 60} 90 l26 28 h68 l26 -28" style="fill:none;stroke:var(--ink);stroke-width:1.3"/><path d="M${c - 60} 350 l26 -28 h68 l26 28" style="fill:none;stroke:var(--ink);stroke-width:1.3"/></g>`;
+  /* growth plates */
+  if (st >= 3 && st <= 4 || st === 9) h += `<g style="${dim('plate')}"><rect x="${c - 58}" y="86" width="116" height="9" style="fill:var(--plate);stroke:var(--ink);stroke-width:1"/><rect x="${c - 58}" y="345" width="116" height="9" style="fill:var(--plate);stroke:var(--ink);stroke-width:1"/></g>`;
+  if (st === 5) h += `<line x1="${c - 58}" y1="90" x2="${c + 58}" y2="90" style="stroke:var(--ink);stroke-width:1;stroke-dasharray:3 3"/><line x1="${c - 58}" y1="350" x2="${c + 58}" y2="350" style="stroke:var(--ink);stroke-width:1;stroke-dasharray:3 3"/>`;
+  /* periosteum */
+  if (st >= 1) h += `<g style="${dim('peri')}"><path d="M${c - 63} 66 L${c - 65} 90 L${c - 38} 116 L${c - 38} 324 L${c - 65} 350 L${c - 63} 374 M${c + 63} 66 L${c + 65} 90 L${c + 38} 116 L${c + 38} 324 L${c + 65} 350 L${c + 63} 374" style="stroke:var(--fascia);stroke-width:2.6;fill:none"/></g>`;
+  /* nutrient artery */
+  if (st >= 2) h += `<g style="${dim('nut')}"><path class="art" d="M${c + 78} 196 L${c + 40} 214 L${c + 6} 236"/><path d="M${c} 236 L${c} 150 M${c} 236 L${c} 300" style="stroke:var(--ink);stroke-width:4;fill:none"/><path d="M${c} 236 L${c} 150 M${c} 236 L${c} 300" style="stroke:var(--artery);stroke-width:2;fill:none"/></g>`;
+  return h;
+}
+const PART_LAB = {dia: [252, 270, 'diaphysis'], epi: [250, 40, 'epiphysis'], meta: [250, 112, 'metaphysis'], plate: [250, 92, 'growth plate'], cart: [250, 20, 'articular cartilage'], peri: [100, 260, 'periosteum'], med: [100, 160, 'medullary cavity'], nut: [262, 192, 'nutrient artery']};
+function drawPart(k) {
+  let h = DEFS + longBone({stage: 9, sel: k});
+  for (const [p, [x, y, s]] of Object.entries(PART_LAB)) h += T(x, y, s, 'l' + (p === k ? '' : ' s'), x < 180 ? 'end' : 'start');
+  h += `<path class="lead" d="M104 256 L140 250 M104 156 L166 166"/>`;
+  $('part-svg').innerHTML = h; $('part-find').innerHTML = PARTS[k][1] + SUPPLY_TEXT;
+}
+function drawOss() {
+  const s = OSS.s, st = [0, 1, 2, 3, 4, 5][s];
+  let h = DEFS + longBone({stage: st});
+  if (s === 1) h += T(260, 224, 'primary centre', 'l');
+  if (s === 3) h += T(250, 62, 'secondary centre', 'l') + T(250, 386, 'secondary centre', 'l');
+  if (s === 4) h += T(250, 94, 'growth plate', 'l') + T(250, 354, 'growth plate', 'l');
+  if (s === 5) h += T(250, 94, 'epiphyseal line', 'l');
+  $('oss-svg').innerHTML = h; $('oss-find').innerHTML = OSS_STEPS[s][1];
+}
+
+/* nutrient canals: [x, top, bottom, arrow 'down'|'up', growing end 'top'|'bottom', label] */
+const LAWB = {
+  upper: [[110, 'Humerus', 'down', 'top', ['shoulder', 'elbow']], [250, 'Radius', 'up', 'bottom', ['elbow', 'wrist']], [320, 'Ulna', 'up', 'bottom', ['elbow', 'wrist']]],
+  lower: [[110, 'Femur', 'up', 'bottom', ['hip', 'knee']], [250, 'Tibia', 'down', 'top', ['knee', 'ankle']], [320, 'Fibula', 'down', 'top', ['knee', 'ankle']]],
+};
+function drawLaw(k) {
+  let h = DEFS;
+  for (const [x, name, dir, grow, ends] of LAWB[k]) {
+    const w = name === 'Fibula' || name === 'Ulna' ? 20 : 30, top = 50, bot = 340;
+    h += `<path d="M${x - w} ${top} q${w} -24 ${w * 2} 0 l-${w * .45} 34 v${bot - top - 68} l${w * .45} 34 q-${w} 24 -${w * 2} 0 l${w * .45} -34 v-${bot - top - 68} z" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.2"/>`;
+    const gy = grow === 'top' ? top + 30 : bot - 37; h += `<rect x="${x - w * .58}" y="${gy}" width="${w * 1.16}" height="7" style="fill:var(--plate);stroke:var(--ink);stroke-width:1"/>`;
+    const y0 = dir === 'down' ? 170 : 230, y1 = dir === 'down' ? 230 : 170;
+    h += `<path class="art" d="M${x + w * .6 + 14} ${y0} L${x} ${y1}"/>`;
+    h += T(x, 399, name, '', 'middle') + T(x, 20, ends[0], 's', 'middle') + T(x, bot + 30, ends[1], 's', 'middle');
+  }
+  h += T(10, 436, k === 'upper' ? 'TOWARDS THE ELBOW' : 'AWAY FROM THE KNEE', 'h') + `<rect x="300" y="428" width="20" height="7" style="fill:var(--plate);stroke:var(--ink);stroke-width:1"/>` + T(326, 436, 'growing end', 's');
+  $('law-svg').innerHTML = h; $('law-find').innerHTML = LAW_ITEMS[k][1] + LAW_TEXT;
+}
+
+/* ---------- sesamoid lever ---------- */
+function drawSes(k) {
+  const withP = k === 'with'; let h = DEFS;
+  h += `<path d="M150 20 L180 20 L190 190 Q190 222 160 222 Q130 222 132 190 Z" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.3"/>` + T(140, 40, 'femur', 's l', 'end');
+  h += `<path d="M128 240 L196 240 L188 320 L140 320 Z" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.3"/>` + T(140, 312, 'tibia', 's l', 'end');
+  const J = [162, 214];   /* knee centre (approximate) */
+  const tendon = withP ? 'M200 30 L214 150 Q232 200 218 250 L196 262' : 'M200 30 L196 150 Q194 200 194 250 L192 262';
+  h += `<path d="${tendon}" style="fill:none;stroke:var(--tendon-edge);stroke-width:12;stroke-linecap:round"/><path d="${tendon}" style="fill:none;stroke:url(#thatch);stroke-width:8;stroke-linecap:round"/>`;
+  if (withP) h += `<ellipse cx="226" cy="196" rx="14" ry="30" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.3"/>` + T(246, 196, 'patella', 'l');
+  /* line of pull of the patellar ligament and its distance from the knee centre */
+  const L = withP ? [[218, 250], [196, 262]] : [[194, 250], [192, 262]];
+  const [p, q] = L, dx = q[0] - p[0], dy = q[1] - p[1], n = Math.hypot(dx, dy), ux = dx / n, uy = dy / n;
+  const a = [p[0] - ux * 120, p[1] - uy * 120], b = [p[0] + ux * 40, p[1] + uy * 40];
+  h += `<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}" style="stroke:var(--accent);stroke-width:1.6;stroke-dasharray:6 4"/>`;
+  const t = (J[0] - p[0]) * ux + (J[1] - p[1]) * uy, foot = [p[0] + ux * t, p[1] + uy * t];
+  h += `<circle cx="${J[0]}" cy="${J[1]}" r="4" style="fill:var(--ink)"/><line x1="${J[0]}" y1="${J[1]}" x2="${foot[0].toFixed(1)}" y2="${foot[1].toFixed(1)}" style="stroke:var(--accent);stroke-width:3"/>`;
+  h += T(214, 296, 'line of pull (dashed);', 's l') + T(214, 310, 'lever arm (solid)', 's l') + T(206, 40, 'quadriceps tendon', 's l');
+  $('ses-svg').innerHTML = h; $('ses-find').innerHTML = SES_ITEMS[k][1];
+}
+
+/* ---------- init ---------- */
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').textContent = MODELS;
+toggles('plane-tg', Object.entries(PLANES).map(([k, v]) => [k, v[0]]), drawPlane, 'median'); $('pos-text').innerHTML = POS_TEXT;
+toggles('term-tg', Object.entries(TERMS).map(([k, v]) => [k, v[0]]), drawTerm, 'antpost');
+table('term-table', ['Term', 'Meaning', 'Opposite', 'Meaning'], Object.values(TERMS).map(t => [t[1][0], t[1][1], t[2][0], t[2][1]]));
+$('term-table').insertAdjacentHTML('afterend', '<p class="muted">Gray 1918 and Wikipedia; ipsilateral and contralateral: Wikipedia only.</p>');
+$('mov-r').oninput = drawMove;
+toggles('mov-tg', Object.entries(MOVES).map(([k, v]) => [k, v[0]]), setMove, 'flex');
+toggles('comp-tg', Object.entries(COMP).map(([k, v]) => [k, v[0]]), drawComp, 'whole');
+drawMarrow(); $('marrow-text').innerHTML = MARROW_TEXT;
+key('marrow-key', [['--bone', 'bone'], ['--redmarrow', 'red marrow'], ['--fat', 'yellow (fatty) marrow'], ['--collagen', 'organic matrix (collagen)']]);
+toggles('part-tg', Object.entries(PARTS).map(([k, v]) => [k, v[0]]), drawPart, 'dia');
+key('part-key', [['--bone', 'compact bone'], ['--cart', 'cartilage'], ['--plate', 'growth plate'], ['--redmarrow', 'marrow'], ['--artery', 'nutrient artery'], ['--fascia', 'periosteum (not over the articular cartilage)']]);
+table('type-table', ['Type', 'Features', 'Examples'], TYPES); $('type-note').textContent = TYPE_NOTE;
+stepper('oss-step', OSS_STEPS.map(s => s[0]), drawOss, OSS);
+key('oss-key', [['--cart', 'cartilage'], ['--bone', 'bone'], ['--centre', 'secondary centre'], ['--plate', 'growth plate'], ['--redmarrow', 'marrow'], ['--artery', 'nutrient artery']]);
+toggles('law-tg', Object.entries(LAW_ITEMS).map(([k, v]) => [k, v[0]]), drawLaw, 'upper');
+table('epi-table', EPI_HEAD, EPI_ROWS); $('epi-note').textContent = EPI_NOTE;
+toggles('ses-tg', Object.entries(SES_ITEMS).map(([k, v]) => [k, v[0]]), drawSes, 'with'); $('ses-text').innerHTML = SES_TEXT;
+window.ready = true;
+</script>
+</body>
+</html>
