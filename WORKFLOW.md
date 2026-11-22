@@ -11,6 +11,10 @@ Last updated: 2026-11-21
 - Module 35 (pelvic viscera, perineum, male genitalia) started 2026-11-22: sheet fill-pelv, model models/pelv
   (tools/abdomen-pelvis/pelvis_config.py), page abdomen-pelvis/pelvis-perineum.html (may split). Target AN46.1–46.5,
   48.1, 48.5–48.8, 49.1–49.5 (+ AN48.3 gap).
+- Module 36 (neuro I: meninges, CSF, cord, brainstem, cerebellum) started 2026-11-22: sheet fill-neuro1, model
+  models/neuro1 (tools/neuro/neuro1_config.py), page anatomy/neuro/brainstem-cord.html (may split). Sections 56–61
+  (+ AN50.3). Module 37 next: neuro II (sections 7, 62, 63: nervous system intro, nuclei, hemispheres, ventricles,
+  pathways).
 - Local test server: 127.0.0.1:8765.
 
 ## Questions for the user
