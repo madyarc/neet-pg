@@ -8,7 +8,19 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 29 done and committed 2026-11-21. Waiting for the user's "proceed" before module 30.
+- Module 30 (lungs, pleura and trachea) started 2026-11-21.
+  - [ ] build (agent a97281ad; sheet fill-lung, model models/lung via tools/thorax/lung_config.py, page anatomy/thorax/lungs.html)
+    [ ] review  [ ] fixes  [ ] docs  [ ] commit, push, live test
+  - Target: AN24.1, 24.2, 24.3, 24.5, 24.6, 25.9 (pleura and lungs), 25.7 and 25.8 (only with openly licensed images,
+    else schematics). Embryology AN25.2–25.6 and slide AN25.1 later.
+
+## Questions for the user
+
+Don't block on a question. Write it here with the default chosen, carry on, and ask these when the user asks for
+status. Remove each once answered.
+
+- (none yet)
+
 - Local test server: 127.0.0.1:8765.
 
 ## Next (the plan, in order)
@@ -50,7 +62,8 @@ Progress: anatomy 178 covered, 12 partial, 223 not started; ophthalmology 6 cove
 6. Docs: SYLLABUS.md ticks with italic notes, DATA-SOURCES.md, README.md row, root index.html counts, CLAUDE.md if
    a new pattern appeared.
 7. Integrity checks (git hash-object vs index, control-character scan, `git fsck`), commit, push, live test.
-8. Update this file, then report to the user and wait for "proceed".
+8. Update this file, give the user a short report, and start the next module straight away (user, 2026-11-21: work
+   continuously; don't wait for "proceed").
 
 ## Resource rules (the machine ran out of memory before)
 
