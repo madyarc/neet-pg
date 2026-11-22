@@ -10,7 +10,7 @@ Last updated: 2026-11-21
 
 - 2026-11-22 11:15 crash: Claude Code 2.1.330 segfaulted itself (coredump; no kernel/amdgpu errors at that time;
   user's memtest and scrub are clean). Same as the 11-20 crashes of 2.1.327/328. Repaired 3 corrupt .git loose objects
-  (fsck clean). User reinstalled python, git and the others (clean); module 40 pushed.
+  (fsck clean). User reinstalled python, git and the others (clean); module 40 pushed. Standard http.server and plain ffshot work again.
   Module 40 review and module 41 build resumed. Later found 2 tracked files changed on disk with mtime unchanged
   (ul-nv.json, ll-nv.pack; git status missed them) and restored them from git; check with a full
   `git ls-files -s` vs `git hash-object --stdin-paths` compare before each commit.
@@ -20,6 +20,9 @@ Last updated: 2026-11-21
   appendix image, attributions; browser checks not run, server down) [x] fixes (all 15 items; +prostate corpora amylacea and Purkinje micrographs; 528 quotes)
   [x] browser checks (6 pages, 0 JS errors, no phone overflow) + colours softened
   [x] docs (+ module 38 pages' Histology links) [x] commit. Done 2026-11-22.
+- Module 42 (genetics: AN73.1–75.5) started 2026-11-22: sheet fill-genetics, pages in anatomy/genetics/.
+  [ ] build (running) [ ] review [ ] fixes [ ] docs [ ] commit. After: leftovers (general 1–6, radiology 54,
+  sectional 51, osteology 53, surface 55, limb leftovers).
 - Module 41 (systemic embryology: AN25.2–25.6, 43.4, 52.4–52.8, 64.2–64.3) started 2026-11-22: sheet fill-embryo2,
   pages in anatomy/embryology/. [x] build (747 quotes; heart-vessels, gut-urogenital, head-neck-cns; not browser-tested,
   gjs+rsvg only) [x] review (14 findings: fetal IVC into RV, arch/coarctation drawing, PDA chip, flexures, malrotation chips,
