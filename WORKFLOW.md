@@ -8,7 +8,9 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 33 (mouth, pharynx, nose, larynx) started 2026-11-21 in parallel: agent a5600e55; sheet fill-oro, model
+- Module 33 (mouth, pharynx, nose, larynx) started 2026-11-21: [x] build (421 quotes, 107-part 653 KB oro) [x] review
+  (10 items: pyriform fold swapped in model, V2 clipped away, model caveats, attributions, label collisions) [ ] fixes
+  (sent). Agent a5600e55; sheet fill-oro, model
   models/oro (tools/head-neck/oro_config.py), page head-neck/mouth-pharynx-nose.html. Target AN36.1, 36.2, 36.4–36.7,
   37.1–37.3, 38.2.
 - Module 34 (ear and eye) started 2026-11-22: agent (eareye); sheet fill-eareye, model models/eareye (or ear + eye),

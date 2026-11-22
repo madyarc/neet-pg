@@ -57,7 +57,8 @@ CLAUDE.md, WORKFLOW.md, pages not listed in your task. Do not commit or push. Do
 ## What reviewers keep finding (check these yourself before you finish)
 - 3D labels: viewer.js silently drops labels that overlap or run off the canvas, and draws labels on hidden anchors
   faint. Run `sources-local/facts/fill-lung-scripts/labelcheck.py` (or adapt it) on desktop and phone: 0 dropped;
-  anchor main labels on points facing the camera; keep labels short.
+  anchor main labels on points facing the camera; keep labels short. Also check that every label a topic lists is
+  actually drawn (a part cut away by a clip plane gives no anchor, and its label silently disappears).
 - The model's own geometry may contradict the text (vessels passing through gut, relations swapped). Check the part
   coordinates for every relation a topic claims; if the model is off, say so in the topic text.
 - Schematics: paint order (what lies in front), layers that should enclose structures, label collisions, leader
