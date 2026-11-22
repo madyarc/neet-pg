@@ -8,6 +8,11 @@ Last updated: 2026-11-21
 
 ## Now
 
+- STOPPED at the usage limit (2026-11-22): module 40 (histology II; untracked files in anatomy/histology/ incl.
+  respiratory-digestive.html, _walltest.html, modified histo.js) and module 41 (systemic embryology, just started)
+  agents were stopped mid-task. To resume: new agents with the same briefs, continuing from files on disk; check
+  histo.js changes don't break the module 38 pages; delete _walltest.html if it is a test file.
+
 - Module 40 (histology II: organs; AN25.1, 43.2, 43.3, 52.1–52.3, 64.1) started 2026-11-22: sheet fill-histo2,
   pages in anatomy/histology/ (reusing histo.js/css).
 - Module 41 (systemic embryology: AN25.2–25.6, 43.4, 52.4–52.8, 64.2–64.3) started 2026-11-22: sheet fill-embryo2,
