@@ -24,8 +24,10 @@ Last updated: 2026-11-21
   radiology, surface, sections (AN51, 53–55) running in parallel; then 45 limb/region leftovers (AN8.4, 9.2–9.3,
   12.9/10/15, 13.5–13.8, 18.7, 20.6/7/10, 23.1, 26.2, 42.1, 43.7, 43.9, 82.1); then the [~] partials.
 - Module 43 (general: sheet fill-general2; terminology-bone, skin-lymphatics + muscle/blood-vessels additions)
-  [x] build (300 quotes; AN3.3 shunt/spurt not covered: no open source) [ ] review (running) [ ] fixes [ ] docs
-  [ ] commit.
+  [x] build (300 quotes; AN3.3 shunt/spurt not covered: no open source) [x] review (aneurysm wall layers inverted, ipsilateral L/R swapped,
+  nutrient-artery Wikipedia copies Gray, S1 band, --redmarrow/--clot hue and atlas clashes) [ ] fixes (running) [ ] docs
+  [ ] commit. AN3.3: reviewer also found no downloadable open source (J Anat 1959/1978 scans only; PDF fetch blocked);
+  stays unticked — ask user whether to fetch those PDFs by hand.
 - Module 44 (abdominopelvic: sheet fill-abdo2; bony-pelvis, imaging-abdomen, surface-sections + ap.js/css)
   [x] build (492 quotes, 7 Commons radiographs, sections cut from 3D models) [ ] review (running) [ ] fixes
   [ ] docs [ ] commit.
