@@ -21,7 +21,9 @@ Last updated: 2026-11-21
   [x] browser checks (6 pages, 0 JS errors, no phone overflow) + colours softened
   [x] docs (+ module 38 pages' Histology links) [x] commit. Done 2026-11-22.
 - Module 42 (genetics: AN73.1–75.5) started 2026-11-22: sheet fill-genetics, pages in anatomy/genetics/.
-  [ ] build (running) [ ] review [ ] fixes [ ] docs [ ] commit. After: leftovers (general 1–6, radiology 54,
+  [x] build (688 quotes; chromosomes-karyotype, inheritance-pedigrees, aberrations-clinical; 6 Commons images;
+  tokens --mat --pat --mut --probe; check_quotes.py now maps MLP- keys) [ ] review (running) [ ] fixes [ ] docs
+  [ ] commit. After: leftovers (general 1–6, radiology 54,
   sectional 51, osteology 53, surface 55, limb leftovers).
 - Module 41 (systemic embryology: AN25.2–25.6, 43.4, 52.4–52.8, 64.2–64.3) started 2026-11-22: sheet fill-embryo2,
   pages in anatomy/embryology/. [x] build (747 quotes; heart-vessels, gut-urogenital, head-neck-cns; not browser-tested,
