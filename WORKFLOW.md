@@ -18,6 +18,13 @@ Last updated: 2026-11-21
   29.1, 29.2, 29.4, 29.5, 33.1, 34.1–34.3, 35.2, 35.8, 42.3, AN43.6 glands and pterion.
 - Local test server: 127.0.0.1:8765.
 
+## Questions for the user
+
+Don't block on a question. Write it here with the default chosen, carry on, and ask these when the user asks for
+status. Remove each once answered.
+
+- (none)
+
 ## Next (the plan, in order)
 
 | # | Module | Page | Model | Notes |
