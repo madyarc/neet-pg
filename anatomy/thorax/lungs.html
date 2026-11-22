@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lungs, Pleura and Trachea</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone, --cart (costal and cricoid cartilage), --soft (diaphragm as context),
+   --heart, --artery, --vein, --nerve, --lymph, --clin (a needle: clinical); --accent for the selected schematic part.
+   Page-only tokens, used for nothing else: --lobe-s / --lobe-m / --lobe-i (superior, middle, inferior lobe), --airway
+   (trachea and bronchi), --pleura (pleura; the same token as on nerves-vessels.html), --gut (oesophagus), --pl-line /
+   --lu-line (surface lines of the pleura (indigo) and of the lung (purple), chosen away from the shared tokens), --air (air in
+   the pleural cavity), --fluid (pleural fluid), --s1 … --s10 (one colour per bronchopulmonary segment, chosen away from the shared tokens). */
+:root{--lobe-s:#f2b5a7;--lobe-m:#c2a7e0;--lobe-i:#9fd3c7;--airway:#2f7d79;--pleura:#9ec5d9;--gut:#d9a066;
+  --pl-line:#283593;--lu-line:#8e24aa;--air:#eef6fb;--fluid:#f3e3a6;
+  --s1:#cc6677;--s2:#332288;--s3:#ff7f00;--s4:#33a02c;--s5:#e7298a;--s6:#882255;--s7:#b2df8a;--s8:#a65628;--s9:#fdbf6f;--s10:#44aa99}
+:root[data-theme="dark"]{--lobe-s:#c98a7d;--lobe-m:#9a83bb;--lobe-i:#6fae9f;--airway:#5cb3ad;--pleura:#4f7d94;--gut:#c08a52;
+  --pl-line:#8c9eff;--lu-line:#ce93d8;--air:#1d2a33;--fluid:#6e6432;
+  --s1:#e08593;--s2:#8577e0;--s3:#ff9a33;--s4:#56c24e;--s5:#f05aa6;--s6:#c0507f;--s7:#c8eaa6;--s8:#c47a4c;--s9:#fdcb85;--s10:#6cc6b5;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+#topics{display:flex;flex-direction:column;gap:10px}
+#topic-text p+p,#topic-text p+ul,#topic-text ul+p{margin-top:8px}
+#topic-text ul{margin:4px 0 0;padding-left:20px}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t tr[data-k]{cursor:pointer}
+table.t tr[aria-pressed="true"] td{background:var(--bg)}
+.scroll{overflow-x:auto}
+.scroll,.schbox{scrollbar-color:var(--line) transparent}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:640px;margin:0 auto}
+svg.sch#bs-svg{max-width:440px}
+.schbox{overflow-x:auto}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:520px}.schbox svg.sch.fit{min-width:0}.swipe{display:inline}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.k{font-size:11px;fill:var(--ink)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch .bone{fill:var(--bone);stroke:var(--muted);stroke-width:1}
+svg.sch .mus{fill:var(--soft);stroke:var(--muted);stroke-width:.8}
+svg.sch .lung{fill:var(--lobe-s);stroke:var(--lu-line);stroke-width:1.2}
+svg.sch .vpl{fill:none;stroke:var(--lu-line);stroke-width:1.2}
+svg.sch .ppl{fill:none;stroke:var(--pl-line);stroke-width:2.5}
+svg.sch .air{fill:var(--air);stroke:none}
+svg.sch .fluid{fill:var(--fluid);stroke:var(--muted);stroke-width:.6}
+svg.sch .heart{fill:var(--heart);fill-opacity:.85;stroke:var(--muted);stroke-width:.8}
+svg.sch .art{fill:var(--artery);stroke:var(--surface);stroke-width:1}
+svg.sch .vn{fill:var(--vein);stroke:var(--surface);stroke-width:1}
+svg.sch .aw{fill:var(--airway);stroke:var(--surface);stroke-width:1}
+svg.sch .awl{stroke:var(--airway);stroke-width:12;fill:none;stroke-linecap:round}
+svg.sch .gut{fill:var(--gut);stroke:var(--muted);stroke-width:.8}
+svg.sch .nvl{stroke:var(--nerve);stroke-width:3.5;fill:none;stroke-linecap:round}
+svg.sch .lym{fill:var(--lymph)}
+svg.sch .clin{stroke:var(--clin);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .clinf{fill:var(--clin)}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .surf{fill:var(--surface);stroke:var(--line);stroke-width:1}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.xray{position:relative;max-width:560px;margin:0 auto;width:100%}
+.xray img{width:100%;height:auto;display:block;border-radius:6px}
+.xray svg{position:absolute;inset:0;width:100%;height:100%}
+.xray svg text{font:600 var(--xr-fs,18px) var(--f-body);fill:#fff;paint-order:stroke;stroke:#000;stroke-width:var(--xr-sw,3px)}
+.xray svg circle{fill:#ffd54a;stroke:#000;stroke-width:var(--xr-sw,3px)}
+.xray svg circle.sel{fill:#ff5a3c}
+.xray svg line{stroke:#ffd54a;stroke-width:1.5}
+.bsw{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,190px);gap:16px;align-items:start}
+@media (max-width:600px){.bsw{grid-template-columns:minmax(0,1fr)}}
+.bsw img{width:100%;height:auto;border-radius:6px;display:block}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Lungs, Pleura and Trachea</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="Lungs, pleura and trachea in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <div class="key" id="key3d"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pl">
+  <h2 id="h-pl">Pleura: layers, recesses, tap and pneumothorax</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="pl-svg" viewBox="0 0 600 470" role="img" aria-label="Schematic front view of the chest cut in a coronal plane: both lungs with their visceral pleura, the parietal pleura lining the chest wall and diaphragm, the costodiaphragmatic recesses and the heart in the middle"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. Front view, cut in a coronal plane: the body's right is on your left, as in the 3D "Front" view.</p>
+      <div class="toggles" id="pl-tg"></div>
+    </div>
+    <div class="prose" id="pl-text"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="pl-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sm">
+  <h2 id="h-sm">Surface marking: pleura, lung borders, fissures, trachea</h2>
+  <p class="cap" id="sm-cap"></p>
+  <div class="scroll"><table class="t stack" id="sm-table"></table></div>
+  <p class="muted" id="sm-note"></p>
+  <p class="muted">Surface marking of the heart (borders, apex beat, valves): <a href="heart.html">The Heart</a>.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-root">
+  <h2 id="h-root">Root of the lung and telling right from left</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="hil-svg" viewBox="0 0 640 330" role="img" aria-label="Schematic of the hilum of each lung seen from the mediastinal side: on the right lung the eparterial bronchus above the pulmonary artery, the hyparterial bronchus behind, the pulmonary veins in front and below; on the left lung the pulmonary artery above the bronchus, the veins in front and below"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic. Each hilum seen from the mediastinal side, as in the 3D topics "Root of the right lung" (seen from the left: front on your left) and "Root of the left lung" (seen from the right: front on your right).</p>
+    </div>
+    <div class="prose" id="root-text"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="side-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tr">
+  <h2 id="h-tr">Trachea and main bronchi</h2>
+  <div class="scroll"><table class="t stack" id="tr-table"></table></div>
+  <div class="scroll"><table class="t stack" id="br-table"></table></div>
+  <div class="prose" id="fb-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-seg">
+  <h2 id="h-seg">Bronchopulmonary segments</h2>
+  <div class="prose" id="seg-text"></div>
+  <div class="scroll"><table class="t stack" id="seg-table"></table></div>
+  <div class="prose" id="asp-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sup">
+  <h2 id="h-sup">Blood supply, lymph and nerves of the lungs</h2>
+  <div class="scroll"><table class="t stack" id="sup-table"></table></div>
+  <div class="prose" id="sup-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-xr">
+  <h2 id="h-xr">Plain chest X-ray, PA view</h2>
+  <div class="two">
+    <div>
+      <div class="xray" id="xray"><img src="img/chest-xray-pa.jpg" width="800" height="915" alt="Normal posteroanterior chest radiograph of an adult" loading="lazy"><svg id="xr-svg" viewBox="0 0 800 915" aria-hidden="true"></svg></div>
+      <div class="toggles" id="xr-tg" style="margin-top:8px"></div>
+      <p class="muted" id="xr-cap"></p>
+    </div>
+    <div>
+      <div class="scroll"><table class="t stack" id="xr-table"></table></div>
+      <div class="prose" id="xr-text"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-bs">
+  <h2 id="h-bs">Barium swallow: the narrowings and impressions of the oesophagus</h2>
+  <div class="bsw">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="bs-svg" viewBox="0 0 560 560" role="img" aria-label="Schematic front view of the oesophagus from the cricoid cartilage to the stomach with its four narrowings and the impressions of the aortic arch, the left main bronchus and the left atrium"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, front view: the body's left is on your right, as in the 3D "Front" view.</p>
+    </div>
+    <figure style="margin:0"><img src="img/barium-swallow.jpg" width="380" height="651" alt="Fluoroscopy frame of a normal barium swallow: barium filling the thoracic oesophagus" loading="lazy">
+      <figcaption class="muted" id="bs-cap"></figcaption></figure>
+  </div>
+  <div class="prose" id="bs-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-lung.md, anatomy/DATA-SOURCES.md) ===================== */
+const V = k => 'v_' + k, R = k => 'r_' + k, LN = k => 'l_' + k;
+const ORD = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth', 'eleventh', 'twelfth'];
+const TV = ORD.map(o => o + '_thoracic_vertebra'), CV = ['sixth_cervical_vertebra', 'seventh_cervical_vertebra'];
+const RIBS = ORD.flatMap(o => ['right_' + o + '_rib', 'left_' + o + '_rib']);
+const CC = ORD.slice(0, 7).flatMap(o => ['right_' + o + '_costal_cartilage', 'left_' + o + '_costal_cartilage']);
+const STERNUM = ['manubrium', 'body_of_sternum', 'xiphoid_process'], CLAV = ['right_clavicle', 'left_clavicle'];
+const CAGE = [...RIBS, ...CC, ...STERNUM, ...CLAV, ...TV, ...CV, 'first_lumbar_vertebra'];
+const LOBES_R = ['superior_lobe_of_right_lung', 'middle_lobe_of_right_lung', 'inferior_lobe_of_right_lung'].map(R);
+const LOBES_L = ['superior_lobe_of_left_lung', 'inferior_lobe_of_left_lung'].map(R);
+const LOBES = [...LOBES_R, ...LOBES_L];
+const MAIN = ['trachea', 'right_main_bronchus', 'left_main_bronchus'].map(R);
+const LOBAR_R = ['right_superior_lobar_bronchus', 'intermediate_bronchus_r', 'middle_lobar_bronchus_r', 'right_inferior_lobar_bronchus'].map(R);
+const LOBAR_L = ['left_superior_lobar_bronchus', 'left_inferior_lobar_bronchus'].map(R);
+/* segmental bronchi: [key, segment number (colour), short label] */
+const SEG_R = [['apical_segmental_bronchus_of_right_lung_bi', 1, '1 Apical'], ['posterior_segmental_bronchus_of_right_lung_bii', 2, '2 Posterior'],
+  ['anterior_segmental_bronchus_of_right_lung_biii', 3, '3 Anterior'], ['lateral_segmental_bronchus_of_right_lung_biv', 4, '4 Lateral (middle lobe)'],
+  ['medial_segmental_bronchus_of_right_lung_bv', 5, '5 Medial (middle lobe)'], ['superior_segmental_bronchus_of_right_lung_bvi', 6, '6 Superior'],
+  ['medial_basal_segmental_bronchus_of_right_lung_bvii', 7, '7 Medial basal'], ['anterior_basal_segmental_bronchus_of_right_lung_bviii', 8, '8 Anterior basal'],
+  ['lateral_basal_segmental_bronchus_of_right_lung_bix', 9, '9 Lateral basal'], ['posterior_basal_segmental_bronchus_of_right_lung_bx', 10, '10 Posterior basal']].map(([k, n, l]) => [R(k), n, l]);
+const SEG_L = [['apicoposterior_segmental_bronchus_of_left_lung_bi_bii', 1, '1+2 Apicopost.'], ['anterior_segmental_bronchus_of_left_lung_biii', 3, '3 Anterior'],
+  ['superior_lingular_segmental_bronchus_of_left_lung_biv', 4, '4 Superior lingular'], ['inferior_lingular_segmental_bronchus_of_left_lung_bv', 5, '5 Inferior lingular'],
+  ['superior_segmental_bronchus_of_left_lung_bvi', 6, '6 Superior'], ['anteromedial_basal_segmental_bronchus_of_left_lung', 7, '7+8 Anteromed. basal'],
+  ['medial_basal_segmental_bronchus_of_left_lung_bvii', 7, null], ['anterior_basal_segmental_bronchus_of_left_lung_bviii', 8, null],
+  ['lateral_basal_segmental_bronchus_of_left_lung_bix', 9, '9 Lateral basal'], ['posterior_basal_segmental_bronchus_of_left_lung_bx', 10, '10 Post. basal']].map(([k, n, l]) => [R(k), n, l]);
+const SEGB = [...SEG_R, ...SEG_L].map(s => s[0]);
+const AIRWAY = [...MAIN, ...LOBAR_R, ...LOBAR_L, ...SEGB];
+const PT = [V('pulmonary_trunk'), V('bifurcation_of_pulmonary_trunk')];
+const PA_R = [V('right_pulmonary_artery'), V('superior_lobar_artery_of_right_lung'), V('middle_lobar_artery_of_right_lung'), V('inferior_lobar_artery_of_right_lung'),
+  ...['apical', 'posterior', 'anterior', 'lateral', 'medial', 'superior', 'medial_basal', 'anterior_basal', 'lateral_basal', 'posterior_basal'].map(s => V(s + '_segmental_artery_of_right_lung'))];
+const PA_L = [V('left_pulmonary_artery'), V('superior_lingular_artery_of_left_lung'), V('inferior_lingular_artery_of_left_lung'),
+  ...['apical', 'posterior', 'anterior', 'superior', 'medial_basal', 'anterior_basal', 'lateral_basal', 'posterior_basal'].map(s => V(s + '_segmental_artery_of_left_lung'))];
+const PV_R = [V('right_superior_pulmonary_vein'), V('right_inferior_pulmonary_vein'), ...['apical', 'anterior', 'posterior', 'lateral', 'medial', 'superior', 'superior_basal', 'inferior_basal'].map(s => V(s + '_vein_of_right_lung'))];
+const PV_L = [V('left_superior_pulmonary_vein'), V('left_inferior_pulmonary_vein'), ...['apicoposterior', 'anterior', 'superior', 'superior_basal', 'inferior_basal'].map(s => V(s + '_vein_of_left_lung')),
+  V('lingular_vein_of_left_lung'), V('superior_lingular_vein_of_left_lung'), V('inferior_lingular_vein_of_left_lung')];
+const AORTA = [V('ascending_aorta'), V('aortic_arch'), V('thoracic_aorta')];
+const ARCH_BR = [V('brachiocephalic_trunk'), V('left_common_carotid_artery'), V('left_subclavian_artery'), V('right_common_carotid_artery'), V('right_subclavian_artery')];
+const SVC = [V('superior_vena_cava'), V('right_brachiocephalic_vein'), V('left_brachiocephalic_vein')];
+const AZY = [V('azygos_vein'), V('hemi_azygos_vein'), V('accessory_hemi_azygos_vein')];
+const HEART = ['right_atrium', 'right_ventricle', 'left_atrium', 'left_ventricle'].map(V);
+const VAGUS = ['n_vagus_nerve_x_r', 'n_vagus_nerve_x_l'];
+const NODES = ['intrapulmonary_nodes', 'superior_tracheobronchial_nodes', 'inferior_tracheobronchial_nodes', 'paratracheal_thoracic_nodes'].map(LN);
+const OES = 'g_oesophagus', CRIC = 'cricoid_cart', DIA = 'm_diaphragm', PLEURA = R('pleura');
+const SH = (l, sh) => ({l, sh});   // a label with a shorter form for narrow screens
+const FRONT = [0, -1, 0.08], BACK = [0, 1, 0.08], RIGHT = [-1, 0, 0.05], LEFT = [1, 0, 0.05];
+/* surface-marking lines and points (mm, body frame: +x left, +y back, +z up), computed from the model's ribs, cartilages,
+   sternum, clavicles and vertebrae by Gray's (1918) words: sources-local/facts/fill-lung-scripts/surface_lines.py. Approximate. */
+const SURF = {"lines":{"pleura_r":[[-18,-133,1344],[-23,-151,1340],[-21,-152,1335],[-19,-153,1330],[-20,-166,1326],[-18,-173,1321],[-16,-176,1317],[-14,-183,1312],[-10,-184,1308],[-7,-184,1303],[-4,-179,1298],[-4,-189,1292],[-4,-193,1286],[-4,-194,1280],[-4,-194,1274],[-4,-194,1268],[-4,-199,1262],[-4,-200,1256],[-4,-200,1250],[-4,-200,1244],[-4,-200,1238],[-4,-200,1232],[-4,-200,1226],[-4,-207,1220],[-4,-207,1214],[-4,-210,1208],[-4,-210,1202],[-4,-210,1196],[-4,-206,1190],[-6,-210,1188],[-9,-200,1186],[-14,-209,1182],[-19,-209,1179],[-23,-208,1175],[-29,-213,1172],[-34,-212,1168],[-40,-214,1164],[-45,-212,1161],[-50,-210,1157],[-55,-210,1153],[-61,-209,1150],[-65,-207,1146],[-70,-204,1142],[-77,-205,1139],[-81,-202,1135],[-85,-198,1132],[-92,-197,1128],[-96,-194,1124],[-101,-191,1121],[-105,-186,1117],[-108,-182,1113],[-111,-177,1110],[-114,-173,1106],[-118,-168,1102],[-115,-160,1099],[-123,-158,1095],[-125,-153,1090],[-127,-148,1086],[-128,-143,1082],[-128,-137,1078],[-129,-132,1074],[-130,-127,1070],[-131,-121,1066],[-130,-116,1061],[-131,-111,1057],[-132,-106,1053],[-125,-100,1049],[-131,-94,1050],[-129,-87,1050],[-129,-81,1051],[-128,-74,1052],[-126,-68,1052],[-123,-62,1053],[-109,-60,1053],[-106,-55,1054],[-102,-50,1055],[-99,-46,1055],[-96,-41,1056],[-92,-37,1057],[-87,-34,1057],[-84,-29,1058],[-71,-34,1059],[-68,-30,1059],[-62,-29,1060],[-58,-28,1061],[-53,-27,1061],[-49,-24,1062],[-46,-22,1063],[-41,-22,1063],[-34,-26,1064],[-32,-21,1064],[-28,-21,1065],[-23,-22,1066],[-20,-21,1066],[-16,-20,1067],[-12,-21,1068],[-8,-22,1068],[-4,-23,1069],[0,-26,1070]],"pleura_l":[[17,-134,1345],[24,-151,1341],[22,-153,1337],[22,-160,1333],[19,-161,1329],[16,-162,1325],[14,-166,1322],[13,-176,1318],[11,-182,1314],[7,-183,1310],[4,-183,1306],[0,-185,1302],[-4,-179,1298],[-4,-189,1292],[-4,-193,1286],[-4,-194,1280],[-4,-194,1274],[-4,-194,1268],[-4,-199,1262],[-4,-199,1256],[-4,-200,1250],[-4,-196,1244],[0,-201,1239],[3,-200,1234],[7,-207,1230],[11,-208,1225],[14,-207,1220],[19,-210,1215],[22,-209,1211],[26,-208,1206],[28,-202,1201],[31,-207,1194],[35,-213,1188],[36,-213,1181],[38,-213,1174],[37,-207,1167],[45,-212,1163],[49,-211,1159],[55,-211,1156],[60,-209,1152],[64,-207,1148],[70,-206,1144],[76,-205,1140],[80,-202,1136],[86,-201,1133],[91,-198,1129],[95,-194,1125],[99,-190,1121],[102,-186,1117],[106,-182,1114],[109,-178,1110],[111,-173,1106],[114,-168,1102],[111,-160,1098],[121,-159,1094],[123,-154,1090],[126,-150,1086],[124,-143,1082],[125,-138,1078],[126,-133,1074],[128,-128,1070],[129,-122,1066],[130,-117,1062],[129,-112,1059],[129,-107,1055],[124,-101,1051],[129,-94,1051],[128,-88,1052],[128,-81,1052],[127,-74,1053],[124,-68,1054],[121,-61,1054],[107,-59,1055],[102,-54,1056],[99,-49,1056],[96,-44,1057],[92,-39,1058],[86,-36,1058],[83,-32,1059],[80,-27,1060],[67,-31,1060],[62,-29,1061],[57,-27,1061],[52,-27,1062],[48,-24,1063],[44,-21,1063],[41,-17,1064],[37,-14,1065],[33,-12,1065],[25,-19,1066],[21,-20,1067],[16,-20,1067],[12,-21,1068],[8,-22,1068],[4,-23,1069],[0,-26,1070]],"lung_r":[[-35,-143,1383],[-34,-144,1378],[-32,-146,1372],[-34,-152,1366],[-32,-152,1361],[-30,-153,1355],[-27,-150,1350],[-18,-133,1344],[-23,-151,1340],[-21,-152,1335],[-19,-153,1330],[-20,-166,1326],[-18,-173,1321],[-16,-176,1317],[-14,-183,1312],[-10,-184,1308],[-7,-184,1303],[-4,-179,1298],[-4,-189,1292],[-4,-193,1286],[-4,-194,1280],[-4,-194,1274],[-4,-194,1268],[-4,-199,1262],[-4,-199,1256],[-4,-200,1250],[-4,-196,1244],[-6,-200,1238],[-8,-206,1232],[-10,-206,1226],[-12,-206,1220],[-14,-206,1214],[-17,-210,1208],[-18,-200,1202],[-24,-209,1199],[-30,-208,1195],[-37,-214,1192],[-42,-212,1188],[-49,-214,1185],[-54,-211,1182],[-61,-211,1178],[-66,-208,1175],[-71,-205,1171],[-78,-205,1168],[-81,-198,1164],[-91,-201,1162],[-96,-196,1160],[-100,-192,1158],[-105,-187,1156],[-109,-182,1154],[-115,-179,1152],[-121,-175,1150],[-127,-171,1147],[-130,-165,1145],[-134,-159,1143],[-135,-152,1141],[-138,-146,1139],[-138,-139,1137],[-135,-131,1135],[-134,-124,1132],[-134,-118,1130],[-134,-112,1128],[-130,-105,1126],[-135,-99,1126],[-135,-92,1126],[-134,-85,1126],[-132,-78,1126],[-128,-72,1126],[-127,-66,1126],[-125,-59,1126],[-123,-53,1125],[-119,-48,1125],[-116,-42,1125],[-113,-36,1125],[-110,-30,1125],[-106,-25,1125],[-98,-22,1125],[-94,-18,1125],[-87,-16,1125],[-79,-16,1124],[-75,-12,1124],[-68,-11,1124],[-62,-10,1124],[-52,-15,1124],[-46,-18,1124],[-41,-16,1124],[-36,-17,1124],[-30,-20,1124],[-26,-21,1124],[-22,-17,1124],[-18,-16,1124],[-15,-10,1123],[-10,-9,1123],[-6,-8,1123],[-1,-10,1123]],"lung_l":[[33,-144,1383],[32,-144,1378],[31,-145,1372],[34,-152,1367],[33,-152,1361],[31,-153,1356],[27,-148,1350],[17,-134,1345],[23,-150,1341],[22,-153,1337],[22,-160,1333],[19,-161,1329],[16,-162,1325],[14,-166,1322],[13,-176,1318],[11,-182,1314],[7,-183,1310],[4,-183,1306],[0,-185,1302],[-4,-179,1298],[-4,-189,1292],[-4,-193,1286],[-4,-194,1280],[-4,-194,1274],[-4,-194,1268],[-4,-199,1262],[-4,-199,1256],[-4,-200,1250],[-4,-196,1244],[2,-200,1244],[8,-200,1244],[14,-200,1244],[17,-187,1244],[22,-199,1239],[26,-201,1234],[29,-201,1229],[33,-202,1224],[36,-201,1219],[42,-207,1214],[45,-207,1209],[49,-208,1204],[51,-204,1199],[45,-207,1199],[38,-209,1200],[31,-207,1200],[24,-209,1201],[16,-201,1201],[23,-209,1198],[28,-208,1195],[35,-213,1192],[41,-212,1189],[47,-212,1185],[54,-213,1182],[59,-210,1179],[64,-207,1176],[70,-206,1173],[76,-205,1170],[80,-199,1166],[89,-201,1164],[94,-196,1162],[99,-191,1160],[104,-186,1157],[108,-181,1155],[117,-179,1152],[122,-174,1150],[126,-168,1148],[130,-162,1146],[133,-155,1143],[135,-148,1141],[136,-141,1139],[138,-134,1136],[130,-125,1134],[131,-118,1132],[132,-112,1129],[127,-105,1127],[133,-98,1127],[132,-91,1127],[132,-84,1127],[129,-77,1126],[125,-71,1126],[124,-64,1126],[122,-58,1126],[120,-51,1126],[117,-45,1126],[113,-39,1126],[110,-33,1126],[106,-27,1126],[99,-24,1125],[95,-19,1125],[90,-15,1125],[80,-15,1125],[75,-12,1125],[67,-12,1125],[62,-10,1125],[55,-10,1124],[44,-18,1124],[39,-16,1124],[33,-18,1124],[28,-19,1124],[22,-22,1124],[20,-16,1124],[16,-15,1124],[12,-10,1124],[8,-9,1123],[3,-8,1123],[-1,-10,1123]],"oblique_r":[[-2,-13,1350],[-5,-23,1347],[-8,-28,1343],[-11,-28,1340],[-13,-33,1337],[-16,-34,1334],[-19,-29,1331],[-23,-28,1327],[-26,-29,1324],[-30,-26,1321],[-36,-19,1318],[-41,-18,1315],[-45,-18,1311],[-48,-20,1308],[-57,-15,1305],[-67,-7,1302],[-74,-6,1299],[-79,-8,1295],[-86,-8,1292],[-91,-10,1289],[-96,-13,1286],[-100,-17,1283],[-103,-21,1279],[-106,-26,1276],[-110,-30,1273],[-113,-34,1270],[-115,-39,1267],[-118,-44,1264],[-121,-49,1260],[-124,-53,1257],[-126,-58,1254],[-128,-64,1251],[-131,-69,1248],[-132,-74,1244],[-131,-80,1241],[-132,-86,1238],[-133,-91,1235],[-133,-97,1232],[-134,-103,1228],[-134,-108,1225],[-135,-114,1222],[-134,-120,1219],[-133,-126,1216],[-132,-131,1212],[-130,-137,1209],[-128,-142,1206],[-126,-148,1203],[-124,-153,1200],[-122,-159,1196],[-119,-164,1193],[-117,-169,1190],[-114,-174,1187],[-111,-180,1184],[-107,-184,1180],[-103,-189,1177],[-99,-193,1174],[-95,-197,1171],[-90,-201,1168],[-81,-198,1164]],"oblique_l":[[-2,-13,1350],[1,-23,1346],[4,-26,1343],[7,-26,1340],[10,-26,1337],[13,-27,1333],[17,-27,1330],[23,-19,1327],[26,-20,1324],[29,-21,1320],[34,-19,1317],[39,-17,1314],[43,-19,1310],[51,-14,1307],[56,-15,1304],[67,-8,1301],[73,-8,1297],[81,-8,1294],[86,-10,1291],[92,-12,1288],[95,-16,1284],[100,-19,1281],[104,-24,1278],[107,-28,1274],[110,-33,1271],[112,-38,1268],[116,-43,1265],[118,-48,1261],[120,-54,1258],[121,-59,1255],[123,-64,1252],[125,-70,1248],[127,-75,1245],[129,-81,1242],[131,-87,1238],[130,-92,1235],[130,-98,1232],[130,-104,1229],[130,-110,1225],[129,-116,1222],[128,-122,1219],[130,-128,1216],[128,-134,1212],[126,-140,1209],[124,-145,1206],[122,-151,1202],[119,-156,1199],[118,-162,1196],[114,-167,1193],[111,-172,1189],[109,-178,1186],[105,-183,1183],[102,-188,1180],[98,-193,1176],[93,-197,1173],[89,-201,1170],[80,-199,1166]],"horizontal_r":[[-134,-103,1228],[-133,-109,1229],[-132,-116,1229],[-130,-123,1230],[-129,-129,1230],[-127,-136,1231],[-124,-142,1232],[-122,-148,1232],[-118,-154,1233],[-114,-160,1233],[-110,-165,1234],[-100,-165,1234],[-95,-170,1235],[-91,-175,1235],[-86,-178,1236],[-82,-182,1236],[-77,-186,1237],[-72,-190,1237],[-67,-194,1238],[-60,-194,1238],[-54,-195,1239],[-49,-197,1240],[-42,-194,1240],[-36,-196,1241],[-31,-198,1241],[-26,-199,1242],[-20,-200,1242],[-14,-200,1243],[-9,-201,1243],[-4,-196,1244]],"trachea_back":[[-2,-34,1400],[-1,-31,1393],[-1,-30,1386],[-1,-28,1380],[-1,-25,1374],[-1,-23,1367],[-1,-21,1360],[-1,-19,1354],[-1,-17,1347],[-1,-14,1341],[-1,-12,1334],[-1,-10,1328],[-1,-8,1321],[-1,-6,1315],[-1,-5,1308],[-1,-1,1302]]},"pts":{"sc_right":[-18,-133,1344],"sc_left":[17,-134,1345],"angle":[-4,-179,1298],"xiphisternal":[-4,-206,1190],"cc4_mid":[-4,-196,1244],"scsixth_right":[-18,-200,1202],"scsixth_left":[16,-201,1201],"r8_ccj_right":[-115,-160,1099],"r8_ccj_left":[111,-160,1098],"maleighth_right":[-130,-105,1126],"maleighth_left":[127,-105,1127],"maltenth_right":[-125,-100,1049],"maltenth_left":[124,-101,1051],"mcl6_right":[-81,-198,1164],"mcl6_left":[80,-199,1166],"sp_second":[-2,-13,1350],"sp_fourth":[-1,-1,1302],"sp_tenth":[-1,-10,1123],"sp_twelfth":[0,-26,1070],"sp_c6":[-2,-34,1400],"apex_right":[-35,-143,1383],"apex_left":[33,-144,1383],"pl_left_6":[28,-202,1201],"oblique_mal_r":[-134,-103,1228],"lu_left_5":[51,-204,1199]}};
+const LINE_COL = {pleura_r: '--pl-line', pleura_l: '--pl-line', lung_r: '--lu-line', lung_l: '--lu-line', oblique_r: '--lu-line', oblique_l: '--lu-line', horizontal_r: '--lu-line', trachea_back: '--airway'};
+const LINE_DASH = {oblique_r: '7 5', oblique_l: '7 5', horizontal_r: '7 5', trachea_back: '3 4'};
+/* a topic: lit = parts in their own colour; solid = parts kept solid in their own colour (bones); colour = {key: token};
+   hide = parts not drawn; show = parts drawn that are hidden by default (pleura, diaphragm); lines = surface lines;
+   pts = [point name, label, colour token]; labels = [key, text, point to start the search from (mm)] */
+const TOPICS = [
+  {grp: 'Lungs', id: 'lungs', name: 'Both lungs and their lobes',
+    lit: [...LOBES, ...MAIN], fit: LOBES, view: FRONT, zoom: 0.85,
+    labels: [[LOBES_R[0], 'Right superior lobe', [-70, -175, 1300]], [LOBES_R[1], 'Middle lobe', [-80, -195, 1210]], [LOBES_R[2], 'Right inferior lobe', [-110, -150, 1150]],
+      [LOBES_L[0], 'Left superior lobe', [70, -180, 1300]], [LOBES_L[1], 'Left inferior lobe', [100, -150, 1150]], [R('trachea'), 'Trachea', [0, -112, 1380]]],
+    text: `<p>The <b>right lung</b> has <b>three lobes</b> (superior, middle, inferior) separated by the <b>oblique</b> and <b>horizontal</b> fissures; the <b>left lung</b> has <b>two</b> (superior and inferior), separated by the <b>oblique fissure</b>. The fissures are folds of the visceral pleura going deep into the lung.</p>
+<ul><li>The right lung is <b>shorter</b> (the right dome of the diaphragm is higher, over the liver) but <b>wider</b>; the left is longer and narrower, with the <b>cardiac notch</b> and the <b>lingula</b> (next topics).</li>
+<li>Each lung has an <b>apex</b> rising into the root of the neck, a <b>base</b> on the diaphragm, <b>costal</b> and <b>mediastinal</b> surfaces and anterior, posterior and inferior borders; the <b>hilum</b> on the mediastinal surface is where the root enters.</li></ul>`},
+  {grp: 'Lungs', id: 'rlat', name: 'Right lung from the side',
+    lit: LOBES_R, solid: [], hide: [...LOBES_L], fit: LOBES_R, view: RIGHT, zoom: 1.05,
+    labels: [[LOBES_R[0], 'Superior lobe', [-125, -110, 1290]], [LOBES_R[1], 'Middle lobe', [-120, -170, 1205]], [LOBES_R[2], 'Inferior lobe', [-125, -80, 1170]],
+      [LOBES_R[1], SH('Horizontal fissure', 'Horizontal'), [-125, -150, 1262]], [LOBES_R[2], SH('Oblique fissure', 'Oblique'), [-125, -60, 1250]]],
+    text: `<p>Seen from the right. The <b>oblique fissure</b> runs from high at the back down and forward, separating the <b>inferior lobe</b> (below and behind) from the others. The <b>horizontal fissure</b> runs forward from the oblique fissure to the anterior border at the level of the <b>4th costal cartilage</b>; the <b>middle lobe</b> is the wedge between them.</p>
+<p>Fissures are often <b>incomplete</b>: in dissection series a third or more of right lungs had an incomplete horizontal fissure, and accessory fissures and lobes occur. One dissection study notes that an infection can then spread from one lobe to the next.</p>`},
+  {grp: 'Lungs', id: 'llat', name: 'Left lung from the side',
+    lit: LOBES_L, hide: [...LOBES_R], fit: LOBES_L, view: LEFT, zoom: 1.05,
+    labels: [[LOBES_L[0], 'Superior lobe', [125, -110, 1290]], [LOBES_L[1], 'Inferior lobe', [125, -70, 1170]], [LOBES_L[1], SH('Oblique fissure', 'Oblique'), [125, -60, 1250]]],
+    text: `<p>Seen from the left. The <b>oblique fissure</b> separates the <b>superior lobe</b> (in front, with the apex) from the <b>inferior lobe</b>. The left lung has no middle lobe; the tongue of the superior lobe below the cardiac notch is the <b>lingula</b>.</p>`},
+  {grp: 'Lungs', id: 'notch', name: 'Cardiac notch and lingula',
+    lit: [...LOBES_L, ...HEART], hide: [...LOBES_R], fit: [LOBES_L[0], ...HEART], view: [0.3, -1, -0.15], zoom: 0.85,
+    labels: [[LOBES_L[0], 'Cardiac notch', [45, -200, 1210]], [LOBES_L[0], 'Lingula', [70, -195, 1185]], [V('right_ventricle'), 'Heart in the notch', [20, -200, 1205]]],
+    text: `<p>From the front. Below the level of the <b>4th costal cartilage</b> the anterior border of the left lung swings out to the left: the <b>cardiac notch</b>, where the heart and pericardium are not covered by lung. The tongue of the superior lobe below the notch is the <b>lingula</b>.</p>
+<p class="muted">Z-Anatomy's lobes are smooth and stylised; the notch and lingula in the model are approximate.</p>`},
+  {grp: 'Root and airways', id: 'rroot', name: 'Root of the right lung',
+    lit: [R('right_main_bronchus'), R('right_superior_lobar_bronchus'), R('intermediate_bronchus_r'), V('right_pulmonary_artery'), V('superior_lobar_artery_of_right_lung'), V('right_superior_pulmonary_vein'), V('right_inferior_pulmonary_vein'), V('azygos_vein'), V('superior_vena_cava'), 'n_vagus_nerve_x_r'],
+    hide: [OES, R('trachea'), R('left_main_bronchus'), ...LOBAR_L, ...SEG_L.map(s => s[0]), ...LOBES, ...HEART, V('ascending_aorta'), V('aortic_arch'), V('thoracic_aorta'), ...PA_L, ...PV_L, V('left_brachiocephalic_vein'), 'n_vagus_nerve_x_l', ...ARCH_BR, ...PT, V('inferior_vena_cava_thoracic_part')],
+    glassLobes: true, fit: [R('right_superior_lobar_bronchus'), R('intermediate_bronchus_r'), V('right_pulmonary_artery'), V('right_superior_pulmonary_vein'), V('right_inferior_pulmonary_vein'), V('superior_vena_cava')], view: [1, 0.15, 0.25], zoom: 0.75,
+    labels: [[R('right_superior_lobar_bronchus'), 'Eparterial bronchus', [-5, -82, 1292]], [V('right_pulmonary_artery'), 'Pulm. artery', [-10, -100, 1282]],
+      [R('intermediate_bronchus_r'), 'Hyparterial', [-15, -79, 1270]], [V('right_superior_pulmonary_vein'), 'Sup. vein', [-23, -98, 1262]],
+      [V('right_inferior_pulmonary_vein'), 'Inf. vein', [0, -75, 1238]], [V('azygos_vein'), 'Azygos arch', [3, -80, 1306]], [V('superior_vena_cava'), 'SVC', [-3, -120, 1300]], ['n_vagus_nerve_x_r', 'Vagus', [0, -70, 1270]]],
+    text: `<p>Seen from the left and a little above, with the lungs, heart and aorta hidden (front on your left). The <b>root</b> holds the bronchus, the pulmonary artery, two pulmonary veins, the bronchial vessels, the pulmonary plexus, lymph vessels and nodes, wrapped in pleura.</p>
+<ul><li><b>Front to back</b> (both sides): upper pulmonary vein, pulmonary artery, bronchus.</li>
+<li><b>Top to bottom, right:</b> the <b>eparterial bronchus</b> (to the upper lobe, about 2–2.5 cm from the bifurcation, <i>above</i> the artery), the <b>pulmonary artery</b>, the <b>hyparterial bronchus</b>, the veins; the inferior vein is lowest.</li>
+<li><b>Relations:</b> the <b>arch of the azygos vein</b> hooks over the root from behind (at about T4) into the <b>SVC</b>, which lies in front of it (Gray); the <b>phrenic nerve</b> runs in front of the root, the <b>vagus</b> behind it. Below it hangs the pulmonary ligament.</li></ul>
+<p class="muted">Lobes hidden; seen a little from above. Z-Anatomy has no phrenic nerve, bronchial vessels or pulmonary ligament.</p>`},
+  {grp: 'Root and airways', id: 'lroot', name: 'Root of the left lung',
+    lit: [R('left_main_bronchus'), R('left_superior_lobar_bronchus'), R('left_inferior_lobar_bronchus'), V('left_pulmonary_artery'), V('left_superior_pulmonary_vein'), V('left_inferior_pulmonary_vein'), V('aortic_arch'), V('thoracic_aorta'), 'n_vagus_nerve_x_l'],
+    hide: [OES, R('trachea'), R('right_main_bronchus'), ...LOBAR_R, ...SEG_R.map(s => s[0]), ...LOBES, ...HEART, V('ascending_aorta'), ...PA_R, ...PV_R, ...SVC, V('azygos_vein'), 'n_vagus_nerve_x_r', V('inferior_vena_cava_thoracic_part'), ...PT],
+    glassLobes: true, fit: [R('left_main_bronchus'), R('left_superior_lobar_bronchus'), V('left_superior_pulmonary_vein'), V('left_inferior_pulmonary_vein'), V('aortic_arch')], view: [-1, 0.15, 0.25], zoom: 0.75,
+    labels: [[V('left_pulmonary_artery'), 'Pulm. artery', [10, -90, 1300]], [R('left_main_bronchus'), 'Bronchus', [20, -85, 1275]],
+      [V('left_superior_pulmonary_vein'), 'Sup. vein', [29, -92, 1262]], [V('left_inferior_pulmonary_vein'), 'Inf. vein', [20, -77, 1240]],
+      [V('aortic_arch'), 'Aortic arch', [0, -100, 1330]], [V('thoracic_aorta'), 'Desc. aorta', [5, -62, 1260]], ['n_vagus_nerve_x_l', 'Vagus', [10, -75, 1290]]],
+    text: `<p>Seen from the right and a little above, with the lungs, heart and SVC hidden (front on your right).</p>
+<ul><li><b>Top to bottom, left:</b> the <b>pulmonary artery</b>, the <b>bronchus</b> (no eparterial branch: the left bronchus divides below the artery), the veins; front to back, vein, artery, bronchus.</li>
+<li><b>Relations:</b> the <b>arch of the aorta</b> arches over the root; the <b>descending aorta</b> lies behind it (Gray); the phrenic nerve in front, the <b>vagus</b> behind.</li></ul>`},
+  {grp: 'Root and airways', id: 'trachea', name: 'Trachea and carina',
+    lit: [...MAIN, CRIC, OES, V('aortic_arch'), V('brachiocephalic_trunk'), V('left_common_carotid_artery'), V('left_subclavian_artery'), V('left_brachiocephalic_vein'), ...VAGUS, V('azygos_vein')],
+    solid: [...CV, ...TV.slice(0, 6)], cage: true, hide: [...LOBES, ...HEART], fit: [R('trachea'), CRIC, R('right_main_bronchus'), R('left_main_bronchus')], view: [0.45, -1, 0.1], zoom: 1.0,
+    labels: [[CRIC, 'Cricoid cartilage (C6)', [0, -110, 1405]], [R('trachea'), 'Trachea', [0, -112, 1350]], [OES, 'Oesophagus (behind)', [5, -75, 1360]],
+      [V('aortic_arch'), 'Arch of the aorta', [20, -120, 1330]], [V('left_brachiocephalic_vein'), 'Left brachiocephalic vein', [10, -135, 1345]], [R('right_main_bronchus'), 'Right main bronchus', [-15, -90, 1295]], [R('left_main_bronchus'), 'Left main bronchus', [30, -90, 1285]], ['body_of_sternum', SH('Sternal angle (bifurcation level)', ''), [-3, -180, 1298]]],
+    text: `<p>The <b>trachea</b> runs from the lower border of the <b>cricoid cartilage (C6)</b> to its bifurcation at about <b>T4–T5</b>, level with the <b>sternal angle</b> (Gray: the upper border of T5; it moves up and down with breathing). It is about <b>10–11 cm</b> long and about <b>2 cm</b> wide, held open by <b>16–20 C-shaped rings</b> of hyaline cartilage, open behind where the <b>trachealis</b> muscle closes the ring.</p>
+<ul><li>Behind it lies the <b>oesophagus</b> all the way; in the chest the arch of the aorta and its branches lie in front and to the left (relations: table below the model).</li>
+<li>The <b>carina</b> is the ridge of the last tracheal cartilage between the two bronchi, a little to the <b>left</b> of the midline.</li></ul>`},
+  {grp: 'Root and airways', id: 'tree', name: 'Bronchial tree',
+    lit: AIRWAY, glassLobes: true, fit: [...AIRWAY], view: FRONT, zoom: 1.1,
+    labels: [[R('right_main_bronchus'), 'Main bronchus', [-15, -95, 1300]], [R('right_superior_lobar_bronchus'), 'Lobar bronchus', [-30, -90, 1300]], [SEGB[0], 'Segmental bronchus', [-45, -100, 1340]], [R('left_inferior_lobar_bronchus'), 'Left lower lobar bronchus', [45, -85, 1240]]],
+    text: `<p>Each <b>main bronchus</b> divides into <b>lobar</b> bronchi, one per lobe (three on the right, two on the left), and each lobar bronchus into <b>segmental</b> bronchi, one for each bronchopulmonary segment. Further divisions end in bronchioles, too narrow to have cartilage.</p>
+<p>On the right, the bronchus continuing below the upper lobe bronchus (Gray: hyparterial) goes to the middle and lower lobes; Wikipedia and the model call it the <b>intermediate bronchus</b>. Segments: "Segments" topics and the table below.</p>`},
+  {grp: 'Root and airways', id: 'fb', name: 'Foreign body: why the right bronchus',
+    lit: MAIN, hide: [...LOBES, ...HEART, OES], fit: [R('right_main_bronchus'), R('left_main_bronchus'), R('right_superior_lobar_bronchus'), R('left_superior_lobar_bronchus')], view: FRONT, zoom: 0.6,
+    labels: [[R('right_main_bronchus'), 'Right: shorter, wider, steeper', [-15, -95, 1295]], [R('left_main_bronchus'), 'Left: longer, narrower', [40, -82, 1268]], [R('trachea'), 'Trachea', [0, -105, 1330]]],
+    text: `<p>The <b>right main bronchus</b> is <b>shorter, wider and more vertical</b> than the left, a more direct continuation of the trachea. In a CT study of adults the means were about <b>26 vs 46 mm</b> long, <b>15 vs 11 mm</b> wide and <b>27° vs 51°</b> from the line of the trachea.</p>
+<p>So inhaled <b>foreign bodies</b> lodge more often in the <b>right bronchial tree</b> (61–81% in adult series; in one series of 292 children, the right main bronchus 30.5% and the left 15.1% of all sites). Details below.</p>`},
+  {grp: 'Segments', id: 'segr', name: 'Right lung segments',
+    lit: SEG_R.map(s => s[0]), colourBy: SEG_R, glassLobes: true, hide: [...LOBES_L, ...SEG_L.map(s => s[0]), ...LOBAR_L], fit: [...LOBES_R], view: [-1, -0.25, 0.05], zoom: 1.05, segLabels: SEG_R,
+    text: `<p>The <b>right lung has 10 segments</b>, each aired by its own <b>segmental bronchus</b> (coloured; the number is the segment's): upper lobe <b>1 apical, 2 posterior, 3 anterior</b>; middle lobe <b>4 lateral, 5 medial</b>; lower lobe <b>6 superior, 7 medial basal, 8 anterior basal, 9 lateral basal, 10 posterior basal</b>. The segment is the lung tissue around the ends of its bronchus (the model has no segment outlines).</p>`},
+  {grp: 'Segments', id: 'segl', name: 'Left lung segments',
+    lit: SEG_L.map(s => s[0]), colourBy: SEG_L, glassLobes: true, hide: [...LOBES_R, ...SEG_R.map(s => s[0]), ...LOBAR_R], fit: [...LOBES_L], view: [1, -0.25, 0.05], zoom: 1.05, segLabels: SEG_L,
+    text: `<p>The <b>left lung usually has 8–9 segments</b>, because neighbours share a bronchus: upper lobe <b>1+2 apicoposterior, 3 anterior, 4 superior lingular, 5 inferior lingular</b>; lower lobe <b>6 superior, 7+8 anteromedial basal, 9 lateral basal, 10 posterior basal</b>.</p>
+<p class="muted">Z-Anatomy draws the left anteromedial basal bronchus and also separate medial basal (7) and anterior basal (8) branches; they share colours here.</p>`},
+  {grp: 'Segments', id: 'asp', name: 'Where aspirated material goes',
+    lit: [R('posterior_segmental_bronchus_of_right_lung_bii'), R('superior_segmental_bronchus_of_right_lung_bvi'), R('superior_segmental_bronchus_of_left_lung_bvi'), R('apicoposterior_segmental_bronchus_of_left_lung_bi_bii')],
+    colourBy: [[R('posterior_segmental_bronchus_of_right_lung_bii'), 2], [R('superior_segmental_bronchus_of_right_lung_bvi'), 6], [R('superior_segmental_bronchus_of_left_lung_bvi'), 6], [R('apicoposterior_segmental_bronchus_of_left_lung_bi_bii'), 2]],
+    glassLobes: true, hide: SEGB.filter(k => !/bii$|bvi$|bi_bii$/.test(k)), fit: LOBES, view: [-0.6, 1, 0.1], zoom: 0.95,
+    labels: [[R('posterior_segmental_bronchus_of_right_lung_bii'), 'R 2 posterior', [-60, -40, 1320]], [R('superior_segmental_bronchus_of_right_lung_bvi'), 'R 6 superior', [-55, -40, 1250]], [R('superior_segmental_bronchus_of_left_lung_bvi'), 'L 6 superior', [55, -40, 1250]]],
+    text: `<p>Aspirated material runs to the <b>lowest (dependent)</b> part of the lungs:</p>
+<ul><li><b>Lying on the back:</b> the <b>superior segments of the lower lobes</b> (6; the right more often than the left) and the <b>posterior segments of the upper lobes</b> (2). Lit, seen from behind: the right lung is on your right.</li>
+<li><b>Upright:</b> the <b>basal segments of the lower lobes</b>.</li></ul>`},
+  {grp: 'Vessels, lymph, nerves', id: 'pa', name: 'Pulmonary arteries',
+    lit: [...PT, ...PA_R, ...PA_L, V('right_ventricle')], glassLobes: true, fit: [...PA_R, ...PA_L], view: FRONT, zoom: 1.0,
+    labels: [[PT[0], 'Pulmonary trunk', [10, -150, 1270]], [V('right_pulmonary_artery'), 'Right pulmonary artery', [-20, -110, 1285]], [V('left_pulmonary_artery'), 'Left pulmonary artery', [35, -100, 1295]], [PA_R[4], 'Segmental arteries', [-60, -120, 1330]]],
+    text: `<p>The <b>pulmonary trunk</b> carries deoxygenated blood from the right ventricle and divides below the arch of the aorta into the <b>right</b> and <b>left pulmonary arteries</b>. Each branches with the bronchi: lobar, then <b>segmental arteries</b>, each running with its segmental bronchus. They bring blood for gas exchange, not to nourish the lung (that is the bronchial arteries' job, not in the model).</p>`},
+  {grp: 'Vessels, lymph, nerves', id: 'pv', name: 'Pulmonary veins',
+    lit: [...PV_R, ...PV_L, V('left_atrium')], glassLobes: true, fit: [...PV_R, ...PV_L], view: BACK, zoom: 1.0,
+    labels: [[V('right_superior_pulmonary_vein'), 'Right superior', [-30, -110, 1255]], [V('right_inferior_pulmonary_vein'), 'Right inferior', [-30, -90, 1230]], [V('left_superior_pulmonary_vein'), 'Left superior', [35, -110, 1260]], [V('left_inferior_pulmonary_vein'), 'Left inferior', [35, -90, 1235]], [V('left_atrium'), 'Left atrium', [5, -100, 1240]]],
+    text: `<p>Seen from behind. The <b>pulmonary veins</b> begin in the alveolar capillaries and run through the lung apart from the arteries and bronchi, mostly between segments. Usually <b>four</b> leave the hila, a <b>superior and an inferior</b> from each lung, and open into the <b>left atrium</b> (Wikipedia: between three and five in healthy people).</p>`},
+  {grp: 'Vessels, lymph, nerves', id: 'bronchial', name: 'Bronchial vessels (not in the model)',
+    lit: [...AORTA, V('azygos_vein'), V('accessory_hemi_azygos_vein'), V('hemi_azygos_vein'), ...MAIN, R('right_superior_lobar_bronchus'), R('intermediate_bronchus_r'), R('left_superior_lobar_bronchus'), R('left_inferior_lobar_bronchus')],
+    hide: [...LOBES, ...HEART], fit: [V('thoracic_aorta'), R('trachea'), V('azygos_vein'), 'eighth_thoracic_vertebra'], view: [0.3, 1, 0.1], zoom: 0.9,
+    labels: [[V('thoracic_aorta'), SH('Desc. aorta (bronchial aa.)', 'Desc. aorta'), [22, -45, 1270]], [V('azygos_vein'), SH('Azygos (R bronchial v.)', 'Azygos'), [-12, -55, 1250]], [V('accessory_hemi_azygos_vein'), SH('Acc. hemiazygos (L bronchial v.)', 'Acc. hemiaz.'), [14, -50, 1270]]],
+    text: `<p>Z-Anatomy has no bronchial arteries or veins; the vessels they come from and drain to are lit (seen from behind).</p>
+<ul><li><b>Bronchial arteries</b> nourish the bronchi, the lung's connective tissue and the visceral pleura. Usually <b>two left</b> (from the descending thoracic aorta) and <b>one right</b> (usually from an <b>intercostobronchial trunk</b>, shared with a right posterior intercostal artery), at about <b>T5–T6</b> (a 2020 CT review), near the carina. Their number and origin vary.</li>
+<li><b>Bronchial veins:</b> right to the <b>azygos</b>; left to the <b>accessory hemiazygos</b> or the left superior intercostal vein. Much of the bronchial blood returns through the pulmonary veins instead.</li></ul>`},
+  {grp: 'Vessels, lymph, nerves', id: 'nodes', name: 'Lymph nodes',
+    lit: [...NODES, ...MAIN, ...LOBAR_R, ...LOBAR_L], glassLobes: true, fit: [...NODES, ...MAIN], view: FRONT, zoom: 1.0,
+    labels: [[LN('intrapulmonary_nodes'), 'Intrapulmonary', [-40, -100, 1270]], [LN('superior_tracheobronchial_nodes'), 'Superior TB', [-12, -100, 1305]], [LN('inferior_tracheobronchial_nodes'), SH('Inferior TB (subcarinal)', 'Inf. TB'), [5, -90, 1285]], [LN('paratracheal_thoracic_nodes'), 'Paratracheal', [-10, -110, 1340]]],
+    text: `<p>Lymph from the lung drains from a <b>superficial (subpleural)</b> plexus under the visceral pleura and a <b>deep</b> plexus along the bronchi and vessels (Gray: none in the alveolar walls), to the <b>hilum</b>:</p>
+<p><b>pulmonary (intrapulmonary)</b> nodes on the larger bronchi → <b>bronchopulmonary (hilar)</b> nodes → <b>tracheobronchial</b> nodes (superior, in the angles beside the bifurcation; inferior, below the carina) → <b>paratracheal</b> nodes → the <b>bronchomediastinal trunks</b> (Gray).</p>
+<p class="muted">Node groups are Z-Anatomy's; their positions are approximate. Modern staging uses numbered stations (see the table under "Blood supply, lymph and nerves").</p>`},
+  {grp: 'Vessels, lymph, nerves', id: 'nerves', name: 'Vagus and pulmonary plexus',
+    lit: [...VAGUS, ...MAIN, V('aortic_arch'), V('right_subclavian_artery'), OES], glassLobes: true, fit: [...MAIN, V('aortic_arch'), ...LOBES], view: [0.2, 1, 0.1], zoom: 0.9,
+    labels: [['n_vagus_nerve_x_r', 'Right vagus', [-20, -80, 1320]], ['n_vagus_nerve_x_l', 'Left vagus', [20, -90, 1320]], [R('right_main_bronchus'), SH('Root (plexus not modelled)', 'Root'), [-20, -85, 1290]]],
+    text: `<p>Seen from behind. The lungs are supplied by the <b>anterior and posterior pulmonary plexuses</b> at the roots, from the <b>vagus</b> and the <b>sympathetic trunk</b> (including the stellate ganglion).</p>
+<ul><li><b>Vagus (parasympathetic):</b> bronchoconstriction, mucus secretion, vasodilatation; its afferents carry the cough reflex.</li>
+<li><b>Sympathetic:</b> bronchodilatation, vasoconstriction.</li></ul>
+<p class="muted">The model has the vagus nerves but not their pulmonary branches or the sympathetic trunk here.</p>`},
+  {grp: 'Pleura and surface', id: 'pleura', name: 'The pleural sacs',
+    lit: LOBES, show: [PLEURA], glassLobes: true, fit: [PLEURA], view: FRONT, zoom: 0.95,
+    labels: [[PLEURA, 'Right pleural sac', [-110, -150, 1250]], [PLEURA, 'Left pleural sac', [110, -150, 1250]]],
+    text: `<p>Z-Anatomy's <b>pleura</b> (one object for both sacs, shown as glass) wraps each lung. Each lung lies in its own closed sac: the <b>visceral pleura</b> on the lung, the <b>parietal pleura</b> on the wall, a thin film of fluid between them. The two sacs never communicate.</p>
+<p class="muted">The model's pleura follows the lungs closely; it does not show the recesses where the parietal pleura reaches below the lungs. For those, see the surface lines (next topics) and the schematic below.</p>`},
+  {grp: 'Pleura and surface', id: 'sfront', name: 'Surface lines: front',
+    lit: [], solid: [...RIBS, ...CC, ...STERNUM, ...CLAV], glassLobes: true, lines: ['pleura_r', 'pleura_l', 'lung_r', 'lung_l', 'oblique_r', 'oblique_l', 'horizontal_r'],
+    fit: [...STERNUM, 'right_tenth_rib', 'left_tenth_rib', ...CLAV], view: FRONT, zoom: 0.85,
+    pts: [['angle', 'Sternal angle', '--ink'], ['cc4_mid', '4th costal cartilage', '--ink'], ['xiphisternal', 'Xiphisternum', '--ink'], ['mcl6_right', '6th rib MCL (lung)', '--lu-line'], ['r8_ccj_right', '8th costochondral (pleura)', '--pl-line'], ['pl_left_6', SH('6th cartilage (L pleura)', '6th cart.'), '--pl-line'], ['apex_right', 'Apex 2.5 cm up', '--lu-line']],
+    text: `<p><b style="color:var(--pl-line)">Pleura</b> (indigo) and <b style="color:var(--lu-line)">lung</b> (purple) lines drawn on the model's ribs (approximate; dashed: fissures).</p>
+<ul><li><b>Apex:</b> pleura and lung rise about <b>2.5 cm above the medial third of the clavicle</b>.</li>
+<li><b>Anterior pleural line:</b> sternoclavicular joint → the midline at the <b>sternal angle</b> → both run down together to the <b>4th costal cartilage</b>; the <b>right</b> goes on to the xiphisternal joint, the <b>left</b> turns out beside the sternal border to the <b>6th costal cartilage</b>.</li>
+<li><b>Lung:</b> follows the pleura to the 4th cartilage; the left lung's border swings out below it (<b>cardiac notch</b>).</li>
+<li><b>Lower borders</b> in front: lung at the <b>6th rib</b> in the midclavicular line, pleura at the <b>8th costochondral junction</b> (Gray 1918; side and back levels in the next topics and the table).</li></ul>`},
+  {grp: 'Pleura and surface', id: 'sside', name: 'Surface lines: side',
+    lit: [], solid: [...RIBS, ...CC, ...STERNUM, ...CLAV], glassLobes: true, lines: ['pleura_r', 'lung_r', 'oblique_r', 'horizontal_r'],
+    fit: ['right_first_rib', 'right_eleventh_rib', 'right_sixth_rib', ...STERNUM], view: RIGHT, zoom: 0.85,
+    pts: [['maleighth_right', '8th rib MAL (lung)', '--lu-line'], ['maltenth_right', '10th rib MAL (pleura)', '--pl-line'], ['oblique_mal_r', 'Fissures meet', '--lu-line'], ['cc4_mid', '4th cartilage', '--ink']],
+    text: `<p>From the right side. In the <b>midaxillary line</b> the lower border of the <b>lung</b> crosses the <b>8th rib</b> and the <b>pleura</b> the <b>10th rib</b>: the gap between them is the <b>costodiaphragmatic recess</b> (Wikipedia: about 5 cm, 8th to 10th rib).</p>
+<ul><li><b>Oblique fissure:</b> from the back (spine of about T2–T4) round the side to the <b>6th rib in the midclavicular line</b>.</li>
+<li><b>Horizontal fissure (right):</b> from the oblique fissure in the midaxillary line forward to the <b>4th costal cartilage</b>.</li></ul>`},
+  {grp: 'Pleura and surface', id: 'sback', name: 'Surface lines: back',
+    lit: [], solid: [...RIBS, ...TV, ...CV, 'first_lumbar_vertebra'], glassLobes: true, lines: ['pleura_r', 'pleura_l', 'lung_r', 'lung_l', 'oblique_r', 'oblique_l', 'trachea_back'],
+    fit: [...TV, 'sixth_cervical_vertebra', 'first_lumbar_vertebra', 'right_tenth_rib', 'left_tenth_rib'], view: BACK, zoom: 0.85,
+    pts: [['sp_tenth', 'T10 (lung)', '--lu-line'], ['sp_twelfth', 'T12 (pleura)', '--pl-line'], ['sp_second', 'T2 (fissure)', '--lu-line'], ['sp_c6', 'C6', '--airway'], ['sp_fourth', 'T4 (bifurcation)', '--airway']],
+    text: `<p>From behind. The lungs reach down to about the <b>T10 spine</b>, the pleura to the <b>12th rib</b> (T12). The oblique fissures start near the upper thoracic spines (Gray T2; other sources T3–T4).</p>
+<p><b>Trachea</b> (teal dotted line): from the <b>C6 spine</b> to the <b>T4 spine</b>, where it divides; in front, the bifurcation is level with the <b>sternal angle</b>.</p>`},
+  {grp: 'Oesophagus', id: 'oes', name: 'Oesophagus and what presses on it',
+    lit: [OES, CRIC, V('aortic_arch'), V('thoracic_aorta'), R('left_main_bronchus'), R('trachea'), R('right_main_bronchus'), V('left_atrium')], show: [DIA], hide: [...LOBES, V('right_atrium'), V('right_ventricle'), V('left_ventricle')],
+    solid: [...CV, ...TV, 'first_lumbar_vertebra'], fit: [OES, CRIC, V('left_atrium')], view: [0.8, -1, 0.05], zoom: 0.95,
+    labels: [[CRIC, '1 Cricoid (C6)', [0, -105, 1400]], [V('aortic_arch'), '2 Aortic arch', [20, -105, 1320]], [R('left_main_bronchus'), '3 Left bronchus', [25, -85, 1280]], [V('left_atrium'), 'Left atrium', [10, -95, 1235]], [DIA, '4 Hiatus (T10)', [15, -95, 1150]], [OES, 'Oesophagus', [5, -80, 1200]]],
+    text: `<p>Seen from the front and left (the diaphragm as glass). The <b>oesophagus</b> (about 25 cm) runs from the cricoid (C6) behind the trachea, then behind and to the right of the arch of the aorta, down the posterior mediastinum to the <b>hiatus</b> (T10) and the stomach (StatPearls: at T11). It is narrowed in <b>four</b> places: (1) its start behind the <b>cricoid</b>, (2) where the <b>arch of the aorta</b> crosses it, (3) where the <b>left main bronchus</b> crosses it, (4) the <b>hiatus</b>. On a barium swallow the arch, the left bronchus and the <b>left atrium</b> make gentle impressions (schematic below).</p>
+<p class="muted">Z-Anatomy draws the oesophagus as a curve; here it is a round tube of even width (approximate).</p>`},
+];
+/* pleura section */
+const PL_TEXT = `<p>Each lung lies in a closed <b>pleural sac</b>. The <b>visceral (pulmonary) pleura</b> covers the lung and dips into its fissures; the <b>parietal pleura</b> lines the chest wall (<b>costal</b>), the diaphragm (<b>diaphragmatic</b>), the mediastinum (<b>mediastinal</b>) and rises over the apex into the neck as the <b>cervical pleura (cupula)</b>, covered by the <b>suprapleural membrane</b> (Sibson's fascia, from the inner border of the 1st rib to the transverse process of C7). The layers meet round the root of the lung and hang below it as the <b>pulmonary ligament</b>. Between them is the <b>pleural cavity</b>, a potential space with a thin film of fluid; right and left do not communicate.</p>
+<p><b>Recesses:</b> in quiet breathing the lung does not fill the cavity at its edges, and two layers of parietal pleura lie against each other: the <b>costodiaphragmatic recess</b> (costal against diaphragmatic pleura, low round the side and back) and the <b>costomediastinal recess</b> (behind the sternum and cartilages, largest at the cardiac notch). Wikipedia: the lung expands into them in deep inspiration but never fills the costodiaphragmatic recess.</p>
+<p><b>Applied:</b></p>
+<ul><li><b>Effusion:</b> standing, fluid first collects in the costodiaphragmatic recess and <b>blunts the costophrenic angle</b> on the X-ray (toggle "Effusion").</li>
+<li><b>Pleural tap (thoracentesis):</b> <b>ultrasound-guided</b>; the needle passes along the <b>upper border of the lower rib</b> of the space to miss the intercostal vessels and nerve under the rib above, <b>6 cm or more from the midline</b>; the safe triangle may be used (ICS/NCCP pleural guidelines, 2024). The intercostal space itself: <a href="nerves-vessels.html">Nerves, Vessels and Lymphatics of the Thorax</a>.</li>
+<li><b>Pneumothorax:</b> air in the pleural cavity, through a wound of the chest wall or a tear of the visceral pleura; the lung collapses. <b>Primary spontaneous</b>: no lung disease; <b>secondary</b>: with lung disease.</li>
+<li><b>Tension pneumothorax:</b> a one-way valve lets air in but not out; the pressure pushes the <b>mediastinum to the other side</b>, presses on the heart, great veins and trachea and pushes the diaphragm down. It is an emergency, treated by <b>decompression</b>, if needed before imaging.</li></ul>`;
+/* pleura supply: [part, nerves, arteries, lymph] */
+const PL_ROWS = [
+  ['Costal pleura (and the cupula)', 'Intercostal nerves (somatic: pain-sensitive)', 'From the wall under it: intercostal and internal thoracic arteries', 'With the wall: to the parasternal (internal thoracic) nodes (Gray)'],
+  ['Diaphragmatic pleura', 'Periphery: intercostal nerves. Centre: phrenic nerve (both pain-sensitive)', 'From the vessels under it: superior phrenic and musculophrenic arteries', 'With the diaphragm\'s lymphatics (Gray)'],
+  ['Mediastinal pleura', 'Phrenic nerve (somatic: pain-sensitive)', 'Pericardiacophrenic and other mediastinal branches', 'Posterior mediastinal nodes (Gray)'],
+  ['Visceral pleura', 'Autonomic fibres of the pulmonary plexus (Wikipedia: insensitive to pain)', 'Bronchial (and pulmonary) vessels of the lung', 'With the lung\'s superficial lymphatics to the hilar nodes'],
+];
+/* surface marking table: [line, midclavicular, midaxillary, back, topic] */
+const SM_ROWS = [
+  ['Pleura (lower limit)', '8th costochondral junction (Gray 1918)', '10th rib', '12th rib / T12 spine', 'sfront'],
+  ['Lung (lower border, quiet breathing)', '6th rib (Gray 1918)', '8th rib', 'T10 spine', 'sside'],
+  ['Oblique fissure', '6th rib (front end)', 'crosses the side', 'spine of T2 (Gray) or T3–T4', 'sside'],
+  ['Horizontal fissure (right)', '4th costal cartilage (front end)', 'meets the oblique fissure', '—', 'sside'],
+  ['Trachea', 'front: midline from the cricoid to the sternal angle', '—', 'C6 to T4 spines', 'sback'],
+];
+const SM_INTRO = 'Tap a row to see the lines on the model. A quick rule from the table: below, the pleura lies about two ribs lower than the lung, all the way round.';
+const SM_NOTE = 'Lines are drawn on the model\'s ribs from Gray\'s (1918) words and are approximate: chests differ and the lungs move with breathing. The midaxillary and back levels are confirmed by a second open source; the midclavicular levels (6th and 8th ribs) are Gray\'s alone.';
+/* root and side */
+const ROOT_TEXT = `<p><b>Order in the root.</b> Front to back on both sides: <b>vein, artery, bronchus</b>. Top to bottom: right, <b>eparterial bronchus, artery, hyparterial bronchus, veins</b>; left, <b>artery, bronchus, veins</b>. The inferior pulmonary vein is the lowest structure of each hilum.</p>
+<p><b>Relations:</b> the <b>azygos arch</b> hooks over the right root (about T4), the <b>arch of the aorta</b> over the left; the <b>phrenic nerve</b> runs in front of each root, the <b>vagus</b> behind; the <b>pulmonary ligament</b> hangs below. Open the 3D topics "Root of the right / left lung". The phrenic and vagus nerves in the thorax: <a href="nerves-vessels.html">Nerves, Vessels and Lymphatics of the Thorax</a>.</p>`;
+const SIDE_ROWS = [
+  ['Lobes and fissures', 'Three lobes, two fissures (oblique and horizontal)', 'Two lobes, one fissure (oblique)'],
+  ['Anterior border', 'No cardiac notch', 'Cardiac notch below the 4th costal cartilage, lingula below it'],
+  ['Bronchi at the hilum', 'Usually two (98% in one series): eparterial bronchus above the artery', 'Usually one (78%): the artery is the highest structure'],
+  ['Arch over the root', 'Arch of the azygos vein', 'Arch of the aorta'],
+  ['Shape', 'Shorter and wider', 'Longer and narrower'],
+];
+const SIDE_NOTE = 'Lobes and fissures vary: incomplete, absent and extra fissures are common (variants in a sixth to a third of lungs in dissection series), and an azygos lobe (about 0.3–1%) is a normal variant. Use all the features together.';
+/* trachea: [feature, facts] */
+const TR_ROWS = [
+  ['Extent', 'Lower border of the cricoid (C6) to the bifurcation at about T4–T5, level with the sternal angle (Gray: upper border of T5; moves with breathing)'],
+  ['Size, structure', 'About 10–11 cm long, about 2 cm wide (wider in men); 16–20 C-shaped hyaline rings open behind, closed by the trachealis muscle'],
+  ['In front (neck)', 'Isthmus of the thyroid (2nd–4th rings), inferior thyroid veins, sternohyoid and sternothyroid, the jugular arch'],
+  ['In front (thorax)', 'Manubrium, thymic remains, left brachiocephalic vein, arch of the aorta with the brachiocephalic trunk and left common carotid, deep cardiac plexus'],
+  ['Behind', 'Oesophagus, along its whole length'],
+  ['Sides (neck)', 'Lobes of the thyroid, common carotid and inferior thyroid arteries; recurrent laryngeal nerves in the groove beside the oesophagus'],
+  ['Sides (thorax)', 'Right: pleura, right vagus, the azygos arch above the bifurcation. Left: arch of the aorta, left common carotid and subclavian arteries, left recurrent laryngeal nerve (Gray)'],
+  ['Arteries, veins', 'Inferior thyroid arteries and veins; the lower part from the bronchial arteries (Wikipedia; Gray names only the inferior thyroid arteries)'],
+  ['Lymph', 'Pretracheal and paratracheal nodes'],
+  ['Nerves', 'Vagus (partly through the recurrent laryngeal nerves, Gray) and sympathetic fibres'],
+];
+/* bronchi: [feature, right, left] */
+const BR_ROWS = [
+  ['Length', 'About 2.5 cm (Gray); CT mean 26 mm', 'About 5 cm (Gray); CT mean 46 mm'],
+  ['Width', 'Wider (CT mean 15 mm)', 'Narrower (CT mean 11 mm)'],
+  ['Direction', 'More vertical (CT: about 27° from the line of the trachea)', 'More horizontal (about 51°)'],
+  ['First branch', 'Upper lobe (eparterial) bronchus about 2–2.5 cm from the bifurcation, above the pulmonary artery', 'Divides below the pulmonary artery'],
+  ['Relations', 'Arch of the azygos above it; right pulmonary artery below, then in front of it', 'Passes under the arch of the aorta, in front of the oesophagus and descending aorta; left pulmonary artery above it'],
+];
+const FB_TEXT = `<p><b>Foreign bodies</b> go more often to the <b>right bronchial tree</b> (Gray; 61–81% in adult series). The classic reason is that the right main bronchus is wider, shorter and more vertical. A 2026 CT study confirmed those differences in the population but found that they did not predict the side in patients; a longer right main bronchus did. Open "Foreign body" in 3D. In children too the right main bronchus is the commonest site (one 10-year series: 30.5% of all sites, against 15.1% for the left).</p>
+<p><b>Carina:</b> widening of the angle under the carina on imaging points to enlarged subcarinal nodes or a large left atrium (both in Wikipedia; the left atrium also in a radiology review).</p>`;
+/* segments */
+const SEG_TEXT = `<p>A <b>bronchopulmonary segment</b> is the part of a lobe aired by one <b>segmental (tertiary) bronchus</b>, with its own branch of the <b>pulmonary artery</b> running beside the bronchus in its centre. The <b>veins</b> mostly run in the planes between segments (Wikipedia), though a 2026 review warns that venous drainage does not always match the segments. Connective tissue separates neighbouring segments, so one segment can be removed on its own.</p>`;
+/* segment table: [lobe, right lung, left lung] */
+const SEG_ROWS = [
+  ['Upper lobe', '1 Apical · 2 Posterior · 3 Anterior', '1+2 Apicoposterior · 3 Anterior'],
+  ['Middle lobe / lingula', '4 Lateral · 5 Medial', '4 Superior lingular · 5 Inferior lingular (lingula of the upper lobe)'],
+  ['Lower lobe', '6 Superior · 7 Medial basal · 8 Anterior basal · 9 Lateral basal · 10 Posterior basal', '6 Superior · 7+8 Anteromedial basal · 9 Lateral basal · 10 Posterior basal'],
+  ['Total', '10', 'Usually 8–9'],
+];
+const ASP_TEXT = `<p><b>Aspiration</b> (inhaled secretions or vomit) affects the <b>dependent</b> segments: lying <b>supine</b>, the <b>superior segments of the lower lobes</b> (6; the right more often) and the <b>posterior segments of the upper lobes</b> (2); <b>upright</b>, the <b>basal segments of the lower lobes</b>. Open "Where aspirated material goes".</p>
+<p><b>Segmentectomy</b> (segmental resection) removes one or more segments, dividing only that segment's bronchus, artery and vein, and keeps the rest of the lobe. It is used in lung cancer surgery; one 2025 series operated on peripheral nodules under 2 cm, patients whose lung function did not allow a lobectomy, and benign disease such as bronchiectasis. A tumour near an intersegmental plane may need a wider resection.</p>`;
+/* supply: [what, details] */
+const SUP_ROWS = [
+  ['Pulmonary arteries', 'Deoxygenated blood from the right ventricle for gas exchange; branch with the bronchi (lobar, segmental); the artery runs with its bronchus.'],
+  ['Pulmonary veins', 'Oxygenated blood; run between segments; usually four (two from each lung) to the left atrium.'],
+  ['Bronchial arteries', 'Nourish the bronchi, lung connective tissue and visceral pleura. Usually two left (descending aorta) and one right (usually an intercostobronchial trunk), at about T5–T6 (a 2020 CT review). They can bleed into the airways (haemoptysis) and are then embolised to stop it.'],
+  ['Bronchial veins', 'Right to the azygos; left to the accessory hemiazygos or left superior intercostal vein; much of the bronchial blood returns through the pulmonary veins.'],
+  ['Lymph', 'Superficial (subpleural) and deep plexuses → pulmonary → bronchopulmonary (hilar) → tracheobronchial → paratracheal nodes → bronchomediastinal trunks (Gray). Staging stations (IASLC lymph node map, 7th edition of the TNM staging; reviewed 2015): 10 hilar, 11 interlobar, 12 lobar, 13 segmental, 14 subsegmental, 7 subcarinal.'],
+  ['Nerves', 'Anterior and posterior pulmonary plexuses: vagus (bronchoconstriction, secretion, cough afferents) and sympathetic (bronchodilatation, vasoconstriction).'],
+];
+const SUP_TEXT = '<p class="muted">The pulmonary vessels, nodes and vagus are in the 3D topics; the bronchial vessels are not in the model.</p>';
+/* chest X-ray labels: [id, label, x, y (fraction of the image), what forms it] */
+const XR_PTS = [
+  ['trachea', 'Trachea', 0.495, 0.20, 'Dark air column in the midline, pushed slightly to the right by the arch of the aorta.'],
+  ['knuckle', 'Aortic knuckle', 0.585, 0.37, 'The arch of the aorta: the first bulge on the left edge of the mediastinum.'],
+  ['lhilum', 'Left hilum', 0.66, 0.405, 'Mainly the pulmonary arteries and veins; usually higher than the right (97%).'],
+  ['rhilum', 'Right hilum', 0.35, 0.49, 'Mainly the pulmonary arteries and veins.'],
+  ['rborder', 'Right heart border', 0.35, 0.645, 'Right atrium (the SVC above it). Blurred by consolidation of the middle lobe.'],
+  ['lborder', 'Left heart border', 0.752, 0.70, 'From above down: aortic knuckle, pulmonary trunk, left atrial appendage, left ventricle. Blurred by consolidation of the lingula.'],
+  ['rdome', 'Right dome', 0.25, 0.805, 'Usually higher than the left (the liver below).'],
+  ['ldome', 'Left dome', 0.82, 0.835, 'Usually lower; the gastric air bubble lies under it.'],
+  ['bubble', 'Gastric air bubble', 0.70, 0.90, 'Air in the stomach under the left dome.'],
+  ['rcp', 'Costophrenic angle', 0.085, 0.84, 'Sharp and dark between the dome and the chest wall; a small effusion blunts it first.'],
+  ['lcp', 'Costophrenic angle', 0.943, 0.888, 'Same on the left.'],
+  ['clav', 'Clavicle', 0.14, 0.146, ''],
+];
+const XR_CAP = 'Normal PA chest radiograph (<a href="https://commons.wikimedia.org/wiki/File:Normal_posteroanterior_(PA)_chest_radiograph_(X-ray).jpg">Mikael Häggström, Wikimedia Commons</a>, CC0), resized. "Dx" marks the patient\'s right, "Sin" the left. Label points placed by eye, approximate. Tap a row to mark it on the film.';
+const XR_TEXT = `<p><b>Silhouette sign:</b> consolidation touching a border blurs it: the <b>right heart border</b> → middle lobe; the <b>left heart border</b> → lingula; a <b>dome of the diaphragm</b> → that lower lobe.</p>
+<p><b>Tension pneumothorax on the film:</b> the mediastinum is pushed to the other side and the diaphragm of the affected side pushed down.</p>`;
+/* barium swallow */
+const BS_TEXT = `<p>A <b>barium swallow</b> (barium oesophagogram) is a contrast X-ray of the oesophagus, used for its outline (masses, strictures, perforation) and partly its motility.</p>
+<ul><li><b>Four narrowings:</b> (1) its start behind the <b>cricoid</b> (cricopharyngeus, C6); (2) where the <b>arch of the aorta</b> crosses it; (3) where the <b>left main bronchus</b> crosses it; (4) the <b>oesophageal hiatus</b> of the diaphragm (T10). Gray: it is narrowest at its start and at the diaphragm.</li>
+<li><b>Impressions</b> on the normal oesophagus: the <b>arch of the aorta</b>, the <b>left main bronchus</b> and the <b>left atrium</b>. An <b>enlarged left atrium</b> (for example in mitral valve disease) presses on the mid-oesophagus and can cause difficulty in swallowing (a 2026 case report and review).</li></ul>
+<p class="muted">The distances of the narrowings from the incisor teeth often quoted in textbooks were not found in an open source and are left out. Relations in 3D: topic "Oesophagus and what presses on it".</p>`;
+const BS_CAP = 'Frame 60 of <a href="https://commons.wikimedia.org/wiki/File:Fluoroscopy_of_normal_barium_swallow.gif">"Fluoroscopy of normal barium swallow"</a> by Ptrump16, Wikimedia Commons, cropped and resized; <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Barium (dark in this display) fills the thoracic oesophagus. Unlabelled.';
+const DATA = {
+  lede: 'The lungs, pleura and trachea in 3D: lobes and fissures, the roots and how to tell right from left, the bronchial tree and the bronchopulmonary segments, the pulmonary vessels, nodes and vagus, and the lines of the pleura and lungs on the chest wall. Pick a topic to light its parts (the rest turns to glass) and tap a part to name it. Below: the pleura and its recesses with tap and pneumothorax, the surface marking, the root, the trachea and bronchi, the segments, the supply of the lungs, a labelled chest X-ray and the barium swallow.',
+  note3d: 'Lobes, pleura, trachea, bronchi and oesophagus are Z-Anatomy\'s and approximate (smooth, stylised lobes; bronchi and vessels are tubes along its curves). The model has no bronchopulmonary segment outlines, bronchial vessels, phrenic nerve, pulmonary ligament or pleural recesses; surface lines are drawn from Gray (1918) on the model\'s ribs. Both lungs are modelled as they are (nothing mirrored).',
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers and chapters (lung fissure and hilum dissection studies, a CT study of the main bronchi and foreign bodies, a child foreign-body series, bronchial artery reviews, the IASLC lymph node map review, segmentectomy and segmental anatomy studies, aspiration in two textbook chapters, surface anatomy and innervation of the respiratory system, chest radiograph reviews, an oesophagogram review, cardiac dysphagia); ICS/NCCP pleural effusion guidelines (Lung India, 2024).",
+  models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); lungs, pleura, trachea, bronchi, oesophagus, cricoid cartilage, diaphragm, heart chambers, vessels, nerves and lymph nodes from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones; bronchi, oesophagus, vessels and nerves are tubes swept along Z-Anatomy curves. Surface lines: computed from the model\'s bones, approximate. Schematics are not to scale. Images: chest radiograph by Mikael Häggström (CC0); barium swallow frame by Ptrump16 (CC BY-SA 4.0), both from Wikimedia Commons. Simplified meshes, shared under the same licences.',
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let kind = {}, names = {}, cur = null;
+const LOBE_COL = {[LOBES_R[0]]: '--lobe-s', [LOBES_L[0]]: '--lobe-s', [LOBES_R[1]]: '--lobe-m', [LOBES_R[2]]: '--lobe-i', [LOBES_L[1]]: '--lobe-i'};
+const COL = {bone: '--bone', cart: '--cart', muscle: '--soft', heart: '--heart', artery: '--artery', vein: '--vein', nerve: '--nerve', node: '--lymph', gut: '--gut', airway: '--airway', lobe: null, pleura: '--pleura'};
+const WHAT = {bone: 'bone', cart: 'cartilage', muscle: 'muscle', heart: 'heart chamber', artery: 'artery', vein: 'vein', nerve: 'nerve', node: 'lymph nodes', gut: 'oesophagus', airway: 'airway', lobe: 'lobe', pleura: 'pleura'};
+const HIDDEN_DEFAULT = new Set([PLEURA, DIA]);
+const CAGE_FRONT = new Set([...RIBS, ...CC, ...STERNUM, ...CLAV]);   // ribs, cartilages, sternum, clavicles: shown only where a topic asks (cage) or draws surface lines
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+const colourOf = k => kind[k] === 'lobe' ? LOBE_COL[k] : COL[kind[k]];
+function anchor(key, near) {   // the vertex of a part nearest to a point
+  if (!key) return near;
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos; let c = near;
+  if (!c) { c = [0, 0, 0]; for (let i = 0; i < pos.length; i++) c[i % 3] += pos[i] / (pos.length / 3); }
+  let best = 0, bd = 1e18;
+  for (let i = 0; i < pos.length; i += 3) { const d = (pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2; if (d < bd) { bd = d; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+const AX = [-3.5, -95];   // the chest axis used by surface_lines.py (x, y)
+function segs(name) {      // a surface line as segments, each with the outward normal of the chest wall there
+  const p = SURF.lines[name], out = [];
+  for (let i = 1; i < p.length; i++) {
+    const a = p[i - 1], b = p[i], nx = (a[0] + b[0]) / 2 - AX[0], ny = (a[1] + b[1]) / 2 - AX[1], l = Math.hypot(nx, ny) || 1;
+    out.push({a, b, n: [nx / l, ny / l, 0], color: LINE_COL[name], dash: LINE_DASH[name] || '', name});
+  }
+  return out;
+}
+// lines are an overlay without depth: draw only the segments on the side of the chest that faces the viewer
+const drawMarkers0 = v.drawMarkers.bind(v);
+v.drawMarkers = function (depth) {
+  const all = this.lines || [];
+  this.lines = all.filter(l => !l.n || (() => { const m = [(l.a[0] + l.b[0]) / 2, (l.a[1] + l.b[1]) / 2, (l.a[2] + l.b[2]) / 2];
+    return this.toCam([m[0] + l.n[0] * 10, m[1] + l.n[1] * 10, m[2]])[1] - this.toCam(m)[1] < 1.5; })());
+  const shown = this.lines;
+  try { drawMarkers0(depth); } finally { this.lines = all; }
+  // a dashed line is drawn as many short segments: carry the dash pattern on from one segment to the next
+  const els = this.svg.querySelectorAll('line'), run = {};
+  shown.forEach((l, i) => { const e = els[i]; if (!e || !l.dash) return;
+    const len = Math.hypot(e.x2.baseVal.value - e.x1.baseVal.value, e.y2.baseVal.value - e.y1.baseVal.value);
+    e.setAttribute('stroke-dashoffset', -(run[l.name] || 0)); run[l.name] = (run[l.name] || 0) + len; });
+};
+function midOf(name) { const p = SURF.lines[name]; return p[Math.floor(p.length / 2)]; }
+const LINE_LABEL_PT = {hz: () => midOf('horizontal_r'), ob: () => SURF.lines.oblique_r[Math.floor(SURF.lines.oblique_r.length * 0.3)], obl: () => SURF.lines.oblique_l[Math.floor(SURF.lines.oblique_l.length * 0.3)]};
+function showTopic(id) {
+  const t = typeof id === 'object' ? id : TOPICS.find(t => t.id === id); cur = t;
+  const has = k => v.parts.has(k);
+  const hide = new Set(t.hide || []), show = new Set(t.show || []);
+  const cage = t.cage || (t.lines || []).length > 0;
+  for (const k in kind) v.setVisible(k, !hide.has(k) && (!HIDDEN_DEFAULT.has(k) || show.has(k)) && (cage || !CAGE_FRONT.has(k)));
+  // colours: own colour, or the segment colour of this topic
+  const seg = new Map((t.colourBy || []).map(s => [s[0], '--s' + s[1]]));
+  for (const k in kind) v.setColour(k, css(seg.get(k) || colourOf(k)));
+  const lit = (t.lit || []).filter(has), solid = (t.solid || []).filter(has);
+  v.setFocus(lit.concat(solid));
+  v.ghostAlpha = t.glassLobes ? 0.22 : 0.16;
+  v.setClip(t.clip ? t.clip[0] : null, t.clip ? t.clip[1] : 0);
+  const fk = (t.fit || lit).filter(has);
+  v.fit(fk.length ? fk : lit);
+  v.face(t.view || FRONT, {zoom: t.zoom || 1});
+  v.setLines((t.lines || []).flatMap(segs));
+  const narrow = $('v').clientWidth < 500, txt = l => l && typeof l === 'object' ? (narrow ? l.sh : l.l) : l;
+  const marks = [];
+  for (const [k, label, near, lp] of t.labels || []) {
+    const p = k ? anchor(k, near) : typeof near === 'string' ? SURF.pts[near] : lp ? LINE_LABEL_PT[lp]() : near;
+    if (!p || (k && v.parts.get(k).visible === false)) continue;
+    marks.push({p, label: txt(label), color: css(!k ? (lp ? '--lu-line' : '--ink') : seg.has(k) ? seg.get(k) : kind[k] === 'bone' ? '--ink' : kind[k] === 'cart' || kind[k] === 'muscle' ? '--muted' : colourOf(k) || '--ink'), always: true});
+  }
+  for (const [n, label, col] of t.pts || []) marks.push({p: SURF.pts[n], label: txt(label), color: css(col), always: true, big: true});
+  for (const [k, , label] of t.segLabels || []) if (label && has(k)) {
+    const pos = v.parts.get(k).m.pos; let i = 0, bd = -1;   // the vertex farthest from the carina: a tip of the segmental bronchus
+    for (let j = 0; j < pos.length; j += 3) { const d = pos[j] ** 2 + (pos[j + 1] + 88) ** 2 + (pos[j + 2] - 1300) ** 2; if (d > bd) { bd = d; i = j; } }
+    marks.push({p: [pos[i], pos[i + 1], pos[i + 2]], label: narrow ? '' : label, color: css(seg.get(k)), always: true});
+  }
+  v.setMarkers(marks);
+  $('topic-text').innerHTML = t.text || `<p><b>${t.name}:</b> ${t.where || ''}</p>`;
+  legend(t.segLabels);
+  $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === t.id));
+}
+const toView = () => $('v').scrollIntoView({behavior: 'smooth', block: 'start'});
+function buildTopics() {
+  const box = $('topics');
+  for (const g of [...new Set(TOPICS.map(t => t.grp))]) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !kind[hit.key]) { $('pick').textContent = ''; return; }
+  $('pick').textContent = `${names[hit.key]}: ${WHAT[kind[hit.key]]}`;
+};
+async function loadModel() {
+  const base = '../models/lung/';
+  const meta = await (await fetch(base + 'kinds.json')).json();
+  const man = await v.load(base + 'lung.json');
+  for (const [k, d] of Object.entries(meta.parts)) {
+    const p = v.parts.get(k); if (!p) continue;
+    names[k] = p.info.name; kind[k] = d.kind; v.setColour(k, css(colourOf(k)));
+  }
+  return man;
+}
+
+/* ===================== schematics ===================== */
+const T = (x, y, s, cls = '', anchor = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+function drawPleura(state) {   // coronal section, front view: body's right on the viewer's left
+  const S = $('pl-svg'), tens = state === 'tension', sh = tens ? 40 : 0;
+  let h = '';
+  // chest wall (ribs as a band) and the two halves of the diaphragm
+  h += `<path class="bone" d="M60 70 Q70 40 150 30 L150 44 Q86 54 78 84 L66 400 L52 400 Z"/><path class="bone" d="M540 70 Q530 40 450 30 L450 44 Q514 54 522 84 L534 400 L548 400 Z"/>`;
+  const dR = tens ? 'M80 405 Q170 420 265 392 L265 402 Q170 432 80 414 Z' : 'M80 405 Q160 318 265 362 L265 372 Q160 330 80 414 Z';
+  h += `<path class="mus" d="${dR}"/><path class="mus" d="M335 362 Q440 318 520 405 L520 414 Q440 330 335 372 Z"/>`;
+  // parietal pleura (wall, diaphragm, mediastinum; cupula above the 1st rib) and the lungs with their visceral pleura
+  const ppR = tens ? 'M150 30 Q90 40 82 90 L84 398 Q170 412 262 386 L262 140 Q240 40 150 30' : 'M150 30 Q90 40 82 90 L84 398 Q160 312 262 356 L262 140 Q240 40 150 30';
+  const ppL = 'M450 30 Q510 40 518 90 L516 398 Q440 318 392 356 Q368 300 384 262 Q376 210 338 192 L338 140 Q360 40 450 30';
+  let lungR = 'M150 42 Q100 52 96 100 L100 330 Q160 300 250 345 L250 150 Q230 52 150 42 Z';
+  if (state === 'pneumo') lungR = 'M160 92 Q128 100 126 130 L130 300 Q180 285 245 320 L245 165 Q228 96 160 92 Z';
+  if (tens) lungR = 'M222 170 Q205 175 205 200 L208 300 Q225 305 252 315 L252 190 Q245 170 222 170 Z';
+  const lungL = 'M450 54 Q500 64 504 110 L500 342 Q440 306 402 345 Q380 300 396 264 Q386 222 352 204 L352 160 Q372 64 450 54 Z';
+  if (state === 'pneumo' || tens) h += `<path class="air" d="${ppR} Z"/>`;
+  if (state === 'effusion') h += `<path class="fluid" d="M84 398 L84 318 Q120 322 160 334 Q210 348 262 356 Q160 312 84 398 Z"/>`;
+  h += `<path class="lung" d="${lungR}"/>`;
+  const gL = tens ? `<g transform="translate(518 0) scale(0.82 1) translate(-518 0)">` : '<g>';
+  h += gL + `<path class="lung" d="${lungL}"/><path class="ppl" d="${ppL}"/></g>`;
+  h += `<path class="ppl" d="${ppR}"/>`;
+  // mediastinum: heart and trachea (pushed to the left in a tension pneumothorax)
+  h += `<g transform="translate(${sh} 0)"><path class="heart" d="M268 228 Q300 200 340 212 Q382 246 378 300 Q368 345 330 350 Q290 352 264 330 Q252 280 268 228 Z"/>` +
+    `<rect class="aw" x="292" y="20" width="16" height="150" rx="6"/>` + T(305, 290, 'Heart', 'k', 'middle') + T(300, 186, 'Trachea', 's', 'middle') + '</g>';
+  // labels
+  h += T(150, 22, 'Cervical pleura (cupula) over the apex', 's', 'middle');
+  h += T(20, 466, "Body's right", 'h') + T(580, 466, "Body's left", 'h', 'end');
+  h += T(470, 300, 'Costal pleura', 'k', 'end') + lead(472, 296, 516, 296);
+  h += T(462, 240, 'Lung (visceral', 'k', 'middle') + T(462, 254, 'pleura on it)', 'k', 'middle');
+  h += T(560, 440, 'Diaphragmatic pleura', 's', 'end');
+  if (!tens) h += T(372, 118, 'Mediastinal pleura', 'k') + lead(370, 114, 340, 150);
+  if (state === 'normal' || state === 'effusion') h += T(110, 440, 'Costodiaphragmatic recess', '', 'start') + lead(112, 434, 90, 392);
+  if (state === 'effusion') h += `<path class="clin" d="M10 352 L60 352 L82 350"/><path class="clinf" d="M94 350 l-12 -6 l1 12 z"/>` + T(10, 342, 'Needle', 'k') + T(160, 380, 'Fluid', 'k', 'middle');
+  if (state === 'pneumo') h += T(110, 210, 'Air', '', 'middle') + T(185, 200, 'Collapsed lung', 'k', 'middle');
+  if (tens) h += T(140, 210, 'Air under pressure', '', 'middle') + T(230, 162, 'Lung', 'k', 'middle') + T(440, 22, 'Mediastinum pushed to the left →', 's', 'middle') + T(170, 440, 'Diaphragm pushed down', 's', 'middle');
+  S.innerHTML = h;
+}
+function drawHilum() {   // right lung seen from the left (front on the viewer's left); left lung seen from the right (front on the viewer's right)
+  const S = $('hil-svg');
+  const lungOut = (cx, flip) => `<path class="lung" d="M${cx - 120 * flip} 300 Q${cx - 140 * flip} 160 ${cx - 40 * flip} 30 Q${cx + 60 * flip} 40 ${cx + 120 * flip} 160 Q${cx + 130 * flip} 260 ${cx + 100 * flip} 310 Z"/>`;
+  let h = lungOut(160, 1) + lungOut(480, -1);
+  h += `<path class="vpl" d="M130 190 Q110 120 160 95 Q215 100 210 190 Q200 250 165 285 Q130 250 130 190 Z" stroke-dasharray="4 3"/>`;
+  h += `<path class="vpl" d="M510 190 Q530 120 480 95 Q425 100 430 190 Q440 250 475 285 Q510 250 510 190 Z" stroke-dasharray="4 3"/>`;
+  // right hilum: front on the left. eparterial bronchus (top, back), artery (below it, middle), hyparterial bronchus (back), veins (front, low)
+  h += `<circle class="aw" cx="185" cy="118" r="13"/><circle class="art" cx="168" cy="150" r="16"/><circle class="aw" cx="192" cy="176" r="15"/><circle class="vn" cx="142" cy="186" r="14"/><circle class="vn" cx="160" cy="240" r="14"/>`;
+  // left hilum: front on the right. artery (top), bronchus (middle, back), veins (front, low)
+  h += `<circle class="art" cx="472" cy="128" r="16"/><circle class="aw" cx="450" cy="168" r="17"/><circle class="vn" cx="500" cy="180" r="14"/><circle class="vn" cx="478" cy="238" r="14"/>`;
+  h += T(160, 322, 'Right lung (from the left)', '', 'middle') + T(480, 322, 'Left lung (from the right)', '', 'middle');
+  h += T(20, 20, 'Front', 'h') + T(300, 20, 'Back', 'h', 'end') + T(340, 20, 'Back', 'h') + T(620, 20, 'Front', 'h', 'end');
+  h += T(250, 110, 'Eparterial bronchus', 's') + lead(248, 106, 198, 116) + T(250, 152, 'Pulmonary artery', 's') + lead(248, 148, 184, 150);
+  h += T(250, 186, 'Hyparterial bronchus', 's') + lead(248, 182, 207, 178) + T(16, 160, 'Superior vein', 's') + lead(70, 164, 128, 184) + T(16, 270, 'Inferior vein', 's') + lead(72, 266, 146, 244);
+  h += T(390, 98, 'Artery', 's', 'end') + lead(392, 102, 456, 124) + T(390, 172, 'Bronchus', 's', 'end') + lead(392, 168, 433, 168);
+  h += T(624, 166, 'Superior vein', 's', 'end') + lead(566, 170, 514, 180) + T(624, 274, 'Inferior vein', 's', 'end') + lead(560, 270, 492, 242);
+  S.innerHTML = h;
+}
+function drawBarium() {   // front view: body's left on the viewer's right
+  const S = $('bs-svg');
+  let h = '';
+  // vertebral levels on the left side
+  const lv = [['C6', 40], ['T4', 190], ['T10', 440], ['T11', 480]];
+  for (const [l, y] of lv) h += T(30, y + 4, l, 'h') + `<path class="lead" d="M58 ${y} L120 ${y}" stroke-dasharray="3 3"/>`;
+  // oesophagus outline with narrowings (x centre ~ 260), slight bend to the left below
+  const L = [[250, 30], [252, 44], [246, 60], [244, 120], [246, 168], [252, 182], [246, 196], [244, 220], [250, 240], [246, 256], [248, 300], [252, 360], [262, 420], [272, 438], [280, 452], [292, 470]];
+  const Rr = [[276, 30], [274, 44], [282, 60], [284, 120], [282, 160], [268, 180], [280, 200], [284, 216], [270, 236], [282, 252], [290, 300], [296, 330], [292, 350], [298, 400], [306, 432], [302, 446], [312, 470]];
+  const pth = [...L, ...Rr.reverse()].map((p, i) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ') + ' Z';
+  h += `<rect class="aw" x="248" y="20" width="22" height="16" rx="3" opacity=".9"/>`;
+  h += `<path class="gut" d="${pth}"/>`;
+  // stomach
+  h += `<path class="gut" d="M292 470 Q330 470 360 490 Q380 530 330 545 Q290 540 300 500 Z"/>`;
+  // aortic arch from the front-right over to the left, bronchus, left atrium behind, diaphragm
+  h += `<path d="M200 200 Q230 150 300 160 Q340 166 330 230" fill="none" stroke="var(--artery)" stroke-width="16" stroke-linecap="round" opacity=".85"/>`;
+  h += `<path d="M290 236 L360 268" class="awl"/>`;
+  h += `<path class="heart" d="M246 296 Q290 284 322 304 Q332 340 300 360 Q258 364 244 336 Z" opacity=".75"/>`;
+  h += `<path class="mus" d="M90 440 Q180 400 262 432 L262 442 Q180 412 90 452 Z"/><path class="mus" d="M312 432 Q400 410 480 450 L480 460 Q400 420 312 442 Z"/>`;
+  // labels with numbers for the four narrowings
+  const lab = (n, y, text, x0) => `<circle cx="${x0}" cy="${y}" r="9" fill="var(--accent)"/>` + T(x0, y + 4, n, 'h', 'middle').replace('class="h"', 'class="h" style="fill:var(--surface)"');
+  h += lab('1', 44, '', 226) + T(320, 48, 'Start, behind the cricoid (C6)', 's');
+  h += lab('2', 182, '', 226) + T(350, 150, 'Arch of the aorta', 's') + lead(348, 146, 312, 162);
+  h += lab('3', 238, '', 226) + T(372, 268, 'Left main bronchus', 's');
+  h += T(350, 330, 'Left atrium, in front (impression)', 's') + lead(348, 326, 322, 320);
+  h += lab('4', 438, '', 236) + T(470, 470, 'Hiatus in the diaphragm (T10)', 's', 'end');
+  h += T(380, 548, 'Stomach', 's', 'middle');
+  h += T(20, 16, "Body's right", 'h') + T(540, 16, "Body's left", 'h', 'end');
+  S.innerHTML = h;
+}
+let xrSel = null;
+function drawXray(sel) {
+  const S = $('xr-svg'), on = $('xr-tg').dataset.on !== 'false', k = 800 / Math.max(200, $('xray').clientWidth || 560);
+  S.style.setProperty('--xr-fs', (12.5 * k).toFixed(1) + 'px'); S.style.setProperty('--xr-sw', (2.6 * k).toFixed(1) + 'px'); xrSel = sel;
+  let h = '';
+  if (on) for (const [id, label, x, y] of XR_PTS) {
+    const X = x * 800, Y = y * 915, right = x < 0.5, tx = right ? X + 9 * k : X - 9 * k;
+    h += ` <circle cx="${X}" cy="${Y}" r="${(sel === id ? 6 : 4.5) * k}" class="${sel === id ? 'sel' : ''}"/>` + `<text x="${tx}" y="${Y + 4}" text-anchor="${right ? 'start' : 'end'}">${label}</text>`;
+  }
+  S.innerHTML = h;
+}
+const row = (cells, heads, k) => `<tr${k ? ` data-k="${k}" aria-pressed="false"` : ''}>` + cells.map((c, i) => `<td data-h="${heads[i]}">${i === 0 ? '<b>' + c + '</b>' : c}</td>`).join('') + '</tr>';
+const head = hs => '<tr>' + hs.map(x => `<th>${x}</th>`).join('') + '</tr>';
+function buildTables() {
+  $('pl-table').innerHTML = head(['Part', 'Nerves', 'Arteries', 'Lymph']) + PL_ROWS.map(r => row(r, ['', 'Nerves', 'Arteries', 'Lymph'])).join('');
+  $('sm-table').innerHTML = head(['Line', 'Midclavicular line', 'Midaxillary line', 'Back']) + SM_ROWS.map(r => row(r.slice(0, 4), ['', 'Midclavicular', 'Midaxillary', 'Back'], r[4])).join('');
+  $('sm-table').querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => { $('sm-table').querySelectorAll('tr[data-k]').forEach(x => x.setAttribute('aria-pressed', x === r)); showTopic(r.dataset.k); toView(); });
+  $('side-table').innerHTML = head(['Feature', 'Right lung', 'Left lung']) + SIDE_ROWS.map(r => row(r, ['', 'Right', 'Left'])).join('') + `<tr><td colspan="3" class="muted">${SIDE_NOTE}</td></tr>`;
+  $('tr-table').innerHTML = head(['Trachea', '']) + TR_ROWS.map(r => row(r, ['', ''])).join('');
+  $('br-table').innerHTML = head(['Main bronchus', 'Right', 'Left']) + BR_ROWS.map(r => row(r, ['', 'Right', 'Left'])).join('');
+  $('seg-table').innerHTML = head(['Lobe', 'Right lung', 'Left lung']) + SEG_ROWS.map(r => row(r, ['', 'Right', 'Left'])).join('');
+  $('sup-table').innerHTML = head(['', 'Supply of the lungs']) + SUP_ROWS.map(r => row(r, ['', ''])).join('');
+  $('xr-table').innerHTML = head(['On the film', 'What it is']) + XR_PTS.map(r => row([r[1], r[4]], ['', ''], r[0])).join('');
+  $('xr-table').querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => { $('xr-table').querySelectorAll('tr[data-k]').forEach(x => x.setAttribute('aria-pressed', x === r)); $('xr-tg').dataset.on = 'true'; drawXray(r.dataset.k); });
+}
+function legend(segs) {
+  if (segs) { $('key3d').innerHTML = segs.filter(s => s[2]).map(([, n, l]) => `<span><i style="background:var(--s${n})"></i>${l}</span>`).join(''); return; }
+  const items = [['--lobe-s', 'Superior lobe'], ['--lobe-m', 'Middle lobe'], ['--lobe-i', 'Inferior lobe'], ['--airway', 'Airway'], ['--artery', 'Artery'], ['--vein', 'Vein'], ['--lymph', 'Nodes'], ['--nerve', 'Nerve'], ['--gut', 'Oesophagus'], ['--heart', 'Heart'], ['--bone', 'Bone'], ['--cart', 'Cartilage'], ['--pleura', 'Pleura'], ['--pl-line', 'Pleura line'], ['--lu-line', 'Lung line']];
+  $('key3d').innerHTML = items.map(([c, l]) => `<span><i style="background:var(${c})"></i>${l}</span>`).join('');
+}
+
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('pl-text').innerHTML = PL_TEXT; $('sm-cap').textContent = SM_INTRO; $('sm-note').textContent = SM_NOTE;
+  $('root-text').innerHTML = ROOT_TEXT; $('fb-text').innerHTML = FB_TEXT; $('seg-text').innerHTML = SEG_TEXT; $('asp-text').innerHTML = ASP_TEXT;
+  $('sup-text').innerHTML = SUP_TEXT; $('xr-cap').innerHTML = XR_CAP; $('xr-text').innerHTML = XR_TEXT; $('bs-text').innerHTML = BS_TEXT; $('bs-cap').innerHTML = BS_CAP;
+  let pl = 'normal';
+  for (const [k, label] of [['normal', 'Normal'], ['effusion', 'Effusion and tap'], ['pneumo', 'Pneumothorax'], ['tension', 'Tension pneumothorax']]) {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = label; b.dataset.k = k; b.setAttribute('aria-pressed', k === pl);
+    b.onclick = () => { pl = k; $('pl-tg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); drawPleura(pl); }; $('pl-tg').append(b);
+  }
+  const xb = document.createElement('button'); xb.className = 'chip'; xb.textContent = 'Labels'; xb.setAttribute('aria-pressed', 'true');
+  xb.onclick = () => { const on = $('xr-tg').dataset.on === 'false'; $('xr-tg').dataset.on = on; xb.setAttribute('aria-pressed', on); drawXray(null); }; $('xr-tg').append(xb);
+  drawPleura(pl); drawHilum(); drawBarium(); drawXray(null); buildTables(); legend();
+  new ResizeObserver(() => drawXray(xrSel)).observe($('xray'));
+  const bar = $('vbar');
+  for (const [label, dir] of [['Front', [0, -1, 0]], ['Back', [0, 1, 0]], ['Right', [-1, 0, 0]], ['Left', [1, 0, 0]]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic('lungs');
+  window.J = {TOPICS, SURF, showTopic, names, kind};   // for tests
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

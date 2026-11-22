@@ -231,12 +231,12 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 24. Lungs & Trachea
 
-- [ ] **AN24.1** Mention the blood supply, lymphatic drainage and nerve supply of pleura, extent of pleura and describe the pleural recesses and their applied anatomy
-- [ ] **AN24.2** Identify side, external features and relations of structures which form root of lung & bronchial tree and their clinical correlate
-- [ ] **AN24.3** Describe a bronchopulmonary segment with its clinical anatomy
+- [x] **AN24.1** Mention the blood supply, lymphatic drainage and nerve supply of pleura, extent of pleura and describe the pleural recesses and their applied anatomy — *pleura: extent, recesses, supply, tap, pneumothorax: [Lungs, Pleura and Trachea](thorax/lungs.html)*
+- [x] **AN24.2** Identify side, external features and relations of structures which form root of lung & bronchial tree and their clinical correlate — *root of each lung, side identification, bronchial tree, foreign bodies: [Lungs, Pleura and Trachea](thorax/lungs.html)*
+- [x] **AN24.3** Describe a bronchopulmonary segment with its clinical anatomy — *segments in 3D (one colour per segmental bronchus), aspiration, segmentectomy: [Lungs, Pleura and Trachea](thorax/lungs.html)*
 - [x] **AN24.4** Identify phrenic nerve & describe its formation & distribution — *formation, course and distribution (approximate lines; not in the model): [Nerves, Vessels and Lymphatics of the Thorax](thorax/nerves-vessels.html)*
-- [ ] **AN24.5** Mention the blood supply, lymphatic drainage and nerve supply of lungs
-- [ ] **AN24.6** Describethe extent, length, relations, bloodsupply, lymphatic drainageand nerve supply of trachea
+- [x] **AN24.5** Mention the blood supply, lymphatic drainage and nerve supply of lungs — *pulmonary and bronchial vessels, nodes, nerves: [Lungs, Pleura and Trachea](thorax/lungs.html)*
+- [x] **AN24.6** Describethe extent, length, relations, bloodsupply, lymphatic drainageand nerve supply of trachea — *trachea: extent, relations, supply, carina: [Lungs, Pleura and Trachea](thorax/lungs.html)*
 
 ### 25. Thorax
 
@@ -246,9 +246,9 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **AN25.4** Describe embryological basis of: 1) atrial septal defect, 2) ventricular septal defect, 3) Fallot’s tetralogy & 4) tracheoesophageal fistula
 - [ ] **AN25.5** Describe developmental basis of congenital anomalies, transposition of great vessels, dextrocardia, patent ductus arteriosus and coarctation of aorta
 - [ ] **AN25.6** Mention development of aortic arch arteries, SVC, IVC and coronary sinus
-- [ ] **AN25.7** Identify structures seen on a plain x-ray chest (PA view)
-- [ ] **AN25.8** Identify and describe in brief a barium swallow
-- [~] **AN25.9** Demonstrate surface marking of lines of pleural reflection, lung borders and fissures, trachea, heart borders, apex beat & surface projection of valves of heart — *heart borders, apex beat, valve positions and auscultation areas: [The Heart](thorax/heart.html); pleura and lungs not yet*
+- [x] **AN25.7** Identify structures seen on a plain x-ray chest (PA view) — *labelled PA chest X-ray (CC0): [Lungs, Pleura and Trachea](thorax/lungs.html)*
+- [x] **AN25.8** Identify and describe in brief a barium swallow — *narrowings and impressions, schematic and a barium frame: [Lungs, Pleura and Trachea](thorax/lungs.html)*
+- [~] **AN25.9** Demonstrate surface marking of lines of pleural reflection, lung borders and fissures, trachea, heart borders, apex beat & surface projection of valves of heart — *heart borders, apex beat, valve positions and auscultation areas: [The Heart](thorax/heart.html); pleura, lung borders, fissures and trachea on the model's ribs: [Lungs, Pleura and Trachea](thorax/lungs.html) (midclavicular levels Gray only)*
 
 ### 26. Skull osteology
 

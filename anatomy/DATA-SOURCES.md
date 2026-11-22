@@ -935,3 +935,32 @@ tubercles.
   highlight and tongue colours; wrong link targets.
 - Home page: head and neck vessels, nerves and nodes open this page; the common facial vein (filed under Trunk) via
   `models/region-pages.json`.
+
+## Lungs, Pleura and Trachea — `thorax/lungs.html`
+
+- Fact sheet `sources-local/facts/fill-lung.md` (372 quotes, script-checked against `sources-local/modern/fill-lung/`,
+  downloads 2026-11-21): Gray 1918 pages 181, 237, 238, 240, 245, 284; StatPearls abstracts; 29 open-access papers and
+  chapters (lung dissection series, CT of the bronchi and a foreign-body study, bronchial-artery reviews, IASLC node map
+  review, segment and aspiration sources, a 2021 topography paper, chest X-ray reviews, an oesophagogram review, the
+  ICS/NCCP 2024 pleural guideline); Wikipedia ("Lung" excluded: it cites OpenStax; Gray copies excluded).
+- Contested, stated on the page: carina level (T4 or T4–5, Gray upper T5); start of the oblique fissure (T2 Gray, T3–T4);
+  left pleura to the 6th or 7th cartilage; main bronchus lengths (Gray and CT); azygos lobe 0.3 % or 1 %; whether
+  bronchus shape predicts the side of a foreign body.
+- Single source, attributed: midclavicular levels of lung and pleura and the 8th costochondral point (Gray); carina
+  widening from nodes and pulmonary vein count (Wikipedia); bronchial artery levels (2020 CT review); left atrium and
+  dysphagia (2026 case report); oesophagus ending at T11 (StatPearls); no lymphatics in alveolar walls (Gray); spread
+  through incomplete fissures (one dissection study).
+- Left out (one source): incisor distances of the oesophageal narrowings, the decompression site for tension
+  pneumothorax, cough sensitivity of the carina, the 8th–10th space for pleural tap (would fall below the pleura).
+- Surface lines are computed on the model's ribs from the written levels (`fill-lung-scripts/surface_lines.py`).
+- Model `models/lung` (`tools/thorax/lung_config.py`; Z-Anatomy exports `z-bp3d-lung*.zip`): 168 parts, 798 KB pack,
+  nothing mirrored. Z-Anatomy has no separate visceral and parietal pleura, recesses, pulmonary ligament, bronchial
+  vessels, phrenic nerve or pulmonary plexus (schematics); its pleura overlaps itself, so faint mottling shows.
+- Images: Mikael Häggström, "Normal posteroanterior (PA) chest radiograph (X-ray).jpg", CC0 (resized); Ptrump16,
+  "Fluoroscopy of normal barium swallow.gif", frame 60, cropped and resized, CC BY-SA 4.0; licences checked on
+  Wikimedia Commons 2026-11-21.
+- Independent review (2026-11-21), fixed: a pleural-tap level that fell below the pleura (removed), dropped and faint 3D
+  labels (now none dropped on desktop or phone), side labels in the aspiration view, solid fissure lines, colour
+  clashes (pleura line with phrenic nerve, segment colours with airway, nerve and vein), nine one-source statements,
+  two overstatements, pleura schematic contrast, X-ray label size on phones, barium credit.
+- Home page: the lobar and segmental pulmonary vessels open this page (`tools/home/region_pages.py`).

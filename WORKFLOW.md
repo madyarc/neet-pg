@@ -8,26 +8,15 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 30 (lungs, pleura and trachea) started 2026-11-21.
-  - [ ] build (agent a97281ad; sheet fill-lung, model models/lung via tools/thorax/lung_config.py, page anatomy/thorax/lungs.html)
-    [ ] review  [ ] fixes  [ ] docs  [ ] commit, push, live test
-  - Target: AN24.1, 24.2, 24.3, 24.5, 24.6, 25.9 (pleura and lungs), 25.7 and 25.8 (only with openly licensed images,
-    else schematics). Embryology AN25.2–25.6 and slide AN25.1 later.
-
-## Questions for the user
-
-Don't block on a question. Write it here with the default chosen, carry on, and ask these when the user asks for
-status. Remove each once answered.
-
-- (none yet)
-
+- Module 31 (abdominal cavity, peritoneum, organs) started 2026-11-21 in parallel: agent af6d044d; sheet fill-abdo, model
+  models/abdo (tools/abdomen-pelvis/organs_config.py), page abdomen-pelvis/organs.html (may split). Target AN44.1, 44.7,
+  47.1–47.7.
 - Local test server: 127.0.0.1:8765.
 
 ## Next (the plan, in order)
 
 | # | Module | Page | Model | Notes |
 |---|--------|------|-------|-------|
-| 30 | Lungs, pleura and trachea | anatomy/thorax/lungs.html | own pack | finishes AN25.9 (pleura and lung markings) |
 | 31 | Abdominal organs | anatomy/abdomen-pelvis/ | own pack | |
 | 32 | Head and neck regions and organs | anatomy/head-neck/ | own pack | parotid, thyroid, nose, tonsil, ear, AN43.6 glands |
 | 33 | Neuroanatomy | | | |
@@ -41,7 +30,7 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
 - AN13.3: the proximal radio-ulnar joint's own nerve and artery supply.
 - AN31.5: the definition of primary versus secondary deviation.
 - AN20.8: the anterior tibial pulse at the ankle has one source (Gray 291); the other four pulses are done (module 25).
-- AN25.9: heart borders, apex and valve areas done (module 26); pleura and lung markings still to do (not yet built: a lungs and pleura module).
+- AN25.9: heart (module 26) and pleura, lungs, trachea (module 30) done; midclavicular levels of lung and pleura are Gray only.
 - AN23.2 (thoracic duct tributaries), AN23.3 (hemiazygos origin), AN47.12 (secondary plexuses), AN48.3 (internal iliac
   relations): Gray only (Wikipedia copies Gray); modules 27–28.
 - AN27.1: scalp wound bleeding and gaping (Wikipedia only); AN43.6: subclavian artery line (Gray only), glands and
@@ -49,7 +38,7 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
 - AN13.7: surface lines and pulses are done (module 24); the muscle tests for pectoralis major, serratus anterior,
   latissimus dorsi, deltoid, biceps and brachioradialis are not. Could go on the upper-limb muscles page.
 
-Progress: anatomy 178 covered, 12 partial, 223 not started; ophthalmology 6 covered, 1 partial, 55 not started.
+Progress: anatomy 185 covered, 12 partial, 216 not started; ophthalmology 6 covered, 1 partial, 55 not started.
 
 ## Steps for every module (do them in this order, tick them here as they finish)
 
@@ -94,6 +83,10 @@ builds at the same time.
   that disproves each claim.
 
 ## Log (newest first)
+
+- 2026-11-21: Module 30 (lungs, pleura, trachea): 372 quotes, 168-part 798 KB `models/lung`, surface lines computed on
+  the model's ribs, CC0 chest X-ray and CC BY-SA barium frame; review found 13 items (a tap level below the pleura,
+  dropped labels, colours), all fixed; 7 ticked, AN25.9 still partial. Pulmonary vessels on the home open the page.
 
 - 2026-11-21: Module 29 (head and neck NV): 610 quotes, 204-part 884 KB `models/hn-nv` (tools/head-neck/nv_config.py);
   review found 9 groups (3D node levels, subclavian schematic, ~30 single-source lines), all fixed; 18 ticked, AN27.1

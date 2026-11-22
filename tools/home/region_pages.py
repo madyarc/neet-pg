@@ -11,7 +11,7 @@ ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
 M = os.path.join(ROOT, 'anatomy', 'models')
 MODELS = [('Thorax', 'thorax-nv/thorax-nv.json'), ('Abdomen and pelvis', 'abd-nv/abd-nv.json'),
           ('Upper limb', 'ul-nv/ul-nv.json'), ('Lower limb', 'll-nv/ll-nv.json'),
-          ('Head and neck', 'hn-nv/hn-nv.json')]
+          ('Head and neck', 'hn-nv/hn-nv.json'), ('Lungs', 'lung/lung.json')]
 PREFER = {'v_abdominal_aorta': 'Abdomen and pelvis', 'v_inferior_vena_cava_thoracic_part': 'Abdomen and pelvis',
           'v_left_ascending_lumbar_vein': 'Abdomen and pelvis', 'v_right_ascending_lumbar_vein': 'Abdomen and pelvis',
           'v_common_facial_vein_r': 'Head and neck'}
