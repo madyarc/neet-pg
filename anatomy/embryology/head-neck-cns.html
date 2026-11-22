@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Development of the Head, Neck and Nervous System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --artery (hyaloid artery), --nerve, --clin (a defect), --accent (UI selection).
+   Embryology tokens exactly as on early-development.html: --ecto / --meso / --endo / --crest (germ layers and neural crest; the
+   neural tube is drawn as ectoderm, pharyngeal pouches and the thyroid diverticulum as endoderm).
+   Shared, same meaning as on other pages: --thyroid, --parathy (thyroid, parathyroid; regions.html), --pit (pituitary; ear-eye.html,
+   cerebrum.html), --lens, --retina (ear-eye.html), --medulla / --pons / --midb / --cblm / --dien (brainstem, cerebellum,
+   diencephalon; neuro pages: here also the embryonic vesicle that forms each), --s-csf (ventricles and CSF; neuro pages).
+   New here (checked with fill-histo2-scripts/colcheck3.py, both themes: CIE76 ≥ 37 from atlas colours, ≥ 12 from every other token, ≥ 36 from this page's tokens): --telen
+   (telencephalon and cerebral hemispheres). Pharyngeal arches and facial prominences are told apart by hatch patterns (one per
+   arch or prominence), not colours. */
+:root{--ecto:#2ad2f4;--meso:#efa272;--endo:#d3910b;--crest:#1bf380;--thyroid:#a55be5;--parathy:#c9e55b;--pit:#7400b8;--lens:#5b8fb9;--retina:#b4485a;
+  --medulla:#bda0c0;--pons:#8fb8d6;--midb:#dca27a;--cblm:#a8c08a;--dien:#a7b3a0;--s-csf:#cfe6f5;--telen:#f606a6}
+:root[data-theme="dark"]{--thyroid:#ad6ae6;--parathy:#c5dd66;--pit:#e2a0ff;--lens:#7fb3dc;--retina:#e07a8c;
+  --medulla:#8c6f90;--pons:#5f88a6;--midb:#a8724c;--cblm:#6f8a52;--dien:#6f7a68;--s-csf:#2b4a60;--telen:#ff5cc8;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+.scroll{overflow-x:auto}
+.two{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:680px;margin:0 auto}
+.schbox{overflow-x:auto;scrollbar-color:var(--line) transparent}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:540px}.schbox svg.sch.fit{min-width:0}.swipe{display:block}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.c{fill:var(--clin);font-weight:600}
+svg.sch text.b{font-weight:700}
+svg.sch text.l{paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .flow{stroke:var(--ink);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+svg.sch .box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .ol{stroke:var(--ink);stroke-width:1.1}
+svg.sch .hrt{fill:var(--heart)} svg.sch .meso{fill:var(--meso)} svg.sch .endo{fill:var(--endo)} svg.sch .ecto{fill:var(--ecto)}
+svg.sch .crest{fill:var(--crest)} svg.sch .fluid{fill:var(--fluid)} svg.sch .liver{fill:var(--liver)} svg.sch .pleura{fill:var(--pleura)}
+svg.sch .art{stroke:var(--artery);fill:none;stroke-linecap:round} svg.sch .vei{stroke:var(--vein);fill:none;stroke-linecap:round}
+svg.sch .nrv{stroke:var(--nerve);fill:none;stroke-width:3;stroke-linecap:round}
+svg.sch .gone{stroke-dasharray:4 4;opacity:.35}
+svg.sch .hl{stroke:var(--accent);stroke-width:2.6;fill:none}
+svg.sch .defect{fill:url(#hatch);stroke:var(--clin);stroke-width:2}
+.step{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.step .chips{flex:1;min-width:0}
+.step .btn{white-space:nowrap}
+.find{font-size:14px;min-height:6em}
+.find h3{font-size:15px;margin:0 0 4px}
+table.dis td:first-child{font-weight:600}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> <span class="muted" style="font-size:13px">· Embryology: <a href="early-development.html">Early development</a> · <a href="membranes-placenta.html">Membranes, placenta</a> · <a href="heart-vessels.html">Heart, vessels, lungs</a> · <a href="gut-urogenital.html">Gut, urogenital</a> · <span aria-current="page">Head, neck, nervous system</span></span></nav>
+
+<header class="stack">
+  <h1>Development of the Head, Neck and Nervous System</h1>
+  <p class="lede" id="lede"></p>
+  <div class="key" id="key"></div>
+</header>
+
+<section class="block panel" aria-labelledby="h-arch">
+  <h2 id="h-arch">Pharyngeal arches, pouches and clefts</h2>
+  <div class="chips" id="pa-tg" aria-label="Arch, pouch or cleft"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pa-svg" viewBox="0 0 520 420" role="img" aria-label="Frontal section through the pharynx with the arches on each side, the pouches inside and the clefts outside; the chosen arch, pouch or cleft and its derivatives are highlighted"></svg></div>
+    <div class="prose find" id="pa-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic frontal section, head up; one hatch pattern per arch. Arch 5 is transient and not drawn.</p>
+  <div class="scroll"><table class="t stack" id="pa-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-face">
+  <h2 id="h-face">Face, cleft lip and palate</h2>
+  <div class="step" id="face-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="face-svg" viewBox="0 0 440 380" role="img" aria-label="Front view of the embryonic face at the chosen stage with the frontonasal, maxillary, mandibular and nasal prominences, or the adult regions each forms"></svg></div>
+    <div class="prose find" id="face-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, seen from the front (the embryo's right on your left). Hatch: one pattern per prominence.</p>
+  <div class="step" id="pal-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pal-svg" viewBox="0 0 440 360" role="img" aria-label="The palate at the chosen stage: frontal section with the palatal shelves beside or above the tongue, or the roof of the mouth seen from below with the primary and secondary palate and the incisive foramen"></svg></div>
+    <div class="prose find" id="pal-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tongue">
+  <h2 id="h-tongue">Tongue and thyroid</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="ton-svg" viewBox="0 0 400 360" role="img" aria-label="The floor of the pharynx seen from above with the swellings that form the tongue, the sulcus terminalis and the foramen caecum"></svg></div>
+    <div class="prose" id="ton-text"></div>
+  </div>
+  <div class="chips" id="thy-tg" aria-label="Thyroid"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="thy-svg" viewBox="0 0 400 380" role="img" aria-label="Midline side view of the tongue, hyoid and larynx with the path of the thyroid from the foramen caecum to the neck, or the chosen anomaly"></svg></div>
+    <div class="prose find" id="thy-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic midline side view, face to your left.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-pit">
+  <h2 id="h-pit">Pituitary and eye</h2>
+  <div class="step" id="pit-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="pit-svg" viewBox="0 0 400 320" role="img" aria-label="Midline section with Rathke's pouch growing up from the roof of the stomodeum and the infundibulum growing down from the diencephalon"></svg></div>
+    <div class="prose find" id="pit-find" aria-live="polite"></div>
+  </div>
+  <div class="step" id="eye-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="eye-svg" viewBox="0 0 420 320" role="img" aria-label="The developing eye at the chosen stage: optic vesicle and lens placode, optic cup and lens vesicle, optic fissure with the hyaloid artery, or a coloboma"></svg></div>
+    <div class="prose find" id="eye-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic sections, not to scale.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-brain">
+  <h2 id="h-brain">Brain vesicles and what they become</h2>
+  <div class="step" id="ves-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ves-svg" viewBox="0 0 460 380" role="img" aria-label="The cranial neural tube at the chosen stage: three primary vesicles, five secondary vesicles, the flexures, and the adult parts each forms"></svg></div>
+    <div class="prose find" id="ves-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic; head up. Steps 1–2: dorsal view; step 3: side view (face to your left).</p>
+  <div class="scroll"><table class="t stack" id="ves-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cord">
+  <h2 id="h-cord">Spinal cord, brainstem and cerebellum</h2>
+  <div class="step" id="cord-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="cord-svg" viewBox="0 0 440 340" role="img" aria-label="Cross-sections of the neural tube at the chosen stage: layers of the wall, alar and basal plates with the sulcus limitans, the adult cord, the opened-out medulla, and the rhombic lips forming the cerebellum"></svg></div>
+    <div class="prose find" id="cord-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic cross-sections, dorsal side up.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-mal">
+  <h2 id="h-mal">Malformations of the brain and open neural tube defects</h2>
+  <div class="chips" id="mal-tg" aria-label="Malformation"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="mal-svg" viewBox="0 0 420 300" role="img" aria-label="Schematic of the chosen brain malformation"></svg></div>
+    <div class="prose find" id="mal-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic midline side views (face to your left) unless stated.</p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-embryo2.md, anatomy/DATA-SOURCES.md) ===================== */
+const LEDE = 'The pharyngeal arches, pouches and clefts, the face and palate, the tongue, thyroid, pituitary and eye, the brain vesicles, the spinal cord, brainstem and cerebellum, with the anomalies each explains. Neurulation, the neural crest and the main neural tube defects: <a href="early-development.html#h-neur">Early Development</a>. Adult anatomy: <a href="../head-neck/regions.html">Face and Neck: Regions and Glands</a>, <a href="../neuro/brainstem.html">Brainstem and Cerebellum</a>, <a href="../neuro/meninges-cord.html">Meninges, CSF and the Spinal Cord</a>.';
+const KEY = [['--ecto', 'Ectoderm / neural tube'], ['--meso', 'Mesoderm'], ['--endo', 'Endoderm'], ['--crest', 'Neural crest'], ['--thyroid', 'Thyroid'], ['--parathy', 'Parathyroid'], ['--pit', 'Pituitary'], ['--telen', 'Telencephalon'], ['--dien', 'Diencephalon'], ['--midb', 'Midbrain'], ['--pons', 'Pons'], ['--cblm', 'Cerebellum'], ['--medulla', 'Medulla'], ['--clin', 'Defect']];
+
+const PA = {sel: 'all'};
+const PA_ITEMS = {
+  all: ['Overview', '<h3>The pharyngeal apparatus</h3><p>From <b>week 4</b>, bars of tissue, the <b>pharyngeal arches</b>, form on each side of the pharynx (numbered 1–6; the 5th is transient). Each has a <b>cartilage</b>, <b>muscles</b>, an <b>artery</b> (aortic arch) and a <b>cranial nerve</b>. Outside, <b>ectoderm</b> covers them and dips in as <b>clefts (grooves)</b>; inside, <b>endoderm</b> lines them and bulges out as <b>pouches</b>; the core is <b>mesoderm</b> (muscles) with <b>neural crest</b> mesenchyme (bones, cartilages).</p>'],
+  a1: ['Arch 1', '<h3>Arch 1 (mandibular): trigeminal nerve (V2, V3)</h3><p>Divides into <b>maxillary</b> and <b>mandibular processes</b>. <b>Meckel\'s cartilage</b>: malleus, incus, sphenomandibular ligament; the mandible ossifies around it (not from it). Muscles: of <b>mastication</b>, mylohyoid, anterior belly of digastric, tensor tympani, tensor veli palatini (Wikipedia). Artery: part of the maxillary artery.</p>'],
+  a2: ['Arch 2', '<h3>Arch 2 (hyoid): facial nerve</h3><p><b>Reichert\'s cartilage</b>: stapes, styloid process, stylohyoid ligament, lesser horn (and upper body) of the hyoid. Muscles: of <b>facial expression</b>, stapedius, stylohyoid, posterior belly of digastric. Artery: stapedial and hyoid arteries.</p>'],
+  a3: ['Arch 3', '<h3>Arch 3: glossopharyngeal nerve</h3><p>Greater horn (and lower body) of the hyoid. Its only muscle is <b>stylopharyngeus</b>. Artery: common carotid and the first part of the internal carotid.</p>'],
+  a4: ['Arch 4 and 6', '<h3>Arches 4 and 6: vagus</h3><p>Arch 4: <b>superior laryngeal</b> nerve; arch 6: <b>recurrent laryngeal</b> nerve. Cartilages: <b>thyroid</b> (4); <b>cricoid, arytenoid</b> (6; the review adds the corniculate). Muscles of 4 and 6 together: all the muscles of the <b>palate</b> except tensor veli palatini, of the <b>pharynx</b> except stylopharyngeus, and of the <b>larynx</b>. Arteries: arch of the aorta / right subclavian (4), pulmonary arteries and ductus (6): <a href="heart-vessels.html#h-arch">aortic arches</a>.</p>'],
+  p1: ['Pouch 1, cleft 1', '<h3>1st pouch and 1st cleft</h3><p>Pouch 1 → <b>tympanic cavity</b> and <b>auditory (Eustachian) tube</b>. Cleft 1 → <b>external acoustic meatus</b>. Where they meet, with mesenchyme between, the <b>tympanic membrane</b> forms.</p>'],
+  p2: ['Pouch 2', '<h3>2nd pouch</h3><p>Lining of the <b>palatine tonsil</b> (tonsillar fossa).</p>'],
+  p3: ['Pouch 3', '<h3>3rd pouch</h3><p>Its <b>ventral</b> part forms the <b>thymus</b>, its <b>dorsal</b> part the <b>inferior parathyroid</b> gland. They descend together, so the 3rd-pouch parathyroids end up <b>below</b> the 4th-pouch ones (and can be ectopic, even in the chest).</p>'],
+  p4: ['Pouch 4', '<h3>4th pouch</h3><p>The <b>superior parathyroid</b> gland and the <b>ultimobranchial body</b>, which gives the <b>parafollicular (C) cells</b> of the thyroid. (Gray 1918 put the ultimobranchial body in a 5th pouch and gave it no thyroid tissue.)</p>'],
+  cs: ['Clefts 2–4, branchial cyst', '<h3>Cervical sinus and branchial cysts</h3><p>The 2nd arch grows down over clefts 2–4, enclosing a <b>cervical sinus</b> that normally disappears (about week 7). Remnants give a <b>branchial (cleft) cyst</b>, sinus or fistula: mostly from the <b>2nd cleft</b> (Wikipedia: 90–95%, in the upper neck <b>in front of sternocleidomastoid</b>; unlike a thyroglossal cyst it does not move on swallowing).</p>'],
+  dg: ['DiGeorge, arch syndromes', '<h3>DiGeorge syndrome and first-arch syndromes</h3><p><b>DiGeorge (22q11.2 deletion)</b>: the <b>3rd and 4th pouches</b> develop poorly: absent or small <b>thymus</b> (T-cell deficiency, infections), poor parathyroids, <b>heart defects</b>, palate problems and a typical face.</p><p><b>Treacher Collins</b>: too few neural crest cells reach arches 1 and 2 (mandibulofacial hypoplasia). <b>Pierre Robin sequence</b>: small mandible → the tongue falls back (glossoptosis) → airway obstruction; often a <b>cleft palate</b>, as the tongue lies between the palatal shelves.</p>'],
+};
+const PA_HEAD = ['Arch', 'Nerve', 'Skeleton', 'Muscles', 'Artery'];
+const PA_ROWS = [
+  ['1', 'Trigeminal (V2, V3)', 'Malleus, incus, sphenomandibular ligament (Meckel\'s cartilage); maxilla, mandible', 'Mastication; mylohyoid, anterior digastric, tensor tympani, tensor veli palatini (Wikipedia)', 'Part of the maxillary'],
+  ['2', 'Facial (VII)', 'Stapes, styloid, stylohyoid ligament, lesser horn of hyoid', 'Facial expression, stapedius, stylohyoid, posterior digastric', 'Stapedial, hyoid'],
+  ['3', 'Glossopharyngeal (IX)', 'Greater horn of hyoid', 'Stylopharyngeus', 'Common carotid, first part of internal carotid'],
+  ['4', 'Vagus: superior laryngeal', 'Thyroid cartilage', 'With arch 6: muscles of the pharynx and palate (except stylopharyngeus, tensor veli palatini) and larynx', 'L: arch of aorta; R: first part of subclavian'],
+  ['6', 'Vagus: recurrent laryngeal', 'Cricoid, arytenoid (review: also corniculate)', 'With arch 4 (see the row above)', 'Pulmonary arteries; L: ductus arteriosus'],
+];
+
+const FACE = {s: 0};
+const FACE_STEPS = [
+  ['Week 4', '<h3>Five prominences (week 4)</h3><p>Around the stomodeum (the primitive mouth): one <b>frontonasal</b> prominence above, a pair of <b>maxillary</b> and a pair of <b>mandibular</b> prominences (both from arch 1). Their mesenchyme is mostly neural crest.</p>'],
+  ['Nasal placodes', '<h3>Nasal placodes and pits (week 5)</h3><p>Two thickenings of surface ectoderm, the <b>nasal placodes</b>, sink into <b>nasal pits</b>, which divide the frontonasal process into <b>medial</b> and <b>lateral nasal processes</b>.</p>'],
+  ['Merging', '<h3>Merging (weeks 6–7)</h3><p>The maxillary prominences grow towards the midline and push the <b>medial nasal processes</b> together; these merge into the <b>intermaxillary segment</b>, then fuse with the maxillary prominences to complete the upper lip.</p>'],
+  ['Adult face', '<h3>What each forms</h3><p><b>Frontonasal</b>: forehead, bridge and tip of the nose. <b>Medial nasal</b> (intermaxillary segment): <b>philtrum</b>, central upper jaw with the <b>four incisors</b>, <b>primary palate</b>, middle of the nose. <b>Lateral nasal</b>: alae of the nose. <b>Maxillary</b>: cheeks, <b>lateral upper lip</b>, maxilla and zygomatic bone, secondary palate. <b>Mandibular</b>: lower lip, chin, mandible.</p>'],
+  ['Cleft lip', '<h3>Cleft lip</h3><p>The <b>maxillary prominence fails to fuse with the medial nasal process</b>, so the cleft lies <b>lateral to the philtrum</b>; one side or both. Orofacial clefts affect about <b>1 in 700</b> newborns (review; Wikipedia: 1–2 per 1000); cleft lip is about twice as common in boys.</p>'],
+];
+const PAL = {s: 0};
+const PAL_STEPS = [
+  ['Primary palate', '<h3>Primary palate</h3><p>The intermaxillary segment grows back into the mouth as the small triangular <b>primary palate</b> in front of the future <b>incisive foramen</b>; done by the end of week 6.</p>'],
+  ['Shelves', '<h3>Palatal shelves</h3><p>From week 6 two <b>palatal shelves</b> grow from the <b>maxillary processes</b>, at first hanging down beside the tongue.</p>'],
+  ['Elevation', '<h3>Elevation</h3><p>The shelves rise above the tongue and grow towards the midline; they meet at about <b>week 8</b>.</p>'],
+  ['Fusion', '<h3>Fusion</h3><p>The shelves fuse with each other, with the primary palate at the <b>incisive foramen</b> and with the nasal septum above. Where fusion starts differs: Gray 1918, <b>from the front backwards</b> (hard palate by week 9, soft by week 11); a 2026 review, from the <b>central part</b> spreading forwards and backwards. The seam disappears between weeks 9 and 12.</p>'],
+  ['Cleft palate', '<h3>Cleft palate</h3><p>The palatal shelves fail to <b>grow, rise or fuse</b> (in Pierre Robin the tongue blocks them). Clefts are classified by the <b>incisive foramen</b>: in front = primary palate (with cleft lip; weeks 4–7), behind = secondary palate (weeks 8–12). Problems (Wikipedia): feeding and a hypernasal voice.</p>'],
+];
+const TON_TEXT = `<p><b>Anterior two-thirds</b>: from <b>arch 1</b>: two <b>lateral lingual swellings</b> (week 5) overgrow the median <b>tuberculum impar</b>. Sensation: <b>lingual nerve (V3)</b>; taste: <b>chorda tympani (VII)</b>.</p>
+<p><b>Posterior third</b>: the <b>copula</b> (arch 2) is overgrown by the <b>hypopharyngeal eminence</b> (arches 3 and 4, mainly 3) (Wikipedia; Gray 1918 derived it from the copula itself). Nerve: <b>glossopharyngeal</b>. The boundary is the V-shaped <b>sulcus terminalis</b>, with the <b>foramen caecum</b> at its apex.</p>
+<p><b>Muscles</b>: all supplied by the <b>hypoglossal</b> nerve except palatoglossus (vagus).</p>`;
+const THY = {sel: 'norm'};
+const THY_ITEMS = {
+  norm: ['Normal descent', '<h3>Thyroid</h3><p>The first endocrine gland to develop (weeks 3–4): a median <b>endodermal diverticulum</b> in the floor of the pharynx at the <b>foramen caecum</b>. It descends <b>in front of the hyoid and the laryngeal cartilages</b>, attached by the <b>thyroglossal duct</b>, which normally breaks down; its lower end may persist as the <b>pyramidal lobe</b>. C cells come from the ultimobranchial body (4th pouch).</p>'],
+  cyst: ['Thyroglossal cyst', '<h3>Thyroglossal (duct) cyst</h3><p>The commonest congenital neck mass (about 7% of people, StatPearls): <b>midline</b>, usually <b>just below the hyoid</b>; it <b>moves up on swallowing and on protruding the tongue</b> (Wikipedia). Excision removes the middle of the hyoid with the tract (Wikipedia).</p>'],
+  ling: ['Lingual thyroid', '<h3>Lingual thyroid</h3><p>Thyroid tissue that failed to descend, at the <b>base of the tongue</b>; ectopic thyroid can lie anywhere along the duct\'s path. It may cause difficulty swallowing, speaking or breathing (Wikipedia).</p>'],
+  pyr: ['Pyramidal lobe', '<h3>Pyramidal lobe</h3><p>A third lobe rising from the isthmus: the persistent <b>lower end of the thyroglossal duct</b>.</p>'],
+};
+const PIT = {s: 0};
+const PIT_STEPS = [
+  ['Two outgrowths', '<h3>Two sources (week 4)</h3><p><b>Rathke\'s pouch</b>, an upgrowth of <b>ectoderm from the roof of the stomodeum</b> (the mouth), rises towards the brain; the <b>infundibulum</b>, a downgrowth of the floor of the <b>diencephalon</b> (neuroectoderm), grows to meet it.</p>'],
+  ['Pituitary', '<h3>Adult pituitary</h3><p>Rathke\'s pouch → <b>anterior lobe (adenohypophysis)</b>; infundibulum → <b>posterior lobe (neurohypophysis)</b> and stalk. Remnants of Rathke\'s pouch give a <b>craniopharyngioma</b> (usually benign, suprasellar; StatPearls: it can involve the hypothalamus and optic chiasm).</p>'],
+];
+const EYE = {s: 0};
+const EYE_STEPS = [
+  ['Optic vesicle', '<h3>Optic vesicle (end of week 4)</h3><p>An outgrowth of the <b>forebrain</b> on each side reaches the surface ectoderm, which thickens into the <b>lens placode</b>.</p>'],
+  ['Optic cup', '<h3>Optic cup and lens vesicle</h3><p>The vesicle folds in to a double-layered <b>optic cup</b>, joined to the brain by the <b>optic stalk</b>: its <b>inner layer → neural retina</b>, its <b>outer layer → retinal pigment epithelium</b>. The placode sinks and pinches off as the <b>lens vesicle</b>. Surface ectoderm also gives the corneal epithelium and eyelids; mesenchyme (neural crest and mesoderm) the sclera and corneal stroma.</p>'],
+  ['Optic fissure', '<h3>Optic (choroid) fissure</h3><p>A groove on the <b>underside</b> of the cup and stalk lets the <b>hyaloid artery</b> in. The fissure closes; the hyaloid artery regresses before birth (Wikipedia: from about week 10; Gray 1918: gone in the ninth month), leaving the <b>hyaloid canal</b>; it can persist.</p>'],
+  ['Coloboma', '<h3>Coloboma</h3><p>The choroid fissure <b>fails to close</b>: a gap in the iris, choroid or retina, usually <b>inferior</b> (Wikipedia: so the upper visual field is affected).</p>'],
+];
+const VES = {s: 0};
+const VES_STEPS = [
+  ['3 vesicles', '<h3>Three primary vesicles (week 4)</h3><p>The cranial neural tube swells into the <b>prosencephalon</b> (forebrain), <b>mesencephalon</b> (midbrain) and <b>rhombencephalon</b> (hindbrain); the rest of the tube forms the spinal cord.</p>'],
+  ['5 vesicles', '<h3>Five secondary vesicles (week 5)</h3><p>The forebrain divides into <b>telencephalon</b> and <b>diencephalon</b>; the hindbrain into <b>metencephalon</b> and <b>myelencephalon</b>; the midbrain stays single. The cavities become the <b>lateral ventricles</b>, <b>third ventricle</b>, <b>cerebral aqueduct</b> and <b>fourth ventricle</b>.</p>'],
+  ['Flexures', '<h3>Flexures</h3><p>The tube bends: the <b>cephalic</b> (midbrain) and <b>cervical</b> (hindbrain–cord) flexures are ventral; the <b>pontine</b> flexure, between metencephalon and myelencephalon, bends the other way (dorsal).</p>'],
+];
+const VES_HEAD = ['Primary', 'Secondary', 'Adult', 'Cavity'];
+const VES_ROWS = [
+  ['Prosencephalon', '<span class="swatch" style="background:var(--telen)"></span>Telencephalon', 'Cerebral hemispheres (cortex, basal ganglia)', 'Lateral ventricles'],
+  ['', '<span class="swatch" style="background:var(--dien)"></span>Diencephalon', 'Thalamus, hypothalamus, epithalamus (pineal), posterior pituitary, optic vesicle', 'Third ventricle'],
+  ['Mesencephalon', '<span class="swatch" style="background:var(--midb)"></span>Mesencephalon', 'Midbrain', 'Cerebral aqueduct'],
+  ['Rhombencephalon', '<span class="swatch" style="background:var(--pons)"></span>Metencephalon', 'Pons and <span class="swatch" style="background:var(--cblm)"></span>cerebellum', 'Fourth ventricle (upper)'],
+  ['', '<span class="swatch" style="background:var(--medulla)"></span>Myelencephalon', 'Medulla oblongata', 'Fourth ventricle (lower)'],
+];
+const CORD = {s: 0};
+const CORD_STEPS = [
+  ['Wall layers', '<h3>Layers of the wall</h3><p>Around the central canal the neuroepithelium produces neuroblasts that form the <b>mantle layer</b> (future <b>grey matter</b>); outside it the <b>marginal layer</b> becomes the <b>white matter</b> (Gray 1918).</p>'],
+  ['Alar and basal plates', '<h3>Alar and basal plates</h3><p>The lateral walls thicken, and a groove, the <b>sulcus limitans</b>, separates the dorsal <b>alar plate</b> (sensory) from the ventral <b>basal plate</b> (motor). Thin <b>roof</b> and <b>floor plates</b> join the two sides.</p>'],
+  ['Adult cord', '<h3>Spinal cord</h3><p>Alar plate → <b>dorsal (posterior) horn</b>, sensory; basal plate → <b>ventral (anterior) horn</b> motor neurons. The cord ends lower in the newborn than in the adult: <a href="../neuro/meninges-cord.html">levels</a>.</p>'],
+  ['Medulla', '<h3>Medulla oblongata (myelencephalon)</h3><p>The floor and walls thicken into the medulla while the <b>roof stays thin</b> and spreads out sideways over the fourth ventricle (Gray 1918), so the <b>alar plates lie lateral</b> to the basal plates: sensory nuclei lateral, motor nuclei medial to the sulcus limitans (<a href="../neuro/brainstem.html">brainstem</a>). The alar plate forms the sensory nuclei of V, VII, VIII, IX and X (Wikipedia).</p>'],
+  ['Pons, cerebellum, midbrain', '<h3>Metencephalon and midbrain</h3><p>The <b>pons</b> forms from the floor and walls of the metencephalon, the <b>cerebellum</b> from its roof: the dorsal edges of the alar plates, the <b>rhombic lips</b>, grow and meet in the midline (vermis); the flocculus and nodulus form first (Gray 1918). <b>Midbrain</b> (Gray 1918): basal plates → nuclei of III and IV beside the aqueduct; alar plates → superior and inferior colliculi.</p><p><b>Hemispheres</b>: from week 5 the telencephalic vesicles grow out from the forebrain and come to overlap the diencephalon, midbrain and hindbrain; the surface is smooth at first, then folds into gyri and sulci as neurons migrate (weeks 12–24).</p>'],
+];
+const MAL = {sel: 'hpe'};
+const MAL_ITEMS = {
+  hpe: ['Holoprosencephaly', '<h3>Holoprosencephaly</h3><p>The forebrain fails to divide into two hemispheres (incomplete midline cleavage), about days 18–28. <b>Alobar</b>, the severest, is also the commonest: one central ventricle. Midline facial defects range from a single central incisor to <b>cyclopia</b>. (Seen from the front.)</p>'],
+  lis: ['Lissencephaly', '<h3>Lissencephaly</h3><p>"Smooth brain": <b>neuronal migration fails</b> (weeks 12–24), so gyri and sulci are absent (agyria) or broad (pachygyria) over a thick cortex.</p>'],
+  hyd: ['Hydrocephalus', '<h3>Congenital hydrocephalus</h3><p>Excess CSF in the ventricles at birth, often with a syndrome or spinal dysraphism; the commonest congenital cause is <b>aqueductal stenosis</b> (Wikipedia). Treated with a shunt or third ventriculostomy.</p>'],
+  chi: ['Chiari II', '<h3>Chiari type II (Arnold–Chiari)</h3><p>The <b>cerebellar vermis, brainstem and fourth ventricle</b> are displaced down through the foramen magnum; usually with <b>spina bifida</b> (myelomeningocele); hydrocephalus and syringomyelia are the commonest associated findings.</p>'],
+  dw: ['Dandy–Walker', '<h3>Dandy–Walker malformation</h3><p><b>Vermis</b> absent or small, <b>cystic fourth ventricle</b> filling an <b>enlarged posterior fossa</b>; most have hydrocephalus at diagnosis (StatPearls).</p>'],
+  enc: ['Encephalocele', '<h3>Encephalocele</h3><p>A neural tube defect: brain and meninges (with CSF) protrude through a <b>defect in the skull</b>; if the sac holds only meninges and CSF it is a (cranial) meningocele. The commonest site is <b>occipital</b> (Wikipedia).</p>'],
+  ntd: ['Open NTDs', '<h3>Open neural tube defects</h3><p>The brain or cord is <b>exposed</b> through a defect of the skull or vertebrae: <b>anencephaly</b> and <b>myelomeningocele</b> (and its relatives) are on <a href="early-development.html#h-neur">Early Development</a>. <b>Rachischisis</b> (Wikipedia): the caudal neuropore fails to close, the vertebral arches stay open and the cord lies exposed; often with anencephaly. <b>Spina bifida occulta</b> is a <b>closed</b> defect (closed spinal dysraphism).</p>'],
+};
+
+const DATA = {
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); open-access reviews (J Craniofac Surg 2023 and 2026, Anat Cell Biol 2025, Rom J Morphol Embryol 2026, World J Methodol 2017, Cureus 2025 and others); Wikipedia.",
+  models: 'Models used: none (schematics only); simplified, not to scale.',
+};
+
+/* ===================== drawing helpers ===================== */
+const $ = id => document.getElementById(id);
+const T = (x, y, s, cls = '', a = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${a}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink)"/></marker>'
+  + '<pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" style="fill:var(--clin);fill-opacity:.15"/><line x1="0" y1="0" x2="0" y2="8" style="stroke:var(--clin);stroke-width:3"/></pattern></defs>';
+function table(id, head, rows) {
+  $(id).innerHTML = '<tr>' + head.map(x => `<th>${x}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + r.map((c, i) => `<td data-h="${head[i]}">${c}</td>`).join('') + '</tr>').join('');
+}
+function toggles(id, items, onSel, start) {
+  const box = $(id); box.innerHTML = '';
+  for (const [key, label] of items) {
+    const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = label; b.setAttribute('aria-pressed', key === start);
+    b.onclick = () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); onSel(key); };
+    box.append(b);
+  }
+}
+function stepper(id, labels, onStep, state) {
+  const box = $(id); box.innerHTML = '';
+  const prev = document.createElement('button'); prev.className = 'btn'; prev.type = 'button'; prev.textContent = '◀ Back'; prev.setAttribute('aria-label', 'Previous step');
+  const next = document.createElement('button'); next.className = 'btn'; next.type = 'button'; next.textContent = 'Next ▶'; next.setAttribute('aria-label', 'Next step');
+  const row = document.createElement('div'); row.className = 'chips'; row.setAttribute('aria-label', 'Steps');
+  const go = i => {
+    state.s = Math.max(0, Math.min(labels.length - 1, i));
+    row.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', j === state.s));
+    prev.disabled = state.s === 0; next.disabled = state.s === labels.length - 1; onStep();
+  };
+  labels.forEach((l, i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.onclick = () => go(i); row.append(b); });
+  prev.onclick = () => go(state.s - 1); next.onclick = () => go(state.s + 1);
+  box.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { go(state.s + 1); e.preventDefault(); } if (e.key === 'ArrowLeft') { go(state.s - 1); e.preventDefault(); } });
+  box.append(prev, row, next); go(state.s);
+}
+const op = o => `style="fill-opacity:${o}"`;
+
+const PATS = '<defs>' + [['p1', 45, 'l'], ['p2', 0, 'l'], ['p3', 0, 'd'], ['p4', 45, 'x'], ['p6', 90, 'l'], ['pf', 0, 'o']].map(([id, r, k]) =>
+  `<pattern id="${id}" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(${r})">` +
+  (k === 'l' ? '<line x1="0" y1="4" x2="8" y2="4" style="stroke:var(--ink);stroke-width:1.3"/>' : k === 'd' ? '<circle cx="4" cy="4" r="1.6" style="fill:var(--ink)"/>' :
+   k === 'x' ? '<path d="M0 4 H8 M4 0 V8" style="stroke:var(--ink);stroke-width:1.1"/>' : '<circle cx="4" cy="4" r="2.6" style="fill:none;stroke:var(--ink);stroke-width:1"/>') + '</pattern>').join('') + '</defs>';
+const AP = {1: 'p1', 2: 'p2', 3: 'p3', 4: 'p4', 6: 'p6'};
+
+/* ===================== 1. pharyngeal arches ===================== */
+function drawPa() {
+  const k = PA.sel; let s = PATS + DEFS;
+  const ys = {1: 70, 2: 140, 3: 210, 4: 270, 6: 330};
+  s += `<path d="M230 30 Q200 200 245 400 L275 400 Q320 200 290 30 Z" style="fill:var(--endo);fill-opacity:.25;stroke:var(--endo);stroke-width:3"/>` + T(260, 24, 'pharynx (endoderm)', 's', 'middle');
+  for (const [n, y] of Object.entries(ys)) {
+    const sel = k === 'a' + n || (k === 'a4' && n === '6');
+    for (const sd of [-1, 1]) {
+      const x0 = sd < 0 ? 90 : 300, w = 130;
+      s += `<rect x="${x0}" y="${y - 22}" width="${w}" height="44" rx="20" style="fill:url(#${AP[n]});stroke:var(${sel ? '--accent' : '--ink'});stroke-width:${sel ? 3 : 1}"/>`;
+      s += `<circle cx="${x0 + (sd < 0 ? 100 : 30)}" cy="${y}" r="7" style="fill:var(--artery)"/>`;
+    }
+    s += T(70, y + 5, n, 'b', 'end') + T(450, y + 5, n, 'b');
+  }
+  /* pouches between arches (inside), clefts (outside) */
+  const py = [105, 175, 240, 300];
+  py.forEach((y, i) => {
+    const pk = 'p' + (i + 1), hi = k === pk || (k === 'p1' && i === 0) || (k === 'dg' && (i === 2 || i === 3));
+    s += `<path d="M232 ${y} Q205 ${y} 205 ${y + 0}" style="stroke:var(--endo);stroke-width:${hi ? 12 : 8};stroke-linecap:round"/><path d="M288 ${y} L315 ${y}" style="stroke:var(--endo);stroke-width:${hi ? 12 : 8};stroke-linecap:round"/>`;
+    if (hi) s += `<rect x="190" y="${y - 12}" width="140" height="24" rx="10" class="hl"/>`;
+    const cl = i === 0 ? (k === 'p1') : k === 'cs';
+    s += `<path d="M90 ${y} H60 M430 ${y} H460" style="stroke:var(--ecto);stroke-width:${cl ? 10 : 6};stroke-linecap:round"/>`;
+  });
+  s += T(14, 400, 'clefts outside (ectoderm), pouches inside (endoderm); red dot = arch artery', 's');
+  if (k === 'p3' || k === 'dg') s += `<ellipse cx="350" cy="380" rx="34" ry="14" class="endo" style="fill-opacity:.7"/>` + T(390, 384, 'thymus', 's l') + `<circle cx="160" cy="300" r="9" style="fill:var(--parathy);stroke:var(--ink)"/>` + T(150, 360, 'inferior parathyroid (3)', 's l', 'end') + lead(110, 352, 158, 306) + `<path class="flow" d="M330 250 Q350 320 350 360"/>`;
+  if (k === 'p4' || k === 'dg') s += `<circle cx="160" cy="255" r="9" style="fill:var(--parathy);stroke:var(--ink)"/>` + T(150, 236, 'superior parathyroid (4)', 's l', 'end');
+  if (k === 'p1') s += T(330, 92, 'tympanic cavity, tube', 's l') + T(14, 92, 'external acoustic meatus', 's l');
+  if (k === 'p2') s += T(330, 160, 'palatine tonsil', 's l');
+  if (k === 'cs') s += `<path d="M40 150 Q20 230 40 320" style="fill:none;stroke:var(--clin);stroke-width:4"/>` + `<ellipse cx="36" cy="230" rx="22" ry="30" class="defect"/>` + T(70, 240, 'cervical sinus remnant', 'c l');
+  $('pa-svg').innerHTML = s; $('pa-find').innerHTML = PA_ITEMS[k][1];
+}
+
+/* ===================== 2. face and palate ===================== */
+function drawFace() {
+  const st = FACE.s; let s = PATS + DEFS; const o = 'stroke:var(--ink);stroke-width:1.2';
+  const cx = 220;
+  if (st <= 2) {
+    const fy = st === 0 ? 70 : 60;
+    s += `<path d="M90 ${fy + 60} Q220 0 350 ${fy + 60} Q300 ${fy + 110} 220 ${fy + 110} Q140 ${fy + 110} 90 ${fy + 60} Z" style="fill:url(#pf);${o}"/>`;
+    if (st === 0) s += T(cx, fy + 40, 'frontonasal prominence', 'b l', 'middle');
+    if (st >= 1) { s += `<circle cx="${cx - 55}" cy="${fy + 95}" r="16" style="fill:var(--surface);stroke:var(--ink)"/><circle cx="${cx + 55}" cy="${fy + 95}" r="16" style="fill:var(--surface);stroke:var(--ink)"/>` + T(cx, fy + 30, 'frontonasal', 'b l', 'middle') + T(cx + 40, fy + 130, 'nasal pits', 's l'); }
+    if (st === 2) s += T(cx, fy + 150, 'medial nasal processes', 'b l', 'middle') + T(70, fy + 110, 'lateral nasal', 's l');
+    const my = 210;
+    const mw = st === 2 ? 90 : 120;
+    s += `<path d="M${cx - 170} ${my - 40} Q${cx - 140} ${my - 60} ${cx - mw} ${my - 10} Q${cx - 130} ${my + 20} ${cx - 170} ${my - 10} Z" style="fill:url(#p1);${o}"/><path d="M${cx + 170} ${my - 40} Q${cx + 140} ${my - 60} ${cx + mw} ${my - 10} Q${cx + 130} ${my + 20} ${cx + 170} ${my - 10} Z" style="fill:url(#p1);${o}"/>`;
+    s += T(cx - 160, my + 40, 'maxillary', 'b l', 'start');
+    s += `<path d="M${cx - 150} ${my + 50} Q${cx} ${my + 30} ${cx + 150} ${my + 50} Q${cx} ${my + 140} ${cx - 150} ${my + 50} Z" style="fill:url(#p1);${o}"/>`;
+    s += T(cx, my + 110, 'mandibular prominences (arch 1)', 'b l', 'middle');
+    s += `<ellipse cx="${cx}" cy="${my + 10}" rx="50" ry="14" style="fill:var(--ink);fill-opacity:.7"/>` + T(cx, my + 14, 'stomodeum', 's', 'middle');
+  } else {
+    /* adult face map */
+    s += `<ellipse cx="${cx}" cy="190" rx="150" ry="175" style="fill:none;stroke:var(--line);stroke-width:2"/>`;
+    s += `<path d="M110 40 Q220 0 330 40 L330 120 Q220 110 200 160 L240 160 Q220 110 110 120 Z" style="fill:url(#pf);${o}"/>` + T(cx, 70, 'frontonasal', 'b l', 'middle');
+    s += `<path d="M200 150 L240 150 L250 250 L190 250 Z" style="fill:url(#pf);fill-opacity:1;${o}"/>` + T(cx, 290, 'philtrum (medial nasal)', 's l', 'middle');
+    s += `<path d="M80 130 Q170 140 190 250 L120 260 Q80 200 80 130 Z M360 130 Q270 140 250 250 L320 260 Q360 200 360 130 Z" style="fill:url(#p1);${o}"/>` + T(100, 160, 'maxillary', 'b l');
+    s += `<path d="M120 262 Q220 280 320 262 Q300 350 220 362 Q140 350 120 262 Z" style="fill:url(#p1);${o}"/>` + T(cx, 330, 'mandibular', 'b l', 'middle');
+    if (st === 4) s += `<path d="M196 200 L192 250" style="stroke:var(--clin);stroke-width:7"/>` + T(90, 240, 'cleft lip', 'c l', 'middle') + lead(120, 236, 190, 230) + T(cx, 375, 'unilateral cleft between maxillary and medial nasal parts', 's', 'middle');
+  }
+  $('face-svg').innerHTML = s; $('face-find').innerHTML = FACE_STEPS[st][1];
+}
+function drawPal() {
+  const st = PAL.s; let s = PATS + DEFS; const o = 'stroke:var(--ink);stroke-width:1.2';
+  if (st >= 1 && st <= 2) {
+    s += T(14, 18, 'FRONTAL SECTION', 'h');
+    s += `<path d="M220 40 V140" style="stroke:var(--meso);stroke-width:14"/>` + T(232, 60, 'nasal septum', 's');
+    s += `<ellipse cx="220" cy="250" rx="${st === 1 ? 70 : 80}" ry="${st === 1 ? 70 : 50}" style="fill:var(--endo);fill-opacity:.3;stroke:var(--endo)"/>` + T(220, 300, 'tongue', 's', 'middle');
+    const sh = st === 1 ? ['M120 150 Q110 220 130 280', 'M320 150 Q330 220 310 280'] : ['M90 170 Q150 160 205 175', 'M350 170 Q290 160 235 175'];
+    for (const d of sh) s += `<path d="${d}" style="stroke-width:28;fill:none;stroke:var(--ink);stroke-linecap:round"/><path d="${d}" style="stroke-width:25;fill:none;stroke:var(--surface);stroke-linecap:round"/><path d="${d}" style="stroke-width:25;fill:none;stroke:url(#p1);stroke-linecap:round"/>`;
+    s += T(60, 130, 'palatal shelf (maxillary)', 'b l') + T(380, 130, 'palatal shelf', 'b l', 'end');
+  } else {
+    s += T(14, 18, 'ROOF OF THE MOUTH SEEN FROM BELOW, FRONT UP', 'h');
+    s += `<path d="M220 40 L270 110 L170 110 Z" style="fill:url(#pf);${o}"/>` + T(290, 70, 'primary palate', 'b l');
+    s += `<circle cx="220" cy="112" r="6" style="fill:var(--ink)"/>` + T(232, 128, 'incisive foramen', 's l');
+    const g = st === 0 ? 0 : st === 3 ? 1 : 0.4;
+    if (st >= 3) {
+      s += `<path d="M110 110 L215 112 L215 300 L150 300 Q100 220 110 110 Z" style="fill:url(#p1);${o}"/><path d="M330 110 L225 112 L225 300 L290 300 Q340 220 330 110 Z" style="fill:url(#p1);${o}"/>`;
+      if (st === 4) s += `<path d="M220 118 V300" style="stroke:var(--clin);stroke-width:14"/>` + T(250, 260, 'cleft of the secondary palate', 'c l');
+      else s += `<path d="M220 118 V300" style="stroke:var(--line);stroke-dasharray:4 4"/>` + T(250, 260, 'seam (fused shelves)', 's l');
+    } else s += T(220, 220, 'secondary palate still to come', 's', 'middle');
+    s += T(110, 330, 'secondary palate = the palatal shelves (arch 1)', 's');
+  }
+  $('pal-svg').innerHTML = s; $('pal-find').innerHTML = PAL_STEPS[st][1];
+}
+
+/* ===================== 3. tongue and thyroid ===================== */
+function drawTon() {
+  let s = PATS + DEFS; const o = 'stroke:var(--ink);stroke-width:1.2';
+  s += T(14, 18, 'FLOOR OF THE PHARYNX FROM ABOVE, FRONT UP', 'h');
+  s += `<path d="M100 60 Q200 20 300 60 L300 170 L200 200 L100 170 Z" style="fill:url(#p1);${o}"/>` + T(200, 110, 'lateral lingual swellings', 'b l', 'middle') + T(200, 126, '(arch 1): anterior 2/3', 's l', 'middle');
+  s += `<path d="M100 175 L200 205 L300 175 L300 260 Q200 290 100 260 Z" style="fill:url(#p3);${o}"/>` + T(200, 245, 'hypopharyngeal eminence (arches 3, 4)', 'b l', 'middle') + T(200, 261, 'posterior 1/3', 's l', 'middle');
+  s += `<path d="M100 172 L200 202 L300 172" style="fill:none;stroke:var(--ink);stroke-width:3"/>` + T(310, 180, 'sulcus terminalis', 's l');
+  s += `<circle cx="200" cy="202" r="6" style="fill:var(--thyroid);stroke:var(--ink)"/>` + T(210, 222, 'foramen caecum', 's l');
+  $('ton-svg').innerHTML = s;
+}
+function drawThy() {
+  const k = THY.sel; let s = DEFS;
+  s += `<path d="M40 80 Q120 40 200 80 Q230 120 200 150 Q120 170 60 140 Z" style="fill:var(--endo);fill-opacity:.2;stroke:var(--line)"/>` + T(80, 70, 'tongue', 's');
+  s += `<circle cx="190" cy="152" r="6" style="fill:var(--ink)"/>` + T(200, 140, 'foramen caecum', 's l');
+  s += `<rect x="140" y="200" width="60" height="14" rx="6" style="fill:var(--line)"/>` + T(130, 212, 'hyoid', 's', 'end');
+  s += `<path d="M150 250 L220 250 L215 300 L160 300 Z" style="fill:var(--line);fill-opacity:.6"/>` + T(140, 280, 'thyroid cartilage', 's', 'end');
+  s += `<path d="M240 140 V370" style="stroke:var(--line);stroke-width:30"/>` + T(262, 360, 'larynx / trachea', 's');
+  s += `<path d="M190 155 Q150 200 135 215 Q140 260 150 320" style="fill:none;stroke:var(--thyroid);stroke-width:3;stroke-dasharray:${k === 'norm' ? '5 5' : '2 6'}"/>` + T(70, 180, 'path of descent', 's');
+  if (k === 'norm' || k === 'pyr') s += `<ellipse cx="170" cy="335" rx="40" ry="18" style="fill:var(--thyroid)"/>` + T(215, 340, 'thyroid', 'b l');
+  if (k === 'pyr') s += `<path d="M160 320 L150 270" style="stroke:var(--thyroid);stroke-width:10;stroke-linecap:round"/>` + T(140, 262, 'pyramidal lobe', 'b l', 'end');
+  if (k === 'cyst') s += `<ellipse cx="170" cy="245" rx="22" ry="18" class="defect"/>` + T(110, 245, 'cyst (midline,', 'c l', 'end') + T(110, 260, 'below the hyoid)', 'c l', 'end') + `<ellipse cx="170" cy="335" rx="40" ry="18" style="fill:var(--thyroid)"/>`;
+  if (k === 'ling') s += `<ellipse cx="185" cy="140" rx="22" ry="14" style="fill:var(--thyroid);stroke:var(--clin);stroke-width:2"/>` + T(120, 110, 'lingual thyroid', 'c l', 'end') + lead(122, 112, 166, 136);
+  s += T(14, 20, 'FACE ←', 'h');
+  $('thy-svg').innerHTML = s; $('thy-find').innerHTML = THY_ITEMS[k][1];
+}
+
+/* ===================== 4. pituitary and eye ===================== */
+function drawPit() {
+  const st = PIT.s; let s = DEFS;
+  s += `<path d="M40 60 H360" style="stroke:var(--ecto);stroke-width:${st ? 22 : 18}"/>` + T(50, 44, st ? 'floor of the diencephalon (hypothalamus)' : 'floor of the diencephalon', 's');
+  s += `<path d="M40 260 Q200 230 360 260" style="fill:none;stroke:var(--ecto);stroke-width:10"/>` + T(50, 290, 'roof of the stomodeum (oral ectoderm)', 's');
+  s += T(14, 310, 'FACE ←', 'h');
+  if (st === 0) {
+    s += `<path d="M200 70 Q190 110 200 130" style="fill:none;stroke:var(--pit);stroke-width:14;stroke-linecap:round"/>` + T(214, 110, 'infundibulum (downgrowth)', 'b l');
+    s += `<path d="M200 245 Q170 200 200 170 Q230 200 200 245" style="fill:var(--pit);fill-opacity:.45;stroke:var(--pit);stroke-width:3"/>` + T(214, 200, "Rathke's pouch (upgrowth)", 'b l');
+    s += `<path class="flow" d="M260 150 V120"/><path class="flow" d="M180 120 V150"/>`;
+  } else {
+    s += `<path d="M200 70 V130" style="stroke:var(--pit);stroke-width:12"/><ellipse cx="225" cy="150" rx="28" ry="24" style="fill:var(--pit)"/><ellipse cx="180" cy="150" rx="32" ry="26" style="fill:var(--pit);fill-opacity:.45;stroke:var(--pit);stroke-width:2"/>`;
+    s += T(260, 150, 'posterior lobe', 'b l') + T(140, 190, 'anterior lobe', 'b l', 'end') + T(214, 100, 'stalk', 's l');
+    s += `<path d="M200 178 Q195 220 200 248" style="stroke:var(--pit);stroke-width:2;stroke-dasharray:3 4"/>` + T(214, 224, 'stalk to the mouth regresses', 's l');
+  }
+  $('pit-svg').innerHTML = s; $('pit-find').innerHTML = PIT_STEPS[st][1];
+}
+function drawEye() {
+  const st = EYE.s; let s = DEFS;
+  s += `<path d="M30 160 H110" style="stroke:var(--ecto);stroke-width:20"/>` + T(30, 140, 'forebrain wall', 's');
+  if (st === 0) {
+    s += `<path d="M110 150 Q250 90 290 160 Q250 230 110 170" style="fill:var(--s-csf);stroke:var(--ecto);stroke-width:14"/>` + T(190, 110, 'optic vesicle', 'b l', 'middle');
+    s += `<path d="M330 80 V240" style="stroke:var(--ecto);stroke-width:8"/><rect x="322" y="125" width="18" height="70" rx="6" style="fill:var(--lens)"/>` + T(316, 112, 'lens placode', 'b l', 'end') + T(410, 270, 'surface ectoderm', 's', 'end');
+  } else {
+    s += `<path d="M110 156 H200" style="stroke:var(--ecto);stroke-width:12"/>` + T(140, 190, 'optic stalk', 's l');
+    s += `<path d="M300 80 Q184 88 194 160 Q184 232 300 240" style="fill:none;stroke:var(--ink);stroke-opacity:.7;stroke-width:6"/>`;
+    s += `<path d="M300 96 Q208 104 216 160 Q208 216 300 224" style="fill:none;stroke:var(--retina);stroke-width:18"/>`;
+    s += T(200, 40, 'outer layer: pigment epithelium', 's l', 'middle') + T(170, 270, 'inner layer: neural retina', 'b l', 'middle');
+    s += `<circle cx="285" cy="160" r="34" style="fill:var(--lens)"/>` + T(290, 164, 'lens', 'b l', 'middle');
+    s += `<path d="M370 70 V250" style="stroke:var(--ecto);stroke-width:8"/>` + T(410, 270, 'surface ectoderm', 's', 'end');
+    if (st >= 2) s += `<path class="art" style="stroke-width:5${st === 3 ? ';opacity:.3' : ''}" d="M110 172 H210 Q250 172 268 168"/>` + T(110, 210, st === 2 ? 'hyaloid artery (via the fissure)' : '', 's l');
+    if (st === 3) s += `<path d="M205 200 Q215 230 250 236" class="defect" style="fill:none;stroke-width:8"/>` + T(250, 300, 'coloboma: fissure open (inferior)', 'c l', 'middle');
+  }
+  $('eye-svg').innerHTML = s; $('eye-find').innerHTML = EYE_STEPS[st][1];
+}
+
+/* ===================== 5. brain vesicles ===================== */
+function drawVes() {
+  const st = VES.s; let s = DEFS;
+  if (st < 2) {
+    s += T(14, 18, 'DORSAL VIEW, HEAD UP', 'h');
+    const tube = (cx, cy, rx, ry, col, lab, sub) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" style="fill:var(${col});stroke:var(--ink);stroke-width:1"/><ellipse cx="${cx}" cy="${cy}" rx="${rx * .45}" ry="${ry * .5}" style="fill:var(--s-csf)"/>` + T(cx + rx + 14, cy, lab, 'b l') + (sub ? T(cx + rx + 14, cy + 15, sub, 's l') : '');
+    if (st === 0) {
+      s += tube(150, 70, 70, 44, '--ecto', 'prosencephalon', 'forebrain') + tube(150, 160, 52, 38, '--ecto', 'mesencephalon', 'midbrain') + tube(150, 255, 60, 50, '--ecto', 'rhombencephalon', 'hindbrain');
+    } else {
+      s += `<ellipse cx="90" cy="60" rx="46" ry="40" style="fill:var(--telen);stroke:var(--ink)"/><ellipse cx="210" cy="60" rx="46" ry="40" style="fill:var(--telen);stroke:var(--ink)"/>` + T(300, 50, 'telencephalon', 'b l') + T(300, 65, 'lateral ventricles', 's l');
+      s += tube(150, 112, 44, 26, '--dien', 'diencephalon', 'third ventricle') + tube(150, 175, 40, 30, '--midb', 'mesencephalon', 'cerebral aqueduct');
+      s += tube(150, 240, 56, 30, '--pons', 'metencephalon', 'fourth ventricle (upper)') + tube(150, 300, 46, 28, '--medulla', 'myelencephalon', 'fourth ventricle (lower)');
+    }
+    s += `<path d="M150 ${st ? 328 : 305} V370" style="stroke:var(--ecto);stroke-width:26"/>` + T(180, 365, 'spinal cord (central canal)', 's l');
+  } else {
+    s += T(14, 18, 'SIDE VIEW, FACE TO YOUR LEFT', 'h');
+    /* telencephalon (front) -> diencephalon -> midbrain (cephalic flexure, convex dorsally) -> pons (pontine flexure, the opposite bend: concave dorsally) -> medulla (cervical flexure, convex dorsally) -> cord */
+    s += `<path d="M132 208 Q150 160 182 122" style="fill:none;stroke:var(--dien);stroke-width:30;stroke-linecap:round"/><circle cx="112" cy="236" r="44" style="fill:var(--telen);stroke:var(--ink)"/>`;
+    s += `<path d="M182 122 Q240 30 300 110" style="fill:none;stroke:var(--midb);stroke-width:34;stroke-linecap:round"/>`;
+    s += `<path d="M300 110 Q240 190 300 250" style="fill:none;stroke:var(--pons);stroke-width:34;stroke-linecap:round"/><path d="M300 250 Q380 300 330 372" style="fill:none;stroke:var(--medulla);stroke-width:30;stroke-linecap:round"/>`;
+    s += T(250, 46, 'cephalic flexure (midbrain)', 'b l', 'middle') + T(300, 186, 'pontine flexure:', 'b l') + T(300, 202, 'the opposite bend', 's l');
+    s += T(455, 300, 'cervical flexure', 'b l', 'end') + T(112, 300, 'telencephalon', 's l', 'middle') + T(150, 120, 'diencephalon', 's l', 'end') + T(330, 118, 'metencephalon (pons)', 's l') + T(360, 230, 'medulla', 's l');
+  }
+  $('ves-svg').innerHTML = s; $('ves-find').innerHTML = VES_STEPS[st][1];
+}
+
+/* ===================== 6. spinal cord ===================== */
+function drawCord() {
+  const st = CORD.s; let s = DEFS;
+  const cx = 220, cy = 170;
+  if (st <= 1) {
+    s += `<ellipse cx="${cx}" cy="${cy}" rx="120" ry="140" style="fill:var(--surface);stroke:var(--ink)"/><ellipse cx="${cx}" cy="${cy}" rx="95" ry="118" style="fill:var(--ecto);fill-opacity:.35"/><ellipse cx="${cx}" cy="${cy}" rx="10" ry="80" style="fill:var(--s-csf);stroke:var(--ink)"/>`;
+    s += T(432, 24, 'marginal layer (white)', 's l', 'end') + T(cx + 110, cy + 120, 'mantle layer (grey)', 's l') + T(cx + 30, cy + 4, 'central canal', 's l');
+    if (st === 1) {
+      s += `<path d="M${cx - 95} ${cy} H${cx - 10} M${cx + 10} ${cy} H${cx + 95}" style="stroke:var(--ink);stroke-width:2;stroke-dasharray:5 3"/>` + T(30, cy + 4, 'sulcus limitans', 'b l');
+      s += T(cx, cy - 60, 'alar plate (sensory)', 'b l', 'middle') + T(cx, cy + 70, 'basal plate (motor)', 'b l', 'middle') + T(cx, cy - 146, 'roof plate', 's', 'middle') + T(cx, cy + 156, 'floor plate', 's', 'middle');
+    }
+  } else if (st === 2) {
+    s += `<ellipse cx="${cx}" cy="${cy}" rx="150" ry="110" style="fill:var(--surface);stroke:var(--ink)"/>`;
+    s += `<path d="M${cx} ${cy} L${cx - 70} ${cy - 90} L${cx - 50} ${cy - 95} Z M${cx} ${cy} L${cx + 70} ${cy - 90} L${cx + 50} ${cy - 95} Z" style="fill:var(--ink);fill-opacity:.35"/>`;
+    s += `<path d="M${cx} ${cy} Q${cx - 100} ${cy + 20} ${cx - 80} ${cy + 80} Q${cx - 30} ${cy + 60} ${cx} ${cy} Z M${cx} ${cy} Q${cx + 100} ${cy + 20} ${cx + 80} ${cy + 80} Q${cx + 30} ${cy + 60} ${cx} ${cy} Z" style="fill:var(--ink);fill-opacity:.35"/>`;
+    s += T(432, 40, 'dorsal horn ← alar plate', 'b l', 'end') + T(432, 300, 'ventral horn ← basal plate', 'b l', 'end') + T(cx, cy + 135, 'white matter outside', 's', 'middle');
+  } else if (st === 3) {
+    s += `<path d="M40 120 Q220 60 400 120" style="fill:none;stroke:var(--medulla);stroke-width:4;stroke-dasharray:3 4"/>` + T(220, 76, 'thin roof (choroid plexus)', 's', 'middle');
+    s += `<path d="M40 130 Q220 300 400 130" style="fill:var(--medulla);stroke:var(--ink)"/>` + `<path d="M220 130 V230" style="stroke:var(--surface);stroke-width:2"/>`;
+    s += T(220, 120, 'fourth ventricle', 's', 'middle');
+    s += T(90, 180, 'alar (sensory)', 'b l', 'middle') + T(170, 200, 'basal', 'b l', 'middle') + T(270, 200, 'basal', 'b l', 'middle') + T(350, 180, 'alar (sensory)', 'b l', 'middle');
+    s += `<path d="M130 150 L135 175 M310 150 L305 175" style="stroke:var(--ink);stroke-width:3"/>` + T(220, 300, 'sulcus limitans between them: motor medial, sensory lateral', 's', 'middle');
+  } else {
+    s += `<path d="M60 230 Q220 330 380 230 L380 260 Q220 340 60 260 Z" style="fill:var(--pons);stroke:var(--ink)"/>` + T(220, 320, 'pons (floor and walls)', 'b l', 'middle');
+    s += `<path d="M80 180 Q150 80 220 90 Q290 80 360 180" style="fill:none;stroke:var(--cblm);stroke-width:34;stroke-linecap:round"/>` + T(220, 60, 'cerebellum from the rhombic lips (meet in the midline: vermis)', 's l', 'middle');
+    s += T(60, 200, 'rhombic lip', 'b l') + T(380, 200, 'rhombic lip', 'b l', 'end') + T(220, 200, 'fourth ventricle', 's', 'middle');
+  }
+  $('cord-svg').innerHTML = s; $('cord-find').innerHTML = CORD_STEPS[st][1];
+}
+
+/* ===================== 7. malformations ===================== */
+function drawMal() {
+  const k = MAL.sel; let s = DEFS;
+  const brain = (vent = '', vermis = true, extra = '') => {
+    let o = `<path d="M60 160 Q60 40 200 40 Q330 40 340 150 Q340 200 300 210 L170 210 Q60 220 60 160 Z" style="fill:var(--telen);fill-opacity:.7;stroke:var(--ink)"/>`;
+    o += vent || `<path d="M140 110 Q200 80 260 110 Q240 140 160 140 Z" style="fill:var(--s-csf);stroke:var(--ink)"/>`;
+    if (vermis) o += `<ellipse cx="300" cy="230" rx="48" ry="30" style="fill:var(--cblm);stroke:var(--ink)"/>`;
+    o += `<path d="M220 200 Q240 240 240 290" style="fill:none;stroke:var(--pons);stroke-width:26"/>`;
+    return o + extra;
+  };
+  if (k === 'hpe') { s += T(14, 18, 'FRONT VIEW', 'h') + `<ellipse cx="210" cy="140" rx="140" ry="110" style="fill:var(--telen);fill-opacity:.7;stroke:var(--ink)"/><ellipse cx="210" cy="150" rx="70" ry="40" class="defect"/>` + T(210, 156, 'single ventricle', 'c l', 'middle') + T(210, 280, 'no midline split (alobar)', 'b', 'middle'); }
+  if (k === 'lis') { s += brain() + T(200, 30, 'smooth surface, no gyri', 'c l', 'middle'); }
+  if (k === 'hyd') { s += brain(`<path d="M100 120 Q200 50 290 120 Q260 180 120 170 Z" class="defect"/>`) + `<path d="M228 205 L232 215" style="stroke:var(--clin);stroke-width:8"/>` + T(200, 110, 'enlarged ventricles', 'c l', 'middle') + T(300, 290, 'narrow aqueduct', 'c l', 'end'); }
+  if (k === 'chi') { s += brain('', false) + `<path d="M260 200 Q250 260 256 290" style="stroke:var(--cblm);stroke-width:22;fill:none"/><path d="M180 270 H330" style="stroke:var(--muted);stroke-width:2;stroke-dasharray:4 4"/>` + T(410, 262, 'foramen magnum', 's', 'end') + T(280, 296, 'vermis and brainstem pushed down', 'c l', 'end'); }
+  if (k === 'dw') { s += brain('', false) + `<ellipse cx="310" cy="235" rx="80" ry="50" class="defect"/>` + `<ellipse cx="300" cy="200" rx="20" ry="10" style="fill:var(--cblm)"/>` + T(310, 240, 'cystic 4th ventricle', 'c l', 'middle') + T(410, 296, 'large posterior fossa, small vermis', 's', 'end'); }
+  if (k === 'enc') { s += brain() + `<path d="M330 120 Q400 110 400 160 Q400 210 336 190" class="defect"/>` + T(395, 230, 'occipital sac', 'c l', 'end'); }
+  if (k === 'ntd') { s += T(14, 18, 'BACK VIEW, CAUDAL END', 'h') + `<path d="M210 30 V270" style="stroke:var(--ecto);stroke-width:30"/><rect x="180" y="150" width="60" height="120" class="defect"/>` + T(250, 210, 'open, exposed cord', 'c l') + T(60, 120, 'see Early Development', 's'); }
+  $('mal-svg').innerHTML = s; $('mal-find').innerHTML = MAL_ITEMS[k][1];
+}
+
+function swipeHints() {
+  document.querySelectorAll('.schbox').forEach(b => {
+    if (b.querySelector('svg.fit')) return;
+    const n = b.nextElementSibling;
+    if (n && n.classList && n.classList.contains('swipe')) return;
+    const p = document.createElement('p'); p.className = 'muted swipe'; p.textContent = 'Swipe sideways to see all of it.'; b.after(p);
+  });
+}
+(() => {
+  $('lede').innerHTML = LEDE;
+  $('key').innerHTML = KEY.map(([t, l]) => `<span><i style="background:var(${t})"></i>${l}</span>`).join('');
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('ton-text').innerHTML = TON_TEXT;
+  table('pa-table', PA_HEAD, PA_ROWS); table('ves-table', VES_HEAD, VES_ROWS);
+  toggles('pa-tg', Object.entries(PA_ITEMS).map(([k, d]) => [k, d[0]]), k => { PA.sel = k; drawPa(); }, 'all');
+  stepper('face-step', FACE_STEPS.map(x => x[0]), drawFace, FACE);
+  stepper('pal-step', PAL_STEPS.map(x => x[0]), drawPal, PAL);
+  toggles('thy-tg', Object.entries(THY_ITEMS).map(([k, d]) => [k, d[0]]), k => { THY.sel = k; drawThy(); }, 'norm');
+  stepper('pit-step', PIT_STEPS.map(x => x[0]), drawPit, PIT);
+  stepper('eye-step', EYE_STEPS.map(x => x[0]), drawEye, EYE);
+  stepper('ves-step', VES_STEPS.map(x => x[0]), drawVes, VES);
+  stepper('cord-step', CORD_STEPS.map(x => x[0]), drawCord, CORD);
+  toggles('mal-tg', Object.entries(MAL_ITEMS).map(([k, d]) => [k, d[0]]), k => { MAL.sel = k; drawMal(); }, 'hpe');
+  drawPa(); drawTon(); drawThy(); drawMal();
+  swipeHints();
+  window.ready = true;
+})();
+</script>
+</body>
+</html>

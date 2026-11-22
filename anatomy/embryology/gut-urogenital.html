@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Development of the Gut and Urogenital System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --artery (aorta and its gut branches), --clin (a defect), --accent (UI selection).
+   Embryology tokens exactly as on early-development.html: --ecto / --meso / --endo (germ layers; the cloaca and urogenital
+   sinus drawn as endoderm, the urorectal septum and intermediate mesoderm as mesoderm).
+   Shared, same meaning as on other pages: --gut (small intestine and the digestive tube), --colon (large intestine), --stom
+   (stomach), --liver, --panc (pancreas and its ducts), --bile (bile duct) as on organs.html; --kidney (kidney, ureter and
+   urinary tract), --duct (epididymis, ductus deferens, ejaculatory duct: here also the mesonephric duct that forms them),
+   --uter (uterus and uterine tubes: here also the paramesonephric duct that forms them), --vag (vagina), --gonad (testis,
+   ovary) as on pelvis.html; --fluid as on other pages. No new tokens. Homologous external genital parts are told apart by
+   hatch patterns (one per primordium), not colours. */
+:root{--ecto:#2ad2f4;--meso:#efa272;--endo:#d3910b;--fluid:#d9edc6;--gut:#d9a066;--colon:#a89a5a;--stom:#e7b7c8;--liver:#9b6b5e;--panc:#8f6aa8;--bile:#5e8c6a;
+  --kidney:#b46e48;--duct:#826bdf;--uter:#e9967a;--vag:#8989e6;--gonad:#dc89e6}
+:root[data-theme="dark"]{--fluid:#4e6638;--gut:#c08a52;--colon:#8f8248;--stom:#8c5468;--liver:#a77464;--panc:#9d7ab6;--bile:#6fa07b;
+  --kidney:#c07a52;--duct:#9a88ea;--uter:#d08066;--vag:#8484d6;--gonad:#c77bd2;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+.scroll{overflow-x:auto}
+.two{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:680px;margin:0 auto}
+.schbox{overflow-x:auto;scrollbar-color:var(--line) transparent}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:540px}.schbox svg.sch.fit{min-width:0}.swipe{display:block}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.c{fill:var(--clin);font-weight:600}
+svg.sch text.b{font-weight:700}
+svg.sch text.l{paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .flow{stroke:var(--ink);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+svg.sch .box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .ol{stroke:var(--ink);stroke-width:1.1}
+svg.sch .hrt{fill:var(--heart)} svg.sch .meso{fill:var(--meso)} svg.sch .endo{fill:var(--endo)} svg.sch .ecto{fill:var(--ecto)}
+svg.sch .crest{fill:var(--crest)} svg.sch .fluid{fill:var(--fluid)} svg.sch .liver{fill:var(--liver)} svg.sch .pleura{fill:var(--pleura)}
+svg.sch .art{stroke:var(--artery);fill:none;stroke-linecap:round} svg.sch .vei{stroke:var(--vein);fill:none;stroke-linecap:round}
+svg.sch .nrv{stroke:var(--nerve);fill:none;stroke-width:3;stroke-linecap:round}
+svg.sch .gone{stroke-dasharray:4 4;opacity:.35}
+svg.sch .hl{stroke:var(--accent);stroke-width:2.6;fill:none}
+svg.sch .defect{fill:url(#hatch);stroke:var(--clin);stroke-width:2}
+.step{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.step .chips{flex:1;min-width:0}
+.step .btn{white-space:nowrap}
+.find{font-size:14px;min-height:6em}
+.find h3{font-size:15px;margin:0 0 4px}
+table.dis td:first-child{font-weight:600}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.readout{font:500 13px var(--f-mono);color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> <span class="muted" style="font-size:13px">· Embryology: <a href="early-development.html">Early development</a> · <a href="membranes-placenta.html">Membranes, placenta</a> · <a href="heart-vessels.html">Heart, vessels, lungs</a> · <span aria-current="page">Gut, urogenital</span> · <a href="head-neck-cns.html">Head, neck, nervous system</a></span></nav>
+
+<header class="stack">
+  <h1>Development of the Gut and Urogenital System</h1>
+  <p class="lede" id="lede"></p>
+  <div class="key" id="key"></div>
+</header>
+
+<section class="block panel" aria-labelledby="h-gut">
+  <h2 id="h-gut">The gut tube: foregut, midgut and hindgut</h2>
+  <div class="chips" id="gut-tg" aria-label="Part"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="gut-svg" viewBox="0 0 520 380" role="img" aria-label="Side view of the embryonic gut tube from the oropharyngeal to the cloacal membrane with the stomach, liver and pancreatic buds, the midgut loop and the cloaca, and the coeliac, superior and inferior mesenteric arteries"></svg></div>
+    <div class="prose find" id="gut-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic side view, head up, ventral to your left; not to scale.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-fore">
+  <h2 id="h-fore">Stomach, liver and pancreas</h2>
+  <div class="prose" id="fore-text"></div>
+  <div class="step" id="pan-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pan-svg" viewBox="0 0 460 330" role="img" aria-label="The duodenal loop with the dorsal and ventral pancreatic buds at the chosen step, or the chosen pancreatic anomaly"></svg></div>
+    <div class="prose find" id="pan-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, seen from the front (the embryo's right on your left).</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-mid">
+  <h2 id="h-mid">Midgut: herniation and the 270° rotation</h2>
+  <label class="readout" for="rot">Rotation, seen from the front: <b id="rot-lab">0°</b></label>
+  <input type="range" id="rot" min="0" max="300" value="0" step="5">
+  <div class="chips" id="mal-tg" aria-label="Anomaly"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="mid-svg" viewBox="0 0 520 420" role="img" aria-label="The midgut loop round the superior mesenteric artery seen from the front, its cranial and caudal limbs turned anticlockwise by the chosen angle, in the umbilical cord or back in the abdomen"></svg></div>
+    <div class="prose find" id="mid-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, seen from the front: the embryo's right is on your left, so the anticlockwise turn you see brings the cranial limb to the embryo's right. The last 30 steps of the slider: the caecum descends.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-wall">
+  <h2 id="h-wall">Anterior abdominal wall, Meckel's diverticulum and their defects</h2>
+  <div class="chips" id="wall-tg" aria-label="Defect"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="wall-svg" viewBox="0 0 440 340" role="img" aria-label="Front view of a newborn abdomen with the umbilical cord, showing the chosen abdominal wall defect, or a loop of ileum with Meckel's diverticulum"></svg></div>
+    <div class="prose find" id="wall-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, seen from the front (the baby's right on your left). The diaphragm and its hernias: <a href="../thorax/wall-muscles.html">Muscles of the Trunk Wall</a>.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-hind">
+  <h2 id="h-hind">Hindgut and cloaca</h2>
+  <div class="step" id="clo-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="clo-svg" viewBox="0 0 460 340" role="img" aria-label="Side view of the cloaca with the allantois and hindgut, the urorectal septum growing down and dividing it into the urogenital sinus in front and the anorectal canal behind"></svg></div>
+    <div class="prose find" id="clo-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic side view, head up, ventral to your left.</p>
+  <div class="prose" id="hind-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-kid">
+  <h2 id="h-kid">Kidneys and ureters: three kidneys, ascent and anomalies</h2>
+  <div class="step" id="kid-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="kid-svg" viewBox="0 0 460 380" role="img" aria-label="Side view of the intermediate mesoderm with the pronephros, mesonephros and its duct, and the metanephros with the ureteric bud"></svg></div>
+    <div class="prose find" id="kid-find" aria-live="polite"></div>
+  </div>
+  <label class="readout" for="asc">Ascent of the kidneys: <b id="asc-lab">pelvis</b></label>
+  <input type="range" id="asc" min="0" max="100" value="0" step="5">
+  <div class="chips" id="ren-tg" aria-label="Anomaly"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="asc-svg" viewBox="0 0 460 400" role="img" aria-label="Front view of the posterior abdominal wall with the aorta and inferior mesenteric artery, the kidneys rising from the pelvis and turning their hila medially, or the chosen anomaly"></svg></div>
+    <div class="prose find" id="asc-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic front view (the embryo's right on your left); not to scale.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-gen">
+  <h2 id="h-gen">Bladder, gonads and genital ducts</h2>
+  <div class="prose" id="blad-text"></div>
+  <div class="chips" id="sex-tg" aria-label="Stage"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="sex-svg" viewBox="0 0 480 400" role="img" aria-label="Front view of the gonads with the mesonephric and paramesonephric ducts in the indifferent stage, and what they become in the male or the female"></svg></div>
+    <div class="prose find" id="sex-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, seen from the front; not to scale.</p>
+  <div class="chips" id="ut-tg" aria-label="Uterine anomaly"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="ut-svg" viewBox="0 0 400 260" role="img" aria-label="Outline of the uterus, cervix and upper vagina for the chosen Müllerian anomaly"></svg></div>
+    <div class="prose find" id="ut-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ext">
+  <h2 id="h-ext">External genitalia and hypospadias</h2>
+  <div class="chips" id="ext-tg" aria-label="Stage"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="ext-svg" viewBox="0 0 420 340" role="img" aria-label="The indifferent external genitalia and their male or female form, each homologous part with its own hatch pattern"></svg></div>
+    <div class="prose find" id="ext-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic; one hatch pattern per primordium: dots = genital tubercle, diagonal lines = urethral (urogenital) folds, horizontal lines = labioscrotal swellings.</p>
+  <div class="scroll"><table class="t stack" id="hom-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-embryo2.md, anatomy/DATA-SOURCES.md) ===================== */
+const LEDE = 'The gut tube and its three parts, the stomach, liver and pancreas, the midgut\'s herniation and rotation, the anterior abdominal wall, the cloaca, the three kidneys and their ascent, the bladder, gonads, genital ducts and external genitalia, with the anomalies each step explains. Linked, not repeated: germ layers and the intermediate mesoderm (<a href="early-development.html">Early Development</a>), the diaphragm (<a href="../thorax/wall-muscles.html">Muscles of the Trunk Wall</a>), descent of the testis (<a href="../abdomen-pelvis/perineum.html#h-testis">Perineum and Male External Genitalia</a>), the adult organs (<a href="../abdomen-pelvis/organs.html">Abdominal Organs</a>, <a href="../abdomen-pelvis/pelvis.html">Pelvic Viscera</a>). Lungs and the tracheo-oesophageal fistula: <a href="heart-vessels.html#h-lung">Heart, Great Vessels and Lungs</a>.';
+const KEY = [['--endo', 'Endoderm'], ['--meso', 'Mesoderm'], ['--gut', 'Small intestine / gut tube'], ['--colon', 'Large intestine'], ['--stom', 'Stomach'], ['--liver', 'Liver'], ['--panc', 'Pancreas'], ['--kidney', 'Kidney, ureter, bladder'], ['--duct', 'Mesonephric duct → male ducts'], ['--uter', 'Paramesonephric duct → uterus, tubes'], ['--gonad', 'Gonad'], ['--artery', 'Artery'], ['--clin', 'Defect']];
+
+const GUT = {sel: 'all'};
+const GUT_ITEMS = {
+  all: ['Whole tube', '<h3>The primitive gut</h3><p>Folding of the embryo takes part of the yolk sac into the body as an endoderm-lined tube from the <b>oropharyngeal membrane</b> to the <b>cloacal membrane</b>. <b>Endoderm</b> gives the epithelium and glands (liver, pancreas); <b>mesoderm</b> the connective tissue and smooth muscle of the wall; <b>neural crest</b> the enteric neurons. Each part has its own artery: <b>coeliac trunk</b> (foregut), <b>superior mesenteric</b> (midgut), <b>inferior mesenteric</b> (hindgut).</p>'],
+  fore: ['Foregut', '<h3>Foregut (coeliac trunk)</h3><p>Oesophagus (and the respiratory tract, which buds from it), stomach, duodenum to the entry of the bile duct (major papilla), liver, gallbladder and pancreas. The spleen develops in the dorsal mesogastrium but from mesoderm, not endoderm (Wikipedia).</p>'],
+  mid: ['Midgut', '<h3>Midgut (superior mesenteric artery)</h3><p>Duodenum beyond the bile duct, jejunum, ileum, caecum, appendix, ascending colon and the <b>proximal two-thirds of the transverse colon</b>.</p>'],
+  hind: ['Hindgut', '<h3>Hindgut (inferior mesenteric artery)</h3><p>The <b>distal third of the transverse colon</b>, descending and sigmoid colon, rectum and the upper part of the anal canal; it ends in the cloaca.</p>'],
+};
+const FORE_TEXT = `<p><b>Stomach</b>: its dorsal border grows faster and becomes the <b>greater curvature</b>. The stomach turns about 90° on its long axis, so that its original right surface faces backwards and its left surface forwards (Gray 1918; Wikipedia: posterior structures move to the left), and the greater curvature swings down and to the left. The turn drags the mesenteries: the space behind the stomach becomes the <b>lesser sac</b>, in front the greater sac, and the <b>dorsal mesogastrium</b> becomes the <b>greater omentum</b>.</p>
+<p><b>Liver</b>: the <b>hepatic diverticulum</b>, a tube of endoderm, grows from the foregut into the <b>septum transversum</b>; as the liver grows it divides the ventral mesentery, which leaves the <b>lesser omentum</b> between the stomach and the liver.</p>
+<p><b>Duodenal atresia</b>: the duodenum is blocked at birth; <b>polyhydramnios</b> before birth, vomiting after the first feeds, and on X-ray the <b>double-bubble sign</b> (air in the stomach and the duodenum). About 20–40% of babies with it have <b>Down syndrome</b> (Wikipedia). Wikipedia gives Tandler's theory: a failure to <b>recanalise</b> the duodenum.</p>`;
+
+const PAN = {s: 0};
+const PAN_STEPS = [
+  ['Two buds', '<h3>Dorsal and ventral buds</h3><p>The pancreas forms from a <b>dorsal bud</b>, which grows into the dorsal mesogastrium, and a <b>ventral bud</b> that arises from the primitive bile duct.</p>'],
+  ['Ventral bud swings', '<h3>Rotation</h3><p>As the duodenum turns to the right, the ventral bud turns with it and comes to lie <b>behind and below</b> the larger dorsal bud.</p>'],
+  ['Fusion', '<h3>Fusion</h3><p>The buds fuse. The <b>ventral bud</b> forms the (lower) head and the <b>uncinate process</b>; the <b>dorsal bud</b> the neck, body and tail (Gray 1918: also part of the head). The ducts join into one main duct; the dorsal duct may stay as an <b>accessory duct</b> to the minor papilla (about 10% of adults, Wikipedia).</p>'],
+  ['Annular pancreas', '<h3>Annular pancreas</h3><p>A ring of pancreatic tissue, continuous with the head, surrounds the <b>second part of the duodenum</b> (ventral bud split round it or not rotating fully); it can obstruct the duodenum (double-bubble sign on X-ray, Wikipedia). Under 1% of people (StatPearls).</p><p><b>Pancreas divisum</b> (Wikipedia): the two duct systems do not fuse (about 10%), so most of the gland drains through the dorsal duct into the minor papilla.</p>'],
+];
+
+const MID = {v: 0, mal: 'none'};
+const MAL_ITEMS = {
+  none: ['Normal', ''],
+  non: ['Nonrotation', '<h3>Nonrotation</h3><p>Rotation stops after the first 90°: the small intestine lies on the <b>right</b>, the caecum and colon on the <b>left</b> (the slider is set to 90°).</p>'],
+  mal: ['Malrotation and volvulus', '<h3>Malrotation</h3><p>Rotation or fixation is incomplete: the caecum lies high (epigastrium or right upper abdomen) instead of the right iliac fossa, and fibrous peritoneal (<b>Ladd</b>) bands may cross the duodenum. The mesentery has a narrow base and can twist: <b>midgut volvulus</b>, cutting off the blood supply (an emergency, often with bilious vomiting in a newborn, StatPearls). The Ladd procedure untwists the bowel and divides the bands.</p>'],
+  rev: ['Reversed rotation', '<h3>Reversed rotation</h3><p>Rare (review): the gut turns <b>clockwise</b>, so the transverse colon ends up <b>behind</b> the superior mesenteric vessels.</p>'],
+};
+
+const WALL = {sel: 'omph'};
+const WALL_ITEMS = {
+  omph: ['Omphalocele', '<h3>Omphalocele (exomphalos)</h3><p>Abdominal contents protrude through the <b>base of the umbilical cord</b> in the <b>midline</b>, inside a <b>membrane sac</b> (peritoneum). Other anomalies and syndromes are common (about 30%, Wikipedia; Beckwith–Wiedemann, trisomies 13, 18, 21).</p><p>Normally the midgut lies in the cord until about week 10 and then returns; the anterior wall closes as the <b>lateral body wall folds</b> meet in the midline (Wikipedia).</p>'],
+  gast: ['Gastroschisis', '<h3>Gastroschisis</h3><p>A full-thickness defect <b>beside</b> the umbilicus, usually on the <b>right</b>; the cord is normal. Bowel lies free in the amniotic fluid with <b>no covering membrane</b>, so it becomes matted and thickened. Few anomalies outside the gut (about 10%) and maternal serum AFP is raised (StatPearls).</p>'],
+  umb: ['Umbilical hernia', '<h3>Umbilical hernia</h3><p>A bulge at the navel, covered by <b>skin</b>, through a gap where the wall muscles have not closed at the umbilicus. Common; in babies most close by themselves.</p>'],
+  blad: ['Bladder exstrophy', '<h3>Bladder exstrophy</h3><p>A defect of the lower anterior abdominal wall with the bladder open on the surface, part of the <b>exstrophy–epispadias complex</b> (Wikipedia: epispadias always present), with separation of the pubic symphysis. About 3–4 per 100,000 births, more in boys.</p>'],
+  meck: ["Meckel's diverticulum", "<h3>Meckel's diverticulum</h3><p>The <b>proximal part of the vitelline (omphalomesenteric) duct</b> persists as a pouch on the <b>antimesenteric border of the ileum</b>. The commonest congenital anomaly of the gut. \"Rule of 2s\" (StatPearls): about <b>2%</b> of people, 2% symptomatic, usually under 2 years, twice as often in males, about <b>2 feet</b> from the ileocaecal valve, up to 2 inches long, 2 kinds of lining. Ectopic <b>gastric mucosa</b> secretes acid and can cause bleeding.</p>"],
+};
+
+const CLO = {s: 0};
+const CLO_STEPS = [
+  ['Cloaca', '<h3>The cloaca</h3><p>The end of the hindgut opens into the <b>cloaca</b>, a chamber lined by endoderm; the <b>allantois</b> enters it in front. Below, the <b>cloacal membrane</b> separates it from the surface.</p>'],
+  ['Urorectal septum', '<h3>Urorectal septum</h3><p>A partition, the <b>urorectal septum</b>, grows down from the angle between the allantois and the hindgut towards the cloacal membrane.</p>'],
+  ['Divided', '<h3>Two compartments</h3><p>The septum reaches the cloacal membrane: in front the <b>urogenital sinus</b> (bladder, urethra), behind the <b>anorectal canal</b> (rectum, upper anal canal). The membrane breaks down, opening the urogenital sinus and the anus to the surface. The <b>lower anal canal</b> comes from an <b>ectodermal</b> pit, so the canal has an upper (endodermal) and lower (ectodermal) part with different supply: <a href="../abdomen-pelvis/perineum.html">Perineum</a>.</p>'],
+];
+const HIND_TEXT = `<p><b>Anorectal malformations</b> (imperforate anus): no normal anal opening, from a thin covering membrane to a <b>persistent cloaca</b>; a high lesion often has a <b>fistula</b> from the rectum to the bladder, urethra or vagina. About <b>half</b> have other anomalies (genitourinary, skeletal; <b>VACTERL</b>).</p>
+<p><b>Hirschsprung disease</b>: neural crest cells fail to complete their migration down the bowel (in the first 12 weeks), so the <b>terminal rectum</b> and a variable length above it have <b>no ganglion cells</b> in the submucosal (Meissner) and myenteric (Auerbach) plexuses. The aganglionic segment obstructs; 80–90% show it as newborns.</p>`;
+
+const KID = {s: 0, mode: 'norm', asc: 0};
+const KID_STEPS = [
+  ['Pronephros', '<h3>Pronephros</h3><p>All three kidneys come from the <b>intermediate mesoderm</b> (nephrogenic cord), from week 4, one after another from head to tail. The <b>pronephros</b> (cervical) is non-functional in humans and regresses by the end of week 4.</p>'],
+  ['Mesonephros', '<h3>Mesonephros</h3><p>The <b>mesonephros</b> works for a while (Wikipedia: from about the 6th week) but its nephrons form no part of the adult kidney. Its duct, the <b>mesonephric (Wolffian) duct</b>, runs to the cloaca and persists; in the male some mesonephric tubules become the efferent ductules of the testis.</p>'],
+  ['Metanephros', '<h3>Metanephros: the permanent kidney</h3><p>In week 5 the mesonephric duct sends out the <b>ureteric bud</b>, which grows into the <b>metanephric blastema</b> (mesenchyme). The two induce each other: the bud branches into the <b>ureter, pelvis, major and minor calyces and collecting tubules</b>; the blastema forms the <b>nephrons</b> (Wikipedia). Urine is made from about week 11; nephrogenesis is complete about week 32 (StatPearls).</p>'],
+];
+const REN_ITEMS = {
+  norm: ['Normal ascent', '<h3>Ascent</h3><p>The kidneys start in the <b>pelvis</b> and rise to their adult place by the upper lumbar vertebrae (about T12–L3), <b>rotating</b> on their axis as they go (Wikipedia: 90° medially, so the hilum comes to face medially). Timing: weeks 6–9 (CAKUT review); during the ninth week (Cureus review).</p>'],
+  pelvic: ['Pelvic kidney', '<h3>Pelvic (ectopic) kidney</h3><p>A kidney fails to ascend and stays in the pelvis (Wikipedia: at the brim); about 1 in 2,200–3,000 people. Usually silent; it can be confused with a pelvic mass.</p>'],
+  horse: ['Horseshoe kidney', '<h3>Horseshoe kidney</h3><p>The <b>lower poles fuse</b> across the midline; the commonest fusion anomaly (about 1 in 500). Its ascent is stopped by the <b>inferior mesenteric artery</b>, so it lies low; it is malrotated and the ureters pass in front of the isthmus (StatPearls). Frequent in Turner syndrome (14–20%, Wikipedia).</p>'],
+  agen: ['Renal agenesis', '<h3>Renal agenesis and Potter sequence</h3><p>One or both kidneys fail to develop. <b>Bilateral</b> agenesis: no fetal urine → <b>oligohydramnios</b> → compression of the fetus (<b>Potter facies</b>, limb deformities) and <b>pulmonary hypoplasia</b>: fatal (Potter sequence).</p>'],
+  dup: ['Duplex ureter', '<h3>Duplex collecting system</h3><p>The ureteric bud <b>splits</b> (incomplete, bifid ureter) or <b>two buds</b> arise (complete duplication). The commonest anomaly of the urinary tract (about 1%; review: 1–5%).</p>'],
+};
+const BLAD_TEXT = `<p><b>Bladder</b>: from the <b>urogenital sinus</b> (the front part of the cloaca). The ends of the mesonephric ducts (with the ureters) are taken into its wall and form the <b>trigone</b>. Its apex continues to the umbilicus as the <b>urachus</b> (the allantois), which closes into the <b>median umbilical ligament</b>; remnants give a <b>urachal cyst</b> or sinus between the umbilicus and the bladder (Wikipedia).</p>`;
+const SEX = {sel: 'ind'};
+const SEX_ITEMS = {
+  ind: ['Indifferent', '<h3>Indifferent stage (to about week 6–7)</h3><p>No sexual difference is visible until about the 6th week. The gonad forms on the <b>genital (gonadal) ridge</b>, beside the mesonephros, from mesothelium, mesenchyme and primordial germ cells. Both sexes have two pairs of ducts: <b>mesonephric (Wolffian)</b> and <b>paramesonephric (Müllerian)</b>.</p>'],
+  male: ['Male', '<h3>Male</h3><p>The <b>SRY</b> gene on the Y chromosome (testis-determining factor; on its short arm, Wikipedia) makes the gonad a <b>testis</b>. <b>Sertoli cells</b> secrete <b>anti-Müllerian hormone</b>: the paramesonephric ducts regress. <b>Leydig cells</b> secrete <b>testosterone</b>: the mesonephric ducts form the <b>epididymis, ductus deferens and seminal vesicle</b>. Remnants: <b>appendix of the testis</b> (Müllerian); <b>appendix of the epididymis</b> (Wolffian).</p>'],
+  fem: ['Female', '<h3>Female</h3><p>Without SRY an <b>ovary</b> forms; with no AMH and no testosterone the mesonephric ducts regress and the paramesonephric ducts form the <b>uterine tubes, uterus, cervix and upper part of the vagina</b>; their lower ends fuse in the midline into the uterus. Remnants of the mesonephric system: <b>epoophoron</b>, <b>paroophoron</b>, <b>Gartner\'s duct</b> (in the broad ligament and beside the vagina; may form cysts). The gubernaculum becomes the ovarian ligament and the round ligament of the uterus.</p>'],
+};
+const UT = {sel: 'norm'};
+const UT_ITEMS = {
+  norm: ['Normal', '<h3>Fusion and resorption</h3><p>The two Müllerian ducts <b>fuse</b> into one uterine body, and the wall between them is <b>resorbed</b> to leave one cavity (StatPearls: errors arise between weeks 6 and 10).</p>'],
+  did: ['Didelphys', '<h3>Uterus didelphys</h3><p>No fusion: <b>two uteri with two cervices</b> (and sometimes a double vagina).</p>'],
+  bic: ['Bicornuate', '<h3>Bicornuate uterus</h3><p><b>Incomplete fusion</b>: two horns, two cavities, one cervix. The commonest fusion (unification) defect (StatPearls).</p>'],
+  sep: ['Septate', '<h3>Septate uterus</h3><p>The ducts fuse but the partition is <b>not resorbed</b>: the outside is normal, the cavity is divided by a septum.</p>'],
+  uni: ['Unicornuate', '<h3>Unicornuate uterus</h3><p>A one-sided uterus: one duct does not develop properly.</p>'],
+  mrkh: ['Müllerian agenesis', '<h3>Müllerian agenesis (MRKH)</h3><p>The Müllerian ducts fail to develop: no uterus, cervix or upper vagina. The <b>ovaries are normal</b> (they are not Müllerian), so puberty is normal but there is no menstruation.</p>'],
+};
+const EXT = {sel: 'ind'};
+const EXT_ITEMS = {
+  ind: ['Indifferent', '<h3>Indifferent stage</h3><p>Around the urogenital groove: the <b>genital tubercle</b> in front, the <b>urethral (urogenital) folds</b> beside the groove and the <b>labioscrotal swellings</b> outside them. The tubercle appears about week 4 (Wikipedia); the sexes become distinct between weeks 8 and 12.</p>'],
+  male: ['Male', '<h3>Male</h3><p><b>Dihydrotestosterone</b> (testosterone converted by <b>5α-reductase</b>) enlarges the tubercle into the <b>penis</b> (its tip, the glans); the <b>urethral folds fuse</b> over the groove, forming the penile (spongy) urethra; the labioscrotal swellings form the <b>scrotum</b>.</p><p><b>Hypospadias</b>: the urethra opens on the <b>underside</b> of the penis instead of the tip (Wikipedia: about 1 in 250 boys; 90% near the glans). <b>Epispadias</b>: it opens on the <b>top</b>; part of the exstrophy–epispadias complex.</p>'],
+  fem: ['Female', '<h3>Female</h3><p>The tubercle becomes the <b>clitoris</b>; the folds stay apart around the vestibule as the <b>labia minora</b> (review); the labioscrotal swellings become the <b>labia majora</b>.</p>'],
+};
+const HOM_HEAD = ['Primordium', 'Male', 'Female'];
+const HOM_ROWS = [
+  ['Genital tubercle', 'Penis (glans)', 'Clitoris (glans)'],
+  ['Urethral (urogenital) folds', 'Penile (spongy) urethra', 'Labia minora'],
+  ['Labioscrotal swellings', 'Scrotum', 'Labia majora'],
+  ['Mesonephric duct', 'Epididymis, ductus deferens, seminal vesicle', 'Remnants (epoophoron, Gartner\'s duct)'],
+  ['Paramesonephric duct', 'Remnant: appendix of the testis', 'Uterine tubes, uterus, cervix, upper vagina'],
+];
+
+const DATA = {
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); open-access reviews (Pediatr Surg Int 2010, BMC Dev Biol 2015, Front Physiol 2018, Asian J Androl 2020, Cells 2024, Cureus 2018 and others); Wikipedia.",
+  models: 'Models used: none (schematics only); simplified, not to scale.',
+};
+
+/* ===================== drawing helpers ===================== */
+const $ = id => document.getElementById(id);
+const T = (x, y, s, cls = '', a = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${a}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink)"/></marker>'
+  + '<pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" style="fill:var(--clin);fill-opacity:.15"/><line x1="0" y1="0" x2="0" y2="8" style="stroke:var(--clin);stroke-width:3"/></pattern></defs>';
+function table(id, head, rows) {
+  $(id).innerHTML = '<tr>' + head.map(x => `<th>${x}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + r.map((c, i) => `<td data-h="${head[i]}">${c}</td>`).join('') + '</tr>').join('');
+}
+function toggles(id, items, onSel, start) {
+  const box = $(id); box.innerHTML = '';
+  for (const [key, label] of items) {
+    const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = label; b.setAttribute('aria-pressed', key === start);
+    b.onclick = () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); onSel(key); };
+    box.append(b);
+  }
+}
+function stepper(id, labels, onStep, state) {
+  const box = $(id); box.innerHTML = '';
+  const prev = document.createElement('button'); prev.className = 'btn'; prev.type = 'button'; prev.textContent = '◀ Back'; prev.setAttribute('aria-label', 'Previous step');
+  const next = document.createElement('button'); next.className = 'btn'; next.type = 'button'; next.textContent = 'Next ▶'; next.setAttribute('aria-label', 'Next step');
+  const row = document.createElement('div'); row.className = 'chips'; row.setAttribute('aria-label', 'Steps');
+  const go = i => {
+    state.s = Math.max(0, Math.min(labels.length - 1, i));
+    row.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', j === state.s));
+    prev.disabled = state.s === 0; next.disabled = state.s === labels.length - 1; onStep();
+  };
+  labels.forEach((l, i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.onclick = () => go(i); row.append(b); });
+  prev.onclick = () => go(state.s - 1); next.onclick = () => go(state.s + 1);
+  box.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { go(state.s + 1); e.preventDefault(); } if (e.key === 'ArrowLeft') { go(state.s - 1); e.preventDefault(); } });
+  box.append(prev, row, next); go(state.s);
+}
+const op = o => `style="fill-opacity:${o}"`;
+
+const PAT = '<defs><pattern id="pt-tub" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.6" style="fill:var(--ink)"/></pattern>'
+  + '<pattern id="pt-fold" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" style="stroke:var(--ink);stroke-width:1.4"/></pattern>'
+  + '<pattern id="pt-ls" width="7" height="7" patternUnits="userSpaceOnUse"><line x1="0" y1="3.5" x2="7" y2="3.5" style="stroke:var(--ink);stroke-width:1.4"/></pattern></defs>';
+
+/* ===================== 1. gut tube ===================== */
+function drawGut() {
+  const k = GUT.sel; let s = DEFS;
+  const reg = {fore: [40, 175], mid: [175, 280], hind: [280, 350]};
+  /* aorta behind (dorsal = your right) */
+  s += `<path class="art" style="stroke-width:10" d="M420 30 V350"/>` + T(430, 40, 'aorta', 's');
+  s += `<path class="art" style="stroke-width:5" d="M420 150 L300 150"/><path class="art" style="stroke-width:5" d="M420 215 L250 225"/><path class="art" style="stroke-width:5" d="M420 300 L330 305"/>`;
+  s += T(436, 154, 'coeliac trunk', 's') + T(436, 219, 'SMA', 's') + T(436, 304, 'IMA', 's');
+  /* gut tube: pharynx at top to cloaca */
+  s += `<path d="M300 40 V120" style="stroke:var(--gut);stroke-width:16;stroke-linecap:round"/>`;
+  s += `<path d="M300 120 Q270 145 300 170" style="stroke:var(--stom);stroke-width:30;fill:none"/>` + T(250, 150, 'stomach', 's', 'end');
+  s += `<ellipse cx="225" cy="185" rx="40" ry="26" class="liver" style="fill:var(--liver);fill-opacity:.7"/>` + T(170, 190, 'liver', 's', 'end');
+  s += `<circle cx="325" cy="180" r="9" style="fill:var(--panc)"/>` + T(340, 186, 'pancreas', 's');
+  s += `<path d="M300 170 V190 Q300 205 280 210 Q150 240 280 270 Q300 275 300 285" style="stroke:var(--gut);stroke-width:14;fill:none"/>`;
+  s += `<path d="M206 240 L120 240" style="stroke:var(--endo);stroke-width:5;stroke-dasharray:5 4"/><circle cx="105" cy="240" r="16" class="endo" style="fill-opacity:.5"/>` + T(100, 270, 'yolk (vitelline) duct', 's', 'middle');
+  s += `<path d="M300 285 V335" style="stroke:var(--colon);stroke-width:14"/><ellipse cx="300" cy="345" rx="26" ry="16" class="endo" style="fill-opacity:.7"/>` + T(250, 360, 'cloaca', 's', 'end');
+  s += `<path d="M285 340 Q240 320 230 290" style="stroke:var(--endo);stroke-width:5;fill:none"/>` + T(222, 300, 'allantois', 's', 'end');
+  s += T(300, 26, 'oropharyngeal membrane', 's', 'middle') + T(300, 375, 'cloacal membrane', 's', 'middle');
+  if (k !== 'all') { const [a, b] = reg[k]; s += `<rect x="80" y="${a}" width="300" height="${b - a}" rx="10" class="hl"/>` + T(86, a + 16, GUT_ITEMS[k][0].toUpperCase(), 'h'); }
+  else for (const [n, [a, b]] of Object.entries(reg)) s += `<path d="M60 ${a + 4} V${b - 4}" style="stroke:var(--muted);stroke-width:2"/>` + T(54, (a + b) / 2, n === 'fore' ? 'foregut' : n === 'mid' ? 'midgut' : 'hindgut', 's', 'end');
+  $('gut-svg').innerHTML = s; $('gut-find').innerHTML = GUT_ITEMS[k][1];
+}
+
+/* ===================== 2. pancreas ===================== */
+function drawPan() {
+  const st = PAN.s; let s = DEFS;
+  /* duodenal C-loop, open to your right (the embryo's left) */
+  s += `<path d="M300 50 Q160 50 160 160 Q160 270 300 270" style="fill:none;stroke:var(--gut);stroke-width:30;stroke-linecap:round"/>` + T(140, 120, 'duodenum', 's', 'end');
+  s += `<path d="M175 90 Q110 40 60 30" style="stroke:var(--bile);stroke-width:7;fill:none"/>` + T(40, 24, 'bile duct', 's');
+  if (st === 0) {
+    s += `<ellipse cx="250" cy="95" rx="70" ry="22" style="fill:var(--panc)"/>` + T(330, 90, 'dorsal bud', 'b');
+    s += `<ellipse cx="150" cy="200" rx="26" ry="18" style="fill:var(--panc);fill-opacity:.6;stroke:var(--panc);stroke-width:2"/>` + T(110, 236, 'ventral bud', 'b', 'middle') + T(110, 252, '(from the bile duct)', 's', 'middle');
+  } else if (st === 1) {
+    s += `<ellipse cx="250" cy="95" rx="70" ry="22" style="fill:var(--panc)"/>` + T(330, 90, 'dorsal bud', 'b');
+    s += `<ellipse cx="230" cy="190" rx="26" ry="18" style="fill:var(--panc);fill-opacity:.6;stroke:var(--panc);stroke-width:2"/>` + `<path class="flow" d="M150 230 Q170 250 210 210"/>` + T(250, 240, 'ventral bud moves behind', 's');
+  } else {
+    s += `<path d="M190 150 Q240 110 300 100 Q380 90 430 70 L432 100 Q380 120 300 130 Q260 160 250 200 Q220 230 196 210 Z" style="fill:var(--panc);fill-opacity:.85"/>`;
+    s += `<path d="M196 205 Q230 170 280 120 Q350 100 420 85" style="stroke:var(--surface);stroke-width:3;fill:none"/>` + T(330, 150, 'main duct', 's');
+    s += T(220, 250, 'head + uncinate (ventral bud)', 's', 'middle') + T(410, 60, 'body, tail (dorsal bud)', 's', 'end');
+    if (st === 3) s += `<ellipse cx="166" cy="160" rx="30" ry="52" style="fill:none;stroke:var(--panc);stroke-width:12"/><ellipse cx="166" cy="160" rx="30" ry="52" style="fill:none;stroke:var(--clin);stroke-width:2;stroke-dasharray:5 4"/>` + T(126, 150, 'ring round the', 'c l', 'end') + T(126, 166, '2nd part', 'c l', 'end');
+  }
+  $('pan-svg').innerHTML = s; $('pan-find').innerHTML = PAN_STEPS[st][1];
+}
+
+/* ===================== 3. midgut rotation ===================== */
+function limb(cx, cy, ang, len, col, w, caecum) {
+  const r = a => a * Math.PI / 180, dx = Math.cos(r(ang)), dy = Math.sin(r(ang)), nx = -dy, ny = dx;
+  let d = `M${cx} ${cy}`;
+  for (let i = 1; i <= 8; i++) { const t = i / 8 * len, wob = (i % 2 ? 12 : -12) * (i < 8 ? 1 : 0); d += ` L${(cx + dx * t + nx * wob).toFixed(1)} ${(cy + dy * t + ny * wob).toFixed(1)}`; }
+  let o = `<path d="${d}" style="fill:none;stroke:var(${col});stroke-width:${w};stroke-linejoin:round;stroke-linecap:round"/>`;
+  if (caecum) o += `<circle cx="${(cx + dx * len).toFixed(1)}" cy="${(cy + dy * len).toFixed(1)}" r="14" style="fill:var(--colon);stroke:var(--ink);stroke-width:.8"/>`;
+  return [o, cx + dx * (len + 30), cy + dy * (len + 30)];
+}
+function drawMid() {
+  const MV = {non: 90, mal: 180, rev: -90};   /* anomaly states: stopped at 90°, caecum left high, reversed (clockwise) */
+  const v = MID.mal in MV ? MV[MID.mal] : MID.v;
+  const th = Math.min(v, 270), desc = Math.max(0, v - 270) / 30;
+  let s = DEFS; const cx = 260, cy = 200;
+  const inCord = MID.mal === 'none' && th < 90;
+  s += `<circle cx="${cx}" cy="${cy}" r="165" style="fill:none;stroke:var(--line);stroke-width:2;stroke-dasharray:${inCord ? '6 6' : '0'}"/>`;
+  s += T(cx, 28, inCord ? 'loop in the umbilical cord (physiological herniation)' : 'back in the abdomen', 's', 'middle');
+  /* cranial limb angle: anticlockwise on screen = decreasing angle; start at 12 o'clock (-90) */
+  const ac = -90 - th, aa = ac + 180;
+  const [c1, lx1, ly1] = limb(cx, cy, ac, 120, '--gut', 16, false);
+  let caLen = 120 + desc * 40, caAng = aa - desc * 55;
+  const [c2, lx2, ly2] = limb(cx, cy, caAng, caLen, '--gut', 12, true);
+  if (MID.mal === 'rev') s += `<g style="opacity:.45">${c2}</g>` + `<circle cx="${cx}" cy="${cy}" r="12" style="fill:var(--artery)"/>` + c1 + T(cx, cy + 60, 'transverse colon passes BEHIND the SMA', 'c l', 'middle');
+  else s += c1 + c2 + `<circle cx="${cx}" cy="${cy}" r="12" style="fill:var(--artery)"/>`;
+  s += T(cx + 16, cy + 30, 'SMA (axis)', 's l');
+  if (MID.mal === 'mal') s += `<path d="M${cx - 8} ${cy - 120} L${cx - 170} ${cy + 20} M${cx + 4} ${cy - 112} L${cx - 160} ${cy + 50}" style="stroke:var(--clin);stroke-width:3"/>` + T(cx - 150, cy + 80, 'Ladd bands (over the duodenum)', 'c l', 'middle') + T(cx + 70, cy - 106, 'caecum high', 'c l');
+  s += T(lx1, ly1, 'cranial limb', 'b l', 'middle') + T(lx1, ly1 + 14, '(jejunum, ileum)', 's', 'middle');
+  s += T(lx2, ly2 + 8, desc > 0 ? 'caecum descends' : 'caudal limb + caecum', 'b l', 'middle');
+  /* direction arrow */
+  if (th > 5 && MID.mal === 'none') { const r = 182, a0 = -90 * Math.PI / 180, a1 = (-90 - Math.min(th, 260)) * Math.PI / 180;
+    s += `<path class="flow" d="M${cx + r * Math.cos(a0)} ${cy + r * Math.sin(a0)} A${r} ${r} 0 ${th > 180 ? 1 : 0} 0 ${(cx + r * Math.cos(a1)).toFixed(1)} ${(cy + r * Math.sin(a1)).toFixed(1)}"/>`; }
+  s += T(16, 410, "your left = the embryo's right", 's') + T(504, 410, "embryo's left", 's', 'end');
+  $('mid-svg').innerHTML = s;
+  $('rot-lab').textContent = MID.mal !== 'none' ? MAL_ITEMS[MID.mal][0] : (v <= 270 ? v + '°' : '270° + caecum descending');
+  let txt;
+  if (MID.mal !== 'none') txt = MAL_ITEMS[MID.mal][1];
+  else if (th < 90) txt = '<h3>Herniation (about week 6)</h3><p>The midgut grows faster than the abdomen and the loop herniates into the <b>umbilical cord</b> (physiological herniation). It hangs on its mesentery around the <b>superior mesenteric artery</b>, its apex joined to the yolk sac by the vitelline duct. Its <b>cranial limb</b> forms most of the small intestine; the <b>caudal limb</b> the end of the ileum, the <b>caecum</b> (a bud on it), the appendix, the ascending colon and most of the transverse colon. In the cord the loop turns <b>90° anticlockwise</b> (seen from the front) round the SMA axis: the cranial limb comes to the right.</p>';
+  else if (th < 270) txt = '<h3>Return (about week 10)</h3><p>The loop returns into the abdomen (week 10; sources range 9–12), turning a further <b>180° anticlockwise</b>, total <b>270°</b>. The small intestine returns first; the caecum comes back last, at first lying below the liver. The duodenojejunal part passes <b>behind</b> the SMA and ends on the left; the transverse colon crosses in front of the duodenum.</p>';
+  else txt = '<h3>Final position</h3><p>After 270° the duodenojejunal junction lies to the <b>left</b> of the spine and the caecum on the <b>right</b>; the caecum then <b>descends into the right iliac fossa</b> (Gray 1918: about the 6th month). The mesenteries then fix to the posterior wall, giving the small intestine a broad mesenteric base.</p><p class="muted">The 270° rotation is the classic description; one study of embryos explains the same end result by differential growth (review, BMC Dev Biol 2015).</p>';
+  $('mid-find').innerHTML = txt;
+}
+
+/* ===================== 4. wall defects ===================== */
+function drawWall() {
+  const k = WALL.sel; let s = DEFS;
+  if (k === 'meck') {
+    s += `<path d="M40 170 Q220 120 400 170" style="fill:none;stroke:var(--gut);stroke-width:40;stroke-linecap:round"/>` + T(40, 130, 'ileum', 'b');
+    s += `<path d="M60 205 Q220 150 380 205" style="fill:none;stroke:var(--muted);stroke-width:2;stroke-dasharray:4 4"/>` + T(220, 230, 'mesentery side', 's', 'middle');
+    s += `<path d="M220 135 Q205 70 230 50 Q255 70 240 135 Z" style="fill:var(--gut);stroke:var(--clin);stroke-width:2"/>` + T(260, 60, "Meckel's diverticulum", 'c l') + T(260, 76, '(antimesenteric border)', 's');
+    s += `<rect x="226" y="80" width="12" height="20" rx="4" style="fill:var(--stom)"/>` + T(300, 100, 'ectopic gastric mucosa', 's');
+  } else {
+    s += `<path d="M80 30 Q60 180 110 320 L330 320 Q380 180 360 30 Z" style="fill:none;stroke:var(--muted);stroke-width:2"/>`;
+    s += T(14, 20, 'NEWBORN ABDOMEN, FRONT', 'h');
+    const cx = 220, cy = 160;
+    if (k === 'omph') {
+      s += `<ellipse cx="${cx}" cy="${cy}" rx="62" ry="50" style="fill:var(--fluid);fill-opacity:.4;stroke:var(--ink);stroke-width:2"/>`;
+      for (let i = 0; i < 4; i++) s += `<path d="M${cx - 40} ${cy - 20 + i * 14} q20 -10 40 0 t40 0" style="fill:none;stroke:var(--gut);stroke-width:8"/>`;
+      s += `<path d="M${cx} ${cy - 50} V10" style="stroke:var(--line);stroke-width:14"/>` + T(cx + 70, cy - 40, 'sac (membrane)', 'b l') + T(cx + 12, 30, 'cord from the sac', 's');
+    } else {
+      s += `<circle cx="${cx}" cy="${cy}" r="12" style="fill:var(--line)"/>` + `<path d="M${cx} ${cy} V10" style="stroke:var(--line);stroke-width:14"/>` + T(cx + 14, 30, 'umbilical cord', 's');
+      if (k === 'gast') { for (let i = 0; i < 4; i++) s += `<path d="M${cx - 120} ${cy - 20 + i * 16} q20 -12 40 0 t40 0" style="fill:none;stroke:var(--gut);stroke-width:10"/>`; s += `<rect x="${cx - 40}" y="${cy - 6}" width="12" height="30" class="defect"/>` + T(cx - 80, cy + 70, 'bowel, no sac', 'c l', 'middle') + T(cx - 80, cy + 86, "(on the baby's right)", 's', 'middle'); }
+      if (k === 'umb') s += `<circle cx="${cx}" cy="${cy + 10}" r="30" style="fill:none;stroke:var(--ink);stroke-width:2"/>` + T(cx + 40, cy + 30, 'skin-covered bulge', 'b l');
+      if (k === 'blad') s += `<ellipse cx="${cx}" cy="${cy + 110}" rx="56" ry="30" class="defect"/>` + T(cx, cy + 160, 'open bladder plate', 'c l', 'middle');
+    }
+  }
+  $('wall-svg').innerHTML = s; $('wall-find').innerHTML = WALL_ITEMS[k][1];
+}
+
+/* ===================== 5. cloaca ===================== */
+function drawClo() {
+  const st = CLO.s; let s = DEFS;
+  s += `<path d="M300 20 V140" style="stroke:var(--colon);stroke-width:26"/>` + T(318, 40, 'hindgut', 's');
+  s += `<path d="M190 30 Q190 110 230 150" style="stroke:var(--endo);stroke-width:12;fill:none"/>` + T(180, 30, 'allantois', 's', 'end');
+  s += `<path d="M170 150 Q160 270 250 280 Q340 280 330 150 Z" class="endo" style="fill-opacity:.35;stroke:var(--endo);stroke-width:3"/>`;
+  s += `<path d="M170 290 H340" style="stroke:var(--ecto);stroke-width:6"/>` + T(360, 296, st < 2 ? 'cloacal membrane' : 'membrane opens', 's');
+  if (st === 0) s += T(250, 220, 'cloaca', 'b', 'middle');
+  if (st >= 1) { const y2 = st === 1 ? 200 : 284; s += `<path d="M262 140 L250 ${y2}" style="stroke:var(--meso);stroke-width:${st === 1 ? 14 : 18};stroke-linecap:round"/>` + T(268, 170, 'urorectal septum', 'b l'); }
+  if (st === 2) s += T(205, 230, 'urogenital', 'b', 'middle') + T(205, 246, 'sinus', 'b', 'middle') + T(300, 230, 'anorectal', 'b', 'middle') + T(300, 246, 'canal', 'b', 'middle');
+  s += T(20, 330, 'ventral (front)', 's') + T(440, 330, 'dorsal', 's', 'end');
+  $('clo-svg').innerHTML = s; $('clo-find').innerHTML = CLO_STEPS[st][1];
+}
+
+/* ===================== 6. kidneys ===================== */
+function drawKid() {
+  const st = KID.s; let s = DEFS;
+  s += T(14, 18, 'SIDE VIEW, HEAD UP', 'h');
+  s += `<path d="M230 30 V350" style="stroke:var(--meso);stroke-width:46;stroke-opacity:.2;stroke-linecap:round"/>` + T(270, 40, 'intermediate mesoderm', 's');
+  const box = (y, h, lab, on, cls) => `<rect x="212" y="${y}" width="36" height="${h}" rx="10" style="fill:var(--${cls});fill-opacity:${on ? .85 : .25};stroke:var(--ink);stroke-width:.6"/>` + T(200, y + h / 2 + 4, lab, on ? 'b' : 's', 'end');
+  s += box(50, 40, 'pronephros (neck)', st === 0, 'meso') + box(110, 170, 'mesonephros', st === 1, 'meso');
+  if (st >= 1) s += `<path d="M258 120 V320 Q258 340 230 350" style="stroke:var(--duct);stroke-width:7;fill:none"/>` + T(270, 200, 'mesonephric duct', 'b l');
+  s += `<ellipse cx="190" cy="352" rx="36" ry="18" class="endo" style="fill-opacity:.4"/>` + T(140, 370, 'cloaca', 's', 'end');
+  if (st === 2) { s += `<path d="M252 330 Q300 330 300 300" style="stroke:var(--kidney);stroke-width:6;fill:none"/><ellipse cx="300" cy="290" rx="30" ry="22" style="fill:var(--meso);fill-opacity:.6;stroke:var(--kidney);stroke-width:3"/>`;
+    s += T(340, 272, 'metanephric', 'b l') + T(340, 288, 'blastema', 'b l') + T(340, 330, 'ureteric bud', 'b l') + lead(338, 326, 290, 320); }
+  $('kid-svg').innerHTML = s; $('kid-find').innerHTML = KID_STEPS[st][1];
+}
+function drawAsc() {
+  const m = KID.mode; let f = KID.asc / 100; let s = DEFS;
+  if (m === 'pelvic') f = 0; if (m === 'horse') f = 0.45;
+  s += `<path class="art" style="stroke-width:12" d="M230 20 V300 L190 380 M230 300 L270 380"/>` + T(242, 30, 'aorta', 's');
+  s += `<path d="M120 330 Q230 400 340 330" style="fill:none;stroke:var(--line);stroke-width:3"/>` + T(230, 392, 'pelvis', 's', 'middle');
+  s += T(30, 80, 'T12', 'h') + T(30, 180, 'L3', 'h') + `<path d="M60 76 H420 M60 176 H420" style="stroke:var(--line);stroke-dasharray:4 6"/>`;
+  const y = 320 - f * 200, rot = f * 90;
+  const kid = (x, side, show) => {
+    if (!show) return '';
+    const hil = side < 0 ? 1 : -1;      /* hilum ends facing the midline */
+    const ang = side * (90 - rot);       /* 0 = facing forward (drawn as dot) */
+    const hx = x + hil * 22 * (rot / 90), hr = 6 + 4 * (1 - rot / 90);
+    return `<ellipse cx="${x}" cy="${y}" rx="30" ry="48" style="fill:var(--kidney)"/><circle cx="${hx.toFixed(1)}" cy="${y}" r="${hr.toFixed(1)}" style="fill:var(--surface);stroke:var(--ink)"/>`;
+  };
+  if (m === 'horse') s += `<path d="M150 ${y - 40} Q140 ${y + 60} 230 ${y + 50} Q320 ${y + 60} 310 ${y - 40}" style="fill:none;stroke:var(--kidney);stroke-width:46;stroke-linecap:round"/>` + T(230, y + 100, 'fused lower poles stuck under the IMA', 'c l', 'middle');
+  else {
+    s += kid(150, -1, true) + kid(310, 1, m !== 'agen');
+    if (m === 'agen') s += T(330, y, 'absent', 'c l');
+    if (m === 'dup') s += `<path d="M150 ${y + 20} Q160 ${y + 90} 210 330 M150 ${y - 20} Q120 ${y + 90} 200 335" style="fill:none;stroke:var(--kidney);stroke-width:4"/>` + T(64, y - 60, 'two ureters', 'b l');
+  }
+  s += `<path class="art" style="stroke-width:4" d="M230 210 L300 230"/>` + T(305, 236, 'inferior mesenteric (in front)', 's l');
+  if (m === 'norm') s += T(150, y - 60, f < .05 ? 'hilum faces forward' : f > .95 ? 'hilum faces medially' : '', 's l', 'middle');
+  if (m === 'pelvic') s += T(450, 250, 'both shown low:', 's', 'end') + T(450, 266, 'one or both may stay', 's', 'end');
+  $('asc-svg').innerHTML = s;
+  $('asc-lab').textContent = m === 'norm' ? (f < .05 ? 'pelvis' : f > .95 ? 'lumbar (adult)' : Math.round(f * 100) + '%') : REN_ITEMS[m][0];
+  $('asc-find').innerHTML = REN_ITEMS[m][1];
+}
+
+/* ===================== 7. ducts ===================== */
+function drawSex() {
+  const k = SEX.sel; let s = DEFS;
+  const on = (c, show) => `stroke:var(--${c});stroke-opacity:${show ? 1 : .2};stroke-width:8;fill:none;stroke-linecap:round`;
+  const male = k === 'male', fem = k === 'fem';
+  s += `<ellipse cx="240" cy="370" rx="80" ry="22" class="endo" style="fill-opacity:.35"/>` + T(240, 374, 'urogenital sinus', 's', 'middle');
+  for (const sd of [-1, 1]) {
+    const gx = 240 + sd * 150;
+    s += `<ellipse cx="${gx}" cy="80" rx="34" ry="46" style="fill:var(--gonad)"/>`;
+    s += fem ? `<path d="M${gx - sd * 10} 120 Q${gx - sd * 20} 150 ${gx - sd * 30} 175" style="${on('duct', false)};stroke-dasharray:4 4"/>` : `<path d="M${gx - sd * 10} 120 Q${240 + sd * 120} 260 ${240 + sd * 30} 355" style="${on('duct', true)}"/>`;
+    s += fem ? `<path d="M${gx + sd * 30} 60 Q${240 + sd * 150} 200 240 250" style="${on('uter', true)}"/>` : `<path d="M${gx + sd * 30} 60 Q${240 + sd * 160} 230 ${240 + sd * 12} 355" style="${on('uter', !male)}"/>`;
+  }
+  if (fem) s += `<path d="M215 250 Q240 230 265 250 L262 300 Q240 310 218 300 Z" style="fill:var(--uter)"/><path d="M226 300 H254 V355 H226 Z" style="fill:var(--vag)"/>` + T(285, 280, 'uterus', 'b l') + T(270, 340, 'upper vagina', 's l');
+  if (k === 'ind') s += T(20, 334, 'mesonephric duct', 'b l') + lead(110, 326, 160, 294) + T(20, 222, 'paramesonephric duct', 'b l') + lead(60, 212, 84, 162);
+  const L = k === 'ind' ? [[90, 30, 'gonad (indifferent)']]
+    : male ? [[90, 30, 'testis'], [30, 230, 'ductus deferens'], [430, 230, 'Müllerian duct regresses (AMH)'], [400, 120, 'appendix of testis']]
+    : [[90, 30, 'ovary'], [30, 196, 'Wolffian remnants (epoophoron)'], [430, 140, 'uterine tube']];
+  for (const [x, y, w] of L) s += T(x, y, w, 'b l', x > 240 ? 'end' : 'start');
+  if (male) s += `<circle cx="420" cy="40" r="6" style="fill:var(--uter)"/>` + T(30, 330, 'seminal vesicle, ejaculatory duct', 's');
+  $('sex-svg').innerHTML = s; $('sex-find').innerHTML = SEX_ITEMS[k][1];
+}
+function drawUt() {
+  const k = UT.sel; let s = DEFS; const u = 'fill:var(--uter);stroke:var(--ink);stroke-width:1';
+  const cervix = (x) => `<rect x="${x - 14}" y="170" width="28" height="30" rx="6" style="${u}"/>`;
+  const vag = (x, w = 36) => `<rect x="${x - w / 2}" y="200" width="${w}" height="50" style="fill:var(--vag)"/>`;
+  if (k === 'norm') s += `<path d="M120 40 Q200 20 280 40 Q290 120 214 170 L186 170 Q110 120 120 40 Z" style="${u}"/>` + cervix(200) + vag(200);
+  if (k === 'did') s += `<path d="M90 40 Q130 30 170 40 Q170 120 160 170 L130 170 Q90 120 90 40 Z" style="${u}"/><path d="M230 40 Q270 30 310 40 Q310 120 270 170 L240 170 Q230 120 230 40 Z" style="${u}"/>` + cervix(145) + cervix(255) + vag(145, 30) + vag(255, 30);
+  if (k === 'bic') s += `<path d="M100 40 Q140 30 180 50 L200 90 L220 50 Q260 30 300 40 Q300 120 214 170 L186 170 Q100 120 100 40 Z" style="${u}"/>` + cervix(200) + vag(200);
+  if (k === 'sep') s += `<path d="M120 40 Q200 20 280 40 Q290 120 214 170 L186 170 Q110 120 120 40 Z" style="${u}"/><path d="M200 34 V150" style="stroke:var(--clin);stroke-width:8"/>` + cervix(200) + vag(200) + T(220, 100, 'septum', 'c l');
+  if (k === 'uni') s += `<path d="M160 40 Q200 30 230 50 Q240 120 214 170 L186 170 Q160 120 160 40 Z" style="${u}"/>` + cervix(200) + vag(200);
+  if (k === 'mrkh') s += `<path d="M120 40 Q200 20 280 40 Q290 120 214 170 L186 170 Q110 120 120 40 Z" style="fill:none;stroke:var(--clin);stroke-dasharray:5 5"/>` + T(200, 110, 'no uterus, cervix', 'c', 'middle') + T(200, 126, 'or upper vagina', 'c', 'middle') + `<rect x="182" y="225" width="36" height="25" style="fill:var(--vag)"/>`;
+  s += `<ellipse cx="60" cy="60" rx="20" ry="14" style="fill:var(--gonad)"/><ellipse cx="340" cy="60" rx="20" ry="14" style="fill:var(--gonad)"/>` + T(60, 92, 'ovary', 's', 'middle') + T(340, 92, 'ovary', 's', 'middle');
+  $('ut-svg').innerHTML = s; $('ut-find').innerHTML = UT_ITEMS[k][1];
+}
+function drawExt() {
+  const k = EXT.sel; let s = PAT + DEFS.replace('<defs>', '<defs>'); const o = 'stroke:var(--ink);stroke-width:1.2';
+  if (k === 'ind') {
+    s += `<ellipse cx="210" cy="70" rx="34" ry="40" style="fill:url(#pt-tub);${o}"/>` + T(260, 60, 'genital tubercle', 'b l');
+    s += `<path d="M190 120 Q180 200 200 250 L220 250 Q240 200 230 120 Z" style="fill:url(#pt-fold);${o}"/>` + T(210, 316, 'urethral folds (middle)', 'b l', 'middle') + lead(210, 304, 210, 256);
+    s += `<ellipse cx="135" cy="200" rx="28" ry="70" style="fill:url(#pt-ls);${o}"/><ellipse cx="285" cy="200" rx="28" ry="70" style="fill:url(#pt-ls);${o}"/>` + T(410, 300, 'labioscrotal swellings', 'b l', 'end');
+    s += `<path d="M210 130 V240" style="stroke:var(--endo);stroke-width:4"/>` + T(20, 20, 'groove between the folds', 's');
+  } else if (k === 'male') {
+    s += `<rect x="185" y="30" width="50" height="150" rx="24" style="fill:url(#pt-fold);${o}"/><ellipse cx="210" cy="40" rx="30" ry="26" style="fill:url(#pt-tub);${o}"/>` + T(250, 40, 'glans (tubercle)', 'b l') + T(250, 110, 'penile urethra (fused folds)', 'b l');
+    s += `<ellipse cx="210" cy="240" rx="70" ry="50" style="fill:url(#pt-ls);${o}"/>` + T(290, 250, 'scrotum', 'b l');
+    s += `<path d="M210 60 V178" style="stroke:var(--ink);stroke-width:1;stroke-dasharray:4 3"/>` + T(30, 160, 'hypospadias: opening', 'c') + T(30, 176, 'on the underside', 'c');
+  } else {
+    s += `<ellipse cx="210" cy="60" rx="18" ry="20" style="fill:url(#pt-tub);${o}"/>` + T(240, 56, 'clitoris', 'b l');
+    s += `<ellipse cx="185" cy="170" rx="14" ry="70" style="fill:url(#pt-fold);${o}"/><ellipse cx="235" cy="170" rx="14" ry="70" style="fill:url(#pt-fold);${o}"/>` + T(210, 300, 'labia minora (inner)', 'b l', 'middle') + lead(210, 288, 228, 236);
+    s += `<ellipse cx="140" cy="175" rx="26" ry="100" style="fill:url(#pt-ls);${o}"/><ellipse cx="280" cy="175" rx="26" ry="100" style="fill:url(#pt-ls);${o}"/>` + T(316, 250, 'labia majora', 'b l');
+    s += T(210, 30, 'vestibule between the labia minora', 's', 'middle');
+  }
+  $('ext-svg').innerHTML = s; $('ext-find').innerHTML = EXT_ITEMS[k][1];
+}
+
+function swipeHints() {
+  document.querySelectorAll('.schbox').forEach(b => {
+    if (b.querySelector('svg.fit')) return;
+    const n = b.nextElementSibling;
+    if (n && n.classList && n.classList.contains('swipe')) return;
+    const p = document.createElement('p'); p.className = 'muted swipe'; p.textContent = 'Swipe sideways to see all of it.'; b.after(p);
+  });
+}
+(() => {
+  $('lede').innerHTML = LEDE;
+  $('key').innerHTML = KEY.map(([t, l]) => `<span><i style="background:var(${t})"></i>${l}</span>`).join('');
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('fore-text').innerHTML = FORE_TEXT; $('hind-text').innerHTML = HIND_TEXT; $('blad-text').innerHTML = BLAD_TEXT;
+  table('hom-table', HOM_HEAD, HOM_ROWS);
+  toggles('gut-tg', Object.entries(GUT_ITEMS).map(([k, d]) => [k, d[0]]), k => { GUT.sel = k; drawGut(); }, 'all');
+  stepper('pan-step', PAN_STEPS.map(x => x[0]), drawPan, PAN);
+  const rot = $('rot');
+  rot.addEventListener('input', () => { MID.v = +rot.value; if (MID.mal !== 'none') { MID.mal = 'none'; $('mal-tg').querySelectorAll('button').forEach((b, i) => b.setAttribute('aria-pressed', i === 0)); } drawMid(); });
+  toggles('mal-tg', Object.entries(MAL_ITEMS).map(([k, d]) => [k, d[0]]), k => { MID.mal = k; if (k !== 'none') { MID.v = {non: 90, mal: 180, rev: 270}[k]; rot.value = MID.v; } drawMid(); }, 'none');
+  toggles('wall-tg', Object.entries(WALL_ITEMS).map(([k, d]) => [k, d[0]]), k => { WALL.sel = k; drawWall(); }, 'omph');
+  stepper('clo-step', CLO_STEPS.map(x => x[0]), drawClo, CLO);
+  stepper('kid-step', KID_STEPS.map(x => x[0]), drawKid, KID);
+  const asc = $('asc'); asc.addEventListener('input', () => { KID.asc = +asc.value; drawAsc(); });
+  toggles('ren-tg', Object.entries(REN_ITEMS).map(([k, d]) => [k, d[0]]), k => { KID.mode = k; drawAsc(); }, 'norm');
+  toggles('sex-tg', Object.entries(SEX_ITEMS).map(([k, d]) => [k, d[0]]), k => { SEX.sel = k; drawSex(); }, 'ind');
+  toggles('ut-tg', Object.entries(UT_ITEMS).map(([k, d]) => [k, d[0]]), k => { UT.sel = k; drawUt(); }, 'norm');
+  toggles('ext-tg', Object.entries(EXT_ITEMS).map(([k, d]) => [k, d[0]]), k => { EXT.sel = k; drawExt(); }, 'ind');
+  drawGut(); drawMid(); drawWall(); drawAsc(); drawSex(); drawUt(); drawExt();
+  swipeHints();
+  window.ready = true;
+})();
+</script>
+</body>
+</html>

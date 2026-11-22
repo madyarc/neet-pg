@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Development of the Heart, Great Vessels and Lungs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --heart (heart muscle: the heart tube and chambers), --artery / --vein (vessels named by
+   structure: the umbilical arteries are drawn as arteries though they carry deoxygenated blood), --nerve (vagus and recurrent laryngeal
+   nerves), --clin (a defect), --accent (UI selection: the current step's part).
+   Embryology tokens exactly as on early-development.html: --ecto / --meso / --endo (germ layers; endocardial cushions are drawn as
+   mesoderm, the lung bud as endoderm), --crest (neural crest: the spiral aorticopulmonary septum), --tropho (trophoblast: the placenta).
+   Shared, same meaning as on other pages: --fluid (body fluids; here amniotic/lung fluid), --pleura (pleura; lungs.html),
+   --airway (trachea and bronchi; lungs.html), --gut (oesophagus; lungs.html), --liver (liver; organs.html). No new tokens. */
+:root{--tropho:#590df2;--ecto:#2ad2f4;--meso:#efa272;--endo:#d3910b;--crest:#1bf380;--fluid:#d9edc6;--pleura:#9ec5d9;--airway:#2f7d79;--gut:#d9a066;--liver:#9b6b5e}
+:root[data-theme="dark"]{--tropho:#5925f4;--fluid:#4e6638;--pleura:#4f7d94;--airway:#5cb3ad;--gut:#c08a52;--liver:#a77464;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+.scroll{overflow-x:auto}
+.two{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:680px;margin:0 auto}
+.schbox{overflow-x:auto;scrollbar-color:var(--line) transparent}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:540px}.schbox svg.sch.fit{min-width:0}.swipe{display:block}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.c{fill:var(--clin);font-weight:600}
+svg.sch text.b{font-weight:700}
+svg.sch text.l{paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .flow{stroke:var(--ink);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+svg.sch .box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .ol{stroke:var(--ink);stroke-width:1.1}
+svg.sch .hrt{fill:var(--heart)} svg.sch .meso{fill:var(--meso)} svg.sch .endo{fill:var(--endo)} svg.sch .ecto{fill:var(--ecto)}
+svg.sch .crest{fill:var(--crest)} svg.sch .fluid{fill:var(--fluid)} svg.sch .liver{fill:var(--liver)} svg.sch .pleura{fill:var(--pleura)}
+svg.sch .art{stroke:var(--artery);fill:none;stroke-linecap:round} svg.sch .vei{stroke:var(--vein);fill:none;stroke-linecap:round}
+svg.sch .nrv{stroke:var(--nerve);fill:none;stroke-width:3;stroke-linecap:round}
+svg.sch .gone{stroke-dasharray:4 4;opacity:.35}
+svg.sch .hl{stroke:var(--accent);stroke-width:2.6;fill:none}
+svg.sch .defect{fill:url(#hatch);stroke:var(--clin);stroke-width:2}
+.step{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.step .chips{flex:1;min-width:0}
+.step .btn{white-space:nowrap}
+.find{font-size:14px;min-height:6em}
+.find h3{font-size:15px;margin:0 0 4px}
+table.dis td:first-child{font-weight:600}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> <span class="muted" style="font-size:13px">· Embryology: <a href="early-development.html">Early development</a> · <a href="membranes-placenta.html">Membranes, placenta</a> · <span aria-current="page">Heart, vessels, lungs</span> · <a href="gut-urogenital.html">Gut, urogenital</a> · <a href="head-neck-cns.html">Head, neck, nervous system</a></span></nav>
+
+<header class="stack">
+  <h1>Development of the Heart, Great Vessels and Lungs</h1>
+  <p class="lede" id="lede"></p>
+  <div class="key" id="key"></div>
+</header>
+
+<section class="block panel" aria-labelledby="h-tube">
+  <h2 id="h-tube">Heart tube, looping and dextrocardia</h2>
+  <div class="step" id="tube-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="tube-svg" viewBox="0 0 520 380" role="img" aria-label="The heart tube at the chosen step: paired endocardial tubes, the fused tube with its five dilatations, the looped tube, and the adult parts each dilatation forms"></svg></div>
+    <div class="prose find" id="tube-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, not to scale. Seen from the front: the embryo's right is on your left.</p>
+  <div class="scroll"><table class="t stack" id="fate-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-atria">
+  <h2 id="h-atria">Septation of the atria and atrial septal defects</h2>
+  <div class="step" id="atr-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="atr-svg" viewBox="0 0 520 360" role="img" aria-label="Frontal section of the common atrium at the chosen step of septation, with septum primum, ostium primum, ostium secundum, septum secundum, foramen ovale and endocardial cushions"></svg></div>
+    <div class="prose find" id="atr-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic frontal section seen from the front (right atrium on your left). Arrow: blood flow.</p>
+  <div class="chips" id="asd-tg" aria-label="Atrial septal defect"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="asd-svg" viewBox="0 0 460 300" role="img" aria-label="The atrial septum seen from inside the right atrium with the site of the chosen atrial septal defect"></svg></div>
+    <div class="prose find" id="asd-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, seen from inside the right atrium (the front of the body is to your right).</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-vent">
+  <h2 id="h-vent">Ventricles, outflow tract and their defects</h2>
+  <div class="chips" id="vent-tg" aria-label="Heart"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="vent-svg" viewBox="0 0 480 400" role="img" aria-label="Schematic heart seen from the front with the ventricles, the interventricular septum and the great arteries, normal or with the chosen defect"></svg></div>
+    <div class="prose find" id="vent-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, seen from the front (right ventricle on your left). Arrows: blood flow through a defect.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-arch">
+  <h2 id="h-arch">Aortic arch arteries and their derivatives</h2>
+  <div class="step" id="arch-step"></div>
+  <div class="chips" id="arch-tg" aria-label="Overlay"></div>
+  <div class="schbox"><svg class="fig sch" id="arch-svg" viewBox="0 0 680 420" role="img" aria-label="The six pairs of pharyngeal arch arteries between the aortic sac and the paired dorsal aortae, and how they remodel into the adult great arteries; optional overlay of the recurrent laryngeal nerves or an anomaly"></svg></div>
+  <p class="muted">Schematic, seen from the front: the embryo's right is on your left. Solid: persists; dashed and faint: disappears. Numbers: arch.</p>
+  <div class="two">
+    <div class="prose find" id="arch-find" aria-live="polite"></div>
+    <div class="scroll"><table class="t dis" id="arch-table"></table></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-veins">
+  <h2 id="h-veins">Sinus venosus, SVC, IVC and the coronary sinus</h2>
+  <div class="step" id="vein-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="vein-svg" viewBox="0 0 520 400" role="img" aria-label="The veins entering the sinus venosus and how the shift of blood to the right turns them into the superior and inferior venae cavae, the left brachiocephalic vein and the coronary sinus"></svg></div>
+    <div class="prose find" id="vein-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, seen from the front (embryo's right on your left); not to scale.</p>
+  <div class="scroll"><table class="t stack" id="ivc-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fetal">
+  <h2 id="h-fetal">Fetal circulation and the changes at birth</h2>
+  <div class="chips" id="fc-tg" aria-label="Circulation"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="fc-svg" viewBox="0 0 520 470" role="img" aria-label="Plan of the circulation before birth with placenta, umbilical vessels, ductus venosus, foramen ovale and ductus arteriosus, or after birth with the shunts closed and their remnants named"></svg></div>
+    <div class="prose find" id="fc-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic plan, seen from the front (embryo's right on your left). Arrows: direction of flow.</p>
+  <div class="scroll"><table class="t stack" id="shunt-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lung">
+  <h2 id="h-lung">Lungs, pleura and tracheo-oesophageal fistula</h2>
+  <div class="step" id="lung-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="lung-svg" viewBox="0 0 520 360" role="img" aria-label="The respiratory diverticulum growing from the ventral foregut, its separation from the oesophagus, the bronchial buds, and the lungs growing into the pleural cavities"></svg></div>
+    <div class="prose find" id="lung-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic. Steps 1–2: side view (ventral to your left); steps 3–4: front view.</p>
+  <div class="scroll"><table class="t stack" id="stage-table"></table></div>
+  <div class="chips" id="tef-tg" aria-label="Type"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="tef-svg" viewBox="0 0 360 300" role="img" aria-label="Schematic of the chosen type of oesophageal atresia or tracheo-oesophageal fistula, trachea in front and oesophagus behind"></svg></div>
+    <div class="prose find" id="tef-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-embryo2.md, anatomy/DATA-SOURCES.md) ===================== */
+const LEDE = 'The heart tube and its septa, the outflow tract, the aortic arch arteries, the great veins, the fetal circulation and the lungs, step by step, with the defects that come from each step. Germ layers and the early embryo: <a href="early-development.html">Early Development</a>. The adult heart: <a href="../thorax/heart.html">The Heart</a>; adult lungs and pleura: <a href="../thorax/lungs.html">Lungs, Pleura and Trachea</a>; the diaphragm and its hernias: <a href="../thorax/wall-muscles.html">Muscles of the Trunk Wall</a>; vessels in general: <a href="../general/blood-vessels.html">Blood Vessels</a>.';
+const KEY = [['--heart', 'Heart muscle'], ['--meso', 'Mesoderm (cushions)'], ['--crest', 'Neural crest'], ['--endo', 'Endoderm'], ['--artery', 'Artery'], ['--vein', 'Vein'], ['--nerve', 'Nerve'], ['--airway', 'Airway'], ['--pleura', 'Pleura'], ['--clin', 'Defect']];
+
+const TUBE = {s: 0};
+const TUBE_STEPS = [
+  ['Two tubes', '<h3>Two endocardial tubes</h3><p>The heart is the <b>first functional organ</b> (the cardiovascular system the first system to work). Its rudiment is a <b>pair of tubes</b> in the splanchnic mesoderm of the cardiac (pericardial) area at the head end of the disc (Gray 1918; reviews: the "cardiac crescent").</p>'],
+  ['Fusion', '<h3>Folding brings them together</h3><p>Folding of the embryo, head to tail and side to side, brings the two endocardial tubes to the <b>midline</b>, where they <b>fuse</b> into one heart tube. It beats spontaneously by the <b>end of week 4</b> (StatPearls: "by week 4").</p>'],
+  ['Five dilatations', '<h3>Five dilatations</h3><p>Constrictions divide the tube, from the tail (venous) end to the head (arterial) end, into the <b>sinus venosus</b>, <b>primitive atrium</b>, <b>primitive ventricle</b> (the inflow part), <b>bulbus cordis</b> (the outflow part) and <b>truncus arteriosus</b>. Blood enters at the sinus venosus and leaves by the truncus into the aortic arches.</p>'],
+  ['Looping', '<h3>Looping (week 4)</h3><p>The tube bends into an <b>S-shaped loop</b>: the bulboventricular part bends to the <b>right</b> (a "D-loop"; the review calls the turn clockwise), the atrial and venous part comes to lie behind it (dorsally; review). A D-loop puts the morphological right ventricle on the right; a loop to the left (<b>L-loop</b>) puts it on the left.</p>'],
+  ['Fates', '<h3>What each part becomes</h3><p>See the table. The atria take in veins: the <b>sinus venosus</b> on the right (smooth part of the right atrium) and the <b>pulmonary veins</b> on the left (smooth part of the left atrium); the rest of each atrium, with its auricle, is the original atrium.</p><p><b>Dextrocardia</b>: the heart lies in the <b>right</b> chest with the apex to the right. With <b>situs inversus</b> all viscera are a mirror image; with <b>situs solitus</b> the other organs are normal. It differs from <b>dextroposition</b>, a heart pushed right by something outside it (diaphragmatic hernia, right lung hypoplasia, pneumonectomy).</p>'],
+];
+const FATE_HEAD = ['Embryonic part', 'Becomes'];
+const FATE_ROWS = [
+  ['Truncus arteriosus', 'Ascending aorta and pulmonary trunk (divided by the aorticopulmonary septum)'],
+  ['Bulbus cordis', 'Outflow part (infundibulum) of the right ventricle (Gray 1918)'],
+  ['Primitive ventricle', 'Left ventricle (Gray 1918: the ventricular septum then separates the bulbus, which stays with the right ventricle)'],
+  ['Primitive atrium', 'Rough (auricular) parts of both atria'],
+  ['Sinus venosus: right horn', 'Smooth part of the right atrium (sinus venarum); crista terminalis marks its junction with the auricle'],
+  ['Sinus venosus: left horn', 'Coronary sinus'],
+];
+
+const ATR = {s: 0};
+const ATR_STEPS = [
+  ['Septum primum', '<h3>Septum primum and ostium primum</h3><p>A thin <b>septum primum</b> grows <b>down from the roof</b> of the common atrium towards the <b>endocardial cushions</b>. The gap below its free edge is the <b>ostium primum</b>.</p>'],
+  ['Ostium secundum', '<h3>Ostium secundum</h3><p><b>Before</b> the septum primum reaches the cushions, holes appear in its upper part and join into the <b>ostium secundum</b> (the review: about day 37), so blood can still pass right to left. Then the septum primum fuses with the cushions and the ostium primum closes.</p>'],
+  ['Septum secundum', '<h3>Septum secundum</h3><p>A thicker <b>septum secundum</b> grows down from the roof <b>to the right</b> of the septum primum. It never closes completely: the opening it leaves low down is the <b>foramen ovale</b>.</p>'],
+  ['Foramen ovale', '<h3>Fetal flap valve</h3><p>Blood from the IVC passes under the edge of the septum secundum, through the foramen ovale and the ostium secundum into the left atrium. The <b>septum primum</b> lies on the <b>left</b> side and acts as the <b>flap (valve) of the foramen ovale</b>: it lets blood go <b>right to left</b> only.</p>'],
+  ['At birth', '<h3>At birth</h3><p>The lungs open, more blood returns to the <b>left atrium</b> and its pressure rises above the right: the septum primum is <b>pressed against the septum secundum</b> and the foramen ovale closes (functionally).</p>'],
+  ['Fossa ovalis', '<h3>Fossa ovalis</h3><p>The two septa fuse: the floor of the <b>fossa ovalis</b> is the septum primum, and its rim (<b>limbus</b>) is the edge of the septum secundum. Fusion is often incomplete: more than half of infants still have a patent foramen ovale at 6 months (StatPearls); it may persist into adult life.</p>'],
+];
+const ASD = {sel: 'sec'};
+const ASD_ITEMS = {
+  sec: ['Ostium secundum', '<h3>Ostium secundum ASD</h3><p>The <b>commonest</b> ASD (about 70–75%): at the <b>fossa ovalis</b>, from <b>too much resorption of the septum primum</b> or a <b>septum secundum that is too small</b>.</p>'],
+  pri: ['Ostium primum', '<h3>Ostium primum ASD</h3><p>About 20% (review): the <b>septum primum fails to fuse with the endocardial cushions</b>, leaving a gap <b>low</b> in the septum next to the AV valves. It is the partial form of an <b>atrioventricular septal defect</b> (with a cleft mitral valve).</p>'],
+  sv: ['Sinus venosus', '<h3>Sinus venosus defect</h3><p>Between the <b>SVC</b> and the <b>right pulmonary veins</b>, high in the septum (outside the fossa ovalis).</p>'],
+  cs: ['Coronary sinus', '<h3>Coronary sinus defect</h3><p>An <b>unroofed coronary sinus</b>: the rarest type.</p>'],
+  pfo: ['Patent foramen ovale', '<h3>Patent foramen ovale</h3><p>The flap never seals: usually harmless, but it can let a venous clot cross to the arterial side (paradoxical embolism, cryptogenic stroke; StatPearls).</p><p><b>Shunts</b>: after birth an ASD shunts <b>left to right</b>. A large long-standing left-to-right shunt (ASD, VSD or PDA) can cause pulmonary hypertension until the flow reverses to <b>right to left</b> with cyanosis: <b>Eisenmenger syndrome</b>.</p>'],
+};
+
+const VENT = {sel: 'norm'};
+const VENT_ITEMS = {
+  norm: ['Normal', '<h3>Normal septation</h3><p><b>Endocardial cushions</b> (dorsal and ventral) grow into the AV canal and fuse, dividing it into the <b>right and left AV orifices</b>. A <b>muscular septum</b> grows up from the floor of the ventricle; the <b>interventricular foramen</b> left above it is closed by the <b>membranous</b> part, formed where the cushions and the outflow (aortic) septum meet it.</p><p><b>Outflow</b>: ridges in the truncus and bulbus, invaded by <b>cardiac neural crest</b> cells, fuse into a <b>spiral aorticopulmonary septum</b>, so the pulmonary trunk (from the right ventricle) and aorta (from the left) twist round each other.</p>'],
+  vsd: ['VSD', '<h3>Ventricular septal defect</h3><p>The <b>commonest congenital heart defect</b> in children. The <b>perimembranous</b> type (in the membranous septum) is usually given as the commonest (imaging review; Wikipedia), though Wikipedia also cites newer data in which <b>muscular</b> VSDs are commoner. Many close by themselves. Acyanotic: blood shunts <b>left to right</b>. A large one can lead to pulmonary hypertension and Eisenmenger syndrome.</p>'],
+  tru: ['Truncus arteriosus', '<h3>Persistent truncus arteriosus</h3><p>The aorticopulmonary septum is <b>absent or partial</b>: the truncus <b>fails to divide</b>. One arterial trunk with a single truncal valve sits over a <b>VSD</b> and gives the aorta and the pulmonary arteries. Cyanotic.</p>'],
+  tga: ['Transposition (TGA)', '<h3>Transposition of the great arteries</h3><p>The conotruncal septum forms <b>straight instead of spiralling</b>: the <b>aorta arises from the right ventricle</b> (in front and to the right, StatPearls) and the <b>pulmonary trunk from the left ventricle</b>. Two <b>parallel circuits</b>: life depends on mixing through a <b>PDA, ASD or VSD</b>. The newborn is cyanosed.</p>'],
+  tof: ['Tetralogy of Fallot', '<h3>Tetralogy of Fallot</h3><p>Four features: <b>pulmonary (infundibular) stenosis</b>, <b>VSD</b>, <b>overriding aorta</b>, <b>right ventricular hypertrophy</b>. The VSD is large and <b>anteriorly malaligned</b>: the outflow septum is displaced <b>forwards and upwards</b> (anterocephalad), narrowing the right ventricular outflow. The <b>commonest cyanotic</b> heart defect (about 7–10% of all CHD, Wikipedia). A right aortic arch in 20–25% (StatPearls).</p>'],
+  avsd: ['AV septal defect', '<h3>Atrioventricular septal defect</h3><p>Endocardial cushion defect: in the complete form, a <b>common AV valve</b>, an <b>ostium primum ASD</b> and an <b>inlet VSD</b>. Linked with <b>Down syndrome</b> (trisomy 21; Wikipedia).</p>'],
+};
+
+const ARCH = {s: 0, ov: 'none'};
+const ARCH_STEPS = [
+  ['Six pairs', '<h3>Pharyngeal arch arteries</h3><p>Six pairs of arteries run in the pharyngeal arches from the <b>aortic sac</b> (above the truncus) to the paired <b>dorsal aortae</b>. They appear one after another and regress, so they are <b>never all present at once</b>. The two dorsal aortae fuse below (about T4 to L4) into one descending aorta.</p>'],
+  ['1, 2, 5 regress', '<h3>Arches 1, 2 and 5</h3><p>Arches <b>1 and 2</b> regress early; their remnants form part of the <b>maxillary artery</b> (1) and the <b>hyoid and stapedial arteries</b> (2). Arch <b>5</b> never forms properly or regresses.</p>'],
+  ['Right side goes', '<h3>Asymmetric remodelling</h3><p>On the <b>right</b>, the <b>distal part of the 6th arch</b> and the <b>right dorsal aorta</b> below the right subclavian disappear. On the <b>left</b>, the distal 6th arch stays as the <b>ductus arteriosus</b>, and the left dorsal aorta continues into the descending aorta.</p>'],
+  ['Adult', '<h3>Adult pattern</h3><p>See the table. The <b>left 4th arch</b> forms part of the <b>arch of the aorta</b>; the <b>right 4th</b> the first part of the <b>right subclavian artery</b>. The <b>7th intersegmental arteries</b> give the left subclavian and the rest of the right.</p>'],
+];
+const ARCH_OV = {
+  none: ['No overlay', ''],
+  nrv: ['Recurrent laryngeal nerves', '<h3>Recurrent laryngeal nerves</h3><p>Both nerves first pass under the <b>6th arches</b>. On the right the distal 6th (and the 5th) disappear, so the <b>right nerve hooks under the right subclavian artery</b> (4th arch); on the left it keeps hooking under the <b>ductus / ligamentum arteriosum</b> and is at risk in PDA surgery.</p>'],
+  arsa: ['Aberrant right subclavian', '<h3>Aberrant right subclavian artery</h3><p>The <b>right 4th arch</b> regresses and the right dorsal aorta persists instead: the right subclavian arises as the <b>last branch</b> of the arch, beyond the left subclavian, and crosses <b>behind the oesophagus</b> to the right; sometimes from a <b>Kommerell diverticulum</b>. It can press on the oesophagus (<b>dysphagia lusoria</b>, rare).</p>'],
+  daa: ['Double aortic arch', '<h3>Double aortic arch</h3><p><b>Both 4th arches persist</b>, forming a complete <b>vascular ring</b> round the trachea and oesophagus (stridor, difficulty swallowing). Usually the right arch is the larger. With a right arch and an aberrant left subclavian, the <b>left ligamentum arteriosum</b> can complete a ring too.</p>'],
+  coa: ['Coarctation', '<h3>Coarctation of the aorta</h3><p>Narrowing usually <b>just distal to the left subclavian</b>, at the <b>ductus</b> (ligamentum arteriosum). Wikipedia describes a <b>preductal</b> type (from poor flow through the left heart in fetal life) and a <b>postductal</b> type (ductal tissue extending into the aorta and narrowing it as the duct closes). Signs: high blood pressure in the arms, weak leg pulses, <b>rib notching</b> from collateral flow; frequent in <b>Turner syndrome</b> (Wikipedia).</p>'],
+};
+const ARCH_HEAD = ['Arch artery', 'Adult derivative'];
+const ARCH_ROWS = [
+  ['1', 'Part of the maxillary artery'],
+  ['2', 'Hyoid and stapedial arteries'],
+  ['3', 'Common carotid and the first part of the internal carotid (the rest of the internal carotid from the dorsal aorta above)'],
+  ['4 left', 'Part of the arch of the aorta (Gray 1918: between the left common carotid and the ductus; StatPearls: between the brachiocephalic trunk and the left common carotid)'],
+  ['4 right', 'First part of the right subclavian artery (to its internal thoracic branch)'],
+  ['5', 'Regresses (or never forms)'],
+  ['6', 'Proximal parts of the pulmonary arteries; on the left the distal part = ductus arteriosus (→ ligamentum arteriosum)'],
+  ['7th intersegmental', 'Left subclavian; the rest of the right subclavian'],
+];
+
+const VEIN = {s: 0};
+const VEIN_STEPS = [
+  ['Three pairs', '<h3>Three pairs of veins</h3><p>The <b>sinus venosus</b> receives, on each side, the <b>vitelline</b> vein (yolk sac), the <b>umbilical</b> vein (placenta) and the <b>common cardinal</b> vein (body wall; formed by the anterior and posterior cardinals).</p>'],
+  ['Shift right', '<h3>Blood shifts to the right</h3><p>The <b>right horn</b> grows faster than the left. Anastomoses carry left-sided blood across: the <b>left brachiocephalic vein</b> (between the two anterior cardinals) and the <b>ductus venosus</b> in the liver. The right umbilical and right vitelline veins disappear; the <b>left umbilical</b> carries the placental blood.</p>'],
+  ['Adult', '<h3>Adult veins</h3><p><b>SVC</b> = right anterior cardinal + right common cardinal. <b>Coronary sinus</b> = left horn of the sinus venosus; the left common cardinal leaves only the <b>oblique vein of the left atrium</b> (vein and ligament of Marshall). The right horn becomes the smooth part of the right atrium. The <b>vitelline veins</b> form the <b>portal vein</b>. <b>Persistent left SVC</b>: the left anterior cardinal stays; the commonest thoracic venous variant; usually beside a normal right SVC and draining into an enlarged coronary sinus.</p>'],
+];
+const IVC_HEAD = ['IVC segment', 'From'];
+const IVC_ROWS = [
+  ['Hepatic', 'Right vitelline vein'],
+  ['Suprarenal (prerenal)', 'Right subcardinal vein'],
+  ['Renal', 'Anastomosis between subcardinal and supracardinal veins'],
+  ['Infrarenal', 'Right supracardinal vein (Gray 1918 instead names the right cardinal vein; modern sources: supracardinal)'],
+  ['Also from the supracardinals', 'Azygos and hemiazygos veins; the posterior cardinals leave the common iliac veins'],
+];
+
+const FC = {sel: 'fet'};
+const FC_ITEMS = {
+  fet: ['Before birth', '<h3>Before birth</h3><p>The <b>placenta</b> oxygenates the blood. The <b>umbilical vein</b> (best oxygenated) brings it back; part goes through the liver, most through the <b>ductus venosus</b> into the <b>IVC</b>. In the right atrium the IVC stream is guided by the <b>valve of the IVC</b> through the <b>foramen ovale</b> into the left atrium, left ventricle and ascending aorta, so the best blood goes to the <b>heart and brain</b>.</p><p><b>SVC</b> blood goes to the right ventricle and pulmonary trunk. The fluid-filled lungs resist flow, so most passes through the <b>ductus arteriosus</b> into the aorta beyond the left subclavian (StatPearls: under 10% reaches the lungs). This mixed blood supplies the lower body and returns via the internal iliac and <b>umbilical arteries</b> to the placenta.</p>'],
+  birth: ['After birth', '<h3>At birth</h3><p>Breathing expands the lungs; oxygen (and nitric oxide) dilate the pulmonary vessels, <b>pulmonary resistance falls</b> and pulmonary flow rises. More blood returns to the <b>left atrium</b>, its pressure exceeds the right and the <b>foramen ovale closes</b>.</p><p>Pulmonary pressure falls below aortic, so flow in the <b>ductus arteriosus reverses</b>; the higher oxygen and the loss of placental prostaglandin make it <b>constrict</b>: functionally closed in <b>12–24 hours</b> at term, anatomically in <b>2–3 weeks</b> (StatPearls; Gray 1918 gave 4–10 days). With no umbilical flow the <b>ductus venosus</b> collapses and closes.</p>'],
+  pda: ['Patent ductus', '<h3>Patent ductus arteriosus</h3><p>The ductus stays open: after birth blood flows from the <b>aorta to the pulmonary artery</b> (left to right). Common in <b>premature</b> babies (20–60% of preterm newborns, Wikipedia). <b>E-series prostaglandins</b> keep the duct open (used when the circulation depends on it, as in TGA); <b>NSAIDs</b> help it close. Untreated, a large one can progress to Eisenmenger physiology.</p>'],
+};
+const SHUNT_HEAD = ['Fetal structure', 'Shunt', 'After birth'];
+const SHUNT_ROWS = [
+  ['Umbilical vein (left)', '—', 'Ligamentum teres (round ligament) of the liver'],
+  ['Ductus venosus', 'Umbilical vein → IVC, past the liver', 'Ligamentum venosum'],
+  ['Foramen ovale', 'Right atrium → left atrium', 'Fossa ovalis'],
+  ['Ductus arteriosus', 'Pulmonary trunk → aorta, past the lungs', 'Ligamentum arteriosum'],
+  ['Umbilical arteries', '—', 'Distal parts: medial umbilical ligaments; the part beside the bladder gives the superior vesical arteries (Wikipedia)'],
+];
+
+const LUNG = {s: 0};
+const LUNG_STEPS = [
+  ['Lung bud', '<h3>Respiratory diverticulum (week 4)</h3><p>A groove and then a <b>diverticulum</b> (lung bud) grows from the <b>ventral wall of the foregut</b>; StatPearls dates the start of the lower respiratory tract to day 22. Its <b>endoderm</b> gives the epithelium of the larynx, trachea, bronchi and alveoli; the surrounding <b>mesoderm</b> gives the cartilages and the rest of the wall.</p>'],
+  ['Septation', '<h3>Tracheo-oesophageal septum</h3><p>Ridges fuse into the <b>tracheo-oesophageal septum</b>, dividing the foregut into the <b>trachea</b> and lung buds in front and the <b>oesophagus</b> behind. Incomplete separation gives <b>oesophageal atresia</b> and <b>tracheo-oesophageal fistula</b>.</p>'],
+  ['Bronchial buds', '<h3>Bronchial buds</h3><p>The bud divides into right and left bronchial buds; these lobulate into <b>three on the right and two on the left</b>, the future lobes, and keep branching (bronchi, bronchioles, then the air sacs).</p>'],
+  ['Pleura', '<h3>Pleura</h3><p>The lungs grow into the <b>pericardioperitoneal canals</b>, the future <b>pleural cavities</b> (part of the intra-embryonic coelom), which pleuropericardial membranes separate from the pericardial cavity. The layer of mesoderm covering each lung becomes the <b>visceral pleura</b> (from the splanchnic layer); the lining of the body wall becomes the <b>parietal pleura</b> (from the somatic layer, Wikipedia).</p>'],
+];
+const STAGE_HEAD = ['Stage', 'Weeks (review, PMC11195428)', 'What happens'];
+const STAGE_ROWS = [
+  ['Embryonic', '3–7', 'Lung bud, bronchial buds'],
+  ['Pseudoglandular', '7–17 (Wikipedia: 5–16)', 'Extensive branching of the airways'],
+  ['Canalicular', '17–27', 'Bronchioles and alveolar epithelium form'],
+  ['Saccular (terminal sac)', '27–36', 'Air sacs; type II cells make <b>surfactant</b>'],
+  ['Alveolar', 'Late fetal life into childhood', 'Alveoli mature; complete at about 8 years (StatPearls)'],
+];
+const LUNG_TEXT = `<p><b>Surfactant</b> is secreted by <b>type II alveolar cells</b>; it lowers surface tension. Its lack in premature babies causes <b>(infant) respiratory distress syndrome</b>.</p>`;
+const TEF = {sel: 'c'};
+const TEF_ITEMS = {
+  c: ['Atresia + distal fistula', '<h3>Commonest form (Gross type C)</h3><p>The upper oesophagus ends in a <b>blind pouch</b>; the lower oesophagus opens into the <b>trachea</b> (distal fistula). Air enters the stomach through the fistula, so the stomach is distended.</p>'],
+  a: ['Atresia, no fistula', '<h3>Oesophageal atresia without a fistula</h3><p>Both ends are blind; no air reaches the stomach.</p>'],
+  d: ['Both fistulas', '<h3>Atresia with proximal and distal fistulas (type D)</h3><p>Each segment opens into the trachea (review classification).</p>'],
+  h: ['H-type fistula', '<h3>H-type fistula</h3><p>The oesophagus is continuous but joined to the trachea by a fistula: <b>under 5%</b> of congenital cases (review).</p>'],
+};
+const TEF_TEXT = `<p><b>Signs</b>: <b>polyhydramnios</b> (the fetus cannot swallow amniotic fluid), drooling, choking and coughing at feeds, a nasogastric tube that cannot be passed, aspiration. About <b>half</b> have other anomalies: <b>VACTERL</b> (vertebral, anal, cardiac, tracheo-oesophageal, renal, limb) or CHARGE.</p>`;
+
+const DATA = {
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); open-access reviews (Int J Mol Sci 2024, JTCVS Open 2023, J Cardiovasc Dev Dis 2025 (interatrial septum), J Cardiovasc Imaging 2022, Curr Cardiol Rep 2022, Insights Imaging 2019, SA J Radiol 2023, Med Rev 2024, Adv Ther 2025 and others); Wikipedia.",
+  models: 'Models used: none (schematics only); simplified, not to scale.',
+};
+
+/* ===================== drawing helpers ===================== */
+const $ = id => document.getElementById(id);
+const T = (x, y, s, cls = '', a = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${a}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink)"/></marker>'
+  + '<pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" style="fill:var(--clin);fill-opacity:.15"/><line x1="0" y1="0" x2="0" y2="8" style="stroke:var(--clin);stroke-width:3"/></pattern></defs>';
+function table(id, head, rows) {
+  $(id).innerHTML = '<tr>' + head.map(x => `<th>${x}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + r.map((c, i) => `<td data-h="${head[i]}">${c}</td>`).join('') + '</tr>').join('');
+}
+function toggles(id, items, onSel, start) {
+  const box = $(id); box.innerHTML = '';
+  for (const [key, label] of items) {
+    const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = label; b.setAttribute('aria-pressed', key === start);
+    b.onclick = () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); onSel(key); };
+    box.append(b);
+  }
+}
+function stepper(id, labels, onStep, state) {
+  const box = $(id); box.innerHTML = '';
+  const prev = document.createElement('button'); prev.className = 'btn'; prev.type = 'button'; prev.textContent = '◀ Back'; prev.setAttribute('aria-label', 'Previous step');
+  const next = document.createElement('button'); next.className = 'btn'; next.type = 'button'; next.textContent = 'Next ▶'; next.setAttribute('aria-label', 'Next step');
+  const row = document.createElement('div'); row.className = 'chips'; row.setAttribute('aria-label', 'Steps');
+  const go = i => {
+    state.s = Math.max(0, Math.min(labels.length - 1, i));
+    row.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', j === state.s));
+    prev.disabled = state.s === 0; next.disabled = state.s === labels.length - 1; onStep();
+  };
+  labels.forEach((l, i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.onclick = () => go(i); row.append(b); });
+  prev.onclick = () => go(state.s - 1); next.onclick = () => go(state.s + 1);
+  box.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { go(state.s + 1); e.preventDefault(); } if (e.key === 'ArrowLeft') { go(state.s - 1); e.preventDefault(); } });
+  box.append(prev, row, next); go(state.s);
+}
+const op = o => `style="fill-opacity:${o}"`;
+
+/* ===================== 1. heart tube ===================== */
+function drawTube() {
+  const st = TUBE.s; let s = DEFS;
+  s += T(14, 20, ['DORSAL VIEW OF THE DISC, HEAD UP', 'FRONT VIEW, HEAD UP', 'FRONT VIEW, HEAD UP', 'FRONT VIEW, HEAD UP', 'ADULT HEART, FRONT VIEW'][st], 'h');
+  const SEG = [['Truncus arteriosus', 1], ['Bulbus cordis', .85], ['Primitive ventricle', .7], ['Primitive atrium', .5], ['Sinus venosus', .32]];
+  if (st === 0) {
+    s += `<ellipse cx="260" cy="200" rx="200" ry="150" style="fill:var(--ecto);fill-opacity:.15;stroke:var(--line)"/>`;
+    s += `<path d="M150 150 Q260 40 370 150" style="fill:none;stroke:var(--meso);stroke-width:30;stroke-opacity:.45"/>`;
+    s += `<path d="M175 150 Q190 110 220 95" class="hrt" style="fill:none;stroke:var(--heart);stroke-width:12;stroke-linecap:round"/><path d="M345 150 Q330 110 300 95" style="fill:none;stroke:var(--heart);stroke-width:12;stroke-linecap:round"/>`;
+    s += T(260, 76, 'cardiac area (mesoderm)', 's', 'middle') + T(110, 170, 'endocardial tube', 'b', 'start') + lead(150, 165, 178, 145) + T(410, 170, 'endocardial tube', 'b', 'end') + lead(370, 165, 342, 145);
+    s += `<rect x="236" y="170" width="48" height="140" rx="20" style="fill:var(--ecto);fill-opacity:.5"/>` + T(260, 330, 'neural plate', 's', 'middle');
+    s += T(260, 360, 'the heart field lies at the head end, in front of the neural plate', 's', 'middle');
+  } else if (st === 1) {
+    s += `<rect x="150" y="70" width="40" height="240" rx="18" class="hrt" ${op(.6)}/><rect x="330" y="70" width="40" height="240" rx="18" class="hrt" ${op(.6)}/>`;
+    s += `<path class="flow" d="M200 190 H246"/><path class="flow" d="M320 190 H274"/>` + T(260, 180, 'fold and', 's', 'middle') + T(260, 210, 'meet', 's', 'middle');
+    s += `<rect x="238" y="250" width="44" height="100" rx="18" class="hrt" ${op(.8)}/>` + T(300, 300, 'one tube', 'b', 'start');
+  } else if (st === 2) {
+    SEG.forEach(([n, o], i) => { const y = 40 + i * 62; s += `<rect x="220" y="${y}" width="80" height="58" rx="${i === 0 || i === 4 ? 18 : 10}" class="hrt ol" ${op(o)}/>` + T(316, y + 34, n, 'b'); });
+    s += `<path class="flow" d="M190 330 V50"/>` + T(180, 200, 'blood flow', 's', 'end');
+    s += `<path class="vei" style="stroke-width:6" d="M150 360 Q200 350 220 330 M370 360 Q320 350 300 330"/>` + T(140, 375, 'veins in', 's', 'start');
+    s += `<path class="art" style="stroke-width:6" d="M240 40 Q220 20 190 18 M280 40 Q300 20 330 18"/>` + T(340, 22, 'to the arch arteries', 's');
+  } else if (st === 3) {
+    /* S-loop: truncus top centre, bulbus to the embryo's right (viewer's left), ventricle across, atrium + sinus up behind */
+    s += `<path d="M300 300 C300 240 330 210 330 170 C330 120 250 120 240 170" style="fill:none;stroke:var(--heart);stroke-width:46;stroke-opacity:.32;stroke-linecap:round"/>`;
+    s += `<path d="M260 60 C250 110 170 140 160 200 C150 270 260 300 300 250 C340 200 330 170 300 160" style="fill:none;stroke:var(--heart);stroke-width:46;stroke-opacity:.85;stroke-linecap:round"/>`;
+    s += T(276, 52, 'truncus', 'b') + T(110, 160, 'bulbus cordis', 'b', 'end') + lead(112, 156, 160, 170) + T(210, 320, 'primitive ventricle', 'b', 'middle');
+    s += T(350, 150, 'atrium and', 'b') + T(350, 166, 'sinus venosus', 'b') + T(350, 182, '(behind it)', 's');
+    s += `<path class="flow" d="M120 240 q-40 0 -60 -30"/>` + T(40, 270, 'bends to the', 's') + T(40, 284, "embryo's right", 'b');
+    s += T(20, 360, "your left = the embryo's right", 's');
+  } else {
+    /* adult outline with origins */
+    s += `<path d="M150 120 Q140 230 230 330 Q300 360 360 300 Q420 220 380 130 Q300 90 150 120 Z" class="hrt ol" ${op(.55)}/>`;
+    s += `<line x1="255" y1="140" x2="270" y2="330" style="stroke:var(--surface);stroke-width:4"/>`;
+    s += `<rect x="120" y="70" width="80" height="60" rx="20" class="hrt ol" ${op(.35)}/><rect x="320" y="74" width="80" height="56" rx="20" class="hrt ol" ${op(.35)}/>`;
+    s += `<path class="art" style="stroke-width:16" d="M280 125 Q270 60 220 46"/><path class="art" style="stroke-width:14;stroke-opacity:.6" d="M220 130 Q240 70 300 52"/>`;
+    s += T(212, 40, 'aorta (from LV)', 's l', 'end') + T(306, 46, 'pulmonary trunk (from RV)', 's l');
+    s += T(200, 230, 'RV', 'b', 'middle') + T(320, 230, 'LV', 'b', 'middle') + T(160, 100, 'RA', 'b', 'middle') + T(360, 100, 'LA', 'b', 'middle');
+    s += T(20, 64, 'both ← truncus', 's') + T(20, 260, 'RV outflow ← bulbus', 's') + lead(140, 256, 210, 160);
+    s += T(390, 270, 'LV ← primitive', 's') + T(390, 284, 'ventricle', 's') + T(20, 150, 'smooth RA ←', 's') + T(20, 164, 'sinus venosus', 's');
+    s += T(405, 150, 'auricles ← primitive', 's') + T(405, 164, 'atrium', 's');
+  }
+  $('tube-svg').innerHTML = s; $('tube-find').innerHTML = TUBE_STEPS[st][1];
+}
+
+/* ===================== 2. atrial septation ===================== */
+function drawAtr() {
+  const st = ATR.s; let s = DEFS;
+  const L = 80, R = 440, TOP = 50, BOT = 290, X = 270;   /* septum primum at X; secundum at X-24 (to the right = your left) */
+  s += `<rect x="${L}" y="${TOP}" width="${R - L}" height="${BOT - TOP}" rx="30" class="hrt" style="fill-opacity:.12;stroke:var(--heart);stroke-width:10"/>`;
+  s += T(150, 80, 'right atrium', 'b', 'middle') + T(380, 80, 'left atrium', 'b', 'middle');
+  s += `<rect x="${X - 60}" y="${BOT - 14}" width="120" height="26" rx="12" class="meso"/>` + T(X, BOT + 34, 'endocardial cushions', 's', 'middle');
+  const primEnd = [170, 255, BOT - 12, BOT - 12, BOT - 12, BOT - 12][st];
+  const holes = st >= 1;
+  let prim = `M${X} ${TOP} V${primEnd}`;
+  if (holes) prim = `M${X} ${TOP} V${TOP + 30} M${X} ${TOP + 90} V${primEnd}`;
+  if (st === 1) prim = `M${X} ${TOP} V${TOP + 34} M${X} ${TOP + 46} V${TOP + 56} M${X} ${TOP + 68} V${primEnd}`;
+  s += `<path d="${prim}" style="stroke:var(--heart);stroke-width:5;fill:none"/>`;
+  s += T(X + 12, 160, 'septum primum', 's');
+  if (st === 0) s += T(X + 8, 230, 'ostium primum', 'b') + lead(X + 6, 226, X, 220);
+  if (st === 1) s += T(X + 10, 104, 'holes → ostium secundum', 'b') + T(X + 8, 275, 'ostium primum closing', 's');
+  if (st >= 2 && st < 5) s += T(X + 10, 118, 'ostium secundum', 'b');
+  if (st >= 2) {
+    const secEnd = st === 2 ? 130 : 200;
+    s += `<path d="M${X - 24} ${TOP} V${secEnd}" style="stroke:var(--heart);stroke-width:16;fill:none;stroke-linecap:round"/>` + (st < 5 ? T(X - 40, secEnd + 18, 'septum secundum', 'b', 'end') : '');
+  }
+  if (st >= 3 && st < 5) s += T(X - 40, 250, 'foramen ovale', 'b', 'end') + lead(X - 38, 246, X - 22, 236);
+  if (st === 3) s += `<path class="flow" style="stroke:var(--vein);stroke-width:2.4" d="M140 260 Q240 260 ${X - 10} 220 Q${X - 12} 150 ${X - 6} 110 Q${X + 10} 80 360 140"/>` + T(100, 276, 'from the IVC', 's');
+  if (st === 4) s += `<path class="flow" d="M380 200 H${X + 14}"/>` + T(330, 190, 'higher LA pressure', 's', 'middle') + T(330, 220, 'flap pressed shut', 's', 'middle');
+  if (st === 5) s += T(X - 14, 236, 'fossa ovalis', 'b', 'end') + T(X - 14, 252, '(floor = septum primum)', 's', 'end') + T(X - 34, 200, 'limbus (edge of septum secundum)', 's', 'end');
+  $('atr-svg').innerHTML = s; $('atr-find').innerHTML = ATR_STEPS[st][1];
+}
+function drawAsd() {
+  const k = ASD.sel; let s = DEFS;
+  s += `<rect x="40" y="30" width="380" height="240" rx="26" style="fill:var(--heart);fill-opacity:.12;stroke:var(--heart);stroke-width:2"/>`;
+  s += `<ellipse cx="130" cy="34" rx="44" ry="16" style="fill:var(--vein);fill-opacity:.5"/>` + T(130, 22, 'SVC', 'b', 'middle');
+  s += `<ellipse cx="120" cy="266" rx="48" ry="16" style="fill:var(--vein);fill-opacity:.5"/>` + T(120, 294, 'IVC', 'b', 'middle');
+  s += `<ellipse cx="330" cy="236" rx="70" ry="24" class="box"/>` + T(330, 240, 'tricuspid valve', 's', 'middle');
+  s += `<circle cx="215" cy="236" r="14" style="fill:var(--vein);fill-opacity:.45"/>` + T(215, 210, 'coronary sinus', 's', 'middle');
+  s += `<ellipse cx="200" cy="140" rx="54" ry="40" style="fill:none;stroke:var(--heart);stroke-width:7"/>` + T(200, 144, 'fossa ovalis', 's', 'middle');
+  s += T(410, 24, 'front →', 'h', 'end') + T(50, 24, 'back', 'h');
+  const D = {sec: [200, 140, 34, 26], pri: [300, 196, 34, 14], sv: [140, 66, 24, 16], cs: [215, 236, 18, 18], pfo: [228, 112, 16, 8]}[k];
+  s += `<ellipse cx="${D[0]}" cy="${D[1]}" rx="${D[2]}" ry="${D[3]}" class="defect"/>` + (k === 'cs' ? '' : T(D[0], D[1] - D[3] - 6, ASD_ITEMS[k][0], 'c l', 'middle'));
+  $('asd-svg').innerHTML = s; $('asd-find').innerHTML = ASD_ITEMS[k][1];
+}
+
+/* ===================== 3. ventricles and outflow ===================== */
+function drawVent() {
+  const k = VENT.sel; let s = DEFS;
+  const rvT = k === 'tof' ? 26 : 12;
+  s += `<path d="M60 170 Q50 300 170 370 Q240 395 310 360 Q430 290 410 170 Z" class="hrt" style="fill-opacity:.25;stroke:var(--heart);stroke-width:${rvT}"/>`;
+  s += `<rect x="70" y="110" width="150" height="58" rx="20" class="hrt" style="fill-opacity:.15;stroke:var(--heart);stroke-width:6"/><rect x="262" y="110" width="150" height="58" rx="20" class="hrt" style="fill-opacity:.15;stroke:var(--heart);stroke-width:6"/>`;
+  s += T(145, 144, 'RA', 'b', 'middle') + T(337, 144, 'LA', 'b', 'middle') + T(140, 300, 'RV', 'b', 'middle') + T(340, 300, 'LV', 'b', 'middle');
+  /* septum: muscular part from apex up; membranous part at top */
+  const sx = 240;
+  s += `<path d="M${sx} 370 L${sx} 210" style="stroke:var(--heart);stroke-width:16"/>`;
+  if (!['vsd', 'tof', 'tru', 'avsd'].includes(k)) s += `<path d="M${sx} 210 L${sx} 172" style="stroke:var(--heart);stroke-width:6"/>`;
+  else {
+    s += `<rect x="${sx - 18}" y="174" width="36" height="34" class="defect"/>`;
+    if (k === 'vsd' || k === 'avsd') s += `<path class="flow" d="M${sx + 50} 200 H${sx - 50}"/>`;            /* left to right */
+    if (k === 'tof') s += `<path class="flow" d="M${sx - 70} 250 Q${sx - 30} 230 ${sx - 4} 196"/>` + T(sx - 80, 270, 'RV blood → aorta (right to left)', 'c l', 'middle');
+    if (k === 'tru') s += T(sx, 232, 'blood mixes', 's l', 'middle');
+  }
+  s += `<rect x="${sx - 40}" y="160" width="80" height="16" rx="7" class="meso" style="fill-opacity:${k === 'avsd' ? 0 : .9}"/>`;
+  if (k === 'avsd') s += `<rect x="${sx - 40}" y="150" width="80" height="34" class="defect"/>` + T(sx, 196, 'common AV valve', 'c l', 'middle');
+  /* great arteries */
+  if (k === 'norm' || k === 'vsd' || k === 'avsd') {
+    s += `<path class="art" style="stroke-width:22" d="M290 180 Q280 90 200 60 Q140 45 120 80"/>` + T(110, 74, 'aorta (from LV)', 'b l', 'end');
+    s += `<path class="art" style="stroke-width:20;stroke-opacity:.6" d="M180 190 Q200 100 300 70 Q350 60 380 80"/>` + T(472, 50, 'pulmonary trunk', 'b l', 'end') + T(472, 64, '(from RV, in front)', 's', 'end');
+    if (k === 'norm') s += `<path d="M196 150 Q240 100 280 110" style="fill:none;stroke:var(--crest);stroke-width:5"/>` + T(250, 40, 'spiral septum (neural crest)', 's', 'middle') + lead(250, 44, 240, 106);
+  }
+  if (k === 'tga') {
+    s += `<path class="art" style="stroke-width:22" d="M160 190 Q150 90 120 60"/>` + T(96, 44, 'aorta from RV', 'b l', 'middle');
+    s += `<path class="art" style="stroke-width:20;stroke-opacity:.6" d="M320 190 Q330 90 360 60"/>` + T(370, 50, 'pulmonary trunk from LV', 'b l', 'middle');
+    s += T(240, 30, 'parallel, not crossing', 'c', 'middle');
+  }
+  if (k === 'tru') {
+    s += `<path class="art" style="stroke-width:30" d="M${sx} 190 Q${sx} 110 ${sx + 10} 60"/>` + T(sx + 30, 70, 'one truncus', 'b l');
+    s += `<path class="art" style="stroke-width:10;stroke-opacity:.6" d="M${sx + 2} 120 Q200 100 170 80 M${sx + 6} 120 Q290 100 320 86"/>` + T(110, 90, 'pulmonary arteries', 's');
+  }
+  if (k === 'tof') {
+    s += `<path class="art" style="stroke-width:24" d="M${sx + 4} 190 Q${sx} 100 180 60"/>` + T(170, 50, 'overriding aorta', 'b l', 'middle');
+    s += `<path class="art" style="stroke-width:8;stroke-opacity:.6" d="M170 196 Q200 120 300 80"/>` + T(310, 76, 'narrow pulmonary outflow', 'c l');
+    s += T(60, 390, 'thick RV wall', 'c l') + T(sx, 228, 'VSD', 'c l', 'middle');
+  }
+  if (k === 'vsd') s += T(sx, 228, 'VSD', 'c l', 'middle') + T(sx + 60, 192, 'left → right', 's');
+  $('vent-svg').innerHTML = s; $('vent-find').innerHTML = VENT_ITEMS[k][1];
+}
+
+/* ===================== 4. aortic arches ===================== */
+function drawArch() {
+  const st = ARCH.s, ov = ARCH.ov; let s = DEFS;
+  /* geometry: patient's right on your left. ventral aortae x 290/390, dorsal aortae x 170/510, arches y by number */
+  const AY = {1: 60, 2: 110, 3: 160, 4: 210, 5: 250, 6: 290};
+  const RV = 300, LV = 380, RD = 170, LD = 510;
+  /* persistence rules: returns style 'on' | 'off' for each segment */
+  const regress12 = st >= 1, regress5 = st >= 1, rightGone = st >= 2;
+  const adult = st >= 3;
+  const st_ = on => on ? '' : ' gone';
+  let arr = ov === 'daa' && adult, rsa = ov === 'arsa' && adult;
+  const seg = (d, on, w = 9, extra = '') => `<path class="art${st_(on)}" style="stroke-width:${w}" d="${d}" ${extra}/>`;
+  /* aortic sac and truncus */
+  s += seg(`M340 372 V330`, true, 18) + seg(`M${RV} 330 H${LV}`, true, 14);
+  const y7 = adult ? 250 : 320;   /* 7th intersegmental arteries: in the adult step drawn above arch 6, as the left subclavian lies proximal to the ductus */
+  /* ventral aortae up to arch 1 */
+  s += seg(`M${RV} 330 V${AY[1]}`, !regress12 || true, 8) + seg(`M${LV} 330 V${AY[1]}`, true, 8);
+  /* dorsal aortae */
+  s += seg(`M${RD} ${AY[1]} V${AY[4]}`, true, 10) + seg(`M${LD} ${AY[1]} V${AY[6]}`, true, 10);
+  /* right dorsal aorta: from arch 4 to the 7th intersegmental (gone in the aberrant right subclavian), then below the 7th (gone normally) */
+  s += seg(`M${RD} ${AY[4]} V${y7}`, !rsa, 10);
+  s += seg(`M${RD} ${y7} V340 Q${RD} 380 340 390`, !(rightGone) || rsa || arr, 10);
+  s += seg(`M${LD} ${AY[6]} V340 Q${LD} 380 340 390`, true, 10);
+  s += seg(`M340 390 V418`, true, 14);
+  /* right dorsal aorta between arches 3 and 4 and 4..6: keeps above 7th for right subclavian */
+  for (const n of [1, 2, 3, 4, 5, 6]) {
+    const on = !((n <= 2 && regress12) || (n === 5 && regress5));
+    let onR = on, onL = on;
+    if (n === 6 && rightGone) onR = false;
+    if (n === 4 && rsa) onR = false;
+    if (n === 4 && arr) { onR = true; onL = true; }
+    if (n === 6 && rightGone) s += seg(`M${RV} ${AY[n]} H${(RV + RD) / 2}`, true, 8) + seg(`M${(RV + RD) / 2} ${AY[n]} H${RD}`, false, 8);
+    else s += seg(`M${RV} ${AY[n]} H${RD}`, onR, n === 5 ? 5 : 8);
+    s += seg(`M${LV} ${AY[n]} H${LD}`, onL, n === 5 ? 5 : 8);
+    s += T(258, AY[n] - 6, n, 'b', 'middle') + T(422, AY[n] - 6, n, 'b', 'middle');
+  }
+  /* 7th intersegmental -> subclavians */
+  s += seg(`M${RD} ${y7} H90`, true, 8) + seg(`M${LD} ${y7} H590`, true, 8);
+  /* dorsal aorta between arch 3 and 4 regresses on both sides in adult */
+  if (adult) { s += `<path d="M${RD - 8} 185 H${RD + 8} M${LD - 8} 185 H${LD + 8}" style="stroke:var(--surface);stroke-width:12"/>`; }
+  /* labels: right-side ones outside on your left, left-side ones outside on your right */
+  s += T(395, 352, 'aortic sac / truncus', 's') + T(350, 414, 'descending aorta (behind)', 's');
+  if (!adult) {
+    s += T(RD, 40, 'right dorsal aorta', 's', 'middle') + T(LD, 40, 'left dorsal aorta', 's', 'middle') + T(340, 40, 'ventral aortae', 's', 'middle');
+    s += T(30, 312, '7th intersegmental', 's', 'start');
+  } else {
+    const L = [[150, 104, 'R internal carotid'], [150, 164, 'R common carotid (3)'], [150, 230, arr ? 'R arch persists' : (rsa ? '(R 4th gone)' : 'R subclavian, 1st part (4)')],
+      [150, 294, 'proximal 6: R pulmonary'], [160, 266, rsa ? 'aberrant R subclavian' : 'R subclavian (7th)']];
+    const Rr = [[530, 104, 'L internal carotid'], [530, 164, 'L common carotid (3)'], [530, 230, arr ? 'L arch (4)' : 'arch of aorta (L 4)'],
+      [530, 294, 'ductus arteriosus (L 6)'], [530, 264, 'L subclavian (7th)']];
+    for (const [x, y, w] of L) s += T(x, y, w, (arr && y === 230) || (rsa && y === 266) ? 'c l' : 's l', 'end');
+    for (const [x, y, w] of Rr) s += T(x, y, w, y === 230 || y === 294 ? 'b l' : 's l');
+    if (ov === 'coa') s += `<rect x="${LD - 14}" y="302" width="28" height="22" class="defect"/>` + T(530, 320, 'coarctation', 'c l');
+  }
+  if (ov === 'nrv') {
+    const ry = adult ? AY[4] : AY[6];
+    s += `<path class="nrv" d="M236 14 V${ry + 14} Q222 ${ry + 28} 210 ${ry + 10} V14"/>` + `<path class="nrv" d="M444 14 V${AY[6] + 14} Q458 ${AY[6] + 28} 470 ${AY[6] + 10} V14"/>`;
+    s += T(205, 12, 'R vagus / recurrent', 's l', 'end') + T(475, 12, 'L vagus / recurrent', 's l');
+  }
+  $('arch-svg').innerHTML = s;
+  $('arch-find').innerHTML = ARCH_STEPS[st][1] + (ov !== 'none' ? ARCH_OV[ov][1] + (st < 3 && ov !== 'nrv' ? '<p class="muted">Go to the "Adult" step to see it drawn.</p>' : '') : '');
+}
+
+/* ===================== 5. veins ===================== */
+function drawVein() {
+  const st = VEIN.s; let s = DEFS;
+  const sv = 'M190 330 Q260 360 330 330';
+  s += `<path d="${sv}" style="fill:none;stroke:var(--vein);stroke-width:22;stroke-linecap:round;stroke-opacity:.6"/>` + T(345, 368, st < 2 ? 'sinus venosus (horns)' : 'right atrium / coronary sinus', 's l');
+  const v = (d, on, w = 7) => `<path class="vei${on ? '' : ' gone'}" style="stroke-width:${w}" d="${d}"/>`;
+  const R = st >= 2;
+  /* anterior and posterior cardinals and common cardinal */
+  s += v('M150 30 V260 Q160 320 190 330', true, 8) + v('M370 30 V260 Q360 320 330 330', !R, 8);
+  s += v('M100 380 Q110 300 150 260', true, 6) + v('M420 380 Q410 300 370 260', !R, 6);
+  s += T(150, 22, R ? 'SVC (R anterior cardinal)' : 'R anterior cardinal', 's', 'middle') + T(370, 22, R ? '(left part gone)' : 'L anterior cardinal', 's', 'middle');
+  s += T(96, 396, 'posterior cardinal', 's', 'middle') + T(424, 396, 'posterior cardinal', 's', 'middle');
+  /* umbilical and vitelline */
+  s += v('M220 400 Q220 360 215 340', st < 1, 6) + v('M300 400 Q300 360 305 340', true, 6);
+  s += v('M240 400 V345', st < 1 || true, 5) + v('M280 400 V345', st < 1, 5);
+  s += T(226, 392, 'umbilical', 's l', 'end') + T(262, 392, 'vitelline', 's l', 'middle');
+  if (st >= 1) s += v('M150 90 L370 70', true, 7) + T(260, 66, 'left brachiocephalic (anastomosis)', 'b', 'middle');
+  if (st >= 1) s += `<ellipse cx="270" cy="262" rx="60" ry="26" class="liver" style="fill-opacity:.5"/>` + T(270, 266, 'liver: ductus venosus', 's', 'middle');
+  if (R) s += T(400, 300, 'L horn → coronary', 'b') + T(400, 316, 'sinus', 'b') + T(388, 200, 'oblique vein of LA', 's');
+  if (R) s += T(30, 230, 'IVC (segments:', 's') + T(30, 246, 'see the table)', 's');
+  $('vein-svg').innerHTML = s; $('vein-find').innerHTML = VEIN_STEPS[st][1];
+}
+
+/* ===================== 6. fetal circulation ===================== */
+function drawFc() {
+  const k = FC.sel, fet = k === 'fet', pda = k === 'pda', duct = fet || pda; let s = DEFS;
+  /* heart chambers */
+  s += `<rect x="190" y="150" width="60" height="50" rx="14" class="hrt" style="fill-opacity:.35"/><rect x="270" y="150" width="60" height="50" rx="14" class="hrt" style="fill-opacity:.35"/>`;
+  s += `<rect x="190" y="206" width="60" height="64" rx="14" class="hrt" style="fill-opacity:.55"/><rect x="270" y="206" width="60" height="64" rx="14" class="hrt" style="fill-opacity:.55"/>`;
+  s += T(220, 180, 'RA', 'b', 'middle') + T(300, 180, 'LA', 'b', 'middle') + T(220, 244, 'RV', 'b', 'middle') + T(300, 244, 'LV', 'b', 'middle');
+  /* lungs */
+  const lf = fet ? 'fill:var(--fluid);stroke:var(--line)' : 'fill:var(--surface);stroke:var(--airway);stroke-width:3';
+  s += `<ellipse cx="90" cy="150" rx="55" ry="70" style="${lf}"/><ellipse cx="430" cy="150" rx="55" ry="70" style="${lf}"/>`;
+  s += T(90, 236, fet ? 'lungs (fluid-filled)' : 'lungs (air)', 's', 'middle');
+  /* SVC into the roof, IVC beside the RV into the floor of the RA */
+  s += `<path class="vei" style="stroke-width:10" d="M205 40 V150"/>` + T(200, 34, 'SVC', 's', 'end');
+  s += `<path class="vei" style="stroke-width:12" d="M178 330 V196 Q178 186 192 186"/>` + T(172, 344, 'IVC', 's', 'end');
+  /* liver with ductus venosus */
+  s += `<path d="M60 300 Q150 280 250 300 Q240 360 140 370 Q70 360 60 300 Z" class="liver" style="fill-opacity:.4"/>` + T(90, 352, 'liver', 's', 'middle');
+  s += `<path class="vei${fet ? '' : ' gone'}" style="stroke-width:7" d="M230 420 Q230 345 184 322"/>`;
+  s += T(240, 408, fet ? 'umbilical vein' : 'ligamentum teres', fet ? 'b l' : 's');
+  s += fet ? T(110, 300, 'ductus venosus', 'b l', 'middle') + lead(130, 304, 196, 326) : T(110, 300, 'ligamentum venosum', 's l', 'middle');
+  /* aorta and pulmonary trunk (both arteries; the trunk drawn paler) */
+  s += `<path class="art" style="stroke-width:12" d="M300 206 Q300 110 340 80 Q390 60 400 110 V420"/>` + T(410, 70, 'aorta', 's');
+  s += `<path class="art" style="stroke-width:10;stroke-opacity:.55" d="M230 206 Q240 120 330 110"/>`;
+  s += `<path class="art" style="stroke-width:6;stroke-opacity:${fet ? .25 : .55}" d="M250 140 Q180 120 130 140 M300 120 Q360 110 400 140"/>`;
+  s += T(196, 104, 'pulmonary trunk', 's l', 'end');
+  /* ductus arteriosus */
+  s += `<path class="art${duct ? '' : ' gone'}" style="stroke-width:${duct ? 7 : 4}" d="M330 110 L392 122"/>`;
+  s += T(350, 150, fet ? 'ductus arteriosus' : pda ? 'ductus still open' : 'ligamentum arteriosum', duct ? 'b l' : 's l');
+  /* foramen ovale */
+  s += fet ? `<path class="flow" style="stroke-width:2.4" d="M232 190 Q262 165 292 172"/>` + T(150, 214, 'foramen ovale', 'b l', 'end') + lead(152, 210, 240, 186) : T(150, 214, 'fossa ovalis', 's l', 'end') + lead(152, 210, 258, 180);
+  /* umbilical arteries and placenta */
+  s += `<path class="art${fet ? '' : ' gone'}" style="stroke-width:6" d="M400 420 Q380 450 300 440 Q260 436 250 446"/>` + T(514, 440, fet ? 'umbilical arteries' : 'medial umbilical ligaments', 's', 'end');
+  if (fet) s += `<ellipse cx="200" cy="452" rx="60" ry="14" style="fill:var(--tropho);fill-opacity:.25;stroke:var(--line)"/>` + T(140, 456, 'placenta', 's', 'end');
+  if (fet) s += `<path class="flow" d="M345 102 L388 118"/><path class="flow" d="M210 60 V140"/><path class="flow" d="M228 410 Q226 360 196 332"/>`;
+  else s += `<path class="flow" d="M250 132 Q170 116 136 132"/><path class="flow" d="M140 132 Q220 100 290 146"/>` + T(250, 98, 'pulmonary veins', 's l', 'middle');
+  if (pda) s += `<path class="flow" style="stroke:var(--clin);stroke-width:2.4" d="M388 126 L338 116"/>` + T(360, 168, 'aorta → pulmonary', 'c l', 'middle');
+  $('fc-svg').innerHTML = s; $('fc-find').innerHTML = FC_ITEMS[k][1];
+}
+
+/* ===================== 7. lungs ===================== */
+function drawLung() {
+  const st = LUNG.s; let s = DEFS;
+  if (st <= 1) {
+    s += T(14, 20, 'SIDE VIEW: VENTRAL ←  → DORSAL', 'h');
+    s += `<path d="M300 30 V340" style="stroke:var(--endo);stroke-width:34;stroke-opacity:.5"/>` + T(340, 50, 'foregut', 'b') + T(340, 330, st ? 'oesophagus (dorsal)' : 'foregut', 's');
+    s += `<path d="M285 120 Q230 140 230 220 Q230 290 250 320" style="fill:none;stroke:var(--endo);stroke-width:${st ? 26 : 22}"/>`;
+    s += `<circle cx="250" cy="322" r="18" class="endo"/>` + T(150, 210, st ? 'trachea (ventral)' : 'respiratory', 'b', 'middle') + T(150, 226, st ? '' : 'diverticulum', 'b', 'middle');
+    if (st) s += `<path d="M262 140 L282 240" style="stroke:var(--meso);stroke-width:8"/>` + T(140, 270, 'tracheo-oesophageal septum', 's') + lead(220, 266, 272, 220);
+    s += `<ellipse cx="240" cy="230" rx="90" ry="130" style="fill:var(--meso);fill-opacity:.12;stroke:none"/>` + T(60, 340, 'surrounding mesoderm', 's');
+  } else {
+    s += T(14, 20, 'FRONT VIEW: EMBRYO\'S RIGHT ON YOUR LEFT', 'h');
+    s += `<path d="M260 30 V150" style="stroke:var(--airway);stroke-width:18"/>` + T(275, 50, 'trachea', 'b');
+    s += `<path d="M260 150 Q220 170 180 190 M260 150 Q300 170 340 190" style="fill:none;stroke:var(--airway);stroke-width:12"/>`;
+    const lob = (cx, cy, n, sideLabel) => { let o = ''; for (let i = 0; i < n; i++) o += `<ellipse cx="${cx}" cy="${cy + i * 52}" rx="44" ry="26" style="fill:var(--endo);fill-opacity:.55;stroke:var(--ink);stroke-width:.6"/>`; return o + T(cx, cy + n * 52 + 4, sideLabel, 's', 'middle'); };
+    s += lob(160, 186, 3, '3 on the right') + lob(360, 215, 2, '');
+    s += T(470, 330, '2 on the left', 's', 'end');
+    if (st === 3) {
+      s += `<path d="M90 170 Q70 280 160 350 Q230 360 230 230 Q220 160 160 160 Z" style="fill:none;stroke:var(--pleura);stroke-width:8"/>`;
+      s += `<path d="M430 180 Q450 300 360 340 Q290 340 290 240 Q300 170 360 170 Z" style="fill:none;stroke:var(--pleura);stroke-width:8"/>`;
+      s += T(20, 46, 'visceral pleura covers each lung', 's') + T(470, 120, 'pleural cavity', 's', 'end');
+    }
+  }
+  $('lung-svg').innerHTML = s; $('lung-find').innerHTML = LUNG_STEPS[st][1] + (st === 2 ? LUNG_TEXT : '');
+}
+function drawTef() {
+  const k = TEF.sel; let s = DEFS;
+  s += T(14, 18, 'SIDE VIEW: TRACHEA IN FRONT (LEFT)', 'h');
+  s += `<path d="M110 30 V200 M110 200 L80 250 M110 200 L140 250" style="fill:none;stroke:var(--airway);stroke-width:16;stroke-linecap:round"/>` + T(60, 60, 'trachea', 's', 'end');
+  const up = k === 'h' ? 'M240 30 V280' : 'M240 30 V110';
+  s += `<path d="${up}" style="stroke:var(--gut);stroke-width:22;stroke-linecap:round"/>`;
+  if (k !== 'h') s += `<path d="M240 170 V280" style="stroke:var(--gut);stroke-width:22;stroke-linecap:round"/>` + T(250, 145, 'blind upper pouch', 'c l', 'middle');
+  if (k === 'c' || k === 'd') s += `<path d="M232 176 Q170 190 118 186" style="stroke:var(--clin);stroke-width:8;fill:none"/>` + T(170, 210, 'distal fistula', 'c', 'middle');
+  if (k === 'd') s += `<path d="M232 104 Q170 98 118 100" style="stroke:var(--clin);stroke-width:8;fill:none"/>` + T(170, 90, 'proximal fistula', 'c', 'middle');
+  if (k === 'h') s += `<path d="M228 150 L120 130" style="stroke:var(--clin);stroke-width:8"/>` + T(175, 120, 'H fistula', 'c', 'middle');
+  s += `<ellipse cx="250" cy="282" rx="50" ry="18" style="fill:var(--gut);fill-opacity:.4"/>` + T(250, 286, 'stomach', 's', 'middle');
+  $('tef-svg').innerHTML = s; $('tef-find').innerHTML = TEF_ITEMS[k][1] + TEF_TEXT;
+}
+
+function swipeHints() {
+  document.querySelectorAll('.schbox').forEach(b => {
+    if (b.querySelector('svg.fit')) return;
+    const n = b.nextElementSibling;
+    if (n && n.classList && n.classList.contains('swipe')) return;
+    const p = document.createElement('p'); p.className = 'muted swipe'; p.textContent = 'Swipe sideways to see all of it.'; b.after(p);
+  });
+}
+(() => {
+  $('lede').innerHTML = LEDE;
+  $('key').innerHTML = KEY.map(([t, l]) => `<span><i style="background:var(${t})"></i>${l}</span>`).join('');
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  table('fate-table', FATE_HEAD, FATE_ROWS); table('arch-table', ARCH_HEAD, ARCH_ROWS); table('ivc-table', IVC_HEAD, IVC_ROWS);
+  table('shunt-table', SHUNT_HEAD, SHUNT_ROWS); table('stage-table', STAGE_HEAD, STAGE_ROWS);
+  stepper('tube-step', TUBE_STEPS.map(x => x[0]), drawTube, TUBE);
+  stepper('atr-step', ATR_STEPS.map(x => x[0]), drawAtr, ATR);
+  toggles('asd-tg', Object.entries(ASD_ITEMS).map(([k, d]) => [k, d[0]]), k => { ASD.sel = k; drawAsd(); }, 'sec');
+  toggles('vent-tg', Object.entries(VENT_ITEMS).map(([k, d]) => [k, d[0]]), k => { VENT.sel = k; drawVent(); }, 'norm');
+  stepper('arch-step', ARCH_STEPS.map(x => x[0]), drawArch, ARCH);
+  toggles('arch-tg', Object.entries(ARCH_OV).map(([k, d]) => [k, d[0]]), k => { ARCH.ov = k; drawArch(); }, 'none');
+  stepper('vein-step', VEIN_STEPS.map(x => x[0]), drawVein, VEIN);
+  toggles('fc-tg', Object.entries(FC_ITEMS).map(([k, d]) => [k, d[0]]), k => { FC.sel = k; drawFc(); }, 'fet');
+  stepper('lung-step', LUNG_STEPS.map(x => x[0]), drawLung, LUNG);
+  toggles('tef-tg', Object.entries(TEF_ITEMS).map(([k, d]) => [k, d[0]]), k => { TEF.sel = k; drawTef(); }, 'c');
+  drawAsd(); drawVent(); drawFc(); drawTef();
+  swipeHints();
+  window.ready = true;
+})();
+</script>
+</body>
+</html>

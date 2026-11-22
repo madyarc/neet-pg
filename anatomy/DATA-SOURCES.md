@@ -1259,3 +1259,49 @@ tubercles.
   drawn as endothelium, not artery, one colour for eosin-stained cells, unmyelinated retinal fibres not drawn as
   myelin); thyroid C cells inside the basement membrane; one-source statements attributed; uploader pointers
   explained or cropped; page code (missing micrographs, observers released, drawing labels for screen readers).
+
+## Systemic Embryology — `embryology/heart-vessels.html`, `embryology/gut-urogenital.html`, `embryology/head-neck-cns.html`
+
+- Fact sheet `sources-local/facts/fill-embryo2.md` (777 quotes, script-checked against `sources-local/modern/fill-embryo2/`,
+  downloads 2026-11-22): Gray 1918 (13–15, 135, 139, 142, 184–189, 224, 235, 241, 250–252, 255, 258, 266, 272, 275);
+  StatPearls abstracts; about 30 open-access papers (Europe PMC / NCBI BioC), among them PMC12372156 (interatrial
+  septum), PMC11241401, PMC10328954, PMC9592245, PMC9556351, PMC7557825 (arch arteries), PMC6893009, PMC10788309,
+  PMC12693601 (great veins), PMC11658130, PMC10011220 (VSD), PMC13514265 (left SVC), PMC12499430 (TEF), PMC11195428
+  (lung), PMC2908440, PMC4546136, PMC6014125 (midgut), PMC12840228 (gastroschisis), PMC7155797, PMC11593116,
+  PMC6084689, PMC12599990 (urogenital), PMC10521768, PMC13200892, PMC12519008, PMC13603011, PMC5618146, PMC12538268
+  (head and neck); Wikipedia.
+- Excluded: Wikipedia "Heart development", "Tubular heart", "Lung", "Diencephalon", "Myelencephalon" and "Ventricular
+  system" (they cite OpenStax/Betts); Wikipedia sentences that copy Gray (wpcopy2 list in the sheet); PMC13332512
+  (survey, no facts) and PMC6440433 (built on a licensed textbook). The slips in PMC10521768 (superior constrictor under
+  arch 3, cricothyroid under arch 6) are not used.
+- Contested, shown on the page: the segment of the adult arch formed by the left 4th arch (Gray vs StatPearls); IVC
+  infrarenal segment (supracardinal, modern sources, vs Gray's cardinal vein); ductus closure (12–24 h / 2–3 weeks vs
+  Gray's 4–10 days); commonest VSD type (perimembranous vs newer data for muscular, Wikipedia); ASD secundum share
+  (70% vs 75%); lung stage weeks; midgut return (weeks 9–12) and the 270° rotation as a descriptive model; kidney ascent
+  timing; palatal fusion starting at the front (Gray) or the centre (2026 review); posterior tongue from the copula
+  (Gray) or the hypopharyngeal eminence; ultimobranchial body in the 4th pouch (Gray: 5th); hyaloid artery regression
+  (week 10, Wikipedia, vs the ninth month, Gray); which part of the pancreas each bud forms.
+- Single source, attributed: bulbus → RV infundibulum and primitive ventricle → LV (Gray); ostium primum share (review);
+  TGA aorta in front and to the right, Fallot right arch 20–25%, truncus single valve, gastroschisis 10% anomalies and
+  AFP, horseshoe malrotation, Dandy–Walker hydrocephalus, craniopharyngioma extent, bilious vomiting in volvulus
+  (StatPearls); AVSD with Down syndrome, pancreas divisum, spleen from mesoderm, superior vesical arteries, SRY on the
+  short arm, hypospadias rates, epispadias in every exstrophy, genital tubercle at week 4, metanephric blastema →
+  nephrons, branchial cyst details, alar plate → sensory nuclei, lingual thyroid symptoms, hyoid removal, rachischisis,
+  coloboma field defect, cleft feeding and voice (Wikipedia); olive, colliculi, flocculus first, mantle/marginal layers
+  (Gray); TEF types A and D and the H-type share, reversed rotation, corniculate from arch 6 (reviews).
+- Left out (no second source): tongue muscles from occipital somites, the pectinate line as the junction, arterial
+  shifts during kidney ascent, rubella cataract, the "machinery" murmur, left vagus turning anterior, lobe-branching
+  weeks, day numbers for looping.
+- Schematics only. Germ-layer tokens as on the module 39 pages; organ tokens reused with their meanings (--gut, --colon,
+  --stom, --liver, --panc, --bile, --kidney, --duct, --uter, --vag, --gonad, --thyroid, --parathy, --pit, --lens,
+  --retina, --medulla, --pons, --midb, --cblm, --dien, --s-csf, --pleura, --airway). New: --telen (telencephalon and
+  cerebral hemispheres) #f606a6 / dark #ff5cc8, checked with fill-histo2-scripts/colcheck3.py. Pharyngeal arches,
+  facial prominences and external genital primordia are told apart by hatch patterns, not colours.
+- Independent review (2026-11-22), fixed: the IVC drawn into the right ventricle in the fetal circulation (now enters
+  the floor of the right atrium); the arch-artery adult step (right dorsal aorta, 7th intersegmentals moved above
+  arch 6 so the coarctation lies beyond the left subclavian, truncus and descending aorta separated, aberrant right
+  subclavian overlay); patent ductus drawn on the newborn state; pulmonary trunk drawn as an artery; shunt arrows per
+  defect (right to left in Fallot); brain flexures (the pontine flexure bends the opposite way) and the order of the
+  vesicles; malrotation and reversed rotation drawn; annular pancreas round the 2nd part; IMA in front of the kidneys;
+  optic cup layers swapped; mandibular prominence hatch; --telen too close to --parathy; unquoted and one-source
+  statements quoted, attributed or cut; overlapping and clipped labels; small figures fit phone width.

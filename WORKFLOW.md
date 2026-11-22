@@ -23,8 +23,9 @@ Last updated: 2026-11-21
 - Module 41 (systemic embryology: AN25.2–25.6, 43.4, 52.4–52.8, 64.2–64.3) started 2026-11-22: sheet fill-embryo2,
   pages in anatomy/embryology/. [x] build (747 quotes; heart-vessels, gut-urogenital, head-neck-cns; not browser-tested,
   gjs+rsvg only) [x] review (14 findings: fetal IVC into RV, arch/coarctation drawing, PDA chip, flexures, malrotation chips,
-  ~30 unquoted or unattributed claims, --telen vs --parathy, text clipping; no JS errors) [ ] fixes + docs (running) [ ] docs (index count 2→5,
-  search index, DATA-SOURCES/SYLLABUS text in build report) [ ] commit.
+  ~30 unquoted or unattributed claims, --telen vs --parathy, text clipping; no JS errors) [x] fixes (all 14; 777 quotes) [x] docs [x] commit. Done 2026-11-22.
+  Leftover on module 39 pages (pre-existing): clipped hour labels "1"/"28" on cyc-svg, som-svg overlap,
+  phone overlaps in neu-svg and horm-svg (membranes-placenta).
 - Module 40 commit 9a481ee is local only: push failed (git pack-objects SIGSEGV; /usr/bin/git fails pacman check).
   Push after `sudo pacman -S git ...`. After: genetics (73–75), then leftovers (general 1–6, radiology 54, sectional 51,
   osteology 53, surface 55, limb leftovers).
