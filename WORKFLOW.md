@@ -9,8 +9,8 @@ Last updated: 2026-11-21
 ## Now
 
 - Module 31 (abdominal cavity, peritoneum, organs) started 2026-11-21: page abdomen-pelvis/organs.html (single page).
-  - [x] build (agent af6d044d; 573 quotes; 98-part 658 KB models/abdo; no images; AN47.6 partial)  [ ] review (agent
-    a83e6bd3 running)  [ ] fixes  [ ] docs  [ ] commit, push, live test
+  - [x] build (agent af6d044d; 573 quotes; 98-part 658 KB models/abdo; no images; AN47.6 partial)  [x] review (18 items: biopsy
+    needle wording, faint/dropped labels, schematics, one-source lines, colours)  [ ] fixes (sent to builder af6d044d)  [ ] docs  [ ] commit, push, live test
   - Home: add abdo/abdo.json to region_pages.py MODELS after abd-nv (only l_spleen new) and an 'Abdominal organs'
     REGION_PAGES entry? Decide at docs step.
 - Module 32 (face and neck regions and glands) started 2026-11-21 in parallel: agent a3248667; sheet fill-hnreg, model
