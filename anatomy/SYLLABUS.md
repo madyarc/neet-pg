@@ -57,14 +57,14 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 7. Introduction to the nervous system
 
-- [ ] **AN7.1** Describe general plan of nervous system with components of central, peripheral & autonomic nervous systems
-- [ ] **AN7.2** List components of nervous tissue and their functions
-- [ ] **AN7.3** Describe parts of a neuron and classify them based on number of neurites, size & function
-- [ ] **AN7.4** Describe structure of a typical spinal nerve
-- [ ] **AN7.5** Describe principles of sensory and motor innervation of muscles
-- [ ] **AN7.6** Describe concept of loss of innervation of a muscle with its applied anatomy
-- [ ] **AN7.7** Describe various types of synapse
-- [ ] **AN7.8** Describe differences between sympathetic and spinal ganglia
+- [x] **AN7.1** Describe general plan of nervous system with components of central, peripheral & autonomic nervous systems — *general plan, CNS, PNS, autonomic: [Nervous System: General Plan and Nervous Tissue](general/nervous-system.html)*
+- [x] **AN7.2** List components of nervous tissue and their functions — *neurons and glia: [Nervous System: General Plan and Nervous Tissue](general/nervous-system.html)*
+- [x] **AN7.3** Describe parts of a neuron and classify them based on number of neurites, size & function — *parts and classification of neurons: [Nervous System: General Plan and Nervous Tissue](general/nervous-system.html)*
+- [x] **AN7.4** Describe structure of a typical spinal nerve — *typical spinal nerve and its components: [Nervous System: General Plan and Nervous Tissue](general/nervous-system.html)*
+- [x] **AN7.5** Describe principles of sensory and motor innervation of muscles — *sensory and motor innervation, motor unit: [Nervous System: General Plan and Nervous Tissue](general/nervous-system.html)*
+- [x] **AN7.6** Describe concept of loss of innervation of a muscle with its applied anatomy — *denervation, LMN vs UMN: [Nervous System: General Plan and Nervous Tissue](general/nervous-system.html)*
+- [x] **AN7.7** Describe various types of synapse — *chemical and electrical synapses: [Nervous System: General Plan and Nervous Tissue](general/nervous-system.html)*
+- [x] **AN7.8** Describe differences between sympathetic and spinal ganglia — *spinal vs sympathetic ganglia: [Nervous System: General Plan and Nervous Tissue](general/nervous-system.html)*
 
 ### 8. Features of individual bones (Upper Limb)
 
@@ -536,18 +536,18 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 62. Cranial nerve nuclei & Cerebral hemispheres
 
-- [ ] **AN62.1** Describe the cranial nerve nuclei with its functional components
-- [ ] **AN62.2** Describe & demonstrate surfaces, sulci, gyri, poles, & functional areas of cerebral hemisphere. Also describe the effects of damage to various functional areas of cerebral cortex
-- [ ] **AN62.3** Describe the white matter of cerebrum. Also describe the effects of damage to corpus callosum and different parts of internal capsule
-- [ ] **AN62.4** Describe the parts & major connections of basal ganglia & limbic lobe. Also explain the anatomical basis of Parkinson’s disease, chorea, athetosis and ballismus
-- [ ] **AN62.5** Describe boundaries, parts, gross relations, major nuclei and connections of dorsal thalamus, hypothalamus, epithalamus, metathalamus and subthalamus
-- [ ] **AN62.6** Describe & identify formation, branches & major areas of distribution of circle of Willis
+- [x] **AN62.1** Describe the cranial nerve nuclei with its functional components — *nuclei by functional column: [Cerebrum, Ventricles and Sensory Pathways](neuro/cerebrum.html) and [Brainstem and Cerebellum](neuro/brainstem.html)*
+- [x] **AN62.2** Describe & demonstrate surfaces, sulci, gyri, poles, & functional areas of cerebral hemisphere. Also describe the effects of damage to various functional areas of cerebral cortex — *surfaces, sulci, gyri, functional areas and their lesions: [Cerebrum, Ventricles and Sensory Pathways](neuro/cerebrum.html)*
+- [x] **AN62.3** Describe the white matter of cerebrum. Also describe the effects of damage to corpus callosum and different parts of internal capsule — *white matter, corpus callosum and internal capsule lesions: [Cerebrum, Ventricles and Sensory Pathways](neuro/cerebrum.html)*
+- [x] **AN62.4** Describe the parts & major connections of basal ganglia & limbic lobe. Also explain the anatomical basis of Parkinson’s disease, chorea, athetosis and ballismus — *basal ganglia, limbic lobe, Parkinson's, chorea, athetosis, hemiballismus: [Cerebrum, Ventricles and Sensory Pathways](neuro/cerebrum.html)*
+- [x] **AN62.5** Describe boundaries, parts, gross relations, major nuclei and connections of dorsal thalamus, hypothalamus, epithalamus, metathalamus and subthalamus — *thalamus, hypothalamus, epi-, meta- and subthalamus: [Cerebrum, Ventricles and Sensory Pathways](neuro/cerebrum.html)*
+- [x] **AN62.6** Describe & identify formation, branches & major areas of distribution of circle of Willis — *circle of Willis and ACA, MCA, PCA territories in 3D: [Cerebrum, Ventricles and Sensory Pathways](neuro/cerebrum.html)*
 
 ### 63. Ventricular System & Special sensory pathways
 
-- [ ] **AN63.1** Describe & demonstrate parts, boundaries & features of 3rd, 4th & lateral ventricle
-- [ ] **AN63.2** Describe anatomical basis of congenital hydrocephalus
-- [ ] **AN63.3** Describe the olfactory, visual, auditory and gustatory pathways
+- [x] **AN63.1** Describe & demonstrate parts, boundaries & features of 3rd, 4th & lateral ventricle — *lateral, third and fourth ventricles in 3D: [Cerebrum, Ventricles and Sensory Pathways](neuro/cerebrum.html)*
+- [x] **AN63.2** Describe anatomical basis of congenital hydrocephalus — *congenital hydrocephalus: [Cerebrum, Ventricles and Sensory Pathways](neuro/cerebrum.html)*
+- [x] **AN63.3** Describe the olfactory, visual, auditory and gustatory pathways — *olfactory, visual, auditory and gustatory pathways: [Cerebrum, Ventricles and Sensory Pathways](neuro/cerebrum.html)*
 
 ### 64. Histology & Embryology
 

@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cerebrum, Ventricles and Sensory Pathways</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone, --nerve (optic nerve, chiasm and tract), --artery, --clin (a lesion or a clinical point).
+   Shared with the module-36 pages, same meaning: --s-csf (cerebrospinal fluid / ventricles), --cordw (white matter: corpus callosum,
+   fornix, commissures, internal capsule), --dien (thalamus and the rest of the diencephalon except the hypothalamus), --chp (choroid
+   plexus), --medulla / --pons / --midb / --cblm (brainstem and cerebellum), --t-cst (corticospinal and corticobulbar fibres), --t-dc /
+   --t-st (sensory tracts), --nuc-m / --nuc-p / --nuc-s (motor / parasympathetic / sensory cranial nerve nuclei), --sn (substantia
+   nigra), --grey (grey matter). --pit (pituitary) as on head-neck/ear-eye.html.
+   Page-only tokens (checked against every other token of the site with fill-neuro2-scripts/colcheck.py): lobes --cx-f (frontal),
+   --cx-p (parietal), --cx-t (temporal), --cx-o (occipital), --cx-i (insula), --cx-l (limbic lobe, hippocampus, amygdala); basal
+   ganglia --caud (caudate), --put (putamen), --gp (globus pallidus), --stn (subthalamic nucleus); --hypo (hypothalamus and
+   mammillary bodies); arterial territories --ter-a (anterior cerebral), --ter-m (middle cerebral), --ter-p (posterior cerebral);
+   --p-sens (a special sensory pathway). */
+:root{--s-csf:#cfe6f5;--cordw:#d9cbe0;--grey:#9c8f99;--dien:#a7b3a0;--chp:#a3586e;--medulla:#bda0c0;--pons:#8fb8d6;--midb:#dca27a;--cblm:#a8c08a;
+  --t-dc:#3c9df2;--t-st:#6060f2;--t-cst:#bf2f85;--nuc-m:#c45a1b;--nuc-p:#628c23;--nuc-s:#b53cf2;--sn:#46343c;--pit:#7400b8;
+  --cx-f:#c3e87a;--cx-p:#7ad3e8;--cx-t:#e87ae0;--cx-o:#b066e8;--cx-i:#f2f07a;--cx-l:#8fe87a;
+  --caud:#5b7fd9;--put:#f2608c;--gp:#ffb347;--stn:#7af2c8;--hypo:#f2b0f0;--ter-a:#4d6bf0;--ter-m:#e8ff70;--ter-p:#60f0f0;--p-sens:#9a3fe0}
+:root[data-theme="dark"]{--s-csf:#2b4a60;--cordw:#6d6080;--grey:#8a7d88;--dien:#6f7a68;--chp:#c97890;--medulla:#8c6f90;--pons:#5f88a6;--midb:#a8724c;--cblm:#6f8a52;
+  --t-dc:#6fb8f5;--t-st:#8f8ff5;--t-cst:#e35aa8;--nuc-m:#e2704f;--nuc-p:#8cb84a;--nuc-s:#cf7af5;--sn:#8a7590;--pit:#e2a0ff;
+  --cx-f:#92d64b;--cx-p:#6da6a8;--cx-t:#843ba8;--cx-o:#7546c7;--cx-i:#d6c24b;--cx-l:#4bd64c;
+  --caud:#4664c7;--put:#a83b7d;--gp:#a84f3b;--stn:#8bd6ad;--hypo:#9e5ac7;--ter-a:#7783b8;--ter-m:#9eb865;--ter-p:#81bcc7;--p-sens:#7365b8;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+#topics{display:flex;flex-direction:column;gap:10px}
+#topic-text p+p,.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.scroll{overflow-x:auto}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:640px;margin:0 auto}
+.schbox{overflow-x:auto;scrollbar-color:var(--line) transparent}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:520px}.swipe{display:inline}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.c{fill:var(--clin);font-weight:600}
+svg.sch text.n{font-size:11px;font-weight:600}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .arrow{stroke:var(--muted);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+svg.sch .flow{stroke:var(--ink);stroke-width:1.8;fill:none;marker-end:url(#arr)}
+svg.sch .inh{stroke:var(--ink);stroke-width:1.8;fill:none;marker-end:url(#bar)}
+svg.sch .dash{stroke-dasharray:6 4}
+svg.sch .wm{fill:var(--cordw);stroke:var(--muted);stroke-width:1}
+svg.sch .gm{fill:var(--grey);fill-opacity:.55;stroke:var(--muted);stroke-width:.8}
+svg.sch .cortex{fill:var(--surface);stroke:var(--muted);stroke-width:1.2}
+svg.sch .vent{fill:var(--s-csf);stroke:var(--muted);stroke-width:1}
+svg.sch .box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .lesion{fill:url(#hatch);stroke:var(--clin);stroke-width:2}
+svg.sch .hit{cursor:pointer}
+svg.sch .sel{stroke:var(--ink);stroke-width:2.4}
+svg.sch .hit:focus{outline:none;stroke:var(--accent);stroke-width:3}
+svg.sch text.halo{paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.credit{font-size:12px;color:var(--muted)}
+.find{font-size:14px}
+.find b{color:var(--ink)}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Cerebrum, Ventricles and Sensory Pathways</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="The cerebrum in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <div class="key" id="key3d"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cx">
+  <h2 id="h-cx">Surfaces, sulci, lobes and functional areas</h2>
+  <div class="prose" id="cx-text"></div>
+  <div class="two">
+    <div>
+      <div class="toggles" id="cx-tg" aria-label="Surface"></div>
+      <div class="schbox"><svg class="fig sch" id="cx-svg" viewBox="0 0 600 400" role="img" aria-label="Schematic of the cerebral hemisphere with its functional areas; tap an area"></svg></div>
+      <p class="muted" id="cx-orient"></p>
+    </div>
+    <div class="prose find" id="cx-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="cx-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-wm">
+  <h2 id="h-wm">White matter: corpus callosum and internal capsule</h2>
+  <div class="prose" id="wm-text"></div>
+  <div class="scroll"><table class="t stack" id="cc-table"></table></div>
+  <div class="two">
+    <div>
+      <div class="toggles" id="ic-view" aria-label="Section"></div>
+      <div class="toggles" id="ic-tg" aria-label="Show"></div>
+      <div class="schbox"><svg class="fig sch" id="ic-svg" viewBox="0 0 600 460" role="img" aria-label="Schematic section through one cerebral hemisphere showing the internal capsule between the caudate nucleus, thalamus and lentiform nucleus"></svg></div>
+      <p class="muted" id="ic-orient"></p>
+      <div class="key" id="ic-key"></div>
+    </div>
+    <div class="prose find" id="ic-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="ic-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-bg">
+  <h2 id="h-bg">Basal ganglia and the limbic system</h2>
+  <div class="prose" id="bg-text"></div>
+  <div class="two">
+    <div>
+      <div class="toggles" id="bg-tg" aria-label="Disorder"></div>
+      <div class="schbox"><svg class="fig sch" id="bg-svg" viewBox="0 0 600 420" role="img" aria-label="Simplified motor loop of the basal ganglia with the chosen disorder's site hatched"></svg></div>
+      <p class="muted">Simplified: only the links named in the text; arrows give the direction. Flat end = inhibits (pallidum → thalamus, GABA).</p>
+      <div class="key" id="bg-key"></div>
+    </div>
+    <div class="prose find" id="bg-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="bg-table"></table></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pz-svg" viewBox="0 0 600 330" role="img" aria-label="The Papez circuit drawn as a loop: hippocampus, fornix, mammillary body, mammillothalamic tract, anterior thalamic nucleus, cingulate gyrus, parahippocampal gyrus, back to the hippocampus"></svg></div>
+    <div class="prose" id="lim-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-di">
+  <h2 id="h-di">Diencephalon: thalamus, hypothalamus, epithalamus, metathalamus, subthalamus</h2>
+  <div class="prose" id="di-text"></div>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="th-svg" viewBox="0 0 600 400" role="img" aria-label="Schematic of the left thalamus from above with its nuclear groups; tap a nucleus to see what it relays"></svg></div>
+      <p class="muted">Schematic, not to scale: the <b>left</b> thalamus seen from above, front at the top, the third ventricle (midline) on the right. The geniculate bodies lie under the back end (drawn below it: lateral geniculate lateral, medial geniculate medial).</p>
+    </div>
+    <div class="prose find" id="th-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="th-table"></table></div>
+  <div class="scroll"><table class="t stack" id="di-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-art">
+  <h2 id="h-art">Circle of Willis: branches and areas of supply</h2>
+  <div class="prose" id="art-text"></div>
+  <div class="two">
+    <div>
+      <div class="toggles" id="art-tg" aria-label="Occlusion"></div>
+      <div class="schbox"><svg class="fig sch" id="art-svg" viewBox="0 0 600 245" role="img" aria-label="Territories of the anterior, middle and posterior cerebral arteries on the lateral and medial surfaces of the hemisphere"></svg></div>
+      <p class="muted">Schematic, territories approximate; both views <b>front to the left</b>. Left: the lateral surface of the left hemisphere. Right: the medial surface of the right hemisphere (from the midline). Dashed: central and lateral sulci; parieto-occipital and calcarine sulci.</p>
+      <div class="key" id="art-key"></div>
+    </div>
+    <div class="prose find" id="art-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="art-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ve">
+  <h2 id="h-ve">Ventricles, CSF pathway and congenital hydrocephalus</h2>
+  <div class="prose" id="ve-text"></div>
+  <div class="two">
+    <div>
+      <div class="toggles" id="ve-tg" aria-label="State"></div>
+      <div class="schbox"><svg class="fig sch" id="ve-svg" viewBox="0 0 600 420" role="img" aria-label="Schematic of the ventricular system seen from the left with the flow of cerebrospinal fluid; the chosen block and the ventricles that dilate"></svg></div>
+      <p class="muted">Schematic, not to scale: the ventricles seen from the <b>left</b>, front to the left. Arrows: CSF flow. Hatched: the block.</p>
+    </div>
+    <div class="prose find" id="ve-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="ve-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-nu">
+  <h2 id="h-nu">Cranial nerve nuclei: functional columns</h2>
+  <div class="prose" id="nu-text"></div>
+  <div class="schbox"><svg class="fig sch" id="nu-svg" viewBox="0 0 700 430" role="img" aria-label="Schematic of the cranial nerve nuclei of one side: motor nuclei medial and sensory nuclei lateral to the sulcus limitans, the branchial motor nuclei drawn apart as deep ventrolateral, at midbrain, pons and medulla levels"></svg></div>
+  <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, positions approximate: the nuclei of <b>one side</b>, midline on the left, lateral to the right; midbrain at the top, medulla at the bottom. Side-by-side order inside a group is not implied. The dashed group lies deep in the tegmentum, drawn apart.</p>
+  <div class="key" id="nu-key"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sp">
+  <h2 id="h-sp">Special sensory pathways: smell, sight, hearing, taste</h2>
+  <div class="prose" id="sp-text"></div>
+  <div class="two">
+    <div>
+      <div class="toggles" id="sp-tg" aria-label="Pathway"></div>
+      <div class="schbox"><svg class="fig sch" id="sp-svg" viewBox="0 0 600 570" role="img" aria-label="The chosen special sensory pathway drawn as a chain of neurons and relays from the receptor to the cortex"></svg></div>
+      <p class="muted">Schematic chain of relays, bottom (receptor) to top (cortex). Not to scale.</p>
+    </div>
+    <div class="prose find" id="sp-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-neuro2.md, anatomy/DATA-SOURCES.md) ===================== */
+const L = k => k + '_l';
+const SH = (l, sh) => ({l, sh});
+const LEFTV = [1, 0, 0.12], RIGHTV = [-1, 0, 0.12], BELOW = [0, -0.25, -1];
+const G = s => ['sfg', 'mfg', 'ifg', 'prec', 'postc', 'smg', 'ang', 'pcun', 'stga', 'stgp', 'mtg', 'itg', 'fus', 'occ', 'ins', 'cing', 'phg'].map(g => `g_${g}_${s}`);
+const GL = G('l'), GR = G('r');
+const LAT_L = GL.filter(k => !/_(ins|cing|phg|fus)_/.test(k));
+const MED_R = ['g_sfg_r', 'g_prec_r', 'g_postc_r', 'g_pcun_r', 'g_cing_r', 'g_occ_r', 'g_phg_r', 'g_fus_r', 'g_itg_r'];
+const BG_R = ['bg_caud_r', 'bg_put_r', 'bg_gp_r'];
+const VENT = ['c_lat_r', 'c_lat_l', 'c_third', 'c_ivf', 'c_aq', 'c_fourth'];
+const STEM = ['s_mid', 's_ped', 's_pons', 's_med'];
+const OPT = ['o_nerve_r', 'o_nerve_l', 'o_chiasm', 'o_tract_r', 'o_tract_l'];
+const WILLIS = ['v_internal_carotid_artery_r', 'v_anterior_cerebral_artery_r', 'v_anterior_communicating_artery', 'v_middle_cerebral_artery_m1_segment_r',
+  'v_posterior_communicating_artery_r', 'v_posterior_cerebral_artery_r', 'v_basilar_artery', 'v_vertebral_artery_r'];
+const MCA = ['v_middle_cerebral_artery_m1_segment_r', 'v_insular_branches_of_middle_cerebral_artery_m2_r', 'v_middle_cerebral_artery_m3_segment_r',
+  'v_temporal_branches_of_middle_cerebral_artery_r', 'v_parietal_branches_of_middle_cerebral_artery_r', 'v_prefrontal_artery_r', 'v_posterior_parietal_artery_r',
+  'v_anterior_temporal_branch_r', 'v_posterior_temporal_branch_r', 'v_temporo_occipital_branch_r'];
+const ACA = ['v_anterior_cerebral_artery_r', 'v_pericallosal_artery_r', 'v_callosomarginal_artery_r', 'v_frontal_branches_of_callosomarginal_artery_r',
+  'v_orbitofrontal_branches_of_anterior_cerebral_artery_r'];
+const PCA = ['v_posterior_cerebral_artery_r', 'v_lateral_occipital_artery_r', 'v_medial_occipital_artery_r', 'v_parieto_occipital_artery_r'];
+const LSA = ['v_proximal_lateral_striate_branches_r', 'v_distal_lateral_striate_branches_r'];
+const PT = {central: [59.5, -87.5, 1597], lateral: [52.3, -118.4, 1568.5], genu: [-1.4, -136.1, 1568.0], splenium: [-0.1, -56.7, 1564.7],
+  body: [2.0, -101.8, 1586.4], rostrum: [1.8, -123.2, 1561.4], antHorn: [13.4, -134.2, 1569.4], postHorn: [14.8, -31.1, 1551.3], infHorn: [25.1, -111.8, 1538.4],
+  lvBody: [10.2, -94.5, 1584.0], pulvinar: [15.5, -72.8, 1554.7], calcarine: [-1.8, -31.7, 1555.9], paracentral: [-2.2, -66.6, 1624.0]};
+const TOPICS = [
+  {grp: 'Hemisphere', id: 'skull', name: 'In the skull',
+    lit: [...GL, ...GR, 'g_rect', 's_cblm', ...STEM], glass: ['frontal_bone', 'right_parietal_bone', 'left_parietal_bone', 'occipital_bone', 'right_temporal_bone', 'left_temporal_bone', 'sphenoid_bone', 'ethmoid'],
+    fit: ['frontal_bone', 'occipital_bone', 'left_parietal_bone', 'right_parietal_bone'], view: [0.8, -0.6, 0.35], zoom: 0.95,
+    labels: [['frontal_bone', SH('Frontal bone (glass)', 'Frontal bone'), [30, -160, 1625]], ['g_sfg_l', SH('Frontal pole', 'Frontal pole'), [12, -172, 1580]], ['g_stga_l', SH('Temporal pole', 'Temporal pole'), [40, -135, 1545]],
+      ['s_cblm', 'Cerebellum', [40, -50, 1520]]],
+    text: `<p>The brain lies in the cranial cavity (skull as glass). The two cerebral hemispheres, separated by the longitudinal fissure, fill most of it; the orbital surface of the frontal lobe rests on the orbital plate of the frontal bone; the cerebellum and brainstem lie below and behind (<a href="brainstem.html">Brainstem and Cerebellum</a>). The front end of each hemisphere is the <b>frontal pole</b>, the front of the temporal lobe the <b>temporal pole</b>, the back end the <b>occipital pole</b>.</p>`},
+  {grp: 'Hemisphere', id: 'lobes', name: 'Lobes and sulci',
+    lit: [...LAT_L], fit: [...LAT_L], view: LEFTV, zoom: 0.95,
+    labels: [['g_mfg_l', SH('Frontal lobe', 'Frontal'), [39.6, -126.6, 1597.9]], ['g_smg_l', SH('Parietal lobe', 'Parietal'), [62.1, -67.7, 1578.3]],
+      ['g_mtg_l', SH('Temporal lobe', 'Temporal'), [61.1, -78.2, 1552.8]], ['g_occ_l', SH('Occipital lobe', 'Occipital'), [36, -45, 1560]]],
+    pts: [[PT.central, SH('Central sulcus', 'Central s.'), '--ink'], [PT.lateral, SH('Lateral sulcus', 'Lateral s.'), '--ink']],
+    text: `<p>The <b>left hemisphere from the left</b>, coloured by lobe. The <b>central sulcus</b> separates the <b>frontal</b> from the <b>parietal</b> lobe; the <b>lateral sulcus</b> separates the <b>temporal</b> lobe below from the frontal and parietal lobes above, and hides the <b>insula</b> in its depth (covered by the opercula; not visible here). Each hemisphere has a lateral, a medial and an inferior surface and three poles: frontal, occipital and temporal.</p>`},
+  {grp: 'Hemisphere', id: 'areas', name: 'Functional areas',
+    lit: [...LAT_L], fit: [...LAT_L], view: LEFTV, zoom: 0.95,
+    labels: [['g_prec_l', SH('Motor cortex (4)', 'Motor 4'), [51.8, -97.9, 1600]], ['g_postc_l', SH('Sensory cortex', 'Sensory'), [57.3, -85.1, 1595]],
+      ['g_ifg_l', SH("Broca's area (44, 45)", 'Broca'), [52.1, -117.3, 1578]], ['g_stgp_l', SH("Wernicke's area (22)", 'Wernicke'), [62.6, -75.7, 1567.8]],
+      ['g_ang_l', SH('Angular gyrus', 'Angular'), [53.9, -45.4, 1574.6]], ['g_smg_l', SH('Supramarginal gyrus', 'Supramarg.'), [62.1, -67.7, 1582]]],
+    text: `<p>The <b>left</b> (usually dominant) hemisphere. <b>Precentral gyrus</b>: primary motor cortex (area 4) for the opposite side of the body. <b>Postcentral gyrus</b>: primary somatosensory cortex. <b>Broca's area</b>: the opercular and triangular parts of the <b>inferior frontal gyrus</b> (44, 45). <b>Wernicke's area</b>: the posterior part of the <b>superior temporal gyrus</b> (22). The <b>supramarginal</b> and <b>angular</b> gyri lie round the ends of the lateral and superior temporal sulci. The primary auditory cortex (transverse temporal gyri) lies inside the lateral sulcus and the visual cortex mostly on the medial surface (next topic): neither is a separate mesh. The inferior frontal gyrus is the BodyParts3D mesh it calls "accessory short gyrus", identified here by its position.</p>`},
+  {grp: 'Hemisphere', id: 'medial', name: 'Medial surface',
+    lit: [...MED_R], solid: ['w_cc', 'w_fornix_r', 'd_thal_r'], fit: [...MED_R], view: [1, 0, 0.08], zoom: 0.95, clip: [[1, 0, 0], 0.4],
+    labels: [['g_prec_r', SH('Paracentral lobule (leg area)', 'Paracentral'), PT.paracentral, 'v'], ['g_cing_r', SH('Cingulate gyrus', 'Cingulate'), null],
+      ['w_cc', SH('Corpus callosum', 'Corpus call.'), [-0.5, -101.8, 1584], 'v'], ['g_pcun_r', 'Precuneus', [-1, -45, 1600]],
+      ['g_occ_r', SH('Calcarine sulcus: visual cortex', 'Visual cortex'), [-2, -45, 1560], 'v'], ['g_phg_r', SH('Parahippocampal gyrus', 'Parahippoc.'), null]],
+    text: `<p>The <b>right hemisphere from the midline</b> (the left one removed). The <b>paracentral lobule</b> is where the precentral and postcentral gyri continue onto the medial surface: the <b>motor and sensory area of the opposite leg and foot</b>. The <b>cingulate gyrus</b> arches above the <b>corpus callosum</b>; with the <b>parahippocampal gyrus</b> it forms Broca's <b>limbic lobe</b>. The <b>calcarine sulcus</b> runs forward in the occipital lobe with the <b>cuneus</b> above and the <b>lingual gyrus</b> below; the <b>primary visual cortex</b> lies in its walls. The parieto-occipital sulcus lies mostly on this surface, joining the calcarine sulcus. Points approximate.</p>`},
+  {grp: 'Hemisphere', id: 'below', compact: true, name: 'From below',
+    lit: [...OPT, 'd_pit', 'd_mam', 'g_rect'], solid: ['s_mid', 's_ped', 's_pons', 'g_phg_r', 'g_phg_l'], glass: [...GR, ...GL], fit: [...GR, ...GL], view: BELOW, zoom: 1.05,
+    labels: [['o_chiasm', SH('Optic chiasm', 'Chiasm'), null], ['o_tract_l', SH('Optic tract', 'Optic tract'), null], ['d_pit', SH('Pituitary', 'Pituitary'), null],
+      ['d_mam', SH('Mammillary bodies', 'Mammillary'), null], ['g_rect', SH('Orbital surface', 'Orbital'), [20, -150, 1550]], ['g_phg_r', 'Uncus', [-15.7, -109.6, 1540.7], 'v']],
+    text: `<p>From below. Between the <b>optic chiasm</b> in front and the <b>mammillary bodies</b> behind lies the floor of the third ventricle (hypothalamus), with the <b>pituitary</b> hanging from it. The <b>optic tracts</b> wind back round the cerebral peduncles. The <b>parahippocampal gyrus</b> ends in front in the hooked <b>uncus</b>. The orbital surface of the frontal lobe rests on the roof of the orbit (the BodyParts3D mesh covers the straight and orbital gyri together).</p>`},
+  {grp: 'Deep structures', id: 'bg', name: 'Basal ganglia',
+    lit: [...BG_R, 'w_ic_r', 'd_thal_r', 'l_amyg_r'], glass: ['c_lat_r'], fit: [...BG_R, 'd_thal_r', 'c_lat_r'], view: [-1, -0.45, 0.75], zoom: 0.95,
+    labels: [['bg_caud_r', SH('Caudate nucleus (head)', 'Caudate'), [-15, -128, 1575]], ['bg_put_r', 'Putamen', null], ['w_ic_r', SH('Internal capsule', 'Int. capsule'), null],
+      ['d_thal_r', 'Thalamus', null], ['l_amyg_r', 'Amygdala', null]],
+    text: `<p>Right side, from the right, front and above, the cortex removed. The <b>caudate nucleus</b> is C-shaped — head, body and tail — and follows the lateral ventricle (glass): its head bulges into the anterior horn and its tail runs in the roof of the inferior horn. Lateral to the caudate (and the internal capsule) is the <b>lentiform nucleus</b> (here the <b>putamen</b>, its outer part). The <b>amygdala</b> lies in the temporal lobe. The <b>internal capsule</b> (white) is the sheet of fibres between them, continuing back between the <b>thalamus</b> and the lentiform nucleus. Caudate + putamen = the <b>striatum</b>.</p>`},
+  {grp: 'Deep structures', id: 'gp', compact: true, name: 'Globus pallidus',
+    lit: [...BG_R, 'w_ic_r', 'd_thal_r'], glassKeys: ['bg_put_r'], fit: [...BG_R, 'd_thal_r'], view: [-1, -0.2, 0.35], zoom: 1.05,
+    labels: [['bg_gp_r', SH('Globus pallidus', 'Gl. pallidus'), null], ['bg_put_r', SH('Putamen (glass)', 'Putamen'), [-26.2, -106.3, 1577.3], 'v'], ['w_ic_r', SH('Internal capsule', 'Int. capsule'), [-20, -118, 1575]],
+      ['bg_caud_r', 'Caudate', null]],
+    text: `<p>The putamen made glass: the <b>globus pallidus</b> is the medial part of the lentiform nucleus (lentiform = putamen laterally + globus pallidus medially). Medial to the lentiform nucleus the <b>internal capsule</b> separates it from the caudate in front and the thalamus behind. BodyParts3D names this capsule mesh "anterior limb", but it runs the whole length — beside the caudate head and beside the thalamus — so here it is labelled simply the internal capsule; its limbs are drawn in the schematic below.</p>`},
+  {grp: 'Deep structures', id: 'cc', name: 'Corpus callosum',
+    lit: ['w_cc', 'w_fornix_r', 'w_fornix_l', 'w_fcom', 'w_ac', 'w_sp'], glass: ['c_lat_l', 'c_lat_r', 'c_third'], fit: ['w_cc'], view: [1, -0.25, 0.45], zoom: 0.95,
+    labels: [['w_cc', 'Genu', [6, -128, 1572]], ['w_cc', SH('Body (trunk)', 'Body'), PT.body, 'v'], ['w_cc', 'Splenium', [6, -58, 1565]], ['w_cc', 'Rostrum', PT.rostrum, 'v'],
+      ['w_fornix_l', 'Fornix', null], ['w_ac', SH('Anterior commissure', 'Ant. comm.'), null], ['w_sp', SH('Septum pellucidum', 'Septum pell.'), null]],
+    text: `<p>From the left, front and above. The <b>corpus callosum</b>, the largest commissure (about 200 million or more fibres; Wikipedia: about 10 cm long), from front to back: <b>rostrum</b>, <b>genu</b>, <b>body</b> and <b>splenium</b> (the thickest part). The <b>septum pellucidum</b> hangs between it and the <b>fornix</b> and separates the two lateral ventricles (glass). The <b>anterior commissure</b> crosses in front of the columns of the fornix, joining the two hemispheres (Wikipedia: the temporal lobes and amygdalae, with olfactory fibres). Points approximate.</p>`},
+  {grp: 'Deep structures', id: 'dien', compact: true, name: 'Diencephalon',
+    lit: ['d_thal_r', 'd_thal_l', 'd_lgb_l', 'd_mgb_l', 'd_pineal', 'd_smt_l', 'd_hypo', 'd_mam', 'd_pit'], glass: ['c_third'], solid: ['s_mid'], fit: ['d_thal_r', 'd_thal_l', 'd_pit', 'd_pineal'], view: [0.75, 0.6, 0.45], zoom: 0.95,
+    labels: [['d_thal_l', 'Thalamus', null], ['d_thal_l', 'Pulvinar', PT.pulvinar, 'v'], ['d_lgb_l', SH('Lateral geniculate body', 'LGB'), null], ['d_mgb_l', SH('Medial geniculate body', 'MGB'), null],
+      ['d_pineal', SH('Pineal body', 'Pineal'), null], ['d_hypo', 'Hypothalamus', null], ['d_pit', 'Pituitary', null]],
+    text: `<p>From the left and behind. The two egg-shaped <b>thalami</b> form most of the lateral walls of the <b>third ventricle</b> (glass); the <b>pulvinar</b> is the back end. Under it lie the <b>medial geniculate body</b> (hearing) and the <b>lateral geniculate body</b> (sight): the <b>metathalamus</b>. Behind, the <b>pineal body</b> (epithalamus). Below the hypothalamic sulcus the <b>hypothalamus</b> forms the floor and lower walls of the ventricle, with the <b>mammillary bodies</b> and the <b>pituitary</b> on its stalk.</p>`},
+  {grp: 'Deep structures', id: 'limbic', name: 'Limbic structures',
+    lit: ['l_hipp_l', 'l_amyg_l', 'w_fornix_l', 'd_mam', 'g_cing_l', 'g_phg_l'], glass: ['c_lat_l'], solid: ['d_thal_l'], fit: ['g_cing_l', 'g_phg_l', 'l_hipp_l'], view: [-1, 0.05, 0.2], zoom: 0.95, clip: [[-1, 0, 0], -0.4],
+    labels: [['l_hipp_l', 'Hippocampus', null], ['l_amyg_l', 'Amygdala', null], ['w_fornix_l', 'Fornix', null], ['d_mam', SH('Mammillary body', 'Mammillary'), null],
+      ['g_cing_l', SH('Cingulate gyrus', 'Cingulate'), null], ['g_phg_l', SH('Parahippocampal gyrus', 'Parahippoc.'), null]],
+    text: `<p>The left hemisphere's limbic structures from the midline. The <b>hippocampus</b> (memory) lies in the floor of the inferior horn of the lateral ventricle (glass); its output, the <b>fornix</b>, arches forward under the corpus callosum to the <b>mammillary body</b>; the <b>amygdala</b> (emotion, fear) also lies in the temporal lobe. The <b>cingulate</b> and <b>parahippocampal</b> gyri complete the limbic lobe. The Papez circuit is drawn below.</p>`},
+  {grp: 'Deep structures', id: 'vent', name: 'Ventricles',
+    lit: [...VENT, 'p_chp_l', 'p_chp_r'], glassKeys: ['c_lat_r', 'p_chp_r'], fit: [...VENT], view: [1, 0.12, 0.1], zoom: 1.0,
+    labels: [['c_lat_l', SH('Anterior horn', 'Ant. horn'), [12, -124, 1572], 'v'], ['c_lat_l', SH('Body (central part)', 'Body'), PT.lvBody, 'v'], ['c_lat_l', SH('Posterior horn', 'Post. horn'), [16, -45, 1556]],
+      ['c_lat_l', SH('Inferior horn', 'Inf. horn'), PT.infHorn, 'v'], ['c_third', SH('Third ventricle', '3rd'), [2, -100, 1556]], ['c_aq', SH('Cerebral aqueduct', 'Aqueduct'), [2, -86, 1546]],
+      ['c_fourth', SH('Fourth ventricle', '4th'), [4, -74, 1517]], ['p_chp_l', SH('Choroid plexus', 'Ch. plexus'), [20, -95, 1570]]],
+    text: `<p>The ventricles as casts, from the left. Each <b>lateral ventricle</b> is C-shaped: a <b>body</b> and three horns — <b>anterior</b> (frontal lobe), <b>posterior</b> (occipital lobe) and <b>inferior</b> (temporal lobe). It opens through the <b>interventricular foramen</b> into the <b>third ventricle</b>, which drains through the <b>cerebral aqueduct</b> into the <b>fourth ventricle</b>. The <b>choroid plexus</b> runs from the interventricular foramen through the body into the inferior horn (none in the anterior or posterior horns). Horn points approximate.</p>`},
+  {grp: 'Arteries', id: 'willis', compact: true, name: 'Circle of Willis',
+    lit: [...WILLIS, ...WILLIS.filter(k => k.endsWith('_r')).map(L)], solid: ['o_chiasm', 'd_pit', 's_pons', 's_mid'], glass: [...GR, ...GL], fit: [...WILLIS, 'o_chiasm', 's_pons'], view: BELOW, zoom: 1.1,
+    labels: [['v_internal_carotid_artery_r', SH('Internal carotid', 'ICA'), [-14, -116, 1532]], ['v_anterior_cerebral_artery_r', SH('Anterior cerebral', 'ACA'), [-8, -130, 1547]],
+      ['v_anterior_communicating_artery', SH('Anterior communicating', 'ACom'), [0.2, -120.5, 1545.5], 'v'], ['v_middle_cerebral_artery_m1_segment_r', SH('Middle cerebral', 'MCA'), [-30, -120, 1547], 'v'],
+      ['v_posterior_communicating_artery_r', SH('Posterior communicating', 'PCom'), [-8.4, -112.5, 1540.9], 'v'], ['v_posterior_cerebral_artery_r', SH('Posterior cerebral', 'PCA'), [-21.9, -96.3, 1543.8], 'v'],
+      ['v_basilar_artery', 'Basilar', null]],
+    text: `<p>From below. The <b>circle of Willis</b> joins the carotid (anterior) and vertebrobasilar (posterior) circulations: <b>anterior communicating</b> artery, the two <b>anterior cerebral</b> arteries, the ends of the two <b>internal carotids</b>, the two <b>posterior communicating</b> arteries and the two <b>posterior cerebral</b> arteries (from the basilar). The <b>middle cerebral</b> artery, the largest branch of the internal carotid, is not part of the ring. Formation in detail: <a href="../general/blood-vessels.html">Blood Vessels</a> (Z-Anatomy's anterior communicating artery is incomplete).</p>`},
+  {grp: 'Arteries', id: 'aca', name: 'Anterior cerebral',
+    lit: [...ACA, 'v_anterior_communicating_artery'], solid: ['w_cc'], glass: [...MED_R], fit: [...MED_R], view: [1, 0, 0.08], zoom: 0.95, clip: [[1, 0, 0], 0.4],
+    labels: [['v_anterior_cerebral_artery_r', SH('Anterior cerebral', 'ACA'), null], ['v_pericallosal_artery_r', SH('Pericallosal', 'Pericallosal'), [-2.2, -89.2, 1585.2], 'v'], ['v_callosomarginal_artery_r', SH('Callosomarginal', 'Callosomarg.'), null]],
+    text: `<p>The right hemisphere from the midline. The <b>anterior cerebral artery</b> runs into the longitudinal fissure, is joined to its fellow by the anterior communicating artery, curves round the <b>genu</b> and runs back above the corpus callosum (pericallosal and callosomarginal branches). It supplies the <b>medial surface</b> of the frontal and parietal lobes — including the paracentral lobule, the <b>leg area</b> — and the corpus callosum, and a strip along the top of the lateral surface. Z-Anatomy's arteries sit only approximately on the BodyParts3D brain (some run through the gyri).</p>`},
+  {grp: 'Arteries', id: 'mca', name: 'Middle cerebral',
+    lit: [...MCA], glass: [...GR], fit: [...GR], view: RIGHTV, zoom: 0.95,
+    labels: [['v_middle_cerebral_artery_m1_segment_r', SH('MCA (in the lateral sulcus)', 'MCA'), null], ['v_parietal_branches_of_middle_cerebral_artery_r', SH('Parietal branches', 'Parietal br.'), null],
+      ['v_temporal_branches_of_middle_cerebral_artery_r', SH('Temporal branches', 'Temporal br.'), null], ['v_prefrontal_artery_r', SH('Frontal branch', 'Frontal br.'), null]],
+    text: `<p>The right hemisphere from the right (glass). The <b>middle cerebral artery</b> runs laterally in the lateral sulcus, over the insula, and spreads its branches over <b>most of the lateral surface</b>: the face and arm parts of the motor and sensory cortex, and on the dominant side Broca's and Wernicke's areas. Z-Anatomy's branches are sparse and partly sunk in the sulci.</p>`},
+  {grp: 'Arteries', id: 'pca', name: 'Posterior cerebral',
+    lit: [...PCA, 'v_basilar_artery'], glass: [...MED_R], fit: [...MED_R], view: [1, 0.25, -0.2], zoom: 0.95, clip: [[1, 0, 0], 0.4],
+    labels: [['v_posterior_cerebral_artery_r', SH('Posterior cerebral', 'PCA'), null], ['v_medial_occipital_artery_r', SH('Medial occipital (calcarine)', 'Med. occipital'), null],
+      ['v_parieto_occipital_artery_r', SH('Parieto-occipital', 'Par.-occ.'), null], ['v_basilar_artery', 'Basilar', null]],
+    text: `<p>The right hemisphere from the midline and below. The <b>posterior cerebral artery</b>, from the end of the basilar, winds round the cerebral peduncle to the tentorial surface: it supplies the <b>occipital lobe</b> — the <b>visual cortex</b> round the calcarine sulcus — the inferior and medial temporal lobe and, through its central branches, the thalamus and midbrain.</p>`},
+  {grp: 'Arteries', id: 'lsa', compact: true, name: 'Lenticulostriate',
+    lit: [...LSA, 'v_middle_cerebral_artery_m1_segment_r', 'v_internal_carotid_artery_r'], solid: [...BG_R, 'w_ic_r'], glassKeys: ['bg_put_r'], fit: [...BG_R, ...LSA], view: [-0.5, -1, -0.25], zoom: 1.0,
+    labels: [['v_distal_lateral_striate_branches_r', SH('Lenticulostriate arteries', 'Lenticulostriate'), [-20.9, -119.6, 1558.3]], ['v_middle_cerebral_artery_m1_segment_r', SH('MCA (first part)', 'MCA'), [-30, -120, 1547], 'v'],
+      ['bg_put_r', SH('Putamen (glass)', 'Putamen'), [-33, -105, 1565]], ['bg_gp_r', SH('Globus pallidus', 'Gl. pallidus'), null], ['bg_caud_r', 'Caudate', null]],
+    text: `<p>From the front and right. The <b>lenticulostriate</b> (lateral striate, anterolateral central) arteries rise from the first part of the <b>middle cerebral artery</b> into the lentiform nucleus, the caudate and the <b>internal capsule</b>. One of them is Charcot's "<b>artery of cerebral haemorrhage</b>", the one most often ruptured. These small perforators are damaged by chronic hypertension: small deep infarcts (lacunes) or haemorrhage. Z-Anatomy draws only their first few millimetres, up to the lower edge of the lentiform nucleus (putamen made glass).</p>`},
+];
+const LEDE = 'The cerebrum in 3D — lobes and functional areas, white matter, basal ganglia, diencephalon, ventricles and arteries — with schematics of their lesions, the CSF pathway, the cranial nerve nuclei and the special sensory pathways. Also: <a href="meninges-cord.html">Meninges and Spinal Cord</a>, <a href="brainstem.html">Brainstem and Cerebellum</a>, <a href="../general/nervous-system.html">Nervous System</a>.';
+const NOTE3D = 'All brain parts are BodyParts3D meshes (one per gyrus or lobe; no inferior frontal gyrus of its own name, no transverse temporal gyrus, cuneus or lingual gyrus as separate meshes); arteries are Z-Anatomy curves swept into tubes (right ones mirrored for the left). Labels on points are approximate.';
+
+/* ---------- functional areas (schematic) ---------- */
+const AREAS = [
+  {id: 'm1', view: 'lat', name: 'Primary motor cortex', where: 'Precentral gyrus; area 4; continues onto the medial surface (paracentral lobule)', fn: 'Voluntary movement of the opposite side; the leg and foot area is on the medial surface (paracentral lobule). Wikipedia: the body is mapped upside down, the face lowest, with outsize hands, lips and face', les: 'Contralateral weakness (upper motor neuron type)', d: 'M268 46 L298 44 L250 238 L222 240 Z', fill: '--cx-f'},
+  {id: 'pm', view: 'lat', name: 'Premotor cortex and frontal eye field', where: 'In front of the motor cortex; areas 6 and 8 (Wikipedia)', fn: 'Frontal eye field: voluntary (saccadic) eye movements (Wikipedia)', les: 'Wikipedia: a frontal eye field lesion makes the eyes deviate towards the side of the lesion', d: 'M218 54 L266 46 L222 240 L196 244 L202 150 Z', fill: '--cx-f'},
+  {id: 'pf', view: 'lat', name: 'Prefrontal cortex', where: 'Front of the frontal lobe', fn: 'Executive functions (planning, decisions), personality, social behaviour', les: 'Frontal lobe syndrome: impaired executive function, behaviour, emotion, motivation and personality', d: 'M216 54 C150 56 70 100 56 170 C52 206 64 232 92 246 L150 250 C160 236 180 230 196 230 L202 150 Z', fill: '--cx-f'},
+  {id: 'broca', view: 'lat', name: "Broca's area (motor speech)", where: 'Inferior frontal gyrus, opercular and triangular parts; areas 44, 45; dominant hemisphere (usually left, about 95% of people)', fn: 'Speech production', les: "Broca's (expressive, motor, non-fluent) aphasia: effortful, halting speech; comprehension largely intact", d: 'M152 256 C160 236 194 228 220 232 L222 248 C200 252 176 254 154 262 Z', fill: '--cx-f'},
+  {id: 's1', view: 'lat', name: 'Primary somatosensory cortex', where: 'Postcentral gyrus (Wikipedia: areas 3, 1, 2)', fn: 'Touch and temperature (Gray) from the opposite side', les: 'Contralateral loss of sensation', d: 'M302 44 L332 48 L282 236 L252 238 Z', fill: '--cx-p'},
+  {id: 'smg', view: 'lat', name: 'Supramarginal and angular gyri (inferior parietal lobule)', where: 'Round the ends of the lateral sulcus (supramarginal) and the superior temporal sulcus (angular)', fn: 'Wikipedia: the angular gyrus serves complex language functions (reading, writing)', les: 'Dominant side: Gerstmann syndrome — agraphia, acalculia, finger agnosia, left–right disorientation (site: Wikipedia). Non-dominant (usually right) parietal lobe: neglect of the opposite (left) side of space', d: 'M384 216 C380 170 470 160 500 200 C502 232 480 250 456 250 C442 232 428 218 418 212 C408 222 398 232 388 240 Z', fill: '--cx-p'},
+  {id: 'wern', view: 'lat', name: "Wernicke's area (sensory speech)", where: 'Posterior part of the superior temporal gyrus; area 22; dominant hemisphere', fn: 'Comprehension of spoken and written language', les: "Wernicke's (receptive, fluent) aphasia: fluent but meaningless speech, poor comprehension; naming, repetition, reading and writing also affected", d: 'M330 252 C360 246 392 240 410 236 L414 262 C390 270 360 276 332 278 Z', fill: '--cx-t'},
+  {id: 'aud', view: 'lat', name: 'Primary auditory cortex', where: 'Transverse temporal gyri (Heschl), on the upper surface of the superior temporal gyrus inside the lateral sulcus (Wikipedia: areas 41, 42)', fn: 'Hearing; each side receives from both ears', les: 'One-sided lesion: only slight hearing loss (Wikipedia; bilateral destruction: cortical deafness)', d: 'M262 258 C285 254 305 252 324 250 L326 266 C304 268 284 270 262 272 Z', fill: '--cx-t', dash: true},
+  {id: 'v1', view: 'lat', name: 'Primary visual cortex', where: 'Walls of the calcarine sulcus (medial occipital lobe), (Wikipedia: area 17, striate cortex)', fn: 'Vision from the opposite half of the visual field', les: 'Contralateral homonymous hemianopia (posterior cerebral artery occlusion; Wikipedia: often with macular sparing)', d: 'M520 158 C548 180 556 220 540 250 L516 252 C526 224 524 190 508 168 Z', fill: '--cx-o'},
+  {id: 'para', view: 'med', name: 'Paracentral lobule', where: 'Medial continuation of the precentral and postcentral gyri', fn: 'Motor and sensory supply of the opposite lower limb', les: 'Contralateral leg weakness and sensory loss (anterior cerebral artery territory)', d: 'M280 46 L332 46 L326 98 L284 100 Z', fill: '--cx-f'},
+  {id: 'cing', view: 'med', name: 'Cingulate gyrus (limbic lobe)', where: 'Arches above the corpus callosum, continuous behind with the parahippocampal gyrus', fn: 'Part of the limbic system (emotion, memory); in the Papez circuit', les: '—', d: 'M150 164 C196 104 340 92 440 128 L436 148 C340 116 210 124 168 180 Z', fill: '--cx-l'},
+  {id: 'v1m', view: 'med', name: 'Visual cortex round the calcarine sulcus', where: 'Cuneus above and lingual gyrus below the calcarine sulcus', fn: 'Vision from the opposite half field', les: 'Contralateral homonymous hemianopia', d: 'M462 196 C500 204 530 226 548 246 L536 262 C510 246 484 228 456 214 Z', fill: '--cx-o'},
+  {id: 'pcun', view: 'med', name: 'Precuneus', where: 'Medial parietal lobe, in front of the parieto-occipital sulcus', fn: 'Gray 1918: sense of form and solidity on the superior parietal lobule and precuneus', les: '—', d: 'M336 48 C380 52 420 70 440 96 L450 138 L436 136 C404 120 370 108 334 102 Z', fill: '--cx-p'},
+  {id: 'phg', view: 'med', name: 'Parahippocampal gyrus and uncus', where: 'Medial temporal lobe; ends in front in the hooked uncus', fn: 'Limbic lobe; the primary olfactory cortex lies round the uncus (piriform cortex)', les: '—', d: 'M190 298 C250 284 340 284 420 294 L416 310 C340 302 262 304 198 314 Z', fill: '--cx-l'},
+];
+const CX_TEXT = `<p>Each hemisphere has three surfaces (lateral, medial, inferior) and three poles (frontal, occipital, temporal). Four main sulci: <b>central</b> (frontal | parietal; motor | sensory cortex), <b>lateral</b> (temporal lobe below; insula hidden in its depth), <b>parieto-occipital</b> (mostly medial) and <b>calcarine</b> (medial occipital; visual cortex). Lobes: frontal, parietal, temporal, occipital, the insula and the limbic lobe. Language areas are in the <b>dominant</b> hemisphere, the left in about 95% of people. Tap an area.</p>`;
+const CX_HEAD = ['Area', 'Where', 'Function', 'Lesion'];
+
+/* ---------- white matter ---------- */
+const WM_TEXT = `<p>Three kinds of fibres: <b>association</b> fibres join parts of the same hemisphere (short fibres between neighbouring gyri; long bundles: the <b>arcuate fasciculus</b> from Wernicke's to Broca's area, the <b>superior longitudinal</b>, <b>uncinate</b> — front of the temporal lobe to the lower frontal lobe — and the <b>cingulum</b> inside the cingulate gyrus); <b>commissural</b> fibres join the two hemispheres (corpus callosum, anterior commissure, posterior commissure, commissure of the fornix); <b>projection</b> fibres join the cortex to the brainstem and cord — they fan out above as the <b>corona radiata</b> and pass between the deep nuclei as the <b>internal capsule</b>, continuing below into the crus cerebri.</p>`;
+const CC_HEAD = ['Corpus callosum', 'Detail'];
+const CC_ROWS = [
+  ['Parts', 'Front to back: <b>rostrum</b>, <b>genu</b>, <b>body</b> (trunk), <b>splenium</b> (the thickest). Genu fibres curve forward into the frontal lobes as the <b>forceps minor</b>; splenium fibres back into the occipital lobes as the <b>forceps major</b>. Its under surface is the roof of the lateral ventricles.'],
+  ['Blood supply', 'Mostly the <b>anterior cerebral artery</b> (pericallosal), which curves round the genu and runs back above the body; the splenium: the posterior cerebral artery (Wikipedia).'],
+  ['Lesion: callosal disconnection', 'When the corpus callosum is cut (callosotomy, split brain) or damaged by an infarct or haemorrhage, the hemispheres cannot share information: things seen in the left visual field or felt in the left hand (right hemisphere) cannot be named; apraxia, tactile and visual anomia, agraphia, alexia and alien hand syndrome are described.'],
+  ['Lesion: pure alexia', '<b>Alexia without agraphia</b>: the patient can write but cannot read. Wikipedia: a left posterior cerebral artery infarct (left visual cortex + splenium) — the intact right visual cortex cannot pass words across to the left language areas.'],
+];
+const IC_HEAD = ['Part of the internal capsule', 'Lies between', 'Main fibres', 'Blood supply'];
+const IC_ROWS = [
+  ['<b>Anterior limb</b>', 'Head of caudate and lentiform nucleus', 'Thalamus ↔ frontal lobe; frontopontine (Gray)', 'Lenticulostriate (MCA); lower part: recurrent artery of Heubner (ACA) (upper/lower split: Wikipedia)'],
+  ['<b>Genu</b>', 'The bend, pointing medially between caudate and thalamus', '<b>Corticobulbar</b> (corticonuclear) fibres to the motor nuclei of the cranial nerves', 'Lenticulostriate (MCA); Wikipedia also lists the anterior choroidal artery'],
+  ['<b>Posterior limb</b>', 'Thalamus and lentiform nucleus', 'Front part: <b>corticospinal</b> fibres; behind them: thalamocortical <b>sensory</b> fibres to the postcentral gyrus', 'Upper part: lenticulostriate (MCA); lower part: anterior choroidal (ICA) (split: Wikipedia)'],
+  ['<b>Retrolentiform</b> part', 'Behind the lentiform nucleus', '<b>Optic radiation</b> (from the lateral geniculate body)', 'Wikipedia: anterior choroidal (ICA)'],
+  ['<b>Sublentiform</b> part', 'Below the lentiform nucleus', '<b>Auditory radiation</b> (from the medial geniculate body), temporopontine', '—'],
+];
+const IC = {view: 'h', mode: 'parts'};
+const IC_MODES = {
+  parts: '<p>The internal capsule is a band of white fibres between the <b>lentiform nucleus</b> laterally and the <b>caudate nucleus</b> and <b>thalamus</b> medially. In a horizontal section it is bent, convex medially: the <b>anterior limb</b>, the <b>genu</b> and the <b>posterior limb</b>, with retrolentiform and sublentiform parts behind and below the lentiform nucleus. Lateral to the lentiform nucleus: external capsule, claustrum, extreme capsule and the insula.</p>',
+  fibres: '<p><b>Anterior limb</b>: thalamus–frontal lobe fibres (Gray adds frontopontine). <b>Genu</b>: corticobulbar fibres to the cranial motor nuclei. <b>Posterior limb</b>: corticospinal fibres in its front part, sensory thalamocortical fibres behind. <b>Retrolentiform</b>: optic radiation. <b>Sublentiform</b>: auditory radiation.</p>',
+  blood: '<p>Mostly the <b>lenticulostriate</b> branches of the first part of the <b>middle cerebral artery</b> (the upper parts of both limbs and the genu); the lower anterior limb with the head of the caudate: the <b>recurrent artery of Heubner</b> (anterior cerebral); the lower posterior limb and the retrolentiform part: the <b>anterior choroidal artery</b> (internal carotid). One lenticulostriate artery is Charcot\'s "artery of cerebral haemorrhage". Upper/lower split: Wikipedia; Gray and StatPearls name the same arteries.</p>',
+  post: '<p><b>Posterior limb lesion</b> (e.g. a lenticulostriate haemorrhage or lacunar infarct): <b>contralateral hemiplegia</b> of the upper motor neuron type (corticospinal fibres) with, if the sensory fibres behind are involved, contralateral loss of sensation. The optic radiation runs in the retrolentiform part; Wikipedia: a lesion of the whole radiation on one side gives a contralateral homonymous hemianopia.</p>',
+  genu: '<p><b>Genu lesion</b>: the <b>corticobulbar</b> fibres to the cranial motor nuclei are cut. For the face this gives an upper motor neuron (central) weakness of the <b>lower face on the opposite side</b>; the <b>upper face (forehead) is spared</b>, because its part of the facial nucleus receives fibres from both hemispheres (a 2025 stroke study adds that mild upper-face weakness can occur). Peripheral (LMN) facial palsy, by contrast, weakens the whole face on the same side.</p>',
+};
+
+/* ---------- basal ganglia ---------- */
+const BG_TEXT = `<p>The <b>basal ganglia</b> are nuclei deep in the hemisphere, mainly for motor control — they act as a gate choosing which movements to start. <b>Caudate nucleus</b> (C-shaped: head, body, tail) + <b>putamen</b> = the <b>striatum</b>; <b>putamen</b> (lateral) + <b>globus pallidus</b> (medial) = the <b>lentiform nucleus</b>; the <b>subthalamic nucleus</b> and <b>substantia nigra</b> work with them. Loop: cortex → striatum → globus pallidus (internal part) → thalamus → motor and premotor cortex. The substantia nigra sends <b>dopamine</b> to the striatum (nigrostriatal pathway); the subthalamic nucleus (glutamate) drives the internal globus pallidus, whose GABA output inhibits the thalamus.</p>`;
+const BGSTATE = {d: 'none'};
+const BG_DIS = {
+  none: ['Normal', null, '<p>Pick a disorder to see where the lesion is.</p>'],
+  pd: ["Parkinson's disease", 'snc', "<p><b>Parkinson's disease</b>: loss of the <b>dopamine neurons of the substantia nigra</b> (with Lewy bodies), cutting its input to the striatum. <b>Bradykinesia, resting tremor, rigidity</b>; StatPearls: by diagnosis 50–80% of these neurons are gone.</p>"],
+  hd: ["Huntington's disease / chorea", 'str', "<p><b>Chorea</b> (quick, involuntary movements of the hands or feet) comes from lesions of the <b>striatum</b> (caudate or putamen). <b>Huntington's disease</b>: autosomal dominant CAG-repeat expansion in the huntingtin (HTT) gene (StatPearls: 4p16.3); the striatum degenerates (Wikipedia: the dorsal striatum first) — chorea with cognitive and behavioural decline.</p>"],
+  ath: ['Athetosis', 'str', '<p><b>Athetosis</b>: slow, writhing, involuntary movements of the fingers, hands, toes and feet; like chorea, from lesions of the <b>striatum</b> (caudate or putamen).</p>'],
+  hb: ['Hemiballismus', 'stn', '<p><b>Hemiballismus</b>: sudden, violent, flinging movements of the arm and leg on <b>one side</b>, classically from an acute lesion (a small stroke) of the <b>opposite subthalamic nucleus</b> — it can no longer drive the inhibitory globus pallidus, so the thalamus is released. StatPearls notes lesions elsewhere in the basal ganglia can do it too.</p>'],
+};
+const BG_HEAD = ['Disorder', 'Site', 'Movements'];
+const BG_ROWS = [
+  ["Parkinson's disease", 'Substantia nigra (dopamine neurons) → striatum', 'Bradykinesia, resting tremor, rigidity'],
+  ['Chorea (e.g. Huntington\'s disease)', 'Striatum: caudate or putamen', 'Quick, involuntary movements'],
+  ['Athetosis', 'Striatum (caudate or putamen)', 'Slow, writhing movements of the fingers, hands, feet'],
+  ['Hemiballismus', 'Subthalamic nucleus of the <b>opposite</b> side', 'Violent flinging of one arm and leg'],
+];
+const LIM_TEXT = `<p>The <b>limbic system</b> serves emotion, behaviour, long-term memory and smell: the limbic lobe (cingulate and parahippocampal gyri), the <b>hippocampus</b> (memory consolidation; in the floor of the inferior horn), the <b>amygdala</b> (in the temporal lobe; emotional responses, fear), the fornix, the mammillary bodies and the anterior thalamic nuclei. The <b>Papez circuit</b> runs hippocampus → fornix → mammillary body → mammillothalamic tract → anterior thalamic nucleus → cingulate gyrus → (cingulum) → parahippocampal (entorhinal) cortex → hippocampus.</p>`;
+
+/* ---------- diencephalon ---------- */
+const DI_TEXT = `<p>The <b>thalamus</b> is a large grey mass on each side of the third ventricle (forming the upper part of its lateral wall), joined to its fellow by the <b>interthalamic adhesion</b> (sometimes absent). Laterally the posterior limb of the internal capsule separates it from the lentiform nucleus; below, the <b>hypothalamic sulcus</b> marks it off from the hypothalamus; its upper surface is in the floor of the lateral ventricle; behind is the <b>pulvinar</b>. A Y-shaped <b>internal medullary lamina</b> divides it into anterior, medial and lateral nuclear groups; the lateral group's ventral tier: ventral anterior (VA), ventral lateral (VL), ventral posterolateral (VPL) and ventral posteromedial (VPM). Tap a nucleus.</p>`;
+const THN = [
+  {id: 'ant', name: 'Anterior nucleus', in: 'Mammillary body (mammillothalamic tract)', out: 'Cingulate gyrus (Papez circuit)', d: 'M120 70 C150 52 200 54 220 76 C200 100 150 104 120 70 Z'},
+  {id: 'md', name: 'Medial (dorsomedial) nucleus', in: '—', out: '—', d: 'M226 84 L300 84 L300 250 L240 250 C226 200 226 140 226 84 Z', note: 'Named for its position; its connections are not listed on this page.'},
+  {id: 'va', name: 'Ventral anterior (VA)', in: '—', out: '—', note: 'Front of the ventral tier; its connections are not listed on this page.', d: 'M96 92 L208 92 C206 112 200 124 194 132 L96 132 Z'},
+  {id: 'vl', name: 'Ventral lateral (VL)', in: 'Wikipedia: cerebellum (dentate nucleus, via the superior cerebellar peduncle)', out: 'Wikipedia: motor and premotor cortex', d: 'M96 136 L192 136 C186 160 184 176 186 192 L96 192 Z'},
+  {id: 'vpl', name: 'Ventral posterolateral (VPL)', in: 'Medial lemniscus and spinothalamic tract (body)', out: 'Postcentral gyrus', d: 'M96 196 L170 196 L170 260 L96 260 Z'},
+  {id: 'vpm', name: 'Ventral posteromedial (VPM)', in: 'Trigeminal pathways (face); Wikipedia: taste from the solitary nucleus', out: 'Postcentral gyrus (face area); Wikipedia: taste to the gustatory cortex', d: 'M174 196 L232 196 C234 220 236 240 238 260 L174 260 Z'},
+  {id: 'pul', name: 'Pulvinar', in: 'Optic tract fibres (Gray: a "lower visual centre")', out: '—', d: 'M96 264 L296 264 C290 320 220 346 150 340 C110 334 96 300 96 264 Z'},
+  {id: 'lgb', name: 'Lateral geniculate body', in: 'Optic tract (retina)', out: 'Optic radiation → visual cortex', d: 'M36 366 C46 350 80 350 90 366 C80 384 46 384 36 366 Z', meta: true},
+  {id: 'mgb', name: 'Medial geniculate body', in: 'Inferior colliculus', out: 'Auditory radiation → auditory cortex', d: 'M104 374 C114 358 148 358 158 374 C148 392 114 392 104 374 Z', meta: true},
+];
+const TH_HEAD = ['Nucleus', 'Receives', 'Sends to'];
+const DI_HEAD = ['Part', 'What it includes', 'Notes'];
+const DI_ROWS = [
+  ['<b>Hypothalamus</b>', 'Below the hypothalamic sulcus: floor and lower lateral walls of the third ventricle — optic chiasm, tuber cinereum with the infundibulum (pituitary stalk), mammillary bodies; lamina terminalis in front', 'Controls the pituitary (releasing and inhibiting hormones); <b>supraoptic and paraventricular</b> nuclei make <b>vasopressin (ADH) and oxytocin</b>, released from the posterior pituitary; temperature, hunger, thirst, the autonomic system'],
+  ['<b>Mammillary bodies</b>', 'Behind the tuber cinereum', 'Receive the fornix; send the mammillothalamic tract to the anterior thalamic nucleus (Papez circuit)'],
+  ['<b>Epithalamus</b>', 'Habenular nuclei and trigone, stria medullaris, posterior commissure, pineal body', 'Pineal: circadian sleep–wake cycle (Wikipedia: secretes melatonin)'],
+  ['<b>Metathalamus</b>', 'Medial and lateral geniculate bodies, under the pulvinar', 'MGB: hearing (from the inferior colliculus); LGB: sight (from the optic tract)'],
+  ['<b>Subthalamus</b>', 'Below the thalamus, at the junction with the midbrain: <b>subthalamic nucleus</b> (on the base of the cerebral peduncle), zona incerta', 'Subthalamic nucleus (glutamate) drives the internal globus pallidus; lesion → hemiballismus'],
+  ['<b>Thalamic syndrome</b>', 'Thalamic stroke (Dejerine–Roussy; central post-stroke pain)', 'StatPearls: central neuropathic pain, often starting months after the stroke, made worse by temperature changes; hyperalgesia and allodynia'],
+];
+
+/* ---------- arteries ---------- */
+const ART_TEXT = `<p>Each cerebral artery gives <b>central</b> (perforating, ganglionic) branches to the deep structures and <b>cortical</b> branches to the surface. Central groups: <b>anteromedial</b> (from the anterior cerebral and anterior communicating: head of caudate, anterior limb), <b>anterolateral = lenticulostriate</b> (from the middle cerebral: lentiform, caudate, internal capsule), <b>posteromedial</b> (from the posterior cerebral and posterior communicating: medial thalamus, walls of the third ventricle), <b>posterolateral</b> (from the posterior cerebral: much of the thalamus). The anterior circulation (internal carotids) supplies most of the hemispheres; the posterior (vertebrals) the brainstem, cerebellum, occipital and medial temporal lobes and thalamus. Pick an artery to see its territory and what its occlusion does.</p>`;
+const ART = {occ: 'all'};
+const ART_OCC = {
+  all: ['All three', '<p>Anterior cerebral: medial surface of the frontal and parietal lobes (with the leg area) and a strip along the top. Middle cerebral: most of the lateral surface. Posterior cerebral: occipital lobe and the inferior and medial temporal lobe.</p>'],
+  aca: ['ACA occlusion', '<p><b>Anterior cerebral artery</b> occlusion: contralateral weakness and sensory loss mainly of the <b>leg</b> (the leg area is on the medial surface), with frontal signs — abulia, apathy, gait disturbance, urinary incontinence.</p>'],
+  mca: ['MCA occlusion', '<p><b>Middle cerebral artery</b> occlusion: contralateral weakness and sensory loss of the <b>face and arm</b> (the leg area, on the medial surface, belongs to the anterior cerebral); <b>aphasia</b> (Broca\'s, Wernicke\'s or global) if the dominant hemisphere; <b>neglect</b> if the non-dominant. A large left MCA trunk occlusion gives global aphasia.</p>'],
+  pca: ['PCA occlusion', '<p><b>Posterior cerebral artery</b> occlusion: <b>contralateral homonymous hemianopia</b>; Wikipedia adds that the macula is often spared, the favoured explanation being that the macular cortex also gets middle cerebral blood.</p>'],
+};
+const ART_HEAD = ['Artery', 'Course', 'Supplies', 'Occlusion'];
+const ART_ROWS = [
+  ['<b>Anterior cerebral</b>', 'Into the longitudinal fissure; joined by the ACom; round the genu and back above the corpus callosum', 'Medial frontal and parietal lobes back to the parieto-occipital sulcus (paracentral lobule), corpus callosum; strip of the upper lateral surface; Heubner → head of caudate, anterior limb', 'Contralateral <b>leg</b> weakness and sensory loss; abulia, urinary incontinence'],
+  ['<b>Middle cerebral</b>', 'Largest branch of the ICA; along the lateral sulcus, over the insula', 'Most of the lateral surface (face and arm areas, Broca, Wernicke); lenticulostriate → basal ganglia, internal capsule', 'Contralateral <b>face and arm</b> weakness and sensory loss; aphasia (dominant) or neglect (non-dominant)'],
+  ['<b>Posterior cerebral</b>', 'End of the basilar; round the cerebral peduncle (receives the PCom) to the tentorial surface', 'Occipital lobe (visual cortex: calcarine branch), inferior and medial temporal lobe, thalamus, midbrain, splenium', 'Contralateral <b>homonymous hemianopia</b> (Wikipedia: often macular sparing)'],
+];
+
+/* ---------- ventricles ---------- */
+const VE_TEXT = `<p>Four ventricles: two <b>lateral</b>, the <b>third</b> (a slit between the thalami) and the <b>fourth</b> (between the pons and medulla in front and the cerebellum behind: <a href="brainstem.html">Brainstem and Cerebellum</a>). CSF is formed mainly by the <b>choroid plexuses</b> and flows: lateral ventricles → <b>interventricular foramina</b> (of Monro) → third ventricle → <b>cerebral aqueduct</b> → fourth ventricle → <b>median aperture</b> (Magendie) and two <b>lateral apertures</b> (Luschka) → subarachnoid space → <b>arachnoid villi and granulations</b> → dural venous sinuses (mainly the superior sagittal). Volumes, pressure and lumbar puncture: <a href="meninges-cord.html">Meninges and Spinal Cord</a>.</p>`;
+const VE = {s: 'normal'};
+const VE_STATES = {
+  normal: ['CSF flow', '<p>Normal flow, as in the text. Nothing is dilated.</p>'],
+  aq: ['Aqueductal stenosis', '<p><b>Aqueductal stenosis</b>: the narrow aqueduct between the third and fourth ventricles is blocked — the commonest congenital cause: it accounts for the majority of non-syndromic congenital hydrocephalus. Obstructive (non-communicating): the <b>lateral and third ventricles dilate, the fourth stays normal</b>. A 2024 review: about 5–15% of these cases are X-linked (L1CAM variants, "L1 syndrome").</p>'],
+  dw: ['Dandy–Walker', '<p><b>Dandy–Walker malformation</b>: the cerebellar <b>vermis</b> is absent or small, the <b>fourth ventricle is cystic</b> and opens into a large cyst filling an <b>enlarged posterior fossa</b>.</p>'],
+  ch: ['Communicating', '<p><b>Communicating</b> hydrocephalus: no block inside the ventricular system; the problem is absorption (the arachnoid granulations into the venous sinuses), so CSF builds up in the ventricles without an obstruction between them.</p>'],
+};
+const VE_HEAD = ['Part', 'Boundaries and features'];
+const VE_ROWS = [
+  ['<b>Lateral ventricle: anterior horn</b>', 'From the interventricular foramen forward into the frontal lobe. Roof and front: corpus callosum (genu); floor (Gray): rostrum; medial wall: septum pellucidum; lateral wall: head of the caudate nucleus.'],
+  ['<b>Lateral ventricle: body</b>', 'From the interventricular foramen to the splenium. Roof: corpus callosum. Floor, lateral to medial: body of the caudate, stria terminalis (with the terminal vein), upper surface of the thalamus, choroid plexus, fornix. Medial wall: septum pellucidum.'],
+  ['<b>Posterior horn</b>', 'Into the occipital lobe. Medial wall: the <b>bulb</b> (forceps major) above and the <b>calcar avis</b> (raised by the calcarine sulcus) below.'],
+  ['<b>Inferior horn</b>', 'Into the temporal lobe. Floor: the <b>hippocampus</b>; roof: tapetum with the tail of the caudate and the stria terminalis, which runs on to the amygdala.'],
+  ['<b>Choroid plexus</b>', 'Along the choroidal fissure from the interventricular foramen to the end of the inferior horn; none in the anterior or posterior horns. Anterior choroidal (ICA) and posterior choroidal (PCA) arteries.'],
+  ['<b>Third ventricle</b>', '<b>Front:</b> lamina terminalis, anterior commissure, columns of the fornix; the interventricular foramina at the junction with the roof. <b>Roof:</b> tela choroidea with its choroid plexus (fornix above). <b>Floor</b> (front to back): optic chiasm, infundibulum, tuber cinereum, mammillary bodies, posterior perforated substance. <b>Lateral wall:</b> thalamus above, hypothalamus below the hypothalamic sulcus; crossed by the interthalamic adhesion. <b>Back:</b> pineal body, posterior commissure, opening of the aqueduct. Recesses (Gray): optic, infundibular, pineal, suprapineal.'],
+  ['<b>Congenital hydrocephalus</b>', 'Present at birth, often with a genetic syndrome or spinal dysraphism: aqueductal stenosis, Dandy–Walker malformation, <b>Chiari II</b> malformation (with myelomeningocele, spina bifida), congenital infection, bleeding. The infant\'s head enlarges (sutures open); Wikipedia adds bulging fontanelles, separated sutures and "sunset eyes" (cannot look up). Treatment: a ventricular <b>shunt</b> or <b>endoscopic third ventriculostomy</b> (an opening in the floor of the third ventricle, between the infundibular recess and the mammillary bodies).'],
+];
+
+/* ---------- cranial nerve nuclei ---------- */
+const NU_TEXT = `<p>In the floor of the fourth ventricle the <b>sulcus limitans</b> separates the <b>motor</b> nuclei (medial) from the <b>sensory</b> nuclei (lateral). Functional columns: <b>GSE</b> general somatic efferent (III, IV, VI, XII: eye and tongue muscles), <b>GVE</b> general visceral efferent (parasympathetic: Edinger–Westphal, superior and inferior salivatory, dorsal vagal), <b>SVE</b> branchial motor (motor V, facial motor, nucleus ambiguus); sensory: the <b>solitary nucleus</b> (taste SVA + visceral GVA), the trigeminal sensory nuclei (<b>GSA</b>) and the cochlear and vestibular nuclei (<b>SSA</b>). The facial motor nucleus and the nucleus ambiguus lie deeper, in the <b>ventrolateral tegmentum</b>, not in the floor. Levels, targets and the full table: <a href="brainstem.html">Brainstem and Cerebellum</a>.</p>`;
+const NU_GROUPS = [['Motor: GSE, GVE', 76, 300, 'medial to the sulcus limitans'], ['Sensory: GVA/SVA, GSA, SSA', 322, 546, 'lateral to it'], ['SVE (branchial)', 566, 690, 'deep, ventrolateral']];
+const NU = [ // [x0, x1, y0, y1, label, colour token]   y: 60 midbrain top … 410 medulla bottom; x within a group is not an order
+  [84, 186, 70, 110, 'Oculomotor (III)', '--nuc-m'], [84, 186, 122, 150, 'Trochlear (IV)', '--nuc-m'], [84, 186, 212, 244, 'Abducens (VI)', '--nuc-m'], [84, 186, 300, 370, 'Hypoglossal (XII)', '--nuc-m'],
+  [192, 294, 70, 104, 'Edinger–W. (III)', '--nuc-p'], [192, 294, 238, 268, 'Sup. salivatory (VII)', '--nuc-p'], [192, 294, 272, 300, 'Inf. salivatory (IX)', '--nuc-p'], [192, 294, 306, 370, 'Dorsal vagal (X)', '--nuc-p'],
+  [328, 400, 262, 372, 'Solitary (VII, IX, X)', '--nuc-s'], [406, 476, 70, 176, 'Mesencephalic V', '--nuc-s'], [406, 476, 180, 206, 'Principal V', '--nuc-s'], [406, 476, 212, 400, 'Spinal V', '--nuc-s'],
+  [482, 542, 230, 300, 'Cochlear, vestib. (VIII)', '--nuc-s'],
+  [574, 682, 180, 206, 'Motor V', '--nuc-m'], [574, 682, 222, 256, 'Facial motor (VII)', '--nuc-m'], [574, 682, 296, 372, 'N. ambiguus (IX, X, XI)', '--nuc-m'],
+];
+
+/* ---------- special sensory pathways ---------- */
+const SP_TEXT = `<p>Four special senses, each drawn as its chain of relays. All but smell pass through a <b>thalamic</b> relay before the cortex. Lesions above the point where a pathway becomes bilateral (hearing) or splits by half-field (vision) give characteristic deficits.</p>`;
+const SPS = {p: 'olf'};
+const PATHS = {
+  olf: {name: 'Olfactory', steps: [
+      ['Olfactory receptor cells', 'Bipolar neurons in the olfactory epithelium: roof of the nose — superior concha and upper septum'],
+      ['Olfactory nerve fila', 'Through the cribriform plate of the ethmoid'],
+      ['Olfactory bulb', 'Synapse in glomeruli with mitral and tufted cells'],
+      ['Olfactory tract → lateral olfactory stria', 'Back along the orbital surface'],
+      ['Primary olfactory cortex', 'Piriform cortex round the uncus, amygdala, entorhinal cortex — no thalamic relay first (a 2023 review)']],
+    text: '<p><b>Smell</b> is the only sense whose fibres reach the primary cortex without a relay in the thalamus first (stated by an open 2023 review of the olfactory system). <b>Anosmia</b> (loss of smell): head trauma, upper respiratory infection, neurodegenerative disease, congenital.</p>'},
+  vis: {name: 'Visual', steps: [
+      ['Retina', 'The axons of its ganglion cells form the optic nerve'],
+      ['Optic nerve', 'Through the optic foramen (canal)'],
+      ['Optic chiasm', 'Partial crossing: the fibres from the nasal half of each retina cross'],
+      ['Optic tract', 'Winds round the cerebral peduncle'],
+      ['Lateral geniculate body', 'Thalamic relay (metathalamus); some fibres to the pulvinar and superior colliculus (Gray)'],
+      ['Optic radiation', 'Through the retrolentiform part of the internal capsule; Wikipedia: its lower fibres loop forward in the temporal lobe (Meyer\'s loop)'],
+      ['Primary visual cortex (17)', 'Walls of the calcarine sulcus']],
+    text: '<p>Lesions, visual fields and pupillary reflexes are on <a href="../../ophthalmology/neuro-ophthalmology/visual-pathway.html">Visual Pathway</a>; the chiasm and pituitary on <a href="../head-neck/ear-eye.html">Ear and Eye</a>.</p>'},
+  aud: {name: 'Auditory', steps: [
+      ['Hair cells of the organ of Corti', 'In the cochlea'],
+      ['Spiral ganglion → cochlear nerve', 'Bipolar neurons'],
+      ['Dorsal and ventral cochlear nuclei', 'Same side (ipsilateral)'],
+      ['Superior olivary complex (both sides)', 'Most fibres cross in the trapezoid body: first point where the two ears meet'],
+      ['Lateral lemniscus → inferior colliculus', 'Further partial crossing'],
+      ['Medial geniculate body', 'Thalamic relay (metathalamus)'],
+      ['Auditory radiation → primary auditory cortex', 'Sublentiform part of the internal capsule → transverse temporal gyri (Heschl)']],
+    text: '<p>From the superior olive upward each side carries input from <b>both ears</b> (contralateral dominant). So a one-sided lesion of the lemniscus, colliculus, medial geniculate body or cortex causes only slight hearing loss, not deafness in one ear; one-sided deafness points to the ear, the cochlear nerve or the cochlear nuclei.</p>'},
+  gus: {name: 'Gustatory', steps: [
+      ['Taste buds', 'Anterior two-thirds of the tongue; posterior third; epiglottic region'],
+      ['Facial (chorda tympani) · glossopharyngeal · vagus', 'Anterior 2/3: chorda tympani, cells in the geniculate ganglion; posterior 1/3: IX; epiglottis: X'],
+      ['Nucleus of the tractus solitarius', 'Upper (gustatory) part, in the medulla'],
+      ['Ventral posteromedial nucleus (thalamus)', 'Wikipedia'],
+      ['Gustatory cortex', 'Anterior insula and frontal operculum (Wikipedia)']],
+    text: '<p>All three taste nerves end in the <b>solitary nucleus</b> (Gray 1918 calls this "supposed"; modern sources state it). The thalamic (VPM) and cortical (anterior insula, frontal operculum) steps are from Wikipedia only. Taste nerves of the tongue: <a href="../head-neck/mouth-pharynx-nose.html">Mouth, Pharynx and Nose</a>.</p>'},
+};
+
+const DATA = {
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (reviews of congenital hydrocephalus, 2024, the olfactory system, 2023, and central auditory processing, 2015; a fibre-dissection study of the corpus callosum and lateral ventricle, 2026; the stereotactic anatomy of the third ventricle, 2024; a case of distal ACA occlusion with a review of ACA and MCA syndromes; callosal disconnection case reports; a review of vertebrobasilar stroke presentations, 2020; a study of central facial palsy after stroke, 2025).",
+  models: 'Models used: brain (gyri and lobes, corpus callosum, commissures, basal ganglia, internal capsule, diencephalon, ventricles, choroid plexus, optic pathway, pituitary, brainstem, cerebellum) and skull from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); cerebral arteries from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), curves swept into tubes and moved onto the same frame. Meshes simplified; right arteries mirrored for the left. Z-Anatomy\'s own brain surface and white matter are not used (their source cannot be traced to a licence). Schematics are simplified, not to scale; positions approximate.',
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let kind = {}, lobe = {}, names = {}, cur = null;
+const LOBE = {frontal: '--cx-f', motor: '--cx-f', parietal: '--cx-p', sensory: '--cx-p', temporal: '--cx-t', occipital: '--cx-o', insula: '--cx-i', limbic: '--cx-l'};
+const COL = {bone: '--bone', gyrus: '--cx-f', limbic: '--cx-l', wm: '--cordw', capsule: '--cordw', caud: '--caud', put: '--put', gp: '--gp', thal: '--dien', meta: '--dien',
+  epi: '--dien', hypo: '--hypo', pit: '--pit', optic: '--nerve', stem: '--midb', cblm: '--cblm', csf: '--s-csf', chp: '--chp', artery: '--artery'};
+const KEYCOL = {s_pons: '--pons', s_med: '--medulla'};
+const WHAT = {bone: 'bone', gyrus: 'cerebral cortex', limbic: 'limbic structure', wm: 'white matter', capsule: 'white matter (projection fibres)', caud: 'basal ganglia', put: 'basal ganglia',
+  gp: 'basal ganglia', thal: 'diencephalon', meta: 'metathalamus', epi: 'epithalamus', hypo: 'hypothalamus', pit: 'pituitary gland', optic: 'visual pathway', stem: 'brainstem',
+  cblm: 'cerebellum', csf: 'ventricle (CSF)', chp: 'choroid plexus', artery: 'artery'};
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+const tokOf = k => KEYCOL[k] || (kind[k] === 'gyrus' && lobe[k] ? LOBE[lobe[k]] : COL[kind[k]]);
+const colOf = k => css(tokOf(k)) || css('--soft');
+function anchor(key, near, view, fixed) {   // the vertex of a part nearest to a point moved 40 mm toward the viewer; fixed: nearest to the point itself
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos; let c = near;
+  if (!c) { c = [0, 0, 0]; for (let i = 0; i < pos.length; i++) c[i % 3] += pos[i] / (pos.length / 3); }
+  if (view && !fixed) { const l = Math.hypot(...view); c = c.map((x, i) => x + 40 * view[i] / l); }
+  let best = 0, bd = 1e18;
+  const cl = v.clip;
+  for (let i = 0; i < pos.length; i += 3) {
+    if (cl && pos[i] * cl[0] + pos[i + 1] * cl[1] + pos[i + 2] * cl[2] > cl[3] - 0.3) continue;
+    const d = (pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2; if (d < bd) { bd = d; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+function showTopic(id) {
+  const t = typeof id === 'object' ? id : TOPICS.find(t => t.id === id); cur = t;
+  const has = k => v.parts.has(k);
+  const lit = (t.lit || []).filter(has), solid = (t.solid || []).filter(has), glass = (t.glass || []).filter(has);
+  const shown = new Set([...lit, ...solid, ...glass]);
+  for (const k in kind) v.setVisible(k, shown.has(k));
+  for (const k in kind) v.setColour(k, colOf(k));
+  const gl = new Set(t.glassKeys || []);
+  v.setFocus([...lit, ...solid].filter(k => !gl.has(k)));
+  v.ghostAlpha = 0.18;
+  const view = t.view || LEFTV, clip = t.clip || null;
+  v.setClip(clip ? clip[0] : null, clip ? clip[1] : 0);
+  const fk = (t.fit || t.lit).filter(has);
+  v.fit(fk.length ? fk : lit);
+  const asp = v.w / v.h;   // a tall (phone) canvas: zoom out so wide views such as the whole hemisphere fit across
+  v.face(view, {zoom: (t.zoom || 1) * (t.compact ? 1 : Math.min(1, asp * 1.05))});
+  const narrow = $('v').clientWidth < 500, txt = l => l && typeof l === 'object' ? (narrow ? l.sh : l.l) : l;
+  const marks = [];
+  for (const [k, label, near, mode] of t.labels || []) {
+    if (!has(k) || v.parts.get(k).visible === false) continue;
+    const fixed = mode === 'v', p = anchor(k, near, view, fixed); if (!p) continue;
+    const dark = ['bone', 'wm', 'capsule', 'csf', 'thal', 'meta', 'epi', 'stem', 'cblm', 'gyrus', 'limbic', 'hypo', 'gp', 'optic'].includes(kind[k]);
+    marks.push({key: k, near: near || p, p, fixed, label: txt(label), color: dark ? css('--ink') : colOf(k), always: true});
+  }
+  for (const [p, label, col] of t.pts || []) marks.push({p, label: txt(label), color: css(col), always: true});
+  v.setMarkers(marks);
+  refineAnchors();
+  $('topic-text').innerHTML = t.text || '';
+  legend(t);
+  $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === t.id));
+}
+/* after the camera has turned, move any label whose anchor is hidden to the nearest vertex of its part that is in view */
+let refineTimer = 0;
+function refineAnchors() {
+  clearTimeout(refineTimer);
+  refineTimer = setTimeout(() => {
+    const depth = v.offscreen(2), W = v.c.width, dpr = v.dpr;
+    const vis = p => { const q = v.toCam(p), [sx, sy] = v.toScreen(q);
+      if (sx < 6 || sy < 6 || sx > v.w - 6 || sy > v.h - 6) return false;
+      const i = (Math.round((v.h - sy) * dpr) * W + Math.round(sx * dpr)) * 4; if (!depth[i + 3]) return true;
+      const z = depth[i] / 255 + depth[i + 1] / 65025 + depth[i + 2] / 16581375; return (q[1] / 2000 + 1) / 2 <= z + 3 / 4000; };
+    let changed = false;
+    for (const m of v.markers) {
+      if (!m.key || m.fixed || vis(m.p)) continue;
+      const pos = v.parts.get(m.key).m.pos, c = m.near, cand = [];
+      for (let i = 0; i < pos.length; i += 3) {
+        if (v.clip && pos[i] * v.clip[0] + pos[i + 1] * v.clip[1] + pos[i + 2] * v.clip[2] > v.clip[3]) continue;
+        cand.push([(pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2, i]);
+      }
+      cand.sort((a, b) => a[0] - b[0]);
+      for (const [, i] of cand.slice(0, 4000)) { const p = [pos[i], pos[i + 1], pos[i + 2]]; if (vis(p)) { m.p = p; changed = true; break; } }
+    }
+    if (changed) v.setMarkers(v.markers);
+  }, 650);
+}
+function legend(t) {
+  const items = new Map(), add = (tok, label) => { if (!items.has(label)) items.set(label, tok); };
+  const shown = [...(t.lit || []), ...(t.solid || []), ...(t.glass || []).filter(k => kind[k] === 'bone')];
+  const LN = {frontal: 'Frontal lobe', motor: 'Frontal lobe', parietal: 'Parietal lobe', sensory: 'Parietal lobe', temporal: 'Temporal lobe', occipital: 'Occipital lobe', insula: 'Insula', limbic: 'Limbic lobe'};
+  const KEYN = {bone: 'Skull (glass)', limbic: 'Hippocampus, amygdala', wm: 'White matter', capsule: 'White matter', caud: 'Caudate', put: 'Putamen', gp: 'Globus pallidus', thal: 'Thalamus etc.', meta: 'Thalamus etc.',
+    epi: 'Thalamus etc.', hypo: 'Hypothalamus', pit: 'Pituitary', optic: 'Optic nerve, chiasm, tract', stem: 'Midbrain', cblm: 'Cerebellum', csf: 'Ventricles (CSF)', chp: 'Choroid plexus', artery: 'Arteries'};
+  for (const k of shown) {
+    if (kind[k] === 'gyrus') add(LOBE[lobe[k]] || '--cx-f', LN[lobe[k]] || 'Frontal lobe');
+    else if (KEYCOL[k]) add(KEYCOL[k], k === 's_pons' ? 'Pons' : 'Medulla');
+    else if (KEYN[kind[k]]) add(COL[kind[k]], KEYN[kind[k]]);
+  }
+  $('key3d').innerHTML = [...items].map(([label, tok]) => `<span><i style="background:var(${tok})"></i>${label}</span>`).join('');
+}
+function buildTopics() {
+  const box = $('topics');
+  for (const g of [...new Set(TOPICS.map(t => t.grp))]) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !kind[hit.key]) { $('pick').textContent = ''; return; }
+  $('pick').textContent = `${names[hit.key]}: ${WHAT[kind[hit.key]]}`;
+};
+async function loadModel() {
+  const base = '../models/neuro2/';
+  const meta = await (await fetch(base + 'kinds.json')).json(), M = meta.mirror;
+  const man = await v.load(base + 'neuro2.json', null, {
+    extra: (m, items) => items.filter(it => meta.parts[it.key] && meta.parts[it.key].mirror)
+      .map(it => ({key: L(it.key), m: v.mirrored(it.m, M.m, M.t), info: {name: it.info.name}}))});
+  for (const [k, d] of Object.entries(meta.parts)) for (const left of d.mirror ? [false, true] : [false]) {
+    const key = left ? L(k) : k, p = v.parts.get(key); if (!p) continue;
+    const nm = p.info.name.replace(/ \.r$/, '');
+    names[key] = d.mirror ? (left ? 'Left ' : 'Right ') + nm.replace(/^./, c => c.toLowerCase()) : nm;
+    kind[key] = d.kind; if (d.lobe) lobe[key] = d.lobe;
+  }
+  for (const k in kind) v.setColour(k, colOf(k));
+  return man;
+}
+
+/* ===================== schematics ===================== */
+const T = (x, y, s, cls = '', anchor = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink)"/></marker>'
+  + '<marker id="bar" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M5 0 L5 10" style="stroke:var(--ink);stroke-width:3"/></marker>'
+  + '<pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" style="fill:var(--clin);fill-opacity:.18"/><line x1="0" y1="0" x2="0" y2="8" style="stroke:var(--clin);stroke-width:3"/></pattern></defs>';
+const fillS = (tok, op = 0.85) => `fill:var(${tok});fill-opacity:${op};stroke:var(--muted);stroke-width:.8`;
+function table(id, head, rows) {
+  $(id).innerHTML = '<tr>' + head.map(x => `<th>${x}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + r.map((c, i) => `<td data-h="${head[i]}">${c}</td>`).join('') + '</tr>').join('');
+}
+function toggles(id, items, onSel, start) {
+  const box = $(id); box.innerHTML = '';
+  for (const [key, label] of items) {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = label; b.dataset.k = key; b.setAttribute('aria-pressed', key === start);
+    b.onclick = () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); onSel(key); };
+    box.append(b);
+  }
+}
+/* tappable schematic parts: click, or Enter/Space when focused; focus stays on the chosen part after the redraw */
+function hitKeys(svgId, pick) {
+  const svg = $(svgId);
+  svg.querySelectorAll('.hit').forEach(el => {
+    const go = () => { pick(el.dataset.id); const again = svg.querySelector(`.hit[data-id="${el.dataset.id}"]`); if (again) again.focus(); };
+    el.onclick = go;
+    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
+  });
+}
+/* --- functional areas: lateral (left hemisphere from the left, front to the left) and medial (right hemisphere from the midline, front to the left) --- */
+const CXS = {view: 'lat', sel: 'm1'};
+const LAT_OUT = 'M50 190 C50 100 150 45 280 42 C420 40 530 100 552 190 C560 230 540 262 500 272 C460 300 380 320 300 318 C240 326 176 318 150 300 C120 290 90 270 70 250 C55 235 50 215 50 190 Z';
+const MED_OUT = 'M50 190 C50 100 150 45 280 42 C420 40 530 100 552 190 C560 230 540 262 500 272 C460 300 380 320 300 318 C240 326 176 318 150 300 C120 290 90 270 70 250 C55 235 50 215 50 190 Z';
+function drawCX() {
+  const lat = CXS.view === 'lat';
+  let s = DEFS + `<path class="cortex" d="${lat ? LAT_OUT : MED_OUT}"/>`;
+  if (lat) {
+    s += `<path d="M300 44 L250 238" style="stroke:var(--ink);stroke-width:2.2;fill:none"/>` + T(306, 34, 'Central sulcus', 's');
+    s += `<path d="M120 268 C200 258 300 250 400 236 C410 230 416 222 420 208" style="stroke:var(--ink);stroke-width:2.2;fill:none"/>` + T(380, 300, 'Lateral sulcus', 's', 'middle') + lead(380, 290, 360, 244);
+    s += T(100, 150, 'FRONTAL', 'h') + T(380, 110, 'PARIETAL', 'h') + T(240, 300, 'TEMPORAL', 'h', 'middle') + T(520, 290, 'OCCIPITAL', 'h', 'middle');
+  } else {
+    s += `<path d="M176 182 C214 140 334 128 430 154 C442 162 436 178 418 176 C334 156 236 164 196 198 C182 208 168 198 176 182 Z" class="wm"/>` + T(300, 186, 'Corpus callosum', 's', 'middle');
+    s += `<path d="M440 96 C452 140 460 170 470 196" style="stroke:var(--ink);stroke-width:2.2;fill:none"/>` + T(560, 80, 'Parieto-occipital s.', 's', 'end') + lead(500, 84, 446, 108);
+    s += `<path d="M470 196 C496 210 520 228 546 244" style="stroke:var(--ink);stroke-width:2.2;fill:none"/>` + T(540, 284, 'Calcarine s.', 's', 'end') + lead(530, 274, 516, 228);
+    s += T(90, 150, 'FRONTAL', 'h') + T(510, 160, 'OCCIP.', 'h', 'middle') + T(330, 262, 'TEMPORAL', 'h', 'middle');
+  }
+  for (const a of AREAS.filter(a => a.view === CXS.view)) {
+    const sel = a.id === CXS.sel;
+    s += `<path class="hit${sel ? ' sel' : ''}" data-id="${a.id}" tabindex="0" role="button" aria-label="${a.name}" aria-pressed="${sel}" d="${a.d}" style="${fillS(a.fill, sel ? 1 : 0.7)}${a.dash ? ';stroke-dasharray:4 3' : ''}"/>`;
+  }
+  $('cx-svg').innerHTML = s;
+  hitKeys('cx-svg', id => { CXS.sel = id; drawCX(); });
+  const a = AREAS.find(a => a.id === CXS.sel);
+  $('cx-find').innerHTML = a ? `<p><b>${a.name}</b></p><p><b>Where:</b> ${a.where}</p><p><b>Function:</b> ${a.fn}</p><p class="c"><b>Lesion:</b> ${a.les}</p>` : '';
+  $('cx-orient').innerHTML = lat ? 'Schematic, areas approximate: the <b>left</b> hemisphere seen from the left, <b>front to the left</b>. The auditory area (dashed) is hidden inside the lateral sulcus.'
+    : 'Schematic, areas approximate: the <b>right</b> hemisphere seen from the midline (the left one removed), <b>front to the left</b>.';
+}
+/* --- internal capsule: horizontal (right hemisphere from above, front at the top, midline on the right) and coronal (right hemisphere from the front, midline on the right) --- */
+function drawIC() {
+  let s = DEFS; const m = IC.mode, H = IC.view === 'h';
+  const lab = [];
+  if (H) {
+    s += `<rect x="40" y="20" width="520" height="420" rx="30" class="cortex"/>`;
+    s += `<path d="M560 20 L560 440" style="stroke:var(--muted);stroke-dasharray:4 4"/>` + T(552, 36, 'Midline', 's', 'end');
+    s += `<path d="M120 100 C100 180 100 280 120 360" style="stroke:var(--grey);stroke-width:14;fill:none;stroke-opacity:.6"/>`;   // insula cortex
+    s += `<path d="M150 110 C134 190 134 270 150 350" style="stroke:var(--grey);stroke-width:5;fill:none"/>`;                     // claustrum
+    s += `<path d="M300 118 L392 230 L300 352" style="stroke:var(--cordw);stroke-width:30;fill:none;stroke-linejoin:round"/>`; // internal capsule V (convex medially)
+    s += `<path d="M300 352 L250 390" style="stroke:var(--cordw);stroke-width:26;fill:none"/>`;                                    // retrolentiform
+    s += `<path d="M170 140 L280 120 L364 230 L280 346 L170 330 C160 270 160 200 170 140 Z" style="${fillS('--put')}"/>`;
+    s += `<path d="M230 170 L300 150 L344 230 L300 312 L230 296 Z" style="${fillS('--gp')}"/>`;
+    s += `<path d="M330 60 C380 50 430 70 440 110 C446 150 420 190 390 200 C360 180 330 130 330 60 Z" style="${fillS('--caud')}"/>`;
+    s += `<path d="M410 250 C440 240 520 250 540 280 C556 330 520 390 470 392 C430 392 410 340 404 300 Z" style="${fillS('--dien')}"/>`;
+    s += `<path d="M450 60 C470 60 500 70 520 100 C500 130 470 150 452 160 C440 120 440 90 450 60 Z" class="vent"/>`;
+    s += `<path d="M545 240 L556 240 L556 400 L545 400 Z" class="vent"/>`;
+    s += T(410, 160, 'Caudate (head)', '', 'start') + T(200, 236, 'Putamen', 'halo', 'middle') + T(286, 236, 'Gl. pallidus', 'halo', 'middle') + T(470, 330, 'Thalamus', '', 'middle');
+    s += T(486, 54, 'Ant. horn', 's', 'middle') + T(538, 420, '3rd ventricle', 's', 'end') + T(84, 90, 'Insula', 's', 'middle') + T(150, 100, 'Claustrum', 's', 'middle');
+    s += T(64, 440, 'External / extreme capsules lie either side of the claustrum', 's');
+    const P = {ant: [330, 156], genu: [392, 230], post: [348, 300], retro: [262, 382]};
+    const NAMES = {ant: 'Anterior limb', genu: 'Genu', post: 'Posterior limb', retro: 'Retrolentiform'};
+    const FIB = {ant: 'Frontopontine; thalamus–frontal', genu: 'Corticobulbar', post: 'Corticospinal (front), sensory (back)', retro: 'Optic radiation'};
+    const BLD = {ant: 'LSA; lower: Heubner (ACA)', genu: 'LSA (MCA)', post: 'LSA; lower: ant. choroidal', retro: 'Anterior choroidal (ICA)'};
+    const pos = {ant: [200, 70], genu: [430, 222], post: [372, 412], retro: [150, 412]};
+    for (const k of ['ant', 'genu', 'post', 'retro']) {
+      const [x, y] = P[k], [tx, ty] = pos[k];
+      const txt = m === 'fibres' ? FIB[k] : m === 'blood' ? BLD[k] : NAMES[k];
+      s += lead(x, y, tx, ty - 4) + T(tx, ty, txt, '', tx > 400 ? 'start' : tx < 200 ? 'start' : 'middle');
+    }
+    if (m === 'post') s += `<path class="lesion" d="M330 280 L372 256 L330 318 L312 330 Z"/>`;
+    if (m === 'genu') s += `<circle class="lesion" cx="392" cy="230" r="17"/>`;
+    $('ic-orient').innerHTML = 'Schematic, not to scale: horizontal section of the <b>left</b> hemisphere seen from <b>above</b> — <b>front at the top</b>, midline on the right, lateral on the left.';
+  } else {
+    s += `<path d="M40 60 C120 20 420 20 520 60 L560 80 L560 440 L60 440 C40 360 30 140 40 60 Z" class="cortex"/>`;
+    s += `<path d="M560 20 L560 440" style="stroke:var(--muted);stroke-dasharray:4 4"/>` + T(552, 36, 'Midline', 's', 'end');
+    s += `<path d="M320 90 C420 76 520 80 560 92 L560 112 C520 102 420 100 330 116 Z" class="wm"/>` + T(450, 74, 'Corpus callosum', 's', 'middle');
+    s += `<path d="M420 120 C470 118 520 120 548 126 L548 150 C510 156 470 162 430 160 Z" class="vent"/>` + T(486, 176, 'Lateral ventricle', 's', 'middle');
+    s += `<path d="M390 130 C410 124 430 130 434 150 C420 166 400 168 388 158 Z" style="${fillS('--caud')}"/>`;
+    s += `<path d="M420 190 C470 180 530 190 546 230 C540 290 500 320 450 316 C420 300 410 250 420 190 Z" style="${fillS('--dien')}"/>`;
+    s += `<path d="M548 180 L556 180 L556 360 L548 360 Z" class="vent"/>`;
+    s += `<path d="M500 330 C520 330 540 340 548 360 L548 400 C520 404 500 380 500 330 Z" style="${fillS('--hypo')}"/>`;
+    s += `<path d="M380 160 L400 330" style="stroke:var(--cordw);stroke-width:26;fill:none"/>`;
+    s += `<path d="M230 190 L360 170 L380 320 L250 330 C230 290 224 240 230 190 Z" style="${fillS('--put')}"/>`;
+    s += `<path d="M300 200 L360 190 L376 310 L314 314 Z" style="${fillS('--gp')}"/>`;
+    s += `<path d="M120 150 C100 220 100 300 120 360" style="stroke:var(--grey);stroke-width:14;fill:none;stroke-opacity:.6"/>`;
+    s += `<path d="M170 170 C158 230 158 300 170 350" style="stroke:var(--grey);stroke-width:5;fill:none"/>`;
+    s += T(402, 120, 'Caudate', 's', 'end') + T(480, 260, 'Thalamus', '', 'middle') + T(266, 260, 'Putamen', 'halo', 'middle') + T(338, 260, 'GP', 'halo', 'middle');
+    s += T(520, 424, 'Hypothalamus', 's', 'end') + T(84, 140, 'Insula', 's', 'middle') + T(170, 160, 'Claustrum', 's', 'middle') + T(552, 196, '3rd v.', 's', 'end');
+    s += lead(392, 250, 430, 380) + T(430, 396, m === 'fibres' ? 'Posterior limb: corticospinal' : m === 'blood' ? 'LSA (MCA); lower: ant. choroidal' : 'Internal capsule (posterior limb)', '', 'middle');
+    if (m === 'post') s += `<path class="lesion" d="M376 220 L398 218 L404 300 L384 302 Z"/>`;
+    $('ic-orient').innerHTML = 'Schematic, not to scale: coronal section through the thalamus of the <b>right</b> hemisphere seen from the <b>front</b> — midline on the right, lateral on the left.';
+  }
+  $('ic-svg').innerHTML = s;
+  $('ic-find').innerHTML = IC_MODES[m];
+  $('ic-key').innerHTML = [['--caud', 'Caudate'], ['--put', 'Putamen'], ['--gp', 'Globus pallidus'], ['--dien', 'Thalamus'], ['--cordw', 'White matter'], ['--grey', 'Grey matter (insula, claustrum)'], ['--s-csf', 'Ventricle']]
+    .map(([t, l]) => `<span><i style="background:var(${t})"></i>${l}</span>`).join('') + '<span><i style="background:repeating-linear-gradient(45deg,var(--clin) 0 3px,transparent 3px 7px)"></i>Lesion</span>';
+}
+/* --- basal ganglia loop --- */
+function drawBG() {
+  const N = {cx: [300, 40, 'Cerebral cortex (motor, premotor)', '--cx-f'], str: [170, 150, 'Striatum (caudate, putamen)', '--caud'], gpi: [300, 260, 'Globus pallidus (internal)', '--gp'],
+    th: [470, 150, 'Thalamus', '--dien'], snc: [110, 360, 'Substantia nigra', '--sn'], stn: [480, 360, 'Subthalamic nucleus', '--stn']};
+  let s = DEFS;
+  const box = (k) => { const [x, y, t, tok] = N[k]; return `<rect x="${x - 105}" y="${y - 20}" width="210" height="40" rx="8" style="${fillS(tok, k === 'snc' ? 0.35 : 0.75)}"/>` + T(x, y + 5, t, '', 'middle'); };
+  const ar = (d, cls = 'flow') => `<path class="${cls}" d="${d}"/>`;
+  s += ar('M260 62 L200 128');
+  s += ar('M200 172 L270 238');
+  s += ar('M340 238 L440 172', 'inh') + T(400, 224, 'GABA: inhibits', 's', 'start');
+  s += ar('M450 128 L360 62');
+  s += ar('M110 338 L150 172') + T(60, 260, 'dopamine', 's', 'start');
+  s += ar('M440 338 L350 282') + T(420, 404, 'glutamate: excites', 's', 'middle');
+  for (const k in N) s += box(k);
+  const d = BG_DIS[BGSTATE.d];
+  if (d[1]) { const [x, y] = N[d[1]]; s += `<rect class="lesion" x="${x - 109}" y="${y - 24}" width="218" height="48" rx="10"/>`; }
+  s += T(300, 312, d[1] === 'stn' ? 'Lesion on one side → movements of the OPPOSITE limbs' : '', 'c', 'middle');
+  $('bg-svg').innerHTML = s;
+  $('bg-find').innerHTML = d[2];
+  $('bg-key').innerHTML = [['--caud', 'Striatum'], ['--gp', 'Globus pallidus'], ['--dien', 'Thalamus'], ['--sn', 'Substantia nigra'], ['--stn', 'Subthalamic nucleus'], ['--cx-f', 'Frontal cortex']]
+    .map(([t, l]) => `<span><i style="background:var(${t})"></i>${l}</span>`).join('') + '<span><i style="background:repeating-linear-gradient(45deg,var(--clin) 0 3px,transparent 3px 7px)"></i>Lesion</span>';
+}
+function drawPZ() {
+  const st = [['Hippocampus', '--cx-l'], ['Fornix', '--cordw'], ['Mammillary body', '--hypo'], ['Mammillothalamic tract', '--cordw'], ['Anterior thalamic nucleus', '--dien'], ['Cingulate gyrus', '--cx-l'], ['Cingulum', '--cordw'], ['Parahippocampal gyrus', '--cx-l']];
+  let s = DEFS; const cx = 300, cy = 160, rx = 195, ry = 118, hw = 76, hh = 14;
+  const pts = st.map((_, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / st.length; return [cx + rx * Math.cos(a), cy + ry * Math.sin(a)]; });
+  const exitT = (dx, dy) => Math.min(dx ? hw / Math.abs(dx) : 1e9, dy ? hh / Math.abs(dy) : 1e9);   // where a ray from a box centre leaves the box
+  pts.forEach((p, i) => { const q = pts[(i + 1) % pts.length], dx = q[0] - p[0], dy = q[1] - p[1], t = exitT(dx, dy);
+    const a = [p[0] + dx * (t + 0.04), p[1] + dy * (t + 0.04)], b = [q[0] - dx * (t + 0.08), q[1] - dy * (t + 0.08)];
+    s += `<path class="flow" d="M${a[0].toFixed(1)} ${a[1].toFixed(1)} L${b[0].toFixed(1)} ${b[1].toFixed(1)}"/>`; });
+  st.forEach(([t, tok], i) => { const [x, y] = pts[i]; s += `<rect x="${x - hw}" y="${y - hh}" width="${2 * hw}" height="${2 * hh}" rx="7" style="${fillS(tok, 0.7)}"/>` + T(x, y + 4, t, 's', 'middle'); });
+  s += T(cx, cy + 4, 'Papez circuit', 'h', 'middle');
+  $('pz-svg').innerHTML = s;
+}
+/* --- thalamic nuclei --- */
+const THS = {sel: 'vpl'};
+function drawTH() {
+  let s = DEFS + `<path d="M90 70 C120 30 280 36 306 80 L306 260 C300 330 230 352 150 346 C100 338 88 300 90 260 Z" style="${fillS('--dien', 0.25)}"/>`;
+  for (const n of THN) { const sel = n.id === THS.sel; s += `<path class="hit${sel ? ' sel' : ''}" data-id="${n.id}" tabindex="0" role="button" aria-label="${n.name}" aria-pressed="${sel}" d="${n.d}" style="${fillS('--dien', sel ? 1 : 0.6)}"/>`; }
+  s += `<path d="M226 254 L224 100 C200 94 150 96 104 90 M224 100 C250 90 280 84 304 82" style="stroke:var(--cordw);stroke-width:6;fill:none"/>`;
+  s += `<path d="M318 60 L330 60 L330 350 L318 350 Z" class="vent"/>` + T(340, 210, 'Third ventricle', 's');
+  const lb = {ant: [170, 50, 'Anterior'], md: [264, 170, 'Medial'], va: [150, 116, 'VA'], vl: [140, 168, 'VL'], vpl: [133, 232, 'VPL'], vpm: [204, 232, 'VPM'], pul: [200, 310, 'Pulvinar'], lgb: [63, 370, 'LGB'], mgb: [131, 378, 'MGB']};
+  for (const k in lb) s += T(lb[k][0], lb[k][1], lb[k][2], k === 'lgb' || k === 'mgb' ? 's' : '', 'middle');
+  s += T(226, 70, 'Internal medullary lamina', 's', 'start') + T(380, 60, 'FRONT ↑', 'h') + T(380, 380, 'BACK', 'h');
+  $('th-svg').innerHTML = s;
+  hitKeys('th-svg', id => { THS.sel = id; drawTH(); });
+  const n = THN.find(n => n.id === THS.sel);
+  $('th-find').innerHTML = `<p><b>${n.name}</b></p><p><b>Receives:</b> ${n.in}</p><p><b>Sends to:</b> ${n.out}</p>${n.note ? `<p class="muted">${n.note}</p>` : ''}`;
+}
+/* --- arterial territories --- */
+function drawART() {
+  let s = DEFS; const o = ART.occ;
+  const op = k => o === 'all' || o === k ? 0.85 : 0.15;
+  // both halves use the outline of the area schematic (front to the left), drawn at half size
+  const half = (x, inner) => `<g transform="translate(${x} 10) scale(0.5)">${inner}</g>`;
+  const latT = `<clipPath id="cl1"><path d="${LAT_OUT}"/></clipPath><g clip-path="url(#cl1)"><rect x="0" y="0" width="600" height="400" style="${fillS('--ter-m', op('mca'))}"/>`
+    + `<path d="M0 0 L600 0 L600 60 C520 70 450 70 420 74 C330 80 220 74 120 90 L0 110 Z" style="${fillS('--ter-a', op('aca'))}"/>`
+    + `<path d="M470 0 L600 0 L600 400 L240 400 L250 300 C330 304 420 296 470 270 C500 230 500 180 470 120 Z" style="${fillS('--ter-p', op('pca'))}"/></g>`
+    + `<path d="${LAT_OUT}" style="fill:none;stroke:var(--ink);stroke-width:2.4"/><path d="M300 44 L250 238 M120 268 C200 258 300 250 400 236" style="stroke:var(--ink);stroke-width:2;fill:none;stroke-dasharray:6 5"/>`;
+  const medT = `<clipPath id="cl2"><path d="${MED_OUT}"/></clipPath><g clip-path="url(#cl2)"><rect x="0" y="0" width="600" height="400" style="${fillS('--ter-a', op('aca'))}"/>`
+    + `<path d="M440 0 L600 0 L600 400 L0 400 L0 300 C120 290 300 270 420 270 C450 250 466 220 470 196 C460 170 452 140 440 96 Z" style="${fillS('--ter-p', op('pca'))}"/></g>`
+    + `<path d="${MED_OUT}" style="fill:none;stroke:var(--ink);stroke-width:2.4"/>`
+    + `<path d="M176 182 C214 140 334 128 430 154 C442 162 436 178 418 176 C334 156 236 164 196 198 C182 208 168 198 176 182 Z" class="wm"/>`
+    + `<path d="M440 96 C452 140 460 170 470 196 C496 210 520 228 546 244" style="stroke:var(--ink);stroke-width:2;fill:none;stroke-dasharray:6 5"/>`;
+  s += half(0, latT) + half(300, medT);
+  s += T(150, 196, 'Lateral (left hemisphere)', 'h', 'middle') + T(450, 196, 'Medial (right hemisphere)', 'h', 'middle');
+  s += T(150, 18, 'leg', 's', 'middle') + T(110, 100, 'face, arm', 's', 'middle') + T(276, 110, 'visual', 's', 'middle') + T(442, 32, 'leg (paracentral)', 's', 'middle') + T(560, 120, 'visual', 's', 'middle');
+  if (o !== 'all') s += T(300, 230, ({aca: 'Anterior cerebral', mca: 'Middle cerebral', pca: 'Posterior cerebral'})[o] + ' territory', 'c', 'middle');
+  $('art-svg').innerHTML = s;
+  $('art-find').innerHTML = ART_OCC[o][1];
+  $('art-key').innerHTML = [['--ter-a', 'Anterior cerebral'], ['--ter-m', 'Middle cerebral'], ['--ter-p', 'Posterior cerebral'], ['--cordw', 'Corpus callosum']]
+    .map(([t, l]) => `<span><i style="background:var(${t})"></i>${l}</span>`).join('');
+}
+/* --- ventricles and CSF --- */
+function drawVE() {
+  const st = VE.s, big = {lat: st === 'aq' || st === 'ch', third: st === 'aq' || st === 'ch', fourth: st === 'ch'};
+  const sc = (on, cx, cy, k, inner) => on ? `<g transform="translate(${cx} ${cy}) scale(${k}) translate(${-cx} ${-cy})">${inner}</g>` : inner;
+  let s = DEFS;
+  s += `<path d="M40 70 C200 30 420 30 560 90 L560 410 L40 410 Z" style="fill:none;stroke:var(--muted);stroke-dasharray:3 5"/>` + T(552, 112, 'Subarachnoid space', 's', 'end');
+  s += `<path d="M170 46 C260 36 350 38 440 50" style="stroke:var(--vein);stroke-width:8;fill:none;stroke-linecap:round"/>` + T(305, 26, 'Superior sagittal sinus: arachnoid granulations', 's', 'middle');
+  // lateral ventricle: anterior horn (front, left) → body → atrium → posterior horn (back) and inferior horn (down and forward)
+  const lat = 'M84 168 C88 128 140 112 220 112 C320 112 410 118 450 140 C480 150 520 156 540 170 C520 182 486 180 462 182 C470 214 456 250 430 270 C400 296 350 304 318 292 C306 284 314 272 330 270 C372 266 410 240 418 206 C380 196 300 192 230 196 C170 200 90 206 84 168 Z';
+  s += sc(big.lat, 300, 190, 1.12, `<path d="${lat}" class="vent"/>`);
+  s += `<path d="M232 196 C300 176 400 180 440 196 C452 220 440 252 420 266" style="stroke:var(--chp);stroke-width:5;fill:none;stroke-linecap:round"/>`;
+  s += sc(big.third, 255, 250, 1.25, `<path d="M214 220 L296 220 L302 276 L222 282 Z" class="vent"/>`);
+  s += st === 'aq' ? '' : `<path d="M300 272 L346 316" style="stroke:var(--s-csf);stroke-width:8;fill:none"/><path d="M300 272 L346 316" style="stroke:var(--muted);stroke-width:1;fill:none;stroke-dasharray:2 3"/>`;
+  const fourth = st === 'dw' ? 'M330 300 C380 290 470 310 480 360 C478 398 420 410 370 400 C340 390 322 340 330 300 Z' : 'M340 310 L386 314 L380 360 L350 354 Z';
+  s += sc(big.fourth, 362, 334, 1.3, `<path d="${fourth}" class="vent"/>`);
+  s += `<path d="M226 206 L232 222" style="stroke:var(--s-csf);stroke-width:7"/>`;   // interventricular foramen
+  s += T(90, 100, 'Lateral ventricle', '', 'start') + T(70, 200, 'Anterior horn', 's', 'start') + lead(92, 192, 96, 178);
+  s += T(300, 100, 'Body', 's', 'middle') + lead(300, 104, 300, 116) + T(548, 196, 'Posterior horn', 's', 'end') + T(470, 300, 'Inferior horn', 's', 'start') + lead(468, 296, 424, 272);
+  s += T(256, 256, '3rd', '', 'middle') + T(150, 250, 'Interventricular', 's', 'end') + T(150, 264, 'foramen', 's', 'end') + lead(154, 252, 226, 214);
+  s += T(286, 320, 'Aqueduct', 's', 'end') + lead(288, 314, 316, 292) + T(362, 342, '4th', '', 'middle');
+  s += T(250, 396, 'Median and lateral apertures', 's', 'middle') + lead(300, 390, 348, 360);
+  if (st === 'normal') s += ['M180 186 C200 196 212 204 224 212', 'M268 262 L312 300', 'M384 352 L420 380', 'M436 384 C520 330 540 200 450 64'].map(d => `<path class="flow" d="${d}"/>`).join('');
+  if (st === 'aq') s += `<circle class="lesion" cx="322" cy="294" r="13"/>` + T(334, 286, 'Block', 'c', 'start');
+  if (st === 'ch') s += `<path class="lesion" d="M200 34 L410 34 L410 56 L200 56 Z"/>` + T(420, 72, 'Absorption fails', 'c', 'start');
+  if (st === 'dw') s += T(486, 404, 'Cystic 4th ventricle, small vermis', 'c', 'end');
+  $('ve-svg').innerHTML = s;
+  $('ve-find').innerHTML = VE_STATES[st][1];
+}
+/* --- cranial nerve nuclei columns --- */
+function drawNU() {
+  let s = DEFS;
+  for (const [n, x0, x1, d] of NU_GROUPS) {
+    const deep = x0 > 560;
+    s += `<rect x="${x0}" y="56" width="${x1 - x0}" height="352" rx="6" style="fill:var(--surface);stroke:var(--muted);${deep ? 'stroke-dasharray:6 4' : ''}"/>` + T((x0 + x1) / 2, 30, n, 'h', 'middle') + T((x0 + x1) / 2, 46, d, 's', 'middle');
+  }
+  s += `<path d="M311 56 L311 408" style="stroke:var(--ink);stroke-width:2;stroke-dasharray:6 4"/>` + T(311, 424, 'Sulcus limitans', 's', 'middle');
+  s += `<path d="M60 56 L60 408" style="stroke:var(--muted)"/>` + T(56, 70, 'Midline', 's', 'end');
+  for (const [y, t] of [[110, 'MIDBRAIN'], [230, 'PONS'], [340, 'MEDULLA']]) s += T(4, y, t, 'h', 'start');
+  s += `<path d="M14 176 L690 176 M14 286 L690 286" style="stroke:var(--line);stroke-dasharray:3 4"/>`;
+  for (const [x0, x1, y0, y1, t, tok] of NU) {
+    s += `<rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" rx="6" style="${fillS(tok, 0.85)}"/>`;
+    const lines = t.split(' ('), cx = (x0 + x1) / 2;
+    s += T(cx, (y0 + y1) / 2 - (lines[1] ? 2 : -4), lines[0], 'n', 'middle') + (lines[1] ? T(cx, (y0 + y1) / 2 + 11, '(' + lines[1], 'n', 'middle') : '');
+  }
+  $('nu-svg').innerHTML = s;
+  $('nu-key').innerHTML = [['--nuc-m', 'Motor (GSE, SVE)'], ['--nuc-p', 'Parasympathetic (GVE)'], ['--nuc-s', 'Sensory (GVA/SVA, GSA, SSA)']].map(([t, l]) => `<span><i style="background:var(${t})"></i>${l}</span>`).join('');
+}
+/* --- special sensory pathways --- */
+function drawSP() {
+  const P = PATHS[SPS.p], n = P.steps.length;
+  let s = DEFS; const top = 20, bot = 560, gap = (bot - top) / n;
+  P.steps.slice().reverse().forEach(([t, d], i) => {
+    const y = top + i * gap, h = gap - 18;
+    s += `<rect x="60" y="${y}" width="480" height="${h}" rx="9" style="fill:var(--p-sens);fill-opacity:${0.15 + 0.6 * (i === 0 || i === n - 1 ? 1 : 0.4)};stroke:var(--p-sens)"/>`;
+    const words = d.split(' '), ln = ['']; for (const w of words) { if ((ln[ln.length - 1] + ' ' + w).length > 70 && ln[ln.length - 1]) ln.push(w); else ln[ln.length - 1] = (ln[ln.length - 1] + ' ' + w).trim(); }
+    const y0 = y + h / 2 - 6 * ln.length;
+    s += T(300, y0 + 2, t, '', 'middle') + ln.map((l, k) => T(300, y0 + 17 + 13 * k, l, 's', 'middle')).join('');
+    if (i < n - 1) s += `<path class="flow" d="M300 ${y + gap - 2} L300 ${y + h + 2}"/>`;
+  });
+  $('sp-svg').innerHTML = s;
+  $('sp-find').innerHTML = `<p><b>${P.name} pathway</b></p><ol>${P.steps.map(([t, d]) => `<li><b>${t}</b>: ${d}</li>`).join('')}</ol>${P.text}`;
+}
+
+/* every scroll box gets the phone hint "Swipe sideways" (shown only at phone width) */
+function swipeHints() {
+  document.querySelectorAll('.schbox').forEach(b => {
+    const n = b.nextElementSibling;
+    if (n && n.querySelector && n.querySelector('.swipe')) return;
+    const p = document.createElement('p'); p.className = 'muted swipe'; p.textContent = 'Swipe sideways to see all of it.'; b.after(p);
+  });
+}
+(async () => {
+  swipeHints();
+  $('lede').innerHTML = LEDE; $('note3d').textContent = NOTE3D;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('cx-text').innerHTML = CX_TEXT; $('wm-text').innerHTML = WM_TEXT; $('bg-text').innerHTML = BG_TEXT; $('lim-text').innerHTML = LIM_TEXT; $('di-text').innerHTML = DI_TEXT;
+  $('art-text').innerHTML = ART_TEXT; $('ve-text').innerHTML = VE_TEXT; $('nu-text').innerHTML = NU_TEXT; $('sp-text').innerHTML = SP_TEXT;
+  table('cx-table', CX_HEAD, AREAS.map(a => [`<b>${a.name}</b>`, a.where, a.fn, a.les]));
+  table('cc-table', CC_HEAD, CC_ROWS); table('ic-table', IC_HEAD, IC_ROWS); table('bg-table', BG_HEAD, BG_ROWS);
+  table('th-table', TH_HEAD, THN.filter(n => n.in !== '—').map(n => [`<b>${n.name}</b>`, n.in, n.out])); table('di-table', DI_HEAD, DI_ROWS);
+  table('art-table', ART_HEAD, ART_ROWS); table('ve-table', VE_HEAD, VE_ROWS);
+  toggles('cx-tg', [['lat', 'Lateral surface (left)'], ['med', 'Medial surface (right)']], k => { CXS.view = k; CXS.sel = k === 'lat' ? 'm1' : 'para'; drawCX(); }, 'lat');
+  toggles('ic-view', [['h', 'Horizontal section'], ['c', 'Coronal section']], k => { IC.view = k; drawIC(); }, 'h');
+  toggles('ic-tg', [['parts', 'Parts'], ['fibres', 'Fibres'], ['blood', 'Blood supply'], ['post', 'Posterior limb lesion'], ['genu', 'Genu lesion']], k => { IC.mode = k; drawIC(); }, 'parts');
+  toggles('bg-tg', Object.entries(BG_DIS).map(([k, d]) => [k, d[0]]), k => { BGSTATE.d = k; drawBG(); }, 'none');
+  toggles('art-tg', Object.entries(ART_OCC).map(([k, d]) => [k, d[0]]), k => { ART.occ = k; drawART(); }, 'all');
+  toggles('ve-tg', Object.entries(VE_STATES).map(([k, d]) => [k, d[0]]), k => { VE.s = k; drawVE(); }, 'normal');
+  toggles('sp-tg', Object.entries(PATHS).map(([k, d]) => [k, d.name]), k => { SPS.p = k; drawSP(); }, 'olf');
+  drawCX(); drawIC(); drawBG(); drawPZ(); drawTH(); drawART(); drawVE(); drawNU(); drawSP();
+  const bar = $('vbar');
+  for (const [label, dir] of [['Left', [1, 0, 0]], ['Right', [-1, 0, 0]], ['Front', [0, -1, 0]], ['Above', [0, 0.25, 1]], ['Below', BELOW]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic('lobes');
+  window.J = {TOPICS, showTopic, names, kind, drawIC, IC, drawVE, VE};
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

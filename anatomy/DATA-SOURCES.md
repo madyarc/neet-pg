@@ -1134,3 +1134,27 @@ tubercles.
 - Independent review (2026-11-22), fixed: anterior spinal artery lesion area, fourth ventricle position, Millard–Gubler
   overlay and facial loop, V root label, about a dozen one-source statements, cerebellum caption and paravermis aside,
   colours (white-matter bundles token), keyboard focus, unused model parts, dark 3D cord sections.
+
+## Cerebrum, Ventricles and Sensory Pathways; Nervous System — `neuro/cerebrum.html`, `general/nervous-system.html`
+
+- Fact sheet `sources-local/facts/fill-neuro2.md` (621 quotes, script-checked against `sources-local/modern/fill-neuro2/`,
+  downloads 2026-11-22): Gray 1918 pages 146, 148, 183, 189–191, 194, 196, 197, 208, 209, 214, 233; StatPearls; open
+  papers PMC13189687, PMC7710193, PMC11318184, PMC10991002, PMC13657594, PMC10960742, PMC10710919, PMC4518744,
+  PMC11074696, PMC4280388, PMC11767383 (central facial palsy, 2025). Wikipedia articles citing OpenStax excluded
+  (Neuron, Chemical synapse, Diencephalon, White and Gray ramus communicans, Lateralization of brain function,
+  Ventricular system, Motor unit, Precentral gyrus, Brodmann area); Gray copies not counted.
+- Contested, stated on the page: "unipolar" (Gray) vs pseudounipolar; taste ending in the solitary nucleus (Gray
+  unsure); language on the left in about 95 %; upper-face sparing in central facial palsy (mild weakness reported).
+- Single source, attributed: taste via VPM and the VL relay, internal capsule blood-supply split, electrical synapse
+  details, fibrillations, alpha/gamma motor neurons, microglia, homunculus layout, Meyer's loop, corpus callosum
+  length, Huntington's onset, Parkinson's cell loss, thalamic syndrome details (Wikipedia or StatPearls); Golgi types
+  and motor unit (Wikipedia).
+- Left out (one source): order of the nucleus columns, tongue in genu lesions, satellite-cell ring difference, motor
+  unit size rule, left-hander language figures.
+- Model `models/neuro2` (`tools/neuro/neuro2_config.py`): 123 parts, 998 KB pack, 23 arteries mirrored in the page.
+  Brain meshes and skull: BodyParts3D 3.0 (CC BY-SA 2.1 Japan), two relabelled by position ("accessory short gyrus"
+  as the inferior frontal gyrus; "anterior limb of internal capsule" as the whole capsule). Arteries: Z-Anatomy (CC
+  BY-SA 4.0), sitting only approximately on the BodyParts3D brain; lenticulostriate arteries stop short (said on the
+  page).
+- Independent review (2026-11-22), fixed: genu lesion (lower face only), internal capsule caption side, nucleus
+  column order, attributions, wording, colours, 3D labels, schematic clipping, keyboard access, swipe hints, contrast.

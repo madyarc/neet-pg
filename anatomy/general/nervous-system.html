@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nervous System: General Plan and Nervous Tissue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --nerve (nerve fibres; motor solid, sensory dashed, autonomic dotted), --bone, --clin (a lesion).
+   Shared, same meaning: --nucleus (cell nuclei) and --cyto (cytoplasm) as on connective-tissue.html; --musc (muscle) as on
+   connective-tissue.html and muscle.html; --grey (grey matter) and --cordw (white matter) as on the neuro pages.
+   Page-only: --myelin (myelin sheath), --rcpt (neurotransmitter receptors), --gapj (gap-junction channels), --sat (satellite cells); checked against every other token of the site with fill-neuro2-scripts/colcheck.py). */
+:root{--nucleus:#3b4a8f;--cyto:#c8b6e2;--musc:#c96f68;--grey:#9c8f99;--cordw:#d9cbe0;--myelin:#c8ffd8;--rcpt:#ff006e;--gapj:#3a86ff;--sat:#06d6a0}
+:root[data-theme="dark"]{--nucleus:#9fb0ff;--cyto:#6d5a8c;--musc:#9c4e48;--grey:#8a7d88;--cordw:#6d6080;--myelin:#3f7a55;--rcpt:#ff5c9d;--gapj:#3a86ff;--sat:#06d6a0;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.scroll{overflow-x:auto}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:640px;margin:0 auto}
+.schbox{overflow-x:auto;scrollbar-color:var(--line) transparent}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:520px}.swipe{display:inline}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.c{fill:var(--clin);font-weight:600}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .flow{stroke:var(--ink);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+svg.sch .box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .cyto{fill:var(--cyto);stroke:var(--muted);stroke-width:1}
+svg.sch .nuc{fill:var(--nucleus)}
+svg.sch .ax{stroke:var(--nerve);stroke-width:4;fill:none;stroke-linecap:round}
+svg.sch .myel{fill:var(--myelin);stroke:var(--muted);stroke-width:.8}
+svg.sch .musc{fill:var(--musc);fill-opacity:.55;stroke:var(--musc)}
+svg.sch .wm{fill:var(--cordw);stroke:var(--muted);stroke-width:1}
+svg.sch .gm{fill:var(--grey);fill-opacity:.7;stroke:var(--muted);stroke-width:.8}
+svg.sch .mot{stroke:var(--nerve);stroke-width:3.5;fill:none;stroke-linecap:round}
+svg.sch .sen{stroke:var(--nerve);stroke-width:3.5;fill:none;stroke-dasharray:9 5}
+svg.sch .aut{stroke:var(--nerve);stroke-width:3.5;fill:none;stroke-dasharray:2 4;stroke-linecap:round}
+svg.sch .dim{opacity:.18}
+svg.sch .lesion{fill:url(#hatch);stroke:var(--clin);stroke-width:2}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.find{font-size:14px}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Nervous System: General Plan and Nervous Tissue</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="block panel" aria-labelledby="h-plan">
+  <h2 id="h-plan">General plan: central, peripheral and autonomic</h2>
+  <div class="two">
+    <div>
+      <div class="toggles" id="plan-tg" aria-label="Part"></div>
+      <div class="schbox"><svg class="fig sch" id="plan-svg" viewBox="0 0 680 380" role="img" aria-label="Diagram of the divisions of the nervous system: central (brain and spinal cord) and peripheral (cranial and spinal nerves and ganglia), the peripheral part divided into somatic and autonomic, the autonomic into sympathetic, parasympathetic and enteric"></svg></div>
+    </div>
+    <div class="prose find" id="plan-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tis">
+  <h2 id="h-tis">Nervous tissue: neurons and neuroglia</h2>
+  <div class="prose" id="tis-text"></div>
+  <div class="scroll"><table class="t stack" id="glia-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-neu">
+  <h2 id="h-neu">The neuron: parts and types</h2>
+  <div class="two">
+    <div>
+      <div class="toggles" id="neu-tg" aria-label="Type"></div>
+      <div class="schbox"><svg class="fig sch" id="neu-svg" viewBox="0 0 600 330" role="img" aria-label="Schematic neuron of the chosen type with its cell body, nucleus, dendrites and axon labelled"></svg></div>
+      <p class="muted">Schematic, not to scale. Arrows: the direction the impulse travels.</p>
+    </div>
+    <div class="prose find" id="neu-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="neu-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sn">
+  <h2 id="h-sn">A typical spinal nerve</h2>
+  <div class="prose" id="sn-text"></div>
+  <div class="two">
+    <div>
+      <div class="toggles" id="sn-tg" aria-label="Component"></div>
+      <div class="schbox"><svg class="fig sch" id="sn-svg" viewBox="0 0 600 420" role="img" aria-label="Schematic cross-section of a thoracic spinal cord segment with its roots, spinal ganglion, spinal nerve, rami and the sympathetic trunk ganglion; the chosen functional component highlighted"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale: a thoracic segment seen from above, the back at the top, one side drawn. Solid line = motor, dashed = sensory, dotted = autonomic (sympathetic).</p>
+    </div>
+    <div class="prose find" id="sn-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mu">
+  <h2 id="h-mu">Nerve supply of a muscle and its loss</h2>
+  <div class="two">
+    <div>
+      <div class="toggles" id="mu-tg" aria-label="State"></div>
+      <div class="schbox"><svg class="fig sch" id="mu-svg" viewBox="0 0 600 360" role="img" aria-label="Schematic of a motor unit, a muscle spindle and a Golgi tendon organ with their nerve fibres; with the denervation state, the cut nerve and its degenerating distal part"></svg></div>
+      <p class="muted">Schematic, not to scale. Solid = motor fibres, dashed = sensory fibres.</p>
+    </div>
+    <div class="prose find" id="mu-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="mu-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sy">
+  <h2 id="h-sy">Synapses</h2>
+  <div class="two">
+    <div>
+      <div class="toggles" id="sy-tg" aria-label="Type"></div>
+      <div class="schbox"><svg class="fig sch" id="sy-svg" viewBox="0 0 600 320" role="img" aria-label="Schematic of the chosen synapse: a chemical synapse with vesicles, cleft and receptors, or an electrical synapse with a gap junction"></svg></div>
+      <p class="muted">Schematic, not to scale (the gaps are a few to tens of nanometres).</p>
+    </div>
+    <div class="prose find" id="sy-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ga">
+  <h2 id="h-ga">Spinal (dorsal root) ganglion and sympathetic ganglion</h2>
+  <div class="schbox"><svg class="fig sch" id="ga-svg" viewBox="0 0 600 304" role="img" aria-label="Side-by-side schematic sections of a spinal ganglion, with large rounded cells in groups at the edge and fibres through the centre, and a sympathetic ganglion, with smaller multipolar cells scattered throughout and synapses on them"></svg></div>
+  <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic sections, not to scale.</p>
+  <div class="scroll"><table class="t stack" id="ga-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-neuro2.md part G, anatomy/DATA-SOURCES.md) ===================== */
+const LEDE = 'How the nervous system is laid out (central, peripheral, autonomic), what nervous tissue is made of (neurons and neuroglia), the parts and types of neurons, a typical spinal nerve with its functional components, the nerve supply of a muscle and what happens when it is lost, the kinds of synapse, and how a spinal ganglion differs from a sympathetic one. The brain: <a href="../neuro/cerebrum.html">Cerebrum</a>, <a href="../neuro/brainstem.html">Brainstem and Cerebellum</a>, <a href="../neuro/meninges-cord.html">Meninges and Spinal Cord</a>; muscle tissue: <a href="muscle.html">Muscle</a>; connective tissue sheaths: <a href="connective-tissue.html">Connective Tissue</a>.';
+const PLAN = {sel: 'cns'};
+const PLAN_ITEMS = {
+  cns: ['Central', '<p><b>Central nervous system</b>: the <b>brain</b>, in the cranium, and the <b>spinal cord</b>, in the vertebral canal. Its <b>grey matter</b> is mostly nerve cell bodies, its <b>white matter</b> mostly their long processes, the nerve fibres.</p>'],
+  pns: ['Peripheral', '<p><b>Peripheral nervous system</b>: <b>12 pairs of cranial nerves</b> (attached to the brain) and <b>31 pairs of spinal nerves</b> (8 cervical, 12 thoracic, 5 lumbar, 5 sacral, 1 coccygeal), with their ganglia. Spinal nerves are mixed: sensory, motor and autonomic fibres.</p>'],
+  som: ['Somatic', '<p>The <b>somatic</b> part of the peripheral system supplies the skin, the skeletal muscles and the joints.</p>'],
+  aut: ['Autonomic', '<p>The <b>autonomic</b> part controls smooth muscle, the heart and glands, involuntarily. Three divisions: <b>sympathetic</b> — outflow from the thoracic and first two lumbar segments (thoracolumbar, T1–L2), leaving by the white rami communicantes; <b>parasympathetic</b> — craniosacral outflow, in cranial nerves III, VII, IX and X and from sacral segments S2–S4; and <b>enteric</b>. Gray 1918 still calls all three outflows "sympathetic" (cranial, thoracolumbar and sacral).</p>'],
+};
+const TIS_TEXT = `<p>Nervous tissue = <b>neurons</b>, which carry impulses, and <b>neuroglia</b>, the supporting cells — the most numerous cells of the CNS; they maintain the surroundings of the neurons and form myelin. Gray 1918 calls neuroglia a connective tissue in function but ectodermal in origin.</p>`;
+const GLIA_HEAD = ['Cell', 'Where', 'What it does'];
+const GLIA_ROWS = [
+  ['<b>Astrocytes</b>', 'CNS', 'Star-shaped support cells with many processes among the neurons and fibres'],
+  ['<b>Oligodendrocytes</b>', 'CNS', 'Form the <b>myelin</b> sheath in the CNS (Wikipedia)'],
+  ['<b>Microglia</b>', 'CNS', 'Wikipedia: phagocytes (specialised macrophages) defending the CNS'],
+  ['<b>Ependymal cells</b>', 'CNS', 'Line the ventricles and the central canal (Wikipedia)'],
+  ['<b>Schwann cells</b>', 'PNS', 'Form the <b>myelin</b> sheath of peripheral fibres (Wikipedia; Gray: the "white substance of Schwann")'],
+  ['<b>Satellite cells</b>', 'PNS ganglia', 'Surround the nerve cell bodies in sensory, sympathetic and parasympathetic ganglia (Wikipedia)'],
+];
+const NEU = {t: 'multi'};
+const NEU_TYPES = {
+  multi: ['Multipolar', '<p><b>Multipolar</b>: one axon and two or more dendrites. Motor neurons (e.g. anterior horn cells) and interneurons.</p>'],
+  bi: ['Bipolar', '<p><b>Bipolar</b>: one axon and one dendrite, at opposite ends. Found in the <b>retina</b>, the <b>olfactory epithelium</b> and the <b>spiral and vestibular ganglia</b> of the vestibulocochlear nerve.</p>'],
+  pseudo: ['Pseudounipolar', '<p><b>Pseudounipolar</b>: a single process that divides like a T into a <b>peripheral</b> branch (from the receptor) and a <b>central</b> branch (into the cord). The sensory neurons of the <b>dorsal root (spinal) ganglia</b>; they develop as bipolar cells. Gray 1918 calls them "unipolar" cells of the spinal ganglia.</p>'],
+  uni: ['Unipolar', '<p><b>Unipolar</b>: a single process (Wikipedia: most invertebrate neurons are unipolar). Gray 1918 gives the spinal ganglion cell as its example; modern texts call that cell pseudounipolar.</p>'],
+};
+const NEU_HEAD = ['Classification', 'Types'];
+const NEU_ROWS = [
+  ['<b>Parts</b>', 'Cell body (soma), with the nucleus and Nissl granules (stain with basic dyes); <b>dendrites</b>, usually many and branching; one <b>axon</b>, leaving at the <b>axon hillock</b> (part of the cell body), up to a metre or more long, ending in terminals at synapses.'],
+  ['<b>By number of processes</b>', 'Unipolar, pseudounipolar, bipolar, multipolar (pick above)'],
+  ['<b>By length of axon</b> (Golgi; Wikipedia)', '<b>Golgi type I</b>: a long axon, running from the grey matter out of the region. <b>Golgi type II</b>: a short axon or none'],
+  ['<b>By function</b>', '<b>Sensory</b> (afferent): from receptors toward the cord and brain. <b>Motor</b> (efferent): from the brain and cord to muscles and glands. <b>Interneurons</b>: connect neurons within the brain or cord'],
+];
+const SN_TEXT = `<p>A <b>ventral (anterior) root</b> — motor — and a <b>dorsal (posterior) root</b> — sensory, carrying the <b>spinal (dorsal root) ganglion</b> — unite in the <b>intervertebral foramen</b> into the <b>spinal nerve</b>, a mixed nerve. Just outside the foramen it gives a small <b>meningeal (recurrent) branch</b> back into the canal (Gray: to the vertebrae, their ligaments and the vessels of the cord and its membranes), then divides into a <b>dorsal ramus</b> (usually the smaller) and a <b>ventral ramus</b>. Every spinal nerve receives a <b>grey ramus communicans</b> from the nearby sympathetic trunk ganglion; the thoracic and first two lumbar nerves also send a <b>white ramus communicans</b> to it.</p>`;
+const SN = {c: 'all'};
+const SN_COMP = {
+  all: ['All', '<p>Gray 1918: a typical spinal nerve has at least four kinds of fibre — somatic sensory, visceral (sympathetic) afferent, somatic motor, and visceral (sympathetic) efferent, preganglionic. Pick one.</p>'],
+  gsa: ['Somatic sensory', '<p><b>Somatic sensory</b> (afferent) fibres from skin, muscles and joints: cell body in the <b>spinal ganglion</b>; the central branch enters the cord by the dorsal root and synapses in the cord.</p>'],
+  gva: ['Visceral sensory', '<p><b>Visceral sensory</b> fibres from the viscera: cell body also in the spinal ganglion; their peripheral processes reach it through the white ramus and the sympathetic ganglia, passing them without a synapse (Gray).</p>'],
+  gse: ['Somatic motor', '<p><b>Somatic motor</b> (efferent) fibres to skeletal muscle: cell body in the <b>anterior horn</b>; out by the ventral root.</p>'],
+  gve: ['Sympathetic', '<p><b>Sympathetic</b> (visceral efferent): the <b>preganglionic</b> fibre leaves the lateral grey column (T1–L2) by the ventral root and the <b>white ramus</b> (mostly myelinated) to the sympathetic trunk ganglion, where it may synapse; the <b>postganglionic</b> fibre (mostly unmyelinated) returns by the <b>grey ramus</b> to the spinal nerve and travels with it to the blood vessels of the trunk and limbs.</p>'],
+};
+const MU = {s: 'normal'};
+const MU_STATES = {
+  normal: ['Normal', '<p>The nerve to a muscle carries: <b>motor</b> fibres (Wikipedia: <b>alpha motor neurons</b> to the ordinary, extrafusal muscle fibres; <b>gamma motor neurons</b> to the intrafusal fibres of the <b>muscle spindles</b>, keeping them taut); <b>sensory</b> fibres — from the muscle spindles (small bundles of intrafusal fibres in a capsule among the muscle fibres; stretch receptors) and the <b>Golgi tendon organs</b> near the muscle–tendon junction (Wikipedia: they sense tension, spindles length); and autonomic fibres to its blood vessels. Each motor axon ends on a muscle fibre at a <b>motor end-plate</b> (neuromuscular junction).</p><p>Wikipedia: a <b>motor unit</b> is one motor neuron and all the muscle fibres it supplies.</p>'],
+  lmn: ['Loss of innervation', '<p><b>Loss of the nerve supply</b> (lower motor neuron lesion — anterior horn cell, root or peripheral nerve): <b>flaccid paralysis</b> with loss of tone, reduced or absent reflexes, progressive <b>wasting</b> (atrophy) of the muscle, <b>fasciculations</b> (Wikipedia adds fibrillations). The part of each axon beyond the cut degenerates (Wikipedia: Wallerian degeneration).</p>'],
+};
+const MU_HEAD = ['', 'Lower motor neuron lesion (denervation)', 'Upper motor neuron lesion'];
+const MU_ROWS = [
+  ['Site', 'Anterior horn cell, root, peripheral nerve', 'Motor cortex or the corticospinal tract'],
+  ['Weakness', 'Flaccid', 'Spastic'],
+  ['Tone and reflexes', 'Reduced or lost', 'Increased'],
+  ['Wasting', 'Marked, progressive', '—'],
+  ['Other', 'Fasciculations (Wikipedia: and fibrillations)', 'Extensor plantar (Babinski)'],
+];
+const SY = {t: 'chem'};
+const SY_TYPES = {
+  chem: ['Chemical', '<p>A <b>synapse</b> is where a neuron passes its signal to another cell: a <b>presynaptic terminal</b> and a <b>postsynaptic</b> membrane. At a <b>chemical synapse</b> the impulse releases a <b>neurotransmitter</b> (Wikipedia: stored in <b>synaptic vesicles</b>) into the <b>synaptic cleft</b> (Wikipedia: 20–40 nm; StatPearls: under 50 nm); it diffuses across in microseconds and binds <b>receptors</b> on the postsynaptic membrane. Transmission is <b>one way</b>. The transmitter may <b>excite</b> or <b>inhibit</b> the postsynaptic cell. The <b>neuromuscular junction</b> is a specialised chemical synapse between a motor neuron and a skeletal muscle fibre.</p>'],
+  elec: ['Electrical', '<p>At an <b>electrical synapse</b> current flows directly from cell to cell through a <b>gap junction</b>. Wikipedia: the gap is about 2–4 nm, transmission is faster than at a chemical synapse and can run in <b>both directions</b>.</p>'],
+  site: ['By site', '<p>By the parts that meet (Wikipedia): most are <b>axodendritic</b> (axon on a dendrite); others are <b>axosomatic</b> (axon on a cell body), <b>axo-axonic</b>, dendro-dendritic and others.</p>'],
+};
+const GA_HEAD = ['', 'Spinal (dorsal root) ganglion', 'Sympathetic ganglion'];
+const GA_ROWS = [
+  ['Where', 'On the dorsal root of each spinal nerve', 'On the sympathetic trunk (and prevertebral plexuses)'],
+  ['Function', 'Sensory: cell bodies of the first sensory neurons', 'Motor (autonomic): postganglionic neurons'],
+  ['Cells', '<b>Pseudounipolar</b> (Gray: "unipolar", T-shaped process), <b>larger</b>, rounded, collected <b>in groups near the edge</b>', '<b>Multipolar</b> (one axon, several dendrites), <b>smaller</b>, <b>scattered</b> in irregular groups through the whole ganglion'],
+  ['Fibres', 'Mostly myelinated, through the <b>centre</b>', 'Scattered; many leaving fibres unmyelinated (postganglionic)'],
+  ['Synapses', '<b>None</b>: the central process synapses in the cord', '<b>Yes</b>: preganglionic fibres synapse on the cells'],
+  ['Satellite cells', 'Round the cell bodies', 'Round the cell bodies'],
+];
+const DATA = {
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia.",
+  models: 'Models used: none (schematics only); simplified, not to scale.',
+};
+
+/* ===================== drawing ===================== */
+const $ = id => document.getElementById(id);
+const T = (x, y, s, cls = '', anchor = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink)"/></marker>'
+  + '<pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" style="fill:var(--clin);fill-opacity:.18"/><line x1="0" y1="0" x2="0" y2="8" style="stroke:var(--clin);stroke-width:3"/></pattern></defs>';
+function table(id, head, rows) {
+  $(id).innerHTML = '<tr>' + head.map(x => `<th>${x}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + r.map((c, i) => `<td data-h="${head[i]}">${c}</td>`).join('') + '</tr>').join('');
+}
+function toggles(id, items, onSel, start) {
+  const box = $(id); box.innerHTML = '';
+  for (const [key, label] of items) {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = label; b.setAttribute('aria-pressed', key === start);
+    b.onclick = () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); onSel(key); };
+    box.append(b);
+  }
+}
+function drawPlan() {
+  const sel = PLAN.sel;
+  const B = {cns: [150, 60, 'Central nervous system', 'Brain · spinal cord'], pns: [470, 60, 'Peripheral nervous system', '12 cranial + 31 spinal nerves, ganglia'],
+    som: [330, 190, 'Somatic', 'Skin, skeletal muscle, joints'], aut: [560, 190, 'Autonomic', 'Smooth muscle, heart, glands']};
+  const lit = {cns: ['cns'], pns: ['pns', 'som', 'aut'], som: ['som'], aut: ['aut', 'sym', 'par', 'ent']};
+  const on = k => lit[sel].includes(k);
+  let s = DEFS;
+  s += `<path class="flow" d="M470 84 L350 164"/><path class="flow" d="M470 84 L550 164"/><path class="flow" d="M560 214 L440 284"/><path class="flow" d="M560 214 L548 284"/><path class="flow" d="M560 214 L632 284"/>`;
+  s += `<path d="M260 60 L360 60" style="stroke:var(--ink);stroke-width:1.6;stroke-dasharray:4 3"/>` + T(310, 52, 'joined', 's', 'middle');
+  for (const [k, [x, y, t, d]] of Object.entries(B)) s += `<g class="${on(k) ? '' : 'dim'}"><rect x="${x - 110}" y="${y - 24}" width="220" height="48" rx="9" class="box" style="stroke:var(--ink)"/>` + T(x, y - 3, t, '', 'middle') + T(x, y + 14, d, 's', 'middle') + '</g>';
+  const A = [['sym', 420, 'Sympathetic', 'T1–L2', 92], ['par', 538, 'Parasympathetic', 'III, VII, IX, X; S2–S4', 128], ['ent', 638, 'Enteric', '', 64]];
+  for (const [k, x, t, d, w] of A) s += `<g class="${on(k) ? '' : 'dim'}"><rect x="${x - w / 2}" y="${286}" width="${w}" height="46" rx="8" class="box" style="stroke:var(--ink)"/>` + T(x, 306, t, 's', 'middle') + T(x, 322, d, 's', 'middle') + '</g>';
+  s += `<g class="${on('cns') ? '' : 'dim'}"><ellipse cx="90" cy="200" rx="48" ry="38" class="gm"/><path d="M84 236 L84 350 L96 350 L96 236 Z" class="wm"/>` + T(150, 196, 'Brain', 's') + T(110, 320, 'Spinal cord', 's') + '</g>';
+  $('plan-svg').innerHTML = s;
+  $('plan-find').innerHTML = PLAN_ITEMS[sel][1];
+}
+function drawNeuron() {
+  const t = NEU.t; let s = DEFS;
+  const soma = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}" class="cyto"/><circle cx="${x}" cy="${y}" r="${r * 0.38}" class="nuc"/>`;
+  const myel = (x1, x2, y) => { let o = ''; for (let x = x1; x < x2 - 30; x += 46) o += `<rect x="${x}" y="${y - 8}" width="38" height="16" rx="7" class="myel"/>`; return o; };
+  if (t === 'multi') {
+    s += ['M150 150 L90 90 L60 80', 'M90 90 L80 60', 'M150 150 L80 160 L50 150', 'M80 160 L60 190', 'M150 150 L110 220 L90 250', 'M150 150 L160 80 L150 50', 'M160 80 L190 60'].map(d => `<path d="${d}" style="stroke:var(--cyto);stroke-width:6;fill:none;stroke-linecap:round"/>`).join('');
+    s += `<path class="ax" d="M190 160 L520 160"/>` + myel(220, 500, 160) + `<path class="ax" d="M520 160 L560 130 M520 160 L565 160 M520 160 L560 190"/>`;
+    s += soma(150, 150, 40) + `<path d="M188 150 L200 160 L188 170 Z" style="fill:var(--cyto)"/>`;
+    s += T(40, 40, 'Dendrites', '', 'start') + lead(80, 46, 86, 80) + T(150, 230 + 40, 'Cell body (soma)', '', 'middle') + lead(150, 252, 150, 192);
+    s += T(230, 130, 'Axon hillock', 's', 'middle') + lead(220, 134, 196, 156) + T(360, 200, 'Axon with myelin sheath', '', 'middle') + T(560, 220, 'Terminals', 's', 'middle');
+    s += `<path class="flow" d="M60 300 L540 300"/>` + T(300, 292, 'impulse: dendrites → cell body → axon', 's', 'middle');
+  } else if (t === 'bi') {
+    s += `<path d="M60 160 L240 160" style="stroke:var(--cyto);stroke-width:6;fill:none;stroke-linecap:round"/><path d="M60 160 L30 140 M60 160 L30 180" style="stroke:var(--cyto);stroke-width:5"/>`;
+    s += `<path class="ax" d="M320 160 L540 160 M540 160 L570 140 M540 160 L570 180"/>` + soma(280, 160, 38);
+    s += T(120, 140, 'Dendrite (one)', '', 'middle') + T(430, 140, 'Axon (one)', '', 'middle') + T(280, 230, 'Cell body', '', 'middle');
+    s += `<path class="flow" d="M60 290 L540 290"/>` + T(300, 282, 'retina, olfactory epithelium, spiral and vestibular ganglia', 's', 'middle');
+  } else if (t === 'pseudo') {
+    s += soma(300, 90, 38) + `<path class="ax" d="M300 128 L300 190"/><path class="ax" d="M300 190 L60 190"/><path class="ax" d="M300 190 L560 190"/>`;
+    s += myel(80, 290, 190) + myel(320, 540, 190);
+    s += T(70, 230, 'Peripheral branch (from the receptor)', '', 'start') + T(560, 230, 'Central branch (into the cord)', '', 'end') + T(350, 96, 'Cell body in the spinal ganglion', '', 'start') + T(312, 166, 'T-shaped division', 's', 'start');
+    s += `<path class="flow" d="M60 290 L540 290"/>` + T(300, 282, 'impulse from the periphery straight on to the cord', 's', 'middle');
+  } else {
+    s += soma(150, 160, 40) + `<path class="ax" d="M190 160 L540 160 M540 160 L570 140 M540 160 L570 180"/>`;
+    s += T(150, 230, 'Cell body', '', 'middle') + T(370, 140, 'One process', '', 'middle');
+    s += `<path class="flow" d="M60 290 L540 290"/>` + T(300, 282, 'a single process from the cell body', 's', 'middle');
+  }
+  $('neu-svg').innerHTML = s;
+  $('neu-find').innerHTML = NEU_TYPES[t][1];
+}
+function drawSN() {
+  const c = SN.c, on = k => c === 'all' || c === k;
+  let s = DEFS;
+  s += `<ellipse cx="160" cy="210" rx="110" ry="90" class="wm"/>`;
+  s += `<path d="M160 150 C140 150 130 160 120 140 C112 128 100 130 98 142 C100 170 120 190 130 206 C112 226 96 246 104 270 C112 284 140 276 150 258 L160 250 L170 258 C180 276 208 284 216 270 C224 246 208 226 190 206 C200 190 220 170 222 142 C220 130 208 128 200 140 C190 160 180 150 160 150 Z" class="gm"/>`;
+  s += T(160, 108, 'Back (dorsal)', 'h', 'middle') + T(160, 318, 'Front (ventral)', 'h', 'middle') + T(250, 216, 'Lateral horn', 's', 'start') + lead(248, 212, 202, 206)
+    + T(104, 170, 'Posterior horn', 's', 'end') + lead(106, 166, 120, 150) + T(104, 270, 'Anterior horn', 's', 'end') + lead(106, 266, 118, 262);
+  // roots, ganglion, nerve, rami (right side of the drawing = lateral)
+  s += `<ellipse cx="330" cy="150" rx="34" ry="22" class="cyto"/>` + T(330, 118, 'Spinal ganglion', '', 'middle');
+  s += `<path d="M208 150 L296 150" style="stroke:var(--nerve);stroke-width:10;stroke-opacity:.35;fill:none"/><path d="M364 150 L410 200" style="stroke:var(--nerve);stroke-width:10;stroke-opacity:.35;fill:none"/>`;
+  s += `<path d="M210 270 L300 270 L410 206" style="stroke:var(--nerve);stroke-width:10;stroke-opacity:.35;fill:none"/>`;
+  s += `<path d="M410 204 L470 204" style="stroke:var(--nerve);stroke-width:14;stroke-opacity:.35;fill:none"/>` + T(440, 190, 'Spinal nerve', '', 'middle');
+  s += `<path d="M470 204 L520 130" style="stroke:var(--nerve);stroke-width:9;stroke-opacity:.35;fill:none"/>` + T(512, 120, 'Dorsal ramus', '', 'end');
+  s += `<path d="M470 204 L580 250" style="stroke:var(--nerve);stroke-width:12;stroke-opacity:.35;fill:none"/>` + T(584, 270, 'Ventral ramus', '', 'end');
+  s += `<path d="M418 206 C400 226 380 228 370 212" style="stroke:var(--nerve);stroke-width:4;stroke-opacity:.5;fill:none"/>` + T(352, 232, 'Meningeal branch', 's', 'end');
+  s += `<ellipse cx="470" cy="350" rx="26" ry="20" class="cyto"/>` + T(470, 390, 'Sympathetic trunk ganglion', '', 'middle');
+  s += `<path d="M480 214 L486 330" style="stroke:var(--nerve);stroke-width:6;stroke-opacity:.35;fill:none"/><path d="M458 214 L452 330" style="stroke:var(--nerve);stroke-width:6;stroke-opacity:.35;fill:none"/>`;
+  s += T(500, 290, 'White ramus', 's', 'start') + T(440, 290, 'Grey ramus', 's', 'end');
+  s += T(250, 140, 'Dorsal root', 's', 'middle') + T(250, 292, 'Ventral root', 's', 'middle');
+  // components
+  if (on('gsa')) s += `<path class="sen" d="M575 245 L470 200 L412 202 L364 152"/><path class="sen" d="M296 152 L210 152 L196 160"/>` + `<circle cx="330" cy="150" r="7" style="fill:var(--nucleus)"/>`;
+  if (on('gse')) s += `<path class="mot" d="M196 258 L210 268 L300 268 L410 210 L470 208 L575 252"/>` + `<circle cx="196" cy="258" r="7" style="fill:var(--nucleus)"/>`;
+  if (on('gve')) s += `<path class="aut" d="M202 206 L206 262 L300 262 L410 210 L492 216 L490 330"/><path class="aut" d="M452 330 L450 216 L470 212 L520 236 L578 258"/>` + `<circle cx="202" cy="206" r="6" style="fill:var(--nucleus)"/><circle cx="470" cy="350" r="6" style="fill:var(--nucleus)"/>`;
+  if (on('gva')) s += `<path class="sen" d="M470 370 C500 400 540 400 560 380"/><path class="sen" d="M478 334 L482 214 L410 204 L364 156"/><path class="sen" d="M296 156 L210 156 L180 182"/>`;
+  $('sn-svg').innerHTML = s;
+  $('sn-find').innerHTML = SN_COMP[c][1];
+}
+function drawMU() {
+  const st = MU.s; let s = DEFS;
+  const deg = st === 'lmn';
+  s += `<circle cx="70" cy="70" r="26" class="cyto"/><circle cx="70" cy="70" r="10" class="nuc"/>` + T(70, 116, 'Anterior horn', 's', 'middle') + T(70, 130, 'cell (alpha)', 's', 'middle');
+  s += `<circle cx="70" cy="190" r="16" class="cyto"/><circle cx="70" cy="190" r="6" class="nuc"/>` + T(70, 224, 'Gamma', 's', 'middle');
+  for (let i = 0; i < 5; i++) { const y = 50 + i * 26; s += `<rect x="300" y="${y}" width="240" height="${deg ? 12 : 20}" rx="9" class="musc"/>`; }
+  s += T(420, 40, deg ? 'Wasting muscle fibres' : 'Muscle fibres', 's', 'middle');
+  s += `<path class="mot" d="M96 70 L200 70${deg ? '' : ' L250 70'}"/>`;
+  if (!deg) for (let i = 0; i < 5; i++) { const y = 60 + i * 26; s += `<path class="mot" d="M250 70 L300 ${y}"/><circle cx="302" cy="${y}" r="5" style="fill:var(--nerve);stroke:var(--ink)"/>`; }
+  else s += `<path d="M200 70 L250 70" style="stroke:var(--nerve);stroke-width:3.5;stroke-dasharray:3 6;opacity:.5"/><path class="lesion" d="M190 54 L210 54 L210 86 L190 86 Z"/>` + T(200, 46, 'Cut', 'c', 'middle') + T(250, 104, 'degenerates', 'c', 'middle');
+  s += deg ? '' : T(250, 40, 'Motor end-plates', 's', 'middle');
+  s += `<rect x="330" y="200" width="150" height="34" rx="17" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><rect x="350" y="210" width="110" height="14" rx="7" class="musc"/>` + T(405, 256, 'Muscle spindle (length)', 's', 'middle');
+  s += `<path class="mot" d="M86 190 L360 210"/><path class="sen" d="M405 216 L160 250 L120 260"/>` + T(120, 276, 'Sensory from spindle', 's', 'start');
+  s += `<rect x="540" y="60" width="34" height="120" rx="8" style="fill:var(--bone);fill-opacity:.5;stroke:var(--muted)"/>` + T(557, 196, 'Tendon', 's', 'middle');
+  s += `<ellipse cx="540" cy="160" rx="14" ry="22" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><path class="sen" d="M532 176 L300 320 L120 330"/>` + T(570, 236, 'Golgi tendon', 's', 'end') + T(570, 250, 'organ (tension)', 's', 'end');
+  s += T(100, 350, 'Motor unit (Wikipedia) = one motor neuron + its muscle fibres', 'h', 'start');
+  $('mu-svg').innerHTML = s;
+  $('mu-find').innerHTML = MU_STATES[st][1];
+}
+function drawSY() {
+  const t = SY.t; let s = DEFS;
+  if (t === 'chem' || t === 'site') {
+    s += `<path d="M40 60 C140 60 200 90 220 160 C200 230 140 260 40 260 Z" class="cyto"/>` + T(80, 50, 'Presynaptic terminal', '', 'start');
+    for (const [x, y] of [[150, 110], [170, 140], [140, 170], [180, 190], [120, 140], [160, 220]]) s += `<circle cx="${x}" cy="${y}" r="9" style="fill:var(--surface);stroke:var(--ink)"/><circle cx="${x}" cy="${y}" r="3" style="fill:var(--ink)"/>`;
+    s += `<path d="M270 60 L560 60 L560 260 L270 260 C290 200 290 120 270 60 Z" class="cyto"/>` + T(420, 50, 'Postsynaptic cell', '', 'middle');
+    for (let y = 100; y <= 220; y += 30) s += `<rect x="268" y="${y}" width="10" height="16" rx="3" style="fill:var(--rcpt)"/>`;
+    for (const [x, y] of [[236, 140], [244, 170], [232, 190], [250, 120]]) s += `<circle cx="${x}" cy="${y}" r="2.5" style="fill:var(--ink)"/>`;
+    s += T(244, 290, 'Synaptic cleft', 's', 'middle') + lead(244, 280, 244, 200) + T(130, 290, 'Vesicles (transmitter)', 's', 'middle') + lead(130, 280, 150, 228) + T(420, 290, 'Receptors', 's', 'middle') + lead(420, 280, 280, 225);
+    s += `<path class="flow" d="M100 30 L520 30"/>` + T(310, 24, 'one way', 's', 'middle');
+  } else {
+    s += `<path d="M40 60 L290 60 L290 260 L40 260 Z" class="cyto"/><path d="M310 60 L560 60 L560 260 L310 260 Z" class="cyto"/>`;
+    for (let y = 90; y <= 230; y += 28) s += `<rect x="284" y="${y}" width="32" height="12" rx="4" style="fill:var(--gapj)"/>`;
+    s += T(165, 50, 'Cell 1', '', 'middle') + T(435, 50, 'Cell 2', '', 'middle') + T(300, 290, 'Gap junction channels (Wikipedia: gap ~2–4 nm)', 's', 'middle');
+    s += `<path class="flow" d="M200 30 L400 30"/><path class="flow" d="M400 18 L200 18"/>` + T(300, 12, 'both ways (Wikipedia)', 's', 'middle');
+  }
+  $('sy-svg').innerHTML = s;
+  $('sy-find').innerHTML = SY_TYPES[t][1];
+}
+function drawGA() {
+  let s = DEFS;
+  s += `<ellipse cx="150" cy="150" rx="130" ry="110" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.4"/>` + T(150, 280, 'Spinal ganglion', 'h', 'middle');
+  s += `<path d="M30 150 L270 150 M30 140 L270 140 M30 160 L270 160" style="stroke:var(--myelin);stroke-width:5;fill:none"/><path d="M30 150 L270 150" style="stroke:var(--nerve);stroke-width:2"/>`;
+  const big = [[80, 80], [120, 66], [165, 64], [210, 78], [70, 220], [115, 236], [165, 238], [215, 222], [245, 110], [52, 110]];
+  for (const [x, y] of big) { s += `<circle cx="${x}" cy="${y}" r="17" style="fill:none;stroke:var(--sat);stroke-width:3;stroke-dasharray:3 3"/><circle cx="${x}" cy="${y}" r="14" class="cyto"/><circle cx="${x}" cy="${y}" r="5" class="nuc"/>`; }
+  s += T(300, 296, 'Dotted rings: satellite cells', 's', 'middle') + T(20, 20, 'Large round cells in groups at the edge;', 's', 'start') + T(20, 34, 'fibres through the centre; no synapse', 's', 'start');
+  s += `<ellipse cx="450" cy="150" rx="130" ry="110" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.4"/>` + T(450, 280, 'Sympathetic ganglion', 'h', 'middle');
+  const sm = [[380, 90], [430, 120], [490, 80], [520, 140], [400, 180], [460, 200], [520, 210], [360, 140], [470, 150], [420, 60]];
+  for (const [x, y] of sm) { s += `<path d="M${x} ${y} l-14 -8 M${x} ${y} l12 -10 M${x} ${y} l-10 12" style="stroke:var(--cyto);stroke-width:3"/><circle cx="${x}" cy="${y}" r="12" style="fill:none;stroke:var(--sat);stroke-width:2;stroke-dasharray:2 4"/><circle cx="${x}" cy="${y}" r="9" class="cyto"/><circle cx="${x}" cy="${y}" r="3.5" class="nuc"/>`; }
+  s += `<path d="M330 120 C380 110 420 116 428 118" style="stroke:var(--nerve);stroke-width:2;fill:none"/><circle cx="428" cy="118" r="3" style="fill:var(--nerve);stroke:var(--ink)"/>` + T(334, 108, 'synapse', 's', 'start');
+  s += T(320, 20, 'Smaller multipolar cells scattered;', 's', 'start') + T(320, 34, 'preganglionic fibres synapse on them', 's', 'start');
+  $('ga-svg').innerHTML = s;
+}
+
+/* every scroll box gets the phone hint "Swipe sideways" (shown only at phone width) */
+function swipeHints() {
+  document.querySelectorAll('.schbox').forEach(b => {
+    const n = b.nextElementSibling;
+    if (n && n.querySelector && n.querySelector('.swipe')) return;
+    const p = document.createElement('p'); p.className = 'muted swipe'; p.textContent = 'Swipe sideways to see all of it.'; b.after(p);
+  });
+}
+(() => {
+  swipeHints();
+  $('lede').innerHTML = LEDE; $('tis-text').innerHTML = TIS_TEXT; $('sn-text').innerHTML = SN_TEXT;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  table('glia-table', GLIA_HEAD, GLIA_ROWS); table('neu-table', NEU_HEAD, NEU_ROWS); table('mu-table', MU_HEAD, MU_ROWS); table('ga-table', GA_HEAD, GA_ROWS);
+  toggles('plan-tg', Object.entries(PLAN_ITEMS).map(([k, d]) => [k, d[0]]), k => { PLAN.sel = k; drawPlan(); }, 'cns');
+  toggles('neu-tg', Object.entries(NEU_TYPES).map(([k, d]) => [k, d[0]]), k => { NEU.t = k; drawNeuron(); }, 'multi');
+  toggles('sn-tg', Object.entries(SN_COMP).map(([k, d]) => [k, d[0]]), k => { SN.c = k; drawSN(); }, 'all');
+  toggles('mu-tg', Object.entries(MU_STATES).map(([k, d]) => [k, d[0]]), k => { MU.s = k; drawMU(); }, 'normal');
+  toggles('sy-tg', Object.entries(SY_TYPES).map(([k, d]) => [k, d[0]]), k => { SY.t = k; drawSY(); }, 'chem');
+  drawPlan(); drawNeuron(); drawSN(); drawMU(); drawSY(); drawGA();
+  window.ready = true;
+})();
+</script>
+</body>
+</html>

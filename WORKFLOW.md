@@ -8,31 +8,6 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 37 (neuro II): [x] build (614 quotes, 123-part 998 KB neuro2; pages neuro/cerebrum.html and
-  general/nervous-system.html) [x] review (14 items: genu lesion overstated, capsule caption side, nuclei column order
-  unsourced, attributions, keyboard) [ ] fixes (sent) [ ] docs [ ] commit. Was: sheet
-  fill-neuro2, model models/neuro2 (tools/neuro/neuro2_config.py), pages anatomy/neuro/cerebrum.html (+ maybe
-  general/nervous-system.html).
-- Navigation work (user request 2026-11-22):
-  1. [x] done 2026-11-22. Search: `tools/home/search_index.py` → `search-index.json` (every page: title, subject, region, type, lede,
-     h2 headings with ids, 3D topic names); search box on the root index and the Anatomy index; results link to the
-     page or the heading anchor.
-  2. [x] done 2026-11-22 (search box at the top, region jump list, type filter). Anatomy index: modules out of the side panel into a full-width section, grouped by region (General and tissues,
-     Head and neck, Upper limb, Lower limb, Thorax, Back, Abdomen and pelvis, Neuro) with type tags/filters (Bones,
-     Muscles, Joints, Vessels and nerves, Organs).
-  3. [x] done 2026-11-22 (tools/home/bone_keys.py, tools/test/bonescheck.py). Bones on/off on every 3D page: viewer.js hides unselected bone parts when off (selected/lit bones stay);
-     bone set from `models/bone-keys.json` (skeleton and detail model keys, kinds.json bone/cart, `_l` mirrors);
-     button in the viewer corner, preference in localStorage, hidden on bone-only pages and the home (it has the
-     Skeletal chip).
-  4. [x] done 2026-11-22: Joints and ligaments and Organs layers (models/body-joints, body-organs; tools/home/
-     body_layers.py config|post); was: joint and organ layers still to build (combined whole-body ligament and
-     organ models from the joint and organ packs, with meta json like body-lymph). Home Systems chips: available ones first; "Joints and ligaments" and "Organs" no longer "coming" if a layer
-     can be built from the joint and organ models (lazy-loaded); otherwise list them last.
-
-- Module 36 (neuro I: meninges, CSF, cord, brainstem, cerebellum) started 2026-11-22: sheet fill-neuro1, model
-  models/neuro1 (tools/neuro/neuro1_config.py), page anatomy/neuro/brainstem-cord.html (may split). Sections 56–61
-  (+ AN50.3). Module 37 next: neuro II (sections 7, 62, 63: nervous system intro, nuclei, hemispheres, ventricles,
-  pathways).
 - Module 38 (histology I: basic tissues; sections 65, 68–72) started 2026-11-22: sheet fill-histo1, openly licensed
   micrographs, pages anatomy/histology/ (tissues.html or split). Module 39 after: systemic histology (AN25.1, 43.2,
   43.3, 52.1–52.3, 64.1).
@@ -71,7 +46,7 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
 - AN13.7: surface lines and pulses are done (module 24); the muscle tests for pectoralis major, serratus anterior,
   latissimus dorsi, deltoid, biceps and brachioradialis are not. Could go on the upper-limb muscles page.
 
-Progress: anatomy 262 covered, 15 partial, 136 not started; ophthalmology 6 covered, 1 partial, 55 not started.
+Progress: anatomy 279 covered, 15 partial, 119 not started; ophthalmology 6 covered, 1 partial, 55 not started.
 
 ## Steps for every module (do them in this order, tick them here as they finish)
 
@@ -116,6 +91,10 @@ builds at the same time.
   that disproves each claim.
 
 ## Log (newest first)
+
+- 2026-11-22: Module 37 (cerebrum, ventricles, pathways; nervous system general plan, two pages): 621 quotes,
+  123-part 998 KB `models/neuro2`; review found 14 items (genu lesion overstated, capsule caption side, nucleus
+  column order unsourced), all fixed; 17 ticked.
 
 - 2026-11-22: Module 36 (meninges, CSF, cord; brainstem and cerebellum, two pages in anatomy/neuro/): 609 quotes,
   121-part 810 KB `models/neuro1`; review found no side or level errors, 11 drawing/source/code items, all fixed;
