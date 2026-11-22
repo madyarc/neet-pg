@@ -8,7 +8,9 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Navigation work done (below); modules resumed. Module 37 (neuro II: sections 7, 62, 63) started 2026-11-22: sheet
+- Module 37 (neuro II): [x] build (614 quotes, 123-part 998 KB neuro2; pages neuro/cerebrum.html and
+  general/nervous-system.html) [x] review (14 items: genu lesion overstated, capsule caption side, nuclei column order
+  unsourced, attributions, keyboard) [ ] fixes (sent) [ ] docs [ ] commit. Was: sheet
   fill-neuro2, model models/neuro2 (tools/neuro/neuro2_config.py), pages anatomy/neuro/cerebrum.html (+ maybe
   general/nervous-system.html).
 - Navigation work (user request 2026-11-22):
