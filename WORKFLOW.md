@@ -11,6 +11,8 @@ Last updated: 2026-11-21
 - Module 38 (histology I: basic tissues; sections 65, 68–72) started 2026-11-22: sheet fill-histo1, openly licensed
   micrographs, pages anatomy/histology/ (tissues.html or split). Module 39 after: systemic histology (AN25.1, 43.2,
   43.3, 52.1–52.3, 64.1).
+- Module 39 (general embryology; sections 76–81) started 2026-11-22: sheet fill-embryo1, schematics, pages
+  anatomy/embryology/ (general.html or split). Then: systemic histology, systemic embryology, genetics, leftovers.
 - Local test server: 127.0.0.1:8765.
 
 ## Questions for the user
