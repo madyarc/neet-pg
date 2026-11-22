@@ -11,6 +11,9 @@ Last updated: 2026-11-21
 - Module 32 (face and neck regions and glands) started 2026-11-21 in parallel: agent a3248667; sheet fill-hnreg, model
   models/hn-reg (tools/head-neck/regions_config.py), page head-neck/regions.html (may split). Target AN28.2, 28.9, 28.10,
   29.1, 29.2, 29.4, 29.5, 33.1, 34.1–34.3, 35.2, 35.8, 42.3, AN43.6 glands and pterion.
+- Module 33 (mouth, pharynx, nose, larynx) started 2026-11-21 in parallel: agent a5600e55; sheet fill-oro, model
+  models/oro (tools/head-neck/oro_config.py), page head-neck/mouth-pharynx-nose.html. Target AN36.1, 36.2, 36.4–36.7,
+  37.1–37.3, 38.2.
 - Local test server: 127.0.0.1:8765.
 
 ## Questions for the user
@@ -24,7 +27,6 @@ status. Remove each once answered.
 
 | # | Module | Page | Model | Notes |
 |---|--------|------|-------|-------|
-| 33 | Mouth, pharynx, nose, larynx | anatomy/head-neck/ | own pack | AN36.x, 37.x, 38.2 |
 | 34 | Ear and eye (anatomy) | anatomy/head-neck/ | own pack | AN40.x, 41.x, 31.4, 30.5; link ophthalmology |
 | 35 | Pelvic viscera, perineum, male genitalia | anatomy/abdomen-pelvis/ | own pack | AN46, 48, 49 |
 | 33 | Neuroanatomy | | | |
