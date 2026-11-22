@@ -1305,3 +1305,42 @@ tubercles.
   vesicles; malrotation and reversed rotation drawn; annular pancreas round the 2nd part; IMA in front of the kidneys;
   optic cup layers swapped; mandibular prominence hatch; --telen too close to --parathy; unquoted and one-source
   statements quoted, attributed or cut; overlapping and clipped labels; small figures fit phone width.
+
+## Genetics — `genetics/chromosomes-karyotype.html`, `genetics/inheritance-pedigrees.html`, `genetics/aberrations-clinical.html`
+
+- Fact sheet `sources-local/facts/fill-genetics.md` (712 quotes, script-checked against `sources-local/modern/fill-genetics/`,
+  downloads 2026-11-22): StatPearls (25 abstracts); GeneReviews abstracts (achondroplasia, X-linked hypophosphataemia);
+  MedlinePlus Genetics (public-domain summaries; "Courtesy of MedlinePlus from the National Library of Medicine");
+  open-access papers PMC8022097, PMC1084335, PMC8198510, PMC3983585, PMC5023040, PMC4215412, PMC12941462, PMC12801557,
+  PMC13258534, PMC12176624, PMC13484737, PMC3991414, PMC3769083, PMC7658086, PMC10084876, PMC12898306, PMC12712970,
+  PMC13341453, PMC3781639, PMC12050259, PMC12469938, PMC13745948, PMC13178452, PMC2853554, PMC6060985, PMC4629947,
+  PMC13538617, PMC13072683, PMC13627043, PMC13419904, PMC13740504; Wikipedia (Centromere tables rebuilt from wikitext).
+  Gray 1918 not used.
+- Not independent (10-word shingle check): Wikipedia "Chromosome 21", "Uniparental disomy", "Leber hereditary optic
+  neuropathy", "Mutation", "Myotonic dystrophy", "Patau syndrome", "XYY syndrome" and part of "CFTR" copy MedlinePlus;
+  "Achondroplasia" copies the GeneReviews abstract; the Wikipedia Denver-group table copies an IOP paper. None is counted
+  as a second source. No quoted article cites OpenStax ("Betts" in "Achondroplasia" is James Betts, a consensus co-author).
+- Contested, shown on the page: X and Y in groups C and G vs a separate "group H"; Down syndrome types (about 94% free
+  trisomy, 4% vs 5.6% translocation, 1–2% mosaic) and two maternal-age series plotted separately; Edwards 5% mosaic vs
+  5% translocation; Klinefelter frequency and mosaic share; F508del share; alkaline phosphatase in XLH; heart disease in
+  Down syndrome (about 40% vs about half); horseshoe kidney in Turner syndrome (10% vs 14–20%).
+- Single source, attributed on the page: pedigree carrier and numbering conventions; chromosome sizes for the to-scale
+  drawing; the Barr-body "X minus one" rule and 47,XXX; knight's move; repeat ranges; the threshold model; cleft lip and
+  NTD recurrence; paternal expansion in Huntington disease and congenital myotonic dystrophy from the mother; the 1%
+  polymorphism cut-off; sickle Glu6Val; PCR temperatures; ddNTP chemistry; non-directive counselling; father-carrier
+  risk under 5%; rocker-bottom feet, cutis aplasia, cubitus valgus; meiosis II errors being rarer; AVSD and duodenal
+  atresia in Down syndrome (linked to the embryology pages).
+- Left out (no second source): ambiguous genitalia as a karyotype indication; the Carter effect and pyloric stenosis;
+  sweat-test cut-offs; transplant and micro-chimerism; the fate of the 45 line after a mitotic error; "does not respond
+  to vitamin D".
+- Images (Wikimedia Commons, licences read 2026-11-22): NHGRI karyogram, public domain (resized, group labels added);
+  Reischig metaphase spread, CC BY-SA 3.0 (cropped, resized, 2 labels); Dietzel Barr body / X-territory painting,
+  CC BY-SA 3.0 (recompressed); DOE trisomy 21 karyotype, public domain (converted to JPEG); Serra Amoros trisomy 18,
+  CC BY-SA 4.0 (recompressed); Saideekshit et al. 46,X,i(Xq) from a mosaic Turner case, CC BY 4.0 (recompressed).
+  "47,XXY.jpg" and "45,X.jpg" not used (no author); Trisomy13.jpg not obtained. No patient photographs.
+- New colour tokens: `--mat` (maternal), `--pat` (paternal), `--mut` (variant or moved segment), `--probe` (FISH signal),
+  checked with colcheck3 against atlas.css and every page.
+- Independent review 2026-11-22, fixed: Punnett titles upper-casing genotypes; missing CFTR 7q31.2 and splice-site
+  variants; Wikipedia copies counted as second sources; over-claims and mis-credits; colour meanings (`--mat`, `--pat`,
+  `--mut`, `--clin`) and dark-theme contrast; mitotic non-disjunction, frameshift and ΔF508 drawings; pedigree layout and
+  the consanguinity line; label collisions; XLH flow arrows; image credits; phone layouts.

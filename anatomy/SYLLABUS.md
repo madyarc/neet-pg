@@ -599,24 +599,24 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 73. Chromosomes
 
-- [ ] **AN73.1** Describe the structure of chromosomes with classification
-- [ ] **AN73.2** Describe technique of karyotyping with its applications
-- [ ] **AN73.3** Describe the Lyon's hypothesis
+- [x] **AN73.1** Describe the structure of chromosomes with classification — *chromosome structure, centromere classes, Denver groups drawn to scale: [Chromosomes, Karyotype and X-Inactivation](genetics/chromosomes-karyotype.html)*
+- [x] **AN73.2** Describe technique of karyotyping with its applications — *karyotyping in seven steps, banding, resolution, uses: [Chromosomes, Karyotype and X-Inactivation](genetics/chromosomes-karyotype.html)*
+- [x] **AN73.3** Describe the Lyon's hypothesis — *Lyon hypothesis stepper, Barr bodies by karyotype: [Chromosomes, Karyotype and X-Inactivation](genetics/chromosomes-karyotype.html)*
 
 ### 74. Patterns of Inheritance
 
-- [ ] **AN74.1** Describemendelian and non-mendelian inheritance. Explain various modes of inheritance with examples.
-- [ ] **AN74.2** Draw pedigree charts for the various types of inheritance & give examples of diseases of each mode of inheritance
-- [ ] **AN74.3** Describemultifactorial inheritance with examples
-- [ ] **AN74.4** Describe the genetic basis & clinical features of Achondroplasia, Cystic Fibrosis, Vitamin D resistant
+- [x] **AN74.1** Describemendelian and non-mendelian inheritance. Explain various modes of inheritance with examples. — *Mendel's laws, Mendelian and non-Mendelian modes: [Inheritance and Pedigrees](genetics/inheritance-pedigrees.html)*
+- [x] **AN74.2** Draw pedigree charts for the various types of inheritance & give examples of diseases of each mode of inheritance — *pedigree symbols and pedigrees for six modes: [Inheritance and Pedigrees](genetics/inheritance-pedigrees.html)*
+- [x] **AN74.3** Describemultifactorial inheritance with examples — *multifactorial inheritance and the threshold model: [Inheritance and Pedigrees](genetics/inheritance-pedigrees.html)*
+- [x] **AN74.4** Describe the genetic basis & clinical features of Achondroplasia, Cystic Fibrosis, Vitamin D resistant — *achondroplasia, cystic fibrosis, X-linked hypophosphataemic rickets: [Inheritance and Pedigrees](genetics/inheritance-pedigrees.html)*
 
 ### 75. Principles of Genetics, Chromosomal Aberrations & Clinical Genetics
 
-- [ ] **AN75.1** Describe the structural and numerical chromosomal aberrations
-- [ ] **AN75.2** Explain the terms mosaics and chimeras with example
-- [ ] **AN75.3** Describe the genetic basis & clinical features of: Prader Willi syndrome, Edward syndrome, Patau syndrome, Down syndrome, Turner Syndrome & Klinefelter syndrome
-- [ ] **AN75.4** Describe genetic basis of variation: polymorphism and mutation
-- [ ] **AN75.5** Describe in brief: genetic counseling, karyotyping, FISH, PCR and genetic sequencing
+- [x] **AN75.1** Describe the structural and numerical chromosomal aberrations — *non-disjunction, numerical and structural aberrations: [Chromosomal Aberrations and Clinical Genetics](genetics/aberrations-clinical.html)*
+- [x] **AN75.2** Explain the terms mosaics and chimeras with example — *mosaics vs chimeras: [Chromosomes, Karyotype and X-Inactivation](genetics/chromosomes-karyotype.html)*
+- [x] **AN75.3** Describe the genetic basis & clinical features of: Prader Willi syndrome, Edward syndrome, Patau syndrome, Down syndrome, Turner Syndrome & Klinefelter syndrome — *Down, Edwards, Patau, Turner, Klinefelter, Prader–Willi vs Angelman: [Chromosomal Aberrations and Clinical Genetics](genetics/aberrations-clinical.html)*
+- [x] **AN75.4** Describe genetic basis of variation: polymorphism and mutation — *polymorphism; silent, missense, nonsense, frameshift, in-frame and splice-site variants: [Chromosomal Aberrations and Clinical Genetics](genetics/aberrations-clinical.html)*
+- [x] **AN75.5** Describe in brief: genetic counseling, karyotyping, FISH, PCR and genetic sequencing — *genetic counselling, karyotype, FISH, PCR, sequencing: [Chromosomal Aberrations and Clinical Genetics](genetics/aberrations-clinical.html)*
 
 ### 76. Introduction to embryology
 

@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Inheritance and Pedigrees</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<link rel="stylesheet" href="gen.css">
+<style>
+/* colours, one meaning each. atlas.css: --ink (pedigree: affected = filled, carrier = dot), --accent (UI selection), --clin (a clinical point).
+   Genetics tokens (same values on all three genetics pages; checked with colcheck3.py): --mat (from the mother), --pat (from the father),
+   --mut (a disease-causing variant allele or altered protein). */
+:root{--mat:#8c0772;--pat:#125959;--mut:#8c8c07}
+:root[data-theme="dark"]{--mat:#d92bd9;--pat:#9df2ea;--mut:#c4f20c;color-scheme:dark}
+svg.sch .mat{fill:var(--mat)} svg.sch .pat{fill:var(--pat)} svg.sch .mut{fill:var(--mut)}
+svg.sch .ped{stroke:var(--ink);stroke-width:1.6;fill:var(--surface)}
+svg.sch .aff{fill:var(--ink)}
+svg.sch .line{stroke:var(--ink);stroke-width:1.4;fill:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> <span class="muted" style="font-size:13px">· Genetics: <a href="chromosomes-karyotype.html">Chromosomes, karyotype</a> · <span aria-current="page">Inheritance, pedigrees</span> · <a href="aberrations-clinical.html">Aberrations, syndromes, tests</a></span></nav>
+
+<header class="stack">
+  <h1>Inheritance and Pedigrees</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-mendel">Mendel's laws</a> <a href="#h-sym">Pedigree symbols</a> <a href="#h-modes">Modes of inheritance</a> <a href="#h-nonm">Non-Mendelian</a> <a href="#h-multi">Multifactorial</a> <a href="#h-ach">Achondroplasia</a> <a href="#h-cf">Cystic fibrosis</a> <a href="#h-xlh">Vitamin D-resistant rickets</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-mendel">
+  <h2 id="h-mendel">Mendel's laws and the chances for each child</h2>
+  <div class="chips" id="pun-tg" aria-label="Cross"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="pun-svg" viewBox="0 0 400 300" role="img" aria-label="Punnett square for the chosen cross: the parents' gametes along the edges and each child's genotype in the cells"></svg></div>
+    <div class="prose find" id="pun-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="pun-key"></div>
+  <div class="prose" id="mendel-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sym">
+  <h2 id="h-sym">Standard pedigree symbols</h2>
+  <div class="schbox"><svg class="fig sch" id="sym-svg" viewBox="0 0 680 220" role="img" aria-label="Pedigree symbols: square male, circle female, diamond sex unknown, filled affected, dot carrier, slash deceased, arrow proband, the lines for parents and children, generation numbering"></svg></div>
+  <p class="muted" id="sym-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-modes">
+  <h2 id="h-modes">Modes of inheritance: pedigrees</h2>
+  <div class="chips" id="ped-tg" aria-label="Mode"></div>
+  <div class="chips" id="car-tg" aria-label="Carriers"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ped-svg" viewBox="0 0 560 330" role="img" aria-label="A three-generation pedigree showing the chosen mode of inheritance"></svg></div>
+    <div class="prose find" id="ped-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Illustrative families drawn from data, built to follow each rule; real families vary (penetrance, new mutations, small numbers).</p>
+  <div class="scroll"><table id="mode-table"></table></div>
+  <div class="prose" id="pen-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-nonm">
+  <h2 id="h-nonm">Non-Mendelian inheritance</h2>
+  <div class="two">
+    <div class="prose" id="mito-text"></div>
+    <div class="prose" id="imp-text"></div>
+  </div>
+  <div class="schbox"><svg class="fig sch fit small" id="imp-svg" viewBox="0 0 390 210" role="img" aria-label="Chromosome 15 pair, one from each parent, with the 15q11–q13 region: Prader–Willi genes active only on the father's copy, UBE3A active only on the mother's copy in neurons"></svg></div>
+  <div class="key" id="imp-key"></div>
+  <h3>Anticipation and trinucleotide repeats</h3>
+  <div class="chips" id="rep-tg" aria-label="Disorder"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="rep-svg" viewBox="0 0 520 230" role="img" aria-label="A ruler of repeat numbers for the chosen disorder with the normal, intermediate or premutation, and disease ranges"></svg></div>
+    <div class="prose find" id="rep-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Ranges from MedlinePlus Genetics (one source for the numbers); segments are equal widths, not to scale. Hatched: intermediate or premutation; coloured: disease range.</p>
+  <div class="prose" id="ant-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-multi">
+  <h2 id="h-multi">Multifactorial inheritance</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit small" id="thr-svg" viewBox="0 0 380 250" role="img" aria-label="Liability threshold model: a bell-shaped curve of liability in the population with a threshold; people beyond it are affected"></svg></div>
+    <div class="prose" id="multi-text"></div>
+  </div>
+  <p class="muted">Schematic of the liability–threshold model (Wikipedia); the curve is a normal distribution, not data.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ach">
+  <h2 id="h-ach">Achondroplasia</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit small" id="ach-svg" viewBox="0 0 340 470" role="img" aria-label="FGFR3 receptor crossing the cell membrane with the glycine 380 to arginine change in its transmembrane part, and a bar chart of the father's age effect"></svg></div>
+    <div class="prose" id="ach-text"></div>
+  </div>
+  <p class="muted">Schematic receptor, not to scale. Bars: relative chance of a new achondroplasia mutation, fathers in their twenties = 1 (review PMC3781639).</p>
+  <div class="scroll"><table id="ach-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cf">
+  <h2 id="h-cf">Cystic fibrosis</h2>
+  <div class="chips" id="cf-tg" aria-label="CFTR"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit small" id="cf-svg" viewBox="0 0 360 300" role="img" aria-label="An airway epithelial cell: the CFTR protein made in the endoplasmic reticulum and placed in the apical membrane as a chloride channel, or, with delta F508, misfolded and broken down"></svg></div>
+    <div class="prose find" id="cf-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic cell, not to scale.</p>
+  <div class="scroll"><table id="cf-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-xlh">
+  <h2 id="h-xlh">Vitamin D-resistant rickets: X-linked hypophosphataemia</h2>
+  <div class="chips" id="xlh-tg" aria-label="State"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="xlh-svg" viewBox="0 0 545 310" role="img" aria-label="Chain from the PHEX gene to FGF23, kidney phosphate handling, calcitriol, blood phosphate and bone, normal or in X-linked hypophosphataemia"></svg></div>
+    <div class="prose find" id="xlh-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic flow; each arrow is labelled with what it does. FGF23 is made mainly by osteocytes and osteoblasts (review PMC13745948; review PMC13178452: expressed in bone).</p>
+  <div class="scroll"><table id="xlh-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="gen.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-genetics.md, Part B; anatomy/DATA-SOURCES.md) ===================== */
+const LEDE = 'Mendel\'s laws as chances for each child, the standard pedigree symbols, pedigrees for each mode of inheritance, the non-Mendelian patterns (mitochondrial, imprinting, anticipation), multifactorial inheritance, and three single-gene disorders: achondroplasia, cystic fibrosis and X-linked hypophosphataemic (vitamin D-resistant) rickets. Chromosomes and the Lyon hypothesis: <a href="chromosomes-karyotype.html">Chromosomes and Karyotype</a>; Prader–Willi and Angelman syndromes, mutation types: <a href="aberrations-clinical.html">Aberrations, Syndromes and Tests</a>.';
+
+/* Punnett squares: mother's gametes (rows), father's gametes (columns); cell outcome: a affected, c carrier, n unaffected */
+const PUN = {sel: 'ar'};
+const PUN_ITEMS = {
+  ad: ['AD: affected × unaffected', ['a', 'a'], ['A', 'a'], {Aa: 'a', aa: 'n'}, 'Father Aa (affected), mother aa',
+    '<h3>Autosomal dominant</h3><p>One altered copy is enough (MedlinePlus; StatPearls). An affected heterozygote and an unaffected partner: <b>each child has a 50% chance</b> (MedlinePlus; GeneReviews for achondroplasia).</p>'],
+  ar: ['AR: carrier × carrier', ['A', 'a'], ['A', 'a'], {AA: 'n', Aa: 'c', aA: 'c', aa: 'a'}, 'Both parents Aa (carriers)',
+    '<h3>Autosomal recessive</h3><p>Both copies must be altered (StatPearls; MedlinePlus). Two carrier parents: each child <b>25% affected, 50% carrier, 25% neither</b> (MedlinePlus; review PMC12469938 for CF).</p>'],
+  xlrm: ['XLR: carrier mother', ['XA', 'Xa'], ['XA', 'Y'], {XAXA: 'n', XAY: 'n', XaXA: 'c', XaY: 'a'}, 'Mother XᴬXᵃ (carrier), father XᴬY',
+    '<h3>X-linked recessive, carrier mother</h3><p>Each <b>son 50% affected</b>, each <b>daughter 50% carrier</b> (StatPearls).</p>'],
+  xlrf: ['XLR: affected father', ['XA', 'XA'], ['Xa', 'Y'], {XAXa: 'c', XAY: 'n'}, 'Mother XᴬXᴬ, father XᵃY (affected)',
+    '<h3>X-linked recessive, affected father</h3><p>He gives his X to every daughter and his Y to every son: <b>all daughters are carriers, no son is affected</b> — no male-to-male transmission (StatPearls; MedlinePlus).</p>'],
+  xldf: ['XLD: affected father', ['X', 'X'], ['XD', 'Y'], {XXD: 'a', XY: 'n'}, 'Mother XX, father XᴰY (affected)',
+    '<h3>X-linked dominant, affected father</h3><p><b>All daughters affected, no sons</b> (StatPearls; Wikipedia) — the classic exam pattern of X-linked hypophosphataemic rickets (GeneReviews; MedlinePlus).</p>'],
+};
+const SUP = s => s.replace(/X([ADa])/g, 'X<tspan baseline-shift="super" font-size="9">$1</tspan>');
+const MENDEL_TEXT = `<p><b>Mendel's laws</b> (StatPearls; Wikipedia): <b>dominance</b> — one allele can mask another; <b>segregation</b> — the two alleles of a gene separate in gamete formation, so each gamete carries one; <b>independent assortment</b> — alleles of different genes sort independently, except genes close together on one chromosome (<b>linkage</b>, StatPearls). Beyond complete dominance there is incomplete dominance (an intermediate heterozygote) and <b>codominance</b>, both alleles expressed — e.g. the ABO blood groups (StatPearls; MedlinePlus).</p>`;
+
+/* pedigree symbol key */
+const SYM_NOTE = 'Symbols as Wikipedia describes the standard set; square, circle, diamond, filled, slash and arrow also in the legends of open case reports (PMC13538617, PMC13072683, PMC13627043); the double line for a consanguineous couple in two others (PMC13419904, PMC13740504). Carriers, when identifiable, get a dot or a half-filled symbol (Wikipedia; PMC13419904); some reports hatch them instead.';
+
+/* pedigrees: P = [id, sex m|f, status a|c|n, generation (0..2), x]; C = couples [id1, id2, [children ids]] */
+const PED = {sel: 'ad', car: true};
+const PEDS = {
+  ad: {name: 'Autosomal dominant', P: [['I1', 'm', 'a', 0, 200], ['I2', 'f', 'n', 0, 280], ['II1', 'f', 'a', 1, 100], ['II2', 'm', 'n', 1, 180], ['II3', 'm', 'a', 1, 300], ['II4', 'f', 'n', 1, 380], ['II5', 'm', 'n', 1, 40],
+      ['III1', 'm', 'a', 2, 30], ['III2', 'f', 'n', 2, 110], ['III3', 'm', 'a', 2, 300], ['III4', 'f', 'n', 2, 380], ['III5', 'f', 'a', 2, 460]],
+    C: [['I1', 'I2', ['II1', 'II2', 'II3']], ['II5', 'II1', ['III1', 'III2']], ['II3', 'II4', ['III3', 'III4', 'III5']]], pro: 'III3',
+    find: '<h3>Autosomal dominant</h3><ul><li>Affected people in <b>every generation</b>; each affected person has an affected parent, unless the mutation is new (MedlinePlus; Wikipedia).</li><li><b>Males and females</b> alike; the trait can pass father to son (III-3 here); X-linked traits never pass from father to son (MedlinePlus).</li><li>Each child of an affected heterozygote: <b>50%</b> (MedlinePlus; GeneReviews).</li><li>Examples: <b>Huntington disease</b>, <b>achondroplasia</b>, myotonic dystrophy; Marfan syndrome (MedlinePlus).</li></ul>'},
+  ar: {name: 'Autosomal recessive', P: [['I1', 'm', 'c', 0, 200], ['I2', 'f', 'n', 0, 280], ['II0', 'm', 'n', 1, 60], ['II1', 'f', 'c', 1, 140], ['II2', 'm', 'c', 1, 340], ['II3', 'f', 'n', 1, 420],
+      ['III1', 'm', 'c', 2, 200], ['III2', 'f', 'c', 2, 280], ['IV1', 'm', 'n', 3, 120], ['IV2', 'f', 'a', 3, 200], ['IV3', 'm', 'c', 3, 280], ['IV4', 'm', 'a', 3, 360]],
+    C: [['I1', 'I2', ['II1', 'II2']], ['II0', 'II1', ['III1']], ['II2', 'II3', ['III2']], ['III1', 'III2', ['IV1', 'IV2', 'IV3', 'IV4'], 'cons']], pro: 'IV2',
+    find: '<h3>Autosomal recessive</h3><ul><li>Usually <b>not in every generation</b>: affected children of <b>unaffected carrier parents</b> (MedlinePlus; Wikipedia).</li><li>Males and females alike.</li><li>Two carriers: each child <b>25% affected, 50% carrier</b> (MedlinePlus; review PMC12469938).</li><li>Here the parents of generation IV are <b>first cousins</b> (double line). Children of related parents are at increased risk of certain genetic disorders (MedlinePlus; Wikipedia: a reason for genetic counselling).</li><li>Examples: <b>cystic fibrosis</b>, sickle cell disease (MedlinePlus).</li></ul>'},
+  xlr: {name: 'X-linked recessive', P: [['I1', 'm', 'n', 0, 200], ['I2', 'f', 'c', 0, 280], ['II5', 'm', 'n', 1, 40], ['II2', 'f', 'c', 1, 120], ['II3', 'f', 'n', 1, 200], ['II4', 'm', 'n', 1, 280], ['II1', 'm', 'a', 1, 360], ['II0', 'f', 'n', 1, 440],
+      ['III1', 'm', 'a', 2, 20], ['III2', 'f', 'c', 2, 90], ['III3', 'm', 'n', 2, 160], ['III4', 'f', 'c', 2, 370], ['III5', 'm', 'n', 2, 450]],
+    C: [['I1', 'I2', ['II1', 'II2', 'II3', 'II4']], ['II1', 'II0', ['III4', 'III5']], ['II5', 'II2', ['III1', 'III2', 'III3']]], pro: 'III1',
+    find: '<h3>X-linked recessive</h3><ul><li>Mostly <b>males</b> affected; carrier women usually unaffected or mildly affected (StatPearls; MedlinePlus).</li><li><b>No male-to-male transmission</b>.</li><li>An affected man: <b>all daughters carriers</b>, sons unaffected (II-5\'s children here).</li><li>A carrier woman: each son 50% affected, each daughter 50% carrier.</li><li>Grandfather → carrier daughter → grandson: "knight\'s move" (StatPearls).</li><li>Examples: <b>haemophilia</b>, <b>Duchenne muscular dystrophy</b> (MedlinePlus; StatPearls); G6PD deficiency ("X-linked", MedlinePlus).</li></ul>'},
+  xld: {name: 'X-linked dominant', P: [['I1', 'm', 'a', 0, 200], ['I2', 'f', 'n', 0, 280], ['II1', 'f', 'a', 1, 160], ['II2', 'm', 'n', 1, 240], ['II3', 'f', 'a', 1, 320], ['II4', 'm', 'n', 1, 400], ['II5', 'm', 'n', 1, 80],
+      ['III1', 'm', 'a', 2, 40], ['III2', 'f', 'n', 2, 110], ['III3', 'f', 'a', 2, 180], ['III4', 'm', 'n', 2, 250]],
+    C: [['I1', 'I2', ['II1', 'II2', 'II3', 'II4']], ['II5', 'II1', ['III1', 'III2', 'III3', 'III4']]], pro: 'II1',
+    find: '<h3>X-linked dominant</h3><ul><li>Both sexes, <b>females more often</b> and usually less severely (StatPearls; MedlinePlus).</li><li>An affected man passes it to <b>all his daughters and none of his sons</b> (I-1) (StatPearls; Wikipedia).</li><li>An affected woman: <b>half her children</b>, sons and daughters alike (II-2).</li><li>Examples: <b>X-linked hypophosphataemic (vitamin D-resistant) rickets</b> — in which, unusually, both sexes are similarly affected (GeneReviews; MedlinePlus) — (StatPearls; Wikipedia; GeneReviews); fragile X syndrome (MedlinePlus; Wikipedia). Some are lethal in males (StatPearls).</li></ul>'},
+  y: {name: 'Y-linked', P: [['I1', 'm', 'a', 0, 200], ['I2', 'f', 'n', 0, 280], ['II1', 'm', 'a', 1, 120], ['II2', 'f', 'n', 1, 200], ['II3', 'm', 'a', 1, 300], ['II4', 'f', 'n', 1, 380],
+      ['III1', 'm', 'a', 2, 260], ['III2', 'f', 'n', 2, 340], ['III3', 'm', 'a', 2, 420]],
+    C: [['I1', 'I2', ['II1', 'II2', 'II3']], ['II3', 'II4', ['III1', 'III2', 'III3']]], pro: 'III1',
+    find: '<h3>Y-linked (holandric)</h3><ul><li><b>Only males</b>; from an affected father to <b>every son</b>, never to daughters (MedlinePlus; Wikipedia).</li><li>Examples (MedlinePlus): Y-chromosome infertility, some cases of Swyer syndrome. Many older claims of Y-linked traits were wrong (Wikipedia).</li></ul>'},
+  mt: {name: 'Mitochondrial', P: [['I1', 'm', 'n', 0, 200], ['I2', 'f', 'a', 0, 280], ['II0', 'f', 'n', 1, 40], ['II1', 'm', 'a', 1, 120], ['II2', 'f', 'a', 1, 300], ['II3', 'm', 'n', 1, 380],
+      ['III1', 'f', 'n', 2, 40], ['III2', 'm', 'n', 2, 120], ['III3', 'f', 'a', 2, 300], ['III4', 'm', 'a', 2, 380]],
+    C: [['I1', 'I2', ['II1', 'II2']], ['II1', 'II0', ['III1', 'III2']], ['II3', 'II2', ['III3', 'III4']]], pro: 'III3',
+    find: '<h3>Mitochondrial (maternal)</h3><ul><li>Mitochondria come <b>only from the egg</b>: a woman can pass the condition to any of her children, a man to <b>none</b> (II-2) (MedlinePlus).</li><li>Both sexes; may appear in every generation (MedlinePlus).</li><li><b>Heteroplasmy</b> — normal and mutant mtDNA mixed — makes severity vary; some carriers show nothing (StatPearls; Wikipedia).</li><li>Example: <b>Leber hereditary optic neuropathy</b> (MedlinePlus; StatPearls).</li></ul>'},
+};
+const MODE_HEAD = ['Mode', 'Who is affected', 'Passed by an affected man to', 'Typical examples'];
+const MODE_ROWS = [
+  ['Autosomal dominant', 'Both sexes, every generation', '50% of sons and daughters', 'Huntington, achondroplasia, myotonic dystrophy'],
+  ['Autosomal recessive', 'Both sexes; children of carrier parents', 'With a non-carrier partner: no child affected, each child 50% a carrier (MedlinePlus)', 'Cystic fibrosis, sickle cell disease'],
+  ['X-linked recessive', 'Mainly males', 'All daughters carriers; no sons', 'Haemophilia, Duchenne muscular dystrophy'],
+  ['X-linked dominant', 'Both, females more often', '<b>All daughters, no sons</b>', 'Hypophosphataemic rickets, fragile X'],
+  ['Y-linked', 'Males only', 'All sons', 'Y-chromosome infertility'],
+  ['Mitochondrial', 'Both sexes', 'None', 'Leber hereditary optic neuropathy'],
+];
+const PEN_TEXT = `<p><b>Reduced (incomplete) penetrance</b>: some people with the variant never show the disorder — penetrance is the proportion who do (MedlinePlus; Wikipedia). <b>Variable expressivity</b>: the signs differ between people with the same condition, even within a family (MedlinePlus; Wikipedia) — e.g. X-linked hypophosphataemia (GeneReviews). Achondroplasia has <b>full penetrance</b> (StatPearls). Many X-linked disorders do not fit "dominant" or "recessive" neatly; StatPearls and MedlinePlus note the proposal to call them simply <b>X-linked</b>.</p>`;
+
+const MITO_TEXT = `<h3>Mitochondrial inheritance</h3><p>Mitochondria have their own small DNA (mtDNA). Only the egg contributes mitochondria to the embryo, so mtDNA disorders pass <b>from mother to children, never from the father</b> (MedlinePlus). They hit energy-hungry organs — brain, muscle, heart (MedlinePlus). <b>Heteroplasmy</b> — a mixture of normal and mutant mtDNA — means disease appears only above a threshold proportion of mutant copies (Wikipedia; StatPearls for LHON). Pedigree: choose "Mitochondrial" above.</p>`;
+const IMP_TEXT = `<h3>Genomic imprinting and uniparental disomy</h3><p>For a few genes <b>only one parent's copy is active</b> — some only the father's, some only the mother's; the parental origin is marked during egg or sperm formation (MedlinePlus; Wikipedia). Imprinted genes cluster, chiefly at <b>15q11–q13</b> and 11p15 (Beckwith–Wiedemann syndrome; MedlinePlus). <b>Uniparental disomy</b> = both copies of a chromosome (or part) from one parent (MedlinePlus; review PMC2853554); it matters for imprinted regions (MedlinePlus), or by making a recessive allele homozygous (Wikipedia). Loss of the paternal 15q11–q13 genes causes <b>Prader–Willi syndrome</b>, loss of the maternal <i>UBE3A</i> <b>Angelman syndrome</b> — see <a href="aberrations-clinical.html#h-pws">Prader–Willi vs Angelman</a>.</p>`;
+
+/* repeat rulers (MedlinePlus): [from, to, label, kind n|i|d] */
+const REP = {sel: 'hd'};
+const REPS = {
+  hd: ['Huntington (CAG)', 'CAG repeats in HTT', [[10, 26, 'Normal (10–35)', 'n'], [27, 35, 'Normal, may expand in children', 'i'], [36, 39, 'May or may not develop', 'i'], [40, 60, 'Disease (adult 40–50)', 'd'], [61, 120, 'Juvenile >60', 'd']],
+    '<h3>Huntington disease</h3><p>Autosomal dominant; a <b>CAG</b> repeat in <i>HTT</i>. Normal 10–35; 27–35 does not cause disease but may lengthen in a child; 36–39 may or may not; 40 or more almost always; juvenile cases usually over 60 (MedlinePlus). Repeats tend to lengthen more when passed by the <b>father</b> (Wikipedia).</p>'],
+  fx: ['Fragile X (CGG)', 'CGG repeats in FMR1', [[5, 40, 'Normal (5–about 40)', 'n'], [55, 200, 'Premutation (55–200)', 'i'], [201, 260, 'Full mutation >200', 'd']],
+    '<h3>Fragile X syndrome</h3><p>A <b>CGG</b> repeat in <i>FMR1</i>; more than 200 repeats silence the gene (MedlinePlus). A <b>premutation</b> (55–200) can expand to a full mutation in a woman\'s egg cells (MedlinePlus; Wikipedia notes the grandchildren of carrier men being affected more often — anticipation).</p>'],
+};
+const ANT_TEXT = `<p><b>Anticipation</b>: a disorder appears <b>earlier and more severely</b> in each generation (MedlinePlus; StatPearls). It is typical of <b>trinucleotide repeat expansions</b>, whose unstable repeats lengthen when passed on — the age at onset falls as the repeat grows (StatPearls; MedlinePlus). Examples: Huntington disease, fragile X syndrome, myotonic dystrophy, Friedreich ataxia, spinocerebellar ataxias (StatPearls). In myotonic dystrophy type 1 the severe congenital form comes mostly from an affected mother (Wikipedia).</p>`;
+
+const MULTI_TEXT = `<p><b>Multifactorial (complex) disorders</b> come from <b>many genes</b> (polygenic) acting together with <b>environment and lifestyle</b> (MedlinePlus; StatPearls lists them as the third category beside single-gene and chromosomal disorders). They <b>cluster in families</b> but follow <b>no clear Mendelian pattern</b> (MedlinePlus).</p>
+<p><b>Liability–threshold model</b> (Wikipedia): everyone has a liability made of many small genetic and environmental contributions, spread as a bell curve; people beyond a threshold are affected.</p>
+<p><b>Examples</b>: heart disease, type 2 diabetes, obesity (MedlinePlus); <b>neural tube defects</b> — spina bifida, anencephaly (MedlinePlus; Wikipedia; a first-degree relative raises the risk 5–10 times, Wikipedia); cleft lip and palate (Wikipedia).</p>`;
+
+const ACH_TEXT = `<p>The commonest <b>short-limbed dwarfism</b>, about 1 in 15,000–40,000 births (MedlinePlus). <b>Autosomal dominant with full penetrance</b> (StatPearls). The cause is a <b>gain of function</b> of the fibroblast growth factor receptor 3 gene, <b><i>FGFR3</i></b> (on chromosome 4, Wikipedia): the receptor is over-active, and since FGFR3 normally <b>restrains</b> bone growth (Wikipedia), cartilage-to-bone growth slows (MedlinePlus).</p>
+<p>Two variants cause over 99% of cases (MedlinePlus); almost all are the same change, <b>c.1138G&gt;A, p.Gly380Arg (G380R)</b>, in the transmembrane part of the receptor — 97% of new cases (review PMC3781639).</p>
+<p><b>About 80% are new mutations</b> in children of average-height parents (MedlinePlus; GeneReviews; StatPearls). They arise in the <b>father's sperm</b>, and more often in <b>older fathers</b> (StatPearls; review PMC3781639; Wikipedia): fathers in their fifties about <b>10 times</b> as likely as fathers in their twenties (review). An affected parent with an average-height partner: 50% per child; two affected parents: 25% average height, 50% achondroplasia, 25% <b>homozygous — lethal</b> (GeneReviews; MedlinePlus; Wikipedia).</p>`;
+const ACH_HEAD = ['Feature', 'Detail'];
+const ACH_ROWS = [
+  ['Limbs', '<b>Rhizomelic</b> (proximal) shortening — upper arms and thighs shortest — with an average-size trunk; limited elbow extension (StatPearls; GeneReviews; MedlinePlus)'],
+  ['Head and face', '<b>Macrocephaly</b>, <b>frontal bossing</b>, midface hypoplasia (StatPearls; GeneReviews)'],
+  ['Hands', 'Short fingers; <b>trident hand</b> — a gap between middle and ring fingers (StatPearls; MedlinePlus)'],
+  ['Spine and legs', '<b>Lumbar lordosis</b>, bowed legs (<b>genu varum</b>), thoracolumbar kyphosis in infancy (MedlinePlus; StatPearls)'],
+  ['Intelligence', '<b>Normal</b> (MedlinePlus; StatPearls; GeneReviews)'],
+  ['Dangerous complications', '<b>Foramen magnum stenosis</b> — brainstem compression, sleep apnoea, hydrocephalus, death in infancy; spinal stenosis in adults; middle-ear infections; obesity (MedlinePlus; StatPearls; GeneReviews)'],
+  ['Height', 'Untreated adults average 131 cm (men) and 124 cm (women) (MedlinePlus)'],
+  ['Treatment', '<b>Vosoritide</b>, a C-type natriuretic peptide analogue, increases growth (StatPearls; GeneReviews, 2025–26 versions)'],
+];
+
+const CF = {sel: 'norm'};
+const CF_ITEMS = {
+  norm: ['Normal CFTR', '<h3>Normal CFTR</h3><p>The <b>CFTR</b> protein is a <b>chloride channel</b> made in the endoplasmic reticulum and placed in the apical membrane of epithelial cells; chloride flow controls the water that keeps mucus thin (MedlinePlus; StatPearls).</p>'],
+  df: ['ΔF508 (F508del)', '<h3>ΔF508 (F508del)</h3><p>The commonest mutation: <b>three nucleotides deleted</b>, so the protein lacks <b>phenylalanine 508</b> (Wikipedia; MedlinePlus). It is an <b>in-frame</b> deletion, not a frameshift (review PMC12050259; Wikipedia). The protein <b>misfolds in the endoplasmic reticulum and is degraded</b> — a class II processing defect — so little or no channel reaches the membrane (review PMC12050259; Wikipedia). It makes up about <b>60–70% of CF alleles</b> (review; Wikipedia: over 70%); about <b>90% of patients</b> carry at least one copy (review; Wikipedia).</p>'],
+};
+const CF_HEAD = ['', 'Cystic fibrosis'];
+const CF_ROWS = [
+  ['Inheritance', '<b>Autosomal recessive</b>; <i>CFTR</i> gene; over 2,000 mutations (StatPearls; MedlinePlus). Two carriers: 25% affected per child.'],
+  ['Gene locus', '<i>CFTR</i> on the long arm of chromosome 7, at <b>7q31.2</b> (MedlinePlus; review PMC12469938; Wikipedia)'],
+  ['Who', 'Commonest in white populations: 1 in 2,500–3,500 white newborns (MedlinePlus)'],
+  ['Lungs', 'Thick mucus, chronic infections, scarring; sinusitis. <b>End-stage lung disease</b> is the commonest cause of death (StatPearls; MedlinePlus)'],
+  ['Gut and pancreas', '<b>Meconium ileus</b> in newborns; <b>pancreatic insufficiency</b> — malabsorption, poor growth; later CF-related diabetes (MedlinePlus; StatPearls)'],
+  ['Reproduction', 'Most men infertile: <b>congenital bilateral absence of the vas deferens</b> (97–98% of men with CF, review PMC12469938; MedlinePlus)'],
+  ['Sweat', '<b>Salty sweat</b>; the <b>sweat chloride test</b> (StatPearls; Wikipedia)'],
+  ['Treatment', 'CFTR modulators (ivacaftor; elexacaftor–tezacaftor–ivacaftor) plus nutrition, airway clearance and infection control (StatPearls; review PMC12050259, 2025)'],
+];
+
+const XLH = {sel: 'xlh'};
+const XLH_ITEMS = {
+  norm: ['Normal', '<h3>Normal</h3><p><b>FGF23</b>, made in bone (reviews PMC13745948, PMC13178452), keeps phosphate in balance: it acts on the kidney and gut (MedlinePlus). The <b>PHEX</b> enzyme affects the activity of FGF23 (MedlinePlus).</p>'],
+  xlh: ['XLH (PHEX mutation)', '<h3>X-linked hypophosphataemia</h3><p>Inactivating <b><i>PHEX</i></b> variants (gene at <b>Xp22</b>) <b>raise FGF23</b>. The kidney <b>wastes phosphate</b> and makes <b>less calcitriol</b> (1,25-dihydroxyvitamin D), so gut absorption falls too: blood phosphate is low and bone is poorly mineralised — <b>rickets</b> in children, <b>osteomalacia</b> in adults (MedlinePlus; reviews PMC13178452, PMC13745948; Wikipedia). StatPearls names it vitamin D–resistant (hypophosphataemic) rickets.</p>'],
+};
+const XLH_HEAD = ['', 'X-linked hypophosphataemia'];
+const XLH_ROWS = [
+  ['Inheritance', '<b>X-linked dominant</b>. An affected <b>father → all daughters, no sons</b>; an affected mother → 50% of each child (GeneReviews; MedlinePlus; StatPearls). Males and females are <b>similarly affected</b> (GeneReviews; MedlinePlus) — an exception, since in X-linked dominant disorders generally females are less severely affected (StatPearls)'],
+  ['Frequency', 'The commonest hereditary rickets; about 1 in 20,000 (review PMC13745948; MedlinePlus 1 in 20,000–25,000)'],
+  ['Blood', 'Phosphate <b>low</b>; calcium normal; <b>FGF23 high</b>; calcitriol normal or low (inappropriately); ALP raised (normal or raised in one review); PTH normal or mildly raised (reviews PMC13745948, PMC13178452)'],
+  ['Children', '<b>Bowed legs</b> once walking starts, in the first two years; short stature; craniosynostosis; spontaneous <b>dental abscesses</b> (GeneReviews; MedlinePlus)'],
+  ['Adults', 'Osteomalacia with stress fractures, calcified tendons and ligaments (enthesopathy), joint pain; hearing loss (GeneReviews; MedlinePlus)'],
+  ['Treatment', '<b>Burosumab</b>, an anti-FGF23 monoclonal antibody; or oral <b>phosphate with active vitamin D</b> (calcitriol or alfacalcidol) (GeneReviews 2025; review PMC13745948, 2026). Not phosphate alone — secondary hyperparathyroidism (GeneReviews)'],
+];
+
+const DATA = {
+  based: 'Based on: StatPearls and GeneReviews (NCBI Bookshelf; abstracts); MedlinePlus Genetics (U.S. National Library of Medicine, public domain); open-access reviews (achondroplasia paternal-age study, Hum Mol Genet 2013; cystic fibrosis, 2025; hypophosphataemic rickets, 2026); open case reports for pedigree symbols; Wikipedia. Courtesy of MedlinePlus from the National Library of Medicine.',
+  models: 'Drawings: schematic, not to scale; pedigrees are illustrative families drawn from data.',
+};
+
+/* ===================== drawing ===================== */
+const {$, T} = Gen;
+function sym(x, y, sex, st, car, r = 13) {
+  let s = sex === 'm' ? `<rect x="${x - r}" y="${y - r}" width="${2 * r}" height="${2 * r}" class="ped${st === 'a' ? ' aff' : ''}"/>`
+    : sex === 'f' ? `<circle cx="${x}" cy="${y}" r="${r}" class="ped${st === 'a' ? ' aff' : ''}"/>`
+    : `<path d="M${x} ${y - r - 2} L${x + r + 2} ${y} L${x} ${y + r + 2} L${x - r - 2} ${y} Z" class="ped${st === 'a' ? ' aff' : ''}"/>`;
+  if (st === 'c' && car) s += `<circle cx="${x}" cy="${y}" r="4" class="aff"/>`;
+  return s;
+}
+function drawPun() {
+  const d = PUN_ITEMS[PUN.sel]; let s = Gen.DEFS;
+  const [, mg, fg, out, who] = d; const x0 = 140, y0 = 70, c = 90;
+  s += T(14, 22, 'PUNNETT SQUARE', 'h') + T(140, 22, who, 's');
+  s += T(x0 + c, y0 - 34, "Father's gametes", 's', 'middle') + T(x0 - 64, y0 + c, "Mother's", 's', 'middle') + T(x0 - 64, y0 + c + 14, 'gametes', 's', 'middle');
+  fg.forEach((g, j) => { s += `<text x="${x0 + c * j + c / 2}" y="${y0 - 10}" class="m" text-anchor="middle">${SUP(g)}</text>`; });
+  mg.forEach((g, i) => {
+    s += `<text x="${x0 - 14}" y="${y0 + c * i + c / 2 + 4}" class="m" text-anchor="end">${SUP(g)}</text>`;
+    fg.forEach((h, j) => {
+      const k = g + h, kr = h + g, o = out[k] || out[kr] || 'n', X = x0 + c * j, Y = y0 + c * i;
+      s += `<rect x="${X}" y="${Y}" width="${c}" height="${c}" class="box" style="stroke:var(--ink)"/>`;
+      const male = h === 'Y';
+      s += sym(X + c / 2, Y + 30, male ? 'm' : (g.startsWith('X') ? 'f' : 'u'), o, true, 11);
+      s += `<text x="${X + c / 2}" y="${Y + 66}" class="m" text-anchor="middle">${SUP(g + h)}</text>`;
+      s += T(X + c / 2, Y + 82, o === 'a' ? 'affected' : o === 'c' ? 'carrier' : 'unaffected', 's', 'middle');
+    });
+  });
+  $('pun-svg').innerHTML = s; $('pun-find').innerHTML = d[5];
+}
+function drawSym() {
+  let s = Gen.DEFS; const y = 60;
+  const items = [['m', 'n', 'Male'], ['f', 'n', 'Female'], ['u', 'n', 'Sex unknown'], ['m', 'a', 'Affected'], ['f', 'c', 'Carrier (dot)'], ['m', 'd', 'Deceased'], ['f', 'p', 'Proband']];
+  items.forEach(([sx, st, l], i) => {
+    const x = 50 + i * 92;
+    s += sym(x, y, sx, st === 'd' || st === 'p' ? 'n' : st, true, 14);
+    if (st === 'd') s += `<path class="line" d="M${x - 20} ${y + 20} L${x + 20} ${y - 20}"/>`;
+    if (st === 'p') s += `<path class="flow" d="M${x - 34} ${y + 26} L${x - 17} ${y + 11}"/>`;
+    s += T(x, y + 36, l, 's', 'middle');
+  });
+  /* family lines */
+  const fy = 140;
+  s += sym(300, fy, 'm', 'n', true, 11) + sym(380, fy, 'f', 'n', true, 11) + `<path class="line" d="M311 ${fy} H369 M340 ${fy} V${fy + 22} M300 ${fy + 22} H380 M300 ${fy + 22} V${fy + 32} M380 ${fy + 22} V${fy + 32}"/>`;
+  s += sym(300, fy + 43, 'f', 'n', true, 10) + sym(380, fy + 43, 'm', 'n', true, 10);
+  s += T(410, fy + 4, 'Parents: horizontal line', 's') + T(410, fy + 26, 'Children hang from a sibship line,', 's') + T(410, fy + 40, 'oldest on the left', 's');
+  s += T(40, fy + 4, 'Generations: I, II, III…', 's') + T(40, fy + 22, 'Individuals: 1, 2, 3… (e.g. II-1)', 's');
+  s += sym(60, fy + 50, 'm', 'n', true, 9) + sym(130, fy + 50, 'f', 'n', true, 9) + `<path class="line" d="M69 ${fy + 47} H121 M69 ${fy + 53} H121"/>` + T(150, fy + 54, 'Double line: related (consanguineous) couple', 's');
+  $('sym-svg').innerHTML = s;
+}
+function drawPed() {
+  const p = PEDS[PED.sel]; let s = Gen.DEFS;
+  const ng = Math.max(...p.P.map(q => q[3])) + 1, GY = ng === 4 ? [55, 135, 215, 295] : [60, 160, 260], by = {}, OX = 40, RN = ['I', 'II', 'III', 'IV'];
+  p.P.forEach(q => { by[q[0]] = q; });
+  s += T(14, 22, p.name.toUpperCase(), 'h');
+  GY.forEach((y, i) => { s += T(12, y + 4, RN[i], 'b'); });
+  s += `<g transform="translate(${OX} 0)">`;
+  p.C.forEach(([a, b, kids, cons]) => {
+    const A = by[a], B = by[b], y = GY[A[3]], mx = (A[4] + B[4]) / 2, x0 = Math.min(A[4], B[4]) + 13, x1 = Math.max(A[4], B[4]) - 13;
+    s += cons ? `<path class="line" d="M${x0} ${y - 3} H${x1} M${x0} ${y + 3} H${x1}"/>` : `<path class="line" d="M${x0} ${y} H${x1}"/>`;
+    const ky = GY[A[3] + 1], xs = kids.map(k => by[k][4]), sy = ky - (ng === 4 ? 24 : 30);
+    s += `<path class="line" d="M${mx} ${y + (cons ? 3 : 0)} V${sy} M${Math.min(...xs, mx)} ${sy} H${Math.max(...xs, mx)}"/>`;
+    xs.forEach(x => { s += `<path class="line" d="M${x} ${sy} V${ky - 13}"/>`; });
+  });
+  const gen = {};
+  p.P.slice().sort((u, v) => u[3] - v[3] || u[4] - v[4]).forEach(q => { gen[q[3]] = (gen[q[3]] || 0) + 1; q.n = gen[q[3]]; });
+  p.P.forEach(q => { s += sym(q[4], GY[q[3]], q[1], q[2], PED.car) + T(q[4], GY[q[3]] + 28, RN[q[3]] + '-' + q.n, 's', 'middle'); });
+  const pr = by[p.pro]; if (pr) s += `<path class="flow" d="M${pr[4] - 34} ${GY[pr[3]] + 24} L${pr[4] - 17} ${GY[pr[3]] + 11}"/>`;
+  s += '</g>';
+  $('ped-svg').innerHTML = s; $('ped-find').innerHTML = p.find;
+}
+function drawImp() {
+  let s = Gen.DEFS;
+  s += T(10, 20, 'CHROMOSOME 15 PAIR, SHORT ARM LEFT', 'h');
+  const row = (y, cls, lab, pwsOn) => {
+    let r = T(52, y + 4, lab, 'b', 'end');
+    r += `<rect x="60" y="${y - 9}" width="320" height="18" rx="9" class="${cls}" style="fill-opacity:.25;stroke:var(--ink)"/>` + `<path d="M84 ${y - 9} V${y + 9}" style="stroke:var(--ink);stroke-width:3"/>`;
+    r += `<rect x="96" y="${y - 9}" width="64" height="18" style="${pwsOn ? '' : 'fill:url(#hatch);'}stroke:var(--ink)" class="${pwsOn ? cls : ''}"/>`;
+    r += `<rect x="160" y="${y - 9}" width="34" height="18" style="${pwsOn ? 'fill:url(#hatch);' : ''}stroke:var(--ink)" class="${pwsOn ? '' : cls}"/>`;
+    return r;
+  };
+  s += row(70, 'pat', 'Father', true) + T(96, 52, 'PWS genes ON', 's') + T(200, 88, 'UBE3A off in neurons', 's');
+  s += row(150, 'mat', 'Mother', false) + T(96, 132, 'PWS genes silent', 's') + T(200, 168, 'UBE3A ON in neurons', 's');
+  s += Gen.lead(84, 159, 84, 186) + T(84, 198, 'centromere', 's', 'middle') + Gen.lead(145, 159, 145, 186) + T(180, 198, '15q11–q13', 'm', 'start');
+  $('imp-svg').innerHTML = s;
+}
+function drawRep() {
+  const [, axis, rng] = REPS[REP.sel]; let s = Gen.DEFS;
+  const n = rng.length, wseg = 440 / n;
+  s += T(14, 22, axis.toUpperCase() + ' (SEGMENTS NOT TO SCALE)', 'h');
+  rng.forEach(([a, b, l, k], i) => {
+    const x0 = 40 + i * wseg;
+    s += `<rect x="${x0}" y="60" width="${wseg}" height="28" style="fill:${k === 'n' ? 'var(--surface)' : k === 'i' ? 'url(#hatch)' : 'var(--mut)'};stroke:var(--ink)"/>`;
+    s += T(x0 + wseg / 2, 78, a + '–' + (i === n - 1 ? '' : b), k === 'd' ? 'm om' : 'm l', 'middle');
+    const ly = 122 + (n - 1 - i) * 20;
+    s += Gen.lead(x0 + 6, 90, x0 + 6, ly - 10) + T(x0 + 10, ly, l, 'l');
+  });
+  $('rep-svg').innerHTML = s; $('rep-find').innerHTML = REPS[REP.sel][3];
+}
+function drawThr() {
+  let s = Gen.DEFS; const pts = [], X0 = 20, W = 340;
+  for (let i = 0; i <= 100; i++) { const z = -3.2 + 6.4 * i / 100; pts.push([X0 + W * i / 100, 210 - 160 * Math.exp(-z * z / 2)]); }
+  const tx = X0 + W * (1.6 + 3.2) / 6.4;
+  s += `<path d="M${pts.map(p => p.join(' ')).join(' L')}" class="line"/>`;
+  const tail = pts.filter(p => p[0] >= tx);
+  s += `<path d="M${tx} 210 L${tail.map(p => p.join(' ')).join(' L')} L${X0 + W} 210 Z" style="fill:var(--ink);fill-opacity:.7"/>`;
+  s += `<path d="M${tx} 34 V214" style="stroke:var(--ink);stroke-width:2;stroke-dasharray:5 4"/>` + T(tx - 4, 30, 'Threshold', 'b', 'end');
+  s += `<path class="line" d="M${X0 - 6} 210 H${X0 + W + 6}"/>` + T(X0 + W / 2, 236, 'Liability (many genes + environment) →', 's', 'middle');
+  s += Gen.lead(tx + 30, 202, tx + 40, 120) + T(tx + 40, 112, 'Affected', 'b', 'middle');
+  s += T(X0 + W * 0.42, 190, 'Unaffected', 's', 'middle');
+  $('thr-svg').innerHTML = s;
+}
+function drawAch() {
+  let s = Gen.DEFS;
+  s += T(10, 20, 'FGFR3 RECEPTOR (SCHEMATIC)', 'h');
+  s += `<rect x="20" y="130" width="260" height="26" style="fill:var(--line)"/>` + T(24, 172, 'Cell membrane', 's');
+  s += `<rect x="134" y="50" width="32" height="74" rx="14" class="box" style="stroke:var(--ink)"/>` + T(126, 66, 'Outside: binds', 's', 'end') + T(126, 80, 'growth factor', 's', 'end');
+  s += `<rect x="141" y="124" width="18" height="38" class="mut"/>` + Gen.lead(160, 143, 196, 112) + T(200, 98, 'Transmembrane part:', 's') + T(200, 116, 'Gly380Arg (G380R)', 'b');
+  s += `<rect x="128" y="162" width="44" height="64" rx="10" class="box" style="stroke:var(--ink)"/>` + T(180, 196, 'Inside: signals', 's') + T(180, 210, 'too strongly', 's');
+  const bx = 60, base = 440, k = 15;
+  s += T(10, 250, "NEW MUTATIONS BY FATHER'S AGE (RELATIVE)", 'h');
+  [['Fathers in their 20s', 1], ['in their 50s', 10]].forEach(([l, v], i) => { const x = bx + i * 130; s += `<rect x="${x}" y="${base - v * k}" width="60" height="${v * k}" style="fill:var(--ink);fill-opacity:.55"/>` + T(x + 30, base + 16, l, 's', 'middle') + T(x + 30, base - v * k - 6, '×' + v, 'b', 'middle'); });
+  s += `<path class="line" d="M${bx - 14} ${base} H${bx + 210}"/>`;
+  $('ach-svg').innerHTML = s;
+}
+function drawCf() {
+  const df = CF.sel === 'df'; let s = Gen.DEFS;
+  s += T(10, 20, df ? 'ΔF508: MISFOLDED, DEGRADED' : 'NORMAL: CHLORIDE CHANNEL', 'h');
+  s += `<rect x="30" y="70" width="300" height="200" rx="14" class="box" style="stroke:var(--ink)"/>` + T(36, 62, 'Airway lumen (apical side)', 's');
+  s += `<ellipse cx="120" cy="205" rx="66" ry="30" style="fill:var(--line);stroke:var(--ink)"/>` + T(120, 252, 'Endoplasmic reticulum', 's', 'middle');
+  s += `<circle cx="270" cy="225" r="22" class="box" style="stroke:var(--ink)"/>` + T(270, 262, 'Nucleus', 's', 'middle');
+  if (!df) {
+    s += `<rect x="200" y="62" width="24" height="18" rx="4" class="box" style="stroke:var(--ink);stroke-width:2"/>` + T(232, 100, 'CFTR channel', 'b');
+    s += `<path class="flow" d="M212 120 V44"/>` + T(220, 40, 'Cl⁻ out', 'm');
+    s += `<path class="flow" d="M150 182 Q190 140 208 92"/>`;
+  } else {
+    s += `<path d="M100 200 q10 -14 20 0 q10 14 20 0" class="line" style="stroke:var(--mut);stroke-width:3"/>` + T(120, 166, 'Misfolded CFTR', 'b', 'middle');
+    s += `<path class="flow" d="M178 196 L226 150"/>` + T(232, 146, 'Broken down', 's');
+    s += `<rect x="200" y="62" width="24" height="18" rx="4" class="box gone" style="stroke:var(--ink)"/>` + T(232, 100, 'Little or no channel', 'b');
+    s += T(180, 292, 'Less chloride and water out → thick mucus', 'c', 'middle');
+  }
+  $('cf-svg').innerHTML = s; $('cf-find').innerHTML = CF_ITEMS[CF.sel][1];
+}
+function drawXlh() {
+  const x = XLH.sel === 'xlh'; let s = Gen.DEFS;
+  s += T(14, 22, x ? 'X-LINKED HYPOPHOSPHATAEMIA' : 'NORMAL', 'h');
+  const box = (cx, cy, l1, l2, bad) => `<rect x="${cx - 78}" y="${cy - 24}" width="156" height="48" rx="8" class="box" style="stroke:var(--ink);stroke-width:${bad ? 2.6 : 1.2}"/>` + T(cx, cy - 3, l1, 'b', 'middle') + T(cx, cy + 14, l2, 's', 'middle');
+  s += box(110, 70, 'PHEX gene (Xp22)', x ? 'inactivating variant' : 'working', x);
+  s += box(110, 170, 'FGF23 (made in bone)', x ? 'HIGH' : 'balanced', x);
+  s += box(370, 70, 'Kidney', x ? 'wastes phosphate' : 'reabsorbs as needed', x);
+  s += box(370, 170, 'Calcitriol (1,25-D)', x ? 'low / inappropriately normal' : 'made as needed', x);
+  s += box(370, 270, 'Blood phosphate', x ? 'LOW' : 'normal', x);
+  s += box(110, 270, 'Bone', x ? 'rickets / osteomalacia' : 'mineralised', x);
+  s += `<path class="flow" d="M110 94 V144"/>` + T(118, 124, x ? 'FGF23 rises' : 'regulates FGF23', 's');
+  s += `<path class="flow" d="M190 160 L292 84"/>` + T(232, 108, 'acts on', 's', 'end');
+  s += `<path class="flow" d="M370 94 V144"/>` + T(378, 124, x ? 'makes less' : 'makes', 's');
+  s += `<path class="flow" d="M452 70 Q500 170 452 262"/>` + T(484, 176, x ? 'urine loss' : 'balance', 's');
+  s += `<path class="flow" d="M370 194 V244"/>` + T(378, 224, x ? 'less gut uptake' : 'gut uptake', 's');
+  s += `<path class="flow" d="M290 270 H192"/>` + T(241, 262, x ? 'too little' : 'supply', 's', 'middle');
+  $('xlh-svg').innerHTML = s; $('xlh-find').innerHTML = XLH_ITEMS[XLH.sel][1];
+}
+
+/* ===================== init ===================== */
+(() => {
+  $('lede').innerHTML = LEDE; $('mendel-text').innerHTML = MENDEL_TEXT; $('sym-note').textContent = SYM_NOTE; $('pen-text').innerHTML = PEN_TEXT;
+  $('mito-text').innerHTML = MITO_TEXT; $('imp-text').innerHTML = IMP_TEXT; $('ant-text').innerHTML = ANT_TEXT; $('multi-text').innerHTML = MULTI_TEXT; $('ach-text').innerHTML = ACH_TEXT;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  Gen.toggles('pun-tg', Object.entries(PUN_ITEMS).map(([k, d]) => [k, d[0]]), k => { PUN.sel = k; drawPun(); }, 'ar');
+  Gen.key('pun-key', [['--ink', 'Affected (filled)'], ['--surface', 'Unaffected', 'border-color:var(--ink)']]);
+  Gen.toggles('ped-tg', Object.entries(PEDS).map(([k, d]) => [k, d.name]), k => { PED.sel = k; drawPed(); }, 'ad');
+  Gen.toggles('car-tg', [['on', 'Show carriers (dot)'], ['off', 'Hide carriers']], k => { PED.car = k === 'on'; drawPed(); }, 'on');
+  Gen.table('mode-table', MODE_HEAD, MODE_ROWS);
+  Gen.key('imp-key', [['--pat', 'Copy from the father'], ['--mat', 'Copy from the mother'], ['url(#x)', 'Hatched: silent copy', 'background:repeating-linear-gradient(45deg,var(--ink) 0 2px,var(--surface) 2px 6px)']]);
+  Gen.toggles('rep-tg', Object.entries(REPS).map(([k, d]) => [k, d[0]]), k => { REP.sel = k; drawRep(); }, 'hd');
+  Gen.table('ach-table', ACH_HEAD, ACH_ROWS);
+  Gen.toggles('cf-tg', Object.entries(CF_ITEMS).map(([k, d]) => [k, d[0]]), k => { CF.sel = k; drawCf(); }, 'norm');
+  Gen.table('cf-table', CF_HEAD, CF_ROWS);
+  Gen.toggles('xlh-tg', Object.entries(XLH_ITEMS).map(([k, d]) => [k, d[0]]), k => { XLH.sel = k; drawXlh(); }, 'xlh');
+  Gen.table('xlh-table', XLH_HEAD, XLH_ROWS);
+  drawPun(); drawSym(); drawPed(); drawImp(); drawRep(); drawThr(); drawAch(); drawCf(); drawXlh();
+  Gen.swipeHints();
+  window.ready = true;
+})();
+</script>
+</body>
+</html>

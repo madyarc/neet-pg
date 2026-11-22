@@ -23,8 +23,8 @@ Last updated: 2026-11-21
 - Module 42 (genetics: AN73.1–75.5) started 2026-11-22: sheet fill-genetics, pages in anatomy/genetics/.
   [x] build (688 quotes; chromosomes-karyotype, inheritance-pedigrees, aberrations-clinical; 6 Commons images;
   tokens --mat --pat --mut --probe; check_quotes.py now maps MLP- keys) [x] review (26 findings: Punnett titles AA, CFTR 7q and splice
-  missing, Wikipedia copying MedlinePlus, --mat/--pat/--mut/--clin misuse, dark contrast, drawings) [ ] fixes + docs (running)
-  [ ] commit. After: leftovers (general 1–6, radiology 54,
+  missing, Wikipedia copying MedlinePlus, --mat/--pat/--mut/--clin misuse, dark contrast, drawings) [x] fixes (712 quotes) [x] docs
+  [x] commit. Done 2026-11-22. Next: leftovers (general 1–6, radiology 54,
   sectional 51, osteology 53, surface 55, limb leftovers).
 - Module 41 (systemic embryology: AN25.2–25.6, 43.4, 52.4–52.8, 64.2–64.3) started 2026-11-22: sheet fill-embryo2,
   pages in anatomy/embryology/. [x] build (747 quotes; heart-vessels, gut-urogenital, head-neck-cns; not browser-tested,

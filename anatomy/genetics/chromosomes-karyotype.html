@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chromosomes, Karyotype and X-Inactivation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<link rel="stylesheet" href="gen.css">
+<style>
+/* colours, one meaning each. atlas.css: --accent (UI selection: the chosen group or arm), --ink/--muted/--line/--surface (chromosome outline,
+   G-bands as --ink at reduced opacity). Genetics tokens (same values on all three genetics pages; checked with colcheck3.py):
+   --mat (a chromosome from the mother), --pat (a chromosome from the father). */
+:root{--mat:#8c0772;--pat:#125959}
+:root[data-theme="dark"]{--mat:#d92bd9;--pat:#9df2ea;color-scheme:dark}
+svg.sch .mat{fill:var(--mat)} svg.sch .pat{fill:var(--pat)}
+svg.sch .matS{stroke:var(--mat)} svg.sch .patS{stroke:var(--pat)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> <span class="muted" style="font-size:13px">· Genetics: <span aria-current="page">Chromosomes, karyotype</span> · <a href="inheritance-pedigrees.html">Inheritance, pedigrees</a> · <a href="aberrations-clinical.html">Aberrations, syndromes, tests</a></span></nav>
+
+<header class="stack">
+  <h1>Chromosomes, Karyotype and X-Inactivation</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-chr">A chromosome</a> <a href="#h-set">The human set and Denver groups</a> <a href="#h-kar">Karyotyping</a> <a href="#h-lyon">Lyon hypothesis, Barr body</a> <a href="#h-mos">Mosaics and chimeras</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-chr">
+  <h2 id="h-chr">A chromosome and how it is classified</h2>
+  <div class="chips" id="chr-tg" aria-label="Centromere position"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="chr-svg" viewBox="0 0 520 380" role="img" aria-label="A metaphase chromosome with two sister chromatids joined at the centromere, short arm p above and long arm q below, telomeres at the ends; the centromere moves with the chosen class"></svg></div>
+    <div class="prose find" id="chr-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, not to scale; bands drawn for orientation only.</p>
+  <div class="prose" id="chr-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-set">
+  <h2 id="h-set">The human set: 46 chromosomes in seven Denver groups</h2>
+  <div class="chips" id="set-tg" aria-label="Group"></div>
+  <div class="schbox"><svg class="fig sch" id="set-svg" viewBox="0 0 680 330" role="img" aria-label="One chromosome of each of the 24 human types drawn to scale, grouped A to G with the sex chromosomes; the chosen group is highlighted"></svg></div>
+  <p class="muted" id="set-note"></p>
+  <div class="two">
+    <div class="scroll"><table id="grp-table"></table></div>
+    <div id="set-img" class="stack"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-kar">
+  <h2 id="h-kar">Karyotyping step by step</h2>
+  <div class="step" id="kar-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="kar-svg" viewBox="0 0 520 300" role="img" aria-label="The chosen step of chromosome preparation: sample, culture, colchicine arrest, hypotonic swelling, fixing and dropping, banding, analysis"></svg></div>
+    <div class="prose find" id="kar-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, not to scale.</p>
+  <div class="two">
+    <div class="prose" id="band-text"></div>
+    <div id="kar-img" class="stack"></div>
+  </div>
+  <h3>What a karyotype shows, and what it misses</h3>
+  <div class="scroll"><table id="res-table"></table></div>
+  <div class="prose" id="use-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lyon">
+  <h2 id="h-lyon">Lyon hypothesis and the Barr body</h2>
+  <div class="step" id="lyon-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="lyon-svg" viewBox="0 0 520 330" role="img" aria-label="Cells of a female embryo: both X chromosomes active, then one X inactivated at random in each cell, then each cell's choice copied to its descendants, giving patches"></svg></div>
+    <div class="prose find" id="lyon-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="lyon-key"></div>
+  <p class="muted">Schematic. Each cell shows its two X chromosomes; the faded, condensed one is inactive.</p>
+  <h3>How many Barr bodies?</h3>
+  <div class="chips" id="barr-tg" aria-label="Karyotype"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit small" id="barr-svg" viewBox="0 0 360 230" role="img" aria-label="An interphase nucleus with the number of Barr bodies for the chosen karyotype"></svg></div>
+    <div class="prose find" id="barr-find" aria-live="polite"></div>
+  </div>
+  <div class="two">
+    <div class="prose" id="lyon-text"></div>
+    <div id="lyon-img" class="stack"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mos">
+  <h2 id="h-mos">Mosaics and chimeras</h2>
+  <div class="chips" id="mos-tg" aria-label="Kind"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="mos-svg" viewBox="0 0 520 280" role="img" aria-label="A mosaic: one zygote whose cells later differ; a chimera: cells from two zygotes in one body"></svg></div>
+    <div class="prose find" id="mos-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic. Plain and hatched cells are the two genetically different cell lines.</p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+  <p id="images"></p>
+</footer>
+</div>
+
+<script src="gen.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-genetics.md, Part A; anatomy/DATA-SOURCES.md) ===================== */
+const LEDE = 'What a chromosome looks like and how chromosomes are classified, the seven Denver groups of the human set, how a karyotype is made and read, X-inactivation (Lyon hypothesis) with Barr bodies, and mosaics versus chimeras. Next: <a href="inheritance-pedigrees.html">inheritance and pedigrees</a>; <a href="aberrations-clinical.html">chromosomal aberrations, syndromes and genetic tests</a>. Meiosis and gametes: <a href="../embryology/early-development.html">Early Development</a>; prenatal tests (amniocentesis, CVS): <a href="../embryology/membranes-placenta.html">Membranes and Placenta</a>.';
+
+/* 1. classes by centromere position: cen = fraction of length from the top */
+const CHR = {sel: 'meta'};
+const CHR_ITEMS = {
+  meta: ['Metacentric', 0.5, '<h3>Metacentric</h3><p>Centromere <b>in the middle</b>: the two arms are about equal, an "X" shape (Wikipedia). Human examples: chromosomes <b>1, 3, 16, 19, 20</b> (the Wikipedia table of human chromosomes, one source).</p>'],
+  sub: ['Submetacentric', 0.3, '<h3>Submetacentric</h3><p>Centromere <b>off centre</b>: one arm (p) shorter than the other (Wikipedia: often an L shape). Most human chromosomes, including <b>X</b>.</p>'],
+  acro: ['Acrocentric', 0.1, '<h3>Acrocentric</h3><p>Centromere <b>near one end</b>: a very short p arm. In humans: <b>13, 14, 15, 21, 22</b> and <b>Y</b> (Wikipedia; review PMC7658086 for the five autosomes). Their short arms carry <b>satellites</b> on thin stalks (Wikipedia: with the nucleolar organiser, rRNA, genes in many copies) — so a Robertsonian translocation that loses two short arms does no harm to the carrier.</p>'],
+  telo: ['Telocentric', 0.0, '<h3>Telocentric</h3><p>Centromere <b>at the very end</b>, only one arm (Wikipedia). <b>None of the human chromosomes is telocentric</b>: human chromosomes are only metacentric, submetacentric or acrocentric (review PMC8022097; Wikipedia table).</p>'],
+};
+const CHR_TEXT = `<p>A normal body cell has <b>46 chromosomes in 23 pairs</b>: <b>22 pairs of autosomes</b> and <b>one pair of sex chromosomes</b> (XX in females, XY in males); gametes carry 23. Each chromosome is DNA wound round <b>histone</b> proteins; it becomes visible only when it condenses during cell division (MedlinePlus).</p>
+<p>At metaphase a chromosome is two identical <b>sister chromatids</b> held together at the <b>centromere</b> (the "primary constriction", Wikipedia). The centromere divides it into a <b>short arm, p</b>, and a <b>long arm, q</b>. <b>Telomeres</b> — repeated sequences — cap the ends.</p>
+<p><b>Writing a location:</b> chromosome number, arm, then the band number, which <b>grows with distance from the centromere</b>: <b>15q11</b> = chromosome 15, long arm, band 11; 14q21 lies nearer the centromere than 14q22 (MedlinePlus). The bands are the light and dark stripes seen after staining; the international system (ISCN) names them. The autosomes are numbered roughly by size, largest first — but <b>chromosome 21 is the smallest</b> (MedlinePlus; Wikipedia's table of sizes).</p>`;
+
+/* 2. one chromosome of each type to scale: [name, centromere position Mbp, category, size Mbp] — Wikipedia "Centromere" table of human
+      chromosomes (ONE SOURCE, marked "citation needed" there; attributed in the caption). Groups: Wikipedia + PMC8022097, PMC1084335, PMC8198510. */
+const CHROMS = [
+  ['1', 125.0, 'm', 247.2], ['2', 93.3, 's', 242.8], ['3', 91.0, 'm', 199.4], ['4', 50.4, 's', 191.3], ['5', 48.4, 's', 180.8],
+  ['6', 61.0, 's', 170.9], ['7', 59.9, 's', 158.8], ['8', 45.6, 's', 146.3], ['9', 49.0, 's', 140.4], ['10', 40.2, 's', 135.4],
+  ['11', 53.7, 's', 134.5], ['12', 35.8, 's', 132.3], ['13', 17.9, 'a', 114.1], ['14', 17.6, 'a', 106.3], ['15', 19.0, 'a', 100.3],
+  ['16', 36.6, 'm', 88.8], ['17', 24.0, 's', 78.7], ['18', 17.2, 's', 76.1], ['19', 26.5, 'm', 63.8], ['20', 27.5, 'm', 62.4],
+  ['21', 13.2, 'a', 46.9], ['22', 14.7, 'a', 49.5], ['X', 60.6, 's', 154.9], ['Y', 12.5, 'a', 57.7],
+];
+const GROUPS = [
+  ['A', ['1', '2', '3'], 'Large; metacentric (1, 3) and submetacentric (2)'],
+  ['B', ['4', '5'], 'Large, submetacentric'],
+  ['C', ['6', '7', '8', '9', '10', '11', '12', 'X'], 'Medium, submetacentric; the X is a C-group chromosome'],
+  ['D', ['13', '14', '15'], 'Medium, <b>acrocentric</b>, with satellites'],
+  ['E', ['16', '17', '18'], 'Small; metacentric (16) and submetacentric (17, 18)'],
+  ['F', ['19', '20'], 'Very small, metacentric'],
+  ['G', ['21', '22', 'Y'], 'Very small, <b>acrocentric</b>; 21 and 22 with satellites'],
+];
+const SET = {sel: 'all'};
+const SET_NOTE = 'Drawn to the sizes (in megabases) and centromere positions in Wikipedia\'s table of human chromosomes (one source; approximate, schematic). Groups: Wikipedia, review PMC8022097 (Reprod Med Biol 2021), PMC1084335, PMC8198510. Old names follow the groups: trisomy 18 was "trisomy E", Down syndrome "trisomy G" (MedlinePlus). One paper (PMC8198510) puts X and Y in a separate "group H" instead of C and G.';
+const GRP_HEAD = ['Group', 'Chromosomes', 'Size and centromere'];
+
+/* 3. karyotyping steps */
+const KAR = {s: 0};
+const KAR_STEPS = [
+  ['Sample', '<h3>1. Cells that will divide</h3><p>Usually <b>white blood cells (T lymphocytes)</b> from a heparinised blood sample, because they are easily made to divide in culture (Wikipedia; review: lymphocytes cultured from peripheral blood). Other sources: <b>amniotic fluid</b> cells, <b>chorionic villi</b>, <b>bone marrow</b>, skin, tumour (Wikipedia).</p>'],
+  ['Culture', '<h3>2. Culture with phytohaemagglutinin</h3><p><b>Phytohaemagglutinin (PHA)</b> stimulates the T lymphocytes to divide in vitro (review PMC3983585). The culture runs at 37 °C for about <b>3 days</b> (72 h in the Wikipedia protocol).</p>'],
+  ['Colchicine', '<h3>3. Arrest in metaphase</h3><p><b>Colchicine or colcemid</b>, a mitotic inhibitor, stops dividing cells at <b>metaphase</b>, when chromosomes are most condensed (Wikipedia; review PMC3983585; protocol PMC5023040).</p>'],
+  ['Hypotonic', '<h3>4. Hypotonic swelling</h3><p>The cells are put in <b>hypotonic potassium chloride (0.075 M KCl)</b>: they swell, so the chromosomes spread apart when the cell bursts on the slide (Wikipedia; protocol PMC5023040; review: better spreading for counting).</p>'],
+  ['Fix and drop', '<h3>5. Fix and drop</h3><p>The cells are fixed in <b>methanol–acetic acid (3:1)</b>, dropped onto a clean slide and air-dried (protocol PMC5023040; Wikipedia).</p>'],
+  ['Band', '<h3>6. Banding</h3><p>The slide is treated with <b>trypsin</b>, which digests chromosomal proteins, then stained with <b>Giemsa</b>: <b>G-banding</b>, still the routine clinical method (review PMC3983585; protocol PMC5023040; Wikipedia).</p>'],
+  ['Analyse', '<h3>7. Count, analyse, arrange</h3><p>Metaphases are counted and analysed under the light microscope — e.g. 15 per patient and 50 if mosaicism is suspected (protocol PMC5023040); at least 30 for Turner syndrome (Endocrine Society review 2025). Photographs are arranged as a <b>karyogram</b>: pairs ordered by size and centromere position, sex chromosomes last (Wikipedia).</p>'],
+];
+const BAND_TEXT = `<h3>Banding</h3><ul>
+<li><b>G-banding</b> (trypsin, then Giemsa): the routine method. Each chromosome gets its own pattern of light and dark bands, so every pair can be identified (review PMC3983585; review PMC12941462). Dark bands are AT-rich, gene-poor heterochromatin; light bands GC-rich and gene-rich (Wikipedia).</li>
+<li><b>Q-banding</b>: the first banding method used on human chromosomes (review PMC3983585).</li>
+<li><b>C-banding</b> stains the constitutive heterochromatin near the centromeres; <b>NOR staining</b> the satellites and stalks of the acrocentrics (Wikipedia). R-banding is another method (review PMC4215412).</li>
+<li><b>High-resolution banding</b>: prophase or prometaphase chromosomes, before full condensation — more bands, about 3–5 Mb (Wikipedia; review PMC12941462).</li></ul>`;
+const RES_HEAD = ['', 'Karyotype (G-banded)'];
+const RES_ROWS = [
+  ['Covers', 'The whole genome in one test (reviews PMC12941462, PMC12801557; StatPearls)'],
+  ['Smallest change seen', 'About <b>5–10 Mb</b> (reviews); "&gt;5 Mb" (StatPearls)'],
+  ['Finds', 'Aneuploidy, large deletions and duplications, <b>balanced and unbalanced</b> translocations, inversions, mosaicism'],
+  ['Misses', 'Microdeletions and microduplications below its resolution — these need <b>FISH</b> at a chosen locus or a <b>chromosomal microarray</b> (about 50–100 kb, but blind to balanced rearrangements) (review PMC12941462; StatPearls). See <a href="aberrations-clinical.html#h-test">genetic tests</a>.'],
+];
+const USE_TEXT = `<h3>When a karyotype is done</h3><ul>
+<li>Suspected chromosomal syndrome or congenital anomalies; intellectual disability or developmental delay (StatPearls).</li>
+<li>Prenatal diagnosis after abnormal ultrasound or biochemical screening, on amniotic fluid or chorionic villi (StatPearls; Wikipedia).</li>
+<li>Recurrent miscarriage (StatPearls).</li>
+<li>Short stature, ovarian insufficiency and infertility in girls and women — Turner syndrome (Endocrine Society review 2025); small testes, infertility, gynaecomastia — Klinefelter syndrome (Wikipedia).</li>
+<li><b>Both parents</b> after a baby with Down syndrome, to find a balanced Robertsonian translocation (reviews PMC3991414, PMC3769083).</li>
+<li>Leukaemias and solid tumours — e.g. the Philadelphia chromosome, t(9;22), of chronic myeloid leukaemia (StatPearls; MedlinePlus).</li></ul>`;
+
+/* 4. Lyon hypothesis: 12 cells; choice[i] = which X is inactivated (m = mother's, p = father's) — illustrative, random */
+const LYON = {s: 0};
+const LYON_CHOICE = ['m', 'p', 'p', 'm', 'p', 'm', 'm', 'p', 'm', 'p', 'p', 'm'];
+const LYON_STEPS = [
+  ['Zygote', '<h3>Zygote: both X active</h3><p>A female zygote has one X from the mother and one from the father, both active at first.</p>'],
+  ['Random choice', '<h3>Early embryo: one X switched off in each cell</h3><p><b>Mary Lyon (1961)</b>: in each cell of a female embryo <b>one X chromosome is inactivated</b>, early in development (StatPearls; Wikipedia; MedlinePlus) — about the time of gastrulation, in the epiblast (Wikipedia). The choice of the mother\'s or the father\'s X is <b>random</b> in each cell. Egg cells are spared (MedlinePlus).</p>'],
+  ['Clones', '<h3>The choice is kept</h3><p>Once made, the choice is <b>permanent</b> in that cell and in all the cells it gives rise to (MedlinePlus; Wikipedia). So every female is a <b>mosaic</b>: patches of cells using the mother\'s X and patches using the father\'s, usually about half each (Wikipedia; MedlinePlus).</p>'],
+  ['Barr body', '<h3>The inactive X is the Barr body</h3><p>The inactive X condenses into the <b>Barr body</b> (sex chromatin): a darkly staining, plano-convex mass against the inner nuclear membrane of interphase cells (Wikipedia; review PMC13484737). It is coated by the <b>XIST</b> RNA, which recruits repressive chromatin (review PMC12176624; Wikipedia).</p>'],
+];
+const BARR = {sel: 'xx'};
+const BARR_ITEMS = {
+  xy: ['46,XY', 1, 0, '<h3>46,XY: no Barr body</h3><p>One X — nothing to inactivate (Wikipedia; review PMC13484737: Barr bodies absent or rare in male buccal cells).</p>'],
+  xx: ['46,XX', 2, 1, '<h3>46,XX: one Barr body</h3><p>One of the two X chromosomes is inactive (Wikipedia; review PMC13484737: Barr bodies in about 20–30% of buccal cells of healthy women, review only).</p>'],
+  x: ['45,X (Turner)', 1, 0, '<h3>45,X: no Barr body</h3><p>Turner syndrome with a single X <b>lacks</b> Barr bodies (review PMC13484737; Wikipedia).</p>'],
+  xxy: ['47,XXY (Klinefelter)', 2, 1, '<h3>47,XXY: one Barr body</h3><p>A phenotypic male who is <b>Barr body positive</b> (review PMC13484737); Wikipedia: a single Barr body.</p>'],
+  xxx: ['47,XXX', 3, 2, '<h3>47,XXX: two Barr bodies</h3><p>Wikipedia\'s rule: the number of Barr bodies is <b>one fewer than the number of X chromosomes</b>; 47,XXX has two (Wikipedia only).</p>'],
+};
+const LYON_TEXT = `<p><b>Not every gene is silenced.</b> About <b>15%</b> of genes on the inactive X escape (15–30% in one review), mostly on the short arm (review PMC13258534), including the pseudoautosomal genes; this is why a missing or extra X still matters — escape genes in the pseudoautosomal region are thought to contribute to the cardiovascular problems of Turner syndrome — heart defects and hypertension (review PMC13258534) and are over-expressed in Klinefelter syndrome (review PMC13341453).</p>
+<p><b>Carriers of X-linked disease.</b> A heterozygous woman has the X with the variant active in some cells and the normal X in others, so the signs of an X-linked recessive disorder vary between carrier women (StatPearls; Wikipedia). If inactivation is <b>skewed</b> — the same X active in most cells — a carrier may be affected, as in some carriers of haemophilia and Duchenne muscular dystrophy (StatPearls; MedlinePlus; Wikipedia). See <a href="inheritance-pedigrees.html#h-modes">X-linked pedigrees</a>.</p>
+<p>A Barr body is also seen at the rim of the nucleus in neutrophils (Wikipedia). Murray Barr and Ewart Bertram described it in 1949 (Wikipedia).</p>`;
+
+/* 5. mosaic vs chimera */
+const MOS = {sel: 'mos'};
+const MOS_ITEMS = {
+  mos: ['Mosaic', '<h3>Mosaic: one zygote</h3><p>Two or more genetically different cell lines <b>from a single zygote</b>, because of a change <b>after fertilisation</b> (StatPearls; Wikipedia) — for example a mitotic non-disjunction in the early embryo. Examples: <b>mosaic Down syndrome</b> (about 1–2% of Down syndrome; milder; review PMC3991414, MedlinePlus, Wikipedia) and <b>mosaic Turner syndrome</b>, 45,X/46,XX (StatPearls; MedlinePlus). Every woman is also a mosaic for her active X (above).</p>'],
+  chi: ['Chimera', '<h3>Chimera: two or more zygotes</h3><p>Cell lines that come <b>from two or more different zygotes</b> in one body (StatPearls; Wikipedia). Examples given by Wikipedia: <b>fusion of two embryos</b> early in development (a "tetragametic" chimera, from four parent cells), and <b>blood chimerism between non-identical twins</b> whose blood vessels joined before birth.</p>'],
+};
+
+const DATA = {
+  based: 'Based on: StatPearls (NCBI Bookshelf); MedlinePlus Genetics (U.S. National Library of Medicine, public domain); open-access reviews and studies (Reprod Med Biol 2021 for the Denver groups, Genet Mol Biol 2014 and a 2016 cord-blood karyotyping protocol for the technique, prenatal karyotyping and CNV reviews 2026, X-inactivation reviews 2025–26, a 2026 buccal Barr-body study, J Clin Endocrinol Metab 2025 for Turner syndrome); Wikipedia. Courtesy of MedlinePlus from the National Library of Medicine.',
+  models: 'Drawings: schematic, not to scale. The chromosome set is drawn to Wikipedia\'s table of sizes and centromere positions (one source); the cells in the Lyon drawing are illustrative.',
+  images: 'Images via Wikimedia Commons (credited under each): National Human Genome Research Institute (public domain), Josef Reischig (CC BY-SA 3.0), Steffen Dietzel (CC BY-SA 3.0); the two photographs resized (one cropped) with labels added, the Barr-body image recompressed only.',
+};
+const PHOTOS = {
+  karyogram: {id: 'karyo', file: 'karyotype-male.jpg', w: 760, h: 596, title: 'G-banded karyogram, normal male',
+    alt: 'Black-and-white banded human chromosomes arranged in pairs in four rows',
+    cap: 'A normal male karyogram after G-banding: pairs arranged in the usual layout — row 1 groups A and B, row 2 group C, row 3 D and E, row 4 F, G and the sex chromosomes (X and Y at the lower right). Group labels placed by the standard layout.',
+    credit: Gen.credit('NHGRI human male karyotype.png', 'National Human Genome Research Institute', 'pd', 'resized', true),
+    labels: [[0.21, 0.12, 'A'], [0.76, 0.12, 'B'], [0.49, 0.37, 'C'], [0.21, 0.64, 'D'], [0.79, 0.64, 'E'], [0.28, 0.87, 'F'], [0.71, 0.88, 'G'], [0.93, 0.85, 'X, Y']]},
+  spread: {id: 'spread', file: 'metaphase-spread.jpg', w: 760, h: 558, title: 'Metaphase spread',
+    alt: 'Scattered dark X-shaped chromosomes beside a round interphase nucleus on a yellow background, with a 10 micrometre scale bar',
+    cap: 'What the microscope shows before the karyogram is made: chromosomes of one metaphase cell spread out beside an <b>interphase nucleus</b>. Each chromosome is two chromatids joined at the centromere. Uploader: a 47,XXY (Klinefelter) karyotype — the extra X can only be found by arranging the karyogram.',
+    credit: Gen.credit('Human karyotype (259 30) Karyotype Human 47,XXY (Klinefelter).jpg', 'Josef Reischig', 'bysa3', 'cropped and resized', true),
+    labels: [[0.22, 0.34, 'Interphase nucleus'], [0.455, 0.44, 'Metaphase chromosomes']]},
+  barr: {id: 'barr', narrow: true, file: 'barr-body.jpg', w: 398, h: 551, title: 'Inactive X: chromosome painting and the Barr body',
+    alt: 'Two fluorescent images of one nucleus: above, two bright patches marked Xa and Xi; below, a DNA stain with an arrow at a bright spot on the rim',
+    cap: 'One nucleus of a female amniotic-fluid cell. <b>Top:</b> both X chromosome territories shown by FISH chromosome painting — the active X (<b>Xa</b>) and the inactive X (<b>Xi</b>). <b>Bottom:</b> the same nucleus with a DNA stain (DAPI): the <b>Barr body</b> (arrow) at the nuclear rim is the inactive X. Labels and arrows are the author\'s.',
+    credit: Gen.credit('Sd4hi-unten-crop.jpg', 'Steffen Dietzel', 'bysa3', 'recompressed only', false), labels: []},
+};
+
+/* ===================== drawing ===================== */
+const {$, T} = Gen;
+function drawChr() {
+  const d = CHR_ITEMS[CHR.sel], cen = d[1]; let s = Gen.DEFS;
+  const x = 200, y = 40, L = 300, w = 26;
+  s += T(14, 22, 'METAPHASE CHROMOSOME (TWO SISTER CHROMATIDS)', 'h');
+  const bands = [[0.06, 0.1], [0.18, 0.24], [0.62, 0.68], [0.76, 0.82], [0.9, 0.94]].filter(([a, b]) => b < cen - 0.04 || a > cen + 0.04);
+  if (cen > 0) s += Gen.chrom(x, y, L, cen, {w, two: true, bands});
+  else { /* telocentric: plain chromatids, centromere drawn as a dark cap at the top end */
+    [x - w / 2 - 0.5, x + w / 2 + 0.5].forEach(cx => { s += `<rect x="${cx - w / 2}" y="${y}" width="${w}" height="${L}" rx="6" class="chr"/>` + bands.filter(b => b[0] > 0.05).map(([a, b]) => `<rect class="band" x="${cx - w / 2 + 1}" y="${(y + a * L).toFixed(1)}" width="${w - 2}" height="${((b - a) * L).toFixed(1)}"/>`).join(''); });
+    s += `<rect x="${x - w - 1}" y="${y - 3}" width="${2 * w + 2}" height="7" rx="3" style="fill:var(--ink)"/>`;
+  }
+  const cy = y + L * cen;
+  s += `<path class="hl" d="M${x - w - 10} ${cy} H${x + w + 10}"/>`;
+  s += Gen.lead(x + w + 12, cy, 330, cy) + T(336, cy + 4, 'Centromere', 'b');
+  s += T(336, cy + 20, cen === 0.5 ? 'in the middle' : cen === 0.3 ? 'off centre' : cen === 0.1 ? 'near one end' : 'at the end', 's');
+  if (cen > 0.05) { s += `<path class="lead" d="M${x - w - 14} ${y + 2} V${cy - 3}"/>` + T(x - w - 20, (y + cy) / 2 + 4, 'p (short arm)', 'l', 'end'); }
+  s += `<path class="lead" d="M${x - w - 14} ${cy + 3} V${y + L - 2}"/>` + T(x - w - 20, (cy + y + L) / 2 + 4, 'q (long arm)', 'l', 'end');
+  s += Gen.lead(x + 2, y + L + 2, x + 60, y + L + 24) + T(x + 64, y + L + 28, 'Telomere (each end)');
+  s += Gen.lead(x + w + 2, y + L * 0.88, 330, y + L * 0.88) + T(336, y + L * 0.88 + 4, 'Sister chromatid');
+  $('chr-svg').innerHTML = s; $('chr-find').innerHTML = d[2];
+}
+function drawSet() {
+  let s = Gen.DEFS; const sc = 0.9, top = 40, base = 40 + 247.2 * sc + 4;  /* px per Mbp */
+  const by = Object.fromEntries(CHROMS.map(c => [c[0], c]));
+  let x = 22;
+  GROUPS.forEach(([g, list]) => {
+    const order = list.filter(n => n !== 'X' && n !== 'Y');
+    const sel = SET.sel === 'all' || SET.sel === g;
+    const x0 = x;
+    order.concat(list.filter(n => n === 'X' || n === 'Y')).forEach(n => {
+      const [, cpos, , size] = by[n]; const L = size * sc, cen = cpos / size;
+      s += `<g style="opacity:${sel ? 1 : 0.25}">` + Gen.chrom(x + 6, top, L, cen, {w: 11}) + T(x + 6, top + L + 14, n, n === 'X' || n === 'Y' ? 'b' : 's', 'middle') + '</g>';
+      x += 26;
+    });
+    s += `<path d="M${x0 - 2} ${base + 22} H${x - 14}" style="stroke:var(${SET.sel === g ? '--accent' : '--line'});stroke-width:3"/>` + T((x0 + x - 16) / 2, base + 40, 'Group ' + g, SET.sel === g ? 'b' : 's', 'middle');
+    x += 6;
+  });
+  s += T(14, 22, 'ONE OF EACH PAIR, DRAWN TO SCALE (MEGABASES), CENTROMERE MARKED BY THE WAIST', 'h');
+  $('set-svg').innerHTML = s;
+}
+function drawKar() {
+  const st = KAR.s; let s = Gen.DEFS;
+  s += T(14, 22, ['SAMPLE', 'CULTURE, ABOUT 3 DAYS AT 37 °C', 'METAPHASE ARREST', 'HYPOTONIC KCl', 'FIX AND DROP ON A SLIDE', 'TRYPSIN + GIEMSA', 'KARYOGRAM'][st], 'h');
+  const cell = (cx, cy, r, inner) => `<circle cx="${cx}" cy="${cy}" r="${r}" class="box" style="stroke:var(--ink)"/>` + inner;
+  const nucleus = (cx, cy, r) => `<circle cx="${cx}" cy="${cy}" r="${r}" style="fill:var(--ink);fill-opacity:.18;stroke:var(--ink)"/>`;
+  const xchr = (cx, cy, a, len = 16) => `<g transform="rotate(${a} ${cx} ${cy})">` + Gen.chrom(cx, cy - len / 2, len, 0.45, {w: 4, two: true}) + '</g>';
+  if (st === 0) {
+    s += `<path d="M150 60 h60 v170 a30 30 0 0 1 -60 0 z" class="box" style="stroke:var(--ink)"/>` + `<rect x="152" y="150" width="56" height="108" rx="26" style="fill:var(--ink);fill-opacity:.12"/>` + T(180, 285, 'Heparinised blood', 's', 'middle');
+    s += cell(330, 120, 30, nucleus(330, 120, 18)) + T(330, 168, 'T lymphocyte', '', 'middle');
+    s += T(300, 220, 'Or: amniotic fluid cells, chorionic villi,', 's') + T(300, 236, 'bone marrow, skin, tumour', 's');
+  } else if (st === 1) {
+    [[200, 110], [300, 110], [250, 190], [350, 190], [150, 190]].forEach(([cx, cy], i) => { s += cell(cx, cy, 26, nucleus(cx, cy, 15)); });
+    s += T(260, 260, 'PHA makes the T cells divide', '', 'middle');
+  } else if (st === 2) {
+    s += cell(260, 150, 80, [[-30, -20, 20], [10, -35, -40], [35, 5, 70], [-20, 25, -10], [15, 35, 30], [-40, 5, 80]].map(([dx, dy, a]) => xchr(260 + dx, 150 + dy, a)).join(''));
+    s += T(260, 260, 'Colchicine or colcemid stops dividing cells in metaphase', '', 'middle');
+  } else if (st === 3) {
+    s += cell(260, 150, 105, [[-55, -40, 20], [20, -60, -40], [60, 10, 70], [-35, 45, -10], [30, 55, 30], [-70, 15, 80], [0, 0, 45]].map(([dx, dy, a]) => xchr(260 + dx, 150 + dy, a)).join(''));
+    s += T(260, 285, '0.075 M KCl: the cell swells, chromosomes move apart', '', 'middle');
+  } else if (st === 4) {
+    s += `<rect x="90" y="80" width="340" height="140" rx="4" class="box" style="stroke:var(--ink)"/>`;
+    [[180, 130, 20], [220, 170, -40], [260, 120, 70], [300, 165, -10], [340, 125, 30], [380, 175, 80], [240, 150, 10]].forEach(([cx, cy, a]) => { s += xchr(cx, cy, a); });
+    s += T(260, 250, 'Methanol : acetic acid 3 : 1; dropped and air-dried', '', 'middle');
+  } else if (st === 5) {
+    [[150, 0.45], [220, 0.35], [290, 0.5], [360, 0.12]].forEach(([cx, cen]) => { s += Gen.chrom(cx, 70, 160, cen, {w: 12, two: true, bands: [[0.05, 0.1], [0.2, 0.26], [0.58, 0.64], [0.72, 0.8], [0.88, 0.93]].filter(([a, b]) => b < cen - 0.03 || a > cen + 0.03)}); });
+    s += T(260, 270, 'Light and dark G-bands: a pattern unique to each pair', '', 'middle');
+  } else {
+    const rows = [['1', '2', '3', '4', '5'], ['6', '7', '8', '9', '10', '11', '12'], ['13', '14', '15', '16', '17', '18'], ['19', '20', '21', '22', 'X', 'Y']];
+    const by = Object.fromEntries(CHROMS.map(c => [c[0], c]));
+    rows.forEach((r, i) => r.forEach((n, j) => {
+      const [, cpos, , size] = by[n]; const L = size * 0.2, cx = 60 + j * 62, cyTop = 38 + i * 64;
+      s += Gen.chrom(cx - 5, cyTop + (50 - L), L, cpos / size, {w: 5}) + Gen.chrom(cx + 5, cyTop + (50 - L), L, cpos / size, {w: 5}) + T(cx, cyTop + 62, n, 's', 'middle');
+    }));
+  }
+  $('kar-svg').innerHTML = s; $('kar-find').innerHTML = KAR_STEPS[st][1];
+}
+function xpair(cx, cy, inact) {  /* two X chromosomes in a cell; inact: '', 'm' or 'p' */
+  const one = (x, cls, off) => off
+    ? `<ellipse cx="${x}" cy="${cy + 2}" rx="5" ry="7" class="${cls}" style="fill-opacity:.45;stroke:var(--ink);stroke-width:.8"/>`
+    : `<rect x="${x - 3}" y="${cy - 11}" width="6" height="22" rx="3" class="${cls}"/>`;
+  return one(cx - 7, 'mat', inact === 'm') + one(cx + 7, 'pat', inact === 'p');
+}
+function drawLyon() {
+  const st = LYON.s; let s = Gen.DEFS;
+  s += T(14, 22, ['ZYGOTE', 'EARLY EMBRYO: RANDOM CHOICE IN EACH CELL', 'LATER: EACH CHOICE COPIED TO DESCENDANT CELLS', 'INTERPHASE NUCLEUS'][st], 'h');
+  if (st === 0) {
+    s += `<circle cx="260" cy="170" r="70" class="box" style="stroke:var(--ink)"/>` + xpair(260, 170, '') + T(260, 270, 'Both X chromosomes active', '', 'middle');
+  } else if (st === 1) {
+    LYON_CHOICE.forEach((c, i) => { const cx = 120 + (i % 4) * 95, cy = 80 + Math.floor(i / 4) * 85; s += `<circle cx="${cx}" cy="${cy}" r="34" class="box" style="stroke:var(--ink)"/>` + xpair(cx, cy, c); });
+    s += T(260, 320, 'Mother\'s or father\'s X: chosen at random in each cell', '', 'middle');
+  } else if (st === 2) {
+    /* each early cell -> a patch of 4 small cells keeping the same choice */
+    LYON_CHOICE.forEach((c, i) => {
+      const px = 60 + (i % 4) * 110, py = 46 + Math.floor(i / 4) * 92;
+      s += `<rect x="${px - 4}" y="${py - 4}" width="104" height="84" rx="8" style="fill:var(${c === 'm' ? '--pat' : '--mat'});fill-opacity:.12;stroke:var(--line)"/>`;
+      for (let k = 0; k < 4; k++) { const cx = px + 24 + (k % 2) * 50, cy = py + 18 + Math.floor(k / 2) * 40; s += `<circle cx="${cx}" cy="${cy}" r="17" class="box" style="stroke:var(--ink)"/>` + xpair(cx, cy, c); }
+    });
+  } else {
+    s += `<ellipse cx="260" cy="170" rx="150" ry="105" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.5"/>`;
+    s += `<path d="M140 108 Q128 125 131 142 Q150 140 160 120 Z" style="fill:var(--ink);fill-opacity:.8"/>`;
+    s += Gen.lead(136, 118, 96, 76) + T(40, 54, 'Barr body: condensed inactive X,', 'b', 'start') + T(40, 70, 'against the inner nuclear membrane', 's', 'start');
+    s += T(260, 175, 'Active X and autosomes: loose chromatin', 's', 'middle');
+  }
+  $('lyon-svg').innerHTML = s; $('lyon-find').innerHTML = LYON_STEPS[st][1];
+}
+function drawBarr() {
+  const d = BARR_ITEMS[BARR.sel], nb = d[2]; let s = Gen.DEFS;
+  s += T(12, 20, 'INTERPHASE NUCLEUS, ' + d[0].split(' ')[0], 'h');
+  s += `<ellipse cx="180" cy="125" rx="120" ry="82" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.5"/>`;
+  const spots = [[72, 92, -30], [270, 168, 40]];
+  for (let i = 0; i < nb; i++) { const [x, y, a] = spots[i]; s += `<ellipse cx="${x}" cy="${y}" rx="10" ry="6" transform="rotate(${a} ${x} ${y})" style="fill:var(--ink);fill-opacity:.85"/>`; }
+  s += T(180, 130, nb === 0 ? 'No Barr body' : nb + (nb === 1 ? ' Barr body' : ' Barr bodies'), 'b', 'middle');
+  s += T(180, 222, d[1] + ' X chromosome' + (d[1] > 1 ? 's' : ''), 's', 'middle');
+  $('barr-svg').innerHTML = s; $('barr-find').innerHTML = d[3];
+}
+function drawMos() {
+  const k = MOS.sel; let s = Gen.DEFS;
+  /* neutral fills: line 1 plain, line 2 hatched (--mat/--pat keep their meaning, mother's/father's chromosome) */
+  const cellc = (cx, cy, r, tok) => `<circle cx="${cx}" cy="${cy}" r="${r}" style="fill:${tok === '--pat' ? 'var(--surface)' : 'url(#hatch)'};stroke:var(--ink)"/>`;
+  if (k === 'mos') {
+    s += T(14, 22, 'ONE ZYGOTE → TWO CELL LINES', 'h');
+    s += cellc(70, 140, 26, '--pat') + T(70, 186, 'Zygote', 's', 'middle');
+    s += `<path class="flow" d="M100 140 H150"/>`;
+    s += cellc(185, 115, 18, '--pat') + cellc(185, 165, 18, '--mat') + T(185, 205, 'Error after', 's', 'middle') + T(185, 219, 'fertilisation', 's', 'middle');
+    s += `<path class="flow" d="M210 140 H260"/>`;
+    for (let i = 0; i < 16; i++) { const cx = 300 + (i % 4) * 46, cy = 60 + Math.floor(i / 4) * 46; s += cellc(cx, cy, 18, [0, 1, 4, 5, 2, 8, 9, 12].includes(i) ? '--pat' : '--mat'); }
+    s += T(370, 260, 'One body, two genetic cell lines', '', 'middle');
+  } else {
+    s += T(14, 22, 'TWO ZYGOTES → ONE BODY', 'h');
+    s += cellc(70, 90, 24, '--pat') + cellc(70, 190, 24, '--mat') + T(70, 130, 'Zygote 1', 's', 'middle') + T(70, 230, 'Zygote 2', 's', 'middle');
+    s += `<path class="flow" d="M98 92 L170 132"/><path class="flow" d="M98 188 L170 148"/>`;
+    s += cellc(200, 140, 26, '--pat') + `<path d="M200 114 A26 26 0 0 1 200 166 Z" style="fill:url(#hatch);stroke:var(--ink)"/>` + T(200, 186, 'Fused', 's', 'middle');
+    s += `<path class="flow" d="M232 140 H262"/>`;
+    for (let i = 0; i < 16; i++) { const cx = 300 + (i % 4) * 46, cy = 60 + Math.floor(i / 4) * 46; s += cellc(cx, cy, 18, [1, 2, 6, 7, 8, 11, 13, 14].includes(i) ? '--pat' : '--mat'); }
+    s += T(370, 260, 'One body, cells from two zygotes', '', 'middle');
+  }
+  $('mos-svg').innerHTML = s; $('mos-find').innerHTML = MOS_ITEMS[k][1];
+}
+
+/* ===================== init ===================== */
+(() => {
+  $('lede').innerHTML = LEDE; $('chr-text').innerHTML = CHR_TEXT; $('band-text').innerHTML = BAND_TEXT; $('use-text').innerHTML = USE_TEXT;
+  $('lyon-text').innerHTML = LYON_TEXT; $('set-note').textContent = SET_NOTE;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models; $('images').innerHTML = DATA.images;
+  Gen.toggles('chr-tg', Object.entries(CHR_ITEMS).map(([k, d]) => [k, d[0]]), k => { CHR.sel = k; drawChr(); }, 'meta');
+  Gen.toggles('set-tg', [['all', 'All']].concat(GROUPS.map(g => [g[0], 'Group ' + g[0]])), k => { SET.sel = k; drawSet(); }, 'all');
+  Gen.table('grp-table', GRP_HEAD, GROUPS.map(([g, l, f]) => [g, l.join(', '), f]));
+  Gen.stepper('kar-step', KAR_STEPS.map(x => x[0]), drawKar, KAR);
+  Gen.table('res-table', RES_HEAD, RES_ROWS);
+  Gen.stepper('lyon-step', LYON_STEPS.map(x => x[0]), drawLyon, LYON);
+  Gen.key('lyon-key', [['--mat', 'X from the mother'], ['--pat', 'X from the father'], ['--surface', 'Faded oval: inactive X', 'border-color:var(--ink)']]);
+  Gen.toggles('barr-tg', Object.entries(BARR_ITEMS).map(([k, d]) => [k, d[0]]), k => { BARR.sel = k; drawBarr(); }, 'xx');
+  Gen.toggles('mos-tg', Object.entries(MOS_ITEMS).map(([k, d]) => [k, d[0]]), k => { MOS.sel = k; drawMos(); }, 'mos');
+  Gen.micro($('set-img'), PHOTOS.karyogram); Gen.micro($('kar-img'), PHOTOS.spread); Gen.micro($('lyon-img'), PHOTOS.barr);
+  drawChr(); drawSet(); drawBarr(); drawMos();
+  Gen.swipeHints();
+  window.ready = true;
+})();
+</script>
+</body>
+</html>

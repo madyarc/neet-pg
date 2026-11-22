@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chromosomal Aberrations and Clinical Genetics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<link rel="stylesheet" href="gen.css">
+<style>
+/* colours, one meaning each. atlas.css: --ink, --muted, --line, --surface (outlines), --accent (UI selection), --clin (clinical points).
+   Genetics tokens (same values on all three genetics pages; checked with colcheck3.py): --mat (chromosome from the mother),
+   --pat (chromosome from the father), --mut (an altered segment, variant or extra material), --probe (a FISH probe signal). */
+:root{--mat:#8c0772;--pat:#125959;--mut:#8c8c07;--probe:#0bd934}
+:root[data-theme="dark"]{--mat:#d92bd9;--pat:#9df2ea;--mut:#c4f20c;--probe:#30f230;color-scheme:dark}
+svg.sch .mat{fill:var(--mat)} svg.sch .pat{fill:var(--pat)} svg.sch .mut{fill:var(--mut)} svg.sch .probe{fill:var(--probe)}
+svg.sch .seg{stroke:var(--ink);stroke-width:1.2}
+svg.sch .line{stroke:var(--ink);stroke-width:1.4;fill:none}
+svg.sch .fig2{fill:var(--surface);stroke:var(--ink);stroke-width:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> <span class="muted" style="font-size:13px">· Genetics: <a href="chromosomes-karyotype.html">Chromosomes, karyotype</a> · <a href="inheritance-pedigrees.html">Inheritance, pedigrees</a> · <span aria-current="page">Aberrations, syndromes, tests</span></span></nav>
+
+<header class="stack">
+  <h1>Chromosomal Aberrations and Clinical Genetics</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-num">Numerical</a> <a href="#h-str">Structural</a> <a href="#h-down">Down syndrome</a> <a href="#h-ep">Edwards, Patau</a> <a href="#h-tk">Turner, Klinefelter</a> <a href="#h-pws">Prader–Willi, Angelman</a> <a href="#h-var">Polymorphism, mutation</a> <a href="#h-test">Counselling and tests</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-num">
+  <h2 id="h-num">Numerical aberrations and non-disjunction</h2>
+  <div class="chips" id="ndj-tg" aria-label="Division"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ndj-svg" viewBox="0 0 540 320" role="img" aria-label="One chromosome pair through meiosis I and II into four gametes, normally or with non-disjunction, or a mitotic error in an early embryo"></svg></div>
+    <div class="prose find" id="ndj-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="ndj-key"></div>
+  <p class="muted">Schematic: one chromosome pair only; the gamete counts include the other 22 chromosomes.</p>
+  <div class="scroll"><table id="num-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-str">
+  <h2 id="h-str">Structural aberrations</h2>
+  <div class="chips" id="str-tg" aria-label="Aberration"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="str-svg" viewBox="0 0 520 250" role="img" aria-label="Chromosomes with lettered segments before and after the chosen structural change"></svg></div>
+    <div class="prose find" id="str-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic: letters mark segments; the waist is the centromere. Coloured segments: altered or moved material.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-down">
+  <h2 id="h-down">Down syndrome (trisomy 21)</h2>
+  <div class="chips" id="dn-tg" aria-label="Type"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="dn-svg" viewBox="0 0 520 260" role="img" aria-label="The chromosomes 21 (and 14) in free trisomy, Robertsonian translocation and mosaic Down syndrome"></svg></div>
+    <div class="prose find" id="dn-find" aria-live="polite"></div>
+  </div>
+  <h3>Maternal age</h3>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="age-svg" viewBox="0 0 520 300" role="img" aria-label="Chance of Down syndrome by maternal age on a logarithmic scale, two published series"></svg></div>
+    <div class="prose" id="age-text"></div>
+  </div>
+  <div class="scroll"><table id="rec-table"></table></div>
+  <div class="two">
+    <div class="scroll"><table id="dnf-table"></table></div>
+    <div id="dn-img" class="stack"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ep">
+  <h2 id="h-ep">Edwards syndrome (trisomy 18) and Patau syndrome (trisomy 13)</h2>
+  <div class="scroll"><table id="ep-table"></table></div>
+  <div class="imgs" id="ep-img"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tk">
+  <h2 id="h-tk">Turner syndrome and Klinefelter syndrome</h2>
+  <div class="chips" id="tk-tg" aria-label="Syndrome"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="tk-svg" viewBox="0 0 620 380" role="img" aria-label="Schematic body outline with the main features of the chosen syndrome labelled"></svg></div>
+    <div class="prose find" id="tk-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic outline, not a real person; proportions not to scale.</p>
+  <div class="two">
+    <div class="scroll"><table id="tk-table"></table></div>
+    <div id="tk-img" class="stack"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pws">
+  <h2 id="h-pws">Prader–Willi syndrome vs Angelman syndrome</h2>
+  <div class="chips" id="pw-tg" aria-label="Mechanism"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pw-svg" viewBox="0 0 520 240" role="img" aria-label="Chromosome 15 pair with the 15q11–q13 region, showing which parent's copy is lost or duplicated in the chosen mechanism"></svg></div>
+    <div class="prose find" id="pw-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="pw-key"></div>
+  <div class="scroll"><table id="pw-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-var">
+  <h2 id="h-var">Genetic variation: polymorphism and mutation</h2>
+  <div class="prose" id="poly-text"></div>
+  <div class="chips" id="mu-tg" aria-label="Variant"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="mu-svg" viewBox="0 0 520 220" role="img" aria-label="A stretch of DNA read in triplets (codons) and the protein it makes, normally or with the chosen kind of variant"></svg></div>
+    <div class="prose find" id="mu-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic: codons and amino acids are shown as boxes, not real sequence, except the sickle-cell example and the GT/AG ends of introns.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-test">
+  <h2 id="h-test">Genetic counselling and genetic tests</h2>
+  <div class="prose" id="gc-text"></div>
+  <h3>FISH</h3>
+  <div class="chips" id="fish-tg" aria-label="Sample"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit small" id="fish-svg" viewBox="0 0 360 230" role="img" aria-label="An interphase nucleus with fluorescent probe spots for chromosome 21: two spots normally, three in trisomy 21"></svg></div>
+    <div class="prose find" id="fish-find" aria-live="polite"></div>
+  </div>
+  <h3>PCR</h3>
+  <div class="step" id="pcr-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pcr-svg" viewBox="0 0 520 240" role="img" aria-label="Polymerase chain reaction: denaturation, primer annealing, extension, and the number of copies doubling each cycle"></svg></div>
+    <div class="prose find" id="pcr-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="seq-text"></div>
+  <h3>Which test finds what</h3>
+  <div class="scroll"><table id="test-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+  <p id="images"></p>
+</footer>
+</div>
+
+<script src="gen.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-genetics.md, Part C; anatomy/DATA-SOURCES.md) ===================== */
+const LEDE = 'How chromosome numbers go wrong (non-disjunction) and how their structure changes, the chromosomal syndromes — Down, Edwards, Patau, Turner, Klinefelter — and the imprinting pair Prader–Willi and Angelman, polymorphism and mutation types, and genetic counselling with FISH, PCR and sequencing. Chromosomes and karyotyping: <a href="chromosomes-karyotype.html">Chromosomes and Karyotype</a>; inheritance patterns: <a href="inheritance-pedigrees.html">Inheritance and Pedigrees</a>; prenatal screening and amniocentesis/CVS: <a href="../embryology/membranes-placenta.html">Membranes and Placenta</a>; heart defects: <a href="../embryology/heart-vessels.html">Development of the Heart</a>.';
+
+/* 1. non-disjunction: gametes for one pair: lists of chromosome colours per gamete (m maternal, p paternal homologue) */
+const NDJ = {sel: 'norm'};
+const NDJ_ITEMS = {
+  norm: ['Normal meiosis', [['m', 'm'], ['p', 'p']], [['m'], ['m'], ['p'], ['p']],
+    '<h3>Normal meiosis</h3><p>Meiosis I separates the <b>homologous</b> chromosomes, meiosis II the <b>sister chromatids</b>: every gamete gets one copy — <b>23</b> chromosomes.</p>'],
+  m1: ['Non-disjunction in meiosis I', [['m', 'm', 'p', 'p'], []], [['m', 'p'], ['m', 'p'], [], []],
+    '<h3>Non-disjunction in meiosis I</h3><p>The <b>homologous pair fails to separate</b> (Wikipedia): two gametes carry both homologues (<b>24</b> chromosomes), two carry none (<b>22</b>). After fertilisation: <b>trisomy</b> (47) or <b>monosomy</b> (45). Most meiotic trisomies arise in the <b>mother</b> and their risk rises with <b>maternal age</b> (review PMC3991414; Wikipedia) — oocytes wait in meiosis I for years, and cohesion between chromosomes is thought to weaken (Wikipedia).</p>'],
+  m2: ['Non-disjunction in meiosis II', [['m', 'm'], ['p', 'p']], [['m', 'm'], [], ['p'], ['p']],
+    '<h3>Non-disjunction in meiosis II</h3><p>The <b>sister chromatids</b> fail to separate in one cell (Wikipedia): one gamete gets two identical copies (24), one none (22), two are normal (23). Meiosis II errors cause aneuploidy far less often than meiosis I errors (Wikipedia).</p>'],
+  mit: ['Mitotic (after fertilisation)', null, null,
+    '<h3>Mitotic non-disjunction</h3><p>In an <b>early embryo</b> the sister chromatids of one chromosome fail to separate in a mitosis (Wikipedia): one daughter cell gets both (47), the other none (45). Only the descendants of that cell are abnormal; cells from earlier divisions stay normal, so the person is a <b>mosaic</b> (Wikipedia; StatPearls) — e.g. mosaic Down syndrome, about 1% of trisomy 21 (review PMC3991414).</p>'],
+};
+const NUM_HEAD = ['Change', 'Count', 'Example'];
+const NUM_ROWS = [
+  ['Aneuploidy: trisomy', '47 — one extra chromosome (MedlinePlus; StatPearls)', 'Down (47,+21), Edwards (+18), Patau (+13), Klinefelter (47,XXY)'],
+  ['Aneuploidy: monosomy', '45 — one missing (MedlinePlus; StatPearls)', 'Turner (45,X)'],
+  ['Triploidy', '69 — one extra set (MedlinePlus; Wikipedia)', 'Usually from two sperm; 2–3% of conceptions, about 15% of miscarriages (Wikipedia)'],
+  ['Tetraploidy', '92 — two extra sets (MedlinePlus; Wikipedia)', 'Not compatible with life in every cell (MedlinePlus)'],
+];
+
+/* 2. structural: arrays of chromosomes, each = list of segments [letter, kind] with '|' = centromere; kind n normal, x altered, o other chromosome */
+const STR = {sel: 'del'};
+const STR_ITEMS = {
+  del: ['Deletion', [['A', 'B', '|', 'C', 'D', 'E', 'F']], [['A', 'B', '|', 'C', 'F']], ['D', 'E'],
+    '<h3>Deletion</h3><p>A chromosome breaks and a piece is <b>lost</b> (MedlinePlus; StatPearls). Example: <b>cri-du-chat</b> (5p−): loss of the end of the short arm of chromosome 5; a high-pitched, cat-like cry (MedlinePlus).</p>'],
+  dup: ['Duplication', [['A', 'B', '|', 'C', 'D', 'E', 'F']], [['A', 'B', '|', 'C', 'D', 'E', 'D*', 'E*', 'F']], [],
+    '<h3>Duplication</h3><p>Part of a chromosome is <b>copied</b>, giving extra copies of those genes (MedlinePlus; StatPearls).</p>'],
+  para: ['Paracentric inversion', [['A', 'B', '|', 'C', 'D', 'E', 'F']], [['A', 'B', '|', 'C', 'E*', 'D*', 'F']], [],
+    '<h3>Paracentric inversion</h3><p>Two breaks <b>in one arm</b>; the piece is turned round and put back — the centromere is <b>not</b> included (MedlinePlus; StatPearls).</p>'],
+  peri: ['Pericentric inversion', [['A', 'B', '|', 'C', 'D', 'E', 'F']], [['A', 'C*', '|', 'B*', 'D', 'E', 'F']], [],
+    '<h3>Pericentric inversion</h3><p>The inverted piece <b>includes the centromere</b> (MedlinePlus; StatPearls: part of the chromosome inverted within it).</p>'],
+  rec: ['Reciprocal translocation', [['A', 'B', '|', 'C', 'D', 'E', 'F'], ['p', 'q', '|', 'r', 's', 't']], [['A', 'B', '|', 'C', 'D', 's*', 't*'], ['p', 'q', '|', 'r', 'E*', 'F*']], [],
+    '<h3>Reciprocal translocation</h3><p>Pieces are <b>exchanged between two non-homologous chromosomes</b> (Wikipedia; StatPearls). <b>Balanced</b> if nothing is gained or lost — the carrier is usually healthy — but the carrier\'s gametes can be <b>unbalanced</b> (MedlinePlus; Wikipedia). The acquired t(9;22) of chronic myeloid leukaemia makes the <b>Philadelphia chromosome</b> with the <i>BCR-ABL1</i> fusion gene (MedlinePlus; StatPearls).</p>'],
+  rob: ['Robertsonian translocation', [['p', '|', 'q', 'r', 's', 't'], ['a', '|', 'b', 'c', 'd']], [['t*', 's*', 'r*', 'q*', '|', 'b', 'c', 'd']], ['p', 'a'],
+    '<h3>Robertsonian translocation</h3><p>The <b>long arms of two acrocentric chromosomes</b> (13, 14, 15, 21, 22) <b>fuse at the centromere</b> (Wikipedia; review PMC7658086) and the two short arms are lost (Wikipedia). Losing the short arms does no harm, so a <b>balanced carrier has 45 chromosomes</b> and is healthy (review PMC3769083: 45,XX,der(14;21)), but may have children with translocation trisomy — e.g. <b>translocation Down syndrome</b> (below).</p>'],
+  iso: ['Isochromosome', [['A', 'B', '|', 'C', 'D', 'E']], [['E*', 'D*', 'C*', '|', 'C', 'D', 'E']], [],
+    '<h3>Isochromosome</h3><p>A chromosome with <b>two identical arms</b> — two q arms or two p arms, mirror images (MedlinePlus; Wikipedia): extra copies of one arm, none of the other. Example: <b>46,X,i(Xq)</b> in Turner syndrome (Wikipedia; Commons karyotype below).</p>'],
+  ring: ['Ring chromosome', [['A', 'B', '|', 'C', 'D', 'E', 'F']], 'ring', [],
+    '<h3>Ring chromosome</h3><p>Breaks <b>at both ends</b>; the broken ends <b>fuse</b> into a ring, usually losing the end segments (MedlinePlus; Wikipedia). Written r(…); ring X in some Turner syndrome (Wikipedia).</p>'],
+};
+
+/* 3. Down syndrome */
+const DN = {sel: 'free'};
+const DN_ITEMS = {
+  free: ['Free trisomy 21', '<h3>Free trisomy 21 (47,+21)</h3><p>Three separate chromosomes 21 in every cell — about <b>94%</b> of Down syndrome (Wikipedia) — from <b>non-disjunction</b>, mostly in the <b>mother\'s</b> meiosis (88% maternal, 8% paternal, 3% after fertilisation, Wikipedia; review PMC3991414: 95% of trisomy 21 from maternal non-disjunction). <b>Not inherited</b>: a random event in a parent\'s egg or sperm (MedlinePlus).</p>'],
+  trans: ['Translocation', '<h3>Translocation Down syndrome</h3><p>About <b>4%</b> (Wikipedia; review PMC3991414; 5.6% in one series, PMC3769083). Two normal 21s <b>plus extra 21q attached to another chromosome</b> — usually a Robertsonian translocation with 14 (or 13, 21) — so the count is <b>46</b> (MedlinePlus; review PMC3769083). It may be <b>new</b> or inherited from a <b>balanced carrier parent with 45 chromosomes</b>, who is healthy (MedlinePlus; Wikipedia) — so <b>both parents are karyotyped</b> (review PMC3991414).</p>'],
+  mos: ['Mosaic', '<h3>Mosaic Down syndrome</h3><p><b>1–2%</b> (Wikipedia; 1%, review PMC3991414): some cells 47,+21, others normal, from a <b>mitotic error after fertilisation</b>. Often milder (review; Wikipedia: IQ 10–30 points higher); not inherited (MedlinePlus).</p>'],
+};
+/* maternal age: two series, chance per birth (as 1 in N) */
+const AGE_REVIEW = [[19, 2500, 'under 20'], [41, 25, 'over 40']];          /* review PMC3991414 */
+const AGE_WP = [[20, 1441], [30, 959], [40, 84], [50, 44]];               /* Wikipedia */
+const AGE_TEXT = `<p>The chance of a baby with Down syndrome <b>rises with the mother's age</b> (MedlinePlus; Wikipedia), steeply — "exponentially" (review PMC3991414). The published numbers differ, so both are plotted separately: the review gives about <b>1 in 2,500</b> for mothers under 20 and <b>1 in 25</b> over 40; Wikipedia gives 1 in 1,441 at 20, 1 in 959 at 30, 1 in 84 at 40 and 1 in 44 at 50.</p>
+<p>The rise concerns the <b>meiotic trisomies</b>: the risk of polyploidy and of monosomy X does <b>not</b> rise with maternal age (review PMC3991414). MedlinePlus lists pregnancy at or after 35 among reasons for genetic counselling.</p>`;
+const REC_HEAD = ['Situation', 'Chance of another child with Down syndrome'];
+const REC_ROWS = [
+  ['Parents have normal karyotypes (free trisomy or a new translocation)', 'Low: about <b>1%</b> (Wikipedia); <b>1–2%</b> after a de novo translocation (review PMC3769083)'],
+  ['Mother carries a balanced Robertsonian translocation, e.g. 14;21', 'About <b>10–15%</b> (review PMC3769083; Wikipedia 15%)'],
+  ['Father carries it', 'Less than 5% (Wikipedia)'],
+  ['A parent carries <b>21q;21q</b> (der(21;21))', '<b>100%</b> of live-born children — every gamete is unbalanced (review PMC3769083; review PMC7658086)'],
+];
+const DNF_HEAD = ['Feature', 'Down syndrome'];
+const DNF_ROWS = [
+  ['Frequency', 'About <b>1 in 700</b> births (MedlinePlus; Wikipedia: 1 in 700 in the US, 1 in 1,000 worldwide); the commonest viable autosomal trisomy and the leading genetic cause of intellectual disability (StatPearls)'],
+  ['Newborn', '<b>Hypotonia</b>; flat face, <b>upslanting palpebral fissures</b>, epicanthic folds, small ears, short neck, protruding tongue; small hands, <b>single palmar crease</b> (MedlinePlus; Wikipedia)'],
+  ['Mind', 'Intellectual disability, usually <b>mild to moderate</b> (MedlinePlus; Wikipedia)'],
+  ['Heart', 'Congenital heart disease in about <b>40–50%</b> (Wikipedia 40%; MedlinePlus "about half"); mostly septal defects — atrial or ventricular (Wikipedia); <b>atrioventricular septal defect</b> is linked with Down syndrome (Wikipedia) — see <a href="../embryology/heart-vessels.html#h-atria">Development of the Heart</a>'],
+  ['Gut', 'Intestinal blockage (less common, MedlinePlus) — <b>duodenal atresia</b> in about 8% (Wikipedia; see <a href="../embryology/gut-urogenital.html#h-fore">Gut development</a>); reflux, coeliac disease; Hirschsprung disease 2–15% (MedlinePlus; Wikipedia)'],
+  ['Thyroid', 'Hypothyroidism about 15% (MedlinePlus); thyroid problems 20–50% (Wikipedia)'],
+  ['Blood', 'Leukaemia more common — 10 to 15 times in childhood (Wikipedia; MedlinePlus "a small percentage")'],
+  ['Later', 'Hearing and vision problems; <b>early-onset Alzheimer disease</b> in about half of adults (MedlinePlus; StatPearls; Wikipedia)'],
+];
+
+/* 4. Edwards / Patau */
+const EP_HEAD = ['', 'Edwards (trisomy 18)', 'Patau (trisomy 13)'];
+const EP_ROWS = [
+  ['Frequency', 'About 1 in 5,000 live births (MedlinePlus); the second commonest autosomal trisomy (StatPearls)', '1 in 10,000–20,000 (StatPearls; Wikipedia); 1 in 16,000 (MedlinePlus); over 95% of affected pregnancies lost (StatPearls)'],
+  ['Cause', 'Mostly maternal non-disjunction, risk up with maternal age (MedlinePlus; review PMC3991414). The other 5% differ by source: about <b>5% mosaic</b> (MedlinePlus) vs <b>5% from a parental balanced translocation</b> (review PMC3991414)', 'Complete trisomy about 80%; translocation, usually Robertsonian t(13;14); mosaic about 5%; maternal non-disjunction about 91% (StatPearls)'],
+  ['Hallmarks', 'Growth restriction; small head and <b>small jaw</b>; <b>clenched fists with overlapping fingers</b> (index over middle); heart defects (VSD, ASD, PDA), kidney defects, omphalocele (MedlinePlus; Wikipedia; review PMC3991414); rocker-bottom feet (Wikipedia)', '<b>Midline defects</b>: <b>holoprosencephaly</b>, midline <b>cleft lip and palate</b>, <b>microphthalmia</b>, <b>post-axial polydactyly</b>, heart defects (MedlinePlus; StatPearls; review PMC3991414; Wikipedia); scalp defects (cutis aplasia, Wikipedia)'],
+  ['Outlook', 'Many die before birth or in the first month; <b>5–10% live past one year</b>, with severe intellectual disability (MedlinePlus; Wikipedia); more often female (Wikipedia)', 'About 90% die in the first year; 5–10% survive past one (Wikipedia; MedlinePlus)'],
+];
+
+/* 5. Turner / Klinefelter: figure labels [x of anchor, y, text, side l|r] on a 400x380 outline */
+const TK = {sel: 't'};
+const TK_ITEMS = {
+  t: ['Turner (45,X)', [[200, 112, 'Webbed neck, low hairline at the back', 'r'], [200, 150, 'Broad chest, widely spaced nipples (Wikipedia)', 'r'], [141, 206, 'Cubitus valgus (Wikipedia)', 'l'], [200, 230, 'Streak ovaries: no puberty, infertility', 'r'], [129, 276, 'Puffy hands and feet at birth (lymphoedema)', 'l'], [180, 338, 'Short stature', 'r']], 1,
+    '<h3>Turner syndrome</h3><p>A female with one normal X and the other sex chromosome <b>missing or altered</b> (MedlinePlus; StatPearls): <b>45,X</b> in 40–50%, 45,X/46,XX mosaic in 15–25%, others with a structurally abnormal X such as <b>46,X,i(Xq)</b> (Endocrine Society review 2025; Wikipedia). About <b>1 in 2,000–2,500</b> girls (review). <b>No Barr body</b> (45,X).</p><p><b>Short stature</b> (from about age 5; one <i>SHOX</i> copy lost), <b>ovarian failure</b> — streak gonads, primary amenorrhoea, infertility (MedlinePlus; Wikipedia); webbed neck, lymphoedema (MedlinePlus; StatPearls). <b>Heart</b>: bicuspid aortic valve about 25%, <b>coarctation of the aorta</b> about 10% (review; MedlinePlus); <b>horseshoe kidney</b>: about 10% (Wikipedia, Turner syndrome) or 14–20% (Wikipedia, Horseshoe kidney — the figure on <a href="../embryology/gut-urogenital.html#h-kid">Gut and Urogenital Development</a>). Usually <b>normal intelligence</b> (MedlinePlus; Wikipedia). <b>Not inherited</b> (MedlinePlus); its risk does <b>not rise with maternal age</b> (review PMC3991414).</p>'],
+  k: ['Klinefelter (47,XXY)', [[180, 300, 'Tall, long arms and legs', 'r'], [200, 160, 'Gynaecomastia', 'r'], [200, 236, 'Small testes: low testosterone, azoospermia', 'r'], [150, 214, 'Sparse body hair, less muscle', 'l']], 1.12,
+    '<h3>Klinefelter syndrome</h3><p><b>47,XXY</b> in 80–90% (review PMC8022097; MedlinePlus); mosaic 46,XY/47,XXY about 10% (MedlinePlus; 15–20%, Wikipedia). About <b>1 in 450–650</b> males (MedlinePlus 1 in 650; review 1 in 450–600) — the commonest sex-chromosome aneuploidy in males. <b>One Barr body</b>. Not inherited: the extra X comes from non-disjunction in either parent (MedlinePlus).</p><p><b>Tall</b>, <b>small testes</b>, <b>azoospermia</b> and infertility, <b>gynaecomastia</b> (StatPearls; MedlinePlus). <b>Primary (hypergonadotropic) hypogonadism</b>: low testosterone, <b>high FSH and LH</b> (Wikipedia; review PMC13341453). Often diagnosed late, during infertility tests (review PMC8022097). More breast cancer and autoimmune disease (MedlinePlus; review).</p>'],
+};
+const TK_HEAD = ['', 'Turner', 'Klinefelter'];
+const TK_ROWS = [
+  ['Karyotype', '45,X (also mosaics, i(Xq), del(Xp), ring X)', '47,XXY (also mosaics, 48,XXXY…)'],
+  ['Phenotype', 'Female', 'Male'],
+  ['Barr bodies', '<b>0</b> (45,X)', '<b>1</b> (47,XXY)'],
+  ['Stature', 'Short', 'Tall'],
+  ['Gonads', 'Streak ovaries, ovarian failure', 'Small testes, azoospermia'],
+  ['Hormones', 'Hypergonadotropic hypogonadism (Wikipedia)', 'Low testosterone, high FSH and LH'],
+  ['Frequency', '1 in 2,000–2,500 girls', '1 in 450–650 boys'],
+];
+
+/* 6. PWS / AS mechanisms: pat/mat chromosome states: 'n' normal, 'del' 15q11–q13 deleted, 'gone' absent, 'dup' second copy of the other parent's, 'var' UBE3A variant, 'imp' imprinting defect */
+const PW = {sel: 'pdel'};
+const PW_ITEMS = {
+  pdel: ['PWS: paternal deletion (~70%)', ['del', 'n', 'mat'], '<h3>Prader–Willi: paternal deletion</h3><p>About <b>70%</b>: the <b>father\'s</b> 15q11–q13 is deleted; the mother\'s copies of these genes are silent by imprinting, so none work (MedlinePlus; review PMC10084876; StatPearls).</p>'],
+  mupd: ['PWS: maternal UPD (~25%)', ['mat', 'n', 'mat'], '<h3>Prader–Willi: maternal uniparental disomy</h3><p>About <b>25%</b>: <b>both</b> chromosomes 15 come from the mother, none from the father (MedlinePlus; review PMC10084876; Wikipedia).</p>'],
+  pimp: ['PWS: imprinting defect (~5%)', ['imp', 'n', 'mat'], '<h3>Prader–Willi: imprinting defect</h3><p>About <b>5%</b>: the father\'s copy is present but switched off (review PMC10084876; StatPearls). Rarely a translocation (MedlinePlus).</p>'],
+  mdel: ['AS: maternal deletion (~70%)', ['n', 'del', 'pat'], '<h3>Angelman: maternal deletion</h3><p>About <b>70%</b>: the <b>mother\'s</b> 15q11–q13, with <i>UBE3A</i>, is deleted; in neurons only the mother\'s <i>UBE3A</i> works (MedlinePlus; StatPearls; review PMC10084876).</p>'],
+  ube: ['AS: UBE3A variant (10–25%)', ['n', 'var', 'pat'], '<h3>Angelman: <i>UBE3A</i> variant</h3><p><b>10–25%</b>: a variant in the mother\'s <i>UBE3A</i> (review PMC10084876; MedlinePlus 10–20%) — a change that can be passed from one generation to the next (MedlinePlus).</p>'],
+  pupd: ['AS: paternal UPD (~7%)', ['n', 'pat', 'pat'], '<h3>Angelman: paternal uniparental disomy</h3><p>A small share (about <b>7%</b>, review PMC10084876): two chromosomes 15 from the father (MedlinePlus). Imprinting defects 3–5% (review).</p>'],
+};
+const PW_HEAD = ['', 'Prader–Willi syndrome', 'Angelman syndrome'];
+const PW_ROWS = [
+  ['Lost', '<b>Paternal</b> 15q11–q13 genes (StatPearls; MedlinePlus)', '<b>Maternal</b> <i>UBE3A</i> (15q11–q13) (StatPearls; MedlinePlus)'],
+  ['Infancy', 'Severe <b>hypotonia</b>, poor feeding, poor growth (MedlinePlus; StatPearls)', 'Delayed development (MedlinePlus)'],
+  ['Childhood on', '<b>Hyperphagia and obesity</b> from childhood — about age 3 (StatPearls; MedlinePlus: beginning in childhood); type 2 diabetes (MedlinePlus)', '<b>Absent or minimal speech</b>, <b>ataxia</b>, <b>seizures</b> (up to 90%, review), microcephaly (MedlinePlus; StatPearls; Wikipedia)'],
+  ['Behaviour', 'Intellectual disability, behaviour problems (Wikipedia; StatPearls)', '<b>Happy, excitable</b>, frequent laughter, hand-flapping; old term "happy puppet" (MedlinePlus; StatPearls)'],
+  ['Body', '<b>Hypogonadism</b>, <b>short stature</b> (GH deficiency), small hands and feet, almond-shaped eyes (StatPearls; MedlinePlus; Wikipedia)', '—'],
+  ['Recurrence', 'Usually under 1% (review PMC10084876; Wikipedia)', 'Usually under 1%; higher for inherited <i>UBE3A</i> or imprinting-centre variants (review)'],
+];
+
+/* 7. variation */
+const POLY_TEXT = `<p><b>Polymorphism</b>: two or more alleles at a locus, each common in the population — by convention the rarer one at <b>1% or more</b> (Wikipedia; the threshold is used inconsistently, Wikipedia). The commonest kind is the <b>single-nucleotide polymorphism (SNP)</b>, one base substituted (Wikipedia). Most variants have <b>no effect on health</b> (MedlinePlus; StatPearls); a variant found in a patient is classed pathogenic, likely pathogenic, of uncertain significance (VUS), likely benign or benign (MedlinePlus, ACMG 2015).</p>
+<p><b>Mutation (variant)</b>: a change in the DNA sequence (StatPearls). <b>Germline</b> (inherited) variants are in the egg or sperm and in every cell; <b>somatic</b> variants arise later in body cells and are not passed on; a <b>de novo</b> variant is new in the child (MedlinePlus). <b>Dynamic</b> mutations — repeat expansions — lengthen between generations (StatPearls; see <a href="inheritance-pedigrees.html#h-nonm">anticipation</a>).</p>`;
+const MU = {sel: 'norm'};
+/* codons: label, kind n normal, x changed, s stop; aa row */
+const MU_ITEMS = {
+  norm: ['Normal', [['c1', 'n'], ['c2', 'n'], ['c3', 'n'], ['c4', 'n'], ['c5', 'n']], [['aa1', 'n'], ['aa2', 'n'], ['aa3', 'n'], ['aa4', 'n'], ['aa5', 'n']], '<h3>Reading frame</h3><p>DNA is read in groups of three nucleotides — <b>codons</b> — each coding for one amino acid (MedlinePlus).</p>'],
+  silent: ['Silent', [['c1', 'n'], ['c2', 'n'], ['c3′', 'x'], ['c4', 'n'], ['c5', 'n']], [['aa1', 'n'], ['aa2', 'n'], ['aa3', 'n'], ['aa4', 'n'], ['aa5', 'n']], '<h3>Silent (synonymous)</h3><p>A base substitution that leaves the <b>same amino acid</b> (Wikipedia); MedlinePlus: some variants change the DNA but not the protein\'s function.</p>'],
+  mis: ['Missense: sickle cell', [['GAG→GTG', 'x']], [['Glu→Val', 'x']], '<h3>Missense</h3><p>A substitution that <b>changes one amino acid</b> (MedlinePlus). Example: <b>sickle-cell disease</b> — in β-globin codon 6, GAG becomes GUG (in the RNA), so <b>glutamic acid is replaced by valine</b> (Glu6Val) (Wikipedia, two articles; one source).</p>'],
+  non: ['Nonsense', [['c1', 'n'], ['c2', 'n'], ['c3′', 'x'], ['c4', 'g'], ['c5', 'g']], [['aa1', 'n'], ['aa2', 'n'], ['STOP', 's']], '<h3>Nonsense</h3><p>A substitution that creates a <b>premature stop signal</b>: a <b>shortened</b> protein, often non-functional or broken down (MedlinePlus).</p>'],
+  fs: ['Frameshift', [], [], '<h3>Frameshift</h3><p>An insertion or deletion of a number of nucleotides <b>not divisible by three</b> (Wikipedia) shifts the reading frame: the codon it falls in and <b>every amino acid downstream</b> change (MedlinePlus). Insertions, deletions and duplications can all be frameshifts (MedlinePlus).</p>'],
+  inf: ['In-frame deletion: ΔF508', [], [], '<h3>In-frame deletion</h3><p>Three bases deleted: one amino acid lost, the frame unchanged — e.g. <b>ΔF508</b> in cystic fibrosis (review PMC12050259; Wikipedia). See <a href="inheritance-pedigrees.html#h-cf">cystic fibrosis</a>.</p>'],
+  spl: ['Splice site', [], [], '<h3>Splice-site variant</h3><p>Introns usually begin with <b>GT</b> and end with <b>AG</b> (review PMC6060985). A variant at a splice site disrupts splicing of the pre-mRNA (Wikipedia; review), <b>usually so that an exon is skipped</b> (review PMC6060985). Splice-site variants are one of the classes found by gene sequencing (review PMC10084876); in CFTR some splicing variants leave very little protein (Wikipedia).</p>'],
+};
+
+/* 8. counselling and tests */
+const GC_TEXT = `<p><b>Genetic counselling</b> is a consultation that gives information and support to people who have, or may be at risk of, a genetic condition: a genetics professional — a medical geneticist or genetic counsellor — discusses the risks, or diagnoses, confirms or rules out a condition (MedlinePlus; Wikipedia). It is <b>non-directive</b>: unbiased information, the family decides (Wikipedia). A <b>pedigree</b> is drawn to estimate the chance for a child (Wikipedia).</p>
+<p><b>Reasons for referral</b> (MedlinePlus; Wikipedia): a personal or family history of a genetic or chromosomal condition or birth defect; two or more miscarriages, a stillbirth or a baby who died; a child with an inherited disorder, birth defect, intellectual disability or developmental delay; pregnancy at or after 35 (MedlinePlus); abnormal test results; partners related by blood; a higher risk because of ethnic background (MedlinePlus).</p>`;
+const FISH = {sel: 'n'};
+const FISH_ITEMS = {
+  n: ['Normal', 2, '<h3>FISH: normal</h3><p><b>Fluorescence in situ hybridisation</b>: fluorescent DNA <b>probes</b> bind to their complementary sequence in <b>metaphase chromosomes or interphase nuclei</b> and show as coloured spots under a fluorescence microscope (Wikipedia; reviews PMC12941462, PMC3983585). A probe for chromosome 21: two spots.</p>'],
+  t21: ['Trisomy 21', 3, '<h3>FISH: trisomy 21</h3><p>Three spots. Because it works on <b>non-dividing (interphase)</b> cells, FISH gives a <b>rapid</b> answer (24–48 h) for chromosomes <b>13, 18, 21, X and Y</b> in prenatal diagnosis (review PMC12941462). It also finds microdeletions and cryptic rearrangements at a chosen locus (about 100 kb–1 Mb, StatPearls), but sees <b>only the regions probed</b> (review).</p>'],
+};
+const PCR = {s: 0};
+const PCR_STEPS = [
+  ['Denature', '<h3>1. Denaturation</h3><p>Heating (typically 94–98 °C, Wikipedia) separates the two DNA strands (StatPearls; Wikipedia).</p>'],
+  ['Anneal', '<h3>2. Annealing</h3><p>At a lower temperature (typically 50–65 °C, Wikipedia) short <b>primers</b> bind either side of the target (StatPearls; Wikipedia).</p>'],
+  ['Extend', '<h3>3. Extension</h3><p>A heat-stable DNA polymerase — <b>Taq</b>, from <i>Thermus aquaticus</i> — copies each strand from the primers (typically at 72 °C, Wikipedia) (StatPearls; Wikipedia).</p>'],
+  ['Repeat', '<h3>4. Repeat the cycle</h3><p>Each cycle <b>doubles</b> the target, so copies grow exponentially — over a billion-fold (StatPearls; Wikipedia). PCR (Mullis, 1980s) is used to screen for genetic disorders, diagnose infections and in prenatal screening (StatPearls).</p>'],
+];
+const SEQ_TEXT = `<h3>DNA sequencing</h3><p>Reading the order of bases (StatPearls). <b>Sanger sequencing</b> (chain termination): dideoxynucleotides, lacking the 3′-OH group, stop each new strand (Wikipedia) — still used for short pieces of DNA, but slow and costly for a whole genome (MedlinePlus). <b>Next-generation sequencing</b> reads many fragments at once: gene panels, <b>whole-exome sequencing</b> (the exons, about 1% of the genome, where most known disease mutations lie, MedlinePlus) and <b>whole-genome sequencing</b> (StatPearls; MedlinePlus). Much of what is found is of unknown significance (MedlinePlus).</p>`;
+const TEST_HEAD = ['Test', 'Looks at', 'Smallest change', 'Notes'];
+const TEST_ROWS = [
+  ['Karyotype', 'Whole genome, chromosome by chromosome', '5–10 Mb', 'Needs dividing cells; finds balanced rearrangements (reviews PMC12941462, PMC12801557)'],
+  ['FISH', 'Chosen loci', 'About 100 kb–1 Mb', 'Interphase cells, 24–48 h; only what is probed (review PMC12941462; StatPearls)'],
+  ['Chromosomal microarray', 'Copy number genome-wide', 'About 50–100 kb', 'No cell culture; misses balanced rearrangements (review PMC12941462)'],
+  ['PCR', 'A chosen short target', '—', 'Amplifies a chosen region over a billion-fold (StatPearls)'],
+  ['Sequencing', 'Bases: one gene, a panel, the exome or the genome', 'Single bases', 'Substitutions, small insertions and deletions (StatPearls; MedlinePlus)'],
+];
+
+const DATA = {
+  based: 'Based on: StatPearls (NCBI Bookshelf); MedlinePlus Genetics (U.S. National Library of Medicine, public domain); open-access reviews and studies (prenatal hand findings in trisomies, Facts Views Vis Obgyn 2011; translocation Down syndrome series, Mater Sociomed 2013; Robertsonian carriers, Cell Mol Life Sci 2020; Prader–Willi and Angelman syndromes, Appl Clin Genet 2023; Turner syndrome, J Clin Endocrinol Metab 2025; Klinefelter syndrome, Front Endocrinol 2026; cystic fibrosis 2025; prenatal CNV testing 2026; molecular cytogenetics, Genet Mol Biol 2014; splicing mutations, J Appl Genet 2018); Wikipedia. Courtesy of MedlinePlus from the National Library of Medicine.',
+  models: 'Drawings: schematic, not to scale; body outlines are schematic, not real patients.',
+  images: 'Karyotypes via Wikimedia Commons (credited under each): U.S. Department of Energy Human Genome Program (public domain), Serra Amoros (CC BY-SA 4.0), Saideekshit et al., Cureus 2024 (CC BY 4.0); converted to JPEG or recompressed, otherwise unchanged.',
+};
+const PHOTOS = {
+  t21: {id: 't21', file: 'trisomy-21.jpg', w: 718, h: 444, title: 'Karyotype: trisomy 21',
+    alt: 'Numbered human chromosome pairs with three chromosomes 21 boxed in red', cap: 'Three chromosomes <b>21</b> (red box and arrow, the source\'s own marking); the X and Y at the lower right show a male.',
+    credit: Gen.credit('21 trisomy - Down syndrome.png', 'U.S. Department of Energy Human Genome Program', 'pd', 'converted to JPEG', false), labels: []},
+  t18: {id: 't18', file: 'trisomy-18.jpg', w: 717, h: 419, title: 'Karyotype: trisomy 18',
+    alt: 'Banded human karyogram with three chromosomes 18 circled', cap: 'Three chromosomes <b>18</b> (circled by the author).',
+    credit: Gen.credit('Trisomia 18.jpg', 'Serra Amoros', 'bysa4', 'recompressed', false), labels: []},
+  ix: {id: 'ix', file: 'isochromosome-x.jpg', w: 729, h: 763, title: 'Karyotype: 46,X,i(Xq) — Turner syndrome',
+    alt: 'Banded karyogram; at the X position a normal X and a longer symmetrical X in a red box with an arrow, no Y', cap: 'One normal X and an <b>isochromosome of the long arm</b> (red box, arrow: the authors\'), and no Y: from a published case of <b>mosaic</b> Turner syndrome with an isochromosome X. Uploader: 450–550 band resolution.',
+    credit: Gen.credit('Karyotype of isochromosome X in Turner syndrome (46,X,i(X)(q10)).ipg.jpg', 'Saideekshit T et al. (Cureus 2024, a report of isochromosome mosaic Turner syndrome)', 'by4', 'recompressed', false), labels: []},
+};
+
+/* ===================== drawing ===================== */
+const {$, T} = Gen;
+const bar = (x, y, c, h = 30) => `<rect x="${x - 4}" y="${y}" width="8" height="${h}" rx="4" class="${c === 'm' ? 'mat' : 'pat'}"/>`;
+function drawNdj() {
+  const d = NDJ_ITEMS[NDJ.sel]; let s = Gen.DEFS;
+  const cell = (cx, cy, r) => `<circle cx="${cx}" cy="${cy}" r="${r}" class="box" style="stroke:var(--ink)"/>`;
+  if (NDJ.sel === 'mit') {
+    s += T(14, 22, 'ZYGOTE → 2 CELLS → ERROR IN ONE CELL\'S DIVISION', 'h');
+    s += cell(50, 150, 30) + bar(42, 135, 'm') + bar(58, 135, 'p') + T(50, 200, 'Zygote 46', 's', 'middle');
+    s += `<path class="flow" d="M82 150 L120 100"/><path class="flow" d="M82 150 L120 210"/>`;
+    s += cell(150, 90, 26) + bar(142, 75, 'm') + bar(158, 75, 'p') + T(150, 130, '46', 's', 'middle');
+    s += cell(150, 215, 26) + bar(142, 200, 'm') + bar(158, 200, 'p') + T(150, 256, '46', 's', 'middle');
+    s += `<path class="flow" d="M178 210 L230 180"/><path class="flow" d="M178 220 L230 260"/>`;
+    s += cell(258, 172, 24) + bar(246, 157, 'm') + bar(258, 157, 'm') + bar(270, 157, 'p') + T(292, 176, '47', 'b');
+    s += cell(258, 268, 24) + bar(258, 253, 'p') + T(292, 272, '45', 'b');
+    s += `<path class="flow" d="M178 90 H230"/>` + T(258, 94, 'normal line', 's');
+    s += T(330, 60, 'The chromatids of one chromosome', 's') + T(330, 76, 'fail to separate in one cell:', 's') + T(330, 92, 'its descendants are 47 or 45,', 's') + T(330, 108, 'the rest stay 46 — a mosaic', 's');
+    } else {
+    s += T(14, 22, 'ONE CHROMOSOME PAIR THROUGH MEIOSIS', 'h');
+    s += cell(70, 160, 40) + bar(60, 145, 'm') + bar(80, 145, 'p') + T(70, 222, 'Germ cell', 's', 'middle');
+    s += T(160, 50, 'MEIOSIS I', 'h', 'middle') + T(330, 50, 'MEIOSIS II', 'h', 'middle');
+    const mi = d[1];
+    [100, 220].forEach((cy, i) => { s += `<path class="flow" d="M110 160 L150 ${cy}"/>` + cell(190, cy, 34); mi[i].forEach((c, j) => { s += bar(190 + (j - (mi[i].length - 1) / 2) * 12, cy - 15, c); }); });
+    const g = d[2];
+    g.forEach((list, k) => {
+      const cy = 95 + k * 60, from = k < 2 ? 100 : 220;
+      s += `<path class="flow" d="M226 ${from} L290 ${cy}"/>` + cell(325, cy, 26);
+      list.forEach((c, j) => { s += bar(325 + (j - (list.length - 1) / 2) * 12, cy - 15, c); });
+      const n = 22 + list.length;
+      s += T(362, cy + 4, 'Gamete: ' + n + (n === 23 ? '' : n === 24 ? ' → trisomy' : ' → monosomy'), n === 23 ? 's' : 'b');
+    });
+  }
+  $('ndj-svg').innerHTML = s; $('ndj-find').innerHTML = d[3];
+}
+function chromRow(x, y, segs, w = 34) {  /* horizontal chromosome of segments; returns [svg, endX] */
+  let s = '', cx = x;
+  segs.forEach(sg => {
+    if (sg === '|') { s += `<path d="M${cx} ${y} v26" style="stroke:var(--ink);stroke-width:4"/>`; cx += 8; return; }
+    const alt = sg.endsWith('*');
+    s += `<rect x="${cx}" y="${y}" width="${w}" height="26" class="seg ${alt ? 'mut' : ''}" style="${alt ? '' : 'fill:var(--surface)'}"/>` + T(cx + w / 2, y + 18, sg.replace('*', ''), alt ? 'm om' : 'm', 'middle');
+    cx += w;
+  });
+  return [s, cx];
+}
+function drawStr() {
+  const [, before, after, lost, txt] = STR_ITEMS[STR.sel]; let s = Gen.DEFS;
+  s += T(14, 22, 'BEFORE', 'h'); s += T(14, 142, 'AFTER', 'h');
+  before.forEach((c, i) => { s += chromRow(40, 40 + i * 44, c)[0]; });
+  if (after === 'ring') {
+    s += `<ellipse cx="170" cy="190" rx="80" ry="40" style="fill:none;stroke:var(--ink);stroke-width:22"/><ellipse cx="170" cy="190" rx="80" ry="40" style="fill:none;stroke:var(--surface);stroke-width:19"/>`;
+    ['B', 'C', 'D', 'E'].forEach((l, i) => { const a = Math.PI * (0.9 + i * 0.4); s += T(170 + 80 * Math.cos(a), 194 + 40 * Math.sin(a), l, 'm', 'middle'); });
+    s += T(300, 194, 'Ends A and F lost; broken ends fused', 's');
+  } else {
+    after.forEach((c, i) => { s += chromRow(40, 158 + i * 44, c)[0]; });
+  }
+  if (lost.length) s += T(330, 180, 'Lost: ' + lost.join(', '), 'b');
+  $('str-svg').innerHTML = s; $('str-find').innerHTML = txt;
+}
+function drawDn() {
+  const k = DN.sel; let s = Gen.DEFS;
+  const c21 = (x, y, extra) => Gen.chrom(x, y, 60, 0.15, {w: 12, fill: extra ? 'var(--mut)' : ''});
+  if (k === 'free') {
+    s += T(14, 22, 'CHROMOSOMES 21 IN EVERY CELL: THREE SEPARATE COPIES (47)', 'h');
+    [150, 200, 250].forEach(x => { s += c21(x, 70); });
+    s += T(200, 160, '21, 21, 21', 'm', 'middle') + T(330, 100, 'Three separate copies', 'b') + T(330, 116, '(any one is "the extra")', 's');
+  } else if (k === 'trans') {
+    s += T(14, 22, 'TWO NORMAL 21s + 21q FUSED TO 14 (46)', 'h');
+    s += c21(120, 80) + c21(160, 80) + T(140, 160, '21, 21', 'm', 'middle');
+    s += Gen.chrom(250, 50, 100, 0.12, {w: 14}) + T(250, 170, '14', 'm', 'middle');
+    s += Gen.chrom(330, 30, 150, 0.4, {w: 14, bands: [[0.02, 0.36]]}) + `<rect x="324" y="31" width="12" height="57" class="mut" rx="5"/>` + T(330, 200, 'der(14;21)', 'm', 'middle');
+    s += Gen.lead(338, 60, 400, 60) + T(404, 64, '21q (coloured)', 's') + Gen.lead(338, 140, 400, 140) + T(404, 144, '14q', 's');
+    s += T(260, 240, 'A balanced carrier parent: one 14, one 21, the der(14;21) → 45', 's', 'middle');
+  } else {
+    s += T(14, 22, 'TWO CELL LINES IN ONE PERSON', 'h');
+    s += `<circle cx="150" cy="120" r="70" class="box" style="stroke:var(--ink)"/>` + c21(125, 90) + c21(150, 90) + c21(175, 90) + T(150, 215, '47,+21 cells', 'b', 'middle');
+    s += `<circle cx="370" cy="120" r="70" class="box" style="stroke:var(--ink)"/>` + c21(355, 90) + c21(385, 90) + T(370, 215, 'Normal 46 cells', 'b', 'middle');
+  }
+  $('dn-svg').innerHTML = s; $('dn-find').innerHTML = DN_ITEMS[k][1];
+}
+function drawAge() {
+  let s = Gen.DEFS; const X = a => 70 + (a - 15) * 11, Y = n => 40 + (Math.log10(n) - 1) * 80;  /* n = 1 in n, log scale */
+  s += `<path class="line" d="M70 30 V${Y(5000)} H${X(55)}"/>`;
+  [10, 100, 1000, 5000].forEach(n => { s += T(64, Y(n) + 4, '1 in ' + n.toLocaleString('en'), 's', 'end') + `<path d="M70 ${Y(n)} H${X(55)}" style="stroke:var(--line);stroke-dasharray:3 4"/>`; });
+  [20, 30, 40, 50].forEach(a => { s += T(X(a), Y(5000) + 18, String(a), 's', 'middle'); });
+  s += T(X(35), Y(5000) + 36, "Mother's age (years)", 's', 'middle');
+  s += `<path d="M${AGE_WP.map(([a, n]) => X(a) + ' ' + Y(n)).join(' L')}" style="stroke:var(--ink);stroke-width:2;fill:none"/>`;
+  AGE_WP.forEach(([a, n]) => { s += `<circle cx="${X(a)}" cy="${Y(n)}" r="4" style="fill:var(--ink)"/>`; });
+  AGE_REVIEW.forEach(([a, n, l]) => { s += `<rect x="${X(a) - 5}" y="${Y(n) - 5}" width="10" height="10" style="fill:var(--surface);stroke:var(--ink);stroke-width:2"/>` + T(X(a) + 10, Y(n) + 4, l, 's'); });
+  s += `<circle cx="330" cy="200" r="4" style="fill:var(--ink)"/>` + T(340, 204, 'Wikipedia', 's') + `<rect x="325" y="215" width="10" height="10" style="fill:var(--surface);stroke:var(--ink);stroke-width:2"/>` + T(340, 224, 'Review PMC3991414', 's');
+  $('age-svg').innerHTML = s;
+}
+function figure(scale) {  /* schematic human outline, front view, centre x 200 */
+  const h = (v) => v;
+  return `<g transform="translate(200 0) scale(${scale} 1) translate(-200 0)">
+    <circle cx="200" cy="62" r="28" class="fig2"/>
+    <path class="fig2" d="M188 88 h24 v14 h-24 z"/>
+    <path class="fig2" d="M160 104 Q200 96 240 104 L246 230 Q200 246 154 230 Z"/>
+    <path class="fig2" d="M160 108 L132 200 L122 282 L136 284 L148 206 L170 140 Z"/>
+    <path class="fig2" d="M240 108 L268 200 L278 282 L264 284 L252 206 L230 140 Z"/>
+    <path class="fig2" d="M160 232 L168 350 L190 350 L198 244 Z"/>
+    <path class="fig2" d="M240 232 L232 350 L210 350 L202 244 Z"/></g>`;
+}
+function drawTk() {
+  const [, labels, sc, txt] = TK_ITEMS[TK.sel]; let s = Gen.DEFS;
+  s += T(10, 20, TK.sel === 't' ? 'TURNER SYNDROME: MAIN FEATURES' : 'KLINEFELTER SYNDROME: MAIN FEATURES', 'h');
+  s += `<g transform="translate(0 ${TK.sel === 't' ? 20 : 0}) scale(1 ${TK.sel === 't' ? 0.92 : 1})">` + figure(sc) + '</g>';
+  labels.forEach(([x, y, t, side], i) => {
+    const tx = 320, ty = 60 + i * 52;
+    s += `<circle cx="${x}" cy="${y}" r="3.5" style="fill:var(--clin)"/>` + Gen.lead(x, y, tx - 4, ty - 4) + T(tx, ty, t, 'l');
+  });
+  $('tk-svg').innerHTML = s; $('tk-find').innerHTML = txt;
+}
+function drawPw() {
+  const [, [pat, mat, second]] = [null, PW_ITEMS[PW.sel][1]]; let s = Gen.DEFS;
+  s += T(14, 22, 'CHROMOSOME 15 PAIR (SHORT ARM LEFT), 15q11–q13 BOXED', 'h');
+  const row = (y, who, cls, st) => {
+    let r = T(70, y + 4, who, 'b', 'end');
+    if (st === 'gone') return r + T(90, y + 4, 'no copy from this parent', 's');
+    r += `<rect x="90" y="${y - 9}" width="380" height="18" rx="9" class="${cls}" style="fill-opacity:.25;stroke:var(--ink)"/>` + `<path d="M126 ${y - 9} V${y + 9}" style="stroke:var(--ink);stroke-width:3"/>`;
+    if (st === 'del') r += `<rect x="140" y="${y - 11}" width="56" height="22" style="fill:var(--surface);stroke:var(--ink);stroke-width:2;stroke-dasharray:4 3"/>` + T(205, y + 24, 'deleted', 'b');
+    else r += `<rect x="140" y="${y - 9}" width="56" height="18" class="${cls}"/>`;
+    if (st === 'imp') r += `<path d="M140 ${y + 9} L196 ${y - 9}" style="stroke:var(--ink);stroke-width:3"/>` + T(205, y + 24, 'present but switched off', 'b');
+    if (st === 'var') r += `<rect x="176" y="${y - 9}" width="10" height="18" class="mut"/>` + T(205, y + 24, 'UBE3A variant', 'b');
+    return r;
+  };
+  /* first row = copy expected from the father, second = from the mother; UPD replaces one with a second copy of the other */
+  const fatherRow = pat === 'mat' ? ['Mother', 'mat', 'n'] : ['Father', 'pat', pat];
+  const motherRow = mat === 'pat' ? ['Father', 'pat', 'n'] : ['Mother', 'mat', mat];
+  s += row(80, fatherRow[0], fatherRow[1], fatherRow[2]) + row(160, motherRow[0], motherRow[1], motherRow[2]);
+  s += T(90, 58, 'Paternal copy needed for the Prader–Willi genes', 's') + T(90, 138, 'Maternal copy needed for UBE3A in neurons', 's');
+  if (pat === 'mat' || mat === 'pat') s += T(260, 220, 'Uniparental disomy: both copies from one parent', 'b', 'middle');
+  $('pw-svg').innerHTML = s; $('pw-find').innerHTML = PW_ITEMS[PW.sel][2];
+}
+function drawMu() {
+  const [, cod, aa, txt] = MU_ITEMS[MU.sel]; let s = Gen.DEFS; const w = 88;
+  const box = (x, y, l, k, round, wd = w - 6) => `<rect x="${x}" y="${y}" width="${wd}" height="40" ${round ? 'rx="18"' : ''} class="seg ${k === 'x' ? 'mut' : ''}" style="${k === 'x' ? '' : 'fill:var(--surface)'};${k === 'g' ? 'opacity:.35' : ''}${k === 's' ? 'stroke-width:3' : ''}"/>` + T(x + wd / 2, y + 25, l, k === 'x' ? 'm om' : k === 's' ? 'b' : 'm', 'middle');
+  if (MU.sel === 'spl') {
+    s += T(14, 22, 'GENE: EXON – INTRON – EXON – INTRON – EXON', 'h');
+    const ex = [[20, 'Exon 1'], [200, 'Exon 2'], [380, 'Exon 3']];
+    ex.forEach(([x, l]) => { s += `<rect x="${x}" y="40" width="110" height="36" class="seg" style="fill:var(--surface)"/>` + T(x + 55, 63, l, 'm', 'middle'); });
+    s += `<path class="line" d="M130 58 H200 M310 58 H380"/>` + T(134, 52, 'GT', 'm') + T(196, 52, 'AG', 'm', 'end') + T(314, 52, 'GT', 'm') + T(376, 52, 'AG', 'm', 'end');
+    s += `<rect x="133" y="62" width="20" height="12" class="mut"/>` + T(143, 94, 'variant at the', 's', 'middle') + T(143, 108, 'splice site', 's', 'middle');
+    s += T(14, 140, 'mRNA AFTER SPLICING', 'h');
+    s += `<rect x="20" y="152" width="110" height="36" class="seg" style="fill:var(--surface)"/>` + T(75, 175, 'Exon 1', 'm', 'middle') + `<rect x="130" y="152" width="110" height="36" class="seg" style="fill:var(--surface)"/>` + T(185, 175, 'Exon 3', 'm', 'middle');
+    s += T(260, 175, 'Exon 2 skipped', 'b');
+  } else if (MU.sel === 'fs') {
+    s += T(14, 22, 'DNA, READ IN CODONS', 'h') + T(14, 132, 'PROTEIN', 'h');
+    s += box(20, 40, 'c1', 'n') + box(108, 40, 'c2', 'n');
+    s += box(196, 40, '', 'x') + `<rect x="200" y="44" width="12" height="32" style="fill:var(--ink)"/>` + T(258, 65, 'shifted', 'm om', 'middle') + T(206, 98, '+1 base inside codon 3', 's');
+    s += box(284, 40, 'shifted', 'x') + box(372, 40, 'shifted', 'x');
+    s += box(20, 150, 'aa1', 'n', 1) + box(108, 150, 'aa2', 'n', 1) + box(196, 150, 'new', 'x', 1) + box(284, 150, 'new', 'x', 1) + box(372, 150, 'new', 'x', 1);
+  } else if (MU.sel === 'inf') {
+    s += T(14, 22, 'DNA: THREE BASES (ONE CODON) DELETED, GAP CLOSES', 'h') + T(14, 132, 'PROTEIN: ONE AMINO ACID FEWER, FRAME KEPT', 'h');
+    s += box(20, 40, 'c1', 'n') + box(108, 40, 'c2', 'n') + box(196, 40, 'c4', 'n') + box(284, 40, 'c5', 'n');
+    s += `<path d="M194 34 V86" style="stroke:var(--mut);stroke-width:4"/>` + T(380, 58, 'codon for', 's') + T(380, 72, 'Phe508 gone', 's');
+    s += box(20, 150, 'aa1', 'n', 1) + box(108, 150, 'aa2', 'n', 1) + box(196, 150, 'aa4', 'n', 1) + box(284, 150, 'aa5', 'n', 1);
+  } else {
+    s += T(14, 22, 'DNA, READ IN CODONS', 'h') + T(14, 132, 'PROTEIN', 'h');
+    cod.forEach(([l, k], i) => { s += box(20 + i * w, 40, l, k); });
+    aa.forEach(([l, k], i) => { s += box(20 + i * w, 150, l, k, 1); });
+    if (MU.sel === 'mis') s += T(130, 65, 'β-globin codon 6', 's') + T(130, 175, 'amino acid 6', 's');
+  }
+  $('mu-svg').innerHTML = s; $('mu-find').innerHTML = txt;
+}
+function drawFish() {
+  const n = FISH_ITEMS[FISH.sel][1]; let s = Gen.DEFS;
+  s += T(12, 20, 'INTERPHASE NUCLEUS, PROBE FOR 21', 'h');
+  s += `<ellipse cx="180" cy="125" rx="120" ry="82" style="fill:var(--ink);fill-opacity:.12;stroke:var(--ink);stroke-width:1.5"/>`;
+  [[120, 95], [235, 110], [170, 170]].slice(0, n).forEach(([x, y]) => { s += `<circle cx="${x}" cy="${y}" r="9" class="probe" style="stroke:var(--ink)"/>`; });
+  s += T(180, 222, n + ' signals', 'b', 'middle');
+  $('fish-svg').innerHTML = s; $('fish-find').innerHTML = FISH_ITEMS[FISH.sel][2];
+}
+function drawPcr() {
+  const st = PCR.s; let s = Gen.DEFS;
+  s += T(14, 22, ['DENATURE: STRANDS SEPARATE', 'ANNEAL: PRIMERS BIND', 'EXTEND: TAQ COPIES', 'REPEAT: COPIES DOUBLE EACH CYCLE'][st], 'h');
+  if (st < 3) {
+    const y1 = st === 0 ? 70 : 70, y2 = st === 0 ? 150 : 150;
+    s += `<rect x="60" y="${y1}" width="400" height="12" style="fill:var(--surface);stroke:var(--ink)"/><rect x="60" y="${y2}" width="400" height="12" style="fill:var(--surface);stroke:var(--ink)"/>`;
+    s += `<rect x="180" y="${y1}" width="160" height="12" style="fill:var(--ink);fill-opacity:.15"/><rect x="180" y="${y2}" width="160" height="12" style="fill:var(--ink);fill-opacity:.15"/>` + T(170, 112, 'Target (shaded)', 's', 'end');
+    if (st >= 1) { s += `<rect x="300" y="${y1 + 14}" width="40" height="10" style="fill:var(--ink)"/><rect x="180" y="${y2 - 12}" width="40" height="10" style="fill:var(--ink)"/>` + T(360, y1 + 24, 'primer', 's') + T(160, y2 - 4, 'primer', 's', 'end'); }
+    if (st === 2) { s += `<rect x="180" y="${y1 + 14}" width="120" height="10" style="fill:url(#hatch);stroke:var(--ink)"/><rect x="220" y="${y2 - 12}" width="120" height="10" style="fill:url(#hatch);stroke:var(--ink)"/>` + `<path class="flow" d="M298 ${y1 + 34} H190"/><path class="flow" d="M222 ${y2 - 22} H330"/>`; }
+    s += T(260, 210, ['High temperature', 'Cooler', 'Heat-stable Taq polymerase'][st], '', 'middle');
+  } else {
+    [1, 2, 4, 8, 16, 32].forEach((n, i) => { const x = 50 + i * 78, h = Math.max(2, n * 5); s += `<rect x="${x}" y="${200 - h}" width="40" height="${h}" style="fill:var(--ink);fill-opacity:.55"/>` + T(x + 20, 216, 'cycle ' + i, 's', 'middle') + T(x + 20, 194 - h, String(n), 'b', 'middle'); });
+    s += T(260, 236, 'Copies of the target (doubling)', 's', 'middle');
+  }
+  $('pcr-svg').innerHTML = s; $('pcr-find').innerHTML = PCR_STEPS[st][1];
+}
+
+/* ===================== init ===================== */
+(() => {
+  $('lede').innerHTML = LEDE; $('age-text').innerHTML = AGE_TEXT; $('poly-text').innerHTML = POLY_TEXT; $('gc-text').innerHTML = GC_TEXT; $('seq-text').innerHTML = SEQ_TEXT;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models; $('images').innerHTML = DATA.images;
+  Gen.toggles('ndj-tg', Object.entries(NDJ_ITEMS).map(([k, d]) => [k, d[0]]), k => { NDJ.sel = k; drawNdj(); }, 'norm');
+  Gen.key('ndj-key', [['--mat', "Mother's homologue"], ['--pat', "Father's homologue"]]);
+  Gen.table('num-table', NUM_HEAD, NUM_ROWS);
+  Gen.toggles('str-tg', Object.entries(STR_ITEMS).map(([k, d]) => [k, d[0]]), k => { STR.sel = k; drawStr(); }, 'del');
+  Gen.toggles('dn-tg', Object.entries(DN_ITEMS).map(([k, d]) => [k, d[0]]), k => { DN.sel = k; drawDn(); }, 'free');
+  Gen.table('rec-table', REC_HEAD, REC_ROWS); Gen.table('dnf-table', DNF_HEAD, DNF_ROWS); Gen.table('ep-table', EP_HEAD, EP_ROWS);
+  Gen.toggles('tk-tg', Object.entries(TK_ITEMS).map(([k, d]) => [k, d[0]]), k => { TK.sel = k; drawTk(); }, 't');
+  Gen.table('tk-table', TK_HEAD, TK_ROWS);
+  Gen.toggles('pw-tg', Object.entries(PW_ITEMS).map(([k, d]) => [k, d[0]]), k => { PW.sel = k; drawPw(); }, 'pdel');
+  Gen.key('pw-key', [['--pat', "Father's chromosome 15"], ['--mat', "Mother's chromosome 15"], ['--mut', 'Variant']]);
+  Gen.table('pw-table', PW_HEAD, PW_ROWS);
+  Gen.toggles('mu-tg', Object.entries(MU_ITEMS).map(([k, d]) => [k, d[0]]), k => { MU.sel = k; drawMu(); }, 'norm');
+  Gen.toggles('fish-tg', Object.entries(FISH_ITEMS).map(([k, d]) => [k, d[0]]), k => { FISH.sel = k; drawFish(); }, 'n');
+  Gen.stepper('pcr-step', PCR_STEPS.map(x => x[0]), drawPcr, PCR);
+  Gen.table('test-table', TEST_HEAD, TEST_ROWS);
+  Gen.micro($('dn-img'), PHOTOS.t21); Gen.micro($('ep-img'), PHOTOS.t18); Gen.micro($('tk-img'), PHOTOS.ix);
+  drawNdj(); drawStr(); drawDn(); drawAge(); drawTk(); drawPw(); drawMu(); drawFish();
+  Gen.swipeHints();
+  window.ready = true;
+})();
+</script>
+</body>
+</html>
