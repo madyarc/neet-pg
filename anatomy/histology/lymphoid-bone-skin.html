@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lymphoid Organs, Bone and Skin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<link rel="stylesheet" href="histo.css">
+<style>
+/* page colours, one meaning each: --lymph (lymphoid tissue, atlas.css), --gc (germinal centre), --lsinus (lymph sinus),
+   --rpulp (splenic red pulp), --collagen (capsule, trabeculae, septa, dermis), --kerat (keratin: stratum corneum, Hassall's corpuscle),
+   --cyto (epithelial cells), --nucleus, --bone (bone matrix, atlas.css), --cement (cement line), --sb / --ss / --sg / --sl (strata basale,
+   spinosum, granulosum, lucidum), --fat (fat), --sweat (sweat gland), --sebum (sebaceous gland), --hair (hair shaft),
+   --t-musc (smooth muscle: arrector pili), --ocyte (osteocytes in lacunae, kept dark on the pale bone in both themes); --artery, --vein from atlas.css; --mark = the part you picked */
+:root{--gc:#eaf5b0;--lsinus:#dff3fa;--rpulp:#d9707a;--collagen:#e39b9b;--kerat:#b5838d;--cyto:#c8b6e2;--nucleus:#1e4f99;--cement:#5c4b3b;--ocyte:#2e3a6e;
+  --sb:#4b3f72;--ss:#e3cdf2;--sg:#8e6bbf;--sl:#f9f1d0;--fat:#f3e3a6;--sweat:#6bb8e8;--sebum:#ffd6a5;--hair:#5c4033;--t-musc:#c96f68}
+:root[data-theme="dark"]{--gc:#4d6b3a;--lsinus:#2b3d4c;--rpulp:#8f4a50;--collagen:#b86a6a;--kerat:#e0a9b4;--cyto:#6d5a8c;--nucleus:#9fb0ff;--cement:#4a3b2c;--ocyte:#2e3a6e;
+  --sb:#b0a2e0;--ss:#5d4b75;--sg:#a58bd0;--sl:#3b3446;--fat:#7d6f3c;--sweat:#3f7a91;--sebum:#8a6a3f;--hair:#c9a27e;--t-musc:#9c4e48}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Lymphoid Organs, Bone and Skin</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="Histology pages"><span class="muted">Histology:</span> <a href="epithelium-glands.html">Epithelium and glands</a> <a href="nervous-vascular.html">Nervous tissue and blood vessels</a> <b>Lymphoid organs, bone and skin</b> <a href="../general/connective-tissue.html#h-cart">Cartilage</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-lym">
+  <h2 id="h-lym">Lymphoid organs</h2>
+  <p class="cap key" id="lym-cap"></p>
+  <div class="chips" id="lym-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="organ" viewBox="0 0 360 260" role="img" aria-label="Schematic of the chosen lymphoid organ"></svg>
+      <div class="legend2" id="lym-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="lym-text"></div>
+    </div>
+    <div id="lym-micro" class="stack"></div>
+  </div>
+  <h3>How to tell them apart</h3>
+  <div class="scroll"><table id="lym-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-bone">
+  <h2 id="h-bone">Bone</h2>
+  <p class="cap key" id="bone-cap"></p>
+  <div class="chips" id="bone-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="osteon" viewBox="0 0 360 270" role="img" aria-label="Schematic of compact bone with osteons"></svg>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="bone-text"></div>
+    </div>
+    <div id="bone-micro"></div>
+  </div>
+  <h3>Bone cells and coverings</h3>
+  <div class="scroll"><table id="cell-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-skin">
+  <h2 id="h-skin">Skin and its appendages</h2>
+  <p class="cap key" id="skin-cap"></p>
+  <div class="chips" id="skin-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="skin" viewBox="0 0 360 330" role="img" aria-label="Schematic section of skin"></svg>
+      <div class="legend2" id="skin-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="skin-text"></div>
+    </div>
+    <div id="skin-micro" class="stack"></div>
+  </div>
+  <h3>Layers of the epidermis (deep to surface)</h3>
+  <div class="scroll"><table id="layer-table"></table></div>
+  <h3>Thick skin vs thin skin</h3>
+  <div class="scroll"><table id="tt-table"></table></div>
+  <h3>Appendages</h3>
+  <div class="scroll"><table id="app-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+  <p id="images"></p>
+</footer>
+</div>
+
+<script src="histo.js"></script>
+<script>
+/* ===================== DATA (checked in sources-local/facts/fill-histo1.md, Parts E, F, G) ===================== */
+const LIC = {
+  cc0: ['CC0', 'https://creativecommons.org/publicdomain/zero/1.0/'], by4: ['CC BY 4.0', 'https://creativecommons.org/licenses/by/4.0/'],
+  bysa2: ['CC BY-SA 2.0', 'https://creativecommons.org/licenses/by-sa/2.0/'], bysa3: ['CC BY-SA 3.0', 'https://creativecommons.org/licenses/by-sa/3.0/'],
+  bysa4: ['CC BY-SA 4.0', 'https://creativecommons.org/licenses/by-sa/4.0/'],
+};
+const BCC = 'Berkshire Community College Bioscience Image Library';
+const cr = (file, author, lic, done) => Histo.credit({file, author, lic: LIC[lic][0], licUrl: LIC[lic][1], done});
+const DATA = {
+  lede: 'The lymph node, spleen, thymus and palatine tonsil; compact bone and the osteon; the layers of the skin, thick and thin skin, and the hair follicle and glands — drawings to pick apart, labelled micrographs and short tables of what to look for.',
+  lymCap: 'Pick an organ. Each is lymphoid tissue in a different frame: the <b>lymph node</b> filters lymph, the <b>spleen</b> filters blood, the <b>thymus</b> is where T cells mature, and the <b>tonsil</b> samples what enters the mouth and pharynx.',
+  /* [key, name, text, micrograph ids] */
+  lym: [
+    ['ln', 'Lymph node', '<b>Lymph node</b>: a bean-shaped organ on the course of lymph vessels, inside a fibrous <b>capsule</b> that sends trabeculae inward. <b>Afferent lymphatics</b> enter all round the convex surface; lymph runs through the <b>subcapsular sinus</b>, then the cortical and <b>medullary sinuses</b>, and leaves by the <b>efferent</b> vessel at the <b>hilum</b>, where blood vessels enter. The outer <b>cortex</b> holds <b>lymphoid follicles</b> of B cells (with germinal centres when active); the deeper <b>paracortex</b> is T cells; the <b>medulla</b> has medullary cords (plasma cells, macrophages, B cells — Wikipedia) between the sinuses.', ['lymph-node']],
+    ['sp', 'Spleen', '<b>Spleen</b>: a capsule and trabeculae of dense connective tissue (with a little smooth muscle in man). <b>White pulp</b> is lymphoid tissue round the arterioles: nodules (the Malpighian bodies of Gray), each with an arteriole running through or beside it — T cells in a sheath round the arteriole, B cells in the follicles (Wikipedia). <b>Red pulp</b>, all around, is full of blood: splenic cords (of Billroth) and venous sinuses, where old and damaged red cells are removed (Wikipedia). The spleen filters blood.', ['spleen']],
+    ['th', 'Thymus', '<b>Thymus</b>: lobules, each with a <b>dark outer cortex</b> packed with lymphocytes (thymocytes) and a <b>paler medulla</b> with fewer of them and <b>Hassall\'s (thymic) corpuscles</b> — concentric whorls of epithelial cells that show signs of keratinization. T cells mature here. It is largest around puberty and is then gradually replaced by fat and fibrous tissue.', ['thymus', 'hassall']],
+    ['to', 'Palatine tonsil', '<b>Palatine tonsil</b>: lymphoid tissue under the mucous membrane, covered on its free surface by <b>stratified squamous epithelium</b> that dips in as <b>crypts</b>; <b>lymphoid nodules</b> (often with germinal centres) lie round the crypts; a fibrous <b>capsule</b> on the deep surface. The crypts greatly enlarge the surface for sampling antigens.', []],
+  ],
+  lymRows: [
+    ['Covering', 'Capsule with a subcapsular sinus under it', 'Capsule and trabeculae', 'Capsule; septa divide it into lobules', 'Stratified squamous epithelium on the free surface; capsule on the deep surface'],
+    ['Inside', 'Cortex (follicles) → paracortex → medulla (cords and sinuses)', 'Scattered white-pulp nodules in red pulp full of blood', 'Each lobule: dark cortex, pale medulla', 'Lymphoid nodules round the crypts'],
+    ['Look for', 'Sinuses; follicles in the outer cortex', 'An arteriole in or beside each nodule', '<b>Hassall\'s corpuscles</b> in the medulla', '<b>Crypts</b> lined by squamous epithelium'],
+    ['Job', 'Filters lymph', 'Filters blood; removes old red cells (Wikipedia)', 'T-cell maturation', 'Samples antigens (the crypts enlarge the surface)'],
+  ],
+  boneCap: 'Bone tissue is <b>compact</b> (dense, on the outside) or <b>cancellous</b> (spongy: a lattice of trabeculae inside, with marrow in its spaces). Compact bone is built of <b>osteons</b> (Haversian systems). Pick a part.',
+  bone: [
+    ['hc', 'Haversian canal', '<b>Haversian (central) canal</b>: the canal in the centre of each osteon, carrying blood vessels.'],
+    ['la', 'Lamellae', '<b>Concentric lamellae</b>: thin layers of bone matrix arranged in rings round the central canal.'],
+    ['lc', 'Lacunae and canaliculi', '<b>Lacunae</b>: small spaces between the lamellae, each holding an <b>osteocyte</b>; fine <b>canaliculi</b> radiate from them, joining lacunae to each other and to the central canal.'],
+    ['vo', 'Volkmann\'s canal', '<b>Volkmann\'s (perforating) canals</b>: run across the bone and let vessels in from the surface to the Haversian canals (Wikipedia).'],
+    ['in', 'Interstitial lamellae', '<b>Interstitial lamellae</b>: lamellae filling the irregular spaces between osteons. Each osteon is bounded by a <b>cement line</b> (Wikipedia).'],
+    ['ci', 'Circumferential lamellae', '<b>Circumferential lamellae</b>: run parallel to the surface of the bone, under the periosteum.'],
+    ['pe', 'Periosteum', '<b>Periosteum</b>: covers the bone except the articular surfaces; an outer fibrous layer and an inner <b>osteogenic</b> layer. The <b>endosteum</b> lines the marrow cavity.'],
+  ],
+  cellRows: [
+    ['Osteoblast', 'Makes and lays down the organic bone matrix (osteoid), which then mineralises'],
+    ['Osteocyte', 'An osteoblast walled up in matrix, lying in a lacuna; maintains the matrix'],
+    ['Osteoclast', 'Large, multinucleated; resorbs bone, lying in shallow pits it digs (Howship\'s lacunae)'],
+    ['Periosteum', 'Outer fibrous layer + inner osteogenic layer; absent over articular cartilage'],
+    ['Endosteum', 'Lines the marrow cavity'],
+  ],
+  skinCap: 'Skin = <b>epidermis</b> (keratinized stratified squamous epithelium, no blood vessels) + <b>dermis</b> (connective tissue: a papillary layer of loose tissue in the dermal papillae, and a deeper reticular layer of dense irregular tissue — Wikipedia); the <b>hypodermis</b> (subcutaneous fat) lies beneath. Pick thick or thin skin.',
+  skin: [
+    ['thick', 'Thick skin (palm, sole)', '<b>Thick skin</b> — palms and soles: a very thick, horny <b>stratum corneum</b>; a <b>stratum lucidum</b> is present; <b>no hairs and no sebaceous glands</b>; sweat glands are very plentiful, and their ducts take a spiral course through the thick epidermis (Gray 1918).', ['thick-skin']],
+    ['thin', 'Thin skin (rest of the body)', '<b>Thin skin</b> — most of the body: a thin stratum corneum and no distinct stratum lucidum; <b>hair follicles, sebaceous glands and arrector pili muscles</b> as well as sweat glands.', ['thin-skin', 'hair-follicle']],
+  ],
+  layerRows: [
+    ['Stratum basale', 'One layer of columnar cells on the basement membrane (Gray: the deepest layer of his "stratum mucosum"); melanocytes and Merkel cells lie here'],
+    ['Stratum spinosum', '"Prickle cells" joined by bridges (Gray); keratinocytes are joined by desmosomes'],
+    ['Stratum granulosum', 'Two or three layers of flattened cells with dark granules (keratohyalin)'],
+    ['Stratum lucidum', 'A clear band — only in thick skin'],
+    ['Stratum corneum', 'Dead, flat, keratin-filled cells with no nuclei'],
+  ],
+  ttRows: [
+    ['Where', 'Palms and soles', 'Rest of the body'],
+    ['Stratum corneum', 'Very thick', 'Thin'],
+    ['Stratum lucidum', 'Present', 'Not seen'],
+    ['Hair follicles, sebaceous glands', 'None', 'Present'],
+    ['Sweat glands', 'Very many; spiral ducts through the epidermis (Gray 1918)', 'Present'],
+  ],
+  appRows: [
+    ['Hair follicle', 'Hair grows from the bulb at the base, round a dermal papilla. With its sebaceous gland and arrector pili it forms the pilosebaceous unit.'],
+    ['Sebaceous gland', '<b>Holocrine</b>: its cells break down to form sebum; opens into the hair follicle. Not in palms and soles.'],
+    ['Arrector pili', 'A bundle of <b>smooth muscle</b> attached to the follicle; supplied by sympathetic fibres (Wikipedia); raises the hair (goose bumps, Wikipedia).'],
+    ['Eccrine sweat gland', 'Simple coiled tubular gland all over the body, most numerous on the soles; merocrine (Wikipedia); opens on the skin surface.'],
+    ['Apocrine sweat gland', 'Large, branched; mostly in the axilla and perineal region; the duct opens into a hair follicle and the glands become active at puberty (Wikipedia).'],
+  ],
+  cells: '<p><b>Cells of the epidermis:</b> <b>keratinocytes</b> are most of the cells; <b>melanocytes</b> in the stratum basale make melanin and pass it to keratinocytes (pigment; protection from UV — Wikipedia); <b>Langerhans cells</b> are immune, antigen-presenting cells among the keratinocytes (mostly in the spinous layer — Wikipedia) that carry antigens to the lymph nodes (review PMC13246397); <b>Merkel cells</b> in the basal layer serve light touch.</p>',
+  micros: {
+    'lymph-node': {w: 720, h: 594, title: 'Lymph node, low power', alt: 'A whole lymph node with capsule and peripheral nodules, in fat',
+      cap: 'A small node in fat, inside a thin pink <b>capsule</b>; the paler rim just under the capsule is the <b>subcapsular sinus</b>; dense lymphoid tissue with rounded <b>nodules</b> at the periphery. Uploader: normal lymph node from a colectomy specimen; "the subcapsular sinus and capsule are well demonstrated"; H&amp;E-type stain.',
+      credit: cr('Normal Lymph Node.jpg', 'Ed Uthman, MD', 'bysa2', 'resized'),
+      labels: [[0.5, 0.03, 'Capsule'], [0.92, 0.5, 'Subcapsular sinus'], [0.86, 0.76, 'Nodule'], [0.08, 0.86, 'Fat']]},
+    spleen: {w: 720, h: 391, title: 'Spleen, H&amp;E, low power', alt: 'Spleen with pale white-pulp nodules in pink red pulp',
+      cap: 'Under the <b>capsule</b>, scattered rounded <b>white-pulp nodules</b> (lymphoid tissue) sit in the <b>red pulp</b>. Uploader: spleen, H&amp;E; species not stated; a whole-slide scan (folds in the section at the edges).',
+      credit: cr('Селезенка.jpg', 'Alexander Klepnev', 'by4', 'cropped and resized'),
+      labels: [[0.55, 0.08, 'Capsule'], [0.55, 0.42, 'White pulp'], [0.3, 0.57, 'Red pulp']]},
+    thymus: {w: 720, h: 390, title: 'Thymus, H&amp;E, low power', alt: 'Thymus lobules separated by pink septa',
+      cap: 'Dark-staining <b>lobules</b> separated by pink connective-tissue <b>septa</b>, under the capsule. Cortex and medulla are hard to tell apart in this scan; see the corpuscle below. Uploader: thymus, H&amp;E; species not stated.',
+      credit: cr('Тимус.jpg', 'Alexander Klepnev', 'by4', 'cropped and resized'),
+      labels: [[0.62, 0.45, 'Lobule'], [0.42, 0.3, 'Septum'], [0.15, 0.07, 'Capsule']]},
+    hassall: {w: 720, h: 692, title: 'Hassall\'s corpuscle, thymus, H&amp;E', alt: 'Pink concentric whorl of cells among dark lymphocytes',
+      cap: 'A pink, <b>concentric whorl</b> of flattened epithelial cells among the small dark lymphocytes (thymocytes) of the medulla. Uploader: thymus, thymic (Hassall\'s) corpuscle, H&amp;E.',
+      credit: cr('Thymic corpuscle.jpg', 'Nephron', 'bysa3', 'cropped and resized'),
+      labels: [[0.5, 0.5, 'Hassall\'s corpuscle'], [0.08, 0.5, 'Thymocytes']]},
+    'compact-bone': {w: 720, h: 406, title: 'Compact bone, ground section, 200×', alt: 'Ground section of compact bone with an osteon',
+      cap: 'A ground section of dried bone: the dark <b>Haversian canal</b> in the centre of an osteon, <b>lacunae</b> as small dark spots in rings round it, and fine <b>canaliculi</b> radiating from them. Uploader: cross section, ground human bone, 200×.',
+      credit: cr('Connective Tissue Compact Bone (41068142774).jpg', BCC, 'cc0', 'resized'),
+      labels: [[0.52, 0.42, 'Haversian canal'], [0.31, 0.27, 'Lacuna'], [0.44, 0.52, 'Canaliculi'], [0.6, 0.55, 'Concentric lamellae']]},
+    'thick-skin': {w: 720, h: 672, title: 'Thick skin, H&amp;E', alt: 'Thick skin with a very thick stratum corneum',
+      cap: 'A very thick, pale <b>stratum corneum</b> with the spiral duct of a <b>sweat gland</b> crossing it; the living layers below, then the dermis. Uploader: thick skin, H&amp;E (photo through the eyepiece).',
+      credit: cr('Histology of thick skin.jpg', 'Bhavya akula', 'bysa4', 'cropped and resized'),
+      labels: [[0.55, 0.35, 'Stratum corneum'], [0.35, 0.42, 'Sweat duct (spiral)'], [0.62, 0.62, 'Living epidermis'], [0.5, 0.9, 'Dermis']]},
+    'thin-skin': {w: 720, h: 528, title: 'Thin skin (neck), H&amp;E', alt: 'Thin skin: purple epidermis over pink dermis',
+      cap: 'The purple <b>epidermis</b> dips deeply into the dermis in ridges, with keratin (pale and red) lining its surface folds; below lies the <b>dermis</b> — the looser papillary dermis between the ridges and the collagen-rich reticular dermis deeper. Uploader: skin of the neck.',
+      credit: cr('Histology of collagen of skin - low magnification.jpg', 'Mikael Häggström, M.D.', 'cc0', 'cropped and resized'),
+      labels: [[0.25, 0.35, 'Epidermis'], [0.32, 0.5, 'Papillary dermis'], [0.5, 0.85, 'Reticular dermis']]},
+    'hair-follicle': {w: 720, h: 658, title: 'Thin skin with hair follicles', alt: 'Hair follicles with sebaceous glands in the dermis',
+      cap: '<b>Hair follicles</b> run obliquely through the dermis, one with its dark <b>hair shaft</b>; pale lobules of a <b>sebaceous gland</b> lie beside a follicle. Uploader: thin skin with hair follicles (photo through the eyepiece).',
+      credit: cr('Thin skin histology.jpg', 'SGnanadeep', 'bysa4', 'cropped and resized'),
+      labels: [[0.6, 0.42, 'Hair shaft'], [0.56, 0.62, 'Sebaceous gland'], [0.75, 0.12, 'Epidermis'], [0.22, 0.8, 'Hair follicle']]},
+  },
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918: lymph glands, spleen, thymus, tonsil, bone, skin); StatPearls (NCBI Bookshelf); open-access reviews on lymph-node anatomy, Hassall\'s corpuscles, the thymic microenvironment and epidermal cells; Wikipedia (not the OpenStax-derived "Bone", "Skin", "Epidermis", "Stratum basale" and "Stratum spinosum" articles). Gray (1918) counts four epidermal layers (his stratum mucosum = basale + spinosum); the modern five are used.',
+  models: 'Drawings: schematic, not to scale; label points on the micrographs placed by eye (approximate).',
+  images: 'Micrographs via Wikimedia Commons (each credited under its picture): Ed Uthman (CC BY-SA 2.0), Alexander Klepnev (CC BY 4.0), Nephron (CC BY-SA 3.0), Berkshire Community College Bioscience Image Library (CC0), Bhavya akula (CC BY-SA 4.0), Mikael Häggström (CC0), SGnanadeep (CC BY-SA 4.0); cropped/resized and labelled for this page.',
+};
+
+/* ===================== PAGE ===================== */
+const {$, el, text, chips, pressed, table, micro} = Histo;
+$('lede').textContent = DATA.lede; $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models; $('images').innerHTML = DATA.images;
+const mk = (box, id) => micro(box, Object.assign({id, file: id + '.jpg'}, DATA.micros[id]));
+const T = (s, x, y, t, a = 'start', size = 10.5) => text(s, x, y, t, {'text-anchor': a, class: 'lab', style: `font-size:${size}px`});
+const keyHTML = items => items.map(([c, l, o]) => `<span><i style="background:var(${c})${o ? ';opacity:' + o : ''}"></i>${l}</span>`).join('');
+const blob = (s, cx, cy, r, fill, extra = {}) => el('circle', Object.assign({cx, cy, r, fill}, extra), s);
+
+/* ---------- lymphoid organs ---------- */
+function drawOrgan(k) {
+  const s = $('organ'); s.replaceChildren();
+  let keys = [];
+  if (k === 'ln') {
+    const HX = 52, HY = 130, A = 1.0, sy = 0.62;
+    const g = el('g', {transform: `translate(${HX} ${HY}) scale(1 ${sy})`}, s);
+    const sector = (r0, r1, fill, op = 1) => { const p = (r, a) => `${(r * Math.cos(a)).toFixed(1)} ${(r * Math.sin(a)).toFixed(1)}`;
+      el('path', {d: `M${p(r0, -A)} L${p(r1, -A)} A${r1} ${r1} 0 0 1 ${p(r1, A)} L${p(r0, A)} A${r0} ${r0} 0 0 0 ${p(r0, -A)} Z`, fill, opacity: op}, g); };
+    sector(26, 214, 'var(--collagen)'); sector(32, 208, 'var(--lsinus)');
+    sector(150, 196, 'var(--lymph)', .5); sector(112, 150, 'var(--lymph)', .9);
+    for (let a = -0.85; a <= 0.86; a += 0.17) el('path', {d: `M${36 * Math.cos(a)} ${36 * Math.sin(a)} L${112 * Math.cos(a)} ${112 * Math.sin(a)}`, stroke: 'var(--lymph)', 'stroke-width': 9, 'stroke-linecap': 'round', opacity: .75}, g);
+    for (let a = -0.8; a <= 0.81; a += 0.32) { el('circle', {cx: 174 * Math.cos(a), cy: 174 * Math.sin(a), r: 19, fill: 'var(--lymph)'}, g); el('circle', {cx: 174 * Math.cos(a), cy: 174 * Math.sin(a), r: 9, fill: 'var(--gc)'}, g); }
+    const X = (r, a) => HX + r * Math.cos(a), Y = (r, a) => HY + sy * r * Math.sin(a);
+    for (const a of [-0.75, -0.25, 0.25, 0.75]) { const x0 = X(250, a), y0 = Y(250, a), x1 = X(218, a), y1 = Y(218, a); el('path', {d: `M${x0} ${y0} L${x1} ${y1}`, stroke: 'var(--lymph)', 'stroke-width': 2.5, 'marker-end': 'url(#arl)'}, s); }
+    el('path', {d: `M${HX + 26} ${HY} L${HX - 40} ${HY + 4}`, stroke: 'var(--lymph)', 'stroke-width': 3.5, 'marker-end': 'url(#arl)'}, s);
+    el('path', {d: `M${HX - 44} ${HY - 18} L${HX + 30} ${HY - 10}`, stroke: 'var(--artery)', 'stroke-width': 3}, s); el('path', {d: `M${HX + 30} ${HY + 12} L${HX - 44} ${HY + 22}`, stroke: 'var(--vein)', 'stroke-width': 3}, s);
+    T(s, 354, Y(250, -0.25) - 14, 'afferent', 'end', 9); T(s, 354, Y(250, -0.25) - 3, 'lymphatics', 'end', 9);
+    T(s, 4, HY + 44, 'hilum: efferent', 'start', 9); T(s, 4, HY + 56, 'lymphatic, vessels', 'start', 9);
+    T(s, X(174, -0.15), Y(174, -0.15) + 4, 'follicle', 'middle', 9);
+    T(s, X(131, 0.05), Y(131, 0.05) + 4, 'paracortex', 'middle', 9);
+    T(s, X(74, 0.3), Y(74, 0.3) + 18, 'medulla', 'middle', 9);
+    T(s, 352, 252, 'subcapsular sinus', 'end', 9); el('line', {x1: 300, y1: 244, x2: X(204, 0.62), y2: Y(204, 0.62), stroke: 'var(--ink)', 'stroke-width': .8}, s);
+    T(s, 352, 22, 'capsule', 'end', 9); el('line', {x1: 318, y1: 26, x2: X(211, -0.55), y2: Y(211, -0.55), stroke: 'var(--ink)', 'stroke-width': .8}, s);
+    keys = [['--collagen', 'Capsule'], ['--lsinus', 'Sinuses'], ['--lymph', 'Cortex (B-cell follicles)', .5], ['--gc', 'Germinal centre'], ['--lymph', 'Paracortex (T cells)', .9], ['--lymph', 'Medullary cords', .75], ['--artery', 'Artery'], ['--vein', 'Vein']];
+  }
+  if (k === 'sp') {
+    el('rect', {x: 10, y: 20, width: 340, height: 220, rx: 14, fill: 'var(--rpulp)', stroke: 'var(--collagen)', 'stroke-width': 6}, s);
+    for (const [x1, y1, x2, y2] of [[60, 24, 90, 120], [250, 24, 230, 110], [180, 236, 160, 170]]) el('line', {x1, y1, x2, y2, stroke: 'var(--collagen)', 'stroke-width': 5}, s);
+    for (let i = 0; i < 40; i++) { const x = 20 + (i * 53) % 320, y = 34 + (i * 37) % 196; el('ellipse', {cx: x, cy: y, rx: 7, ry: 3, fill: 'none', stroke: 'var(--vein)', 'stroke-width': 1, opacity: .6}, s); }
+    for (const [x, y] of [[120, 160], [230, 170], [290, 80], [160, 70]]) {
+      blob(s, x, y, 30, 'var(--lymph)'); blob(s, x - 8, y - 4, 12, 'var(--gc)');
+      el('line', {x1: x - 40, y1: y + 22, x2: x + 40, y2: y - 4, stroke: 'var(--artery)', 'stroke-width': 3}, s);
+    }
+    T(s, 120, 206, 'white pulp nodule + arteriole', 'middle', 9.5); T(s, 300, 230, 'red pulp', 'end', 10); T(s, 14, 14, 'capsule and trabeculae', 'start', 9.5);
+    T(s, 300, 34, 'sinus', 'end', 9);
+    keys = [['--collagen', 'Capsule, trabeculae'], ['--lymph', 'White pulp'], ['--gc', 'Germinal centre'], ['--rpulp', 'Red pulp'], ['--vein', 'Venous sinus'], ['--artery', 'Arteriole']];
+  }
+  if (k === 'th') {
+    el('rect', {x: 8, y: 14, width: 344, height: 236, rx: 12, fill: 'var(--collagen)', opacity: .5}, s);
+    for (const [x, y, rx, ry] of [[92, 78, 70, 50], [262, 78, 70, 50], [92, 192, 70, 50], [262, 192, 70, 50]]) {
+      el('ellipse', {cx: x, cy: y, rx, ry, fill: 'var(--lymph)'}, s);
+      el('ellipse', {cx: x, cy: y, rx: rx * .52, ry: ry * .5, fill: '#fff'}, s); el('ellipse', {cx: x, cy: y, rx: rx * .52, ry: ry * .5, fill: 'var(--lymph)', opacity: .38}, s);
+      for (const [dx, dy] of [[-12, -4], [14, 8]]) { blob(s, x + dx, y + dy, 6, 'var(--kerat)'); blob(s, x + dx, y + dy, 2.5, 'var(--surface)'); }
+    }
+    for (const d of ['M177 18 L177 248', 'M10 135 L350 135']) el('path', {d, stroke: 'var(--collagen)', 'stroke-width': 8}, s);
+    T(s, 92, 22, 'cortex (dark)', 'middle', 9.5); T(s, 92, 100, 'medulla (pale)', 'middle', 9); T(s, 177, 150, 'septum', 'middle', 9.5); T(s, 258, 222, 'Hassall\'s corpuscles', 'middle', 9);
+    keys = [['--collagen', 'Capsule, septa'], ['--lymph', 'Cortex (dense lymphocytes)'], ['--lymph', 'Medulla (fewer lymphocytes)', .38], ['--kerat', 'Hassall\'s corpuscle']];
+  }
+  if (k === 'to') {
+    el('rect', {x: 10, y: 200, width: 340, height: 20, fill: 'var(--collagen)'}, s);
+    let d = 'M10 40 '; for (const x of [80, 170, 260]) d += `L${x - 14} 40 L${x - 6} 150 L${x + 6} 150 L${x + 14} 40 `; d += 'L350 40';
+    el('path', {d: d + ' L350 56 ' + [260, 170, 80].map(x => `L${x + 26} 56 L${x + 16} 166 L${x - 16} 166 L${x - 26} 56`).join(' ') + ' L10 56 Z', fill: 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': .8}, s);
+    for (const x of [35, 125, 215, 305]) { blob(s, x, 120, 26, 'var(--lymph)'); blob(s, x, 120, 11, 'var(--gc)'); }
+    for (const x of [125, 215]) { blob(s, x, 184, 14, 'var(--lymph)'); }
+    T(s, 10, 30, 'stratified squamous epithelium'); T(s, 170, 186, 'crypt', 'middle', 9.5); T(s, 350, 238, 'capsule (deep surface)', 'end', 9.5); T(s, 305, 160, 'nodule', 'middle', 9);
+    keys = [['--cyto', 'Epithelium'], ['--lymph', 'Lymphoid nodule'], ['--gc', 'Germinal centre'], ['--collagen', 'Capsule']];
+  }
+  const d = el('defs', {}, s); const m = el('marker', {id: 'arl', viewBox: '0 0 6 6', refX: 3, refY: 3, markerWidth: 4, markerHeight: 4, orient: 'auto'}, d); el('path', {d: 'M0 0 L6 3 L0 6 Z', fill: 'var(--lymph)'}, m);
+  $('lym-key').innerHTML = keyHTML(keys);
+  const it = DATA.lym.find(x => x[0] === k); $('lym-text').innerHTML = '<p>' + it[2] + '</p>';
+  const box = $('lym-micro'); box.replaceChildren();
+  if (it[3].length) for (const id of it[3]) mk(box, id); else box.innerHTML = '<p class="muted">No usable open micrograph of the palatine tonsil was found (the candidates were drawings or folded sections).</p>';
+  pressed($('lym-chips'), k);
+}
+$('lym-cap').innerHTML = DATA.lymCap; chips($('lym-chips'), DATA.lym.map(e => [e[0], e[1]]), drawOrgan); drawOrgan('ln');
+table($('lym-table'), ['', 'Lymph node', 'Spleen', 'Thymus', 'Palatine tonsil'], DATA.lymRows);
+
+/* ---------- bone ---------- */
+function drawOsteon(k) {
+  const s = $('osteon'); s.replaceChildren();
+  const on = x => !k || k === x, op = x => on(x) ? 1 : .25;
+  el('rect', {x: 0, y: 0, width: 360, height: 270, fill: 'var(--bone)'}, s);
+  /* periosteum and circumferential lamellae */
+  el('rect', {x: 0, y: 0, width: 360, height: 16, fill: 'var(--collagen)', opacity: op('pe')}, s);
+  const cg = el('g', {opacity: op('ci')}, s); for (let y = 20; y < 40; y += 5) el('line', {x1: 0, y1: y, x2: 360, y2: y, stroke: 'var(--cement)', 'stroke-width': .8, opacity: .7}, cg);
+  /* interstitial lamellae fragments */
+  const ig = el('g', {opacity: op('in')}, s);
+  for (const [x, y] of [[180, 190], [40, 230], [320, 230]]) for (let r = 14; r < 40; r += 6) el('path', {d: `M${x - r} ${y} a ${r} ${r} 0 0 1 ${r * 1.2} ${-r * .6}`, fill: 'none', stroke: 'var(--cement)', 'stroke-width': .9}, ig);
+  const ost = [[95, 130, 62], [262, 128, 64], [180, 250, 40]];
+  for (const [cx, cy, R] of ost) {
+    el('circle', {cx, cy, r: R, fill: 'var(--bone)', stroke: 'var(--cement)', 'stroke-width': 1.8, opacity: on('in') ? 1 : .9}, s);
+    const lg = el('g', {opacity: op('la')}, s); for (let r = 18; r < R; r += 8) el('circle', {cx, cy, r, fill: 'none', stroke: 'var(--cement)', 'stroke-width': .7, opacity: .7}, lg);
+    const qg = el('g', {opacity: op('lc')}, s);
+    for (let r = 22; r < R - 2; r += 16) for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4 + r * .05, x = cx + r * Math.cos(a), y = cy + r * Math.sin(a);
+      el('ellipse', {cx: x, cy: y, rx: 3.6, ry: 1.8, transform: `rotate(${a * 180 / Math.PI + 90} ${x} ${y})`, fill: 'var(--ocyte)'}, qg);
+      for (const dd of [-1, 1]) el('line', {x1: x, y1: y, x2: x + dd * 6 * Math.cos(a), y2: y + dd * 6 * Math.sin(a), stroke: 'var(--ocyte)', 'stroke-width': .6}, qg); }
+    const hg = el('g', {opacity: op('hc')}, s);
+    blob(hg, cx, cy, 11, 'var(--surface)', {stroke: 'var(--cement)'}); blob(hg, cx - 3, cy, 3, 'var(--artery)'); blob(hg, cx + 4, cy + 1, 3.6, 'var(--vein)');
+  }
+  const vg = el('g', {opacity: op('vo')}, s);
+  el('rect', {x: 105, y: 124, width: 146, height: 9, fill: 'var(--surface)', stroke: 'var(--cement)', 'stroke-width': .8}, vg);
+  el('rect', {x: 176, y: 10, width: 9, height: 60, fill: 'var(--surface)', stroke: 'var(--cement)', 'stroke-width': .8}, vg);
+  T(s, 350, 12, 'periosteum', 'end', 9.5); T(s, 350, 48, 'circumferential lamellae', 'end', 9);
+  T(s, 95, 206, 'osteon', 'middle'); T(s, 95, 156, 'Haversian canal', 'middle', 9); T(s, 178, 116, 'Volkmann\'s canal', 'middle', 9);
+  T(s, 312, 262, 'interstitial lamellae', 'end', 9); T(s, 8, 264, 'lacunae with canaliculi', 'start', 9);
+  const it = DATA.bone.find(x => x[0] === k); $('bone-text').innerHTML = it ? '<p>' + it[2] + '</p>' : '';
+  pressed($('bone-chips'), k);
+}
+$('bone-cap').innerHTML = DATA.boneCap; chips($('bone-chips'), DATA.bone.map(e => [e[0], e[1]]), drawOsteon); drawOsteon('hc');
+mk($('bone-micro'), 'compact-bone');
+table($('cell-table'), ['', ''], DATA.cellRows);
+
+/* ---------- skin ---------- */
+function drawSkin(k) {
+  const s = $('skin'); s.replaceChildren();
+  const thick = k === 'thick';
+  const top = 14, sc = thick ? 70 : 12, sl = thick ? 10 : 0, sg = 8, ss = 34, sb = 8;
+  let y = top, ly = 0; const band = (h, fill, label) => { if (!h) return y; el('rect', {x: 0, y, width: 250, height: h, fill}, s); if (label) { ly = Math.max(y + h / 2 + 3, ly + 12); T(s, 256, ly, label, 'start', 9); } y += h; return y; };
+  band(sc, 'var(--kerat)', 'stratum corneum'); band(sl, 'var(--sl)', sl ? 'stratum lucidum' : ''); band(sg, 'var(--sg)', 'stratum granulosum'); band(ss, 'var(--ss)', 'stratum spinosum');
+  const yb = y; band(sb, 'var(--ss)', 'stratum basale');
+  /* dermal papillae push up into the epidermis; the stratum basale follows the junction */
+  const yd = y; let edge = `M0 ${yd}`; for (let x = 20; x < 250; x += 50) edge += ` L${x} ${yd} q 12 -34 24 0`; edge += ` L250 ${yd}`;
+  el('path', {d: edge + ` L250 280 L0 280 Z`, fill: 'var(--surface)'}, s);
+  el('path', {d: edge + ` L250 280 L0 280 Z`, fill: 'var(--collagen)', opacity: .45}, s);
+  el('path', {d: edge, fill: 'none', stroke: 'var(--sb)', 'stroke-width': 7, 'stroke-linejoin': 'round'}, s);
+  T(s, 256, Math.max(yd + 18, ly + 12), 'papillary dermis', 'start', 9); T(s, 256, yd + 70, 'reticular dermis', 'start', 9);
+  el('rect', {x: 0, y: 280, width: 250, height: 50, fill: 'var(--fat)'}, s); T(s, 256, 306, 'hypodermis (fat)', 'start', 9);
+  /* sweat gland */
+  const gx = thick ? 70 : 200;
+  for (let i = 0; i < 6; i++) blob(s, gx + (i % 3) * 9 - 9, 262 + Math.floor(i / 3) * 9, 5, 'var(--sweat)', {stroke: 'var(--ink)', 'stroke-width': .5});
+  if (thick) { let d = `M${gx} 256 L${gx} ${yd}`; for (let yy = yd; yy > top; yy -= 8) d += ` q 6 -4 0 -8`; el('path', {d, stroke: 'var(--sweat)', 'stroke-width': 3, fill: 'none'}, s); T(s, gx + 8, 46, 'spiral sweat duct', 'start', 9); }
+  else el('path', {d: `M${gx} 256 L${gx} ${top}`, stroke: 'var(--sweat)', 'stroke-width': 3, fill: 'none'}, s);
+  T(s, gx + 10, 252, 'sweat gland', 'start', 9);
+  if (!thick) {
+    el('path', {d: 'M60 0 L95 200', stroke: 'var(--hair)', 'stroke-width': 3}, s);
+    el('path', {d: 'M48 20 L80 220 L110 214 L76 16 Z', fill: 'none', stroke: 'var(--sb)', 'stroke-width': 1.4}, s);
+    el('ellipse', {cx: 95, cy: 218, rx: 18, ry: 12, fill: 'var(--sb)', opacity: .8}, s); blob(s, 95, 220, 6, 'var(--collagen)');
+    blob(s, 112, 120, 13, 'var(--sebum)', {stroke: 'var(--ink)', 'stroke-width': .5}); blob(s, 120, 138, 10, 'var(--sebum)', {stroke: 'var(--ink)', 'stroke-width': .5});
+    el('path', {d: 'M96 170 L162 88', stroke: 'var(--t-musc)', 'stroke-width': 4}, s);
+    T(s, 132, 112, 'sebaceous gland', 'start', 9); T(s, 150, 96, 'arrector pili', 'start', 9); T(s, 40, 240, 'hair follicle + bulb', 'start', 9);
+  }
+  const keys = [['--kerat', 'Corneum'], ['--sl', 'Lucidum'], ['--sg', 'Granulosum'], ['--ss', 'Spinosum'], ['--sb', 'Basale'], ['--collagen', 'Dermis'], ['--fat', 'Fat'], ['--sweat', 'Sweat gland']];
+  if (!thick) keys.splice(1, 1); if (!thick) keys.push(['--hair', 'Hair'], ['--sebum', 'Sebaceous gland'], ['--t-musc', 'Arrector pili']);
+  $('skin-key').innerHTML = keyHTML(keys);
+  const it = DATA.skin.find(x => x[0] === k); $('skin-text').innerHTML = '<p>' + it[2] + '</p>' + DATA.cells;
+  const box = $('skin-micro'); box.replaceChildren(); for (const id of it[3]) mk(box, id);
+  pressed($('skin-chips'), k);
+}
+$('skin-cap').innerHTML = DATA.skinCap; chips($('skin-chips'), DATA.skin.map(e => [e[0], e[1]]), drawSkin); drawSkin('thick');
+table($('layer-table'), ['Layer', 'What you see'], DATA.layerRows);
+table($('tt-table'), ['', 'Thick skin', 'Thin skin'], DATA.ttRows);
+table($('app-table'), ['', ''], DATA.appRows);
+window.ready = true;
+</script>
+</body>
+</html>

@@ -1158,3 +1158,34 @@ tubercles.
   page).
 - Independent review (2026-11-22), fixed: genu lesion (lower face only), internal capsule caption side, nucleus
   column order, attributions, wording, colours, 3D labels, schematic clipping, keyboard access, swipe hints, contrast.
+
+## Histology I: Epithelium and Glands; Nervous Tissue and Blood Vessels; Lymphoid Organs, Bone and Skin — `histology/`
+
+- Fact sheet `sources-local/facts/fill-histo1.md` (414 quotes, script-checked against `sources-local/modern/fill-histo1/`,
+  built from `fill-histo1-scripts/spec-*.md`, downloads 2026-11-22): Gray 1918 pages 18, 133, 175, 183, 234, 237, 242,
+  243, 245, 247, 248, 255, 272, 274, 278; StatPearls histology chapters; open papers PMC12525432, PMC1995455,
+  PMC11132765, PMC9599896, PMC10704243, PMC9705259, PMC11965237, PMC11924920, PMC10416754, PMC12956672, PMC13762532,
+  PMC12188952, PMC13246397 and the vessel papers; Wikipedia. Excluded for OpenStax notices: Wikipedia Neuron, Chemical
+  synapse, Bone, Skin, Epidermis, Stratum basale, Stratum spinosum. Gray copies not counted.
+- Contested, stated on the page: tracheal epithelium (Gray "stratified", modern pseudostratified); sublingual gland
+  mucous or seromucous; four or five epidermal layers; serous demilunes partly a fixation artefact; apocrine
+  mechanism; liver sinusoids sinusoidal or fenestrated.
+- Single source, attributed: stereocilia, cement line, Volkmann's canals, medullary cords, spiral sweat duct, one-way
+  synapse, nucleolus (Gray); spleen zones and cords, connexons, capillary sites, eccrine merocrine (Wikipedia);
+  Langerhans cells to nodes (PMC13246397).
+- Left out (one source or none): woven vs lamellar bone (only source OpenStax-derived), satellite-cell ring
+  difference, thymus without follicles, tonsil without afferent lymphatics, lamina lucida and densa, microvillus size.
+- Micrographs (Wikimedia Commons; licences read from the Commons API 2026-11-22; all resized and labelled, labels
+  approximate): Berkshire Community College Bioscience Image Library, CC0 (simple cuboidal, simple columnar,
+  pseudostratified, stratified squamous, transitional epithelium; motor neuron; nerve bundles; compact bone);
+  Wbensmith, "WVSOM Parotid Gland1.JPG", CC BY 3.0; CoRus13, oesophageal submucosal glands, CC BY-SA 4.0 (cropped);
+  Heihaheihaha, "Serous demilunes of submandibular gland section.png", CC BY-SA 4.0; M-J-G, "Spinalganglion.jpg",
+  CC BY-SA 4.0 (cropped); Lord of Konrad, "Artery.png", CC0; Ed Uthman, "Normal Lymph Node.jpg", CC BY-SA 2.0; Alexander
+  Klepnev, spleen and thymus, CC BY 4.0 (cropped); Nephron, "Thymic corpuscle.jpg", CC BY-SA 3.0 (cropped); Bhavya
+  akula, "Histology of thick skin.jpg", CC BY-SA 4.0 (cropped); Mikael Häggström, skin collagen, CC0 (cropped);
+  SGnanadeep, "Thin skin histology.jpg", CC BY-SA 4.0 (cropped). Elastic artery and vein micrographs could not be
+  downloaded (Commons rate limit): drawings instead.
+- Independent review (2026-11-22), fixed: seven micrograph labels on the neighbouring structure (internal elastic
+  lamina, media, sebaceous gland, epidermis, lymph-node capsule, cilia, goblet cell, demilune, glial nuclei,
+  lamellae), schematic layers (demilune inside the basement membrane, paracortex, septa, basal layer), one-source
+  statements, dark bone figure, phone label size, keyboard access.

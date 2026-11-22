@@ -557,8 +557,8 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 65. Epithelium histology
 
-- [ ] **AN65.1** Identify epithelium under the microscope & describe the various types that correlate to its function
-- [ ] **AN65.2** Describe the ultrastructure of epithelium
+- [x] **AN65.1** Identify epithelium under the microscope & describe the various types that correlate to its function — *seven epithelia, drawings and labelled micrographs, identification table: [Epithelium and Glands](histology/epithelium-glands.html)*
+- [x] **AN65.2** Describe the ultrastructure of epithelium — *microvilli, cilia, stereocilia, junctions, hemidesmosome, basement membrane: [Epithelium and Glands](histology/epithelium-glands.html)*
 
 ### 66. Connective tissue histology
 
@@ -573,29 +573,29 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 68. Nervous tissue histology
 
-- [ ] **AN68.1** Describe & Identify multipolar & unipolar neuron, ganglia, peripheral nerve under the microscope
-- [ ] **AN68.2** Describe the structure-function correlation of neuron
-- [ ] **AN68.3** Describe the ultrastructure of nervous tissue
+- [x] **AN68.1** Describe & Identify multipolar & unipolar neuron, ganglia, peripheral nerve under the microscope — *multipolar neuron, spinal ganglion, nerve sections (micrographs); sympathetic ganglion by table: [Nervous Tissue and Blood Vessels](histology/nervous-vascular.html)*
+- [x] **AN68.2** Describe the structure-function correlation of neuron — *Nissl, hillock, myelin and nodes, nerve sheaths: [Nervous Tissue and Blood Vessels](histology/nervous-vascular.html)*
+- [x] **AN68.3** Describe the ultrastructure of nervous tissue — *myelin, Remak bundle, synapse ultrastructure: [Nervous Tissue and Blood Vessels](histology/nervous-vascular.html)*
 
 ### 69. Blood Vessels
 
-- [ ] **AN69.1** Identify elastic & muscular blood vessels, capillaries under the microscope
-- [ ] **AN69.2** Describe the various types and structure-function correlation of blood vessel
-- [ ] **AN69.3** Describe the ultrastructure of blood vessels
+- [~] **AN69.1** Identify elastic & muscular blood vessels, capillaries under the microscope — *muscular artery micrograph in [Nervous Tissue and Blood Vessels](histology/nervous-vascular.html); elastic artery, vein and capillary as drawings and a table (no open micrograph obtained)*
+- [x] **AN69.2** Describe the various types and structure-function correlation of blood vessel — *types and wall structure: [Nervous Tissue and Blood Vessels](histology/nervous-vascular.html)*
+- [x] **AN69.3** Describe the ultrastructure of blood vessels — *continuous, fenestrated and sinusoidal capillaries: [Nervous Tissue and Blood Vessels](histology/nervous-vascular.html)*
 
 ### 70. Glands & Lymphoid tissue
 
-- [ ] **AN70.1** Identify exocrine gland under the microscope & distinguish between serous, mucous and mixed acini
-- [ ] **AN70.2** Identify the lymphoid tissue under the microscope & describe microanatomy of lymph node, spleen, thymus, tonsil andcorrelatethe structure with function
+- [x] **AN70.1** Identify exocrine gland under the microscope & distinguish between serous, mucous and mixed acini — *serous, mucous and mixed acini (micrographs), demilunes, salivary glands, modes of secretion: [Epithelium and Glands](histology/epithelium-glands.html)*
+- [~] **AN70.2** Identify the lymphoid tissue under the microscope & describe microanatomy of lymph node, spleen, thymus, tonsil andcorrelatethe structure with function — *lymph node, spleen, thymus micrographs in [Lymphoid Organs, Bone and Skin](histology/lymphoid-bone-skin.html); tonsil drawn only*
 
 ### 71. Bone & Cartilage
 
-- [ ] **AN71.1** Identify bone under the microscope; classify various types and describe the structure-function correlation of the same
+- [~] **AN71.1** Identify bone under the microscope; classify various types and describe the structure-function correlation of the same — *compact and cancellous bone, osteon (ground section), bone cells, periosteum in [Lymphoid Organs, Bone and Skin](histology/lymphoid-bone-skin.html); woven vs lamellar left out (only source OpenStax-derived)*
 - [x] **AN71.2** Identify cartilage under the microscope & describe various types and structure- function correlation of the same — *types, structure, perichondrium (absent in fibrocartilage) and light micrographs of hyaline, elastic and fibrocartilage: [Connective Tissue](general/connective-tissue.html)*
 
 ### 72. Integumentary System
 
-- [ ] **AN72.1** Identify the skin and its appendages under the microscope and correlate the structure with function
+- [x] **AN72.1** Identify the skin and its appendages under the microscope and correlate the structure with function — *epidermal layers, thick vs thin skin, appendages (three micrographs): [Lymphoid Organs, Bone and Skin](histology/lymphoid-bone-skin.html)*
 
 ### 73. Chromosomes
 

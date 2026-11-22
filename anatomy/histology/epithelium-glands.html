@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Epithelium and Glands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<link rel="stylesheet" href="histo.css">
+<style>
+/* page colours, one meaning each (same values as the other tissue pages where the meaning is the same):
+   --nucleus (nuclei), --cyto (cytoplasm), --bm (basement membrane), --collagen (connective tissue under the epithelium),
+   --actin (actin filaments: microvillus core), --gapj (gap junction), --mt (microtubules: cilia), --tj (tight junction),
+   --aj (adherens junction), --desmo (desmosome / hemidesmosome plaque), --kerat (keratin intermediate filaments; dead keratin layer),
+   --mucin (mucus / mucin granules), --zym (serous secretory (zymogen) granules), --myoep (myoepithelial cell); --mark = the part you picked */
+:root{--nucleus:#1e4f99;--cyto:#c8b6e2;--bm:#8a93a3;--collagen:#e39b9b;--actin:#2f8f6a;--gapj:#3a86ff;--mt:#e4572e;--tj:#7b2cbf;--aj:#577590;
+  --desmo:#6c584c;--kerat:#b5838d;--mucin:#a8dadc;--zym:#6b3e26;--myoep:#81b29a}
+:root[data-theme="dark"]{--nucleus:#9fb0ff;--cyto:#6d5a8c;--bm:#7d8696;--collagen:#b86a6a;--actin:#59c79a;--gapj:#3a86ff;--mt:#ffb04d;--tj:#c39bf0;--aj:#9db4d0;
+  --desmo:#c8b39f;--kerat:#e0a9b4;--mucin:#4f7f82;--zym:#d09a7a;--myoep:#5c8a72}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Epithelium and Glands</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="Histology pages"><span class="muted">Histology:</span> <b>Epithelium and glands</b> <a href="nervous-vascular.html">Nervous tissue and blood vessels</a> <a href="lymphoid-bone-skin.html">Lymphoid organs, bone and skin</a> <a href="../general/connective-tissue.html">Connective tissue and cartilage</a> <a href="../general/muscle.html">Muscle tissue</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-types">
+  <h2 id="h-types">Kinds of epithelium</h2>
+  <p class="cap key" id="types-cap"></p>
+  <div class="chips" id="epi-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="epi" viewBox="0 0 360 210" role="img" aria-label="Schematic of the chosen epithelium"></svg>
+      <div class="legend2" id="epi-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="epi-text"></div>
+    </div>
+    <div id="epi-micro"></div>
+  </div>
+  <div class="scroll"><table id="epi-table"></table></div>
+  <p class="muted" id="epi-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-tell">
+  <h2 id="h-tell">Telling them apart under the microscope</h2>
+  <div class="scroll"><table id="tell-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-em">
+  <h2 id="h-em">Under the electron microscope</h2>
+  <p class="cap key" id="em-cap"></p>
+  <div class="chips" id="em-chips"></div>
+  <div class="grid2">
+    <svg class="fig" id="em" viewBox="0 0 380 330" role="img" aria-label="Schematic of two epithelial cells under the electron microscope"></svg>
+    <div>
+      <div class="prose info" id="em-text"></div>
+      <svg class="fig" id="xs" viewBox="0 0 380 140" role="img" aria-label="Cross-sections of a microvillus and a cilium" style="max-width:420px"></svg>
+      <p class="muted">Schematic, not to scale; the order of the junctions down the side of the cell follows the usual drawing.</p>
+    </div>
+  </div>
+  <div class="scroll"><table id="em-table"></table></div>
+  <div class="prose" id="em-clin"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gl">
+  <h2 id="h-gl">Exocrine glands: serous, mucous and mixed acini</h2>
+  <p class="cap key" id="gl-cap"></p>
+  <div class="chips" id="gl-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="acinus" viewBox="0 0 300 230" style="max-width:400px" role="img" aria-label="Schematic of a secretory acinus"></svg>
+      <div class="legend2" id="gl-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="gl-text"></div>
+    </div>
+    <div id="gl-micro"></div>
+  </div>
+  <h3>Serous or mucous?</h3>
+  <div class="scroll"><table id="sm-table"></table></div>
+  <h3>Which salivary gland?</h3>
+  <div class="scroll"><table id="sal-table"></table></div>
+  <h3>How glands release their product</h3>
+  <svg class="fig" id="modes" viewBox="0 0 600 170" role="img" aria-label="Merocrine, apocrine and holocrine secretion" style="max-width:640px"></svg>
+  <p class="muted">Schematic, not to scale.</p>
+  <div class="prose" id="modes-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+  <p id="images"></p>
+</footer>
+</div>
+
+<script src="histo.js"></script>
+<script>
+/* ===================== DATA (every fact checked in sources-local/facts/fill-histo1.md, Parts A, U, B) ===================== */
+const LIC = {
+  cc0: ['CC0', 'https://creativecommons.org/publicdomain/zero/1.0/'],
+  by3: ['CC BY 3.0', 'https://creativecommons.org/licenses/by/3.0/'],
+  bysa4: ['CC BY-SA 4.0', 'https://creativecommons.org/licenses/by-sa/4.0/'],
+  bysa3: ['CC BY-SA 3.0', 'https://creativecommons.org/licenses/by-sa/3.0/'],
+};
+const BCC = 'Berkshire Community College Bioscience Image Library';
+const cr = (file, author, lic, done) => Histo.credit({file, author, lic: LIC[lic][0], licUrl: LIC[lic][1], done});
+const DATA = {
+  lede: 'Epithelium covers surfaces and lines cavities; it sits on a basement membrane and has no blood vessels of its own. Pick a kind of epithelium to see a drawing and a real micrograph, then the cell surfaces and junctions under the electron microscope, and finally how serous, mucous and mixed glands look.',
+  typesCap: 'Epithelia are named by the <b>number of layers</b> (simple = one layer, every cell on the basement membrane; stratified = two or more) and by the <b>shape of the cells</b> (squamous = flat, cuboidal, columnar), with two special kinds: <b>pseudostratified</b> and <b>transitional</b>. A stratified epithelium is named after its surface cells.',
+  /* [key, chip name, where, what it does, micrograph id or null] */
+  epi: [
+    ['sq', 'Simple squamous', 'Lining of blood vessels (endothelium), lung alveoli, serous membranes such as pleura and peritoneum (mesothelium)', 'Thin, so substances pass quickly: diffusion and filtration.', null],
+    ['cu', 'Simple cuboidal', 'Kidney tubules, thyroid follicles, small gland ducts (Wikipedia); bronchioles (StatPearls: columnar to cuboidal)', 'Secretion and absorption.', 'simple-cuboidal'],
+    ['co', 'Simple columnar', 'Stomach and intestines', 'Absorption and secretion; absorptive cells carry a striated (brush) border of microvilli; goblet cells among them secrete mucin.', 'simple-columnar'],
+    ['ps', 'Pseudostratified ciliated', 'Respiratory tract from the nasal cavity to the bronchi (trachea, bronchi)', 'Cilia and goblet cells move mucus with trapped particles out of the airway. One layer only — every cell rests on the basement membrane — but the nuclei lie at different heights, so it looks layered (Wikipedia; Gray 1918 even called it stratified).', 'pseudostratified'],
+    ['sn', 'Stratified squamous (non-keratinized)', 'Mouth, oesophagus, vagina', 'Protects linings that are rubbed: the surface cells can be worn away without exposing the tissue beneath. Kept moist by secretions; no thick layer of dead keratinized cells (Wikipedia notes a slight surface keratinization even here).', 'stratified-squamous'],
+    ['sk', 'Stratified squamous (keratinized)', 'Skin (epidermis)', 'A surface layer of dead, keratin-filled cells (the stratum corneum) makes it dry and impermeable (Wikipedia).', 'thin-skin'],
+    ['tr', 'Transitional (urothelium)', 'Urinary tract: ureters, bladder', 'Stratified, and changes shape with stretch: the surface (umbrella) cells look dome-shaped (cuboidal) when the organ is empty and flatten when it is stretched.', 'transitional'],
+    ['sc', 'Stratified cuboidal / columnar', 'Rare. Ducts of sweat and salivary glands (stratified cuboidal); parts of the male urethra and conjunctiva (stratified columnar) — Wikipedia only', 'Lines larger ducts.', null],
+  ],
+  epiNote: 'Mesothelium, kidney tubules, thyroid follicles and the rare stratified cuboidal/columnar sites are from Wikipedia (one source); the rest are in at least two sources (Gray 1918, StatPearls, Wikipedia).',
+  tell: [
+    ['Pseudostratified vs stratified', 'Tall cells with <b>cilia</b> and goblet cells, nuclei at several heights, all cells on the basement membrane → pseudostratified (respiratory). A truly stratified epithelium has no cilia (Wikipedia).'],
+    ['Simple columnar vs pseudostratified', 'Simple columnar: one row of tall cells, nuclei lined up near the base, a <b>striated (brush) border</b> of microvilli (intestine). Pseudostratified: nuclei at many levels and <b>cilia</b> (trachea).'],
+    ['Transitional vs stratified squamous', 'Transitional: large <b>dome-shaped surface (umbrella) cells</b> bulging into the lumen (bladder, ureter). Stratified squamous: the surface cells are <b>flat</b>.'],
+    ['Keratinized vs non-keratinized', 'Keratinized (skin): a layer of dead, flat, keratin-filled cells with no nuclei on top. Non-keratinized (mouth, oesophagus, vagina): no thick dead layer; kept moist.'],
+    ['Endothelium vs mesothelium', 'Both simple squamous; endothelium lines vessels, mesothelium lines the pleura and peritoneum.'],
+  ],
+  micros: {
+    'simple-cuboidal': {w: 720, h: 406, title: 'Simple cuboidal (kidney tubules), 400×', alt: 'Kidney tubules lined by one layer of cuboidal cells',
+      cap: 'Each tubule is lined by <b>one layer of cube-shaped cells</b> with round nuclei around a lumen. Uploader: kidney tubule, 400×; stain not stated.',
+      credit: cr('Epithelial Tissues Simple Cuboidal Epithelium (41681552782).jpg', BCC, 'cc0', 'resized'),
+      labels: [[0.3, 0.5, 'Lumen'], [0.145, 0.5, 'One layer of cuboidal cells'], [0.445, 0.38, 'Round nucleus']]},
+    'simple-columnar': {w: 720, h: 406, title: 'Simple columnar with goblet cells (gut), 400×', alt: 'Simple columnar epithelium with goblet cells and a brush border',
+      cap: 'Tall cells in one row with their nuclei near the base; pale <b>goblet cells</b> (mucin); the thin bright line on the free surface is the <b>striated (brush) border</b> of microvilli. Uploader: mammalian gut, 400×.',
+      credit: cr('Epithelial Tissues Simple Columnar Epithelium (27854453538).jpg', BCC, 'cc0', 'resized'),
+      labels: [[0.6, 0.5, 'Lumen'], [0.315, 0.5, 'Striated border'], [0.17, 0.73, 'Goblet cell'], [0.1, 0.4, 'Nuclei near the base']]},
+    pseudostratified: {w: 720, h: 406, title: 'Pseudostratified ciliated columnar (trachea), 200×', alt: 'Trachea lined by pseudostratified ciliated columnar epithelium over hyaline cartilage',
+      cap: 'Tall ciliated cells with a fringe of <b>cilia</b> on the free surface; the cell nuclei sit at different heights. Below: connective tissue and the hyaline cartilage of the tracheal ring. Uploader: mammalian trachea, 200×.',
+      credit: cr('Epithelial Tissues Pseudostratified Columnar Epithelium (26915091897).jpg', BCC, 'cc0', 'resized'),
+      labels: [[0.6, 0.43, 'Cilia'], [0.58, 0.5, 'Tall ciliated cells'], [0.12, 0.78, 'Hyaline cartilage'], [0.82, 0.22, 'Lumen']]},
+    'stratified-squamous': {w: 720, h: 406, title: 'Stratified squamous, non-keratinized, 200×', alt: 'Stratified squamous epithelium with flattened surface cells',
+      cap: 'Many layers: small dark cells at the base, larger polygonal cells above, <b>flattened cells at the surface</b> (nuclei still visible here; no thick dead keratin layer). Connective-tissue papillae push up into the base. Uploader: stratified squamous epithelium, 200× (organ not stated).',
+      credit: cr('Epithelial Tissues Stratified Squamous Epithelium (40230842160).jpg', BCC, 'cc0', 'resized'),
+      labels: [[0.6, 0.13, 'Flattened surface cells'], [0.72, 0.86, 'Basal layer'], [0.43, 0.42, 'Connective-tissue papilla'], [0.32, 0.93, 'Connective tissue']]},
+    transitional: {w: 720, h: 406, title: 'Transitional epithelium (bladder), 400×', alt: 'Transitional epithelium with dome-shaped surface cells',
+      cap: 'Several layers of cells; the <b>surface (umbrella) cells are large and dome-shaped</b>, bulging into the lumen — the bladder was not stretched. A band of connective tissue runs across the middle. Uploader: urinary bladder, 400×.',
+      credit: cr('Epithelial Tissues Transitional (41850592732).jpg', BCC, 'cc0', 'resized'),
+      labels: [[0.33, 0.09, 'Dome-shaped surface cells'], [0.6, 0.47, 'Connective tissue'], [0.88, 0.08, 'Lumen']]},
+    'thin-skin': {w: 720, h: 528, title: 'Keratinized stratified squamous (skin of the neck)', alt: 'Skin: epidermis over dermis',
+      cap: 'The epidermis (purple) is keratinized stratified squamous epithelium; on top lies a thin layer of dead keratin. More on the skin on the <a href="lymphoid-bone-skin.html#h-skin">skin page</a>. Uploader: skin of the neck, H&amp;E.',
+      credit: cr('Histology of collagen of skin - low magnification.jpg', 'Mikael Häggström, M.D.', 'cc0', 'cropped and resized'),
+      labels: [[0.25, 0.35, 'Epidermis'], [0.5, 0.85, 'Dermis']]},
+    parotid: {w: 720, h: 588, title: 'Serous gland: parotid', alt: 'Parotid gland with serous acini and ducts',
+      cap: '<b>Serous acini</b>: cells packed with fine pink granules, round nuclei, hardly any lumen. Ducts with taller cells run in the connective tissue. Uploader: parotid gland; magnification and stain not stated (looks like H&amp;E).',
+      credit: cr('WVSOM Parotid Gland1.JPG', 'Wbensmith', 'by3', 'resized'),
+      labels: [[0.78, 0.6, 'Serous acini'], [0.45, 0.17, 'Duct'], [0.12, 0.3, 'Connective tissue']]},
+    'mucous-gland': {w: 720, h: 524, title: 'Mucous acini (oesophageal glands), high power', alt: 'Mucous glands with pale foamy cells',
+      cap: '<b>Mucous acini</b>: pale, foamy cells (the mucin washes out in preparation) with their nuclei pushed flat against the base of the cell. Uploader: oesophageal submucosal glands from a biopsy at the gastro-oesophageal junction, H&amp;E-type stain.',
+      credit: cr('Esophageal submucosal glands - biopsy, high mag.jpg', 'CoRus13', 'bysa4', 'cropped and resized'),
+      labels: [[0.3, 0.45, 'Mucous acinus'], [0.72, 0.72, 'Mucous acinus']]},
+    demilunes: {w: 720, h: 676, title: 'Mixed gland: submandibular, H&amp;E', alt: 'Mucous acini capped by pink serous demilunes',
+      cap: 'Pale <b>mucous</b> cells with pink <b>serous demilunes</b> (half-moon caps) on some acini. Uploader: submandibular gland, H&amp;E.',
+      credit: cr('Serous demilunes of submandibular gland section.png', 'Heihaheihaha', 'bysa4', 'resized'),
+      labels: [[0.19, 0.62, 'Serous demilune'], [0.43, 0.63, 'Mucous cells']]},
+  },
+  emCap: 'The electron microscope shows the <b>free (apical) surface</b> (microvilli, cilia), the <b>junctions between cells</b> and the <b>basement membrane</b>. Pick a structure.',
+  /* [key, name, text] */
+  em: [
+    ['mv', 'Microvilli', '<b>Microvilli</b>: finger-like projections of the cell membrane with a core of <b>actin filaments</b> (Wikipedia). They increase the surface for absorption; too small to see one by one in the light microscope, together they form the <b>brush (striated) border</b> of the intestine (and of kidney tubules — Wikipedia).'],
+    ['ci', 'Cilia', '<b>Motile cilia</b>: longer projections with a <b>9 + 2 axoneme</b> — nine doublet microtubules round a central pair — and dynein arms that make them beat. In the airways they sweep mucus out (mucociliary clearance).'],
+    ['tj', 'Tight junction', '<b>Tight junction (zonula occludens)</b>: seals neighbouring cells together, stopping leakage between them — the barrier of an epithelium.'],
+    ['aj', 'Adherens junction', '<b>Adherens junction (zonula adherens)</b>: a band round the cell that holds it to its neighbours; linked to the actin cytoskeleton (Wikipedia).'],
+    ['de', 'Desmosome', '<b>Desmosome (macula adherens)</b>: a spot weld between cells; keratin intermediate filaments are anchored in its plaques, so it gives mechanical strength.'],
+    ['gj', 'Gap junction', '<b>Gap junction</b>: channels (connexons — Wikipedia) linking the cytoplasm of neighbouring cells, so small molecules and signals pass directly.'],
+    ['hd', 'Hemidesmosome', '<b>Hemidesmosome</b>: a half-desmosome on the base of the cell that anchors its keratin filaments to the basement membrane.'],
+    ['bm', 'Basement membrane', '<b>Basement membrane</b>: the sheet the epithelium rests on — a basal lamina from the epithelium and a reticular lamina from the connective tissue (Wikipedia); contains type IV collagen and laminin (Wikipedia). It anchors the epithelium and filters what passes into it. The epithelium–connective tissue interface is the basement membrane zone.'],
+  ],
+  emRows: [
+    ['Microvilli', 'Actin core', 'Short, many, non-motile; absorption (brush border)'],
+    ['Cilia (motile)', '9 + 2 microtubules, dynein arms', 'Longer, beat; move mucus (airway)'],
+    ['Stereocilia', 'Actin, no axoneme', 'Long non-motile microvilli, not true cilia (epididymis) — Wikipedia'],
+  ],
+  emClin: `<p><b>Primary ciliary dyskinesia:</b> defects of the dynein arms (and other parts of the axoneme) leave cilia immotile or nearly so (review PMC12525432).</p>
+<p><b>Blistering diseases:</b> in <b>pemphigus</b> autoantibodies attack the adhesion molecules of <b>desmosomes</b>, so the cells of the epidermis separate (blisters within the epithelium); in <b>bullous pemphigoid</b> the target is the <b>hemidesmosome</b>, at the basement membrane zone.</p>
+<p><b>Urothelium:</b> basal, intermediate and umbrella (surface) cells; the umbrella cells carry an apical plaque of uroplakin proteins and many vesicles below it, making the impermeable barrier of the bladder (review PMC9705259).</p>`,
+  glCap: 'Exocrine glands release their product <b>through a duct</b> onto a surface; endocrine glands have no duct and secrete into the blood. The goblet cell is a single mucin-secreting cell set in an epithelium. In the salivary glands the secretory ends are rounded <b>acini</b> (alveoli) on a branching (compound) duct system. Pick a kind of acinus.',
+  gl: [
+    ['se', 'Serous', '<b>Serous acinus</b>: secretes a thin, watery fluid with enzymes (amylase). The cells nearly fill the acinus, so <b>the lumen is tiny</b>; the cytoplasm is <b>granular</b> (secretory, zymogen granules); the <b>nucleus is round</b>. The base of the cell stains darker (rough ER — Wikipedia).', 'parotid'],
+    ['mu', 'Mucous', '<b>Mucous acinus</b>: secretes a viscid fluid containing mucin (a lubricant). The cells look <b>pale and clear</b> because the mucin is lost in preparation; the <b>nucleus is flattened against the base</b>; the lumen is wider than in serous acini (Gray).', 'mucous-gland'],
+    ['mx', 'Mixed', '<b>Mixed (seromucous)</b>: mucous acini, some capped by a crescent of serous cells — the <b>serous demilune</b> (crescent of Gianuzzi). Wikipedia notes that demilunes may be partly an artefact of fixation.', 'demilunes'],
+  ],
+  smRows: [
+    ['Cytoplasm', 'Granular, stains well', 'Pale, clear or foamy'],
+    ['Nucleus', 'Round', 'Flattened, pushed to the base'],
+    ['Lumen', 'Tiny', 'Wider'],
+    ['Secretion', 'Thin, watery, enzymes (amylase)', 'Viscid, mucin'],
+  ],
+  salRows: [
+    ['Parotid', 'Serous', 'All acini serous'],
+    ['Submandibular', 'Mixed, mostly serous', 'Serous acini outnumber mucous ones; some mucous acini have serous demilunes'],
+    ['Sublingual', 'Mostly mucous', 'Gray 1918: mucous alveoli; Wikipedia: seromucous, with some serous cells'],
+  ],
+  modesText: `<p><b>Merocrine</b>: the product leaves by exocytosis and the cell stays whole — salivary glands, eccrine sweat glands, goblet cells. <b>Apocrine</b>: the apical part of the cell, with the product, buds off — the mammary gland; the axillary "apocrine" sweat glands are named so, though their real mechanism is debated. <b>Holocrine</b>: the whole cell breaks down and becomes the secretion — the <b>sebaceous gland</b>. (Merocrine and apocrine definitions: Wikipedia; holocrine: Wikipedia and StatPearls.)</p>
+<p><b>Ducts and myoepithelial cells:</b> the smallest ducts start with flat, low cells (intercalated ducts); larger ones have columnar cells whose base is finely striated (striated ducts) — Gray describes both without these names. <b>Myoepithelial cells</b> lie between the secretory cells and the basement membrane and contract to squeeze out the secretion (Wikipedia).</p>`,
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918: trachea, stomach, intestine, bladder, skin, salivary glands); StatPearls (NCBI Bookshelf) histology chapters; open-access reviews on cilia, cell junctions, blistering diseases and the urothelium; Wikipedia. Gray (1918) predates electron microscopy and calls the tracheal epithelium stratified; the modern terms are used.',
+  models: 'Drawings: schematic, not to scale; label points on the micrographs placed by eye (approximate).',
+};
+DATA.images = 'Micrographs via Wikimedia Commons (each credited under its picture): Berkshire Community College Bioscience Image Library (CC0), Mikael Häggström (CC0), Wbensmith (CC BY 3.0), CoRus13 (CC BY-SA 4.0), Heihaheihaha (CC BY-SA 4.0); cropped/resized and labelled for this page.';
+
+/* ===================== PAGE ===================== */
+const {$, el, text, chips, pressed, table, micro} = Histo;
+$('lede').textContent = DATA.lede; $('types-cap').innerHTML = DATA.typesCap; $('epi-note').textContent = DATA.epiNote;
+$('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models; $('images').innerHTML = DATA.images;
+
+const swatch = (box, items) => { box.innerHTML = items.map(([c, l]) => `<span><i style="background:var(${c})"></i>${l}</span>`).join(''); };
+
+/* ---------- epithelium drawings ---------- */
+function cellRect(s, x, y, w, h, nuc, opt = {}) {
+  el('rect', {x, y, width: w, height: h, rx: opt.rx || 2, fill: opt.fill || 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': .7, 'stroke-opacity': .5}, s);
+  if (nuc) el('ellipse', {cx: nuc[0], cy: nuc[1], rx: nuc[2], ry: nuc[3], fill: 'var(--nucleus)'}, s);
+}
+function drawEpi(k) {
+  const s = $('epi'); s.replaceChildren();
+  const BM = 160;
+  el('rect', {x: 0, y: BM, width: 360, height: 50, fill: 'var(--collagen)', opacity: .45}, s);
+  for (let i = 0; i < 9; i++) el('path', {d: `M${10 + i * 40} ${BM + 14 + (i % 3) * 9} q 12 -6 24 0 t 18 2`, stroke: 'var(--collagen)', 'stroke-width': 2, fill: 'none'}, s);
+  const top = {sq: 146, cu: 118, co: 62, ps: 52, sn: 42, sk: 34, tr: 60, sc: 100}[k];
+  if (k === 'sq') for (let x = 0; x < 360; x += 60) cellRect(s, x, 146, 60, 14, [x + 30, 153, 13, 3.2]);
+  if (k === 'cu') for (let x = 0; x < 360; x += 40) cellRect(s, x, 120, 40, 40, [x + 20, 140, 7, 7]);
+  if (k === 'co') {
+    for (let x = 0, i = 0; x < 360; x += 30, i++) {
+      if (i === 5) { cellRect(s, x, 64, 30, 96, [x + 15, 148, 6, 5]); el('path', {d: `M${x + 3} 66 Q${x + 15} 140 ${x + 27} 66 Z`, fill: 'var(--mucin)', stroke: 'var(--ink)', 'stroke-width': .5}, s); continue; }
+      cellRect(s, x, 64, 30, 96, [x + 15, 140, 6, 11]);
+      for (let m = x + 3; m < x + 29; m += 4) el('rect', {x: m, y: 56, width: 2.2, height: 8, fill: 'var(--actin)'}, s);
+    }
+  }
+  if (k === 'ps') {
+    const hs = [0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 2];
+    for (let x = 0, i = 0; x < 360; x += 30, i++) {
+      if (i % 4 === 3) { el('path', {d: `M${x} 160 L${x + 8} 120 L${x + 22} 120 L${x + 30} 160 Z`, fill: 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': .7, 'stroke-opacity': .5}, s); el('ellipse', {cx: x + 15, cy: 145, rx: 7, ry: 6, fill: 'var(--nucleus)'}, s); continue; }
+      cellRect(s, x, 60, 30, 100, [x + 15, [95, 112, 128][hs[i]], 6, 10]);
+      if (i === 6) { el('path', {d: `M${x + 3} 62 Q${x + 15} 120 ${x + 27} 62 Z`, fill: 'var(--mucin)', stroke: 'var(--ink)', 'stroke-width': .5}, s); continue; }
+      for (let m = x + 3; m < x + 29; m += 3.4) el('path', {d: `M${m} 60 q 2 -8 0 -16`, stroke: 'var(--mt)', 'stroke-width': 1.3, fill: 'none'}, s);
+    }
+  }
+  if (k === 'sn' || k === 'sk') {
+    for (let x = 0; x < 360; x += 20) cellRect(s, x, 142, 20, 18, [x + 10, 151, 5, 5]);
+    for (let r = 0; r < 3; r++) for (let x = (r % 2) * 15; x < 360; x += 30) cellRect(s, x - 15, 112 - r * 26 + 4, 30, 26, [x, 125 - r * 26 + 4, 6, 6]);
+    for (let x = 0; x < 360; x += 45) cellRect(s, x, 52, 45, 10, [x + 22, 57, 12, 2.4]);
+    if (k === 'sk') for (let i = 0; i < 3; i++) for (let x = (i % 2) * 20; x < 380; x += 50) el('rect', {x: x - 25, y: 28 + i * 8, width: 48, height: 7, rx: 2, fill: 'var(--kerat)', stroke: 'var(--ink)', 'stroke-width': .4, 'stroke-opacity': .5}, s);
+  }
+  if (k === 'tr') {
+    for (let x = 0; x < 360; x += 22) cellRect(s, x, 140, 22, 20, [x + 11, 150, 5, 5]);
+    for (let x = 0; x < 360; x += 30) { el('path', {d: `M${x + 4} 140 L${x} 102 L${x + 30} 102 L${x + 26} 140 Z`, fill: 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': .7, 'stroke-opacity': .5}, s); el('ellipse', {cx: x + 15, cy: 118, rx: 6, ry: 7, fill: 'var(--nucleus)'}, s); }
+    for (let x = 0; x < 360; x += 60) { el('path', {d: `M${x} 102 L${x} 76 Q${x + 30} 50 ${x + 60} 76 L${x + 60} 102 Z`, fill: 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': .7, 'stroke-opacity': .5}, s); el('ellipse', {cx: x + 30, cy: 86, rx: 8, ry: 7, fill: 'var(--nucleus)'}, s); }
+  }
+  if (k === 'sc') { for (let x = 0; x < 360; x += 30) cellRect(s, x, 132, 30, 28, [x + 15, 146, 6, 6]); for (let x = 0; x < 360; x += 30) cellRect(s, x, 102, 30, 30, [x + 15, 117, 6, 6]); }
+  el('line', {x1: 0, y1: BM, x2: 360, y2: BM, stroke: 'var(--bm)', 'stroke-width': 3}, s);
+  const L = (x, y, t, a = 'start') => text(s, x, y, t, {'text-anchor': a, class: 'lab', style: 'font-size:11px'});
+  L(356, BM + 12, 'basement membrane', 'end'); L(356, 204, 'connective tissue', 'end');
+  if (k === 'co') { L(4, 48, 'microvilli (striated border)'); L(244, 30, 'goblet cell'); el('line', {x1: 250, y1: 34, x2: 168, y2: 72, stroke: 'var(--muted)'}, s); }
+  if (k === 'ps') { L(4, 38, 'cilia'); L(186, 46, 'goblet cell'); L(92, 116, 'short basal cell', 'middle'); }
+  if (k === 'sk') L(4, 22, 'dead keratin layer');
+  if (k === 'tr') L(4, 50, 'dome-shaped umbrella cells');
+  if (k === 'sn') L(4, 46, 'flattened surface cells');
+  const keys = [['--cyto', 'Cytoplasm'], ['--nucleus', 'Nucleus'], ['--bm', 'Basement membrane'], ['--collagen', 'Connective tissue']];
+  if (k === 'co') keys.push(['--actin', 'Microvilli'], ['--mucin', 'Mucin']);
+  if (k === 'ps') keys.push(['--mt', 'Cilia'], ['--mucin', 'Mucin']);
+  if (k === 'sk') keys.push(['--kerat', 'Keratin']);
+  swatch($('epi-key'), keys);
+}
+let epiFig = null;
+function pickEpi(k) {
+  drawEpi(k); pressed($('epi-chips'), k);
+  const e = DATA.epi.find(x => x[0] === k);
+  $('epi-text').innerHTML = `<p><b>${e[1]}.</b> ${e[3]}</p><p><b>Where:</b> ${e[2]}.</p>`;
+  const box = $('epi-micro'); box.replaceChildren();
+  if (e[4]) micro(box, Object.assign({id: e[4], file: e[4] + '.jpg'}, DATA.micros[e[4]]));
+  else box.innerHTML = '<p class="muted">' + (k === 'sq' ? 'No micrograph here: simple squamous cells are too thin to show well alone. See the endothelium lining the artery on the <a href="nervous-vascular.html#h-ves">vessels page</a>.' : 'No open micrograph used for this rare kind.') + '</p>';
+  $('epi-table').querySelectorAll('tr[data-k]').forEach(r => r.setAttribute('aria-pressed', String(r.dataset.k === k)));
+}
+chips($('epi-chips'), DATA.epi.map(e => [e[0], e[1]]), pickEpi);
+table($('epi-table'), ['Epithelium', 'Where (examples)', 'What it does'], DATA.epi.map(e => [e[1], e[2], e[3]]), DATA.epi.map(e => e[0]));
+$('epi-table').querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => pickEpi(r.dataset.k));
+pickEpi('ps');
+table($('tell-table'), ['Question', 'Look for'], DATA.tell);
+
+/* ---------- electron microscope schematic ---------- */
+function drawEM(k) {
+  const s = $('em'); s.replaceChildren();
+  const on = x => !k || k === x, g = x => ({opacity: on(x) ? 1 : .2});
+  const BM = 292, L = 40, M = 190, R = 340, TOP = 70;
+  el('rect', {x: 0, y: BM + 6, width: 380, height: 32, fill: 'var(--collagen)', opacity: .4}, s);
+  for (const [x0, x1] of [[L, M], [M, R]]) {
+    el('rect', {x: x0, y: TOP, width: x1 - x0, height: BM - TOP, fill: 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': 1, 'stroke-opacity': .5}, s);
+    el('ellipse', {cx: (x0 + x1) / 2, cy: 230, rx: 32, ry: 24, fill: 'var(--nucleus)', opacity: .85}, s);
+  }
+  /* microvilli on the left cell */
+  const mv = el('g', g('mv'), s);
+  for (let x = L + 6; x < M - 4; x += 10) { el('rect', {x, y: TOP - 24, width: 7, height: 24, rx: 3.5, fill: 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': .7, 'stroke-opacity': .6}, mv); el('line', {x1: x + 3.5, y1: TOP - 20, x2: x + 3.5, y2: TOP + 8, stroke: 'var(--actin)', 'stroke-width': 1.6}, mv); }
+  el('line', {x1: L, y1: TOP + 9, x2: M, y2: TOP + 9, stroke: 'var(--actin)', 'stroke-width': 1, 'stroke-dasharray': '2 2'}, mv);
+  /* cilia on the right cell */
+  const ci = el('g', g('ci'), s);
+  for (let x = M + 10; x < R - 4; x += 16) { el('path', {d: `M${x} ${TOP} q 6 -26 0 -52`, stroke: 'var(--mt)', 'stroke-width': 4, fill: 'none', 'stroke-linecap': 'round'}, ci); el('rect', {x: x - 3, y: TOP + 2, width: 6, height: 9, fill: 'var(--mt)', opacity: .7}, ci); }
+  /* junctions on the shared membrane x = M */
+  const J = (key, y0, y1, draw) => { const gg = el('g', g(key), s); draw(gg, y0, y1); };
+  J('tj', TOP + 2, TOP + 20, (gg, a, b) => { for (let y = a; y < b; y += 4) el('circle', {cx: M, cy: y + 2, r: 2.2, fill: 'var(--tj)'}, gg); });
+  J('aj', TOP + 26, TOP + 44, (gg, a, b) => { el('rect', {x: M - 6, y: a, width: 12, height: b - a, fill: 'var(--aj)', opacity: .8}, gg); for (const d of [-1, 1]) el('line', {x1: M + d * 6, y1: (a + b) / 2, x2: M + d * 40, y2: (a + b) / 2, stroke: 'var(--actin)', 'stroke-width': 1.6}, gg); });
+  J('de', TOP + 62, TOP + 82, (gg, a, b) => { for (const d of [-1, 1]) { el('rect', {x: M + (d < 0 ? -9 : 4), y: a, width: 5, height: b - a, fill: 'var(--desmo)'}, gg); for (let i = 0; i < 3; i++) el('path', {d: `M${M + d * 9} ${a + 4 + i * 6} q ${d * 14} ${-6 + i * 6} ${d * 34} ${-4 + i * 8}`, stroke: 'var(--kerat)', 'stroke-width': 1.4, fill: 'none'}, gg); } });
+  J('gj', TOP + 104, TOP + 124, (gg, a, b) => { for (let y = a; y < b; y += 5) el('rect', {x: M - 4, y, width: 8, height: 3, fill: 'var(--gapj)'}, gg); });
+  J('de', TOP + 150, TOP + 166, (gg, a, b) => { for (const d of [-1, 1]) el('rect', {x: M + (d < 0 ? -9 : 4), y: a, width: 5, height: b - a, fill: 'var(--desmo)'}, gg); });
+  /* hemidesmosomes on the base */
+  const hd = el('g', g('hd'), s);
+  for (const x of [80, 140, 240, 300]) { el('rect', {x: x - 9, y: BM - 7, width: 18, height: 5, fill: 'var(--desmo)'}, hd); for (const d of [-1, 1]) el('path', {d: `M${x + d * 4} ${BM - 7} q ${d * 6} -14 ${d * 2} -28`, stroke: 'var(--kerat)', 'stroke-width': 1.4, fill: 'none'}, hd); }
+  /* basement membrane: basal lamina + reticular lamina */
+  const bm = el('g', g('bm'), s);
+  el('rect', {x: 0, y: BM - 1, width: 380, height: 4, fill: 'var(--bm)'}, bm);
+  for (let x = 6; x < 380; x += 14) el('path', {d: `M${x} ${BM + 5} q 5 4 10 0`, stroke: 'var(--bm)', 'stroke-width': 1.6, fill: 'none'}, bm);
+  const T = (x, y, t, a = 'start', key) => { const e = text(s, x, y, t, {'text-anchor': a, class: 'lab', style: 'font-size:10.5px'}); if (key && !on(key)) e.setAttribute('opacity', .3); };
+  T(L, TOP - 30, 'microvilli', 'start', 'mv'); T(R, TOP - 58, 'cilia', 'end', 'ci');
+  T(M + 46, TOP + 14, 'tight junction', 'start', 'tj'); T(M + 46, TOP + 38, 'adherens junction', 'start', 'aj');
+  T(M + 46, TOP + 76, 'desmosome', 'start', 'de'); T(M + 46, TOP + 118, 'gap junction', 'start', 'gj');
+  T(4, BM - 12, 'hemidesmosome', 'start', 'hd'); T(376, BM + 30, 'basement membrane', 'end', 'bm');
+  T((L + M) / 2, 236, 'nucleus', 'middle'); T((M + R) / 2, 236, 'nucleus', 'middle');
+  const it = DATA.em.find(x => x[0] === k); $('em-text').innerHTML = it ? '<p>' + it[2] + '</p>' : '<p class="muted">Pick a structure to light it up.</p>';
+  pressed($('em-chips'), k);
+}
+function drawXS() {
+  const s = $('xs');
+  el('circle', {cx: 60, cy: 60, r: 24, fill: 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': 1}, s);
+  for (let i = 0; i < 20; i++) { const a = i * 2.4, d = Math.sqrt(i / 20) * 15; el('circle', {cx: 60 + d * Math.cos(a), cy: 60 + d * Math.sin(a), r: 1.6, fill: 'var(--actin)'}, s); }
+  text(s, 60, 104, 'microvillus:', {'text-anchor': 'middle', class: 'lab', style: 'font-size:10px'}); text(s, 60, 117, 'actin core', {'text-anchor': 'middle', class: 'lab', style: 'font-size:10px'});
+  const cx = 210, cy = 58;
+  el('circle', {cx, cy, r: 44, fill: 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': 1}, s);
+  for (let i = 0; i < 9; i++) { const a = i * Math.PI * 2 / 9 - Math.PI / 2, x = cx + 30 * Math.cos(a), y = cy + 30 * Math.sin(a);
+    el('circle', {cx: x - 3 * Math.sin(a), cy: y + 3 * Math.cos(a), r: 4, fill: 'none', stroke: 'var(--mt)', 'stroke-width': 2}, s);
+    el('circle', {cx: x + 3 * Math.sin(a), cy: y - 3 * Math.cos(a), r: 4, fill: 'none', stroke: 'var(--mt)', 'stroke-width': 2}, s);
+    el('path', {d: `M${x - 5 * Math.cos(a) + 3 * Math.sin(a)} ${y - 5 * Math.sin(a) - 3 * Math.cos(a)} l ${-6 * Math.cos(a - .8)} ${-6 * Math.sin(a - .8)}`, stroke: 'var(--ink)', 'stroke-width': 1.2}, s); }
+  for (const d of [-5, 5]) el('circle', {cx: cx + d, cy, r: 4, fill: 'none', stroke: 'var(--mt)', 'stroke-width': 2}, s);
+  text(s, cx, 117, 'cilium: 9 doublets + central pair', {'text-anchor': 'middle', class: 'lab', style: 'font-size:10px'}); text(s, cx, 130, '(9 + 2)', {'text-anchor': 'middle', class: 'lab', style: 'font-size:10px'});
+  text(s, cx + 50, 22, 'dynein arms', {class: 'lab', style: 'font-size:9.5px'}); el('line', {x1: cx + 48, y1: 24, x2: cx + 26, y2: 36, stroke: 'var(--muted)', 'stroke-width': 1}, s);
+}
+$('em-cap').innerHTML = DATA.emCap;
+chips($('em-chips'), DATA.em.map(e => [e[0], e[1]]), k => drawEM(k));
+drawEM(null); drawXS();
+table($('em-table'), ['Surface projection', 'Core', 'Notes'], DATA.emRows);
+$('em-clin').innerHTML = DATA.emClin;
+
+/* ---------- glands ---------- */
+function drawAcinus(k) {
+  const s = $('acinus'); s.replaceChildren();
+  const cx = 150, cy = 118, R = 92, n = 9;
+  const lumen = k === 'se' ? 9 : 26;
+  for (let i = 0; i < n; i++) {
+    const a0 = i * 2 * Math.PI / n, a1 = (i + 1) * 2 * Math.PI / n, P = (r, a) => [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+    const [x0, y0] = P(R, a0), [x1, y1] = P(R, a1), [x2, y2] = P(lumen, a1), [x3, y3] = P(lumen, a0);
+    const mucous = k === 'mu' || k === 'mx';
+    el('path', {d: `M${x0} ${y0} A${R} ${R} 0 0 1 ${x1} ${y1} L${x2} ${y2} L${x3} ${y3} Z`, fill: mucous ? 'var(--mucin)' : 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': .8, 'stroke-opacity': .5}, s);
+    const am = (a0 + a1) / 2;
+    if (mucous) { const [nx, ny] = P(R - 7, am); el('ellipse', {cx: nx, cy: ny, rx: 10, ry: 3, transform: `rotate(${am * 180 / Math.PI + 90} ${nx} ${ny})`, fill: 'var(--nucleus)'}, s); }
+    else { const [nx, ny] = P(R - 30, am); el('circle', {cx: nx, cy: ny, r: 7, fill: 'var(--nucleus)'}, s);
+      for (let j = 0; j < 7; j++) { const [gx, gy] = P(lumen + 8 + (j % 3) * 7, am + (j - 3) * .07); el('circle', {cx: gx, cy: gy, r: 2.4, fill: 'var(--zym)'}, s); } }
+  }
+  if (k === 'mx') {
+    const a0 = -1.05, a1 = 0.3, P = (r, a) => [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+    const [p0x, p0y] = P(92, a0), [p1x, p1y] = P(92, a1), [p2x, p2y] = P(68, a1), [p3x, p3y] = P(68, a0);
+    el('path', {d: `M${p0x} ${p0y} A92 92 0 0 1 ${p1x} ${p1y} L${p2x} ${p2y} A68 68 0 0 0 ${p3x} ${p3y} Z`, fill: 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': .8}, s);
+    for (const a of [-0.8, -0.38, 0.05]) { const [x, y] = P(82, a); el('circle', {cx: x, cy: y, r: 5, fill: 'var(--nucleus)'}, s); }
+    for (let j = 0; j < 9; j++) { const [x, y] = P(72, a0 + 0.1 + j * 0.14); el('circle', {cx: x, cy: y, r: 2, fill: 'var(--zym)'}, s); }
+  }
+  /* myoepithelial cell: between the secretory cells and the basement membrane */
+  { const P = (r, a) => [cx + r * Math.cos(a), cy + r * Math.sin(a)], [x0, y0] = P(88, 1.2), [x1, y1] = P(88, 2.4);
+    el('path', {d: `M${x0} ${y0} A88 88 0 0 1 ${x1} ${y1}`, stroke: 'var(--myoep)', 'stroke-width': 5, fill: 'none', 'stroke-linecap': 'round'}, s); }
+  el('circle', {cx, cy, r: R + 3, fill: 'none', stroke: 'var(--bm)', 'stroke-width': 3}, s);
+  const T = (x, y, t, a = 'start') => text(s, x, y, t, {'text-anchor': a, class: 'lab', style: 'font-size:10.5px'});
+  T(cx, cy - lumen - 6, 'lumen', 'middle'); T(6, 14, k === 'se' ? 'serous acinus' : k === 'mu' ? 'mucous acinus' : 'mucous acinus + serous demilune');
+  if (k === 'mx') { T(296, 60, 'serous demilune', 'end'); el('line', {x1: 250, y1: 64, x2: 222, y2: 84, stroke: 'var(--muted)'}, s); }
+  T(4, 226, 'myoepithelial cell (green)'); el('line', {x1: 60, y1: 218, x2: 100, y2: 196, stroke: 'var(--muted)'}, s); T(296, 30, 'basement membrane', 'end');
+  const keys = [['--nucleus', 'Nucleus'], ['--bm', 'Basement membrane'], ['--myoep', 'Myoepithelial cell']];
+  if (k !== 'mu') keys.unshift(['--cyto', 'Serous cell'], ['--zym', 'Secretory granules']);
+  if (k !== 'se') keys.unshift(['--mucin', 'Mucous cell']);
+  swatch($('gl-key'), keys);
+}
+function pickGl(k) {
+  drawAcinus(k); pressed($('gl-chips'), k);
+  const e = DATA.gl.find(x => x[0] === k); $('gl-text').innerHTML = '<p>' + e[2] + '</p>';
+  const box = $('gl-micro'); box.replaceChildren(); micro(box, Object.assign({id: e[3], file: e[3] + '.jpg'}, DATA.micros[e[3]]));
+}
+$('gl-cap').innerHTML = DATA.glCap;
+chips($('gl-chips'), DATA.gl.map(e => [e[0], e[1]]), pickGl); pickGl('se');
+table($('sm-table'), ['Feature', 'Serous acinus', 'Mucous acinus'], DATA.smRows);
+table($('sal-table'), ['Gland', 'Kind', 'What you see'], DATA.salRows);
+function drawModes() {
+  const s = $('modes');
+  const cell = (x, label, kind) => {
+    const g = el('g', {}, s);
+    for (let i = 0; i < 3; i++) { const cx = x + 20 + i * 52;
+      el('rect', {x: cx, y: 40, width: 48, height: 90, rx: 4, fill: 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': .8, 'stroke-opacity': .5}, g);
+      el('circle', {cx: cx + 24, cy: 108, r: 9, fill: 'var(--nucleus)'}, g);
+      for (let j = 0; j < 4; j++) el('circle', {cx: cx + 12 + j * 8, cy: 58, r: 3, fill: 'var(--zym)'}, g);
+      if (i === 1 && kind === 'mero') for (let j = 0; j < 3; j++) el('circle', {cx: cx + 16 + j * 8, cy: 30, r: 3, fill: 'var(--zym)'}, g);
+      if (i === 1 && kind === 'apo') { el('path', {d: `M${cx + 6} 40 Q${cx + 24} 6 ${cx + 42} 40`, fill: 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': .8}, g); for (let j = 0; j < 3; j++) el('circle', {cx: cx + 16 + j * 8, cy: 30, r: 3, fill: 'var(--zym)'}, g); }
+      if (i === 1 && kind === 'holo') { el('rect', {x: cx, y: 40, width: 48, height: 90, rx: 4, fill: 'var(--surface)', stroke: 'var(--ink)', 'stroke-width': .8, 'stroke-dasharray': '3 3'}, g);
+        for (let j = 0; j < 10; j++) el('circle', {cx: cx + 8 + (j * 13) % 34, cy: 48 + (j * 17) % 70, r: 3, fill: j % 4 ? 'var(--zym)' : 'var(--nucleus)', opacity: .8}, g); }
+    }
+    text(s, x + 98, 155, label, {'text-anchor': 'middle', class: 'lab', style: 'font-size:12px'});
+  };
+  cell(0, 'merocrine', 'mero'); cell(200, 'apocrine', 'apo'); cell(400, 'holocrine', 'holo');
+}
+drawModes(); $('modes-text').innerHTML = DATA.modesText;
+window.ready = true;
+</script>
+</body>
+</html>

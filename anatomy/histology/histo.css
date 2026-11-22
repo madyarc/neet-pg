@@ -1,0 +1,37 @@
+/* shared by the three histology pages (anatomy/histology/*.html) */
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+svg text{font:500 12px var(--f-body);fill:var(--ink)}
+svg .lab{font:600 12px var(--f-mono);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+@media (max-width:760px){.grid2,.grid3{grid-template-columns:minmax(0,1fr)}}
+/* micrograph with toggleable labels (same look as the chest X-ray labels on thorax/lungs.html) */
+.mg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.mg .im{position:relative;width:100%;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:var(--bg)}
+.mg .im img{width:100%;height:auto;display:block}
+.mg .im svg{position:absolute;inset:0;width:100%;height:100%}
+.mg .im svg text{font:600 var(--mg-fs,18px) var(--f-body);fill:#fff;paint-order:stroke;stroke:#000;stroke-width:var(--mg-sw,3px)}
+.mg .im svg line{stroke:#ffd54a;stroke-width:var(--mg-lw,1.5px)}
+.mg .im svg circle{fill:#ffd54a;stroke:#000;stroke-width:var(--mg-sw,3px)}
+.mg .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.mg .bar .t{font:600 13.5px var(--f-body);margin-right:auto}
+.mg figcaption{font-size:13.5px;line-height:1.45}
+.mg .cr{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+.scroll{overflow-x:auto}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t tr[data-k]{cursor:pointer} table.t tr[data-k]:focus-visible{outline:2px solid var(--accent);outline-offset:-2px} table.t tr[aria-pressed="true"] td{background:var(--bg)}
+@media (max-width:600px){
+  table.t.stack:not(.nohead) tr:first-child{display:none}
+  table.t.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.t.stack th,table.t.stack td{border:0;padding:0}
+  table.t.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+.prose p{margin:0 0 8px;max-width:80ch}
+.legend2{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--muted)}
+.legend2 i{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:4px;border:1px solid var(--line)}
+.info{min-height:3.2em}
+.dim{opacity:.22;transition:opacity .2s} .hi{transition:opacity .2s}
+.jump{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13.5px}

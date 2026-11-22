@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nervous Tissue and Blood Vessels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<link rel="stylesheet" href="histo.css">
+<style>
+/* page colours, one meaning each (same values as general/nervous-system.html and general/blood-vessels.html for the same meaning):
+   --nucleus, --cyto (neuron cytoplasm), --nissl (Nissl substance), --myelin, --schwann (Schwann cell cytoplasm), --sat (satellite cells),
+   --rcpt (receptors), --gapj (gap junction), --vesicle (synaptic vesicles), --collagen (connective-tissue sheaths),
+   --t-endo / --t-musc / --t-el / --t-adv (endothelium, smooth muscle, elastic laminae, adventitia), --lumen-a / --lumen-v / --lumen-c,
+   --bm (basement membrane); --nerve, --artery, --vein from atlas.css */
+:root{--nucleus:#1e4f99;--cyto:#c8b6e2;--nissl:#5a3f8c;--myelin:#c8ffd8;--schwann:#f2cc8f;--sat:#06d6a0;--rcpt:#ff006e;--gapj:#3a86ff;--vesicle:#e9d8a6;
+  --collagen:#e39b9b;--t-endo:#e98f86;--t-musc:#c96f68;--t-el:#2f3b52;--t-adv:#d3dbe6;--lumen-a:#f6d4d8;--lumen-v:#d6e0f3;--lumen-c:#e6dcef;--bm:#8a93a3}
+:root[data-theme="dark"]{--nucleus:#9fb0ff;--cyto:#6d5a8c;--nissl:#c9a6ff;--myelin:#3f7a55;--schwann:#8c6f3f;--sat:#06d6a0;--rcpt:#ff5c9d;--gapj:#3a86ff;--vesicle:#9c8f60;
+  --collagen:#b86a6a;--t-endo:#f0a59d;--t-musc:#9c4e48;--t-el:#c8d0de;--t-adv:#46505f;--lumen-a:#4a2a30;--lumen-v:#28344c;--lumen-c:#3a3044;--bm:#7d8696}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Nervous Tissue and Blood Vessels</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="Histology pages"><span class="muted">Histology:</span> <a href="epithelium-glands.html">Epithelium and glands</a> <b>Nervous tissue and blood vessels</b> <a href="lymphoid-bone-skin.html">Lymphoid organs, bone and skin</a> <a href="../general/nervous-system.html">Nervous system (general)</a> <a href="../general/blood-vessels.html">Blood vessels (general)</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-neu">
+  <h2 id="h-neu">The neuron under the microscope</h2>
+  <p class="cap key" id="neu-cap"></p>
+  <div class="chips" id="neu-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="neuron" viewBox="0 0 420 250" role="img" aria-label="Schematic of a multipolar neuron"></svg>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="neu-text"></div>
+    </div>
+    <div id="neu-micro"></div>
+  </div>
+  <div class="prose" id="neu-types"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fib">
+  <h2 id="h-fib">Nerve fibres: myelin and the nodes of Ranvier</h2>
+  <p class="cap key" id="fib-cap"></p>
+  <div class="chips" id="fib-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="fibre" viewBox="0 0 420 220" role="img" aria-label="Schematic of a nerve fibre"></svg>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="fib-text"></div>
+    </div>
+    <div id="fib-micro"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-nerve">
+  <h2 id="h-nerve">A peripheral nerve in cross-section</h2>
+  <p class="cap key" id="nv-cap"></p>
+  <div class="chips" id="nv-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="nerve" viewBox="0 0 300 260" role="img" aria-label="Schematic cross-section of a peripheral nerve" style="max-width:420px"></svg>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="nv-text"></div>
+    </div>
+    <div id="nv-micro"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gang">
+  <h2 id="h-gang">Ganglia</h2>
+  <div class="grid2">
+    <div id="ga-micro"></div>
+    <div>
+      <div class="scroll"><table id="ga-table"></table></div>
+      <p class="muted" id="ga-note"></p>
+    </div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-syn">
+  <h2 id="h-syn">The synapse under the electron microscope</h2>
+  <div class="chips" id="syn-chips"></div>
+  <div class="grid2">
+    <svg class="fig" id="syn" viewBox="0 0 360 230" role="img" aria-label="Schematic of a synapse" style="max-width:480px"></svg>
+    <div class="prose info" id="syn-text"></div>
+  </div>
+  <p class="muted">Schematic, not to scale.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ves">
+  <h2 id="h-ves">Blood vessels: telling them apart</h2>
+  <p class="cap key" id="ves-cap"></p>
+  <div class="chips" id="ves-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="vessel" viewBox="0 0 300 260" role="img" aria-label="Schematic cross-section of a vessel wall" style="max-width:420px"></svg>
+      <div class="legend2" id="ves-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="ves-text"></div>
+    </div>
+    <div id="ves-micro"></div>
+  </div>
+  <div class="scroll"><table id="ves-table"></table></div>
+  <h3>Capillaries under the electron microscope</h3>
+  <div class="chips" id="cap-chips"></div>
+  <div class="grid2">
+    <svg class="fig" id="capil" viewBox="0 0 360 200" role="img" aria-label="Schematic of a capillary wall" style="max-width:480px"></svg>
+    <div class="prose info" id="cap-text"></div>
+  </div>
+  <p class="muted">Schematic, not to scale. More on arteries, veins, capillaries and the microcirculation: <a href="../general/blood-vessels.html#h-wall">Blood vessels (general)</a>.</p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+  <p id="images"></p>
+</footer>
+</div>
+
+<script src="histo.js"></script>
+<script>
+/* ===================== DATA (checked in sources-local/facts/fill-histo1.md, Parts C and D) ===================== */
+const LIC = {cc0: ['CC0', 'https://creativecommons.org/publicdomain/zero/1.0/'], bysa4: ['CC BY-SA 4.0', 'https://creativecommons.org/licenses/by-sa/4.0/']};
+const BCC = 'Berkshire Community College Bioscience Image Library';
+const cr = (file, author, lic, done) => Histo.credit({file, author, lic: LIC[lic][0], licUrl: LIC[lic][1], done});
+const DATA = {
+  lede: 'Nerve cells and fibres, the sheaths of a peripheral nerve, ganglia and the synapse; then the walls of arteries, veins and capillaries — each as a drawing you can pick apart and, where an open micrograph exists, a labelled light micrograph.',
+  neuCap: 'A neuron has a <b>cell body</b>, several <b>dendrites</b> and usually <b>one axon</b>. Pick a part. How neurons are classified (multipolar, bipolar, pseudounipolar; by function and size) and the neuroglia are on <a href="../general/nervous-system.html#h-neu">Nervous system (general)</a>.',
+  neu: [
+    ['body', 'Cell body', '<b>Cell body</b> (soma): large, with a round nucleus containing a well-marked nucleolus (Gray 1918). Its cytoplasm holds <b>Nissl granules</b> — clumps of rough endoplasmic reticulum that stain deeply with basic dyes. (Gray 1918 notes that they are not seen in living cells.)'],
+    ['den', 'Dendrites', '<b>Dendrites</b>: usually several, branching soon after they leave the cell body; they <b>receive</b> signals and carry them toward the cell body. Nissl granules extend into them.'],
+    ['hil', 'Axon hillock', '<b>Axon hillock</b> (Gray\'s "cone of origin"): the small clear area where the axon leaves the cell body — it has <b>no Nissl granules</b>, which is how it is recognised in a section.'],
+    ['ax', 'Axon', '<b>Axon</b>: a neuron rarely has more than one. It carries impulses <b>away</b> from the cell body, has no Nissl granules, and may be wrapped in myelin; it ends in terminals at synapses.'],
+  ],
+  neuTypes: '<p><b>Shapes you meet in sections:</b> <b>multipolar</b> — many processes, one axon (motor neurons of the anterior horn; the cells of sympathetic ganglia); <b>pseudounipolar</b> ("unipolar" in Gray) — one process that divides like a T (spinal ganglia); <b>bipolar</b> — one process at each pole (retina, olfactory epithelium, spiral and vestibular ganglia).</p>',
+  fibCap: 'In a <b>myelinated</b> fibre the axon is wrapped in myelin, interrupted at regular <b>nodes of Ranvier</b>; the stretch between two nodes is an <b>internode</b>. Pick a feature.',
+  fib: [
+    ['my', 'Myelin', '<b>Myelin</b> is a fatty sheath that insulates the axon. In peripheral nerves it is made by <b>Schwann cells</b>, each wrapping one stretch of <b>one</b> axon; in the brain and cord by <b>oligodendrocytes</b>, each myelinating several axons. <b>Osmium</b> (osmic acid) stains myelin black.'],
+    ['no', 'Node of Ranvier', '<b>Nodes of Ranvier</b>: regular gaps in the myelin where the axon membrane is exposed. The impulse jumps from node to node (<b>saltatory conduction</b>), so myelinated fibres conduct faster.'],
+    ['un', 'Unmyelinated fibre', '<b>Unmyelinated</b> (non-medullated) fibres: most sympathetic (postganglionic) fibres. Schwann cells hold them without wrapping myelin round them; several small axons sit together in one Schwann cell (a Remak bundle). No nodes.'],
+  ],
+  nvCap: 'Connective tissue wraps a nerve at three levels. Pick one.',
+  nv: [
+    ['epi', 'Epineurium', '<b>Epineurium</b>: the outer sheath of the whole nerve, dense connective tissue carrying the blood vessels of the nerve (and fat — Wikipedia) between the fascicles.'],
+    ['peri', 'Perineurium', '<b>Perineurium</b>: a thin sheath round each <b>fascicle</b> (bundle of fibres). Its layers of flat cells, joined by tight junctions, form the <b>blood–nerve barrier</b>.'],
+    ['endo', 'Endoneurium', '<b>Endoneurium</b>: delicate connective tissue round each nerve fibre inside a fascicle.'],
+  ],
+  gaRows: [
+    ['Cell bodies', 'Large, rounded, mostly in groups near the periphery', 'Smaller, multipolar'],
+    ['Fibres', 'Mostly myelinated, running through the centre', 'Axons leave as unmyelinated fibres'],
+    ['Around each cell', 'A capsule of satellite cells', 'Satellite cells too'],
+    ['Neurons', 'Sensory, pseudounipolar', 'Autonomic (postganglionic), multipolar'],
+  ],
+  gaNote: 'Gray 1918 and Wikipedia. Full comparison (synapses, rami): Nervous system (general), "Spinal ganglion and sympathetic ganglion". No open micrograph of a sympathetic ganglion was found.',
+  syn: [
+    ['chem', 'Chemical synapse', '<b>Chemical synapse</b> (most synapses): the <b>presynaptic terminal</b> at the end of the axon holds vesicles of transmitter; when the impulse arrives, transmitter is released into the <b>synaptic cleft</b> (about 20–40 nm, Wikipedia), diffuses across and binds <b>receptors</b> on the postsynaptic membrane. Transmission is <b>one-way</b> (Gray 1918).'],
+    ['elec', 'Electrical synapse', '<b>Electrical synapse</b>: the two cells are joined by a <b>gap junction</b> (gap about 2–4 nm, Wikipedia); current flows directly from cell to cell, faster, and can go both ways.'],
+  ],
+  vesCap: 'Every vessel except the capillary has three coats: <b>intima</b> (endothelium), <b>media</b> (smooth muscle and elastic tissue) and <b>adventitia</b> (connective tissue). Pick a vessel.',
+  ves: [
+    ['ela', 'Elastic artery', '<b>Elastic (conducting) artery</b> — aorta and its large branches, pulmonary arteries: a thick media in which <b>elastic lamellae alternate with smooth muscle</b>. It stretches in systole and recoils in diastole, keeping pressure and flow steady. Larger vessels have their own vasa vasorum in the outer coat.'],
+    ['mus', 'Muscular artery', '<b>Muscular (distributing) artery</b> — named arteries such as the radial and femoral: media <b>mainly smooth muscle</b>, a clear, wavy <b>internal elastic lamina</b> and an external elastic lamina. It distributes blood and controls flow by contracting.'],
+    ['art', 'Arteriole', '<b>Arteriole</b>: the smallest arteries, wall mainly smooth muscle (usually one or two layers — Wikipedia); the main site of resistance to flow.'],
+    ['vei', 'Vein', '<b>Vein</b>: thin wall for its wide lumen, often collapsed; <b>thin media</b>; the adventitia is the thickest coat of large veins; only a thin network of elastic fibres in place of a definite internal elastic lamina. Most veins have valves (folds of the intima).'],
+    ['cap', 'Capillary', '<b>Capillary</b>: only endothelium on a basement membrane, about 5–10 µm wide — the site of exchange.'],
+  ],
+  vesRows: [
+    ['Wall', 'Thick', 'Thick', 'Thin; wide lumen that collapses when empty', 'One cell thick'],
+    ['Media', 'Elastic lamellae alternating with smooth muscle', 'Mainly smooth muscle', 'Thin', 'None'],
+    ['Internal elastic lamina', '(many elastic lamellae fill the media)', 'Distinct, wavy', 'Only a thin elastic network', 'None'],
+    ['Adventitia', '—', '—', 'Thickest coat of large veins', '—'],
+    ['Examples', 'Aorta, pulmonary arteries', 'Radial, femoral', '—', '—'],
+  ],
+  capTypes: [
+    ['cont', 'Continuous', '<b>Continuous</b>: an unbroken endothelium on a continuous basement membrane — muscle and lung (review + Wikipedia), skin (Wikipedia); in the brain the cells are sealed by tight junctions (blood–brain barrier; Wikipedia + review).'],
+    ['fen', 'Fenestrated', '<b>Fenestrated</b>: the endothelial cells have pores (fenestrae, about 60–80 nm); basement membrane continuous — endocrine glands and kidney (Wikipedia + review), intestine (Wikipedia).'],
+    ['sin', 'Sinusoidal', '<b>Sinusoidal (discontinuous)</b>: wide, irregular channels with gaps between the cells and a discontinuous basement membrane, letting blood cells and proteins through — liver, spleen, bone marrow (Wikipedia; the review classes the liver as fenestrated, so sources differ on the liver).'],
+  ],
+  micros: {
+    'multipolar-neuron': {w: 720, h: 406, title: 'Multipolar motor neuron (spinal cord smear), 400×', alt: 'A large multipolar neuron with several processes',
+      cap: 'A large <b>cell body</b> with several <b>processes</b> leaving it, and a dark central <b>nucleus</b> (a nucleolus cannot be picked out with certainty here; the small dark dot below it may be an overlying glial nucleus). The small dark dots around it are the nuclei of glial cells. Uploader: smear of spinal cord, motor neuron, 400×; stain not stated.',
+      credit: cr('Nervous Tissue Spinal Cord Motor Neuron (41850850692).jpg', BCC, 'cc0', 'resized'),
+      labels: [[0.4, 0.33, 'Cell body'], [0.45, 0.45, 'Nucleus'], [0.14, 0.4, 'Process (dendrite)'], [0.055, 0.73, 'Glial nuclei']]},
+    'nerve-ls-osmium': {w: 720, h: 406, title: 'Nerve fibres, longitudinal, osmium, 400×', alt: 'Nerve fibres with myelin stained black by osmium',
+      cap: '<b>Osmium</b> stains the myelin sheaths black, outlining each fibre. Nodes are not clearly seen in this picture. Uploader: nerve bundle, long section, osmium tetroxide, 400×.',
+      credit: cr('Nervous Tissue Nerve Bundle (27059334187).jpg', BCC, 'cc0', 'resized'),
+      labels: [[0.6, 0.5, 'Myelin (black)']]},
+    'nerve-ts': {w: 720, h: 406, title: 'Peripheral nerve, cross-section, 200×', alt: 'Cross-section of a nerve fascicle with many fibres',
+      cap: 'A fascicle packed with fibres cut across: each shows as a <b>pale ring</b> with a small central dot, the <b>axon</b>, with pink endoneurium between them; the <b>perineurium</b> bounds the fascicle on the left. Uploader: cross section of nerve, 200×; stain not stated.',
+      credit: cr('Nervous Tissue Nerve Bundle (40106759090).jpg', BCC, 'cc0', 'resized'),
+      labels: [[0.11, 0.45, 'Perineurium'], [0.5, 0.5, 'Nerve fibres'], [0.04, 0.8, 'Outside the fascicle']]},
+    'spinal-ganglion': {w: 720, h: 331, title: 'Spinal (dorsal root) ganglion, human', alt: 'Large round ganglion cells each ringed by small satellite cells',
+      cap: 'Large, rounded <b>ganglion cells</b>, some showing a nucleus with a nucleolus, each surrounded by a ring of small <b>satellite (capsule) cells</b>; bundles of fibres pass between the groups. Uploader: human spinal ganglion; stain not stated.',
+      credit: cr('Spinalganglion.jpg', 'M-J-G', 'bysa4', 'cropped (the uploader\'s German labels removed) and resized'),
+      labels: [[0.66, 0.48, 'Ganglion cell'], [0.58, 0.34, 'Satellite cells'], [0.88, 0.9, 'Nerve fibres']]},
+    'muscular-artery': {w: 720, h: 616, title: 'Muscular artery, cross-section (human)', alt: 'Cross-section of a muscular artery with a wavy internal elastic lamina',
+      cap: 'Wide lumen; a scalloped, <b>wavy internal elastic lamina</b> at the lumen edge; a thick <b>media</b> of smooth muscle; a thinner <b>external elastic lamina</b> at its outer edge; the <b>adventitia</b> outside (stained blue here). Uploader: bright-field micrograph of a human artery; stain not stated.',
+      credit: cr('Artery.png', 'Lord of Konrad', 'cc0', 'resized'),
+      labels: [[0.55, 0.5, 'Lumen'], [0.55, 0.262, 'Internal elastic lamina'], [0.42, 0.226, 'External elastic lamina'], [0.29, 0.45, 'Media'], [0.5, 0.93, 'Adventitia']]},
+  },
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918: nervous tissue, ganglia, structure of arteries, veins and capillaries); StatPearls (NCBI Bookshelf); open-access reviews on myelin imaging, perineurial cells, peripheral nerves, vascular elastic fibres and endothelial permeability; Wikipedia (not the OpenStax-derived "Neuron" and "Chemical synapse" articles).',
+  models: 'Drawings: schematic, not to scale; label points on the micrographs placed by eye (approximate).',
+  images: 'Micrographs via Wikimedia Commons (each credited under its picture): Berkshire Community College Bioscience Image Library (CC0), Lord of Konrad (CC0), M-J-G (CC BY-SA 4.0); cropped/resized and labelled for this page.',
+};
+
+/* ===================== PAGE ===================== */
+const {$, el, text, chips, pressed, table, micro} = Histo;
+$('lede').textContent = DATA.lede; $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models; $('images').innerHTML = DATA.images;
+const mk = (box, id) => micro(box, Object.assign({id, file: id + '.jpg'}, DATA.micros[id]));
+const T = (s, x, y, t, a = 'start', size = 10.5) => text(s, x, y, t, {'text-anchor': a, class: 'lab', style: `font-size:${(size * Histo.SM).toFixed(1)}px`});
+
+/* ---------- neuron ---------- */
+function drawNeuron(k) {
+  const s = $('neuron'); s.replaceChildren();
+  const on = x => !k || k === x, op = x => on(x) ? 1 : .25;
+  const cx = 110, cy = 125;
+  const dg = el('g', {opacity: op('den')}, s);
+  for (const [a, l] of [[-2.4, 70], [-1.7, 80], [2.3, 75], [1.9, 60], [-2.9, 60], [2.9, 66]]) {
+    const x1 = cx + Math.cos(a) * 30, y1 = cy + Math.sin(a) * 30, x2 = cx + Math.cos(a) * l, y2 = cy + Math.sin(a) * l;
+    el('path', {d: `M${x1} ${y1} L${x2} ${y2} l ${Math.cos(a + .5) * 18} ${Math.sin(a + .5) * 18} M${x2} ${y2} l ${Math.cos(a - .5) * 16} ${Math.sin(a - .5) * 16}`, stroke: 'var(--cyto)', 'stroke-width': 6, 'stroke-linecap': 'round', fill: 'none'}, dg);
+    for (let i = 0; i < 3; i++) el('circle', {cx: cx + Math.cos(a) * (36 + i * 8), cy: cy + Math.sin(a) * (36 + i * 8), r: 1.6, fill: 'var(--nissl)'}, dg);
+  }
+  const bg = el('g', {opacity: op('body')}, s);
+  el('circle', {cx, cy, r: 34, fill: 'var(--cyto)'}, bg);
+  for (let i = 0; i < 26; i++) { const a = i * 2.4, d = 20 + (i % 3) * 4; el('rect', {x: cx + Math.cos(a) * d - 2, y: cy + Math.sin(a) * d - 1.5, width: 4, height: 3, fill: 'var(--nissl)', transform: `rotate(${i * 37} ${cx + Math.cos(a) * d} ${cy + Math.sin(a) * d})`}, bg); }
+  el('circle', {cx, cy, r: 13, fill: 'var(--surface)', stroke: 'var(--nucleus)', 'stroke-width': 2}, bg);
+  el('circle', {cx, cy, r: 4, fill: 'var(--nucleus)'}, bg);
+  const hg = el('g', {opacity: op('hil')}, s);
+  el('path', {d: `M${cx + 30} ${cy - 12} L${cx + 52} ${cy - 3} L${cx + 52} ${cy + 3} L${cx + 30} ${cy + 12} Z`, fill: 'var(--cyto)'}, hg);
+  const ag = el('g', {opacity: op('ax')}, s);
+  el('line', {x1: cx + 52, y1: cy, x2: 404, y2: cy, stroke: 'var(--cyto)', 'stroke-width': 5}, ag);
+  for (let x = 190; x < 390; x += 52) el('rect', {x, y: cy - 9, width: 46, height: 18, rx: 9, fill: 'var(--myelin)', stroke: 'var(--ink)', 'stroke-width': .6, 'stroke-opacity': .5}, ag);
+  for (const dy of [-14, 0, 14]) { el('line', {x1: 400, y1: cy, x2: 414, y2: cy + dy, stroke: 'var(--cyto)', 'stroke-width': 3}, ag); el('circle', {cx: 414, cy: cy + dy, r: 4, fill: 'var(--cyto)'}, ag); }
+  T(s, cx, cy + 54, 'cell body', 'middle'); T(s, cx, cy - 18, 'nucleus', 'middle', 9.5);
+  T(s, 20, 30, 'dendrites'); T(s, cx + 44, cy - 20, 'axon hillock'); T(s, 240, cy - 18, 'axon with myelin');
+  T(s, 236, cy + 30, 'node'); el('line', {x1: 240, y1: cy + 21, x2: 239, y2: cy + 9, stroke: 'var(--muted)'}, s);
+  T(s, 410, cy + 34, 'terminals', 'end'); T(s, 30, 226, 'Nissl granules: dark flecks in', 'start', 9.5); T(s, 30, 240, 'the cell body and dendrites', 'start', 9.5);
+  const it = DATA.neu.find(x => x[0] === k); $('neu-text').innerHTML = it ? '<p>' + it[2] + '</p>' : '<p class="muted">Pick a part to light it up.</p>';
+  pressed($('neu-chips'), k);
+}
+$('neu-cap').innerHTML = DATA.neuCap; chips($('neu-chips'), DATA.neu.map(e => [e[0], e[1]]), drawNeuron); drawNeuron('body');
+$('neu-types').innerHTML = DATA.neuTypes; mk($('neu-micro'), 'multipolar-neuron');
+
+/* ---------- fibre ---------- */
+function drawFibre(k) {
+  const s = $('fibre'); s.replaceChildren();
+  const y = 70;
+  if (k !== 'un') {
+    el('line', {x1: 10, y1: y, x2: 410, y2: y, stroke: 'var(--nerve)', 'stroke-width': 5}, s);
+    for (let x = 14; x < 400; x += 130) {
+      el('rect', {x, y: y - 20, width: 118, height: 40, rx: 20, fill: 'var(--myelin)', stroke: 'var(--ink)', 'stroke-width': .6, 'stroke-opacity': .5, opacity: k === 'no' ? .5 : 1}, s);
+      el('line', {x1: x + 4, y1: y, x2: x + 114, y2: y, stroke: 'var(--nerve)', 'stroke-width': 5}, s);
+      el('ellipse', {cx: x + 59, cy: y - 24, rx: 16, ry: 5, fill: 'var(--schwann)', stroke: 'var(--ink)', 'stroke-width': .5}, s);
+      el('ellipse', {cx: x + 59, cy: y - 24, rx: 6, ry: 3, fill: 'var(--nucleus)'}, s);
+    }
+    for (const xn of [138, 268]) { el('circle', {cx: xn, cy: y, r: 14, fill: 'none', stroke: k === 'no' ? 'var(--mark)' : 'var(--muted)', 'stroke-width': k === 'no' ? 2.5 : 1, 'stroke-dasharray': '3 2'}, s); }
+    T(s, 138, y + 34, 'node', 'middle'); T(s, 268, y + 34, 'node', 'middle');
+    el('path', {d: `M152 ${y + 44} L254 ${y + 44}`, stroke: 'var(--ink)', 'stroke-width': 1, 'marker-start': 'url(#ar)', 'marker-end': 'url(#ar)'}, s);
+    T(s, 203, y + 58, 'internode (one Schwann cell)', 'middle');
+    T(s, 14, y - 34, 'Schwann cell nucleus', 'start', 9.5);
+    T(s, 10, 14, 'Myelinated fibre (longitudinal)');
+    /* cross-section of the myelin wrap */
+    const cx = 90, cy = 172;
+    for (let r = 30; r > 12; r -= 3) el('circle', {cx, cy, r, fill: 'none', stroke: 'var(--myelin)', 'stroke-width': 2.4}, s);
+    el('circle', {cx, cy, r: 33, fill: 'none', stroke: 'var(--schwann)', 'stroke-width': 4}, s);
+    el('circle', {cx, cy, r: 10, fill: 'var(--nerve)'}, s);
+    T(s, cx + 44, cy - 10, 'cross-section: axon wrapped');
+    T(s, cx + 44, cy + 4, 'by many turns of Schwann-');
+    T(s, cx + 44, cy + 18, 'cell membrane (myelin)');
+  } else {
+    const cx = 150, cy = 110;
+    el('ellipse', {cx, cy, rx: 110, ry: 70, fill: 'var(--schwann)', stroke: 'var(--ink)', 'stroke-width': .6}, s);
+    el('ellipse', {cx: cx - 60, cy: cy + 30, rx: 18, ry: 9, fill: 'var(--nucleus)'}, s);
+    for (const [x, yy] of [[cx - 30, cy - 30], [cx + 10, cy - 40], [cx + 50, cy - 20], [cx + 20, cy + 10], [cx + 60, cy + 30], [cx - 10, cy + 40]]) {
+      { const n = Math.hypot((x - cx) / 110, (yy - cy) / 70) || 1, bx = cx + (x - cx) / n, by = cy + (yy - cy) / n; el('line', {x1: x, y1: yy, x2: bx, y2: by, stroke: 'var(--ink)', 'stroke-width': .9}, s); }
+      el('circle', {cx: x, cy: yy, r: 8, fill: 'var(--nerve)'}, s);
+    }
+    T(s, 10, 14, 'Unmyelinated fibres (cross-section)'); T(s, cx + 116, cy - 50, 'Schwann cell'); T(s, cx, 198, 'small axons, no myelin', 'middle'); T(s, cx, 212, '(a Remak bundle)', 'middle');
+  }
+  const d = el('defs', {}, s); const m = el('marker', {id: 'ar', viewBox: '0 0 6 6', refX: 3, refY: 3, markerWidth: 5, markerHeight: 5, orient: 'auto-start-reverse'}, d); el('path', {d: 'M0 0 L6 3 L0 6 Z', fill: 'var(--ink)'}, m);
+  const it = DATA.fib.find(x => x[0] === k); $('fib-text').innerHTML = '<p>' + it[2] + '</p>';
+  pressed($('fib-chips'), k);
+}
+$('fib-cap').innerHTML = DATA.fibCap; chips($('fib-chips'), DATA.fib.map(e => [e[0], e[1]]), drawFibre); drawFibre('my');
+mk($('fib-micro'), 'nerve-ls-osmium');
+
+/* ---------- nerve cross-section ---------- */
+function drawNerve(k) {
+  const s = $('nerve'); s.replaceChildren();
+  const on = x => !k || k === x;
+  el('ellipse', {cx: 150, cy: 130, rx: 140, ry: 118, fill: 'var(--collagen)', opacity: on('epi') ? .55 : .2, stroke: 'var(--collagen)', 'stroke-width': on('epi') ? 5 : 2}, s);
+  el('circle', {cx: 160, cy: 132, r: 7, fill: 'var(--artery)', opacity: .85}, s); el('circle', {cx: 176, cy: 136, r: 6, fill: 'var(--vein)', opacity: .85}, s);
+  for (const [fx, fy, fr] of [[95, 95, 48], [195, 90, 44], [140, 175, 42], [222, 175, 32]]) {
+    el('circle', {cx: fx, cy: fy, r: fr, fill: 'var(--surface)', stroke: 'var(--ink)', 'stroke-width': on('peri') ? 3.5 : 1.2, 'stroke-opacity': on('peri') ? 1 : .4}, s);
+    for (let i = 0; i < 26; i++) { const a = i * 2.39996, d = Math.sqrt(i / 26) * (fr - 8);
+      const x = fx + d * Math.cos(a), y = fy + d * Math.sin(a);
+      el('circle', {cx: x, cy: y, r: 4.2, fill: 'var(--myelin)', stroke: 'var(--collagen)', 'stroke-width': on('endo') ? 1.8 : .5}, s);
+      el('circle', {cx: x, cy: y, r: 1.5, fill: 'var(--nerve)'}, s); }
+  }
+  T(s, 150, 254, 'epineurium (round the whole nerve)', 'middle', 10);
+  T(s, 150, 30, 'perineurium (round a fascicle)', 'middle', 10);
+  T(s, 8, 182, 'endoneurium', 'start', 9.5); el('line', {x1: 40, y1: 172, x2: 88, y2: 112, stroke: 'var(--ink)', 'stroke-width': .8}, s);
+  T(s, 244, 126, 'vessels', 'start', 9.5); el('line', {x1: 242, y1: 124, x2: 184, y2: 136, stroke: 'var(--ink)', 'stroke-width': .8}, s);
+  const it = DATA.nv.find(x => x[0] === k); $('nv-text').innerHTML = it ? '<p>' + it[2] + '</p>' : '';
+  pressed($('nv-chips'), k);
+}
+$('nv-cap').innerHTML = DATA.nvCap; chips($('nv-chips'), DATA.nv.map(e => [e[0], e[1]]), drawNerve); drawNerve('peri');
+mk($('nv-micro'), 'nerve-ts');
+
+/* ---------- ganglia ---------- */
+mk($('ga-micro'), 'spinal-ganglion');
+table($('ga-table'), ['', 'Spinal (dorsal root) ganglion', 'Sympathetic ganglion'], DATA.gaRows);
+$('ga-note').innerHTML = DATA.gaNote.replace('Nervous system (general)', '<a href="../general/nervous-system.html#h-ga">Nervous system (general)</a>');
+
+/* ---------- synapse ---------- */
+function drawSyn(k) {
+  const s = $('syn'); s.replaceChildren();
+  if (k === 'chem') {
+    el('path', {d: 'M20 20 L120 20 Q190 20 200 100 Q190 180 120 180 L20 180', fill: 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': 1}, s);
+    for (let i = 0; i < 22; i++) el('circle', {cx: 120 + (i * 37) % 70, cy: 50 + (i * 23) % 100, r: 6, fill: 'var(--vesicle)', stroke: 'var(--ink)', 'stroke-width': .6}, s);
+    el('ellipse', {cx: 70, cy: 70, rx: 26, ry: 12, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1}, s); T(s, 70, 74, 'mitochondrion', 'middle', 8.5);
+    el('path', {d: 'M226 10 L226 190', stroke: 'var(--ink)', 'stroke-width': 1.2}, s);
+    el('rect', {x: 226, y: 10, width: 120, height: 180, fill: 'var(--cyto)', opacity: .6}, s);
+    for (let y = 50; y < 160; y += 14) el('rect', {x: 226, y, width: 8, height: 8, fill: 'var(--rcpt)'}, s);
+    for (const [x, y] of [[208, 70], [214, 100], [210, 130]]) el('circle', {cx: x, cy: y, r: 2, fill: 'var(--vesicle)', stroke: 'var(--ink)', 'stroke-width': .5}, s);
+    T(s, 20, 14, 'presynaptic terminal (axon)'); T(s, 110, 202, 'vesicles of transmitter', 'middle');
+    T(s, 250, 222, 'synaptic cleft', 'middle'); el('line', {x1: 236, y1: 212, x2: 214, y2: 150, stroke: 'var(--ink)', 'stroke-width': .8}, s); T(s, 340, 14, 'postsynaptic cell', 'end'); T(s, 350, 200, 'receptors', 'end'); el('line', {x1: 320, y1: 190, x2: 236, y2: 156, stroke: 'var(--ink)', 'stroke-width': .8}, s);
+  } else {
+    el('rect', {x: 20, y: 20, width: 150, height: 170, fill: 'var(--cyto)', stroke: 'var(--ink)'}, s);
+    el('rect', {x: 186, y: 20, width: 150, height: 170, fill: 'var(--cyto)', stroke: 'var(--ink)', opacity: .8}, s);
+    for (let y = 60; y < 150; y += 14) { el('rect', {x: 166, y, width: 24, height: 8, rx: 2, fill: 'var(--gapj)'}, s); }
+    el('path', {d: 'M120 200 L240 200', stroke: 'var(--ink)', 'marker-start': 'url(#ar2)', 'marker-end': 'url(#ar2)'}, s);
+    T(s, 178, 46, 'gap junction', 'middle'); T(s, 180, 222, 'current both ways', 'middle'); T(s, 95, 110, 'cell 1', 'middle'); T(s, 262, 110, 'cell 2', 'middle');
+  }
+  const d = el('defs', {}, s); const m = el('marker', {id: 'ar2', viewBox: '0 0 6 6', refX: 3, refY: 3, markerWidth: 5, markerHeight: 5, orient: 'auto-start-reverse'}, d); el('path', {d: 'M0 0 L6 3 L0 6 Z', fill: 'var(--ink)'}, m);
+  const it = DATA.syn.find(x => x[0] === k); $('syn-text').innerHTML = '<p>' + it[2] + '</p>' + '<p class="muted">Types of synapse by the parts in contact: <a href="../general/nervous-system.html#h-sy">Nervous system (general)</a>.</p>';
+  pressed($('syn-chips'), k);
+}
+chips($('syn-chips'), DATA.syn.map(e => [e[0], e[1]]), drawSyn); drawSyn('chem');
+
+/* ---------- vessels ---------- */
+function drawVessel(k) {
+  const s = $('vessel'); s.replaceChildren();
+  const cx = 150, cy = 128;
+  const ring = (r1, r0, fill, op = 1) => el('path', {d: `M${cx - r1} ${cy} a${r1} ${r1} 0 1 0 ${2 * r1} 0 a${r1} ${r1} 0 1 0 ${-2 * r1} 0 Z M${cx - r0} ${cy} a${r0} ${r0} 0 1 1 ${2 * r0} 0 a${r0} ${r0} 0 1 1 ${-2 * r0} 0 Z`, fill, 'fill-rule': 'evenodd', opacity: op}, s);
+  const wavy = (r, w) => { let d = ''; for (let i = 0; i <= 72; i++) { const a = i / 72 * 2 * Math.PI, rr = r + Math.sin(i * 1.0 * 4) * 2.2; d += (i ? 'L' : 'M') + (cx + rr * Math.cos(a)).toFixed(1) + ' ' + (cy + rr * Math.sin(a)).toFixed(1); } el('path', {d: d + 'Z', fill: 'none', stroke: 'var(--t-el)', 'stroke-width': w}, s); };
+  if (k === 'ela') { ring(118, 104, 'var(--t-adv)'); ring(104, 52, 'var(--t-musc)'); for (let r = 58; r < 104; r += 7) el('circle', {cx, cy, r, fill: 'none', stroke: 'var(--t-el)', 'stroke-width': 1.6}, s); ring(52, 46, 'var(--t-endo)'); el('circle', {cx, cy, r: 46, fill: 'var(--lumen-a)'}, s); }
+  if (k === 'mus') { ring(112, 92, 'var(--t-adv)'); ring(92, 52, 'var(--t-musc)'); el('circle', {cx, cy, r: 92, fill: 'none', stroke: 'var(--t-el)', 'stroke-width': 1.4}, s); wavy(52, 2.6); ring(50, 46, 'var(--t-endo)'); el('circle', {cx, cy, r: 46, fill: 'var(--lumen-a)'}, s); }
+  if (k === 'art') { ring(44, 36, 'var(--t-adv)'); ring(36, 24, 'var(--t-musc)'); ring(24, 21, 'var(--t-endo)'); el('circle', {cx, cy, r: 21, fill: 'var(--lumen-a)'}, s); }
+  if (k === 'vei') { el('path', {d: `M${cx - 110} ${cy - 20} Q${cx - 120} ${cy - 75} ${cx} ${cy - 72} Q${cx + 120} ${cy - 76} ${cx + 112} ${cy - 10} Q${cx + 118} ${cy + 66} ${cx} ${cy + 62} Q${cx - 116} ${cy + 66} ${cx - 110} ${cy - 20} Z`, fill: 'var(--t-adv)'}, s);
+    el('path', {d: `M${cx - 92} ${cy - 18} Q${cx - 100} ${cy - 58} ${cx} ${cy - 56} Q${cx + 100} ${cy - 60} ${cx + 94} ${cy - 10} Q${cx + 98} ${cy + 50} ${cx} ${cy + 46} Q${cx - 98} ${cy + 50} ${cx - 92} ${cy - 18} Z`, fill: 'var(--t-musc)'}, s);
+    el('path', {d: `M${cx - 84} ${cy - 16} Q${cx - 92} ${cy - 50} ${cx} ${cy - 48} Q${cx + 92} ${cy - 52} ${cx + 86} ${cy - 10} Q${cx + 90} ${cy + 42} ${cx} ${cy + 38} Q${cx - 90} ${cy + 42} ${cx - 84} ${cy - 16} Z`, fill: 'var(--lumen-v)', stroke: 'var(--t-endo)', 'stroke-width': 3}, s); }
+  if (k === 'cap') { el('circle', {cx, cy, r: 22, fill: 'var(--bm)'}, s); el('circle', {cx, cy, r: 20, fill: 'var(--t-endo)'}, s); el('circle', {cx, cy, r: 15, fill: 'var(--lumen-c)'}, s); el('ellipse', {cx: cx + 16, cy, rx: 4, ry: 7, fill: 'var(--nucleus)'}, s); }
+  const lab = {ela: 'aorta-type: many elastic lamellae', mus: 'wavy internal elastic lamina', art: 'arteriole: 1–2 muscle layers', vei: 'thin media, thick adventitia', cap: 'endothelium + basement membrane'}[k];
+  T(s, 150, 252, lab, 'middle', 10.5);
+  const keys = [['--t-endo', 'Endothelium (intima)'], ['--t-musc', 'Smooth muscle (media)'], ['--t-el', 'Elastic lamina'], ['--t-adv', 'Adventitia']];
+  if (k === 'cap') keys.splice(1, 3, ['--bm', 'Basement membrane']);
+  $('ves-key').innerHTML = keys.map(([c, l]) => `<span><i style="background:var(${c})"></i>${l}</span>`).join('');
+  const it = DATA.ves.find(x => x[0] === k); $('ves-text').innerHTML = '<p>' + it[2] + '</p>';
+  pressed($('ves-chips'), k);
+  const box = $('ves-micro'); box.replaceChildren();
+  if (k === 'mus') mk(box, 'muscular-artery');
+  else box.innerHTML = '<p class="muted">' + (k === 'ela' ? 'No open micrograph of an elastic artery could be used here (download refused); compare the drawing with the muscular artery.' : 'Micrograph: see the muscular artery (pick "Muscular artery").') + '</p>';
+}
+$('ves-cap').innerHTML = DATA.vesCap; chips($('ves-chips'), DATA.ves.map(e => [e[0], e[1]]), drawVessel); drawVessel('mus');
+table($('ves-table'), ['', 'Elastic artery', 'Muscular artery', 'Vein', 'Capillary'], DATA.vesRows);
+
+function drawCap(k) {
+  const s = $('capil'); s.replaceChildren();
+  el('rect', {x: 10, y: 40, width: 340, height: 70, fill: 'var(--lumen-c)'}, s);
+  T(s, 180, 82, 'lumen', 'middle');
+  const wall = (y, up) => {
+    if (k === 'sin') { for (let x = 10; x < 350; x += 90) el('rect', {x, y, width: 64, height: 10, rx: 4, fill: 'var(--t-endo)'}, s); }
+    else el('rect', {x: 10, y, width: 340, height: 10, fill: 'var(--t-endo)'}, s);
+    if (k === 'fen') for (let x = 40; x < 350; x += 36) el('rect', {x, y: y - 1, width: 8, height: 12, fill: 'var(--lumen-c)'}, s);
+    const by = up ? y - 5 : y + 12;
+    if (k === 'sin') for (let x = 10; x < 350; x += 90) el('rect', {x, y: by, width: 50, height: 3, fill: 'var(--bm)'}, s);
+    else el('rect', {x: 10, y: by, width: 340, height: 3, fill: 'var(--bm)'}, s);
+    if (k === 'cont') for (let x = 96; x < 350; x += 110) el('rect', {x, y: y - 2, width: 4, height: 14, fill: 'var(--ink)', opacity: .6}, s);
+  };
+  wall(30, true); wall(110, false);
+  if (k === 'sin') T(s, 180, 152, 'cells, proteins pass through gaps', 'middle', 9.5);
+  const lab = {cont: ['unbroken endothelium;', 'junctions between cells (dark)'], fen: ['pores (fenestrae) through', 'the endothelial cells'], sin: ['wide gaps between cells;', 'basement membrane incomplete']}[k];
+  T(s, 180, 172, lab[0], 'middle', 10); T(s, 180, 188, lab[1], 'middle', 10);
+  T(s, 352, 22, 'basement membrane', 'end', 9); T(s, 12, 22, 'endothelium', 'start', 9);
+  const it = DATA.capTypes.find(x => x[0] === k); $('cap-text').innerHTML = '<p>' + it[2] + '</p>';
+  pressed($('cap-chips'), k);
+}
+chips($('cap-chips'), DATA.capTypes.map(e => [e[0], e[1]]), drawCap); drawCap('cont');
+window.ready = true;
+</script>
+</body>
+</html>
