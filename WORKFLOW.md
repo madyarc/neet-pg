@@ -8,17 +8,23 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 31 (abdominal cavity, peritoneum, organs) started 2026-11-21 in parallel: agent af6d044d; sheet fill-abdo, model
-  models/abdo (tools/abdomen-pelvis/organs_config.py), page abdomen-pelvis/organs.html (may split). Target AN44.1, 44.7,
-  47.1–47.7.
+- Module 31 (abdominal cavity, peritoneum, organs) started 2026-11-21: page abdomen-pelvis/organs.html (single page).
+  - [x] build (agent af6d044d; 573 quotes; 98-part 658 KB models/abdo; no images; AN47.6 partial)  [ ] review (agent
+    a83e6bd3 running)  [ ] fixes  [ ] docs  [ ] commit, push, live test
+  - Home: add abdo/abdo.json to region_pages.py MODELS after abd-nv (only l_spleen new) and an 'Abdominal organs'
+    REGION_PAGES entry? Decide at docs step.
+- Module 32 (face and neck regions and glands) started 2026-11-21 in parallel: agent a3248667; sheet fill-hnreg, model
+  models/hn-reg (tools/head-neck/regions_config.py), page head-neck/regions.html (may split). Target AN28.2, 28.9, 28.10,
+  29.1, 29.2, 29.4, 29.5, 33.1, 34.1–34.3, 35.2, 35.8, 42.3, AN43.6 glands and pterion.
 - Local test server: 127.0.0.1:8765.
 
 ## Next (the plan, in order)
 
 | # | Module | Page | Model | Notes |
 |---|--------|------|-------|-------|
-| 31 | Abdominal organs | anatomy/abdomen-pelvis/ | own pack | |
-| 32 | Head and neck regions and organs | anatomy/head-neck/ | own pack | parotid, thyroid, nose, tonsil, ear, AN43.6 glands |
+| 33 | Mouth, pharynx, nose, larynx | anatomy/head-neck/ | own pack | AN36.x, 37.x, 38.2 |
+| 34 | Ear and eye (anatomy) | anatomy/head-neck/ | own pack | AN40.x, 41.x, 31.4, 30.5; link ophthalmology |
+| 35 | Pelvic viscera, perineum, male genitalia | anatomy/abdomen-pelvis/ | own pack | AN46, 48, 49 |
 | 33 | Neuroanatomy | | | |
 | 34 | Histology, embryology, genetics | | | |
 
