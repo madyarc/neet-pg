@@ -457,7 +457,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 - [x] **AN50.1** Describe the curvatures of the vertebral column — *[The Vertebral Column](back/vertebral-column.html)*
 - [x] **AN50.2** Describe & demonstrate the type, articular ends, ligaments and movements of Intervertebral joints, Sacroiliac joints & Pubic symphysis — *[Joints of the Jaw, Spine and Pelvis](back/joints.html); discs: [The Vertebral Column](back/vertebral-column.html)*
-- [ ] **AN50.3** Describe lumbar puncture (site, direction of the needle, structures pierced during the lumbar puncture)
+- [x] **AN50.3** Describe lumbar puncture (site, direction of the needle, structures pierced during the lumbar puncture) — *site, direction, layers pierced, adult and newborn: [Meninges, CSF and the Spinal Cord](neuro/meninges-cord.html)*
 - [x] **AN50.4** Explain the anatomical basis of Scoliosis, Lordosis, Prolapsed disc, Spondylolisthesis & Spina bifida — *scoliosis, hyperlordosis, spondylolysis/spondylolisthesis (3D), spina bifida types: [The Vertebral Column](back/vertebral-column.html); prolapsed disc: [Joints of the Jaw, Spine and Pelvis](back/joints.html)*
 
 ### 51. Sectional Anatomy
@@ -497,42 +497,42 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 56. Meninges & CSF
 
-- [ ] **AN56.1** Describe & identify various layers of meninges with its extent & modifications
-- [ ] **AN56.2** Describe formation, circulation and absorption of CSF with its applied anatomy.
+- [x] **AN56.1** Describe & identify various layers of meninges with its extent & modifications — *meninges, spaces, folds: [Meninges, CSF and the Spinal Cord](neuro/meninges-cord.html)*
+- [x] **AN56.2** Describe formation, circulation and absorption of CSF with its applied anatomy. — *CSF formation, circulation, absorption, hydrocephalus types: [Meninges, CSF and the Spinal Cord](neuro/meninges-cord.html)*
 
 ### 57. Spinal Cord
 
-- [ ] **AN57.1** Identify external features of spinal cord
-- [ ] **AN57.2** Describe extent of spinal cord in child & adult with its clinical implication
-- [ ] **AN57.3** Draw & label transverse section of spinal cord at mid-cervical & mid- thoracic level
-- [ ] **AN57.4** Enumerate ascending & descending tracts at mid thoracic level of spinal cord
-- [ ] **AN57.5** Describe the anatomical basis of clinical conditions affecting the grey and white matter of spinal cord (Brown-Sequard Syndrome, Poliomyelitis, Amyotrophic lateral sclerosis or motor neuron disease, Syringomyelia, Hereditary sensory neuropathy, Subacute Combined degeneration, Transversemyelitis, paraplegia)
+- [x] **AN57.1** Identify external features of spinal cord — *external features, enlargements, end levels, segments vs vertebrae in 3D: [Meninges, CSF and the Spinal Cord](neuro/meninges-cord.html)*
+- [x] **AN57.2** Describe extent of spinal cord in child & adult with its clinical implication — *grey and white matter, cord sections at C6, T6, L4: [Meninges, CSF and the Spinal Cord](neuro/meninges-cord.html)*
+- [x] **AN57.3** Draw & label transverse section of spinal cord at mid-cervical & mid- thoracic level — *tracts with laminae and decussations: [Meninges, CSF and the Spinal Cord](neuro/meninges-cord.html)*
+- [x] **AN57.4** Enumerate ascending & descending tracts at mid thoracic level of spinal cord — *blood supply: [Meninges, CSF and the Spinal Cord](neuro/meninges-cord.html)*
+- [x] **AN57.5** Describe the anatomical basis of clinical conditions affecting the grey and white matter of spinal cord (Brown-Sequard Syndrome, Poliomyelitis, Amyotrophic lateral sclerosis or motor neuron disease, Syringomyelia, Hereditary sensory neuropathy, Subacute Combined degeneration, Transversemyelitis, paraplegia) — *Brown-Séquard, syringomyelia, polio, ALS, SACD, tabes, anterior spinal artery, transverse myelitis: [Meninges, CSF and the Spinal Cord](neuro/meninges-cord.html)*
 
 ### 58. Medulla Oblongata
 
-- [ ] **AN58.1** Identify external features of medulla oblongata
-- [ ] **AN58.2** Describe transverse section of medulla oblongata at the level of 1) pyramidal decussation, 2) sensory decussation 3) Inferior Olivary Nucleus
-- [ ] **AN58.3** Describe cranial nerve nuclei in medulla oblongata with their functional group
-- [ ] **AN58.4** Describe the anatomical basis of clinical conditions affecting the medulla oblongata (Medial and lateral medullary syndromes, Crossed Diplegia)
+- [x] **AN58.1** Identify external features of medulla oblongata — *external features in 3D: [Brainstem and Cerebellum](neuro/brainstem.html)*
+- [x] **AN58.2** Describe transverse section of medulla oblongata at the level of 1) pyramidal decussation, 2) sensory decussation 3) Inferior Olivary Nucleus — *sections at three medullary levels: [Brainstem and Cerebellum](neuro/brainstem.html)*
+- [x] **AN58.3** Describe cranial nerve nuclei in medulla oblongata with their functional group — *medial and lateral medullary syndromes: [Brainstem and Cerebellum](neuro/brainstem.html)*
+- [~] **AN58.4** Describe the anatomical basis of clinical conditions affecting the medulla oblongata (Medial and lateral medullary syndromes, Crossed Diplegia) — *in [Brainstem and Cerebellum](neuro/brainstem.html); "crossed diplegia" taken as cruciate paralysis (one source)*
 
 ### 59. Pons
 
-- [ ] **AN59.1** Identify external features of pons
-- [ ] **AN59.2** Draw & label transverse section of pons at the upper and lower level
-- [ ] **AN59.3** Describe cranial nerve nuclei in pons with their functional group
-- [ ] **AN59.4** Describe the anatomical basis of clinical conditions affecting the pons (Locked-in syndrome, Pontine haemorrhage, Foville syndrome, Raymond syndrome, Millard-Gubler syndrome)
+- [x] **AN59.1** Identify external features of pons — *external features: [Brainstem and Cerebellum](neuro/brainstem.html)*
+- [x] **AN59.2** Draw & label transverse section of pons at the upper and lower level — *sections at two pontine levels: [Brainstem and Cerebellum](neuro/brainstem.html)*
+- [x] **AN59.3** Describe cranial nerve nuclei in pons with their functional group — *Millard–Gubler, Foville, Raymond, locked-in, pontine haemorrhage: [Brainstem and Cerebellum](neuro/brainstem.html)*
+- [x] **AN59.4** Describe the anatomical basis of clinical conditions affecting the pons (Locked-in syndrome, Pontine haemorrhage, Foville syndrome, Raymond syndrome, Millard-Gubler syndrome) — *in [Brainstem and Cerebellum](neuro/brainstem.html)*
 
 ### 60. Cerebellum
 
-- [ ] **AN60.1** Describe & demonstrate external & internal features of cerebellum
-- [ ] **AN60.2** Describe connections of cerebellar cortex and intracerebellar nuclei
-- [ ] **AN60.3** Describe anatomical basis of cerebellar dysfunction
+- [x] **AN60.1** Describe & demonstrate external & internal features of cerebellum — *parts, lobes, peduncles in 3D and a diagram: [Brainstem and Cerebellum](neuro/brainstem.html)*
+- [x] **AN60.2** Describe connections of cerebellar cortex and intracerebellar nuclei — *deep nuclei and connections: [Brainstem and Cerebellum](neuro/brainstem.html)*
+- [x] **AN60.3** Describe anatomical basis of cerebellar dysfunction — *cerebellar signs, ipsilateral: [Brainstem and Cerebellum](neuro/brainstem.html)*
 
 ### 61. Midbrain
 
-- [ ] **AN61.1** Identify external & internal features of midbrain
-- [ ] **AN61.2** Describe internal features of midbrain at the level of superior & inferior colliculus
-- [ ] **AN61.3** Describe the anatomical basis of clinical conditions affecting the midbrain (Weber syndrome, Benedikt syndrome, Parinaud syndrome)
+- [x] **AN61.1** Identify external & internal features of midbrain — *external features: [Brainstem and Cerebellum](neuro/brainstem.html)*
+- [x] **AN61.2** Describe internal features of midbrain at the level of superior & inferior colliculus — *sections at superior and inferior colliculus: [Brainstem and Cerebellum](neuro/brainstem.html)*
+- [x] **AN61.3** Describe the anatomical basis of clinical conditions affecting the midbrain (Weber syndrome, Benedikt syndrome, Parinaud syndrome) — *Weber, Benedikt, Parinaud: [Brainstem and Cerebellum](neuro/brainstem.html)*
 
 ### 62. Cranial nerve nuclei & Cerebral hemispheres
 

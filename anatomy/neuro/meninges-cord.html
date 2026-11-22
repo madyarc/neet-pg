@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meninges, CSF and the Spinal Cord</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone, --dura, --nerve, --artery, --vein, --clin (a lesion or a clinical point), --soft.
+   Shared with other pages, same meaning: --s-csf (cerebrospinal fluid, as on back/vertebral-column.html), --skin (regions.html).
+   Page-only tokens of the neuro pages (meninges-cord.html and brainstem.html share them; chosen away from every other token of the
+   site with fill-neuro1-scripts/colcheck.py): --cordw (white matter / cord surface), --grey (grey matter of the cord), tract
+   families --t-dc (posterior column – medial lemniscus), --t-st (spinothalamic / spinal lemniscus), --t-sc (spinocerebellar),
+   --t-cst (corticospinal and corticobulbar fibres, also the pyramid), --t-ex (other descending tracts), --medulla, --pons,
+   --midb, --cblm (brainstem and cerebellum in 3D), --dien (thalamus and other context), --chp (choroid plexus), --arach
+   (arachnoid), --pia (pia mater), --fat (epidural fat, as on perineum.html). Dark --t-ex and --nuc-m shifted away from --gut and --ins (review 2026-11-22). */
+:root{--s-csf:#cfe6f5;--skin:#f1d3bf;--cordw:#d9cbe0;--grey:#9c8f99;--t-dc:#3c9df2;--t-st:#6060f2;--t-sc:#1c724a;--t-cst:#bf2f85;--t-ex:#8c5b23;
+  --medulla:#bda0c0;--pons:#8fb8d6;--midb:#dca27a;--cblm:#a8c08a;--dien:#a7b3a0;--chp:#a3586e;--arach:#7d6e8a;--pia:#d98fa8;--fat:#f3e3a6;
+  --olive:#a88f2f;--rn:#c25b56;--sn:#46343c;--nuc-m:#c45a1b;--nuc-p:#628c23;--nuc-s:#b53cf2}
+:root[data-theme="dark"]{--s-csf:#2b4a60;--skin:#7a5a48;--cordw:#6d6080;--grey:#8a7d88;--t-dc:#6fb8f5;--t-st:#8f8ff5;--t-sc:#3fae7c;--t-cst:#e35aa8;--t-ex:#a88a5a;
+  --medulla:#8c6f90;--pons:#5f88a6;--midb:#a8724c;--cblm:#6f8a52;--dien:#6f7a68;--chp:#c97890;--arach:#a596b4;--pia:#b06a82;--fat:#7d6f3c;
+  --olive:#c9ae52;--rn:#e07a74;--sn:#8a7590;--nuc-m:#e2704f;--nuc-p:#8cb84a;--nuc-s:#cf7af5;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+#topics{display:flex;flex-direction:column;gap:10px}
+#topic-text p+p,.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.scroll{overflow-x:auto}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:640px;margin:0 auto}
+.schbox{overflow-x:auto;scrollbar-color:var(--line) transparent}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:520px}.schbox svg.sch.fit{min-width:0}.swipe{display:inline}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.c{fill:var(--clin);font-weight:600}
+svg.sch text.onb{fill:#1a2130}   /* on bone (light in both themes), as on ear-eye.html */
+svg.sch .bone{fill:var(--bone);stroke:var(--muted);stroke-width:1}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .arrow{stroke:var(--muted);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+svg.sch .flow{stroke:var(--ink);stroke-width:1.8;fill:none;marker-end:url(#arr)}
+svg.sch .dash{stroke-dasharray:6 4}
+svg.sch .wm{fill:var(--cordw);stroke:var(--muted);stroke-width:1.2}
+svg.sch .gm{fill:var(--grey);stroke:var(--muted);stroke-width:.8}
+svg.sch .csf{fill:var(--s-csf)}
+svg.sch .dura{fill:none;stroke:var(--dura);stroke-width:5}
+svg.sch .durab{fill:var(--dura)}
+svg.sch .arach{fill:none;stroke:var(--arach);stroke-width:1.6;stroke-dasharray:5 3}
+svg.sch .pia{fill:none;stroke:var(--pia);stroke-width:2}
+svg.sch .fatf{fill:var(--fat)}
+svg.sch .vein{fill:var(--vein);fill-opacity:.75}
+svg.sch .art{fill:var(--artery)}
+svg.sch .nv{fill:var(--nerve);stroke:var(--ink);stroke-width:.5}
+svg.sch .nvl{stroke:var(--nerve);stroke-width:4;fill:none;stroke-linecap:round}
+svg.sch .lig{fill:var(--lig);fill-opacity:.6;stroke:var(--lig);stroke-width:1}
+svg.sch .skin{fill:var(--skin)}
+svg.sch .lesion{fill:url(#hatch);stroke:var(--clin);stroke-width:2}
+svg.sch .needle{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+svg.sch .box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .vent{fill:var(--s-csf);stroke:var(--muted);stroke-width:1}
+svg.sch .brain{fill:var(--cordw);fill-opacity:.55;stroke:var(--muted);stroke-width:1}
+svg.sch .chp{fill:var(--chp)}
+svg.sch .sinus{fill:var(--vein);fill-opacity:.85}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.credit{font-size:12px;color:var(--muted)}
+#find{font-size:14px}
+#find b{color:var(--ink)}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Meninges, CSF and the Spinal Cord</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="The spinal cord, meninges and ventricles in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <div class="key" id="key3d"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-men">
+  <h2 id="h-men">The meninges and their spaces</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="men-svg" viewBox="0 0 600 470" role="img" aria-label="Schematic transverse section of the vertebral canal at a thoracic level: the vertebral body in front, the arch behind; the epidural space with fat and veins; the dura; the potential subdural space; the arachnoid; the subarachnoid space with CSF; the pia on the cord; a denticulate ligament on each side between the anterior and posterior roots"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. Transverse section seen <b>from above</b>: the back is at the <b>top</b>, the front at the bottom, the patient's <b>right on your left</b> (as the 3D "Above" view).</p>
+    </div>
+    <div class="prose" id="men-text"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="men-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-csf">
+  <h2 id="h-csf">Cerebrospinal fluid: formation, circulation, absorption</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="csf-svg" viewBox="-60 0 730 470" role="img" aria-label="Schematic midline view of the head seen from the right: the choroid plexus in the lateral ventricle makes CSF, which flows through the interventricular foramen to the third ventricle, through the cerebral aqueduct to the fourth ventricle, out through the median and lateral apertures into the subarachnoid space and cisterna magna, round the brain and down round the cord, and back into the blood through arachnoid granulations in the superior sagittal sinus"></svg></div>
+      <div class="toggles" id="csf-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. Midline view from the <b>right</b>: the front of the head is on your <b>right</b>. The lateral ventricle lies off the midline and is drawn behind.</p>
+    </div>
+    <div class="prose" id="csf-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lp">
+  <h2 id="h-lp">Lumbar puncture: site, direction, layers</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="lp-svg" viewBox="20 0 620 545" role="img" aria-label="Schematic midline section of the lower back seen from the right, the patient curled on the side: lumbar vertebrae L1 to L5 and the sacrum; the cord ends at the L1–L2 level in an adult and lower in a newborn; the dural sac with the cauda equina in the lumbar cistern runs down to S2; the line joining the iliac crests crosses near L4; the needle passes in the midline between the L3 and L4 spines through skin, fat, supraspinous and interspinous ligaments, ligamentum flavum, epidural space, dura and arachnoid into the CSF"></svg></div>
+      <div class="toggles" id="lp-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. Midline section seen from the patient's <b>right</b>: the vertebral bodies (front) on your left, the back and the needle on your <b>right</b>, head up (drawn upright; in practice the patient lies curled on the side).</p>
+    </div>
+    <div class="prose" id="lp-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ext">
+  <h2 id="h-ext">The cord: extent, enlargements, segments</h2>
+  <div class="prose" id="ext-text"></div>
+  <div class="scroll"><table class="t stack" id="ext-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sec">
+  <h2 id="h-sec">Cross-sections, tracts and lesions</h2>
+  <div class="two">
+    <div>
+      <div class="toggles" id="lev-tg" aria-label="Level"></div>
+      <div class="schbox"><svg class="fig sch" id="sec-svg" viewBox="-70 0 700 470" role="img" aria-label="Schematic transverse section of the spinal cord at the chosen level, with the grey matter and the main ascending and descending tracts of the right side labelled, and the chosen lesion hatched"></svg></div>
+      <div class="toggles" id="les-tg" aria-label="Lesion"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, positions of the tracts approximate (they overlap in reality). Seen <b>from above</b>: the back (posterior) at the <b>top</b>, the patient's <b>right on your left</b>. Tracts are labelled on the patient's right half; the left half is the mirror image.</p>
+      <div class="key" id="sec-key"></div>
+    </div>
+    <div class="prose" id="sec-text"></div>
+  </div>
+  <p id="find" aria-live="polite"></p>
+  <div class="scroll"><table class="t stack" id="tract-table"></table></div>
+  <div class="prose" id="umn-text"></div>
+  <div class="scroll"><table class="t stack" id="les-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-neuro1.md, anatomy/DATA-SOURCES.md) ===================== */
+const L = k => k + '_l';                    // the mirrored (left) copy of a right-only part
+const SH = (l, sh) => ({l, sh});            // a label with a shorter form for narrow screens
+const RIGHT = [-1, 0, 0.05], FRONT = [0, -1, 0.05], BACK = [0, 1, 0.1], ABOVE = [0, 0.25, 1];
+const VERT = ['atlas', 'axis', 'third_cervical_vertebra', 'fourth_cervical_vertebra', 'fifth_cervical_vertebra', 'sixth_cervical_vertebra',
+  'seventh_cervical_vertebra', 'first_thoracic_vertebra', 'second_thoracic_vertebra', 'third_thoracic_vertebra', 'fourth_thoracic_vertebra',
+  'fifth_thoracic_vertebra', 'sixth_thoracic_vertebra', 'seventh_thoracic_vertebra', 'eighth_thoracic_vertebra', 'ninth_thoracic_vertebra',
+  'tenth_thoracic_vertebra', 'eleventh_thoracic_vertebra', 'twelfth_thoracic_vertebra', 'first_lumbar_vertebra', 'second_lumbar_vertebra',
+  'third_lumbar_vertebra', 'fourth_lumbar_vertebra', 'fifth_lumbar_vertebra', 'sacrum'];
+const BOTH = k => [k + '_r', k + '_l'];
+const GREY = [...BOTH('s_ant_horn'), ...BOTH('s_post_horn'), ...BOTH('s_int_grey')];
+const ASC = [...BOTH('t_gracile'), ...BOTH('t_cuneate'), ...BOTH('t_lst'), ...BOTH('t_ast'), ...BOTH('t_psct'), ...BOTH('t_asct')];
+const DESC = [...BOTH('t_lcst'), ...BOTH('t_acst')];
+const ROOTS = ['n_anterior_root_of_spinal_nerve_r', 'n_posterior_root_of_spinal_nerve_r', 'n_spinal_ganglion_r'];
+const STEM = ['b_medulla', 'b_pons', 'b_midbrain', 'b_peduncles', 'b_sup_coll_r', 'b_sup_coll_l', 'b_inf_coll_r', 'b_inf_coll_l'];
+const VENT = ['c_lat_r', 'c_lat_l', 'c_ivf', 'c_third', 'c_aqueduct', 'c_fourth', 'c_canal'];
+/* a topic: lit = parts in their own colour; solid = context kept solid; glass = drawn as glass; clip = [normal, d]: cut away n·p > d (mm);
+   labels = [key, text, point to search from (mm), 'v' = nearest vertex to that point]; pts = [point, label, colour token] */
+const TOPICS = [
+  {grp: 'Spinal cord', id: 'cord', name: 'Cord in the canal',
+    lit: ['s_white', 'n_cauda_equina'], glass: [...VERT, 'occipital_bone'], fit: ['s_white', 'n_cauda_equina', 'sacrum'], view: RIGHT, zoom: 1.0,
+    labels: [['s_white', SH('Cervical enlargement', 'Cervical enl.'), [-7, -71, 1420]], ['s_white', SH('Lumbar enlargement', 'Lumbar enl.'), [-7, -50, 1110]],
+      ['s_white', SH('Conus medullaris (end ≈ L2 here)', 'Conus'), [-1.5, -74.5, 1018], 'v'], ['n_cauda_equina', 'Cauda equina', [-6, -70, 960]],
+      ['atlas', 'C1', [-20, -70, 1480]], ['first_lumbar_vertebra', 'L1', [-30, -90, 1055]], ['second_lumbar_vertebra', 'L2', [-32, -95, 1028]], ['sacrum', 'Sacrum', [-40, -60, 880]]],
+    text: `<p>Seen from the <b>right</b>. The cord runs from the <b>foramen magnum</b> (continuous with the medulla) to about the <b>lower border of L1 or upper border of L2</b>, about <b>45 cm</b> long in men (42–43 cm in women). It widens twice — the <b>cervical enlargement</b> for the upper limbs and the <b>lumbar enlargement</b> for the lower limbs — and tapers into the <b>conus medullaris</b>. Below it the lumbar, sacral and coccygeal roots run down as the <b>cauda equina</b>. The cord is shorter than the canal because it stops growing in length early while the vertebral column keeps growing, so (Wikipedia) its segments lie <b>higher than the vertebrae of the same number</b>, more so lower down.</p>
+<p>The model is Z-Anatomy's cord (rebuilt from its sections and path): its conus ends at about <b>L2</b>, a little lower than the textbook level. The bones are glass.</p>`},
+  {grp: 'Spinal cord', id: 'dura', name: 'Dural sac and roots',
+    lit: ['n_spinal_dura', 's_white', ...ROOTS, ...ROOTS.map(L)], glass: [...VERT], fit: ['n_spinal_dura'], view: [-0.6, 0.8, 0.1], zoom: 1,
+    focusZ: [1020, 1180], fitH: 210,
+    labels: [['n_spinal_dura', SH('Dural sac (ends at L2 here)', 'Dura (ends L2)'), [-12, -68, 1015]],
+      ['n_spinal_ganglion_r', SH('Posterior root ganglion', 'Root ganglion'), [-18, -40, 1150]],
+      ['n_posterior_root_of_spinal_nerve_r', SH('Posterior (dorsal) root', 'Post. root'), [-8, -30, 1170]], ['s_white', 'Cord', [-6, -40, 1130]]],
+    glassKeys: ['n_spinal_dura'],
+    text: `<p>From behind and the right, lower thoracic and lumbar part. The <b>spinal dura</b> is a tube attached round the <b>foramen magnum</b> (where it continues as the cranial dura) and to C2–C3; outside it the <b>epidural space</b> holds fat and the internal vertebral venous plexus. Each spinal nerve is attached by a <b>posterior (dorsal, sensory) root</b> with its <b>ganglion</b> and an <b>anterior (ventral, motor) root</b>.</p>
+<p><b>Model caveat:</b> Z-Anatomy's dural sac stops at about <b>L2</b>, just below the cord. In the body the dural sac (and the subarachnoid space with CSF, the <b>lumbar cistern</b>) goes on down to the <b>lower border of S2</b> — see the lumbar puncture schematic.</p>`},
+  {grp: 'Spinal cord', id: 'grey', name: 'Grey matter',
+    lit: [...GREY], glass: ['s_white'], fit: ['s_white'], axisAt: 1330, zoom: 1, fitH: 30,
+    labels: [['s_ant_horn_r', SH('Anterior (ventral) horn', 'Ant. horn'), [-3.5, -43, 1322]], ['s_post_horn_r', SH('Posterior (dorsal) horn', 'Post. horn'), [-3.5, -33, 1336]]],
+    text: `<p>Cut across at the <b>T3 vertebra</b> and seen <b>from above and in front</b> (the back at the top, the patient's right on your left). The <b>grey matter</b> (H-shaped) lies inside the <b>white matter</b> (glass); colours are lightened because the cut shows the inside of each part. Clean drawn sections at three levels: <a href="#h-sec">Cross-sections, tracts and lesions</a>. The <b>anterior horn</b> holds the motor neurons whose axons form the anterior roots; the <b>posterior horn</b> receives the posterior (sensory) roots. In the thoracic and upper lumbar segments (T1–L2) a small <b>lateral horn</b> holds the preganglionic sympathetic neurons.</p>
+<p>Z-Anatomy's cord has one cross-section along its whole length, so the 3D horns do not change with level; the schematic below draws the cervical, thoracic and lumbar shapes.</p>`},
+  {grp: 'Spinal cord', id: 'asc', name: 'Ascending tracts',
+    lit: [...ASC], glass: ['s_white', ...GREY], fit: ['s_white'], axisAt: 1395, zoom: 1, fitH: 30, byTract: true,
+    labels: [['t_gracile_r', SH('Fasciculus gracilis', 'Gracilis'), [-1, -60, 1398]], ['t_cuneate_r', SH('Fasciculus cuneatus', 'Cuneatus'), [-3, -64, 1392]],
+      ['t_psct_r', SH('Posterior spinocerebellar', 'Post. spinocereb.'), [-7, -66, 1396]], ['t_asct_r', SH('Anterior spinocerebellar', 'Ant. spinocereb.'), [-7.5, -73, 1380]],
+      ['t_lst_r', SH('Lateral spinothalamic', 'Lat. spinothal.'), [-4.0, -69.4, 1393.5]]],
+    text: `<p>Cut across at about the <b>C7–T1 vertebrae</b> and seen <b>from above and in front</b> (the back at the top, the patient's right on your left). In the <b>posterior column</b>: the <b>fasciculus gracilis</b> (medial; lower limb and lower trunk) and the <b>fasciculus cuneatus</b> (lateral; upper limb and upper trunk — fibres entering at or above about T6). They carry <b>fine touch, vibration and conscious position sense</b>, uncrossed, to the medulla.</p>
+<p>At the edge of the <b>lateral funiculus</b>: the <b>posterior</b> and <b>anterior spinocerebellar tracts</b> (unconscious proprioception). In front: the <b>lateral spinothalamic tract</b> (pain, temperature) and the <b>anterior spinothalamic tract</b> (crude touch, pressure), whose fibres crossed in the anterior white commissure. Positions approximate (Z-Anatomy's); drawn sections at three levels: <a href="#h-sec">below</a>.</p>`},
+  {grp: 'Spinal cord', id: 'desc', name: 'Corticospinal tracts',
+    lit: [...DESC], glass: ['s_white', ...GREY], fit: ['s_white'], axisAt: 1395, zoom: 1, fitH: 30, byTract: true,
+    labels: [['t_lcst_r', SH('Lateral corticospinal (crossed)', 'Lat. corticospinal'), [-5.5, -66.5, 1394]], ['t_acst_r', SH('Anterior corticospinal (uncrossed)', 'Ant. corticospinal'), [-1.2, -74.5, 1394]]],
+    text: `<p>The same cut, from above and in front (drawn sections: <a href="#h-sec">below</a>). The <b>lateral corticospinal tract</b> lies in the lateral funiculus in front of the posterior horn and runs the whole length of the cord; it is made of the fibres that crossed in the <b>pyramidal decussation</b> of the medulla. The small <b>anterior corticospinal tract</b> lies beside the anterior median fissure, uncrossed, only in the upper cord (to about the mid-thoracic level); its fibres cross in the anterior white commissure at the level where they end. How many cross in the medulla: Gray (1918) "about two-thirds", Wikipedia 75–90 %.</p>`},
+  {grp: 'Brain', id: 'csf', name: 'Ventricles and CSF',
+    lit: [...VENT, 'p_chp_r', 'p_chp_l'], glass: [...STEM, 'b_cerebellum', 'b_thal_r', 'b_thal_l'], fit: [...VENT], view: [-1, -0.25, 0.25], zoom: 1.05,
+    labels: [['c_lat_r', SH('Lateral ventricle', 'Lateral vent.'), [-20, -60, 1575]], ['p_chp_r', SH('Choroid plexus', 'Choroid pl.'), [-25, -80, 1556]],
+      ['c_ivf', SH('Interventricular foramen', 'Interventr. for.'), [-5, -106, 1568], 'v'], ['c_third', SH('Third ventricle', 'Third vent.'), [-3, -100, 1552]],
+      ['c_aqueduct', SH('Cerebral aqueduct', 'Aqueduct'), [-2, -87, 1545]], ['c_fourth', SH('Fourth ventricle', 'Fourth vent.'), [-12, -75, 1515]]],
+    text: `<p>From the right and in front; brainstem, cerebellum and thalami are glass. CSF is made mostly by the <b>choroid plexuses</b> of the ventricles. It flows from the <b>lateral ventricles</b> through the <b>interventricular foramina</b> (of Monro) into the <b>third ventricle</b>, through the <b>cerebral aqueduct</b> into the <b>fourth ventricle</b>, and out into the subarachnoid space through its median and two lateral apertures. The <b>central canal</b> of the cord continues the fourth ventricle downward (the model has only its part in the medulla).</p>`},
+  {grp: 'Brain', id: 'folds', name: 'Tentorium and falx',
+    lit: ['d_tent_r', 'd_tent_l', 'd_falx', 'v_transverse_sinus_r', 'v_transverse_sinus_r_l'], solid: ['b_cerebellum', ...STEM], glass: ['occipital_bone'], fit: ['d_tent_r', 'd_tent_l', 'b_cerebellum'], view: [-0.7, 0.7, 0.45], zoom: 1.2,
+    glassKeys: ['d_falx'],
+    labels: [['d_falx', 'Falx cerebri', [-3, -60, 1600]], ['d_tent_r', SH('Tentorium cerebelli', 'Tentorium'), [-22, -35, 1548]], ['b_cerebellum', 'Cerebellum', [-35, -40, 1515]], ['v_transverse_sinus_r', SH('Transverse sinus', 'Transv. sinus'), null]],
+    text: `<p>From behind, the right and above. The <b>cranial dura</b> has an outer periosteal layer and an inner meningeal layer; its folds — <b>falx cerebri</b>, <b>tentorium cerebelli</b>, falx cerebelli and diaphragma sellae — are folds of the meningeal layer, with the venous sinuses between the layers. The tentorium roofs the posterior cranial fossa over the <b>cerebellum</b>; along its attached margin on the occipital bone it encloses the <b>transverse sinuses</b>. Folds, sinuses and their foramina: <a href="../head-neck/skull.html">Skull</a> and <a href="../head-neck/nerves-vessels.html">Head and neck nerves and vessels</a>.</p>`},
+];
+const MEN_TEXT = `<p>The brain and cord lie in three membranes, from outside in: <b>dura mater</b>, <b>arachnoid mater</b>, <b>pia mater</b>.</p>
+<ul><li><b>Spinal dura:</b> a tube attached round the <b>foramen magnum</b> (continuous with the cranial dura) and to C2–C3. The dural sac, with the subdural and subarachnoid spaces, ends at the <b>lower border of S2</b>; below that the dura invests the filum terminale down to the coccyx.</li>
+<li><b>Epidural (extradural) space:</b> only in the vertebral canal (in the skull the dura is fused to bone); it holds <b>fat</b> and the <b>internal vertebral venous plexus</b>, from the foramen magnum to the sacral hiatus.</li>
+<li><b>Subdural space:</b> a <b>potential</b> space between dura and arachnoid, opened only by blood, fluid or pus.</li>
+<li><b>Arachnoid:</b> a delicate membrane; the <b>subarachnoid space</b> between it and the pia, crossed by trabeculae, holds the <b>CSF</b>. Its wide parts are <b>cisterns</b>: the <b>cisterna magna</b> (cerebellomedullary, the largest), the pontine cistern with the basilar artery, and the <b>lumbar cistern</b> below the cord, from which CSF is drawn in lumbar puncture.</li>
+<li><b>Pia:</b> the delicate innermost layer, closely covering the cord and brain. Each side of the cord it forms the <b>denticulate ligament</b> — about <b>21</b> tooth-like processes from the foramen magnum to about T12/L1, attached to the dura between the anterior and posterior roots — which anchors the cord. Below the conus it continues as the <b>filum terminale</b> (about 20 cm): the pial part inside the dural sac, then, with a dural covering, down to the first coccygeal segment.</li></ul>`;
+const MEN_HEAD = ['Layer or space', 'Where', 'Contents and notes'];
+const MEN_ROWS = [
+  ['Epidural space', 'Between the vertebral canal wall and the dura (spinal only)', 'Fat, internal vertebral venous plexus; foramen magnum to sacral hiatus'],
+  ['Dura mater', 'Spinal: foramen magnum to S2 (sac), then on the filum to the coccyx', 'Cranial: periosteal + meningeal layers; folds: falx cerebri, tentorium cerebelli, falx cerebelli, diaphragma sellae'],
+  ['Subdural space', 'Between dura and arachnoid', 'Potential space'],
+  ['Arachnoid mater', 'Under the dura, not attached to it', 'Delicate; trabeculae cross to the pia'],
+  ['Subarachnoid space', 'Between arachnoid and pia', 'CSF; cisterns (cisterna magna, pontine, lumbar cistern)'],
+  ['Pia mater', 'On the surface of the cord and brain', 'Denticulate ligaments (about 21 each side); filum terminale'],
+];
+const CSF_TEXT = {
+  normal: `<p><b>Formation:</b> mostly by the <b>choroid plexuses</b> of the lateral, third and fourth ventricles (some from the ependyma). About <b>125–150 mL</b> is present at any time and about <b>500 mL</b> is made a day, so it is renewed several times a day.</p>
+<p><b>Circulation:</b> lateral ventricles → <b>interventricular foramina</b> (Monro) → third ventricle → <b>cerebral aqueduct</b> → fourth ventricle → <b>median aperture</b> (Magendie) and <b>two lateral apertures</b> (Luschka) → subarachnoid space, round the brain and down round the cord. (Wikipedia also counts the central canal of the cord as an outlet.)</p>
+<p><b>Absorption:</b> through the <b>arachnoid villi and granulations</b> into the dural venous sinuses, mainly the <b>superior sagittal sinus</b> (StatPearls adds newer evidence for absorption by dural lymphatics). Wikipedia: CSF gives the brain buoyancy and cushions it against jolts.</p>`,
+  obs: `<p><b>Hydrocephalus</b> is an excess of CSF in the ventricles, from obstruction to its flow, poor absorption or (rarely) over-production.</p>
+<p><b>Obstructive (non-communicating):</b> the block is inside the ventricular system. A common congenital cause is <b>aqueductal stenosis</b>; a tumour can also compress the aqueduct.</p>`,
+  com: `<p><b>Communicating hydrocephalus:</b> nothing blocks the ventricles; the fluid leaves them but is not absorbed (for example at the arachnoid granulations). CSF can be sampled, and its pressure estimated, by <b>lumbar puncture</b> (next section).</p>`};
+const LP_TEXT = `<p><b>Why there:</b> to draw CSF from the <b>lumbar cistern</b> (to diagnose meningitis, subarachnoid haemorrhage and other disorders, to measure pressure, or to give drugs) <b>below the end of the cord</b>. In adults the cord ends at about L1–L2 (with wide variation, T12–L3, in the 2022 review), so the needle goes in at the <b>L3–L4 or L4–L5</b> space. The dural sac and lumbar cistern go down to S2. Wikipedia: the loose roots of the cauda equina tend to move out of the way of the needle.</p>
+<p><b>Landmark:</b> the line joining the highest points of the <b>iliac crests</b> (Tuffier's, intercristal line) crosses the spine at about the <b>L4 spine or the L4–L5 space</b> (the review says L4–5; Wikipedia "roughly the fourth lumbar vertebra"); it can be a level out.</p>
+<p><b>Position:</b> lying on the side with knees and neck flexed (or sitting bent forward), which opens the spaces between the spines; lying is preferred when the pressure is to be measured. <b>Direction:</b> in the <b>midline</b> between the spines, gently toward the <b>umbilicus</b> (the 2022 review).</p>
+<p><b>Layers pierced:</b> skin → subcutaneous tissue → <b>supraspinous ligament</b> → <b>interspinous ligament</b> → <b>ligamentum flavum</b> (a "give") → <b>epidural space</b> (fat, venous plexus) → <b>dura</b> and <b>arachnoid</b> (a second "give") → <b>subarachnoid space</b> (CSF).</p>
+<p><b>In babies</b> the cord reaches lower — about <b>L3 at birth</b> (term babies L1–L3) — so the needle must go in below it. <b>Complications:</b> a <b>post-dural-puncture headache</b> from CSF leaking through the dural hole. Wikipedia: <b>raised intracranial pressure</b> from a mass is a contraindication (risk of herniation), so the brain is often imaged first.</p>`;
+const EXT_TEXT = `<p>The <b>spinal cord</b> continues the medulla oblongata at the foramen magnum (the upper border of the atlas) and ends at the <b>lower border of L1 or the upper border of L2</b>; about 45 cm long in men. In the fetus it reaches lower (Gray: at the end of the fifth month to the base of the sacrum), and at birth to about <b>L3</b> (Wikipedia: L1–L3 in term babies). The vertebral column grows longer than the cord (Wikipedia: the cord stops growing in length at about age four), so in the adult the <b>cord segments lie higher than the vertebrae</b> of the same number (Wikipedia: e.g. the T11 segment above the T11 vertebra), and the lower roots run down as the <b>cauda equina</b> (L2–coccygeal roots). <b>Clinical implication:</b> lumbar puncture is done below the cord, and in a baby lower still.</p>
+<p><b>Surface:</b> a deep <b>anterior median fissure</b> (Gray: about 3 mm) and a shallow <b>posterior median sulcus</b> with a septum. The posterior rootlets enter in a line along the <b>posterolateral sulcus</b>; the anterior rootlets leave over a strip, without a sulcus. These divide each half into <b>anterior, lateral and posterior funiculi</b>. <b>31 pairs</b> of spinal nerves: 8 cervical, 12 thoracic, 5 lumbar, 5 sacral, 1 coccygeal.</p>`;
+const EXT_HEAD = ['Feature', 'Level (vertebrae)', 'Notes'];
+const EXT_ROWS = [
+  ['Upper end', 'Foramen magnum, upper border of the atlas', 'Continuous with the medulla oblongata'],
+  ['Cervical enlargement', 'About C3/C4 to T1/T2 (Gray C3–T2; Wikipedia C4–T1)', 'Nerves of the upper limbs; widest at the C6 nerve attachment (Gray)'],
+  ['Lumbar enlargement', 'From about T9/T10, widest opposite T12 (Gray from T9; Wikipedia T10–L1)', 'Nerves of the lower limbs; tapers into the conus'],
+  ['Conus medullaris', 'Lower border of L1 / upper L2 in the adult; about L3 at birth', 'The tapered lower end; the filum terminale continues from its apex'],
+  ['Filum terminale', 'Conus to the first coccygeal segment', 'About 20 cm; pial part in the sac, then with a dural covering'],
+  ['Dural sac, lumbar cistern', 'To the lower border of S2', 'CSF and the cauda equina'],
+];
+/* ---------- cross-section data: right half of the section (patient's right = viewer's left), mirrored for the left.
+   Coordinates: centre (300, 235), x < 300 = patient's right, y < 235 = posterior (back).  Schematic. ---------- */
+const LEVELS = {
+  cervical: {name: 'Mid-cervical (C6)', rx: 170, ry: 112, cuneatus: true, lat: false, clarke: false, acst: true, tecto: true,
+    note: 'Transversely oval; broad anterior horns (the limb motor columns); narrow posterior horns; the most white matter; both gracilis and cuneatus.'},
+  thoracic: {name: 'Mid-thoracic (T6)', rx: 118, ry: 98, cuneatus: true, small: true, lat: true, clarke: true, acst: true, tecto: false,
+    note: 'Small and round; slender horns with a lateral horn (T1–L2) and the dorsal nucleus (Clarke); little grey matter. A small cuneatus (fibres from T6 up) and the anterior corticospinal tract only just reach this level.'},
+  lumbar: {name: 'Lumbar (L4 segment)', rx: 126, ry: 112, cuneatus: false, lat: false, clarke: false, acst: false, tecto: false,
+    note: 'Round; both horns large; less white matter; no cuneatus, no anterior corticospinal tract.'},
+};
+/* tracts: [key, label, colour token, [dx, dy] centre as a fraction of (rx, ry), [w, h] half-size fraction, ascending?] */
+const TRACTS = [
+  ['gr', 'Fasciculus gracilis', '--t-dc', [-0.1, -0.68], [0.09, 0.26], true],
+  ['cu', 'Fasciculus cuneatus', '--t-dc', [-0.28, -0.62], [0.1, 0.22], true],
+  ['psc', 'Posterior spinocerebellar', '--t-sc', [-0.86, -0.3], [0.08, 0.22], true],
+  ['asc', 'Anterior spinocerebellar', '--t-sc', [-0.9, 0.18], [0.07, 0.22], true],
+  ['lst', 'Lateral spinothalamic', '--t-st', [-0.7, 0.3], [0.1, 0.14], true],
+  ['ast', 'Anterior spinothalamic', '--t-st', [-0.4, 0.74], [0.1, 0.1], true],
+  ['lcst', 'Lateral corticospinal', '--t-cst', [-0.62, -0.18], [0.13, 0.17], false],
+  ['rub', 'Rubrospinal', '--t-ex', [-0.6, 0.07], [0.08, 0.07], false],
+  ['ves', 'Vestibulospinal', '--t-ex', [-0.26, 0.86], [0.08, 0.06], false],
+  ['acst', 'Anterior corticospinal', '--t-cst', [-0.07, 0.82], [0.05, 0.12], false],
+  ['tec', 'Tectospinal', '--t-ex', [-0.17, 0.66], [0.05, 0.07], false],
+];
+const TRACT_HEAD = ['Tract', 'Funiculus', 'Carries / does', 'Crossing'];
+const TRACT_ROWS = [
+  ['<b>Fasciculus gracilis</b>', 'Posterior, medial', 'Fine touch, vibration, position sense from the lower limb and lower trunk (sacral fibres most medial)', 'Uncrossed in the cord; crosses in the medulla (sensory decussation) → medial lemniscus'],
+  ['<b>Fasciculus cuneatus</b>', 'Posterior, lateral (from about T6 up)', 'The same from the upper limb, upper trunk and neck', 'As gracilis'],
+  ['<b>Lateral spinothalamic</b>', 'Lateral (anterolateral)', 'Pain and temperature', 'Crossed in the anterior white commissure (Wikipedia: within 1–2 segments of entry)'],
+  ['<b>Anterior spinothalamic</b>', 'Anterior', 'Crude touch, pressure', 'Crossed in the anterior white commissure'],
+  ['<b>Posterior spinocerebellar</b>', 'Lateral, at the edge, behind', 'Unconscious proprioception (lower limb, trunk); from the dorsal nucleus (Clarke, C8–L2/L3)', 'Uncrossed; enters the cerebellum by the inferior peduncle'],
+  ['<b>Anterior spinocerebellar</b>', 'Lateral, at the edge, in front', 'Unconscious proprioception', 'Crosses in the cord and back again; enters by the superior peduncle'],
+  ['<b>Lateral corticospinal</b>', 'Lateral, in front of the posterior horn', 'Voluntary movement (upper motor neurons)', 'Crossed in the pyramidal decussation (most fibres)'],
+  ['<b>Anterior corticospinal</b>', 'Anterior, beside the fissure (to about mid-thoracic)', 'Voluntary movement', 'Uncrossed; crosses in the anterior white commissure at the level where it ends'],
+  ['<b>Rubrospinal</b>', 'Lateral, in front of the lateral corticospinal', 'From the red nucleus', 'Crossed in the midbrain'],
+  ['<b>Tectospinal</b>', 'Anterior', 'From the superior colliculus: head and eye movements (reflexes)', 'Crossed (from the opposite colliculus)'],
+  ['<b>Lateral vestibulospinal</b>', 'Anterior', 'From the lateral vestibular nucleus (Deiters): antigravity extensors', 'Mainly uncrossed'],
+  ['<b>Reticulospinal</b>', 'Anterior and lateral (not drawn)', 'From the reticular formation of the pons and medulla (Wikipedia)', '—'],
+];
+/* lesions: regions are drawn by drawSection; findings follow the sheet (part K) */
+const LESIONS = [
+  ['none', 'Normal'],
+  ['bss', 'Brown-Séquard (right)'],
+  ['syr', 'Syringomyelia'],
+  ['polio', 'Polio (right)'],
+  ['als', 'ALS'],
+  ['sacd', 'SACD'],
+  ['tabes', 'Tabes dorsalis'],
+  ['asa', 'Anterior spinal artery'],
+  ['tm', 'Transverse myelitis'],
+  ['art', 'Arteries'],
+];
+const FIND = {
+  none: '',
+  bss: '<b>Hemisection of the right half.</b> Below the lesion on the <b>same (right) side</b>: spastic (UMN) weakness (lateral corticospinal tract) and loss of fine touch, vibration and position sense (posterior column). On the <b>opposite (left) side</b>: loss of pain and temperature (the crossed lateral spinothalamic tract), starting (Wikipedia) a segment or two below the lesion. At the level, right side (Wikipedia): a band of flaccid (LMN) weakness and loss of all sensation.',
+  syr: '<b>A central cavity (syrinx)</b>, often cervical and often with a Chiari I malformation. It first cuts the pain and temperature fibres <b>crossing in the anterior white commissure</b>: a bilateral, <b>cape-like</b> loss of pain and temperature over the shoulders and arms with touch and position sense kept (<b>dissociated sensory loss</b>). Later (Wikipedia): weakness and wasting of the hands as it reaches the anterior horns.',
+  polio: '<b>Poliomyelitis</b> (Wikipedia: "grey matter myelitis"): the poliovirus destroys the <b>motor neurons of the anterior horn</b>, so the paralysis is flaccid (LMN) — weakness, wasting, low reflexes — often asymmetric, with <b>no sensory loss</b>.',
+  als: '<b>Amyotrophic lateral sclerosis</b>, the commonest motor neuron disease: both <b>upper</b> (corticospinal tracts) and <b>lower</b> (anterior horn) motor neurons degenerate — wasting and fasciculations together with brisk reflexes and spasticity. Wikipedia: sensation is typically not affected.',
+  sacd: '<b>Subacute combined degeneration</b> (vitamin B12 deficiency; also nitrous oxide): demyelination of the <b>posterior and lateral columns</b> — loss of vibration and position sense, sensory ataxia (Romberg\'s test positive), and spastic weakness from the corticospinal tracts; untreated, it can end in paraplegia.',
+  tabes: '<b>Tabes dorsalis</b> (tertiary neurosyphilis): the <b>dorsal roots and posterior columns</b> degenerate — sensory ataxia, lightning (lancinating) pains, absent leg reflexes, Argyll Robertson pupils.',
+  asa: '<b>Anterior spinal artery syndrome</b> (Wikipedia): infarction of the part the anterior spinal artery supplies (Wikipedia: the anterior two-thirds) — paralysis (corticospinal) and loss of pain and temperature (spinothalamic) below the lesion, with <b>vibration and position sense preserved</b> (the posterior columns are supplied by the posterior spinal arteries).',
+  tm: '<b>Transverse myelitis:</b> inflammation across the whole width of the cord at one level (most often thoracic): weakness, sensory loss below a <b>sensory level</b>, and bladder and bowel dysfunction, usually on both sides. Both legs affected = <b>paraplegia</b> (Wikipedia: thoracic, lumbar or sacral lesions; a cervical lesion gives tetraplegia).',
+  art: '<b>Blood supply:</b> one <b>anterior spinal artery</b> in the anterior median fissure (formed from a branch of each vertebral artery) and <b>two posterior spinal arteries</b> along the posterior roots (from the vertebral or the posterior inferior cerebellar artery), reinforced along the cord by <b>segmental medullary (radicular) arteries</b> from the vertebral, intercostal and lumbar arteries. Wikipedia: the largest, the <b>artery of Adamkiewicz</b>, usually arises on the left between T8 and L1. Territories drawn approximate.',
+};
+const UMN_TEXT = `<p><b>Upper vs lower motor neuron lesions.</b> UMN (cortex to the corticospinal tract): spastic weakness, increased tone and reflexes, extensor plantar (Babinski). LMN (anterior horn cell, root, nerve): flaccid weakness, low or absent reflexes, and in time wasting and fasciculations. <b>Hereditary sensory (and autonomic) neuropathy</b> is a disease of the sensory neurons rather than of a cord tract: progressive loss of pain and temperature sense, mostly distal, with painless injuries and ulcers.</p>`;
+const LES_HEAD = ['Condition', 'What is damaged', 'Main findings'];
+const LES_ROWS = [
+  ['Brown-Séquard', 'One half of the cord', 'Same side: UMN weakness, loss of vibration and position sense; opposite side: loss of pain and temperature'],
+  ['Syringomyelia', 'Centre: crossing spinothalamic fibres (later, Wikipedia: anterior horns)', 'Cape-like bilateral loss of pain and temperature, touch kept; later (Wikipedia) wasting of the hands'],
+  ['Poliomyelitis', 'Anterior horn cells (Wikipedia)', 'Flaccid (LMN) paralysis, no sensory loss'],
+  ['ALS / motor neuron disease', 'Anterior horn cells + corticospinal tracts', 'Mixed UMN and LMN signs (Wikipedia: sensation typically spared)'],
+  ['Hereditary sensory neuropathy', 'Sensory neurons', 'Loss of pain and temperature, painless ulcers'],
+  ['Subacute combined degeneration', 'Posterior + lateral columns', 'Loss of vibration and position sense, ataxia, spastic weakness'],
+  ['Tabes dorsalis', 'Dorsal roots + posterior columns', 'Sensory ataxia, lightning pains, absent leg reflexes, Argyll Robertson pupils'],
+  ['Transverse myelitis', 'The whole width at one level', 'Weakness, sensory level, bladder and bowel dysfunction'],
+  ['Paraplegia', 'Wikipedia: thoracic, lumbar or sacral cord', 'Both lower limbs (Wikipedia: a cervical lesion gives tetraplegia)'],
+];
+const DATA = {
+  lede: 'The meninges, the CSF and the spinal cord: the cord in the vertebral canal in 3D with its grey matter and main tracts, the ventricles and the dural folds; schematics of the meninges, the CSF circulation, lumbar puncture and cross-sections of the cord at three levels with its lesions. The brainstem and cerebellum are on the next page.',
+  note3d: 'Spinal cord (rebuilt from Z-Anatomy\'s sections and path; one cross-section shape for its whole length), dural sac, roots, tentorium, falx and transverse sinus are Z-Anatomy\'s and approximate (Z-Anatomy\'s dural sac ends at L2, too high); brainstem, cerebellum, ventricles, choroid plexus, thalami and bones are BodyParts3D\'s. Left roots are mirrored from the right.',
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (a lumbar puncture review, 2022; a spinal anaesthesia review, 2025; a review of hereditary sensory and autonomic neuropathy type 2, 2025). See also <a href=\"brainstem.html\">Brainstem and Cerebellum</a>, <a href=\"../back/vertebral-column.html\">The Vertebral Column</a>, <a href=\"../head-neck/skull.html\">Skull</a>.",
+  models: 'Models used: brainstem, cerebellum, ventricles, choroid plexus, thalami and bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); spinal cord, its grey matter and tracts (rebuilt from Z-Anatomy\'s cross-sections swept along its path), spinal dura, roots, cauda equina, tentorium, falx and transverse sinus from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same frame. Nerves are tubes swept along Z-Anatomy curves; the left roots are mirrored. Schematics are not to scale. Simplified meshes, shared under the same licences.',
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let kind = {}, tract = {}, names = {}, cur = null;
+const COL = {bone: '--bone', dura: '--dura', cord: '--cordw', grey: '--grey', medulla: '--medulla', pons: '--pons', midbrain: '--midb', cblm: '--cblm',
+  dien: '--dien', olive: '--olive', pyr: '--t-cst', csf: '--s-csf', chp: '--chp', gse: '--nuc-m', sve: '--nuc-m', gve: '--nuc-p', ssa: '--nuc-s', red: '--rn',
+  nerve: '--nerve', artery: '--artery', vein: '--vein'};
+const TCOL = {dc: '--t-dc', st: '--t-st', sc: '--t-sc', cst: '--t-cst'};
+const WHAT = {bone: 'bone', dura: 'dura mater', cord: 'spinal cord', grey: 'grey matter of the cord', tract: 'tract of the cord', medulla: 'brainstem', pons: 'brainstem',
+  midbrain: 'brainstem', cblm: 'cerebellum', dien: 'diencephalon', olive: 'medulla', pyr: 'medulla', csf: 'ventricle (CSF)', chp: 'choroid plexus', gse: 'cranial nerve nucleus',
+  sve: 'cranial nerve nucleus', gve: 'cranial nerve nucleus', ssa: 'cranial nerve nucleus', red: 'midbrain nucleus', nerve: 'nerve', artery: 'artery', vein: 'venous sinus'};
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+const tint = (hex, f) => '#' + [1, 3, 5].map(i => Math.round(parseInt(hex.slice(i, i + 2), 16) * (1 - f) + 255 * f).toString(16).padStart(2, '0')).join('');   // mix with white
+const colOf = k => css(kind[k] === 'tract' ? TCOL[tract[k]] : COL[kind[k]]) || css('--soft');
+function anchor(key, near, view, fixed) {   // the vertex of a part nearest to a point moved 40 mm toward the viewer; fixed: nearest to the point itself
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos; let c = near;
+  if (!c) { c = [0, 0, 0]; for (let i = 0; i < pos.length; i++) c[i % 3] += pos[i] / (pos.length / 3); }
+  if (view && !fixed) { const l = Math.hypot(...view); c = c.map((x, i) => x + 40 * view[i] / l); }
+  let best = 0, bd = 1e18;
+  const cl = v.clip;
+  for (let i = 0; i < pos.length; i += 3) {
+    if (cl && pos[i] * cl[0] + pos[i + 1] * cl[1] + pos[i + 2] * cl[2] > cl[3] - 0.3) continue;
+    const d = (pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2; if (d < bd) { bd = d; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+function showTopic(id) {
+  const t = typeof id === 'object' ? id : TOPICS.find(t => t.id === id); cur = t;
+  const has = k => v.parts.has(k);
+  const lit = (t.lit || []).filter(has), solid = (t.solid || []).filter(has), glass = (t.glass || []).filter(has);
+  const shown = new Set([...lit, ...solid, ...glass]);
+  for (const k in kind) v.setVisible(k, shown.has(k));
+  for (const k in kind) v.setColour(k, colOf(k));
+  // cut-section topics: the cut face shows the inside of each part, which the viewer shades darker, so lighten those parts
+  if (t.axisAt) for (const k of lit) v.setColour(k, tint(colOf(k), kind[k] === 'grey' ? 0.6 : 0.3));
+  const gl = new Set(t.glassKeys || []);
+  v.setFocus([...lit.filter(k => !gl.has(k)), ...solid]);
+  v.ghostAlpha = 0.18;
+  let view = t.view || RIGHT, clip = t.clip || null;
+  if (t.axisAt) {   // look straight down the cord at height z (mm), cut across it there (perpendicular to the cord)
+    const P = v.parts.get('s_white').m.pos, cen = (a, b) => { const s = [0, 0, 0]; let n = 0;
+      for (let i = 0; i < P.length; i += 3) if (P[i + 2] >= a && P[i + 2] <= b) { s[0] += P[i]; s[1] += P[i + 1]; s[2] += P[i + 2]; n++; } return s.map(x => x / n); };
+    const z = t.axisAt, lo = cen(z - 14, z - 4), hi = cen(z + 4, z + 14), c = cen(z - 3, z + 3);
+    let d = hi.map((x, i) => x - lo[i]); const l = Math.hypot(...d); d = d.map(x => x / l);
+    view = d; clip = [d, d[0] * c[0] + d[1] * c[1] + d[2] * c[2]]; t._axis = {c, d};
+  }
+  v.setClip(clip ? clip[0] : null, clip ? clip[1] : 0);
+  const fk = (t.fit || t.lit).filter(has);
+  v.fit(fk.length ? fk : lit);
+  if (t._axis) { v.centre = t._axis.c; v.fitH = t.fitH || 30; v.pan = [0, 0]; }
+  else if (t.focusZ) {   // centre the camera on a stretch of the cord
+    const z0 = t.focusZ[0], z1 = t.focusZ[1], P = v.parts.get('s_white').m.pos; let s = [0, 0, 0], n = 0;
+    for (let i = 0; i < P.length; i += 3) if (P[i + 2] >= z0 && P[i + 2] <= z1) { s[0] += P[i]; s[1] += P[i + 1]; s[2] += P[i + 2]; n++; }
+    if (n) { v.centre = s.map(x => x / n); v.fitH = t.fitH || 40; v.pan = [0, 0]; }
+  }
+  v.face(view, {zoom: t.zoom || 1});
+  const narrow = $('v').clientWidth < 500, txt = l => l && typeof l === 'object' ? (narrow ? l.sh : l.l) : l;
+  const marks = [];
+  for (const [k, label, near, mode] of t.labels || []) {
+    if (!has(k) || v.parts.get(k).visible === false) continue;
+    const fixed = mode === 'v' || !!clip, p = anchor(k, near, view, fixed); if (!p) continue;
+    const kd = kind[k], dark = ['bone', 'cord', 'dura', 'csf', 'medulla', 'pons', 'midbrain', 'cblm', 'dien', 'grey'].includes(kd);
+    marks.push({key: k, near: near || p, p, fixed, label: txt(label), color: dark ? css('--ink') : colOf(k), always: true});
+  }
+  for (const [p, label, col] of t.pts || []) marks.push({p, label: txt(label), color: css(col), always: true});
+  v.setMarkers(marks);
+  refineAnchors();
+  $('topic-text').innerHTML = t.text || '';
+  legend(t);
+  $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === t.id));
+}
+/* after the camera has turned, move any label whose anchor is hidden to the nearest vertex of its part that is in view */
+let refineTimer = 0;
+function refineAnchors() {
+  clearTimeout(refineTimer);
+  refineTimer = setTimeout(() => {
+    const depth = v.offscreen(2), W = v.c.width, dpr = v.dpr;
+    const vis = p => { const q = v.toCam(p), [sx, sy] = v.toScreen(q);
+      if (sx < 6 || sy < 6 || sx > v.w - 6 || sy > v.h - 6) return false;
+      const i = (Math.round((v.h - sy) * dpr) * W + Math.round(sx * dpr)) * 4; if (!depth[i + 3]) return true;
+      const z = depth[i] / 255 + depth[i + 1] / 65025 + depth[i + 2] / 16581375; return (q[1] / 2000 + 1) / 2 <= z + 3 / 4000; };
+    let changed = false;
+    for (const m of v.markers) {
+      if (!m.key || m.fixed || vis(m.p)) continue;
+      const pos = v.parts.get(m.key).m.pos, c = m.near, cand = [];
+      for (let i = 0; i < pos.length; i += 3) {
+        if (v.clip && pos[i] * v.clip[0] + pos[i + 1] * v.clip[1] + pos[i + 2] * v.clip[2] > v.clip[3]) continue;
+        cand.push([(pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2, i]);
+      }
+      cand.sort((a, b) => a[0] - b[0]);
+      for (const [, i] of cand.slice(0, 4000)) { const p = [pos[i], pos[i + 1], pos[i + 2]]; if (vis(p)) { m.p = p; changed = true; break; } }
+    }
+    if (changed) v.setMarkers(v.markers);
+  }, 650);
+}
+function legend(t) {
+  const items = new Map(), add = (tok, label) => { if (!items.has(label)) items.set(label, tok); };
+  const lit = t.lit || [];
+  const KEYN = {cord: 'Spinal cord (white matter)', grey: 'Grey matter', dura: 'Dura mater', nerve: 'Nerves and roots', csf: 'Ventricles (CSF)', chp: 'Choroid plexus', cblm: 'Cerebellum', vein: 'Venous sinus'};
+  const TN = {dc: 'Posterior column', st: 'Spinothalamic', sc: 'Spinocerebellar', cst: 'Corticospinal'};
+  for (const k of lit) if (kind[k] === 'tract') add(TCOL[tract[k]], TN[tract[k]]);
+  for (const kd of Object.keys(KEYN)) if (lit.some(k => kind[k] === kd) || (t.solid || []).some(k => kind[k] === kd)) add(COL[kd], KEYN[kd]);
+  if (t.glass && t.glass.some(k => kind[k] === 'bone')) add('--bone', 'Bone (glass)');
+  $('key3d').innerHTML = [...items].map(([label, tok]) => `<span><i style="background:var(${tok})"></i>${label}</span>`).join('');
+}
+function buildTopics() {
+  const box = $('topics');
+  for (const g of [...new Set(TOPICS.map(t => t.grp))]) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !kind[hit.key]) { $('pick').textContent = ''; return; }
+  $('pick').textContent = `${names[hit.key]}: ${WHAT[kind[hit.key]]}`;
+};
+async function loadModel() {
+  const base = '../models/neuro1/';
+  const meta = await (await fetch(base + 'kinds.json')).json(), M = meta.mirror;
+  const man = await v.load(base + 'neuro1.json', null, {
+    extra: (m, items) => items.filter(it => meta.parts[it.key] && meta.parts[it.key].mirror)
+      .map(it => ({key: L(it.key), m: v.mirrored(it.m, M.m, M.t), info: {name: it.info.name}}))});
+  for (const [k, d] of Object.entries(meta.parts)) for (const left of d.mirror ? [false, true] : [false]) {
+    const key = left ? L(k) : k, p = v.parts.get(key); if (!p) continue;
+    const nm = p.info.name.replace(/ \.r$/, '');
+    names[key] = d.mirror ? (left ? 'Left ' : 'Right ') + nm.replace(/^./, c => c.toLowerCase()) : nm;
+    kind[key] = d.kind; if (d.tract) tract[key] = d.tract;
+  }
+  for (const k in kind) v.setColour(k, colOf(k));
+  return man;
+}
+
+/* ===================== schematics ===================== */
+const T = (x, y, s, cls = '', anchor = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--muted)"/></marker>'
+  + '<pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" style="fill:var(--clin);fill-opacity:.18"/><line x1="0" y1="0" x2="0" y2="8" style="stroke:var(--clin);stroke-width:3"/></pattern></defs>';
+function drawMen() {   // transverse section of the vertebral canal from above: back at the top, patient's right on the viewer's left
+  const cx = 300, cy = 225;
+  let s = DEFS;
+  s += `<path class="bone" d="M140 395 Q300 430 460 395 L470 345 Q300 320 130 345 Z"/>` + T(300, 418, 'Vertebral body (front)', 's onb', 'middle');
+  s += `<path class="bone" d="M150 330 L120 150 L200 70 L300 20 L400 70 L480 150 L450 330 L420 320 L440 160 L390 95 L300 55 L210 95 L160 160 L180 320 Z"/>`;
+  s += T(300, 40, 'Vertebral arch (back)', 's onb', 'middle');
+  s += `<ellipse class="fatf" cx="${cx}" cy="${cy}" rx="128" ry="112"/>`;
+  s += `<circle class="vein" cx="215" cy="300" r="9"/><circle class="vein" cx="385" cy="300" r="9"/><circle class="vein" cx="240" cy="132" r="7"/><circle class="vein" cx="360" cy="132" r="7"/>`;
+  s += `<ellipse class="csf" cx="${cx}" cy="${cy}" rx="100" ry="86"/>`;
+  s += `<ellipse class="dura" cx="${cx}" cy="${cy}" rx="103" ry="89"/>`;
+  s += `<ellipse class="arach" cx="${cx}" cy="${cy}" rx="97" ry="83"/>`;
+  s += `<ellipse class="wm" cx="${cx}" cy="${cy}" rx="52" ry="44"/><ellipse class="pia" cx="${cx}" cy="${cy}" rx="53" ry="45"/>`;
+  s += `<path class="gm" d="M300 220 C285 220 272 212 268 196 L258 192 C268 205 270 222 262 236 C258 248 262 258 272 262 C282 252 290 240 300 238 C310 240 318 252 328 262 C338 258 342 248 338 236 C330 222 332 205 342 192 L332 196 C328 212 315 220 300 220 Z"/>`;
+  // roots and denticulate ligaments
+  s += `<path class="nvl" d="M262 196 Q235 175 205 168"/><path class="nvl" d="M338 196 Q365 175 395 168"/>`;
+  s += `<path class="nvl" d="M268 250 Q240 262 205 268"/><path class="nvl" d="M332 250 Q360 262 395 268"/>`;
+  s += `<path class="lig" d="M249 222 L199 210 L203 234 Z"/><path class="lig" d="M351 222 L401 210 L397 234 Z"/>`;
+  // labels on the viewer's left = patient's right; anchors on each layer, label slots in the anchors' top-to-bottom order
+  const ML = [[234, 143, 'Epidural fat'], [274, 165, 'CSF'], [234, 178, 'Post. root'], [212, 190, 'Arachnoid'],
+    [199, 209, 'Dura'], [215, 222, 'Denticulate lig.'], [238, 260, 'Ant. root'], [215, 300, 'Venous plexus']];
+  ML.forEach(([x, y, t], i) => { const ty = 116 + i * 26; s += lead(x, y, 92, ty - 4) + T(88, ty, t, '', 'end'); });
+  s += lead(350, 210, 520, 120) + T(524, 124, 'Pia');
+  s += lead(330, 230, 520, 200) + T(524, 204, 'Cord');
+  s += lead(399, 215, 520, 250) + T(524, 254, 'Subdural');
+  s += T(524, 268, '(potential)', 's');
+  $('men-svg').innerHTML = s;
+}
+function drawCSF(mode) {   // midline view from the right: front on the viewer's right
+  let s = DEFS;
+  s += `<path class="bone" d="M90 360 Q70 150 260 70 Q430 20 520 160 Q560 250 530 330 L500 330 Q520 250 490 175 Q420 60 265 100 Q115 165 120 360 Z"/>`;
+  s += `<path class="sinus" d="M140 210 Q170 120 265 92 Q400 62 480 150 L470 158 Q395 80 265 108 Q180 132 152 214 Z"/>`;
+  s += T(330, 68, 'Superior sagittal sinus', 's onb', 'middle');
+  s += `<path class="csf" d="M128 352 Q118 175 265 112 Q405 72 478 170 Q512 238 494 320 L470 322 Q488 240 455 182 Q395 98 268 130 Q150 182 152 350 Z"/>`;
+  s += `<path class="brain" d="M152 350 Q150 182 268 130 Q395 98 455 182 Q488 240 470 322 Q420 300 360 300 Q300 290 260 300 Q220 320 200 360 Z"/>`;
+  s += `<path class="brain" d="M168 360 Q178 320 226 318 Q272 318 284 345 Q274 390 226 392 Q178 392 168 360 Z"/>`;
+  s += T(200, 378, 'Cerebellum', 's');
+  s += `<path class="brain" d="M300 300 L330 300 L330 420 L314 470 L298 470 L300 420 Z"/>`;
+  const lv = 'M250 205 Q300 170 380 192 Q400 207 380 220 Q320 205 265 228 Q240 228 250 205 Z';
+  s += `<path class="vent" d="${lv}" style="fill-opacity:.7"/>`;
+  s += `<path class="chp" d="M268 220 Q300 205 340 210 Q320 216 300 220 Z"/>`;
+  const th = 'M338 240 L362 240 L362 284 L344 286 Z';
+  s += `<path class="vent" d="${th}"/>`;
+  // aqueduct: from the back of the third ventricle down and back through the midbrain to the fourth ventricle, which lies
+  // behind the pons and medulla (front edge x 300) and in front of the cerebellum, its roof peaked toward the cerebellum
+  s += `<path d="M346 286 Q326 296 304 318" style="fill:none;stroke:var(--muted);stroke-width:7;stroke-linecap:round"/><path d="M346 286 Q326 296 304 318" style="fill:none;stroke:var(--s-csf);stroke-width:4.5;stroke-linecap:round"/>`;
+  s += `<path class="vent" d="M302 316 L302 356 L286 336 Z"/>`;
+  if (mode === 'obs') s += `<circle cx="324" cy="300" r="10" class="lesion"/>` + T(372, 318, 'Block (aqueduct)', 'c');
+  if (mode === 'com') s += `<path class="lesion" d="M230 110 L300 96 L305 112 L235 126 Z"/>` + T(240, 92, 'Absorption fails', 'c');
+  s += `<path class="flow" d="M310 212 Q330 230 345 248"/><path class="flow" d="M354 262 L352 280"/><path class="flow" d="M292 352 L288 384"/><path class="flow" d="M298 400 Q230 430 160 330 Q170 200 250 150"/><path class="flow" d="M314 440 L312 466"/><path class="flow" d="M260 140 L250 116"/>`;
+  s += lead(245, 210, 120, 170) + T(116, 166, 'Lateral ventricle', '', 'end');
+  s += lead(290, 215, 120, 236) + T(116, 240, 'Choroid plexus', '', 'end');
+  s += lead(348, 252, 540, 210) + T(544, 205, 'Interventricular', '') + T(544, 219, 'foramen → third', '') + T(544, 233, 'ventricle', '');
+  s += lead(318, 302, 540, 290) + T(544, 294, 'Aqueduct');
+  s += lead(296, 336, 540, 340) + T(544, 344, 'Fourth ventricle');
+  s += lead(298, 354, 540, 390) + T(544, 386, 'Median and lateral') + T(544, 400, 'apertures → cisterna');
+  s += T(544, 414, 'magna, subarachnoid');
+  s += lead(250, 116, 120, 100) + T(116, 96, 'Arachnoid granulations', '', 'end') + T(116, 110, '→ venous sinus', 's', 'end');
+  s += T(318, 462, 'Down round the cord', 's');
+  $('csf-svg').innerHTML = s;
+  $('csf-text').innerHTML = CSF_TEXT[mode];
+}
+function drawLP(baby) {   // midline section from the right: front (bodies) on the viewer's left, back on the right, head up
+  let s = DEFS;
+  const yb = i => 30 + i * 74;   // top of vertebral body i: 0 = L1 ... 4 = L5
+  for (let i = 0; i < 5; i++) {
+    const y = yb(i);
+    s += `<rect class="bone" x="70" y="${y}" width="120" height="54" rx="6"/>` + T(130, y + 32, 'L' + (i + 1), 'onb', 'middle');
+    s += `<path class="bone" d="M232 ${y + 4} L262 ${y} L360 ${y + 10} L372 ${y + 30} L360 ${y + 46} L262 ${y + 50} L232 ${y + 46} Z"/>`;
+  }
+  s += `<path class="bone" d="M70 400 L190 400 L232 400 L250 540 L110 540 Z"/>` + T(160, 470, 'Sacrum', 'onb', 'middle');
+  s += `<line x1="70" y1="452" x2="250" y2="452" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3"/>` + T(66, 456, 'S2', 's', 'end');
+  // dural sac with CSF (to S2) and the cord
+  s += `<path class="csf" d="M196 0 L228 0 L228 440 Q212 462 196 440 Z"/>`;
+  s += `<path d="M196 0 L196 440 Q212 462 228 440 L228 0" style="fill:none;stroke:var(--dura);stroke-width:3"/>`;
+  const end = baby ? yb(2) + 40 : yb(0) + 64;   // adult: L1–L2 disc; newborn: about L3
+  s += `<path class="wm" d="M203 0 L221 0 L221 ${end - 16} L212 ${end} L203 ${end - 16} Z"/>`;
+  for (let i = 0; i < 5; i++) s += `<path d="M${205 + i * 3.5} ${end - 4} L${205 + i * 3.5} 438" style="stroke:var(--nerve);stroke-width:1.4"/>`;
+  // ligaments, fat, skin (back on the right)
+  for (let i = 0; i < 4; i++) {
+    const y0 = yb(i) + 50, y1 = yb(i + 1);
+    s += `<rect class="lig" x="232" y="${y0 + 2}" width="8" height="${y1 - y0}"/>`;                // ligamentum flavum
+    s += `<rect x="262" y="${y0 + 2}" width="98" height="${y1 - y0 + 2}" style="fill:var(--lig);fill-opacity:.25"/>`;   // interspinous
+  }
+  s += `<rect x="372" y="20" width="8" height="380" style="fill:var(--lig);fill-opacity:.7"/>`;     // supraspinous
+  s += `<rect class="fatf" x="380" y="0" width="46" height="540"/><rect class="skin" x="426" y="0" width="12" height="540"/>`;
+  // iliac crest line at the L4 spine
+  const yl4 = yb(3) + 30;
+  s += `<line x1="40" y1="${yl4}" x2="470" y2="${yl4}" style="stroke:var(--muted);stroke-width:1.2;stroke-dasharray:6 4"/>`;
+  s += T(600, yl4 - 6, 'Line of the iliac crests', 's', 'end');
+  // needle at the L3–L4 space, horizontal, midline
+  const yn = yb(2) + 64;
+  s += `<line class="needle" x1="590" y1="${yn}" x2="214" y2="${yn}"/>`;
+  // numbered layers: [x on the needle, number, label centre x, y offset]; the close ones (5–8) fan out with short leaders
+  const marks = [[432, 1, 432, -14], [403, 2, 403, 18], [376, 3, 376, -14], [312, 4, 312, 18], [236, 5, 250, -22], [231, 6, 252, 24], [228, 7, 222, -30], [214, 8, 202, 22]];
+  marks.forEach(([x, n, lx, dy]) => { const yy = yn + dy; if (lx !== x) s += lead(x, yn, lx, yy);
+    s += `<circle cx="${lx}" cy="${yy}" r="8" style="fill:var(--surface);stroke:var(--ink)"/>` + T(lx, yy + 4, n, 's', 'middle'); });
+  s += T(470, yn - 22, 'Needle at L3–L4', '') + T(470, yn - 8, '(midline)', 's');
+  // labels
+  s += lead(221, end - 8, 290, end + (baby ? -40 : 10)) + T(294, end + (baby ? -36 : 14), baby ? 'Cord ends ≈ L3 (newborn)' : 'Cord ends ≈ L1–L2 (adult)', '');
+  s += lead(218, 360, 290, 372) + T(294, 376, 'Cauda equina in', '') + T(294, 390, 'the lumbar cistern', '');
+  s += lead(226, 446, 290, 500) + T(294, 504, 'Dural sac ends at S2', '');
+  const list = ['1 Skin', '2 Subcutaneous fat', '3 Supraspinous ligament', '4 Interspinous ligament', '5 Ligamentum flavum', '6 Epidural space', '7 Dura + arachnoid', '8 Subarachnoid space (CSF)'];
+  list.forEach((t, i) => { s += T(470, 330 + i * 18, t, 's'); });
+  s += T(470, 312, 'Layers pierced:', 'h');
+  $('lp-svg').innerHTML = s;
+}
+/* ---------- cord cross-section ---------- */
+const CX = 300, CY = 235;
+function greyHalf(lv) {   // right half of the grey matter (x < CX), as a path
+  const L = LEVELS[lv];
+  const ah = lv === 'cervical' ? [86, 70] : lv === 'lumbar' ? [74, 76] : [42, 54];   // anterior horn reach (x, y)
+  const ph = lv === 'cervical' ? [76, 92] : lv === 'lumbar' ? [58, 86] : [56, 78];   // posterior horn tip
+  const w = lv === 'thoracic' ? 9 : lv === 'lumbar' ? 20 : 12;                       // posterior horn half width
+  const aw = lv === 'thoracic' ? 16 : 30;
+  let d = `M${CX} ${CY - 7} L${CX - 18} ${CY - 9}`;
+  d += ` C${CX - 26} ${CY - 30} ${CX - ph[0] + w} ${CY - ph[1] + 20} ${CX - ph[0] + w} ${CY - ph[1]}`;
+  d += ` L${CX - ph[0] - w} ${CY - ph[1] + 4} C${CX - ph[0] - w - 4} ${CY - ph[1] + 40} ${CX - 40} ${CY - 22} ${CX - 34} ${CY - 6}`;
+  if (L.lat) d += ` L${CX - 62} ${CY + 2} L${CX - 38} ${CY + 12}`;
+  d += ` C${CX - ah[0] - 4} ${CY + 18} ${CX - ah[0] - 6} ${CY + ah[1] - aw} ${CX - ah[0] + 10} ${CY + ah[1]}`;
+  d += ` C${CX - ah[0] + aw} ${CY + ah[1] + 12} ${CX - 22} ${CY + ah[1] - 4} ${CX - 20} ${CY + 12} L${CX} ${CY + 9} Z`;
+  return d;
+}
+const mirror = s => `<g transform="translate(${2 * CX} 0) scale(-1 1)">${s}</g>`;
+const SEC = {level: 'thoracic', lesion: 'none'};
+function tractShape(t, L) {
+  const [key, , tok, c, sz] = t, x = CX + c[0] * L.rx, y = CY + c[1] * L.ry, w = sz[0] * L.rx, h = sz[1] * L.ry;
+  return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${w.toFixed(1)}" ry="${h.toFixed(1)}" style="fill:var(${tok});fill-opacity:.85"/>`;
+}
+function drawSection() {
+  const lv = SEC.level, L = LEVELS[lv], les = SEC.lesion;
+  let s = DEFS;
+  s += `<ellipse class="wm" cx="${CX}" cy="${CY}" rx="${L.rx}" ry="${L.ry}"/>`;
+  s += `<path d="M${CX - 6} ${CY + L.ry + 1} L${CX} ${CY + L.ry - 30} L${CX + 6} ${CY + L.ry + 1} Z" style="fill:var(--surface)"/>`;
+  s += `<line x1="${CX}" y1="${CY - L.ry}" x2="${CX}" y2="${CY - 10}" style="stroke:var(--muted);stroke-width:1.2"/>`;
+  const show = TRACTS.filter(t => !(t[0] === 'cu' && !L.cuneatus) && !(t[0] === 'acst' && !L.acst) && !(t[0] === 'tec' && !L.tecto));
+  let half = show.map(t => tractShape(t, L)).join('');
+  half += `<path class="gm" d="${greyHalf(lv)}"/>`;
+  if (L.clarke) half += `<circle cx="${CX - 22}" cy="${CY - 24}" r="6" style="fill:var(--surface);stroke:var(--muted)"/>`;
+  s += half + mirror(half);
+  s += `<circle cx="${CX}" cy="${CY}" r="3.5" style="fill:var(--s-csf);stroke:var(--muted)"/>`;
+  // lesions
+  const half_ = `M${CX} ${CY - L.ry} A${L.rx} ${L.ry} 0 0 0 ${CX} ${CY + L.ry} Z`;
+  const ellipse = (fx, fy, w, h) => `<ellipse class="lesion" cx="${CX + fx * L.rx}" cy="${CY + fy * L.ry}" rx="${w * L.rx}" ry="${h * L.ry}"/>`;
+  const both = e => e + mirror(e);
+  // anterior spinal artery territory (approximate): everything in front of a line from the lateral surface just behind the
+  // lateral corticospinal tract (−0.35 ry) to the bases of the posterior horns and the grey commissure
+  const ax = (0.937 * L.rx).toFixed(1), ay = (CY - 0.35 * L.ry).toFixed(1);
+  const ASA_TOP = `L${CX + 0.3 * L.rx} ${ay} L${CX} ${CY - 0.12 * L.ry} L${CX - 0.3 * L.rx} ${ay} Z`;
+  const ASA = `M${CX - ax} ${ay} A${L.rx} ${L.ry} 0 1 0 ${CX + +ax} ${ay} ` + ASA_TOP;
+  const LES = {
+    bss: `<path class="lesion" d="${half_}"/>`,
+    syr: `<ellipse class="lesion" cx="${CX}" cy="${CY + 6}" rx="${0.26 * L.rx}" ry="${0.2 * L.ry}"/>`,
+    polio: `<path class="lesion" d="M${CX - 22} ${CY + 14} C${CX - 80} ${CY + 18} ${CX - 92} ${CY + 70} ${CX - 70} ${CY + 76} C${CX - 40} ${CY + 80} ${CX - 22} ${CY + 60} ${CX - 22} ${CY + 14} Z"/>`,
+    als: both(`<path class="lesion" d="M${CX - 22} ${CY + 14} C${CX - 80} ${CY + 18} ${CX - 92} ${CY + 70} ${CX - 70} ${CY + 76} C${CX - 40} ${CY + 80} ${CX - 22} ${CY + 60} ${CX - 22} ${CY + 14} Z"/>` + ellipse(-0.62, -0.18, 0.15, 0.19) + (L.acst ? ellipse(-0.07, 0.82, 0.06, 0.13) : '')),
+    sacd: both(`<path class="lesion" d="M${CX} ${CY - L.ry} A${L.rx} ${L.ry} 0 0 0 ${CX - 0.42 * L.rx} ${CY - 0.9 * L.ry} L${CX - 0.12 * L.rx} ${CY - 0.14 * L.ry} L${CX} ${CY - 0.12 * L.ry} Z"/>` + ellipse(-0.62, -0.18, 0.15, 0.19)),
+    tabes: both(`<path class="lesion" d="M${CX} ${CY - L.ry} A${L.rx} ${L.ry} 0 0 0 ${CX - 0.42 * L.rx} ${CY - 0.9 * L.ry} L${CX - 0.12 * L.rx} ${CY - 0.14 * L.ry} L${CX} ${CY - 0.12 * L.ry} Z"/><path class="lesion" d="M${CX - 0.5 * L.rx} ${CY - 0.86 * L.ry} L${CX - 0.75 * L.rx} ${CY - 1.25 * L.ry} L${CX - 0.62 * L.rx} ${CY - 1.32 * L.ry} L${CX - 0.38 * L.rx} ${CY - 0.92 * L.ry} Z"/>`),
+    asa: `<path class="lesion" d="${ASA}"/>`,
+    tm: `<ellipse class="lesion" cx="${CX}" cy="${CY}" rx="${L.rx}" ry="${L.ry}"/>`,
+  };
+  if (LES[les]) s += LES[les];
+  if (les === 'art') {
+    s += `<path d="M${CX - ax} ${ay} L${CX - 0.3 * L.rx} ${ay} L${CX} ${CY - 0.12 * L.ry} L${CX + 0.3 * L.rx} ${ay} L${CX + +ax} ${ay}" style="fill:none;stroke:var(--artery);stroke-width:2;stroke-dasharray:6 4"/>`;
+    s += `<circle class="art" cx="${CX}" cy="${CY + L.ry + 10}" r="8"/>` + T(CX + 14, CY + L.ry + 26, 'Anterior spinal artery', '');
+    s += `<circle class="art" cx="${CX - 0.55 * L.rx}" cy="${CY - 1.02 * L.ry}" r="6"/><circle class="art" cx="${CX + 0.55 * L.rx}" cy="${CY - 1.02 * L.ry}" r="6"/>`;
+    s += T(CX + 0.55 * L.rx + 10, CY - 1.02 * L.ry - 6, 'Posterior spinal arteries', '');
+    s += T(CX + L.rx + 6, CY + 30, 'Anterior territory', 's') + T(CX + L.rx + 6, CY - 40, 'Posterior territory', 's');
+  }
+  // labels: patient's right half (viewer's left)
+  const lx = CX - L.rx - 30;
+  const lab = [];
+  for (const t of show) lab.push([CX + t[3][0] * L.rx, CY + t[3][1] * L.ry, t[1]]);
+  lab.push([CX - 30, CY + 40, 'Anterior horn'], [CX - 40, CY - 50, 'Posterior horn']);
+  if (L.lat) lab.push([CX - 58, CY + 3, 'Lateral horn (T1–L2)']);
+  if (L.clarke) lab.push([CX - 22, CY - 24, 'Dorsal nucleus (Clarke)']);
+  lab.sort((a, b) => a[1] - b[1]);
+  const y0 = 30, step = Math.min(30, (440 - y0) / Math.max(1, lab.length - 1));
+  lab.forEach(([x, y, t], i) => { const ty = y0 + i * step; s += lead(x, y, lx + 4, ty - 4) + T(lx, ty, t, '', 'end'); });
+  s += T(CX, CY - L.ry - 10, 'Posterior (back)', 'h', 'middle') + T(CX, CY + L.ry + (les === 'art' ? 46 : 22), 'Anterior median fissure', 'h', 'middle');
+  s += T(CX + L.rx + 6, 20, L.name, 'h');
+  $('sec-svg').innerHTML = s;
+  $('sec-text').innerHTML = `<p><b>${L.name}.</b> ${L.note}</p><p>In every section: the <b>central canal</b> in the grey commissure; the anterior white commissure in front of it, where the spinothalamic fibres cross; the <b>posterolateral tract (Lissauer)</b> between the tip of the posterior horn and the surface, where entering pain fibres run up or down one or two segments; the <b>substantia gelatinosa</b> capping the posterior horn.</p>`;
+  $('find').innerHTML = FIND[les];
+}
+function table(id, head, rows) {
+  $(id).innerHTML = '<tr>' + head.map(x => `<th>${x}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + r.map((c, i) => `<td data-h="${head[i]}">${c}</td>`).join('') + '</tr>').join('');
+}
+function toggles(id, items, onSel, start) {
+  const box = $(id);
+  for (const [key, label] of items) {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = label; b.dataset.k = key; b.setAttribute('aria-pressed', key === start);
+    b.onclick = () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); onSel(key); };
+    box.append(b);
+  }
+}
+
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('men-text').innerHTML = MEN_TEXT; $('lp-text').innerHTML = LP_TEXT; $('ext-text').innerHTML = EXT_TEXT; $('umn-text').innerHTML = UMN_TEXT;
+  table('men-table', MEN_HEAD, MEN_ROWS); table('ext-table', EXT_HEAD, EXT_ROWS); table('tract-table', TRACT_HEAD, TRACT_ROWS); table('les-table', LES_HEAD, LES_ROWS);
+  drawMen(); drawCSF('normal'); drawLP(false); drawSection();
+  toggles('csf-tg', [['normal', 'Normal flow'], ['obs', 'Obstructive hydrocephalus'], ['com', 'Communicating']], k => drawCSF(k), 'normal');
+  toggles('lp-tg', [['adult', 'Adult'], ['baby', 'Newborn']], k => drawLP(k === 'baby'), 'adult');
+  toggles('lev-tg', Object.entries(LEVELS).map(([k, l]) => [k, l.name]), k => { SEC.level = k; drawSection(); }, 'thoracic');
+  toggles('les-tg', LESIONS, k => { SEC.lesion = k; drawSection(); }, 'none');
+  $('sec-key').innerHTML = [['--t-dc', 'Posterior column'], ['--t-st', 'Spinothalamic'], ['--t-sc', 'Spinocerebellar'], ['--t-cst', 'Corticospinal'], ['--t-ex', 'Other descending'], ['--grey', 'Grey matter']]
+    .map(([t, l]) => `<span><i style="background:var(${t})"></i>${l}</span>`).join('') + '<span><i style="background:repeating-linear-gradient(45deg,var(--clin) 0 3px,transparent 3px 7px)"></i>Lesion</span>';
+  const bar = $('vbar');
+  for (const [label, dir] of [['Front', [0, -1, 0]], ['Back', [0, 1, 0]], ['Right', [-1, 0, 0]], ['Above', ABOVE], ['Below', [0, 0.3, -1]]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic('cord');
+  window.J = {TOPICS, showTopic, names, kind, drawSection, SEC};   // for tests
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

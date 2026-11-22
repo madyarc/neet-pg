@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brainstem and Cerebellum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone, --dura, --nerve, --artery, --vein, --clin (a lesion or a clinical point), --soft.
+   Shared with other pages, same meaning: --s-csf (cerebrospinal fluid, as on back/vertebral-column.html), --skin (regions.html).
+   Page-only tokens of the neuro pages (meninges-cord.html and brainstem.html share them; chosen away from every other token of the
+   site with fill-neuro1-scripts/colcheck.py): --cordw (white matter / cord surface), --grey (grey matter of the cord), tract
+   families --t-dc (posterior column – medial lemniscus), --t-st (spinothalamic / spinal lemniscus), --t-sc (spinocerebellar),
+   --t-cst (corticospinal and corticobulbar fibres, also the pyramid), --t-ex (other descending tracts), --medulla, --pons,
+   --midb, --cblm (brainstem and cerebellum in 3D), --dien (thalamus and other context), --chp (choroid plexus), --arach
+   (arachnoid), --pia (pia mater), --fat (epidural fat, as on perineum.html); brainstem.html also --wmt (white-matter bundles drawn on a section: peduncles, MLF,
+   lemnisci, trapezoid body, transverse pontine fibres). Dark --t-ex and --nuc-m shifted away from --gut and --ins (review 2026-11-22). */
+:root{--s-csf:#cfe6f5;--skin:#f1d3bf;--cordw:#d9cbe0;--grey:#9c8f99;--t-dc:#3c9df2;--t-st:#6060f2;--t-sc:#1c724a;--t-cst:#bf2f85;--t-ex:#8c5b23;
+  --medulla:#bda0c0;--pons:#8fb8d6;--midb:#dca27a;--cblm:#a8c08a;--dien:#a7b3a0;--chp:#a3586e;--arach:#7d6e8a;--pia:#d98fa8;--fat:#f3e3a6;
+  --olive:#a88f2f;--rn:#c25b56;--sn:#46343c;--nuc-m:#c45a1b;--nuc-p:#628c23;--nuc-s:#b53cf2;--wmt:#cde6e1}
+:root[data-theme="dark"]{--s-csf:#2b4a60;--skin:#7a5a48;--cordw:#6d6080;--grey:#8a7d88;--t-dc:#6fb8f5;--t-st:#8f8ff5;--t-sc:#3fae7c;--t-cst:#e35aa8;--t-ex:#a88a5a;
+  --medulla:#8c6f90;--pons:#5f88a6;--midb:#a8724c;--cblm:#6f8a52;--dien:#6f7a68;--chp:#c97890;--arach:#a596b4;--pia:#b06a82;--fat:#7d6f3c;
+  --olive:#c9ae52;--rn:#e07a74;--sn:#8a7590;--nuc-m:#e2704f;--nuc-p:#8cb84a;--nuc-s:#cf7af5;--wmt:#87a09b;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+#topics{display:flex;flex-direction:column;gap:10px}
+#topic-text p+p,.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.scroll{overflow-x:auto}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:640px;margin:0 auto}
+.schbox{overflow-x:auto;scrollbar-color:var(--line) transparent}
+.swipe{display:none}
+svg.sch.wide{max-width:900px}
+@media (max-width:600px){.schbox svg.sch{min-width:520px}.schbox svg.sch.wide{min-width:700px}.schbox svg.sch.fit{min-width:0}.swipe{display:inline}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.c{fill:var(--clin);font-weight:600}
+svg.sch .bone{fill:var(--bone);stroke:var(--muted);stroke-width:1}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .arrow{stroke:var(--muted);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+svg.sch .flow{stroke:var(--ink);stroke-width:1.8;fill:none;marker-end:url(#arr)}
+svg.sch .dash{stroke-dasharray:6 4}
+svg.sch .wm{fill:var(--cordw);stroke:var(--muted);stroke-width:1.2}
+svg.sch .gm{fill:var(--grey);stroke:var(--muted);stroke-width:.8}
+svg.sch .csf{fill:var(--s-csf)}
+svg.sch .dura{fill:none;stroke:var(--dura);stroke-width:5}
+svg.sch .durab{fill:var(--dura)}
+svg.sch .arach{fill:none;stroke:var(--arach);stroke-width:1.6;stroke-dasharray:5 3}
+svg.sch .pia{fill:none;stroke:var(--pia);stroke-width:2}
+svg.sch .fatf{fill:var(--fat)}
+svg.sch .vein{fill:var(--vein);fill-opacity:.75}
+svg.sch .art{fill:var(--artery)}
+svg.sch .nv{fill:var(--nerve);stroke:var(--ink);stroke-width:.5}
+svg.sch .nvl{stroke:var(--nerve);stroke-width:4;fill:none;stroke-linecap:round}
+svg.sch .lig{fill:var(--lig);fill-opacity:.6;stroke:var(--lig);stroke-width:1}
+svg.sch .skin{fill:var(--skin)}
+svg.sch .lesion{fill:url(#hatch);stroke:var(--clin);stroke-width:2}
+svg.sch .needle{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+svg.sch .box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .vent{fill:var(--s-csf);stroke:var(--muted);stroke-width:1}
+svg.sch .brain{fill:var(--cordw);fill-opacity:.55;stroke:var(--muted);stroke-width:1}
+svg.sch .chp{fill:var(--chp)}
+svg.sch .sinus{fill:var(--vein);fill-opacity:.85}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.credit{font-size:12px;color:var(--muted)}
+#find{font-size:14px}
+#find b{color:var(--ink)}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Brainstem and Cerebellum</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="The brainstem and cerebellum in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <div class="key" id="key3d"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ext">
+  <h2 id="h-ext">External features of the brainstem</h2>
+  <div class="prose" id="ext-text"></div>
+  <div class="scroll"><table class="t stack" id="ext-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sec">
+  <h2 id="h-sec">Sections of the medulla, pons and midbrain, and their syndromes</h2>
+  <div class="toggles" id="lev-tg" aria-label="Level"></div>
+  <div class="schbox"><svg class="fig sch wide" id="sec-svg" viewBox="-135 0 870 470" role="img" aria-label="Schematic transverse section of the brainstem at the chosen level, with its nuclei and tracts labelled (each structure on one side; both sides have it) and the chosen syndrome's lesion hatched"></svg></div>
+  <div class="toggles" id="les-tg" aria-label="Lesion"></div>
+  <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, positions approximate. Seen <b>from above</b>: the back (dorsal: the fourth ventricle or the tectum) at the <b>top</b>, the front at the bottom, the patient's <b>right on your left</b>. The two halves are mirror images, so each structure is labelled on one side only. Lesions are drawn on the patient's <b>right</b> (your left).</p>
+  <div class="key" id="sec-key"></div>
+  <div class="two">
+    <div class="prose" id="sec-text"></div>
+    <p id="find" aria-live="polite"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-nuc">
+  <h2 id="h-nuc">Cranial nerve nuclei and their functional columns</h2>
+  <div class="prose" id="nuc-text"></div>
+  <div class="scroll"><table class="t stack" id="nuc-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-syn">
+  <h2 id="h-syn">Brainstem syndromes at a glance</h2>
+  <div class="prose" id="syn-text"></div>
+  <div class="scroll"><table class="t stack" id="syn-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cb">
+  <h2 id="h-cb">Cerebellum: parts, cortex, nuclei, peduncles, connections, dysfunction</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="cb-svg" viewBox="0 0 600 470" role="img" aria-label="Schematic of the cerebellum unfolded flat: the anterior lobe above the primary fissure, the posterior lobe, and the flocculonodular lobe below the posterolateral fissure; the vermis in the middle, the intermediate zone and the lateral hemispheres on each side, shaded by functional division; the four deep nuclei from lateral to medial: dentate, emboliform, globose, fastigial"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic: the cerebellar surface unfolded flat, not to scale. The anterior lobe at the top.</p>
+      <div class="key" id="cb-key"></div>
+    </div>
+    <div class="prose" id="cb-text"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="ped-table"></table></div>
+  <div class="prose" id="cb2-text"></div>
+  <div class="scroll"><table class="t stack" id="sign-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-neuro1.md, anatomy/DATA-SOURCES.md) ===================== */
+const L = k => k + '_l';
+const SH = (l, sh) => ({l, sh});
+const RIGHT = [-1, 0, 0.05], FRONT = [0, -1, 0.05], BACK = [0, 1, 0.1], ABOVE = [0, 0.25, 1];
+const STEM = ['b_medulla', 'b_pons', 'b_midbrain', 'b_peduncles', 'b_sup_coll_r', 'b_sup_coll_l', 'b_inf_coll_r', 'b_inf_coll_l',
+  'b_brach_sc_r', 'b_brach_sc_l', 'b_brach_ic_r', 'b_brach_ic_l'];
+const SURF = ['z_olive_r', 'z_olive_l', 'z_pyramid_r', 'z_pyramid_l'];
+const CN = ['cn_iii', 'cn_iv', 'cn_v', 'cn_vi', 'cn_vii', 'cn_viii', 'cn_ix', 'cn_x', 'cn_xi', 'cn_xii'];
+const NUC = ['n3_r', 'n3ew_r', 'n4_r', 'n6_r', 'n7m_r', 'nss_r', 'nis_r', 'n10d_r', 'namb_r', 'n12_r', 'n11_r', 'ncoa_r', 'ncop_r', 'nred_r'];
+const DIEN = ['b_thal_r', 'b_thal_l', 'b_pineal', 'b_mammillary'];
+const ART = ['v_vertebral_artery_r', 'v_basilar_artery', 'v_posterior_inferior_cerebellar_artery_r', 'v_anterior_inferior_cerebellar_artery_r',
+  'v_superior_cerebellar_artery_r', 'v_posterior_cerebral_artery_r', 'v_medial_pontine_branches_of_basilar_artery_r', 'v_lateral_pontine_branches_of_basilar_artery_r',
+  'v_anterior_spinal_artery_r'];
+const TOPICS = [
+  {grp: 'Brainstem', id: 'front', name: 'From the front',
+    lit: [...STEM.filter(k => k !== 'b_medulla'), ...SURF], solid: [...DIEN], glass: ['b_medulla', 'b_cerebellum'], fit: [...STEM, 'b_mammillary'], view: FRONT, zoom: 0.82,
+    labels: [['z_pyramid_r', 'Pyramid', [-4, -95, 1503]], ['z_olive_r', 'Olive', [-11, -90, 1507]], ['b_pons', SH('Pons (basilar part)', 'Pons'), [-12, -106, 1527]],
+      ['b_peduncles', SH('Crus cerebri (cerebral peduncle)', 'Crus cerebri'), [-14, -108, 1545]], 
+      ['b_mammillary', SH('Mammillary bodies (context)', 'Mammillary'), [-2, -106, 1549], 'v']],
+    pts: [[[0, -104, 1546], SH('Interpeduncular fossa', 'Interped. fossa'), '--ink']],
+    text: `<p>From the front. The <b>medulla</b>: the anterior median fissure with a <b>pyramid</b> on each side (corticospinal and corticobulbar fibres; at the lower end most of them cross in the <b>pyramidal decussation</b>); lateral to it the <b>olive</b>, over the inferior olivary nucleus (here the medulla is glass so that Z-Anatomy's olive and pyramid show). The <b>pons</b>: a convex basilar part whose transverse fibres gather on each side into the <b>middle cerebellar peduncle</b>, with a median basilar sulcus for the basilar artery. The <b>midbrain</b>: the two <b>crura cerebri</b> diverge upward with the <b>interpeduncular fossa</b> between them.</p>`},
+  {grp: 'Brainstem', id: 'nerves', name: 'Cranial nerve roots',
+    lit: [...CN, ...CN.map(L)], solid: [...STEM, ...SURF], glass: ['b_cerebellum'], fit: [...STEM], view: [-1, -0.5, 0.08], zoom: 0.85,
+    labels: [['cn_iii', 'III', [-9, -111, 1541], 'v'], ['cn_iv', 'IV', [-14, -100, 1535]], ['cn_v', 'V', [-16.6, -85.7, 1533.8], 'v'], ['cn_vi', 'VI', [-4.5, -95, 1513], 'v'],
+      ['cn_vii', 'VII', [-12, -92, 1517]], ['cn_viii', 'VIII', [-21, -86, 1514], 'v'], ['cn_ix', 'IX', [-16, -84, 1510]], ['cn_x', 'X', [-17, -86, 1505]], ['cn_xi', 'XI', [-14, -80, 1488]],
+      ['cn_xii', 'XII', [-11, -90, 1500]]],
+    text: `<p>From the right and a little in front (the cranial nerves are Z-Anatomy's curves, cut short near the brainstem; left ones mirrored). <b>III</b> emerges on the medial side of the crus into the interpeduncular fossa; <b>IV</b> is the only nerve to leave the <b>back</b> of the brainstem, just below the inferior colliculus, and winds forward round the peduncle; <b>V</b> is attached to the side of the pons (a large sensory and a small motor root) where it meets the middle cerebellar peduncle; <b>VI</b> leaves in the groove between the pons and the pyramid; <b>VII</b> and <b>VIII</b> more laterally, at the <b>cerebellopontine angle</b>; <b>XII</b> rootlets between the pyramid and the olive; <b>IX</b> and <b>X</b> rootlets in the groove behind the olive (Gray: the accessory rootlets too).</p>`},
+  {grp: 'Brainstem', id: 'back', name: 'From behind',
+    lit: [...STEM, 'c_fourth'], solid: [...DIEN], glass: ['c_aqueduct'], fit: [...STEM], view: BACK, zoom: 0.85,
+    labels: [['b_sup_coll_r', SH('Superior colliculus', 'Sup. colliculus'), [-5, -79, 1549]], ['b_inf_coll_r', SH('Inferior colliculus', 'Inf. colliculus'), [-6, -78, 1540]],
+      ['c_fourth', SH('Fourth ventricle (floor)', '4th ventricle'), [-6, -65, 1518]], ['b_medulla', SH('Medulla (closed part)', 'Medulla'), [-6, -66, 1485]],
+      ['b_pineal', SH('Pineal body', 'Pineal'), [-1, -70, 1553], 'v']],
+    text: `<p>From behind, the cerebellum removed. The <b>tectum</b> of the midbrain carries two <b>superior</b> and two <b>inferior colliculi</b>. Below, the <b>fourth ventricle</b> (blue, its cavity) lies on the back of the pons and the upper (open) medulla — its floor is the <b>rhomboid fossa</b>; the lower (closed) medulla contains the central canal and shows the gracile and cuneate tubercles (not modelled). The ventricle's sides are the cerebellar peduncles (not modelled).</p>`},
+  {grp: 'Brainstem', id: 'nuclei', name: 'Cranial nerve nuclei',
+    lit: [...NUC], glass: [...STEM, 'c_fourth', 'c_aqueduct'], fit: [...STEM], view: [-0.6, 1, 0.15], zoom: 1.1,
+    labels: [['n3_r', SH('Oculomotor (III)', 'III'), null], ['n3ew_r', SH('Edinger–Westphal', 'EW'), null], ['n4_r', SH('Trochlear (IV)', 'IV'), null],
+      ['n6_r', SH('Abducens (VI)', 'VI'), null], ['n7m_r', SH('Facial motor (VII)', 'VII'), null], ['n12_r', SH('Hypoglossal (XII)', 'XII'), [-0.8, -78.6, 1511.8], 'v'],
+      ['namb_r', SH('Nucleus ambiguus', 'Ambiguus'), null], ['n10d_r', SH('Dorsal vagal (X)', 'X dorsal'), [-2.1, -77.4, 1505.2], 'v'], ['n11_r', SH('Accessory (XI)', 'XI'), null],
+      ['ncop_r', SH('Cochlear nuclei', 'Cochlear'), null], ['nred_r', SH('Red nucleus', 'Red n.'), null]],
+    text: `<p>From behind and the right, brainstem as glass. Motor nuclei (orange), parasympathetic (green), sensory (violet), red nucleus. They lie in functional columns (table below): <b>somatic motor</b> (III, IV, VI, XII), <b>branchial motor</b> (motor V, facial, ambiguus), <b>parasympathetic</b> (Edinger–Westphal, salivatory, dorsal vagal) and sensory; in the floor of the fourth ventricle the <b>sulcus limitans</b> separates the motor nuclei (medial) from the sensory (lateral). Positions are Z-Anatomy's hand-placed blobs: approximate. Z-Anatomy has no trigeminal sensory or solitary nucleus mesh and its vestibular blob is misplaced, so they are left out.</p>`},
+  {grp: 'Brainstem', id: 'arteries', name: 'Arteries',
+    lit: [...ART, ...ART.filter(k => k.endsWith('_r')).map(L)], solid: [...STEM, ...SURF], glass: ['b_cerebellum'], fit: [...STEM, 'v_basilar_artery'], view: FRONT, zoom: 0.95,
+    labels: [['v_vertebral_artery_r', SH('Vertebral artery', 'Vertebral'), [-12, -95, 1495]], ['v_basilar_artery', 'Basilar', [0, -107, 1525]],
+      ['v_posterior_inferior_cerebellar_artery_r', 'PICA', [-20, -90, 1500]], ['v_anterior_inferior_cerebellar_artery_r', 'AICA', [-22, -100, 1517]],
+      ['v_superior_cerebellar_artery_r', SH('Superior cerebellar', 'SCA'), [-18, -104, 1537]], ['v_posterior_cerebral_artery_r', SH('Posterior cerebral', 'PCA'), [-20, -108, 1545]],
+      ['v_anterior_spinal_artery_r', SH('Anterior spinal', 'Ant. spinal'), [-2, -95, 1485], 'v']],
+    text: `<p>From the front. The two <b>vertebral arteries</b> join (Gray: at the lower border of the pons) into the <b>basilar artery</b>, which runs up in the basilar sulcus and divides into the <b>posterior cerebral arteries</b>. <b>Medulla:</b> its medial part from the <b>anterior spinal artery</b> (and vertebral paramedian branches), its lateral part from the <b>posterior inferior cerebellar artery</b> and the vertebral artery. <b>Pons:</b> mainly the pontine branches of the basilar artery. <b>Midbrain:</b> branches of the posterior cerebral artery. The circle of Willis: <a href="../general/blood-vessels.html">Blood Vessels</a>.</p>`},
+  {grp: 'Cerebellum', id: 'cblm', name: 'Cerebellum',
+    lit: ['b_cerebellum'], solid: [...STEM], glass: ['d_tent_r', 'd_tent_l', 'occipital_bone'], fit: ['b_cerebellum'], view: [0, 1, -0.35], zoom: 1.0,
+    labels: [['b_cerebellum', SH('Right hemisphere', 'R. hemisphere'), [-35, -35, 1515]], ['b_cerebellum', SH('Left hemisphere', 'L. hemisphere'), [34, -35, 1515]],
+      ['b_cerebellum', SH('Vermis (midline)', 'Vermis'), [-0.5, -40, 1508], 'v'], ['d_tent_r', SH('Tentorium cerebelli', 'Tentorium'), [-35, -45, 1540]]],
+    text: `<p>From behind and below. The cerebellum lies in the <b>posterior cranial fossa</b> behind the pons, medulla and fourth ventricle, under the <b>tentorium cerebelli</b> (glass). Two <b>hemispheres</b> are joined by the median <b>vermis</b> (raised on the upper surface, sunk between the hemispheres below). BodyParts3D's cerebellum is one mesh, so the lobes, lobules and peduncles are drawn in the schematic below; the vermis label marks the midline (approximate). Z-Anatomy's lobule meshes are not used: their origin cannot be traced to a licensed source.</p>`},
+];
+const EXT_TEXT = `<p>The <b>medulla oblongata</b>, lowest part of the brainstem, runs from the foramen magnum (C1 level), continuous with the cord, to the lower border of the pons. Its lower <b>closed</b> part contains the central canal; in its upper <b>open</b> part the canal opens into the fourth ventricle and its back forms the lower floor of the ventricle.</p>
+<p>The <b>pons</b> lies between the midbrain above and the medulla below, in front of the cerebellum, with the fourth ventricle between them; its back forms the upper floor of the ventricle, with the <b>facial colliculus</b> (the facial nerve fibres looping over the abducens nucleus) beside the median sulcus. The <b>midbrain</b> consists of the <b>cerebral peduncles</b> in front (each: crus cerebri, substantia nigra, tegmentum), the <b>cerebral aqueduct</b> (joining the third and fourth ventricles) and the <b>tectum</b> behind, with four colliculi (corpora quadrigemina).</p>`;
+const EXT_HEAD = ['Part', 'Front', 'Side', 'Back'];
+const EXT_ROWS = [
+  ['<b>Medulla</b>', 'Anterior median fissure; pyramids; pyramidal decussation at the lower end', 'Olive between the anterolateral sulcus (XII rootlets) and the posterolateral sulcus behind it (IX, X rootlets; Gray: XI too)', 'Gracile and cuneate tubercles (lower); inferior cerebellar peduncles bounding the lower floor of the fourth ventricle (upper)'],
+  ['<b>Pons</b>', 'Basilar part with transverse fibres; basilar sulcus (basilar artery)', 'Middle cerebellar peduncle; V attached at its junction with the pons; VI, VII, VIII at the lower border', 'Upper floor of the fourth ventricle; facial colliculus'],
+  ['<b>Midbrain</b>', 'Crura cerebri; interpeduncular fossa (III emerges on the medial side of the crus)', 'Lateral lemniscus to the inferior colliculus', 'Superior and inferior colliculi; IV emerges below the inferior colliculus, beside the frenulum veli'],
+];
+/* ---------- brainstem sections. Right half (patient's right = viewer's left), mirrored for the left. Centre x = 300; top = dorsal.
+   item: [kind, geometry, colour token or class, label, label point]; kinds: e = ellipse [cx, cy, rx, ry]; p = path d (right half);
+   'mid' items are drawn once (not mirrored). Schematic; positions approximate. ---------- */
+const NUCM = '--nuc-m', NUCP = '--nuc-p', NUCS = '--nuc-s';
+const LEVELS = {
+  pyr: {name: 'Medulla: pyramidal decussation', grp: 'Medulla',
+    outline: 'M300 140 C230 140 175 175 175 235 C175 295 230 330 300 330 C370 330 425 295 425 235 C425 175 370 140 300 140 Z',
+    items: [
+      ['e', [292, 175, 12, 26], '--t-dc', 'Fasciculus gracilis', [288, 165]], ['e', [264, 180, 13, 22], '--t-dc', 'Fasciculus cuneatus', [262, 172]],
+      ['e', [293, 188, 6, 8], '--grey', 'Gracile nucleus (beginning)', [293, 190]], ['e', [216, 205, 13, 18], NUCS, 'Spinal tract and nucleus of V', [212, 205]],
+      ['e', [202, 255, 10, 16], '--t-st', 'Spinothalamic (spinal lemniscus)', [200, 255]], ['e', [192, 228, 7, 14], '--t-sc', 'Spinocerebellar tracts', [190, 228]],
+      ['e', [276, 312, 22, 15], '--t-cst', 'Pyramid', [270, 315]],
+      ['p', 'M282 300 C300 280 320 255 352 230', '--t-cst', 'Pyramidal decussation (crossing)', [306, 268], 'line'],
+      ['mid', 'circle', 'canal', 'Central canal', [300, 228]]],
+    text: '<b>Lowest level (closed medulla).</b> Most corticospinal fibres leave the <b>pyramids</b> and cross in the <b>pyramidal (motor) decussation</b> to run down in the opposite <b>lateral corticospinal tract</b>. The section still looks like the cord: the central canal, the gracile and cuneate fasciculi with their nuclei beginning, and laterally the <b>spinal trigeminal tract and nucleus</b> (pain and temperature of the face).'},
+  sens: {name: 'Medulla: sensory decussation', grp: 'Medulla',
+    outline: 'M300 135 C228 135 170 172 170 235 C170 300 228 340 300 340 C372 340 430 300 430 235 C430 172 372 135 300 135 Z',
+    items: [
+      ['e', [288, 165, 14, 18], '--grey', 'Gracile nucleus', [286, 163]], ['e', [258, 172, 16, 18], '--grey', 'Cuneate nucleus', [256, 170]],
+      ['p', 'M268 186 C255 230 270 262 300 268 C320 272 330 290 318 300', '--t-dc', 'Internal arcuate fibres (crossing)', [262, 222], 'line'],
+      ['e', [288, 290, 10, 22], '--t-dc', 'Medial lemniscus', [290, 292]], ['e', [276, 322, 22, 15], '--t-cst', 'Pyramid', [270, 325]],
+      ['e', [292, 205, 6, 7], NUCM, 'Hypoglossal nucleus', [292, 205]], ['e', [276, 200, 6, 6], NUCP, 'Dorsal nucleus of the vagus', [276, 200]],
+      ['e', [212, 205, 13, 18], NUCS, 'Spinal tract and nucleus of V', [208, 205]], ['e', [198, 262, 10, 16], '--t-st', 'Spinothalamic (spinal lemniscus)', [196, 262]],
+      ['mid', 'circle', 'canal', 'Central canal', [300, 222]]],
+    text: '<b>Just above (still closed).</b> Axons from the <b>gracile and cuneate nuclei</b> curve forward as <b>internal arcuate fibres</b>, cross the midline in the <b>sensory decussation</b> and turn up as the <b>medial lemniscus</b>, behind the pyramids. The posterior column pathway has now crossed: above this level its fibres carry the opposite half of the body.'},
+  olive: {name: 'Medulla: olive (open)', grp: 'Medulla',
+    outline: 'M300 165 L265 140 C215 128 170 160 165 215 C160 275 205 340 300 350 C395 340 440 275 435 215 C430 160 385 128 335 140 Z',
+    items: [
+      ['p', 'M300 165 L265 140 L335 140 Z', '--s-csf', 'Fourth ventricle', [300, 150], 'mid'],
+      ['e', [290, 160, 7, 8], NUCM, 'Hypoglossal nucleus', [290, 160]], ['e', [272, 154, 7, 7], NUCP, 'Dorsal nucleus of the vagus', [272, 154]],
+      ['e', [236, 150, 16, 9], NUCS, 'Vestibular nuclei', [232, 150]], ['e', [252, 172, 6, 6], NUCS, 'Solitary tract and nucleus', [252, 172]],
+      ['e', [238, 222, 6, 8], NUCM, 'Nucleus ambiguus', [238, 222]], ['e', [196, 196, 12, 16], NUCS, 'Spinal tract and nucleus of V', [194, 196]],
+      ['e', [188, 160, 16, 14], '--wmt', 'Inferior cerebellar peduncle', [186, 158]], ['e', [204, 258, 10, 14], '--t-st', 'Spinothalamic', [202, 258]],
+      ['p', 'M262 268 C238 250 214 262 214 290 C214 318 240 332 262 316 C246 312 236 300 240 290 C244 280 256 278 264 284 Z', '--olive', 'Inferior olivary nucleus', [222, 292]],
+      ['e', [288, 278, 9, 32], '--t-dc', 'Medial lemniscus', [289, 280]], ['e', [276, 330, 22, 14], '--t-cst', 'Pyramid', [272, 332]],
+      ['e', [292, 182, 5, 6], '--wmt', 'Medial longitudinal fasciculus', [292, 182]],
+      ['p', 'M290 168 C285 230 270 300 256 345', '--nerve', 'Hypoglossal (XII) fibres', [276, 300], 'line'],
+      ['p', 'M240 222 C220 230 196 236 168 240', '--nerve', 'IX, X fibres', [190, 236], 'line']],
+    text: '<b>Level of the olive (open medulla).</b> The folded, bag-like <b>inferior olivary nucleus</b> opens medially (its <b>olivocerebellar = climbing fibres</b> cross and enter the opposite inferior cerebellar peduncle). In the floor of the fourth ventricle, from medial to lateral: <b>hypoglossal nucleus</b> (hypoglossal trigone), <b>dorsal nucleus of the vagus</b> (vagal trigone), <b>vestibular nuclei</b> (vestibular area); the <b>sulcus limitans</b> separates the motor (medial) from the sensory (lateral) nuclei. Deeper: the <b>nucleus ambiguus</b> in the reticular formation, the <b>solitary tract and nucleus</b>, the <b>spinal trigeminal</b> tract and nucleus, the <b>inferior cerebellar peduncle</b>; beside the midline the <b>medial lemniscus</b> behind the <b>pyramid</b>.'},
+  pons1: {name: 'Pons: lower (facial colliculus)', grp: 'Pons',
+    outline: 'M300 150 L262 128 C215 120 175 150 172 195 C168 225 150 240 128 262 C112 300 150 365 300 380 C450 365 488 300 472 262 C450 240 432 225 428 195 C425 150 385 120 338 128 Z',
+    items: [
+      ['p', 'M300 150 L262 128 L338 128 Z', '--s-csf', 'Fourth ventricle', [300, 138], 'mid'],
+      ['e', [284, 160, 10, 9], NUCM, 'Abducens nucleus', [284, 160]],
+      ['p', 'M244 208 C258 192 280 182 292 172 C300 164 296 148 284 147 C272 146 266 152 258 160 C236 176 222 196 222 230 C222 256 196 290 140 316', '--nerve', 'Facial fibres (internal genu)', [222, 232], 'line'],
+      ['e', [238, 216, 10, 10], NUCM, 'Facial motor nucleus', [238, 216]], ['e', [292, 178, 5, 6], '--wmt', 'MLF', [292, 178]],
+      ['e', [226, 146, 16, 9], NUCS, 'Vestibular nuclei', [222, 146]], ['e', [196, 188, 11, 14], NUCS, 'Spinal tract and nucleus of V', [194, 188]],
+      ['p', 'M210 252 L300 256', '--wmt', 'Trapezoid body', [252, 254], 'line'], ['e', [228, 244, 7, 6], '--grey', 'Superior olivary nucleus', [228, 244]],
+      ['e', [268, 262, 26, 7], '--t-dc', 'Medial lemniscus', [262, 262]], ['e', [204, 236, 8, 10], '--t-st', 'Spinothalamic', [204, 236]],
+      ['p', 'M284 170 C284 240 280 320 286 375', '--nerve', 'Abducens fibres to the front', [283, 296], 'line'],
+      ['e', [262, 318, 16, 12], '--t-cst', 'Corticospinal bundles', [258, 318]], ['e', [222, 330, 14, 11], '--t-cst', '', null],
+      ['e', [175, 300, 30, 26], '--grey', 'Pontine nuclei', [168, 300]], ['p', 'M150 302 C200 292 250 294 300 298', '--wmt', 'Transverse pontine fibres', [236, 294], 'line']],
+    text: '<b>Lower pons.</b> A dorsal <b>tegmentum</b> (reticular formation, cranial nerve nuclei, medial lemniscus, MLF) and a ventral <b>basilar part</b> (pontine nuclei; transverse pontocerebellar fibres crossing to the opposite middle cerebellar peduncle; corticospinal, corticobulbar and corticopontine fibres). Under the <b>facial colliculus</b> lies the <b>abducens nucleus</b>, with the facial fibres looping round it; the <b>facial motor nucleus</b> is deeper and lateral; the <b>trapezoid body</b> (the transverse fibres of the lower pons) with the superior olivary nucleus; the vestibular nuclei and the spinal trigeminal nucleus laterally.'},
+  pons2: {name: 'Pons: upper (trigeminal nuclei)', grp: 'Pons',
+    outline: 'M300 165 L280 140 C230 125 180 150 175 195 C170 225 152 240 132 262 C116 300 152 362 300 375 C448 362 484 300 468 262 C448 240 430 225 425 195 C420 150 370 125 320 140 Z',
+    items: [
+      ['p', 'M300 165 L280 140 L320 140 Z', '--s-csf', 'Fourth ventricle', [300, 150], 'mid'],
+      ['e', [244, 160, 14, 22], '--wmt', 'Superior cerebellar peduncle', [240, 160]], ['e', [270, 150, 4, 6], NUCS, 'Mesencephalic nucleus of V', [270, 150]],
+      ['e', [244, 210, 9, 10], NUCM, 'Motor nucleus of V', [244, 210]], ['e', [216, 206, 10, 11], NUCS, 'Principal sensory nucleus of V', [214, 206]],
+      ['p', 'M230 212 C200 230 170 250 132 262', '--nerve', 'Trigeminal root', [176, 246], 'line'],
+      ['e', [292, 178, 5, 6], '--wmt', 'MLF', [292, 178]], ['e', [266, 256, 24, 7], '--t-dc', 'Medial lemniscus', [262, 256]],
+      ['e', [208, 236, 8, 10], '--t-st', 'Spinothalamic', [208, 236]], ['e', [200, 216, 6, 6], '--wmt', 'Lateral lemniscus', [200, 216]],
+      ['e', [262, 312, 16, 12], '--t-cst', 'Corticospinal bundles', [258, 312]], ['e', [222, 326, 14, 11], '--t-cst', '', null],
+      ['e', [178, 298, 30, 26], '--grey', 'Pontine nuclei', [170, 298]], ['p', 'M154 300 C200 290 250 292 300 296', '--wmt', 'Transverse pontine fibres', [236, 292], 'line']],
+    text: '<b>Upper pons.</b> The <b>motor nucleus of V</b> with the <b>principal (chief) sensory nucleus</b> lateral to it, the <b>mesencephalic nucleus</b> near the ventricle (StatPearls: it carries stretch signals from the muscles of mastication; Gray 1918 was unsure whether this root is motor or sensory); the <b>superior cerebellar peduncles</b> forming the side walls of the upper fourth ventricle and helping to form its roof; the medial and lateral lemnisci; the MLF; the basilar part as below.'},
+  mid1: {name: 'Midbrain: inferior colliculus', grp: 'Midbrain',
+    outline: 'M300 132 C262 118 220 128 214 160 C188 190 160 250 172 320 C185 355 230 370 282 340 L300 322 L318 340 C370 370 415 355 428 320 C440 250 412 190 386 160 C380 128 338 118 300 132 Z',
+    items: [
+      ['e', [262, 145, 30, 18], '--midb', 'Inferior colliculus', [256, 140]], ['mid', 'circle', 'aq', 'Cerebral aqueduct', [300, 178]],
+      ['e', [292, 205, 6, 6], NUCM, 'Trochlear nucleus', [292, 205]], ['e', [293, 220, 5, 5], '--wmt', 'MLF', [293, 220]],
+      ['p', 'M292 205 C270 196 268 160 300 150', '--nerve', 'Trochlear fibres (cross dorsally)', [274, 176], 'line'],
+      ['p', 'M270 238 L330 262 M270 262 L330 238', '--wmt', 'Decussation of the sup. cerebellar ped.', [282, 250], 'mid-line'],
+      ['e', [222, 238, 12, 8], '--t-dc', 'Medial lemniscus', [218, 238]], ['e', [206, 214, 8, 8], '--t-st', 'Spinothalamic', [204, 214]],
+      ['e', [214, 186, 7, 9], '--wmt', 'Lateral lemniscus', [212, 186]],
+      ['p', 'M206 276 C240 290 270 300 290 312', '--sn', 'Substantia nigra', [244, 292], 'band'],
+      ['p', 'M180 300 C200 330 250 345 285 330 L290 318 C260 330 210 322 192 292 Z', '--t-cst', 'Crus cerebri', [232, 330]],
+      ['mid', 'text', '', 'Interpeduncular fossa', [300, 352]]],
+    text: '<b>Inferior colliculus level.</b> The <b>trochlear nucleus</b> lies ventral to the aqueduct (Gray: opposite the upper part of the inferior colliculus; Wikipedia: intercollicular); its fibres run backward and cross in the superior medullary velum, and the nerve leaves the back of the brainstem. In the tegmentum the <b>superior cerebellar peduncles decussate</b>. The <b>inferior colliculus</b> is an auditory relay, reached by the lateral lemniscus. In front: the <b>substantia nigra</b> and the <b>crus cerebri</b> (Wikipedia: corticospinal and corticobulbar fibres in its middle third).'},
+  mid2: {name: 'Midbrain: superior colliculus', grp: 'Midbrain',
+    outline: 'M300 132 C262 118 220 128 214 160 C188 190 160 250 172 320 C185 355 230 370 282 340 L300 322 L318 340 C370 370 415 355 428 320 C440 250 412 190 386 160 C380 128 338 118 300 132 Z',
+    items: [
+      ['e', [262, 145, 30, 18], '--midb', 'Superior colliculus', [256, 140]], ['mid', 'circle', 'aq', 'Cerebral aqueduct', [300, 178]],
+      ['e', [290, 210, 8, 9], NUCM, 'Oculomotor nucleus', [290, 212]], ['e', [296, 194, 4, 4], NUCP, 'Edinger–Westphal nucleus', [296, 194]],
+      ['e', [262, 252, 18, 18], '--rn', 'Red nucleus', [258, 252]],
+      ['p', 'M288 220 C270 236 258 248 262 262 C266 290 276 314 284 334', '--nerve', 'Oculomotor (III) fibres', [272, 296], 'line'],
+      ['e', [214, 238, 10, 10], '--t-dc', 'Medial lemniscus', [212, 238]], ['e', [204, 214, 8, 8], '--t-st', 'Spinothalamic', [202, 214]],
+      ['p', 'M206 276 C240 290 270 300 290 312', '--sn', 'Substantia nigra', [244, 292], 'band'],
+      ['p', 'M180 300 C200 330 250 345 285 330 L290 318 C260 330 210 322 192 292 Z', '--t-cst', 'Crus cerebri', [232, 330]],
+      ['mid', 'text', '', 'Interpeduncular fossa', [300, 352]]],
+    text: '<b>Superior colliculus level.</b> The <b>oculomotor nucleus</b> lies in the grey matter ventral to the aqueduct, with the <b>Edinger–Westphal</b> (parasympathetic) nucleus dorsal to it, between it and the aqueduct. Its fibres pass forward (StatPearls: through the <b>red nucleus</b>) to the interpeduncular fossa. The <b>red nucleus</b> (tegmentum, next to the substantia nigra) receives the crossed superior cerebellar peduncle fibres and gives the <b>rubrospinal</b> tract, which crosses and descends. The <b>superior colliculus</b>: visual input (through its brachium), eye and head movements. Pupil reflexes: <a href="../../ophthalmology/neuro-ophthalmology/pupil-reflexes.html">Pupil Reflexes</a>.'},
+};
+/* lesions per level: [key, chip label, region (right side unless 'both'), findings html] */
+const LESIONS = {
+  olive: [['mms', 'Medial medullary', 'M262 150 L300 150 L300 345 L256 345 L262 300 Z',
+      '<b>Medial medullary syndrome (Dejerine)</b> — anterior spinal artery (or vertebral paramedian branches). <b>Pyramid</b> → contralateral (left) hemiparesis; <b>medial lemniscus</b> → contralateral loss of touch, vibration and position sense; <b>hypoglossal nucleus/fibres</b> → ipsilateral (right) LMN tongue palsy: wasting, and the tongue deviates to the side of the lesion. Face sensation and pain/temperature are spared (the spinothalamic tract and trigeminal nucleus lie lateral).'],
+    ['lms', 'Lateral medullary', 'M170 150 C200 132 240 132 258 150 L256 240 L230 262 L176 268 C166 230 164 190 170 150 Z',
+      '<b>Lateral medullary syndrome (Wallenberg)</b> — vertebral artery or PICA. <b>Spinal trigeminal nucleus/tract</b> → ipsilateral loss of pain and temperature of the <b>face</b>; <b>spinothalamic tract</b> → contralateral loss in the <b>body</b>; descending sympathetic fibres → ipsilateral <b>Horner syndrome</b>; <b>nucleus ambiguus</b> → dysphagia, hoarseness (Wikipedia: also hiccups); <b>vestibular nuclei</b> → vertigo, nystagmus, vomiting; <b>inferior cerebellar peduncle</b> → ipsilateral ataxia. The pyramid is spared, so usually no hemiplegia.']],
+  pyr: [['cru', 'Cruciate paralysis', 'M262 300 L300 270 L338 300 L330 330 L270 330 Z',
+      '<b>"Crossed diplegia"</b> (NMC wording) — taken here as <b>cruciate paralysis</b>: a lesion at the <b>pyramidal decussation</b> (cervicomedullary junction) weakens the <b>arms more than the legs</b>, sensation often spared. One case report with review (2022): the leading explanation — a "speculation" — is that the upper-limb fibres lie higher and more ventral there than the lower-limb fibres.', 'both']],
+  pons1: [['mg', 'Millard–Gubler', 'M130 290 L196 268 L300 290 L300 378 L210 368 L134 330 Z',
+      '<b>Millard–Gubler syndrome</b> (ventral caudal pons, basis pontis): <b>facial fascicles</b> → ipsilateral LMN facial palsy; <b>abducens fascicles</b> → ipsilateral lateral rectus palsy; <b>corticospinal tract</b> → contralateral hemiplegia. StatPearls notes that VI was not in Millard and Gubler\'s own cases; Wikipedia, a case report and a review include it.'],
+    ['fov', 'Foville', 'M262 140 L300 150 L300 360 L272 360 L268 250 L222 236 L222 190 Z',
+      '<b>Foville syndrome</b> (lower pontine tegmentum; perforating branches of the basilar artery): <b>abducens nucleus / paramedian pontine reticular formation</b> → ipsilateral <b>horizontal gaze palsy</b> (StatPearls\' "classic" form: a VI palsy); <b>facial nucleus/fascicles</b> → ipsilateral LMN facial palsy; <b>corticospinal tract</b> → contralateral hemiparesis. Sources differ on how lateral the lesion is (a 2020 review lists it with lateral pontine strokes).'],
+    ['ray', 'Raymond', 'M268 285 L300 285 L300 378 L268 372 Z',
+      '<b>Raymond syndrome</b> (ventral medial pons): <b>abducens fascicles</b> → ipsilateral lateral rectus palsy; <b>corticospinal tract</b> → contralateral hemiparesis (the classic description also has a contralateral central facial palsy).'],
+    ['lis', 'Locked-in', 'M140 290 C160 270 440 270 460 290 C470 330 420 372 300 378 C180 372 130 330 140 290 Z',
+      '<b>Locked-in syndrome</b>: a bilateral lesion of the <b>ventral (basilar) pons</b> cutting the corticospinal and corticobulbar tracts → <b>quadriplegia</b> and <b>bulbar palsy</b> (cannot speak or swallow), with consciousness, hearing, <b>vertical eye movements and blinking</b> preserved.', 'whole'],
+    ['ph', 'Pontine haemorrhage', 'M150 150 C200 120 400 120 450 150 C480 250 440 370 300 378 C160 370 120 250 150 150 Z',
+      '<b>Pontine haemorrhage:</b> usually hypertensive (about 5–15 % of hypertensive haemorrhages: a 2026 study 5–10 %, Wikipedia 7–15 %), with impaired consciousness or coma, paralysis and breathing problems and a high mortality; Wikipedia adds <b>pinpoint (reactive) pupils</b> and gaze palsies.', 'whole']],
+  mid2: [['web', 'Weber', 'M232 300 L300 300 L300 345 L282 340 C250 348 214 342 192 300 Z',
+      '<b>Weber syndrome</b> (ventral midbrain: crus cerebri with the oculomotor fascicles; branches of the posterior cerebral artery): ipsilateral <b>oculomotor palsy</b> — the eye down and out, ptosis, often a dilated pupil — with <b>contralateral hemiplegia</b> (corticospinal tract).'],
+    ['ben', 'Benedikt', 'M244 228 L300 222 L300 330 L268 330 C252 300 240 270 244 228 Z',
+      '<b>Benedikt syndrome</b> (paramedian tegmentum: <b>red nucleus</b> and the oculomotor fascicles, sometimes the crus): ipsilateral <b>oculomotor palsy</b> with contralateral <b>involuntary movements</b> (tremor, choreoathetosis) and ataxia, often a contralateral hemiparesis. (Claude syndrome: the superior cerebellar peduncle fibres with III — ataxia.)'],
+    ['par', 'Parinaud', 'M214 160 C220 125 262 118 300 132 C338 118 380 125 386 160 C360 176 330 182 300 176 C270 182 240 176 214 160 Z',
+      '<b>Parinaud (dorsal midbrain) syndrome</b>: lesion or compression of the dorsal midbrain (tectum and pretectal area): <b>paralysis of upward gaze</b>, <b>convergence–retraction nystagmus</b> and <b>light–near dissociation</b> of the pupils. Wikipedia: eyelid retraction (Collier\'s sign); classically pineal or midbrain tumours with hydrocephalus, multiple sclerosis or stroke.', 'whole']],
+};
+const NUC_TEXT = `<p>Cranial nerve nuclei lie in functional columns: <b>motor</b> nuclei medial to the <b>sulcus limitans</b> in the floor of the fourth ventricle, <b>sensory</b> nuclei lateral to it. Columns (modern names; Gray 1918 calls the general visceral efferent fibres "sympathetic efferent" and the branchial motor fibres of the nucleus ambiguus "somatic motor"): <b>GSE</b> general somatic efferent, <b>SVE</b> special visceral efferent (branchial motor), <b>GVE</b> general visceral efferent (parasympathetic), <b>GSA</b> general somatic afferent, <b>GVA/SVA</b> general and special (taste) visceral afferent, <b>SSA</b> special somatic afferent (hearing, balance).</p>`;
+const NUC_HEAD = ['Nucleus', 'Where', 'Column', 'Nerve → target'];
+const NUC_ROWS = [
+  ['Oculomotor', 'Midbrain, superior colliculus level, ventral to the aqueduct', 'GSE', 'III → extraocular muscles (not lateral rectus, superior oblique), levator palpebrae'],
+  ['Edinger–Westphal', 'Dorsal to the oculomotor nucleus', 'GVE', 'III → ciliary ganglion → sphincter pupillae, ciliary muscle'],
+  ['Trochlear', 'Midbrain, inferior colliculus level', 'GSE', 'IV (crosses, leaves dorsally) → superior oblique'],
+  ['Mesencephalic nucleus of V', 'Midbrain and upper pons, near the aqueduct and ventricle', 'GSA (proprioception)', 'V: stretch signals from the muscles of mastication (StatPearls)'],
+  ['Principal sensory nucleus of V', 'Upper pons, lateral to the motor nucleus', 'GSA', 'V (sensory)'],
+  ['Motor nucleus of V', 'Upper pons', 'SVE', 'V3 → muscles of mastication'],
+  ['Abducens', 'Lower pons, under the facial colliculus', 'GSE', 'VI → lateral rectus'],
+  ['Facial motor', 'Lower pons, deeper and lateral', 'SVE', 'VII → muscles of facial expression'],
+  ['Superior salivatory', 'Lower pons', 'GVE', 'VII (its nervus intermedius): parasympathetic'],
+  ['Vestibular and cochlear nuclei', 'Lateral part of the floor of the fourth ventricle (vestibular area)', 'SSA', 'VIII'],
+  ['Solitary nucleus', 'Medulla', 'SVA + GVA', 'VII, IX, X: taste and visceral sensation (Wikipedia)'],
+  ['Inferior salivatory', 'Medulla', 'GVE', 'IX → parotid gland'],
+  ['Nucleus ambiguus', 'Medulla, deep in the reticular formation', 'SVE', 'IX, X, cranial XI → soft palate, pharynx, larynx'],
+  ['Dorsal nucleus of the vagus', 'Medulla, floor of the fourth ventricle (vagal trigone)', 'GVE', 'X (parasympathetic)'],
+  ['Hypoglossal', 'Medulla, next to the midline (hypoglossal trigone)', 'GSE', 'XII → tongue muscles'],
+  ['Spinal trigeminal nucleus', 'Medulla (down into the upper cord)', 'GSA', 'V (and VII, IX, X): pain and temperature of the face'],
+];
+const SYN_TEXT = `<p><b>The rule of crossed (alternating) syndromes:</b> a one-sided brainstem lesion damages cranial nerve nuclei or fibres on their own side (<b>ipsilateral</b> cranial nerve signs) and long tracts that cross <b>below</b> it — the corticospinal tract (pyramidal decussation) and the spinothalamic tract (in the cord) — so the limb signs are <b>contralateral</b>. The posterior column pathway crosses in the lower medulla, so above that the medial lemniscus also gives contralateral signs.</p>`;
+const SYN_HEAD = ['Syndrome', 'Site (artery)', 'Same side (ipsilateral)', 'Opposite side (contralateral)'];
+const SYN_ROWS = [
+  ['Medial medullary (Dejerine)', 'Medial medulla (anterior spinal artery)', 'LMN tongue palsy (XII)', 'Hemiparesis; loss of touch, vibration, position sense'],
+  ['Lateral medullary (Wallenberg)', 'Lateral medulla (vertebral, PICA)', 'Face pain/temperature loss; Horner; dysphagia, hoarseness; ataxia; vertigo, nystagmus', 'Body pain/temperature loss'],
+  ['Millard–Gubler', 'Ventral caudal pons', 'LMN facial palsy (VII); lateral rectus palsy (VI)', 'Hemiplegia'],
+  ['Raymond', 'Ventral medial pons', 'Lateral rectus palsy (VI)', 'Hemiparesis'],
+  ['Foville', 'Lower pontine tegmentum (basilar perforators)', 'Horizontal gaze palsy (VI nucleus / PPRF); LMN facial palsy', 'Hemiparesis'],
+  ['Locked-in', 'Bilateral ventral pons', '—', 'Quadriplegia and bulbar palsy; conscious, vertical eye movements and blinking kept'],
+  ['Weber', 'Ventral midbrain: crus + III (PCA branches)', 'Oculomotor palsy', 'Hemiplegia'],
+  ['Benedikt', 'Midbrain tegmentum: red nucleus + III', 'Oculomotor palsy', 'Involuntary movements (tremor, choreoathetosis), ataxia, ± hemiparesis'],
+  ['Parinaud', 'Dorsal midbrain (tectum, pretectum)', 'Upward gaze palsy, convergence–retraction nystagmus, light–near dissociation (both eyes)', '—'],
+];
+const CB_TEXT = `<p><b>Lobes:</b> the <b>primary fissure</b> separates the <b>anterior</b> and <b>posterior lobes</b>; the <b>posterolateral fissure</b> separates the posterior lobe from the <b>flocculonodular lobe</b> (nodule and flocculi). There are ten lobules, each with a vermian and two hemispheric parts; the nine lobules of the <b>vermis</b> are the lingula, central lobule, culmen, declive, folium, tuber, pyramid, uvula and nodule.</p>
+<p><b>Functional divisions:</b> <b>vestibulocerebellum</b> (archicerebellum: the flocculonodular lobe; balance and eye movements; with the vestibular nuclei); <b>spinocerebellum</b> (paleocerebellum: the vermis — Wikipedia adds the intermediate zone of the anterior and posterior lobes; posture, tone, gait; with the fastigial and interposed nuclei); <b>cerebrocerebellum</b> (neocerebellum: the lateral hemispheres; planning and coordinating skilled limb movements; with the dentate nucleus).</p>
+<p><b>Cortex:</b> three layers — outer <b>molecular</b>, <b>Purkinje cell</b>, inner <b>granular</b> (Gray 1918 counts two, with the Purkinje cells between). Inputs: <b>mossy fibres</b> (from the pontine nuclei, spinal cord, vestibular nuclei) → granule cells → parallel fibres → Purkinje cells; <b>climbing fibres</b> from the opposite <b>inferior olivary nucleus</b>, one per Purkinje cell. The <b>Purkinje cells</b> are the only output of the cortex and are <b>inhibitory (GABA)</b>, to the deep nuclei.</p>
+<p><b>Deep nuclei</b>, lateral to medial: <b>dentate</b> (the largest; folded, its hilum facing medially), <b>emboliform</b>, <b>globose</b> (these two = interposed), <b>fastigial</b> (beside the midline, over the roof of the fourth ventricle).</p>`;
+const PED_HEAD = ['Peduncle', 'Joins the cerebellum to', 'Main fibres'];
+const PED_ROWS = [
+  ['Inferior (restiform body)', 'Medulla', 'Mainly afferent: posterior spinocerebellar, olivocerebellar (climbing), vestibulocerebellar fibres; some efferent'],
+  ['Middle', 'Pons', 'Afferent only in practice: pontocerebellar fibres from the opposite pontine nuclei (the cortico-ponto-cerebellar path)'],
+  ['Superior', 'Midbrain', 'Mainly efferent from the dentate, interposed and fastigial nuclei: to the opposite red nucleus and thalamus, crossing in the midbrain; in: the anterior spinocerebellar tract'],
+];
+const CB2_TEXT = `<p><b>Main circuits.</b> Cerebrocerebellar: cerebral cortex → pontine nuclei → (crossing) middle peduncle → cerebellar hemisphere → <b>dentate nucleus</b> → superior peduncle (crossing in the midbrain) → red nucleus and thalamus. Vestibulocerebellar: vestibular nuclei ↔ flocculonodular lobe and <b>fastigial nucleus</b> → vestibulospinal and reticulospinal tracts (balance, posture, axial muscles).</p>
+<p><b>Cerebellar dysfunction</b> shows on the <b>same side</b> as the lesion (its paths cross twice). Signs: <b>ataxia</b> (a broad, "drunken" gait), <b>dysmetria</b> (over- or undershooting), <b>intention tremor</b>, <b>dysdiadochokinesia</b> (impaired rapid alternating movements), <b>hypotonia</b>, <b>dysarthria</b>, <b>nystagmus</b>. <b>Midline (vermis)</b> lesions mainly upset balance and stance; <b>hemisphere</b> lesions mainly cause incoordination of the limbs on that side.</p>`;
+const SIGN_HEAD = ['Sign', 'What you see'];
+const SIGN_ROWS = [
+  ['Ataxia', 'Unsteady ("drunken") gait; incoordination'],
+  ['Dysmetria', 'Over- or undershooting a target (finger–nose)'],
+  ['Intention tremor', 'Coarse tremor during a deliberate, aimed movement (Wikipedia)'],
+  ['Dysdiadochokinesia', 'Cannot perform rapid alternating movements'],
+  ['Hypotonia', 'Decreased muscle tone'],
+  ['Dysarthria', 'Problems articulating speech'],
+  ['Nystagmus', 'Involuntary eye movements; with vertigo (vestibulocerebellar system)'],
+];
+const DATA = {
+  lede: 'The medulla, pons, midbrain and cerebellum: the brainstem in 3D from the front and behind, with its cranial nerve roots, nuclei and arteries; schematic sections at seven levels with the medial and lateral medullary, pontine and midbrain syndromes; the cranial nerve nuclei by functional column; and the cerebellum\'s lobes, cortex, nuclei, peduncles and signs. Meninges, CSF and the spinal cord are on the <a href="meninges-cord.html">previous page</a>.',
+  note3d: 'Medulla, pons, midbrain, colliculi, cerebellum (one mesh), ventricles, thalami and bones are BodyParts3D\'s; the olive, pyramid, cranial nerve nuclei (hand-placed blobs: positions approximate), red nucleus, tentorium, nerves and vessels are Z-Anatomy\'s. Cranial nerves and right-sided vessels are mirrored for the left.',
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (a cerebellum anatomy review, 2025; a review of vertebrobasilar stroke presentations, 2020; case reports of Weber, Benedikt, Millard–Gubler, Raymond, lateral and medial medullary syndromes and cruciate paralysis; a hypertensive pontine haemorrhage study, 2026; a hypoglossal palsy paper). See also <a href=\"meninges-cord.html\">Meninges, CSF and the Spinal Cord</a>, <a href=\"../head-neck/nerves-vessels.html\">Head and neck nerves and vessels</a>.",
+  models: 'Models used: brainstem, colliculi, cerebellum, ventricles, thalami, pineal, mammillary bodies and bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); olive, pyramid, cranial nerve nuclei, red nucleus, tentorium, cranial nerves (cut short near the brainstem) and arteries from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same frame. Nerves and vessels are tubes swept along Z-Anatomy curves; left ones are mirrored. Schematics are not to scale. Simplified meshes, shared under the same licences.',
+};
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let kind = {}, tract = {}, names = {}, cur = null;
+const COL = {bone: '--bone', dura: '--dura', cord: '--cordw', grey: '--grey', medulla: '--medulla', pons: '--pons', midbrain: '--midb', cblm: '--cblm',
+  dien: '--dien', olive: '--olive', pyr: '--t-cst', csf: '--s-csf', chp: '--chp', gse: '--nuc-m', sve: '--nuc-m', gve: '--nuc-p', ssa: '--nuc-s', red: '--rn',
+  nerve: '--nerve', artery: '--artery', vein: '--vein'};
+const TCOL = {dc: '--t-dc', st: '--t-st', sc: '--t-sc', cst: '--t-cst'};
+const WHAT = {bone: 'bone', dura: 'dura mater', cord: 'spinal cord', grey: 'grey matter of the cord', tract: 'tract of the cord', medulla: 'brainstem', pons: 'brainstem',
+  midbrain: 'brainstem', cblm: 'cerebellum', dien: 'diencephalon', olive: 'medulla', pyr: 'medulla', csf: 'ventricle (CSF)', chp: 'choroid plexus', gse: 'cranial nerve nucleus',
+  sve: 'cranial nerve nucleus', gve: 'cranial nerve nucleus', ssa: 'cranial nerve nucleus', red: 'midbrain nucleus', nerve: 'nerve', artery: 'artery', vein: 'venous sinus'};
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+const colOf = k => css(kind[k] === 'tract' ? TCOL[tract[k]] : COL[kind[k]]) || css('--soft');
+function anchor(key, near, view, fixed) {   // the vertex of a part nearest to a point moved 40 mm toward the viewer; fixed: nearest to the point itself
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos; let c = near;
+  if (!c) { c = [0, 0, 0]; for (let i = 0; i < pos.length; i++) c[i % 3] += pos[i] / (pos.length / 3); }
+  if (view && !fixed) { const l = Math.hypot(...view); c = c.map((x, i) => x + 40 * view[i] / l); }
+  let best = 0, bd = 1e18;
+  const cl = v.clip;
+  for (let i = 0; i < pos.length; i += 3) {
+    if (cl && pos[i] * cl[0] + pos[i + 1] * cl[1] + pos[i + 2] * cl[2] > cl[3] - 0.3) continue;
+    const d = (pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2; if (d < bd) { bd = d; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+function showTopic(id) {
+  const t = typeof id === 'object' ? id : TOPICS.find(t => t.id === id); cur = t;
+  const has = k => v.parts.has(k);
+  const lit = (t.lit || []).filter(has), solid = (t.solid || []).filter(has), glass = (t.glass || []).filter(has);
+  const shown = new Set([...lit, ...solid, ...glass]);
+  for (const k in kind) v.setVisible(k, shown.has(k));
+  for (const k in kind) v.setColour(k, colOf(k));
+  const gl = new Set(t.glassKeys || []);
+  v.setFocus([...lit.filter(k => !gl.has(k)), ...solid]);
+  v.ghostAlpha = 0.18;
+  let view = t.view || RIGHT, clip = t.clip || null;
+  if (t.axisAt) {   // look straight down the cord at height z (mm), cut across it there (perpendicular to the cord)
+    const P = v.parts.get('s_white').m.pos, cen = (a, b) => { const s = [0, 0, 0]; let n = 0;
+      for (let i = 0; i < P.length; i += 3) if (P[i + 2] >= a && P[i + 2] <= b) { s[0] += P[i]; s[1] += P[i + 1]; s[2] += P[i + 2]; n++; } return s.map(x => x / n); };
+    const z = t.axisAt, lo = cen(z - 14, z - 4), hi = cen(z + 4, z + 14), c = cen(z - 3, z + 3);
+    let d = hi.map((x, i) => x - lo[i]); const l = Math.hypot(...d); d = d.map(x => x / l);
+    view = d; clip = [d, d[0] * c[0] + d[1] * c[1] + d[2] * c[2]]; t._axis = {c, d};
+  }
+  v.setClip(clip ? clip[0] : null, clip ? clip[1] : 0);
+  const fk = (t.fit || t.lit).filter(has);
+  v.fit(fk.length ? fk : lit);
+  if (t._axis) { v.centre = t._axis.c; v.fitH = t.fitH || 30; v.pan = [0, 0]; }
+  else if (t.focusZ) {   // centre the camera on a stretch of the cord
+    const z0 = t.focusZ[0], z1 = t.focusZ[1], P = v.parts.get('s_white').m.pos; let s = [0, 0, 0], n = 0;
+    for (let i = 0; i < P.length; i += 3) if (P[i + 2] >= z0 && P[i + 2] <= z1) { s[0] += P[i]; s[1] += P[i + 1]; s[2] += P[i + 2]; n++; }
+    if (n) { v.centre = s.map(x => x / n); v.fitH = t.fitH || 40; v.pan = [0, 0]; }
+  }
+  v.face(view, {zoom: t.zoom || 1});
+  const narrow = $('v').clientWidth < 500, txt = l => l && typeof l === 'object' ? (narrow ? l.sh : l.l) : l;
+  const marks = [];
+  for (const [k, label, near, mode] of t.labels || []) {
+    if (!has(k) || v.parts.get(k).visible === false) continue;
+    const fixed = mode === 'v' || !!clip, p = anchor(k, near, view, fixed); if (!p) continue;
+    const kd = kind[k], dark = ['bone', 'cord', 'dura', 'csf', 'medulla', 'pons', 'midbrain', 'cblm', 'dien', 'grey'].includes(kd);
+    marks.push({key: k, near: near || p, p, fixed, label: txt(label), color: dark ? css('--ink') : colOf(k), always: true});
+  }
+  for (const [p, label, col] of t.pts || []) marks.push({p, label: txt(label), color: css(col), always: true});
+  v.setMarkers(marks);
+  refineAnchors();
+  $('topic-text').innerHTML = t.text || '';
+  legend(t);
+  $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === t.id));
+}
+/* after the camera has turned, move any label whose anchor is hidden to the nearest vertex of its part that is in view */
+let refineTimer = 0;
+function refineAnchors() {
+  clearTimeout(refineTimer);
+  refineTimer = setTimeout(() => {
+    const depth = v.offscreen(2), W = v.c.width, dpr = v.dpr;
+    const vis = p => { const q = v.toCam(p), [sx, sy] = v.toScreen(q);
+      if (sx < 6 || sy < 6 || sx > v.w - 6 || sy > v.h - 6) return false;
+      const i = (Math.round((v.h - sy) * dpr) * W + Math.round(sx * dpr)) * 4; if (!depth[i + 3]) return true;
+      const z = depth[i] / 255 + depth[i + 1] / 65025 + depth[i + 2] / 16581375; return (q[1] / 2000 + 1) / 2 <= z + 3 / 4000; };
+    let changed = false;
+    for (const m of v.markers) {
+      if (!m.key || m.fixed || vis(m.p)) continue;
+      const pos = v.parts.get(m.key).m.pos, c = m.near, cand = [];
+      for (let i = 0; i < pos.length; i += 3) {
+        if (v.clip && pos[i] * v.clip[0] + pos[i + 1] * v.clip[1] + pos[i + 2] * v.clip[2] > v.clip[3]) continue;
+        cand.push([(pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2, i]);
+      }
+      cand.sort((a, b) => a[0] - b[0]);
+      for (const [, i] of cand.slice(0, 4000)) { const p = [pos[i], pos[i + 1], pos[i + 2]]; if (vis(p)) { m.p = p; changed = true; break; } }
+    }
+    if (changed) v.setMarkers(v.markers);
+  }, 650);
+}
+function legend(t) {
+  const items = new Map(), add = (tok, label) => { if (!items.has(label)) items.set(label, tok); };
+  const lit = t.lit || [];
+  const KEYN = {medulla: 'Medulla', pons: 'Pons', midbrain: 'Midbrain', cblm: 'Cerebellum', dien: 'Thalamus etc. (context)', olive: 'Olive', pyr: 'Pyramid (corticospinal)', gse: 'Motor nuclei', gve: 'Parasympathetic nuclei', ssa: 'Sensory nuclei', red: 'Red nucleus', nerve: 'Cranial nerves', artery: 'Arteries', csf: 'Ventricles (CSF)', dura: 'Dura (tentorium)'};
+  const TN = {dc: 'Posterior column', st: 'Spinothalamic', sc: 'Spinocerebellar', cst: 'Corticospinal'};
+  for (const k of lit) if (kind[k] === 'tract') add(TCOL[tract[k]], TN[tract[k]]);
+  for (const kd of Object.keys(KEYN)) if (lit.some(k => kind[k] === kd) || (t.solid || []).some(k => kind[k] === kd)) add(COL[kd], KEYN[kd]);
+
+  $('key3d').innerHTML = [...items].map(([label, tok]) => `<span><i style="background:var(${tok})"></i>${label}</span>`).join('');
+}
+function buildTopics() {
+  const box = $('topics');
+  for (const g of [...new Set(TOPICS.map(t => t.grp))]) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !kind[hit.key]) { $('pick').textContent = ''; return; }
+  $('pick').textContent = `${names[hit.key]}: ${WHAT[kind[hit.key]]}`;
+};
+async function loadModel() {
+  const base = '../models/neuro1/';
+  const meta = await (await fetch(base + 'kinds.json')).json(), M = meta.mirror;
+  const man = await v.load(base + 'neuro1.json', null, {
+    extra: (m, items) => items.filter(it => meta.parts[it.key] && meta.parts[it.key].mirror)
+      .map(it => ({key: L(it.key), m: v.mirrored(it.m, M.m, M.t), info: {name: it.info.name}}))});
+  for (const [k, d] of Object.entries(meta.parts)) for (const left of d.mirror ? [false, true] : [false]) {
+    const key = left ? L(k) : k, p = v.parts.get(key); if (!p) continue;
+    const nm = p.info.name.replace(/ \.r$/, '');
+    names[key] = d.mirror ? (left ? 'Left ' : 'Right ') + nm.replace(/^./, c => c.toLowerCase()) : nm;
+    kind[key] = d.kind; if (d.tract) tract[key] = d.tract;
+  }
+  for (const k in kind) v.setColour(k, colOf(k));
+  return man;
+}
+
+
+
+/* ===================== schematics ===================== */
+const T = (x, y, s, cls = '', anchor = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--muted)"/></marker>'
+  + '<pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" style="fill:var(--clin);fill-opacity:.18"/><line x1="0" y1="0" x2="0" y2="8" style="stroke:var(--clin);stroke-width:3"/></pattern></defs>';
+const mirror = s => `<g transform="translate(600 0) scale(-1 1)">${s}</g>`;
+const SEC = {level: 'olive', lesion: 'none'};
+function drawSection() {
+  const L = LEVELS[SEC.level], les = SEC.lesion;
+  let s = `<path class="wm" d="${L.outline}"/>`;
+  let half = '', mid = '';
+  const labels = [];
+  for (const it of L.items) {
+    const [k, g, col, label, lp, mode] = it;
+    if (k === 'e') half += `<ellipse cx="${g[0]}" cy="${g[1]}" rx="${g[2]}" ry="${g[3]}" style="fill:var(${col});fill-opacity:.9;stroke:var(--muted);stroke-width:.6"/>`;
+    else if (k === 'p') {
+      const st = mode === 'line' || mode === 'mid-line' ? `fill:none;stroke:var(${col});stroke-width:3.2;stroke-linecap:round` : mode === 'band' ? `fill:none;stroke:var(${col});stroke-width:9;stroke-linecap:round` : `fill:var(${col});fill-opacity:.9;stroke:var(--muted);stroke-width:.6`;
+      const e = `<path d="${g}" style="${st}"/>`;
+      if (mode === 'mid' || mode === 'mid-line') mid += e; else half += e;
+    } else if (k === 'mid') {
+      if (g === 'circle') mid += `<circle cx="300" cy="${lp[1]}" r="${col === 'aq' ? 7 : 4}" style="fill:var(--s-csf);stroke:var(--muted)"/>`;
+    }
+    if (label && lp) labels.push([lp[0], lp[1], label]);
+  }
+  s += half + mirror(half) + mid;
+  const lesSet = LESIONS[SEC.level] || [], lz = lesSet.find(x => x[0] === les);
+  if (lz) s += `<clipPath id="secclip"><path d="${L.outline}"/></clipPath><path class="lesion" d="${lz[2]}" clip-path="url(#secclip)"/>`;   // kept inside the outline
+  // enlarge the section to a common width (about 390 units), centred at (300, 250); labels stay outside at a fixed size
+  const nums = L.outline.match(/-?\d+(\.\d+)?/g).map(Number), xs = nums.filter((_, i) => !(i % 2)), ys = nums.filter((_, i) => i % 2);
+  const k = Math.min(1.45, 390 / (Math.max(...xs) - Math.min(...xs))), cyc = (Math.min(...ys) + Math.max(...ys)) / 2;
+  const X = x => +(300 + (x - 300) * k).toFixed(1), Y = y => +(250 + (y - cyc) * k).toFixed(1);
+  s = DEFS + `<g transform="translate(${(300 - 300 * k).toFixed(1)} ${(250 - cyc * k).toFixed(1)}) scale(${k.toFixed(3)})">${s}</g>`;
+  // labels: sorted from dorsal to ventral, alternately on the left (patient's right half) and on the right (the mirror point)
+  labels.sort((a, b) => a[1] - b[1] || a[0] - b[0]);
+  const sides = [[], []];
+  labels.forEach((l, i) => sides[i % 2].push(l));
+  sides.forEach((list, side) => {
+    const y0 = 52, step = Math.min(30, (440 - y0) / Math.max(1, list.length - 1));
+    list.forEach(([x, y, t], i) => {
+      const ty = y0 + i * step;
+      if (side === 0) s += lead(X(x), Y(y), 96, ty - 4) + T(92, ty, t, '', 'end');
+      else s += lead(X(600 - x), Y(y), 504, ty - 4) + T(508, ty, t, '');
+    });
+  });
+  s += T(300, Y(Math.min(...ys)) - 8, 'Dorsal (back)', 'h', 'middle') + T(300, Y(Math.max(...ys)) + 18, 'Ventral (front)', 'h', 'middle');
+  s += T(300, 20, L.name, 'h', 'middle');
+  $('sec-svg').innerHTML = s;
+  $('sec-text').innerHTML = `<p>${L.text}</p>`;
+  $('find').innerHTML = lz ? lz[3] : '';
+  const box = $('les-tg');
+  if (box.dataset.level !== SEC.level) {   // rebuild the lesion chips only when the level changes (keeps keyboard focus)
+    box.innerHTML = ''; box.dataset.level = SEC.level;
+    for (const [key, label] of [['none', 'Normal'], ...lesSet.map(x => [x[0], x[1]])]) {
+      const b = document.createElement('button'); b.className = 'chip'; b.textContent = label; b.dataset.k = key;
+      b.onclick = () => { SEC.lesion = key; drawSection(); }; box.append(b);
+    }
+  }
+  box.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === les));
+}
+function drawCB() {   // cerebellum unfolded: anterior lobe top; patient's right on the viewer's left; midline x = 250
+  let s = DEFS;
+  const OP = {vest: 1, spino: 0.6, cereb: 0.25};
+  const zone = (x0, x1, y0, y1, op) => `<rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" style="fill:var(--cblm);fill-opacity:${op};stroke:var(--surface);stroke-width:1.5"/>`;
+  s += zone(30, 140, 40, 300, OP.cereb) + zone(360, 470, 40, 300, OP.cereb);      // lateral hemispheres
+  s += zone(140, 205, 40, 300, OP.spino) + zone(295, 360, 40, 300, OP.spino);     // intermediate zones (paravermis)
+  s += zone(205, 295, 40, 300, OP.spino);                                          // vermis
+  const lobe = (cx, rx, t) => `<ellipse cx="${cx}" cy="335" rx="${rx}" ry="18" style="fill:var(--cblm);fill-opacity:${OP.vest};stroke:var(--muted)"/>` + T(cx, 339, t, 's', 'middle');
+  s += lobe(250, 36, 'Nodule') + lobe(85, 42, 'Flocculus') + lobe(415, 42, 'Flocculus');
+  s += `<line x1="30" y1="130" x2="470" y2="130" style="stroke:var(--ink);stroke-width:2"/>` + T(478, 134, 'Primary fissure', 's');
+  s += `<line x1="30" y1="312" x2="470" y2="312" style="stroke:var(--ink);stroke-width:2;stroke-dasharray:6 4"/>` + T(478, 310, 'Posterolateral', 's') + T(478, 323, 'fissure', 's');
+  s += T(250, 90, 'ANTERIOR LOBE', 'h', 'middle') + T(250, 220, 'POSTERIOR LOBE', 'h', 'middle') + T(478, 339, 'Flocculonodular', 's') + T(478, 352, 'lobe', 's');
+  s += T(250, 30, 'Vermis', '', 'middle') + T(172, 30, 'Intermediate', 's', 'middle') + T(85, 30, 'Lateral hemisphere', 's', 'middle');
+  s += T(328, 30, 'Intermediate', 's', 'middle') + T(415, 30, 'Lateral hemisphere', 's', 'middle');
+  // deep nuclei of each side, lateral → medial (patient's right drawn on the viewer's left), labels alternately below and above
+  const ny = 425;
+  s += T(250, 374, 'Deep nuclei (each side), lateral → medial', 'h', 'middle');
+  const nuc = [[70, 'Dentate', 26, 1], [140, 'Emboliform', 13, -1], [185, 'Globose', 10, 1], [226, 'Fastigial', 11, -1]];
+  for (const [x, t, r, up] of nuc) {
+    for (const xx of [x, 500 - x]) s += `<ellipse cx="${xx}" cy="${ny}" rx="${r}" ry="${Math.max(8, r * 0.6)}" style="fill:var(--grey);stroke:var(--muted)"/>`;
+    s += T(x, up > 0 ? ny + 34 : ny - 18, t, 's', 'middle');
+  }
+  s += `<line x1="250" y1="385" x2="250" y2="460" style="stroke:var(--muted);stroke-dasharray:3 3"/>` + T(256, 462, 'midline', 's');
+  $('cb-svg').innerHTML = s;
+  $('cb-key').innerHTML = [[OP.vest, 'Vestibulocerebellum (flocculonodular lobe)'], [OP.spino, 'Spinocerebellum (vermis; intermediate zone per Wikipedia)'], [OP.cereb, 'Cerebrocerebellum (lateral hemispheres)']]
+    .map(([op, t]) => `<span><i style="background:var(--cblm);opacity:${op}"></i>${t}</span>`).join('');
+}
+function table(id, head, rows) {
+  $(id).innerHTML = '<tr>' + head.map(x => `<th>${x}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + r.map((c, i) => `<td data-h="${head[i]}">${c}</td>`).join('') + '</tr>').join('');
+}
+function toggles(id, items, onSel, start) {
+  const box = $(id);
+  for (const [key, label] of items) {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = label; b.dataset.k = key; b.setAttribute('aria-pressed', key === start);
+    b.onclick = () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); onSel(key); };
+    box.append(b);
+  }
+}
+
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('ext-text').innerHTML = EXT_TEXT; $('nuc-text').innerHTML = NUC_TEXT; $('syn-text').innerHTML = SYN_TEXT; $('cb-text').innerHTML = CB_TEXT; $('cb2-text').innerHTML = CB2_TEXT;
+  table('ext-table', EXT_HEAD, EXT_ROWS); table('nuc-table', NUC_HEAD, NUC_ROWS); table('syn-table', SYN_HEAD, SYN_ROWS); table('ped-table', PED_HEAD, PED_ROWS); table('sign-table', SIGN_HEAD, SIGN_ROWS);
+  toggles('lev-tg', Object.entries(LEVELS).map(([k, l]) => [k, l.name]), k => { SEC.level = k; SEC.lesion = 'none'; drawSection(); }, 'olive');
+  drawSection(); drawCB();
+  $('sec-key').innerHTML = [['--t-dc', 'Posterior column – medial lemniscus'], ['--t-st', 'Spinothalamic'], ['--t-sc', 'Spinocerebellar'], ['--t-cst', 'Corticospinal'], ['--nuc-m', 'Motor nucleus'], ['--nuc-p', 'Parasympathetic nucleus'], ['--nuc-s', 'Sensory nucleus'], ['--olive', 'Inferior olive'], ['--rn', 'Red nucleus'], ['--sn', 'Substantia nigra'], ['--grey', 'Other nuclei'], ['--wmt', 'Other fibre bundles (peduncles, MLF, lemnisci, trapezoid body)'], ['--nerve', 'Nerve fibres'], ['--s-csf', 'CSF']]
+    .map(([t, l]) => `<span><i style="background:var(${t})"></i>${l}</span>`).join('') + '<span><i style="background:repeating-linear-gradient(45deg,var(--clin) 0 3px,transparent 3px 7px)"></i>Lesion</span>';
+  const bar = $('vbar');
+  for (const [label, dir] of [['Front', [0, -1, 0]], ['Back', [0, 1, 0]], ['Right', [-1, 0, 0]], ['Above', ABOVE], ['Below', [0, -0.3, -1]]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic('front');
+  window.J = {TOPICS, showTopic, names, kind, drawSection, SEC, LEVELS};
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

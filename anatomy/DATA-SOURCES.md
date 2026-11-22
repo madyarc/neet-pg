@@ -1112,3 +1112,25 @@ tubercles.
   mouth-pharynx and ear-eye models, with the same sources (the kidney is Z-Anatomy's CC BY-NC 4.0 model, as on the
   abdominal page). Each organ is coloured as on its own page and a second tap opens that page. Heart chambers are in
   the vessel layer; spleen and tonsil in the lymph layer; the pelvis is male, as in the model.
+
+## Meninges, CSF and the Spinal Cord; Brainstem and Cerebellum — `neuro/meninges-cord.html`, `neuro/brainstem.html`
+
+- Fact sheet `sources-local/facts/fill-neuro1.md` (609 quotes, script-checked against `sources-local/modern/fill-neuro1/`,
+  downloads 2026-11-22): Gray 1918 pages 185, 187, 188, 191, 193, 194, 198–201, 204; StatPearls (cord, tracts, lesion
+  and brainstem syndrome chapters); Wikipedia (Gray copies not counted); a 2022 lumbar puncture review (PMC10295920),
+  a 2025 spinal anaesthesia review, reviews PMC7710193 and PMC12721976, case reports.
+- Contested, stated on the page: share of pyramidal fibres crossing (Gray two-thirds, Wikipedia 75–90 %), enlargement
+  levels, cord end at birth, Tuffier's line, cerebellar cortex layers, trochlear nucleus level, mesencephalic root of
+  V, Millard–Gubler with or without VI, Foville, pontine haemorrhage share.
+- Single source, attributed: Brown-Séquard level, spinothalamic crossing within 1–2 segments, segments higher than
+  vertebrae, ALS and syringomyelia details (Wikipedia); fifth-month cord level and fissure depth (Gray); III through
+  the red nucleus (StatPearls); cruciate paralysis for "crossed diplegia" (AN58.4, one case report with review).
+- Left out (one source or none): which ventricles enlarge in each type of hydrocephalus, cauda equina paraplegia,
+  taste in the upper solitary nucleus, the paravermis as vestibulocerebellum.
+- Model `models/neuro1` (`tools/neuro/neuro1_config.py`; `z-bp3d-neuro1*.zip`): 121 parts, 810 KB pack. Brainstem,
+  cerebellum and ventricles: BodyParts3D (CC BY-SA 2.1 Japan). Cord (rebuilt by `export_cord.py`, faces flipped by
+  `flip_cord.py`), olive, pyramid, nuclei, dura, nerves and vessels: Z-Anatomy (CC BY-SA 4.0). No Brainder or
+  White-matter meshes. The model's dural sac ends at L2 (the page gives the real level, S2).
+- Independent review (2026-11-22), fixed: anterior spinal artery lesion area, fourth ventricle position, Millard–Gubler
+  overlay and facial loop, V root label, about a dozen one-source statements, cerebellum caption and paravermis aside,
+  colours (white-matter bundles token), keyboard focus, unused model parts, dark 3D cord sections.

@@ -8,10 +8,6 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 36 (neuro I): [x] build (605 quotes, 138-part 838 KB neuro1, pages neuro/meninges-cord.html and
-  neuro/brainstem.html; AN58.4 partial) [x] review (11 items: anterior spinal artery hatch, 4th ventricle drawn in front,
-  Millard–Gubler overlay, attributions, colours) [ ] fixes (sent) [ ] docs (new region group 'neuro' on the
-  Anatomy index) [ ] commit.
 - Navigation work done (below); modules resumed. Module 37 (neuro II: sections 7, 62, 63) started 2026-11-22: sheet
   fill-neuro2, model models/neuro2 (tools/neuro/neuro2_config.py), pages anatomy/neuro/cerebrum.html (+ maybe
   general/nervous-system.html).
@@ -65,11 +61,12 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
 - AN27.1: scalp wound bleeding and gaping (Wikipedia only).
 - AN43.6: only the subclavian vein's surface line is missing (one source).
 - AN37.2: sinus functions are Wikipedia only (module 33).
+- AN58.4: "crossed diplegia" read as cruciate paralysis, one source (module 36).
 - AN47.6: the clinical use of the splenic notch has no open source (module 31).
 - AN13.7: surface lines and pulses are done (module 24); the muscle tests for pectoralis major, serratus anterior,
   latissimus dorsi, deltoid, biceps and brachioradialis are not. Could go on the upper-limb muscles page.
 
-Progress: anatomy 241 covered, 14 partial, 158 not started; ophthalmology 6 covered, 1 partial, 55 not started.
+Progress: anatomy 262 covered, 15 partial, 136 not started; ophthalmology 6 covered, 1 partial, 55 not started.
 
 ## Steps for every module (do them in this order, tick them here as they finish)
 
@@ -114,6 +111,11 @@ builds at the same time.
   that disproves each claim.
 
 ## Log (newest first)
+
+- 2026-11-22: Module 36 (meninges, CSF, cord; brainstem and cerebellum, two pages in anatomy/neuro/): 609 quotes,
+  121-part 810 KB `models/neuro1`; review found no side or level errors, 11 drawing/source/code items, all fixed;
+  21 ticked, AN58.4 partial. New 'Brain and spinal cord' group on the Anatomy page. Follow-up: the home vessel layer's
+  straight and occipital sinuses lie in front of the brainstem (misplaced in Z-Anatomy) — check or hide them.
 
 - 2026-11-22: Navigation: site search (assets/search.js, search-index.json), grouped Anatomy page with filters and
   region jumps, Bones on/off on every 3D page, Joints and ligaments and Organs layers on the Anatomy home.
