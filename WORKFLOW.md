@@ -8,11 +8,6 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 31 (abdominal cavity, peritoneum, organs) started 2026-11-21: page abdomen-pelvis/organs.html (single page).
-  - [x] build (agent af6d044d; 573 quotes; 98-part 658 KB models/abdo; no images; AN47.6 partial)  [x] review (18 items: biopsy
-    needle wording, faint/dropped labels, schematics, one-source lines, colours)  [ ] fixes (sent to builder af6d044d)  [ ] docs  [ ] commit, push, live test
-  - Home: add abdo/abdo.json to region_pages.py MODELS after abd-nv (only l_spleen new) and an 'Abdominal organs'
-    REGION_PAGES entry? Decide at docs step.
 - Module 32 (face and neck regions and glands) started 2026-11-21 in parallel: agent a3248667; sheet fill-hnreg, model
   models/hn-reg (tools/head-neck/regions_config.py), page head-neck/regions.html (may split). Target AN28.2, 28.9, 28.10,
   29.1, 29.2, 29.4, 29.5, 33.1, 34.1–34.3, 35.2, 35.8, 42.3, AN43.6 glands and pterion.
@@ -48,10 +43,11 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
   relations): Gray only (Wikipedia copies Gray); modules 27–28.
 - AN27.1: scalp wound bleeding and gaping (Wikipedia only); AN43.6: subclavian artery line (Gray only), glands and
   pterion not yet (module 29).
+- AN47.6: the clinical use of the splenic notch has no open source (module 31).
 - AN13.7: surface lines and pulses are done (module 24); the muscle tests for pectoralis major, serratus anterior,
   latissimus dorsi, deltoid, biceps and brachioradialis are not. Could go on the upper-limb muscles page.
 
-Progress: anatomy 185 covered, 12 partial, 216 not started; ophthalmology 6 covered, 1 partial, 55 not started.
+Progress: anatomy 193 covered, 13 partial, 207 not started; ophthalmology 6 covered, 1 partial, 55 not started.
 
 ## Steps for every module (do them in this order, tick them here as they finish)
 
@@ -96,6 +92,10 @@ builds at the same time.
   that disproves each claim.
 
 ## Log (newest first)
+
+- 2026-11-21: Module 31 (abdominal cavity, peritoneum, organs): 582 quotes, 100-part 664 KB `models/abdo` with the
+  Z-Anatomy kidney (CC BY-NC, better fit); review found 18 items (biopsy needle wording, labels, schematics), all fixed;
+  8 ticked, AN47.6 partial. Spleen on the home opens the page.
 
 - 2026-11-21: Licence: content now CC BY-NC-SA 4.0 (user: never commercial); NC models/images allowed, chosen by
   accuracy and load speed (Z-Anatomy kidney and inner ear now usable). Code stays AGPL.

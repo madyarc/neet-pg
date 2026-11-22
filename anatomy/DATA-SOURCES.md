@@ -964,3 +964,35 @@ tubercles.
   clashes (pleura line with phrenic nerve, segment colours with airway, nerve and vein), nine one-source statements,
   two overstatements, pleura schematic contrast, X-ray label size on phones, barium credit.
 - Home page: the lobar and segmental pulmonary vessels open this page (`tools/home/region_pages.py`).
+
+## The Abdominal Cavity: Peritoneum and Organs — `abdomen-pelvis/organs.html`
+
+- Fact sheet `sources-local/facts/fill-abdo.md` (582 quotes, script-checked against `sources-local/modern/fill-abdo/`,
+  downloads 2026-11-21): Gray 1918 pages 246–251, 253, 254, 277, 278, 285, 286; StatPearls abstracts; open-access papers
+  (WSES 2023 laparotomy guideline, two peritoneal-space imaging reviews, stomach blood supply, liver anatomy,
+  cholecystectomy anatomy and the critical view of safety, liver biopsy studies, pancreaticobiliary junction, abdominal
+  pain, appendicitis, a Meckel's meta-analysis, splenic rupture and accessory spleens, adrenal veins); Wikipedia
+  (Stomach, Kehr's sign and Adrenal gland excluded for citing OpenStax; Gray copies excluded).
+- Contested, stated on the page: vertical region lines (Gray's halfway ASIS–symphysis or midclavicular); subcostal
+  plane at the upper or lower border of L3; SMA origin at or 2 cm above the transpyloric plane; McBurney's point as
+  tenderness or appendix position; side of subphrenic abscess; Calot's triangle original and modern upper boundary;
+  lowest point of the cavity (Morison's pouch lying flat, rectouterine pouch).
+- Single source, attributed: lengths, hilum order and colon relations (Gray); SMA syndrome, kidney length (Wikipedia);
+  ERCP (StatPearls); McBurney incision and incisional hernia (a 2025 history review); nerves at risk in incisions
+  (PMC13198815, PMC11324006); selective vagotomy (PMC12083144). Liver biopsy site has two sources (PMC11272270,
+  PMC5670258).
+- Left out (one source): the clinical use of the splenic notch, Spigelian hernia, the classic seven subphrenic spaces.
+- Planes are computed on the model's bones (`fill-abdo-scripts/planes.py`), approximate; the model's iliac tubercle is
+  closer to the ASIS than Gray's 5 cm.
+- Model `models/abdo` (`tools/abdomen-pelvis/organs_config.py`): 100 parts, 664 KB pack, nothing mirrored. BodyParts3D
+  bones, stomach, duodenum, jejunum, ileum, rectum, ureters; Z-Anatomy liver segments, biliary tree, pancreas, colon,
+  appendix, omenta, mesocolon, suprarenals, spleen, vessels. Kidneys and renal pelves: "Kidney" by Lissie Cowley as
+  included in Z-Anatomy, CC BY-NC 4.0, chosen for its fit to the renal vessels and suprarenals and its separate pelvis.
+  Missing (schematics): separate caecum, hepatic and cystic ducts, mesentery, parietal peritoneum, liver and spleen
+  ligaments, lesser sac, anterior abdominal wall. The model's SMA and SMV pass through the 3rd part of the duodenum
+  and its epiploic-foramen vessels only approximate the textbook arrangement (said on the page).
+- Independent review (2026-11-21), fixed: liver biopsy needle wording, linea alba colour, dropped and faint 3D labels
+  (now none on desktop or phone), foramen and duodenum caveats, peritonitis and lowest-point wording, subphrenic,
+  Calot, horizontal and sagittal schematics, about ten one-source statements, jejunum position, colour clashes, dark
+  contrast, incision nerves, selective vagotomy, keyboard access.
+- Home page: the spleen (lymph layer) opens this page.

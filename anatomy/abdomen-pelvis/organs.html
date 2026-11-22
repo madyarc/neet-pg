@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Abdominal Cavity: Peritoneum and Abdominal Organs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone, --cart (costal cartilage), --soft (diaphragm as context), --artery, --vein,
+   --clin (clinical: incisions, McBurney's point, the gallbladder point, a needle). Shared with other pages, same meaning:
+   --stom (the stomach; the value of --s-stom on thorax/wall-muscles.html), --gut (the digestive tube, here the small intestine;
+   the value of --gut on thorax/lungs.html), --perit (peritoneum; the value of --s-perit on wall-muscles.html), --fluid (fluid in a
+   serous cavity; as on lungs.html). Page-only tokens, used for nothing else: --colon (large intestine), --liver / --liver-l /
+   --liver-q (liver: right lobe or right liver / left lobe or left liver / the small lobes (quadrate, caudate) or segment I),
+   --bile (gallbladder and bile ducts), --panc (pancreas and its ducts), --spleen, --kidney (kidneys and ureters), --supra
+   (suprarenal glands), --pln (horizontal planes), --vln (vertical lines), --lin (linea alba and lineae semilunares), --gsac /
+   --lsac (greater sac / lesser sac in the tracings), --pus (an abscess). Checked against every colour token on the site
+   (sources-local/facts/fill-abdo-scripts/colcheck.py). */
+:root{--stom:#e7b7c8;--gut:#d9a066;--colon:#a89a5a;--liver:#9b6b5e;--liver-l:#cfa38a;--liver-q:#6b3f33;--bile:#5e8c6a;--panc:#8f6aa8;
+  --spleen:#94587a;--kidney:#b46e48;--supra:#2dd4bf;--perit:#a9cfc4;--fluid:#d9edc6;--pus:#cfd08a;
+  --pln:#f59e0b;--vln:#0e7490;--lin:#7c2d12;--gsac:#fb923c;--lsac:#c026d3}
+:root[data-theme="dark"]{--stom:#8c5468;--gut:#c08a52;--colon:#8f8248;--liver:#a77464;--liver-l:#c49680;--liver-q:#7d4a3c;--bile:#6fa07b;--panc:#9d7ab6;
+  --spleen:#a8678c;--kidney:#c07a52;--supra:#3fbfae;--perit:#3f6e63;--fluid:#4e6638;--pus:#7a7b3c;
+  --pln:#fbbf24;--vln:#38b2c9;--lin:#fff1e6;--gsac:#fdba74;--lsac:#e879f9;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+#topics{display:flex;flex-direction:column;gap:10px}
+#topic-text p+p,#topic-text p+ul,#topic-text ul+p{margin-top:8px}
+#topic-text ul{margin:4px 0 0;padding-left:20px}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t tr[data-k]{cursor:pointer}
+table.t tr[aria-pressed="true"] td{background:var(--bg)}
+.scroll{overflow-x:auto}
+.scroll,.schbox{scrollbar-color:var(--line) transparent}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:620px;margin:0 auto}
+.schbox{overflow-x:auto}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:500px}.swipe{display:inline}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch .bone{fill:var(--bone);stroke:var(--muted);stroke-width:1}
+svg.sch .mus{fill:var(--soft);stroke:var(--muted);stroke-width:.8}
+svg.sch .wall{fill:var(--soft);stroke:var(--muted);stroke-width:.8}
+svg.sch .o{stroke:var(--muted);stroke-width:.8}
+svg.sch .gs{fill:none;stroke:var(--gsac);stroke-width:2.6;stroke-linejoin:round}
+svg.sch .ls{fill:none;stroke:var(--lsac);stroke-width:2.6;stroke-linejoin:round}
+svg.sch .gsf{fill:var(--gsac);fill-opacity:.16;stroke:none}
+svg.sch .lsf{fill:var(--lsac);fill-opacity:.16;stroke:none}
+svg.sch .dim{opacity:.25}
+svg.sch .fl{fill:var(--fluid);stroke:var(--muted);stroke-width:.6}
+svg.sch .pus{fill:var(--pus);stroke:var(--muted);stroke-width:.8}
+svg.sch .art{fill:var(--artery);stroke:var(--surface);stroke-width:1}
+svg.sch .vn{fill:var(--vein);stroke:var(--surface);stroke-width:1}
+svg.sch .artl{stroke:var(--artery);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .bil{stroke:var(--bile);stroke-width:7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+svg.sch .clin{stroke:var(--clin);stroke-width:3.5;fill:none;stroke-linecap:round}
+svg.sch .clinf{fill:var(--clin)}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .surf{fill:var(--surface);stroke:var(--line);stroke-width:1}
+svg.sch .tri{fill:var(--ink);fill-opacity:.06;stroke:var(--ink);stroke-width:1.5;stroke-dasharray:6 4}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.organ-card{display:flex;flex-direction:column;gap:8px}
+.organ-card h3{font:700 18px var(--f-display);margin:0}
+.clinlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.clinlist .item{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg);font-size:14px}
+.clinlist .item b.t{display:block;font:600 14.5px var(--f-body);margin-bottom:4px}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>The Abdominal Cavity: Peritoneum and Abdominal Organs</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="Abdominal organs in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <div class="key" id="key3d"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-planes">
+  <h2 id="h-planes">Planes, regions and quadrants</h2>
+  <p class="cap" id="pl-cap"></p>
+  <div class="scroll"><table class="t stack" id="pl-table"></table></div>
+  <p class="muted" id="pl-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-inc">
+  <h2 id="h-inc">Common abdominal incisions</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="inc-svg" viewBox="0 0 460 520" role="img" aria-label="Schematic front view of the abdomen with the common incisions drawn: upper and lower midline, paramedian, right subcostal (Kocher), McBurney gridiron at McBurney's point, Lanz, and Pfannenstiel above the pubis"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. Front view: the body's right is on your left, as in the 3D "Front" view. Tap a row to highlight an incision; tap it again to clear.</p>
+    </div>
+    <div class="scroll"><table class="t stack" id="inc-table"></table></div>
+  </div>
+  <p class="muted" id="inc-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-perit">
+  <h2 id="h-perit">Peritoneum: tracing the greater and lesser sacs</h2>
+  <div class="prose" id="pe-text"></div>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="sag-svg" viewBox="0 0 520 600" role="img" aria-label="Schematic median sagittal section of the abdomen showing the peritoneum of the greater sac and of the lesser sac (omental bursa), the liver, stomach, transverse colon, pancreas, duodenum, small intestine and pelvic organs"></svg></div>
+      <div class="toggles" id="sag-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Vertical (sagittal) tracing, schematic, after Gray 1918 (Fig. 1035); T. colon = transverse colon; the duodenum and pancreas lie behind the peritoneum. Seen from the right, as in the 3D "Right" view: front on your right, head at the top.</p>
+    </div>
+    <div>
+      <div class="schbox"><svg class="fig sch" id="hor-svg" viewBox="0 0 540 420" role="img" aria-label="Schematic transverse section at the level of the epiploic foramen showing the greater sac, the lesser sac behind the stomach, the epiploic foramen with the free border of the lesser omentum, and the gastrosplenic and splenorenal ligaments"></svg></div>
+      <div class="toggles" id="hor-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Horizontal tracing at the level of the epiploic foramen (upper abdomen), schematic, after Gray 1918. Seen from below as on a CT scan: front at the top, the body's right on your left (as in the 3D "Front" view).</p>
+    </div>
+  </div>
+  <div class="two">
+    <div class="scroll"><table class="t stack" id="ls-table"></table></div>
+    <div class="scroll"><table class="t stack" id="ef-table"></table></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-folds">
+  <h2 id="h-folds">Peritoneal folds, pouches and recesses</h2>
+  <div class="scroll"><table class="t stack" id="fold-table"></table></div>
+  <p class="muted" id="fold-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-spaces">
+  <h2 id="h-spaces">Subphrenic spaces, ascites and peritonitis</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="sp-svg" viewBox="0 0 520 490" role="img" aria-label="Schematic right parasagittal section showing the right subphrenic space above the liver, the anterior right subhepatic space, the hepatorenal pouch of Morison between liver and right kidney, the right paracolic gutter and the pelvis"></svg></div>
+      <div class="toggles" id="sp-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic right parasagittal section, not to scale. Seen from the right (front on your right), as in the 3D "Right" view.</p>
+    </div>
+    <div class="prose" id="sp-text"></div>
+  </div>
+  <div class="prose" id="ap-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-org">
+  <h2 id="h-org">The major abdominal organs</h2>
+  <p class="cap" id="org-cap"></p>
+  <div class="chips" id="org-chips"></div>
+  <div class="organ-card" id="org-card"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-clin">
+  <h2 id="h-clin">Applied anatomy</h2>
+  <div class="clinlist" id="clin-list"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-calot">
+  <h2 id="h-calot">Calot's (hepatocystic) triangle</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="cal-svg" viewBox="0 0 480 400" role="img" aria-label="Schematic of Calot's triangle seen from the front: the inferior surface of the liver above, the cystic duct on the body's right, the common hepatic duct on the left, with the cystic artery from the right hepatic artery crossing the triangle"></svg></div>
+      <div class="toggles" id="cal-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. Front view, gallbladder pulled up: the body's right is on your left, as in the 3D "Front" view.</p>
+    </div>
+    <div class="prose" id="cal-text"></div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-abdo.md, anatomy/DATA-SOURCES.md) ===================== */
+const V = k => 'v_' + k, O = k => 'o_' + k, P = k => 'p_' + k;
+const ORD = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth', 'eleventh', 'twelfth'];
+const RIBS = ORD.slice(4).flatMap(o => ['right_' + o + '_rib', 'left_' + o + '_rib']);
+const CC = ORD.slice(4, 10).flatMap(o => ['right_' + o + '_costal_cartilage', 'left_' + o + '_costal_cartilage']);
+const CAGE = [...RIBS, ...CC, 'manubrium', 'body_of_sternum', 'xiphoid_process', 'right_clavicle', 'left_clavicle'];
+const SEG = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii'].map(s => O('liver_' + s));
+const [S1, S2, S3, S4, S5, S6, S7, S8] = SEG;
+const LIVER = SEG;
+const GI = [O('stomach'), O('duodenum'), O('jejunum'), O('ileum'), O('ascending_colon'), O('transverse_colon'), O('descending_colon'), O('sigmoid_colon'), O('appendix'), O('rectum')];
+const BIL = [O('gallbladder'), O('bile_duct')], PANC = [O('pancreas'), O('pancreatic_duct'), O('accessory_pancreatic_duct')];
+const KID = [O('kidney_r'), O('kidney_l'), O('renal_pelvis_r'), O('renal_pelvis_l'), O('ureter_r'), O('ureter_l')], SUPRA = [O('suprarenal_r'), O('suprarenal_l')], SPL = 'l_spleen';
+const PERIT = [P('greater_omentum'), P('lesser_omentum'), P('transverse_mesocolon'), P('meso_appendix')];
+const ART = ['abdominal_aorta', 'coeliac_trunk', 'left_gastric_artery', 'splenic_artery', 'common_hepatic_artery', 'proper_hepatic_artery', 'gastroduodenal_artery',
+  'superior_mesenteric_artery', 'inferior_mesenteric_artery', 'right_renal_artery', 'left_renal_artery'].map(V);
+const VEIN = ['inferior_vena_cava_abdominal_part', 'hepatic_veins', 'right_renal_vein', 'left_renal_vein', 'hepatic_portal_vein', 'splenic_vein', 'superior_mesenteric_vein', 'inferior_mesenteric_vein'].map(V);
+const VESS = [...ART, ...VEIN];
+const ORGANS = [...LIVER, ...GI, ...BIL, ...PANC, ...KID, ...SUPRA, SPL];
+const DIA = 'm_diaphragm', GO = P('greater_omentum'), IVC = V('inferior_vena_cava_abdominal_part');
+const FRONT = [0, -1, 0.08], BACK = [0, 1, 0.08], RIGHT = [-1, 0, 0.05], LEFT = [1, 0, 0.05], FRONT_LOW = [0, -1, -0.45];
+/* surface lines and points computed on the model's bones by sources-local/facts/fill-abdo-scripts/planes.py (approximate; mm,
+   body frame +x left, +y back, +z up); the planes are drawn in one coronal plane in front of the organs (y = -212) */
+const SURF = {"lines":{"transpyloric":[[-150.0,-212.0,1077.7],[150.0,-212.0,1077.7]],"subcostal":[[-150.0,-212.0,1015.8],[150.0,-212.0,1015.8]],"transtubercular":[[-150.0,-212.0,928.3],[150.0,-212.0,928.3]],"transumbilical":[[-150.0,-212.0,985.7],[150.0,-212.0,985.7]],"median":[[0.0,-212.0,1169.5],[0.0,-212.0,813.1]],"lateral_r":[[-61.7,-212.0,1185.0],[-61.7,-212.0,845.0]],"lateral_l":[[61.7,-212.0,1185.0],[61.7,-212.0,845.0]],"semilunaris_r":[[-71.2,-212.0,1075.4],[-71.9,-212.0,1062.4],[-72.3,-212.0,1049.4],[-72.4,-212.0,1036.5],[-72.2,-212.0,1023.5],[-71.7,-212.0,1010.6],[-71.0,-212.0,997.6],[-70.0,-212.0,984.7],[-68.6,-212.0,971.7],[-67.0,-212.0,958.8],[-65.1,-212.0,945.8],[-62.9,-212.0,932.8],[-60.5,-212.0,919.9],[-57.7,-212.0,906.9],[-54.7,-212.0,894.0],[-51.3,-212.0,881.0],[-47.7,-212.0,868.1],[-43.8,-212.0,855.1],[-39.6,-212.0,842.2],[-35.1,-212.0,829.2],[-30.3,-212.0,816.3]],"semilunaris_l":[[69.7,-212.0,1076.3],[70.5,-212.0,1063.4],[71.2,-212.0,1050.4],[71.5,-212.0,1037.5],[71.6,-212.0,1024.6],[71.4,-212.0,1011.6],[70.9,-212.0,998.7],[70.1,-212.0,985.8],[69.0,-212.0,972.8],[67.7,-212.0,959.9],[66.1,-212.0,947.0],[64.2,-212.0,934.0],[62.1,-212.0,921.1],[59.6,-212.0,908.2],[56.9,-212.0,895.2],[53.9,-212.0,882.3],[50.7,-212.0,869.4],[47.1,-212.0,856.4],[43.3,-212.0,843.5],[39.2,-212.0,830.6],[34.8,-212.0,817.7]],"mcburney":[[-116.8,-212.0,903.1],[0.0,-212.0,985.7]]},
+  "pts":{"jugular_notch":[-2.4,-141.1,1342.3],"symphysis":[0.0,-137.5,813.1],"asis_r":[-116.8,-152.2,903.1],"asis_l":[117.6,-152.2,903.8],"pubic_tubercle_r":[-30.3,-133.3,816.3],"pubic_tubercle_l":[34.8,-120.6,817.7],"iliac_tubercle_r":[-126.4,-133.9,924.7],"iliac_tubercle_l":[131.6,-110.6,931.9],"tip9_r":[-71.2,-186.6,1075.4],"tip9_l":[69.7,-185.8,1076.3],"xiphoid_tip":[-0.1,-195.9,1169.5],"umbilicus":[0.0,-212.0,985.7],"mcburney":[-77.9,-212.0,930.7],"gb_fundus":[-71.2,-212.0,1075.4]}};
+const LINE_COL = {linea_alba: '--lin', transpyloric: '--pln', subcostal: '--pln', transtubercular: '--pln', transumbilical: '--pln', median: '--vln', lateral_r: '--vln', lateral_l: '--vln',
+  semilunaris_r: '--lin', semilunaris_l: '--lin', mcburney: '--clin'};
+const LINE_DASH = {subcostal: '7 5', mcburney: '3 4'};
+SURF.lines.linea_alba = SURF.lines.median;
+const F = (x, z) => [x, -212, z];   // a point in the drawing plane in front of the organs
+/* 3D topics. lit = parts in full colour (the rest faint); hide = not drawn; show = drawn although hidden by default (greater
+   omentum, diaphragm); cage = show ribs, cartilages, sternum, clavicles; lines = surface lines; pts = [point, label, colour];
+   labels = [key, text, point to start the search from (mm)] (key null: the point itself); colours = {key: token} for this topic */
+const TOPICS = [
+  {grp: 'Planes and regions', id: 'regions', name: 'Nine regions (Addison)', cage: true,
+    lit: [...ORGANS], lines: ['transpyloric', 'transtubercular', 'lateral_r', 'lateral_l'], view: FRONT, zoom: 0.95, fitPts: true,
+    labels: [[null, 'Epigastric', F(0, 1128)], [null, 'R hypochondriac', F(-108, 1128)], [null, 'L hypochondriac', F(108, 1128)],
+      [null, 'Umbilical', F(0, 1003)], [null, 'R lumbar', F(-108, 1003)], [null, 'L lumbar', F(108, 1003)],
+      [null, 'Hypogastric', F(0, 884)], [null, 'R iliac', F(-108, 884)], [null, 'L iliac', F(108, 884)]],
+    text: `<p>Two horizontal and two vertical planes divide the abdomen into <b>nine regions</b>. Here, Addison's planes as in Gray: the <b>transpyloric</b> (upper horizontal line), halfway between the jugular notch and the top of the pubic symphysis, and the <b>transtubercular</b> (lower horizontal line) through the tubercles of the iliac crests; the two <b>vertical lines</b> (teal) pass through the points halfway between each anterior superior iliac spine and the symphysis.</p>
+<p>On this model the computed transpyloric plane passes the tips of both 9th costal cartilages and the body of L1; the transtubercular plane crosses the body of L5.</p>`},
+  {grp: 'Planes and regions', id: 'subcostal', name: 'Subcostal plane', cage: true,
+    lit: [...ORGANS], lines: ['subcostal', 'transpyloric', 'transtubercular'], view: FRONT, zoom: 0.95,
+    labels: [[null, 'Transpyloric', F(-55, 1077.7)], [null, 'Subcostal', F(-55, 1015.8)], [null, 'Transtubercular', F(-55, 928.3)]],
+    pts: [['tip9_r', 'Tip of 9th cartilage', '--ink'], ['iliac_tubercle_l', 'Iliac tubercle', '--ink']],
+    text: `<p>The <b>subcostal plane</b> (dashed) runs through the lowest points of the <b>10th costal cartilages</b>, at about L3. With the transtubercular plane it is the other common pair for the nine regions (Wikipedia; Gray's "older method").</p>
+<p>The vertical lines also differ between books: Gray draws them through the points halfway between the anterior superior iliac spines and the symphysis (62 mm from the midline on this model); Wikipedia uses the <b>midclavicular lines</b> (80 mm on this model). The regions are the same idea either way.</p>`},
+  {grp: 'Planes and regions', id: 'quadrants', name: 'Four quadrants', cage: true,
+    lit: [...ORGANS], lines: ['median', 'transumbilical'], view: FRONT, zoom: 0.95,
+    labels: [[null, 'RUQ', F(-80, 1090)], [null, 'LUQ', F(80, 1090)], [null, 'RLQ', F(-80, 905)], [null, 'LLQ', F(80, 905)]],
+    pts: [['umbilicus', 'Umbilicus', '--ink']],
+    text: `<p>A vertical <b>median plane</b> and a horizontal plane through the <b>umbilicus</b> give four quadrants: right and left upper, right and left lower. They are used to localise pain, tenderness, lumps and scars (two sources).</p>
+<p>Main organs in each (Wikipedia):</p><ul><li>RUQ: liver, gallbladder, duodenum, head of pancreas, right kidney and suprarenal, hepatic flexure.</li><li>LUQ: stomach, spleen, left lobe of liver, body of pancreas, left kidney and suprarenal, splenic flexure.</li><li>RLQ: caecum, appendix; LLQ: descending and sigmoid colon.</li></ul>
+<p class="muted">The umbilicus is drawn at the level of the L3/L4 disc (Gray); its height varies.</p>`},
+  {grp: 'Planes and regions', id: 'lineae', name: 'Linea alba, semilunaris, McBurney', cage: true,
+    lit: [...ORGANS], lines: ['linea_alba', 'semilunaris_r', 'semilunaris_l', 'mcburney'], view: FRONT, zoom: 0.95,
+    pts: [['asis_r', 'ASIS', '--ink'], ['pubic_tubercle_l', 'Pubic tubercle', '--ink'], ['mcburney', "McBurney's point", '--clin'], ['gb_fundus', 'Gallbladder point', '--clin'], ['xiphoid_tip', 'Xiphoid', '--ink']],
+    text: `<p>The <b>linea alba</b> (midline, drawn in the linea colour of the key) is the fibrous seam between the two recti, from the xiphoid process to the pubic symphysis. Each <b>linea semilunaris</b> (curved line) is the lateral edge of rectus, from the tip of the 9th costal cartilage to the pubic tubercle, convex laterally (Gray: about 7 cm from the midline at the umbilicus).</p>
+<p><b>McBurney's point</b> lies one-third of the way from the right anterior superior iliac spine to the umbilicus. The <b>gallbladder point</b> is where the right linea semilunaris meets the costal margin, at the tip of the 9th cartilage on the transpyloric plane.</p>
+<p class="muted">The abdominal wall itself is on <a href="../thorax/wall-muscles.html">Muscles of the Trunk Wall</a> (rectus sheath, inguinal canal, diaphragm).</p>`},
+  {grp: 'Organs in place', id: 'all', name: 'With the greater omentum', show: [GO], hide: [O('jejunum'), O('ileum')],
+    lit: [...ORGANS, GO], view: FRONT, zoom: 0.95,
+    labels: [[S5, 'Liver', [-70, -195, 1110]], [O('stomach'), 'Stomach', [55, -185, 1110]], [GO, 'Greater omentum', [10, -183, 960]]],
+    text: `<p>Open the front of the abdomen and you see the <b>liver</b> under the right ribs, the <b>stomach</b> to its left, and the <b>greater omentum</b> hanging like an apron from the greater curvature over the intestines; below it, coils of small intestine and the caecum (Gray).</p>
+<p class="muted">The greater omentum is Z-Anatomy's sheet, approximate; its length varies.</p>`},
+  {grp: 'Organs in place', id: 'open', name: 'Omentum lifted away',
+    lit: [...ORGANS], view: FRONT, zoom: 0.95,
+    labels: [[S5, 'Liver', [-70, -195, 1110]], [O('stomach'), 'Stomach', [55, -185, 1110]], [O('transverse_colon'), 'Transverse colon', [20, -178, 1045]], [O('jejunum'), 'Jejunum', [55, -185, 990]], [O('ileum'), 'Ileum', [-40, -160, 900]],
+      [O('ascending_colon'), 'Ascending colon', [-105, -135, 990]]],
+    text: `<p>With the greater omentum removed: the <b>transverse colon</b> crosses below the stomach; the coils of the <b>jejunum</b> lie mostly on the left and those of the <b>ileum</b> on the right and in the pelvis (Gray); the colon frames them: <b>ascending</b> on the right, <b>descending</b> on the left.</p>`},
+  {grp: 'Organs in place', id: 'omenta', name: 'Omenta and transverse mesocolon',
+    show: [GO], lit: [...PERIT, O('stomach'), O('transverse_colon'), O('gallbladder'), O('appendix'), ...LIVER], hide: [O('jejunum'), O('ileum'), S2, S3, S4], view: [0.35, -1, 0.25], zoom: 1,
+    fit: [GO, P('lesser_omentum'), O('stomach')],
+    labels: [[P('lesser_omentum'), 'Lesser omentum', [0, -170, 1125]], [GO, 'Greater omentum', [20, -183, 950]], [P('transverse_mesocolon'), 'Transverse mesocolon', [50, -150, 1065]], [O('stomach'), 'Stomach', [60, -180, 1120]]],
+    text: `<p>The <b>lesser omentum</b> runs from the lesser curvature (and the first 2.5 cm of the duodenum) up to the liver; the <b>greater omentum</b> hangs from the greater curvature and turns back up to the <b>transverse colon</b>, which hangs on the <b>transverse mesocolon</b> from the front of the pancreas. The mesocolon divides the cavity into supracolic and infracolic compartments.</p>
+<p class="muted">The model has no mesentery of the small intestine, sigmoid mesocolon, parietal peritoneum or ligaments of the liver and spleen: they are drawn in the schematics below.</p>`},
+  {grp: 'Organs in place', id: 'bed', name: 'Stomach bed',
+    hide: [O('stomach'), ...LIVER, O('gallbladder'), GO, O('transverse_colon'), O('jejunum'), O('ileum'), P('lesser_omentum')],
+    lit: [SPL, O('pancreas'), O('kidney_l'), O('suprarenal_l'), V('splenic_artery'), P('transverse_mesocolon')], view: FRONT, zoom: 0.85,
+    fit: [SPL, O('pancreas'), O('kidney_l'), O('suprarenal_l')],
+    labels: [[SPL, 'Spleen', [100, -120, 1110]], [O('pancreas'), 'Pancreas', [30, -140, 1080]], [O('kidney_l'), 'Left kidney', [70, -95, 1022]], [O('suprarenal_l'), 'Left suprarenal', [45, -84, 1115]], [V('splenic_artery'), 'Splenic artery', [60, -125, 1110]], [P('transverse_mesocolon'), 'Transverse mesocolon', [40, -165, 1060]]],
+    text: `<p>Lift the stomach away and you see what it lies on (across the lesser sac): the <b>diaphragm</b>, <b>spleen</b>, <b>left suprarenal</b>, the upper part of the <b>left kidney</b>, the <b>pancreas</b> with the <b>splenic artery</b> along its upper border, and the <b>transverse mesocolon</b> (Gray; a 2025 review).</p>`},
+  {grp: 'Organs in place', id: 'retro', name: 'Retroperitoneal organs',
+    hide: [O('stomach'), O('jejunum'), O('ileum'), O('transverse_colon'), O('sigmoid_colon'), O('appendix'), O('gallbladder'), SPL, ...LIVER, ...PERIT],
+    lit: [O('duodenum'), ...PANC, ...KID, ...SUPRA, O('ascending_colon'), O('descending_colon'), V('abdominal_aorta'), IVC], view: FRONT, zoom: 1.1,
+    labels: [[O('duodenum'), 'Duodenum', [-55, -150, 1040]], [O('pancreas'), 'Pancreas', [20, -142, 1075]], [O('kidney_l'), 'L kidney', [75, -90, 1060]],
+      [O('ascending_colon'), 'Ascending colon', [-105, -130, 980]], [O('descending_colon'), 'Descending colon', [105, -110, 950]], [V('abdominal_aorta'), 'Aorta', [8, -130, 1010]], [IVC, 'IVC', [-12, -128, 1010]]],
+    text: `<p>Organs behind the peritoneum, fixed to the posterior wall: the <b>kidneys</b>, <b>ureters</b> and <b>suprarenals</b> (primarily retroperitoneal), and the <b>duodenum</b> (except its first part), <b>pancreas</b>, <b>ascending</b> and <b>descending colon</b> (secondarily retroperitoneal: they lost their mesentery), with the aorta and IVC.</p>
+<p>Intraperitoneal organs hang on a mesentery and move: stomach, first part of the duodenum, jejunum and ileum, transverse and sigmoid colon, liver, spleen.</p>`},
+  {grp: 'Organs', id: 'stomach', name: 'Stomach', lit: [O('stomach'), ...ART.slice(1, 7), P('lesser_omentum')], hide: [GO, O('transverse_colon'), S2, S3, S4, P('transverse_mesocolon')], view: FRONT, zoom: 0.85, fit: [O('stomach')],
+    labels: [[O('stomach'), 'Fundus', [40, -150, 1170]], [O('stomach'), 'Body', [70, -175, 1110]], [O('stomach'), 'Pyloric part', [-10, -170, 1075]]],
+    organ: 'stomach'},
+  {grp: 'Organs', id: 'duod', name: 'Duodenum and pancreas', lit: [O('duodenum'), ...PANC, O('bile_duct'), V('superior_mesenteric_artery'), V('superior_mesenteric_vein'), V('hepatic_portal_vein'), V('splenic_vein'), V('abdominal_aorta'), IVC],
+    hide: [O('stomach'), GO, O('transverse_colon'), O('jejunum'), O('ileum'), ...LIVER, O('gallbladder'), ...PERIT], view: FRONT, zoom: 0.85, fit: [O('duodenum'), O('pancreas')],
+    labels: [[O('duodenum'), '1st part', [-35, -150, 1085]], [O('duodenum'), '2nd part', [-62, -140, 1040]], [O('duodenum'), '4th part', [25, -140, 1030]],
+      [O('pancreas'), 'Head', [-35, -140, 1050]], [O('pancreas'), 'Tail', [65, -110, 1095]], [V('superior_mesenteric_vein'), 'SMV', [-5, -150, 1028]]],
+    organ: 'duod', note: 'In this model the superior mesenteric vessels run through the third part of the duodenum instead of in front of it (an approximation of the two sources): the third part is not labelled here.'},
+  {grp: 'Organs', id: 'smallint', name: 'Jejunum and ileum', lit: [O('jejunum'), O('ileum'), O('duodenum'), O('ascending_colon')], hide: [GO, O('transverse_colon')], view: FRONT, zoom: 0.95, fit: [O('jejunum'), O('ileum')],
+    labels: [[O('jejunum'), 'Jejunum', [50, -180, 1000]], [O('ileum'), 'Ileum', [-40, -160, 890]]],
+    organ: 'smallint'},
+  {grp: 'Organs', id: 'caecum', name: 'Caecum and appendix', lit: [O('ascending_colon'), O('appendix'), P('meso_appendix')], hide: [GO, O('jejunum'), O('ileum')], view: [0.5, -1, -0.1], zoom: 0.8, fit: [O('appendix'), O('ascending_colon')], cage: true,
+    lines: ['mcburney'], pts: [['mcburney', "McBurney's point", '--clin']],
+    labels: [[O('ascending_colon'), 'Caecum', [-95, -130, 900]], [O('appendix'), 'Appendix', [-55, -105, 903]], [P('meso_appendix'), 'Meso-appendix', [-45, -100, 925]]],
+    organ: 'caecum'},
+  {grp: 'Organs', id: 'colon', name: 'Colon', lit: [O('ascending_colon'), O('transverse_colon'), O('descending_colon'), O('sigmoid_colon'), O('rectum'), O('appendix')], hide: [GO, O('jejunum'), O('ileum'), P('transverse_mesocolon')], view: FRONT, zoom: 0.95,
+    labels: [[O('ascending_colon'), 'Ascending', [-105, -130, 990]], [O('transverse_colon'), 'Transverse', [10, -178, 1050]], [O('descending_colon'), 'Descending', [105, -110, 960]],
+      [O('ascending_colon'), 'Hepatic flexure', [-90, -140, 1060]], [O('transverse_colon'), 'Splenic flexure', [90, -130, 1080]], [O('rectum'), 'Rectum', [0, -50, 790]]],
+    organ: 'colon'},
+  {grp: 'Organs', id: 'liverlobes', name: 'Liver: anatomical lobes', lit: [...LIVER, O('gallbladder'), IVC], hide: [GO, O('stomach'), O('transverse_colon'), O('duodenum')], view: [0.1, -0.55, -1], zoom: 0.9, fit: LIVER,
+    colours: {[S1]: '--liver-q', [S4]: '--liver-q', [S2]: '--liver-l', [S3]: '--liver-l'},
+    labels: [[S6, 'Right lobe', [-95, -150, 1080]], [S3, 'Left lobe', [55, -170, 1120]], [S4, 'Quadrate (≈ IV)', [-15, -170, 1085]], [S1, 'Caudate (I)', [-10, -120, 1130]], [O('gallbladder'), 'Gallbladder', [-45, -165, 1068]]],
+    organ: 'liver'},
+  {grp: 'Organs', id: 'liverseg', name: 'Liver: Couinaud segments', lit: [...LIVER, V('hepatic_veins'), IVC, V('hepatic_portal_vein')], hide: [GO], view: [0.15, -1, 0.35], zoom: 0.9, fit: LIVER,
+    colours: {[S1]: '--liver-q', [S2]: '--liver-l', [S3]: '--liver-l', [S4]: '--liver-l'},
+    labels: [[S2, 'II', [60, -150, 1180]], [S3, 'III', [40, -185, 1130]], [S4, 'IV', [-15, -185, 1150]], [S5, 'V', [-60, -185, 1100]], [S6, 'VI', [-100, -140, 1080]], [S7, 'VII', [-100, -100, 1170]], [S8, 'VIII', [-60, -150, 1190]]],
+    text: `<p>Couinaud's <b>eight segments</b>, each with its own portal and arterial branch and bile duct. The <b>functional right liver</b> (V–VIII, dark) and <b>left liver</b> (II–IV, light) meet at <b>Cantlie's line</b>, the plane of the middle hepatic vein from the gallbladder fossa to the IVC, not at the falciform ligament. <b>Segment I</b> (the caudate lobe) is supplied from both sides. Seen from the front and above.</p>
+<p class="muted">Z-Anatomy's segment meshes; boundaries approximate (segments vary between people).</p>`},
+  {grp: 'Organs', id: 'gb', name: 'Gallbladder and bile duct', lit: [...BIL, O('duodenum'), V('proper_hepatic_artery'), V('hepatic_portal_vein'), V('common_hepatic_artery'), V('gastroduodenal_artery'), O('pancreas')],
+    hide: [GO, O('stomach'), O('transverse_colon'), O('jejunum'), O('ileum'), P('lesser_omentum'), S2, S3, S4], glass: true, view: [-0.25, -1, -0.2], zoom: 0.7, fit: [O('gallbladder'), O('bile_duct')],
+    labels: [[O('gallbladder'), 'Gallbladder', [-50, -170, 1080]], [O('bile_duct'), 'Bile duct', [-30, -132, 1080]], [V('proper_hepatic_artery'), 'Hepatic artery', [-25, -150, 1110]], [V('hepatic_portal_vein'), 'Portal vein', [-8, -128, 1125]], [O('duodenum'), 'Duodenum', [-55, -145, 1050]]],
+    organ: 'gb'},
+  {grp: 'Organs', id: 'spleen', name: 'Spleen', lit: [SPL, V('splenic_artery'), V('splenic_vein'), O('pancreas'), O('kidney_l')], hide: [GO, O('stomach')], cage: true, view: [0.3, -1, 0.1], zoom: 0.8, fit: [SPL, O('pancreas')],
+    labels: [[SPL, 'Spleen', [105, -100, 1120]], [V('splenic_artery'), 'Splenic artery', [30, -132, 1112]], [O('pancreas'), 'Tail of pancreas', [65, -110, 1095]], [O('kidney_l'), 'Left kidney', [80, -80, 1060]], ['left_tenth_rib', '10th rib', [130, -60, 1080]]],
+    organ: 'spleen'},
+  {grp: 'Organs', id: 'kidney', name: 'Kidneys, ureters, suprarenals', lit: [...KID, ...SUPRA, ...ART.slice(9), V('right_renal_vein'), V('left_renal_vein'), V('abdominal_aorta'), IVC],
+    hide: [...GI.filter(k => k !== O('rectum')), ...LIVER, SPL, ...PERIT, ...BIL, ...PANC, V('hepatic_portal_vein'), V('splenic_vein'), V('superior_mesenteric_vein')], cage: true, view: BACK, zoom: 0.9, fit: [...KID, ...SUPRA],
+    labels: [[O('kidney_r'), 'Right kidney', [-75, -60, 1050]], [O('kidney_l'), 'Left kidney', [65, -60, 1070]], [O('suprarenal_r'), 'R suprarenal', [-40, -85, 1110]], [O('suprarenal_l'), 'L suprarenal', [45, -70, 1125]], [O('ureter_r'), 'Ureter', [-40, -95, 930]], ['right_twelfth_rib', '12th rib', [-80, -40, 1060]]],
+    organ: 'kidney'},
+  {grp: 'Peritoneum', id: 'foramen', name: 'Epiploic foramen', lit: [P('lesser_omentum'), V('hepatic_portal_vein'), V('proper_hepatic_artery'), O('bile_duct'), IVC, S1, O('duodenum')],
+    hide: [GO, O('transverse_colon'), O('jejunum'), O('ileum'), O('stomach'), S2, S3, S4, S5, S6, S8], glass: true, view: [-0.75, -0.65, 0.1], zoom: 0.75, fit: [P('lesser_omentum'), V('hepatic_portal_vein'), O('bile_duct'), S1],
+    labels: [[O('bile_duct'), 'Bile duct', [-30, -133, 1095]], [V('proper_hepatic_artery'), 'Hepatic artery', [-25, -150, 1110]], [IVC, 'IVC (behind)', [-12, -120, 1100]], [S1, 'Caudate lobe (above)', [-15, -118, 1140]], [O('duodenum'), 'Duodenum (below)', [-30, -150, 1080]]],
+    text: `<p>Seen from the right and in front, with the liver mostly removed. The <b>epiploic foramen</b> (of Winslow) is the only opening between the greater and lesser sacs. In front: the <b>free border of the lesser omentum</b> (hepatoduodenal ligament) holding the <b>bile duct</b> (right), <b>hepatic artery</b> (left) and <b>portal vein</b> (behind them). Behind: the <b>IVC</b>. Above: the <b>caudate lobe</b> (its caudate process). Below: the <b>first part of the duodenum</b>.</p>
+<p>A finger in the foramen with the thumb in front can squeeze the free border and stop hepatic inflow (the Pringle manoeuvre, Wikipedia; StatPearls: "rapid hepatic inflow control"). Bowel can herniate through the foramen into the lesser sac (rare internal hernia).</p>
+<p class="muted">The foramen itself, a gap between peritoneal surfaces, is not modelled, and the model's duct, artery (mostly its right hepatic branch) and portal vein only approximate the textbook arrangement: see the horizontal tracing below.</p>`},
+];
+
+
+/* planes (AN44.1) */
+const PL_ROWS = [
+  ['Transpyloric (Addison)', 'Halfway between the jugular notch and the upper border of the pubic symphysis; tips of the 9th costal cartilages', 'L1 (Gray: lower border)', 'Pylorus, neck of pancreas, renal hila (about 5 cm from the midline), duodenojejunal flexure near it, origin of the SMA at or just above it', 'regions'],
+  ['Subcostal', 'Lowest points of the 10th costal cartilages', 'About L3', 'Upper plane of the "older" nine regions', 'subcostal'],
+  ['Transtubercular (intertubercular)', 'Tubercles of the iliac crests, about 5 cm behind the anterior superior iliac spines', 'Body of L5', 'Lower plane of the nine regions; near the ileocaecal junction', 'regions'],
+  ['Vertical (lateral) lines', 'Gray: through the points halfway between each ASIS and the symphysis (or the midline); Wikipedia: the midclavicular lines', '–', 'Divide each zone into three regions', 'regions'],
+  ['Median plane + transumbilical plane', 'Midline; horizontal through the umbilicus', 'Umbilicus: about L3/L4 disc (Gray; varies)', 'Four quadrants', 'quadrants'],
+  ['Linea alba', 'Midline fibrous seam from the xiphoid process to the pubic symphysis', '–', 'Midline incision; the umbilicus lies on it', 'lineae'],
+  ['Linea semilunaris', 'Lateral edge of rectus: tip of the 9th costal cartilage to the pubic tubercle, convex laterally', '–', 'Its upper end marks the gallbladder fundus (right)', 'lineae']];
+const PL_CAP = 'Tap a row to see the plane or line on the model. Zones from above: subcostal (epigastric, two hypochondriac), umbilical (umbilical, two lumbar), hypogastric (hypogastric or pubic, two iliac or inguinal).';
+const PL_NOTE = 'Lines are computed on the model\'s bones from Gray\'s (1918) definitions and are approximate: the anterior abdominal wall is not in the model, so the planes are drawn in one plane just in front of the organs; bony points stay on the bones. Two conventions exist for the planes (Addison\'s transpyloric + transtubercular; subcostal + transtubercular) and for the vertical lines (Gray: halfway ASIS–symphysis; Wikipedia: midclavicular); both are shown. On this model the most lateral point of the iliac crest, taken as the tubercle, is only about 2 cm behind the anterior superior iliac spine (Gray: about 5 cm), so the transtubercular line is approximate.';
+
+/* incisions (AN44.7) */
+const INC = [
+  ['midU', 'Upper midline', 'Xiphoid to umbilicus through the linea alba', 'Fast, wide access to the upper abdomen; the incision of choice in emergencies and trauma (WSES 2023)'],
+  ['midL', 'Lower midline', 'Umbilicus to pubic symphysis through the linea alba', 'Access below the umbilicus; with the upper midline it opens the whole abdomen'],
+  ['para', 'Paramedian', 'Vertical, beside the midline through the rectus sheath (WSES 2023)', 'An alternative vertical incision'],
+  ['kocher', 'Kocher (right subcostal)', 'Oblique, below and parallel to the right costal margin', 'Liver, gallbladder and bile ducts (Wikipedia)'],
+  ['mcb', 'McBurney (gridiron)', 'Oblique, muscle-splitting, at McBurney\'s point', 'Open appendicectomy; splitting rather than cutting the muscles (a 2025 history review: less incisional hernia)'],
+  ['lanz', 'Lanz', 'Oblique, in the same region, also muscle-splitting', 'Appendicectomy with a better scar; can be extended'],
+  ['pfann', 'Pfannenstiel', 'Transverse, just above the pubic symphysis; skin cut transversely, linea alba opened vertically', 'Caesarean section and benign hysterectomy (Wikipedia); good view of the central pelvis, little of the upper abdomen']];
+const INC_NOTE = 'Clinical importance (WSES 2023 guideline): incisional hernia is significantly less common after transverse and oblique incisions than after midline ones, and a transverse incision affects breathing, wound breakdown and pain less; the midline is still chosen when the abdomen must be explored quickly. Nerves at risk (one source each, attributed): injury to the iliohypogastric and ilioinguinal nerves after appendicectomy has been reported (2025 letter); incisions across the anterolateral wall cross the T11–T12 intercostal nerves that supply its muscles (2024 spine-surgery series).';
+
+/* peritoneum (AN47.1) */
+const PE_TEXT = `<p>The <b>peritoneum</b> is a serous membrane: the <b>parietal</b> layer lines the walls, the <b>visceral</b> layer covers the organs, and between them is the <b>peritoneal cavity</b>, a potential space with a small amount of fluid (about 50–100 mL). It is closed in the male; in the female the uterine tubes open into it. The cavity has a main part, the <b>greater sac</b>, and a pouch behind the stomach, the <b>lesser sac</b> (omental bursa); they communicate only through the <b>epiploic foramen</b>.</p>
+<p><b>Vertical tracing</b> (greater sac, start at the umbilicus going up): falciform ligament → under the diaphragm → over the liver (coronary ligament round the bare area) → under the liver to the lesser curvature (front layer of the lesser omentum) → over the front of the stomach → down as the front two layers of the greater omentum → back up round the transverse colon → under the transverse mesocolon to the pancreas → mesentery of the small intestine → over the posterior wall into the pelvis (sigmoid mesocolon, rectum, rectovesical or rectouterine pouch, bladder) → up the anterior wall to the umbilicus. <b>Lesser sac</b>: from the front of the pancreas up to the diaphragm and caudate lobe → back layer of the lesser omentum → behind the stomach → down as the back two layers of the greater omentum → up to the transverse colon → upper layer of the transverse mesocolon back to the pancreas. So the greater omentum has <b>four layers</b>.</p>
+<p><b>Horizontal tracing</b> at the epiploic foramen: the greater sac runs from the IVC over the right kidney, round the anterior wall, over the left kidney to the spleen (back layer of the splenorenal ligament), round the spleen and back to the stomach (front layer of the gastrosplenic ligament), over the front of the stomach and up as the front of the lesser omentum. The lesser sac runs from the IVC across the aorta and left kidney to the spleen (front layer of the splenorenal ligament), back as the rear layer of the gastrosplenic ligament, behind the stomach and up as the back of the lesser omentum, turning round its free border into the greater sac. <b>Below the transverse colon</b> there is only the greater sac: round the walls, over the ascending and descending colon (front and sides), with the mesentery of the small intestine between.</p>`;
+const LS_ROWS = [
+  ['In front (above down)', 'Caudate lobe, lesser omentum, stomach, front two layers of the greater omentum'],
+  ['Behind', 'Back two layers of the greater omentum, transverse colon and mesocolon, pancreas, left suprarenal, upper left kidney, diaphragm'],
+  ['Left', 'Spleen with the gastrosplenic and splenorenal (lienorenal) ligaments'],
+  ['Right', 'Epiploic foramen'],
+  ['Recesses', 'Superior (between the caudate lobe and the diaphragm), inferior (between the layers of the greater omentum; mostly closed in adults), splenic (towards the spleen; Gray); the vestibule leads in from the foramen (Gray)']];
+const EF_ROWS = [
+  ['In front', 'Free border of the lesser omentum (hepatoduodenal ligament): bile duct, hepatic artery, portal vein (behind)'],
+  ['Behind', 'Inferior vena cava'],
+  ['Above', 'Caudate process / lobe of the liver'],
+  ['Below', 'First part of the duodenum (and the hepatic artery turning forward)'],
+  ['Applied', 'Pressing the free border stops hepatic inflow (Pringle manoeuvre); rare internal hernia into the lesser sac']];
+
+/* folds and pouches (AN47.2) */
+const FOLD_ROWS = [
+  ['Lesser omentum', 'Lesser curvature and first 2.5 cm of the duodenum → porta hepatis and fissure for the ligamentum venosum', 'Hepatogastric and hepatoduodenal parts; gastric vessels along the curvature; bile duct, hepatic artery, portal vein in the free border', 'omenta'],
+  ['Greater omentum', 'Greater curvature → hangs in front of the intestines → transverse colon', 'Four layers, fatty; gastro-omental arcade near the stomach; nicknamed the "abdominal policeman" (Wikipedia)', 'all'],
+  ['Mesentery (of the small intestine)', 'Root runs obliquely from the duodenojejunal flexure (left of L2) to the ileocaecal region / right sacroiliac joint (Gray: about 15 cm)', 'Jejunal and ileal branches of the superior mesenteric vessels, nerves, lacteals, nodes', null],
+  ['Transverse mesocolon', 'Transverse colon → along the front of the pancreas', 'Middle colic vessels; divides the cavity into supracolic and infracolic parts', 'omenta'],
+  ['Sigmoid mesocolon', 'Inverted V, apex near the division of the left common iliac artery (Gray)', 'Its vessels run between its layers (Gray: sigmoid and superior rectal); intersigmoid fossa at its attachment', null],
+  ['Falciform ligament', 'Liver → anterior abdominal wall and diaphragm, down to the umbilicus', 'Ligamentum teres (obliterated left umbilical vein) in its free edge', null],
+  ['Coronary and triangular ligaments', 'Liver → diaphragm, around the bare area', 'The two layers meet at the right and left triangular ligaments', null],
+  ['Gastrosplenic ligament', 'Greater curvature → hilum of the spleen', 'Short gastric and left gastro-omental vessels', 'spleen'],
+  ['Splenorenal (lienorenal) ligament', 'Hilum of the spleen → left kidney', 'Splenic vessels, tail of the pancreas', 'spleen'],
+  ['Phrenicocolic ligament', 'Left colic flexure → diaphragm', 'Supports the lower end of the spleen; partly closes the left paracolic gutter above', null],
+  ['Hepatorenal pouch (Morison)', 'Between the liver and the right kidney (posterior right subhepatic space)', 'The lowest (most dependent) space of the cavity in a patient lying flat (two sources): fluid, blood and pus collect here', null],
+  ['Rectovesical / rectouterine pouch (of Douglas)', 'Between rectum and bladder (male) / rectum and uterus (female), with the shallower vesicouterine pouch in front', 'Wikipedia: "the deepest point of the peritoneal cavity" in women, and "the lowest part … in a woman at supine position": pelvic fluid, pus, deposits collect here', null],
+  ['Paracolic gutters', 'Beside the ascending and descending colon', 'The right gutter links Morison\'s pouch and the pelvis (appendix pus can track up it)', null],
+  ['Retroperitoneal fossae', 'Duodenal (paraduodenal), caecal (ileocaecal, retrocaecal; Gray) and intersigmoid fossae', 'Sites of internal hernia', null]];
+const FOLD_NOTE = 'Rows with a 3D topic open it when tapped. The mesentery, sigmoid mesocolon and liver ligaments are not in the model: see the tracings above.';
+
+/* spaces, ascites, peritonitis (AN47.3, AN47.4) */
+const SP_TEXT = `<p>Above the transverse mesocolon, the <b>falciform ligament</b> divides the <b>subphrenic space</b> into right and left.</p>
+<ul><li><b>Right subphrenic space</b>: between the right lobe and the diaphragm; the coronary ligament behind, the falciform ligament medially. It continues round the liver into the <b>right subhepatic space</b>.</li>
+<li><b>Right subhepatic space</b>: its back part is the <b>hepatorenal pouch</b> (Morison's), the lowest point when lying flat; its front part leads through the epiploic foramen into the <b>lesser sac</b>.</li>
+<li><b>Left side</b>: the left coronary ligament lies further forward than the right, and fluid in the left subphrenic space can spread throughout it (imaging review); imaging reviews divide it into the space between the diaphragm and fundus, the <b>left subhepatic</b> (gastrohepatic) space and the <b>perisplenic</b> space; the phrenicocolic ligament limits it below. (Textbooks number the spaces in other ways.)</li></ul>
+<p><b>Subphrenic abscess</b>: pus under the diaphragm, after abdominal surgery, trauma, perforation (appendix, duodenal ulcer) or peritonitis. More often on the right (two sources; one Wikipedia article says left). Fever, pain and <b>shoulder-tip pain</b> on that side: the diaphragm's phrenic nerve (C3–C5) shares C3–C4 with the supraclavicular nerves to the shoulder skin.</p>`;
+const AP_TEXT = `<p><b>Ascites</b> is fluid in the peritoneal cavity, most often from <b>cirrhosis</b> (also heart, kidney and pancreatic disease). Free fluid follows gravity into the dependent recesses: <b>Morison's pouch</b> when lying flat, the <b>pelvis</b> (rectouterine or rectovesical pouch), and the flanks; hence bulging flanks and dullness that shifts when the patient turns (Wikipedia). Its complications include spontaneous bacterial peritonitis (Wikipedia).</p>
+<p><b>Peritonitis</b> is inflammation of the peritoneum, localised or generalised, usually from a perforated organ (also chemical irritation by gastric acid or pancreatic juice, Wikipedia). Irritation of the <b>parietal</b> peritoneum gives tenderness, guarding and rigidity (emergency-medicine chapter). In appendicitis, for example, early visceral pain is deep and poorly localised in the midline (epigastric or periumbilical, T8–T10), and becomes localised when the inflammation reaches the parietal peritoneum, through the intercostal nerves of the wall (2025 review); under the diaphragm the parietal peritoneum refers pain to the shoulder (phrenic, see the subphrenic abscess). Pus is steered by the folds: from the appendix it can track up the right paracolic gutter to Morison's pouch, or sink into the pelvis.</p>`;
+
+/* organs (AN47.5) */
+const ORG_CAP = 'Pick an organ: the 3D view shows it, and the card gives the textbook headings. Arteries in brief; their origins, levels and the portal system are on Nerves and Vessels of the Abdomen and Pelvis.';
+const NV = '<a href="nerves-vessels.html">nerves-vessels</a>';
+const ORG = [
+  {id: 'stomach', name: 'Stomach', rows: [
+    ['Position', 'Epigastric and left hypochondriac regions. Cardiac orifice left of the midline at T10 (behind the 7th left cartilage); pylorus about 1 cm right of the midline at L1 (transpyloric plane).'],
+    ['Features', 'Parts (Gray): cardia, fundus (above the horizontal plane of the cardiac orifice), body, pyloric part (antrum and canal); lesser curvature with the incisura angularis, greater curvature.'],
+    ['Peritoneum', 'Intraperitoneal: lesser omentum on the lesser curvature, greater omentum and gastrosplenic ligament on the greater curvature; lesser sac behind.'],
+    ['Relations', 'Front: liver, diaphragm, anterior wall. Behind (stomach bed, across the lesser sac): diaphragm (left crus), spleen, left suprarenal, upper left kidney, pancreas with the splenic artery, transverse mesocolon.'],
+    ['Arteries', 'Lesser curvature: left gastric (coeliac) and right gastric (hepatic). Greater curvature: right gastro-omental (gastroduodenal) and left gastro-omental (splenic). Fundus: short gastrics (splenic). See ' + NV + '.'],
+    ['Nerves', 'Vagal trunks (parasympathetic: the anterior (left) vagus to the front, the posterior (right) to the back); sympathetic from the coeliac plexus.'],
+    ['Lymph', 'Nodes along both curvatures, then the coeliac nodes.'],
+    ['Applied', 'Vagotomy; lymphatic spread of cancer (Applied anatomy below).']]},
+  {id: 'duod', name: 'Duodenum', rows: [
+    ['Position', 'C-shaped loop round the head of the pancreas, about 25 cm, the shortest and widest part of the small intestine; from the pylorus (L1) to the duodenojejunal flexure (about L2, left of the aorta).'],
+    ['Features', '1st (superior, Gray about 5 cm; the cap or bulb), 2nd (descending, with the major papilla for the bile and main pancreatic ducts and the minor papilla above it), 3rd (horizontal, across the IVC and aorta), 4th (ascending) parts.'],
+    ['Peritoneum', 'First part (about 2.5 cm) mobile, attached to the lesser omentum; the rest retroperitoneal.'],
+    ['Relations', '1st part: below the quadrate lobe and neck of the gallbladder; gastroduodenal artery behind it. 3rd part: SMA and SMV in front, aorta and IVC behind (Wikipedia: it can be compressed between the SMA and the aorta, SMA syndrome).'],
+    ['Arteries', 'Superior pancreaticoduodenal (gastroduodenal, coeliac) and inferior pancreaticoduodenal (SMA) arcades. The foregut–midgut junction is just below the major papilla (Wikipedia).'],
+    ['Nerves', 'Coeliac plexus (Gray).'],
+    ['Lymph', 'Coeliac and superior mesenteric (pre-aortic) nodes.'],
+    ['Applied', 'Peptic ulcer; the major papilla is the landmark for ERCP (StatPearls); SMA syndrome.']]},
+  {id: 'smallint', name: 'Jejunum and ileum', rows: [
+    ['Position', 'Coils of the jejunum (upper two-fifths, Gray) mostly on the left: umbilical and left iliac regions (Gray p. 248; p. 286 adds the left lumbar region); ileum (lower three-fifths) in the umbilical, hypogastric, right iliac regions and the pelvis, ending at the ileocaecal junction in the right iliac fossa.'],
+    ['Features', 'Jejunum: wider, thicker, more vascular, large closely set circular folds, less mesenteric fat. Ileum: narrower, thinner, small folds (none at its end), more fat, large Peyer\'s patches.'],
+    ['Peritoneum', 'Intraperitoneal, on the mesentery (root from the duodenojejunal flexure to the ileocaecal region).'],
+    ['Relations', 'Behind the greater omentum and below the transverse mesocolon; framed by the colon.'],
+    ['Arteries', 'Jejunal and ileal branches of the SMA in the mesentery. See ' + NV + '.'],
+    ['Nerves', 'Superior mesenteric plexus: see ' + NV + '.'],
+    ['Lymph', 'Mesenteric nodes → superior mesenteric nodes; lacteals carry fat.'],
+    ['Applied', 'Meckel\'s diverticulum on the distal ileum (Applied anatomy).']]},
+  {id: 'caecum', name: 'Caecum and appendix', rows: [
+    ['Position', 'Right iliac fossa. Appendix from the posteromedial wall of the caecum close to the ileocaecal valve, where the three taeniae meet.'],
+    ['Features', 'Caecum: the blind start of the large intestine. Appendix: Gray 2–20 cm (about 8–9 cm on average); its tip varies (retrocaecal, pelvic and others; the commonest position differs between populations).'],
+    ['Peritoneum', 'Caecum usually fully covered and mobile; the appendix on its own meso-appendix.'],
+    ['Relations', 'The terminal ileum opens into its medial side at the ileocaecal junction.'],
+    ['Arteries', 'Ileocolic artery; the appendicular artery runs in the free border of the meso-appendix. See ' + NV + '.'],
+    ['Nerves', 'Superior mesenteric plexus: early appendicitis pain is felt at the umbilicus (T10).'],
+    ['Lymph', 'Ileocolic nodes → superior mesenteric nodes.'],
+    ['Applied', 'McBurney\'s point: one-third of the way from the right ASIS to the umbilicus, where tenderness is usually greatest; the base of the appendix lies near it but its position varies. Pain moves from the umbilicus to the right iliac fossa when the parietal peritoneum is inflamed.']]},
+  {id: 'colon', name: 'Colon', rows: [
+    ['Position', 'Ascending (right lumbar, up to the right colic or hepatic flexure under the liver), transverse (to the left colic or splenic flexure, which is higher and tied to the diaphragm by the phrenicocolic ligament), descending (down the left side), sigmoid (a loop in the pelvis, Gray about 40 cm) to the rectum.'],
+    ['Features', 'Taeniae coli (three bands of longitudinal muscle), haustra (sacculations), appendices epiploicae (fat tags); wider and more fixed than the small intestine.'],
+    ['Peritoneum', 'Ascending and descending: retroperitoneal (covered in front and at the sides). Transverse and sigmoid: on a mesocolon, mobile.'],
+    ['Relations', 'Hepatic flexure under the liver, splenic flexure against the spleen and diaphragm; descending colon along the lateral border of the left kidney; sigmoid colon in front of the external iliac vessels and the left sacral plexus (Gray).'],
+    ['Arteries', 'Midgut part (to about the left third of the transverse colon): SMA (ileocolic, right and middle colic); hindgut part: IMA. See ' + NV + '.'],
+    ['Nerves', 'Vagus to the midgut part, pelvic splanchnics to the hindgut part, with sympathetics. See ' + NV + '.'],
+    ['Lymph', 'Paracolic and colic nodes → superior and inferior mesenteric nodes.'],
+    ['Applied', 'The paracolic gutters beside the ascending and descending colon carry fluid and pus; the mobile sigmoid can be displaced out of the pelvis.']]},
+  {id: 'liver', name: 'Liver', rows: [
+    ['Position', 'The largest gland (Gray: 1.4–1.6 kg in men), in the right upper quadrant under the ribs, from about the 5th intercostal space in the midclavicular line to the right costal margin.'],
+    ['Features', 'Diaphragmatic and visceral surfaces. Anatomical lobes: right and left (falciform ligament, fissures for the ligamentum teres and venosum), quadrate (in front of the porta) and caudate (behind it, between the IVC and the ligamentum venosum). Eight functional (Couinaud) segments; Cantlie\'s line (gallbladder fossa to IVC, the middle hepatic vein) separates the functional right and left liver.'],
+    ['Peritoneum', 'Mostly covered; the bare area at the back lies directly on the diaphragm, inside the coronary ligament; falciform, triangular ligaments; lesser omentum to the porta.'],
+    ['Relations', 'Visceral surface: stomach and duodenum, right colic flexure, right kidney and suprarenal, gallbladder. The IVC in its groove behind.'],
+    ['Arteries', 'Dual supply: hepatic artery and portal vein at the porta (Gray: duct in front and right, artery left, vein behind); hepatic veins to the IVC. See ' + NV + '.'],
+    ['Nerves', 'See ' + NV + ' (coeliac plexus).'],
+    ['Lymph', 'Coeliac nodes (pre-aortic).'],
+    ['Applied', 'Liver biopsy site (Applied anatomy); resections follow the Couinaud segments; the bare area lies directly on the diaphragm.']]},
+  {id: 'gb', name: 'Gallbladder and bile ducts', rows: [
+    ['Position', 'In a fossa on the visceral surface between segments IV and V. The fundus touches the anterior wall behind the tip of the right 9th costal cartilage at the lateral edge of rectus (where the transpyloric plane meets the right linea semilunaris).'],
+    ['Features', 'Pear-shaped, 7–10 cm; fundus, body, neck. Biliary tree: right and left hepatic ducts → common hepatic duct; + cystic duct → bile duct, down behind the first part of the duodenum and in a groove on the back of the pancreatic head, joining the main pancreatic duct at the hepatopancreatic ampulla (of Vater, sphincter of Oddi) on the major papilla in the second part of the duodenum.'],
+    ['Peritoneum', 'Fundus fully covered; body attached to the liver; bile duct in the free border of the lesser omentum.'],
+    ['Relations', 'Fundus: anterior wall in front, transverse colon behind (Gray). Bile duct behind the first part of the duodenum and the head of the pancreas.'],
+    ['Arteries', 'Cystic artery, usually from the right hepatic artery in Calot\'s triangle.'],
+    ['Nerves', 'Hepatic plexus: vagus and coeliac plexus (StatPearls).'],
+    ['Lymph', 'Cystic node (in Calot\'s triangle) → coeliac nodes.'],
+    ['Applied', 'Referred pain of cholecystitis, obstructive jaundice, Calot\'s triangle (below).']]},
+  {id: 'duod-p', name: 'Pancreas', topic: 'duod', rows: [
+    ['Position', 'Retroperitoneal across L1–L2 behind the stomach (lesser sac between), 12–15 cm long.'],
+    ['Features', 'Head in the C of the duodenum, uncinate process behind the superior mesenteric vessels, neck in front of the portal vein formation (behind the pylorus), body behind the stomach, tail in the splenorenal ligament reaching the splenic hilum. Main duct (Wirsung) to the ampulla; accessory duct (Santorini) to the minor papilla above it.'],
+    ['Peritoneum', 'Retroperitoneal; the transverse mesocolon is attached along its front.'],
+    ['Relations', 'Behind: IVC and renal veins (head), bile duct (head), aorta, SMA origin, left renal vein, left kidney; splenic artery along its upper border, splenic vein behind the body and tail.'],
+    ['Arteries', 'Splenic artery to the body and tail; superior (coeliac) and inferior (SMA) pancreaticoduodenal arcades to the head. See ' + NV + '.'],
+    ['Nerves', 'Coeliac plexus (Gray: filaments from the splenic plexus).'],
+    ['Lymph', 'Along its arteries to the coeliac and superior mesenteric nodes.'],
+    ['Applied', 'Cancer of the head blocks the bile duct (obstructive jaundice).']]},
+  {id: 'spleen', name: 'Spleen', rows: [
+    ['Position', 'Left hypochondrium, between the fundus of the stomach and the diaphragm, along the 9th–11th ribs (its long axis along the 10th, Gray).'],
+    ['Features', 'Diaphragmatic and visceral surfaces; impressions for the stomach, left kidney, colic flexure and tail of the pancreas; hilum on the visceral surface; the anterior (superior) border is often notched, especially below (Gray). About 12 × 7 × 3–4 cm (Gray).'],
+    ['Peritoneum', 'Intraperitoneal; gastrosplenic and splenorenal ligaments; supported below by the phrenicocolic ligament.'],
+    ['Relations', 'Diaphragm separating it from the 9th–11th ribs and the lower edge of the left lung and pleura; stomach, left kidney, splenic flexure, tail of pancreas.'],
+    ['Arteries', 'Splenic artery (large, tortuous, along the pancreas) dividing at the hilum; splenic vein to the portal vein. See ' + NV + '.'],
+    ['Nerves', 'Coeliac plexus.'],
+    ['Lymph', 'Splenic nodes at the hilum → coeliac nodes.'],
+    ['Applied', 'Splenic rupture and Kehr\'s sign; accessory spleens (Applied anatomy).']]},
+  {id: 'kidney', name: 'Kidneys, ureters and suprarenal glands', rows: [
+    ['Position', 'Kidneys: retroperitoneal, about T12–L3, the right slightly lower (the liver); about 12 cm long (Wikipedia); hilum at about L1, 5 cm from the midline (Gray), on the transpyloric plane. Ureters: 25–30 cm (Gray; Wikipedia 20–30 cm), down on psoas into the pelvis over the iliac bifurcation. Suprarenals: on the upper poles.'],
+    ['Features', 'Hilum (Gray, front to back): renal vein, artery, pelvis. Coverings: fibrous capsule, perirenal fat, renal fascia, pararenal fat. Suprarenals: right more triangular, left more crescentic and larger (Gray).'],
+    ['Peritoneum', 'All retroperitoneal.'],
+    ['Relations', 'Front, right kidney: suprarenal, liver, 2nd part of duodenum, right colic flexure, small intestine. Front, left kidney: suprarenal, spleen, stomach, pancreas with the splenic vessels, left colic flexure, jejunum. Behind both (Gray): diaphragm, psoas major, quadratus lumborum, transversus abdominis; the 12th rib (left: 11th and 12th). Right suprarenal: behind the IVC, against the liver.'],
+    ['Arteries', 'Renal arteries (end arteries); suprarenals from the inferior phrenic, aorta and renal; right suprarenal vein to the IVC, left to the left renal vein; the ureter\'s supply is segmental (renal, gonadal, aortic, iliac). See ' + NV + '.'],
+    ['Nerves', 'Renal plexus from the coeliac and aortic plexuses (Gray); ureter T12–L2.'],
+    ['Lymph', 'Lateral aortic (para-aortic, lumbar) nodes.'],
+    ['Applied', 'Stones lodge at the narrowings: pelviureteric junction, pelvic brim (an angle over the iliac vessels), vesicoureteric junction. Renal colic radiates from the loin to the groin (T12–L2).']]}];
+
+/* applied anatomy (AN47.6) */
+const CLIN = [
+  ['Splenic notch', 'The anterior (superior) border of the spleen is often notched, especially below (Gray); persistent fetal lobulation is a recognised variant (2025 case review).', 'spleen'],
+  ['Accessory spleens', 'Common (StatPearls: 10–30% of people), usually about 1 cm, most often at the splenic hilum and near the tail of the pancreas, also in the gastrosplenic and splenorenal ligaments. A missed one can keep a blood disease going after splenectomy, and on imaging it can mimic a node or tumour.', 'spleen'],
+  ['Kehr\'s sign', 'Pain at the left shoulder tip from irritation of the diaphragm, classically by blood after splenic rupture: the phrenic nerve (C3–C5) shares C3–C4 with the supraclavicular nerves of the shoulder skin.', 'spleen'],
+  ['Types of vagotomy', '<b>Truncal</b>: both vagal trunks divided, including the coeliac and hepatic branches; the pylorus is denervated, so a drainage operation (pyloroplasty or gastrojejunostomy) is needed. <b>Selective</b>: total gastric denervation, leaving the hepatic, biliary and other visceral vagal fibres intact (a 2025 cohort paper; StatPearls lists the three types). <b>Highly selective</b> (proximal gastric, parietal cell): only the branches to the fundus and body; the nerves of Latarjet to the antrum and pylorus are spared, so emptying is kept. Now rarely done since acid-reducing drugs and H. pylori treatment.', 'stomach'],
+  ['Liver biopsy (needle site)', 'Usually percutaneous through the right intercostal route in the midaxillary line, now under ultrasound: the 7th or 8th intercostal space (2017 study; a 2024 review: "between the 7th and 8th ribs"), the needle going in just above the upper border of the lower (8th) rib, away from the intercostal vessels and nerve that run under each rib.', 'liverlobes'],
+  ['Referred pain in cholecystitis', 'Right upper quadrant and epigastrium, radiating to the right shoulder and below the right scapula (Boas\'s sign, Wikipedia): inflammation reaching the diaphragm refers pain to C3–C4.', 'gb'],
+  ['Obstructive jaundice', 'A block in the bile duct (a stone, cancer of the head of the pancreas or of the ampulla) raises conjugated bilirubin: jaundice with itching, pale stools and dark urine. The lower bile duct runs behind and through the pancreatic head, so a tumour there blocks it.', 'duod'],
+  ['Referred pain around the umbilicus', 'Visceral pain from the midgut (early appendicitis) is felt round the umbilicus, the T10 dermatome; it shifts to the right iliac fossa when the parietal peritoneum is inflamed.', 'caecum'],
+  ['Kidney pain radiating to the groin', 'Renal colic starts in the loin (costovertebral angle) and runs forward and down to the groin and testis or labium: the ureter\'s sensory supply is T12–L2, the segments of the groin skin.', 'kidney'],
+  ['Lymphatic spread of carcinoma stomach', 'To the nodes along the curvatures and the coeliac nodes, then up the thoracic duct to the left supraclavicular node (Virchow\'s). Through the peritoneum: ovarian deposits (Krukenberg tumour; a 2025 case report) and periumbilical nodules (Sister Mary Joseph).', 'stomach'],
+  ['Meckel\'s diverticulum', 'A true diverticulum on the antimesenteric border of the distal ileum, the remnant of the vitelline duct. "Rule of 2s": about 2% of people (a 2026 meta-analysis: 1.6%), about 2 feet (60 cm) from the ileocaecal valve, about 2 inches long, twice as common in males, symptoms usually before age 2. Ectopic gastric mucosa causes painless bleeding.', 'smallint'],
+  ['McBurney\'s point', 'One-third of the way from the right ASIS to the umbilicus; tenderness is usually greatest here in appendicitis, and the McBurney (gridiron) incision is centred on it.', 'caecum']];
+
+const CAL_TEXT = `<p><b>Boundaries</b> (today): the <b>cystic duct</b> (on the body's right), the <b>common hepatic duct</b> (medially) and the <b>inferior surface of the liver</b> (above). In Calot's original description (1890s) the third side was the <b>cystic artery</b> itself.</p>
+<p><b>Contents</b>: usually the <b>cystic artery</b> (from the right hepatic artery) and the <b>right hepatic artery</b>, the <b>cystic lymph node</b> (of Lund), fat and lymphatics; sometimes accessory ducts and arteries.</p>
+<p><b>Clinical importance</b>: this space is dissected in cholecystectomy to identify the cystic duct and artery before they are clipped. The <b>critical view of safety</b>: the triangle cleared of fat, the lower gallbladder lifted off the cystic plate, and <b>two and only two</b> structures entering the gallbladder. A tortuous right hepatic artery looping into the triangle ("Moynihan's hump") and other variants are easily mistaken for the cystic artery; misidentification causes bile duct injury.</p>`;
+
+const DATA = {
+  lede: 'The abdominal cavity in 3D: planes, regions and quadrants drawn on the bones, the organs in place and organ by organ, the omenta and the epiploic foramen; then incisions, tracings of the peritoneum, folds and pouches, the subphrenic spaces, and applied anatomy. Pick a topic to light its parts (the rest stay as faint glass); tap a part to name it.',
+  note3d: 'Organs, omenta, mesocolon, meso-appendix, liver segments, ducts and vessels are Z-Anatomy\'s and BodyParts3D\'s and approximate (smooth, stylised; ducts and vessels are tubes along curves). The model has no caecum separate from the ascending colon, no hepatic or cystic ducts, no mesentery of the small intestine, no sigmoid mesocolon, no parietal peritoneum or liver and spleen ligaments, and no anterior abdominal wall: these are drawn in the schematics. Surface lines are computed from Gray\'s definitions on the model\'s bones, approximate.',
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers and chapters (WSES 2023 laparotomy-closure guidelines, imaging reviews of the peritoneal spaces, the blood supply of the stomach, liver anatomy for surgeons, anatomy relevant to cholecystectomy and the critical view of safety, ultrasound-guided liver biopsy, the pancreaticobiliary junction, abdominal pain in emergency medicine, appendicitis history and reviews, a Meckel's diverticulum meta-analysis, splenic rupture and accessory spleen reports, adrenal vein variants).",
+  models: 'Models used: bones, stomach, duodenum, jejunum, ileum, rectum and ureters from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); liver segments, gallbladder, bile and pancreatic ducts, pancreas, colon, appendix, greater and lesser omentum, transverse mesocolon, meso-appendix, suprarenal glands, spleen, costal cartilages 8–10, diaphragm and vessels from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D); kidneys and renal pelves: "Kidney" by Lissie Cowley as included in Z-Anatomy (<a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>); all moved onto the BodyParts3D frame and simplified. Planes, lines and points computed on the bones, approximate. Schematics after Gray (1918), not to scale.'
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let kind = {}, names = {}, cur = null;
+const COL = {bone: '--bone', cart: '--cart', muscle: '--soft', artery: '--artery', vein: '--vein', liver: '--liver', bile: '--bile', stomach: '--stom', small: '--gut',
+  large: '--colon', pancreas: '--panc', spleen: '--spleen', kidney: '--kidney', supra: '--supra', perit: '--perit'};
+const WHAT = {bone: 'bone', cart: 'cartilage', muscle: 'muscle', artery: 'artery', vein: 'vein', liver: 'liver', bile: 'biliary', stomach: 'stomach', small: 'small intestine',
+  large: 'large intestine', pancreas: 'pancreas', spleen: 'spleen', kidney: 'urinary', supra: 'suprarenal gland', perit: 'peritoneum'};
+const HIDDEN_DEFAULT = new Set([GO, DIA]);
+const CAGE_SET = new Set(CAGE);
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+function anchor(key, near, n) {   // a vertex of the part near a point, on the side facing the camera (n: direction to the camera)
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos, d2 = [];
+  for (let i = 0; i < pos.length; i += 3) d2.push([(pos[i] - near[0]) ** 2 + (pos[i + 1] - near[1]) ** 2 + (pos[i + 2] - near[2]) ** 2, i]);
+  d2.sort((a, b) => a[0] - b[0]);
+  const r2 = Math.max(144, d2[0][0] * 2.25), cand = d2.filter((x, j) => j < 30 || x[0] <= r2);
+  let best = cand[0][1], bs = -1e18;
+  for (const [, i] of cand) { const s = pos[i] * n[0] + pos[i + 1] * n[1] + pos[i + 2] * n[2]; if (s > bs) { bs = s; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+const segs = name => { const p = SURF.lines[name], out = []; for (let i = 1; i < p.length; i++) out.push({a: p[i - 1], b: p[i], color: LINE_COL[name], dash: LINE_DASH[name] || ''}); return out; };
+function showTopic(id) {
+  const t = TOPICS.find(t => t.id === id); if (!t) return; cur = t;
+  const has = k => v.parts.has(k);
+  const hide = new Set(t.hide || []), show = new Set(t.show || []);
+  for (const k in kind) v.setVisible(k, !hide.has(k) && (!HIDDEN_DEFAULT.has(k) || show.has(k)) && (t.cage || !CAGE_SET.has(k)));
+  const tc = t.colours || {};
+  for (const k in kind) v.setColour(k, css(tc[k] || COL[kind[k]]));
+  const lit = (t.lit || []).filter(has);
+  v.setFocus(lit);
+  v.ghostAlpha = t.glass ? 0.12 : 0.18;
+  const fk = (t.fit || lit).filter(has);
+  v.fit(fk.length ? fk : lit);
+  v.face(t.view || FRONT, {zoom: t.zoom || 1});
+  v.setLines((t.lines || []).flatMap(segs));
+  const marks = [];
+  for (const [k, label, near] of t.labels || []) {
+    const p = k ? anchor(k, near, t.view || FRONT) : near;
+    if (!p || (k && v.parts.get(k).visible === false)) continue;
+    marks.push({p, label, color: css(!k ? '--ink' : tc[k] || COL[kind[k]] || '--ink'), always: true});
+  }
+  for (const [n, label, col] of t.pts || []) marks.push({p: SURF.pts[n], label, color: css(col), always: true, big: true});
+  v.setMarkers(marks);
+  const o = t.organ && ORG.find(x => x.id === t.organ);
+  $('topic-text').innerHTML = t.text || (o ? `<p><b>${o.name}.</b> ${o.rows[0][1]}</p>${t.note ? `<p class="muted">${t.note}</p>` : ''}<p class="muted">Full card: <a href="#h-org" data-org="${o.id}">The major abdominal organs</a>.</p>` : '');
+  const a = $('topic-text').querySelector('a[data-org]'); if (a) a.onclick = () => showOrgan(a.dataset.org);
+  $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === t.id));
+}
+const toView = () => $('v').scrollIntoView({behavior: 'smooth', block: 'start'});
+function buildTopics() {
+  const box = $('topics');
+  for (const g of [...new Set(TOPICS.map(t => t.grp))]) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !kind[hit.key]) { $('pick').textContent = ''; return; }
+  $('pick').textContent = `${names[hit.key]}: ${WHAT[kind[hit.key]]}`;
+};
+async function loadModel() {
+  const base = '../models/abdo/';
+  const meta = await (await fetch(base + 'kinds.json')).json();
+  const man = await v.load(base + 'abdo.json');
+  for (const [k, d] of Object.entries(meta.parts)) {
+    const p = v.parts.get(k); if (!p) continue;
+    names[k] = p.info.name; kind[k] = d.kind; v.setColour(k, css(COL[d.kind]));
+  }
+  return man;
+}
+
+/* ===================== schematics ===================== */
+const T = (x, y, s, cls = '', anchor = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+function drawIncisions(sel) {   // front view: body's right on the viewer's left
+  const S = $('inc-svg'); let h = '';
+  // trunk outline, costal margins, iliac crests, pubis, umbilicus
+  h += `<path class="surf" d="M90 20 L370 20 Q400 200 395 330 Q392 420 350 500 L110 500 Q68 420 65 330 Q60 200 90 20 Z"/>`;
+  h += `<path class="bone" d="M230 40 l-8 52 l16 0 z"/>` + T(250, 64, 'Xiphoid', 's');
+  h += `<path d="M222 92 Q170 150 105 175" fill="none" stroke="var(--cart)" stroke-width="7" stroke-linecap="round"/><path d="M238 92 Q290 150 355 175" fill="none" stroke="var(--cart)" stroke-width="7" stroke-linecap="round"/>`;
+  h += T(392, 205, 'Costal margin', 's', 'end');
+  h += `<path class="bone" d="M80 360 Q95 330 125 335 L140 350 Q110 352 92 372 Z"/><path class="bone" d="M380 360 Q365 330 335 335 L320 350 Q350 352 368 372 Z"/>`;
+  h += T(70, 392, 'ASIS', 's') + `<path class="bone" d="M175 470 Q230 455 285 470 L280 482 Q230 470 180 482 Z"/>` + T(230, 498, 'Pubic symphysis', 's', 'middle');
+  h += `<circle cx="230" cy="290" r="6" fill="none" stroke="var(--muted)" stroke-width="1.5"/>` + T(245, 294, 'Umbilicus', 's');
+  const line = (id, d) => `<path class="clin" d="${d}" style="${sel && sel !== id ? 'opacity:.25' : ''}${sel === id ? ';stroke-width:6' : ''}"/>`;
+  h += line('midU', 'M230 100 L230 278') + line('midL', 'M230 302 L230 455');
+  h += line('para', 'M262 130 L262 270');
+  h += line('kocher', 'M205 150 Q160 185 110 205');
+  h += line('mcb', 'M133 308 L169 368');   // oblique, across the spino-umbilical line at McBurney's point (body's right = viewer's left)
+  h += line('lanz', 'M118 352 L182 336');
+  h += line('pfann', 'M180 444 Q230 456 280 444');
+  // McBurney's point on the line from the right ASIS to the umbilicus (one third of the way)
+  h += `<path class="lead" d="M112 362 L230 290" stroke-dasharray="3 4"/><circle class="clinf" cx="${112 + (230 - 112) / 3}" cy="${362 + (290 - 362) / 3}" r="4"/>`;
+  const lab = [['midU', 222, 250, 'Upper midline', 'end'], ['midL', 238, 380, 'Lower midline'], ['para', 270, 215, 'Paramedian'], ['kocher', 120, 232, 'Kocher'], ['mcb', 172, 386, 'McBurney'], ['lanz', 188, 332, 'Lanz'], ['pfann', 290, 448, 'Pfannenstiel']];
+  for (const [id, x, y, s, an] of lab) h += T(x, y, s, sel && sel !== id ? 's' : '', an || 'start');
+  h += T(30, 515, "Body's right", 'h') + T(430, 515, "Body's left", 'h', 'end');
+  S.innerHTML = h;
+}
+function drawSagittal(mode) {   // median sagittal section seen from the right: front on the viewer's right, head up (schematic, after Gray Fig. 1035)
+  const S = $('sag-svg'); let h = '';
+  const gs = mode !== 'lesser', ls = mode !== 'greater';
+  h += `<path class="wall" d="M452 70 Q468 300 452 560 L472 560 Q490 300 472 64 Z"/>` + T(470, 588, 'Anterior wall', 's', 'end');
+  h += `<path class="bone" d="M60 80 L100 80 L104 575 L64 575 Z"/>` + T(20, 330, 'Spine', 's');
+  h += `<path class="mus" d="M100 70 Q280 8 470 60 L470 72 Q280 22 100 84 Z"/>` + T(285, 26, 'Diaphragm', 's', 'middle');
+  // organs
+  h += `<path class="o" fill="var(--liver)" d="M232 84 Q340 64 444 102 L438 160 Q380 180 302 166 Q252 140 232 84 Z"/>` + T(360, 125, 'Liver', '', 'middle');
+  h += `<ellipse class="o" fill="var(--stom)" cx="382" cy="216" rx="52" ry="27"/>` + T(390, 220, 'Stomach', '', 'middle');
+  h += `<path class="o" fill="var(--panc)" d="M110 232 Q150 224 180 236 Q176 252 140 254 Q112 250 110 232 Z"/>` + T(118, 222, 'Pancreas', 's');
+  h += `<ellipse class="o" fill="var(--colon)" cx="368" cy="300" rx="24" ry="17"/>` + T(368, 304, 'T. colon', 's', 'middle');
+  h += `<ellipse class="o" fill="var(--gut)" cx="128" cy="282" rx="18" ry="12"/>` + T(112, 308, 'Duodenum', 's');
+  for (const [x, y] of [[300, 410], [345, 425], [390, 405], [330, 465], [380, 470], [300, 490]]) h += `<circle class="o" fill="var(--gut)" cx="${x}" cy="${y}" r="17"/>`;
+  h += T(345, 515, 'Small intestine', 's', 'middle');
+  h += `<path class="o" fill="var(--soft)" d="M372 520 Q420 500 446 525 Q442 560 400 560 Q372 548 372 520 Z"/>` + T(410, 545, 'Bladder', 's', 'middle');
+  h += `<path class="o" fill="var(--colon)" d="M106 470 Q132 472 140 520 Q142 560 126 575 L106 575 Z"/>` + T(112, 592, 'Rectum', 's');
+  // greater sac lining (Gray): umbilicus up the anterior wall, under the diaphragm, coronary ligament, over the liver, under it to the
+  // porta, front layer of the lesser omentum, front of the stomach, front layers of the greater omentum, back up under the transverse colon,
+  // lower layer of the transverse mesocolon to the pancreas, mesentery, down the posterior wall, rectovesical pouch, bladder, anterior wall
+  const G = 'M449 340 L449 80 Q330 34 236 70 Q340 56 448 96 L442 166 Q380 186 304 172 L334 194 Q352 186 382 186 Q440 190 438 222 Q432 246 386 246 L412 360 Q414 372 400 368 L368 322 Q332 322 300 300 Q240 268 180 262 Q156 264 150 280 Q148 298 136 306 Q200 300 282 400 Q300 440 230 440 Q160 400 112 360 L110 466 Q142 470 150 520 Q170 560 260 555 Q330 548 372 518 Q420 498 449 515 Z';
+  // lesser sac (omental bursa): anterior border of the pancreas, up to the diaphragm and the caudate lobe, back layer of the lesser omentum,
+  // back of the stomach, deep layers of the greater omentum, up to the transverse colon, upper layer of the transverse mesocolon
+  const L = 'M180 238 Q120 200 118 120 Q150 88 226 82 Q250 128 298 170 L330 200 Q326 238 372 244 L398 350 Q398 358 390 356 L372 284 Q340 276 300 268 Q240 252 180 238 Z';
+  if (ls) h += `<path class="lsf" d="${L}"/>`;
+  if (gs) h += `<path class="gs" d="${G}"/>`;
+  if (ls) h += `<path class="ls" d="${L}"/>`;
+  if (gs) h += `<text x="440" y="455" text-anchor="end" style="fill:var(--gsac);font:600 12.5px var(--f-body)">Greater sac</text>` + T(418, 385, 'Greater omentum', 's') + lead(416, 380, 404, 362)
+    + T(222, 430, 'Mesentery', 's', 'end') + T(262, 575, 'Rectovesical pouch', 's', 'middle') + T(250, 210, 'Lesser omentum', 's', 'end') + lead(252, 206, 318, 184)
+    + T(250, 322, 'Transverse mesocolon', 's', 'end') + lead(252, 318, 300, 290);
+  if (ls) h += `<text x="250" y="240" text-anchor="middle" style="fill:var(--lsac);font:600 12.5px var(--f-body)">Lesser sac</text>` + T(150, 112, 'Superior recess', 's') + T(400, 372, 'Inferior recess', 's', 'end').replace('y="372"', 'y="395"');
+  h += T(18, 598, 'Back', 'h').replace('x="18"', 'x="20"').replace('y="598"', 'y="16"') + T(500, 16, 'Front', 'h', 'end');
+  S.innerHTML = h;
+}
+function drawHorizontal(mode) {   // transverse section at the epiploic foramen seen from below: front at the top, body's right on the viewer's left
+  const S = $('hor-svg'); let h = '';
+  const gs = mode !== 'lesser', ls = mode !== 'greater';
+  h += `<path class="wall" d="M270 18 Q500 22 524 200 Q520 330 400 398 L140 398 Q22 330 16 200 Q40 22 270 18 Z" fill-opacity=".35"/>`;
+  h += `<path class="bone" d="M240 330 Q270 305 300 330 L300 385 L240 385 Z"/>` + T(270, 400, 'Vertebra', 's', 'middle');
+  h += `<path class="o" fill="var(--liver)" d="M44 190 Q60 58 210 52 Q222 120 210 205 Q180 248 118 246 Q62 238 44 190 Z"/>` + T(118, 150, 'Liver', '', 'middle');
+  h += `<path class="o" fill="var(--kidney)" d="M95 268 Q135 252 172 280 Q168 322 120 328 Q88 312 95 268 Z"/>` + T(100, 346, 'R kidney', 's');
+  h += `<path class="o" fill="var(--kidney)" d="M450 272 Q412 256 380 282 Q384 324 430 328 Q458 312 450 272 Z"/>` + T(412, 346, 'L kidney', 's');
+  h += `<circle class="vn" cx="232" cy="292" r="13"/>` + T(206, 318, 'IVC', 's', 'end');
+  h += `<circle class="art" cx="290" cy="304" r="11"/>` + T(310, 322, 'Aorta', 's');
+  h += `<path class="o" fill="var(--panc)" d="M304 246 Q370 240 440 252 Q436 266 380 268 Q330 268 306 262 Z"/>` + T(340, 284, 'Pancreas', 's');
+  h += `<ellipse class="o" fill="var(--stom)" cx="368" cy="136" rx="64" ry="54"/>` + T(368, 140, 'Stomach', '', 'middle');
+  h += `<path class="o" fill="var(--spleen)" d="M470 172 Q512 220 476 286 Q452 268 458 228 Q460 192 470 172 Z"/>` + T(508, 304, 'Spleen', 's', 'end');
+  h += `<circle cx="226" cy="214" r="5.5" fill="var(--bile)" stroke="var(--surface)"/><circle class="art" cx="248" cy="216" r="4.5"/><circle class="vn" cx="238" cy="229" r="7"/>`;
+  // greater sac lining: IVC, right kidney, walls, splenorenal (back layer), round the spleen, gastrosplenic (front layer), front of the
+  // stomach, front layer of the lesser omentum, round the free border
+  const G = 'M218 276 Q160 262 136 258 Q60 248 36 190 Q58 30 270 26 Q484 30 514 200 Q516 262 496 296 Q482 268 474 262 Q510 222 482 186 Q474 172 462 186 L428 162 Q420 78 366 76 Q306 80 302 136 Q290 176 256 202 Q222 204 210 222';
+  // lesser sac: from the free border, back layer of the lesser omentum, behind the stomach, gastrosplenic (back layer), spleen hilum,
+  // splenorenal (front layer), over the left kidney and pancreas, across the aorta to the IVC
+  const L = 'M210 222 Q212 242 238 244 Q266 236 284 206 Q298 180 306 160 Q322 196 368 196 Q420 196 440 176 L458 196 Q456 222 466 242 Q448 238 430 238 Q380 234 330 236 Q296 240 258 282';
+  if (ls) h += `<path class="lsf" d="${L} L244 286 L236 246 Z"/>`;
+  if (gs) h += `<path class="gs" d="M44 190 Q60 58 210 52 Q222 120 210 205 Q180 248 118 246 Q62 238 44 190 Z" transform="translate(127 150) scale(1.05) translate(-127 -150)"/>`;
+  if (gs) h += `<path class="gs" d="${G}"/>`;
+  if (ls) h += `<path class="ls" d="${L}"/>`;
+  if (gs) h += `<text x="270" y="44" text-anchor="middle" style="fill:var(--gsac);font:600 12.5px var(--f-body)">Greater sac</text>` + T(470, 150, 'Gastrosplenic lig.', 's', 'end').replace('y="150"', 'y="166"').replace('x="470"', 'x="500"');
+  if (ls) h += `<text x="340" y="222" text-anchor="middle" style="fill:var(--lsac);font:600 12.5px var(--f-body)">Lesser sac</text>` + T(500, 268, 'Splenorenal lig.', 's', 'end').replace('y="268"', 'y="380"') + lead(470, 370, 462, 258);
+  h += lead(238, 262, 170, 230) + T(165, 226, 'Epiploic foramen', 's', 'end').replace('x="165"', 'x="200"').replace('y="226"', 'y="270"');
+  h += lead(236, 206, 262, 178) + T(250, 172, 'Free border (duct, artery, vein)', 's');
+  h += T(18, 414, "Body's right", 'h') + T(522, 414, "Body's left", 'h', 'end') + T(270, 12, 'Front', 'h', 'middle');
+  S.innerHTML = h;
+}
+function drawSpaces(mode) {   // right parasagittal section seen from the right: front on the viewer's right
+  const S = $('sp-svg'); let h = '';
+  h += `<path class="mus" d="M60 140 Q240 30 470 80 L470 92 Q240 44 62 152 Z"/>` + T(468, 60, 'Diaphragm', 's', 'end');
+  h += `<path class="wall" d="M462 90 Q480 270 462 450 L482 450 Q500 270 482 85 Z"/>` + T(500, 470, 'Front', 'h', 'end');
+  h += `<path class="o" fill="var(--liver)" d="M96 182 Q240 98 440 118 Q452 180 400 208 Q300 222 220 214 Q140 208 96 182 Z"/>` + T(300, 168, 'Liver (right lobe)', '', 'middle');
+  h += `<path class="o" fill="var(--kidney)" d="M66 232 Q106 216 136 246 Q136 306 96 316 Q66 306 66 232 Z"/>` + T(56, 336, 'Right kidney', 's');
+  h += `<ellipse class="o" fill="var(--colon)" cx="318" cy="268" rx="40" ry="20"/>` + T(318, 272, 'Hepatic flexure', 's', 'middle');
+  h += `<ellipse class="o" fill="var(--gut)" cx="176" cy="246" rx="24" ry="13"/>` + T(176, 250, 'Duodenum', 's', 'middle');
+  h += `<path d="M150 112 L160 138" stroke="var(--ink)" stroke-width="2"/>` + T(30, 120, 'Coronary ligament', 's') + lead(118, 118, 148, 124) + T(30, 134, '(bare area behind)', 's');
+  h += `<path class="o" fill="var(--colon)" d="M140 340 Q190 330 220 355 Q215 390 170 395 Q140 385 140 340 Z"/>` + T(180, 414, 'Caecum', 's', 'middle');
+  h += `<path class="o" fill="var(--soft)" d="M250 420 Q300 402 340 430 Q330 462 280 462 Q252 450 250 420 Z"/>` + T(296, 480, 'Pelvis', 's', 'middle');
+  const sub = 'M150 112 Q300 58 460 100 L440 118 Q300 98 160 138 Z', mor = 'M100 190 Q124 204 140 232 Q132 250 118 246 Q98 222 100 190 Z', ant = 'M222 216 Q300 226 362 216 Q342 248 300 246 Q258 244 222 216 Z';
+  if (mode === 'spaces') {
+    h += `<path fill="var(--gsac)" fill-opacity=".45" d="${sub}"/>` + T(170, 58, 'Right subphrenic space', 's') + lead(200, 62, 230, 92);
+    h += `<path fill="var(--gsac)" fill-opacity=".45" d="${ant}"/>` + T(372, 312, 'Anterior right subhepatic', 's', 'middle') + lead(350, 302, 320, 244);
+    h += `<path fill="var(--gsac)" fill-opacity=".7" d="${mor}"/>` + lead(124, 230, 152, 292) + T(152, 300, "Morison's pouch", 's') + T(152, 314, '(posterior right subhepatic)', 's');
+    h += `<path d="M146 312 Q140 370 200 420 L250 430" fill="none" stroke="var(--gsac)" stroke-width="3" stroke-dasharray="6 5"/>` + T(20, 395, 'Right paracolic gutter', 's');
+  }
+  if (mode === 'ascites') {
+    h += `<path class="fl" d="${mor}"/><path class="fl" d="M246 428 Q300 402 344 432 Q330 466 280 466 Q250 454 246 428 Z"/><path class="fl" d="M140 318 Q132 345 148 356 L160 340 Z"/>`;
+    h += lead(124, 230, 152, 292) + T(152, 300, "Fluid in Morison's pouch", 's') + T(152, 314, '(lowest point lying flat)', 's') + T(352, 400, 'and in the pelvis', 's') + lead(350, 404, 320, 428);
+  }
+  if (mode === 'abscess') {
+    h += `<path class="pus" d="M150 140 Q250 82 380 92 Q370 112 260 116 Q200 120 150 140 Z"/>` + T(110, 70, 'Subphrenic abscess', '') + lead(150, 74, 220, 112);
+    h += `<path class="clin" d="M330 92 L330 30"/>` + T(338, 24, 'Diaphragm → phrenic (C3–C5):', 's') + T(338, 38, 'shoulder-tip pain', 's');
+  }
+  h += T(18, 470, 'Back', 'h');
+  S.innerHTML = h;
+}
+function drawCalot(withArt) {   // front view, gallbladder pulled up: body's right on the viewer's left
+  const S = $('cal-svg'); let h = '';
+  h += `<path class="o" fill="var(--liver)" d="M20 30 L460 30 L460 110 Q300 120 240 105 Q150 95 20 120 Z"/>` + T(380, 70, 'Liver (inferior surface)', '', 'middle');
+  h += `<path class="o" fill="var(--bile)" fill-opacity=".85" d="M40 140 Q40 105 90 110 Q150 120 175 165 Q180 190 160 196 Q110 200 70 185 Q42 170 40 140 Z"/>` + T(80, 160, 'Gallbladder', '', 'start').replace('class=""', 'style="fill:var(--surface);font-weight:600"');
+  // triangle: cystic duct (viewer's left, lower), common hepatic duct (viewer's right), liver above
+  h += `<path class="tri" d="M170 180 L300 262 L300 112 L176 112 Z"/>`;
+  h += `<path class="bil" d="M168 182 Q230 230 300 262"/>` + T(222, 248, 'Cystic duct', '', 'end');
+  h += `<path class="bil" d="M300 108 L300 380"/>` + T(312, 200, 'Common hepatic duct', '');
+  h += `<path class="bil" d="M280 108 L300 140 M320 108 L300 140"/>` + T(328, 132, 'R and L hepatic ducts', 's');
+  h += T(312, 330, 'Bile duct', '');
+  if (withArt) {   // right hepatic artery from below-left (body's left), behind the common hepatic duct (dashed), into the triangle; cystic artery from it
+    h += `<path class="artl" d="M392 382 Q360 300 316 250"/><path class="artl" d="M316 250 Q300 236 284 222" stroke-dasharray="4 4"/><path class="artl" d="M284 222 Q250 180 262 118"/>`;
+    h += T(400, 300, 'Right hepatic a.', 's', 'end').replace('x="400"', 'x="470"');
+    h += `<path class="artl" d="M262 168 Q220 160 182 168"/>` + T(205, 150, 'Cystic artery', 's');
+    h += `<circle cx="205" cy="196" r="7" fill="var(--lymph)" stroke="var(--surface)"/>` + lead(200, 202, 150, 222) + T(70, 230, 'Cystic node', 's');
+    h += T(470, 316, '(behind the duct)', 's', 'end');
+  }
+  h += T(262, 212, 'Calot', 'h', 'middle');
+  h += T(18, 396, "Body's right", 'h') + T(462, 396, "Body's left", 'h', 'end');
+  S.innerHTML = h;
+}
+const row = (cells, heads, k) => `<tr${k ? ` data-k="${k}" aria-pressed="false" tabindex="0"` : ''}>` + cells.map((c, i) => `<td data-h="${heads[i]}">${i === 0 ? '<b>' + c + '</b>' : c}</td>`).join('') + '</tr>';
+const head = hs => '<tr>' + hs.map(x => `<th>${x}</th>`).join('') + '</tr>';
+function rowsToTopic(tableId) {
+  $(tableId).querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => { $(tableId).querySelectorAll('tr[data-k]').forEach(x => x.setAttribute('aria-pressed', x === r)); showTopic(r.dataset.k); toView(); });
+}
+function showOrgan(id) {
+  const o = ORG.find(x => x.id === id); if (!o) return;
+  $('org-card').innerHTML = `<h3>${o.name}</h3><div class="scroll"><table class="t stack">${head(['', o.name])}${o.rows.map(r => row(r, ['', ''])).join('')}</table></div><div><button class="btn" id="org-3d">Show in 3D</button></div>`;
+  $('org-3d').onclick = () => { showTopic(o.topic || o.id); toView(); };
+  document.querySelectorAll('#org-chips button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id));
+}
+document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('tr[data-k]')) { e.preventDefault(); e.target.click(); } });
+function buildTables() {
+  $('pl-table').innerHTML = head(['Plane or line', 'Defined by', 'Level', 'What lies on it / use']) + PL_ROWS.map(r => row(r.slice(0, 4), ['', 'Defined by', 'Level', 'On it'], r[4])).join('');
+  rowsToTopic('pl-table');
+  $('inc-table').innerHTML = head(['Incision', 'Where', 'Use and importance']) + INC.map(r => row(r.slice(1), ['', 'Where', 'Use'], r[0])).join('');
+  $('inc-table').querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => { const on = r.getAttribute('aria-pressed') !== 'true';
+    $('inc-table').querySelectorAll('tr[data-k]').forEach(x => x.setAttribute('aria-pressed', on && x === r)); drawIncisions(on ? r.dataset.k : null); });
+  $('ls-table').innerHTML = head(['Lesser sac', 'Boundary']) + LS_ROWS.map(r => row(r, ['', ''])).join('');
+  $('ef-table').innerHTML = head(['Epiploic foramen', 'Boundary']) + EF_ROWS.map(r => row(r, ['', ''], r[0] === 'In front' ? 'foramen' : null)).join('');
+  rowsToTopic('ef-table');
+  $('fold-table').innerHTML = head(['Fold or pouch', 'Where', 'Contents / importance']) + FOLD_ROWS.map(r => row(r.slice(0, 3), ['', 'Where', 'Contents'], r[3])).join('');
+  rowsToTopic('fold-table');
+  const oc = $('org-chips');
+  for (const o of ORG) { const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = o.id; b.textContent = o.name; b.onclick = () => showOrgan(o.id); oc.append(b); }
+  $('clin-list').innerHTML = CLIN.map(([t, d, k]) => `<div class="item"><b class="t">${t}</b>${d}${k ? ` <button class="chip" data-k="${k}">3D</button>` : ''}</div>`).join('');
+  $('clin-list').querySelectorAll('button[data-k]').forEach(b => b.onclick = () => { showTopic(b.dataset.k); toView(); });
+}
+function legend() {
+  const items = [['--stom', 'Stomach'], ['--gut', 'Small intestine'], ['--colon', 'Large intestine'], ['--liver', 'Liver'], ['--bile', 'Gallbladder, bile duct'], ['--panc', 'Pancreas'], ['--spleen', 'Spleen'],
+    ['--kidney', 'Kidney, ureter'], ['--supra', 'Suprarenal'], ['--perit', 'Peritoneal fold'], ['--artery', 'Artery'], ['--vein', 'Vein'], ['--pln', 'Plane'], ['--vln', 'Vertical line'], ['--lin', 'Linea'], ['--clin', 'Clinical point']];
+  $('key3d').innerHTML = items.map(([c, l]) => `<span><i style="background:var(${c})"></i>${l}</span>`).join('');
+}
+function toggles(boxId, opts, def, draw) {
+  for (const [k, label] of opts) {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = label; b.setAttribute('aria-pressed', k === def);
+    b.onclick = () => { $(boxId).querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); draw(k); }; $(boxId).append(b);
+  }
+  draw(def);
+}
+
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('pl-cap').textContent = PL_CAP; $('pl-note').textContent = PL_NOTE; $('inc-note').textContent = INC_NOTE;
+  $('pe-text').innerHTML = PE_TEXT; $('fold-note').textContent = FOLD_NOTE; $('sp-text').innerHTML = SP_TEXT; $('ap-text').innerHTML = AP_TEXT;
+  $('org-cap').textContent = ORG_CAP; $('cal-text').innerHTML = CAL_TEXT;
+  drawIncisions(null);
+  toggles('sag-tg', [['both', 'Both sacs'], ['greater', 'Greater sac'], ['lesser', 'Lesser sac']], 'both', drawSagittal);
+  toggles('hor-tg', [['both', 'Both sacs'], ['greater', 'Greater sac'], ['lesser', 'Lesser sac']], 'both', drawHorizontal);
+  toggles('sp-tg', [['spaces', 'Spaces'], ['ascites', 'Ascites'], ['abscess', 'Subphrenic abscess']], 'spaces', drawSpaces);
+  toggles('cal-tg', [['art', 'With the arteries'], ['bounds', 'Boundaries only']], 'art', k => drawCalot(k === 'art'));
+  buildTables(); legend(); showOrgan('stomach');
+  const bar = $('vbar');
+  for (const [label, dir] of [['Front', [0, -1, 0]], ['Back', [0, 1, 0]], ['Right', [-1, 0, 0]], ['Left', [1, 0, 0]]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic('regions');
+  window.J = {TOPICS, SURF, showTopic, names, kind, showOrgan};   // for tests
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

@@ -395,13 +395,13 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 44. Anterior abdominal wall
 
-- [ ] **AN44.1** Describe & demonstrate the Planes (transpyloric, transtubercular, subcostal, lateral vertical, linea alba, linea semilunaris), regions & Quadrants of abdomen
+- [x] **AN44.1** Describe & demonstrate the Planes (transpyloric, transtubercular, subcostal, lateral vertical, linea alba, linea semilunaris), regions & Quadrants of abdomen — *planes, regions, quadrants and lineae drawn on the model: [The Abdominal Cavity: Peritoneum and Organs](abdomen-pelvis/organs.html)*
 - [x] **AN44.2** Describe & identify the Fascia, nerves & blood vessels of anterior abdominal wall — *fascial layers (Camper, Scarpa and its continuity with Colles, transversalis, extraperitoneal fat), wall arteries in 3D, nerves and TAP plane: [Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 - [x] **AN44.3** Describe the formation of rectus sheath and its contents — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 - [x] **AN44.4** Describe & demonstrate extent, boundaries, contents of Inguinal canal including Hesselbach’s triangle. — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 - [x] **AN44.5** Explain the anatomical basis of inguinal hernia. — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
 - [x] **AN44.6** Describe & demonstrate attachments of muscles of anterior abdominal wall — *[Muscles of the Trunk Wall](thorax/wall-muscles.html)*
-- [ ] **AN44.7** Describe common abdominal incisions with example and their clinical importance
+- [x] **AN44.7** Describe common abdominal incisions with example and their clinical importance — *incisions schematic and table: [The Abdominal Cavity: Peritoneum and Organs](abdomen-pelvis/organs.html)*
 
 ### 45. Posterior abdominal wall
 
@@ -419,13 +419,13 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 47. Abdominal cavity
 
-- [ ] **AN47.1** Describe & demonstrate horizontal and vertical tracing of peritoneum. Also describe boundaries and recesses of Lesser & Greater sac.
-- [ ] **AN47.2** Name & identify various peritoneal folds & pouches with its explanation.
-- [ ] **AN47.3** Explain anatomical basis of Ascites & Peritonitis
-- [ ] **AN47.4** Explain anatomical basis of Subphrenic abscess
-- [ ] **AN47.5** Describe & demonstrate major viscera of abdomen under following headings (anatomical position, external and internal features, important peritoneal and other relations, blood supply, nerve supply, lymphatic drainage and applied aspects)
-- [ ] **AN47.6** Explain the anatomical basis of Splenic notch, Accessory spleens, Kehr’s sign, Different types of vagotomy, Liver biopsy (site of needle puncture), Referred pain in cholecystitis, Obstructive jaundice, Referred pain around umbilicus, Radiating pain of kidney to groin & Lymphatic spread in carcinoma stomach
-- [ ] **AN47.7** Demonstrate boundaries of Calot's triangle and mention its clinical importance
+- [x] **AN47.1** Describe & demonstrate horizontal and vertical tracing of peritoneum. Also describe boundaries and recesses of Lesser & Greater sac. — *sagittal and horizontal tracings, lesser and greater sac, epiploic foramen: [The Abdominal Cavity: Peritoneum and Organs](abdomen-pelvis/organs.html)*
+- [x] **AN47.2** Name & identify various peritoneal folds & pouches with its explanation. — *folds and pouches: [The Abdominal Cavity: Peritoneum and Organs](abdomen-pelvis/organs.html)*
+- [x] **AN47.3** Explain anatomical basis of Ascites & Peritonitis — *ascites and peritonitis: [The Abdominal Cavity: Peritoneum and Organs](abdomen-pelvis/organs.html)*
+- [x] **AN47.4** Explain anatomical basis of Subphrenic abscess — *subphrenic spaces and abscess: [The Abdominal Cavity: Peritoneum and Organs](abdomen-pelvis/organs.html)*
+- [x] **AN47.5** Describe & demonstrate major viscera of abdomen under following headings (anatomical position, external and internal features, important peritoneal and other relations, blood supply, nerve supply, lymphatic drainage and applied aspects) — *organ cards and 3D topics, stomach to suprarenals: [The Abdominal Cavity: Peritoneum and Organs](abdomen-pelvis/organs.html)*
+- [~] **AN47.6** Explain the anatomical basis of Splenic notch, Accessory spleens, Kehr’s sign, Different types of vagotomy, Liver biopsy (site of needle puncture), Referred pain in cholecystitis, Obstructive jaundice, Referred pain around umbilicus, Radiating pain of kidney to groin & Lymphatic spread in carcinoma stomach — *all items in [The Abdominal Cavity: Peritoneum and Organs](abdomen-pelvis/organs.html); the clinical use of the splenic notch has no open source*
+- [x] **AN47.7** Demonstrate boundaries of Calot's triangle and mention its clinical importance — *Calot's triangle, original and modern boundaries: [The Abdominal Cavity: Peritoneum and Organs](abdomen-pelvis/organs.html)*
 - [x] **AN47.8** Describe & identify the formation, course relations and tributaries of Portal vein, Inferior vena cava & Renal vein — *portal vein, IVC, renal and gonadal veins in 3D: [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html)*
 - [x] **AN47.9** Describe & identify the origin, course, important relations and branches of Abdominal aorta, Coeliac trunk, Superior mesenteric, Inferior mesenteric & Common iliac artery — *aortic branch levels, coeliac trunk, SMA, IMA, iliac arteries in 3D: [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html)*
 - [x] **AN47.10** Describe sites of portosystemic anastomosis, describe its applied anatomy andanatomical correlations — *the four sites in 3D: [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html)*
