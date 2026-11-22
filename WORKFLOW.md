@@ -31,6 +31,9 @@ Last updated: 2026-11-21
   models/neuro1 (tools/neuro/neuro1_config.py), page anatomy/neuro/brainstem-cord.html (may split). Sections 56–61
   (+ AN50.3). Module 37 next: neuro II (sections 7, 62, 63: nervous system intro, nuclei, hemispheres, ventricles,
   pathways).
+- Module 38 (histology I: basic tissues; sections 65, 68–72) started 2026-11-22: sheet fill-histo1, openly licensed
+  micrographs, pages anatomy/histology/ (tissues.html or split). Module 39 after: systemic histology (AN25.1, 43.2,
+  43.3, 52.1–52.3, 64.1).
 - Local test server: 127.0.0.1:8765.
 
 ## Questions for the user
