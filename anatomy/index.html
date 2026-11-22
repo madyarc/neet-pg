@@ -17,6 +17,24 @@
 .num{font:500 13px var(--f-mono);color:var(--muted);padding-top:2px}
 .mod p{color:var(--muted);font-size:14px}
 .themebtn{font:500 13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
+.pages{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.grps{columns:2 420px;column-gap:40px}
+.grp{break-inside:avoid;padding-bottom:10px}
+.jump{display:flex;flex-wrap:wrap;gap:6px}
+.jump a{font:500 13.5px var(--f-body);color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px;background:var(--surface)}
+.jump a span{font:500 11.5px var(--f-mono);color:var(--muted);margin-left:4px}
+.jump a:hover{border-color:var(--accent)}
+.grp{scroll-margin-top:12px}
+@media (min-width:601px){#systems{flex-wrap:wrap;overflow:visible}}
+header .sitesearch{max-width:680px}
+.grp{min-width:0}
+.grph{font:700 15px var(--f-display,inherit);margin:10px 0 2px;display:flex;align-items:baseline;gap:8px}
+.grph .cnt{font:500 12px var(--f-mono);color:var(--muted)}
+.grp .mod{grid-template-columns:minmax(0,1fr);gap:4px;padding:10px 0}
+.grp .mod h3{font-size:15.5px}
+.grp .mod p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:13.5px}
+.tag{justify-self:start;font:500 11px var(--f-mono);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+.mod[hidden],.grp[hidden]{display:none}
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
 </style>
 </head>
@@ -26,6 +44,7 @@
 <header class="stack">
   <h1>Anatomy</h1>
   <p class="lede">The whole body, assembled. Turn it with a finger, pinch to zoom, tap a part to select it, tap it again to open it.</p>
+  <div class="sitesearch" data-index="search-index.json" data-base="../" data-placeholder="Search anatomy: a structure, a topic, a condition…"></div>
 </header>
 
 <section class="split" aria-label="Whole body">
@@ -39,89 +58,145 @@
       <div class="chips scrollrow" id="systems">
         <button class="chip" aria-pressed="true" data-sys="skeletal">Skeletal</button>
         <button class="chip" aria-pressed="false" data-sys="muscular">Muscular</button>
-        <button class="chip" disabled>Joints and ligaments — coming</button>
         <button class="chip" aria-pressed="false" data-sys="vascular">Heart and vessels</button>
         <button class="chip" aria-pressed="false" data-sys="nervous">Nerves</button>
         <button class="chip" aria-pressed="false" data-sys="lymphatic">Lymph nodes</button>
+        <button class="chip" disabled>Joints and ligaments — coming</button>
         <button class="chip" disabled>Organs — coming</button>
       </div>
     </div>
     <p class="muted"><span class="swatch" style="background:var(--bone)"></span>bone &nbsp; <span class="swatch" style="background:var(--cart)"></span>cartilage (costal cartilages)<span id="mus-key" hidden> &nbsp; <span class="swatch" style="background:#CC6677"></span><span class="swatch" style="background:#117733"></span><span class="swatch" style="background:#88CCEE"></span>muscles (one colour each, the same on both sides; different muscles that touch never share one) &nbsp; <span class="swatch" style="background:var(--fascia)"></span>tendons, aponeuroses, retinacula</span><span id="ves-key" hidden> &nbsp; <span class="swatch" style="background:var(--artery)"></span>arteries (pulmonary arteries too) &nbsp; <span class="swatch" style="background:var(--vein)"></span>veins and venous sinuses &nbsp; <span class="swatch" style="background:var(--heart)"></span>heart</span><span id="ner-key" hidden> &nbsp; <span class="swatch" style="background:var(--nerve)"></span>nerves and ganglia &nbsp; <span class="swatch" style="background:var(--dura)"></span>spinal dura (the spinal cord is not in the model)</span><span id="lym-key" hidden> &nbsp; <span class="swatch" style="background:var(--lymph)"></span>lymph node groups, tonsil, thymus, spleen (no lymph vessels in the model)</span></p>
     <div>
-      <h3>Detailed pages</h3>
-      <nav class="mods" aria-label="Modules">
-        <a class="mod" href="head-neck/skull.html"><span class="num">01</span><div><h3>The Skull</h3>
-          <p>The 22 bones assembled and colour-coded; sutures and the points where they meet; inside the cranial cavity.</p></div></a>
-        <a class="mod" href="head-neck/skull-bones.html"><span class="num">02</span><div><h3>Bones of the Skull</h3>
-          <p>Each of the 22 bones and the hyoid on its own, in near-full detail: parts, landmarks and foramina, the bones it joins, ossification.</p></div></a>
-        <a class="mod" href="back/vertebral-column.html"><span class="num">03</span><div><h3>The Vertebral Column</h3>
-          <p>The 24 vertebrae, sacrum, coccyx and discs assembled by region; the four curves; the discs.</p></div></a>
-        <a class="mod" href="back/vertebrae.html"><span class="num">04</span><div><h3>The Vertebrae</h3>
-          <p>Atlas, axis, typical cervical, C7, thoracic, lumbar, sacrum and coccyx in detail: landmarks, how to recognise each, ossification.</p></div></a>
-        <a class="mod" href="thorax/thoracic-cage.html"><span class="num">05</span><div><h3>The Thoracic Cage</h3>
-          <p>Ribs (true, false, floating), costal cartilages, sternum and thoracic vertebrae assembled; the joints; the openings.</p></div></a>
-        <a class="mod" href="thorax/ribs.html"><span class="num">06</span><div><h3>Ribs and Sternum</h3>
-          <p>A typical rib, the first, second and twelfth ribs and the sternum in detail: landmarks, how to recognise each, ossification.</p></div></a>
-        <a class="mod" href="upper-limb/upper-limb.html"><span class="num">07</span><div><h3>The Upper Limb</h3>
-          <p>Shoulder girdle, humerus, radius and ulna, and the hand assembled; the nerves that lie on the humerus; the carpal tunnel.</p></div></a>
-        <a class="mod" href="upper-limb/bones.html"><span class="num">08</span><div><h3>Bones of the Upper Limb</h3>
-          <p>Clavicle, scapula, humerus, ulna, radius and the bones of the hand in detail: landmarks, how to recognise each, ossification.</p></div></a>
-        <a class="mod" href="lower-limb/lower-limb.html"><span class="num">09</span><div><h3>The Lower Limb</h3>
-          <p>Hip bone, femur and patella, tibia and fibula, and the foot assembled; the joints between them; the arches of the foot.</p></div></a>
-        <a class="mod" href="lower-limb/bones.html"><span class="num">10</span><div><h3>Bones of the Lower Limb</h3>
-          <p>Hip bone (with the pelvis), femur, patella, tibia, fibula and the bones of the foot in detail: landmarks, how to recognise each, ossification.</p></div></a>
-        <a class="mod" href="lower-limb/femur.html"><span class="num">11</span><div><h3>The Femur: attachments and side</h3>
-          <p>Telling a left femur from a right one, muscle and ligament attachments, neck fracture, ossification.</p></div></a>
-        <a class="mod" href="general/muscle.html"><span class="num">12</span><div><h3>Muscle Tissue</h3>
-          <p>Skeletal, cardiac and smooth muscle side by side; a sarcomere you can contract; triads and dyads; how fibres are arranged; tendons, aponeuroses and the sheaths of a muscle.</p></div></a>
-        <a class="mod" href="general/connective-tissue.html"><span class="num">13</span><div><h3>Connective Tissue</h3>
-          <p>Cells, fibres and ground substance; loose, dense, elastic, reticular and adipose tissue; collagen types and banding; the three cartilages; tendon vs ligament; superficial and deep fascia.</p></div></a>
-        <a class="mod" href="upper-limb/muscles.html"><span class="num">14</span><div><h3>Muscles of the Upper Limb</h3>
-          <p>Every muscle from the shoulder girdle to the hand in 3D on its bones: origin and insertion lit on the bone, nerve, action; colour by nerve supply; the retinacula, carpal tunnel, extensor compartments and thumb movements.</p></div></a>
-        <a class="mod" href="lower-limb/muscles.html"><span class="num">15</span><div><h3>Muscles of the Lower Limb</h3>
-          <p>Every muscle from the hip to the sole in 3D on its bones: attachments lit on the bone, nerve, action; Trendelenburg sign, foot drop; femoral triangle, adductor canal, tarsal tunnel, the four layers of the sole.</p></div></a>
-        <a class="mod" href="back/muscles.html"><span class="num">16</span><div><h3>Muscles of the Back</h3>
-          <p>The deep back in 3D: serratus posterior, splenius, the three columns of the erector spinae, the transversospinales, the suboccipital muscles and quadratus lumborum; dorsal rami; thoracolumbar fascia; suboccipital triangle.</p></div></a>
-        <a class="mod" href="thorax/wall-muscles.html"><span class="num">17</span><div><h3>Muscles of the Trunk Wall</h3>
-          <p>Intercostals, the diaphragm and its openings, the abdominal muscles, rectus sheath, inguinal canal and hernias, and the pelvic floor, in 3D on the thoracic cage and pelvis.</p></div></a>
-        <a class="mod" href="head-neck/muscles.html"><span class="num">18</span><div><h3>Muscles of the Head and Neck</h3>
-          <p>Face, mastication, the neck muscles and triangles, deep cervical fascia, the eye, tongue, pharynx and larynx, in 3D on the skull, neck and laryngeal cartilages.</p></div></a>
-        <a class="mod" href="general/joints.html"><span class="num">19</span><div><h3>Joints</h3>
-          <p>Fibrous, cartilaginous and synovial joints on real bones; the synovial types moving about their axes in 3D (hinge, pivot, ellipsoid, saddle, ball and socket, plane); inside a synovial joint; words for movement; stability; Hilton's law.</p></div></a>
-        <a class="mod" href="upper-limb/joints.html"><span class="num">20</span><div><h3>Joints of the Upper Limb</h3>
-          <p>Sternoclavicular, acromioclavicular, shoulder, elbow, radio-ulnar, wrist and hand joints in 3D with their capsules, ligaments, discs and bursae; each joint moves; type, surfaces, ligaments, relations, muscles, supply, applied.</p></div></a>
-        <a class="mod" href="lower-limb/joints.html"><span class="num">21</span><div><h3>Joints of the Lower Limb</h3>
-          <p>Hip, knee, tibiofibular, ankle and foot joints in 3D with their capsules, ligaments, menisci and bursae; each joint moves; locking of the knee; dislocations, ligament and meniscal injuries, hip replacement, ankle sprains.</p></div></a>
-        <a class="mod" href="back/joints.html"><span class="num">22</span><div><h3>Joints of the Jaw, Spine and Pelvis</h3>
-          <p>Temporomandibular, atlanto-occipital and atlanto-axial, intervertebral and facet joints, sacro-iliac joints and the pubic symphysis in 3D; the jaw opening with its glide, nodding and turning the head; prolapsed disc; TMJ dislocation.</p></div></a>
-        <a class="mod" href="general/blood-vessels.html"><span class="num">23</span><div><h3>Blood Vessels</h3>
-          <p>Systemic, pulmonary and portal circulations on the whole-body vessel model; the wall of arteries, veins and sinuses; elastic and muscular arteries, arterioles, capillary types; anastomoses and end arteries in 3D; metarterioles, precapillary sphincters and arteriovenous anastomoses; portal hypertension.</p></div></a>
-        <a class="mod" href="upper-limb/nerves-vessels.html"><span class="num">24</span><div><h3>Nerves, Vessels and Lymph Nodes of the Upper Limb</h3>
-          <p>Axilla, axillary artery and vein, brachial plexus with its branches and variations, scapular anastomosis, axillary nodes, arm, forearm and hand vessels and nerves, cubital fossa in 3D; Erb, Klumpke, Saturday night palsy, claw and ape hand, winging, carpal tunnel; dermatomes.</p></div></a>
-        <a class="mod" href="lower-limb/nerves-vessels.html"><span class="num">25</span><div><h3>Nerves, Vessels and Lymph Nodes of the Lower Limb</h3>
-          <p>Lumbar and sacral plexus, femoral, obturator and sciatic nerves, femoral and profunda arteries, popliteal fossa, leg and foot vessels and nerves in 3D; blood supply of the femoral head, psoas abscess, femoral hernia, inguinal nodes, varicose veins and perforators; foot drop and other nerve injuries; pulses and surface markings.</p></div></a>
-        <a class="mod" href="thorax/heart.html"><span class="num">26</span><div><h3>The Heart</h3>
-          <p>Pericardium and its sinuses, each chamber cut open in 3D, valves, coronary arteries and dominance, territories and ischaemic heart disease, coronary sinus and cardiac veins, fibrous skeleton, conducting system and its arteries; heart borders, apex beat and valve areas on the chest.</p></div></a>
-        <a class="mod" href="thorax/nerves-vessels.html"><span class="num">27</span><div><h3>Nerves, Vessels and Lymphatics of the Thorax</h3>
-          <p>Intercostal nerves and vessels, internal thoracic vessels, the mediastinum and its contents, aortic arch and descending aorta, SVC and azygos veins, thoracic duct, sympathetic trunk and splanchnic nerves, phrenic nerve; chest drains, coarctation, SVC obstruction.</p></div></a>
-        <a class="mod" href="abdomen-pelvis/nerves-vessels.html"><span class="num">28</span><div><h3>Nerves and Vessels of the Abdomen and Pelvis</h3>
-          <p>Abdominal aorta and its branches, IVC, renal and portal veins, portosystemic anastomoses and portal hypertension, autonomic plexuses, lumbar plexus, internal iliac artery, sacral plexus and pudendal nerve, lymph node groups in 3D.</p></div></a>
-        <a class="mod" href="head-neck/nerves-vessels.html"><span class="num">29</span><div><h3>Nerves, Vessels and Lymph Nodes of the Head and Neck</h3>
-          <p>Scalp and emissary veins, facial vessels and the danger area, dural sinuses and the cavernous sinus, orbital nerves and vessels, carotid, subclavian and vertebral arteries, IJV, cervical rib, IX–XII in the neck, RLN injury, tongue deviation, node levels I–VI, angiogram routes.</p></div></a>
-        <a class="mod" href="thorax/lungs.html"><span class="num">30</span><div><h3>Lungs, Pleura and Trachea</h3>
-          <p>Lobes and fissures, root of the lung and side identification, bronchial tree and foreign bodies, bronchopulmonary segments and aspiration, pulmonary and bronchial vessels, pleura and recesses, pleural tap and pneumothorax, surface marking, trachea, chest X-ray, barium swallow.</p></div></a>
-        <a class="mod" href="abdomen-pelvis/organs.html"><span class="num">31</span><div><h3>The Abdominal Cavity: Peritoneum and Organs</h3>
-          <p>Planes, regions and quadrants on the model, incisions, peritoneal tracings, lesser sac and epiploic foramen, folds and pouches, subphrenic spaces, ascites and peritonitis, stomach to kidneys organ by organ, Couinaud segments, Calot's triangle, McBurney, Meckel, Kehr, vagotomy, liver biopsy.</p></div></a>
-        <a class="mod" href="head-neck/regions.html"><span class="num">32</span><div><h3>Face and Neck: Regions and Glands</h3>
-          <p>Parotid and Frey's syndrome, submandibular region, gland, ganglion and stones, thyroid and parathyroids, posterior triangle, sternocleidomastoid and torticollis, temporal and infratemporal fossae, pterion, sensory supply of the face, surface marking.</p></div></a>
-        <a class="mod" href="head-neck/mouth-pharynx-nose.html"><span class="num">33</span><div><h3>Mouth, Pharynx, Nose and Larynx</h3>
-          <p>Oral cavity, palatine tonsil and its bed, soft palate, Waldeyer's ring, parts and spaces of the pharynx, pyriform fossa, Killian's dehiscence, nasal septum and lateral wall, Little's area and epistaxis, paranasal sinuses and their drainage, sinusitis, maxillary tumours, laryngitis.</p></div></a>
-        <a class="mod" href="head-neck/ear-eye.html"><span class="num">34</span><div><h3>The Ear and the Eye</h3>
-          <p>Auricle, meatus and eardrum with an otoscope photo, middle-ear walls and ossicles, auditory tube, inner ear, otitis and myringotomy; coats of the eyeball, aqueous flow, cataract, glaucoma, retinal artery occlusion, intraocular muscles, lacrimal apparatus, pituitary tumours and the chiasm.</p></div></a>
+      <h3>Detailed pages by region</h3>
+      <nav class="jump" aria-label="Regions">
+        <a href="#g-general">General and tissues <span>4</span></a>
+        <a href="#g-head-neck">Head and neck <span>7</span></a>
+        <a href="#g-upper-limb">Upper limb <span>5</span></a>
+        <a href="#g-thorax">Thorax <span>6</span></a>
+        <a href="#g-abdomen-pelvis">Abdomen and pelvis <span>2</span></a>
+        <a href="#g-lower-limb">Lower limb <span>6</span></a>
+        <a href="#g-back">Back and spine <span>4</span></a>
       </nav>
     </div>
   </div>
 </section>
+
+<section class="pages" aria-label="Detailed pages">
+  <h2>Detailed pages</h2>
+  <div class="chips scrollrow" id="typefilter" aria-label="Show only">
+    <button class="chip" aria-pressed="true" data-t="">All</button>
+    <button class="chip" aria-pressed="false" data-t="bones">Bones</button>
+    <button class="chip" aria-pressed="false" data-t="muscles">Muscles</button>
+    <button class="chip" aria-pressed="false" data-t="joints">Joints</button>
+    <button class="chip" aria-pressed="false" data-t="vessels">Vessels and nerves</button>
+    <button class="chip" aria-pressed="false" data-t="organs">Organs and regions</button>
+    <button class="chip" aria-pressed="false" data-t="tissues">Tissues</button>
+  </div>
+  <div class="grps">
+    <section class="grp" id="g-general"><h3 class="grph">General and tissues <span class="cnt">4</span></h3>
+      <nav class="mods" aria-label="General and tissues">
+        <a class="mod" href="general/muscle.html" data-type="tissues"><span class="tag t-tissues">Tissues</span><div><h3>Muscle Tissue</h3>
+          <p>Skeletal, cardiac and smooth muscle side by side; a sarcomere you can contract; triads and dyads; how fibres are arranged; tendons, aponeuroses and the sheaths of a muscle.</p></div></a>
+        <a class="mod" href="general/connective-tissue.html" data-type="tissues"><span class="tag t-tissues">Tissues</span><div><h3>Connective Tissue</h3>
+          <p>Cells, fibres and ground substance; loose, dense, elastic, reticular and adipose tissue; collagen types and banding; the three cartilages; tendon vs ligament; superficial and deep fascia.</p></div></a>
+        <a class="mod" href="general/joints.html" data-type="joints"><span class="tag t-joints">Joints</span><div><h3>Joints</h3>
+          <p>Fibrous, cartilaginous and synovial joints on real bones; the synovial types moving about their axes in 3D (hinge, pivot, ellipsoid, saddle, ball and socket, plane); inside a synovial joint; words for movement; stability; Hilton's law.</p></div></a>
+        <a class="mod" href="general/blood-vessels.html" data-type="vessels"><span class="tag t-vessels">Vessels and nerves</span><div><h3>Blood Vessels</h3>
+          <p>Systemic, pulmonary and portal circulations on the whole-body vessel model; the wall of arteries, veins and sinuses; elastic and muscular arteries, arterioles, capillary types; anastomoses and end arteries in 3D; metarterioles, precapillary sphincters and arteriovenous anastomoses; portal hypertension.</p></div></a>
+      </nav></section>
+    <section class="grp" id="g-head-neck"><h3 class="grph">Head and neck <span class="cnt">7</span></h3>
+      <nav class="mods" aria-label="Head and neck">
+        <a class="mod" href="head-neck/skull.html" data-type="bones"><span class="tag t-bones">Bones</span><div><h3>The Skull</h3>
+          <p>The 22 bones assembled and colour-coded; sutures and the points where they meet; inside the cranial cavity.</p></div></a>
+        <a class="mod" href="head-neck/skull-bones.html" data-type="bones"><span class="tag t-bones">Bones</span><div><h3>Bones of the Skull</h3>
+          <p>Each of the 22 bones and the hyoid on its own, in near-full detail: parts, landmarks and foramina, the bones it joins, ossification.</p></div></a>
+        <a class="mod" href="head-neck/muscles.html" data-type="muscles"><span class="tag t-muscles">Muscles</span><div><h3>Muscles of the Head and Neck</h3>
+          <p>Face, mastication, the neck muscles and triangles, deep cervical fascia, the eye, tongue, pharynx and larynx, in 3D on the skull, neck and laryngeal cartilages.</p></div></a>
+        <a class="mod" href="head-neck/nerves-vessels.html" data-type="vessels"><span class="tag t-vessels">Vessels and nerves</span><div><h3>Nerves, Vessels and Lymph Nodes of the Head and Neck</h3>
+          <p>Scalp and emissary veins, facial vessels and the danger area, dural sinuses and the cavernous sinus, orbital nerves and vessels, carotid, subclavian and vertebral arteries, IJV, cervical rib, IX–XII in the neck, RLN injury, tongue deviation, node levels I–VI, angiogram routes.</p></div></a>
+        <a class="mod" href="head-neck/regions.html" data-type="organs"><span class="tag t-organs">Organs and regions</span><div><h3>Face and Neck: Regions and Glands</h3>
+          <p>Parotid and Frey's syndrome, submandibular region, gland, ganglion and stones, thyroid and parathyroids, posterior triangle, sternocleidomastoid and torticollis, temporal and infratemporal fossae, pterion, sensory supply of the face, surface marking.</p></div></a>
+        <a class="mod" href="head-neck/mouth-pharynx-nose.html" data-type="organs"><span class="tag t-organs">Organs and regions</span><div><h3>Mouth, Pharynx, Nose and Larynx</h3>
+          <p>Oral cavity, palatine tonsil and its bed, soft palate, Waldeyer's ring, parts and spaces of the pharynx, pyriform fossa, Killian's dehiscence, nasal septum and lateral wall, Little's area and epistaxis, paranasal sinuses and their drainage, sinusitis, maxillary tumours, laryngitis.</p></div></a>
+        <a class="mod" href="head-neck/ear-eye.html" data-type="organs"><span class="tag t-organs">Organs and regions</span><div><h3>The Ear and the Eye</h3>
+          <p>Auricle, meatus and eardrum with an otoscope photo, middle-ear walls and ossicles, auditory tube, inner ear, otitis and myringotomy; coats of the eyeball, aqueous flow, cataract, glaucoma, retinal artery occlusion, intraocular muscles, lacrimal apparatus, pituitary tumours and the chiasm.</p></div></a>
+      </nav></section>
+    <section class="grp" id="g-upper-limb"><h3 class="grph">Upper limb <span class="cnt">5</span></h3>
+      <nav class="mods" aria-label="Upper limb">
+        <a class="mod" href="upper-limb/upper-limb.html" data-type="bones"><span class="tag t-bones">Bones</span><div><h3>The Upper Limb</h3>
+          <p>Shoulder girdle, humerus, radius and ulna, and the hand assembled; the nerves that lie on the humerus; the carpal tunnel.</p></div></a>
+        <a class="mod" href="upper-limb/bones.html" data-type="bones"><span class="tag t-bones">Bones</span><div><h3>Bones of the Upper Limb</h3>
+          <p>Clavicle, scapula, humerus, ulna, radius and the bones of the hand in detail: landmarks, how to recognise each, ossification.</p></div></a>
+        <a class="mod" href="upper-limb/muscles.html" data-type="muscles"><span class="tag t-muscles">Muscles</span><div><h3>Muscles of the Upper Limb</h3>
+          <p>Every muscle from the shoulder girdle to the hand in 3D on its bones: origin and insertion lit on the bone, nerve, action; colour by nerve supply; the retinacula, carpal tunnel, extensor compartments and thumb movements.</p></div></a>
+        <a class="mod" href="upper-limb/joints.html" data-type="joints"><span class="tag t-joints">Joints</span><div><h3>Joints of the Upper Limb</h3>
+          <p>Sternoclavicular, acromioclavicular, shoulder, elbow, radio-ulnar, wrist and hand joints in 3D with their capsules, ligaments, discs and bursae; each joint moves; type, surfaces, ligaments, relations, muscles, supply, applied.</p></div></a>
+        <a class="mod" href="upper-limb/nerves-vessels.html" data-type="vessels"><span class="tag t-vessels">Vessels and nerves</span><div><h3>Nerves, Vessels and Lymph Nodes of the Upper Limb</h3>
+          <p>Axilla, axillary artery and vein, brachial plexus with its branches and variations, scapular anastomosis, axillary nodes, arm, forearm and hand vessels and nerves, cubital fossa in 3D; Erb, Klumpke, Saturday night palsy, claw and ape hand, winging, carpal tunnel; dermatomes.</p></div></a>
+      </nav></section>
+    <section class="grp" id="g-thorax"><h3 class="grph">Thorax <span class="cnt">6</span></h3>
+      <nav class="mods" aria-label="Thorax">
+        <a class="mod" href="thorax/thoracic-cage.html" data-type="bones"><span class="tag t-bones">Bones</span><div><h3>The Thoracic Cage</h3>
+          <p>Ribs (true, false, floating), costal cartilages, sternum and thoracic vertebrae assembled; the joints; the openings.</p></div></a>
+        <a class="mod" href="thorax/ribs.html" data-type="bones"><span class="tag t-bones">Bones</span><div><h3>Ribs and Sternum</h3>
+          <p>A typical rib, the first, second and twelfth ribs and the sternum in detail: landmarks, how to recognise each, ossification.</p></div></a>
+        <a class="mod" href="thorax/wall-muscles.html" data-type="muscles"><span class="tag t-muscles">Muscles</span><div><h3>Muscles of the Trunk Wall</h3>
+          <p>Intercostals, the diaphragm and its openings, the abdominal muscles, rectus sheath, inguinal canal and hernias, and the pelvic floor, in 3D on the thoracic cage and pelvis.</p></div></a>
+        <a class="mod" href="thorax/nerves-vessels.html" data-type="vessels"><span class="tag t-vessels">Vessels and nerves</span><div><h3>Nerves, Vessels and Lymphatics of the Thorax</h3>
+          <p>Intercostal nerves and vessels, internal thoracic vessels, the mediastinum and its contents, aortic arch and descending aorta, SVC and azygos veins, thoracic duct, sympathetic trunk and splanchnic nerves, phrenic nerve; chest drains, coarctation, SVC obstruction.</p></div></a>
+        <a class="mod" href="thorax/heart.html" data-type="organs"><span class="tag t-organs">Organs and regions</span><div><h3>The Heart</h3>
+          <p>Pericardium and its sinuses, each chamber cut open in 3D, valves, coronary arteries and dominance, territories and ischaemic heart disease, coronary sinus and cardiac veins, fibrous skeleton, conducting system and its arteries; heart borders, apex beat and valve areas on the chest.</p></div></a>
+        <a class="mod" href="thorax/lungs.html" data-type="organs"><span class="tag t-organs">Organs and regions</span><div><h3>Lungs, Pleura and Trachea</h3>
+          <p>Lobes and fissures, root of the lung and side identification, bronchial tree and foreign bodies, bronchopulmonary segments and aspiration, pulmonary and bronchial vessels, pleura and recesses, pleural tap and pneumothorax, surface marking, trachea, chest X-ray, barium swallow.</p></div></a>
+      </nav></section>
+    <section class="grp" id="g-abdomen-pelvis"><h3 class="grph">Abdomen and pelvis <span class="cnt">2</span></h3>
+      <nav class="mods" aria-label="Abdomen and pelvis">
+        <a class="mod" href="abdomen-pelvis/nerves-vessels.html" data-type="vessels"><span class="tag t-vessels">Vessels and nerves</span><div><h3>Nerves and Vessels of the Abdomen and Pelvis</h3>
+          <p>Abdominal aorta and its branches, IVC, renal and portal veins, portosystemic anastomoses and portal hypertension, autonomic plexuses, lumbar plexus, internal iliac artery, sacral plexus and pudendal nerve, lymph node groups in 3D.</p></div></a>
+        <a class="mod" href="abdomen-pelvis/organs.html" data-type="organs"><span class="tag t-organs">Organs and regions</span><div><h3>The Abdominal Cavity: Peritoneum and Organs</h3>
+          <p>Planes, regions and quadrants on the model, incisions, peritoneal tracings, lesser sac and epiploic foramen, folds and pouches, subphrenic spaces, ascites and peritonitis, stomach to kidneys organ by organ, Couinaud segments, Calot's triangle, McBurney, Meckel, Kehr, vagotomy, liver biopsy.</p></div></a>
+      </nav></section>
+    <section class="grp" id="g-lower-limb"><h3 class="grph">Lower limb <span class="cnt">6</span></h3>
+      <nav class="mods" aria-label="Lower limb">
+        <a class="mod" href="lower-limb/lower-limb.html" data-type="bones"><span class="tag t-bones">Bones</span><div><h3>The Lower Limb</h3>
+          <p>Hip bone, femur and patella, tibia and fibula, and the foot assembled; the joints between them; the arches of the foot.</p></div></a>
+        <a class="mod" href="lower-limb/bones.html" data-type="bones"><span class="tag t-bones">Bones</span><div><h3>Bones of the Lower Limb</h3>
+          <p>Hip bone (with the pelvis), femur, patella, tibia, fibula and the bones of the foot in detail: landmarks, how to recognise each, ossification.</p></div></a>
+        <a class="mod" href="lower-limb/femur.html" data-type="bones"><span class="tag t-bones">Bones</span><div><h3>The Femur: attachments and side</h3>
+          <p>Telling a left femur from a right one, muscle and ligament attachments, neck fracture, ossification.</p></div></a>
+        <a class="mod" href="lower-limb/muscles.html" data-type="muscles"><span class="tag t-muscles">Muscles</span><div><h3>Muscles of the Lower Limb</h3>
+          <p>Every muscle from the hip to the sole in 3D on its bones: attachments lit on the bone, nerve, action; Trendelenburg sign, foot drop; femoral triangle, adductor canal, tarsal tunnel, the four layers of the sole.</p></div></a>
+        <a class="mod" href="lower-limb/joints.html" data-type="joints"><span class="tag t-joints">Joints</span><div><h3>Joints of the Lower Limb</h3>
+          <p>Hip, knee, tibiofibular, ankle and foot joints in 3D with their capsules, ligaments, menisci and bursae; each joint moves; locking of the knee; dislocations, ligament and meniscal injuries, hip replacement, ankle sprains.</p></div></a>
+        <a class="mod" href="lower-limb/nerves-vessels.html" data-type="vessels"><span class="tag t-vessels">Vessels and nerves</span><div><h3>Nerves, Vessels and Lymph Nodes of the Lower Limb</h3>
+          <p>Lumbar and sacral plexus, femoral, obturator and sciatic nerves, femoral and profunda arteries, popliteal fossa, leg and foot vessels and nerves in 3D; blood supply of the femoral head, psoas abscess, femoral hernia, inguinal nodes, varicose veins and perforators; foot drop and other nerve injuries; pulses and surface markings.</p></div></a>
+      </nav></section>
+    <section class="grp" id="g-back"><h3 class="grph">Back and spine <span class="cnt">4</span></h3>
+      <nav class="mods" aria-label="Back and spine">
+        <a class="mod" href="back/vertebral-column.html" data-type="bones"><span class="tag t-bones">Bones</span><div><h3>The Vertebral Column</h3>
+          <p>The 24 vertebrae, sacrum, coccyx and discs assembled by region; the four curves; the discs.</p></div></a>
+        <a class="mod" href="back/vertebrae.html" data-type="bones"><span class="tag t-bones">Bones</span><div><h3>The Vertebrae</h3>
+          <p>Atlas, axis, typical cervical, C7, thoracic, lumbar, sacrum and coccyx in detail: landmarks, how to recognise each, ossification.</p></div></a>
+        <a class="mod" href="back/muscles.html" data-type="muscles"><span class="tag t-muscles">Muscles</span><div><h3>Muscles of the Back</h3>
+          <p>The deep back in 3D: serratus posterior, splenius, the three columns of the erector spinae, the transversospinales, the suboccipital muscles and quadratus lumborum; dorsal rami; thoracolumbar fascia; suboccipital triangle.</p></div></a>
+        <a class="mod" href="back/joints.html" data-type="joints"><span class="tag t-joints">Joints</span><div><h3>Joints of the Jaw, Spine and Pelvis</h3>
+          <p>Temporomandibular, atlanto-occipital and atlanto-axial, intervertebral and facet joints, sacro-iliac joints and the pubic symphysis in 3D; the jaw opening with its glide, nodding and turning the head; prolapsed disc; TMJ dislocation.</p></div></a>
+      </nav></section>
+  </div>
+</section>
+<script src="../assets/search.js"></script>
+<script>
+// type filter for the grouped list of pages; a group with nothing left is hidden
+document.getElementById('typefilter').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  for (const x of e.currentTarget.children) x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+  for (const g of document.querySelectorAll('.grp')) {
+    let n = 0;
+    for (const m of g.querySelectorAll('.mod')) { const on = !b.dataset.t || m.dataset.type === b.dataset.t; m.hidden = !on; n += on; }
+    g.hidden = !n; g.querySelector('.cnt').textContent = n;
+  }
+});
+</script>
 
 <footer>
   <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). Muscles, tendons and aponeuroses from Z-Anatomy, the libre 3D atlas of anatomy (CC BY-SA 4.0, built on BodyParts3D), moved into the BodyParts3D frame. The heart, blood vessels and nerves are also from Z-Anatomy, where vessels and nerves are curves with a radius: here each is a tube swept along its curve (calibre approximate); Z-Anatomy has no phrenic or inferior gluteal nerve and no spinal cord (its spinal dura is shown); lymph node groups are drawn as small blobs at their usual sites (no lymph vessels); the heart is shown by its four chambers. This overview uses a lighter version of each bone and muscle than the detailed pages. The left-side muscles and most left-side vessels and nerves are mirror images of the right ones (as in Z-Anatomy), so they can sit slightly off the left bones. It shows the muscles of the regional muscle pages; those pages list what the model leaves out. The four small sesamoid bones of the feet are not included yet. The model has costal cartilages 1–7 only (BodyParts3D does not include the 8th–10th).</p>

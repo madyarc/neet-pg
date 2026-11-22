@@ -11,17 +11,18 @@ Last updated: 2026-11-21
 - PAUSED new modules (user, 2026-11-22): finish modules 35 and 36 (review, fixes, docs, commit), then do the
   navigation work below before module 37.
 - Navigation work (user request 2026-11-22):
-  1. Search: `tools/home/search_index.py` → `search-index.json` (every page: title, subject, region, type, lede,
+  1. [x] done 2026-11-22. Search: `tools/home/search_index.py` → `search-index.json` (every page: title, subject, region, type, lede,
      h2 headings with ids, 3D topic names); search box on the root index and the Anatomy index; results link to the
      page or the heading anchor.
-  2. Anatomy index: modules out of the side panel into a full-width section, grouped by region (General and tissues,
+  2. [x] done 2026-11-22 (search box at the top, region jump list, type filter). Anatomy index: modules out of the side panel into a full-width section, grouped by region (General and tissues,
      Head and neck, Upper limb, Lower limb, Thorax, Back, Abdomen and pelvis, Neuro) with type tags/filters (Bones,
      Muscles, Joints, Vessels and nerves, Organs).
   3. [x] done 2026-11-22 (tools/home/bone_keys.py, tools/test/bonescheck.py). Bones on/off on every 3D page: viewer.js hides unselected bone parts when off (selected/lit bones stay);
      bone set from `models/bone-keys.json` (skeleton and detail model keys, kinds.json bone/cart, `_l` mirrors);
      button in the viewer corner, preference in localStorage, hidden on bone-only pages and the home (it has the
      Skeletal chip).
-  4. Home Systems chips: available ones first; "Joints and ligaments" and "Organs" no longer "coming" if a layer
+  4. [~] chips reordered (available first); joint and organ layers still to build (combined whole-body ligament and
+     organ models from the joint and organ packs, with meta json like body-lymph). Home Systems chips: available ones first; "Joints and ligaments" and "Organs" no longer "coming" if a layer
      can be built from the joint and organ models (lazy-loaded); otherwise list them last.
 
 - Module 35 (pelvic viscera, perineum, male genitalia) started 2026-11-22: [x] build (771 quotes, 77-part 391 KB male

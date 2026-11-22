@@ -143,6 +143,11 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
   opens from the Anatomy home): re-run it after building a regional model. Every viewer has a Bones on/off button
   (`viewer.js`; preference in localStorage `neetpg-bones`): `tools/home/bone_keys.py` writes `models/bone-keys.json`
   from the bone models and kinds.json — re-run it after adding a model; `tools/test/bonescheck.py` checks every page.
+- Navigation: the Anatomy index lists pages in region groups (`<section class="grp" id="g-<folder>">`), each row
+  `<a class="mod" href=… data-type="bones|muscles|joints|vessels|organs|tissues">` with a matching `tag`; add a new
+  page to its region's group and update the group count and the region jump list. `assets/search.js` + `search-index.json`
+  (written by `tools/home/search_index.py` from titles, ledes, h2 ids, 3D topic names, bold terms and model part names):
+  re-run it after adding or changing a page.
 - `tools/bones/skull_points.py`: named sutures and points from the contacts. `tools/bones/assign_colours.py`: bone
   colours. The femur page still uses `tools/bones/build_femur.py` + `embed.py`.
 - **Memory**: the machine has run out of RAM during long sessions. Heavy jobs (Blender exports, `bones build`,
