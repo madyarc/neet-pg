@@ -25,11 +25,6 @@ Last updated: 2026-11-21
      organ models from the joint and organ packs, with meta json like body-lymph). Home Systems chips: available ones first; "Joints and ligaments" and "Organs" no longer "coming" if a layer
      can be built from the joint and organ models (lazy-loaded); otherwise list them last.
 
-- Module 35 (pelvic viscera, perineum, male genitalia) started 2026-11-22: [x] build (771 quotes, 77-part 391 KB male
-  model, female organs schematic; two pages pelvis.html and perineum.html; AN48.3 can be ticked) [x] review (26 items: palpable vs relations, extravasation
-  of urine missing, one-source tables, model caveats, schematic and colour bugs) [ ] fixes (sent) [ ] docs [ ] commit. sheet fill-pelv, model models/pelv
-  (tools/abdomen-pelvis/pelvis_config.py), page abdomen-pelvis/pelvis-perineum.html (may split). Target AN46.1–46.5,
-  48.1, 48.5–48.8, 49.1–49.5 (+ AN48.3 gap).
 - Module 36 (neuro I: meninges, CSF, cord, brainstem, cerebellum) started 2026-11-22: sheet fill-neuro1, model
   models/neuro1 (tools/neuro/neuro1_config.py), page anatomy/neuro/brainstem-cord.html (may split). Sections 56–61
   (+ AN50.3). Module 37 next: neuro II (sections 7, 62, 63: nervous system intro, nuclei, hemispheres, ventricles,
@@ -59,8 +54,8 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
 - AN31.5: the definition of primary versus secondary deviation.
 - AN20.8: the anterior tibial pulse at the ankle has one source (Gray 291); the other four pulses are done (module 25).
 - AN25.9: heart (module 26) and pleura, lungs, trachea (module 30) done; midclavicular levels of lung and pleura are Gray only.
-- AN23.2 (thoracic duct tributaries), AN23.3 (hemiazygos origin), AN47.12 (secondary plexuses), AN48.3 (internal iliac
-  relations): Gray only (Wikipedia copies Gray); modules 27–28.
+- AN23.2 (thoracic duct tributaries), AN23.3 (hemiazygos origin), AN47.12 (secondary plexuses): Gray only (Wikipedia
+  copies Gray); modules 27–28. AN48.5: the part of the tube used for ligation (module 35).
 - AN27.1: scalp wound bleeding and gaping (Wikipedia only).
 - AN43.6: only the subclavian vein's surface line is missing (one source).
 - AN37.2: sinus functions are Wikipedia only (module 33).
@@ -68,7 +63,7 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
 - AN13.7: surface lines and pulses are done (module 24); the muscle tests for pectoralis major, serratus anterior,
   latissimus dorsi, deltoid, biceps and brachioradialis are not. Could go on the upper-limb muscles page.
 
-Progress: anatomy 226 covered, 14 partial, 173 not started; ophthalmology 6 covered, 1 partial, 55 not started.
+Progress: anatomy 241 covered, 14 partial, 158 not started; ophthalmology 6 covered, 1 partial, 55 not started.
 
 ## Steps for every module (do them in this order, tick them here as they finish)
 
@@ -113,6 +108,11 @@ builds at the same time.
   that disproves each claim.
 
 ## Log (newest first)
+
+- 2026-11-22: Module 35 (pelvic viscera; perineum and male genitalia, two pages): 796 quotes, 77-part 391 KB male
+  `models/pelv`, female organs schematic; review found 26 items (palpable vs relations, extravasation of urine,
+  one-source tables, model caveats), all fixed; 15 ticked, AN48.3 completed, AN48.5 partial. Search index now lists
+  only git-tracked pages.
 
 - 2026-11-22 01:46: user saw memory errors: three capped jobs (module 36 agent, compare.py on Startup.blend, 3G cap)
   were OOM-killed in their own scopes; the machine itself had 59 GB free. Brief now says 6G for .blend reads, batch

@@ -2,7 +2,7 @@
 result can open that section), 3D topic names, key terms (bold words in the text, table headers) and the names of the
 3D parts it shows (bones only on bone pages, so a search for "clavicle" doesn't list every page with a glass skeleton).
 
-usage: python3 -I tools/home/search_index.py  ->  search-index.json at the repo root (read by assets/search.js)"""
+usage: (git add the new pages first) python3 -I tools/home/search_index.py  ->  search-index.json at the repo root (read by assets/search.js)"""
 import json, os, re, html, glob
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
 SUBJECTS = {'anatomy': 'Anatomy', 'ophthalmology': 'Ophthalmology'}
@@ -28,11 +28,14 @@ def part_names(src, path):
     return out
 
 
+import subprocess
+# only pages git knows about (committed or staged), so a page still being built is not listed
+TRACKED = set(subprocess.run(['git', '-C', ROOT, 'ls-files', '--cached'], capture_output=True, text=True).stdout.split())
 pages = []
 for sub, subname in SUBJECTS.items():
     for f in sorted(glob.glob(os.path.join(ROOT, sub, '**', '*.html'), recursive=True)):
         rel = os.path.relpath(f, ROOT).replace(os.sep, '/')
-        if rel.endswith('index.html'): continue
+        if rel.endswith('index.html') or rel not in TRACKED: continue
         src = open(f, encoding='utf-8').read()
         h1 = re.search(r'<h1[^>]*>(.*?)</h1>', src, re.S)
         if not h1: continue

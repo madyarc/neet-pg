@@ -411,11 +411,11 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 46. Male external genitalia
 
-- [ ] **AN46.1** Describe & demonstrate coverings, internal structure, side determination, blood supply, nerve supply, lymphatic drainage & descent of testis with its applied anatomy
-- [ ] **AN46.2** Describe parts of Epididymis
-- [ ] **AN46.3** Describe Penis under following headings: (parts, components, blood supply and lymphatic drainage)
-- [ ] **AN46.4** Explain the anatomical basis of Varicocele
-- [ ] **AN46.5** Explain the anatomical basis of Phimosis & Circumcision
+- [x] **AN46.1** Describe & demonstrate coverings, internal structure, side determination, blood supply, nerve supply, lymphatic drainage & descent of testis with its applied anatomy — *coverings, inside, side, supply, lymph, descent: [Perineum and Male External Genitalia](abdomen-pelvis/perineum.html)*
+- [x] **AN46.2** Describe parts of Epididymis — *parts of the epididymis: [Perineum and Male External Genitalia](abdomen-pelvis/perineum.html)*
+- [x] **AN46.3** Describe Penis under following headings: (parts, components, blood supply and lymphatic drainage) — *parts, corpora, supply, lymph: [Perineum and Male External Genitalia](abdomen-pelvis/perineum.html)*
+- [x] **AN46.4** Explain the anatomical basis of Varicocele — *anatomical basis in [Perineum and Male External Genitalia](abdomen-pelvis/perineum.html); the veins in [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html)*
+- [x] **AN46.5** Explain the anatomical basis of Phimosis & Circumcision — *phimosis, paraphimosis, circumcision: [Perineum and Male External Genitalia](abdomen-pelvis/perineum.html)*
 
 ### 47. Abdominal cavity
 
@@ -436,22 +436,22 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 48. Pelvic wall and viscera
 
-- [ ] **AN48.1** Describe & demonstrate the position, features, important peritoneal and other relations, blood supply, nerve supply, lymphatic drainage and clinical aspects of important male & female pelvic viscera.
+- [x] **AN48.1** Describe & demonstrate the position, features, important peritoneal and other relations, blood supply, nerve supply, lymphatic drainage and clinical aspects of important male & female pelvic viscera. — *organs, relations, supply, applied (female organs as schematics): [Pelvic Viscera](abdomen-pelvis/pelvis.html)*
 - [x] **AN48.2** Describe & identify the muscles of Pelvic diaphragm. — *[Muscles of the Trunk Wall](thorax/wall-muscles.html) (puborectalis described, not separate in the model)*
-- [~] **AN48.3** Describe & demonstrate the origin, course, important relations and branches of internal iliac artery — *divisions and branches in 3D: [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html); relations have one source*
+- [x] **AN48.3** Describe & demonstrate the origin, course, important relations and branches of internal iliac artery — *divisions and branches in 3D: [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html); relations (ureter in front, vein behind) with two sources: [Pelvic Viscera](abdomen-pelvis/pelvis.html)*
 - [x] **AN48.4** Describe the branches of sacral plexus — *pelvic branches, pudendal nerve: [Nerves and Vessels of the Abdomen and Pelvis](abdomen-pelvis/nerves-vessels.html); limb branches: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
-- [ ] **AN48.5** Explain the anatomical basis of suprapubic cystostomy, Urinary obstruction in benign prostatic hypertrophy, Retroverted uterus, Prolapse uterus, Internal and external haemorrhoids, Anal fistula, Vasectomy, Tubal pregnancy & Tubal ligation
-- [ ] **AN48.6** Describe the neurological basis of Automatic bladder
-- [ ] **AN48.7** Mention the lobes involved in benign prostatic hypertrophy & prostatic cancer
-- [ ] **AN48.8** Mention the structures palpable during vaginal & rectal examination
+- [~] **AN48.5** Explain the anatomical basis of suprapubic cystostomy, Urinary obstruction in benign prostatic hypertrophy, Retroverted uterus, Prolapse uterus, Internal and external haemorrhoids, Anal fistula, Vasectomy, Tubal pregnancy & Tubal ligation — *all items in [Pelvic Viscera](abdomen-pelvis/pelvis.html) (haemorrhoids, fistula, vasectomy on [Perineum and Male External Genitalia](abdomen-pelvis/perineum.html)); the part of the tube for tubal ligation has no two sources*
+- [x] **AN48.6** Describe the neurological basis of Automatic bladder — *automatic (suprasacral) vs flaccid bladder: [Pelvic Viscera](abdomen-pelvis/pelvis.html)*
+- [x] **AN48.7** Mention the lobes involved in benign prostatic hypertrophy & prostatic cancer — *lobes and zones side by side, BPH and cancer: [Pelvic Viscera](abdomen-pelvis/pelvis.html)*
+- [x] **AN48.8** Mention the structures palpable during vaginal & rectal examination — *structures felt per rectum and per vaginam: [Pelvic Viscera](abdomen-pelvis/pelvis.html)*
 
 ### 49. Perineum
 
-- [ ] **AN49.1** Describe& demonstrate the superficial & deep perineal pouch (boundaries and contents)
-- [ ] **AN49.2** Describe & identify Perineal body
-- [ ] **AN49.3** Describe & demonstrate Perineal membrane in male & female
-- [ ] **AN49.4** Describe & demonstrate boundaries, content & applied anatomy of Ischiorectal fossa
-- [ ] **AN49.5** Explain the anatomical basis of Perineal tear, Episiotomy, Perianal abscess and Anal fissure
+- [x] **AN49.1** Describe& demonstrate the superficial & deep perineal pouch (boundaries and contents) — *superficial and deep pouches, male and female, extravasation of urine: [Perineum and Male External Genitalia](abdomen-pelvis/perineum.html)*
+- [x] **AN49.2** Describe & identify Perineal body — *perineal body: [Perineum and Male External Genitalia](abdomen-pelvis/perineum.html)*
+- [x] **AN49.3** Describe & demonstrate Perineal membrane in male & female — *perineal membrane in male and female: [Perineum and Male External Genitalia](abdomen-pelvis/perineum.html)*
+- [x] **AN49.4** Describe & demonstrate boundaries, content & applied anatomy of Ischiorectal fossa — *ischio-anal fossa, pudendal canal: [Perineum and Male External Genitalia](abdomen-pelvis/perineum.html)*
+- [x] **AN49.5** Explain the anatomical basis of Perineal tear, Episiotomy, Perianal abscess and Anal fissure — *tears, episiotomy, perianal abscess, anal fissure: [Perineum and Male External Genitalia](abdomen-pelvis/perineum.html)*
 
 ### 50. Vertebral column
 

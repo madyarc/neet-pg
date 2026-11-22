@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Perineum and Male External Genitalia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone, --lig (ligament), --fascia (fascia and the perineal membrane), --artery, --vein,
+   --nerve, --lymph, --clin (clinical: an abscess track, a fistula, a cut, a tear). Shared with other pages, same meaning: --kidney
+   (urinary tract; organs.html), --colon (large intestine; organs.html), --perit (peritoneum and its derivative the tunica vaginalis;
+   organs.html), --musc (muscle; --s-musc on wall-muscles.html), --skin and --fat (--s-skin, --s-fat on wall-muscles.html), --fluid
+   (fluid in a serous cavity; lungs.html, organs.html), --pus (an abscess; organs.html). Page tokens shared with pelvis.html only, same
+   meaning: --prost, --sv, --duct (epididymis, ductus deferens), --gonad (testis), --erect (corpora cavernosa), --spong (corpus
+   spongiosum, bulb, glans; bulbs of the vestibule), --vag (vagina). Page-only: --gland (bulbourethral and greater vestibular glands). */
+:root{--gland:#f2a7c3;--kidney:#b46e48;--colon:#a89a5a;--perit:#a9cfc4;--musc:#c98f8a;--skin:#e9c9b0;--fat:#f3e3a6;--fluid:#d9edc6;--pus:#cfd08a;
+  --prost:#556b2f;--sv:#8fbc8f;--duct:#826bdf;--gonad:#dc89e6;--erect:#c741d6;--spong:#89e6ae;--vag:#8989e6}
+:root[data-theme="dark"]{--gland:#d98aa8;--kidney:#c07a52;--colon:#8f8248;--perit:#3f6e63;--musc:#a86f6a;--skin:#8a6a55;--fat:#7d6f3c;--fluid:#4e6638;--pus:#7a7b3c;
+  --prost:#7f9a4f;--sv:#78a878;--duct:#9a88ea;--gonad:#c77bd2;--erect:#c25ad0;--spong:#5fbf88;--vag:#8484d6;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+#topics{display:flex;flex-direction:column;gap:10px}
+#topic-text p+p,#topic-text p+ul,#topic-text ul+p{margin-top:8px}
+#topic-text ul{margin:4px 0 0;padding-left:20px}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.scroll{overflow-x:auto}
+.scroll,.schbox{scrollbar-color:var(--line) transparent}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:620px;margin:0 auto}
+.schbox{overflow-x:auto}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:500px}.swipe{display:inline}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch .bone{fill:var(--bone);stroke:var(--muted);stroke-width:1}
+svg.sch .o{stroke:var(--muted);stroke-width:.8}
+svg.sch .mus{fill:var(--musc);stroke:var(--muted);stroke-width:.8}
+svg.sch .fas{stroke:var(--fascia);stroke-width:4;fill:none;stroke-linecap:round}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .art{stroke:var(--artery);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .artf{fill:var(--artery);stroke:var(--surface);stroke-width:1}
+svg.sch .vnf{fill:var(--vein);stroke:var(--surface);stroke-width:1}
+svg.sch .nvf{fill:var(--nerve);stroke:var(--surface);stroke-width:1}
+svg.sch .clin{stroke:var(--clin);stroke-width:3.5;fill:none;stroke-linecap:round}
+svg.sch .clinf{fill:var(--clin)}
+svg.sch .dim{opacity:.22}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.organ-card{display:flex;flex-direction:column;gap:8px}
+.organ-card h3{font:700 18px var(--f-display);margin:0}
+.clinlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.clinlist .item{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg);font-size:14px}
+.clinlist .item b.t{display:block;font:600 14.5px var(--f-body);margin-bottom:4px}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Perineum and Male External Genitalia</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="Perineum and male external genitalia in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <div class="key" id="key3d"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pouch">
+  <h2 id="h-pouch">Perineal membrane and the perineal pouches</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="pouch-svg" viewBox="0 0 540 420" role="img" aria-label="Schematic coronal section through the urogenital triangle showing, from below up, the skin, Colles' fascia, the superficial perineal pouch with the crura and bulb and their muscles, the perineal membrane, the deep perineal pouch with the urethra and external urethral sphincter, and levator ani above"></svg></div>
+      <div class="toggles" id="pouch-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic coronal section through the urogenital triangle, not to scale, seen from the front: the body's right on your left, head at the top.</p>
+    </div>
+    <div>
+      <div class="scroll"><table class="t stack" id="pouch-table"></table></div>
+      <div class="prose" id="pouch-text"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-body">
+  <h2 id="h-body">Perineal body, perineal tears and episiotomy</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="body-svg" viewBox="0 0 520 440" role="img" aria-label="Schematic of the female perineum seen from below in the lithotomy position: vaginal opening, perineal body with the muscles attached to it, anal canal with the external sphincter; toggles show the median and mediolateral episiotomy lines and the degrees of perineal tear"></svg></div>
+      <div class="toggles" id="body-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic female perineum seen from below with the woman lying on her back (lithotomy): front (pubis) at the top, the woman's right on your left. Not to scale.</p>
+    </div>
+    <div class="prose" id="body-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-anal">
+  <h2 id="h-anal">Anal canal, ischio-anal fossa and the anorectal applied list</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="isch-svg" viewBox="0 0 540 440" role="img" aria-label="Schematic coronal section through the anal canal: rectum above, levator ani sloping down to the anal canal, obturator internus on the side wall with the pudendal canal, the fat-filled ischio-anal fossa between them, internal and external sphincters and the pectinate line; toggles show abscess spaces and fistula types"></svg></div>
+      <div class="toggles" id="isch-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic coronal section through the anal canal, not to scale, seen from the front: the body's right on your left. Matches the 3D "Ischio-anal fossa (cut)" view.</p>
+    </div>
+    <div class="prose" id="isch-text"></div>
+  </div>
+  <div class="two">
+    <div class="scroll"><table class="t stack" id="pect-table"></table></div>
+    <div>
+      <div class="schbox"><svg class="fig sch" id="clock-svg" viewBox="0 0 360 300" role="img" aria-label="Clock face of the anal canal with the three main anal cushions at 3, 7 and 11 o'clock: left lateral, right posterior and right anterior"></svg></div>
+      <p class="muted">The three main anal cushions as a 2019 review gives them: left lateral at 3 o'clock, right anterior at 11, right posterior at 7. Those pairings put 12 o'clock at the front and the patient's right at 9, so the clock is drawn that way (front at the top, the patient's right on your left, as in the perineal body drawing). The fissure mark is at 6 o'clock, the posterior midline. Schematic.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-testis">
+  <h2 id="h-testis">Testis: coverings, structure and descent</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="cov-svg" viewBox="0 0 540 400" role="img" aria-label="Schematic of the testis and its coverings: skin and dartos, external spermatic fascia, cremaster, internal spermatic fascia and the tunica vaginalis, each matched to the abdominal wall layer it comes from; a second view shows the inside of the testis with lobules, seminiferous tubules, rete testis, efferent ductules and the head, body and tail of the epididymis"></svg></div>
+      <div class="toggles" id="cov-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. Transverse section of the right half of the scrotum, seen from below (front at the top), for the coverings; the inside view is a vertical section of the right testis seen from its medial side (front on your left).</p>
+    </div>
+    <div class="prose" id="cov-text"></div>
+  </div>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="desc-svg" viewBox="0 0 520 360" role="img" aria-label="Schematic side view of the descent of the testis from the posterior abdominal wall through the inguinal canal into the scrotum, guided by the gubernaculum and preceded by the processus vaginalis"></svg></div>
+      <div class="toggles" id="desc-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic side view, seen from the right: front on your right. Not to scale.</p>
+    </div>
+    <div class="prose" id="desc-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-penis">
+  <h2 id="h-penis">Penis, prepuce, phimosis and circumcision</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="xs-svg" viewBox="0 0 540 340" role="img" aria-label="Schematic cross-section of the body of the penis: two corpora cavernosa with deep arteries, corpus spongiosum with the urethra, tunica albuginea and septum, Buck's fascia, the deep dorsal vein between the paired dorsal arteries and nerves, the superficial dorsal vein, dartos fascia and skin"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic cross-section of the body of the penis, dorsum (upper surface of the flaccid penis) at the top. Not to scale.</p>
+    </div>
+    <div>
+      <div class="schbox"><svg class="fig sch" id="prep-svg" viewBox="0 0 440 300" role="img" aria-label="Schematic side view of the glans and prepuce: retractile prepuce, phimosis, paraphimosis and after circumcision"></svg></div>
+      <div class="toggles" id="prep-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic side view of the end of the penis, tip on your right. Not to scale.</p>
+      <div class="prose" id="prep-text"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-org">
+  <h2 id="h-org">Cards: testis, epididymis, penis, scrotum</h2>
+  <div class="chips" id="org-chips"></div>
+  <div class="organ-card" id="org-card"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-clin">
+  <h2 id="h-clin">Applied anatomy</h2>
+  <div class="clinlist" id="clin-list"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-pelv.md, anatomy/DATA-SOURCES.md) ===================== */
+const V = k => 'v_' + k, O = k => 'o_' + k, N = k => 'n_' + k, L = k => 'l_' + k, LEFT = k => k + '_l';
+const BONES = ['sacrum', 'right_hip_bone', 'left_hip_bone'];
+const LEV_R = ['m_pubococcygeus_r', 'm_iliococcygeus_r', 'm_puborectalis_r'], LEV = [...LEV_R, ...LEV_R.map(LEFT)];
+const OI = ['m_obturator_internus_r', LEFT('m_obturator_internus_r')], STL = ['g_sacrotuberous_ligament_r', LEFT('g_sacrotuberous_ligament_r')];
+const EAS = 'm_external_anal_sphincter', RE = O('rectum'), CC = O('corpus_cavernosum'), CS = O('corpus_spongiosum'), GL = O('glans'), UR = O('urethra');
+const PEN = [CC, CS, GL], PUD = [N('pudendal_nerve_r'), V('internal_pudendal_artery_r'), V('internal_pudendal_vein_r')];
+const TE = [O('testis_r'), O('testis_l')], EP = [O('epididymis_r'), O('epididymis_l')], DD = [O('ductus_deferens_r'), O('ductus_deferens_l')];
+const TV = [V('right_testicular_vein'), V('left_testicular_vein')], TA = [V('right_testicular_artery_r'), V('left_testicular_artery')];
+const SIN = ['superomedial_superficial_inguinal_nodes_r', 'superolateral_superficial_inguinal_nodes_r', 'inferior_superficial_inguinal_nodes_r'].flatMap(k => [L(k), LEFT(L(k))]);
+const PENV = [V('dorsal_artery_of_penis_r'), LEFT(V('dorsal_artery_of_penis_r')), V('deep_artery_of_penis_r'), LEFT(V('deep_artery_of_penis_r')), V('deep_dorsal_vein_of_penis'), V('superficial_dorsal_veins_of_penis')];
+const FRONT = [0, -1, 0.08], BACK = [0, 1, 0.1], RIGHT = [-1, 0, 0.04], BELOW = [0, -0.2, -1];
+/* surface points (mm, body frame; picked from the model's vertices: approximate) */
+const P = {symph: [0, -118, 777], tub_r: [-42, -65, 759], tub_l: [43, -65, 759], coccyx: [-2, -27, 791], ug: [0, -95, 765], an: [-22, -45, 770], body: [0, -64, 762], fossa: [-32, -42, 770]};
+const DIAMOND = [['symph', 'tub_r'], ['tub_r', 'coccyx'], ['coccyx', 'tub_l'], ['tub_l', 'symph']].map(([a, b]) => ({a: P[a], b: P[b], color: '--ink', dash: '6 4'}))
+  .concat([{a: P.tub_r, b: P.tub_l, color: '--ink', dash: '2 4'}]);
+/* 3D topics: lit = parts in full colour; show = context (bones by default); clip = [normal, d] (keep n·p <= d);
+   labels = [key, text, point (mm)] (key null: the point itself) */
+const TOPICS = [
+  {grp: 'Perineum', id: 'bounds', name: 'Boundaries and triangles', lit: [...STL, EAS, ...LEV], show: BONES,
+    view: BELOW, zoom: 1.5, fit: ['right_hip_bone', 'left_hip_bone', 'sacrum'], lines: DIAMOND,
+    labels: [[null, 'Pubic symphysis', P.symph], [null, 'Ischial tuberosity', P.tub_r], [null, 'Coccyx', P.coccyx], [null, 'Urogenital triangle', P.ug], [null, 'Anal triangle', P.an]],
+    text: `<p>The <b>perineum</b> is the diamond-shaped region below the pelvic diaphragm, outlined by the dashed lines: the <b>pubic arch</b> in front, the <b>tip of the coccyx</b> behind, the <b>ischiopubic rami</b> and <b>ischial tuberosities</b> at the sides in front, the <b>sacrotuberous ligaments</b> behind. A line between the ischial tuberosities (dotted) divides it into the <b>urogenital triangle</b> in front (root of the penis or the vulva, the urethra) and the <b>anal triangle</b> behind (anal canal and the ischio-anal fossae). The <b>perineal body</b> sits at the middle of this line.</p>
+<p class="muted">Seen from below: front (pubis) at the top, the body's right on your left, as in the perineal-body drawing below. Points are picked on the model's bones, approximate. The penis and testes are hidden. Skin, fat, fasciae and the perineal membrane are not in the model.</p>`},
+  {grp: 'Perineum', id: 'root', name: 'Root of the penis', lit: [CC, CS, EAS, UR], show: [...BONES, ...STL], view: [0, 0.75, -1], zoom: 0.85, fit: [CC, CS, EAS, 'm_puborectalis_r'],
+    labels: [[CC, 'Crus', [-30, -68, 768]], [CS, 'Bulb', [0, -80, 756]], [EAS, 'Anal sphincter', [0, -48, 762]], [null, 'Perineal body', P.body]],
+    text: `<p>Seen from behind and below (the anal sphincter at the top, the penis hanging towards the bottom). The <b>root</b> of the penis lies in the superficial perineal pouch: two <b>crura</b>, fixed to the ischiopubic rami and covered by ischiocavernosus, and the median <b>bulb</b> of the corpus spongiosum, covered by bulbospongiosus, on the perineal membrane. Between the bulb and the anal canal is the <b>perineal body</b>, where the perineal muscles meet.</p>
+<p class="muted">The ischiocavernosus, bulbospongiosus, transverse perineal muscles and perineal membrane are not in the model: see the pouch section. The perineal body marker is a point between the bulb and the sphincter, approximate.</p>`},
+  {grp: 'Perineum', id: 'anal', name: 'Anal triangle from below', lit: [EAS, ...LEV, ...OI, ...STL, ...PUD], show: BONES, view: [0, 0.35, -1], zoom: 0.95, fit: [EAS, ...LEV_R, OI[0], STL[0]],
+    labels: [[EAS, 'External sphincter', [0, -42, 765]], ['m_iliococcygeus_r', 'Levator ani', [-28, -66, 800]], [OI[0], 'Obturator internus', [-62, -55, 806]], [null, 'Ischio-anal fossa', P.fossa]],
+    text: `<p>From below and behind: the anal canal ringed by the <b>external sphincter</b>; above and beside it <b>levator ani</b> slopes down to the canal; on the side wall, <b>obturator internus</b>. The wedge between them, filled with fat, is the <b>ischio-anal fossa</b>; the <b>pudendal nerve</b> and internal pudendal vessels run on its lateral wall in the pudendal canal (on the obturator internus fascia). The <b>sacrotuberous ligament</b> and gluteus maximus close it behind (Gray).</p>
+<p class="muted">The fossa marker is a point, approximate; the fat is not modelled. In this model the pudendal nerve (yellow) runs 16–20 mm medial to the internal pudendal vessels, off the obturator internus, so it is not labelled; the vessels mark the pudendal canal. Pudendal canal and nerve in detail: <a href="nerves-vessels.html">Nerves and Vessels</a>.</p>`},
+  {grp: 'Perineum', id: 'coronal', name: 'Ischio-anal fossa (cut)', clip: [[0, -1, 0], 50], lit: [RE, EAS, ...LEV, ...OI, ...PUD], show: [...BONES, ...STL], view: FRONT, zoom: 1.2, fit: [RE, ...LEV_R, OI[0], OI[1]],
+    labels: [[RE, 'Rectum', [0, -50, 840]], ['m_iliococcygeus_r', 'Levator ani', [-30, -50, 805]], [OI[0], 'Obturator internus', [-62, -50, 812]], [EAS, 'External sphincter', [-10, -50, 766]], [null, 'Ischio-anal fossa', [-34, -50, 780]], [V('internal_pudendal_artery_r'), 'Pudendal canal', [-45, -50, 800]]],
+    text: `<p>Cut across through the anal canal and seen from the front (the body's right on your left), as in the schematic below. The <b>ischio-anal fossa</b> is the wedge on each side of the anal canal: <b>medially</b> the external sphincter and levator ani; <b>laterally</b> obturator internus with its fascia and the ischial tuberosity; <b>above</b> (apex) where levator ani meets the obturator fascia; <b>below</b> (base) the perineal skin. In front: the perineal membrane and the superficial transverse perineal muscle; behind: gluteus maximus and the sacrotuberous ligament (Gray; a 2026 dissection study).</p>
+<p class="muted">"Pudendal canal" marks the internal pudendal vessels on obturator internus; the model's pudendal nerve lies 16–20 mm medial to them, off the muscle.</p>`},
+  {grp: 'Male genitalia', id: 'penis', name: 'Penis and its vessels', lit: [...PEN, ...PENV, UR], show: [...BONES, ...TE, ...EP], view: [-1, -0.3, 0.1], zoom: 0.85, fit: [...PEN],
+    labels: [[CC, 'Corpus cavernosum', [-14, -130, 768]], [CS, 'Corpus spongiosum', [-6, -120, 745]], [GL, 'Glans', [-12, -195, 720]], [V('dorsal_artery_of_penis_r'), 'Dorsal artery', [-7, -120, 788]]],
+    text: `<p>Seen from the right. Two <b>corpora cavernosa</b> on the dorsum (side by side, their crura fixed to the ischiopubic rami) and the <b>corpus spongiosum</b> underneath, carrying the urethra and expanding as the <b>bulb</b> behind and the <b>glans</b> in front. Arteries from the internal pudendal: the <b>deep artery</b> to each corpus cavernosum, the paired <b>dorsal arteries</b> on the dorsum (to the glans and skin) either side of the single <b>deep dorsal vein</b> (deep to Buck's fascia); the superficial dorsal vein drains the skin.</p>
+<p class="muted">The model's penis hangs down (flaccid). The deep arteries run inside the corpora and the deep dorsal vein lies in the groove between them: both faint behind the surface here; see the cross-section below.</p>`},
+  {grp: 'Male genitalia', id: 'testis', name: 'Testis and epididymis', lit: [O('testis_r'), O('epididymis_r'), DD[0], TA[0], TV[0]], show: [O('testis_l'), O('epididymis_l'), ...PEN], view: [-1, 0.45, 0.15], zoom: 0.5, fit: [O('testis_r'), O('epididymis_r')],
+    labels: [[O('testis_r'), 'Testis', [-24, -163, 703]], [O('epididymis_r'), 'Head', [-24, -152, 724]], [O('epididymis_r'), 'Tail', [-21, -143, 702]], [DD[0], 'Ductus deferens', [-26, -146, 728]], [TV[0], 'Pampiniform plexus', [-22, -140, 740]]],
+    text: `<p>The right testis from the right side and behind. The <b>epididymis</b> lies along the <b>posterior border</b> (on its lateral part), its <b>head</b> on the upper pole receiving the efferent ductules, its <b>tail</b> at the lower pole continuing as the <b>ductus deferens</b>, which climbs into the spermatic cord with the testicular artery and the veins of the pampiniform plexus.</p>
+<p><b>Side determination</b>: hold the testis with the free convex border forward and the head of the epididymis up: the epididymis lies behind, on the lateral side, so it points to the side the testis belongs to.</p>
+<p class="muted">In this model the epididymis sits behind and over the upper part of the testis; its lateral offset is small. Testicular vessels are tubes, approximate.</p>`},
+  {grp: 'Male genitalia', id: 'veins', name: 'Testicular veins (varicocele)', lit: [...TV, V('left_renal_vein'), V('inferior_vena_cava_abdominal_part'), ...TE], show: [...BONES, 'fifth_lumbar_vertebra', V('abdominal_aorta'), ...TA], view: FRONT, zoom: 1, fit: [...TV, V('left_renal_vein')],
+    labels: [[V('left_testicular_vein'), 'Left testicular v.', [40, -110, 900]], [V('right_testicular_vein'), 'Right testicular v.', [-40, -110, 900]], [V('left_renal_vein'), 'Left renal v.', [20, -118, 1060]], [V('inferior_vena_cava_abdominal_part'), 'IVC', [-12, -128, 1030]], [O('testis_l'), 'Testis', [20, -160, 700]]],
+    text: `<p><b>Anatomical basis of varicocele</b>: the veins of the testis form the <b>pampiniform plexus</b> in the cord, which becomes the testicular vein. The <b>right</b> vein opens into the low-pressure <b>IVC</b> at an acute angle; the <b>left</b> joins the higher-pressure <b>left renal vein</b> at a right angle, which impedes drainage, and the left renal vein itself can be squeezed between the SMA and aorta (nutcracker). With failed valves, blood refluxes and the plexus dilates: most clinically detected varicoceles are <b>left-sided</b> (Wikipedia: 80–90% of palpable ones). An isolated right varicocele is rare and should prompt a look for an abdominal mass pressing on the IVC (Wikipedia).</p>
+<p class="muted">The vascular route in detail: <a href="nerves-vessels.html">Nerves and Vessels</a>. In this model the right testicular vein ends about 11 mm short of the IVC.</p>`},
+  {grp: 'Male genitalia', id: 'lymph', name: 'Lymph: testis vs scrotum', lit: [L('lateral_aortic_nodes'), L('pre_aortic_nodes'), ...SIN, ...TE, ...TA], show: [...BONES, 'fifth_lumbar_vertebra', ...PEN, ...EP], view: FRONT, zoom: 0.95, fit: [L('lateral_aortic_nodes'), ...SIN, ...TE],
+    labels: [[L('lateral_aortic_nodes'), 'Lumbar (aortic) nodes', [-12, -130, 1060]], [LEFT(L('superolateral_superficial_inguinal_nodes_r')), 'Superficial inguinal', [58, -152, 825]], [O('testis_r'), 'Testis', [-22, -160, 700]]],
+    text: `<p>The <b>testis</b> drains with the testicular vessels up to the <b>lumbar (lateral and pre-aortic) nodes</b> beside the aorta; the <b>scrotum</b> (and the skin of the penis and the perineum) drains to the <b>superficial inguinal nodes</b>.</p>
+<p class="muted">Node groups are Z-Anatomy's, approximate; inguinal nodes on the left are mirrored.</p>`},
+];
+
+const POUCH_ROWS = [
+  ['Superficial pouch: boundaries', 'Between the perineal membrane (above) and the membranous layer of superficial fascia, Colles\' fascia (below); open in front, continuous with the space under the membranous layer of the abdominal wall', 'Same'],
+  ['Superficial pouch: contents', 'Crura (with ischiocavernosus) and bulb of the penis (with bulbospongiosus), corpus spongiosum with the spongy urethra; superficial transverse perineal muscles; posterior scrotal vessels and nerves, artery to the bulb (arises in the deep pouch and pierces the perineal membrane, Gray)', 'Crura of the clitoris (ischiocavernosus), bulbs of the vestibule (bulbospongiosus), greater vestibular (Bartholin\'s) glands; superficial transverse perineal muscles; posterior labial vessels and nerves'],
+  ['Perineal membrane', 'Triangular fibrous sheet between the ischiopubic rami, attached behind to the perineal body; thin (2014 review); pierced by the urethra', 'Thick and multilayered (2014 review); pierced by the urethra and the vagina; supports the distal vagina and urethra'],
+  ['Applied', 'Extravasation of urine from a ruptured bulbar or spongy urethra with a torn Buck\'s fascia: into the superficial pouch and on into the scrotum, penis and anterior abdominal wall (applied list)', '—'],
+  ['Deep pouch: boundaries', 'Above the perineal membrane, up to the pelvic diaphragm (fascia below levator ani); obturator fascia at the sides', 'Same'],
+  ['Deep pouch: contents', 'Membranous urethra and the external urethral sphincter; bulbourethral glands; dorsal nerve and internal pudendal vessels; deep transverse perineal muscle (classically; disputed)', 'Urethra and external urethral sphincter (compressor urethrae, urethrovaginal sphincter); vagina; dorsal nerve of the clitoris and vessels']];
+const POUCH_TEXT = `<p><b>"Urogenital diaphragm"</b>: older books describe a three-layer sheet in the urogenital triangle: the deep transverse perineal muscle between a superior and an inferior fascia (the inferior one = the perineal membrane). Today the deep pouch is described as the region between the perineal membrane and the pelvic diaphragm, and a separate striated deep transverse perineal muscle is doubtful (a 2026 dissection study found none clearly definable in either sex).</p>
+<p>The gap between the apex of the membrane and the arcuate pubic ligament carries the deep dorsal vein, and the dorsal nerves pass beside it.</p>`;
+
+const BODY_TEXT = {
+  body: `<p><b>Perineal body</b> (central tendon of the perineum): a fibromuscular mass in the midline between the anus and the bulb of the penis, or the vaginal opening, at the junction of the urogenital and anal triangles. Attached to it: <b>bulbospongiosus</b>, the <b>superficial and deep transverse perineal</b> muscles, the <b>external anal sphincter</b>, fibres of <b>levator ani</b> (puborectal), the <b>external urethral sphincter</b>, with the perineal membrane and Colles' fascia; above it the rectovaginal (rectoprostatic) septum (StatPearls).</p>
+<p>It is essential to the pelvic floor, especially in women: torn in childbirth, the gap between the two levators widens and predisposes to prolapse of the uterus, rectum or bladder.</p>`,
+  epis: `<p><b>Episiotomy</b>: a cut to widen the vaginal opening in a difficult delivery, under local or pudendal anaesthesia. <b>Median</b> (midline): from the back of the vaginal opening (fourchette) straight back towards the anus, through the perineal body. <b>Mediolateral</b>: starts in the same place and angles to one side (StatPearls: about 60 degrees), angling the cut away from the anal sphincter (both sources).</p>
+<p>Midline cuts are linked with more obstetric anal sphincter injuries. Not for routine use (ACOG, 2006).</p>`,
+  tear: `<p><b>Perineal tears</b> (RCOG/ACOG grading, as summarised in a 2026 review): <b>1st</b>: skin or vaginal lining only; <b>2nd</b>: into the perineal muscles (perineal body), not the anal sphincter; <b>3rd</b>: the anal sphincter: <b>3a</b> under 50% of the external sphincter, <b>3b</b> over 50%, <b>3c</b> the internal sphincter too; <b>4th</b>: also the anorectal lining. Third and fourth degree = <b>obstetric anal sphincter injuries</b>: risk of anal incontinence; they need careful repair. Most tears are first or second degree. Risk factors: first birth, operative delivery, a large baby.</p>`};
+
+const ISCH_TEXT = {
+  bounds: `<p><b>Ischio-anal (ischiorectal) fossa</b>: a fat-filled wedge on each side of the anal canal, below the pelvic diaphragm. Apex up, where the obturator and anal fasciae meet; base down at the perineal skin. <b>Medial</b>: levator ani and the external sphincter (anal canal); <b>lateral</b>: obturator internus with its fascia, the ischial tuberosity; <b>in front</b>: the perineal membrane and superficial transverse perineal muscle; <b>behind</b>: gluteus maximus and the sacrotuberous ligament (Gray; a 2026 study).</p>
+<p><b>Contents</b>: fat crossed by fibrous bands (letting the canal widen at defaecation, Wikipedia); the <b>pudendal canal</b> on the lateral wall with the internal pudendal vessels and pudendal nerve; and (Gray) the <b>inferior rectal</b> vessels and nerves crossing to the canal.</p>
+<p>The <b>pectinate (dentate) line</b> at the bottom of the anal columns marks the junction of hindgut and skin-derived lining: table below.</p>`,
+  abscess: `<p><b>Perianal (anorectal) abscess</b>: usually from a blocked, infected <b>anal gland</b> in the intersphincteric space (cryptoglandular). Pus spreads: <b>down</b> to the skin round the anus (<b>perianal</b>, the commonest, Wikipedia: about 60%); <b>out through the external sphincter</b> into the ischio-anal fossa (<b>ischio-anal</b> abscess); <b>up</b> between the sphincters or above levator ani (<b>supralevator</b>); backwards (<b>horseshoe</b> abscess, StatPearls). Treatment is surgical drainage.</p>`,
+  fistula: `<p><b>Anal fistula</b> (fistula-in-ano): an epithelium-lined track from the anal canal to the perianal skin, usually after an abscess; classified by its relation to the sphincters (<b>Parks</b>): <b>intersphincteric</b> (between the sphincters), <b>trans-sphincteric</b> (through the external sphincter), <b>suprasphincteric</b> (above it), <b>extrasphincteric</b> (outside both). The tracks in the drawing are schematic. Treatment aims to clear infection and keep continence.</p>`,
+  fissure: `<p><b>Anal fissure</b>: a split in the lining of the lower canal, from the dentate line to the anal margin, mostly in the <b>posterior midline</b> (80–90%; the rest anterior). Pain on and after defaecation, bleeding; spasm of the <b>internal sphincter</b> keeps it open and (Wikipedia) cuts the blood supply of the lining, so it does not heal. Chronic ones have a sentinel tag. A fissure off the midline suggests another disease (Crohn's, HIV, tuberculosis, cancer; Wikipedia). Lateral internal sphincterotomy for chronic fissures (Wikipedia). Why the posterior midline is favoured is not explained in the open sources used, so it is left out. Its site is marked on the clock face below.</p>`};
+
+const PECT_ROWS = [
+  ['Origin (Wikipedia)', 'Hindgut (endoderm)', 'Proctodeum (ectoderm)'],
+  ['Lining (Wikipedia)', 'Columnar', 'Stratified squamous, non-keratinised'],
+  ['Arteries', 'Superior rectal (from the IMA)', 'Middle and inferior rectal'],
+  ['Veins', 'Superior rectal → IMV → portal', 'Middle and inferior rectal → systemic (see <a href="nerves-vessels.html">Nerves and Vessels</a>)'],
+  ['Nerves (Wikipedia)', 'Autonomic (inferior hypogastric plexus): pain-insensitive', 'Pudendal: pain-sensitive'],
+  ['Lymph', 'Internal iliac nodes (Wikipedia)', 'Superficial inguinal nodes'],
+  ['Haemorrhoids', 'Internal: painless bright red bleeding', 'External: painful when thrombosed']];
+
+const COV_TEXT = {
+  cov: `<p>The testis carries the layers of the abdominal wall with it as it descends. From outside in: <b>skin</b> and <b>dartos</b> (smooth muscle; together the scrotum), <b>external spermatic fascia</b> (from the external oblique aponeurosis), <b>cremaster</b> muscle and fascia (from the internal oblique), <b>internal spermatic fascia</b> (from the transversalis fascia), and the <b>tunica vaginalis</b> (from the peritoneum: the lower, closed end of the processus vaginalis), with a parietal and a visceral layer. The tunica vaginalis does not cover the posterior border, where the epididymis and vessels attach.</p>
+<p>The cord coverings and the inguinal canal: <a href="../thorax/wall-muscles.html">Muscles of the Trunk Wall</a>.</p>`,
+  inside: `<p>Under the tunica vaginalis, the tough <b>tunica albuginea</b>, thickened behind as the <b>mediastinum testis</b>; septa divide the gland into lobules of coiled <b>seminiferous tubules</b>, which drain into the <b>rete testis</b> in the mediastinum and on through the <b>efferent ductules</b> to the <b>head of the epididymis</b>. The epididymis (a single coiled duct, about 6 m uncoiled) has a head on the upper pole, a body along the posterior border and a tail at the lower pole, continuous with the ductus deferens; it stores and matures sperm. The <b>sinus of the epididymis</b> is the pouch of tunica vaginalis between the body and the testis.</p>`};
+
+const DESC_TEXT = {
+  early: `<p>The testis forms on the back of the abdominal wall, behind the peritoneum, near the kidney. The <b>gubernaculum</b>, a band from its lower pole through the inguinal canal to the skin of the future scrotum, guides it down; a tube of peritoneum, the <b>processus (saccus) vaginalis</b>, pushes down the inguinal canal ahead of it.</p>`,
+  canal: `<p>The testis passes through the inguinal canal behind the processus vaginalis and reaches the scrotum by about the <b>7th–8th month</b> (StatPearls: by the 7th month; Gray: by the end of the 8th).</p>`,
+  birth: `<p>About birth the upper part of the processus vaginalis closes; its lower part stays round the testis as the <b>tunica vaginalis</b>. The gubernaculum's remnant ties the testis to the bottom of the scrotum (scrotal ligament). In the female the gubernaculum becomes the ovarian ligament and the round ligament of the uterus.</p>`,
+  open: `<p><b>If the processus stays open</b>: fluid can collect in the tunica vaginalis (<b>congenital hydrocele</b>, which transilluminates) or bowel can enter it (indirect inguinal hernia, see <a href="../thorax/wall-muscles.html">Muscles of the Trunk Wall</a>). <b>If the testis stops on the way</b> (<b>cryptorchidism</b>): about 3% of full-term and 30% of premature boys; most come down in the first 3 months, leaving about 1%; usually felt in the inguinal canal, sometimes in the abdomen; more often on the right (StatPearls, Wikipedia). Risks: lower fertility, a testicular tumour, torsion, hernia: orchiopexy in infancy if not down by about 6 months (StatPearls: at 6–18 months).</p>`};
+
+const PREP_TEXT = {
+  normal: `<p>The <b>prepuce</b> (foreskin) is a double fold of skin and lining over the glans, tied to its underside by the <b>frenulum</b>. At birth it is normally fused to the glans and cannot be retracted; it separates with age. Wikipedia: phimosis resolves in over 90% by age 7, although adhesions still prevent full retraction in over half at that age.</p>`,
+  phimosis: `<p><b>Phimosis</b>: the prepuce cannot be retracted over the glans. Physiological in young children; pathological when scarred (recurrent balanitis, balanitis xerotica obliterans / lichen sclerosus): risk of balanitis. Treatment: steroid cream and stretching, then preputioplasty or circumcision.</p>`,
+  para: `<p><b>Paraphimosis</b>: a tight prepuce retracted behind the glans cannot be brought back; it swells and constricts: an <b>emergency</b>, as the glans can lose its blood supply. Often after retraction for examination, cleaning or catheterisation (Wikipedia).</p>`,
+  circ: `<p><b>Circumcision</b>: surgical removal of the prepuce, uncovering the glans. Indications: pathological phimosis, recurrent balanitis, balanitis xerotica obliterans, recurrent urinary infections, and religious or cultural reasons. It reduces female-to-male HIV transmission by up to about 60% (WHO recommended it in high-prevalence areas, 2007; reaffirmed 2020). Under a penile ring block or dorsal nerve block (the dorsal nerves on the dorsum). Commonest complications: bleeding and infection early, meatal stenosis late (Wikipedia).</p>`};
+
+const ORG = [
+  {id: 'testis', name: 'Testis', topic: 'testis', rows: [
+    ['Position', 'In the scrotum on the spermatic cord, the two halves separated by the scrotal septum. Which hangs lower: Gray and StatPearls: usually the left (longer cord); Wikipedia: the right in 85%.'],
+    ['Features', 'Oval, about 4–5 cm long and 2–3 cm wide; the anterior border free and convex (Gray); epididymis on the posterior border, a little lateral (side determination).'],
+    ['Coverings', 'Skin, dartos, external spermatic fascia, cremaster, internal spermatic fascia, tunica vaginalis (section above).'],
+    ['Structure', 'Tunica vaginalis, tunica albuginea (mediastinum testis behind), tunica vasculosa; lobules of seminiferous tubules → rete testis → efferent ductules → epididymis.'],
+    ['Arteries', 'Testicular artery from the abdominal aorta; collaterals from the cremasteric (inferior epigastric) and the artery to the ductus (Gray: superior vesical; Wikipedia: inferior vesical).'],
+    ['Veins', 'Pampiniform plexus → testicular vein: right into the IVC, left into the left renal vein.'],
+    ['Nerves', 'Testicular (spermatic) sympathetic plexus along the artery; testicular pain travels up with it into the abdomen.'],
+    ['Lymph', 'Lumbar (lateral and pre-aortic) nodes, not the inguinal nodes.'],
+    ['Applied', 'Undescended testis, hydrocele, torsion, varicocele (Applied anatomy).']]},
+  {id: 'epid', name: 'Epididymis', topic: 'testis', rows: [
+    ['Position', 'Along the posterior border of the testis, a little lateral.'],
+    ['Parts', 'Head (upper pole; receives the efferent ductules), body, tail (lower pole; continues as the ductus deferens).'],
+    ['Structure', 'A single tightly coiled duct, about 6 m long uncoiled; stores and matures sperm.'],
+    ['Relations', 'Covered by the tunica vaginalis except along its posterior border; the sinus of the epididymis between its body and the testis. Gray: the appendix of the testis (hydatid of Morgagni) lies just below its head.'],
+    ['Applied', 'Epididymitis; the vasectomy cut is above it, in the cord.']]},
+  {id: 'penis', name: 'Penis', topic: 'penis', rows: [
+    ['Parts', 'Root (crura and bulb, in the superficial perineal pouch), body, glans.'],
+    ['Components', 'Two corpora cavernosa (dorsal, separated by the septum, each in its tunica albuginea) and the corpus spongiosum (ventral, with the spongy urethra; bulb behind, glans in front, external urethral opening at the tip); Buck\'s (deep) fascia round all three; dartos; thin loose skin folding over the glans as the prepuce, held by the frenulum. Suspensory and fundiform ligaments hold it to the symphysis.'],
+    ['Arteries', 'From the internal pudendal: deep arteries (corpora cavernosa; helicine arteries), dorsal arteries (glans, skin), artery to the bulb (corpus spongiosum).'],
+    ['Veins', 'Superficial dorsal vein (skin) → superficial external pudendal → great saphenous; deep dorsal vein (erectile bodies), deep to Buck\'s fascia between the dorsal arteries → prostatic plexus → internal iliac veins.'],
+    ['Nerves', 'Dorsal nerve of the penis (pudendal, S2–S4): skin and glans; autonomic nerves from the pelvic plexuses for erection.'],
+    ['Lymph', 'Skin and prepuce: superficial inguinal nodes (penile cancer spreads first here); glans and spongy urethra: partly deep inguinal and external iliac nodes (Gray).'],
+    ['Applied', 'Phimosis, paraphimosis, circumcision.']]},
+  {id: 'scrotum', name: 'Scrotum and spermatic cord', rows: [
+    ['Scrotum', 'Skin and dartos (smooth muscle that wrinkles the skin), divided by a septum, marked outside by the raphe, which runs on to the underside of the penis and back along the perineum to the anus.'],
+    ['Nerves (Gray)', 'Front: ilio-inguinal and genital branch of genitofemoral; back: perineal branches of the pudendal and the posterior femoral cutaneous nerve.'],
+    ['Lymph', 'Superficial inguinal nodes.'],
+    ['Spermatic cord', 'From the deep inguinal ring to the testis: ductus deferens and its artery, testicular artery, cremasteric artery, pampiniform plexus, lymphatics, testicular (sympathetic) nerves, genital branch of the genitofemoral (to the cremaster); in three coverings. Wikipedia: the ilio-inguinal nerve runs outside the cord, in the canal.']]}];
+
+const CLIN = [
+  ['Varicocele', 'Dilated pampiniform plexus, mostly left-sided: the left testicular vein enters the high-pressure left renal vein at a right angle (and the renal vein can be compressed between the SMA and aorta); failed valves let blood reflux. About 15% of men; a common correctable cause of male infertility; feels like a "bag of worms". Isolated right-sided: look for an abdominal mass (Wikipedia).', 'veins'],
+  ['Hydrocele', 'Fluid between the two layers of the tunica vaginalis; congenital when the processus vaginalis stays open. The swelling transilluminates.', null],
+  ['Testicular torsion', 'The spermatic cord twists and cuts off the blood supply: a urological emergency. Bell-clapper deformity (the testis not fixed to the scrotum, free inside the tunica vaginalis) predisposes. Viability falls after about 6 hours; surgery is the only treatment.', 'testis'],
+  ['Undescended testis', 'See the descent section: mostly in the inguinal canal; orchiopexy in infancy.', null],
+  ['Phimosis and circumcision', 'See the prepuce section above.', null],
+  ['Vasectomy', 'Permanent male sterilisation: under local anaesthesia, through small scrotal incisions or a no-scalpel puncture, each <b>vas</b> is picked up in the cord (a hard cord-like tube, Gray), divided, tied or sealed and the ends separated. Testosterone production continues (Wikipedia); contraception is needed until semen shows no sperm (Wikipedia). StatPearls: 99.7% success.', 'testis'],
+  ['Internal haemorrhoids', 'Enlarged anal cushions above the dentate line (left lateral, right anterior, right posterior: 3, 11, 7 o\'clock), fed by the terminal branches of the superior rectal artery: painless bright red bleeding; graded I–IV by prolapse (I bulge, II prolapse and reduce, III need pushing back, IV cannot be reduced, StatPearls). External haemorrhoids, below the line, hurt when thrombosed.', null],
+  ['Anal fistula and perianal abscess', 'From infected anal glands between the sphincters; see the ischio-anal section (toggles).', 'coronal'],
+  ['Anal fissure', 'Posterior midline split of the lower canal with internal sphincter spasm; see the ischio-anal section.', null],
+  ['Perineal tear and episiotomy', 'See the perineal body section above.', null],
+  ['Extravasation of urine', 'A ruptured <b>bulbar or spongy (anterior) urethra</b> with a torn Buck\'s fascia leaks urine and blood into the <b>superficial perineal pouch</b>, under Colles\' fascia, and on into the <b>scrotum, penis and anterior abdominal wall</b> under Scarpa\'s fascia, the layers being continuous (a 2021 case report; StatPearls). Gray: Colles\' fascia is fixed to the ischiopubic rami and tuberosities and Scarpa\'s fascia blends with the fascia lata just below the inguinal ligament, which keeps it out of the thigh. <b>Posterior (membranous)</b> injuries come with pelvic fractures, at the bulbomembranous junction, with a pelvic haematoma (a 2025 review).', null]];
+
+const DATA = {
+  lede: 'The perineum in 3D and in section: its boundaries and triangles, the perineal membrane and pouches, the perineal body, the ischio-anal fossa and the anal canal; then the male external genitalia: testis and epididymis (coverings, structure, side, supply, descent), penis, prepuce, and the applied list. Pick a topic to light its parts; tap a part to name it. The pelvic organs above: <a href="pelvis.html">Pelvic Viscera</a>.',
+  note3d: 'The model is male and approximate (BodyParts3D and Z-Anatomy). Skin, scrotum, fat, fasciae, the perineal membrane and body, bulbospongiosus, ischiocavernosus, the transverse perineal muscles, internal anal sphincter, tunica vaginalis and bulbourethral glands are not in it: they are drawn in the schematics. Vessels and nerves are tubes along curves; left pelvic parts are mirrored from the right.',
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (the perineal membrane and deep perineal pouch, the urethral rhabdosphincter and perineal membrane, obstetric anal sphincter injury, the pathophysiology of internal haemorrhoids, anal fissure history, perianal ultrasound of fistulas and abscesses, phimosis in adults, male circumcision, the penile fibro-vascular assembly, inguinal node metastasis in penile cancer, post-vasectomy pain).",
+  models: 'Models used: bones, testes, epididymides, penis, urethra, rectum and external anal sphincter from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); pelvic floor and wall muscles, ligaments, ductus deferens, vessels, nerves and lymph nodes from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the BodyParts3D frame and simplified; left pelvic parts mirrored from the right. Surface points picked on the model, approximate. Schematics after Gray (1918) and the sources above, not to scale.'
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let kind = {}, names = {};
+const COL = {bone: '--bone', lig: '--lig', wall: '--musc', floor: '--musc', artery: '--artery', vein: '--vein', nerve: '--nerve', node: '--lymph', urinary: '--kidney',
+  large: '--colon', prostate: '--prost', sv: '--sv', duct: '--duct', testis: '--gonad', erect: '--erect', spong: '--spong'};
+const WHAT = {bone: 'bone', lig: 'ligament', wall: 'muscle of the pelvic wall', floor: 'pelvic floor or sphincter muscle', artery: 'artery', vein: 'vein', nerve: 'nerve', node: 'lymph nodes',
+  urinary: 'urinary tract', large: 'large intestine', prostate: 'prostate', sv: 'seminal vesicle', duct: 'sperm duct', testis: 'testis', erect: 'erectile tissue', spong: 'erectile tissue round the urethra'};
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+function anchor(key, near, n) {   // a vertex of the part near a point, kept by the clip, on the side facing the camera
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos, d2 = [], clip = v.clip;
+  for (let i = 0; i < pos.length; i += 3) {
+    if (clip && pos[i] * clip[0] + pos[i + 1] * clip[1] + pos[i + 2] * clip[2] > clip[3]) continue;
+    d2.push([(pos[i] - near[0]) ** 2 + (pos[i + 1] - near[1]) ** 2 + (pos[i + 2] - near[2]) ** 2, i]);
+  }
+  if (!d2.length) return null;
+  d2.sort((a, b) => a[0] - b[0]);
+  const r2 = Math.max(9, d2[0][0] * 1.5), cand = d2.filter((x, j) => j < 6 || x[0] <= r2);
+  let best = cand[0][1], bs = -1e18;
+  for (const [, i] of cand) { const s = pos[i] * n[0] + pos[i + 1] * n[1] + pos[i + 2] * n[2]; if (s > bs) { bs = s; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+function showTopic(id) {
+  const t = TOPICS.find(t => t.id === id); if (!t) return;
+  const has = k => v.parts.has(k);
+  v.setClip(t.clip ? t.clip[0] : null, t.clip ? t.clip[1] : 0);
+  const lit = (t.lit || []).filter(has), on = new Set([...lit, ...(t.show || BONES)]);
+  for (const k in kind) { v.setVisible(k, on.has(k)); v.setColour(k, css(COL[kind[k]])); }
+  v.setFocus(lit);
+  v.ghostAlpha = 0.16;
+  const fk = (t.fit || lit).filter(has);
+  v.fit(fk.length ? fk : null);
+  const view = t.view || FRONT;
+  v.face(view, {zoom: (t.zoom || 1) * Math.min(1, (v.w / v.h) / 0.95)});   // narrower canvas (phone): zoom out so wide parts fit
+  v.setLines(t.lines || []);
+  const marks = [];
+  for (const [k, label, near] of t.labels || []) {
+    const p = k ? anchor(k, near, view) : near;
+    if (!p || (k && v.parts.get(k).visible === false)) continue;
+    marks.push({p, label, color: css(!k || kind[k] === 'bone' ? '--ink' : COL[kind[k]]), always: true, big: !k});
+  }
+  v.setMarkers(marks);
+  $('topic-text').innerHTML = t.text || '';
+  $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === t.id));
+}
+const toView = () => $('v').scrollIntoView({behavior: 'smooth', block: 'start'});
+function buildTopics() {
+  const box = $('topics');
+  for (const g of [...new Set(TOPICS.map(t => t.grp))]) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !kind[hit.key]) { $('pick').textContent = ''; return; }
+  $('pick').textContent = `${names[hit.key]}: ${WHAT[kind[hit.key]]}`;
+};
+async function loadModel() {
+  const base = '../models/pelv/';
+  const meta = await (await fetch(base + 'kinds.json')).json(), MR = meta.mirror;
+  const man = await v.load(base + 'pelv.json', null, {
+    extra: (m, items) => items.filter(it => meta.parts[it.key] && meta.parts[it.key].mirror)
+      .map(it => ({key: LEFT(it.key), m: v.mirrored(it.m, MR.m, MR.t), info: {name: it.info.name}}))});
+  for (const p of man.parts) {
+    const d = meta.parts[p.key]; if (!d) continue;
+    for (const left of d.mirror ? [false, true] : [false]) {
+      const key = left ? LEFT(p.key) : p.key;
+      kind[key] = d.kind;
+      names[key] = d.mirror ? p.name.replace(/^Right /, '').replace(/ \(right\)$/i, '') + (left ? ' (left)' : ' (right)') : p.name;
+      v.setColour(key, css(COL[d.kind]));
+    }
+  }
+  return man;
+}
+
+/* ===================== schematics ===================== */
+const T = (x, y, s, cls = '', anchor = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+function drawPouch(sex) {   // coronal section through the urogenital triangle, seen from the front: body's right on the viewer's left
+  const S = $('pouch-svg'); let h = ''; const cx = 270;
+  // ischiopubic rami
+  h += `<path class="bone" d="M40 150 L96 190 L92 250 L36 214 Z"/><path class="bone" d="M500 150 L444 190 L448 250 L504 214 Z"/>` + T(20, 266, 'Ischiopubic', 's') + T(20, 279, 'ramus', 's');
+  // levator ani above (pelvic diaphragm), sloping
+  h += `<path class="mus" d="M96 120 Q180 150 ${cx - 30} 176 L${cx - 30} 186 Q180 162 96 132 Z"/><path class="mus" d="M444 120 Q360 150 ${cx + 30} 176 L${cx + 30} 186 Q360 162 444 132 Z"/>` + T(30, 92, 'Levator ani', 's') + T(30, 105, '(pelvic diaphragm)', 's');
+  // organ above: prostate / bladder base or vagina
+  if (sex === 'm') h += `<ellipse class="o" fill="var(--prost)" cx="${cx}" cy="120" rx="52" ry="40"/>` + T(cx + 64, 76, 'Prostate', 's');
+  else h += `<path class="o" fill="var(--kidney)" d="M${cx - 46} 70 Q${cx - 22} 50 ${cx} 70 L${cx} 130 L${cx - 46} 130 Z"/>` + T(cx - 24, 62, 'Bladder', 's', 'middle');
+  // deep pouch band between the levator and the perineal membrane
+  h += `<path d="M96 196 Q${cx} 214 444 196 L444 246 Q${cx} 262 96 246 Z" fill="var(--soft)" fill-opacity=".55"/>`;
+  h += `<rect x="${cx - 70}" y="208" width="140" height="34" rx="6" class="mus"/>` + T(cx + 76, 222, sex === 'm' ? 'External urethral' : 'Urethral sphincter', 's') + T(cx + 76, 235, sex === 'm' ? 'sphincter' : 'complex', 's');
+  h += T(110, 232, 'Deep pouch', 'h');
+  // perineal membrane
+  h += `<path class="fas" d="M92 250 Q${cx} 268 448 250"/>` + T(444, 252, 'Perineal membrane', 's', 'end').replace('y="252"', 'y="250"');
+  // urethra (and vagina) through
+  if (sex === 'm') {
+    h += `<path d="M${cx} 160 L${cx} 300" stroke="var(--kidney)" stroke-width="8" stroke-linecap="round"/>` + T(cx + 10, 176, 'Urethra', 's');
+    h += `<circle cx="${cx - 26}" cy="226" r="8" fill="var(--gland)" stroke="var(--surface)"/><circle cx="${cx + 26}" cy="226" r="8" fill="var(--gland)" stroke="var(--surface)"/>` + T(cx - 40, 202, 'Bulbourethral gland', 's', 'end').replace('y="202"', 'y="200"') + lead(cx - 42, 204, cx - 30, 220);
+  } else {
+    h += `<path d="M${cx - 14} 130 L${cx - 14} 300" stroke="var(--kidney)" stroke-width="7" stroke-linecap="round"/>` + T(cx - 100, 176, 'Urethra', 's') + lead(cx - 56, 172, cx - 18, 180) + T(cx - 24, 189, '(in front of the vagina)', 's', 'end');
+    h += `<path class="o" fill="var(--vag)" d="M${cx + 4} 90 L${cx + 32} 90 L${cx + 30} 310 L${cx + 6} 310 Z"/>` + T(cx + 18, 80, 'Vagina', 's', 'middle');
+  }
+  // superficial pouch: crura with ischiocavernosus on the rami, bulb(s) with bulbospongiosus
+  if (sex === 'm') {
+    for (const s of [-1, 1]) { const x = cx + s * 150; h += `<ellipse class="o" fill="var(--erect)" cx="${x}" cy="286" rx="22" ry="16"/><path class="mus" d="M${x - 30} 284 Q${x} 312 ${x + 30} 284 Q${x + 30} 304 ${x} 310 Q${x - 30} 304 ${x - 30} 284 Z"/>`; }
+    h += `<ellipse class="o" fill="var(--spong)" cx="${cx}" cy="300" rx="34" ry="22"/><path class="mus" d="M${cx - 42} 292 Q${cx} 344 ${cx + 42} 292 Q${cx + 44} 322 ${cx} 330 Q${cx - 44} 322 ${cx - 42} 292 Z"/>`;
+    h += T(cx + 150, 336, 'Crus + ischiocavernosus', 's', 'middle') + T(cx, 352, 'Bulb + bulbospongiosus', 's', 'middle').replace('y="352"', 'y="344"');
+  } else {
+    for (const s of [-1, 1]) { const x = cx + s * 150; h += `<ellipse class="o" fill="var(--erect)" cx="${x}" cy="286" rx="18" ry="13"/><path class="mus" d="M${x - 26} 284 Q${x} 308 ${x + 26} 284 Q${x + 26} 300 ${x} 306 Q${x - 26} 300 ${x - 26} 284 Z"/>`; }
+    for (const s of [-1, 1]) { const x = cx + 20 + s * 62; h += `<ellipse class="o" fill="var(--spong)" cx="${x}" cy="292" rx="22" ry="16"/><path class="mus" d="M${x - 28} 286 Q${x} 322 ${x + 28} 286 Q${x + 28} 308 ${x} 314 Q${x - 28} 308 ${x - 28} 286 Z"/>`; }
+    h += `<circle cx="${cx + 20 + 92}" cy="278" r="8" fill="var(--gland)" stroke="var(--surface)"/>` + T(cx + 112, 372, 'Greater vestibular gland', 's', 'middle') + lead(cx + 112, 362, cx + 112, 286);
+    h += T(cx + 150, 336, 'Crus of clitoris + ischiocavernosus', 's', 'middle').replace(`x="${cx + 150}"`, `x="${cx + 120}"`).replace('y="336"', 'y="340"') + T(cx - 60, 352, 'Bulb of vestibule + bulbospongiosus', 's', 'middle');
+  }
+  h += T(110, 300, 'Superficial pouch', 'h').replace('x="110"', 'x="120"').replace('y="300"', 'y="330"');
+  // Colles' fascia, fat, skin
+  h += `<path class="fas" d="M92 256 Q60 330 120 360 Q${cx} 392 420 360 Q480 330 448 256" style="stroke-dasharray:1 0"/>` + T(474, 398, "Colles' fascia", 's', 'end');
+  h += `<path d="M70 380 Q${cx} 418 470 380" stroke="var(--skin)" stroke-width="8" fill="none"/>` + T(cx, 412, 'Skin', 's', 'middle');
+  h += T(16, 16, "Body's right", 'h') + T(524, 16, "Body's left", 'h', 'end');
+  S.innerHTML = h;
+}
+function drawBody(mode) {   // female perineum from below, lithotomy: front at the top, woman's right on the viewer's left
+  const S = $('body-svg'); let h = ''; const cx = 260;
+  h += `<path d="M60 40 Q${cx} 10 460 40 L470 400 Q${cx} 430 50 400 Z" fill="var(--skin)" fill-opacity=".45" stroke="var(--line)"/>`;
+  h += `<path class="bone" d="M${cx - 50} 26 Q${cx} 14 ${cx + 50} 26 L${cx + 46} 40 Q${cx} 30 ${cx - 46} 40 Z"/>` + T(cx, 56, 'Pubic symphysis', 's', 'middle');
+  h += `<circle class="bone" cx="110" cy="250" r="24"/><circle class="bone" cx="410" cy="250" r="24"/>` + T(110, 290, 'Ischial tuberosity', 's', 'middle');
+  // vulva: labia, vestibule, urethral and vaginal openings
+  h += `<ellipse cx="${cx}" cy="150" rx="46" ry="86" fill="var(--skin)" stroke="var(--muted)"/>`;
+  h += `<ellipse cx="${cx}" cy="110" rx="5" ry="4" fill="var(--kidney)"/>`;
+  h += `<ellipse cx="${cx}" cy="170" rx="20" ry="34" fill="var(--vag)" stroke="var(--muted)"/>`;
+  // anus with the external sphincter
+  h += `<circle cx="${cx}" cy="330" r="30" class="mus"/><circle cx="${cx}" cy="330" r="12" fill="var(--colon)" stroke="var(--muted)"/>` + T(cx + 38, 352, 'Anus, external sphincter', 's');
+  // perineal body and the muscles meeting at it
+  const pb = [cx, 248];
+  h += `<path class="mus" d="M${cx - 12} 206 L${cx - 130} 248 L${cx - 126} 258 L${cx - 10} 254 Z" opacity=".9"/><path class="mus" d="M${cx + 12} 206 L${cx + 130} 248 L${cx + 126} 258 L${cx + 10} 254 Z" opacity=".9"/>`;
+  h += `<path class="mus" d="M${cx - 30} 150 Q${cx - 44} 210 ${cx - 12} 240 L${cx - 4} 236 Q${cx - 30} 206 ${cx - 22} 152 Z"/><path class="mus" d="M${cx + 30} 150 Q${cx + 44} 210 ${cx + 12} 240 L${cx + 4} 236 Q${cx + 30} 206 ${cx + 22} 152 Z"/>`;
+  h += `<ellipse cx="${pb[0]}" cy="${pb[1]}" rx="22" ry="20" fill="var(--musc)" stroke="var(--ink)" stroke-width="1.5"/>`;
+  h += mode === 'epis' ? T(cx + 100, 214, 'Perineal body', '') + lead(cx + 98, 216, cx + 20, 242) : T(cx - 180, 214, 'Perineal body', '') + lead(cx - 96, 214, cx - 22, 244);
+  h += T(cx + 12, 106, 'Urethral opening', 's').replace('class="s"', 'class="s" style="paint-order:stroke;stroke:var(--surface);stroke-width:3px"') + T(cx + 50, 160, 'Vaginal opening', 's').replace('class="s"', 'class="s" style="paint-order:stroke;stroke:var(--surface);stroke-width:3px"');
+  if (mode === 'body') {
+    h += T(cx + 132, 226, 'Superficial transverse', 's', 'start').replace(`x="${cx + 132}"`, `x="${cx + 82}"`) + T(cx + 82, 239, 'perineal muscle', 's');
+    h += T(cx + 40, 196, 'Bulbospongiosus', 's').replace(`x="${cx + 40}"`, `x="${cx + 44}"`).replace('y="196"', 'y="200"');
+    h += T(cx + 30, 296, 'External anal sphincter', 's').replace('y="296"', 'y="290"');
+  }
+  if (mode === 'epis') {
+    h += `<path class="clin" d="M${cx} 206 L${cx} 268" stroke-dasharray="7 4"/>` + T(cx + 8, 280, 'Median', 's');
+    // mediolateral: from the fourchette angled about 60 degrees from the midline, to the woman's right (viewer's left)
+    h += `<path class="clin" d="M${cx - 4} 206 L${cx - 4 - 62 * Math.sin(Math.PI / 3)} ${206 + 62 * Math.cos(Math.PI / 3)}"/>` + T(cx - 140, 262, 'Mediolateral', 's').replace('y="262"', 'y="256"');
+    h += `<path d="M${cx} 230 A24 24 0 0 1 ${cx - 21} 218" fill="none" stroke="var(--muted)"/>` + T(cx - 48, 212, '~60°', 's', 'end');
+  }
+  if (mode === 'tear') {
+    const t = [['1st', 'skin, vaginal lining', 0.3], ['2nd', '+ perineal muscles (body)', 0.5], ['3rd', '+ anal sphincter (3a <50% EAS, 3b >50%, 3c IAS)', 0.75], ['4th', '+ anorectal lining', 1]];
+    h += `<path d="M${cx} 206 L${cx} 248" stroke="var(--clin)" stroke-width="10" stroke-opacity=".35"/><path d="M${cx} 248 L${cx} 300" stroke="var(--clin)" stroke-width="10" stroke-opacity=".6"/><path d="M${cx} 300 L${cx} 330" stroke="var(--clin)" stroke-width="10" stroke-opacity=".9"/>`;
+    t.forEach(([d, s], i) => { h += T(300, 214 + i * 14 + 160, `${d}: ${s}`, 's').replace('x="300"', 'x="40"'); });
+    h += T(cx + 14, 228, '1st–2nd', 's') + T(cx + 14, 306, '3rd–4th', 's');
+  }
+  h += T(16, 432, "Woman's right", 'h') + T(504, 432, "Woman's left", 'h', 'end') + T(cx, 12, 'Front', 'h', 'middle');
+  S.innerHTML = h;
+  $('body-text').innerHTML = BODY_TEXT[mode];
+}
+function drawIsch(mode) {   // coronal section through the anal canal, seen from the front: body's right on the viewer's left
+  const S = $('isch-svg'); let h = ''; const cx = 270;
+  // obturator internus on the side walls with hip bone
+  h += `<path class="bone" d="M30 60 L70 60 L84 320 L44 330 Z"/><path class="bone" d="M510 60 L470 60 L456 320 L496 330 Z"/>` + T(20, 350, 'Ischium', 's').replace('y="350"', 'y="348"');
+  h += `<path class="mus" d="M70 70 Q96 200 86 316 L104 316 Q114 200 92 70 Z"/><path class="mus" d="M470 70 Q444 200 454 316 L436 316 Q426 200 448 70 Z"/>`;
+  h += T(100, 100, 'Obturator internus', 's');
+  // fossa fat
+  const fossaL = `M96 150 Q170 210 ${cx - 50} 300 L${cx - 54} 380 L96 380 Q104 260 96 150 Z`, fossaR = `M444 150 Q370 210 ${cx + 50} 300 L${cx + 54} 380 L444 380 Q436 260 444 150 Z`;
+  h += `<path d="${fossaL}" fill="var(--fat)" stroke="none"/><path d="${fossaR}" fill="var(--fat)" stroke="none"/>`;
+  // levator ani sloping from the side wall to the canal
+  h += `<path class="mus" d="M92 136 Q180 200 ${cx - 46} 290 L${cx - 34} 284 Q186 190 100 124 Z"/><path class="mus" d="M448 136 Q360 200 ${cx + 46} 290 L${cx + 34} 284 Q354 190 440 124 Z"/>` + T(160, 150, 'Levator ani', 's').replace('x="160"', 'x="150"').replace('y="150"', 'y="162"');
+  // rectum, anal canal, internal and external sphincters
+  h += `<path class="o" fill="var(--colon)" d="M${cx - 60} 20 L${cx + 60} 20 L${cx + 50} 260 L${cx + 26} 380 L${cx - 26} 380 L${cx - 50} 260 Z"/>` + T(cx, 80, 'Rectum', '', 'middle');
+  h += `<path d="M${cx - 28} 290 L${cx - 24} 380 M${cx + 28} 290 L${cx + 24} 380" stroke="var(--musc)" stroke-width="9" opacity=".9"/>`;
+  h += `<path class="mus" d="M${cx - 54} 296 L${cx - 41} 296 L${cx - 39} 396 L${cx - 56} 396 Z"/><path class="mus" d="M${cx + 54} 296 L${cx + 41} 296 L${cx + 39} 396 L${cx + 56} 396 Z"/>`;
+  h += `<path d="M${cx - 22} 330 L${cx + 22} 330" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="3 3"/>`;
+  // pudendal canal on the lateral wall
+  for (const x of [108, 432]) h += `<circle class="artf" cx="${x}" cy="270" r="5"/><circle class="vnf" cx="${x + (x < cx ? 10 : -10)}" cy="278" r="5"/><circle class="nvf" cx="${x + (x < cx ? 4 : -4)}" cy="288" r="4"/>`;
+  h += `<path d="M98 258 Q120 280 104 300" fill="none" stroke="var(--fascia)" stroke-width="2.5"/>`;
+  h += `<path d="M${cx - 380 + 520} 420" />`;
+  h += `<path d="M40 410 Q${cx} 440 500 410" stroke="var(--skin)" stroke-width="8" fill="none"/>`;
+  if (mode === 'bounds') {
+    h += T(150, 330, 'Ischio-anal fossa', '', 'middle').replace('x="150"', 'x="160"');
+    h += T(440, 236, 'Pudendal canal', 's', 'end').replace('x="440"', 'x="424"').replace('y="236"', 'y="246"');
+    h += T(cx + 56, 330, 'Pectinate line', 's').replace(`x="${cx + 56}"`, `x="${cx + 60}"`) + lead(cx + 58, 326, cx + 22, 330);
+    h += T(cx + 60, 372, 'Ext. sphincter', 's') + T(cx - 120, 410, 'Int. sphincter', 's', 'end').replace(`x="${cx - 120}"`, `x="${cx - 60}"`).replace('y="410"', 'y="300"');
+  }
+  if (mode === 'abscess') {
+    h += `<ellipse class="o" style="fill:var(--pus)" cx="${cx - 36}" cy="340" rx="3.5" ry="20"/>` + T(cx - 60, 286, 'Intersphincteric', 's', 'end');
+    h += `<ellipse class="o" style="fill:var(--pus)" cx="${cx - 40}" cy="396" rx="18" ry="8"/>` + T(cx - 70, 404, 'Perianal', 's', 'end');
+    h += `<ellipse class="o" style="fill:var(--pus)" cx="170" cy="320" rx="34" ry="22"/>` + T(170, 360, 'Ischio-anal', 's', 'middle');
+    h += `<ellipse class="o" style="fill:var(--pus)" cx="${cx + 80}" cy="200" rx="26" ry="14"/>` + T(cx + 80, 182, 'Supralevator', 's', 'middle');
+    h += `<path class="clin" d="M${cx - 38} 330 Q${cx - 80} 330 196 320" stroke-dasharray="4 4"/><path class="clin" d="M${cx - 36} 362 L${cx - 40} 390" stroke-dasharray="4 4"/><path class="clin" d="M${cx + 36} 300 Q${cx + 50} 240 ${cx + 70} 212" stroke-dasharray="4 4"/>`;
+  }
+  if (mode === 'fistula') {
+    h += `<path class="clin" d="M${cx - 26} 340 Q${cx - 36} 370 ${cx - 36} 404"/>` + T(cx - 50, 420, 'Intersphincteric', 's', 'end').replace('y="420"', 'y="430"');
+    h += `<path class="clin" d="M${cx - 26} 330 Q${cx - 70} 320 150 404"/>` + T(150, 352, 'Trans-sphincteric', 's', 'middle');
+    h += `<path class="clin" d="M${cx + 26} 334 Q${cx + 40} 300 ${cx + 46} 270 Q${cx + 80} 250 ${cx + 110} 300 Q${cx + 120} 360 ${cx + 110} 404"/>` + T(cx + 120, 250, 'Suprasphincteric', 's', 'start').replace(`x="${cx + 120}"`, `x="${cx + 96}"`);
+    h += `<path class="clin" d="M${cx + 50} 160 Q${cx + 120} 200 ${cx + 150} 300 L${cx + 160} 404"/>` + T(cx + 170, 156, 'Extrasphincteric', 's', 'start').replace(`x="${cx + 170}"`, `x="${cx + 60}"`).replace('y="156"', 'y="140"');
+  }
+  if (mode === 'fissure') {
+    h += T(cx, 432, 'Fissure: lower canal, dentate line to anal margin (site on the clock face)', 's', 'middle');
+    h += T(cx + 60, 372, 'Ext. sphincter', 's') + T(cx - 62, 410, 'Int. sphincter (spasm)', 's', 'end') + lead(cx - 60, 404, cx - 30, 380);
+  }
+  h += T(16, 16, "Body's right", 'h') + T(524, 16, "Body's left", 'h', 'end');
+  S.innerHTML = h;
+  $('isch-text').innerHTML = ISCH_TEXT[mode];
+}
+function drawClock() {
+  const S = $('clock-svg'); let h = ''; const cx = 180, cy = 150, r = 100;
+  h += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--bg)" stroke="var(--muted)"/><circle cx="${cx}" cy="${cy}" r="22" fill="var(--colon)" stroke="var(--muted)"/>`;
+  for (let k = 1; k <= 12; k++) { const a = k / 12 * 2 * Math.PI; h += T(cx + (r + 14) * Math.sin(a), cy - (r + 14) * Math.cos(a) + 4, k, 's', 'middle'); }
+  for (const [k, s] of [[3, 'Left lateral'], [7, 'Right posterior'], [11, 'Right anterior']]) {
+    const a = k / 12 * 2 * Math.PI, x = cx + 58 * Math.sin(a), y = cy - 58 * Math.cos(a);
+    h += `<circle cx="${x}" cy="${y}" r="18" fill="var(--vein)" fill-opacity=".75" stroke="var(--surface)"/>` + T(x + (k === 3 ? 22 : k === 7 ? -24 : -22), y + (k === 7 ? 30 : k === 11 ? -24 : -22), s, 's', k === 3 ? 'start' : 'end');
+  }
+  h += `<path class="clin" d="M${cx} ${cy + 26} L${cx} ${cy + 46}"/>` + T(cx + 8, cy + 64, 'Fissure', 's');
+  h += T(cx, 20, 'Anterior (12)', 'h', 'middle') + T(cx, 290, 'Posterior (6)', 'h', 'middle');
+  S.innerHTML = h;
+}
+function drawCov(mode) {
+  const S = $('cov-svg'); let h = '';
+  if (mode === 'cov') {   // transverse section of the right half of the scrotum, front at the top
+    const cx = 170, cy = 200;
+    const layers = [[150, '--skin', 'Skin', 'Skin'], [142, '--musc', 'Dartos', "Superficial fascia (Colles', Scarpa's)"], [132, '--fascia', 'External spermatic fascia', 'External oblique aponeurosis'],
+      [122, '--musc', 'Cremaster + fascia', 'Internal oblique'], [112, '--fascia', 'Internal spermatic fascia', 'Transversalis fascia'], [100, '--perit', 'Tunica vaginalis (parietal)', 'Peritoneum (processus vaginalis)']];
+    layers.forEach(([r, c], i) => { h += `<ellipse cx="${cx}" cy="${cy}" rx="${r * 0.82}" ry="${r}" fill="var(${c})" fill-opacity="${i === 1 || i === 3 ? .55 : .9}" stroke="var(--muted)" stroke-width=".6"/>`; });
+    h += `<ellipse cx="${cx}" cy="${cy}" rx="${88 * 0.82}" ry="88" fill="var(--fluid)" stroke="var(--perit)" stroke-width="3"/>`;
+    h += `<ellipse cx="${cx}" cy="${cy - 6}" rx="52" ry="68" fill="var(--gonad)" stroke="var(--fascia)" stroke-width="4"/>` + T(cx, cy - 4, 'Testis', '', 'middle');
+    h += `<path d="M${cx - 48} ${cy + 50} Q${cx - 60} ${cy + 74} ${cx - 30} ${cy + 82} Q${cx - 10} ${cy + 80} ${cx - 14} ${cy + 60}" fill="var(--duct)" stroke="var(--surface)"/>` + T(cx - 70, cy + 112, 'Epididymis (behind)', 's', 'middle');
+    // the tunica vaginalis does not cover the posterior border: the cavity is closed off where the epididymis and vessels attach
+    h += `<path d="M${cx - 30} ${cy + 58} L${cx - 60} ${cy + 64} L${cx - 54} ${cy + 86} L${cx - 22} ${cy + 66} Z" fill="var(--duct)" stroke="none"/>` + T(cx + 4, cy + 128, 'No cavity behind: epididymis and vessels attach', 's', 'middle').replace('y="' + (cy + 128) + '"', 'y="' + (cy + 140) + '"');
+    layers.forEach(([r, c, n, src], i) => { const y = 36 + i * 30; h += T(330, y, n, 's') + T(330, y + 13, '← ' + src, 's').replace('class="s"', 'class="s" style="font-style:italic"') + lead(326, y - 4, cx + r * 0.82 * 0.7, cy - r * 0.7); });
+    h += T(330, 36 + 6 * 30, 'Visceral layer on the testis', 's') + T(330, 36 + 6 * 30 + 13, 'Tunica albuginea under it', 's');
+    h += T(cx, 20, 'Front', 'h', 'middle') + T(cx, 392, 'Back', 'h', 'middle');
+  } else {   // vertical section of the right testis seen from the lateral side: front on the viewer's left
+    const cx = 220, cy = 200;
+    h += `<ellipse cx="${cx}" cy="${cy}" rx="110" ry="150" fill="var(--gonad)" stroke="var(--fascia)" stroke-width="7"/>` + T(cx - 90, 40, 'Tunica albuginea', 's', 'end').replace(`x="${cx - 90}"`, `x="${cx - 40}"`);
+    h += `<path d="M${cx + 70} ${cy - 90} Q${cx + 96} ${cy} ${cx + 70} ${cy + 90}" stroke="var(--fascia)" stroke-width="16" fill="none" stroke-linecap="round"/>` + T(cx + 76, cy + 130, 'Mediastinum', 's', 'middle');
+    for (let k = -4; k <= 4; k++) { const a = k * 0.32; h += `<path d="M${cx + 72} ${cy + k * 18} L${cx + 72 - 170 * Math.cos(a)} ${cy + 140 * Math.sin(a)}" stroke="var(--fascia)" stroke-width="2"/>`; }
+    for (let k = -3; k <= 3; k++) { const a = (k + 0.5) * 0.32, x = cx + 72 - 110 * Math.cos(a), y = cy + 90 * Math.sin(a); h += `<path d="M${x - 14} ${y - 6} q6 -10 12 0 t12 0 t12 0" stroke="var(--duct)" stroke-width="2" fill="none"/>`; }
+    h += T(cx - 70, cy - 20, 'Seminiferous', 's', 'middle') + T(cx - 70, cy - 7, 'tubules (lobules)', 's', 'middle');
+    h += `<path d="M${cx + 66} ${cy - 60} L${cx + 84} ${cy - 60} M${cx + 66} ${cy - 40} L${cx + 84} ${cy - 40}" stroke="var(--duct)" stroke-width="3"/>` + T(cx + 110, cy - 64, 'Rete testis', 's');
+    h += `<path d="M${cx + 76} ${cy - 120} Q${cx + 120} ${cy - 150} ${cx + 150} ${cy - 130}" stroke="var(--duct)" stroke-width="3" fill="none"/>` + T(cx + 160, cy - 150, 'Efferent ductules', 's');
+    h += `<path d="M${cx + 120} ${cy - 150} Q${cx + 190} ${cy - 130} ${cx + 170} ${cy} Q${cx + 160} ${cy + 120} ${cx + 120} ${cy + 150} Q${cx + 160} ${cy + 140} ${cx + 180} ${cy + 90} L${cx + 190} ${cy - 160}" stroke="var(--duct)" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>`;
+    h += T(cx + 220, cy - 110, 'Head', 's') + T(cx + 196, cy + 10, 'Body', 's') + T(cx + 140, cy + 182, 'Tail → ductus deferens', 's');
+    h += T(30, 392, 'Front', 'h') + T(510, 392, 'Back', 'h', 'end');
+  }
+  S.innerHTML = h;
+  $('cov-text').innerHTML = COV_TEXT[mode];
+}
+function drawDesc(mode) {   // side view from the right: front on the viewer's right
+  const S = $('desc-svg'); let h = '';
+  h += `<path d="M60 30 L60 250" stroke="var(--bone)" stroke-width="16"/>` + T(30, 270, 'Spine', 's');
+  h += `<path d="M420 30 Q440 160 400 230 L380 250" stroke="var(--musc)" stroke-width="10" fill="none" stroke-linecap="round"/>` + T(410, 22, 'Abdominal wall', 's', 'end');
+  h += `<path d="M380 250 L330 268" stroke="var(--soft)" stroke-width="18" stroke-linecap="round"/>` + T(300, 296, 'Inguinal canal', 's', 'end').replace('y="296"', 'y="304"') + lead(302, 300, 346, 268);
+  h += `<path d="M330 268 Q312 300 330 340 Q372 352 380 316 Q376 286 350 274 Z" fill="var(--skin)" stroke="var(--muted)"/>` + T(392, 340, 'Scrotum', 's');
+  // parietal peritoneum lining the posterior wall (in front of the testis, which is retroperitoneal), the floor and the front wall
+  h += `<path d="M140 40 L140 226 Q142 244 166 244 L384 232 L404 222 Q426 150 408 40" fill="none" stroke="var(--perit)" stroke-width="3"/>` + T(146, 56, 'Peritoneum', 's');
+  const pos = {early: [110, 110], canal: [330, 262], birth: [348, 310], open: [348, 310]}[mode];
+  // gubernaculum from the testis to the scrotal skin
+  h += `<path d="M${pos[0]} ${pos[1] + 14} Q${mode === 'early' ? 250 : (pos[0] + 356) / 2} ${mode === 'early' ? 250 : Math.max(pos[1], 262)} 356 262 L350 336" stroke="var(--lig)" stroke-width="3" fill="none" stroke-dasharray="${mode === 'early' ? '' : '4 4'}"/>`;
+  // processus vaginalis
+  const pv = mode === 'early' ? 'M392 230 Q350 270 346 300' : mode === 'birth' ? 'M346 296 Q360 286 364 300 Q366 322 348 326 Q332 320 334 304 Z' : 'M392 228 Q350 262 336 290 Q330 322 350 328 Q370 322 366 300 Q368 280 392 238';
+  h += `<path d="${pv}" fill="var(--perit)" fill-opacity="${mode === 'early' ? 0 : .5}" stroke="var(--perit)" stroke-width="3"/>`;
+  if (mode === 'open') h += `<path d="M352 296 Q358 312 350 320" stroke="var(--fluid)" stroke-width="8" fill="none"/>` + T(160, 220, 'Patent processus: hydrocele or hernia', 's', 'middle').replace('x="160"', 'x="200"');
+  if (mode === 'birth') h += `<path d="M374 248 L388 236" stroke="var(--ink)" stroke-width="3"/>` + T(250, 222, 'Upper processus closed', 's', 'middle') + lead(300, 226, 378, 244);
+  h += `<ellipse cx="${pos[0]}" cy="${pos[1]}" rx="14" ry="20" fill="var(--gonad)" stroke="var(--muted)"/>` + T(pos[0] - 20, pos[1] - 26, 'Testis', 's', 'middle');
+  h += mode === 'early' ? T(226, 206, 'Gubernaculum', 's', 'middle') : T(300, 350, 'Gubernaculum (remnant)', 's', 'end') + lead(302, 346, 350, 334);
+  h += T(392, 210, 'Processus vaginalis', 's', 'end').replace('x="392"', 'x="430"').replace('y="210"', 'y="214"');
+  h += T(20, 352, 'Back', 'h') + T(500, 352, 'Front', 'h', 'end');
+  S.innerHTML = h;
+  $('desc-text').innerHTML = DESC_TEXT[mode];
+}
+function drawXS() {   // cross-section of the body of the penis, dorsum at the top
+  const S = $('xs-svg'); let h = ''; const cx = 220, cy = 160;
+  h += `<ellipse cx="${cx}" cy="${cy}" rx="150" ry="132" fill="var(--skin)" stroke="var(--muted)"/>` + T(cx + 160, 40, 'Skin', 's', 'end').replace(`x="${cx + 160}"`, `x="${cx + 186}"`);
+  h += `<ellipse cx="${cx}" cy="${cy}" rx="138" ry="120" fill="var(--musc)" fill-opacity=".35" stroke="var(--muted)" stroke-width=".6"/>` + T(20, 70, 'Dartos', 's') + lead(58, 70, cx - 110, cy - 64);
+  h += `<ellipse cx="${cx}" cy="${cy + 4}" rx="118" ry="104" fill="var(--bg)" stroke="var(--fascia)" stroke-width="5"/>` + T(20, 312, "Buck's (deep) fascia", 's') + lead(80, 302, cx - 84, cy + 70);
+  for (const s of [-1, 1]) {
+    h += `<ellipse cx="${cx + s * 46}" cy="${cy - 10}" rx="48" ry="44" fill="var(--erect)" stroke="var(--fascia)" stroke-width="4"/>`;
+    h += `<circle class="artf" cx="${cx + s * 46}" cy="${cy - 8}" r="6"/>`;
+    h += `<circle class="artf" cx="${cx + s * 22}" cy="${cy - 64}" r="5"/><circle class="nvf" cx="${cx + s * 42}" cy="${cy - 60}" r="5"/>`;
+  }
+  h += `<path d="M${cx} ${cy - 54} L${cx} ${cy + 34}" stroke="var(--fascia)" stroke-width="3"/>`;
+  h += `<circle class="vnf" cx="${cx}" cy="${cy - 66}" r="7"/><circle class="vnf" cx="${cx}" cy="${cy - 124}" r="5"/>`;
+  h += `<ellipse cx="${cx}" cy="${cy + 64}" rx="34" ry="30" fill="var(--spong)" stroke="var(--fascia)" stroke-width="3"/><ellipse cx="${cx}" cy="${cy + 64}" rx="8" ry="4" fill="var(--kidney)"/>`;
+  h += T(20, cy - 30, 'Corpus', 's') + T(20, cy - 17, 'cavernosum', 's') + lead(78, cy - 24, cx - 70, cy - 24);
+  h += T(cx - 46, cy + 30, 'Deep artery', 's', 'middle').replace('class="s"', 'class="s" style="fill:var(--surface)"');
+  h += T(cx + 60, cy + 104, 'Corpus spongiosum', 's').replace(`x="${cx + 60}"`, `x="${cx + 40}"`) + T(cx + 40, cy + 117, 'with the urethra', 's');
+  h += T(cx + 150, cy - 96, 'Deep dorsal vein', 's').replace(`x="${cx + 150}"`, `x="${cx + 160}"`) + lead(cx + 156, cy - 100, cx + 8, cy - 68);
+  h += T(cx + 160, cy - 80, 'Dorsal artery', 's') + lead(cx + 156, cy - 84, cx + 28, cy - 64);
+  h += T(cx + 160, cy - 64, 'Dorsal nerve', 's') + lead(cx + 156, cy - 68, cx + 48, cy - 60);
+  h += T(cx - 160, cy - 128, 'Superficial dorsal vein', 's').replace(`x="${cx - 160}"`, `x="${cx - 200}"`).replace(`y="${cy - 128}"`, `y="${cy - 138}"`) + lead(cx - 60, cy - 138, cx - 6, cy - 126);
+  h += T(cx + 170, cy + 30, 'Septum', 's') + lead(cx + 168, cy + 26, cx + 3, cy + 10);
+  h += T(cx, 14, 'Dorsum', 'h', 'middle') + T(cx, 332, 'Urethral surface', 'h', 'middle');
+  S.innerHTML = h;
+}
+function drawPrep(mode) {   // side view of the end of the penis, tip on the viewer's right
+  const S = $('prep-svg'); let h = '';
+  h += `<path class="o" fill="var(--erect)" d="M20 110 L250 110 L250 190 L20 190 Z"/>` + T(110, 155, 'Shaft', 's', 'middle').replace('class="s"', 'class="s" style="fill:var(--surface)"');
+  const glans = `<path class="o" fill="var(--spong)" d="M250 100 Q350 100 380 150 Q350 200 250 200 Q262 150 250 100 Z"/>`;
+  h += glans + `<path d="M378 150 L390 150" stroke="var(--kidney)" stroke-width="4"/>`;
+  h += T(320, 156, 'Glans', 's', 'middle');
+  const skin = c => `<path d="${c}" fill="none" stroke="var(--skin)" stroke-width="10" stroke-linejoin="round"/>`;
+  if (mode === 'normal') { h += skin('M20 100 L250 100 Q330 92 392 132 L392 168 Q330 208 250 200 L20 200') + `<path d="M300 200 Q320 186 340 182" stroke="var(--skin)" stroke-width="5" fill="none"/>` + T(306, 222, 'Frenulum', 's') + T(330, 86, 'Prepuce (can retract)', 's', 'middle'); }
+  if (mode === 'phimosis') { h += skin('M20 100 L250 100 Q340 92 404 140 L410 148 L410 152 L404 160 Q340 208 250 200 L20 200') + `<circle cx="408" cy="150" r="5" fill="none" stroke="var(--ink)" stroke-width="2.5"/>` + T(330, 82, 'Tight opening: cannot retract', 's', 'middle'); }
+  if (mode === 'para') { h += skin('M20 100 L240 100 Q234 150 240 200 L20 200') + `<path d="M238 94 Q228 150 238 206" stroke="var(--skin)" stroke-width="18" fill="none"/>` + `<path d="M246 96 L246 204" stroke="var(--clin)" stroke-width="3" stroke-dasharray="5 4"/>` + T(250, 82, 'Retracted ring trapped behind the glans', 's', 'middle') + T(250, 236, 'Swelling: glans at risk', 's', 'middle'); }
+  if (mode === 'circ') { h += skin('M20 100 L246 100 M20 200 L246 200') + `<path d="M246 94 L246 106 M246 194 L246 206" stroke="var(--clin)" stroke-width="3"/>` + T(250, 82, 'Prepuce removed: glans uncovered', 's', 'middle'); }
+  h += T(20, 290, 'Base', 'h') + T(420, 290, 'Tip', 'h', 'end');
+  S.innerHTML = h;
+  $('prep-text').innerHTML = PREP_TEXT[mode];
+}
+
+const row = (cells, heads) => '<tr>' + cells.map((c, i) => `<td data-h="${heads[i]}">${i === 0 ? '<b>' + c + '</b>' : c}</td>`).join('') + '</tr>';
+const head = hs => '<tr>' + hs.map(x => `<th>${x}</th>`).join('') + '</tr>';
+function showOrgan(id) {
+  const o = ORG.find(x => x.id === id); if (!o) return;
+  $('org-card').innerHTML = `<h3>${o.name}</h3><div class="scroll"><table class="t stack">${head(['', o.name])}${o.rows.map(r => row(r, ['', ''])).join('')}</table></div>` +
+    (o.topic ? `<div><button class="btn" id="org-3d">Show in 3D</button></div>` : '');
+  if (o.topic) $('org-3d').onclick = () => { showTopic(o.topic); toView(); };
+  document.querySelectorAll('#org-chips button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id));
+}
+function buildTables() {
+  $('pouch-table').innerHTML = head(['', 'Male', 'Female']) + POUCH_ROWS.map(r => row(r, ['', 'Male', 'Female'])).join('');
+  $('pouch-text').innerHTML = POUCH_TEXT;
+  $('pect-table').innerHTML = head(['Pectinate line', 'Above', 'Below']) + PECT_ROWS.map(r => row(r, ['', 'Above', 'Below'])).join('');
+  const oc = $('org-chips');
+  for (const o of ORG) { const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = o.id; b.textContent = o.name; b.onclick = () => showOrgan(o.id); oc.append(b); }
+  $('clin-list').innerHTML = CLIN.map(([t, d, k]) => `<div class="item"><b class="t">${t}</b>${d}${k ? ` <button class="chip" data-k="${k}">3D</button>` : ''}</div>`).join('');
+  $('clin-list').querySelectorAll('button[data-k]').forEach(b => b.onclick = () => { showTopic(b.dataset.k); toView(); });
+}
+function legend() {
+  const items = [['--gonad', 'Testis'], ['--duct', 'Epididymis, ductus'], ['--erect', 'Corpora cavernosa'], ['--spong', 'Corpus spongiosum, glans'], ['--kidney', 'Urethra'], ['--colon', 'Rectum'],
+    ['--musc', 'Muscles'], ['--lig', 'Ligaments'], ['--artery', 'Arteries'], ['--vein', 'Veins'], ['--nerve', 'Nerves'], ['--lymph', 'Lymph nodes']];
+  $('key3d').innerHTML = items.map(([c, l]) => `<span><i style="background:var(${c})"></i>${l}</span>`).join('');
+}
+function toggles(boxId, opts, def, draw) {
+  for (const [k, label] of opts) {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = label; b.setAttribute('aria-pressed', k === def);
+    b.onclick = () => { $(boxId).querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); draw(k); }; $(boxId).append(b);
+  }
+  draw(def);
+}
+
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  toggles('pouch-tg', [['m', 'Male'], ['f', 'Female']], 'm', drawPouch);
+  toggles('body-tg', [['body', 'Perineal body'], ['epis', 'Episiotomy'], ['tear', 'Perineal tears']], 'body', drawBody);
+  toggles('isch-tg', [['bounds', 'Fossa and canal'], ['abscess', 'Abscess spaces'], ['fistula', 'Fistula (Parks)'], ['fissure', 'Fissure']], 'bounds', drawIsch);
+  toggles('cov-tg', [['cov', 'Coverings'], ['inside', 'Inside the testis']], 'cov', drawCov);
+  toggles('desc-tg', [['early', 'Early fetus'], ['canal', '7th–8th month'], ['birth', 'About birth'], ['open', 'Processus stays open']], 'early', drawDesc);
+  toggles('prep-tg', [['normal', 'Normal'], ['phimosis', 'Phimosis'], ['para', 'Paraphimosis'], ['circ', 'Circumcised']], 'normal', drawPrep);
+  drawClock(); drawXS();
+  buildTables(); legend(); showOrgan('testis');
+  const bar = $('vbar');
+  for (const [label, dir] of [['Front', [0, -1, 0]], ['Back', [0, 1, 0]], ['Right', [-1, 0, 0]], ['Left', [1, 0, 0]], ['Below', [0, -0.2, -1]]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic('bounds');
+  window.J = {TOPICS, showTopic, names, kind, showOrgan};   // for tests
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

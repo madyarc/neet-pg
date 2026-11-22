@@ -1077,3 +1077,26 @@ tubercles.
 - Independent review (2026-11-22), fixed: canal, tragus and lobule labels on the wrong spots, model notes for the
   chorda and tube, cone of light and isthmus sourcing, seven one-source statements, pituitary visual-field layout,
   eye schematic cut labels and Schlemm's canal, dark contrast, colours (extraocular muscles now muscle red).
+
+## Pelvic Viscera; Perineum and Male External Genitalia — `abdomen-pelvis/pelvis.html`, `abdomen-pelvis/perineum.html`
+
+- Fact sheet `sources-local/facts/fill-pelv.md` (796 quotes, script-checked against `sources-local/modern/fill-pelv/`,
+  downloads 2026-11-22): Gray 1918 pages 118–120, 155, 180, 249, 252, 255–270, 287–288; 47 StatPearls abstracts; about
+  20 open-access papers (internal iliac ligation 2023, urethral injury, prostate zones, haemorrhoids, fistula, tears,
+  episiotomy, descent); Wikipedia (Ovary and Uterus excluded for citing OpenStax; Gray copies not counted).
+- Contested, stated on the page: which testis hangs lower; time of descent; artery to the ductus; seminal vesicle
+  length; prostate zone shares; tubal share of ectopic pregnancy; symptoms of retroversion; the urogenital diaphragm.
+- Single source, attributed: pectinate-line table rows (Wikipedia; arteries also Gray), phimosis resolution, uterine
+  body and vaginal lymph and ovarian fossa (Gray), extravasation "not into the thigh" (Gray), ilio-inguinal nerve
+  outside the cord and cervix nerves (Wikipedia), sympathetic levels of the bladder (StatPearls).
+- Left out (one source): Goodsall's rule, anteversion angles, bony landmarks per rectum or vagina, the part of the tube
+  used for ligation, why fissures are posterior, urine spreading into the deep pouch, the "autonomous bladder" term.
+- Model `models/pelv` (`tools/abdomen-pelvis/pelvis_config.py`; `z-bp3d-pelv*.zip`): 77 parts, 391 KB pack, 33 left
+  parts mirrored in the page. BodyParts3D organs and bones; Z-Anatomy pelvic floor, ligaments, ducts, vessels, nerves,
+  nodes. Male only: neither source has female pelvic organs (schematics). The model's ductus ends at the tip of the
+  seminal vesicle, its pudendal nerve lies medial to the vessels, its right testicular vein ends short of the IVC (said
+  on the page).
+- Independent review (2026-11-22), fixed: palpable vs relation per rectum, extravasation of urine added, one-source
+  table rows, phimosis wording, cryptorchidism side, episiotomy wording, model caveats, testis caption, lesion dimming,
+  colours, schematic layers and label collisions, sourcing of levels and nerves.
+- AN48.3: internal iliac relations completed with PMC10801552.

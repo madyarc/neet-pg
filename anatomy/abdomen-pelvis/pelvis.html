@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pelvic Viscera</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone, --lig (ligament), --artery, --vein, --nerve, --lymph, --fascia, --clin (clinical:
+   a lesion, a needle or catheter track, a cut). Shared with other pages, same meaning: --kidney (urinary tract; organs.html),
+   --colon (large intestine; organs.html), --perit (peritoneum; organs.html, --s-perit on wall-muscles.html), --musc (muscle; the value
+   of --s-musc on wall-muscles.html), --gut (small intestine; organs.html). Page-only tokens (also on perineum.html, same meaning),
+   used for nothing else: --prost (prostate), --sv (seminal vesicle), --duct (epididymis, ductus deferens, ejaculatory duct),
+   --gonad (testis, ovary), --erect (corpora cavernosa), --spong (corpus spongiosum, bulb and glans), --uter (uterus and uterine
+   tubes), --vag (vagina), --tz / --cz / --afs (prostate transition zone, central zone, anterior fibromuscular stroma; pelvis.html only);
+   --skin (skin; the value of --s-skin on wall-muscles.html). Checked against every colour token on the site (sources-local/facts/fill-pelv-scripts/pickcol.py, colcheck.py). */
+:root{--kidney:#b46e48;--colon:#a89a5a;--perit:#a9cfc4;--musc:#c98f8a;--gut:#d9a066;--skin:#e9c9b0;--tz:#41d67d;--cz:#bdbd28;--afs:#b0a8a0;
+  --prost:#556b2f;--sv:#8fbc8f;--duct:#826bdf;--gonad:#dc89e6;--erect:#c741d6;--spong:#89e6ae;--uter:#e9967a;--vag:#8989e6}
+:root[data-theme="dark"]{--kidney:#c07a52;--colon:#8f8248;--perit:#3f6e63;--musc:#a86f6a;--gut:#c08a52;--skin:#8a6a55;--tz:#35b068;--cz:#a3a330;--afs:#8a837c;
+  --prost:#7f9a4f;--sv:#78a878;--duct:#9a88ea;--gonad:#c77bd2;--erect:#c25ad0;--spong:#5fbf88;--uter:#d08066;--vag:#8484d6;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+#topics{display:flex;flex-direction:column;gap:10px}
+#topic-text p+p,#topic-text p+ul,#topic-text ul+p{margin-top:8px}
+#topic-text ul{margin:4px 0 0;padding-left:20px}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.scroll{overflow-x:auto}
+.scroll,.schbox{scrollbar-color:var(--line) transparent}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:620px;margin:0 auto}
+.schbox{overflow-x:auto}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:500px}.swipe{display:inline}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch .bone{fill:var(--bone);stroke:var(--muted);stroke-width:1}
+svg.sch .o{stroke:var(--muted);stroke-width:.8}
+svg.sch .mus{fill:var(--musc);stroke:var(--muted);stroke-width:.8}
+svg.sch .pe{fill:none;stroke:var(--perit);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .art{stroke:var(--artery);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .ure{stroke:var(--kidney);stroke-width:6;fill:none;stroke-linecap:round}
+svg.sch .nv{stroke:var(--nerve);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .clin{stroke:var(--clin);stroke-width:3.5;fill:none;stroke-linecap:round}
+svg.sch .clinf{fill:var(--clin)}
+svg.sch .dim{opacity:.22}
+svg.sch .felt{fill:var(--clin);stroke:var(--surface);stroke-width:1.5}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.organ-card{display:flex;flex-direction:column;gap:8px}
+.organ-card h3{font:700 18px var(--f-display);margin:0}
+.clinlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.clinlist .item{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg);font-size:14px}
+.clinlist .item b.t{display:block;font:600 14.5px var(--f-body);margin-bottom:4px}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Pelvic Viscera</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="Male pelvic organs in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <div class="key" id="key3d"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fem">
+  <h2 id="h-fem">The female pelvis in section</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="fem-svg" viewBox="0 0 520 470" role="img" aria-label="Schematic median sagittal section of the female pelvis: pubic symphysis, bladder, urethra, uterus and cervix, vagina with its fornices, rectum and anal canal, sacrum and coccyx, the vesicouterine and rectouterine pouches and the perineal body"></svg></div>
+      <div class="toggles" id="fem-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic median section, not to scale, seen from the right as in the 3D "Right" view: front (pubis) on your right, back (sacrum) on your left, head at the top. The 3D model is male: neither source has female organs.</p>
+    </div>
+    <div class="prose" id="fem-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-broad">
+  <h2 id="h-broad">Uterus, tubes, ovaries and the broad ligament</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="broad-svg" viewBox="0 0 560 380" role="img" aria-label="Schematic front view of the uterus with the uterine tubes, ovaries, ovarian and round ligaments, the suspensory ligament of the ovary, the broad ligament, and the uterine artery crossing above the ureter beside the cervix"></svg></div>
+      <div class="toggles" id="broad-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. Front view, uterus drawn upright: the body's right on your left. Labels on one side only; both sides are the same.</p>
+    </div>
+    <div class="scroll"><table class="t stack" id="sup-table"></table></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pros">
+  <h2 id="h-pros">Prostate: lobes or zones, BPH and cancer</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="pros-svg" viewBox="0 0 560 330" role="img" aria-label="Two schematics of the prostate: a median sagittal section with McNeal's zones (peripheral, central, transition, anterior fibromuscular stroma) and a transverse section with the older five lobes (anterior, median, posterior, two lateral)"></svg></div>
+      <div class="toggles" id="pros-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. Left: median section seen from the right (front on your right, bladder above, rectum behind). Right: transverse section at the upper part of the gland, seen from below (front at the top, the body's right on your left).</p>
+    </div>
+    <div class="prose" id="pros-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-auto">
+  <h2 id="h-auto">Micturition and the automatic bladder</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="auto-svg" viewBox="0 0 520 380" role="img" aria-label="Schematic of the nervous control of the bladder: cortex and pontine micturition centre, the spinal cord down to the sacral segments S2 to S4, the pelvic splanchnic nerves to the detrusor, the pudendal nerve to the external sphincter and the hypogastric sympathetic nerves; toggles show a lesion above the sacral segments and a lesion of the sacral segments or cauda equina"></svg></div>
+      <div class="toggles" id="auto-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale; levels approximate.</p>
+    </div>
+    <div class="prose" id="auto-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-exam">
+  <h2 id="h-exam">Structures felt on rectal and vaginal examination</h2>
+  <div class="two">
+    <div class="scroll"><table class="t stack" id="pr-table"></table></div>
+    <div class="scroll"><table class="t stack" id="pv-table"></table></div>
+  </div>
+  <p class="muted" id="exam-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-org">
+  <h2 id="h-org">The pelvic organs</h2>
+  <p class="cap" id="org-cap"></p>
+  <div class="chips" id="org-chips"></div>
+  <div class="organ-card" id="org-card"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-clin">
+  <h2 id="h-clin">Applied anatomy</h2>
+  <div class="clinlist" id="clin-list"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-pelv.md, anatomy/DATA-SOURCES.md) ===================== */
+const V = k => 'v_' + k, O = k => 'o_' + k, M_ = k => 'm_' + k, N = k => 'n_' + k, L = k => 'l_' + k, LEFT = k => k + '_l';
+const BONES = ['fifth_lumbar_vertebra', 'sacrum', 'right_hip_bone', 'left_hip_bone'];
+const FLOOR_R = ['m_pubococcygeus_r', 'm_iliococcygeus_r', 'm_coccygeus_r', 'm_puborectalis_r'];
+const FLOOR = [...FLOOR_R, ...FLOOR_R.map(LEFT), 'm_external_anal_sphincter'];
+const ARCH = ['m_tendinous_arch_r', LEFT('m_tendinous_arch_r')], OI = ['m_obturator_internus_r', LEFT('m_obturator_internus_r')];
+const PIRI = ['m_piriformis_r', LEFT('m_piriformis_r')];
+const LIGS = ['g_sacrotuberous_ligament_r', 'g_sacrospinous_ligament_r'].flatMap(k => [k, LEFT(k)]);
+const BL = O('bladder'), PR = O('prostate'), RE = O('rectum'), UR = O('urethra');
+const SV = [O('seminal_vesicle_r'), O('seminal_vesicle_l')], DD = [O('ductus_deferens_r'), O('ductus_deferens_l')], EJ = [O('ejaculatory_duct_r'), O('ejaculatory_duct_l')];
+const URET = [O('ureter_r'), O('ureter_l')];
+const GENIT = [O('testis_r'), O('testis_l'), O('epididymis_r'), O('epididymis_l'), O('corpus_cavernosum'), O('corpus_spongiosum'), O('glans')];
+const VISC = [BL, UR, ...URET, PR, ...SV, ...DD, ...EJ, RE];
+const IIA = [V('internal_iliac_artery_r'), V('anterior_division_of_internal_iliac_artery_r'), V('posterior_division_of_internal_iliac_artery_r')];
+const NODES = ['obturator_nodes_r', 'lateral_sacral_nodes_r', 'lateral_vesical_nodes_r'].flatMap(k => [L(k), LEFT(L(k))]).concat([L('pararectal_nodes'), L('prevesical_nodes'), L('postvesical_nodes')]);
+const FRONT = [0, -1, 0.08], BACK = [0, 1, 0.12], RIGHT = [-1, 0, 0.04], LEFTV = [1, 0, 0.04], ABOVE = [0, -0.45, 1];
+const MID = 2;   // clip: keep x >= -2 (the left half, cut in the median plane), seen from the right
+/* 3D topics. lit = parts in full colour (the rest of 'show' faint); show = extra parts drawn as context (bones by default);
+   clip = MID (median section); labels = [key, text, point to search from (mm, body frame +x left, +y back, +z up)] (key null:
+   the point itself, drawn at that spot); every label point was checked against the part's vertices and in screenshots */
+const TOPICS = [
+  {grp: 'Male pelvis', id: 'front', name: 'In place, from the front',
+    lit: VISC, show: [...BONES, ...FLOOR, ...GENIT], view: [0.3, -1, 0.55], zoom: 0.92, fit: [BL, RE, ...SV, PR],
+    labels: [[BL, 'Bladder', [-10, -138, 830]], [O('ureter_l'), 'Ureter', [40, -100, 880]], [O('ductus_deferens_r'), 'Ductus deferens', [-45, -125, 845]],
+      [RE, 'Rectum', [5, -75, 885]], [O('corpus_cavernosum'), 'Penis', [0, -150, 785]]],
+    text: `<p>The male pelvic organs behind the pubic symphysis: the <b>bladder</b> in front, the <b>rectum</b> behind against the sacrum, the <b>prostate</b> under the bladder neck, the <b>seminal vesicles</b> and the ends of the <b>ductus deferentes</b> on the back of the bladder, between it and the rectum. The <b>ureters</b> come down over the pelvic brim to the back of the bladder.</p>
+<p class="muted">The front of the hip bones is drawn faint. The model has no peritoneum: the rectovesical pouch is in the section view and in the female schematic below.</p>`},
+  {grp: 'Male pelvis', id: 'sag', name: 'Median section', clip: MID,
+    lit: [BL, UR, PR, RE, SV[1], DD[1], EJ[1], O('corpus_spongiosum'), O('corpus_cavernosum'), 'm_external_anal_sphincter', LEFT('m_puborectalis_r')],
+    show: [...BONES, O('glans'), O('testis_l'), O('epididymis_l')], view: RIGHT, zoom: 0.92, fit: [BL, RE, PR, O('corpus_spongiosum')],
+    labels: [[BL, 'Bladder', [2, -110, 835]], [PR, 'Prostate', [0, -85, 780]], [RE, 'Rectum', [0, -50, 830]], [SV[1], 'Seminal vesicle', [8, -62, 812]],
+      ['left_hip_bone', 'Pubic symphysis', [4, -140, 800]], ['sacrum', 'Sacrum', [0, -60, 880]], ['sacrum', 'Coccyx', [0, -27, 794]], [O('corpus_spongiosum'), 'Bulb', [0, -95, 760]]],
+    text: `<p>Cut in the median plane and seen from the right (front on your right). From front to back: <b>pubic symphysis</b>, <b>bladder</b> with the <b>prostate</b> below its neck, the <b>seminal vesicles</b> and <b>ductus</b> behind the bladder, then the <b>rectum</b> along the curve of the <b>sacrum</b> and <b>coccyx</b>. The peritoneum dips between bladder and rectum as the <b>rectovesical pouch</b> above the seminal vesicles (not modelled). Below the prostate the urethra passes through the perineum into the <b>bulb</b> of the penis.</p>
+<p>The rectum and prostate are separated by a thin fascia (rectovesical, Denonvilliers'); the prostate can be felt through the rectum (Gray), especially when enlarged.</p>`},
+  {grp: 'Organs', id: 'bladder', name: 'Bladder', lit: [BL, ...URET, PR, UR], show: [...BONES, RE, ...SV, ...DD],
+    view: [0.5, -1, 0.25], zoom: 0.8, fit: [BL, PR],
+    labels: [[BL, 'Apex', [3, -132, 836]], [BL, 'Body', [25, -110, 818]], [BL, 'Neck', [5, -95, 792]], [PR, 'Prostate', [10, -96, 778]]],
+    organ: 'bladder'},
+  {grp: 'Organs', id: 'urethra', name: 'Male urethra', clip: MID, lit: [UR, PR, BL, O('corpus_spongiosum'), O('glans')],
+    show: [...BONES, O('corpus_cavernosum'), RE, 'm_external_anal_sphincter'], view: RIGHT, zoom: 0.92, fit: [UR, BL],
+    labels: [[UR, 'Prostatic', [0, -80, 788]], [UR, 'Membranous', [0, -90, 768]], [UR, 'Spongy (bulb)', [0, -100, 758]], [UR, 'Spongy (penile)', [0, -176, 748]], [UR, 'External opening', [0, -184, 700]]],
+    text: `<p>The male urethra (about 18–20 cm) in three parts: <b>prostatic</b> (Gray: the widest and most dilatable; the ejaculatory ducts open on the colliculus seminalis), <b>membranous</b> (the shortest and, apart from the external opening, the narrowest, Gray; surrounded by the external urethral sphincter in the perineum) and <b>spongy</b> (the longest, Gray about 15 cm, in the corpus spongiosum, widened in the bulb and in the glans). The female urethra is about 4 cm, in the front wall of the vagina (organ card).</p>
+<p class="muted">The model's penis hangs down, so the spongy part bends at the root. Labels are approximate positions along the mesh.</p>`},
+  {grp: 'Organs', id: 'prostate', name: 'Prostate, vesicles, ductus (from behind)', lit: [PR, ...SV, ...DD, ...EJ, BL, ...URET],
+    show: ['right_hip_bone', 'left_hip_bone'], view: BACK, zoom: 0.92, fit: [PR, ...SV, BL],
+    labels: [[SV[0], 'Seminal vesicle', [-28, -58, 812]], [DD[1], 'Ductus (end)', [8, -62, 806]], [O('ureter_r'), 'Ureter', [-28, -62, 826]], [PR, 'Prostate', [-8, -70, 778]], [BL, 'Bladder', [20, -60, 836]]],
+    text: `<p>Seen from behind with the rectum removed. On the back of the bladder: the two <b>seminal vesicles</b> (lateral) and the <b>ampullae</b> of the ductus deferentes (medial to them); each ductus joins its seminal vesicle duct to form the <b>ejaculatory duct</b>, which runs through the prostate to the prostatic urethra. The <b>ureters</b> reach the bladder just above the tips of the seminal vesicles (the ductus crosses in front of them).</p>
+<p>The <b>prostate</b> sits below the bladder neck, round the urethra; its back faces the rectum.</p>
+<p class="muted">In this model each ductus ends at the lateral tip of its seminal vesicle instead of running medial to it as an ampulla; the label marks the model's duct end.</p>`},
+  {grp: 'Organs', id: 'ductus', name: 'Course of the ductus deferens', lit: [DD[0], O('epididymis_r'), O('testis_r'), O('ureter_r'), V('inferior_epigastric_artery_r'), V('external_iliac_artery_r'), SV[0]],
+    show: [...BONES, BL, PR], view: [-0.75, -1, 0.15], zoom: 0.72, fit: [DD[0], O('testis_r')],
+    labels: [[DD[0], 'Ductus deferens', [-40, -140, 790]], [O('epididymis_r'), 'Epididymis', [-24, -158, 722]], [O('testis_r'), 'Testis', [-30, -160, 700]],
+      [V('inferior_epigastric_artery_r'), 'Inferior epigastric a.', [-40, -160, 900]], [O('ureter_r'), 'Ureter', [-45, -95, 890]]],
+    text: `<p>The ductus continues the <b>tail of the epididymis</b>, climbs the back of the testis, runs in the <b>spermatic cord</b> through the inguinal canal, enters the pelvis lateral to the <b>inferior epigastric vessels</b> at the deep ring (where it leaves the testicular vessels), crosses the external iliac vessels, runs on the side wall under the peritoneum, crosses <b>in front of the ureter</b>, and widens as the <b>ampulla</b> behind the bladder. It feels hard and cord-like (Gray).</p>
+<p class="muted">The inguinal canal is on <a href="../thorax/wall-muscles.html">Muscles of the Trunk Wall</a>; the abdominal wall is not in this model.</p>`},
+  {grp: 'Organs', id: 'rectum', name: 'Rectum and anal canal', clip: MID, lit: [RE, 'm_external_anal_sphincter', LEFT('m_puborectalis_r'), LEFT('m_pubococcygeus_r'), LEFT('m_iliococcygeus_r')],
+    show: [...BONES, BL, PR, SV[1]], view: RIGHT, zoom: 0.92, fit: [RE, 'm_external_anal_sphincter'],
+    labels: [[RE, 'Rectum', [0, -55, 850]], [RE, 'Ampulla', [0, -62, 800]], [RE, 'Anal canal', [0, -58, 772]], ['m_external_anal_sphincter', 'External sphincter', [4, -40, 763]],
+      [LEFT('m_puborectalis_r'), 'Puborectalis', [2, -42, 776]]],
+    text: `<p>The <b>rectum</b> (Gray: about 12 cm) starts at about S3, follows the curve of the sacrum and coccyx, widens below as the <b>ampulla</b>, then turns back and down through the pelvic floor as the <b>anal canal</b> (2.5–4 cm), slung forward by <b>puborectalis</b> and ringed by the <b>external sphincter</b>. In front of the lower rectum: base of the bladder, seminal vesicles, ductus and prostate (male); vagina (female). Supply: superior rectal (from the IMA) above, middle and inferior rectal below; see <a href="nerves-vessels.html">Nerves and Vessels</a>. The anal canal in detail, haemorrhoids, fistula and fissure: <a href="perineum.html#h-anal">Perineum</a>.</p>
+<p class="muted">The model's rectum mesh runs down to the anus (no separate anal canal): "anal canal" marks its lowest part, approximate. No internal sphincter in the model.</p>`},
+  {grp: 'Organs', id: 'pr', name: 'What a rectal finger meets', clip: MID, lit: [PR, RE, SV[1], BL, LEFT('m_puborectalis_r'), 'm_external_anal_sphincter'],
+    show: [...BONES, UR, O('corpus_spongiosum')], view: RIGHT, zoom: 0.92, fit: [RE, PR, SV[1]],
+    labels: [[PR, 'Prostate (felt)', [0, -80, 780]], [SV[1], 'Vesicle (relation)', [8, -62, 812]], [BL, 'Bladder (relation)', [3, -70, 818]], [LEFT('m_puborectalis_r'), 'Anorectal ring', [12, -60, 780]], ['sacrum', 'Coccyx', [0, -27, 794]]],
+    text: `<p>A finger in the rectum feels the <b>anal sphincter tone</b> and the <b>anorectal ring</b> (external sphincter with puborectalis), the rectal wall (tumours, polyps, abscesses) and, in the male, the <b>prostate</b> in front: its size, consistency and outline. Above the prostate lie the seminal vesicles and the base of the bladder: relations of the lower rectum (Gray), not stated as palpable in the open sources used. The full lists are in the table below.</p>`},
+  {grp: 'Vessels and floor', id: 'iliac', name: 'Internal iliac artery: relations', lit: [...IIA, V('internal_iliac_vein_r'), O('ureter_r'), N('obturator_nerve_r'), V('common_iliac_artery_r')],
+    show: ['sacrum', 'right_hip_bone', 'fifth_lumbar_vertebra', V('external_iliac_artery_r'), V('external_iliac_vein_r')], view: [0.55, -1, 0.2], zoom: 1.2, fit: [...IIA, V('internal_iliac_vein_r'), N('obturator_nerve_r')],
+    labels: [[V('internal_iliac_artery_r'), 'Internal iliac a.', [-32, -100, 925]], [O('ureter_r'), 'Ureter (in front)', [-36, -118, 942]], [V('internal_iliac_vein_r'), 'Vein (behind)', [-17, -95, 925]],
+      [N('obturator_nerve_r'), 'Obturator nerve', [-45, -95, 880]]],
+    text: `<p>The <b>internal iliac artery</b> begins at the common iliac bifurcation in front of the sacroiliac joint, at the lumbosacral level, and runs down to the upper border of the greater sciatic foramen. Relations (two sources): the <b>ureter in front</b> (it crosses at the bifurcation and is held medially when the artery is tied); the <b>internal iliac vein behind</b> (posteromedial). Gray adds: behind, the lumbosacral trunk and piriformis; laterally the external iliac vein (between it and psoas) near its origin, and the obturator nerve lower down.</p>
+<p>Its branches are on <a href="nerves-vessels.html">Nerves and Vessels of the Abdomen and Pelvis</a>.</p>
+<p class="muted">On this model the ureter lies about 5 mm in front of the artery and the vein a few mm behind and medial to it, as the sources say. The model has no lumbosacral trunk.</p>`},
+  {grp: 'Vessels and floor', id: 'nodes', name: 'Pelvic lymph nodes', lit: NODES, show: [...BONES, ...VISC], view: [0.4, -1, 0.3], zoom: 0.92, fit: NODES,
+    labels: [[L('obturator_nodes_r'), 'Obturator', [-48, -80, 836]], [L('lateral_sacral_nodes_r'), 'Lateral sacral', [-22, -40, 865]], [LEFT(L('lateral_vesical_nodes_r')), 'Lateral vesical', [30, -100, 808]], [L('pararectal_nodes'), 'Pararectal', [0, -46, 776]]],
+    text: `<p>Node groups of the pelvic wall and viscera (Z-Anatomy's groups, approximate): obturator, lateral sacral, vesical, pararectal. The bladder drains mainly to the external iliac nodes, the prostate to the internal iliac (and obturator, sacral) nodes, the anal canal below the pectinate line to the superficial inguinal nodes; the testis to the lumbar (aortic) nodes. Details in the organ cards; node groups by region on <a href="nerves-vessels.html">Nerves and Vessels</a>.</p>`},
+  {grp: 'Vessels and floor', id: 'floor', name: 'Pelvic floor from above', lit: [...FLOOR.slice(0, 8), ...ARCH, ...OI], show: [...BONES, RE, PR, UR], view: ABOVE, zoom: 0.92, fit: [...FLOOR.slice(0, 8), ...OI],
+    labels: [['m_pubococcygeus_r', 'Pubococcygeus', [-15, -95, 805]], ['m_iliococcygeus_r', 'Iliococcygeus', [-20, -62, 810]], ['m_coccygeus_r', 'Coccygeus', [-30, -40, 825]], ['m_obturator_internus_r', 'Obturator internus', [-80, -85, 828]], [RE, 'Rectum', [0, -60, 830]]],
+    text: `<p>The <b>pelvic diaphragm</b> (levator ani: pubococcygeus, iliococcygeus, with the puborectal fibres round the anorectal junction; and coccygeus) closes the pelvic outlet under the viscera; levator ani arises from the <b>tendinous arch</b> on the obturator internus fascia. It is the main muscular support of the pelvic organs; the urethra (and vagina) and the rectum pass through the gap between the two sides. Attachments and nerve supply: <a href="../thorax/wall-muscles.html">Muscles of the Trunk Wall</a>.</p>`},
+];
+
+const SUP_ROWS = [
+  ['Uterosacral ligaments', 'Cervix and upper vagina → front of the sacrum, round the rectouterine pouch', 'Suspend the uterus; pull the cervix back, keeping anteversion against the forward pull of the round ligaments on the fundus (Wikipedia)'],
+  ['Cardinal (transverse cervical, Mackenrodt\'s)', 'Cervix and lateral fornix → side wall of the pelvis, in the base of the broad ligament', 'Suspend the cervix and upper vagina; the uterine artery, ureter and inferior hypogastric plexus run in it'],
+  ['Pubocervical', 'Named with the transcervical and sacrocervical ligaments (Wikipedia)', 'Part of the support of the upper vagina (Wikipedia)'],
+  ['Levator ani, perineal body, perineal membrane', 'Pelvic floor and perineum', 'Levator ani is the main muscular support; the perineal body and membrane support from below'],
+  ['Round ligament', 'Uterine horn → deep inguinal ring → inguinal canal → labium majus (10–12 cm)', 'The remnant of the gubernaculum; pulls the fundus forward'],
+  ['Broad ligament', 'Double fold of peritoneum: uterus → side wall', 'A mesentery for the uterus, tubes and ovaries (mesometrium, mesosalpinx, mesovarium)']];
+
+const FEM_TEXT = {
+  normal: `<p>The usual uterus is <b>anteverted</b> (tilted forward on the vagina; Gray: the two make an angle of more than 90 degrees, opening forward) and <b>anteflexed</b> (the body bent forward on the cervix), lying on the bladder (StatPearls: about half of women). The cervix projects into the top of the vagina, making the <b>anterior</b>, <b>posterior</b> (deepest) and lateral <b>fornices</b>.</p>
+<p>The peritoneum runs over the bladder, dips into the shallow <b>vesicouterine pouch</b>, covers the fundus and back of the uterus, the supravaginal cervix and the top of the posterior vaginal wall, then turns onto the rectum: the <b>rectouterine pouch</b> (of Douglas), whose front wall is the posterior fornix. Behind the lower vagina, the <b>perineal body</b> separates it from the anal canal.</p>`,
+  retro: `<p>A <b>retroverted</b> uterus tilts backwards towards the rectum and sacrum (Wikipedia: 1 in 3 to 1 in 5 women); <b>retroflexed</b> = the fundus bent back on the cervix. Usually a normal variant from birth; it can be acquired (endometriosis or adhesions pulling it back, fibroids, ligaments stretched by pregnancy). The uterosacral ligaments (pulling the cervix back) and the round ligaments (pulling the fundus forward) keep the normal anteversion.</p>
+<p><b>Sources differ on symptoms:</b> Wikipedia: generally no problems, no effect on pregnancy or fertility; StatPearls: it may contribute to pelvic pain, dyspareunia and (rarely) incarceration in pregnancy. It is usually found at a routine pelvic examination.</p>`,
+  prolapse: `<p><b>Uterine prolapse</b>: the uterus descends into the vagina when its supports weaken: the <b>uterosacral and cardinal ligaments</b> that suspend the cervix and upper vagina, and the <b>levator ani</b>, the main muscular support, with the perineal body below. Risk factors: older age, pregnancy and vaginal childbirth, menopause, obesity, chronic cough and constipation. A torn perineal body widens the gap between the two levators and predisposes to prolapse of the uterus, rectum or bladder. Complete prolapse through the hymen is <b>procidentia</b>. Prolapse is shown at examination when the woman bears down.</p>`,
+  pv: `<p><b>Vaginal (bimanual) examination</b> (red dots, approximate): through the vaginal walls the <b>urethra</b> (in the front wall), the glands at the vaginal opening, the <b>cervix</b> (also seen with a speculum) and, with the other hand on the abdomen, the <b>uterus</b> (size, anteverted or retroverted) and the <b>adnexa</b> (ovaries, tubes; StatPearls: normal ovaries can be felt, but not always easily). The posterior fornix lies against the rectouterine pouch.</p>`};
+
+const PROS_TEXT = {
+  zones: `<p><b>McNeal's zones</b> (used today; seen on MRI and in histology): <b>peripheral zone</b>, the largest, about 70% of the gland in young men, at the back and below, next to the rectum; <b>central zone</b>, about 20–25%, a wedge at the base round the ejaculatory ducts; <b>transition zone</b>, about 5%, round the proximal urethra; <b>anterior fibromuscular stroma</b>, without glands.</p>
+<p>Wikipedia: because lobe definitions vary, the zone scheme is used more.</p>`,
+  lobes: `<p><b>Lobes</b> (gross anatomy, older books): five: <b>anterior</b> (isthmus, little glandular tissue), <b>median (middle)</b> (between the ejaculatory ducts and the urethra; it raises the uvula of the bladder behind the internal urethral orifice), <b>posterior</b>, and <b>right and left lateral</b> (the main mass).</p>
+<p class="muted">The two schemes describe the same gland in different ways; the sources do not map lobes onto zones one-to-one, so the two drawings are not matched.</p>`,
+  bph: `<p><b>Benign prostatic hyperplasia</b>: nodular growth of the <b>transition zone</b> round the urethra (and the periurethral central zone); in lobe terms the <b>median and lateral lobes</b> (two sources); the anterior lobe has little gland and seldom enlarges. Common in men over 50.</p>
+<p><b>Urinary obstruction</b>: the gland squeezes the prostatic urethra (bladder outlet obstruction): hesitancy, weak stream, frequency, nocturia, retention, infection, stones; an enlarged <b>median lobe</b> bulges into the bladder behind the internal orifice (intravesical protrusion) and its size relates to symptom severity. Long-standing obstruction can cause chronic high-pressure retention and lasting detrusor damage.</p>`,
+  ca: `<p><b>Prostate cancer</b>: about 70–80% arises in the <b>peripheral zone</b> (MRI review 70–75%; Wikipedia 70–80%), at the back next to the rectum, so it can be felt on rectal examination as a hard, irregular gland (Wikipedia). In the older lobe terms: the <b>posterior lobe</b> (Wikipedia). It spreads to nodes and bones (pelvis, spine).</p>`};
+
+const AUTO_TEXT = {
+  normal: `<p><b>Micturition reflex</b>: stretch receptors in the bladder wall signal through the <b>pelvic nerves</b> to the <b>sacral cord (S2–S4)</b>; the parasympathetic outflow (pelvic splanchnic nerves) contracts the detrusor and relaxes the internal sphincter. The <b>pontine micturition centre</b> coordinates this with relaxation of the <b>external sphincter</b> (pudendal nerve, S2–S4): a spinobulbospinal reflex, switched on or held back voluntarily from higher centres. Sympathetic nerves from the lumbar cord (StatPearls: T10–L2), through the hypogastric plexus, relax the detrusor and close the bladder neck during filling. In infants voiding is a reflex.</p>`,
+  auto: `<p><b>Automatic (reflex) bladder</b>: a complete spinal cord lesion <b>above the sacral segments</b> (suprasacral; upper motor neuron). After <b>spinal shock</b> (the bladder flaccid and distending; a 2016 review: up to about 3 months), the sacral reflex arc works but is cut off from the pons and cortex: the bladder empties <b>by itself, by reflex</b>, when it fills, without voluntary control or normal sensation.</p>
+<p>Detrusor overactivity gives leakage; without the pons, detrusor and sphincter contract together (<b>detrusor–sphincter dyssynergia</b>): incomplete emptying, high pressures, reflux and kidney damage. Wikipedia: this spastic bladder usually follows cord damage above the T10 vertebra.</p>`,
+  flaccid: `<p><b>Flaccid (lower motor neuron) bladder</b>: a lesion of the <b>sacral segments, cauda equina or pelvic nerves</b> cuts the reflex arc itself: the detrusor cannot contract (areflexia), filling sensation is lost, the bladder overfills and leaks: <b>overflow incontinence</b>.</p><p class="muted">The NMC's "automatic bladder" is the suprasacral (reflex) type. No open source used here gives a separate name for the sacral-lesion type, so it is called the flaccid (lower motor neuron) bladder.</p>`};
+
+const PR_ROWS = [
+  ['Anal canal', 'Sphincter tone (incontinence, spinal cord injury); after childbirth, sphincter injury'],
+  ['Anorectal ring', 'External sphincter with puborectalis, at the top of the canal'],
+  ['Rectal wall', 'Tumours, polyps, abscesses, faeces'],
+  ['Prostate (male)', 'In front: size, consistency, outline; smooth symmetric enlargement in BPH, hard irregular in cancer, tender in prostatitis; an enlarged median lobe'],
+  ['Relations, not stated as palpable', 'Above the prostate lie the seminal vesicles and the base of the bladder (relations of the lower rectum, Gray); no open source used says they are felt'],
+  ['Female', 'Cervix and posterior pelvis (rectal or rectovaginal examination when the vagina cannot be examined)']];
+const PV_ROWS = [
+  ['Vaginal walls', 'Smooth and soft; prolapse when bearing down (cystocele, rectocele, uterus)'],
+  ['Urethra', 'Through the anterior wall (it is embedded in it)'],
+  ['Glands', 'Skene\'s beside the urethra; Bartholin\'s at the back of the vaginal opening (Wikipedia)'],
+  ['Cervix', 'Felt at the vault and seen with a speculum'],
+  ['Uterus (bimanual)', 'Size and position: anteverted or retroverted'],
+  ['Adnexa', 'Ovaries and tubes; normal ovaries are palpable but not always easily, cysts more easily'],
+  ['Posterior fornix', 'Lies against the rectouterine pouch (Douglas)']];
+const EXAM_NOTE = 'Only structures the sources say are felt are listed. Bony landmarks (ischial spines, sacral promontory) and the pouches themselves are not given as palpable in the open sources used, so they are left out.';
+
+/* organs (AN48.1) */
+const ORG_CAP = 'Pick an organ for its card. Arteries in brief; the internal iliac branches and the portal–systemic rectal veins are on Nerves and Vessels of the Abdomen and Pelvis.';
+const NV = '<a href="nerves-vessels.html">nerves-vessels</a>';
+const ORG = [
+  {id: 'bladder', name: 'Urinary bladder', topic: 'bladder', rows: [
+    ['Position', 'Behind the pubic symphysis in the lesser pelvis when empty; it rises into the abdomen as it fills. Higher in children (abdominal). Holds about 300–500 mL before the urge (StatPearls: up to 500 mL).'],
+    ['Features', 'Apex (forward, towards the abdominal wall), body, fundus or base (back, triangular), neck (round the internal urethral orifice). Inside: the smooth <b>trigone</b> between the two ureteric orifices and the internal urethral orifice, its mucosa bound to the muscle; the wall muscle is the detrusor.'],
+    ['Peritoneum', 'On the superior surface and the upper back; none on the inferolateral surfaces. A full bladder lifts the peritoneum off the front wall (suprapubic cystostomy).'],
+    ['Relations', 'In front: pubic bones. Below: levator ani (and the prostate in the male). Behind: seminal vesicles, ductus and rectum (male); uterus and vagina (female). Above: small intestine and sigmoid colon.'],
+    ['Arteries', 'Superior and inferior vesical (internal iliac); see ' + NV + '.'],
+    ['Nerves', 'Pelvic splanchnic (S2–S4, parasympathetic: empties it), hypogastric (sympathetic: filling); stretch sensation mainly with the parasympathetic fibres.'],
+    ['Lymph', 'Mainly to the external iliac nodes (Wikipedia; Gray: through the vesical nodes).'],
+    ['Applied', 'Suprapubic cystostomy, outflow obstruction in BPH, automatic bladder (Applied anatomy).']]},
+  {id: 'urethra', name: 'Urethra', topic: 'urethra', rows: [
+    ['Male', 'About 18–20 cm: prostatic part (widest and most dilatable, Gray; ejaculatory ducts on the colliculus), membranous part (shortest and narrowest except the meatus, Gray; through the perineal membrane, in the external sphincter; the bulbourethral glands lie in the same deep pouch), spongy part (longest, about 15 cm, Gray; in the corpus spongiosum, widened in the bulb and the glans).'],
+    ['Female', 'About 4 cm, embedded in the front wall of the vagina, opening in the vestibule in front of the vaginal opening.'],
+    ['Sphincters', 'Internal (smooth, involuntary) at the bladder neck; external (striated, voluntary, pudendal nerve) round the membranous urethra.'],
+    ['Applied', 'Catheterisation; when it fails, suprapubic cystostomy.']]},
+  {id: 'prostate', name: 'Prostate', topic: 'prostate', rows: [
+    ['Position', 'Walnut-sized, below the bladder neck round the prostatic urethra, behind the lower symphysis, in front of the rectum (felt through it); base up against the bladder, apex down.'],
+    ['Features', 'Fibromuscular capsule with the prostatic venous plexus round it. Lobes (older) or zones (McNeal, used today): see the section above.'],
+    ['Relations', 'In front: puboprostatic ligaments (Gray) and venous plexus; sides: levator ani; behind: rectum, separated by the rectovesical (Denonvilliers\') fascia; above: bladder and seminal vesicles.'],
+    ['Arteries', 'Inferior vesical and middle rectal (internal iliac; Gray adds the internal pudendal).'],
+    ['Veins', 'Prostatic plexus (receives the deep dorsal vein of the penis) → internal iliac veins.'],
+    ['Nerves', 'Prostatic plexus from the inferior hypogastric (pelvic) plexus.'],
+    ['Lymph', 'Internal iliac (with obturator, sacral, external iliac) nodes.'],
+    ['Applied', 'BPH (transition zone; median and lateral lobes) and cancer (peripheral zone; posterior lobe, Wikipedia).']]},
+  {id: 'sv', name: 'Seminal vesicles and ductus deferens', topic: 'prostate', rows: [
+    ['Seminal vesicles', 'Paired coiled blind tubes (StatPearls 3–5 cm; Gray about 7.5 cm) on the back of the bladder above the prostate, in front of the rectum; their upper ends are near the ureters and partly covered by peritoneum (Gray).'],
+    ['Ductus deferens', 'From the tail of the epididymis, in the spermatic cord through the inguinal canal, lateral to the inferior epigastric vessels at the deep ring, over the external iliac vessels, down the side wall, in front of the ureter, to the ampulla medial to the seminal vesicle.'],
+    ['Ejaculatory ducts', 'Ductus + seminal vesicle duct → through the prostate (central zone) → colliculus seminalis, beside the prostatic utricle.'],
+    ['Applied', 'Vasectomy (on the <a href="perineum.html#h-clin">Perineum</a> page, where the cord is).']]},
+  {id: 'rectum', name: 'Rectum and anal canal', topic: 'rectum', rows: [
+    ['Position', 'Rectum (Gray: about 12 cm) from about S3 along the sacrum and coccyx to the anorectal junction at the pelvic floor; dilated below (ampulla). Anal canal 2.5–4 cm.'],
+    ['Peritoneum', 'Gray: on the front and sides above, the front only lower down, none on the lowest part; it turns onto the bladder (rectovesical pouch) or the vagina and uterus (rectouterine pouch).'],
+    ['Relations', 'Behind: sacrum, coccyx, levator ani; superior rectal vessels and the sacral plexus above. In front: male: rectovesical pouch, then bladder base, seminal vesicles, ductus, prostate; female: rectouterine pouch, then vagina.'],
+    ['Arteries', 'Superior rectal (continuation of the IMA) above; middle and inferior rectal below. Veins: portal above, systemic below: ' + NV + '.'],
+    ['Lymph', 'Above the pectinate line to the internal iliac nodes (Wikipedia); the anus and the canal below the line to the superficial inguinal nodes.'],
+    ['Applied', 'Internal haemorrhoids, anal fistula: <a href="perineum.html#h-anal">Perineum</a>.']]},
+  {id: 'uterus', name: 'Uterus', rows: [
+    ['Position', 'Between the bladder and the rectum, wholly in the pelvis; usually anteverted and anteflexed (female section above). Gray: about 7.5 × 5 × 2.5 cm.'],
+    ['Features', 'Fundus (above the tubal openings), body, isthmus, cervix (Wikipedia: about 4 cm; supravaginal and vaginal parts; internal and external os).'],
+    ['Peritoneum', 'Front: over the body (Gray: to the junction of body and cervix), then onto the bladder (vesicouterine pouch). Back: down the supravaginal cervix and the posterior fornix, then onto the rectum (rectouterine pouch).'],
+    ['Supports', 'Uterosacral and cardinal ligaments, levator ani, perineal body and membrane; round and broad ligaments (table above).'],
+    ['Arteries', 'Uterine (internal iliac), crossing above the ureter beside the cervix, anastomosing with the ovarian (aorta).'],
+    ['Nerves', 'Cervix (Wikipedia): visceral pain with the sympathetic nerves to T10–L1 through the inferior hypogastric (uterovaginal) plexus; the vaginal part of the cervix has pudendal (S2–S4) sensory supply; parasympathetic from the pelvic splanchnics.'],
+    ['Lymph', 'Cervix: to the external and internal iliac, obturator and sacral (and common iliac) nodes. Body and fundus (Gray): mainly with the ovarian vessels to the lateral aortic and pre-aortic nodes, a few to the external iliac.'],
+    ['Applied', 'Retroversion, prolapse (Applied anatomy).']]},
+  {id: 'tube', name: 'Uterine tubes', rows: [
+    ['Position', 'In the upper free edge of the broad ligament (mesosalpinx), from the uterine horn to the ovary.'],
+    ['Features', 'About 10 cm (Wikipedia 10–14 cm): intramural part (the narrowest, Wikipedia), isthmus (medial third), ampulla (wide, curving over the ovary; fertilisation usually happens here), infundibulum with fimbriae round the abdominal opening (one fimbria to the ovary): it opens into the peritoneal cavity.'],
+    ['Arteries', 'Ovarian (Gray) and the tubal branch of the uterine (Wikipedia).'],
+    ['Applied', 'Tubal pregnancy, tubal ligation.']]},
+  {id: 'ovary', name: 'Ovaries', rows: [
+    ['Position', 'On the side wall of the pelvis in the ovarian fossa (Gray: external iliac vessels above, obliterated umbilical artery in front, ureter behind). Gray: about 4 × 2 × 0.8 cm.'],
+    ['Attachments', 'Mesovarium (to the back of the broad ligament), ovarian ligament (to the uterus), suspensory (infundibulopelvic) ligament (to the pelvic wall, carrying the ovarian vessels). The gubernaculum becomes the ovarian and round ligaments.'],
+    ['Arteries', 'Ovarian artery from the aorta (in the suspensory ligament).'],
+    ['Lymph', 'Gray: with the ovarian vessels, like the testis, to the lateral aortic and pre-aortic nodes.'],
+    ['Applied', 'Normal ovaries can be felt on bimanual examination but not always easily.']]},
+  {id: 'vagina', name: 'Vagina', rows: [
+    ['Position', 'From the vestibule up and back to the uterus, behind the bladder and urethra, in front of the rectum. Front wall about 7.5 cm, back wall about 9 cm.'],
+    ['Features', 'Fornices round the cervix: anterior, posterior (the deepest) and two lateral.'],
+    ['Relations', 'Front: bladder base and urethra. Back: rectouterine pouch (top), rectum, then the perineal body (bottom). Sides: levator ani; the ureters pass close to the lateral fornices (Gray).'],
+    ['Supports', 'Above: cardinal and uterosacral ligaments, levator ani; below: perineal body and perineal membrane.'],
+    ['Arteries', 'Vaginal artery (from the internal iliac or the uterine).'],
+    ['Lymph', 'Gray: upper part external iliac, middle internal iliac, lower part with the vulva to the superficial inguinal nodes.']]}];
+
+/* applied (AN48.5, AN48.6, AN48.7) */
+const CLIN = [
+  ['Suprapubic cystostomy', 'A catheter through the lower abdominal wall just above the pubic symphysis into a <b>full</b> bladder, when the urethra cannot be used (injury, obstruction such as BPH, stones, cancer) or for long-term drainage (spinal cord injury with dyssynergia), usually under ultrasound. <b>Basis</b>: as the bladder fills, its superior surface rises above the pubis carrying the peritoneum up with it, so the front of the full bladder lies against the anterior abdominal wall without peritoneum: the track does not enter the peritoneal cavity.', 'bladder'],
+  ['Urinary obstruction in BPH', 'Growth of the transition zone (median and lateral lobes) narrows the prostatic urethra; an enlarged median lobe protrudes into the bladder at the internal orifice. Symptoms of outflow obstruction, retention; long-term high-pressure retention can damage the detrusor and kidneys. Details: prostate section above.', 'prostate'],
+  ['Automatic bladder', 'Reflex emptying without voluntary control after a cord lesion above the sacral centre (S2–S4), once spinal shock has passed; with detrusor–sphincter dyssynergia. Contrast the flaccid bladder of sacral or cauda lesions. Diagram above.', null],
+  ['Retroverted uterus', 'Tilted back towards the rectum; usually a normal variant; acquired with endometriosis, adhesions, fibroids, after pregnancy. Sources differ on whether it causes symptoms (female section above).', null],
+  ['Prolapse of the uterus', 'Descent into the vagina when the uterosacral–cardinal ligaments and levator ani (and perineal body) are weakened, mostly by vaginal childbirth and age; procidentia when it passes the hymen.', null],
+  ['Tubal pregnancy', 'Implantation in the uterine tube (90–97% of ectopic pregnancies; 1–2% of pregnancies, StatPearls), most often in the <b>ampulla</b> (Wikipedia: ampulla 80%, isthmus 12%, fimbrial end 5%, interstitial 2%). Risk factors damage the tube: pelvic inflammatory disease (chlamydia), previous tubal surgery including sterilisation, previous ectopic, assisted reproduction, smoking. Rupture bleeds into the peritoneal cavity: pain, shoulder-tip pain (blood under the diaphragm; see Kehr\'s sign on <a href="organs.html#h-clin">Abdominal Organs</a>), fainting, shock; treated by removing the embryo or the tube.', null],
+  ['Tubal ligation', 'Permanent female sterilisation: each tube blocked (clips, bands or electrocautery), partly removed, or removed whole (salpingectomy, now the method of choice in StatPearls), usually laparoscopically through an umbilical incision, or at caesarean section or just after delivery; about 99% effective. Which part of the tube is clipped or cut is not given by two open sources, so it is not stated here. If pregnancy does occur, about a third are ectopic (Wikipedia). Salpingectomy also lowers the risk of ovarian cancer.', null],
+  ['Internal haemorrhoids and anal fistula', 'On the <a href="perineum.html#h-anal">Perineum</a> page with the anal canal and the ischio-anal fossa.', 'rectum'],
+  ['Vasectomy', 'On the <a href="perineum.html#h-clin">Perineum and Male External Genitalia</a> page, where the ductus lies in the spermatic cord.', 'ductus']];
+
+const DATA = {
+  lede: 'The pelvic organs: the male pelvis in 3D (bladder, urethra, prostate, seminal vesicles, ductus deferens, rectum, the internal iliac artery and the pelvic floor), the female pelvis in schematics, the prostate\'s lobes and zones, the nervous control of the bladder, what is felt on rectal and vaginal examination, organ cards and the applied list. Pick a topic to light its parts (the rest stay as faint glass); tap a part to name it. Perineum, testis and penis: <a href="perineum.html">Perineum and Male External Genitalia</a>.',
+  note3d: 'The model is male (BodyParts3D and Z-Anatomy have no female organs) and approximate: smooth, simplified organs; ducts, vessels and nerves are tubes along curves; the sacrum mesh includes the coccyx; left-sided pelvic muscles, ligaments, vessels and nodes are mirror images of the right ones. No peritoneum, fasciae, internal anal sphincter, bulbourethral glands or lumbosacral trunk.',
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (MRI anatomy of the prostate, prostate zonal anatomy and BPH treatment, median-lobe size and symptoms, pelvic organ prolapse review, laparoscopic pelvic anatomy, neurogenic bladder after lumbar disease and after suprasacral spinal cord injury, internal iliac artery ligation anatomy).",
+  models: 'Models used: bones, bladder, ureters, urethra, prostate, seminal vesicles, testes, epididymides, penis, rectum and external anal sphincter from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); pelvic floor and wall muscles, ligaments, ductus deferens, ejaculatory ducts, vessels, nerves and lymph nodes from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the BodyParts3D frame and simplified; left pelvic parts mirrored from the right. Schematics after Gray (1918) and the sources above, not to scale.'
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let kind = {}, names = {};
+const COL = {bone: '--bone', lig: '--lig', wall: '--musc', floor: '--musc', artery: '--artery', vein: '--vein', nerve: '--nerve', node: '--lymph', urinary: '--kidney',
+  large: '--colon', prostate: '--prost', sv: '--sv', duct: '--duct', testis: '--gonad', erect: '--erect', spong: '--spong'};
+const WHAT = {bone: 'bone', lig: 'ligament', wall: 'muscle of the pelvic wall', floor: 'pelvic floor or sphincter muscle', artery: 'artery', vein: 'vein', nerve: 'nerve', node: 'lymph nodes',
+  urinary: 'urinary tract', large: 'large intestine', prostate: 'prostate', sv: 'seminal vesicle', duct: 'sperm duct', testis: 'testis', erect: 'erectile tissue', spong: 'erectile tissue round the urethra'};
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+function anchor(key, near, n) {   // a vertex of the part near a point, kept by the clip, on the side facing the camera (n: direction to the camera)
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos, d2 = [], clip = v.clip;
+  for (let i = 0; i < pos.length; i += 3) {
+    if (clip && pos[i] * clip[0] + pos[i + 1] * clip[1] + pos[i + 2] * clip[2] > clip[3]) continue;
+    d2.push([(pos[i] - near[0]) ** 2 + (pos[i + 1] - near[1]) ** 2 + (pos[i + 2] - near[2]) ** 2, i]);
+  }
+  if (!d2.length) return null;
+  d2.sort((a, b) => a[0] - b[0]);
+  const r2 = Math.max(9, d2[0][0] * 1.5), cand = d2.filter((x, j) => j < 6 || x[0] <= r2);
+  let best = cand[0][1], bs = -1e18;
+  for (const [, i] of cand) { const s = pos[i] * n[0] + pos[i + 1] * n[1] + pos[i + 2] * n[2]; if (s > bs) { bs = s; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+function showTopic(id) {
+  const t = TOPICS.find(t => t.id === id); if (!t) return;
+  const has = k => v.parts.has(k);
+  v.setClip(t.clip !== undefined ? [-1, 0, 0] : null, t.clip);
+  const lit = (t.lit || []).filter(has), on = new Set([...lit, ...(t.show || BONES)]);
+  for (const k in kind) { v.setVisible(k, on.has(k)); v.setColour(k, css(COL[kind[k]])); }
+  v.setFocus(lit);
+  v.ghostAlpha = 0.16;
+  const fk = (t.fit || lit).filter(has);
+  v.fit(fk.length ? fk : null);
+  const view = t.view || FRONT;
+  v.face(view, {zoom: (t.zoom || 1) * Math.min(1, (v.w / v.h) / 0.95)});   // narrower canvas (phone): zoom out so wide parts fit
+  const marks = [];
+  for (const [k, label, near] of t.labels || []) {
+    const p = k ? anchor(k, near, view) : near;
+    if (!p || (k && v.parts.get(k).visible === false)) continue;
+    marks.push({p, label, color: css(!k || kind[k] === 'bone' ? '--ink' : COL[kind[k]]), always: true});
+  }
+  v.setMarkers(marks);
+  const o = t.organ && ORG.find(x => x.id === t.organ);
+  $('topic-text').innerHTML = t.text || (o ? `<p><b>${o.name}.</b> ${o.rows[0][1]}</p><p>${o.rows[1][1]}</p><p class="muted">Full card: <a href="#h-org" data-org="${o.id}">The pelvic organs</a>.</p>` : '');
+  const a = $('topic-text').querySelector('a[data-org]'); if (a) a.onclick = () => showOrgan(a.dataset.org);
+  $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === t.id));
+}
+const toView = () => $('v').scrollIntoView({behavior: 'smooth', block: 'start'});
+function buildTopics() {
+  const box = $('topics');
+  for (const g of [...new Set(TOPICS.map(t => t.grp))]) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !kind[hit.key]) { $('pick').textContent = ''; return; }
+  $('pick').textContent = `${names[hit.key]}: ${WHAT[kind[hit.key]]}`;
+};
+async function loadModel() {
+  const base = '../models/pelv/';
+  const meta = await (await fetch(base + 'kinds.json')).json(), MR = meta.mirror;
+  const man = await v.load(base + 'pelv.json', null, {
+    extra: (m, items) => items.filter(it => meta.parts[it.key] && meta.parts[it.key].mirror)
+      .map(it => ({key: LEFT(it.key), m: v.mirrored(it.m, MR.m, MR.t), info: {name: it.info.name}}))});
+  for (const p of man.parts) {
+    const d = meta.parts[p.key]; if (!d) continue;
+    for (const left of d.mirror ? [false, true] : [false]) {
+      const key = left ? LEFT(p.key) : p.key;
+      kind[key] = d.kind;
+      names[key] = d.mirror ? p.name.replace(/^Right /, '').replace(/ \(right\)$/i, '') + (left ? ' (left)' : ' (right)') : p.name;
+      v.setColour(key, css(COL[d.kind]));
+    }
+  }
+  return man;
+}
+
+/* ===================== schematics ===================== */
+const T = (x, y, s, cls = '', anchor = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+function drawFemale(mode) {   // median section seen from the right: front (pubis) on the viewer's right, head up
+  const S = $('fem-svg'); let h = '';
+  const ell = (cx, cy, rx, ry, deg, t0, t1, n = 28) => {   // points on a rotated ellipse from angle t0 to t1 (degrees)
+    const r = deg * Math.PI / 180, out = [];
+    for (let i = 0; i <= n; i++) { const t = (t0 + (t1 - t0) * i / n) * Math.PI / 180, x = rx * Math.cos(t), y = ry * Math.sin(t);
+      out.push([cx + x * Math.cos(r) - y * Math.sin(r), cy + x * Math.sin(r) + y * Math.cos(r)]); }
+    return out; };
+  const pl = pts => pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+  // bones: sacrum and coccyx (back, viewer's left), pubic symphysis (front, viewer's right)
+  h += `<path class="bone" d="M78 36 Q126 150 120 262 Q118 304 138 334 L156 328 Q138 300 140 260 Q146 148 100 32 Z"/>` + T(44, 28, 'Sacrum', 's');
+  h += `<path class="bone" d="M138 334 Q150 360 178 372 L184 360 Q164 352 156 328 Z"/>` + T(126, 392, 'Coccyx', 's');
+  h += `<ellipse class="bone" cx="446" cy="336" rx="15" ry="36" transform="rotate(-20 446 336)"/>` + T(500, 300, 'Pubic', 's', 'end').replace('y="300"', 'y="282"') + T(500, 295, 'symphysis', 's', 'end');
+  // perineal skin
+  h += `<path d="M170 444 L486 444" stroke="var(--skin)" stroke-width="7" stroke-linecap="round"/>`;
+  // rectum along the sacrum, then the anal canal down and back to the anus
+  h += `<path class="o" fill="var(--colon)" d="M150 50 Q186 150 186 250 Q188 330 226 368 L210 440 L232 442 L252 372 Q214 326 214 250 Q214 146 176 44 Z"/>`;
+  h += T(188, 462, 'Anal canal', 's', 'middle');
+  // perineal body between the anal canal and the lower vagina
+  h += `<path class="mus" d="M262 404 Q300 396 336 414 L330 440 L258 440 Z"/>` + T(296, 462, 'Perineal body', 's', 'middle');
+  const um = {normal: 'ante', pv: 'ante', retro: 'retro', prolapse: 'pro'}[mode];
+  // bladder resting on the front of the vagina; urethra embedded in the anterior vaginal wall (pushed down in prolapse)
+  const pro = um === 'pro', bdy = pro ? 18 : 0;
+  h += `<ellipse class="o" fill="var(--kidney)" cx="364" cy="${294 + bdy}" rx="42" ry="30" transform="rotate(28 364 ${294 + bdy})"/>` + T(368, 300 + bdy, 'Bladder', '', 'middle');
+  // vagina: from the vestibule up and back to the vault (in prolapse only its lower part remains below the descended uterus)
+  h += pro ? `<path class="o" fill="var(--vag)" d="M346 444 L326 402 L350 394 L370 444 Z"/>` : `<path class="o" fill="var(--vag)" d="M346 444 L276 306 L298 296 L370 444 Z"/>`;
+  h += `<path class="ure" d="M${pro ? 340 : 316} ${pro ? 346 : 328} Q${pro ? 352 : 340} 390 375 444" style="stroke-width:5"/>` + T(470, 430, 'Urethra', 's', 'end') + lead(440, 426, 372, 432);
+  if (!pro) h += T(318, 404, 'Vagina', 's', 'end').replace('x="318"', 'x="316"').replace('y="404"', 'y="392"');
+  // uterus: cervix and body as rotated ellipses; peritoneum drawn over the body
+  let cerv, body;
+  if (um === 'ante') { cerv = [290, 292, 22, 13, -60]; body = [340, 248, 52, 26, -28]; }
+  if (um === 'retro') { cerv = [292, 290, 22, 13, 60]; body = [244, 236, 52, 26, 52]; }
+  if (pro) { cerv = [356, 428, 20, 12, 64]; body = [329, 372, 50, 24, 64]; }
+  h += `<ellipse class="o" fill="var(--uter)" cx="${body[0]}" cy="${body[1]}" rx="${body[2]}" ry="${body[3]}" transform="rotate(${body[4]} ${body[0]} ${body[1]})"/>`;
+  h += `<ellipse class="o" fill="var(--uter)" cx="${cerv[0]}" cy="${cerv[1]}" rx="${cerv[2]}" ry="${cerv[3]}" transform="rotate(${cerv[4]} ${cerv[0]} ${cerv[1]})"/>`;
+  const f1 = p => p[0].toFixed(1) + ' ' + p[1].toFixed(1);
+  if (um === 'ante') {
+    // peritoneum: anterior abdominal wall → over the bladder → vesicouterine pouch → round the body of the uterus → supravaginal cervix and
+    // posterior fornix → rectouterine pouch → up over the rectum
+    const arc = ell(body[0], body[1], body[2] + 4, body[3] + 4, body[4], 150, -150, 40);   // vesical surface → fundus → intestinal surface
+    const [a0, a1] = [arc[0], arc[arc.length - 1]];
+    h += `<path class="pe" d="M486 150 Q452 230 420 262 Q396 256 372 264 Q334 272 ${f1(a0)} ${pl(arc).replace(/^M/, 'L')}"/>`;
+    h += `<path class="pe" d="M${f1(a1)} Q280 290 278 304 Q262 330 242 318 Q222 296 220 250 Q218 146 182 44"/>`;
+    h += T(332, 196, 'Uterus', '', 'middle');
+    h += T(408, 248, 'Vesicouterine', 's') + T(408, 261, 'pouch', 's') + lead(406, 252, 344, 272);
+    h += T(196, 404, 'Rectouterine', 's') + T(196, 417, 'pouch', 's') + lead(236, 396, 256, 324);
+    h += T(268, 276, 'Cervix', 's', 'end');
+    h += T(262, 346, 'Posterior fornix', 's', 'end') + lead(264, 342, 278, 314);
+    h += T(400, 362, 'Anterior fornix', 's') + lead(398, 358, 304, 316);
+  } else {
+    // retroverted or prolapsed: the same course, round the displaced uterus (arc from its front surface round the fundus to its back)
+    const arc = ell(body[0], body[1], body[2] + 4, body[3] + 4, body[4], 340, 20, 40), [a0, a1] = [arc[0], arc[arc.length - 1]];
+    const bt = pro ? 'Q452 250 424 288 Q398 282 380 290' : 'Q452 230 420 262 Q396 256 372 264';
+    h += `<path class="pe" d="M486 150 ${bt} Q${pro ? '350 300' : '330 290'} ${f1(a0)} ${pl(arc).replace(/^M/, 'L')}"/>`;
+    const pb = pro ? 'Q300 410 284 380 Q262 340 246 320' : 'Q284 300 276 312 Q260 330 242 318';
+    h += `<path class="pe" d="M${f1(a1)} ${pb} Q222 296 220 250 Q218 146 182 44"/>`;
+    if (pro) {
+      h += T(272, 250, 'Uterus descended', 's', 'end') + T(272, 263, 'into the vagina', 's', 'end');
+      h += `<path class="clin" d="M300 236 L312 292"/><path class="clinf" d="M316 306 l-11 -9 l12 -4 z"/>`;
+      h += T(470, 404, 'Cervix at the vaginal opening', 's', 'end') + lead(420, 408, 364, 428);
+      h += T(196, 404, 'Rectouterine', 's') + T(196, 417, 'pouch (deepened)', 's') + lead(236, 396, 252, 352);
+    } else {
+      h += T(230, 168, 'Retroverted uterus', '');
+      h += T(330, 282, 'Cervix', 's', 'end');
+      h += T(408, 248, 'Vesicouterine', 's') + T(408, 261, 'pouch', 's') + lead(406, 252, 318, 290);
+      h += T(196, 404, 'Rectouterine', 's') + T(196, 417, 'pouch', 's') + lead(236, 396, 248, 318);
+    }
+  }
+  if (mode === 'pv') {
+    for (const [x, y, s, an, tx, ty] of [[354, 392, 'Urethra (front wall)', 'end', 470, 400], [282, 306, 'Cervix', 'end', 262, 300], [380, 220, 'Uterus (bimanual)', 'start', 392, 212], [272, 320, 'Posterior fornix → pouch', 'end', 262, 334]])
+      h += `<circle class="felt" cx="${x}" cy="${y}" r="6"/>`;
+    h += T(470, 386, 'Urethra (front wall)', 's', 'end') + lead(424, 382, 360, 392) + T(396, 212, 'Uterus (bimanual)', 's');
+  }
+  h += T(150, 130, 'Rectum', '', 'end').replace('x="150"', 'x="198"').replace('y="130"', 'y="120"').replace('class=""', 'class="" style="paint-order:stroke;stroke:var(--surface);stroke-width:3px"');
+  h += T(20, 466, 'Back', 'h') + T(500, 466, 'Front', 'h', 'end');
+  S.innerHTML = h;
+  $('fem-text').innerHTML = FEM_TEXT[mode];
+}
+function drawBroad(mode) {   // front view: body's right on the viewer's left
+  const S = $('broad-svg'); let h = '';
+  const cx = 280;
+  // broad ligament sheet from the uterus to the side walls
+  h += `<path d="M60 120 Q160 92 ${cx - 40} 110 L${cx - 44} 250 Q170 268 60 262 Z" fill="var(--perit)" fill-opacity=".45" stroke="var(--perit)" stroke-width="1.5"/>`;
+  h += `<path d="M500 120 Q400 92 ${cx + 40} 110 L${cx + 44} 250 Q390 268 500 262 Z" fill="var(--perit)" fill-opacity=".45" stroke="var(--perit)" stroke-width="1.5"/>`;
+  if (mode === 'parts') h += T(470, 258, 'Broad ligament', 's', 'end');
+  h += `<path d="M44 80 L44 300" stroke="var(--muted)" stroke-width="2" stroke-dasharray="5 4"/>` + T(50, 316, 'Pelvic side wall', 's');
+  // uterus, cervix, vagina
+  h += `<path class="o" fill="var(--uter)" d="M${cx - 44} 112 Q${cx} 70 ${cx + 44} 112 Q${cx + 48} 200 ${cx + 22} 246 L${cx - 22} 246 Q${cx - 48} 200 ${cx - 44} 112 Z"/>` + T(cx, 170, 'Uterus', '', 'middle');
+  h += `<path class="o" fill="var(--uter)" d="M${cx - 20} 246 L${cx + 20} 246 L${cx + 18} 290 L${cx - 18} 290 Z"/>` + T(cx, 276, 'Cervix', 's', 'middle');
+  h += `<path class="o" fill="var(--vag)" d="M${cx - 30} 286 L${cx + 30} 286 L${cx + 26} 360 L${cx - 26} 360 Z"/>` + T(cx, 340, 'Vagina', 's', 'middle');
+  // tubes: isthmus, ampulla, infundibulum + fimbriae on both sides
+  const tube = s => { const x = t => cx + s * t; return `<path d="M${x(42)} 112 Q${x(90)} 104 ${x(130)} 108 Q${x(190)} 96 ${x(214)} 128 Q${x(222)} 150 ${x(206)} 160" fill="none" stroke="var(--uter)" stroke-width="9" stroke-linecap="round"/>`
+    + `<path d="M${x(206)} 160 l${s * -10} 12 M${x(206)} 160 l${s * 2} 14 M${x(206)} 160 l${s * 12} 8" stroke="var(--uter)" stroke-width="4" stroke-linecap="round"/>`; };
+  h += tube(-1) + tube(1);
+  // ovaries below the tubes, ovarian ligaments to the uterus, suspensory ligaments to the side wall
+  for (const s of [-1, 1]) {
+    const ox = cx + s * 150;
+    h += `<path d="M${cx + s * 40} 150 L${ox - s * 26} 172" stroke="var(--lig)" stroke-width="3"/>`;
+    h += `<ellipse class="o" fill="var(--gonad)" cx="${ox}" cy="176" rx="28" ry="16"/>`;
+    h += `<path d="M${ox + s * 26} 170 Q${cx + s * 215} 150 ${s < 0 ? 46 : 514} 132" stroke="var(--lig)" stroke-width="3" fill="none"/>`;
+    // round ligament from the horn, below the tube, out to the deep ring
+    h += `<path d="M${cx + s * 42} 128 Q${cx + s * 120} 140 ${cx + s * 150} 222 Q${cx + s * 170} 262 ${s < 0 ? 70 : 490} 282" stroke="var(--lig)" stroke-width="3" fill="none" stroke-dasharray="7 4"/>`;
+  }
+  if (mode === 'parts') {
+    h += T(cx + 86, 92, 'Isthmus', 's', 'middle') + T(cx + 176, 88, 'Ampulla', 's', 'middle') + T(cx + 240, 186, 'Fimbriae', 's', 'start').replace(`x="${cx + 240}"`, `x="${cx + 214}"`).replace('y="186"', 'y="192"');
+    h += T(cx + 150, 206, 'Ovary', 's', 'middle') + T(cx + 98, 150, 'Ovarian lig.', 's', 'middle').replace('y="150"', 'y="146"');
+    h += T(cx + 246, 130, 'Suspensory lig.', 's', 'end').replace(`x="${cx + 246}"`, `x="${cx + 234}"`).replace('y="130"', 'y="128"');
+    h += T(cx + 160, 252, 'Round ligament', 's', 'start').replace(`x="${cx + 160}"`, `x="${cx + 116}"`).replace('y="252"', 'y="236"');
+    h += T(cx - 186, 92, 'Uterine tube', 's', 'middle');
+  }
+  if (mode === 'vessels') {
+    // ureter (behind and below, dashed where hidden) and uterine artery crossing above it beside the cervix
+    for (const s of [-1, 1]) {
+      h += `<path class="ure" d="M${cx + s * 170} 90 Q${cx + s * 120} 200 ${cx + s * 40} 300" style="stroke-width:5;stroke-dasharray:8 5"/>`;
+      h += `<path class="art" d="M${s < 0 ? 46 : 514} 230 Q${cx + s * 90} 236 ${cx + s * 26} 250 Q${cx + s * 50} 200 ${cx + s * 46} 120"/>`;
+      h += `<path class="art" d="M${cx + s * 160} 168 Q${cx + s * 110} 120 ${cx + s * 46} 120" stroke-dasharray="3 3"/>`;
+    }
+    h += T(cx + 146, 222, 'Uterine artery', 's', 'start').replace(`x="${cx + 146}"`, `x="${cx + 120}"`).replace('y="222"', 'y="226"');
+    h += T(cx + 88, 300, 'Ureter (below and behind)', 's', 'start').replace(`x="${cx + 88}"`, `x="${cx + 96}"`).replace('y="300"', 'y="316"');
+    h += `<circle cx="${cx + 72}" cy="240" r="9" fill="none" stroke="var(--clin)" stroke-width="2.5"/>` + T(cx + 120, 290, 'Artery crosses above the ureter', 's').replace(`x="${cx + 120}"`, `x="${cx + 60}"`).replace('y="290"', 'y="282"') + lead(cx + 70, 274, cx + 72, 250);
+    h += T(cx + 120, 76, 'Ovarian a. joins it', 's', 'start');
+  }
+  h += T(18, 374, "Body's right", 'h') + T(542, 374, "Body's left", 'h', 'end');
+  S.innerHTML = h;
+}
+function drawProstate(mode) {   // left: median section seen from the right (front on the right); right: transverse, seen from below
+  const S = $('pros-svg'); let h = '';
+  const hiZ = {bph: ['tz'], ca: ['pz']}[mode] || [], hiL = {bph: ['median', 'lateral'], ca: ['posterior']}[mode] || [];
+  const showZ = mode !== 'lobes', showL = mode !== 'zones';
+  const zc = id => hiZ.length && !hiZ.includes(id) ? ' class="dim"' : '';
+  const lc = id => hiL.length && !hiL.includes(id) ? ' class="dim"' : '';
+  // left panel: median section of the gland (base up against the bladder, apex down), front on the right
+  h += `<g${showZ ? '' : ' class="dim"'}>`;
+  h += `<path class="o" fill="var(--kidney)" d="M60 30 Q150 8 240 30 L232 62 Q150 46 68 62 Z"/>` + T(150, 42, 'Bladder', 's', 'middle');
+  h += `<path class="o" fill="var(--colon)" d="M22 66 Q36 160 30 286 L52 286 Q58 160 44 66 Z"/>` + T(14, 304, 'Rectum', 's');
+  h += `<g${zc('pz')}><path class="o" fill="var(--prost)" d="M70 100 Q60 190 128 256 Q150 272 176 254 Q146 238 124 204 Q100 162 100 104 Z"/></g>`;
+  h += `<g${zc('cz')}><path class="o" fill="var(--cz)" d="M72 70 L148 66 L152 162 Q112 128 72 70 Z"/></g>`;
+  h += `<g${zc('tz')}><ellipse class="o" fill="var(--tz)" cx="170" cy="118" rx="18" ry="34"/></g>`;
+  h += `<g${zc('afs')}><path class="o" fill="var(--afs)" d="M190 68 Q232 76 230 112 Q222 176 184 230 Q196 160 186 92 Z"/></g>`;
+  h += `<path d="M156 58 Q160 120 153 164 Q148 220 150 270" stroke="var(--kidney)" stroke-width="6" fill="none" stroke-linecap="round"/>`;
+  h += `<path d="M94 64 L152 164" stroke="var(--duct)" stroke-width="3" fill="none"/>`;
+  h += T(48, 86, 'Central', 's', 'end').replace('x="48"', 'x="54"') + T(54, 99, 'zone', 's', 'end') + lead(56, 90, 92, 92);
+  h += T(54, 150, 'Ejac.', 's', 'end') + T(54, 163, 'duct', 's', 'end') + lead(56, 154, 120, 112);
+  h += T(54, 232, 'Peripheral', 's', 'end').replace('x="54"', 'x="60"') + T(60, 245, 'zone', 's', 'end') + lead(62, 236, 100, 214);
+  h += T(246, 140, 'Transition', 's') + T(246, 153, 'zone', 's') + lead(244, 140, 186, 126);
+  h += T(246, 210, 'Fibromuscular', 's') + T(246, 223, 'stroma', 's') + lead(244, 206, 214, 170);
+  h += T(150, 292, 'Urethra (apex)', 's', 'middle');
+  h += `</g>`;
+  h += T(20, 18, 'ZONES (McNEAL)', 'h') + T(20, 322, 'Back', 'h') + T(250, 322, 'Front', 'h', 'end');
+  // right panel: transverse section of the upper prostate, front at the top
+  h += `<g${showL ? '' : ' class="dim"'} transform="translate(300 0)">`;
+  h += `<g${lc('anterior')}><path class="o" fill="var(--prost)" fill-opacity=".25" d="M80 60 Q130 40 180 60 L170 96 Q130 84 90 96 Z"/></g>`;
+  h += `<g${lc('lateral')}><path class="o" fill="var(--prost)" fill-opacity=".8" d="M86 98 Q40 140 74 230 L118 220 Q100 170 120 112 Z"/><path class="o" fill="var(--prost)" fill-opacity=".8" d="M174 98 Q220 140 186 230 L142 220 Q160 170 140 112 Z"/></g>`;
+  h += `<g${lc('median')}><path class="o" fill="var(--prost)" fill-opacity=".5" d="M120 132 Q130 126 140 132 L146 176 Q130 186 114 176 Z"/></g>`;
+  h += `<g${lc('posterior')}><path class="o" fill="var(--prost)" fill-opacity=".6" d="M78 232 Q130 270 182 232 L170 210 Q130 230 90 210 Z"/></g>`;
+  h += `<circle cx="130" cy="114" r="10" fill="var(--kidney)" stroke="var(--surface)" stroke-width="1.5"/>`;
+  h += `<circle cx="118" cy="194" r="5" fill="var(--duct)"/><circle cx="142" cy="194" r="5" fill="var(--duct)"/>`;
+  h += T(130, 34, 'Anterior lobe', 's', 'middle') + T(20, 150, 'Lateral', 's', 'start').replace('x="20"', 'x="6"') + T(6, 163, 'lobe', 's') + lead(36, 160, 62, 160);
+  h += T(240, 150, 'Lateral', 's', 'end').replace('x="240"', 'x="254"') + T(254, 163, 'lobe', 's', 'end');
+  h += T(130, 160, 'Median', 's', 'middle').replace('y="160"', 'y="158"').replace('class="s"', 'class="s" style="font-size:9.5px"');
+  h += T(130, 292, 'Posterior lobe', 's', 'middle') + T(252, 62, 'Urethra', 's', 'end') + lead(212, 66, 140, 110);
+  h += T(254, 262, 'Ejaculatory', 's', 'end') + T(254, 275, 'ducts', 's', 'end') + lead(196, 258, 146, 198);
+  h += `</g>`;
+  h += T(320, 18, 'LOBES (OLDER BOOKS)', 'h') + T(430, 322, 'Front at the top', 'h', 'middle');
+  S.innerHTML = h;
+  $('pros-text').innerHTML = PROS_TEXT[mode];
+}
+function drawAuto(mode) {
+  const S = $('auto-svg'); let h = '';
+  // cortex and pons, cord down to S2-S4, bladder with sphincters
+  h += `<rect x="30" y="16" width="150" height="40" rx="8" fill="var(--soft)" stroke="var(--muted)"/>` + T(105, 41, 'Cortex (voluntary)', 's', 'middle');
+  h += `<rect x="40" y="78" width="130" height="36" rx="8" fill="var(--soft)" stroke="var(--muted)"/>` + T(105, 101, 'Pontine centre', 's', 'middle');
+  h += `<rect x="92" y="114" width="26" height="236" rx="10" fill="var(--bg)" stroke="var(--muted)"/>` + T(126, 170, 'Spinal cord', 's');
+  h += T(126, 214, 'Lumbar cord (sympathetic)', 's') + `<path d="M118 210 L132 210" stroke="var(--muted)"/>`;
+  h += `<rect x="84" y="296" width="42" height="40" rx="8" fill="var(--soft)" stroke="var(--muted)"/>` + T(105, 320, 'S2–S4', 's', 'middle');
+  h += `<path class="o" fill="var(--kidney)" d="M340 230 Q340 170 400 168 Q460 170 460 230 Q452 284 400 290 Q348 284 340 230 Z"/>` + T(400, 222, 'Bladder', '', 'middle') + T(400, 238, '(detrusor)', 's', 'middle');
+  h += `<path class="ure" d="M400 290 L400 350"/>` + T(410, 318, 'Internal sphincter', 's') + `<rect x="384" y="330" width="32" height="12" rx="3" class="mus"/>` + T(424, 346, 'External sphincter', 's');
+  const cut = mode === 'auto' ? 'cord' : mode === 'flaccid' ? 'sacral' : null;
+  const nvDown = cut ? 'nv dim' : 'nv', dimArc = mode === 'flaccid' ? ' class="dim"' : '';
+  h += `<path d="M105 56 L105 78" class="${nvDown}"/><path d="M112 114 L112 296" class="${nvDown}" stroke-dasharray="6 4"/>`;
+  h += T(56, 260, 'Descending', 's', 'end').replace('x="56"', 'x="86"') + T(86, 273, 'control', 's', 'end');
+  h += `<g${dimArc}><path class="nv" d="M126 326 Q260 330 350 262"/><path class="nv" d="M126 314 Q250 290 344 228" stroke-dasharray="3 4"/>`;
+  h += T(230, 290, 'Pelvic splanchnic nerves', 's', 'middle').replace('y="290"', 'y="350"') + T(220, 264, 'stretch afferents', 's', 'middle').replace('y="264"', 'y="282"');
+  h += `<path class="nv" d="M126 332 Q260 352 384 338"/></g>` + T(250, 374, 'Pudendal nerve → external sphincter', 's', 'middle').replace('y="374"', 'y="372"');
+  h += `<path class="nv" d="M118 210 Q250 200 346 200" style="opacity:.75"/>` + T(240, 194, 'Hypogastric (sympathetic)', 's', 'middle');
+  if (cut === 'cord') h += `<path class="clin" d="M86 150 L126 170 M126 150 L86 170"/>` + T(20, 140, 'Lesion above S2–S4', 's').replace('class="s"', 'class="s" style="fill:var(--clin)"');
+  if (cut === 'sacral') h += `<path class="clin" d="M74 300 L136 336 M136 300 L74 336"/>` + T(14, 290, 'Lesion: S2–S4 or cauda', 's').replace('class="s"', 'class="s" style="fill:var(--clin)"');
+  if (mode === 'auto') h += T(400, 154, 'Empties by reflex, no control', 's', 'middle').replace('class="s"', 'class="s" style="font-weight:600"');
+  if (mode === 'flaccid') h += T(400, 154, 'Overfills, overflow leakage', 's', 'middle').replace('class="s"', 'class="s" style="font-weight:600"');
+  S.innerHTML = h;
+  $('auto-text').innerHTML = AUTO_TEXT[mode];
+}
+
+const row = (cells, heads) => '<tr>' + cells.map((c, i) => `<td data-h="${heads[i]}">${i === 0 ? '<b>' + c + '</b>' : c}</td>`).join('') + '</tr>';
+const head = hs => '<tr>' + hs.map(x => `<th>${x}</th>`).join('') + '</tr>';
+function showOrgan(id) {
+  const o = ORG.find(x => x.id === id); if (!o) return;
+  $('org-card').innerHTML = `<h3>${o.name}</h3><div class="scroll"><table class="t stack">${head(['', o.name])}${o.rows.map(r => row(r, ['', ''])).join('')}</table></div>` +
+    (o.topic ? `<div><button class="btn" id="org-3d">Show in 3D</button></div>` : '<p class="muted">Not in the 3D model (male model): see the female schematics above.</p>');
+  if (o.topic) $('org-3d').onclick = () => { showTopic(o.topic); toView(); };
+  document.querySelectorAll('#org-chips button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id));
+}
+function buildTables() {
+  $('sup-table').innerHTML = head(['Support', 'From → to', 'Role']) + SUP_ROWS.map(r => row(r, ['', 'From → to', 'Role'])).join('');
+  $('pr-table').innerHTML = head(['Per rectum', 'What is felt']) + PR_ROWS.map(r => row(r, ['', ''])).join('');
+  $('pv-table').innerHTML = head(['Per vaginam', 'What is felt']) + PV_ROWS.map(r => row(r, ['', ''])).join('');
+  const oc = $('org-chips');
+  for (const o of ORG) { const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = o.id; b.textContent = o.name; b.onclick = () => showOrgan(o.id); oc.append(b); }
+  $('clin-list').innerHTML = CLIN.map(([t, d, k]) => `<div class="item"><b class="t">${t}</b>${d}${k ? ` <button class="chip" data-k="${k}">3D</button>` : ''}</div>`).join('');
+  $('clin-list').querySelectorAll('button[data-k]').forEach(b => b.onclick = () => { showTopic(b.dataset.k); toView(); });
+}
+function legend() {
+  const items = [['--kidney', 'Urinary tract'], ['--prost', 'Prostate'], ['--sv', 'Seminal vesicle'], ['--duct', 'Sperm ducts'], ['--colon', 'Rectum'], ['--musc', 'Muscles'],
+    ['--lig', 'Ligaments'], ['--artery', 'Arteries'], ['--vein', 'Veins'], ['--nerve', 'Nerves'], ['--lymph', 'Lymph nodes'], ['--erect', 'Corpora cavernosa'], ['--spong', 'Corpus spongiosum'], ['--gonad', 'Testis']];
+  $('key3d').innerHTML = items.map(([c, l]) => `<span><i style="background:var(${c})"></i>${l}</span>`).join('');
+}
+function toggles(boxId, opts, def, draw) {
+  for (const [k, label] of opts) {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = label; b.setAttribute('aria-pressed', k === def);
+    b.onclick = () => { $(boxId).querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); draw(k); }; $(boxId).append(b);
+  }
+  draw(def);
+}
+
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('org-cap').textContent = ORG_CAP; $('exam-note').textContent = EXAM_NOTE;
+  toggles('fem-tg', [['normal', 'Usual position'], ['retro', 'Retroverted'], ['prolapse', 'Prolapse'], ['pv', 'Felt per vaginam']], 'normal', drawFemale);
+  toggles('broad-tg', [['parts', 'Tube, ovary, ligaments'], ['vessels', 'Uterine artery and ureter']], 'parts', drawBroad);
+  toggles('pros-tg', [['zones', 'Zones'], ['lobes', 'Lobes'], ['bph', 'BPH'], ['ca', 'Cancer']], 'zones', drawProstate);
+  toggles('auto-tg', [['normal', 'Normal'], ['auto', 'Automatic bladder'], ['flaccid', 'Flaccid bladder']], 'normal', drawAuto);
+  buildTables(); legend(); showOrgan('bladder');
+  const bar = $('vbar');
+  for (const [label, dir] of [['Front', [0, -1, 0]], ['Back', [0, 1, 0]], ['Right', [-1, 0, 0]], ['Left', [1, 0, 0]], ['Above', [0, -0.3, 1]]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic('front');
+  window.J = {TOPICS, showTopic, names, kind, showOrgan};   // for tests
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>
