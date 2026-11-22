@@ -8,7 +8,10 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 34 (ear and eye) started 2026-11-22: agent (eareye); sheet fill-eareye, model models/eareye (or ear + eye),
+- Module 34 (ear and eye) started 2026-11-22: [x] build (521 quotes, 83-part 631 KB eareye, one page, CC BY-SA eardrum
+  photo; AN31.5 still partial) [x] review (14 items: canal and auricle labels on the
+  wrong spots, model chorda and tube off, cone of light one source, pituitary field layout) [ ] fixes (sent) [ ] docs
+  [ ] commit. Builder agent a18f9dc6; sheet fill-eareye, model models/eareye (or ear + eye),
   page head-neck/ear-eye.html (may split). Target AN40.1–40.5, 41.1–41.3, 31.4, 30.5 (+ AN31.5 gap).
 - Module 35 (pelvic viscera, perineum, male genitalia) started 2026-11-22: sheet fill-pelv, model models/pelv
   (tools/abdomen-pelvis/pelvis_config.py), page abdomen-pelvis/pelvis-perineum.html (may split). Target AN46.1–46.5,
