@@ -1100,3 +1100,15 @@ tubercles.
   table rows, phimosis wording, cryptorchidism side, episiotomy wording, model caveats, testis caption, lesion dimming,
   colours, schematic layers and label collisions, sourcing of levels and nerves.
 - AN48.3: internal iliac relations completed with PMC10801552.
+
+## Anatomy home: Joints and ligaments, and Organs layers — `index.html`
+
+- Joints and ligaments (`models/body-joints`, 236 parts, 1.09 MB; `tools/home/body_layers.py`): the ligaments,
+  capsules, discs, menisci, labra, bursae, interosseous membranes and fat pad of the regional joint models. Z-Anatomy
+  (CC BY-SA 4.0, from BodyParts3D), modifiers applied, in the BodyParts3D frame; intervertebral discs from BodyParts3D
+  (CC BY-SA 2.1 Japan). Same keys as the regional models, the thinnest parts slightly coarser; right side mirrored to
+  the left. A second tap opens the regional joints page.
+- Organs (`models/body-organs`, 102 parts, 0.63 MB): organs of the lung, abdominal, pelvic, neck-gland,
+  mouth-pharynx and ear-eye models, with the same sources (the kidney is Z-Anatomy's CC BY-NC 4.0 model, as on the
+  abdominal page). Each organ is coloured as on its own page and a second tap opens that page. Heart chambers are in
+  the vessel layer; spleen and tonsil in the lymph layer; the pelvis is male, as in the model.

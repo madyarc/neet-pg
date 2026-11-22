@@ -92,6 +92,10 @@ The anatomy pages load model files, which browsers block when a page is opened s
 The simplified meshes embedded in the pages are shared under the same licence. Muscles, vessels, nerves and lymph nodes:
 Z-Anatomy, CC BY-SA 4.0 (built on BodyParts3D).
 
+Anatomy home layers: skeleton, muscles, heart and vessels, nerves, lymph nodes, joints and ligaments
+(`models/body-joints`) and organs (`models/body-organs`, from the regional organ models); each part opens its page.
+Every 3D page has a Bones on/off button; the main and Anatomy pages have a site search (`tools/home/search_index.py`).
+
 ## Licence
 
 This project is free and not for commercial use: anyone may use, copy, change and share it for non-commercial

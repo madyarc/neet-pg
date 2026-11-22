@@ -9,7 +9,7 @@ Last updated: 2026-11-21
 ## Now
 
 - Resumed 2026-11-22 05:31: module 36 finishing agent (continues from files on disk: meninges-cord.html,
-  brainstem.html, models/neuro1, fill-neuro1) and the home Joints/Organs layers agent (body_layers.py) running.
+  brainstem.html, models/neuro1, fill-neuro1) (running); home Joints/Organs layers done.
 - PAUSED new modules (user, 2026-11-22): finish modules 35 and 36 (review, fixes, docs, commit), then do the
   navigation work below before module 37.
 - Navigation work (user request 2026-11-22):
@@ -23,7 +23,8 @@ Last updated: 2026-11-21
      bone set from `models/bone-keys.json` (skeleton and detail model keys, kinds.json bone/cart, `_l` mirrors);
      button in the viewer corner, preference in localStorage, hidden on bone-only pages and the home (it has the
      Skeletal chip).
-  4. [~] chips reordered (available first); joint and organ layers still to build (combined whole-body ligament and
+  4. [x] done 2026-11-22: Joints and ligaments and Organs layers (models/body-joints, body-organs; tools/home/
+     body_layers.py config|post); was: joint and organ layers still to build (combined whole-body ligament and
      organ models from the joint and organ packs, with meta json like body-lymph). Home Systems chips: available ones first; "Joints and ligaments" and "Organs" no longer "coming" if a layer
      can be built from the joint and organ models (lazy-loaded); otherwise list them last.
 
@@ -110,6 +111,9 @@ builds at the same time.
   that disproves each claim.
 
 ## Log (newest first)
+
+- 2026-11-22: Navigation: site search (assets/search.js, search-index.json), grouped Anatomy page with filters and
+  region jumps, Bones on/off on every 3D page, Joints and ligaments and Organs layers on the Anatomy home.
 
 - 2026-11-22: Module 35 (pelvic viscera; perineum and male genitalia, two pages): 796 quotes, 77-part 391 KB male
   `models/pelv`, female organs schematic; review found 26 items (palpable vs relations, extravasation of urine,

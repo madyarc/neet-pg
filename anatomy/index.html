@@ -61,11 +61,11 @@ header .sitesearch{max-width:680px}
         <button class="chip" aria-pressed="false" data-sys="vascular">Heart and vessels</button>
         <button class="chip" aria-pressed="false" data-sys="nervous">Nerves</button>
         <button class="chip" aria-pressed="false" data-sys="lymphatic">Lymph nodes</button>
-        <button class="chip" disabled>Joints and ligaments — coming</button>
-        <button class="chip" disabled>Organs — coming</button>
+        <button class="chip" aria-pressed="false" data-sys="joints">Joints and ligaments</button>
+        <button class="chip" aria-pressed="false" data-sys="organs">Organs</button>
       </div>
     </div>
-    <p class="muted"><span class="swatch" style="background:var(--bone)"></span>bone &nbsp; <span class="swatch" style="background:var(--cart)"></span>cartilage (costal cartilages)<span id="mus-key" hidden> &nbsp; <span class="swatch" style="background:#CC6677"></span><span class="swatch" style="background:#117733"></span><span class="swatch" style="background:#88CCEE"></span>muscles (one colour each, the same on both sides; different muscles that touch never share one) &nbsp; <span class="swatch" style="background:var(--fascia)"></span>tendons, aponeuroses, retinacula</span><span id="ves-key" hidden> &nbsp; <span class="swatch" style="background:var(--artery)"></span>arteries (pulmonary arteries too) &nbsp; <span class="swatch" style="background:var(--vein)"></span>veins and venous sinuses &nbsp; <span class="swatch" style="background:var(--heart)"></span>heart</span><span id="ner-key" hidden> &nbsp; <span class="swatch" style="background:var(--nerve)"></span>nerves and ganglia &nbsp; <span class="swatch" style="background:var(--dura)"></span>spinal dura (the spinal cord is not in the model)</span><span id="lym-key" hidden> &nbsp; <span class="swatch" style="background:var(--lymph)"></span>lymph node groups, tonsil, thymus, spleen (no lymph vessels in the model)</span></p>
+    <p class="muted"><span class="swatch" style="background:var(--bone)"></span>bone &nbsp; <span class="swatch" style="background:var(--cart)"></span>cartilage (costal cartilages)<span id="mus-key" hidden> &nbsp; <span class="swatch" style="background:#CC6677"></span><span class="swatch" style="background:#117733"></span><span class="swatch" style="background:#88CCEE"></span>muscles (one colour each, the same on both sides; different muscles that touch never share one) &nbsp; <span class="swatch" style="background:var(--fascia)"></span>tendons, aponeuroses, retinacula</span><span id="ves-key" hidden> &nbsp; <span class="swatch" style="background:var(--artery)"></span>arteries (pulmonary arteries too) &nbsp; <span class="swatch" style="background:var(--vein)"></span>veins and venous sinuses &nbsp; <span class="swatch" style="background:var(--heart)"></span>heart</span><span id="ner-key" hidden> &nbsp; <span class="swatch" style="background:var(--nerve)"></span>nerves and ganglia &nbsp; <span class="swatch" style="background:var(--dura)"></span>spinal dura (the spinal cord is not in the model)</span><span id="lym-key" hidden> &nbsp; <span class="swatch" style="background:var(--lymph)"></span>lymph node groups, tonsil, thymus, spleen (no lymph vessels in the model)</span><span id="joi-key" hidden> &nbsp; <span class="swatch" style="background:var(--lig)"></span>ligaments, interosseous membranes &nbsp; <span class="swatch" style="background:var(--capsule)"></span>joint capsules &nbsp; <span class="swatch" style="background:var(--cart)"></span>discs, menisci, labra &nbsp; <span class="swatch" style="background:var(--bursa)"></span>bursae &nbsp; <span class="swatch" style="background:var(--soft)"></span>fat pad (joints of the regional joint pages; right side mirrored to the left)</span><span id="org-key" hidden> &nbsp; <span class="swatch" style="background:var(--lobe-s)"></span><span class="swatch" style="background:var(--lobe-m)"></span><span class="swatch" style="background:var(--lobe-i)"></span>lung lobes &nbsp; <span class="swatch" style="background:var(--airway)"></span>airways &nbsp; <span class="swatch" style="background:var(--gut)"></span><span class="swatch" style="background:var(--stom)"></span><span class="swatch" style="background:var(--colon)"></span>gut &nbsp; <span class="swatch" style="background:var(--liver)"></span>liver &nbsp; <span class="swatch" style="background:var(--kidney)"></span>kidneys, ureters, bladder &nbsp; <span class="swatch" style="background:var(--saliv)"></span><span class="swatch" style="background:var(--thyroid)"></span>glands &nbsp; each organ in the colour of its own page (organs of the regional organ pages; male pelvis as in the model)</span></p>
     <div>
       <h3>Detailed pages by region</h3>
       <nav class="jump" aria-label="Regions">
@@ -233,7 +233,7 @@ let man = null, names = {}, sel = null;      // sel = {group, key}
 // muscles: loaded the first time the Muscular system is switched on (models/body-muscles, tools/zanat/body_muscles.py)
 let mus = null, musLoading = null;           // mus = {info: {key: {region, page, kind, side, colour}}, keys: [...]}
 // heart and vessels: loaded the first time that system is switched on (models/body-vessels, tools/zanat/body_vessels.py)
-const layers = {skeletal: true, muscular: false, vascular: false, nervous: false, lymphatic: false};
+const layers = {skeletal: true, muscular: false, vascular: false, nervous: false, lymphatic: false, joints: false, organs: false};
 
 // selection card over the model, and a "whole body" button
 const card = v.addOverlay(document.createElement('div')); card.className = 'selcard'; card.hidden = true;
@@ -291,6 +291,8 @@ function applyLayers() {
   document.getElementById('ves-key').hidden = !layers.vascular;
   document.getElementById('ner-key').hidden = !layers.nervous;
   document.getElementById('lym-key').hidden = !layers.lymphatic;
+  document.getElementById('joi-key').hidden = !layers.joints;
+  document.getElementById('org-key').hidden = !layers.organs;
   if (sel) { const vis = k => (mus && mus.info[k]) ? layers.muscular : extraOf(k) ? layers[extraOf(k)] : layers.skeletal; if (!vis(sel.key)) clear(); }
 }
 function loadMuscles() {
@@ -327,6 +329,9 @@ const EXTRA = {
   vascular: {label: 'Heart and vessels', base: 'models/body-vessels/', meta: 'vessels.json', model: 'body-vessels.json', colour: d => '--' + d.kind},
   lymphatic: {label: 'Lymph nodes', base: 'models/body-lymph/', meta: 'lymph.json', model: 'body-lymph.json', colour: d => '--lymph'},
   nervous: {label: 'Nerves', base: 'models/body-nerves/', meta: 'nerves.json', model: 'body-nerves.json', colour: d => d.kind === 'dura' ? '--dura' : '--nerve'},
+  // joints and organs (tools/home/body_layers.py): colour and page (a REGION_PAGES name) per part in the meta json
+  joints: {label: 'Joints and ligaments', base: 'models/body-joints/', meta: 'joints.json', model: 'body-joints.json', colour: d => d.colour},
+  organs: {label: 'Organs', base: 'models/body-organs/', meta: 'organs.json', model: 'body-organs.json', colour: d => d.colour},
 };
 // regions whose vessels, nerves and nodes have a detailed page
 const REGION_PAGES = {'Upper limb': {name: 'Nerves, vessels and lymph nodes of the upper limb', href: 'upper-limb/nerves-vessels.html'},
@@ -336,7 +341,16 @@ const REGION_PAGES = {'Upper limb': {name: 'Nerves, vessels and lymph nodes of t
   'Abdomen and pelvis': {name: 'Nerves and vessels of the abdomen and pelvis', href: 'abdomen-pelvis/nerves-vessels.html'},
   'Head and neck': {name: 'Nerves, vessels and lymph nodes of the head and neck', href: 'head-neck/nerves-vessels.html'},
   'Lungs': {name: 'Lungs, pleura and trachea', href: 'thorax/lungs.html'},
-  'Abdominal organs': {name: 'The abdominal cavity and organs', href: 'abdomen-pelvis/organs.html'}};
+  'Abdominal organs': {name: 'The abdominal cavity and organs', href: 'abdomen-pelvis/organs.html'},
+  'Pelvic viscera': {name: 'Pelvic viscera', href: 'abdomen-pelvis/pelvis.html'},
+  'Perineum': {name: 'Perineum and male external genitalia', href: 'abdomen-pelvis/perineum.html'},
+  'Neck glands': {name: 'Face and neck: regions and glands', href: 'head-neck/regions.html'},
+  'Mouth, pharynx, nose and larynx': {name: 'Mouth, pharynx, nose and larynx', href: 'head-neck/mouth-pharynx-nose.html'},
+  'Ear and eye': {name: 'The ear and the eye', href: 'head-neck/ear-eye.html'},
+  'Upper limb joints': {name: 'Joints of the upper limb', href: 'upper-limb/joints.html'},
+  'Lower limb joints': {name: 'Joints of the lower limb', href: 'lower-limb/joints.html'},
+  'Axial joints': {name: 'Joints of the jaw, spine and pelvis', href: 'back/joints.html'},
+  'Joints': {name: 'Joints', href: 'general/joints.html'}};
 // Z-Anatomy files thorax, abdomen, pelvis (and axillary and inguinal nodes) under "Trunk": which page each such part opens
 // (written by tools/home/region_pages.py from the regional models); loaded with the first extra layer
 let PAGE_OF = {}, pagesLoading = null;
@@ -345,6 +359,8 @@ const loadPages = () => pagesLoading || (pagesLoading = fetch('models/region-pag
 const HEART_RE = /^v_(left|right)_(atrium|ventricle)$|^v_pulmonary_trunk$|coronary|cardiac_vein|interventricular_artery|^v_marginal_artery$|^v_circumflex_artery_of_heart$/;
 function regionOf(layer, k) {
   if (layer === 'vascular' && HEART_RE.test(k.replace(/_l$/, ''))) return 'Heart';
+  const d = extra[layer].info[k];
+  if (d.page) return REGION_PAGES[d.page] ? d.page : layer === 'joints' ? 'Joints' : d.region;    // joints and organs
   return PAGE_OF[k] || PAGE_OF[k.replace(/_l$/, '')] || extra[layer].info[k].region;
 }
 const extra = {}, extraLoading = {};     // extra[sys] = {info: {key: {kind, region, side, ...}}, keys: [...]}
@@ -355,6 +371,10 @@ function loadExtra(sys) {
   extraLoading[sys] = (async () => {
     loadPages();
     const meta = await (await fetch(L.base + L.meta)).json();
+    if (meta.tokens) {                         // organ colours that their own pages define ([light, dark])
+      const st = document.createElement('style'), decl = i => Object.entries(meta.tokens).map(([n, c]) => `${n}:${c[i]}`).join(';');
+      st.textContent = `:root{${decl(0)}}:root[data-theme="dark"]{${decl(1)}}`; document.head.append(st);
+    }
     const info = {}, M = meta.mirror, keys = [];
     await v.load(L.base + L.model, null, {fit: false,
       onProgress: f => { b.textContent = `${L.label} · loading ${Math.round(f * 100)}%`; },
@@ -363,7 +383,7 @@ function loadExtra(sys) {
     for (const [k, d] of Object.entries(meta.parts)) {
       for (const left of d.mirror ? [false, true] : [false]) {
         const key = left ? k + '_l' : k;
-        info[key] = {...d, side: d.mirror ? (left ? 'left' : 'right') : d.side};
+        info[key] = {...d, side: d.mirror ? (left === (d.side === 'left') ? 'right' : 'left') : d.side};   // a mirrored left-only part becomes the right one
         names[key] = v.parts.get(k).info.name;
         v.setColour(key, L.colour(d));
         keys.push(key);
