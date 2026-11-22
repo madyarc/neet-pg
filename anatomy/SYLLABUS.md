@@ -292,14 +292,14 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [x] **AN30.2** Describe & identify major foramina with structures passing through them — *foramina of the cranial floor and external base with their contents in 3D: [The Skull](head-neck/skull.html#foramina); on each bone: [Bones of the Skull](head-neck/skull-bones.html)*
 - [x] **AN30.3** Describe & identify dural folds & dural venous sinuses — *sinus drainage in [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html); dural folds in [The Skull](head-neck/skull.html)*
 - [x] **AN30.4** Describe clinical importance of dural venous sinuses — *cavernous sinus contents and thrombosis: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
-- [ ] **AN30.5** Explain effect of pituitary tumours on visual pathway
+- [x] **AN30.5** Explain effect of pituitary tumours on visual pathway — *pituitary under the chiasm, bitemporal hemianopia: [The Ear and the Eye](head-neck/ear-eye.html); also [Visual Pathway](../ophthalmology/neuro-ophthalmology/visual-pathway.html)*
 
 ### 31. Orbit
 
 - [x] **AN31.1** Describe & identify extra ocular muscles of eyeball, along with a note on its attachment, action and clinical anatomy — *attachments, nerves, primary/secondary/tertiary actions, H test: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [x] **AN31.2** Describe & demonstrate nerves and vessels in the orbit — *ophthalmic artery and veins, orbital nerves: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 - [x] **AN31.3** Describe anatomical basis of Horner’s syndrome — *three-neuron pathway, signs, causes and sweating pattern by level, sympathetic trunk in 3D: [Muscles of the Head and Neck](head-neck/muscles.html)*
-- [ ] **AN31.4** Describe the components of lacrimal apparatus
+- [x] **AN31.4** Describe the components of lacrimal apparatus — *gland, puncta, canaliculi, sac, nasolacrimal duct, secretomotor path: [The Ear and the Eye](head-neck/ear-eye.html)*
 - [~] **AN31.5** Explain the anatomical basis of oculomotor, trochlear and abducent nerve palsies along with strabismus — *III, IV, VI palsies; phoria/tropia, eso/exo/hyper/hypo, concomitant vs paralytic, secondary deviation; III/IV/VI in 3D (primary vs secondary deviation not found in two open sources): [Muscles of the Head and Neck](head-neck/muscles.html)*
 
 ### 32. Anterior Triangle
@@ -363,17 +363,17 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 40. Organs of hearing and equilibrium
 
-- [ ] **AN40.1** Describe & identify the parts, blood supply and nerve supply of external ear
-- [ ] **AN40.2** Describe & demonstrate the boundaries, contents, relations and functional anatomy of middle ear and auditory tube
-- [ ] **AN40.3** Describe the features of internal ear
-- [ ] **AN40.4** Explain anatomical basis of otitis externa and otitis media
-- [ ] **AN40.5** Explain anatomical basis of myringotomy
+- [x] **AN40.1** Describe & identify the parts, blood supply and nerve supply of external ear — *auricle parts and cartilage, meatus, arteries, nerves in 3D: [The Ear and the Eye](head-neck/ear-eye.html)*
+- [x] **AN40.2** Describe & demonstrate the boundaries, contents, relations and functional anatomy of middle ear and auditory tube — *six walls, ossicles, tensor tympani and stapedius, chorda tympani, facial canal, auditory tube, eardrum with a labelled otoscope photo: [The Ear and the Eye](head-neck/ear-eye.html)*
+- [x] **AN40.3** Describe the features of internal ear — *bony and membranous labyrinth, cochlea, semicircular canals, VIII: [The Ear and the Eye](head-neck/ear-eye.html)*
+- [x] **AN40.4** Explain anatomical basis of otitis externa and otitis media — *otitis externa and media, spread by the walls: [The Ear and the Eye](head-neck/ear-eye.html)*
+- [x] **AN40.5** Explain anatomical basis of myringotomy — *myringotomy site and why: [The Ear and the Eye](head-neck/ear-eye.html)*
 
 ### 41. Eyeball
 
-- [ ] **AN41.1** Describe & demonstrate parts and layers of eyeball
-- [ ] **AN41.2** Describe the anatomical aspects of cataract, glaucoma & central retinal artery occlusion
-- [ ] **AN41.3** Describe the position, nerve supply and actions of intraocular muscles
+- [x] **AN41.1** Describe & demonstrate parts and layers of eyeball — *coats, chambers, media, aqueous circulation in a 3D section: [The Ear and the Eye](head-neck/ear-eye.html)*
+- [x] **AN41.2** Describe the anatomical aspects of cataract, glaucoma & central retinal artery occlusion — *cataract, open- and closed-angle glaucoma, central retinal artery occlusion: [The Ear and the Eye](head-neck/ear-eye.html)*
+- [x] **AN41.3** Describe the position, nerve supply and actions of intraocular muscles — *ciliary muscle, sphincter and dilator pupillae: [The Ear and the Eye](head-neck/ear-eye.html)*
 
 ### 42. Back Region
 

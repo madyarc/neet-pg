@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Ear and the Eye</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone, --cart (cartilage; the auditory tube, as on mouth-pharynx-nose.html), --soft (muscles
+   as context), --artery, --vein, --nerve, --clin (a clinical point: incision, blockage, tumour). Shared with other pages, same meaning:
+   --skin (regions.html: the skin of the auricle), --musc (muscle tissue, as on mouth-pharynx-nose.html and joints.html: the extraocular muscles), --fluid (the shared fluid token: aqueous humour and vitreous), --iris and --sclera
+   (ophthalmology/neuro-ophthalmology/pupil-reflexes.html), --lens and --retina (ophthalmology/refraction/refractive-errors.html).
+   Page-only tokens, used for nothing else (chosen away from every other token of the site): --tm (tympanic membrane), --labyr (bony
+   labyrinth), --cornea, --choroid, --cil (ciliary body and muscle), --lacgl (lacrimal gland), --tear (lacrimal drainage passages),
+   --tarsus (tarsal plates), --pit (pituitary gland). The three ossicles take bone identity colours (Paul Tol "light", as the skull's bones). */
+:root{--skin:#f1d3bf;--fluid:#d9edc6;--iris:#6b7f99;--sclera:#ffffff;--lens:#5b8fb9;--retina:#b4485a;
+  --tm:#c9ada7;--labyr:#3a0ca3;--cornea:#a5e6f5;--choroid:#5a1e1e;--cil:#b08900;--lacgl:#b5179e;--tear:#00a6a6;--tarsus:#8c6d1f;--pit:#7400b8;--musc:#c96f68}
+:root[data-theme="dark"]{--skin:#7a5a48;--fluid:#4e6638;--iris:#7d93b0;--sclera:#d9dee6;--lens:#7fb3dc;--retina:#e07a8c;
+  --tm:#8a6f6a;--labyr:#9d8cf2;--cornea:#5fa8bd;--choroid:#8c3b3b;--cil:#cc9a3d;--lacgl:#e05cc8;--tear:#2ec4c4;--tarsus:#c4a24a;--pit:#e2a0ff;--musc:#9c4e48;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+#topics{display:flex;flex-direction:column;gap:10px}
+#topic-text p+p,#topic-text p+ul,#topic-text ul+p{margin-top:8px}
+#topic-text ul{margin:4px 0 0;padding-left:20px}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.scroll{overflow-x:auto}
+.scroll,.schbox{scrollbar-color:var(--line) transparent}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:640px;margin:0 auto}
+.schbox{overflow-x:auto}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:520px}.schbox svg.sch.fit{min-width:0}.swipe{display:inline}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.c{fill:var(--clin);font-weight:600}
+svg.sch text.onb{fill:#1a2130;font-size:11px}   /* text on a --bone fill: dark in both themes */
+svg.sch .bone{fill:var(--bone);stroke:var(--muted);stroke-width:1}
+svg.sch .cart{fill:var(--cart);stroke:var(--muted);stroke-width:1}
+svg.sch .mus{fill:var(--soft);stroke:var(--muted);stroke-width:.8}
+svg.sch .skin{fill:var(--skin);stroke:var(--muted);stroke-width:.8}
+svg.sch .tm{fill:var(--tm);stroke:var(--muted);stroke-width:1}
+svg.sch .lab{fill:var(--labyr);fill-opacity:.25;stroke:var(--labyr);stroke-width:1.5}
+svg.sch .scl{fill:var(--sclera);stroke:var(--muted);stroke-width:1.2}
+svg.sch .cor{fill:var(--cornea);stroke:var(--muted);stroke-width:1}
+svg.sch .cho{fill:var(--choroid)}
+svg.sch .ret{fill:var(--retina)}
+svg.sch .cil{fill:var(--cil);stroke:var(--muted);stroke-width:.6}
+svg.sch .iri{fill:var(--iris)}
+svg.sch .lns{fill:var(--lens);fill-opacity:.85;stroke:var(--muted);stroke-width:.8}
+svg.sch .flu{fill:var(--fluid)}
+svg.sch .lg{fill:var(--lacgl);fill-opacity:.8;stroke:var(--lacgl);stroke-width:1.2}
+svg.sch .tearl{stroke:var(--tear);stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+svg.sch .tearf{fill:var(--tear)}
+svg.sch .pit{fill:var(--pit);fill-opacity:.75;stroke:var(--pit);stroke-width:1.2}
+svg.sch .art{fill:var(--artery)}
+svg.sch .artl{stroke:var(--artery);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .vn{fill:var(--vein);fill-opacity:.8}
+svg.sch .nv{fill:var(--nerve);stroke:var(--ink);stroke-width:.5}
+svg.sch .nvl{stroke:var(--nerve);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .clin{stroke:var(--clin);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .clinf{fill:var(--clin);fill-opacity:.75}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .arrow{stroke:var(--muted);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+svg.sch .flow{stroke:var(--ink);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+svg.sch .dash{stroke-dasharray:6 4}
+svg.sch .box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .wall{fill:var(--bg);stroke:var(--line);stroke-width:1}
+svg.sch .air{fill:var(--surface);stroke:var(--muted);stroke-width:1}
+svg.sch .quad{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 4;fill:none}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.credit{font-size:12px;color:var(--muted)}
+figure{margin:0}
+figure img{width:100%;height:auto;display:block;border-radius:6px}
+.photo{position:relative;max-width:360px}
+.photo svg{position:absolute;inset:0;width:100%;height:100%}
+.photo .pl path{stroke:#fff;stroke-width:2;fill:none}
+.photo .pt text{font:600 15px var(--f-body);fill:#fff;paint-order:stroke;stroke:#000;stroke-width:3px}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>The Ear and the Eye</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="The ear and the eye in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <div class="key" id="key3d"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ext">
+  <h2 id="h-ext">External ear: parts, arteries and nerves</h2>
+  <div class="prose" id="ext-text"></div>
+  <div class="scroll"><table class="t stack" id="ext-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tm">
+  <h2 id="h-tm">The tympanic membrane, otitis externa and myringotomy</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="tm-svg" viewBox="0 0 600 440" role="img" aria-label="Schematic of the right tympanic membrane as seen through an otoscope: the handle of the malleus running down and back to the umbo at the centre, the lateral process at its top, the small pars flaccida above the malleolar folds, the cone of light in the front lower quadrant, and the four quadrants; behind the back upper quadrant lie the long process of the incus, the stapes and the chorda tympani"></svg></div>
+      <div class="toggles" id="tm-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. <b>Right</b> ear seen through an otoscope: the front of the head is on your <b>right</b>, the top at the top.</p>
+    </div>
+    <div class="prose" id="tm-text"></div>
+  </div>
+  <figure>
+    <div class="photo"><img src="img/tm-right-normal.jpg" width="420" height="416" loading="lazy" alt="Otoscopic photograph of a normal right tympanic membrane: pearly grey, with the handle of the malleus running down from its lateral process to the umbo and the bright cone of light in the front lower quadrant">
+    <svg viewBox="0 0 420 416" aria-hidden="true"><g class="pl"><path d="M284 146 L250 60"/><path d="M250 180 L330 160"/><path d="M216 214 L120 250"/><path d="M248 236 L262 330"/></g><g class="pt"><text x="250" y="52" text-anchor="middle">Lateral process</text><text x="334" y="164">Handle</text><text x="116" y="254" text-anchor="end">Umbo</text><text x="262" y="350" text-anchor="middle">Cone of light</text></g></svg></div>
+    <figcaption class="credit">A normal <b>right</b> tympanic membrane through an otoscope (front on your right): handle of the malleus, umbo, cone of light. Labels added (approximate). Photo: <a href="https://commons.wikimedia.org/wiki/File:TM_RIGHT_NORMAL.jpg">Michael Hawke MD, “TM RIGHT NORMAL.jpg”</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>, resized and labelled.</figcaption>
+  </figure>
+  <div class="prose" id="oe-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-me">
+  <h2 id="h-me">Middle ear: walls, contents and relations</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="box-svg" viewBox="0 0 600 470" role="img" aria-label="Schematic of the right middle ear opened like a box and seen from the lateral side with the tympanic membrane removed: in the centre the medial wall with the promontory, the oval window holding the stapes, the round window below and behind it, the prominence of the facial canal above the oval window; above the roof (tegmen tympani) and the middle cranial fossa, below the floor and the jugular bulb, in front the anterior wall with the internal carotid artery, the canal for tensor tympani and the auditory tube, behind the posterior wall with the aditus to the mastoid antrum, the pyramid and the vertical part of the facial canal"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. <b>Right</b> middle ear seen from the <b>lateral</b> side (tympanic membrane removed), as the 3D "Right" view: the front is on your <b>right</b>.</p>
+    </div>
+    <div class="prose" id="me-text"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="wall-table"></table></div>
+  <div class="scroll"><table class="t stack" id="cont-table"></table></div>
+  <div class="prose" id="om-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ie">
+  <h2 id="h-ie">Internal ear</h2>
+  <div class="prose" id="ie-text"></div>
+  <div class="scroll"><table class="t stack" id="ie-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-eye">
+  <h2 id="h-eye">Eyeball: coats, chambers and media; cataract, glaucoma, retinal artery occlusion</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="eye-svg" viewBox="0 0 610 520" role="img" aria-label="Schematic horizontal section of the right eyeball seen from above: cornea in front, sclera behind, choroid and retina lining the back, ciliary body and iris in front of the lens, anterior and posterior chambers, vitreous behind the lens, optic nerve leaving on the nasal side of the back with the central retinal artery, the fovea at the back; arrows show aqueous humour flowing from the ciliary processes through the pupil to the angle and Schlemm's canal"></svg></div>
+      <div class="toggles" id="eye-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. <b>Right</b> eye, horizontal section seen from <b>above</b>: the front at the top, the nasal side on your <b>left</b>, the temporal side on your right.</p>
+    </div>
+    <div class="prose" id="eye-text"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="coat-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-iom">
+  <h2 id="h-iom">Intraocular muscles</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="iom-svg" viewBox="0 0 600 340" role="img" aria-label="Pathway diagram: the Edinger–Westphal nucleus sends parasympathetic fibres in the oculomotor nerve to the ciliary ganglion, then by the short ciliary nerves to the sphincter pupillae and the ciliary muscle; sympathetic fibres from the superior cervical ganglion travel on the internal carotid artery and reach the dilator pupillae mainly by the long ciliary nerves"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic pathway, not anatomical positions.</p>
+    </div>
+    <div class="prose" id="iom-text"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="iom-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lac">
+  <h2 id="h-lac">Lacrimal apparatus</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="lac-svg" viewBox="0 0 680 420" role="img" aria-label="Schematic of the right eye seen from the front: the lacrimal gland at the upper lateral part of the orbit with its ducts opening on the upper eyelid; tears flow across the eye to the medial angle, enter the puncta on the lid margins, run in the upper and lower canaliculi to the lacrimal sac and down the nasolacrimal duct to the inferior meatus of the nose"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. <b>Right</b> eye seen from the <b>front</b>, as the 3D "Front" view: the lateral side on your <b>left</b>, the nose on your right.</p>
+    </div>
+    <div class="prose" id="lac-text"></div>
+  </div>
+  <div class="scroll"><table class="t stack" id="lac-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pit">
+  <h2 id="h-pit">Pituitary tumours and the visual pathway</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="pit-svg" viewBox="0 0 600 520" role="img" aria-label="Schematic coronal section through the sella turcica seen from the front: the pituitary in the hypophyseal fossa, roofed by the diaphragma sellae, the optic chiasm above, the cavernous sinuses on each side with the internal carotid artery and cranial nerves, the sphenoidal sinus below; with the tumour switched on, a pituitary adenoma grows up through the diaphragma and presses on the middle of the chiasm, and the two visual fields lose their temporal halves"></svg></div>
+      <div class="toggles" id="pit-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. Coronal section seen from the <b>front</b>: the patient's right is on your <b>left</b>. Visual fields as the patient sees them (each eye's temporal field on the outside).</p>
+    </div>
+    <div class="prose" id="pit-text"></div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-eareye.md, anatomy/DATA-SOURCES.md) ===================== */
+const L = k => k + '_l';                    // the mirrored (left) copy of a right-only part
+const SH = (l, sh) => ({l, sh});            // a label with a shorter form for narrow screens
+const RIGHT = [-1, 0, 0.05], FRONT = [0, -1, 0.05], ABOVE = [0, -0.25, 1];
+const AURICLE = ['a_helix', 'a_antihelix', 'a_scapha', 'a_triangular', 'a_concha', 'a_tragus', 'a_antitragus', 'a_lobule', 'a_back'];
+const OSS = ['z_malleus', 'z_incus', 'z_stapes'], LAB = ['z_cochlea', 'z_vestibule'];
+const VIII = ['n_vestibulocochlear_nerve_viii_r', 'n_vestibular_nerve_r', 'n_cochlear_nerve'];
+const ORBIT = ['frontal_bone', 'sphenoid_bone', 'ethmoid', 'right_maxilla', 'right_zygomatic_bone', 'right_lacrimal_bone', 'right_nasal_bone', 'right_palatine_bone'];
+const SKULL_EAR = ['z_temporal', 'occipital_bone', 'right_parietal_bone', 'sphenoid_bone', 'mandible'];
+const EYE = ['e_sclera', 'e_cornea', 'e_iris', 'e_lens', 'e_retina', 'e_vitreous', 'e_aqueous'];
+const EOM = ['m_sup_rectus', 'm_inf_rectus', 'm_med_rectus', 'm_lat_rectus', 'm_sup_oblique', 'm_inf_oblique', 'm_lps'];
+const OPTIC = ['o_nerve_r', 'o_nerve_l', 'o_chiasm', 'o_tract_r', 'o_tract_l'];
+const OSS_COL = {z_malleus: '#FFAABB', z_incus: '#77AADD', z_stapes: '#EEDD88'};   // bone identity colours (Paul Tol light), only for the ossicles
+/* a topic: lit = parts in their own colour; soft = muscles shown (soft colour); solid = context parts kept solid; glass = parts drawn
+   as glass; hide = parts not drawn; clip = [normal, d]: cut away the side n·p > d (mm); labels = [key, text, point to search from (mm)];
+   pts = [point (mm), label, colour token]: labels on a place, not a part */
+const TOPICS = [
+  {grp: 'Ear', id: 'aur', name: 'Auricle',
+    lit: [...AURICLE], solid: ['z_temporal', 'mandible', 'right_parietal_bone', 'occipital_bone'], fit: [...AURICLE], view: [-1, -0.05, 0.05], zoom: 0.95,
+    labels: [['a_helix', 'Helix', [-89, -84, 1535]], ['a_antihelix', 'Antihelix', [-80, -89, 1512]], ['a_scapha', 'Scapha', [-87, -82, 1527]],
+      ['a_triangular', SH('Triangular fossa', 'Tri. fossa'), [-79, -95, 1533]], ['a_concha', 'Concha', [-72, -91, 1512]], ['a_tragus', 'Tragus', [-70, -100, 1514.5], 'v'],
+      ['a_antitragus', 'Antitragus', [-75, -98, 1502]], ['a_lobule', 'Lobule', [-75, -95.8, 1490.9], 'v']],
+    text: `<p>The <b>auricle</b> (pinna) collects sound and funnels it into the <b>external acoustic meatus</b>; together they are the <b>external ear</b>. Its rim is the <b>helix</b>; in front of it the <b>antihelix</b> divides above into two crura round the <b>triangular fossa</b>; the groove between helix and antihelix is the <b>scapha</b>; the deep bowl in front of the antihelix is the <b>concha</b>, leading into the meatus. The <b>tragus</b> projects back over the meatus, the <b>antitragus</b> faces it across the intertragic notch, and below hangs the <b>lobule</b>.</p>
+<p>The auricle is one plate of <b>elastic cartilage</b> covered by thin, closely adherent skin; the <b>lobule has no cartilage</b> (fibrous and fatty tissue). The model's auricle is Z-Anatomy's surface patches, coloured as skin.</p>`},
+  {grp: 'Ear', id: 'eam', name: 'Meatus and eardrum',
+    lit: ['z_tm', ...OSS], solid: ['z_temporal'], glass: [...AURICLE], fit: ['z_tm', 'a_concha'], view: [-0.45, -1, 0.3], zoom: 0.85,
+    clip: [[0, -1, 0], 96.5],
+    labels: [['z_tm', SH('Tympanic membrane', 'Eardrum'), [-47, -96, 1512]], ['z_malleus', 'Malleus', [-47, -96, 1521]], ['a_concha', 'Concha (glass)', [-70, -95, 1512]]],
+    pts: [[[-57, -95.5, 1514], SH('External acoustic meatus', 'Meatus'), '--ink']],
+    text: `<p>Cut through the meatus and seen from the <b>front</b>, a little from the side and above (the front half of the head removed). The <b>external acoustic meatus</b> runs about <b>2.5 cm</b> from the bottom of the concha to the <b>tympanic membrane</b>, in a gentle S-curve. Its <b>lateral third is cartilaginous</b> (continuous with the auricle's cartilage) and its <b>medial two-thirds bony</b> (tympanic part of the temporal bone); its narrowest point is the isthmus (Gray: in the bony part, about 2 cm from the concha; StatPearls: at the junction of the cartilaginous and bony parts).</p>
+<p>The skin of the cartilaginous part has hairs, sebaceous glands and <b>ceruminous</b> (wax) glands; in the bony part the skin is thin, has no glands, is tightly bound to the periosteum and is very sensitive. The drum closes the inner end obliquely: its outer surface faces down and forward.</p>`},
+  {grp: 'Ear', id: 'oss', name: 'Ossicles',
+    lit: ['z_tm', ...OSS], glass: [...LAB], fit: ['z_tm', ...OSS], view: [0.75, -0.55, 0.35], zoom: 0.62,
+    labels: [['z_malleus', SH('Malleus (head)', 'Malleus'), [-47.2, -93.8, 1522.7], 'v'], ['z_incus', 'Incus', [-45.2, -93.3, 1520.6], 'v'], ['z_stapes', 'Stapes', [-42, -94, 1518]],
+      ['z_tm', SH('Tympanic membrane', 'Eardrum'), [-48, -97, 1512]]],
+    text: `<p>Seen from <b>inside</b> the middle ear (from the medial side, in front and above; temporal bone hidden), so the drum is behind the chain. A chain of three small bones crosses the middle ear: the <b>malleus</b>, whose handle is fixed to the inner surface of the drum and whose head sits in the attic; the <b>incus</b>, its body jointed to the malleus head and its long process ending at the lenticular process; and the <b>stapes</b>, its head jointed to the incus and its <b>base (footplate) in the oval window</b>, held by the annular ligament. Small joints link them (incudomalleolar, incudostapedial).</p>
+<p>The chain carries the drum's vibrations to the oval window. The drum's vibrating area is many times the area of the footplate, so the pressure at the oval window rises.</p>`},
+  {grp: 'Ear', id: 'rel', name: 'Middle-ear relations',
+    lit: ['z_tm', ...OSS, ...LAB, 'n_facial_nerve_vii_r', 'v_internal_carotid_artery_r', 'v_internal_jugular_vein_r', 'v_sigmoid_sinus_r', 'v_transverse_sinus_r', 'z_auditory_tube'],
+    glass: ['z_temporal'], fit: ['z_tm', 'z_cochlea', 'z_vestibule'], view: [-1, -0.1, 0.25], zoom: 0.42,
+    labels: [['z_tm', SH('Tympanic membrane', 'Eardrum'), [-48, -97, 1512]], ['z_cochlea', 'Cochlea', [-40, -101, 1516]], ['v_internal_carotid_artery_r', SH('Internal carotid a.', 'ICA'), [-26, -108, 1495]],
+      ['v_internal_jugular_vein_r', SH('Internal jugular v.', 'IJV'), [-33, -95, 1488]], ['v_sigmoid_sinus_r', SH('Sigmoid sinus', 'Sigmoid'), [-55, -68, 1518]],
+      ['n_facial_nerve_vii_r', SH('Facial nerve', 'VII'), [-45, -84, 1508]], ['z_auditory_tube', SH('Auditory tube', 'Tube'), [-22, -106, 1514]]],
+    text: `<p>The middle ear with its neighbours (temporal bone as glass): the <b>cochlea</b> medially (its basal turn bulges as the promontory), the <b>internal carotid artery</b> in front (Gray), the <b>jugular bulb</b> below the floor, and the <b>facial nerve</b> in its canal on the medial and posterior walls; the sigmoid sinus and internal jugular vein are shown for orientation. Above, the thin tegmen separates it from the middle cranial fossa (not modelled as a separate part).</p>
+<p>In the model the <b>auditory tube</b> is only its cartilaginous part and stops short of the middle ear; its bony third (in the temporal bone) is not a part.</p>`},
+  {grp: 'Ear', id: 'fac', name: 'Facial nerve, chorda tympani',
+    lit: ['n_facial_nerve_vii_r', 'n_chorda_tympani_r', ...VIII, 'z_tm', ...OSS], glass: ['z_temporal', ...LAB], fit: ['z_tm', 'z_vestibule', 'n_chorda_tympani_r', 'n_vestibulocochlear_nerve_viii_r'], view: [-1, 0.25, 0.3], zoom: 0.8,
+    labels: [['n_facial_nerve_vii_r', SH('Facial nerve (canal)', 'VII'), [-40, -86, 1521]], ['n_chorda_tympani_r', SH('Chorda tympani', 'Chorda'), [-31, -103, 1508]],
+      ['n_vestibulocochlear_nerve_viii_r', 'VIII', [-16, -88, 1517]], ['z_tm', SH('Tympanic membrane', 'Eardrum'), [-48, -97, 1512]]],
+    text: `<p>The <b>facial nerve</b> enters the internal acoustic meatus with VIII, then its own <b>facial canal</b>: laterally between cochlea and vestibule to the <b>geniculate ganglion</b> (bend; the <b>greater petrosal</b> nerve leaves here), back along the <b>medial wall above the oval window</b> (tympanic segment), then down the <b>posterior wall</b> (mastoid segment) to the <b>stylomastoid foramen</b>. In the canal it gives the <b>greater petrosal nerve</b>, the <b>nerve to stapedius</b> and the <b>chorda tympani</b>.</p>
+<p>The <b>chorda tympani</b> enters the middle ear through the posterior wall, crosses the <b>inner surface of the drum</b> (between its fibrous and mucous layers) and the handle of the malleus, leaves by the <b>petrotympanic fissure</b> and joins the <b>lingual nerve</b>: taste from the anterior two-thirds of the tongue, secretomotor fibres to the submandibular and sublingual glands. <b>In the model the chorda tympani does not reach the middle ear</b>: Z-Anatomy draws it about 10 mm medial to the drum, medial even to the cochlea, so it is wrong in position here; see the otoscope schematic below for where it really runs.</p>`},
+  {grp: 'Ear', id: 'tube', name: 'Auditory tube',
+    lit: ['z_auditory_tube', 'z_tm', ...OSS], glass: ['z_temporal', 'sphenoid_bone', 'occipital_bone'], fit: ['z_auditory_tube', 'z_tm'], view: [-0.45, -0.35, -1], zoom: 0.9,
+    labels: [['z_auditory_tube', SH('Auditory tube (cartilaginous)', 'Auditory tube'), [-18, -104, 1514]], ['z_tm', SH('Tympanic membrane', 'Eardrum'), [-48, -97, 1512]]],
+    text: `<p>Seen from below (and a little from the front and right; bones as glass). The <b>auditory (pharyngotympanic, Eustachian) tube</b>, about <b>36 mm</b> long, runs from the anterior wall of the middle ear <b>down, forward and medially</b> to the nasopharynx. Its <b>lateral third is bony</b> and always open; its <b>medial two-thirds are fibrocartilaginous</b> and normally closed; they meet at the narrow isthmus. It opens in <b>swallowing and yawning</b> (tensor and levator veli palatini), ventilating the middle ear, equalising its pressure with the nasopharynx and draining it.</p>
+<p>In <b>children</b> the tube is shorter (a 2025 review: about 18 mm) and <b>more horizontal</b>, so infection climbs from the nasopharynx to the middle ear more easily. The model's tube is its cartilaginous part only, and it runs almost horizontally (under 10°), whereas Gray gives 30–40° to the horizontal.</p>`},
+  {grp: 'Ear', id: 'inner', name: 'Internal ear',
+    lit: [...LAB, ...VIII, 'n_facial_nerve_vii_r', 'z_stapes', 'v_anterior_inferior_cerebellar_artery_r'], glass: ['z_temporal'], fit: [...LAB, 'n_vestibulocochlear_nerve_viii_r'], view: [-1, -0.3, 0.45], zoom: 0.75,
+    labels: [['z_cochlea', 'Cochlea', [-38, -102, 1516]], ['z_vestibule', SH('Anterior canal', 'Ant. canal'), [-37.7, -90.4, 1526.4], 'v'], ['z_vestibule', SH('Lateral canal', 'Lat. canal'), [-43.5, -89.7, 1520.2], 'v'],
+      ['z_vestibule', SH('Posterior canal', 'Post. canal'), [-37.8, -84.2, 1517.3], 'v'], ['n_vestibulocochlear_nerve_viii_r', 'VIII', [-16, -88, 1517]], ['z_stapes', 'Stapes', [-43, -94, 1517]],
+      ['v_anterior_inferior_cerebellar_artery_r', SH('AICA', 'AICA'), [-20, -84, 1514]]],
+    text: `<p>The <b>bony labyrinth</b> in the petrous temporal bone: the <b>cochlea</b> in front, the <b>vestibule</b> in the middle and the three <b>semicircular canals</b> behind and above it (Gray; as in the model), at right angles to each other. The stapes footplate sits in the oval window. It holds <b>perilymph</b>, and inside it floats the <b>membranous labyrinth</b> with <b>endolymph</b>.</p>
+<p><b>VIII</b> enters through the internal acoustic meatus with VII; the <b>labyrinthine artery</b> (from the basilar artery or the anterior inferior cerebellar artery, AICA) runs with it (not in the model). The model's labyrinth is Z-Anatomy's (after the University of Dundee model, CC BY-NC-SA).</p>`},
+  {grp: 'Eye', id: 'globe', name: 'Eyeball in the orbit',
+    lit: ['e_sclera', 'e_cornea', 'o_nerve_r'], soft: [...EOM], muscCol: true, solid: [], glass: ORBIT, fit: ['e_sclera', 'm_lat_rectus', 'm_sup_oblique'], view: [-1, -0.7, 0.25], zoom: 0.8,
+    labels: [['e_cornea', 'Cornea', [-31, -173, 1528]], ['m_lat_rectus', SH('Lateral rectus', 'Lat. rectus'), [-42, -138, 1530]],
+      ['m_sup_rectus', SH('Superior rectus', 'Sup. rectus'), [-28, -150, 1540]], ['m_lps', 'LPS', [-32, -158, 1542]], ['m_inf_oblique', SH('Inferior oblique', 'Inf. oblique'), [-34, -162, 1516]]],
+    text: `<p>The right eyeball in the orbit with the extraocular muscles (muscle red; bones as glass). It is about <b>24 mm</b> across: a small transparent front part, the <b>cornea</b> (about one-sixth), set in the larger opaque <b>sclera</b> (five-sixths). The extraocular muscles and their nerves are on <a href="muscles.html">Muscles of the Head and Neck</a>; the orbit's nerves and vessels on <a href="nerves-vessels.html">Nerves, Vessels and Lymph Nodes</a>.</p>`},
+  {grp: 'Eye', id: 'layers', name: 'Coats (section)',
+    lit: ['e_sclera', 'e_cornea', 'e_retina', 'e_iris', 'e_lens', 'o_nerve_r', 'v_central_retinal_artery_r'], glass: ['e_vitreous', 'e_aqueous'], fit: ['e_sclera'], view: [0, 0.2, 1], zoom: 0.8,
+    clip: [[0, 0, 1], 1527.2],
+    labels: [['e_sclera', 'Sclera', [-42, -158, 1527]], ['e_retina', 'Retina', [-19, -156, 1527]], ['e_cornea', 'Cornea', [-31, -173, 1527]], ['e_iris', 'Iris', [-36, -169, 1527]],
+      ['e_lens', 'Lens', [-30, -167, 1527]],
+      ['v_central_retinal_artery_r', SH('Central retinal a.', 'CRA'), [-24, -150, 1527]]],
+    text: `<p>The right eyeball cut horizontally and seen from <b>above</b>, as the schematic below: front at the top, nasal side on your left. Three coats: outer <b>fibrous</b> (sclera behind, cornea in front), middle <b>vascular</b> (uvea: choroid, ciliary body, iris), inner <b>nervous</b> (retina). The model has sclera, cornea, retina, iris and lens; it has <b>no choroid or ciliary body</b> (see the schematic below).</p>
+<p>The <b>lens</b> lies behind the iris; the <b>aqueous humour</b> fills the chambers in front of it and the <b>vitreous body</b> (glass) the space behind. The optic nerve leaves the back of the eye on its nasal side, carrying the central retinal artery.</p>`},
+  {grp: 'Eye', id: 'art', name: 'Arteries of the eyeball',
+    lit: ['v_ophthalmic_artery_r', 'v_central_retinal_artery_r', 'v_short_posterior_ciliary_arteries_r', 'v_long_posterior_ciliary_arteries_r', 'v_lacrimal_artery_r', 'v_internal_carotid_artery_r', 'o_nerve_r'],
+    glass: ['e_sclera', 'e_cornea'], fit: ['e_sclera', 'v_ophthalmic_artery_r', 'v_short_posterior_ciliary_arteries_r'], view: [-0.3, -0.25, 1], zoom: 0.85,
+    labels: [['v_ophthalmic_artery_r', SH('Ophthalmic artery', 'Ophthalmic a.'), [-12, -132, 1538]], ['v_central_retinal_artery_r', SH('Central retinal a.', 'CRA'), [-20, -150, 1533]],
+      ['v_short_posterior_ciliary_arteries_r', SH('Short post. ciliary aa.', 'Short ciliary'), [-17, -137, 1536]], ['v_long_posterior_ciliary_arteries_r', SH('Long post. ciliary aa.', 'Long ciliary'), [-25, -146, 1541]],
+      ['o_nerve_r', SH('Optic nerve', 'II'), [-10, -125, 1546]]],
+    text: `<p>Seen from above. All the arteries of the eyeball come from the <b>ophthalmic artery</b> (a branch of the internal carotid). The <b>central retinal artery</b> (Gray: its first branch) runs in the optic nerve's dural sheath and then, Gray says, <b>pierces the nerve</b> about 1.25 cm behind the eye and runs in it to the optic disc; its branches are the only supply of the <b>inner retina</b>. The <b>short posterior ciliary arteries</b> pierce the sclera round the optic nerve to the <b>choroid</b> (which feeds the outer retina and the fovea), the ciliary processes and the optic disc; the <b>long posterior ciliary arteries</b> run forward to the ciliary muscle and iris.</p>`},
+  {grp: 'Eye', id: 'lac', name: 'Lacrimal apparatus',
+    lit: ['l_gland', 'l_canal', 'l_sac', 'l_duct', 't_sup', 't_inf'], glass: ['e_sclera', 'e_cornea', 'right_maxilla', 'right_nasal_bone'], solid: ['frontal_bone', 'right_lacrimal_bone', 'right_zygomatic_bone', 'ethmoid'], fit: ['l_gland', 'l_duct', 'e_sclera', 'l_sac'], view: [-0.25, -1, 0.1], zoom: 0.9,
+    labels: [['l_gland', SH('Lacrimal gland', 'Gland'), [-44, -163, 1542]], ['l_canal', SH('Canaliculi', 'Canaliculi'), [-14, -170, 1524]], ['l_sac', SH('Lacrimal sac', 'Sac'), [-11, -167, 1518]],
+      ['l_duct', SH('Nasolacrimal duct', 'NL duct'), [-10, -163, 1500]], ['t_sup', SH('Superior tarsus', 'Sup. tarsus'), [-30, -172, 1535]], ['right_lacrimal_bone', SH('Lacrimal bone', 'Lacrimal b.'), [-12, -163, 1530]]],
+    text: `<p>From the front. The <b>lacrimal gland</b> lies in the <b>lacrimal fossa</b> of the frontal bone at the upper lateral part of the orbit; the levator palpebrae aponeurosis divides it into a larger <b>orbital</b> and a smaller <b>palpebral</b> part, and its ducts open into the upper lateral part of the superior conjunctival fornix (Gray). Tears cross the eye to the medial angle and drain through the <b>puncta</b> into the <b>canaliculi</b>, the <b>lacrimal sac</b> (in the fossa of the lacrimal bone; Gray adds the frontal process of the maxilla) and the <b>nasolacrimal duct</b> to the <b>inferior meatus</b> of the nose.</p>
+<p>The <b>tarsal plates</b> stiffen the lids (the upper about 10 mm high, the lower about 5 mm); the tarsal (Meibomian) glands lie in them.</p>`},
+  {grp: 'Eye', id: 'pit', name: 'Pituitary and optic chiasm',
+    lit: [...OPTIC, 'p_pituitary', 'e_sclera', L('e_sclera'), 'v_internal_carotid_artery_r', 'v_cavernous_sinus_r'], glass: ['sphenoid_bone'], fit: [...OPTIC, 'p_pituitary', 'e_sclera', L('e_sclera')], view: [0, -0.55, 1], zoom: 0.95,
+    labels: [['o_chiasm', SH('Optic chiasm', 'Chiasm'), [0, -113, 1552]], ['p_pituitary', SH('Pituitary (below)', 'Pituitary'), [2, -118, 1540]], ['o_nerve_r', SH('Right optic nerve', 'R optic n.'), [-14, -136, 1545]],
+      ['o_tract_l', SH('Left optic tract', 'L tract'), [14, -95, 1550]], ['v_cavernous_sinus_r', SH('Cavernous sinus', 'Cav. sinus'), [-13, -111, 1540]], ['e_sclera', SH('Right eye', 'R eye'), [-30, -160, 1540]]],
+    text: `<p>From above and in front, both eyes shown. The <b>pituitary gland</b> sits in the <b>hypophyseal fossa of the sella turcica</b> (sphenoid, glass), roofed by the dural <b>diaphragma sellae</b>, with the <b>cavernous sinuses</b> on each side and the <b>sphenoidal sinus</b> below. The <b>optic chiasm</b> lies <b>above</b> it. In the chiasm the fibres from the <b>nasal half of each retina cross</b>; the temporal fibres stay on their own side. In the model the chiasm sits only about 2 mm above the gland (StatPearls: about 10 mm).</p>`},
+];
+const EXT_TEXT = `<p><b>Arteries of the auricle:</b> mainly the <b>posterior auricular</b> (from the external carotid), with the <b>anterior auricular</b> branches of the superficial temporal and a branch of the <b>occipital</b> artery. <b>Nerves:</b> the <b>great auricular</b> and <b>lesser occipital</b> (cervical plexus), the <b>auriculotemporal</b> (mandibular nerve, V3), the <b>auricular branch of the vagus</b> (Arnold's nerve) and a small part by the <b>facial nerve</b>. The parts developed from the first pharyngeal arch (tragus, crus of the helix, helix) are supplied by the trigeminal nerve; most of the rest by the cervical plexus (Wikipedia). The <b>meatus</b> is supplied mainly by the <b>auriculotemporal</b> nerve and the <b>auricular branch of the vagus</b>: in some people touching the canal makes them cough (ear-cough, Arnold's reflex).</p>`;
+const EXT_HEAD = ['Part', 'Details'];
+const EXT_ROWS = [
+  ['Auricle (pinna)', 'Elastic cartilage under thin, adherent skin; lobule without cartilage. Helix, antihelix and crura, triangular fossa, scapha, concha, tragus, antitragus, intertragic notch, lobule.'],
+  ['External acoustic meatus', 'About 2.5 cm from the concha to the drum; S-shaped; lateral third cartilaginous (hairs, sebaceous and ceruminous glands), medial two-thirds bony (thin, very sensitive skin). In front: the condyle of the mandible (temporomandibular joint).'],
+  ['Arteries', 'Posterior auricular (main), anterior auricular (superficial temporal), occipital.'],
+  ['Nerves', 'Great auricular and lesser occipital (cervical plexus); auriculotemporal (V3); auricular branch of the vagus (X); a small area by the facial nerve.'],
+];
+const TM_TEXT = `<p>The <b>tympanic membrane</b> is thin, semitransparent and oval, about <b>1 cm</b> across (Gray: 9–10 × 8–9 mm), set obliquely so that its outer surface faces <b>down and forward</b>. Its thick rim (fibrocartilaginous ring) sits in the tympanic sulcus. Most of it is the tense <b>pars tensa</b>, three layers: <b>skin</b> outside, <b>fibrous</b> middle, <b>mucosa</b> inside. Above the anterior and posterior malleolar folds is the small, lax <b>pars flaccida</b>.</p>
+<p>The <b>handle of the malleus</b> (running down and back from its lateral process, Gray) is fixed to its inner surface and draws its centre inward: the deepest point is the <b>umbo</b>. Wikipedia: lit by the otoscope, a <b>cone of light</b> radiates from the tip of the malleus into the <b>anteroinferior quadrant</b> ("5 o'clock"). Nerves: outer surface mainly <b>auriculotemporal</b> (V3) with the <b>auricular branch of the vagus</b>; inner surface the <b>glossopharyngeal</b> (tympanic branch).</p>
+<p><b>Myringotomy</b> is an incision in the drum to let out fluid or pus from the middle ear; a <b>tympanostomy (ventilation) tube</b> can be left in it to keep the middle ear aerated. The usual sites are the <b>anteroinferior</b> (or posteroinferior) quadrant. An incision in the <b>posterosuperior quadrant</b> can injure structures of the middle ear: just behind it lie the <b>long process of the incus</b> with the <b>stapes</b>, and the <b>chorda tympani</b> crossing the inner surface of the drum.</p>`;
+const OE_TEXT = `<p><b>Otitis externa</b> (swimmer's ear) is inflammation of the external acoustic meatus, usually bacterial; retained water, swimming and minor injury (cleaning) favour it. <b>Anatomical basis of the pain:</b> the skin of the bony meatus is thin and bound directly to periosteum, so swelling there is very painful; the cartilaginous canal is continuous with the cartilage of the auricle, and pulling the auricle or pressing the <b>tragus</b> hurts (Wikipedia: typically enough to suggest the diagnosis). In older people with diabetes a <b>necrotising (malignant) otitis externa</b>, most often <i>Pseudomonas aeruginosa</i>, spreads from the canal into the temporal bone and skull base, sometimes reaching the stylomastoid and jugular foramina (StatPearls).</p>`;
+const ME_TEXT = `<p>The <b>middle ear (tympanic cavity)</b> is an air space in the petrous temporal bone between the <b>tympanic membrane</b> laterally and the <b>inner ear</b> medially. It opens <b>in front</b> into the <b>auditory tube</b> and <b>behind</b> into the <b>mastoid antrum</b> and air cells. The part above the level of the drum is the <b>epitympanic recess (attic)</b>, holding the head of the malleus and the body of the incus. (Gray: about 15 mm high and front-to-back but only 2–6 mm wide.)</p>
+<p>It contains the three <b>ossicles</b>, two <b>muscles</b> (tensor tympani, stapedius), the <b>chorda tympani</b> and the <b>tympanic plexus</b>, and air. Arteries: <b>anterior tympanic</b> (maxillary), <b>stylomastoid</b> (posterior auricular), petrosal and caroticotympanic branches; veins mainly to the <b>pterygoid plexus</b>.</p>`;
+const WALL_HEAD = ['Wall', 'Formed by / features', 'Relation (clinical)'];
+const WALL_ROWS = [
+  ['Roof (tegmental)', 'Tegmen tympani: thin bone', 'Middle cranial fossa and temporal lobe. Nearby, the tegmen mastoideum (floor of the middle cranial fossa over the mastoid) can be eroded by a cholesteatoma (StatPearls) or injured in surgery, exposing the dura (a CT review)'],
+  ['Floor (jugular)', 'Thin plate of bone', 'Bulb of the internal jugular vein (a 2023 CT study: the bone can be missing, a dehiscent jugular bulb)'],
+  ['Lateral (membranous)', 'Tympanic membrane', 'External acoustic meatus'],
+  ['Medial (labyrinthine)', 'Promontory (basal turn of the cochlea) with the tympanic plexus; oval window (stapes footplate) above and behind it; round window (closed by the secondary tympanic membrane) below and behind it (Gray); prominence of the facial canal above the oval window; Gray: the lateral semicircular canal bulges above that, at the aditus', 'Inner ear'],
+  ['Posterior (mastoid)', 'Aditus to the mastoid antrum above; pyramidal eminence (houses stapedius) below it; vertical part of the facial canal', 'Mastoid antrum and air cells; facial nerve'],
+  ['Anterior (carotid)', 'Openings of the canal for tensor tympani (above) and of the auditory tube', 'Internal carotid artery behind thin bone (Gray); auditory tube to the nasopharynx'],
+];
+const CONT_HEAD = ['Content', 'Attachments / course', 'Nerve', 'Action'];
+const CONT_ROWS = [
+  ['Malleus', 'Handle in the drum; head in the attic, jointed to the incus', '—', 'Takes the drum’s vibrations'],
+  ['Incus', 'Body in the attic; long process down to the stapes', '—', 'Middle link'],
+  ['Stapes', 'Head to the incus; footplate in the oval window (annular ligament)', '—', 'Moves the perilymph'],
+  ['Tensor tympani', 'In its canal above the auditory tube; tendon turns round the processus cochleariformis to the handle of the malleus', 'Mandibular nerve (V3)', 'Pulls the malleus in, tensing the drum'],
+  ['Stapedius', 'From the pyramidal eminence to the neck of the stapes', 'Facial nerve (nerve to stapedius)', 'Damps the stapes (Wikipedia: its paralysis, as in Bell’s palsy, can give hyperacusis)'],
+  ['Chorda tympani', 'From the facial nerve in its canal, across the inner surface of the drum and the malleus handle, out through the petrotympanic fissure to the lingual nerve', 'Branch of VII', 'Taste, anterior 2/3 of tongue; secretomotor to submandibular, sublingual glands'],
+  ['Tympanic plexus', 'On the promontory: tympanic branch of IX (Jacobson’s nerve) with sympathetic fibres; continues as the lesser petrosal nerve to the otic ganglion (parotid)', 'IX', 'Sensation of the middle ear'],
+];
+const OM_TEXT = `<p><b>Otitis media</b> is inflammation or infection of the middle ear, most common in young children, often after an upper respiratory infection; the usual bacteria are <i>S. pneumoniae</i>, non-typeable <i>H. influenzae</i> and <i>M. catarrhalis</i>. <b>Anatomical basis:</b> the middle ear is continuous with the nasopharynx through the <b>auditory tube</b>, which in children is <b>shorter and more horizontal</b>; a blocked tube lets fluid collect behind the drum (otitis media with effusion), which damps its vibration (conductive hearing loss).</p>
+<p><b>Complications and the walls:</b> infection spreads back through the attic and aditus to the <b>mastoid air cells</b> (mastoiditis), and can reach the skull (meningitis, brain abscess, dural venous sinus thrombosis); a <b>cholesteatoma</b> can erode the ossicles, the <b>tegmen mastoideum</b> and the <b>facial canal</b> (StatPearls). Myringotomy (above) drains the middle ear when the tube cannot.</p>`;
+const IE_TEXT = `<p>The <b>internal ear</b> lies in the dense <b>petrous temporal bone</b>. The <b>bony labyrinth</b> (vestibule, three semicircular canals, cochlea) contains <b>perilymph</b>; inside it the <b>membranous labyrinth</b> (utricle and saccule in the vestibule, three semicircular ducts, cochlear duct) contains <b>endolymph</b> (potassium-rich, like intracellular fluid).</p>
+<p><b>Sound:</b> the stapes footplate passes the vibration to the fluid of the inner ear at the <b>oval window</b>. In the cochlea the <b>scala vestibuli</b> (above) and <b>scala tympani</b> (below) hold perilymph and join at the apex through the <b>helicotrema</b>; the <b>round window</b>, closed by the secondary tympanic membrane, lets the fluid move (Wikipedia). The <b>spiral organ (of Corti)</b> sits on the basilar membrane in the <b>cochlear duct (scala media)</b>, between the two scalae.</p>`;
+const IE_HEAD = ['Part', 'Features', 'Senses / function'];
+const IE_ROWS = [
+  ['Cochlea', 'Bony spiral of about 2¾ turns round the modiolus; its basal turn bulges as the promontory; scala vestibuli and scala tympani (perilymph), cochlear duct (endolymph) with the spiral organ', 'Hearing'],
+  ['Vestibule', 'Central part of the bony labyrinth; holds the utricle and saccule', 'Utricle and saccule (maculae): linear acceleration and head tilt (gravity)'],
+  ['Semicircular canals', 'Three (anterior, posterior, lateral) at right angles; each with an ampulla holding a crista; five openings into the vestibule, two canals sharing one (Gray)', 'Rotation of the head (angular acceleration)'],
+  ['Vestibulocochlear nerve (VIII)', 'Cochlear and vestibular parts; with VII and the labyrinthine artery through the internal acoustic meatus; cochlear neurons in the spiral ganglion in the modiolus', 'Hearing and balance to the brainstem'],
+  ['Labyrinthine artery', 'From the basilar or the anterior inferior cerebellar artery, through the internal acoustic meatus', 'Supply of the inner ear'],
+];
+const EYE_TEXT = {
+  normal: `<p><b>Coats:</b> outer <b>sclera</b> (white, fibrous; at the optic nerve its outer part continues with the dura, its inner part forms the <b>lamina cribrosa</b>, pierced by the nerve fibres and the central vessels) and <b>cornea</b> (transparent, avascular, five layers: epithelium, Bowman's layer, stroma, Descemet's membrane, endothelium; Gray counted four). Middle <b>uvea</b>: <b>choroid</b> (vascular, nourishes the outer retina), <b>ciliary body</b> (ciliary processes and ciliary muscle) and <b>iris</b>. Inner <b>retina</b>: outer pigmented layer, inner neural layer, ending in front at the <b>ora serrata</b>.</p>
+<p>At the back the <b>macula lutea</b> holds the <b>fovea centralis</b>: sharpest vision, so thin that the choroid shows through (Gray); its photoreceptors are all cones (Wikipedia). About 3–4 mm to its <b>nasal</b> side the <b>optic disc</b> is the <b>blind spot</b> (no rods or cones); the central retinal artery enters there. <b>Media:</b> light passes cornea → aqueous → lens → vitreous. <b>Aqueous</b> (arrows) is made by the ciliary processes into the <b>posterior chamber</b>, flows through the pupil into the <b>anterior chamber</b> and leaves at the <b>iridocorneal angle</b> through the <b>trabecular meshwork</b> into the <b>canal of Schlemm</b> (Wikipedia: a small part by the uveoscleral route).</p>`,
+  oag: `<p><b>Glaucoma</b> is an optic neuropathy: loss of retinal ganglion cells and their axons in the optic nerve, with a characteristic disc and peripheral field loss. Raised intraocular pressure is the main risk factor. In <b>open-angle glaucoma</b> the angle is open but outflow through the <b>trabecular meshwork</b> is impeded, so aqueous accumulates and the pressure rises; StatPearls: it often has no symptoms until the nerve is damaged.</p>`,
+  acg: `<p>In <b>angle-closure glaucoma</b> the <b>iris is pushed forward against the cornea</b> and blocks the trabecular meshwork; the anterior chamber is shallow. <b>Acute angle closure</b> is an emergency (StatPearls: intense pain round the eye, a red eye, rapid loss of vision, halos round lights, headache and vomiting, a very high pressure).</p>`,
+  cat: `<p>A <b>cataract</b> is a clouding (opacity) of the <b>lens</b> or its capsule that blocks light on its way to the retina; it is mostly a disease of older people (StatPearls). The <b>lens</b> is transparent and biconvex, in its capsule, held by the zonule from the ciliary body. Treatment when vision suffers is surgery: the cloudy lens is removed and an <b>artificial intraocular lens</b> put in (Wikipedia).</p>`,
+  crao: `<p><b>Central retinal artery occlusion</b>: sudden, <b>painless</b> loss of vision in one eye, usually from an <b>embolus</b> (carotid artery, aortic arch, heart; StatPearls also names giant cell arteritis). The central retinal artery's branches are the only supply of the inner retina, so the retina turns <b>pale and swollen</b>; the <b>fovea</b>, thin and fed by the <b>choroid</b>, stays red: the <b>cherry-red spot</b>. A <b>cilioretinal artery</b> (from the ciliary circulation, present in some people) can keep the macula alive and is a better sign for vision.</p>`,
+};
+const COAT_HEAD = ['Coat', 'Parts', 'Key facts'];
+const COAT_ROWS = [
+  ['Fibrous (outer)', 'Sclera (back five-sixths), cornea (front sixth)', 'Cornea: transparent, avascular, five layers; sclera continuous with the optic nerve’s dural sheath'],
+  ['Vascular (uvea)', 'Choroid, ciliary body, iris', 'Choroid nourishes the outer retina; ciliary processes make aqueous; ciliary muscle and the iris muscles are the intraocular muscles'],
+  ['Nervous (inner)', 'Retina: pigmented layer and neural layer', 'Ends at the ora serrata; fovea (cones only); optic disc = blind spot, nasal to the fovea'],
+  ['Chambers', 'Anterior (cornea to iris and lens), posterior (behind the iris, in front of lens and zonule), vitreous chamber', 'Aqueous fills the anterior and posterior chambers; vitreous (a clear gel) behind the lens'],
+];
+const IOM_TEXT = `<p>The <b>intraocular (intrinsic) muscles</b> are smooth muscles inside the eyeball: the <b>ciliary muscle</b>, the <b>sphincter pupillae</b> and the <b>dilator pupillae</b>. The first two are <b>parasympathetic</b>: fibres from the <b>Edinger–Westphal nucleus</b> (Wikipedia) run in the <b>oculomotor nerve</b>, synapse in the <b>ciliary ganglion</b> (behind the eye in the orbit), and reach the eye in the <b>short ciliary nerves</b>. The dilator is <b>sympathetic</b>: fibres from the superior cervical ganglion reach it mainly through the <b>long ciliary nerves</b> (branches of the nasociliary nerve, V1).</p>
+<p>For a near object the <b>ciliary muscle contracts</b>, the zonule slackens and the elastic lens rounds up (accommodation), while the sphincter narrows the pupil. Pupil reflexes and their testing: <a href="../../ophthalmology/neuro-ophthalmology/pupil-reflexes.html">Pupil Reflexes</a>; Horner's syndrome (the sympathetic pathway): <a href="muscles.html">Muscles of the Head and Neck</a>.</p>`;
+const IOM_HEAD = ['Muscle', 'Position', 'Nerve supply', 'Action'];
+const IOM_ROWS = [
+  ['Ciliary muscle', 'In the ciliary body, a ring of smooth muscle behind the iris root', 'Parasympathetic: III → ciliary ganglion → short ciliary nerves', 'Contracts for near vision: zonule relaxes, lens becomes more convex (accommodation)'],
+  ['Sphincter pupillae', 'Circular fibres in the iris near the pupil margin', 'Parasympathetic: III → ciliary ganglion → short ciliary nerves', 'Constricts the pupil (light reflex, near response)'],
+  ['Dilator pupillae', 'Radial fibres in the iris', 'Sympathetic: superior cervical ganglion → long ciliary nerves', 'Dilates the pupil'],
+];
+const LAC_TEXT = `<p><b>Secretomotor supply of the gland</b> (parasympathetic): <b>superior salivatory nucleus</b> (Wikipedia) → facial nerve (nervus intermedius) → <b>greater petrosal nerve</b> (leaves at the geniculate ganglion) → joined in the foramen lacerum by the sympathetic deep petrosal nerve as the <b>nerve of the pterygoid canal</b> → <b>pterygopalatine ganglion</b> (synapse) → zygomatic nerve → a communicating branch to the <b>lacrimal nerve</b> (V1) → gland. The lacrimal nerve also carries the gland's sensation.</p>
+<p><b>Blockage</b> of the drainage gives <b>epiphora</b> (tears overflowing onto the cheek). Congenital nasolacrimal duct obstruction is common in newborns (StatPearls: 6–20%) and mostly resolves; infection of a blocked sac is <b>dacryocystitis</b>.</p>`;
+const LAC_HEAD = ['Part', 'Position', 'Details'];
+const LAC_ROWS = [
+  ['Lacrimal gland', 'Lacrimal fossa of the frontal bone, upper lateral orbit', 'Orbital and palpebral parts, divided by the levator aponeurosis; ducts open into the upper lateral superior conjunctival fornix (Gray); secretes the watery part of the tear film'],
+  ['Puncta', 'On the lacrimal papillae of the upper and lower lid margins, at the medial angle', 'Take tears from the lacus lacrimalis'],
+  ['Canaliculi', 'One in each lid', 'First vertical, then medial (dilated at the bend: ampulla); usually join before entering the sac'],
+  ['Lacrimal sac', 'Fossa of the lacrimal bone (Gray: with the frontal process of the maxilla)', 'Upper, blind, dilated end of the nasolacrimal duct'],
+  ['Nasolacrimal duct', 'Bony canal down to the nose', 'Opens into the inferior meatus under a mucosal fold (valve of Hasner)'],
+];
+const PIT_TEXT = {
+  off: `<p>The <b>pituitary</b> lies in the <b>hypophyseal fossa</b> of the sella turcica, in the body of the sphenoid, with the <b>sphenoidal sinus</b> below. A fold of dura, the <b>diaphragma sellae</b>, roofs it, with a hole for the stalk. On each side is a <b>cavernous sinus</b> (its contents: <a href="nerves-vessels.html">Nerves, Vessels and Lymph Nodes</a>). The <b>optic chiasm</b> lies above, on the tuberculum sellae and the front of the diaphragma (StatPearls: about 10 mm above the gland). In the chiasm the fibres from the <b>nasal half of each retina</b> (which see the <b>temporal</b> half of the field) cross.</p>`,
+  on: `<p>A <b>pituitary adenoma</b> that grows up out of the sella pushes through the diaphragma and presses on the <b>middle of the chiasm</b>, where the crossing nasal fibres run. Both temporal fields are lost: <b>bitemporal hemianopia</b> (a heteronymous defect). Pressing from <b>below</b>, it catches the lower crossing fibres first, so the <b>upper temporal quadrants</b> go first (Wikipedia). Spreading sideways into the cavernous sinus it can catch the nerves there (abducens palsy, Wikipedia). Macroadenoma: over 10 mm (Wikipedia). More on field defects: <a href="../../ophthalmology/neuro-ophthalmology/visual-pathway.html">Visual Pathway</a>.</p>`,
+};
+const DATA = {
+  lede: 'The external, middle and internal ear and the eyeball with the lacrimal apparatus, the pituitary and the optic chiasm, in 3D. Pick a topic to light its parts (the rest turns to glass); tap a part to name it. Schematics and tables follow, with otitis, myringotomy, glaucoma, cataract, retinal artery occlusion and pituitary tumours.',
+  note3d: 'Right side. The auricle, temporal bone, ossicles, tympanic membrane, eyeball, lacrimal apparatus, tarsi, auditory tube, muscles, vessels and nerves are Z-Anatomy\'s and approximate (vessels and nerves are tubes along its curves); the optic nerves, chiasm, tracts and pituitary are BodyParts3D\'s. The model has no tensor tympani, stapedius, ciliary muscle, choroid or ciliary body, no meatal or auricular arteries, no labyrinthine artery and no ciliary ganglion: they are in the schematics. The left eyeball is a mirror image of the right.',
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (tympanostomy tube placement, a temporal bone CT review, jugular bulb and middle ear variants, a Eustachian tube review and a Eustachian tube function test review, central retinal artery occlusion fundus findings).",
+  image: 'Image: normal right tympanic membrane, photo by Michael Hawke MD (Wikimedia Commons, CC BY-SA 4.0), resized.',
+  models: 'Models used: optic nerves, chiasm, tracts, pituitary and skull bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); temporal bone, ossicles, tympanic membrane, auricle, eyeball, lacrimal apparatus, tarsi, auditory tube, muscles, vessels and nerves from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same frame; cochlea and vestibule from Z-Anatomy after "Anatomy of the Inner Ear", University of Dundee School of Medicine (CC BY-NC-SA 4.0). Vessels and nerves are tubes swept along Z-Anatomy curves; the left eye is mirrored. Schematics are not to scale. Simplified meshes, shared under the same licences.',
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let kind = {}, names = {}, cur = null;
+const COL = {bone: '--bone', ossicle: '--bone', tm: '--tm', labyr: '--labyr', cart: '--cart', auricle: '--skin', sclera: '--sclera', cornea: '--cornea', iris: '--iris',
+  lens: '--lens', retina: '--retina', vitreous: '--fluid', aqueous: '--fluid', lacgl: '--lacgl', lacdr: '--tear', tarsus: '--tarsus', muscle: '--soft', optic: '--nerve',
+  pit: '--pit', artery: '--artery', vein: '--vein', nerve: '--nerve'};
+const WHAT = {bone: 'bone', ossicle: 'auditory ossicle', tm: 'tympanic membrane', labyr: 'bony labyrinth', cart: 'auditory tube', auricle: 'part of the auricle',
+  sclera: 'outer coat of the eyeball', cornea: 'outer coat of the eyeball', iris: 'iris', lens: 'lens', retina: 'retina', vitreous: 'refracting medium', aqueous: 'refracting medium',
+  lacgl: 'lacrimal gland', lacdr: 'lacrimal drainage', tarsus: 'eyelid plate', muscle: 'muscle', optic: 'visual pathway', pit: 'pituitary gland', artery: 'artery', vein: 'vein or venous sinus', nerve: 'nerve'};
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+const colOf = k => { const base = k.replace(/_l$/, ''); return OSS_COL[base] || css(COL[kind[k]]); };
+function anchor(key, near, view, fixed) {   // the vertex of a part nearest to a point moved 40 mm toward the viewer (a camera-facing vertex);
+  const p = v.parts.get(key); if (!p) return null;                // fixed: the vertex nearest to the point itself (hand-checked points)
+  const pos = p.m.pos; let c = near;
+  if (!c) { c = [0, 0, 0]; for (let i = 0; i < pos.length; i++) c[i % 3] += pos[i] / (pos.length / 3); }
+  if (view && !fixed) { const l = Math.hypot(...view); c = c.map((x, i) => x + 40 * view[i] / l); }
+  let best = 0, bd = 1e18;
+  const cl = v.clip;   // never anchor on the cut-away side
+  for (let i = 0; i < pos.length; i += 3) {
+    if (cl && pos[i] * cl[0] + pos[i + 1] * cl[1] + pos[i + 2] * cl[2] > cl[3] - 0.3) continue;
+    const d = (pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2; if (d < bd) { bd = d; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+function showTopic(id) {
+  const t = typeof id === 'object' ? id : TOPICS.find(t => t.id === id); cur = t;
+  const has = k => v.parts.has(k);
+  const lit = (t.lit || []).filter(has), soft = (t.soft || []).filter(has), solid = (t.solid || []).filter(has), glass = (t.glass || []).filter(has), hide = new Set((t.hide || []).filter(has));
+  const shown = new Set([...lit, ...soft, ...solid, ...glass]);
+  for (const k in kind) v.setVisible(k, !hide.has(k) && shown.has(k));
+  for (const k in kind) v.setColour(k, soft.includes(k) ? css(t.muscCol ? '--musc' : '--soft') : colOf(k));
+  v.setFocus([...lit, ...soft, ...solid]);
+  v.ghostAlpha = 0.18;
+  v.setClip(t.clip ? t.clip[0] : null, t.clip ? t.clip[1] : 0);
+  const fk = (t.fit || t.lit).filter(has);
+  v.fit(fk.length ? fk : lit);
+  v.face(t.view || RIGHT, {zoom: t.zoom || 1});
+  const narrow = $('v').clientWidth < 500, txt = l => l && typeof l === 'object' ? (narrow ? l.sh : l.l) : l;
+  const marks = [];
+  for (const [k, label, near, mode] of t.labels || []) {
+    if (!has(k) || v.parts.get(k).visible === false) continue;
+    const fixed = mode === 'v', p = anchor(k, near, t.view || RIGHT, fixed); if (!p) continue;
+    const kd = kind[k];
+    marks.push({key: k, near: near || p, p, fixed, label: txt(label), color: kd === 'bone' || kd === 'muscle' || kd === 'auricle' || kd === 'sclera' || kd === 'cart' || kd === 'ossicle' || kd === 'tm' || kd === 'aqueous' || kd === 'vitreous' || kd === 'cornea' ? css('--ink') : css(COL[kd]), always: true});
+  }
+  for (const [p, label, col] of t.pts || []) marks.push({p, label: txt(label), color: css(col), always: true});
+  v.setMarkers(marks);
+  refineAnchors();
+  $('topic-text').innerHTML = t.text || '';
+  legend(t);
+  $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === t.id));
+}
+/* after the camera has turned, move any label whose anchor is hidden to the nearest vertex of its part that is in view
+   (the same depth test the viewer uses to fade hidden labels) */
+let refineTimer = 0;
+function refineAnchors() {
+  clearTimeout(refineTimer);
+  refineTimer = setTimeout(() => {
+    const depth = v.offscreen(2), W = v.c.width, dpr = v.dpr;
+    const vis = p => { const q = v.toCam(p), [sx, sy] = v.toScreen(q);
+      if (sx < 6 || sy < 6 || sx > v.w - 6 || sy > v.h - 6) return false;
+      const i = (Math.round((v.h - sy) * dpr) * W + Math.round(sx * dpr)) * 4; if (!depth[i + 3]) return true;
+      const z = depth[i] / 255 + depth[i + 1] / 65025 + depth[i + 2] / 16581375; return (q[1] / 2000 + 1) / 2 <= z + 3 / 4000; };
+    let changed = false;
+    for (const m of v.markers) {
+      if (!m.key || m.fixed || vis(m.p)) continue;
+      const pos = v.parts.get(m.key).m.pos, c = m.near, cand = [];
+      for (let i = 0; i < pos.length; i += 3) {
+        if (v.clip && pos[i] * v.clip[0] + pos[i + 1] * v.clip[1] + pos[i + 2] * v.clip[2] > v.clip[3]) continue;   // cut away
+        cand.push([(pos[i] - c[0]) ** 2 + (pos[i + 1] - c[1]) ** 2 + (pos[i + 2] - c[2]) ** 2, i]);
+      }
+      cand.sort((a, b) => a[0] - b[0]);
+      for (const [, i] of cand.slice(0, 4000)) { const p = [pos[i], pos[i + 1], pos[i + 2]]; if (vis(p)) { m.p = p; changed = true; break; } }
+    }
+    if (changed) v.setMarkers(v.markers);
+  }, 650);
+}
+function legend(t) {
+  const items = new Map();
+  const add = (tok, label) => { if (!items.has(label)) items.set(label, tok); };
+  const kinds = new Set([...(t.lit || [])].map(k => kind[k]).filter(Boolean));
+  const KEYN = {tm: 'Tympanic membrane', labyr: 'Bony labyrinth', cart: 'Auditory tube (cartilage)', auricle: 'Auricle (skin)', cornea: 'Cornea', iris: 'Iris', lens: 'Lens', retina: 'Retina',
+    lacgl: 'Lacrimal gland', lacdr: 'Lacrimal passages', tarsus: 'Tarsal plates', optic: 'Optic nerve, chiasm, tract', pit: 'Pituitary', artery: 'Arteries', vein: 'Veins and sinuses', nerve: 'Nerves'};
+  if ((t.lit || []).some(k => OSS_COL[k])) for (const k of OSS) add(OSS_COL[k], {z_malleus: 'Malleus', z_incus: 'Incus', z_stapes: 'Stapes'}[k]);
+  for (const kd of Object.keys(KEYN)) if (kinds.has(kd)) add(COL[kd], KEYN[kd]);
+  if ((t.glass || []).some(k => kind[k] === 'vitreous' || kind[k] === 'aqueous')) add('--fluid', 'Aqueous and vitreous (glass)');
+  if ((t.soft || []).length) add(t.muscCol ? '--musc' : '--soft', t.muscCol ? 'Extraocular muscles' : 'Muscles');
+  $('key3d').innerHTML = [...items].map(([label, tok]) => `<span><i style="background:${tok.startsWith('--') ? `var(${tok})` : tok}"></i>${label}</span>`).join('');
+}
+function buildTopics() {
+  const box = $('topics');
+  for (const g of [...new Set(TOPICS.map(t => t.grp))]) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !kind[hit.key]) { $('pick').textContent = ''; return; }
+  $('pick').textContent = `${names[hit.key]}: ${WHAT[kind[hit.key]]}`;
+};
+async function loadModel() {
+  const base = '../models/eareye/';
+  const meta = await (await fetch(base + 'kinds.json')).json(), M = meta.mirror;
+  const man = await v.load(base + 'eareye.json', null, {
+    extra: (m, items) => items.filter(it => meta.parts[it.key] && meta.parts[it.key].mirror)
+      .map(it => ({key: L(it.key), m: v.mirrored(it.m, M.m, M.t), info: {name: it.info.name}}))});
+  for (const [k, d] of Object.entries(meta.parts)) for (const left of d.mirror ? [false, true] : [false]) {
+    const key = left ? L(k) : k, p = v.parts.get(key); if (!p) continue;
+    names[key] = (d.mirror ? (left ? 'Left ' : 'Right ') : '') + (d.mirror ? p.info.name.replace(/^./, c => c.toLowerCase()) : p.info.name);
+    kind[key] = d.kind;
+  }
+  for (const k in kind) v.setColour(k, colOf(k));
+  return man;
+}
+
+/* ===================== schematics ===================== */
+const T = (x, y, s, cls = '', anchor = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--muted)"/></marker></defs>';
+function drawTM(cut) {   // right ear through an otoscope: front (anterior) on the viewer's right, up at the top
+  const cx = 300, cy = 225, rx = 150, ry = 165;
+  let h = DEFS;
+  h += `<ellipse cx="${cx}" cy="${cy}" rx="${rx + 22}" ry="${ry + 22}" class="skin"/>`;                          // canal wall
+  h += `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" class="tm"/>`;
+  // pars flaccida: small triangle above the malleolar folds
+  h += `<path d="M${cx - 34} ${cy - ry + 18} Q${cx} ${cy - ry - 4} ${cx + 34} ${cy - ry + 18} L${cx + 6} ${cy - 112} L${cx - 6} ${cy - 112} Z" style="fill:var(--tm);fill-opacity:.55;stroke:var(--muted)"/>`;
+  h += `<path class="lead dash" d="M${cx - 34} ${cy - ry + 18} L${cx - 4} ${cy - 112} M${cx + 34} ${cy - ry + 18} L${cx + 4} ${cy - 112}"/>`;
+  // quadrant lines: along the handle and perpendicular at the umbo
+  const ux = cx + 4, uy = cy + 8;
+  h += `<path class="quad" d="M${ux + 32} ${uy - 154} L${ux - 31} ${uy + 148}"/><path class="quad" d="M${ux - 142} ${uy - 30} L${ux + 142} ${uy + 30}"/>`;   // along the handle and across it at the umbo
+  // structures behind the posterosuperior quadrant (seen through): incus long process, stapes, chorda tympani (dashed)
+  h += `<path d="M${cx - 30} ${cy - 92} L${cx - 42} ${cy - 30}" style="stroke:#77AADD;stroke-width:7;stroke-linecap:round;opacity:.7"/>`;
+  h += `<path d="M${cx - 44} ${cy - 30} l-26 8 m26 -8 l-24 -6" style="stroke:#EEDD88;stroke-width:5;stroke-linecap:round;opacity:.85"/>`;
+  h += `<path class="nvl dash" d="M${cx - rx + 8} ${cy - 70} Q${cx - 40} ${cy - 100} ${cx + rx - 20} ${cy - 85}"/>`;
+  // handle of the malleus down and back to the umbo, lateral process at the top
+  h += `<path d="M${ux + 26} ${cy - 115} L${ux} ${uy}" style="stroke:#FFAABB;stroke-width:9;stroke-linecap:round"/><circle cx="${ux + 26}" cy="${cy - 118}" r="7" style="fill:#FFAABB"/>`;   // handle runs down and back (Gray)
+  h += `<circle cx="${ux}" cy="${uy}" r="4" style="fill:var(--ink)"/>`;
+  // cone of light: from the umbo into the anteroinferior quadrant (viewer's lower right)
+  h += `<path d="M${ux + 6} ${uy + 8} L${cx + 112} ${cy + 104} L${cx + 82} ${cy + 128} Z" style="fill:#ffffff;opacity:.85"/>`;
+  if (cut) h += `<path class="clin" d="M${cx + 42} ${cy + 70} L${cx + 92} ${cy + 118}"/>` + T(cx + 120, cy + 150, 'Myringotomy (anteroinferior)', 'c');
+  // labels
+  h += T(14, 26, 'BACK (posterior)', 'h') + T(586, 26, 'FRONT (anterior)', 'h', 'end') + T(300, 18, 'UP', 'h', 'middle');
+  h += lead(cx - 22, cy - 140, 160, 46) + T(156, 44, 'Pars flaccida', '', 'end');
+  h += lead(ux + 32, cy - 118, 440, 54) + T(444, 52, 'Lateral process of malleus');
+  h += lead(ux + 16, cy - 50, 440, 92) + T(444, 90, 'Handle of malleus');
+  h += lead(ux + 2, uy, 470, 196) + T(474, 194, 'Umbo');
+  h += lead(cx + 96, cy + 110, 474, 300) + T(478, 304, 'Cone of light');
+  h += lead(cx - 36, cy - 64, 120, 118) + T(116, 112, 'Incus (long process)', '', 'end');
+  h += lead(cx - 66, cy - 24, 120, 170) + T(116, 166, 'Stapes', '', 'end');
+  h += lead(cx - 120, cy - 74, 120, 74) + T(116, 72, 'Chorda tympani', '', 'end');
+  h += T(cx - 100, cy - 40, 'PS', 'h', 'middle') + T(cx + 100, cy - 40, 'AS', 'h', 'middle') + T(cx - 100, cy + 70, 'PI', 'h', 'middle') + T(cx + 40, cy + 100, 'AI', 'h', 'middle');
+  h += T(300, 430, 'Quadrants: AS/AI anterosuperior/-inferior, PS/PI posterosuperior/-inferior. Dashed: seen through the drum.', 's', 'middle');
+  $('tm-svg').innerHTML = h;
+}
+function drawBox() {   // right middle ear from the lateral side: front on the viewer's right
+  let h = DEFS;
+  const X0 = 150, Y0 = 110, W = 300, H = 230;
+  h += `<rect x="${X0}" y="${Y0}" width="${W}" height="${H}" class="wall"/>`;                                  // medial wall
+  h += `<path d="M${X0 - 70} ${Y0 - 70} L${X0 + W + 70} ${Y0 - 70} L${X0 + W} ${Y0} L${X0} ${Y0} Z" class="bone"/>`;          // roof
+  h += `<path d="M${X0 - 70} ${Y0 + H + 70} L${X0 + W + 70} ${Y0 + H + 70} L${X0 + W} ${Y0 + H} L${X0} ${Y0 + H} Z" class="bone"/>`; // floor
+  h += `<path d="M${X0 - 70} ${Y0 - 70} L${X0} ${Y0} L${X0} ${Y0 + H} L${X0 - 70} ${Y0 + H + 70} Z" class="bone"/>`;           // posterior
+  h += `<path d="M${X0 + W + 70} ${Y0 - 70} L${X0 + W} ${Y0} L${X0 + W} ${Y0 + H} L${X0 + W + 70} ${Y0 + H + 70} Z" class="bone"/>`; // anterior
+  // roof / floor / walls labels
+  h += T(300, 58, 'ROOF: tegmen tympani', 'onb', 'middle') + T(300, 76, 'above: middle cranial fossa, temporal lobe', 'onb', 'middle');
+  h += T(300, 398, 'FLOOR: thin bone', 'onb', 'middle') + T(300, 414, 'below: bulb of the internal jugular vein', 'onb', 'middle');
+  h += `<ellipse cx="300" cy="448" rx="60" ry="12" class="vn"/>` + T(372, 452, 'Jugular bulb', 's');
+  h += T(46, 224, 'POSTERIOR', 'h', 'middle') + T(560, 240, 'ANTERIOR', 'h', 'middle');
+  // posterior wall: aditus above, pyramid, vertical facial canal
+  h += `<path d="M${X0 - 60} ${Y0 - 40} L${X0 - 8} ${Y0 + 4} L${X0 - 8} ${Y0 + 44} L${X0 - 60} ${Y0 + 8} Z" class="air"/>` + T(46, 92, 'Aditus to', 's', 'middle') + T(46, 106, 'mastoid', 's', 'middle') + T(46, 120, 'antrum', 's', 'middle');
+  h += `<path d="M${X0 - 34} ${Y0 + 130} L${X0 - 6} ${Y0 + 126} L${X0 - 34} ${Y0 + 150} Z" class="bone" style="stroke-width:1.5"/>` + T(46, 260, 'Pyramid', 's', 'middle') + T(46, 274, '(stapedius)', 's', 'middle');
+  // anterior wall: tensor tympani canal above the auditory tube; ICA behind
+  h += `<ellipse cx="${X0 + W + 32}" cy="${Y0 + 40}" rx="13" ry="9" class="air"/>` + T(560, 140, 'Tensor tympani', 's', 'middle') + T(560, 154, 'canal', 's', 'middle');
+  h += `<ellipse cx="${X0 + W + 32}" cy="${Y0 + 90}" rx="18" ry="14" class="air"/>` + T(560, 192, 'Auditory', 's', 'middle') + T(560, 206, 'tube', 's', 'middle');
+  h += `<circle cx="${X0 + W + 40}" cy="${Y0 + 180}" r="16" class="art"/>` + T(560, 316, 'Internal', 's', 'middle') + T(560, 330, 'carotid a.', 's', 'middle') + T(560, 344, '(Gray)', 's', 'middle');
+  // medial wall contents
+  const px = 300, py = 245;
+  h += `<ellipse cx="${px}" cy="${py}" rx="70" ry="48" class="lab" style="fill-opacity:.18"/>` + T(px + 6, py + 6, 'Promontory', '', 'middle') + T(px + 6, py + 22, '(basal turn of cochlea)', 's', 'middle');
+  h += `<ellipse cx="${px - 40}" cy="${py - 72}" rx="24" ry="13" class="air"/>`;                       // oval window, above and behind the promontory
+  h += `<path d="M${px - 60} ${py - 72} L${px - 20} ${py - 72} M${px - 52} ${py - 72} L${px - 40} ${py - 100} L${px - 28} ${py - 72}" style="stroke:#EEDD88;stroke-width:4;fill:none;stroke-linecap:round"/>`;
+  h += T(px - 12, py - 76, 'Oval window', '') + T(px - 12, py - 62, '+ stapes footplate', 's');
+  h += `<circle cx="${px - 80}" cy="${py + 50}" r="13" class="air"/>` + T(px - 80, py + 82, 'Round window', '', 'middle');
+  // facial canal: horizontal above the oval window, then down the posterior wall
+  h += `<path class="nvl" d="M${X0 + W - 20} ${py - 122} L${X0 + 30} ${py - 122} Q${X0 + 2} ${py - 122} ${X0 - 18} ${py - 92} L${X0 - 40} ${Y0 + H + 40}"/>`;
+  h += T(px + 60, py - 104, 'Facial canal (VII)', '', 'middle');
+  h += `<path d="M${X0 + 20} ${Y0 + 8} Q${X0 + 50} ${Y0 - 12} ${X0 + 80} ${Y0 + 8}" style="stroke:var(--labyr);stroke-width:5;fill:none;opacity:.7"/>` + T(X0 + 50, Y0 - 16, 'Lateral semicircular canal', 'onb', 'middle');
+  h += T(X0 + W - 8, Y0 + H - 10, 'MEDIAL WALL', 'h', 'end');
+  $('box-svg').innerHTML = h;
+}
+const EYE_STATE = {mode: 'normal'};
+function drawEye() {   // right eye, horizontal section from above: front at the top, nasal on the viewer's left
+  const m = EYE_STATE.mode, cx = 250, cy = 285, R = 150;
+  const P = (r, a) => [cx + r * Math.sin(a * Math.PI / 180), cy - r * Math.cos(a * Math.PI / 180)];   // angle clockwise from the front
+  const arc = (r, a0, a1) => { const [x0, y0] = P(r, a0), [x1, y1] = P(r, a1); return `M${x0.toFixed(1)} ${y0.toFixed(1)} A${r} ${r} 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${x1.toFixed(1)} ${y1.toFixed(1)}`; };
+  const f = ([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`;
+  let h = DEFS;
+  const [cl, cr] = [P(R, -35), P(R, 35)];
+  h += `<path d="${arc(R, 35, 325)} Q${cx} ${cy - R - 58} ${f(cr)} Z" class="scl"/>`;                                  // sclera + cornea outline
+  h += `<path d="${arc(R - 18, 50, 310)} Z" class="flu"/><rect x="${cx - 96}" y="${cy - 130}" width="192" height="50" class="flu"/>`;   // vitreous; posterior chamber and the space round the lens
+  h += `<path d="M${f(cl)} Q${cx} ${cy - R - 58} ${f(cr)}" style="stroke:var(--cornea);stroke-width:7;fill:none"/>`;  // cornea
+  h += `<path d="M${f(P(R - 6, -36))} Q${cx} ${cy - R - 48} ${f(P(R - 6, 36))} L${cx + 22} ${cy - 128} L${cx - 22} ${cy - 128} Z" class="flu"/>`;  // anterior chamber
+  h += `<path d="${arc(R - 6, 40, 320)}" style="stroke:var(--choroid);stroke-width:8;fill:none"/>`;                 // choroid
+  h += `<path d="${arc(R - 13, 48, 312)}" style="stroke:var(--retina);stroke-width:6;fill:none${m === 'crao' ? ';opacity:.35' : ''}"/>`;   // retina to the ora serrata
+  for (const s of [-1, 1]) {
+    const [bx, by] = P(R - 10, s * 44);
+    h += `<path d="M${f(P(R - 4, s * 37))} L${f([bx, by])} L${cx + s * 74} ${cy - 112} Z" class="cil"/>`;                   // ciliary body
+    h += `<path class="lead" d="M${cx + s * 54} ${cy - 106} L${cx + s * 76} ${cy - 112}"/>`;                                // zonule
+    const root = [cx + s * 84, cy - 124], tip = m === 'acg' ? [cx + s * 22, cy - 140] : [cx + s * 22, cy - 128];
+    const ctrl = m === 'acg' ? [cx + s * 60, cy - 150] : [cx + s * 55, cy - 128];
+    h += `<path d="M${f(root)} Q${f(ctrl)} ${f(tip)}" style="stroke:var(--iris);stroke-width:7;fill:none;stroke-linecap:round"/>`;   // iris
+    h += `<circle cx="${cx + s * 80}" cy="${cy - 124}" r="4" class="vn"/>`;                                                 // Schlemm's canal, in the sclera at the limbus
+  }
+  h += `<ellipse cx="${cx}" cy="${cy - 106}" rx="54" ry="24" class="lns"${m === 'cat' ? ' style="fill:#d9d6cc;fill-opacity:1"' : ''}/>`;   // lens
+  // optic nerve on the nasal side of the back (viewer's left); fovea at the back, a little temporal
+  const [nx, ny] = P(R, 194);
+  h += `<path d="M${nx - 17} ${ny - 8} L${nx - 22} ${ny + 56} L${nx + 22} ${ny + 56} L${nx + 15} ${ny - 6} Z" style="fill:var(--nerve);stroke:var(--ink);stroke-width:.6"/>`;
+  const disc = P(R - 14, 194);
+  h += `<path class="artl" d="M${nx} ${ny + 56} L${f(disc)}${m === 'crao' ? '' : ` M${f(disc)} Q${cx - 100} ${cy + 90} ${f(P(R - 22, 250))} M${f(disc)} Q${cx + 40} ${cy + 120} ${f(P(R - 22, 120))}`}"/>`;
+  if (m === 'crao') h += `<path class="clin" d="M${nx - 14} ${ny + 34} L${nx + 14} ${ny + 34}"/>`;
+  const fv = P(R - 14, 174);
+  h += `<circle cx="${fv[0]}" cy="${fv[1]}" r="${m === 'crao' ? 8 : 4}" style="fill:${m === 'crao' ? 'var(--clin)' : 'var(--ink)'}"/>`;
+  if (m === 'normal' || m === 'oag') {   // aqueous: ciliary body → posterior chamber → pupil → anterior chamber → angle
+    h += `<path class="flow" d="M${cx + 70} ${cy - 118} Q${cx + 40} ${cy - 126} ${cx + 10} ${cy - 134}"/>`;
+    h += `<path class="flow" d="M${cx - 4} ${cy - 146} Q${cx + 50} ${cy - 172} ${cx + 84} ${cy - 140}"/>`;
+  }
+  if (m === 'oag') h += `<path class="clin" d="M${cx + 70} ${cy - 140} l12 12 m0 -12 l-12 12"/>`;
+  if (m === 'acg') h += `<path class="clin" d="M${cx + 70} ${cy - 140} l12 12 m0 -12 l-12 12"/>`;
+  h += T(cx, 20, 'FRONT', 'h', 'middle') + T(12, 40, 'NASAL', 'h') + T(588, 40, 'TEMPORAL', 'h', 'end');
+  const lab = (x, y, ly, text, c) => lead(x, y, 440, ly) + T(446, ly + 4, text, c ? 'c' : '');
+  h += lab(cx + 40, cy - 160, 70, 'Cornea');
+  h += lab(cx + 30, cy - 150, 96, 'Anterior chamber');
+  h += lab(cx + 80, cy - 124, 122, m === 'oag' ? 'Outflow impeded' : m === 'acg' ? 'Angle closed' : "Angle, Schlemm's c.", m === 'oag' || m === 'acg');
+  h += lab(cx + 60, cy - 128, 148, 'Iris');
+  h += lab(...P(R - 10, 44), 174, 'Ciliary body');
+  h += lab(cx + 30, cy - 104, 200, m === 'cat' ? 'Lens: cloudy' : 'Lens, zonule', m === 'cat');
+  h += lab(...P(R - 6, 70), 250, 'Choroid');
+  h += lab(...P(R - 13, 95), 280, m === 'crao' ? 'Retina: pale' : 'Retina', m === 'crao');
+  h += lab(...P(R, 115), 310, 'Sclera');
+  h += lab(cx + 40, cy + 40, 340, 'Vitreous');
+  h += lab(fv[0], fv[1], 430, m === 'crao' ? 'Cherry-red spot' : 'Fovea (macula)', m === 'crao');
+  h += lead(nx - 18, ny + 40, 120, ny + 40) + T(114, ny + 44, 'Optic nerve', '', 'end') + T(114, ny + 58, '(disc = blind spot)', 's', 'end');
+  h += lead(nx + 4, ny + 50, 300, 500) + T(304, 504, m === 'crao' ? 'Central retinal a.: blocked' : 'Central retinal artery', m === 'crao' ? 'c' : '');
+  h += lead(cx - 50, cy - 116, 120, 150) + T(114, 154, 'Posterior chamber', '', 'end');
+  $('eye-svg').innerHTML = h;
+  $('eye-text').innerHTML = EYE_TEXT[m];
+}
+function drawIOM() {
+  let h = DEFS;
+  const box = (x, y, w, t1, t2, cls) => `<rect x="${x}" y="${y}" width="${w}" height="${t2 ? 44 : 30}" rx="6" class="box"/>` + T(x + w / 2, y + 19, t1, cls || '', 'middle') + (t2 ? T(x + w / 2, y + 36, t2, 's', 'middle') : '');
+  h += T(20, 22, 'PARASYMPATHETIC', 'h') + T(20, 214, 'SYMPATHETIC', 'h');
+  h += box(20, 34, 150, 'Edinger–Westphal', 'nucleus (midbrain)') + box(220, 34, 150, 'Oculomotor nerve', '(III)') + box(420, 34, 160, 'Ciliary ganglion', '(synapse; orbit)');
+  h += `<path class="arrow" d="M170 56 L216 56"/><path class="arrow" d="M370 56 L416 56"/>`;
+  h += T(500, 102, 'short ciliary nerves', 's', 'middle') + `<path class="arrow" d="M500 80 L500 128"/>`;
+  h += box(330, 134, 150, 'Sphincter pupillae', 'constricts the pupil') + box(490, 134, 100, 'Ciliary muscle', 'accommodation');
+  h += `<path class="arrow" d="M480 120 L420 132"/>`;
+  h += box(20, 226, 170, 'Superior cervical', 'ganglion') + box(220, 226, 170, 'Plexus on the internal', 'carotid artery') + box(420, 226, 160, 'Long ciliary nerves', '(nasociliary, V1)');
+  h += `<path class="arrow" d="M190 248 L216 248"/><path class="arrow" d="M390 248 L416 248"/><path class="arrow" d="M500 270 L500 290"/>`;
+  h += box(420, 294, 160, 'Dilator pupillae', 'dilates the pupil');
+  $('iom-svg').innerHTML = h;
+}
+function drawLac() {   // right eye from the front: lateral on the viewer's left, nose on the right
+  let h = DEFS;
+  h += `<path d="M90 70 Q300 10 500 80 L520 330 Q300 400 80 330 Z" class="bone" style="fill-opacity:.35"/>` + T(340, 64, 'Orbital margin', 's');
+  h += `<path d="M120 200 Q300 90 470 200 Q300 300 120 200 Z" class="scl"/>`;                       // eye between the lids
+  h += `<circle cx="300" cy="198" r="52" class="iri"/><circle cx="300" cy="198" r="20" style="fill:var(--ink)"/>`;
+  h += `<path d="M110 196 Q300 70 476 196" class="skin" style="fill:none;stroke-width:10;stroke:var(--skin)"/><path d="M110 204 Q300 318 476 204" class="skin" style="fill:none;stroke-width:10;stroke:var(--skin)"/>`;
+  // gland upper lateral (viewer's left)
+  h += `<path d="M120 92 Q170 64 232 92 Q206 132 150 128 Q120 118 120 92 Z" class="lg"/>`;
+  h += `<path d="M168 126 L176 152 M190 126 L196 150 M210 120 L214 144" style="stroke:var(--lacgl);stroke-width:2"/>`;
+  // tear flow across the eye to the medial angle
+  h += `<path class="flow" d="M200 160 Q300 140 420 186"/>`;
+  // puncta, canaliculi, sac, duct
+  h += `<circle cx="452" cy="190" r="4" class="tearf"/><circle cx="452" cy="210" r="4" class="tearf"/>`;
+  h += `<path class="tearl" d="M452 190 L452 178 L500 172 M452 210 L452 222 L500 214"/>`;
+  h += `<path d="M498 150 Q512 150 514 170 L516 238 Q506 244 496 238 L494 168 Q494 150 498 150 Z" class="tearf" style="opacity:.85"/>`;
+  h += `<path class="tearl" d="M506 238 L512 360"/>` + `<path d="M470 372 Q512 360 560 372" class="bone" style="fill:none;stroke-width:2"/>`;
+  // labels
+  h += T(14, 22, 'LATERAL', 'h') + T(666, 22, 'MEDIAL (nose)', 'h', 'end');
+  h += lead(150, 96, 60, 140) + T(20, 154, 'Lacrimal gland');
+  h += lead(190, 140, 60, 186) + T(20, 200, 'Ducts');
+  h += lead(452, 190, 420, 120) + T(416, 116, 'Puncta', '', 'end');
+  h += lead(480, 176, 546, 130) + T(550, 134, 'Canaliculi');
+  h += lead(516, 196, 546, 196) + T(550, 200, 'Lacrimal sac');
+  h += lead(510, 300, 546, 300) + T(550, 304, 'Nasolacrimal duct');
+  h += T(512, 398, 'Inferior meatus (nose)', 's', 'middle');
+  $('lac-svg').innerHTML = h;
+}
+function drawPit(on) {   // top: visual fields (patient's view); below: coronal section through the sella seen from the front (patient's right on the viewer's left)
+  let h = DEFS;
+  // visual-field strip: as the patient sees them, left eye on the left; temporal halves are the outer halves
+  h += `<rect x="120" y="6" width="360" height="112" rx="8" class="box"/>` + T(300, 24, "VISUAL FIELDS (PATIENT'S VIEW)", 'h', 'middle');
+  const field = (x, lost) => `<circle cx="${x}" cy="66" r="32" style="fill:var(--surface);stroke:var(--muted)"/>` + (lost ? `<path d="${lost === 'R' ? `M${x} 34 A32 32 0 0 1 ${x} 98 Z` : `M${x} 34 A32 32 0 0 0 ${x} 98 Z`}" style="fill:var(--clin);fill-opacity:.6"/>` : '') + `<path class="lead" d="M${x} 34 L${x} 98"/>`;
+  h += field(210, on ? 'L' : '') + field(390, on ? 'R' : '') + T(160, 70, 'L eye', 's', 'middle') + T(440, 70, 'R eye', 's', 'middle');
+  h += '<g transform="translate(0,90)">';
+  h += T(20, 52, "PATIENT'S RIGHT", 'h') + T(580, 52, 'LEFT', 'h', 'end') + T(300, 52, 'SECTION, SEEN FROM THE FRONT', 'h', 'middle');
+  h += `<path d="M60 260 L230 260 Q240 330 300 334 Q360 330 370 260 L540 260 L540 330 L60 330 Z" class="bone"/>`;          // sphenoid body + sella floor
+  h += `<rect x="200" y="338" width="200" height="70" rx="10" class="air"/>` + T(300, 380, 'Sphenoidal sinus', 's', 'middle');
+  h += `<path d="M60 330 L60 420 L540 420 L540 330" class="bone" style="fill:none"/>`;
+  for (const [x, side] of [[150, 'R'], [450, 'L']]) {   // cavernous sinuses with the ICA and nerves
+    h += `<ellipse cx="${x}" cy="225" rx="62" ry="44" class="vn" style="fill-opacity:.35"/>`;
+    h += `<circle cx="${x + (side === 'R' ? 22 : -22)}" cy="232" r="14" class="art"/>`;
+    for (const [dx, dy] of [[-30, -22], [-36, -2], [-30, 18], [-14, 32]]) h += `<circle cx="${x + (side === 'R' ? dx : -dx)}" cy="${225 + dy}" r="6" class="nv"/>`;
+  }
+  h += `<path d="M236 252 L284 252 M316 252 L364 252" style="stroke:var(--dura);stroke-width:4"/>`;   // diaphragma sellae
+  if (on) h += `<path d="M240 300 Q240 240 260 210 Q300 150 340 210 Q360 240 360 300 Q300 340 240 300 Z" class="clinf"/>`;   // adenoma, top at about y 180
+  else h += `<path d="M244 300 Q244 258 300 256 Q356 258 356 300 Q300 334 244 300 Z" class="pit"/><path d="M296 256 L296 214 L304 214 L304 256 Z" class="pit"/>`;
+  const cy = on ? 178 : 190;   // the chiasm in cross-section; lifted and indented where the tumour touches it
+  h += on ? `<path d="M226 ${cy - 6} Q300 ${cy - 40} 374 ${cy - 6} Q380 ${cy + 10} 368 ${cy + 14} Q300 ${cy - 10} 232 ${cy + 14} Q220 ${cy + 10} 226 ${cy - 6} Z" class="nv"/>` : `<ellipse cx="300" cy="${cy}" rx="76" ry="16" class="nv"/>`;
+  h += `<path class="lead dash" d="M270 ${cy - (on ? 18 : 0)} L330 ${cy - (on ? 18 : 0)}"/>` + T(300, cy - (on ? 44 : 24), 'crossing (nasal) fibres', 's', 'middle');
+  h += lead(360, cy - 12, 470, 120) + T(474, 118, 'Optic chiasm');
+  h += lead(92, 216, 70, 200) + T(66, 192, 'Cavernous', 's', 'end') + T(66, 206, 'sinus', 's', 'end');
+  h += lead(340, 254, 396, 296) + T(400, 300, 'Diaphragma sellae', 'onb');
+  h += lead(300, on ? 260 : 290, 140, 300) + T(136, 304, on ? 'Pituitary adenoma' : 'Pituitary (fossa)', on ? 'c' : 'onb', 'end');
+  h += lead(428, 232, 560, 232) + T(586, 240, 'ICA', 's', 'end');
+  h += '</g>';
+  $('pit-svg').innerHTML = h;
+  $('pit-text').innerHTML = on ? PIT_TEXT.off + PIT_TEXT.on : PIT_TEXT.off;
+}
+function table(id, head, rows) {
+  $(id).innerHTML = '<tr>' + head.map(x => `<th>${x}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + r.map((c, i) => `<td data-h="${head[i]}">${c}</td>`).join('') + '</tr>').join('');
+}
+function toggles(id, items, onSel, start) {
+  const box = $(id);
+  for (const [key, label] of items) {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = label; b.dataset.k = key; b.setAttribute('aria-pressed', key === start);
+    b.onclick = () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); onSel(key); };
+    box.append(b);
+  }
+}
+
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models + ' ' + DATA.image;
+  $('ext-text').innerHTML = EXT_TEXT; $('tm-text').innerHTML = TM_TEXT; $('oe-text').innerHTML = OE_TEXT; $('me-text').innerHTML = ME_TEXT; $('om-text').innerHTML = OM_TEXT;
+  $('ie-text').innerHTML = IE_TEXT; $('iom-text').innerHTML = IOM_TEXT; $('lac-text').innerHTML = LAC_TEXT;
+  table('ext-table', EXT_HEAD, EXT_ROWS); table('wall-table', WALL_HEAD, WALL_ROWS); table('cont-table', CONT_HEAD, CONT_ROWS); table('ie-table', IE_HEAD, IE_ROWS);
+  table('coat-table', COAT_HEAD, COAT_ROWS); table('iom-table', IOM_HEAD, IOM_ROWS); table('lac-table', LAC_HEAD, LAC_ROWS);
+  drawTM(false); drawBox(); drawEye(); drawIOM(); drawLac(); drawPit(false);
+  toggles('tm-tg', [['off', 'Normal'], ['on', 'Myringotomy site']], k => drawTM(k === 'on'), 'off');
+  toggles('eye-tg', [['normal', 'Normal'], ['oag', 'Open-angle glaucoma'], ['acg', 'Angle closure'], ['cat', 'Cataract'], ['crao', 'Retinal artery occlusion']], k => { EYE_STATE.mode = k; drawEye(); }, 'normal');
+  toggles('pit-tg', [['off', 'Normal'], ['on', 'Pituitary tumour']], k => drawPit(k === 'on'), 'off');
+  const bar = $('vbar');
+  for (const [label, dir] of [['Front', [0, -1, 0]], ['Back', [0, 1, 0]], ['Right', [-1, 0, 0]], ['Above', [0, -0.25, 1]], ['Below', [0, -0.3, -1]]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic('aur');
+  window.J = {TOPICS, showTopic, names, kind};   // for tests
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

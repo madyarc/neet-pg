@@ -8,11 +8,6 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 34 (ear and eye) started 2026-11-22: [x] build (521 quotes, 83-part 631 KB eareye, one page, CC BY-SA eardrum
-  photo; AN31.5 still partial) [x] review (14 items: canal and auricle labels on the
-  wrong spots, model chorda and tube off, cone of light one source, pituitary field layout) [ ] fixes (sent) [ ] docs
-  [ ] commit. Builder agent a18f9dc6; sheet fill-eareye, model models/eareye (or ear + eye),
-  page head-neck/ear-eye.html (may split). Target AN40.1–40.5, 41.1–41.3, 31.4, 30.5 (+ AN31.5 gap).
 - Module 35 (pelvic viscera, perineum, male genitalia) started 2026-11-22: sheet fill-pelv, model models/pelv
   (tools/abdomen-pelvis/pelvis_config.py), page abdomen-pelvis/pelvis-perineum.html (may split). Target AN46.1–46.5,
   48.1, 48.5–48.8, 49.1–49.5 (+ AN48.3 gap).
@@ -50,7 +45,7 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
 - AN13.7: surface lines and pulses are done (module 24); the muscle tests for pectoralis major, serratus anterior,
   latissimus dorsi, deltoid, biceps and brachioradialis are not. Could go on the upper-limb muscles page.
 
-Progress: anatomy 216 covered, 14 partial, 183 not started; ophthalmology 6 covered, 1 partial, 55 not started.
+Progress: anatomy 226 covered, 14 partial, 173 not started; ophthalmology 6 covered, 1 partial, 55 not started.
 
 ## Steps for every module (do them in this order, tick them here as they finish)
 
@@ -95,6 +90,10 @@ builds at the same time.
   that disproves each claim.
 
 ## Log (newest first)
+
+- 2026-11-22: Module 34 (ear and eye): 522 quotes, 83-part 631 KB `models/eareye` (Z-Anatomy temporal bone and inner
+  ear, CC BY-NC-SA), CC BY-SA otoscope photo; review found 14 items (labels drifting onto the wrong spots, model
+  chorda and tube, cone of light one source, field layout), all fixed; 10 ticked; AN31.5 still partial.
 
 - 2026-11-22: Module 33 (mouth, pharynx, nose, larynx): 430 quotes, 107-part 653 KB `models/oro` with a midline clip;
   review found 10 items (pyriform fold lateral in the model, V2 clipped away, model caveats), all fixed; 9 ticked,

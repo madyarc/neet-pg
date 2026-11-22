@@ -1048,3 +1048,32 @@ tubercles.
 - Independent review (2026-11-22), fixed: pyriform fold drawn lateral to the fossa, maxillary nerve cut away by the
   clip, maxillary markers off-canvas, model caveats, quinsy, epistaxis and pyriform sourcing, laryngeal epithelium,
   label collisions, dark contrast, colours, accessibility.
+
+## The Ear and the Eye — `head-neck/ear-eye.html`
+
+- Fact sheet `sources-local/facts/fill-eareye.md` (522 quotes, script-checked against `sources-local/modern/fill-eareye/`,
+  downloads 2026-11-22): Gray 1918 pages 35, 146, 197–203, 224–232, 275; 31 StatPearls abstracts; 94 Wikipedia
+  articles (no OpenStax notices; Tympanic cavity, Outer ear and Petrous part not used as they copy Gray; other copied
+  sentences not counted); open-access papers PMC9647717, PMC9360827, PMC12746166 (tympanostomy site), PMC13230221
+  (temporal bone CT), PMC10294180 (jugular bulb), PMC12122612, PMC13720400, PMC12801116 (auditory tube), PMC12752107
+  (CRAO).
+- Contested, stated on the page: cornea layers (five, Gray four); greater petrosal nerve (parasympathetic, Gray mainly
+  sensory); narrowest point of the meatus (Gray in the bony part, StatPearls at the junction).
+- Single source, attributed: cone of light (Wikipedia), pain sign in otitis externa and spread of necrotising otitis
+  externa (StatPearls), round window, carotid relation, central retinal artery course, lateral canal at the aditus,
+  lacrimal fossa (Gray), child tube length (2025 review), jugular bulb dehiscence (2023 CT study), Edinger–Westphal
+  and superior salivatory nuclei, uveoscleral route, intraocular lens, hyperacusis, macroadenoma size (Wikipedia).
+- Left out (one source): cochlear tonotopy, ion values, the eardrum's tilt, nasolacrimal duct length, number of
+  lacrimal ducts; AN31.5's "secondary deviation larger than primary" (searched again 2026-11-22).
+- Model `models/eareye` (`tools/head-neck/eareye_config.py`; `z-bp3d-eareye.zip`): 83 parts, 631 KB pack, left eyeball
+  mirrored in the page. Bones, optic pathway and pituitary: BodyParts3D. Temporal bone, ossicles, eardrum, auricle,
+  eye, lacrimal parts, muscles, vessels, nerves: Z-Anatomy (its temporal bone fits its inner ear far better).
+  Cochlea and vestibule: Z-Anatomy after University of Dundee "Anatomy of the Inner Ear", CC BY-NC-SA 4.0. The
+  model's chorda tympani lies outside the middle ear, its auditory tube is nearly horizontal, and its chiasm is
+  about 2 mm above the pituitary (said on the page). Missing: tensor tympani, stapedius, choroid, ciliary body,
+  labyrinthine artery (schematics).
+- Image: Michael Hawke MD, "TM RIGHT NORMAL.jpg", Wikimedia Commons, CC BY-SA 4.0 (checked 2026-11-22), resized and
+  labelled → `head-neck/img/tm-right-normal.jpg`.
+- Independent review (2026-11-22), fixed: canal, tragus and lobule labels on the wrong spots, model notes for the
+  chorda and tube, cone of light and isthmus sourcing, seven one-source statements, pituitary visual-field layout,
+  eye schematic cut labels and Schlemm's canal, dark contrast, colours (extraocular muscles now muscle red).
