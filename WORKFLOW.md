@@ -9,7 +9,8 @@ Last updated: 2026-11-21
 ## Now
 
 - Module 38 (histology I): [x] build (408 quotes, three pages in anatomy/histology/, 20 CC0/CC BY/CC BY-SA Commons
-  micrographs, 1.7 MB; AN69.1, 70.2, 71.1 partial) [ ] review (running) [ ] fixes [ ] docs [ ] commit. Was started: sheet fill-histo1, openly licensed
+  micrographs, 1.7 MB; AN69.1, 70.2, 71.1 partial) [x] review (15 items: ~7 micrograph labels on the wrong structure,
+  schematic layers, one-source lines) [ ] fixes (sent) [ ] docs [ ] commit. Was started: sheet fill-histo1, openly licensed
   micrographs, pages anatomy/histology/ (tissues.html or split). Module 39 after: systemic histology (AN25.1, 43.2,
   43.3, 52.1–52.3, 64.1).
 - Module 39 (general embryology; sections 76–81) started 2026-11-22: sheet fill-embryo1, schematics, pages
