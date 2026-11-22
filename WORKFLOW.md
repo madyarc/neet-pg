@@ -8,6 +8,14 @@ Last updated: 2026-11-21
 
 ## Now
 
+- ALL WORK PAUSED by the user (2026-11-22). Both agents were stopped mid-task; nothing of theirs is committed:
+  - Module 36 (neuro I): the builder had written a page (anatomy/neuro/meninges-cord.html, a second page was in
+    progress), model models/neuro1, tools/neuro/, configs/neuro1.json, z-index-neuro1*.tsv and sheet fill-neuro1
+    (untracked). To resume: send a new agent the original brief plus "continue from the files on disk; finish page B,
+    then check_quotes, labelcheck, tests", then review as usual.
+  - Home Joints and Organs layers: the agent had only started tools/home/body_layers.py (untracked); anatomy/index.html
+    untouched. To resume: rerun the same brief (navigation item 4).
+
 - PAUSED new modules (user, 2026-11-22): finish modules 35 and 36 (review, fixes, docs, commit), then do the
   navigation work below before module 37.
 - Navigation work (user request 2026-11-22):
