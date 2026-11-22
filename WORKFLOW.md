@@ -9,8 +9,8 @@ Last updated: 2026-11-21
 ## Now
 
 - Module 39 (general embryology): [x] build (747 quotes, two pages embryology/early-development.html and
-  membranes-placenta.html, schematics, germ-layer tokens --ecto/--meso/--endo; AN77.6 partial) [ ] review (running)
-  [ ] fixes [ ] docs (new 'Embryology' group) [ ] commit. Was started: sheet fill-embryo1, schematics, pages
+  membranes-placenta.html, schematics, germ-layer tokens --ecto/--meso/--endo; AN77.6 partial) [x] review (16 items: yolk sac inside the amnion, amniocentesis needle
+  through the placenta, germ-layer colours too close to meaning colours, chart alignment) [ ] fixes (sent) [ ] docs (new 'Embryology' group) [ ] commit. Was started: sheet fill-embryo1, schematics, pages
   anatomy/embryology/ (general.html or split). Then: systemic histology, systemic embryology, genetics, leftovers.
 - Module 40 (histology II: organs; AN25.1, 43.2, 43.3, 52.1–52.3, 64.1) started 2026-11-22: sheet fill-histo2,
   pages in anatomy/histology/ (reusing histo.js/css).

@@ -71,7 +71,8 @@ CLAUDE.md, WORKFLOW.md, pages not listed in your task. Do not commit or push. Do
 - Every sentence the page states plainly needs two quotes; one-source details must be attributed or cut. The
   sheet's own notes ("left out", "attributed") must match what the page actually says.
 - Colours: one meaning across the whole site. Grep other pages' `:root` tokens for near-identical values before adding
-  one; --clin only for clinical points, --accent only for UI selection. Shared values: --fluid #d9edc6 / dark #4e6638 (all body fluids: pleural, peritoneal, synovial).
+  one, and choose by meaning, not only distance: a new colour must not look like a colour that already means something
+  that could appear nearby (artery red, vein and nerve blues, nerve yellow); --clin only for clinical points, --accent only for UI selection. Shared values: --fluid #d9edc6 / dark #4e6638 (all body fluids: pleural, peritoneal, synovial).
 - Micrograph labels: draw every label coordinate on the processed image and zoom in before finishing; labels placed
   by eye land on the neighbouring layer surprisingly often.
 - Clinical safety: needle sites, levels and sides must agree with the page's own anatomy elsewhere.
