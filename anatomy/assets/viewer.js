@@ -93,15 +93,34 @@
     return out.buffer;
   }
   const nextFrame = () => new Promise(r => requestAnimationFrame(() => r()));
+  // which parts are bones (tools/home/bone_keys.py), for the Bones on/off button; left copies end in _l, detail copies
+  // start with D:
+  const SCRIPT_SRC = document.currentScript && document.currentScript.src;
+  let BONES = null;
+  const bonesReady = SCRIPT_SRC ? fetch(new URL('../models/bone-keys.json', SCRIPT_SRC)).then(r => r.json())
+    .then(a => { BONES = new Set(a); }).catch(() => { BONES = new Set(); }) : Promise.resolve();
+  const isBone = k => !!BONES && (BONES.has(k) || BONES.has(k.replace(/^D:/, '')) || BONES.has(k.replace(/_l$/, '')));
+  const bonesPref = () => { try { return localStorage.getItem('neetpg-bones') !== 'off'; } catch (e) { return true; } };
 
   class AtlasViewer {
     constructor(host, opts = {}) {
       this.host = host; this.parts = new Map(); this.order = [];
       this.yaw = 0; this.pitch = 0; this.zoom = 1; this.pan = [0, 0]; this.centre = [0, 0, 0]; this.fitH = 200;
       this.clip = null; this.markers = []; this.onPick = null; this.dimOthers = null; this.labelsOn = true; this.contacts = [];
+      this.bonesOn = bonesPref(); this.boneToggle = opts.boneToggle !== false;
       host.classList.add('viewer');
       host.innerHTML = '<canvas></canvas><svg aria-hidden="true"></svg><div class="hint">drag · pinch/scroll · tap</div><div class="loading">Loading 3D model…</div>';
       this.c = host.querySelector('canvas'); this.svg = host.querySelector('svg'); this.loadingEl = host.querySelector('.loading');
+      if (this.boneToggle) {
+        const b = this.boneBtn = document.createElement('button');
+        b.type = 'button'; b.className = 'bonesbtn'; b.hidden = true;
+        b.title = 'Show or hide the bones (a topic about bones keeps them)';
+        for (const ev of ['pointerdown', 'pointerup', 'wheel']) b.addEventListener(ev, e => e.stopPropagation());
+        b.addEventListener('click', () => this.setBones(!this.bonesOn));
+        host.append(b); this.updateBoneBtn();
+        bonesReady.then(() => { this.updateBoneBtn(); this.draw(); });
+        window.addEventListener('storage', e => { if (e.key === 'neetpg-bones') this.setBones(bonesPref(), false); });
+      }
       const gl = this.gl = this.c.getContext('webgl', {antialias: true, alpha: true, premultipliedAlpha: false, preserveDrawingBuffer: false});
       if (!gl) { host.innerHTML = '<div class="nogl">3D needs WebGL, which this browser has turned off.</div>'; this.dead = true; return; }
       this.u32 = !!gl.getExtension('OES_element_index_uint');
@@ -198,6 +217,7 @@
       batch.bp = buf(pos, gl.ARRAY_BUFFER); batch.bn = buf(nrm, gl.ARRAY_BUFFER);
       batch.bc = buf(vcol, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW); batch.bi = buf(idx, gl.ELEMENT_ARRAY_BUFFER);
       batch.itype = this.u32 ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT; batch.isize = this.u32 ? 4 : 2;
+      this.updateBoneBtn();
       this.draw();
     }
     /** frame the visible parts */
@@ -226,6 +246,21 @@
     }
     setColour(key, c) { const p = this.parts.get(key); if (p && p.colour !== c) { p.colour = c; p.rgb = rgb(c); this.draw(); } }
     setVisible(key, on) { const p = this.parts.get(key); if (p && p.visible !== on) { p.visible = on; this.draw(); } }
+    /** Bones on/off: when off, all bones are hidden, unless every focused (setFocus) part is a bone */
+    setBones(on, save = true) {
+      this.bonesOn = on;
+      if (save) { try { localStorage.setItem('neetpg-bones', on ? 'on' : 'off'); } catch (e) {} }
+      this.updateBoneBtn(); this.draw(); this.scheduleMarkers && this.scheduleMarkers();
+    }
+    /** the button shows only when the model has both bones and other parts (pointless on bone-only pages) */
+    updateBoneBtn() {
+      const b = this.boneBtn; if (!b) return;
+      let nb = 0, no = 0;
+      if (BONES) for (const k of this.order) { if (isBone(k)) nb++; else no++; }
+      b.hidden = !(nb && no);
+      b.textContent = this.bonesOn ? 'Bones: on' : 'Bones: off';
+      b.setAttribute('aria-pressed', this.bonesOn ? 'true' : 'false');
+    }
     /** dim every part except these keys (null = none dimmed) */
     setFocus(keys) { this.dimOthers = keys ? new Set(keys) : null; this.draw(); }
     /** colour some vertices of a part (others keep the part colour); list = [{verts: Uint32Array, colour}] */
@@ -340,6 +375,9 @@
         gl.drawElements(gl.TRIANGLES, p.count, b.itype, p.i0 * b.isize);
       };
       let vis = this.order.filter(k => this.parts.get(k).visible);
+      // Bones off: hide every bone, unless the topic lights only bones (then they are its subject)
+      if (!this.bonesOn && !(this.dimOthers && this.dimOthers.size && [...this.dimOthers].every(isBone)))
+        vis = vis.filter(k => !isBone(k));
       // labels test against the depth of what is drawn solid: with glass parts, only the selected ones
       if (mode === 2 && this.dimOthers) vis = vis.filter(k => this.dimOthers.has(k));
       if (!ghost && mode !== 1) {

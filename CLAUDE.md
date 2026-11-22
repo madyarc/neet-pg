@@ -140,7 +140,9 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
   nerves, nodes) built from the whole-body configs with the same keys and `error_mm`, plus `models/ul-nv/nv.json` (kind
   of each part), for `upper-limb/nerves-vessels.html`. Regional nerve-and-vessel pages follow this pattern. Z-Anatomy files thorax, abdomen, pelvis and the axillary and inguinal
   nodes under "Trunk"; `tools/home/region_pages.py` writes `models/region-pages.json` (which regional page each such part
-  opens from the Anatomy home): re-run it after building a regional model.
+  opens from the Anatomy home): re-run it after building a regional model. Every viewer has a Bones on/off button
+  (`viewer.js`; preference in localStorage `neetpg-bones`): `tools/home/bone_keys.py` writes `models/bone-keys.json`
+  from the bone models and kinds.json — re-run it after adding a model; `tools/test/bonescheck.py` checks every page.
 - `tools/bones/skull_points.py`: named sutures and points from the contacts. `tools/bones/assign_colours.py`: bone
   colours. The femur page still uses `tools/bones/build_femur.py` + `embed.py`.
 - **Memory**: the machine has run out of RAM during long sessions. Heavy jobs (Blender exports, `bones build`,
