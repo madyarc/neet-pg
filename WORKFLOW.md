@@ -8,7 +8,9 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 39 (general embryology; sections 76–81) started 2026-11-22: sheet fill-embryo1, schematics, pages
+- Module 39 (general embryology): [x] build (747 quotes, two pages embryology/early-development.html and
+  membranes-placenta.html, schematics, germ-layer tokens --ecto/--meso/--endo; AN77.6 partial) [ ] review (running)
+  [ ] fixes [ ] docs (new 'Embryology' group) [ ] commit. Was started: sheet fill-embryo1, schematics, pages
   anatomy/embryology/ (general.html or split). Then: systemic histology, systemic embryology, genetics, leftovers.
 - Module 40 (histology II: organs; AN25.1, 43.2, 43.3, 52.1–52.3, 64.1) started 2026-11-22: sheet fill-histo2,
   pages in anatomy/histology/ (reusing histo.js/css).
@@ -16,6 +18,7 @@ Last updated: 2026-11-21
 
 ## Small follow-ups
 
+- `--sl` #f9f1d0 on histology pages is close to other cream tokens.
 - Home vessel layer: straight and occipital sinuses sit in front of the brainstem (Z-Anatomy): check or hide.
 
 ## Questions for the user
