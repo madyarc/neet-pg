@@ -11,6 +11,8 @@ Last updated: 2026-11-21
 - Module 33 (mouth, pharynx, nose, larynx) started 2026-11-21 in parallel: agent a5600e55; sheet fill-oro, model
   models/oro (tools/head-neck/oro_config.py), page head-neck/mouth-pharynx-nose.html. Target AN36.1, 36.2, 36.4–36.7,
   37.1–37.3, 38.2.
+- Module 34 (ear and eye) started 2026-11-22: agent (eareye); sheet fill-eareye, model models/eareye (or ear + eye),
+  page head-neck/ear-eye.html (may split). Target AN40.1–40.5, 41.1–41.3, 31.4, 30.5 (+ AN31.5 gap).
 - Local test server: 127.0.0.1:8765.
 
 ## Questions for the user
@@ -24,7 +26,6 @@ status. Remove each once answered.
 
 | # | Module | Page | Model | Notes |
 |---|--------|------|-------|-------|
-| 34 | Ear and eye (anatomy) | anatomy/head-neck/ | own pack | AN40.x, 41.x, 31.4, 30.5; link ophthalmology |
 | 35 | Pelvic viscera, perineum, male genitalia | anatomy/abdomen-pelvis/ | own pack | AN46, 48, 49 |
 | 33 | Neuroanatomy | | | |
 | 34 | Histology, embryology, genetics | | | |
