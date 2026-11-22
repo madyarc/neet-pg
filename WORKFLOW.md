@@ -10,6 +10,8 @@ Last updated: 2026-11-21
 
 - Module 39 (general embryology; sections 76–81) started 2026-11-22: sheet fill-embryo1, schematics, pages
   anatomy/embryology/ (general.html or split). Then: systemic histology, systemic embryology, genetics, leftovers.
+- Module 40 (histology II: organs; AN25.1, 43.2, 43.3, 52.1–52.3, 64.1) started 2026-11-22: sheet fill-histo2,
+  pages in anatomy/histology/ (reusing histo.js/css).
 - Local test server: 127.0.0.1:8765.
 
 ## Small follow-ups
