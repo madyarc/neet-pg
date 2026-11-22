@@ -10,6 +10,9 @@ Last updated: 2026-11-21
 
 - Module 40 (histology II: organs; AN25.1, 43.2, 43.3, 52.1–52.3, 64.1) started 2026-11-22: sheet fill-histo2,
   pages in anatomy/histology/ (reusing histo.js/css).
+- Module 41 (systemic embryology: AN25.2–25.6, 43.4, 52.4–52.8, 64.2–64.3) started 2026-11-22: sheet fill-embryo2,
+  pages in anatomy/embryology/. After: genetics (73–75), then leftovers (general 1–6, radiology 54, sectional 51,
+  osteology 53, surface 55, limb leftovers).
 - Local test server: 127.0.0.1:8765.
 
 ## Small follow-ups
