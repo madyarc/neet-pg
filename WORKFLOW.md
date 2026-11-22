@@ -8,8 +8,10 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Resumed 2026-11-22 05:31: module 36 finishing agent (continues from files on disk: meninges-cord.html,
-  brainstem.html, models/neuro1, fill-neuro1) (running); home Joints/Organs layers done.
+- Module 36 (neuro I): [x] build (605 quotes, 138-part 838 KB neuro1, pages neuro/meninges-cord.html and
+  neuro/brainstem.html; AN58.4 partial) [x] review (11 items: anterior spinal artery hatch, 4th ventricle drawn in front,
+  Millard–Gubler overlay, attributions, colours) [ ] fixes (sent) [ ] docs (new region group 'neuro' on the
+  Anatomy index) [ ] commit.
 - Navigation work done (below); modules resumed. Module 37 (neuro II: sections 7, 62, 63) started 2026-11-22: sheet
   fill-neuro2, model models/neuro2 (tools/neuro/neuro2_config.py), pages anatomy/neuro/cerebrum.html (+ maybe
   general/nervous-system.html).
