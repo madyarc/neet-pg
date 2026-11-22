@@ -8,9 +8,6 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 32 (face and neck regions and glands) started 2026-11-21 in parallel: agent a3248667; sheet fill-hnreg, model
-  models/hn-reg (tools/head-neck/regions_config.py), page head-neck/regions.html (may split). Target AN28.2, 28.9, 28.10,
-  29.1, 29.2, 29.4, 29.5, 33.1, 34.1–34.3, 35.2, 35.8, 42.3, AN43.6 glands and pterion.
 - Module 33 (mouth, pharynx, nose, larynx) started 2026-11-21 in parallel: agent a5600e55; sheet fill-oro, model
   models/oro (tools/head-neck/oro_config.py), page head-neck/mouth-pharynx-nose.html. Target AN36.1, 36.2, 36.4–36.7,
   37.1–37.3, 38.2.
@@ -43,13 +40,13 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
 - AN25.9: heart (module 26) and pleura, lungs, trachea (module 30) done; midclavicular levels of lung and pleura are Gray only.
 - AN23.2 (thoracic duct tributaries), AN23.3 (hemiazygos origin), AN47.12 (secondary plexuses), AN48.3 (internal iliac
   relations): Gray only (Wikipedia copies Gray); modules 27–28.
-- AN27.1: scalp wound bleeding and gaping (Wikipedia only); AN43.6: subclavian artery line (Gray only), glands and
-  pterion not yet (module 29).
+- AN27.1: scalp wound bleeding and gaping (Wikipedia only).
+- AN43.6: only the subclavian vein's surface line is missing (one source).
 - AN47.6: the clinical use of the splenic notch has no open source (module 31).
 - AN13.7: surface lines and pulses are done (module 24); the muscle tests for pectoralis major, serratus anterior,
   latissimus dorsi, deltoid, biceps and brachioradialis are not. Could go on the upper-limb muscles page.
 
-Progress: anatomy 193 covered, 13 partial, 207 not started; ophthalmology 6 covered, 1 partial, 55 not started.
+Progress: anatomy 207 covered, 13 partial, 193 not started; ophthalmology 6 covered, 1 partial, 55 not started.
 
 ## Steps for every module (do them in this order, tick them here as they finish)
 
@@ -94,6 +91,10 @@ builds at the same time.
   that disproves each claim.
 
 ## Log (newest first)
+
+- 2026-11-22: Module 32 (face and neck regions and glands): 531 quotes, 141-part 636 KB `models/hn-reg`; review found 13
+  items (face sensory map, parotid section mirrored, carotid sheath contents, model caveats), all fixed except thyroid
+  ligation advice (no open source); 14 ticked; AN43.6 now only lacks the subclavian vein.
 
 - 2026-11-21: Module 31 (abdominal cavity, peritoneum, organs): 582 quotes, 100-part 664 KB `models/abdo` with the
   Z-Anatomy kidney (CC BY-NC, better fit); review found 18 items (biopsy needle wording, labels, schematics), all fixed;

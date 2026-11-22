@@ -996,3 +996,29 @@ tubercles.
   Calot, horizontal and sagittal schematics, about ten one-source statements, jejunum position, colour clashes, dark
   contrast, incision nerves, selective vagotomy, keyboard access.
 - Home page: the spleen (lymph layer) opens this page.
+
+## Face and Neck: Regions and Glands — `head-neck/regions.html`
+
+- Fact sheet `sources-local/facts/fill-hnreg.md` (531 quotes, script-checked against `sources-local/modern/fill-hnreg/`,
+  downloads 2026-11-21): Gray 1918 pages 46, 111–116, 121, 144–148, 200–210, 242, 272–273, 280; StatPearls; about 100
+  Wikipedia articles (none with an OpenStax notice; Gray copies excluded); open-access papers (sialolithiasis,
+  submandibular ganglion, thyroid arteries, external laryngeal nerve, RLN and inferior thyroid artery, parathyroids,
+  thyroglossal cysts, Frey's syndrome, parotid duct landmarks, posterior triangle sonoanatomy, neck muscles, pterion,
+  great auricular nerve, salivary tumours).
+- Contested, stated on the page: thyroid weight (25 or 30 g), lower pole level, isthmus rings, pyramidal lobe frequency,
+  pterion distance behind the frontozygomatic suture, parotid duct length and surface line (Gray's or tragus to mouth
+  corner), one-side action of semispinalis, splenius nerve roots, accessory parotid "usually" or "sometimes".
+- Single source, attributed: scalene levels, pterygomaxillary fissure, infratemporal walls (Gray); maxillary artery and
+  lateral pterygoid (StatPearls); nerves to protect in stone surgery (one source each).
+- Left out (one source or none): where to tie the thyroid arteries, the prevertebral fascia as the posterior triangle
+  floor's covering.
+- Model `models/hn-reg` (`tools/head-neck/regions_config.py`; Z-Anatomy glands and ducts exported with modifiers
+  applied, `z-bp3d-hnreg*.zip`): 141 parts, 636 KB pack, 94 left parts mirrored in the page. Z-Anatomy's thyroid and
+  parathyroids sit about 2 cm high: the page draws the textbook outline from Gray's levels and says so. The model's
+  lingual and hypoglossal nerves don't show the textbook relation to the duct (schematic instead). Missing: otic and
+  submandibular ganglia, auriculotemporal nerve, cervical plexus, laryngeal nerves, superior thyroid and lingual
+  arteries, middle and inferior thyroid veins, pyramidal lobe, semispinalis capitis (schematics).
+- Independent review (2026-11-21), fixed: face sensory map (lips, nose tip, great auricular area, duct line), parotid
+  section orientation, carotid sheath contents, model caveats for parathyroids and the lingual nerve, swallow
+  animation, RLN crossing the inferior thyroid artery, faint labels (now none), about eight one-source statements,
+  colours; added the accessory nerve surface line.
