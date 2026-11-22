@@ -95,6 +95,10 @@ builds at the same time.
 
 ## Log (newest first)
 
+- 2026-11-22 01:46: user saw memory errors: three capped jobs (module 36 agent, compare.py on Startup.blend, 3G cap)
+  were OOM-killed in their own scopes; the machine itself had 59 GB free. Brief now says 6G for .blend reads, batch
+  parts, no retry loops.
+
 - 2026-11-22: Module 34 (ear and eye): 522 quotes, 83-part 631 KB `models/eareye` (Z-Anatomy temporal bone and inner
   ear, CC BY-NC-SA), CC BY-SA otoscope photo; review found 14 items (labels drifting onto the wrong spots, model
   chorda and tube, cone of light one source, field layout), all fixed; 10 ticked; AN31.5 still partial.

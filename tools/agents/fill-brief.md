@@ -41,6 +41,9 @@ their own licence in the footer and your DATA-SOURCES text. Keep downloads small
 ## Memory (hard)
 Run every heavy command through tools/capped (Blender exports, `bones build`, ffshot.py, large Python jobs). It caps
 the job's RAM and queues it behind other agents' heavy jobs. Never start more than one browser at a time.
+Anything that reads Z-Anatomy's Startup.blend needs `tools/capped --mem 6G`; load it once per run and batch all part
+names, never one process per part. If a job is OOM-killed (the user sees a desktop notification each time), do not
+retry at the same cap: raise it once, and if it fails again stop and report.
 
 ## Files you must NOT edit
 anatomy/assets/* (unless your task message allows it), any SYLLABUS.md, DATA-SOURCES.md, index.html files, README.md,
