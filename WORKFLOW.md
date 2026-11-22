@@ -8,10 +8,10 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Resumed after the limit reset: module 40 finishing agent (continues from respiratory-digestive.html, histo.js,
-  fill-histo2 specs) and module 41 agent (fresh) running.
-- Module 40 (histology II: organs; AN25.1, 43.2, 43.3, 52.1–52.3, 64.1) started 2026-11-22: sheet fill-histo2,
-  pages in anatomy/histology/ (reusing histo.js/css).
+- Module 41 agent (systemic embryology) running.
+- Module 40 (histology II): [x] build (520 quotes, 37 Commons micrographs, pages respiratory-digestive,
+  urinary-reproductive, endocrine-senses-cns; OpenStax-flagged quotes found and removed; AN43.2, 43.3 partial)
+  [ ] review (running) [ ] fixes [ ] docs (+ module 38 pages' Histology links) [ ] commit.
 - Module 41 (systemic embryology: AN25.2–25.6, 43.4, 52.4–52.8, 64.2–64.3) started 2026-11-22: sheet fill-embryo2,
   pages in anatomy/embryology/. After: genetics (73–75), then leftovers (general 1–6, radiology 54, sectional 51,
   osteology 53, surface 55, limb leftovers).
