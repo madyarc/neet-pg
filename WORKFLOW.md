@@ -10,6 +10,9 @@ Last updated: 2026-11-21
 
 - Module 34 (ear and eye) started 2026-11-22: agent (eareye); sheet fill-eareye, model models/eareye (or ear + eye),
   page head-neck/ear-eye.html (may split). Target AN40.1–40.5, 41.1–41.3, 31.4, 30.5 (+ AN31.5 gap).
+- Module 35 (pelvic viscera, perineum, male genitalia) started 2026-11-22: sheet fill-pelv, model models/pelv
+  (tools/abdomen-pelvis/pelvis_config.py), page abdomen-pelvis/pelvis-perineum.html (may split). Target AN46.1–46.5,
+  48.1, 48.5–48.8, 49.1–49.5 (+ AN48.3 gap).
 - Local test server: 127.0.0.1:8765.
 
 ## Questions for the user
@@ -23,7 +26,6 @@ status. Remove each once answered.
 
 | # | Module | Page | Model | Notes |
 |---|--------|------|-------|-------|
-| 35 | Pelvic viscera, perineum, male genitalia | anatomy/abdomen-pelvis/ | own pack | AN46, 48, 49 |
 | 33 | Neuroanatomy | | | |
 | 34 | Histology, embryology, genetics | | | |
 
