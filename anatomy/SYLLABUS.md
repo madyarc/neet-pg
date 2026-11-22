@@ -620,50 +620,50 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 76. Introduction to embryology
 
-- [ ] **AN76.1** Describe the stages of human life
-- [ ] **AN76.2** Explain the terms- phylogeny, ontogeny, trimester, viability
+- [x] **AN76.1** Describe the stages of human life — *stages of life timeline: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN76.2** Explain the terms- phylogeny, ontogeny, trimester, viability — *phylogeny, ontogeny, trimester, viability: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
 
 ### 77. Gametogenesis and fertilization
 
-- [ ] **AN77.1** Describe the uterine changes occurring during the menstrual cycle
-- [ ] **AN77.2** Describe the synchrony between the ovarian and menstrual cycles
-- [ ] **AN77.3** Describe spermatogenesis and oogenesis along with diagrams
-- [ ] **AN77.4** Describe the stages and consequences of fertilisation
-- [ ] **AN77.5** Describe the anatomical principles underlying contraception
-- [ ] **AN77.6** Describe teratogenic influences: fertility and sterility, surrogate motherhood, social significance of “sex- ratio”.
+- [x] **AN77.1** Describe the uterine changes occurring during the menstrual cycle — *uterine changes on a cycle chart with a day slider: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN77.2** Describe the synchrony between the ovarian and menstrual cycles — *ovarian and uterine phases in step: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN77.3** Describe spermatogenesis and oogenesis along with diagrams — *spermatogenesis and oogenesis with chromosome numbers and arrests: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN77.4** Describe the stages and consequences of fertilisation — *fertilisation in seven steps: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN77.5** Describe the anatomical principles underlying contraception — *contraception and where each method acts: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [~] **AN77.6** Describe teratogenic influences: fertility and sterility, surrogate motherhood, social significance of “sex- ratio”. — *infertility, surrogacy, sex ratio in [Early Development: Gametes to the Embryo](embryology/early-development.html); the sex-selection law (PCPNDT) has no open source yet*
 
 ### 78. Second week of development
 
-- [ ] **AN78.1** Describe cleavage and formation of blastocyst
-- [ ] **AN78.2** Describe the development of trophoblast
-- [ ] **AN78.3** Describe the process of implantation & common abnormal sites of implantation
-- [ ] **AN78.4** Describe the formation of extra-embryonic mesoderm and coelom, bilaminar disc and prochordal plate
-- [ ] **AN78.5** Describe abortion, decidual reaction, pregnancy test
+- [x] **AN78.1** Describe cleavage and formation of blastocyst — *cleavage and blastocyst: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN78.2** Describe the development of trophoblast — *trophoblast layers: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN78.3** Describe the process of implantation & common abnormal sites of implantation — *implantation and ectopic sites: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN78.4** Describe the formation of extra-embryonic mesoderm and coelom, bilaminar disc and prochordal plate — *extra-embryonic mesoderm and coelom, bilaminar disc, prechordal plate: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN78.5** Describe abortion, decidual reaction, pregnancy test — *abortion types, decidual reaction, pregnancy test: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
 
 ### 79. 3rd to 8th week of development
 
-- [ ] **AN79.1** Describe the formation & fate of the primitive streak
-- [ ] **AN79.2** Describe formation & fate of notochord
-- [ ] **AN79.3** Describe the process of neurulation
-- [ ] **AN79.4** Describe the development of somites and intra-embryonic coelom
-- [ ] **AN79.5** Explain embryological basis of congenital malformations, nucleus pulposus, sacrococcygeal teratomas, neural tube defects
-- [ ] **AN79.6** Describe the diagnosis of pregnancy in first trimester and role of teratogens, alpha-fetoprotein
+- [x] **AN79.1** Describe the formation & fate of the primitive streak — *primitive streak and its fate: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN79.2** Describe formation & fate of notochord — *notochord and its fate: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN79.3** Describe the process of neurulation — *neurulation, neuropores, neural tube defects: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN79.4** Describe the development of somites and intra-embryonic coelom — *somites and the intra-embryonic coelom: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN79.5** Explain embryological basis of congenital malformations, nucleus pulposus, sacrococcygeal teratomas, neural tube defects — *malformations, nucleus pulposus, sacrococcygeal teratoma, NTDs: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
+- [x] **AN79.6** Describe the diagnosis of pregnancy in first trimester and role of teratogens, alpha-fetoprotein — *first-trimester diagnosis, teratogens, AFP: [Early Development: Gametes to the Embryo](embryology/early-development.html)*
 
 ### 80. Fetal membranes
 
-- [ ] **AN80.1** Describe formation, functions & fate of chorion, amnion, yolk sac, allantois & decidua
-- [ ] **AN80.2** Describe formation & structure of umbilical cord
-- [ ] **AN80.3** Describe formation of placenta, its physiological functions, foetomaternal circulation & placental barrier
-- [ ] **AN80.4** Describe embryological basis of twinning in monozygotic & dizygotic twins
-- [ ] **AN80.5** Describe role of placental hormones in uterine growth & parturition
-- [ ] **AN80.6** Explain embryological basis of estimation of fetal age.
-- [ ] **AN80.7** Describe various types of umbilical cord attachments
+- [x] **AN80.1** Describe formation, functions & fate of chorion, amnion, yolk sac, allantois & decidua — *chorion, amnion, yolk sac, allantois, decidua: [Fetal Membranes, Placenta and Prenatal Diagnosis](embryology/membranes-placenta.html)*
+- [x] **AN80.2** Describe formation & structure of umbilical cord — *umbilical cord formation and structure: [Fetal Membranes, Placenta and Prenatal Diagnosis](embryology/membranes-placenta.html)*
+- [x] **AN80.3** Describe formation of placenta, its physiological functions, foetomaternal circulation & placental barrier — *placenta, circulation and barrier: [Fetal Membranes, Placenta and Prenatal Diagnosis](embryology/membranes-placenta.html)*
+- [x] **AN80.4** Describe embryological basis of twinning in monozygotic & dizygotic twins — *twinning by split day: [Fetal Membranes, Placenta and Prenatal Diagnosis](embryology/membranes-placenta.html)*
+- [x] **AN80.5** Describe role of placental hormones in uterine growth & parturition — *placental hormones and parturition: [Fetal Membranes, Placenta and Prenatal Diagnosis](embryology/membranes-placenta.html)*
+- [x] **AN80.6** Explain embryological basis of estimation of fetal age. — *estimation of fetal age: [Fetal Membranes, Placenta and Prenatal Diagnosis](embryology/membranes-placenta.html)*
+- [x] **AN80.7** Describe various types of umbilical cord attachments — *cord insertions: [Fetal Membranes, Placenta and Prenatal Diagnosis](embryology/membranes-placenta.html)*
 
 ### 81. Prenatal Diagnosis
 
-- [ ] **AN81.1** Describe various invasive & non-invasive methods of prenatal diagnosis
-- [ ] **AN81.2** Describe indications, process and disadvantages of amniocentesis
-- [ ] **AN81.3** Describe indications, process and disadvantages of chorion villus biopsy
+- [x] **AN81.1** Describe various invasive & non-invasive methods of prenatal diagnosis — *invasive and non-invasive tests and their windows: [Fetal Membranes, Placenta and Prenatal Diagnosis](embryology/membranes-placenta.html)*
+- [x] **AN81.2** Describe indications, process and disadvantages of amniocentesis — *amniocentesis: [Fetal Membranes, Placenta and Prenatal Diagnosis](embryology/membranes-placenta.html)*
+- [x] **AN81.3** Describe indications, process and disadvantages of chorion villus biopsy — *chorionic villus sampling: [Fetal Membranes, Placenta and Prenatal Diagnosis](embryology/membranes-placenta.html)*
 
 ### 82. Ethics in Anatomy
 

@@ -8,10 +8,6 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 39 (general embryology): [x] build (747 quotes, two pages embryology/early-development.html and
-  membranes-placenta.html, schematics, germ-layer tokens --ecto/--meso/--endo; AN77.6 partial) [x] review (16 items: yolk sac inside the amnion, amniocentesis needle
-  through the placenta, germ-layer colours too close to meaning colours, chart alignment) [ ] fixes (sent) [ ] docs (new 'Embryology' group) [ ] commit. Was started: sheet fill-embryo1, schematics, pages
-  anatomy/embryology/ (general.html or split). Then: systemic histology, systemic embryology, genetics, leftovers.
 - Module 40 (histology II: organs; AN25.1, 43.2, 43.3, 52.1–52.3, 64.1) started 2026-11-22: sheet fill-histo2,
   pages in anatomy/histology/ (reusing histo.js/css).
 - Local test server: 127.0.0.1:8765.
@@ -52,11 +48,12 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
 - AN58.4: "crossed diplegia" read as cruciate paralysis, one source (module 36).
 - AN69.1 (elastic artery and vein micrographs: Commons rate limit), AN70.2 (no tonsil micrograph), AN71.1 (woven vs
   lamellar: only OpenStax-derived source) — module 38.
+- AN77.6: the sex-selection law (PCPNDT) has no open source (module 39).
 - AN47.6: the clinical use of the splenic notch has no open source (module 31).
 - AN13.7: surface lines and pulses are done (module 24); the muscle tests for pectoralis major, serratus anterior,
   latissimus dorsi, deltoid, biceps and brachioradialis are not. Could go on the upper-limb muscles page.
 
-Progress: anatomy 288 covered, 18 partial, 107 not started; ophthalmology 6 covered, 1 partial, 55 not started.
+Progress: anatomy 316 covered, 19 partial, 78 not started; ophthalmology 6 covered, 1 partial, 55 not started.
 
 ## Steps for every module (do them in this order, tick them here as they finish)
 
@@ -101,6 +98,10 @@ builds at the same time.
   that disproves each claim.
 
 ## Log (newest first)
+
+- 2026-11-22: Module 39 (general embryology, two pages in anatomy/embryology/): 753 quotes, step-through schematics,
+  germ-layer tokens; review found 16 items (yolk sac inside the amnion, amniocentesis needle through the placenta,
+  colours, chart alignment), all fixed; 29 ticked, AN77.6 partial.
 
 - 2026-11-22: Module 38 (histology I, three pages in anatomy/histology/): 414 quotes, 20 Commons micrographs with
   switchable labels; review found 15 items (seven labels on the neighbouring structure), all fixed; 9 ticked, 3

@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Early Development: Gametes to the Embryo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --artery / --vein (blood vessels: maternal and embryonic), --clin (a defect or lesion).
+   Shared, same meaning as other pages: --fluid (body fluids: here amniotic fluid and blastocyst fluid), --cyto (cytoplasm) and
+   --nucleus (cell nuclei) as on nervous-system.html and connective-tissue.html, --musc (muscle: here the myometrium) as on muscle.html.
+   Embryology tokens (new here, meant for every later embryology page; checked against every token of the site with
+   fill-embryo1-scripts/colcheck2.py: CIE76 ≥ ~20 from atlas meaning colours, ≥ ~10 from every other page token, ≥ 20 from each other): --ecto / --meso / --endo (the three germ layers and everything drawn as made of them),
+   --epi / --hypo (epiblast and hypoblast of the bilaminar disc), --tropho (trophoblast; solid = cytotrophoblast, pale =
+   syncytiotrophoblast), --endom (endometrium and decidua: the maternal uterine lining), --noto (notochord), --crest (neural crest);
+   chart-only: --h-fsh / --h-lh / --h-oes / --h-prog (hormone curves). */
+:root{--fluid:#d9edc6;--cyto:#c8b6e2;--nucleus:#1e4f99;--musc:#c96f68;
+  --ecto:#2ad2f4;--meso:#efa272;--endo:#d3910b;--epi:#a3fafa;--hypo:#90f655;--tropho:#590df2;--endom:#f986d2;--noto:#257906;--crest:#1bf380;
+  --h-fsh:#15f312;--h-lh:#f20df2;--h-oes:#191c66;--h-prog:#5c430a}
+:root[data-theme="dark"]{--fluid:#4e6638;--cyto:#6d5a8c;--nucleus:#9fb0ff;--musc:#9c4e48;
+  --tropho:#5925f4;--endom:#a70953;--noto:#4cb514;--h-oes:#2555f4;--h-prog:#a47537;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+.scroll{overflow-x:auto}
+.two{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:680px;margin:0 auto}
+.schbox{overflow-x:auto;scrollbar-color:var(--line) transparent}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:540px}.swipe{display:block}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.c{fill:var(--clin);font-weight:600}
+svg.sch text.b{font-weight:700}
+svg.sch text.w{fill:#fff;font-weight:600}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .flow{stroke:var(--ink);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+svg.sch .ax{stroke:var(--line);stroke-width:1}
+svg.sch .box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .ol{stroke:var(--ink);stroke-width:1.1}
+svg.sch .ecto{fill:var(--ecto)} svg.sch .meso{fill:var(--meso)} svg.sch .endo{fill:var(--endo)}
+svg.sch .epi{fill:var(--epi)} svg.sch .hypo{fill:var(--hypo)} svg.sch .noto{fill:var(--noto)} svg.sch .crest{fill:var(--crest)}
+svg.sch .cyto{fill:var(--tropho)} svg.sch .syn{fill:var(--tropho);fill-opacity:.32}
+svg.sch .endom{fill:var(--endom)} svg.sch .fluid{fill:var(--fluid)} svg.sch .musc{fill:var(--musc);fill-opacity:.55}
+svg.sch .cell{fill:var(--cyto);stroke:var(--ink);stroke-width:.9} svg.sch .nuc{fill:var(--nucleus)}
+svg.sch .exm{fill:url(#exmp)}
+svg.sch .dim{opacity:.22}
+svg.sch .hl{stroke:var(--accent);stroke-width:2.6;fill:none}
+svg.sch .art{stroke:var(--artery);fill:none} svg.sch .vei{stroke:var(--vein);fill:none}
+svg.sch .defect{fill:url(#hatch);stroke:var(--clin);stroke-width:2}
+.step{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.step .chips{flex:1;min-width:0}
+.step .btn{white-space:nowrap}
+.find{font-size:14px;min-height:6em}
+.find h3{font-size:15px;margin:0 0 4px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.readout{font:500 13px var(--f-mono);color:var(--muted)}
+table.dis td:first-child{font-weight:600;white-space:nowrap}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Early Development: Gametes to the Embryo</h1>
+  <p class="lede" id="lede"></p>
+  <div class="key" id="key"></div>
+</header>
+
+<section class="block panel" aria-labelledby="h-life">
+  <h2 id="h-life">Stages of life and the terms of time</h2>
+  <div class="chips" id="life-tg" aria-label="Stage"></div>
+  <div class="schbox"><svg class="fig sch" id="life-svg" viewBox="0 0 680 240" role="img" aria-label="Timeline from fertilisation to adulthood with the germinal, embryonic and fetal periods, and below it the 40 gestational weeks with the three trimesters and the period of viability"></svg></div>
+  <p class="muted">Schematic, not to scale (the postnatal part is compressed). Upper bar: weeks after fertilisation; lower bar: gestational weeks from the last menstrual period.</p>
+  <div class="prose find" id="life-find" aria-live="polite"></div>
+  <div class="prose" id="terms"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cycle">
+  <h2 id="h-cycle">Ovarian and menstrual cycles: how they keep in step</h2>
+  <label class="readout" for="cyc-day">Day of the cycle: <b id="cyc-lab">1</b></label>
+  <input type="range" id="cyc-day" min="1" max="28" value="1" step="1">
+  <div class="schbox"><svg class="fig sch" id="cyc-svg" viewBox="0 0 680 420" role="img" aria-label="Chart of a 28-day cycle: pituitary and ovarian hormone curves, the ovarian follicle, ovulation and corpus luteum, and the thickness of the endometrium with its menstrual, proliferative and secretory phases; a line marks the chosen day"></svg></div>
+  <p class="muted">Hormone curves are schematic shapes (relative, not measured values), for an idealised 28-day cycle with ovulation on day 14.</p>
+  <div class="two">
+    <div class="prose find" id="cyc-find" aria-live="polite"></div>
+    <div class="prose" id="cyc-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gam">
+  <h2 id="h-gam">Gametogenesis: spermatogenesis and oogenesis</h2>
+  <div class="step" id="gam-step"></div>
+  <div class="schbox"><svg class="fig sch" id="gam-svg" viewBox="0 0 680 360" role="img" aria-label="Spermatogenesis above and oogenesis below, stage by stage, with the chromosome number in each cell and the two arrest points of the oocyte"></svg></div>
+  <p class="muted">Schematic. Numbers in the cells = chromosomes (46 = diploid, 23 = haploid). Not to scale: the oocyte is far larger than any sperm cell.</p>
+  <div class="prose find" id="gam-find" aria-live="polite"></div>
+  <div class="scroll"><table class="t stack" id="gam-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fert">
+  <h2 id="h-fert">Fertilisation: the steps and what follows</h2>
+  <div class="step" id="fert-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="fert-svg" viewBox="0 0 520 380" role="img" aria-label="The secondary oocyte with its zona pellucida and corona radiata, and a sperm at the chosen step of fertilisation"></svg></div>
+    <div class="prose find" id="fert-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, not to scale; one sperm shown.</p>
+  <div class="prose" id="fert-cons"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-contra">
+  <h2 id="h-contra">Contraception, fertility and society</h2>
+  <div class="chips" id="con-tg" aria-label="Method"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="con-svg" viewBox="0 0 560 330" role="img" aria-label="Schematic of the female reproductive tract with the ovaries, uterine tubes, uterus and cervix, and the male vas deferens, marking where the chosen contraceptive method acts"></svg></div>
+    <div class="prose find" id="con-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="soc-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-wk1">
+  <h2 id="h-wk1">Week 1: cleavage, blastocyst, implantation and where else it can implant</h2>
+  <div class="step" id="wk1-step"></div>
+  <div class="schbox"><svg class="fig sch" id="wk1-svg" viewBox="0 0 740 380" role="img" aria-label="The ovary, uterine tube and uterus with the conceptus at the chosen day, a magnified drawing of its stage, and optionally the ectopic sites"></svg></div>
+  <p class="muted">Schematic, not to scale; the tube is drawn straightened. Days = days after fertilisation (approximate; sources differ, see the table).</p>
+  <div class="two">
+    <div class="prose find" id="wk1-find" aria-live="polite"></div>
+    <div class="scroll"><table class="t dis" id="wk1-table"></table></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-wk2">
+  <h2 id="h-wk2">Week 2: the bilaminar disc and its cavities</h2>
+  <div class="step" id="wk2-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="wk2-svg" viewBox="0 0 560 410" role="img" aria-label="Section through the implanting conceptus in the endometrium at the chosen day of week 2, with trophoblast, bilaminar disc, amniotic cavity, yolk sac, extra-embryonic mesoderm and coelom, and maternal sinusoids"></svg></div>
+    <div class="prose find" id="wk2-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic section, not to scale; the uterine cavity is at the top.</p>
+  <div class="prose" id="wk2-text"></div>
+  <div class="scroll"><table class="t stack" id="ab-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gast">
+  <h2 id="h-gast">Week 3: gastrulation, primitive streak and notochord</h2>
+  <div class="step" id="gas-step"></div>
+  <div class="schbox"><svg class="fig sch" id="gas-svg" viewBox="0 0 680 330" role="img" aria-label="Left: the embryonic disc seen from the amniotic side with the primitive streak, node, notochord, prechordal plate and the two membranes; right: a cross-section through the streak showing epiblast cells moving in to form endoderm and mesoderm"></svg></div>
+  <p class="muted">Schematic. Left: dorsal view (head end up). Right: cross-section through the streak (amniotic side up).</p>
+  <div class="prose find" id="gas-find" aria-live="polite"></div>
+  <div class="scroll"><table class="t stack" id="germ-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-neur">
+  <h2 id="h-neur">Neurulation and neural tube defects</h2>
+  <div class="step" id="neu-step"></div>
+  <div class="schbox"><svg class="fig sch" id="neu-svg" viewBox="0 0 680 320" role="img" aria-label="Left: cross-sections showing neural plate, folds and groove, fusion, and the closed neural tube with neural crest; right: dorsal view of the embryo with the closing neural tube and the two neuropores"></svg></div>
+  <p class="muted">Schematic. Left: cross-section (back of the embryo up). Right: dorsal view, head up.</p>
+  <div class="two">
+    <div class="prose find" id="neu-find" aria-live="polite"></div>
+    <div class="scroll"><table class="t dis" id="np-table"></table></div>
+  </div>
+  <div class="chips" id="ntd-tg" aria-label="Defect"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ntd-svg" viewBox="0 0 420 250" role="img" aria-label="Schematic of the chosen neural tube defect"></svg></div>
+    <div class="prose find" id="ntd-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-som">
+  <h2 id="h-som">Somites and the intra-embryonic coelom</h2>
+  <div class="chips" id="som-tg" aria-label="Part"></div>
+  <div class="schbox"><svg class="fig sch" id="som-svg" viewBox="0 0 680 330" role="img" aria-label="Cross-section of the embryo at about the end of week 3 with neural tube, notochord, somite, intermediate mesoderm and lateral plate split by the coelom into somatic and splanchnic layers; the chosen part is highlighted"></svg></div>
+  <p class="muted">Schematic cross-section, one side drawn in full (back up). Not to scale.</p>
+  <div class="prose find" id="som-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tera">
+  <h2 id="h-tera">Teratogens, early diagnosis of pregnancy and alpha-fetoprotein</h2>
+  <div class="schbox"><svg class="fig sch" id="tera-svg" viewBox="0 0 680 200" role="img" aria-label="Bar of weeks after fertilisation showing the first two weeks, the embryonic period of weeks 3 to 8 as the most sensitive time, the fetal period, and the thalidomide window"></svg></div>
+  <p class="muted">Schematic bar; sensitivity shown in three bands only (no curve is claimed).</p>
+  <div class="prose" id="tera-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-embryo1.md, anatomy/DATA-SOURCES.md) ===================== */
+const LEDE = 'From the gametes to the end of the embryonic period, step by step: the stages of life, the ovarian and menstrual cycles, gametogenesis, fertilisation, contraception, the first three weeks (cleavage, implantation, the bilaminar disc, gastrulation), neurulation, somites and the coelom, and teratogens. Fetal membranes, placenta, twins and prenatal diagnosis: <a href="membranes-placenta.html">Fetal Membranes, Placenta and Prenatal Diagnosis</a>. Linked, not repeated: development of the diaphragm (<a href="../thorax/wall-muscles.html">Muscles of the Trunk Wall</a>), descent of the testis (<a href="../abdomen-pelvis/perineum.html#h-testis">Perineum and Male External Genitalia</a>), the nucleus pulposus (<a href="../back/vertebral-column.html">Vertebral Column</a>).';
+const KEY = [['--ecto', 'Ectoderm'], ['--meso', 'Mesoderm'], ['--endo', 'Endoderm'], ['--epi', 'Epiblast'], ['--hypo', 'Hypoblast'], ['--tropho', 'Trophoblast'], ['--noto', 'Notochord'], ['--crest', 'Neural crest'], ['--endom', 'Endometrium / decidua'], ['--fluid', 'Fluid']];
+
+const LIFE = {sel: 'germ'};
+const LIFE_ITEMS = {
+  germ: ['Germinal', '<h3>Germinal (pre-embryonic) stage</h3><p>From <b>fertilisation to implantation</b>: about the <b>first two weeks</b>. Cleavage, morula, blastocyst, implantation.</p>'],
+  emb: ['Embryonic', '<h3>Embryonic period</h3><p>To the <b>end of week 8 after fertilisation</b> (= the end of the 10th gestational week). <b>Organogenesis</b> happens in <b>weeks 3–8</b>: gastrulation gives the three germ layers in week 3, and by the end of week 8 the organ systems are laid down.</p>'],
+  fet: ['Fetal', '<h3>Fetal period</h3><p>From <b>week 9</b> to birth: growth and differentiation of structures already formed.</p>'],
+  post: ['After birth', '<h3>After birth</h3><p>Development goes on through childhood and adolescence (puberty) into adulthood (Wikipedia lists newborn, infant, toddler and later stages; no ages are given here).</p>'],
+  tri: ['Trimesters', '<h3>Trimesters</h3><p>Pregnancy is divided into <b>three trimesters of about three months</b> each, counted in gestational weeks. Where the first ends is not fixed: <b>12 weeks</b> (Wikipedia), up to <b>12 6/7</b> (StatPearls/ACOG, early loss), and the second trimester is said to start anywhere from week 13 to 15. Pregnancy lasts on average <b>280 days (40 weeks)</b> from the last menstrual period.</p>'],
+  via: ['Viability', '<h3>Viability</h3><p>The age at which a fetus can survive outside the uterus. There is <b>no sharp limit</b>: in high-resource settings about <b>23–24 weeks</b> (Wikipedia); periviable births are those at 22+0 to 25+6 weeks (2024 review); StatPearls: viable after 21–25 weeks after fertilisation (23–27 gestational). Traditionally the period of viability was after <b>28 weeks</b> (Wikipedia).</p>'],
+};
+const TERMS = `<p><b>Ontogeny</b>: the development of the individual, from the fertilised egg to the adult. <b>Phylogeny</b>: the evolutionary history of the species (Gray 1918 calls these the two aspects from which embryology may be studied). "Ontogeny recapitulates phylogeny" (Haeckel) is a historical hypothesis (Wikipedia). <b>Gestational age</b> is counted from the first day of the last menstrual period and is about <b>2 weeks more than the fertilisation age</b>.</p>`;
+
+/* cycle chart: relative hormone levels per day 1..28 (schematic shapes) */
+const CYC = {
+  fsh: [.5,.55,.6,.6,.55,.5,.45,.4,.37,.35,.35,.4,.62,.7,.45,.3,.27,.25,.24,.23,.23,.24,.25,.27,.3,.35,.4,.45],
+  lh:  [.15,.15,.15,.15,.15,.15,.15,.16,.17,.18,.2,.3,.75,1,.5,.22,.18,.17,.16,.16,.15,.15,.15,.15,.14,.14,.14,.15],
+  oes: [.15,.15,.16,.18,.2,.24,.3,.38,.48,.6,.72,.85,.92,.6,.45,.42,.46,.52,.57,.6,.6,.58,.52,.45,.36,.27,.2,.15],
+  prog:[.05,.05,.05,.05,.05,.05,.05,.05,.05,.05,.05,.05,.06,.08,.15,.3,.45,.6,.72,.8,.85,.83,.75,.62,.45,.28,.15,.08],
+};
+const CYC_PH = d => d <= 5 ? 'men' : d <= 13 ? 'pro' : d === 14 ? 'ovu' : 'sec';
+const CYC_TXT = {
+  men: '<h3>Days 1–5: menstrual phase (early follicular phase)</h3><p>The corpus luteum of the last cycle has regressed, so <b>progesterone and oestrogen have fallen</b>; the spiral arteries constrict, the <b>functional layer</b> of the endometrium becomes ischaemic and is <b>shed</b>. The basal layer stays. FSH rises in the first days and a few follicles start to grow. Day 1 = the first day of bleeding.</p>',
+  pro: '<h3>Days 6–13: proliferative phase = late follicular phase</h3><p><b>Oestrogen from the growing follicles</b> (granulosa cells, from theca-cell androgens) makes the functional layer <b>regrow from the basal layer</b>: it thickens, glands lengthen, spiral arteries grow. One follicle becomes dominant. Oestrogen first holds FSH and LH down (negative feedback); near its peak (about day 13) it switches to <b>positive feedback</b>.</p>',
+  ovu: '<h3>Day 14: ovulation</h3><p>The <b>LH surge</b> (with a smaller FSH surge) makes the dominant follicle rupture: the oocyte is released some <b>10–12 hours after the increase in LH</b> (the LH surge; Wikipedia), having just finished meiosis I. Ovulation is about <b>14 days before the next period</b>, because the luteal phase is fairly constant; the follicular phase is the part that varies.</p>',
+  sec: '<h3>Days 15–28: secretory phase = luteal phase</h3><p>The ruptured follicle becomes the <b>corpus luteum</b>, which secretes mainly <b>progesterone</b> (also oestradiol and inhibin). Progesterone makes the endometrium <b>secretory and receptive</b>: the implantation window is about <b>days 20–24</b>. Without a pregnancy the corpus luteum stops within about <b>14 days</b>, becomes the <b>corpus albicans</b>, progesterone falls, and the next menstruation starts. If an embryo implants, its <b>hCG</b> keeps the corpus luteum going until the placenta takes over.</p>',
+};
+const CYC_TEXT = `<p><b>Synchrony</b>: ovarian <b>follicular phase = uterine menstrual + proliferative phases</b> (oestrogen); <b>ovulation</b> between them; <b>luteal phase = secretory phase</b> (progesterone). The ovary drives the uterus: each endometrial phase follows the hormone the ovary is making.</p><p>Cycle length: median <b>28 days</b>; normal 21–35 days (Wikipedia; review inclusion criteria) or 24–38 days (FIGO, StatPearls). Bleeding normally lasts up to 8 days (FIGO).</p>`;
+
+const GAM = {s: 0};
+const GAM_STEPS = [
+  ['Before birth', '<h3>Before birth</h3><p><b>Female</b>: oogonia multiply by mitosis in the fetal ovary; they become <b>primary oocytes</b>, enter meiosis I and <b>arrest in prophase I</b> (diplotene, "dictyate") before birth. They stay arrested until the LH surge before their own ovulation, years to decades later. <b>Male</b>: spermatogonia wait; spermatogenesis starts only at puberty.</p>'],
+  ['Puberty on', '<h3>From puberty</h3><p><b>Male</b>: in the seminiferous tubules, <b>spermatogonia</b> (46) divide by <b>mitosis</b> and give <b>primary spermatocytes</b> (46), continuously. <b>Female</b>: each cycle a few follicles grow; their primary oocytes are still arrested in prophase I.</p>'],
+  ['Meiosis I', '<h3>Meiosis I (the reduction division)</h3><p><b>Male</b>: each primary spermatocyte gives <b>two secondary spermatocytes</b> (23). <b>Female</b>: just before ovulation (LH surge) the primary oocyte finishes meiosis I unequally: one large <b>secondary oocyte</b> (23) and the small <b>first polar body</b>. The secondary oocyte <b>arrests in metaphase II</b> and is ovulated in that state.</p>'],
+  ['Meiosis II', '<h3>Meiosis II</h3><p><b>Male</b>: each secondary spermatocyte gives <b>two spermatids</b> (23): four equal cells from one primary spermatocyte. <b>Female</b>: meiosis II is completed <b>only if a sperm enters</b> (fertilisation): the ovum and the <b>second polar body</b>. Gray 1918: the first polar body often divides too, giving the ovum and three polar bodies.</p>'],
+  ['Result', '<h3>Result</h3><p><b>Male</b>: <b>spermiogenesis</b> turns each round spermatid into a motile <b>spermatozoon</b> (head with the acrosome, neck, middle piece with mitochondria, tail); Sertoli cells nourish them, Leydig cells make testosterone. The whole process takes about <b>64–74 days</b> (sources differ). <b>Female</b>: <b>one ovum</b> from each primary oocyte; the polar bodies degenerate.</p>'],
+];
+const GAM_HEAD = ['', 'Spermatogenesis', 'Oogenesis'];
+const GAM_ROWS = [
+  ['Starts', 'Puberty, then continuous', 'Before birth (fetal ovary)'],
+  ['Products of one cell', '4 equal spermatozoa', '1 ovum + polar bodies'],
+  ['Arrests', 'None', 'Prophase I (from fetal life to ovulation); metaphase II (until fertilisation)'],
+  ['Numbers', 'Continuous production', 'Peak at about 20 weeks of fetal life, then falls. Wikipedia: ~7 million at the peak, 1–2 million at birth, ~300,000 at puberty, 400–500 ever ovulated. A 2010 model of 8 histology studies: mean peak ~300,000 per ovary (range 35,000–2.5 million), ~295,000 per ovary at birth, about 1,000 at menopause. Sources differ several-fold.'],
+];
+
+const FERT = {s: 0};
+const FERT_STEPS = [
+  ['Capacitation', '<h3>1. Capacitation</h3><p>Sperm gain the ability to fertilise only after some time in the <b>female tract</b>: their motility becomes <b>hyperactivated</b> and they become able to undergo the acrosome reaction. Fertilisation normally happens in the <b>ampulla</b> of the uterine tube.</p>'],
+  ['Corona radiata', '<h3>2. Through the corona radiata</h3><p>The sperm passes between the follicle cells of the <b>corona radiata</b>, helped by hyaluronidase from the acrosome (Wikipedia).</p>'],
+  ['Zona & acrosome', '<h3>3. Zona binding and the acrosome reaction</h3><p>The sperm binds the <b>zona pellucida</b> (ZP3, Wikipedia); this triggers the <b>acrosome reaction</b>, and the released enzymes help it through the zona. (Where exactly the human acrosome reaction starts is still disputed.)</p>'],
+  ['Fusion', '<h3>4. Fusion</h3><p>The sperm and oocyte <b>membranes fuse</b> and the sperm enters; its tail and mitochondria degenerate.</p>'],
+  ['Block to polyspermy', '<h3>5. Block to polyspermy</h3><p>Fusion triggers the <b>cortical reaction</b>: cortical granules empty into the space around the oocyte, and the <b>zona hardens</b> (ovastacin cleaves ZP2) so no other sperm can bind. With polyspermy the ovum usually develops abnormally (Gray 1918); Wikipedia: polyspermy is lethal for the human zygote.</p>'],
+  ['Pronuclei', '<h3>6. Meiosis II and the pronuclei</h3><p>The oocyte <b>completes meiosis II</b> and extrudes the <b>second polar body</b>. The female and male <b>pronuclei</b> form, move towards each other and combine.</p>'],
+  ['Zygote', '<h3>7. The zygote</h3><p>The fertilised egg (<b>zygote</b>) with 23 + 23 = <b>46</b> chromosomes begins its first cleavage division. StatPearls: fertilisation is complete within about 24 hours.</p>'],
+];
+const FERT_CONS = `<p><b>Consequences</b>: the <b>diploid number is restored</b> (46); <b>chromosomal sex</b> is set by the sperm (X or Y); <b>variation</b> (recombination and independent assortment in meiosis give each gamete a new combination); <b>cleavage</b> begins. Time limits: the unfertilised oocyte lives about a day (Wikipedia, 12–24 h); Gray 1918: sperm keep their power to fertilise "for several days".</p>`;
+
+const CON = {sel: 'bar'};
+const CON_ITEMS = {
+  bar: ['Barrier', '<h3>Barrier methods</h3><p>Condoms (male, female), diaphragm, cervical cap, sponge: they keep <b>sperm out of the uterus</b>. Less effective than IUDs, implants and sterilisation (Wikipedia).</p>'],
+  hor: ['Hormonal', '<h3>Hormonal (pills, injections, implants, patches, rings)</h3><p>Mainly <b>inhibit ovulation</b> (antigonadotrophic action of the progestogen), and <b>thicken cervical mucus</b> against sperm and make the <b>endometrium less receptive</b>. In the combined pill the progestogen prevents pregnancy; the oestrogen controls bleeding (StatPearls).</p>'],
+  iud: ['IUD', '<h3>Intrauterine devices</h3><p><b>Copper</b> or <b>levonorgestrel</b> devices in the uterine cavity; more than 99% effective. Copper acts as a spermicide (Wikipedia).</p>'],
+  vas: ['Vasectomy', '<h3>Vasectomy</h3><p>The <b>vas deferens</b> is cut and ligated on each side: sperm no longer reach the ejaculate. Permanent; success about 99.7% (StatPearls).</p>'],
+  tub: ['Tubal sterilisation', '<h3>Tubal sterilisation</h3><p>The <b>uterine tubes</b> are occluded (clips, bands, cautery) or partly or wholly removed (salpingectomy): sperm and oocyte cannot meet in the ampulla. Intended to be permanent.</p>'],
+  fa: ['Fertility awareness', '<h3>Fertility awareness</h3><p>Avoiding intercourse on the <b>fertile days</b> around ovulation (Wikipedia). It works on the time limits of the oocyte and the sperm.</p>'],
+};
+const SOC_TEXT = `<p><b>Fertility and sterility.</b> <b>Infertility</b>: no pregnancy after <b>1 year</b> of regular unprotected intercourse (after 6 months if the woman is over 35); about <b>15% of couples</b>; a male factor contributes to about half. Female fertility falls with age because oocytes are fewer and poorer: their number peaks at about 20 weeks of fetal life and is never replaced.</p>
+<p><b>Surrogacy</b>: a woman carries a pregnancy for intended parents. <b>Traditional</b>: her own egg (she is the genetic mother); <b>gestational</b>: an IVF embryo, no genetic link. <b>Altruistic</b> (no payment beyond expenses) vs <b>commercial</b>. India's <b>Surrogacy (Regulation) Act, 2021</b> (in force 25 January 2022) permits only altruistic surrogacy (Cureus 2023 review).</p>
+<p><b>Sex ratio</b>: at birth it naturally favours boys slightly, about <b>105 boys per 100 girls</b> (1.03–1.06). Prenatal sex selection (sex-selective abortion) pushes it higher; in India the child sex ratio (0–6 years) has long favoured boys. Teratogenic influences: see <a href="#h-tera">Teratogens</a> below.</p>`;
+
+const WK1 = {s: 0, ecto: false};
+/* x position along the drawn tract (see drawWk1), stage drawing, label, finding */
+const WK1_STEPS = [
+  ['Day 0', 150, 'zyg', 'Zygote', '<h3>Day 0: zygote in the ampulla</h3><p>Fertilisation in the <b>ampulla</b> of the uterine tube gives the zygote, still inside the <b>zona pellucida</b>.</p>'],
+  ['Day 1–2', 215, 'c2', '2–4 cells', '<h3>Days 1–2: cleavage</h3><p>Rapid <b>mitotic divisions</b> inside the zona: 2, 4, 8 cells (<b>blastomeres</b>). The number of cells rises but the conceptus does not grow, so each cell gets smaller.</p>'],
+  ['Day 3–4', 330, 'mor', 'Morula', '<h3>Days 3–4: morula</h3><p>A compact ball of about <b>16 cells</b> (compaction completes at 8–16 cells), between days 3 and 4. It reaches the uterus about <b>day 3–5</b> (Wikipedia). Gray 1918 guessed a 7–8-day journey along the tube.</p>'],
+  ['Day 4–6', 546, 'bla', 'Blastocyst', '<h3>Days 4–6: blastocyst</h3><p>Fluid collects inside (the <b>blastocoel</b>), separating an outer <b>trophoblast</b> (it will form the placenta, not the embryo) from the <b>inner cell mass</b> (embryoblast, which forms the embryo) at one pole, the embryonic pole. About day 4–5 it <b>hatches</b> out of the zona (Wikipedia).</p>'],
+  ['Day 6–7 on', 590, 'imp', 'Implanting', '<h3>From day 6–7: implantation</h3><p>The blastocyst attaches to the endometrium by its <b>embryonic pole</b> (the trophoblast next to the inner cell mass) and invades it. Implantation is complete by the <b>end of week 2</b>. Normal site: the body of the uterus, usually upper, more often on the posterior wall (Gray 1918). Implantation over or near the internal os gives <b>placenta praevia</b>.</p>'],
+];
+const WK1_HEAD = ['Event', 'Day after fertilisation (sources)'];
+const WK1_ROWS = [
+  ['Morula', 'days 3–4 (2023 review)'],
+  ['Reaches the uterus', '~3 or 3–5 (Wikipedia); 7–8 (Gray 1918)'],
+  ['Blastocyst', '4–5 and 5–6 (same review); ~5 (Wikipedia)'],
+  ['Hatching', '4–5 (Wikipedia, Implantation)'],
+  ['Implantation starts', '6–7 (review); 5–6, ~7, 8–9, 8–10 after ovulation (Wikipedia articles)'],
+  ['Implantation complete', 'end of week 2'],
+];
+const ECTO = `<h3>Ectopic pregnancy</h3><p>Implantation <b>outside the uterine cavity</b>; about <b>1–2%</b> of pregnancies. Most are in the <b>uterine tube</b>: 90% (Wikipedia) or about 97% (StatPearls). Within the tube most are in the <b>ampulla</b> (70%, 75% or 80% in different sources), then the <b>isthmus</b> (12–13%), the fimbrial end (5–12%) and the interstitial/cornual part (2% in Wikipedia; 11% interstitial and 2–3% cornual in a 2025 review). Rare: <b>ovary</b>, <b>cervix</b>, <b>abdomen</b>, caesarean scar. Risks: tubal damage (infection such as gonorrhoea or chlamydia, surgery including sterilisation, a previous ectopic) and conception with an IUD or progestogen-only contraception.</p>`;
+
+const WK2 = {s: 0};
+const WK2_STEPS = [
+  ['Day 7–8', '<h3>Days 7–8: two layers of trophoblast</h3><p>As the blastocyst sinks in, the trophoblast splits into an inner <b>cytotrophoblast</b> (cells with boundaries; the stem cells, "layer of Langhans") and an outer <b>syncytiotrophoblast</b> (a multinucleated mass without cell boundaries) that invades the endometrium (about day 8). The inner cell mass becomes a <b>bilaminar disc</b>: <b>epiblast</b> (tall cells) over <b>hypoblast</b>.</p>'],
+  ['Day 8–9', '<h3>Days 8–9: amniotic cavity and primary yolk sac</h3><p>A space inside the epiblast becomes the <b>amniotic cavity</b>; cells from the epiblast (amnioblasts) line it as the <b>amnion</b>, and the epiblast forms its floor. Hypoblast cells spread round the blastocoel (exocoelomic or <b>Heuser\'s membrane</b>): the <b>primary yolk sac</b>.</p>'],
+  ['Day 9–12', '<h3>Days 9–12: lacunae and extra-embryonic mesoderm</h3><p><b>Lacunae</b> open in the syncytiotrophoblast (about day 9) and join; the syncytium erodes <b>maternal capillaries</b> (sinusoids, about day 12–13) so maternal blood flows through the lacunae: the start of the <b>uteroplacental circulation</b>. <b>Extra-embryonic mesoderm</b> fills the space inside the cytotrophoblast (by about day 11). Its origin is debated: from the hypoblast (two reviews, lineage data) or the epiblast (Wikipedia, Epiblast).</p>'],
+  ['Day 12–14', '<h3>Days 12–14: extra-embryonic coelom and connecting stalk</h3><p>Spaces in the extra-embryonic mesoderm join into the <b>extra-embryonic coelom (chorionic cavity)</b>, splitting it into a <b>somatic</b> layer lining the trophoblast (trophoblast + this layer = the <b>chorion</b>) and a <b>splanchnic</b> layer on the yolk sac; the yolk sac becomes the smaller secondary yolk sac. The disc stays hung from the chorion by the <b>connecting (body) stalk</b>, the future umbilical cord. At the head end of the hypoblast a thickening, the <b>prechordal plate</b>, lies in front of the future notochord.</p>'],
+];
+const WK2_TEXT = `<p><b>Decidual reaction</b>: the endometrium becomes the <b>decidua</b>: thicker and more vascular, its stromal cells swell into large <b>decidual cells</b>, under progesterone. When: Wikipedia — it starts after ovulation in every cycle and develops further after implantation; Gray 1918 — the change happens "before the fertilized ovum reaches the uterus". Its parts are named by their relation to the conceptus (basalis, capsularis, parietalis): see <a href="membranes-placenta.html#h-mem">fetal membranes</a>.</p>
+<p><b>Pregnancy test</b>: <b>hCG</b>, made by the syncytiotrophoblast, is measured in <b>urine</b> (kits detect its β-core fragment) or <b>blood</b>. Wikipedia: sensitive tests detect it 6–12 days after ovulation; levels peak at about 8–11 weeks. hCG keeps the corpus luteum making progesterone.</p>
+<p><b>Abortion</b>: loss of a pregnancy before viability. <b>Spontaneous abortion (miscarriage)</b>: traditionally before <b>20 weeks</b> (StatPearls; US) or the <b>24th week</b> (Wikipedia); about 80% happen in the first 12 weeks. At least half of early losses have <b>chromosomal abnormalities</b> (Wikipedia). <b>Induced abortion</b> is a deliberate termination. Clinical types (StatPearls, early pregnancy loss):</p>`;
+const AB_HEAD = ['Type', 'Cervical os', 'Meaning'];
+const AB_ROWS = [
+  ['Threatened', 'Closed', 'Bleeding and cramps; the embryo still appears viable'],
+  ['Inevitable', 'Open', 'Symptoms with an open os (term falling out of use)'],
+  ['Incomplete', 'Open', 'Products of conception remain in the uterus'],
+  ['Complete', '—', 'All products of conception have passed'],
+  ['Missed', '—', 'Embryo or fetus dead, without symptoms or expulsion'],
+  ['Recurrent', '—', '≥2 losses (ASRM) or ≥3 consecutive (other bodies)'],
+  ['Septic', '—', 'Complicated by intrauterine infection'],
+];
+
+const GAS = {s: 0};
+const GAS_STEPS = [
+  ['Day ~14', '<h3>Start of gastrulation (about day 14)</h3><p>Gastrulation turns the bilaminar disc into a <b>trilaminar</b> one (ectoderm, mesoderm, endoderm) in week 3, and sets the head–tail and left–right axes. It starts about 14 days after fertilisation and lasts a little over a week.</p>'],
+  ['Primitive streak', '<h3>The primitive streak</h3><p>A midline thickening appears at the <b>caudal end</b> of the epiblast and grows to about <b>half the length of the disc</b>, with a groove along it. At its cranial end: the <b>primitive node</b> (Hensen\'s node) with the <b>primitive pit</b>.</p>'],
+  ['Endoderm', '<h3>Ingression: endoderm</h3><p>Epiblast cells move to the streak, undergo an <b>epithelial-to-mesenchymal transition</b> and pass down through it. The first wave displaces the hypoblast and becomes the <b>definitive endoderm</b> (Wikipedia, Epiblast).</p>'],
+  ['Mesoderm', '<h3>Ingression: mesoderm</h3><p>Later cells spread between the two layers as <b>intra-embryonic mesoderm</b>; the epiblast left on top is now the <b>ectoderm</b>. Two places stay without mesoderm, where ectoderm touches endoderm: the <b>buccopharyngeal (oropharyngeal) membrane</b> at the head end and the <b>cloacal membrane</b> at the tail end.</p>'],
+  ['Notochord', '<h3>Notochordal process → notochord</h3><p>Cells from the primitive node migrate cranially in the midline (about day 19) as the <b>notochordal process</b>; it joins the endoderm as the <b>notochordal plate</b> (about day 23) and becomes the solid <b>notochord</b> (about day 25), stopping at the prechordal plate. It <b>induces the neural plate</b> in the ectoderm above it and is the axis around which the vertebral column forms.</p>'],
+  ['Fates', '<h3>Fates</h3><p><b>Notochord</b>: breaks down from week 5; most of it forms the <b>nucleus pulposus</b> of the intervertebral discs. Remnants can give a <b>chordoma</b> (skull base and spine). <b>Primitive streak</b>: it shrinks towards the tail as somites form and normally disappears. A <b>sacrococcygeal teratoma</b> (the commonest newborn tumour, at the base of the coccyx; about 1 in 20,000–40,000 births, Wikipedia 1 in 35,000; girls 3–4 : 1 in one review) is thought to come from <b>streak remnants</b> (Wikipedia) — a 2021 review instead derives it from <b>primordial germ cells</b> migrating past the hindgut.</p>'],
+];
+const GERM_HEAD = ['Layer', 'Gives rise to (examples)'];
+const GERM_ROWS = [
+  ['<span class="swatch" style="background:var(--ecto)"></span><b>Ectoderm</b>', 'Epidermis, hair, nails, skin glands; the whole <b>nervous system</b> (neural tube; neural crest); parts of the sense organs; enamel; anterior pituitary; epithelium of the cornea and conjunctiva'],
+  ['<span class="swatch" style="background:var(--meso)"></span><b>Mesoderm</b>', 'Muscle, bone, cartilage, connective tissue, dermis; heart, blood, vessels, lymphatics; kidney, ureter, gonads; spleen; adrenal cortex; notochord. Paraxial → somites; intermediate → kidneys and gonads; lateral plate → somatic and splanchnic layers'],
+  ['<span class="swatch" style="background:var(--endo)"></span><b>Endoderm</b>', 'Lining of the gut and respiratory tract; liver, pancreas; thyroid, thymus, parathyroid; urinary bladder and urethra (part); auditory tube and middle ear (Gray 1918)'],
+];
+
+const NEU = {s: 0};
+const NEU_STEPS = [
+  ['Neural plate', '<h3>Neural plate</h3><p>The <b>notochord induces</b> the ectoderm above it to thicken into the <b>neural plate</b> (neuroectoderm), cranial to the primitive node.</p>'],
+  ['Folds and groove', '<h3>Neural folds and groove</h3><p>The edges of the plate rise as <b>neural folds</b> with the <b>neural groove</b> between them (primary neurulation: elevation, apposition, fusion).</p>'],
+  ['Fusion', '<h3>Fusion begins</h3><p>The folds meet and fuse first in the future <b>neck (cervical) region</b>, at about the <b>4th somite</b> (Wikipedia, at Carnegie stage 9; no day is given here because Wikipedia dates stage 9 both to about day 20 and to about day 25), and the closure spreads both ways like a zip. The open ends are the <b>cranial</b> and <b>caudal neuropores</b>, which open into the amniotic cavity.</p>'],
+  ['Neural tube', '<h3>Neural tube and neural crest</h3><p>The closed tube lies under the surface ectoderm. Cells at the crests of the folds leave as the <b>neural crest</b> and migrate: spinal, cranial and autonomic ganglia (Gray, Wikipedia), and also melanocytes, adrenal medulla and craniofacial cartilage (Wikipedia). The most caudal part (sacral, coccygeal) forms later by <b>secondary neurulation</b>: a solid cord that hollows out.</p>'],
+];
+const NP_HEAD = ['Neuropore closes', 'Day after fertilisation (sources)'];
+const NP_ROWS = [
+  ['Cranial', '23 (Wikipedia, Spina bifida); 24 (Wikipedia, Neurulation); 25 (2021 review). Anencephaly arises days 23–26 (Wikipedia)'],
+  ['Caudal', '27 (Wikipedia, Spina bifida; 2021 review); 28 (Wikipedia, Neurulation)'],
+  ['All', 'By the end of week 4 (StatPearls: the process runs in weeks 3–4)'],
+];
+const NTD = {sel: 'anen'};
+const NTD_ITEMS = {
+  anen: ['Anencephaly', '<h3>Anencephaly</h3><p>The <b>cranial</b> end fails to close: no calvarium and most or all of the brain missing. The cranial and caudal failures are the two main kinds of <b>neural tube defect</b> (NTD); failure along the whole length = craniorachischisis. NTDs affect about 1 in 1,000 pregnancies.</p>'],
+  occ: ['Spina bifida occulta', '<h3>Spina bifida occulta</h3><p>Closed spinal dysraphism, the mildest NTD: a hidden defect of the vertebral arch with minimal neural involvement.</p>'],
+  men: ['Meningocele', '<h3>Meningocele</h3><p>An open (aperta, cystica) form: the <b>meninges</b> bulge through the defect in a sac of CSF; the cord stays in place. Usually mild problems (Wikipedia).</p>'],
+  mmc: ['Myelomeningocele', '<h3>Myelomeningocele</h3><p>The sac contains the <b>meninges and the cord (or roots)</b>, exposed through the arch defect. Its link with Chiari II and hydrocephalus: <a href="../neuro/meninges-cord.html">Meninges, CSF and the Spinal Cord</a>.</p>'],
+  fol: ['Prevention', '<h3>Prevention: folic acid</h3><p>Folic acid taken <b>before conception</b> and in early pregnancy lowers the risk of NTDs; after flour fortification NTD rates fell by about a third (US CDC, 2015) to a half (Canada, 46%) (Wikipedia; a 2018 review: anencephaly fell 50–70%). Screening: raised <b>maternal serum AFP</b> (below).</p>'],
+};
+
+const SOM = {sel: 'all'};
+const SOM_ITEMS = {
+  all: ['All', '<h3>Mesoderm beside the neural tube</h3><p>On each side the mesoderm divides into <b>paraxial</b> (beside the tube and notochord), <b>intermediate</b>, and <b>lateral plate</b> mesoderm. Pick a part.</p>'],
+  par: ['Somite', '<h3>Paraxial mesoderm → somites</h3><p>The paraxial mesoderm segments into paired blocks, the <b>somites</b> (Gray: "primitive segments"), in head-to-tail order as the primitive streak regresses, from the third week (Wikipedia: first three by days 17–19). Number: Gray 1918 lists occipital 4, cervical 8, thoracic 12, lumbar 5, sacral 5, coccygeal 5–8 (39–42 pairs); Wikipedia: humans have 37. Because they appear in order, their count is used to stage embryos. Each somite gives a <b>sclerotome</b> (vertebrae, ribs: cartilage and bone) and a <b>dermomyotome</b> that splits into <b>myotome</b> (skeletal muscle) and <b>dermatome</b> (dermis of the back).</p>'],
+  int: ['Intermediate', '<h3>Intermediate mesoderm</h3><p>Links paraxial and lateral mesoderm; it forms the <b>urogenital</b> system: kidneys and gonads.</p>'],
+  lat: ['Lateral plate', '<h3>Lateral plate mesoderm</h3><p>Split by the coelom into a <b>somatic (parietal)</b> layer, which with the ectoderm forms the <b>somatopleure</b> (body wall), and a <b>splanchnic (visceral)</b> layer, which with the endoderm forms the <b>splanchnopleure</b> (gut wall).</p>'],
+  coe: ['Coelom', '<h3>Intra-embryonic coelom</h3><p>Spaces in the lateral plate (and cardiogenic) mesoderm join into one <b>horseshoe-shaped</b> cavity. Its cranial bend becomes the <b>pericardial cavity</b>; its two limbs the <b>pleural</b> and <b>peritoneal</b> cavities (Gray 1918: the two lateral cavities first unite into one pleuroperitoneal cavity, later divided). At first it opens into the extra-embryonic coelom at the umbilicus. How the septum transversum and the pleuroperitoneal membranes divide it into chest and abdomen: <a href="../thorax/wall-muscles.html">diaphragm development</a>.</p>'],
+};
+
+const TERA_TEXT = `<p><b>Teratology</b> studies congenital abnormalities. Causes: <b>infections</b> (TORCH: toxoplasmosis; others such as varicella, syphilis, parvovirus B19; rubella; cytomegalovirus; herpes simplex), <b>drugs and chemicals</b>, <b>physical agents</b>, maternal <b>metabolic</b> conditions. The <b>embryonic period (weeks 3–8)</b>, when organs form, is the most sensitive time (Wikipedia, Teratology: "from the second to eighth week"); exposure in the first two weeks tends rather to stop implantation or cause a miscarriage (Wikipedia). Each organ has its own window.</p>
+<ul><li><b>Thalidomide</b> (a sedative, withdrawn in Europe in 1961): limb defects — <b>phocomelia</b>, amelia; also eye and ear defects (2021 case review) and heart and urinary tract problems in survivors (Wikipedia). Limb defects follow exposure about days 24–30 after conception (2021 case review); more than 10,000 children harmed (Wikipedia).</li>
+<li><b>Alcohol</b>: fetal alcohol spectrum disorders, fetal alcohol syndrome being one of them.</li></ul>
+<p><b>Diagnosis of pregnancy in the first trimester</b>: <b>hCG</b> in urine or serum; <b>transvaginal ultrasound</b> confirms an intrauterine pregnancy (gestational sac from about 5 weeks' gestational age, the heartbeat usually once the embryo is about 5 mm, though sometimes not until about 7 weeks — Wikipedia); the <b>crown–rump length</b> between 8+0 and 13+6 weeks dates the pregnancy most accurately.</p>
+<p><b>Alpha-fetoprotein (AFP)</b>: a fetal plasma protein made by the <b>yolk sac, fetal liver and gut</b>. Maternal serum AFP, the first prenatal screening test (1970s), is measured in the second trimester (Wikipedia: 16–18 weeks): <b>raised</b> with <b>open neural tube defects</b> (also in amniotic fluid; also omphalocele and gastroschisis) and <b>lower</b> with chromosomal disorders such as Down syndrome. More on screening: <a href="membranes-placenta.html#h-pnd">prenatal diagnosis</a>.</p>`;
+
+const DATA = {
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); open-access reviews (Front Cell Dev Biol 2023, Semin Cell Dev Biol 2022, J Family Med Prim Care 2021, J Dev Biol 2018, Cureus 2017, PLoS One 2010 and others); Wikipedia.",
+  models: 'Models used: none (schematics only); simplified, not to scale. Hormone curves are schematic shapes.',
+};
+
+/* ===================== drawing helpers ===================== */
+const $ = id => document.getElementById(id);
+const T = (x, y, s, cls = '', a = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${a}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink)"/></marker>'
+  + '<pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" style="fill:var(--clin);fill-opacity:.15"/><line x1="0" y1="0" x2="0" y2="8" style="stroke:var(--clin);stroke-width:3"/></pattern>'
+  + '<pattern id="exmp" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="1.8" style="fill:var(--meso)"/></pattern></defs>';
+const cell = (x, y, r, n, extra = '') => `<circle cx="${x}" cy="${y}" r="${r}" class="cell" ${extra}/>` + (n ? T(x, y + 4, n, 'b', 'middle') : '');
+function table(id, head, rows) {
+  $(id).innerHTML = '<tr>' + head.map(x => `<th>${x}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + r.map((c, i) => `<td data-h="${head[i]}">${c}</td>`).join('') + '</tr>').join('');
+}
+function toggles(id, items, onSel, start) {
+  const box = $(id); box.innerHTML = '';
+  for (const [key, label] of items) {
+    const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = label; b.setAttribute('aria-pressed', key === start);
+    b.onclick = () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); onSel(key); };
+    box.append(b);
+  }
+}
+/* step control: Back / chips / Next; arrow keys move when focus is inside it */
+function stepper(id, labels, onStep, state) {
+  const box = $(id); box.innerHTML = '';
+  const prev = document.createElement('button'); prev.className = 'btn'; prev.type = 'button'; prev.textContent = '◀ Back'; prev.setAttribute('aria-label', 'Previous step');
+  const next = document.createElement('button'); next.className = 'btn'; next.type = 'button'; next.textContent = 'Next ▶'; next.setAttribute('aria-label', 'Next step');
+  const row = document.createElement('div'); row.className = 'chips'; row.setAttribute('aria-label', 'Steps');
+  const go = i => {
+    state.s = Math.max(0, Math.min(labels.length - 1, i));
+    row.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', j === state.s));
+    prev.disabled = state.s === 0; next.disabled = state.s === labels.length - 1; onStep();
+  };
+  labels.forEach((l, i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.onclick = () => go(i); row.append(b); });
+  prev.onclick = () => go(state.s - 1); next.onclick = () => go(state.s + 1);
+  box.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { go(state.s + 1); e.preventDefault(); } if (e.key === 'ArrowLeft') { go(state.s - 1); e.preventDefault(); } });
+  box.append(prev, row, next); go(state.s);
+}
+
+/* ===================== 1. stages of life ===================== */
+function drawLife() {
+  const sel = LIFE.sel; let s = DEFS;
+  /* upper bar: weeks after fertilisation 0..38, then postnatal compressed */
+  const X0 = 30, G0 = 30, GW = 470, gw = w => G0 + w * GW / 40, wk = w => gw(w + 2);   /* fertilisation age + 2 = gestational age */
+  const segs = [['germ', 0, 2, 'Germinal'], ['emb', 2, 8, 'Embryonic'], ['fet', 8, 38, 'Fetal period']];
+  s += T(X0, 22, 'WEEKS AFTER FERTILISATION', 'h');
+  for (const [k, a, b, lab] of segs) {
+    s += `<rect x="${wk(a)}" y="32" width="${wk(b) - wk(a)}" height="34" rx="3" style="fill:${sel === k ? 'var(--accent)' : 'var(--line)'};fill-opacity:${sel === k ? .35 : .6};stroke:var(--surface)"/>`;
+    if (k !== 'germ') s += T((wk(a) + wk(b)) / 2, 54, lab, 'b', 'middle');
+  }
+  s += T(wk(1), 82, 'Germinal', sel === 'germ' ? 'b' : 's', 'middle');
+  for (const w of [0, 2, 8, 38]) s += `<path class="ax" d="M${wk(w)} 30 V70"/>` + T(wk(w), 96, w === 38 ? '38 (birth)' : String(w), 's', 'middle');
+  /* postnatal */
+  const P0 = 520;
+  s += `<rect x="${P0}" y="32" width="140" height="34" rx="3" style="fill:${sel === 'post' ? 'var(--accent)' : 'var(--line)'};fill-opacity:${sel === 'post' ? .35 : .6};stroke:var(--surface)"/>`;
+  s += T(P0 + 70, 54, 'Childhood → adult', 'b', 'middle') + T(P0 + 70, 82, 'after birth (compressed)', 's', 'middle');
+  s += `<path class="flow" d="M${wk(38) + 2} 49 L${P0 - 4} 49"/>`;
+  /* lower bar: gestational weeks 0..40 */
+  s += T(G0, 128, 'GESTATIONAL WEEKS (FROM THE LAST MENSTRUAL PERIOD)', 'h');
+  const tri = [[0, 13, '1st trimester'], [13, 28, '2nd trimester'], [28, 40, '3rd trimester']];
+  tri.forEach(([a, b, lab], i) => {
+    s += `<rect x="${gw(a)}" y="138" width="${gw(b) - gw(a)}" height="30" style="fill:var(--line);fill-opacity:${sel === 'tri' ? (i % 2 ? .9 : .5) : .3};stroke:var(--surface)"/>` + T((gw(a) + gw(b)) / 2, 158, lab, sel === 'tri' ? 'b' : 's', 'middle');
+  });
+  if (sel === 'tri') s += `<rect x="${gw(12)}" y="134" width="${gw(14) - gw(12)}" height="38" style="fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:4 3"/>` + T(gw(13), 206, 'end of 1st: 12–14 wk (sources differ)', 's', 'middle');
+  if (sel === 'via') {
+    s += `<rect x="${gw(22)}" y="134" width="${gw(26) - gw(22)}" height="38" style="fill:var(--accent);fill-opacity:.15;stroke:var(--accent);stroke-dasharray:3 2"/>` + `<rect x="${gw(23)}" y="134" width="${gw(24) - gw(23)}" height="38" style="fill:var(--accent);fill-opacity:.45"/>`;
+    s += T(gw(23.5), 200, '23–24 (Wikipedia)', 'b', 'middle') + T(gw(24), 214, 'periviable 22+0–25+6 (review)', 's', 'middle');
+    s += `<path d="M${gw(28)} 132 V176" style="stroke:var(--ink);stroke-width:1.5;stroke-dasharray:3 3"/>` + T(gw(28) + 4, 228, '28: traditional (Wikipedia)', 's', 'start');
+  }
+  for (const w of [0, 10, 20, 30, 40]) s += T(gw(w), 184, String(w), 's', 'middle');
+  s += `<path d="M${gw(2)} 134 V172" style="stroke:var(--ink);stroke-width:1.5"/>` + T(gw(2) + 4, 228, '↑ fertilisation ≈ gestational week 2', 's', 'start');
+  $('life-svg').innerHTML = s;
+  $('life-find').innerHTML = LIFE_ITEMS[sel][1];
+}
+
+/* ===================== 2. cycles ===================== */
+function drawCycle(d) {
+  let s = DEFS;
+  const X0 = 112, X1 = 664, dx = (X1 - X0) / 27, x = day => X0 + (day - 1) * dx;
+  /* hormones panel y 20..150 */
+  const curve = (arr, top, h, col, lab, lx) => {
+    const pts = arr.map((v, i) => `${x(i + 1).toFixed(1)},${(top + h - v * h).toFixed(1)}`).join(' ');
+    return `<polyline points="${pts}" style="fill:none;stroke:var(${col});stroke-width:2.6;stroke-linejoin:round"/>`;
+  };
+  s += T(8, 18, 'PITUITARY', 'h') + T(8, 96, 'OVARIAN', 'h') + T(8, 108, 'HORMONES', 'h') + T(8, 30, 'HORMONES', 'h');
+  s += `<path class="ax" d="M${X0} 140 H${X1}"/>`;
+  s += curve(CYC.fsh, 20, 50, '--h-fsh') + curve(CYC.lh, 20, 50, '--h-lh');
+  s += curve(CYC.oes, 80, 60, '--h-oes') + curve(CYC.prog, 80, 60, '--h-prog');
+  s += `<path class="ax" d="M${X0} 70 H${X1}"/>`;
+  /* legends */
+  const lg = [['--h-fsh', 'FSH', 8, 52], ['--h-lh', 'LH', 54, 52], ['--h-oes', 'Oestrogen', 470, 156], ['--h-prog', 'Progesterone', 560, 156]];
+  for (const [c, l, lx, ly] of lg) s += `<rect x="${lx}" y="${ly - 8}" width="14" height="4" style="fill:var(${c})"/>` + T(lx + 18, ly - 3, l, 's');
+  /* ovary row y 170..230 */
+  s += T(8, 200, 'OVARY', 'h');
+  for (let i = 1; i <= 28; i += 1) {
+    if (i % 2 === 0 && i < 14) { const r = 3 + i * .9; s += `<circle cx="${x(i)}" cy="200" r="${r}" style="fill:var(--fluid);stroke:var(--ink);stroke-width:.8"/><circle cx="${x(i) + r * .45}" cy="${200 - r * .2}" r="2.2" class="nuc"/>`; }
+  }
+  s += `<path d="M${x(14) - 9} 190 l6 6 M${x(14) + 9} 190 l-6 6 M${x(14)} 186 v8" style="stroke:var(--ink);stroke-width:1.5"/><circle cx="${x(14)}" cy="203" r="7" style="fill:var(--fluid);stroke:var(--ink);stroke-width:.8;stroke-dasharray:3 2"/>`;
+  for (let i = 16; i <= 24; i += 2) s += `<circle cx="${x(i)}" cy="200" r="${i < 22 ? 9 + (i - 16) * .6 : 12 - (i - 22) * 1.5}" style="fill:var(--soft);stroke:var(--ink);stroke-width:.8"/>`;
+  s += `<circle cx="${x(27)}" cy="200" r="5" style="fill:var(--line);stroke:var(--ink);stroke-width:.8"/>`;
+  s += T(x(6), 232, 'follicles grow', 's', 'middle') + T(x(14), 232, 'ovulation', 's', 'middle') + T(x(20), 232, 'corpus luteum', 's', 'middle') + T(x(27), 232, 'albicans', 's', 'middle');
+  /* phase bars */
+  const bar = (y, parts, title) => {
+    let o = T(8, y + 15, title, 'h');
+    for (const [a, b, lab, col] of parts) o += `<rect x="${x(a) - dx / 2}" y="${y}" width="${(b - a + 1) * dx}" height="22" style="fill:var(${col});fill-opacity:.35;stroke:var(--surface)"/>` + T((x(a) + x(b)) / 2, y + 15, lab, 's', 'middle');
+    return o;
+  };
+  s += bar(244, [[1, 13, 'Follicular phase', '--h-oes'], [14, 14, 'Ov', '--h-lh'], [15, 28, 'Luteal phase', '--h-prog']], 'OVARIAN');
+  s += bar(272, [[1, 5, 'Menstrual', '--line'], [6, 13, 'Proliferative', '--h-oes'], [14, 14, '', '--h-lh'], [15, 28, 'Secretory', '--h-prog']], 'UTERINE');
+  /* endometrium y 300..390: basal layer constant, functional layer thickness by day */
+  s += T(8, 340, 'ENDO-', 'h') + T(8, 352, 'METRIUM', 'h');
+  const th = day => day <= 5 ? 26 - day * 4.4 : day <= 14 ? 4 + (day - 5) * 3.4 : day <= 26 ? 35 + (day - 14) * .7 : 43 - (day - 26) * 12;
+  let top = '';
+  for (let i = 1; i <= 28; i += .5) top += `${x(i).toFixed(1)},${(372 - 10 - th(i)).toFixed(1)} `;
+  s += `<rect x="${X0 - dx / 2}" y="372" width="${X1 - X0 + dx}" height="14" class="musc"/>` + T(X1 + dx / 2 - 2, 384, 'myometrium', 's', 'end');
+  s += `<rect x="${X0 - dx / 2}" y="362" width="${X1 - X0 + dx}" height="10" style="fill:var(--endom);stroke:var(--ink);stroke-width:.6"/>`;
+  s += `<polygon points="${x(1).toFixed(1)},362 ${top}${x(28).toFixed(1)},362" style="fill:var(--endom);fill-opacity:.75;stroke:var(--ink);stroke-width:.8"/>`;
+  for (let i = 1; i <= 5; i++) s += `<circle cx="${x(i)}" cy="${362 - th(i) - 4}" r="2.4" style="fill:var(--artery)"/>`;
+  for (let i = 16; i <= 26; i += 2) s += `<path d="M${x(i)} 362 q3 -6 0 -12 q-3 -6 0 -12" style="fill:none;stroke:var(--ink);stroke-width:.8"/>`;
+  s += T(x(3), 410, 'shed (functional layer)', 's', 'middle') + T(x(10), 410, 'regrows', 's', 'middle') + T(x(21), 410, 'thick, coiled glands', 's', 'middle') + T(X0 - 6, 368, 'basal', 's', 'end');
+  /* day line */
+  s += `<path d="M${x(d)} 6 V392" style="stroke:var(--accent);stroke-width:2;stroke-dasharray:5 3"/><rect x="${x(d) - 13}" y="0" width="26" height="14" rx="3" style="fill:var(--accent)"/>` + T(x(d), 11, String(d), 'w', 'middle');
+  $('cyc-svg').innerHTML = s;
+  $('cyc-lab').textContent = d;
+  $('cyc-find').innerHTML = CYC_TXT[CYC_PH(d)];
+}
+
+/* ===================== 3. gametogenesis ===================== */
+function drawGam() {
+  const st = GAM.s; let s = DEFS;
+  const on = i => st >= i ? '' : 'class="dim"';
+  s += T(10, 22, 'SPERMATOGENESIS (TESTIS)', 'h') + T(10, 202, 'OOGENESIS (OVARY)', 'h');
+  /* male row y ~100 */
+  const cols = [60, 190, 330, 470, 610];
+  s += T(cols[0], 44, 'spermatogonium', 's', 'middle') + T(cols[1], 44, 'primary spermatocyte', 's', 'middle') + T(cols[2], 44, '2 secondary', 's', 'middle') + T(cols[3], 44, '4 spermatids', 's', 'middle') + T(cols[4], 44, '4 spermatozoa', 's', 'middle');
+  s += `<g ${st >= 1 ? '' : 'class="dim"'}>` + cell(cols[0], 100, 20, '46') + `<path class="flow" d="M${cols[0] + 24} 100 L${cols[1] - 26} 100"/>` + T((cols[0] + cols[1]) / 2, 92, 'mitosis', 's', 'middle') + cell(cols[1], 100, 22, '46') + '</g>';
+  s += `<g ${on(2)}>` + `<path class="flow" d="M${cols[1] + 24} 94 L${cols[2] - 20} 76"/><path class="flow" d="M${cols[1] + 24} 106 L${cols[2] - 20} 124"/>` + T((cols[1] + cols[2]) / 2 + 4, 104, 'MI', 'h', 'middle') + cell(cols[2], 72, 16, '23') + cell(cols[2], 128, 16, '23') + '</g>';
+  s += `<g ${on(3)}>`; for (const [y0, ys] of [[72, [56, 88]], [128, [116, 148]]]) for (const y of ys) s += `<path class="flow" d="M${cols[2] + 18} ${y0} L${cols[3] - 14} ${y}"/>` + cell(cols[3], y, 11, ''); s += T((cols[2] + cols[3]) / 2 + 6, 104, 'MII', 'h', 'middle') + T(cols[3] + 16, 106, '23 each', 's', 'start') + '</g>';
+  s += `<g ${on(4)}>`; for (const y of [56, 88, 116, 148]) s += `<ellipse cx="${cols[4] - 8}" cy="${y}" rx="8" ry="5" class="cell"/><path d="M${cols[4]} ${y} c10 -6 18 6 30 0" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>`; s += T(cols[4] - 30, 172, 'spermiogenesis', 's', 'middle') + '</g>';
+  if (st === 0) s += T(340, 186, 'Spermatogonia wait until puberty', 'b', 'middle');
+  /* female row y ~285 */
+  const fy = 285;
+  s += T(cols[0], 224, 'oogonium (fetus)', 's', 'middle') + T(cols[1], 224, 'primary oocyte', 's', 'middle') + T(cols[2], 224, 'secondary oocyte', 's', 'middle') + T(cols[3], 224, 'ovum + 2nd polar body', 's', 'middle') + T(cols[4], 224, 'result', 's', 'middle');
+  s += cell(cols[0], fy, 16, '46') + `<path class="flow" d="M${cols[0] + 20} ${fy} L${cols[1] - 36} ${fy}"/>` + T((cols[0] + cols[1]) / 2 - 6, fy - 8, 'mitosis', 's', 'middle');
+  s += cell(cols[1], fy, 28, '46');
+  s += `<rect x="${cols[1] - 60}" y="${fy + 36}" width="120" height="18" rx="9" style="fill:var(--surface);stroke:var(--ink);stroke-dasharray:4 2"/>` + T(cols[1], fy + 49, 'arrest: prophase I', 'b', 'middle').replace('class="b"', 'class="b" style="font-size:11px"');
+  s += `<g ${on(2)}>` + `<path class="flow" d="M${cols[1] + 32} ${fy} L${cols[2] - 30} ${fy}"/>` + T((cols[1] + cols[2]) / 2, fy - 22, 'MI, just before', 's', 'middle') + T((cols[1] + cols[2]) / 2, fy - 9, 'ovulation', 's', 'middle') + cell(cols[2], fy, 26, '23') + cell(cols[2] + 26, fy - 28, 7, '') + T(cols[2] + 36, fy - 36, '1st polar body', 's', 'start')
+    + `<rect x="${cols[2] - 66}" y="${fy + 36}" width="132" height="18" rx="9" style="fill:var(--surface);stroke:var(--ink);stroke-dasharray:4 2"/>` + T(cols[2], fy + 49, 'arrest: metaphase II', 'b', 'middle').replace('class="b"', 'class="b" style="font-size:11px"') + '</g>';
+  s += `<g ${on(3)}>` + `<path class="flow" d="M${cols[2] + 30} ${fy} L${cols[3] - 28} ${fy}"/>` + T((cols[2] + cols[3]) / 2, fy + 18, 'MII only if', 's', 'middle') + T((cols[2] + cols[3]) / 2, fy + 31, 'fertilised', 's', 'middle') + cell(cols[3], fy, 24, '23') + cell(cols[3] + 28, fy + 26, 6, '') + '</g>';
+  s += `<g ${on(4)}>` + cell(cols[4], fy, 26, '') + T(cols[4], fy + 4, '1 ovum', 'b', 'middle') + [[-36, -26], [-40, 0], [-34, 26]].map(([a, b]) => `<circle cx="${cols[4] + a}" cy="${fy + b}" r="5" class="cell"/>`).join('') + T(cols[4], fy + 46, '+ up to 3 polar bodies', 's', 'middle') + '</g>';
+  /* arrows linking arrests to time */
+  s += T(10, 352, st === 0 ? 'Before birth: oocytes already arrested in prophase I' : 'Prophase I arrest lasts until that oocyte\'s own ovulation', 's', 'start');
+  $('gam-svg').innerHTML = s;
+  $('gam-find').innerHTML = GAM_STEPS[st][1];
+}
+
+/* ===================== 4. fertilisation ===================== */
+function drawFert() {
+  const st = FERT.s; let s = DEFS;
+  const cx = 250, cy = 196, R = 100;
+  /* corona cells (fade after step 1) */
+  if (st <= 2) for (let a = 0; a < 360; a += 20) { const r = R + 42, x = cx + r * Math.cos(a * Math.PI / 180), y = cy + r * Math.sin(a * Math.PI / 180); if (st >= 1 && a > 140 && a < 220) continue; s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="10" class="cell" style="opacity:${st >= 2 ? .5 : 1}"/>`; }
+  /* zona */
+  s += `<circle cx="${cx}" cy="${cy}" r="${R + 24}" style="fill:none;stroke:${st >= 4 ? 'var(--ink)' : 'var(--line)'};stroke-width:14;opacity:${st >= 4 ? .45 : 1}"/>`;
+  s += `<circle cx="${cx}" cy="${cy}" r="${R}" class="cell"/>`;
+  /* cortical granules */
+  for (let a = 0; a < 360; a += 24) { const r = st >= 4 ? R + 6 : R - 10; s += `<circle cx="${(cx + r * Math.cos(a * Math.PI / 180)).toFixed(1)}" cy="${(cy + r * Math.sin(a * Math.PI / 180)).toFixed(1)}" r="3" style="fill:var(--ink);opacity:${st >= 4 ? .3 : .6}"/>`; }
+  /* nucleus content */
+  if (st < 5) s += `<path d="M${cx - 6} ${cy - 22} L${cx + 6} ${cy + 22} M${cx + 6} ${cy - 22} L${cx - 6} ${cy + 22}" style="stroke:var(--nucleus);stroke-width:2"/>` + T(cx, cy + 42, 'metaphase II spindle', 's', 'middle');
+  s += `<circle cx="${cx + 62}" cy="${cy - 84}" r="7" class="cell"/>` + T(cx + 150, cy - 128, '1st polar body', 's', 'start') + lead(cx + 148, cy - 132, cx + 68, cy - 90);
+  if (st >= 5) {
+    s += `<circle cx="${cx - 74}" cy="${cy - 72}" r="7" class="cell"/>` + T(cx - 92, cy - 128, '2nd polar body', 's', 'end') + lead(cx - 96, cy - 124, cx - 78, cy - 78);
+    const d = st >= 6 ? 12 : 30;
+    s += `<circle cx="${cx - d}" cy="${cy}" r="17" style="fill:var(--nucleus);fill-opacity:.35;stroke:var(--nucleus)"/><circle cx="${cx + d}" cy="${cy}" r="17" style="fill:var(--nucleus);fill-opacity:.35;stroke:var(--nucleus)"/>`;
+    s += st >= 6 ? T(cx, cy + 44, 'zygote: 23 + 23 = 46', 'b', 'middle') : T(cx - d, cy + 34, '♀', 'b', 'middle') + T(cx + d, cy + 34, '♂', 'b', 'middle') + T(cx, cy + 56, 'pronuclei', 's', 'middle');
+  }
+  /* sperm position */
+  const sp = [[100, 40], [110, 196], [128, 196], [160, 196], [160, 196]][Math.min(st, 4)];
+  if (st <= 3) {
+    const [sx, sy] = sp;
+    s += `<path d="M${sx - 40} ${sy} c-12 -10 -24 10 -36 0 c-10 -8 -18 8 -26 0" style="fill:none;stroke:var(--ink);stroke-width:1.6"/><path d="M${sx - 40} ${sy} H${sx - 18}" style="stroke:var(--ink);stroke-width:3"/>`;
+    s += `<ellipse cx="${sx - 8}" cy="${sy}" rx="12" ry="7" class="cell"/>`;
+    if (st < 2) s += `<path d="M${sx - 2} ${sy - 6} a10 7 0 0 1 0 12" style="fill:none;stroke:var(--ink);stroke-width:3"/>` + T(sx - 6, sy - 14, 'acrosome', 's', 'middle');
+    if (st === 2) s += `<circle cx="${sx + 4}" cy="${sy}" r="9" style="fill:var(--ink);fill-opacity:.15"/>` + T(sx - 10, sy - 26, 'acrosome reaction', 's', 'middle');
+  }
+  if (st === 0) s += T(4, 72, 'in the female tract:', 's', 'start') + T(4, 86, 'hyperactivated motility', 's', 'start');
+  if (st === 4) s += `<circle cx="${cx - R + 16}" cy="${cy}" r="10" style="fill:var(--nucleus);fill-opacity:.35"/>` + T(cx - R + 16, cy - 18, 'sperm nucleus', 's', 'middle') + T(cx, 26, 'zona hardened: other sperm cannot bind', 'b', 'middle');
+  if (st === 4) for (const [x, y] of [[60, 90], [50, 310]]) s += `<path d="M${x - 40} ${y} H${x}" style="stroke:var(--ink);stroke-width:2"/><ellipse cx="${x + 8}" cy="${y}" rx="10" ry="6" class="cell"/><path d="M${x + 22} ${y - 8} l10 16 M${x + 32} ${y - 8} l-10 16" style="stroke:var(--clin);stroke-width:2"/>`;
+  if (st <= 2) s += T(cx + 150, 40, 'corona radiata', 's', 'start') + lead(cx + 148, 36, cx + 96, 70);
+  s += T(cx + 150, 346, 'zona pellucida', 's', 'start') + lead(cx + 148, 342, cx + 88, 290);
+  s += T(cx, 372, st >= 6 ? 'zygote, still in the zona' : 'secondary oocyte (dots: cortical granules)', 's', 'middle');
+  $('fert-svg').innerHTML = s;
+  $('fert-find').innerHTML = FERT_STEPS[st][1];
+}
+
+/* ===================== 5. contraception ===================== */
+function drawCon() {
+  const sel = CON.sel; let s = DEFS;
+  /* female tract: uterus in centre, tubes to each side, ovaries below tubes */
+  s += `<path d="M200 70 Q280 50 360 70 L340 190 Q280 214 220 190 Z" style="fill:var(--musc);fill-opacity:.35;stroke:var(--ink)"/>`;
+  s += `<path d="M228 84 Q280 74 332 84 L318 176 Q280 192 242 176 Z" style="fill:var(--endom);stroke:var(--ink);stroke-width:.8"/>`;
+  s += `<path d="M250 190 L250 232 M310 190 L310 232" style="stroke:var(--ink)"/><rect x="250" y="200" width="60" height="32" style="fill:var(--musc);fill-opacity:.25"/>` + T(280, 252, 'cervix', 's', 'middle');
+  for (const sg of [-1, 1]) {
+    const x0 = sg < 0 ? 200 : 360, xe = sg < 0 ? 70 : 490;
+    s += `<path d="M${x0} 76 C${x0 + sg * 60} 50 ${x0 + sg * 110} 50 ${xe} 70" style="fill:none;stroke:var(--ink);stroke-width:${7}"/><path d="M${x0} 76 C${x0 + sg * 60} 50 ${x0 + sg * 110} 50 ${xe} 70" style="fill:none;stroke:var(--soft);stroke-width:4"/>`;
+    for (let k = -2; k <= 2; k++) s += `<path d="M${xe} 70 l${sg * 14} ${k * 7}" style="stroke:var(--ink);stroke-width:1.4"/>`;
+    s += `<ellipse cx="${sg < 0 ? 100 : 460}" cy="118" rx="34" ry="20" style="fill:var(--soft);stroke:var(--ink)"/>`;
+  }
+  s += T(100, 156, 'ovary', 's', 'middle') + T(150, 40, 'uterine tube', 's', 'middle') + T(280, 140, 'uterus', 's', 'middle') + T(150, 92, 'ampulla', 's', 'middle');
+  /* male vas schematic */
+  s += `<ellipse cx="470" cy="270" rx="18" ry="26" style="fill:var(--soft);stroke:var(--ink)"/><path d="M482 252 C500 220 510 210 520 190" style="fill:none;stroke:var(--ink);stroke-width:3"/>` + T(470, 312, 'testis', 's', 'middle') + T(524, 186, 'vas', 's', 'start');
+  const ring = (x, y, r = 22) => `<circle cx="${x}" cy="${y}" r="${r}" class="hl"/>`;
+  if (sel === 'bar') s += ring(280, 218, 26) + T(280, 290, 'blocks sperm at the cervix / vagina', 'b', 'middle');
+  if (sel === 'hor') s += ring(100, 118, 30) + ring(460, 118, 30) + ring(280, 216, 22) + ring(280, 130, 40) + T(280, 290, 'no ovulation; thick mucus; unreceptive lining', 'b', 'middle');
+  if (sel === 'iud') s += `<path d="M262 96 H298 M280 96 V170" style="stroke:var(--accent);stroke-width:4;stroke-linecap:round"/>` + T(280, 290, 'device in the uterine cavity', 'b', 'middle');
+  if (sel === 'vas') s += `<path d="M498 220 l14 10 M512 220 l-14 10" style="stroke:var(--clin);stroke-width:3"/>` + ring(505, 225, 18) + T(280, 290, 'vas cut and tied: no sperm in the ejaculate', 'b', 'middle');
+  if (sel === 'tub') s += `<path d="M150 50 l10 16 M160 50 l-10 16 M410 50 l10 16 M420 50 l-10 16" style="stroke:var(--clin);stroke-width:3"/>` + ring(155, 58, 18) + ring(415, 58, 18) + T(280, 290, 'tubes blocked: egg and sperm cannot meet', 'b', 'middle');
+  if (sel === 'fa') s += ring(100, 118, 30) + T(280, 290, 'avoid the days around ovulation', 'b', 'middle');
+  $('con-svg').innerHTML = s;
+  $('con-find').innerHTML = CON_ITEMS[sel][1];
+}
+
+/* ===================== 6. week 1 ===================== */
+function stageDrawing(kind, cx, cy, r) {
+  let o = '';
+  const zona = `<circle cx="${cx}" cy="${cy}" r="${r + 5}" style="fill:none;stroke:var(--line);stroke-width:5"/>`;
+  if (kind === 'zyg') o += zona + `<circle cx="${cx}" cy="${cy}" r="${r}" class="cell"/><circle cx="${cx - 6}" cy="${cy}" r="${r * .22}" class="nuc"/><circle cx="${cx + 6}" cy="${cy}" r="${r * .22}" class="nuc"/>`;
+  if (kind === 'c2') o += zona + [[-.42, 0], [.42, 0]].map(([a, b]) => `<circle cx="${cx + a * r}" cy="${cy + b * r}" r="${r * .55}" class="cell"/>`).join('');
+  if (kind === 'mor') { o += zona; for (let i = 0; i < 12; i++) { const a = i * 30 * Math.PI / 180, rr = i % 2 ? r * .5 : r * .55; o += `<circle cx="${(cx + rr * Math.cos(a)).toFixed(1)}" cy="${(cy + rr * Math.sin(a)).toFixed(1)}" r="${r * .3}" class="cell"/>`; } o += `<circle cx="${cx}" cy="${cy}" r="${r * .3}" class="cell"/>`; }
+  if (kind === 'bla' || kind === 'imp') {
+    if (kind === 'bla') o += `<circle cx="${cx}" cy="${cy}" r="${r + 5}" style="fill:none;stroke:var(--line);stroke-width:5;stroke-dasharray:${r * 2.2} ${r * 1.2}"/>`;
+    o += `<circle cx="${cx}" cy="${cy}" r="${r}" class="cyto"/><circle cx="${cx}" cy="${cy}" r="${r - 4}" class="fluid"/>`;
+    o += `<path d="M${cx - r * .62} ${cy - r * .55} A${r - 4} ${r - 4} 0 0 1 ${cx + r * .62} ${cy - r * .55} Q${cx} ${cy - r * .05} ${cx - r * .62} ${cy - r * .55} Z" class="cell"/>`;
+  }
+  return o;
+}
+function drawWk1() {
+  const st = WK1.s, step = WK1_STEPS[st]; let s = DEFS;
+  /* tract along y = 220: ovary x 40-110, fimbriae ~125, infundibulum 140, ampulla 150-330, isthmus 330-450, interstitial 450-480, uterus 480-660 */
+  s += `<ellipse cx="70" cy="250" rx="40" ry="24" style="fill:var(--soft);stroke:var(--ink)"/>` + T(70, 292, 'ovary', 's', 'middle');
+  s += `<path d="M130 196 C180 186 300 186 330 206 L450 214 L480 214 L480 226 L450 226 L330 234 C300 254 180 254 130 244 Z" style="fill:var(--soft);stroke:var(--ink)"/>`;
+  for (let k = -3; k <= 3; k++) s += `<path d="M130 220 l-16 ${k * 8}" style="stroke:var(--ink);stroke-width:1.5"/>`;
+  s += `<path d="M480 150 L640 150 Q660 220 640 290 L520 290 Q490 250 480 226 L480 214 Q490 190 480 150 Z" style="fill:var(--musc);fill-opacity:.35;stroke:var(--ink)"/>`;
+  s += `<path d="M498 170 L622 170 Q636 220 622 270 L540 270 Q510 240 498 226 L498 214 Q506 196 498 170 Z" style="fill:var(--endom);stroke:var(--ink);stroke-width:.8"/>`;
+  /* uterine lumen (cavity), continuous with the tube and the cervical canal */
+  s += `<path d="M480 217 Q512 202 534 200 L598 200 Q608 222 602 246 L616 330 L610 330 L592 250 Q556 246 540 244 Q516 234 480 223 Z" style="fill:var(--surface);stroke:var(--ink);stroke-width:.8"/>` + T(590, 238, 'cavity', 's', 'middle');
+  s += `<path d="M600 290 L600 330 M640 290 L640 330" style="stroke:var(--ink)"/>` + T(660, 318, 'cervix', 's', 'start') + T(662, 296, 'internal os', 's', 'start');
+  s += T(110, 178, 'fimbriae', 's', 'middle') + T(240, 178, 'ampulla', 's', 'middle') + T(390, 200, 'isthmus', 's', 'middle') + T(465, 246, 'intramural', 's', 'middle') + T(570, 140, 'body of the uterus', 's', 'middle');
+  /* conceptus */
+  const [lab, px, kind, name] = [step[0], step[1], step[2], step[3]];
+  const py = kind === 'imp' ? 196 : kind === 'bla' ? 222 : 220;
+  s += stageDrawing(kind, px, py, 9);
+  /* path dots for earlier steps */
+  WK1_STEPS.forEach((w, i) => { if (i < st) s += `<circle cx="${w[1]}" cy="${w[2] === 'imp' ? 196 : w[2] === 'bla' ? 222 : 220}" r="3" style="fill:var(--muted)"/>`; });
+  /* inset */
+  s += `<circle cx="300" cy="80" r="56" class="box"/>` + stageDrawing(kind, 300, 80, 34) + T(300, 154, name + ' (magnified)', 'b', 'middle');
+  s += lead(300, 136, px, py - 14);
+  if (kind === 'bla' || kind === 'imp') s += T(372, 54, 'inner cell mass', 's', 'start') + lead(370, 50, 318, 60) + T(372, 80, 'blastocoel (fluid)', 's', 'start') + lead(370, 76, 316, 86) + T(372, 106, 'trophoblast', 's', 'start') + lead(370, 102, 334, 100);
+  if (kind === 'zyg' || kind === 'c2' || kind === 'mor') s += T(372, 64, 'zona pellucida', 's', 'start') + lead(370, 60, 338, 66);
+  /* ectopic sites: numbered markers, legend below */
+  if (WK1.ecto) {
+    const ec = [[240, 220, 'ampulla 70–80%'], [390, 220, 'isthmus 12–13%'], [124, 220, 'fimbrial 5–12%'], [466, 220, 'interstitial / cornual'], [70, 250, 'ovary'], [620, 312, 'cervix'], [200, 320, 'abdominal cavity']];
+    ec.forEach(([x, y], i) => { s += `<circle cx="${x}" cy="${y}" r="9" style="fill:var(--surface);stroke:var(--clin);stroke-width:2"/>` + T(x, y + 4, String(i + 1), 'c', 'middle'); });
+    s += `<rect x="584" y="246" width="22" height="10" rx="4" style="fill:url(#hatch);stroke:var(--clin)"/>` + T(572, 274, 'low (praevia)', 'c', 'end');
+    s += ec.map(([x, y, t], i) => T(20 + (i % 4) * 170, 346 + Math.floor(i / 4) * 18, `${i + 1} ${t}`, 'c', 'start')).join('');
+  }
+  $('wk1-svg').innerHTML = s;
+  $('wk1-find').innerHTML = WK1.ecto ? ECTO : step[4];
+}
+
+/* ===================== 7. week 2 ===================== */
+function drawWk2() {
+  const st = WK2.s; let s = DEFS;
+  /* uterine cavity at the top (y < 60); the conceptus enters with its embryonic pole first, so the disc lies deep */
+  const SURF = 60;
+  s += `<rect x="10" y="${SURF}" width="540" height="350" class="endom"/>` + T(20, 30, 'uterine cavity', 's') + T(540, 84, 'endometrium (decidua)', 's', 'end');
+  for (const x of [480, 525]) s += `<path d="M${x} ${SURF} q8 30 0 60 q-8 30 0 60" style="fill:none;stroke:var(--ink);stroke-width:.8"/>`;
+  const cx = 280, cy = st === 0 ? 120 : 230, R = st === 0 ? 82 : 128, ry = R * .9;
+  /* syncytiotrophoblast: only below the surface */
+  if (st === 0) s += `<path d="M${cx - R - 22} ${SURF} A${R + 22} ${ry + 22} 0 0 0 ${cx + R + 22} ${SURF} Z" class="syn" style="stroke:var(--tropho)"/>`;
+  else s += `<ellipse cx="${cx}" cy="${cy}" rx="${R + 34}" ry="${ry + 30}" class="syn" style="stroke:var(--tropho)"/>`;
+  /* surface epithelium: gap over the conceptus, later a plug */
+  if (st === 0) s += `<path d="M10 ${SURF} H${cx - R - 22} M${cx + R + 22} ${SURF} H550" style="stroke:var(--ink);stroke-width:2"/>`;
+  else s += `<path d="M10 ${SURF} H550" style="stroke:var(--ink);stroke-width:2"/><path d="M${cx - 30} ${SURF} Q${cx} ${SURF - 14} ${cx + 30} ${SURF}" style="fill:var(--surface);stroke:var(--ink)"/>` + T(cx + 40, SURF - 10, 'entry site closed over', 's', 'start');
+  /* lacunae and maternal sinusoids */
+  if (st >= 2) {
+    for (const a of [150, 175, 200, 225, 250, 290, 315, 340, 5, 30]) { const x = cx + (R + 17) * Math.cos(a * Math.PI / 180), y = cy - (ry + 15) * Math.sin(a * Math.PI / 180); s += `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="10" ry="6" style="fill:var(--artery);fill-opacity:.65;stroke:var(--ink);stroke-width:.5"/>`; }
+    s += `<path d="M${cx + 120} ${cy + ry + 34} Q${cx + 170} ${cy + ry + 14} ${cx + 250} ${cy + ry + 30}" style="fill:none;stroke:var(--artery);stroke-width:6"/>` + T(540, cy + ry + 58, 'maternal sinusoid', 's', 'end');
+    s += T(cx + R + 40, cy - 70, 'lacunae with', 's', 'start') + T(cx + R + 40, cy - 58, 'maternal blood', 's', 'start') + lead(cx + R + 38, cy - 66, cx + R + 18, cy - 50);
+  }
+  /* cytotrophoblast */
+  s += `<ellipse cx="${cx}" cy="${cy}" rx="${R}" ry="${ry}" style="fill:${st === 0 ? 'var(--fluid)' : 'var(--surface)'};stroke:var(--tropho);stroke-width:7"/>`;
+  if (st >= 2) s += `<ellipse cx="${cx}" cy="${cy}" rx="${R - 5}" ry="${ry - 5}" class="exm"/>`;
+  /* disc near the deep (lower) pole: hypoblast above, epiblast below, amniotic cavity below the epiblast */
+  const dy = cy + ry - (st === 0 ? 28 : 46), w = st === 0 ? 70 : 96;
+  if (st >= 3) s += `<ellipse cx="${cx}" cy="${cy - 18}" rx="${R - 18}" ry="${ry - 44}" style="fill:var(--surface);stroke:var(--meso);stroke-width:3;stroke-opacity:.6"/>` + T(cx, cy - 64, 'extra-embryonic coelom', 's', 'middle') + T(cx, cy - 51, '(chorionic cavity)', 's', 'middle');
+  if (st >= 1) s += `<path d="M${cx - w / 2} ${dy + 10} Q${cx} ${dy + 42} ${cx + w / 2} ${dy + 10} Z" style="fill:var(--fluid);stroke:var(--ecto);stroke-width:2"/>`;
+  if (st >= 1 && st < 3) { const top = cy - ry + (st >= 2 ? 26 : 10), yr = (dy - top) / 2; s += `<ellipse cx="${cx}" cy="${top + yr}" rx="${R - (st >= 2 ? 26 : 10)}" ry="${yr}" style="fill:var(--surface);stroke:var(--hypo);stroke-width:4"/>`; }
+  if (st === 0) s += T(cx, cy - 10, 'blastocoel', 's', 'middle');
+  if (st >= 3) s += `<circle cx="${cx}" cy="${dy - 34}" r="30" style="fill:var(--surface);stroke:var(--hypo);stroke-width:4"/><circle cx="${cx}" cy="${dy - 34}" r="35" style="fill:none;stroke:var(--meso);stroke-opacity:.55;stroke-width:4"/>` + T(cx, dy - 30, 'yolk sac', 's', 'middle');
+  s += `<rect x="${cx - w / 2}" y="${dy}" width="${w}" height="5" rx="2" class="hypo" style="stroke:var(--ink);stroke-width:.5"/><rect x="${cx - w / 2}" y="${dy + 5}" width="${w}" height="9" rx="3" class="epi" style="stroke:var(--ink);stroke-width:.5"/>`;
+  /* labels */
+  const L = 470;
+  s += T(L, dy - 6, 'hypoblast', 's', 'start') + lead(L - 2, dy - 10, cx + w / 2, dy + 2);
+  s += T(L, dy + 12, 'epiblast', 's', 'start') + lead(L - 2, dy + 8, cx + w / 2, dy + 9);
+  if (st >= 1) s += T(L, dy + 32, 'amniotic cavity', 's', 'start') + lead(L - 2, dy + 28, cx + 12, dy + 22);
+  if (st === 1 || st === 2) s += T(cx, cy - 34, st === 1 ? 'primary yolk sac' : 'yolk sac', 's', 'middle') + (st === 1 ? T(cx, cy - 20, "(Heuser's membrane)", 's', 'middle') : '');
+  if (st === 2) s += T(20, cy + 40, 'extra-embryonic', 's', 'start') + T(20, cy + 52, 'mesoderm (dots)', 's', 'start') + lead(118, cy + 44, cx - R + 16, cy + 50);
+  if (st >= 3) {
+    s += `<path d="M${cx - 26} ${dy + 30} L${cx - 34} ${cy + ry - 2} M${cx + 26} ${dy + 30} L${cx + 34} ${cy + ry - 2}" style="stroke:var(--meso);stroke-width:5;stroke-opacity:.55"/>` + T(20, cy + ry + 14, 'connecting stalk', 's', 'start') + lead(118, cy + ry + 10, cx - 32, cy + ry - 8);
+    s += `<circle cx="${cx - w / 2 + 8}" cy="${dy + 2}" r="4" style="fill:var(--hypo);stroke:var(--ink)"/>` + T(20, dy + 40, 'prechordal plate', 's', 'start') + lead(110, dy + 36, cx - w / 2 + 6, dy + 4);
+    s += T(20, 102, 'chorion = trophoblast + somatic', 's', 'start') + T(20, 114, 'extra-embryonic mesoderm', 's', 'start');
+  }
+  s += T(20, cy - 40, 'syncytiotrophoblast', 's', 'start') + lead(122, cy - 44, cx - R - 18, cy + (st === 0 ? -26 : -40));
+  s += T(20, cy - 22, 'cytotrophoblast', 's', 'start') + lead(106, cy - 26, cx - R - 2, cy + (st === 0 ? -14 : -24));
+  $('wk2-svg').innerHTML = s;
+  $('wk2-find').innerHTML = WK2_STEPS[st][1];
+}
+
+/* ===================== 8. gastrulation ===================== */
+function drawGas() {
+  const st = GAS.s; let s = DEFS;
+  /* dorsal view: pear-shaped disc, head up, centre x 170 */
+  const cx = 170;
+  s += `<path d="M${cx} 30 C${cx + 110} 30 ${cx + 120} 150 ${cx + 70} 250 Q${cx} 300 ${cx - 70} 250 C${cx - 120} 150 ${cx - 110} 30 ${cx} 30 Z" style="fill:var(${st >= 3 ? '--ecto' : '--epi'});fill-opacity:${st >= 3 ? .45 : 1};stroke:var(--ink)"/>`;
+  s += T(cx, 22, 'HEAD END', 'h', 'middle') + T(cx, 316, 'TAIL END', 'h', 'middle');
+  s += `<ellipse cx="${cx}" cy="58" rx="16" ry="8" style="fill:var(--surface);stroke:var(--ink);stroke-dasharray:3 2"/>` + T(cx + 120, 52, 'buccopharyngeal', 's', 'start') + T(cx + 120, 64, 'membrane', 's', 'start') + lead(cx + 118, 56, cx + 16, 58);
+  s += `<ellipse cx="${cx}" cy="272" rx="12" ry="6" style="fill:var(--surface);stroke:var(--ink);stroke-dasharray:3 2"/>` + T(cx + 120, 282, 'cloacal membrane', 's', 'start') + lead(cx + 118, 278, cx + 12, 272);
+  if (st >= 1) {
+    const top = st >= 5 ? 220 : 150;
+    s += `<path d="M${cx} ${top} V262" style="stroke:var(--ink);stroke-opacity:.35;stroke-width:${st >= 5 ? 6 : 10};stroke-linecap:round"/><path d="M${cx} ${top + 4} V258" style="stroke:var(--ink);stroke-width:1.4;stroke-dasharray:4 3"/>`;
+    s += `<circle cx="${cx}" cy="${top}" r="9" style="fill:var(--surface);stroke:var(--ink);stroke-width:2"/><circle cx="${cx}" cy="${top}" r="3" style="fill:var(--ink)"/>`;
+    s += T(cx - 120, top + 4, 'primitive node + pit', 's', 'start') + lead(cx - 40, top, cx - 10, top);
+    s += T(cx - 120, 250, st >= 5 ? 'streak (regressing)' : 'primitive streak', 's', 'start') + lead(cx - 32, 246, cx - 6, 248);
+  }
+  if (st >= 4) { const top = st >= 5 ? 220 : 150; s += `<path d="M${cx} ${top - 10} V76" style="stroke:var(--noto);stroke-width:7;stroke-linecap:round"/>` + T(cx + 120, 120, 'notochord', 's', 'start') + lead(cx + 118, 116, cx + 6, 116); }
+  if (st >= 0) s += `<circle cx="${cx}" cy="76" r="5" style="fill:var(--hypo);stroke:var(--ink)"/>` + T(cx - 120, 84, 'prechordal plate', 's', 'start') + lead(cx - 48, 80, cx - 6, 78);
+  /* cross-section right: x 400..670, y 120..240 */
+  const X0 = 400, X1 = 670, ym = 170;
+  s += T(X0, 110, 'SECTION THROUGH THE STREAK', 'h');
+  s += `<rect x="${X0}" y="${ym - 22}" width="${X1 - X0}" height="16" style="fill:var(${st >= 3 ? '--ecto' : '--epi'});stroke:var(--ink);stroke-width:.6"/>`;
+  s += T(X0, ym - 28, st >= 3 ? 'ectoderm' : 'epiblast', 's', 'start');
+  const ycl = st >= 2 ? '--endo' : '--hypo';
+  s += `<rect x="${X0}" y="${ym + 34}" width="${X1 - X0}" height="10" style="fill:var(${ycl});stroke:var(--ink);stroke-width:.6"/>`;
+  s += T(X0, ym + 62, st >= 2 ? 'endoderm (displacing the hypoblast)' : 'hypoblast', 's', 'start');
+  if (st >= 2 && st < 3) s += `<rect x="${X0}" y="${ym + 34}" width="60" height="10" style="fill:var(--hypo);stroke:var(--ink);stroke-width:.6"/><rect x="${X1 - 60}" y="${ym + 34}" width="60" height="10" style="fill:var(--hypo);stroke:var(--ink);stroke-width:.6"/>`;
+  if (st >= 3) s += `<rect x="${X0 + 10}" y="${ym}" width="${X1 - X0 - 20}" height="28" class="exm" style="fill-opacity:.0"/>` + `<path d="M${X0 + 10} ${ym + 14} H${X1 - 10}" style="stroke:var(--meso);stroke-width:22;stroke-opacity:.7"/>` + T(X1 - 14, ym + 18, 'mesoderm', 'b', 'end');
+  if (st >= 1) {
+    const mx = (X0 + X1) / 2;
+    s += `<path d="M${mx - 8} ${ym - 22} L${mx} ${ym - 12} L${mx + 8} ${ym - 22}" style="fill:var(--surface);stroke:var(--ink)"/>` + T(mx, ym - 30, 'primitive groove', 's', 'middle');
+    if (st >= 2) for (const sg of [-1, 1]) s += `<path class="flow" d="M${mx + sg * 3} ${ym - 6} Q${mx + sg * 6} ${ym + (st >= 3 ? 14 : 26)} ${mx + sg * (st >= 3 ? 60 : 40)} ${ym + (st >= 3 ? 14 : 30)}"/>`;
+  }
+  if (st === 0) s += T((X0 + X1) / 2, ym + 100, 'two layers only (bilaminar)', 'b', 'middle');
+  if (st >= 4) s += T(X0, ym + 96, 'The notochord lies in the midline', 's', 'start') + T(X0, ym + 110, 'cranial to the node (left view).', 's', 'start');
+  $('gas-svg').innerHTML = s;
+  $('gas-find').innerHTML = GAS_STEPS[st][1];
+}
+
+/* ===================== 9. neurulation ===================== */
+function drawNeu() {
+  const st = NEU.s; let s = DEFS;
+  /* cross-section left x 20..380 */
+  const cx = 200, base = 150;
+  s += T(30, 22, 'CROSS-SECTION', 'h');
+  /* notochord and endoderm */
+  s += `<circle cx="${cx}" cy="${base + 44}" r="12" class="noto" style="stroke:var(--ink)"/>` + T(cx, base + 100, 'notochord', 's', 'middle');
+  s += `<rect x="40" y="${base + 66}" width="320" height="10" class="endo" style="stroke:var(--ink);stroke-width:.6"/>` + T(360, base + 92, 'endoderm', 's', 'end');
+  s += `<rect x="40" y="${base + 20}" width="120" height="40" rx="10" class="meso" style="fill-opacity:.55"/><rect x="240" y="${base + 20}" width="120" height="40" rx="10" class="meso" style="fill-opacity:.55"/>` + T(60, base + 44, 'mesoderm', 's', 'start');
+  if (st === 0) {
+    s += `<rect x="40" y="${base}" width="320" height="10" class="ecto" style="stroke:var(--ink);stroke-width:.6"/><rect x="${cx - 60}" y="${base - 6}" width="120" height="16" rx="4" class="ecto" style="fill-opacity:1;stroke:var(--ink)"/>` + T(cx, base - 14, 'neural plate (thickened ectoderm)', 'b', 'middle');
+    s += `<path class="flow" d="M${cx} ${base + 30} V${base + 14}"/>` + T(cx + 18, base + 24, 'induces', 's', 'start');
+  }
+  if (st === 1) {
+    s += `<path d="M40 ${base} H${cx - 70} Q${cx - 50} ${base - 50} ${cx - 24} ${base - 40} Q${cx} ${base + 8} ${cx + 24} ${base - 40} Q${cx + 50} ${base - 50} ${cx + 70} ${base} H360" style="fill:none;stroke:var(--ecto);stroke-width:12;stroke-linejoin:round"/>`;
+    s += T(cx - 64, base - 56, 'neural fold', 's', 'end') + T(cx, base + 2, 'groove', 's', 'middle');
+    s += `<circle cx="${cx - 44}" cy="${base - 48}" r="5" class="crest"/><circle cx="${cx + 44}" cy="${base - 48}" r="5" class="crest"/>`;
+  }
+  if (st === 2) {
+    s += `<path d="M40 ${base} H${cx - 60} Q${cx - 46} ${base - 90} ${cx} ${base - 86} Q${cx + 46} ${base - 90} ${cx + 60} ${base} H360" style="fill:none;stroke:var(--ecto);stroke-width:12"/>`;
+    s += `<circle cx="${cx}" cy="${base - 46}" r="26" style="fill:var(--fluid);stroke:var(--ecto);stroke-width:12"/><circle cx="${cx - 10}" cy="${base - 82}" r="5" class="crest"/><circle cx="${cx + 10}" cy="${base - 82}" r="5" class="crest"/>` + T(cx + 60, base - 90, 'folds meet and fuse', 'b', 'start');
+  }
+  if (st >= 3) {
+    s += `<path d="M40 ${base - 50} H360" style="stroke:var(--ecto);stroke-width:10"/>` + T(360, base - 62, 'surface ectoderm', 's', 'end');
+    s += `<circle cx="${cx}" cy="${base - 4}" r="30" style="fill:var(--fluid);stroke:var(--ecto);stroke-width:14"/>` + T(cx + 52, base - 4, 'neural tube', 'b', 'start');
+    s += `<circle cx="${cx - 52}" cy="${base - 30}" r="7" class="crest"/><circle cx="${cx + 52}" cy="${base - 30}" r="7" class="crest"/><path class="flow" d="M${cx - 60} ${base - 24} q-30 10 -40 40"/>` + T(44, base + 12, 'neural crest', 's', 'start');
+  }
+  /* dorsal view right x 420..660 */
+  const dx = 560;
+  s += T(430, 22, 'DORSAL VIEW', 'h');
+  s += `<path d="M${dx} 36 C${dx + 70} 36 ${dx + 70} 120 ${dx + 50} 200 Q${dx + 30} 290 ${dx} 296 Q${dx - 30} 290 ${dx - 50} 200 C${dx - 70} 120 ${dx - 70} 36 ${dx} 36 Z" style="fill:var(--ecto);fill-opacity:.25;stroke:var(--ink)"/>`;
+  const fused = st >= 2 ? (st >= 3 ? [70, 250] : [176, 212]) : null;
+  s += `<path d="M${dx - 18} 50 Q${dx - 30} 160 ${dx - 8} 280 M${dx + 18} 50 Q${dx + 30} 160 ${dx + 8} 280" style="fill:none;stroke:var(--ecto);stroke-width:5"/>`;
+  if (fused) {
+    s += `<path d="M${dx} ${fused[0]} V${fused[1]}" style="stroke:var(--ecto);stroke-width:26;stroke-opacity:.9"/>`;
+    for (let i = 0; i < 6; i++) { const y = 140 + i * 16; s += `<rect x="${dx - 46}" y="${y}" width="14" height="11" rx="2" class="meso" style="fill-opacity:.7"/><rect x="${dx + 32}" y="${y}" width="14" height="11" rx="2" class="meso" style="fill-opacity:.7"/>`; }
+    s += T(dx - 74, 150, 'somites', 's', 'end') + lead(dx - 72, 146, dx - 48, 146);
+    s += T(dx - 74, 58, 'cranial', 's', 'end') + T(dx - 74, 70, 'neuropore', 's', 'end') + lead(dx - 72, 62, dx - 10, fused[0] - 12);
+    s += T(dx - 74, 280, 'caudal', 's', 'end') + T(dx - 74, 292, 'neuropore', 's', 'end') + lead(dx - 72, 282, dx - 8, fused[1] + 14);
+    if (st === 2) s += `<path class="flow" d="M${dx} ${fused[0] + 6} V${fused[0] - 26}" style="stroke:var(--surface);stroke-width:2.4"/><path class="flow" d="M${dx} ${fused[1] - 6} V${fused[1] + 26}" style="stroke:var(--surface);stroke-width:2.4"/>` + T(dx - 74, 186, 'starts at about', 'b', 'end') + T(dx - 74, 199, 'the 4th somite', 'b', 'end');
+  } else s += T(dx, 170, st === 0 ? 'plate' : 'open folds', 's', 'middle');
+  if (st >= 3) s += T(dx, 314, 'cranial ~day 23–25, caudal ~day 27–28', 's', 'middle');
+  $('neu-svg').innerHTML = s;
+  $('neu-find').innerHTML = NEU_STEPS[st][1];
+}
+function drawNtd() {
+  const sel = NTD.sel; let s = DEFS;
+  if (sel === 'anen' || sel === 'fol') {
+    s += `<path d="M120 200 C120 120 170 80 210 80 C250 80 300 120 300 200 Z" style="fill:var(--soft);stroke:var(--ink)"/>`;
+    if (sel === 'anen') s += `<path d="M150 112 Q210 60 270 112 L260 120 Q210 90 160 120 Z" class="defect"/>` + T(210, 54, 'no calvarium; brain largely absent', 'c', 'middle');
+    else s += `<path d="M150 112 Q210 60 270 112" style="fill:none;stroke:var(--bone);stroke-width:10"/>` + T(210, 54, 'normal skull and brain', 's', 'middle');
+    s += T(210, 232, sel === 'anen' ? 'cranial neuropore fails to close' : 'folic acid before conception lowers NTD risk', 'b', 'middle');
+  } else {
+    /* back section: skin top, vertebra below */
+    s += `<path d="M40 70 H380" style="stroke:var(--ecto);stroke-width:8"/>` + T(380, 60, 'skin', 's', 'end');
+    s += `<ellipse cx="210" cy="190" rx="70" ry="36" style="fill:var(--bone);stroke:var(--ink)"/>` + T(210, 196, 'vertebral body', 's', 'middle');
+    s += `<circle cx="210" cy="130" r="18" style="fill:var(--surface);stroke:var(--ink)"/>` + T(108, 134, 'canal', 's', 'end') + lead(110, 130, 192, 130);
+    const arch = gap => `<path d="M150 170 Q140 120 ${210 - gap} 100 M270 170 Q280 120 ${210 + gap} 100" style="fill:none;stroke:var(--ink);stroke-width:10;stroke-linecap:round"/>`;
+    if (sel === 'occ') s += arch(10) + `<circle cx="210" cy="130" r="9" style="fill:var(--nerve)"/>` + T(210, 236, 'arch defect hidden under intact skin', 'b', 'middle');
+    if (sel === 'men') s += arch(28) + `<circle cx="210" cy="130" r="9" style="fill:var(--nerve)"/><path d="M180 100 Q170 20 210 20 Q250 20 240 100" style="fill:var(--fluid);stroke:var(--dura);stroke-width:4"/>` + T(270, 34, 'sac of meninges + CSF', 's', 'start') + T(210, 236, 'cord stays in the canal', 'b', 'middle');
+    if (sel === 'mmc') s += arch(28) + `<path d="M180 100 Q170 20 210 20 Q250 20 240 100" style="fill:var(--fluid);stroke:var(--dura);stroke-width:4"/><path d="M210 130 Q206 80 210 40" style="stroke:var(--nerve);stroke-width:9;fill:none"/>` + T(270, 34, 'meninges + cord in the sac', 's', 'start') + `<path d="M180 100 Q170 20 210 20 Q250 20 240 100" class="defect" style="fill-opacity:.0"/>` + T(210, 236, 'neural tissue exposed', 'c', 'middle');
+  }
+  $('ntd-svg').innerHTML = s;
+  $('ntd-find').innerHTML = NTD_ITEMS[sel][1];
+}
+
+/* ===================== 10. somites and coelom ===================== */
+function drawSom() {
+  const sel = SOM.sel; let s = DEFS;
+  const op = k => sel === 'all' || sel === k ? 1 : .18;
+  const M = x => 680 - x;   /* mirror for the right side */
+  /* ectoderm: over the back and down both sides (the body wall) */
+  s += `<path d="M24 250 Q24 150 130 108 Q340 24 550 108 Q656 150 656 250" style="fill:none;stroke:var(--ecto);stroke-width:8"/>` + T(662, 268, 'ectoderm', 's', 'end');
+  s += `<circle cx="340" cy="82" r="26" style="fill:var(--fluid);stroke:var(--ecto);stroke-width:11"/>` + T(340, 30, 'neural tube', 's', 'middle');
+  s += `<circle cx="340" cy="146" r="10" class="noto" style="stroke:var(--ink)"/>` + T(340, 174, 'notochord', 's', 'middle');
+  /* endoderm: roof of the gut, continuing down as the yolk sac */
+  s += `<path d="M150 316 Q150 248 220 236 Q340 214 460 236 Q530 248 530 316" style="fill:none;stroke:var(--endo);stroke-width:8"/>` + T(340, 252, 'endoderm', 's', 'middle');
+  for (const sg of [0, 1]) {
+    const f = x => sg ? M(x) : x;
+    /* somite */
+    s += `<g style="opacity:${op('par')}"><rect x="${f(sg ? 316 : 254) - (sg ? 0 : 0)}" y="98" width="62" height="58" rx="16" class="meso" style="stroke:var(--ink)"/>`;
+    if (sel === 'par') s += `<path d="M${f(258)} 122 H${f(312)}" style="stroke:var(--ink);stroke-dasharray:3 2"/>`;
+    s += '</g>';
+    /* intermediate */
+    s += `<g style="opacity:${op('int')}"><rect x="${sg ? M(232) : 202}" y="150" width="30" height="30" rx="8" class="meso" style="fill-opacity:.7;stroke:var(--ink)"/></g>`;
+    /* coelom between the two layers of the lateral plate */
+    s += `<path d="M${f(196)} 186 Q${f(96)} 178 ${f(52)} 236 Q${f(110)} 250 ${f(160)} 300 Q${f(150)} 226 ${f(196)} 200 Z" style="fill:var(--fluid);stroke:var(--ink);stroke-width:.6;opacity:${op('coe')}"/>`;
+    /* somatic layer (under the ectoderm) and splanchnic layer (on the endoderm) */
+    s += `<g style="opacity:${op('lat')}"><path d="M${f(200)} 182 Q${f(92)} 168 ${f(40)} 236" style="fill:none;stroke:var(--meso);stroke-width:12;stroke-linecap:round"/>`;
+    s += `<path d="M${f(200)} 206 Q${f(140)} 228 ${f(160)} 306" style="fill:none;stroke:var(--meso);stroke-width:12;stroke-linecap:round;stroke-opacity:.75"/></g>`;
+  }
+  const b = k => sel === k ? 'b' : 's';
+  s += T(452, 92, 'somite (paraxial)', b('par'), 'start') + lead(450, 96, 424, 106);
+  s += T(500, 140, 'intermediate', b('int'), 'start') + lead(498, 144, 478, 158);
+  s += T(560, 150, 'somatic layer', b('lat'), 'start') + lead(600, 154, 590, 184);
+  s += T(372, 300, 'splanchnic layer', b('lat'), 'start') + lead(470, 294, 512, 270);
+  s += T(80, 300, 'coelom', b('coe'), 'middle') + lead(80, 290, 96, 240);
+  if (sel === 'par') s += T(150, 90, 'dermomyotome', 's', 'end') + lead(152, 88, 258, 108) + T(150, 140, 'sclerotome', 's', 'end') + lead(152, 138, 258, 140);
+  $('som-svg').innerHTML = s;
+  $('som-find').innerHTML = SOM_ITEMS[sel][1];
+}
+
+/* ===================== 11. teratogen bar (piecewise scale: weeks 0–8 stretched) ===================== */
+function drawTera() {
+  let s = DEFS;
+  const wk = w => w <= 8 ? 30 + w * 40 : 350 + (w - 8) * 10;
+  s += T(30, 20, 'WEEKS AFTER FERTILISATION (weeks 0–8 STRETCHED)', 'h');
+  s += `<rect x="${wk(0)}" y="40" width="${wk(2) - wk(0)}" height="40" style="fill:var(--line)"/>` + T(wk(1), 64, 'weeks 1–2', 's', 'middle') + T(wk(1), 100, 'implantation fails', 's', 'middle') + T(wk(1), 114, 'or loss (Wikipedia)', 's', 'middle');
+  s += `<rect x="${wk(2)}" y="34" width="${wk(8) - wk(2)}" height="52" style="fill:var(--clin);fill-opacity:.45"/>` + T((wk(2) + wk(8)) / 2, 58, 'weeks 3–8: organogenesis', 'b', 'middle') + T((wk(2) + wk(8)) / 2, 76, 'most sensitive', 'c', 'middle');
+  s += `<rect x="${wk(8)}" y="46" width="${wk(38) - wk(8)}" height="28" style="fill:var(--clin);fill-opacity:.12"/>` + T((wk(8) + wk(38)) / 2, 64, 'fetal period: growth, maturation', 's', 'middle');
+  const d = day => wk(day / 7);
+  s += `<path d="M${d(24)} 136 H${d(30)}" style="stroke:var(--ink);stroke-width:6"/>` + T(d(30) + 8, 140, 'thalidomide limb window ~days 24–30 (2021 review)', 's', 'start');
+  for (const w of [0, 2, 4, 6, 8, 20, 38]) s += T(wk(w), 186, String(w), 's', 'middle') + `<path class="ax" d="M${wk(w)} 88 V172"/>`;
+  $('tera-svg').innerHTML = s;
+}
+
+/* every scroll box gets the phone hint "Swipe sideways" (shown only at phone width) */
+function swipeHints() {
+  document.querySelectorAll('.schbox').forEach(b => {
+    const n = b.nextElementSibling;
+    if (n && n.classList && n.classList.contains('swipe')) return;
+    const p = document.createElement('p'); p.className = 'muted swipe'; p.textContent = 'Swipe sideways to see all of it.'; b.after(p);
+  });
+}
+(() => {
+  $('lede').innerHTML = LEDE;
+  $('key').innerHTML = KEY.map(([t, l]) => `<span><i style="background:var(${t})"></i>${l}</span>`).join('');
+  $('terms').innerHTML = TERMS; $('cyc-text').innerHTML = CYC_TEXT; $('fert-cons').innerHTML = FERT_CONS; $('soc-text').innerHTML = SOC_TEXT;
+  $('wk2-text').innerHTML = WK2_TEXT; $('tera-text').innerHTML = TERA_TEXT;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  table('gam-table', GAM_HEAD, GAM_ROWS); table('wk1-table', WK1_HEAD, WK1_ROWS); table('ab-table', AB_HEAD, AB_ROWS);
+  table('germ-table', GERM_HEAD, GERM_ROWS); table('np-table', NP_HEAD, NP_ROWS);
+  toggles('life-tg', Object.entries(LIFE_ITEMS).map(([k, d]) => [k, d[0]]), k => { LIFE.sel = k; drawLife(); }, 'germ');
+  toggles('con-tg', Object.entries(CON_ITEMS).map(([k, d]) => [k, d[0]]), k => { CON.sel = k; drawCon(); }, 'bar');
+  toggles('ntd-tg', Object.entries(NTD_ITEMS).map(([k, d]) => [k, d[0]]), k => { NTD.sel = k; drawNtd(); }, 'anen');
+  toggles('som-tg', Object.entries(SOM_ITEMS).map(([k, d]) => [k, d[0]]), k => { SOM.sel = k; drawSom(); }, 'all');
+  const day = $('cyc-day'); day.addEventListener('input', () => drawCycle(+day.value));
+  stepper('gam-step', GAM_STEPS.map(x => x[0]), drawGam, GAM);
+  stepper('fert-step', FERT_STEPS.map(x => x[0]), drawFert, FERT);
+  stepper('wk1-step', WK1_STEPS.map(x => x[0]), () => { WK1.ecto = false; if (WK1.btn) WK1.btn.setAttribute('aria-pressed', 'false'); drawWk1(); }, WK1);
+  const eb = document.createElement('button'); eb.className = 'chip'; eb.type = 'button'; eb.textContent = 'Ectopic sites'; eb.style.alignSelf = 'flex-start'; eb.setAttribute('aria-pressed', 'false');
+  eb.onclick = () => { WK1.ecto = !WK1.ecto; eb.setAttribute('aria-pressed', WK1.ecto); drawWk1(); };
+  $('wk1-step').insertAdjacentElement('afterend', eb);
+  WK1.btn = eb;
+  stepper('wk2-step', WK2_STEPS.map(x => x[0]), drawWk2, WK2);
+  stepper('gas-step', GAS_STEPS.map(x => x[0]), drawGas, GAS);
+  stepper('neu-step', NEU_STEPS.map(x => x[0]), drawNeu, NEU);
+  drawLife(); drawCycle(1); drawCon(); drawNtd(); drawSom(); drawTera();
+  swipeHints();
+  window.ready = true;
+})();
+</script>
+</body>
+</html>

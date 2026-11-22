@@ -1189,3 +1189,25 @@ tubercles.
   lamina, media, sebaceous gland, epidermis, lymph-node capsule, cilia, goblet cell, demilune, glial nuclei,
   lamellae), schematic layers (demilune inside the basement membrane, paracortex, septa, basal layer), one-source
   statements, dark bone figure, phone label size, keyboard access.
+
+## General Embryology — `embryology/early-development.html`, `embryology/membranes-placenta.html`
+
+- Fact sheet `sources-local/facts/fill-embryo1.md` (753 quotes, script-checked against `sources-local/modern/fill-embryo1/`,
+  downloads 2026-11-22): Gray 1918 (embryology chapter and pages 255, 266, 268); StatPearls; about 45 open-access papers
+  (Europe PMC); Wikipedia. Excluded: Wikipedia "Human embryonic development" and "Neural tube" (OpenStax/Betts) and
+  sentences shared with them; Wikipedia sentences copying Gray; Gray's chromosome number of 24.
+- Contested, stated on the page (as tables): implantation day, day the uterus is reached, neuropore closure days, twin
+  split days and chorionicity, CVS weeks, amniocentesis and CVS loss rates, viability (22–24 vs the traditional 28),
+  trimester cut-off, ectopic and ampullary shares, oocyte counts, spermatogenesis duration, cycle length, placenta
+  and cord sizes, somite number, origin of extra-embryonic mesoderm and of sacrococcygeal teratoma, decidual reaction
+  timing, teratogenic period, polyspermy outcome.
+- Single source, attributed: hatching day, LH surge to ovulation, TTTS share, thalidomide windows, endoderm to the
+  middle ear (Gray), surrogacy law 2021 (Cureus 2023), lambda and T signs (StatPearls), Gray's fetal-age table.
+- Left out (one source): somite formation rate, cotyledon number, battledore definition, the sex-selection law
+  (PCPNDT), morula cell range.
+- Schematics only; hormone curves are schematic shapes. Germ-layer colour tokens (--ecto, --meso, --endo, --epi,
+  --hypo, --tropho, --endom, --noto, --crest, --jelly) are for reuse on later embryology pages.
+- Independent review (2026-11-22), fixed: yolk sac drawn inside the amnion and the sac crossing the uterine wall, the
+  amniocentesis needle through the placenta and the CVS catheter in the wall, germ-layer colours too close to artery,
+  nerve and vein colours, life-chart bars misaligned, uterus without a lumen, dates and attributions, drawing slips,
+  accessibility of the flow button and steppers.

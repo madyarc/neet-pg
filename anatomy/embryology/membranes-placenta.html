@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fetal Membranes, Placenta and Prenatal Diagnosis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --artery / --vein (blood vessels: arteries and veins of the mother and of the fetus,
+   named by structure — the umbilical arteries carry deoxygenated blood), --clin (a risk or defect), --accent (UI selection).
+   Shared: --fluid (amniotic fluid), --musc (myometrium) as on other pages. Embryology tokens as on early-development.html:
+   --ecto / --meso / --endo (germ layers), --tropho (trophoblast; solid = cytotrophoblast, pale = syncytiotrophoblast),
+   --endom (endometrium and decidua). New here: --jelly (Wharton's jelly), checked with fill-embryo1-scripts/colcheck2.py. */
+:root{--fluid:#d9edc6;--musc:#c96f68;--ecto:#2ad2f4;--meso:#efa272;--endo:#d3910b;--tropho:#590df2;--endom:#f986d2;--jelly:#b2fbb0}
+:root[data-theme="dark"]{--fluid:#4e6638;--musc:#9c4e48;--tropho:#5925f4;--endom:#a70953;--jelly:#0e7706;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+.scroll{overflow-x:auto}
+.two{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:680px;margin:0 auto}
+.schbox{overflow-x:auto;scrollbar-color:var(--line) transparent}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:540px}.swipe{display:block}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.c{fill:var(--clin);font-weight:600}
+svg.sch text.b{font-weight:700}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .flow{stroke:var(--ink);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+svg.sch .ax{stroke:var(--line);stroke-width:1}
+svg.sch .box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .cyto{fill:var(--tropho)} svg.sch .syn{fill:var(--tropho);fill-opacity:.32}
+svg.sch .endom{fill:var(--endom)} svg.sch .fluid{fill:var(--fluid)} svg.sch .musc{fill:var(--musc);fill-opacity:.55}
+svg.sch .hl{stroke:var(--accent);stroke-width:2.6;fill:none}
+svg.sch .mflow{stroke-dasharray:6 6;animation:dash 1.4s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-24}}
+@media (prefers-reduced-motion:reduce){svg.sch .mflow{animation:none}}
+.nomotion svg.sch .mflow{animation:none}
+.step{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.step .chips{flex:1;min-width:0}
+.find{font-size:14px;min-height:6em}
+.find h3{font-size:15px;margin:0 0 4px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.readout{font:500 13px var(--f-mono);color:var(--muted)}
+table.dis td:first-child{font-weight:600}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Fetal Membranes, Placenta and Prenatal Diagnosis</h1>
+  <p class="lede" id="lede"></p>
+  <div class="key" id="key"></div>
+</header>
+
+<section class="block panel" aria-labelledby="h-mem">
+  <h2 id="h-mem">Fetal membranes and the decidua, month by month</h2>
+  <div class="step" id="mem-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="mem-svg" viewBox="0 0 640 440" role="img" aria-label="Schematic section of the pregnant uterus at the chosen stage, with the decidua basalis, capsularis and parietalis, the chorion with its villi, the amnion, the chorionic cavity, the yolk sac and the umbilical cord"></svg></div>
+    <div class="prose find" id="mem-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, not to scale; the uterine cavity is drawn much larger than it is.</p>
+  <div class="scroll"><table class="t stack" id="mem-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cord">
+  <h2 id="h-cord">Umbilical cord: structure and attachments</h2>
+  <div class="chips" id="cord-tg" aria-label="Stage"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="cord-svg" viewBox="0 0 520 300" role="img" aria-label="Cross-section of the umbilical cord at the chosen stage with its vessels, Wharton's jelly and amnion covering"></svg></div>
+    <div class="prose find" id="cord-find" aria-live="polite"></div>
+  </div>
+  <h3>Where the cord joins the placenta</h3>
+  <div class="chips" id="ins-tg" aria-label="Insertion"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ins-svg" viewBox="0 0 480 280" role="img" aria-label="The fetal surface of the placenta with the membranes and the chosen type of cord insertion"></svg></div>
+    <div class="prose find" id="ins-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-plac">
+  <h2 id="h-plac">Placenta: formation, fetomaternal circulation and barrier</h2>
+  <div class="row"><div class="chips" id="pl-tg" aria-label="Show"></div><button class="btn" type="button" id="motion" aria-pressed="true">Flow animation</button></div>
+  <div class="schbox"><svg class="fig sch" id="pl-svg" viewBox="0 0 680 400" role="img" aria-label="Schematic section of the placenta: chorionic plate with umbilical vessels above, villous trees hanging in the intervillous space, decidua basalis with spiral arteries and endometrial veins below; the chosen circulation is highlighted"></svg></div>
+  <p class="muted">Schematic section, not to scale; fetal side up. Dashes move along the direction of flow (the Flow animation button turns this on and off).</p>
+  <div class="prose find" id="pl-find" aria-live="polite"></div>
+  <div class="two">
+    <div>
+      <div class="chips" id="bar-tg" aria-label="Stage of pregnancy"></div>
+      <div class="schbox"><svg class="fig sch" id="bar-svg" viewBox="0 0 420 240" role="img" aria-label="Magnified wall of a placental villus between maternal blood and a fetal capillary, early or late in pregnancy"></svg></div>
+    </div>
+    <div class="prose find" id="bar-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table class="t dis" id="size-table"></table></div>
+  <div class="prose" id="pl-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-horm">
+  <h2 id="h-horm">Placental hormones, uterine growth and parturition</h2>
+  <div class="schbox"><svg class="fig sch" id="horm-svg" viewBox="0 0 680 262" role="img" aria-label="Top: the source of progesterone across pregnancy, corpus luteum first, placenta after about week 10. Bottom: flow chart of the hormonal changes at term that lead to labour"></svg></div>
+  <p class="muted">Schematic. The parturition chart is a summary of a 2019 review, not a complete pathway.</p>
+  <div class="prose" id="horm-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-twin">
+  <h2 id="h-twin">Twinning: when the split happens decides the membranes</h2>
+  <label class="readout" for="tw-day">Monozygotic twins — day of splitting after fertilisation: <b id="tw-lab">2</b></label>
+  <input type="range" id="tw-day" min="1" max="16" value="2" step="1">
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="tw-svg" viewBox="0 0 520 300" role="img" aria-label="Two fetuses with their amnions, chorions and placentas for the chosen day of splitting"></svg></div>
+    <div class="prose find" id="tw-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table class="t dis" id="tw-table"></table></div>
+  <div class="prose" id="tw-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-age">
+  <h2 id="h-age">Estimating fetal age</h2>
+  <div class="prose" id="age-text"></div>
+  <div class="scroll"><table class="t stack" id="age-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pnd">
+  <h2 id="h-pnd">Prenatal diagnosis: screening and invasive tests</h2>
+  <div class="chips" id="pnd-tg" aria-label="Test"></div>
+  <div class="schbox"><svg class="fig sch" id="pnd-svg" viewBox="0 0 680 270" role="img" aria-label="Timeline of gestational weeks 8 to 28 with the usual window of each prenatal test; the chosen test is highlighted"></svg></div>
+  <p class="muted">Gestational weeks. Bars show the windows the sources give; the thin line under a bar is the wider range some sources give (cordocentesis: usual from 18 weeks, safer 20–28).</p>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="proc-svg" viewBox="0 0 440 300" role="img" aria-label="Schematic of the pregnant uterus showing where the needle goes for the chosen invasive test"></svg></div>
+    <div class="prose find" id="pnd-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table class="t dis" id="loss-table"></table></div>
+  <p class="muted" id="loss-note"></p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-embryo1.md parts P, X, E, D; anatomy/DATA-SOURCES.md) ===================== */
+const LEDE = 'The fetal membranes and the decidua through pregnancy, the umbilical cord and its attachments, the placenta with its circulation, barrier and hormones, twins, how fetal age is estimated, and prenatal diagnosis. Earlier stages (gametes, implantation, the first three weeks): <a href="early-development.html">Early Development: Gametes to the Embryo</a>.';
+const KEY = [['--tropho', 'Trophoblast / chorion'], ['--endom', 'Decidua'], ['--ecto', 'Amnion (ectoderm)'], ['--endo', 'Yolk sac (endoderm)'], ['--meso', 'Extra-embryonic mesoderm'], ['--fluid', 'Amniotic fluid'], ['--artery', 'Artery'], ['--vein', 'Vein'], ['--musc', 'Myometrium']];
+
+const MEM = {s: 0};
+const MEM_STEPS = [
+  ['Week 3–4', '<h3>Weeks 3–4</h3><p>The conceptus lies in the decidua. <b>Decidua basalis</b> = between the conceptus and the myometrium (the future maternal part of the placenta); <b>decidua capsularis</b> = over it, facing the cavity; <b>decidua parietalis</b> (vera) = the rest of the uterine lining. <b>Villi cover the whole chorion</b>. Inside the chorionic cavity: the embryo with a small <b>amnion</b> and the <b>yolk sac</b>, attached to the chorion by the <b>connecting stalk</b> (the future cord, from week 3).</p>'],
+  ['Week 5–8', '<h3>Weeks 5–8</h3><p>Fluid collects in the amnion from about the <b>4th–5th week</b> (Gray 1918) and it expands round the embryo. The yolk sac becomes a small pear-shaped vesicle on a long narrow <b>vitelline duct</b> (end of week 4, Gray). The cord forms from the connecting stalk and the vitelline duct, covered by amnion: <b>complete by week 7</b> (StatPearls). Villi still cover the whole chorion until about the end of month 2.</p>'],
+  ['Month 3–4', '<h3>Months 3–4</h3><p>Villi facing the decidua capsularis <b>atrophy</b> (by month 4 scarcely a trace): this smooth part is the <b>chorion laeve</b>. Villi facing the decidua basalis grow and branch: the <b>chorion frondosum</b>, the fetal part of the placenta. The capsularis, thinned, <b>meets the parietalis by month 3</b> and the cavity is obliterated. As it fills with fluid the amnion meets the chorion and <b>obliterates the chorionic cavity</b> (Gray 1918 gives no month); the shrinking yolk sac is left between amnion and chorion, near the cord (Gray: its remains can sometimes be seen beneath the amnion close to the cord).</p>'],
+  ['Month 5 on', '<h3>From month 5</h3><p>The decidua capsularis has practically <b>disappeared by month 5</b>; the parietalis thins with pressure. The <b>amniochorionic membrane</b> lines the uterus; the discoid <b>placenta</b> sits on the decidua basalis. After birth the placenta and membranes are expelled; separation runs through the spongy layer of the decidua.</p>'],
+];
+const MEM_HEAD = ['Membrane', 'Formation', 'Functions', 'Fate'];
+const MEM_ROWS = [
+  ['<b>Chorion</b>', 'Trophoblast + extra-embryonic somatic mesoderm (week 2)', 'Villi absorb from the decidua; frondosum forms the fetal part of the placenta; sampled in CVS', 'Frondosum → placenta; laeve → smooth part of the membranes'],
+  ['<b>Amnion</b>', 'From the epiblast (amnioblasts), with a thin mesoderm layer outside', 'Holds amniotic fluid (about 0.5–1 litre at term: Gray ~1 litre; Wikipedia 500–1,000 mL): free movement; protects the fetus and cord from injury and compression; antibacterial; reservoir of fluid and nutrients; helps lung, gut and limb development', 'Fuses with the chorion; covers the cord and the fetal surface of the placenta'],
+  ['<b>Yolk sac</b>', 'From the hypoblast (primary), then the smaller secondary sac; endoderm-lined', 'No yolk in humans: early (primitive) blood formation; primordial germ cells start here; makes AFP', 'Regresses (gone from ultrasound in the 2nd trimester); the vitelline duct normally closes — if it persists: <b>Meckel\'s diverticulum</b> (2% of people)'],
+  ['<b>Allantois</b>', 'Small endoderm-lined diverticulum of the yolk sac / hindgut into the connecting stalk', 'Its mesoderm carries the umbilical vessels', 'Intra-embryonic part → <b>urachus</b> (bladder to umbilicus) → <b>median umbilical ligament</b>; patent urachus = failure of involution'],
+  ['<b>Decidua</b>', 'The endometrium after implantation (decidual reaction, under progesterone)', 'Basalis forms the maternal part of the placenta', 'Shed with the placenta after birth; the epithelium regrows from the deepest gland remnants'],
+];
+
+const CORD = {sel: 'birth'};
+const CORD_ITEMS = {
+  early: ['Week 5–7', '<h3>Early cord (about weeks 5–7)</h3><p>The cord gathers the <b>connecting stalk</b> (with the <b>allantois</b> and the umbilical vessels: two arteries and two veins at first, Gray) and the <b>vitelline duct</b> to the yolk sac, all covered by <b>amnion</b>. Gray 1918: the right umbilical vein and the vitelline vessels and duct atrophy.</p>'],
+  birth: ['At birth', '<h3>At birth</h3><p><b>Two umbilical arteries</b> (deoxygenated blood and wastes from the fetus to the placenta) and <b>one umbilical vein</b> (the left: oxygenated, nutrient-rich blood to the fetus), in <b>Wharton\'s jelly</b>, covered by amnion. Length about <b>50–60 cm</b> (Gray: about 50 cm, roughly the length of the fetus; StatPearls 50–60; Wikipedia 55–60), about 2 cm thick, with up to 40 helical turns (StatPearls). After birth the arteries become the <b>medial umbilical ligaments</b>; their proximal parts persist as part of the anterior division of the internal iliac artery (StatPearls).</p>'],
+  sua: ['Single artery', '<h3>Single umbilical artery</h3><p>Only one artery instead of two: the commonest cord defect, in about <b>1%</b> of fetuses; it prompts a detailed scan for other anomalies (Wikipedia).</p>'],
+};
+const INS = {sel: 'cen'};
+const INS_ITEMS = {
+  cen: ['Central / eccentric', '<h3>Central or eccentric</h3><p>Usually near the <b>centre</b> of the placenta, but it may be anywhere between the centre and the margin (Gray 1918).</p>'],
+  mar: ['Marginal', '<h3>Marginal insertion</h3><p>Within <b>2 cm of the placental edge</b>; 5.5% of 6,675 singleton pregnancies in a 2026 study. Usually of little consequence: the root is still covered by Wharton\'s jelly.</p>'],
+  vel: ['Velamentous', '<h3>Velamentous insertion</h3><p>The cord inserts into the <b>membranes</b>; its vessels run between amnion and chorion <b>without Wharton\'s jelly</b>, so they can be compressed or torn. About <b>1%</b> of singletons (Wikipedia 0.1–1.8%) and <b>15% of monochorionic twins</b>. A strong risk factor for <b>vasa praevia</b>: unprotected fetal vessels over or near the internal os (about 1 in 2,500 deliveries), which can rupture when the membranes rupture.</p>'],
+  fur: ['Furcate', '<h3>Furcate insertion</h3><p>The cord <b>branches before it reaches the placenta</b>, so the branches are not covered by Wharton\'s jelly (one 2024 study).</p>'],
+};
+
+const PL = {sel: 'mat', motion: true};
+const PL_ITEMS = {
+  mat: ['Maternal blood', '<h3>Maternal circulation</h3><p>Maternal blood enters the <b>intervillous space</b> from the <b>spiral arteries</b> of the decidua basalis — widened and straightened by invading <b>extravillous trophoblast</b>, which increases flow — bathes the villi, and drains by the <b>endometrial (uterine) veins</b>. The vessel lining stops where the vessels open into the space, which is lined by syncytiotrophoblast: the human placenta is <b>haemochorial</b> (maternal blood touches the chorion).</p>'],
+  fet: ['Fetal blood', '<h3>Fetal circulation</h3><p>The two <b>umbilical arteries</b> branch over the chorionic plate; a branch enters each villus and ends in a <b>capillary</b> network; blood returns by tributaries of the <b>umbilical vein</b>. Fetal blood takes up oxygen and nutrients through the villus wall and gives up wastes. The two bloods <b>do not mix</b>.</p>'],
+  str: ['Structure', '<h3>Parts</h3><p><b>Fetal part</b>: the <b>chorion frondosum</b> — the chorionic plate with its branching villi (anchoring villi reach the decidua; most hang free in the space). <b>Maternal part</b>: the <b>decidua basalis</b> with the intervillous space. Decidual <b>septa</b> divide the maternal surface into lobes (<b>cotyledons</b>). The placenta forms over the first three months, then grows with the uterus.</p>'],
+};
+const BAR = {sel: 'early'};
+const BAR_ITEMS = {
+  early: ['Early', '<h3>Placental barrier: early</h3><p>From maternal to fetal blood: <b>syncytiotrophoblast</b>, a continuous <b>cytotrophoblast</b> layer, the villus <b>connective tissue</b> (mesoderm), and the <b>endothelium</b> of the fetal capillary.</p>'],
+  late: ['Late', '<h3>Placental barrier: late</h3><p>The <b>cytotrophoblast becomes sparse and discontinuous</b> and the syncytiotrophoblast <b>thins</b>, so the barrier gets thinner and exchange easier (Gray 1918: after the fifth month a single layer of flattened cells covers the villus).</p>'],
+};
+const SIZE_HEAD = ['Term placenta', 'Sources'];
+const SIZE_ROWS = [
+  ['Shape', 'Discoid (Gray); round or oval (StatPearls)'],
+  ['Weight', '~450 g (Gray 1918); ~500 g (Wikipedia); "about a pound" (StatPearls)'],
+  ['Diameter', '15–20 cm (Gray); 20 cm and 22 cm (two StatPearls chapters); 22 cm (Wikipedia)'],
+  ['Thickness', '~3 cm (Gray; StatPearls); 2–2.5 cm (StatPearls; Wikipedia)'],
+];
+const PL_TEXT = `<p><b>Functions</b>: <b>exchange</b> — oxygen, carbon dioxide, nutrients and wastes, by passive diffusion and active transport (nutrition, respiration, excretion for the fetus); <b>endocrine</b> (below); <b>immune</b> — <b>IgG crosses</b> from about 13 weeks, most in the third trimester, giving the newborn passive protection, while <b>IgM does not</b> (Wikipedia). It keeps out most microbes, but some viruses cross (rubella, cytomegalovirus, Zika: Wikipedia; TORCH infections cause birth defects, StatPearls), and many drugs and chemicals reach the fetus. Placental position: usually upper uterus, more often posterior (Gray 1918); over the internal os = <b>placenta praevia</b>.</p>`;
+
+const HORM_TEXT = `<p><b>Hormones of the placenta</b>: the <b>syncytiotrophoblast</b> secretes <b>hCG</b>, <b>human placental lactogen</b> (hPL; fetal growth and metabolism, Wikipedia), <b>progesterone</b> and <b>oestrogens</b> (and leptin, growth factors). hCG keeps the corpus luteum making progesterone; the placenta takes over progesterone production after about <b>week 10</b> (StatPearls; Wikipedia: the corpus luteum works for 8–12 weeks).</p>
+<p><b>Uterine growth</b>: oestrogen drives proliferation and increases uterine blood flow late in pregnancy (Wikipedia); progesterone and oestradiol from the placenta maintain the pregnancy. <b>Quiescence</b>: through pregnancy <b>progesterone keeps the myometrium quiet</b>. <b>Parturition</b>: near term a fall in progesterone action and a rise in <b>oestrogen</b> action switch on contraction genes — <b>oxytocin receptors</b>, gap junctions (connexin-43) and <b>prostaglandin</b> synthesis (COX-2); the human placenta secretes rising <b>CRH</b> near term, proposed as a fetal signal for labour; <b>uterine stretch</b> also contributes. Oxytocin is used clinically to start or strengthen labour and to reduce postpartum haemorrhage.</p>`;
+
+const TW_HEAD = ['Type (monozygotic)', 'Day of splitting after fertilisation (sources)'];
+const TW_ROWS = [
+  ['DCDA: 2 chorions, 2 amnions', 'days 1–3 (StatPearls); within the first 4 days (Wikipedia)'],
+  ['MCDA: 1 chorion, 2 amnions', 'days 3–8 (StatPearls); "in the first 3 to 8 days" (2024 review)'],
+  ['MCMA: 1 chorion, 1 amnion', 'days 8–13 (StatPearls); after about day 8 (review); after the first week (Wikipedia)'],
+  ['Conjoined', 'after day 13 (StatPearls TTTS); about days 13–17 (StatPearls Conjoined twins); after day 12, or "likely" after day 14 (Wikipedia)'],
+];
+const TW_TEXT = `<p><b>Dizygotic (fraternal) twins</b>: two ova, each fertilised by its own sperm; they share on average half their genes and may differ in sex; they always have <b>two chorions and two amnions</b>. About <b>70%</b> of spontaneous twins. Their rate varies between populations; it rises with a family history (a tendency to hyperovulate), maternal age (doubling over 35), fertility treatment and parity (Wikipedia). Two placentas do <b>not</b> prove dizygosity: early-splitting monozygotic twins look the same.</p>
+<p><b>Monozygotic (identical) twins</b>: one zygote splits; same genes and same chromosomal sex; about <b>30%</b> of spontaneous twins; their rate is about constant worldwide, 3–5 per 1,000 births (StatPearls). About <b>two-thirds are monochorionic</b>. Over 95% of monochorionic diamniotic placentas share vessels between the twins, the basis of <b>twin-to-twin transfusion syndrome</b> (about 15% of monochorionic twins, Wikipedia). <b>Ultrasound</b> (best in the first trimester): <b>lambda (twin-peak) sign</b> = dichorionic, a thick dividing membrane of 4 layers (2 chorions + 2 amnions); <b>T sign</b> = monochorionic diamniotic, a thin membrane of 2 amnions (StatPearls). Conjoined twins are monochorionic and monoamniotic, female 3 : 1 (StatPearls). A <b>vanishing twin</b> dies and is absorbed, usually in the first trimester (up to 36% of twin pregnancies, StatPearls; up to 1 in 8 multiple pregnancies, Wikipedia).</p>`;
+
+const AGE_TEXT = `<p>Two clocks: <b>gestational (menstrual) age</b> from the first day of the last menstrual period (LMP), and <b>fertilisation age</b>, 2 weeks less. Average pregnancy: <b>280 days (40 weeks)</b> from the LMP. <b>Naegele's rule</b>: expected date of delivery = LMP + 1 year − 3 months + 7 days (= LMP + 9 months + 7 days; Wikipedia; StatPearls: the LMP is put into formulas).</p>
+<p><b>Ultrasound</b> is more accurate, especially in the first trimester: the <b>crown–rump length (CRL) between 8+0 and 13+6 weeks</b> is the gold standard. After 14 weeks: head circumference (with or without femur length), biparietal diameter, abdominal circumference (Wikipedia). Clinical: <b>fundal height</b>; after birth, scoring by physical and neurological examination (StatPearls).</p>
+<p><b>Embryological basis</b>: in the embryonic period age is read from the <b>number of somite pairs</b> and from external features (<b>Carnegie stages</b> cover the first ~60 days, Wikipedia); later from size and features. Gray 1918's month-by-month description (old specimen measurements, shown as Gray gives them; two features cross-checked with StatPearls):</p>`;
+const AGE_HEAD = ['End of', 'Gray 1918 (length, features)'];
+const AGE_ROWS = [
+  ['Month 2', '28–30 mm. Eyelids as folds; parts of the ear recognisable'],
+  ['Month 3', '~7 cm (9–10 cm with legs). Eyelids meet and fuse (closed until the end of month 6); nails; <b>sex distinguishable</b> (StatPearls: genitalia recognisable at 9–12 weeks after fertilisation)'],
+  ['Month 4', '12–13 cm (16–20 cm with legs). The gut loop returns from the cord into the abdomen; hairs begin'],
+  ['Month 5', '25–27 cm with legs. <b>First fetal movements</b> usually felt; vernix caseosa begins'],
+  ['Month 6', '30–32 cm vertex to heel. Body covered by <b>lanugo</b>'],
+  ['Month 7', '35–36 cm. Pupillary membrane atrophies, <b>eyelids open</b> (StatPearls: 26–29 weeks after fertilisation); testis descends; a little over 3 lb'],
+  ['Month 8', '~40 cm, 4.5–5.5 lb. Skin pink, covered with vernix; subcutaneous fat'],
+  ['Term', '~50 cm, 6.5–8 lb. Lanugo largely gone; umbilicus near the middle of the body; testes in the scrotum'],
+];
+
+const PND = {sel: 'cvs'};
+/* windows in gestational weeks: [from, to, faint range from, faint to] */
+const PND_ITEMS = {
+  nipt: ['Cell-free DNA', [10, 11, 10, 28], 'none', '<h3>Cell-free fetal DNA (NIPT)</h3><p>A maternal <b>blood test</b>: fragments of fetal DNA, released from the <b>trophoblast</b>, circulate in the mother\'s plasma (detectable early: from 4 weeks, review; 5–7 weeks, Wikipedia); the sample is usually taken at about <b>10 weeks</b> (Wikipedia). It has the <b>highest detection rate</b> of the screening tests for trisomies, but it is still <b>screening</b>: a positive result is confirmed by an invasive test, partly because of <b>confined placental mosaicism</b>. No procedure risk.</p>'],
+  nt: ['Nuchal scan', [11.4, 13.9, null, null], 'none', '<h3>First-trimester ultrasound and combined screening</h3><p><b>Nuchal translucency</b> is measured at the end of the first trimester, <b>11+3 to 13+6 weeks</b> (Wikipedia), and combined with maternal serum markers (first-trimester combined screening, StatPearls).</p>'],
+  tri: ['Triple / quadruple', [15, 22, null, null], 'none', '<h3>Second-trimester serum screening</h3><p><b>Triple test</b>: AFP, oestriol and β-hCG (quadruple adds inhibin A), at <b>15–21.9 weeks</b>, best for open neural tube defects at 16–18 weeks (Wikipedia). Raised AFP: open neural tube defects; low AFP: chromosomal disorders such as Down syndrome (StatPearls).</p>'],
+  scan: ['Anomaly scan', [18, 22, null, null], 'none', '<h3>Mid-trimester anomaly scan</h3><p>Routine ultrasound in the middle of the second trimester, ideally <b>18–22 weeks</b>, for fetal anomalies and growth (StatPearls).</p>'],
+  cvs: ['CVS', [10, 13, 10, 15], 'cvs', '<h3>Chorionic villus sampling (CVS)</h3><p><b>When</b>: first trimester, from <b>10 weeks</b>: 10–13 (StatPearls CVS), 10–14 (StatPearls), 10–12 (Wikipedia; "preferred before 15 weeks"). <b>How</b>: under ultrasound, a needle <b>through the abdomen</b> or a catheter <b>through the cervix</b> into the <b>chorion frondosum</b> (the developing placenta); villi are aspirated for chromosome and DNA analysis; karyotype in <b>7–10 days</b>. <b>For</b>: chromosomal and single-gene disorders. <b>Advantage</b>: a diagnosis weeks earlier than amniocentesis, so an earlier, safer termination if chosen. <b>Disadvantages</b>: miscarriage (see the table); <b>limb reduction defects</b> when done too early (the earlier, the higher the risk); <b>confined placental mosaicism</b> (1–2%): the placenta may not match the fetus, giving false results; infection, fluid leakage, membrane rupture. Not done with vaginal bleeding, cervical abnormalities or severe infection.</p>'],
+  amn: ['Amniocentesis', [15, 20, 15, 40], 'amn', '<h3>Amniocentesis</h3><p><b>When</b>: from <b>15 weeks</b> (StatPearls; usually 15–20 weeks, can be later, Wikipedia). <b>How</b>: under ultrasound, a needle <b>through the abdominal wall</b> into the <b>amniotic sac</b>; amniotic fluid is withdrawn (fetal cells, fetal urine, lung secretions) for chromosomal, genetic, biochemical (AFP) and infection tests. Also <b>therapeutic</b>: draining fluid in polyhydramnios. <b>Disadvantages</b>: miscarriage (see the table), amniotic fluid <b>leakage 1–2%</b>, infection; <b>early amniocentesis</b> (before 15 weeks; 10–13 or 11+0–12+6) has more losses and <b>talipes equinovarus</b>; later than CVS.</p>'],
+  fbs: ['Cordocentesis', [20, 28, 18, 28], 'fbs', '<h3>Fetal blood sampling (cordocentesis)</h3><p>Under ultrasound, a needle through the mother\'s abdomen into the <b>umbilical vein</b> (Wikipedia: first described in 1983). Usually <b>after 18 weeks</b>, safer at 20–28 weeks because the cord vessels are narrow earlier; results in 24–72 hours; for fetal anaemia (blood-group alloimmunisation, parvovirus B19) and can go on to an <b>intrauterine transfusion</b>. Higher loss: <b>1–3%</b> (StatPearls).</p>'],
+};
+const LOSS_HEAD = ['Procedure-related loss', 'Figures (sources)'];
+const LOSS_ROWS = [
+  ['Amniocentesis, recent', '0.13% in experienced hands (StatPearls); 0.1–0.3%, and 0.30% (95% CI 0.11–0.49) in a meta-analysis (Wikipedia)'],
+  ['Amniocentesis, older figures', '1% (UK RCOG, from one randomised trial); 0.5% (North America, expert opinion); 0.6–0.86% (studies 2000–2006, Wikipedia)'],
+  ['CVS, recent', 'Similar to amniocentesis in trained hands (StatPearls); 0.20% (95% CI −0.13 to 0.52) in a meta-analysis (2020 paper); 1.04% vs 1.33% in matched controls, no excess (2020 Slovenian cohort); "0.2–1%" recent range (same cohort)'],
+  ['CVS, older figures', '1.5% (UK RCOG); "potentially as high as 1–2%" (Wikipedia)'],
+  ['Cordocentesis', '1–3% (StatPearls)'],
+];
+const LOSS_NOTE = 'Sources disagree because loss after a test is partly the pregnancy\'s own background risk; a 2014 review concludes that generic figures should no longer be quoted. Both procedures carry a small risk today, far below the old 1%.';
+
+const DATA = {
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); open-access papers (Front Cell Dev Biol 2023, Front Endocrinol 2019, J Clin Med 2024, J Med Life 2016, BMC Pregnancy Childbirth 2024, Clin Sci 2022, J Clin Med 2014, Ultrasound Obstet Gynecol 2020 and others); Wikipedia.",
+  models: 'Models used: none (schematics only); simplified, not to scale.',
+};
+
+/* ===================== helpers ===================== */
+const $ = id => document.getElementById(id);
+const T = (x, y, s, cls = '', a = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${a}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink)"/></marker>'
+  + '<pattern id="exmp" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="1.8" style="fill:var(--meso)"/></pattern></defs>';
+function table(id, head, rows) {
+  $(id).innerHTML = '<tr>' + head.map(x => `<th>${x}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + r.map((c, i) => `<td data-h="${head[i]}">${c}</td>`).join('') + '</tr>').join('');
+}
+function toggles(id, items, onSel, start) {
+  const box = $(id); box.innerHTML = '';
+  for (const [key, label] of items) {
+    const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = label; b.setAttribute('aria-pressed', key === start);
+    b.onclick = () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); onSel(key); };
+    box.append(b);
+  }
+}
+function stepper(id, labels, onStep, state) {
+  const box = $(id); box.innerHTML = '';
+  const prev = document.createElement('button'); prev.className = 'btn'; prev.type = 'button'; prev.textContent = '◀ Back'; prev.setAttribute('aria-label', 'Previous step');
+  const next = document.createElement('button'); next.className = 'btn'; next.type = 'button'; next.textContent = 'Next ▶'; next.setAttribute('aria-label', 'Next step');
+  const row = document.createElement('div'); row.className = 'chips'; row.setAttribute('aria-label', 'Steps');
+  const go = i => {
+    state.s = Math.max(0, Math.min(labels.length - 1, i));
+    row.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', j === state.s));
+    prev.disabled = state.s === 0; next.disabled = state.s === labels.length - 1; onStep();
+  };
+  labels.forEach((l, i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.onclick = () => go(i); row.append(b); });
+  prev.onclick = () => go(state.s - 1); next.onclick = () => go(state.s + 1);
+  box.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { go(state.s + 1); e.preventDefault(); } if (e.key === 'ArrowLeft') { go(state.s - 1); e.preventDefault(); } });
+  box.append(prev, row, next); go(state.s);
+}
+const villi = (cx, cy, rx, ry, a0, a1, len, n) => {
+  let o = '';
+  for (let k = 0; k <= n; k++) { const a = (a0 + (a1 - a0) * k / n) * Math.PI / 180, x = cx + rx * Math.cos(a), y = cy + ry * Math.sin(a); o += `<path d="M${x.toFixed(1)} ${y.toFixed(1)} l${(len * Math.cos(a)).toFixed(1)} ${(len * Math.sin(a)).toFixed(1)}" style="stroke:var(--tropho);stroke-width:2.2"/>`; }
+  return o;
+};
+
+/* ===================== 1. membranes ===================== */
+function drawMem() {
+  const st = MEM.s; let s = DEFS;
+  /* uterus: myometrium, decidua parietalis lining, cavity; the conceptus implants on the right wall */
+  s += `<path d="M120 30 Q280 0 440 30 Q520 60 520 200 Q520 340 380 400 L330 430 L230 430 L180 400 Q40 340 40 200 Q40 60 120 30 Z" class="musc" style="stroke:var(--ink)"/>`;
+  s += T(280, 425, 'cervix', 's', 'middle') + T(150, 22, 'MYOMETRIUM', 'h');
+  s += `<path d="M130 52 Q280 26 430 52 Q496 80 496 200 Q496 324 372 380 L330 404 L230 404 L188 380 Q64 324 64 200 Q64 80 130 52 Z" class="endom" style="stroke:var(--ink);stroke-width:.6"/>`;
+  if (st < 3) s += `<path d="M150 74 Q280 52 410 74 Q472 100 472 200 Q472 306 362 360 L330 380 L230 380 L198 360 Q88 306 88 200 Q88 100 150 74 Z" style="fill:var(--surface);stroke:var(--ink);stroke-width:.6"/>`;
+  /* chorionic sac: an ellipse kept inside the cavity; frondosum villi reach only into the decidua basalis */
+  const [cx, cy, rx, ry] = [[420, 200, 44, 44], [392, 200, 76, 76], [304, 220, 150, 138], [280, 220, 184, 148]][st];
+  s += `<path d="M472 ${cy - ry * .8} Q500 ${cy} 472 ${cy + ry * .8}" style="fill:none;stroke:var(--ink);stroke-width:1;stroke-dasharray:4 3"/>`;
+  if (st < 3) s += `<ellipse cx="${cx}" cy="${cy}" rx="${rx + (st >= 2 ? 6 : 12)}" ry="${ry + (st >= 2 ? 6 : 12)}" class="endom" style="stroke:var(--ink);stroke-width:.6"/>`;
+  s += `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" style="fill:var(--surface);stroke:var(--tropho);stroke-width:4"/>`;
+  if (st <= 1) s += villi(cx, cy, rx, ry, 0, 360, 8, 40);
+  else { const vl = cx + rx + 16 > 494 ? 494 - cx - rx : 16; s += villi(cx, cy, rx, ry, -50, 50, vl, 16); s += `<path d="M${(cx + rx * Math.cos(-.87)).toFixed(1)} ${(cy + ry * Math.sin(-.87)).toFixed(1)} A${rx} ${ry} 0 0 1 ${(cx + rx * Math.cos(.87)).toFixed(1)} ${(cy + ry * Math.sin(.87)).toFixed(1)}" style="fill:none;stroke:var(--tropho);stroke-width:9"/>`; }
+  /* amnion: small early; later it fills the sac, leaving the yolk sac between amnion and chorion (month 3–4) */
+  const ax = st >= 2 ? cx - 8 : cx - rx * .1, arx = [18, 44, rx - 22, rx - 5][st], ary = [18, 44, ry - 22, ry - 5][st];
+  const acy = st === 1 ? cy - 6 : cy;
+  s += `<ellipse cx="${ax}" cy="${acy}" rx="${arx}" ry="${ary}" class="fluid" style="stroke:var(--ecto);stroke-width:2.5"/>`;
+  const fs = [8, 24, 64, 84][st];
+  s += `<ellipse cx="${ax - 10}" cy="${cy - 4}" rx="${fs * .55}" ry="${fs}" style="fill:var(--soft);stroke:var(--ink)"/>`;
+  const c0 = [ax - 10 + fs * .5, cy + fs * .3], c1 = [cx + rx - 3, cy], cm = [(c0[0] + c1[0]) / 2, cy + Math.min(ry, 60) * .45];
+  s += `<path d="M${c0[0]} ${c0[1]} Q${cm[0]} ${cm[1] + 10} ${c1[0]} ${c1[1]}" style="fill:none;stroke:var(--jelly);stroke-width:${st ? 8 : 6}"/>`;
+  let ys = null;
+  if (st <= 2) {
+    const yr = [8, 9, 7][st];
+    ys = st === 2 ? [cx + (rx - 12) * Math.cos(.95), cy + (ry - 12) * Math.sin(.95), yr] : [cx - rx * .2, cy + ry * .78, yr];
+    s += `<path d="M${ys[0]} ${ys[1] - yr} Q${(ys[0] + cm[0]) / 2} ${cm[1] + 20} ${cm[0]} ${cm[1] + 4}" style="fill:none;stroke:var(--endo);stroke-width:2.2"/><circle cx="${ys[0].toFixed(1)}" cy="${ys[1].toFixed(1)}" r="${yr}" style="fill:var(--endo);stroke:var(--ink);stroke-width:.6"/>`;
+  }
+  /* labels: right-hand ones beyond the uterus, the rest next to their targets (haloed) */
+  const L = (x, y, t, tx, ty, a = 'start') => T(x, y, t, 's', a) + lead(a === 'end' ? x + 3 : x - 3, y - 4, tx, ty);
+  s += L(532, 236, 'decidua basalis', 492, cy + 10);
+  s += L(532, 400, st ? 'umbilical cord' : 'connecting stalk', cm[0] + 10, cm[1] + 4);
+  if (st >= 2) s += L(532, 60, 'chorion frondosum', cx + rx * .8, cy - ry * .6);
+  s += L(150, 330, 'decidua parietalis', 74, 300, 'end');
+  if (st <= 1) {
+    s += L(cx - rx - 30, cy - ry - 2, 'decidua capsularis', cx - (rx + 9) * .7, cy - (ry + 9) * .7, 'end');
+    s += L(cx - rx - 30, cy + 4, 'chorion: villi all round', cx - rx - 8, cy, 'end');
+    s += L(cx - rx - 30, cy + ry * .6 + 16, 'amnion', ax - arx * .7, cy + ary * .7, 'end');
+    s += L(cx - rx - 30, cy + ry + 34, 'chorionic cavity', cx - rx * .3, cy + ry * .7, 'end');
+  } else {
+    if (st === 2) s += L(250, 100, 'decidua capsularis', cx - (rx + 6) * .8, cy - (ry + 6) * .6, 'end');
+    s += L(260, st === 2 ? 140 : 110, st === 3 ? 'chorion laeve (+ amnion) on the parietalis' : 'chorion laeve (smooth)', cx - rx * .9, cy - ry * .4, 'start');
+    s += L(260, st === 2 ? 160 : 130, st === 3 ? 'amnion (fused with chorion)' : 'amnion (expanding)', ax - arx * .8, cy - ary * .55, 'start');
+  }
+  if (ys) s += st === 2 ? L(532, 330, 'yolk sac', ys[0] + ys[2], ys[1]) : L(ys[0] - ys[2] - 10, ys[1] + 4, 'yolk sac', ys[0] - ys[2], ys[1], 'end');
+  $('mem-svg').innerHTML = s;
+  $('mem-find').innerHTML = MEM_STEPS[st][1];
+}
+
+/* ===================== 2. cord ===================== */
+function drawCord() {
+  const sel = CORD.sel; let s = DEFS;
+  const cx = 200, cy = 150;
+  s += `<circle cx="${cx}" cy="${cy}" r="120" style="fill:var(--jelly);stroke:var(--ecto);stroke-width:4"/>`;
+  s += T(cx, 20, 'amnion covering', 's', 'middle') + T(360, 230, "Wharton's jelly", 's', 'start') + lead(358, 226, 290, 200);
+  const art = (x, y) => `<circle cx="${x}" cy="${y}" r="20" style="fill:var(--surface);stroke:var(--artery);stroke-width:7"/>`;
+  const vei = (x, y, r = 30) => `<circle cx="${x}" cy="${y}" r="${r}" style="fill:var(--surface);stroke:var(--vein);stroke-width:4"/>`;
+  if (sel === 'birth') {
+    s += vei(cx, cy - 30) + art(cx - 50, cy + 44) + art(cx + 50, cy + 44);
+    s += T(370, 90, 'umbilical vein (1)', 's', 'start') + lead(368, 86, cx + 30, cy - 30) + T(370, 140, 'umbilical arteries (2)', 's', 'start') + lead(368, 136, cx + 68, cy + 36);
+  } else if (sel === 'sua') {
+    s += vei(cx, cy - 30) + art(cx, cy + 50);
+    s += T(370, 90, 'umbilical vein', 's', 'start') + lead(368, 86, cx + 30, cy - 30) + T(370, 140, 'one artery only', 'c', 'start') + lead(368, 136, cx + 20, cy + 48);
+  } else {
+    s += vei(cx - 40, cy - 40, 18) + vei(cx + 40, cy - 40, 18) + art(cx - 50, cy + 30) + art(cx + 50, cy + 30);
+    s += `<circle cx="${cx}" cy="${cy}" r="7" style="fill:var(--endo);stroke:var(--ink)"/><circle cx="${cx}" cy="${cy + 84}" r="10" style="fill:var(--endo);stroke:var(--ink)"/>`;
+    s += T(370, 60, 'umbilical veins (2 at first)', 's', 'start') + lead(368, 56, cx + 56, cy - 46) + T(370, 140, 'umbilical arteries (2)', 's', 'start') + lead(368, 136, cx + 70, cy + 28);
+    s += T(370, 170, 'allantois', 's', 'start') + lead(368, 166, cx + 8, cy) + T(370, 280, 'vitelline duct', 's', 'start') + lead(368, 276, cx + 10, cy + 88);
+  }
+  $('cord-svg').innerHTML = s;
+  $('cord-find').innerHTML = CORD_ITEMS[sel][1];
+}
+function drawIns() {
+  const sel = INS.sel; let s = DEFS;
+  const cx = 200, cy = 140;
+  /* membranes beyond the disc */
+  s += `<ellipse cx="${cx}" cy="${cy}" rx="190" ry="120" style="fill:var(--surface);stroke:var(--line);stroke-dasharray:5 4"/>` + T(cx, 276, 'membranes (amnion + chorion laeve)', 's', 'middle');
+  s += `<ellipse cx="${cx}" cy="${cy}" rx="120" ry="84" style="fill:var(--tropho);fill-opacity:.22;stroke:var(--tropho);stroke-width:2"/>` + T(cx, cy + 104, 'placenta (fetal surface)', 's', 'middle');
+  const vessels = (x, y, spread) => { let o = ''; for (let a = 0; a < 360; a += 45) { const r = spread, ex = x + r * Math.cos(a * Math.PI / 180), ey = y + r * .7 * Math.sin(a * Math.PI / 180); o += `<path d="M${x} ${y} L${ex.toFixed(1)} ${ey.toFixed(1)}" style="stroke:var(${a % 90 ? '--artery' : '--vein'});stroke-width:2"/>`; } return o; };
+  const cord = (x, y) => `<circle cx="${x}" cy="${y}" r="13" style="fill:var(--jelly);stroke:var(--ink)"/>`;
+  if (sel === 'cen') { s += vessels(cx + 18, cy - 6, 70) + cord(cx + 18, cy - 6) + T(410, 40, 'cord near the centre', 'b', 'end'); }
+  if (sel === 'mar') { s += vessels(cx + 108, cy - 10, 60) + cord(cx + 108, cy - 10) + `<path d="M${cx + 112} ${cy - 30} h16" style="stroke:var(--ink)"/>` + T(410, 40, 'within 2 cm of the edge', 'b', 'end'); }
+  if (sel === 'vel') { s += `<path d="M${cx + 160} ${cy - 60} L${cx + 100} ${cy - 40} M${cx + 160} ${cy - 60} L${cx + 92} ${cy - 66}" style="stroke:var(--artery);stroke-width:3"/><path d="M${cx + 160} ${cy - 60} L${cx + 112} ${cy - 10}" style="stroke:var(--vein);stroke-width:4"/>` + cord(cx + 160, cy - 60) + T(410, 30, 'cord in the membranes;', 'c', 'end') + T(410, 44, 'bare vessels to the disc', 'c', 'end'); }
+  if (sel === 'fur') { s += `<path d="M${cx + 40} ${cy - 120} L${cx + 40} ${cy - 96}" style="stroke:var(--jelly);stroke-width:22"/><path d="M${cx + 40} ${cy - 96} L${cx} ${cy - 40} M${cx + 40} ${cy - 96} L${cx + 80} ${cy - 40}" style="stroke:var(--artery);stroke-width:3"/><path d="M${cx + 40} ${cy - 96} L${cx + 40} ${cy - 30}" style="stroke:var(--vein);stroke-width:4"/>` + T(410, 30, 'branches before the disc,', 'b', 'end') + T(410, 44, 'without jelly', 'b', 'end'); }
+  $('ins-svg').innerHTML = s;
+  $('ins-find').innerHTML = INS_ITEMS[sel][1];
+}
+
+/* ===================== 3. placenta ===================== */
+function drawPl() {
+  const sel = PL.sel; let s = DEFS;
+  const mat = sel === 'mat', fet = sel === 'fet', X0 = 170, X1 = 670;
+  /* layers (fetal side up): amnion, chorionic plate, intervillous space, decidua basalis, myometrium; labels in the left margin */
+  s += `<rect x="${X0}" y="70" width="${X1 - X0}" height="232" style="fill:var(--artery);fill-opacity:${mat ? .2 : .08}"/>`;
+  s += `<rect x="${X0}" y="40" width="${X1 - X0}" height="30" class="cyto" style="fill-opacity:.55"/>`;
+  s += `<rect x="${X0}" y="30" width="${X1 - X0}" height="10" style="fill:var(--ecto);fill-opacity:.8"/>`;
+  s += `<rect x="${X0}" y="300" width="${X1 - X0}" height="50" class="endom"/>`;
+  s += `<rect x="${X0}" y="350" width="${X1 - X0}" height="40" class="musc"/>`;
+  const L = (y, t, b = false) => T(160, y, t, b ? 'b' : 's', 'end');
+  s += L(38, 'amnion') + L(60, 'chorionic plate') + L(150, 'intervillous space', mat) + L(164, '(maternal blood)', mat) + L(330, 'decidua basalis') + L(374, 'myometrium');
+  /* septa */
+  for (const x of [335, 505]) s += `<path d="M${x} 300 L${x - 7} 196 L${x + 7} 196 Z" class="endom" style="stroke:var(--ink);stroke-width:.5"/>`;
+  /* villous trees */
+  for (const x0 of [250, 420, 590]) {
+    const br = `M${x0} 70 V300 M${x0} 120 L${x0 - 45} 196 L${x0 - 60} 246 M${x0} 120 L${x0 + 45} 196 L${x0 + 60} 246 M${x0} 180 L${x0 - 26} 246 M${x0} 180 L${x0 + 26} 246`;
+    s += `<path d="${br}" style="stroke:var(--tropho);stroke-opacity:.35;stroke-width:16;stroke-linecap:round;fill:none"/>`;
+    const o = fet || sel === 'str' ? 1 : .45;
+    s += `<path d="M${x0 - 3} 70 V180 L${x0 - 26} 246 M${x0 - 3} 122 L${x0 - 45} 196 L${x0 - 60} 246" class="${fet ? 'mflow' : ''}" style="stroke:var(--artery);stroke-width:3;fill:none;opacity:${o}"/>`;
+    s += `<path d="M${x0 + 60} 246 L${x0 + 45} 196 L${x0 + 3} 122 M${x0 + 26} 246 L${x0 + 3} 180 V70" class="${fet ? 'mflow' : ''}" style="stroke:var(--vein);stroke-width:3;fill:none;opacity:${o}"/>`;
+  }
+  /* cord */
+  s += `<path d="M406 0 V30" style="stroke:var(--artery);stroke-width:5"/><path d="M420 0 V30" style="stroke:var(--vein);stroke-width:7"/><path d="M434 0 V30" style="stroke:var(--artery);stroke-width:5"/>` + T(444, 16, 'cord: 2 umbilical arteries, 1 vein', 's', 'start');
+  /* spiral arteries and endometrial veins */
+  for (const x of [200, 380, 550]) {
+    s += `<path d="M${x} 390 q12 -14 0 -28 q-12 -14 0 -28 q12 -14 0 -28 q-8 -8 0 -16" class="${mat ? 'mflow' : ''}" style="stroke:var(--artery);stroke-width:4;fill:none;opacity:${mat ? 1 : .45}"/>`;
+    if (mat) s += `<path class="flow" d="M${x} 294 Q${x + 4} 270 ${x + 16} 256"/>`;
+  }
+  for (const x of [300, 470, 640]) {
+    s += `<path d="M${x} 300 V390" class="${mat ? 'mflow' : ''}" style="stroke:var(--vein);stroke-width:5;fill:none;opacity:${mat ? 1 : .45}"/>`;
+    if (mat) s += `<path class="flow" d="M${x - 20} 262 Q${x - 6} 276 ${x - 1} 294"/>`;
+  }
+  s += L(290, 'spiral artery →', mat) + L(306, '/ vein (in decidua)', mat);
+  if (sel === 'str') s += T(335, 190, 'septum', 's', 'middle') + T(430, 276, '← anchoring villus', 's', 'start') + T(420, 296, '← one lobe (cotyledon) →', 'b', 'middle') + L(232, 'free villi', true);
+  if (fet) s += L(100, 'umbilical artery', true) + L(114, 'branches in,', true) + L(128, 'vein out', true);
+  $('pl-svg').innerHTML = s;
+  $('pl-find').innerHTML = PL_ITEMS[sel][1];
+}
+function drawBar() {
+  const late = BAR.sel === 'late'; let s = DEFS;
+  s += `<rect x="0" y="0" width="420" height="70" style="fill:var(--artery);fill-opacity:.18"/>` + T(10, 22, 'MATERNAL BLOOD', 'h');
+  const syn = late ? 8 : 18, top = 70;
+  s += `<rect x="0" y="${top}" width="420" height="${syn}" class="syn" style="stroke:var(--tropho)"/>` + T(414, top - 6, 'syncytiotrophoblast', 's', 'end');
+  let y = top + syn;
+  if (late) { for (const x of [80, 260]) s += `<rect x="${x}" y="${y}" width="50" height="12" class="cyto"/>`; s += T(414, y + 11, 'cytotrophoblast (sparse)', 's', 'end'); y += 12; }
+  else { s += `<rect x="0" y="${y}" width="420" height="16" class="cyto"/>` + `<text x="414" y="${y + 12}" text-anchor="end" style="fill:#fff;font:600 11px var(--f-body)">cytotrophoblast</text>`; y += 16; }
+  const ct = late ? 22 : 50;
+  s += `<rect x="0" y="${y}" width="420" height="${ct}" style="fill:url(#exmp)"/>` + `<rect x="250" y="${y + ct / 2 - 9}" width="168" height="16" rx="3" style="fill:var(--surface);fill-opacity:.9"/>` + T(414, y + ct / 2 + 3, 'connective tissue (mesoderm)', 's', 'end'); y += ct;
+  s += `<rect x="0" y="${y}" width="420" height="6" style="fill:var(--ink);fill-opacity:.5"/>` + T(414, y + 20, 'fetal capillary endothelium', 's', 'end'); y += 6;
+  s += `<rect x="0" y="${y}" width="420" height="${240 - y}" style="fill:var(--vein);fill-opacity:.16"/>` + T(10, 232, 'FETAL BLOOD', 'h');
+  s += `<path d="M30 ${top} V${y}" style="stroke:var(--ink);stroke-width:1.4"/><path d="M22 ${top} h16 M22 ${y} h16" style="stroke:var(--ink)"/>` + T(44, y + 22, late ? 'thin barrier' : 'thicker barrier', 'b', 'start');
+  $('bar-svg').innerHTML = s;
+  $('bar-find').innerHTML = BAR_ITEMS[BAR.sel][1];
+}
+
+/* ===================== 4. hormones ===================== */
+function drawHorm() {
+  let s = DEFS;
+  const X0 = 40, W = 600, wk = w => X0 + w * W / 40;
+  s += T(X0, 18, 'SOURCE OF PROGESTERONE (GESTATIONAL WEEKS)', 'h');
+  s += `<rect x="${wk(0)}" y="28" width="${wk(10) - wk(0)}" height="26" style="fill:var(--line)"/>` + T(wk(5), 46, 'corpus luteum', 'b', 'middle');
+  s += `<rect x="${wk(10)}" y="28" width="${wk(40) - wk(10)}" height="26" class="cyto" style="fill-opacity:.35"/>` + T(wk(25), 46, 'placenta (syncytiotrophoblast)', 'b', 'middle');
+  s += `<path d="M${wk(8)} 24 V58 M${wk(12)} 24 V58" style="stroke:var(--ink);stroke-dasharray:3 3"/>` + T(wk(10), 74, 'switch: after ~week 10 (StatPearls); 8–12 weeks (Wikipedia)', 's', 'middle');
+  for (const w of [0, 10, 20, 30, 40]) s += T(wk(w), 90, String(w), 's', 'middle');
+  /* parturition chart: four inputs → contraction genes → labour */
+  const box = (x, y, w, t1, t2, h = 30) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" class="box"/>` + T(x + 8, y + (t2 ? 13 : 19), t1, 'b', 'start') + (t2 ? T(x + 8, y + 25, t2, 's', 'start') : '');
+  s += T(X0, 112, 'AT TERM', 'h');
+  const ins = [['Progesterone action ↓', 'quiescence ends'], ['Oestrogen action ↑', ''], ['Placental CRH ↑', 'fetal signal (proposed)'], ['Uterine stretch', '']];
+  ins.forEach(([a, b], k) => { const y = 120 + k * 34; s += box(20, y, 200, a, b) + `<path class="flow" d="M222 ${y + 15} L330 ${170 + (k - 1.5) * 8}"/>`; });
+  s += box(332, 150, 190, 'Oxytocin receptors,', 'gap junctions, prostaglandins ↑', 40) + `<path class="flow" d="M524 170 L556 170"/>` + box(558, 155, 112, 'Contractions', 'labour', 34);
+  $('horm-svg').innerHTML = s;
+}
+
+/* ===================== 5. twins ===================== */
+function twinType(d) { return d < 3 ? 'dcda' : d === 3 ? 'dcda|mcda' : d < 8 ? 'mcda' : d === 8 ? 'mcda|mcma' : d < 13 ? 'mcma' : d === 13 ? 'mcma|conj' : 'conj'; }
+const TW_TXT = {
+  dcda: '<h3>Dichorionic diamniotic (DCDA)</h3><p>Split in the first ~3 days (StatPearls 1–3; Wikipedia within 4): <b>two chorions, two amnions</b> — two placentas (which can lie close together). Looks the same as dizygotic twins.</p>',
+  mcda: '<h3>Monochorionic diamniotic (MCDA)</h3><p>Split at about <b>days 3–8</b>: <b>one chorion (one placenta), two amnions</b>. About two-thirds of monozygotic twins are monochorionic; the placental vessels are shared, so twin-to-twin transfusion can occur. T sign on ultrasound.</p>',
+  mcma: '<h3>Monochorionic monoamniotic (MCMA)</h3><p>Split at about <b>days 8–13</b> (after about the first week): <b>one chorion, one amnion</b> — both fetuses in one sac; their cords can entangle (Wikipedia). Fewer than 1% of twin pregnancies (2024 review).</p>',
+  conj: '<h3>Conjoined twins</h3><p>Splitting <b>after about day 13</b> (sources: after 12, after 13, 13–17, "likely" after 14) is incomplete: the twins stay joined. Always one chorion and one amnion.</p>',
+};
+function drawTw(d) {
+  const both = twinType(d), ty = both.split('|')[0]; let s = DEFS;
+  const fetus = (x, y) => `<ellipse cx="${x}" cy="${y}" rx="22" ry="38" style="fill:var(--soft);stroke:var(--ink)"/><circle cx="${x}" cy="${y - 44}" r="16" style="fill:var(--soft);stroke:var(--ink)"/>`;
+  const plac = (x, w) => `<rect x="${x}" y="250" width="${w}" height="26" rx="12" class="cyto" style="fill-opacity:.55"/>`;
+  const amn = (x, y, rx, ry) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" class="fluid" style="stroke:var(--ecto);stroke-width:3"/>`;
+  const cho = (x, y, rx, ry) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" style="fill:none;stroke:var(--tropho);stroke-width:4"/>`;
+  if (ty === 'dcda') { s += plac(40, 180) + plac(300, 180) + cho(130, 150, 104, 116) + cho(390, 150, 104, 116) + amn(130, 150, 88, 100) + amn(390, 150, 88, 100) + fetus(130, 160) + fetus(390, 160); }
+  if (ty === 'mcda') { s += plac(120, 280) + cho(260, 150, 230, 126) + amn(170, 150, 84, 106) + amn(350, 150, 84, 106) + fetus(170, 160) + fetus(350, 160); }
+  if (ty === 'mcma' || ty === 'conj') { s += plac(120, 280) + cho(260, 150, 230, 126) + amn(260, 150, 200, 110); }
+  if (ty === 'mcma') s += `<path d="M196 190 C230 280 300 200 300 250 M324 190 C290 280 220 200 236 250" style="fill:none;stroke:var(--jelly);stroke-width:6"/>` + fetus(190, 160) + fetus(330, 160) + T(400, 236, 'cords can entangle', 's', 'start');
+  if (ty === 'conj') s += `<ellipse cx="240" cy="160" rx="22" ry="38" style="fill:var(--soft);stroke:var(--ink)"/><ellipse cx="280" cy="160" rx="22" ry="38" style="fill:var(--soft);stroke:var(--ink)"/><circle cx="236" cy="116" r="16" style="fill:var(--soft);stroke:var(--ink)"/><circle cx="284" cy="116" r="16" style="fill:var(--soft);stroke:var(--ink)"/>` + T(260, 216, 'joined', 'b', 'middle');
+  const lab = {dcda: '2 chorions · 2 amnions · 2 placentas', mcda: '1 chorion (1 placenta) · 2 amnions', mcma: '1 chorion · 1 amnion', conj: '1 chorion · 1 amnion · joined'}[ty];
+  const NM = {dcda: 'DCDA', mcda: 'MCDA', mcma: 'MCMA', conj: 'conjoined'};
+  s += T(260, 22, both.includes('|') ? `Day ${d}: sources overlap — ${both.split('|').map(k => NM[k]).join(' or ')} (drawn: ${NM[ty]})` : lab, 'b', 'middle') + T(260, 296, 'placenta', 's', 'middle');
+  $('tw-svg').innerHTML = s;
+  $('tw-lab').textContent = d;
+  $('tw-find').innerHTML = both.split('|').map(k => TW_TXT[k]).join('');
+}
+
+/* ===================== 6. prenatal diagnosis ===================== */
+function drawPnd() {
+  const sel = PND.sel; let s = DEFS;
+  const X0 = 150, W = 510, wk = w => X0 + (w - 8) * W / 20;
+  s += T(X0, 18, 'GESTATIONAL WEEKS', 'h');
+  for (let w = 8; w <= 28; w += 2) s += `<path class="ax" d="M${wk(w)} 26 V250"/>` + T(wk(w), 266, String(w), 's', 'middle');
+  Object.entries(PND_ITEMS).forEach(([k, [lab, [a, b, fa, fb]]], i) => {
+    const y = 34 + i * 31, on = k === sel;
+    s += T(X0 - 8, y + 15, lab, on ? 'b' : 's', 'end');
+    if (fa != null) s += `<rect x="${wk(fa)}" y="${y + 23}" width="${wk(Math.min(fb, 28)) - wk(fa)}" height="5" rx="2" style="fill:var(--accent);fill-opacity:.35"/>`;
+    s += `<rect x="${wk(a)}" y="${y}" width="${wk(Math.min(b, 28)) - wk(a)}" height="22" rx="5" style="fill:${on ? 'var(--accent)' : 'var(--muted)'};fill-opacity:${on ? .55 : .3}"/>`;
+    if (b > 28) s += T(wk(28) - 4, y + 15, '→ term', 's', 'end');
+  });
+  $('pnd-svg').innerHTML = s;
+  $('pnd-find').innerHTML = PND_ITEMS[sel][3];
+  drawProc(PND_ITEMS[sel][2]);
+}
+function drawProc(kind) {
+  let s = DEFS;
+  /* uterus (myometrium), placenta on the upper wall, amniotic sac below it, fetus, cord to the placenta; cervix on the right */
+  s += `<path d="M10 40 H430" style="stroke:var(--ink);stroke-width:2"/>` + T(14, 32, "mother's abdominal wall", 's', 'start');
+  s += `<ellipse cx="220" cy="162" rx="190" ry="112" class="musc" style="stroke:var(--ink)"/>`;
+  s += `<path d="M70 118 Q150 62 260 62 Q330 64 360 90 L344 104 Q320 86 260 84 Q160 86 90 132 Z" class="cyto" style="fill-opacity:.6"/>` + T(150, 66, 'placenta', 'b', 'end');
+  s += `<path d="M90 132 Q160 86 260 84 Q320 86 344 104 Q394 140 392 172 Q388 240 220 254 Q60 250 46 172 Q46 150 90 132 Z" class="fluid" style="stroke:var(--ecto);stroke-width:2"/>`;
+  s += `<rect x="404" y="146" width="36" height="34" class="musc" style="stroke:var(--ink)"/>` + T(436, 200, 'cervix', 's', 'end');
+  s += `<ellipse cx="230" cy="186" rx="40" ry="52" style="fill:var(--soft);stroke:var(--ink)"/><circle cx="292" cy="160" r="24" style="fill:var(--soft);stroke:var(--ink)"/>`;
+  s += `<path d="M196 170 Q150 140 160 92" style="fill:none;stroke:var(--jelly);stroke-width:7"/>`;
+  s += T(120, 230, 'amniotic fluid', 's', 'middle');
+  if (kind === 'amn') s += `<path d="M382 4 L382 192" style="stroke:var(--ink);stroke-width:3"/><circle cx="382" cy="192" r="3" style="fill:var(--ink)"/>` + T(376, 22, 'needle into the', 'b', 'end') + T(376, 36, 'amniotic sac', 'b', 'end') + T(220, 290, 'transabdominal, ultrasound-guided', 's', 'middle');
+  if (kind === 'cvs') s += `<path d="M230 4 L230 78" style="stroke:var(--ink);stroke-width:3"/>` + T(238, 22, 'needle into the chorion frondosum', 'b', 'start') + T(238, 36, '(the developing placenta)', 'b', 'start') + `<path d="M446 163 L404 163 Q400 132 372 106 L354 98" style="fill:none;stroke:var(--ink);stroke-width:2.4;stroke-dasharray:6 4"/>` + T(220, 290, 'transabdominal (solid), or a catheter through the cervical canal (dashed)', 's', 'middle');
+  if (kind === 'fbs') s += `<path d="M150 4 L161 100" style="stroke:var(--ink);stroke-width:3"/>` + T(158, 22, 'needle into the umbilical vein', 'b', 'start') + T(158, 36, 'near the cord insertion', 'b', 'start') + T(220, 290, 'transabdominal, ultrasound-guided', 's', 'middle');
+  if (kind === 'none') s += T(220, 290, 'non-invasive: no needle into the uterus', 'b', 'middle');
+  $('proc-svg').innerHTML = s;
+}
+function swipeHints() {
+  document.querySelectorAll('.schbox').forEach(b => {
+    const n = b.nextElementSibling;
+    if (n && n.classList && n.classList.contains('swipe')) return;
+    const p = document.createElement('p'); p.className = 'muted swipe'; p.textContent = 'Swipe sideways to see all of it.'; b.after(p);
+  });
+}
+(() => {
+  $('lede').innerHTML = LEDE;
+  $('key').innerHTML = KEY.map(([t, l]) => `<span><i style="background:var(${t})"></i>${l}</span>`).join('');
+  $('pl-text').innerHTML = PL_TEXT; $('horm-text').innerHTML = HORM_TEXT; $('tw-text').innerHTML = TW_TEXT; $('age-text').innerHTML = AGE_TEXT;
+  $('loss-note').textContent = LOSS_NOTE; $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  table('mem-table', MEM_HEAD, MEM_ROWS); table('size-table', SIZE_HEAD, SIZE_ROWS); table('tw-table', TW_HEAD, TW_ROWS); table('age-table', AGE_HEAD, AGE_ROWS); table('loss-table', LOSS_HEAD, LOSS_ROWS);
+  stepper('mem-step', MEM_STEPS.map(x => x[0]), drawMem, MEM);
+  toggles('cord-tg', Object.entries(CORD_ITEMS).map(([k, d]) => [k, d[0]]), k => { CORD.sel = k; drawCord(); }, 'birth');
+  toggles('ins-tg', Object.entries(INS_ITEMS).map(([k, d]) => [k, d[0]]), k => { INS.sel = k; drawIns(); }, 'cen');
+  toggles('pl-tg', Object.entries(PL_ITEMS).map(([k, d]) => [k, d[0]]), k => { PL.sel = k; drawPl(); }, 'mat');
+  toggles('bar-tg', Object.entries(BAR_ITEMS).map(([k, d]) => [k, d[0]]), k => { BAR.sel = k; drawBar(); }, 'early');
+  toggles('pnd-tg', Object.entries(PND_ITEMS).map(([k, d]) => [k, d[0]]), k => { PND.sel = k; drawPnd(); }, 'cvs');
+  const mb = $('motion'), sec = $('pl-svg').closest('section');
+  const setMotion = on => { PL.motion = on; mb.setAttribute('aria-pressed', on); sec.classList.toggle('nomotion', !on); };
+  let reduce = false; try { reduce = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  setMotion(!reduce); mb.onclick = () => setMotion(!PL.motion);
+  const tw = $('tw-day'); tw.addEventListener('input', () => drawTw(+tw.value));
+  drawCord(); drawIns(); drawPl(); drawBar(); drawHorm(); drawTw(2); drawPnd();
+  swipeHints();
+  window.ready = true;
+})();
+</script>
+</body>
+</html>
