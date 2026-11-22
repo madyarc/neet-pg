@@ -20,6 +20,13 @@ Last updated: 2026-11-21
   appendix image, attributions; browser checks not run, server down) [x] fixes (all 15 items; +prostate corpora amylacea and Purkinje micrographs; 528 quotes)
   [x] browser checks (6 pages, 0 JS errors, no phone overflow) + colours softened
   [x] docs (+ module 38 pages' Histology links) [x] commit. Done 2026-11-22.
+- Leftovers 2026-11-22: 46 unticked + 21 partial items. Plan: 43 general (AN1–6) and 44 abdominopelvic osteology,
+  radiology, surface, sections (AN51, 53–55) running in parallel; then 45 limb/region leftovers (AN8.4, 9.2–9.3,
+  12.9/10/15, 13.5–13.8, 18.7, 20.6/7/10, 23.1, 26.2, 42.1, 43.7, 43.9, 82.1); then the [~] partials.
+- Module 43 (general: sheet fill-general2; terminology-bone, skin-lymphatics + muscle/blood-vessels additions)
+  [ ] build (running) [ ] review [ ] fixes [ ] docs [ ] commit.
+- Module 44 (abdominopelvic: sheet fill-abdo2; abdomen-pelvis/ new pages) [ ] build (running) [ ] review [ ] fixes
+  [ ] docs [ ] commit.
 - Module 42 (genetics: AN73.1–75.5) started 2026-11-22: sheet fill-genetics, pages in anatomy/genetics/.
   [x] build (688 quotes; chromosomes-karyotype, inheritance-pedigrees, aberrations-clinical; 6 Commons images;
   tokens --mat --pat --mut --probe; check_quotes.py now maps MLP- keys) [x] review (26 findings: Punnett titles AA, CFTR 7q and splice
