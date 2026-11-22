@@ -26,7 +26,8 @@ Last updated: 2026-11-21
 - Module 43 (general: sheet fill-general2; terminology-bone, skin-lymphatics + muscle/blood-vessels additions)
   [x] build (300 quotes; AN3.3 shunt/spurt not covered: no open source) [ ] review (running) [ ] fixes [ ] docs
   [ ] commit.
-- Module 44 (abdominopelvic: sheet fill-abdo2; abdomen-pelvis/ new pages) [ ] build (running) [ ] review [ ] fixes
+- Module 44 (abdominopelvic: sheet fill-abdo2; bony-pelvis, imaging-abdomen, surface-sections + ap.js/css)
+  [x] build (492 quotes, 7 Commons radiographs, sections cut from 3D models) [ ] review (running) [ ] fixes
   [ ] docs [ ] commit.
 - Module 42 (genetics: AN73.1–75.5) started 2026-11-22: sheet fill-genetics, pages in anatomy/genetics/.
   [x] build (688 quotes; chromosomes-karyotype, inheritance-pedigrees, aberrations-clinical; 6 Commons images;
