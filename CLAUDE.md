@@ -42,7 +42,7 @@ tools/                      generators: syllabus/, bones/
 
 Create a subject's `index.html` only when its first module is written. File names are lowercase-kebab-case.
 Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`, `head-neck/`, `back/` (vertebral column), `abdomen-pelvis/`,
-`neuroanatomy/`, `histology/`, `embryology/`, `genetics/`, `general/`.
+`neuro/` (neuroanatomy), `histology/`, `embryology/`, `genetics/`, `general/`.
 
 ## Content rules (non-negotiable)
 
