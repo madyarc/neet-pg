@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Urinary and Reproductive Organs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<link rel="stylesheet" href="histo.css">
+<style>
+/* page colours, one meaning each (same values as the other histology pages where the meaning is the same):
+   --nucleus (nuclei), --cyto (epithelial / parenchymal cell cytoplasm), --collagen (connective tissue), --t-musc (smooth muscle),
+   --elastic (elastic fibres), --lumen-v (blood spaces: sinusoids, cavernous spaces, intervillous space), --horm (hormone-secreting cells between or round the germ cells: Leydig cells, lutein cells),
+   --t-endo (endothelium: capillary and small-vessel walls; same as nervous-vascular), --fluid (body fluids: follicular fluid; shared value);
+   --artery (arteries and arterioles only), --vein from atlas.css */
+:root{--nucleus:#1e4f99;--cyto:#c8b6e2;--collagen:#e39b9b;--t-musc:#c96f68;--elastic:#c5a8f0;--lumen-v:#d6e0f3;--t-endo:#e98f86;--horm:#f0b97a;--fluid:#d9edc6}
+:root[data-theme="dark"]{--nucleus:#9fb0ff;--cyto:#6d5a8c;--collagen:#b86a6a;--t-musc:#9c4e48;--elastic:#4a2f6b;--lumen-v:#28344c;--t-endo:#f0a59d;--horm:#94683a;--fluid:#4e6638}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Urinary and Reproductive Organs</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="Histology pages"><span class="muted">Histology:</span> <a href="epithelium-glands.html">Epithelium and glands</a> <a href="nervous-vascular.html">Nervous tissue and blood vessels</a> <a href="lymphoid-bone-skin.html">Lymphoid organs, bone and skin</a> <a href="respiratory-digestive.html">Respiratory and digestive organs</a> <b>Urinary and reproductive organs</b> <a href="endocrine-senses-cns.html">Endocrine glands, senses and CNS</a></nav>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-uri">Kidney, ureter, bladder</a> <a href="#h-male">Male organs</a> <a href="#h-fem">Female organs</a> <a href="#h-plac">Placenta and cord</a> <a href="#h-tubes">Tubes that look alike</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-uri">
+  <h2 id="h-uri">Kidney, ureter and bladder</h2>
+  <p class="cap key" id="uri-cap"></p>
+  <div class="chips" id="uri-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="uri-svg" viewBox="0 0 400 300" role="img" aria-label="Schematic of the chosen organ"></svg>
+      <div class="legend2" id="uri-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="uri-text"></div>
+    </div>
+    <div id="uri-micro" class="stack"></div>
+  </div>
+  <h3>Along the nephron</h3>
+  <div class="scroll"><table id="neph-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-male">
+  <h2 id="h-male">Male reproductive organs</h2>
+  <p class="cap key" id="male-cap"></p>
+  <div class="chips" id="male-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="male-svg" viewBox="0 0 400 300" role="img" aria-label="Schematic of the chosen organ"></svg>
+      <div class="legend2" id="male-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="male-text"></div>
+    </div>
+    <div id="male-micro" class="stack"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fem">
+  <h2 id="h-fem">Female reproductive organs</h2>
+  <p class="cap key" id="fem-cap"></p>
+  <div class="chips" id="fem-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="fem-svg" viewBox="0 0 400 300" role="img" aria-label="Schematic of the chosen organ"></svg>
+      <div class="legend2" id="fem-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="fem-text"></div>
+    </div>
+    <div id="fem-micro" class="stack"></div>
+  </div>
+  <h3>Follicle to corpus albicans</h3>
+  <div class="scroll"><table id="foll-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-plac">
+  <h2 id="h-plac">Placenta and umbilical cord</h2>
+  <p class="cap key" id="plac-cap"></p>
+  <div class="chips" id="plac-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="plac-svg" viewBox="0 0 400 300" role="img" aria-label="Schematic of the chosen structure"></svg>
+      <div class="legend2" id="plac-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="plac-text"></div>
+    </div>
+    <div id="plac-micro" class="stack"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tubes">
+  <h2 id="h-tubes">Tubes that look alike</h2>
+  <p class="cap">Four muscular tubes cut across. Look first at the <b>epithelium</b>, then at the <b>shape of the lumen</b> and the <b>thickness of the muscle</b>.</p>
+  <div class="scroll"><table id="tube-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+  <p id="images"></p>
+</footer>
+</div>
+
+<script src="histo.js"></script>
+<script>
+/* ===================== DATA (checked in sources-local/facts/fill-histo2.md, Parts E–G and K) ===================== */
+const LIC = {
+  pd: ['Public domain', 'https://creativecommons.org/publicdomain/mark/1.0/'], cc0: ['CC0', 'https://creativecommons.org/publicdomain/zero/1.0/'],
+  by25: ['CC BY 2.5', 'https://creativecommons.org/licenses/by/2.5/'], by4: ['CC BY 4.0', 'https://creativecommons.org/licenses/by/4.0/'],
+  by2: ['CC BY 2.0', 'https://creativecommons.org/licenses/by/2.0/'], bysa2: ['CC BY-SA 2.0', 'https://creativecommons.org/licenses/by-sa/2.0/'], bysa3: ['CC BY-SA 3.0', 'https://creativecommons.org/licenses/by-sa/3.0/'], bysa4: ['CC BY-SA 4.0', 'https://creativecommons.org/licenses/by-sa/4.0/'],
+};
+const cr = (file, author, lic, done) => Histo.credit({file, author, lic: LIC[lic][0], licUrl: LIC[lic][1], done});
+const DATA = {
+  lede: 'Organ slides of the urinary tract, the male and female reproductive organs, the placenta and the umbilical cord: pick an organ to see a drawing of its plan, a labelled micrograph where an open one exists, and the features that identify it. The last table sorts out four tubes that are easily confused.',
+  uriCap: 'The kidney is identified by its <b>renal corpuscles</b>; the passages that carry urine — ureter and bladder — are lined by <b>transitional epithelium (urothelium)</b> with smooth muscle round it.',
+  uri: [
+    {k: 'kc', name: 'Kidney: cortex', ident: '<b>Renal corpuscles</b> — round tufts of capillaries in a capsule — scattered among cut convoluted tubules. Corpuscles are found only in the cortex.',
+      text: 'A corpuscle is a <b>glomerulus</b> (a tuft of capillaries between an afferent and an efferent arteriole) inside <b>Bowman\'s capsule</b>: an outer parietal layer of simple squamous epithelium and an inner visceral layer of <b>podocytes</b> wrapped round the capillaries, with the urinary (Bowman\'s) space between the two. The filtration barrier is the capillary endothelium, the podocytes and their fused basement membranes (StatPearls). The proximal convoluted tubule carries a <b>brush border</b> of microvilli; the distal tubule\'s cells are shorter, and where the distal tubule touches its glomerulus its cells are crowded into the <b>macula densa</b> (Wikipedia). Gray (1918) saw the same epithelium in both convoluted tubules.',
+      micros: ['kidney-cortex', 'renal-corpuscle'], draw: drawCortex},
+    {k: 'km', name: 'Kidney: medulla', ident: 'Only <b>straight tubules</b> cut along or across — no corpuscles: thin limbs of Henle\'s loops and collecting ducts.',
+      text: 'The medulla is a set of pyramids. Henle\'s loops dip into them from the cortex, and cortical collecting ducts descend into them as medullary collecting ducts. The thin limb is lined by flat (squamous) cells; the collecting ducts by clear cuboidal cells that become columnar toward the papilla (Gray; Wikipedia: simple columnar).',
+      micros: ['kidney-medulla'], draw: drawMedulla},
+    {k: 'ur', name: 'Ureter', ident: '<b>Transitional epithelium</b> on a mucosa thrown into <b>longitudinal folds</b>, then smooth muscle and a fibrous adventitia.',
+      text: 'The folds flatten when the ureter is distended (Gray). Muscle: an inner longitudinal and an outer circular layer, with a third, outer longitudinal layer in the lower part (Wikipedia; 2026 review). Gray (1918) lists the layers the other way round — external longitudinal, middle circular and an internal layer near the bladder. Outside is a fibrous coat (adventitia; Gray).',
+      micros: ['ureter'], draw: s => ring(s, {lumen: 'star', epi: 'trans', lp: 14, coats: [['long', 12, 'inner longitudinal'], ['circ', 18, 'outer circular']], outer: 'adventitia'})},
+    {k: 'bl', name: 'Urinary bladder', ident: 'Transitional epithelium over a folded mucosa and a wall of <b>smooth muscle bundles</b> running in different directions (the detrusor).',
+      text: 'The urothelium has three to six layers of cells, which become flatter or more cuboidal as the bladder fills or empties (Wikipedia). The mucosa is wrinkled when the bladder is contracted and smooth when it is distended; over the trigone it is bound to the muscle and always smooth (Gray). The detrusor has inner longitudinal, middle circular and outer longitudinal fibres, its bundles running spirally, longitudinally and circularly. The peritoneum covers only part of the bladder (Gray).',
+      micros: ['bladder'], draw: s => Histo.wall(s, {parts: [{epi: 'trans', surf: 'folds'}], vh: 22, lp: 24, mm: 0, sub: 0, me: [['smooth', 'long', 14, 'inner longitudinal'], ['smooth', 'bundles', 26, 'middle circular (bundles)'], ['smooth', 'long', 14, 'outer longitudinal']], outer: 'serosa', epiLab: 'transitional epithelium'})},
+  ],
+  nephRows: [
+    ['Renal corpuscle', 'Cortex only', 'Capsule: parietal simple squamous; visceral layer of podocytes', 'Glomerulus + urinary space'],
+    ['Proximal convoluted tubule', 'Cortex', 'Cuboidal to columnar, with a <b>brush border</b> (microvilli)', 'Brush border (modern account; Gray 1918: same epithelium as the distal tubule)'],
+    ['Thin limb of Henle\'s loop', 'Medulla (pyramids)', 'Flat, squamous cells', '—'],
+    ['Distal convoluted tubule', 'Cortex', 'Cuboidal, shorter than proximal cells (Wikipedia)', '<b>Macula densa</b> where it touches its glomerulus (Wikipedia)'],
+    ['Collecting duct', 'Cortex → medulla', 'Clear cuboidal, columnar toward the papilla', 'Empties at the papilla (Wikipedia)'],
+  ],
+  maleCap: 'The testis makes sperm in <b>seminiferous tubules</b> and testosterone in the <b>Leydig cells</b> between them; the ducts that carry the sperm are lined by tall epithelium inside smooth muscle.',
+  male: [
+    {k: 'te', name: 'Testis', ident: 'Round <b>seminiferous tubules</b> lined by many layers of spermatogenic cells, with clusters of <b>interstitial (Leydig) cells</b> in the loose tissue between them; a thick fibrous <b>tunica albuginea</b> outside.',
+      text: 'Fibrous septa from the tunica albuginea divide the testis into lobules, each holding one to three or more convoluted seminiferous tubules (Gray). The tubule wall is a basement layer with flattened cells (Gray). Inside it, the spermatogenic cells sit in several irregular layers — cubical cells along the basement membrane, some of which become <b>spermatogonia</b> (Gray) — and divide by meiosis into sperm. Tall <b>Sertoli cells</b> stretch from the basement membrane to the lumen and wrap the germ cells. <b>Leydig cells</b> make testosterone.',
+      micros: ['testis'], draw: drawTestis},
+    {k: 'ep', name: 'Epididymis', ident: 'One coiled duct cut many times: tall <b>pseudostratified</b> epithelium with long <b>stereocilia</b>, and a thin ring of smooth muscle; sperm are stored here.',
+      text: 'The epididymis is a single convoluted tubule lined by pseudostratified epithelium, where sperm arriving from the testis mature and are stored; its connective-tissue wall carries smooth muscle, mainly circular (Gray). The long processes on the cells are stereocilia, not true cilia (Wikipedia; Gray 1918 called the epithelium ciliated).',
+      micros: ['epididymis'], draw: s => ring(s, {lumen: 'round', epi: 'pst', lp: 6, coats: [['circ', 10, 'thin circular smooth muscle']], outer: 'none', sperm: true})},
+    {k: 'vd', name: 'Vas deferens', ident: 'A <b>small, folded lumen</b> inside a <b>thick muscular wall</b> — the greatest muscle-to-lumen ratio of any hollow organ (Wikipedia).',
+      text: 'The mucosa is pale and in longitudinal folds, lined by columnar (Gray) or pseudostratified columnar (Wikipedia) epithelium. The muscle: a circular layer between two longitudinal layers (Wikipedia); Gray (1918) found two layers — outer longitudinal, inner circular — for most of the length and the inner longitudinal layer only at the beginning. Outside is an areolar coat with vessels and nerves.',
+      micros: ['vas-deferens'], draw: s => ring(s, {lumen: 'folds', epi: 'pst', lp: 8, coats: [['long', 12, 'inner longitudinal'], ['circ', 30, 'middle circular'], ['long', 18, 'outer longitudinal']], outer: 'adventitia', small: true})},
+    {k: 'pr', name: 'Prostate', ident: 'Glands with <b>folded, irregular outlines</b> (papillary infoldings) of columnar epithelium, set in a <b>fibromuscular stroma</b>; concretions (corpora amylacea) in some glands (Wikipedia).',
+      text: 'The glandular pouches often show papillary elevations and are lined by tall columnar cells; the stroma is fibrous tissue and smooth muscle. Thickened secretions — <b>corpora amylacea</b> (prostatic concretions) — build up in the glands over time (Wikipedia).',
+      micros: ['prostate', 'corpora-amylacea'], draw: drawProstate},
+    {k: 'pe', name: 'Penis', ident: 'Three masses of <b>erectile tissue</b> — two <b>corpora cavernosa</b> above, one <b>corpus spongiosum</b> round the urethra below — each a sponge of blood spaces in a fibrous <b>tunica albuginea</b>.',
+      text: 'The erectile tissue is trabeculae of fibrous tissue, elastic fibres and smooth muscle round irregular blood spaces lined by endothelium. The tunica albuginea of the corpus spongiosum is thinner and more elastic than that of the corpora cavernosa (Gray). Skin covers the whole.',
+      micros: [], none: 'No open micrograph of a whole penis section was found; see the drawing.', draw: drawPenis},
+  ],
+  femCap: 'The ovary is a <b>cortex of follicles</b> round a vascular medulla; after ovulation the follicle becomes the <b>corpus luteum</b>. The uterus, its tube and the cervix differ in their lining.',
+  fem: [
+    {k: 'ov', name: 'Ovary', ident: 'A <b>cortex with follicles</b> at different stages under a surface epithelium and a fibrous tunica albuginea; a central medulla of connective tissue and vessels, with no follicles.',
+      text: 'The surface is covered by the ovarian surface epithelium (Gray: a layer of columnar cells, the "germinal epithelium"). Under it the stroma is condensed into the tunica albuginea. A follicle grows from an oocyte ringed by one layer of follicular cells (Wikipedia) to a stratified <b>membrana granulosa</b>, the <b>zona pellucida</b> round the oocyte and <b>theca</b> cells from the stroma outside; the mature (Graafian) follicle holds fluid, with the oocyte in a mound of granulosa cells (Gray\'s discus proligerus).',
+      micros: ['follicle'], draw: drawOvary},
+    {k: 'cl', name: 'Corpus luteum', ident: 'A <b>folded wall of lutein cells</b>, large and small, with vessels growing in from the surrounding tissue.',
+      text: 'After ovulation the lining of the follicle is thrown into folds and vascular processes grow in from the surrounding tissue. The granulosa cells become <b>large luteal (granulosa-lutein) cells</b> and the theca cells <b>small luteal (theca-lutein) cells</b>; both make <b>progesterone</b>. Without fertilization its secretion stops within 14 days of ovulation (StatPearls) and it turns into a scar of collagen, the <b>corpus albicans</b>.',
+      micros: ['corpus-albicans'], draw: drawCL},
+    {k: 'ut', name: 'Uterus', ident: 'A thick <b>endometrium</b> of simple columnar epithelium with <b>simple tubular glands</b> in a cellular stroma, over a very thick <b>myometrium</b> of smooth muscle.',
+      text: 'The glands run from the surface to the base of the stroma. The endometrium has a basal layer, which regenerates the functional layer, and the functional layer is shed at menstruation (Wikipedia). After conception the glands become enlarged and contorted (Gray). The myometrium is smooth muscle in three ill-defined layers; the middle layer carries the most vessels (Gray). Gray (1918) describes the surface epithelium as ciliated.',
+      micros: ['endometrium'], draw: drawUterus},
+    {k: 'tu', name: 'Uterine tube', ident: 'A mucosa thrown into <b>branching longitudinal folds</b> (most complex in the ampulla) lined by <b>ciliated columnar</b> and secretory cells; a thin muscle coat.',
+      text: 'The folds are far more extensive in the ampulla than in the isthmus. Wikipedia counts about a quarter of the lining cells as ciliated, most of the rest as secretory, and a few as peg cells. Muscle: inner circular, outer longitudinal; serous coat outside.',
+      micros: ['uterine-tube'], draw: s => ring(s, {lumen: 'branch', epi: 'cil', lp: 4, coats: [['circ', 14, 'inner circular'], ['long', 10, 'outer longitudinal']], outer: 'serosa'})},
+    {k: 'cx', name: 'Cervix', ident: 'Canal (endocervix) lined by <b>tall mucus-secreting columnar cells</b> with deep mucous glands; the vaginal surface (ectocervix) by <b>stratified squamous</b> epithelium.',
+      text: 'The mucosa of the canal is thrown into oblique ridges, with deep glands that secrete a clear, viscid, alkaline mucus (Gray); glands that become blocked and distended with mucus form small cysts, the ovula Nabothi (Nabothian cysts). The two linings meet at the <b>squamocolumnar junction</b> (Wikipedia), close to the external os (Gray).',
+      micros: ['cervix'], draw: drawCervix},
+  ],
+  follRows: [
+    ['Primordial', 'Oocyte ringed by one layer of follicular cells (Wikipedia)'],
+    ['Growing (primary)', 'Cells become cuboidal granulosa cells and multiply into a stratified membrana granulosa; zona pellucida laid down; theca from the stroma'],
+    ['Mature (Graafian)', 'Fluid-filled cavity; oocyte in a mound of granulosa cells (discus proligerus)'],
+    ['Corpus luteum', 'Folded wall of large (granulosa) and small (theca) lutein cells, invaded by vessels; progesterone'],
+    ['Corpus albicans', 'Collagen scar left when the corpus luteum regresses'],
+  ],
+  placCap: 'The placenta exchanges across <b>chorionic villi</b> bathed in maternal blood; the cord carries the fetal vessels in <b>Wharton\'s jelly</b>.',
+  plac: [
+    {k: 'pl', name: 'Placenta', ident: '<b>Chorionic villi</b> floating in the <b>intervillous space</b> (maternal blood); each villus has fetal capillaries in a connective-tissue core under two layers of trophoblast.',
+      text: 'A branch of an umbilical artery enters each villus and ends in capillaries drained by a tributary of the umbilical vein (Gray). The covering: an inner layer of distinct cells, the <b>cytotrophoblast</b> (layer of Langhans), and an outer <b>syncytiotrophoblast</b> — many nuclei in cytoplasm without cell boundaries — in contact with the maternal blood.',
+      micros: ['placenta'], draw: drawVilli},
+    {k: 'uc', name: 'Umbilical cord', ident: '<b>Two umbilical arteries</b> and <b>one umbilical vein</b> in pale gelatinous <b>Wharton\'s jelly</b>.',
+      text: 'The vein that remains is the left one (Gray). Wharton\'s jelly is a gelatinous substance made largely of mucopolysaccharides that protects the vessels; the cord is covered by a layer continuous with the amnion (Gray). The artery wall is mainly circular smooth muscle (Wikipedia).',
+      micros: ['umbilical-cord'], draw: drawCord},
+  ],
+  tubeRows: [
+    ['Ureter', 'Transitional', 'Longitudinal folds', 'Two layers; a third, outer longitudinal, in the lower part (Wikipedia: lower third)'],
+    ['Vas deferens', 'Pseudostratified / columnar', 'Small, folded', '<b>Thick</b> (greatest muscle-to-lumen ratio, Wikipedia): longitudinal–circular–longitudinal (Wikipedia); Gray: outer longitudinal and inner circular for most of its length, the inner longitudinal layer only at the start'],
+    ['Epididymis', 'Pseudostratified with stereocilia', 'Many profiles of one coiled duct; sperm stored in it', 'Thin, mainly circular'],
+    ['Uterine tube', 'Ciliated columnar + secretory cells', '<b>Branched folds</b> filling the lumen (ampulla)', 'Thin: inner circular, outer longitudinal'],
+  ],
+  micros: {
+    'kidney-cortex': {w: 720, h: 519, title: 'Kidney: cortex', alt: 'A round renal corpuscle among many small round tubule profiles',
+      cap: 'A <b>renal corpuscle</b> — the glomerulus in its capsule — among cut <b>convoluted tubules</b>. Uploader: human kidney cortex.',
+      credit: cr('Kidney-Cortex.JPG', 'Jpogi', 'pd', 'cropped (the uploader\'s pointer cut off) and resized'),
+      labels: [[0.143, 0.42, 'Renal corpuscle'], [0.444, 0.36, 'Convoluted tubules']]},
+    'renal-corpuscle': {w: 720, h: 560, title: 'Renal corpuscle, PAS stain', alt: 'A tuft of capillary loops inside a thin capsule, with a clear space between',
+      cap: 'The <b>glomerulus</b> — a tuft of capillary loops — inside <b>Bowman\'s capsule</b>, with the <b>urinary (Bowman\'s) space</b> between them; tubules all round. Periodic acid–Schiff stain (uploader).',
+      credit: cr('Renal corpuscle.jpg', 'Ed Uthman', 'bysa2', 'resized'),
+      labels: [[0.5, 0.35, 'Glomerulus'], [0.3, 0.56, 'Urinary space'], [0.29, 0.45, 'Bowman\'s capsule']]},
+    'kidney-medulla': {w: 720, h: 496, title: 'Kidney: medulla', alt: 'Tubules cut across on the left and lengthwise on the right, no corpuscles',
+      cap: 'Only <b>straight tubules</b> and no corpuscles: cut across on the left, along their length on the right. Uploader: human kidney medulla. The black pointer is the uploader\'s: its tip touches one tubule cut lengthwise.',
+      credit: cr('Kidney-medulla.JPG', 'Jpogi', 'pd', 'cropped and resized'),
+      labels: [[0.2, 0.47, 'Tubules cut across'], [0.72, 0.47, 'Tubules cut lengthwise']]},
+    ureter: {w: 720, h: 635, title: 'Ureter', alt: 'A star-shaped lumen lined by a dark band of epithelium, with connective tissue and muscle around',
+      cap: 'The mucosa is folded, so the empty lumen looks star-shaped in this section; it is lined by <b>transitional epithelium</b> on a <b>lamina propria</b>, with <b>smooth muscle</b> outside. Uploader: human ureter.',
+      credit: cr('Ureter.JPG', 'Jpogi', 'pd', 'cropped and resized'),
+      labels: [[0.494, 0.4, 'Lumen'], [0.353, 0.642, 'Transitional epithelium'], [0.343, 0.724, 'Lamina propria'], [0.30, 0.83, 'Smooth muscle']]},
+    bladder: {w: 720, h: 683, title: 'Urinary bladder: urothelium', alt: 'Several layers of epithelial cells with large rounded cells at the surface',
+      cap: '<b>Transitional epithelium</b> several cells deep, with large rounded <b>surface cells</b>, on a pink <b>lamina propria</b>. Uploader: urinary bladder urothelium, haemalum-eosin.',
+      credit: cr('Harnblase Urothel.png', 'Polarlys', 'by25', 'resized'),
+      labels: [[0.4, 0.1, 'Lumen'], [0.37, 0.27, 'Surface cells'], [0.6, 0.6, 'Transitional epithelium'], [0.12, 0.65, 'Lamina propria']]},
+    testis: {w: 720, h: 785, title: 'Testis, low power', alt: 'Many round tubules with thick cellular walls and small lumina',
+      cap: 'Many <b>seminiferous tubules</b> cut across, each with a thick wall of spermatogenic cells round a small lumen, separated by thin interstitial tissue. Uploader: human seminiferous tubule.',
+      credit: cr('Seminiferous tubule.JPG', 'Jpogi', 'pd', 'cropped and resized'),
+      labels: [[0.36, 0.42, 'Seminiferous tubule']]},
+    epididymis: {w: 720, h: 540, title: 'Epididymis', alt: 'Many profiles of a duct with tall epithelium and dark clumps of sperm in the lumina',
+      cap: 'Many profiles of the one coiled duct, each lined by tall <b>pseudostratified epithelium</b>, with <b>sperm</b> in the lumina and connective tissue between. Uploader: human epididymis. The black pointer is the uploader\'s: its tip touches the wall of one duct profile.',
+      credit: cr('Epididymis.JPG', 'Jpogi', 'pd', 'resized'),
+      labels: [[0.287, 0.522, 'Sperm'], [0.292, 0.465, 'Pseudostratified epithelium'], [0.6, 0.4, 'Connective tissue']]},
+    'vas-deferens': {w: 720, h: 706, title: 'Vas deferens', alt: 'A small folded lumen in the centre of a thick ring of muscle',
+      cap: 'A small, <b>folded lumen</b> in the centre of a very thick coat of <b>smooth muscle</b>, with an adventitia outside. Uploader: human vas deferens; the uploader\'s pointer reaches the lumen.',
+      credit: cr('Vas deferens.jpg', 'Jpogi', 'pd', 'cropped and resized'),
+      labels: [[0.508, 0.47, 'Lumen'], [0.462, 0.412, 'Folded mucosa'], [0.323, 0.647, 'Smooth muscle'], [0.508, 0.847, 'Adventitia']]},
+    prostate: {w: 720, h: 538, title: 'Prostate', alt: 'Glands with folded outlines in pink stroma',
+      cap: 'Glands with folded, irregular outlines, lined by columnar epithelium, in a <b>fibromuscular stroma</b>. Uploader: normal prostate, H&amp;E.',
+      credit: cr('Histology of normal prostate.jpg', 'Mikael Häggström', 'cc0', 'resized'),
+      labels: [[0.82, 0.3, 'Gland lumen'], [0.4, 0.42, 'Folded epithelium'], [0.6, 0.75, 'Fibromuscular stroma']]},
+    'corpora-amylacea': {w: 720, h: 480, title: 'Prostate: corpora amylacea', alt: 'Three large pink layered concretions in a gland lumen lined by epithelium, with pink stroma around',
+      cap: 'Three laminated pink <b>corpora amylacea</b> (prostatic concretions) in the lumen of a gland with a folded <b>epithelial</b> lining, in a <b>fibromuscular stroma</b>. Uploader: corpora amylacea, a benign finding in prostatic glands; H&amp;E, prostatectomy specimen.',
+      credit: cr('Corpora amylacea intermed mag.jpg', 'Nephron', 'bysa3', 'resized'),
+      labels: [[0.43, 0.54, 'Corpus amylaceum'], [0.37, 0.745, 'Epithelium'], [0.15, 0.45, 'Gland lumen'], [0.075, 0.08, 'Stroma']]},
+    follicle: {w: 720, h: 409, title: 'Ovary: growing follicle', alt: 'A large round oocyte with a pink ring around it and several layers of cells outside',
+      cap: 'The <b>oocyte</b> with its <b>zona pellucida</b>, ringed by several layers of <b>granulosa cells</b>, in the ovarian stroma. Uploader: human primary follicle.',
+      credit: cr('Human ovarian follicle.jpg', 'Jpogi', 'pd', 'resized'),
+      labels: [[0.47, 0.55, 'Oocyte'], [0.315, 0.62, 'Zona pellucida'], [0.22, 0.45, 'Granulosa cells'], [0.92, 0.40, 'Stroma']]},
+    'corpus-albicans': {w: 720, h: 540, title: 'Ovary: corpus albicans', alt: 'A pale pink rounded scar in purple ovarian stroma',
+      cap: 'No open micrograph of a normal corpus luteum was found. This is its end: a pale <b>corpus albicans</b> (at the pointer) in the ovarian stroma. Uploader: human corpus albicans.',
+      credit: cr('Corpus albicans.JPG', 'Jpogi', 'pd', 'resized'),
+      labels: [[0.42, 0.55, 'Corpus albicans'], [0.75, 0.72, 'Ovarian stroma']]},
+    endometrium: {w: 720, h: 540, title: 'Uterus: endometrium', alt: 'Tubular glands cut across in a dense cellular stroma below the lumen',
+      cap: 'Simple tubular <b>glands</b>, cut in many planes, in a cellular <b>stroma</b> below the lumen. Uploader: human uterus, endometrium. The black pointer is the uploader\'s: its tip touches a gland cut across.',
+      credit: cr('Uterus (endometrium).JPG', 'Jpogi', 'pd', 'resized'),
+      labels: [[0.45, 0.12, 'Lumen'], [0.575, 0.655, 'Gland'], [0.42, 0.5, 'Stroma']]},
+    'uterine-tube': {w: 720, h: 540, title: 'Uterine tube', alt: 'Branched mucosal folds filling a lumen, with muscle beside',
+      cap: '<b>Branched mucosal folds</b> almost fill the lumen; the muscle coat lies outside. Uploader: human fallopian tube. The black pointer is the uploader\'s; the file name says it marks the lamina propria, and its tip reaches the wall beyond the bases of the folds.',
+      credit: cr('Fallopian tube (lamina propoia).JPG', 'Jpogi', 'pd', 'resized'),
+      labels: [[0.12, 0.45, 'Mucosal folds'], [0.347, 0.30, 'Lumen'], [0.45, 0.45, 'Muscle coat']]},
+    cervix: {w: 720, h: 479, title: 'Cervix: squamocolumnar junction', alt: 'Thick layered epithelium on the left ending where a single row of tall cells begins on the right',
+      cap: 'The <b>stratified squamous</b> epithelium of the ectocervix (left) meets the tall <b>columnar</b> epithelium of the endocervix (right) at the <b>squamocolumnar junction</b>. Uploader: normal cervix from a hysterectomy.',
+      credit: cr('Cervix Uteri Normal Squamocolumnar Junction (4796821432).jpg', 'Ed Uthman', 'by2', 'resized'),
+      labels: [[0.2, 0.35, 'Stratified squamous'], [0.8, 0.36, 'Columnar'], [0.515, 0.45, 'Squamocolumnar junction'], [0.4, 0.75, 'Stroma']]},
+    'umbilical-cord': {w: 720, h: 701, title: 'Umbilical cord, low power', alt: 'Three thick-walled vessels in pale homogeneous tissue',
+      cap: 'Three thick-walled <b>umbilical vessels</b> in pale <b>Wharton\'s jelly</b>. Uploader: umbilical cord, low power.',
+      credit: cr('Umbilical cord histology.jpg', 'Netha Hussain', 'bysa3', 'cropped and resized'),
+      labels: [[0.156, 0.5, 'Vessel'], [0.494, 0.15, 'Vessel'], [0.61, 0.8, 'Vessel'], [0.675, 0.45, 'Wharton\'s jelly']]},
+    placenta: {w: 720, h: 540, title: 'Placenta: villi', alt: 'Rounded villi with a cellular covering, separated by an empty space',
+      cap: '<b>Chorionic villi</b>, each covered by trophoblast, separated by the <b>intervillous space</b> (at the pointer), where maternal blood flows. Uploader: intervillous space.',
+      credit: cr('Intervillous space.JPG', 'Jpogi', 'pd', 'resized'),
+      labels: [[0.48, 0.45, 'Intervillous space'], [0.15, 0.45, 'Villus'], [0.395, 0.42, 'Trophoblast']]},
+  },
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918: kidney, ureter, bladder, testis and ducts, prostate, penis, ovary, uterus and tube, placenta and cord); StatPearls (NCBI Bookshelf); open-access reviews (proximal tubule, ureterovesical junction, epididymis, luteal cells); Wikipedia (articles checked for OpenStax and Gray-1918 copying). Where Gray (1918) differs from modern accounts (brush border, ureter muscle layers, stereocilia), the modern account is used and Gray\'s is noted.',
+  models: 'Drawings: schematic, not to scale; label points on the micrographs placed by eye and checked on the image (approximate).',
+  images: 'Micrographs via Wikimedia Commons (each credited under its picture): Jpogi (public domain), Mikael Häggström (CC0), Polarlys (CC BY 2.5), Ed Uthman (CC BY 2.0 and CC BY-SA 2.0), Netha Hussain (CC BY-SA 3.0), Nephron (CC BY-SA 3.0); cropped/resized and labelled for this page.',
+};
+
+/* ===================== DRAWINGS ===================== */
+const {$, el, text, lab, keyHTML} = Histo;
+const blob = (s, cx, cy, r, fill, extra = {}) => el('circle', Object.assign({cx, cy, r, fill}, extra), s);
+const vb = (s, h) => s.setAttribute('viewBox', `0 0 400 ${h}`);
+/* polar outline path */
+const polar = (cx, cy, rf, n = 180) => { let d = ''; for (let i = 0; i <= n; i++) { const a = i / n * 2 * Math.PI, r = rf(a); d += (i ? 'L' : 'M') + (cx + r * Math.cos(a)).toFixed(1) + ' ' + (cy + r * Math.sin(a)).toFixed(1); } return d + 'Z'; };
+/* leader + label on the right */
+const callout = (s, x, y, ty, t) => { el('line', {x1: x, y1: y, x2: 268, y2: ty - 3, stroke: 'var(--ink)', 'stroke-width': .7}, s); lab(s, 272, ty, t, 'start', 9); };
+
+/* A tube cut across: lumen (round | star | folds | branch), epithelium, lamina propria, muscle coats from inside out, outer coat. */
+function ring(s, w) {
+  s.replaceChildren(); vb(s, 300);
+  const cx = 130, cy = 150, keys = [];
+  const r0 = w.small ? 18 : w.lumen === 'branch' ? 52 : 42;
+  const coatsT = w.coats.reduce((a, c) => a + c[1], 0);
+  const R1 = r0 + 14 + w.lp, Rout = Math.min(128, R1 + coatsT);
+  const sc = (Rout - R1) / coatsT;
+  /* outer coat */
+  if (w.outer !== 'none') blob(s, cx, cy, Rout + (w.outer === 'adventitia' ? 14 : 4), 'var(--collagen)', {opacity: w.outer === 'adventitia' ? .5 : .35});
+  if (w.outer === 'serosa') el('circle', {cx, cy, r: Rout + 4, fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 2.5}, s);
+  /* muscle coats, drawn from outside in */
+  let R = Rout; const radii = [];
+  for (let i = w.coats.length - 1; i >= 0; i--) {
+    const [dir, t] = w.coats[i], r = R - t * sc;
+    blob(s, cx, cy, R, 'var(--t-musc)');
+    if (dir === 'circ') for (let rr = r + 3; rr < R - 1; rr += 4) el('circle', {cx, cy, r: rr, fill: 'none', stroke: 'var(--surface)', 'stroke-width': .5, opacity: .6}, s);
+    else for (let rr = r + 3; rr < R - 1; rr += 5) for (let a = 0; a < 2 * Math.PI; a += 9 / rr) blob(s, cx + rr * Math.cos(a + rr), cy + rr * Math.sin(a + rr), 1.2, 'var(--surface)', {opacity: .7});
+    radii[i] = (r + R) / 2; R = r;
+  }
+  blob(s, cx, cy, R1, 'var(--collagen)', {opacity: 1}); blob(s, cx, cy, R1, 'var(--surface)', {opacity: .55});
+  /* lumen outline */
+  let rf;
+  if (w.lumen === 'round') rf = () => r0;
+  else if (w.lumen === 'star') rf = a => r0 * (0.55 + 0.45 * Math.pow(Math.abs(Math.cos(2.5 * a)), 3));
+  else if (w.lumen === 'folds') rf = a => r0 * (0.75 + 0.25 * Math.abs(Math.cos(3 * a)));
+  else rf = a => r0;
+  const ew = {trans: 6, pst: 7, cil: 4}[w.epi] || 5;
+  el('path', {d: polar(cx, cy, a => rf(a) + ew / 2 + 2), fill: 'var(--collagen)', opacity: .35}, s);
+  el('path', {d: polar(cx, cy, rf), fill: 'var(--surface)', stroke: 'var(--cyto)', 'stroke-width': ew}, s);
+  if (w.epi === 'pst' || w.epi === 'cil') el('path', {d: polar(cx, cy, a => rf(a) - ew / 2 - 1.5), fill: 'none', stroke: 'var(--ink)', 'stroke-width': w.epi === 'pst' ? 3.5 : 2.4, 'stroke-dasharray': w.epi === 'pst' ? '.6 2.6' : '.6 1.8', opacity: .65}, s);
+  if (w.epi === 'trans') el('path', {d: polar(cx, cy, a => rf(a) + 2), fill: 'none', stroke: 'var(--nucleus)', 'stroke-width': 1, 'stroke-dasharray': '1 4'}, s);
+  if (w.lumen === 'branch') {
+    /* branched folds of mucosa filling the lumen */
+    for (let i = 0; i < 9; i++) {
+      const a = i * 2 * Math.PI / 9, x0 = cx + r0 * Math.cos(a), y0 = cy + r0 * Math.sin(a), x1 = cx + r0 * .25 * Math.cos(a), y1 = cy + r0 * .25 * Math.sin(a);
+      const fold = d => { el('path', {d, fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 9, 'stroke-linecap': 'round'}, s); el('path', {d, fill: 'none', stroke: 'var(--collagen)', 'stroke-width': 3, 'stroke-linecap': 'round', opacity: .8}, s); };
+      fold(`M${x0} ${y0} L${x1} ${y1}`);
+      const xm = (x0 + x1) / 2, ym = (y0 + y1) / 2, b = a + 0.9;
+      fold(`M${xm} ${ym} l${14 * Math.cos(b)} ${14 * Math.sin(b)}`);
+    }
+  }
+  if (w.sperm) for (let i = 0; i < 26; i++) { const a = i * 2.39, r = (i * 13) % (r0 - 10); el('ellipse', {cx: cx + r * Math.cos(a), cy: cy + r * Math.sin(a), rx: 1.6, ry: 1.1, fill: 'var(--nucleus)'}, s); }
+  lab(s, cx, cy + 3, w.lumen === 'branch' ? '' : 'lumen', 'middle', 8.5);
+  /* labels on the right with leaders at the right-hand side of each layer */
+  const EPN = {trans: 'transitional epithelium', pst: 'pseudostratified epith.', cil: 'ciliated columnar epith.'};
+  const L = [[a => rf(a) + 1, (w.sperm ? 'pseudostrat. + stereocilia' : EPN[w.epi])], [a => (rf(a) + ew + R1) / 2, w.lumen === 'branch' ? 'branched mucosal folds' : 'lamina propria' + (w.lumen === 'star' || w.lumen === 'folds' ? ' (folds)' : '')]];
+  w.coats.forEach((c, i) => L.push([() => radii[i], c[2]]));
+  if (w.outer !== 'none') L.push([() => Rout + (w.outer === 'adventitia' ? 8 : 3), w.outer]);
+  if (w.sperm) L.push([() => r0 * 0.4, 'sperm (stored here)']);
+  const n = L.length;
+  L.forEach(([r, t], i) => { const a = -0.9 + 1.8 * i / Math.max(1, n - 1); callout(s, cx + r(a) * Math.cos(a), cy + r(a) * Math.sin(a), 60 + i * (180 / Math.max(1, n - 1)), t); });
+  keys.push(['--cyto', 'Epithelium'], ['--collagen', 'Connective tissue', .6], ['--t-musc', 'Smooth muscle']);
+  if (w.sperm) keys.push(['--nucleus', 'Sperm heads']);
+  return keys;
+}
+
+function drawCortex(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--collagen)', opacity: .15}, s);
+  /* tubules cut across: proximal (brush border, dotted inner edge), distal (shorter cells, clear lumen) */
+  const tub = (x, y, prox) => {
+    blob(s, x, y, 15, 'var(--cyto)');
+    blob(s, x, y, prox ? 5 : 7, 'var(--surface)');
+    if (prox) el('circle', {cx: x, cy: y, r: 6.5, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 2.4, 'stroke-dasharray': '.5 1.2', opacity: .6}, s);
+    for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3 + (prox ? 0 : .5); blob(s, x + 11 * Math.cos(a), y + 11 * Math.sin(a), 1.8, 'var(--nucleus)'); }
+  };
+  const P = [[26, 30], [62, 22], [26, 272], [70, 278], [330, 30], [372, 36], [350, 270], [300, 282], [20, 120], [22, 190], [380, 140], [378, 210], [110, 270], [250, 276]];
+  P.forEach(([x, y], i) => tub(x, y, i % 3 !== 2));
+  /* renal corpuscle */
+  const cx = 200, cy = 150;
+  blob(s, cx, cy, 92, 'var(--surface)', {stroke: 'var(--cyto)', 'stroke-width': 3});
+  for (let i = 0; i < 10; i++) { const a = i * Math.PI / 5; el('ellipse', {cx: cx + 91 * Math.cos(a), cy: cy + 91 * Math.sin(a), rx: 3.5, ry: 1.5, transform: `rotate(${a * 180 / Math.PI + 90} ${cx + 91 * Math.cos(a)} ${cy + 91 * Math.sin(a)})`, fill: 'var(--nucleus)'}, s); }
+  /* capillary loops with podocytes */
+  const caps = [[170, 120], [205, 110], [238, 128], [160, 158], [196, 150], [232, 165], [180, 190], [215, 192]];
+  for (const [x, y] of caps) { blob(s, x, y, 15, 'var(--lumen-v)', {stroke: 'var(--t-endo)', 'stroke-width': 1.8}); blob(s, x + 10, y - 10, 3.2, 'var(--cyto)', {stroke: 'var(--nucleus)', 'stroke-width': 1}); }
+  /* afferent and efferent arterioles at the vascular pole */
+  el('path', {d: `M${cx - 40} ${cy - 84} L${cx - 60} 2`, stroke: 'var(--artery)', 'stroke-width': 9, fill: 'none'}, s);
+  el('path', {d: `M${cx - 18} ${cy - 90} L${cx - 22} 2`, stroke: 'var(--artery)', 'stroke-width': 6, fill: 'none'}, s);
+  /* macula densa: crowded nuclei in the distal tubule touching the pole */
+  blob(s, cx + 26, 40, 16, 'var(--cyto)'); blob(s, cx + 26, 40, 6, 'var(--surface)');
+  for (let i = 0; i < 9; i++) { const a = Math.PI * (0.55 + i * 0.1); blob(s, cx + 26 + 11 * Math.cos(a), 40 + 11 * Math.sin(a), 1.8, 'var(--nucleus)'); }
+  lab(s, cx - 64, 12, 'afferent', 'end', 8.5); lab(s, cx - 14, 12, 'efferent', 'start', 8.5);
+  lab(s, cx + 46, 36, 'macula densa', 'start', 8.5);
+  lab(s, cx, cy + 4, 'glomerulus', 'middle', 9.5);
+  lab(s, cx + 52, cy + 70, 'urinary space', 'start', 8.5);
+  lab(s, cx, cy + 108, 'Bowman\'s capsule (parietal layer)', 'middle', 9);
+  lab(s, 4, 96, 'proximal tubule', 'start', 8.5); lab(s, 4, 106, '(brush border)', 'start', 8.5);
+  return [['--cyto', 'Epithelium (tubules, capsule, podocytes)'], ['--lumen-v', 'Capillary lumen'], ['--t-endo', 'Capillary wall (endothelium)'], ['--artery', 'Afferent and efferent arterioles'], ['--nucleus', 'Nuclei'], ['--collagen', 'Interstitium', .15]];
+}
+
+function drawMedulla(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--collagen)', opacity: .15}, s);
+  /* tubules cut along their length: collecting ducts (clear, taller cells), thin limbs (flat cells), vasa recta */
+  const duct = (x, w, h) => { el('rect', {x, y: 20, width: w, height: 260, fill: 'var(--cyto)'}, s); el('rect', {x: x + h, y: 20, width: w - 2 * h, height: 260, fill: 'var(--surface)'}, s); for (let y = 28; y < 276; y += 12) { blob(s, x + h / 2, y, 1.8, 'var(--nucleus)'); blob(s, x + w - h / 2, y + 6, 1.8, 'var(--nucleus)'); } };
+  duct(30, 46, 12); duct(150, 50, 14); duct(290, 46, 12);
+  for (const x of [100, 240, 360]) { el('rect', {x, y: 20, width: 18, height: 260, fill: 'var(--cyto)'}, s); el('rect', {x: x + 3, y: 20, width: 12, height: 260, fill: 'var(--surface)'}, s); for (let y = 30; y < 276; y += 26) el('ellipse', {cx: x + 1.5, cy: y, rx: 1.2, ry: 3, fill: 'var(--nucleus)'}, s); }
+  for (const x of [128, 216]) { el('rect', {x, y: 20, width: 10, height: 260, fill: 'var(--lumen-v)', stroke: 'var(--t-endo)', 'stroke-width': 1.4}, s); }
+  lab(s, 53, 14, 'collecting duct', 'middle', 8.5); lab(s, 200, 296, 'collecting ducts: clear cells, taller toward the papilla', 'middle', 8.5);
+  lab(s, 238, 14, 'thin limb (flat cells)', 'start', 8.5);
+  lab(s, 133, 14, 'capillary', 'middle', 8);
+  return [['--cyto', 'Epithelium'], ['--nucleus', 'Nuclei'], ['--lumen-v', 'Capillary lumen'], ['--t-endo', 'Capillary wall (endothelium)'], ['--collagen', 'Interstitium', .15]];
+}
+
+function drawTestis(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--collagen)', opacity: .2}, s);
+  el('rect', {x: 0, y: 0, width: 400, height: 16, fill: 'var(--collagen)', opacity: .9}, s);
+  const tubule = (cx, cy, R, detail) => {
+    blob(s, cx, cy, R + 3, 'var(--collagen)', {opacity: .9});
+    blob(s, cx, cy, R, 'var(--cyto)', {opacity: .55});
+    blob(s, cx, cy, R * 0.3, 'var(--surface)');
+    for (let ring = 0; ring < 4; ring++) {
+      const rr = R - 6 - ring * (R * 0.16), n = Math.round(2 * Math.PI * rr / (detail ? 11 : 9));
+      for (let i = 0; i < n; i++) { const a = i * 2 * Math.PI / n + ring * .3; blob(s, cx + rr * Math.cos(a), cy + rr * Math.sin(a), [3, 3.6, 2.4, 1.6][ring], 'var(--nucleus)', {opacity: [1, .8, .7, 1][ring]}); }
+    }
+    if (detail) for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3 + .25; el('line', {x1: cx + (R - 2) * Math.cos(a), y1: cy + (R - 2) * Math.sin(a), x2: cx + R * .34 * Math.cos(a), y2: cy + R * .34 * Math.sin(a), stroke: 'var(--cyto)', 'stroke-width': 4, 'stroke-linecap': 'round'}, s); el('ellipse', {cx: cx + (R - 9) * Math.cos(a), cy: cy + (R - 9) * Math.sin(a), rx: 3.4, ry: 2, fill: 'var(--surface)', stroke: 'var(--nucleus)', 'stroke-width': 1}, s); }
+  };
+  tubule(150, 150, 100, true); tubule(340, 80, 56, false); tubule(340, 236, 56, false);
+  /* Leydig cells in clusters between the tubules */
+  for (const [x, y] of [[270, 156], [282, 170], [266, 176], [278, 144]]) { blob(s, x, y, 6, 'var(--horm)'); blob(s, x, y, 2.2, 'var(--nucleus)'); }
+  lab(s, 4, 11, 'tunica albuginea', 'start', 8.5);
+  lab(s, 150, 153, 'lumen', 'middle', 8.5);
+  lab(s, 290, 160, 'Leydig cells', 'start', 9);
+  el('line', {x1: 84, y1: 216, x2: 30, y2: 282, stroke: 'var(--ink)', 'stroke-width': .7}, s); lab(s, 4, 292, 'spermatogonia on the basement membrane', 'start', 8.5);
+  el('line', {x1: 206, y1: 100, x2: 230, y2: 40, stroke: 'var(--ink)', 'stroke-width': .7}, s); lab(s, 232, 38, 'Sertoli cell (base to lumen)', 'start', 8.5);
+  el('line', {x1: 150, y1: 104, x2: 120, y2: 30, stroke: 'var(--ink)', 'stroke-width': .7}, s); lab(s, 118, 28, 'later spermatogenic cells', 'end', 8.5);
+  return [['--nucleus', 'Spermatogenic cells (nuclei)'], ['--cyto', 'Sertoli cells / epithelium'], ['--horm', 'Leydig cells (make testosterone)'], ['--collagen', 'Connective tissue', .6]];
+}
+
+function drawProstate(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--collagen)', opacity: .3}, s);
+  for (let i = 0; i < 70; i++) el('ellipse', {cx: (i * 53) % 400, cy: (i * 37) % 300, rx: 12, ry: 2.4, transform: `rotate(${(i * 47) % 180} ${(i * 53) % 400} ${(i * 37) % 300})`, fill: 'var(--t-musc)', opacity: .75}, s);
+  const gland = (cx, cy, R, conc) => {
+    const rf = a => R * (0.8 + 0.2 * Math.sin(5 * a) + 0.08 * Math.sin(11 * a));
+    el('path', {d: polar(cx, cy, a => rf(a) + 6), fill: 'var(--collagen)', opacity: .5}, s);
+    el('path', {d: polar(cx, cy, rf), fill: 'var(--surface)', stroke: 'var(--cyto)', 'stroke-width': 8}, s);
+    /* papillary infoldings */
+    for (let i = 0; i < 5; i++) { const a = i * 2 * Math.PI / 5 + .3; el('line', {x1: cx + rf(a) * Math.cos(a), y1: cy + rf(a) * Math.sin(a), x2: cx + rf(a) * .62 * Math.cos(a), y2: cy + rf(a) * .62 * Math.sin(a), stroke: 'var(--cyto)', 'stroke-width': 6, 'stroke-linecap': 'round'}, s); }
+    if (conc) for (const r of [11, 7, 3]) el('circle', {cx: cx - 4, cy: cy + 6, r, fill: r === 11 ? 'var(--surface)' : 'none', stroke: 'var(--ink)', 'stroke-width': 1}, s);
+  };
+  gland(110, 110, 70, true); gland(290, 90, 54, false); gland(270, 230, 52, true); gland(80, 250, 40, false);
+  lab(s, 196, 290, 'fibromuscular stroma (smooth muscle + fibrous tissue)', 'middle', 9);
+  lab(s, 110, 34, 'papillary infoldings', 'middle', 9);
+  el('line', {x1: 117, y1: 116, x2: 180, y2: 160, stroke: 'var(--ink)', 'stroke-width': .7}, s); lab(s, 182, 168, 'corpus amylaceum', 'start', 9);
+  return [['--cyto', 'Columnar epithelium'], ['--t-musc', 'Smooth muscle'], ['--collagen', 'Fibrous tissue', .3]];
+}
+
+function drawPenis(s) {
+  s.replaceChildren(); vb(s, 300);
+  blob(s, 200, 150, 146, 'var(--collagen)', {opacity: .2});
+  const body = (cx, cy, r, tw) => {
+    blob(s, cx, cy, r + tw, 'var(--collagen)');
+    blob(s, cx, cy, r, 'var(--t-musc)', {opacity: .55});
+    for (let i = 0; i < Math.round(r * r / 70); i++) { const a = i * 2.39, rr = Math.sqrt(i / (r * r / 70)) * (r - 6); el('ellipse', {cx: cx + rr * Math.cos(a), cy: cy + rr * Math.sin(a), rx: 5, ry: 3.4, transform: `rotate(${i * 37} ${cx + rr * Math.cos(a)} ${cy + rr * Math.sin(a)})`, fill: 'var(--lumen-v)', stroke: 'var(--vein)', 'stroke-width': .8}, s); }
+  };
+  body(142, 115, 54, 9); body(258, 115, 54, 9);
+  body(200, 228, 38, 4);
+  blob(s, 200, 228, 9, 'var(--surface)', {stroke: 'var(--cyto)', 'stroke-width': 4});
+  el('rect', {x: 197, y: 60, width: 6, height: 110, fill: 'var(--collagen)'}, s);
+  lab(s, 200, 42, 'corpora cavernosa (two)', 'middle', 9);
+  lab(s, 254, 252, 'corpus spongiosum', 'start', 9); lab(s, 214, 232, 'urethra', 'start', 8.5);
+  lab(s, 352, 110, 'tunica albuginea', 'start', 8.5); el('line', {x1: 316, y1: 108, x2: 350, y2: 108, stroke: 'var(--ink)', 'stroke-width': .7}, s);
+  lab(s, 200, 296, 'skin outside (not drawn)', 'middle', 8.5);
+  lab(s, 4, 150, 'dorsal ↑', 'start', 8.5);
+  return [['--lumen-v', 'Blood spaces (endothelium-lined)'], ['--t-musc', 'Trabeculae (smooth muscle + fibrous tissue)', .55], ['--collagen', 'Tunica albuginea, septum'], ['--cyto', 'Urethral epithelium']];
+}
+
+function drawOvary(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('path', {d: 'M0 20 L400 20 L400 300 L0 300 Z', fill: 'var(--collagen)', opacity: .3}, s);
+  el('rect', {x: 0, y: 20, width: 400, height: 12, fill: 'var(--collagen)', opacity: .8}, s);
+  el('rect', {x: 0, y: 16, width: 400, height: 4, fill: 'var(--cyto)'}, s);
+  /* medulla with vessels */
+  el('rect', {x: 0, y: 250, width: 400, height: 50, fill: 'var(--collagen)', opacity: .35}, s);
+  for (const x of [40, 120, 210, 300, 370]) el('ellipse', {cx: x, cy: 276, rx: 12, ry: 6, fill: 'var(--lumen-v)', stroke: 'var(--t-endo)', 'stroke-width': 1.8}, s);
+  const oocyte = (x, y, r) => { blob(s, x, y, r + 3, 'var(--surface)', {stroke: 'var(--ink)', 'stroke-width': .8}); blob(s, x, y, r, 'var(--cyto)', {opacity: .5}); blob(s, x, y, r * .3, 'var(--nucleus)', {opacity: .8}); };
+  /* primordial follicles under the capsule */
+  for (const x of [20, 46, 72]) { blob(s, x, 46, 9, 'var(--cyto)'); oocyte(x, 46, 6); }
+  /* primary (growing) follicle */
+  blob(s, 60, 120, 32, 'var(--collagen)', {opacity: .7}); blob(s, 60, 120, 28, 'var(--cyto)');
+  for (let i = 0; i < 24; i++) { const a = i * Math.PI / 12; blob(s, 60 + 22 * Math.cos(a), 120 + 22 * Math.sin(a), 1.8, 'var(--nucleus)'); }
+  oocyte(60, 120, 13);
+  /* Graafian follicle */
+  const gx = 250, gy = 140;
+  blob(s, gx, gy, 102, 'var(--collagen)', {opacity: .75});
+  blob(s, gx, gy, 94, 'var(--cyto)');
+  for (let i = 0; i < 60; i++) { const a = i * Math.PI / 30; blob(s, gx + 88 * Math.cos(a), gy + 88 * Math.sin(a), 1.7, 'var(--nucleus)'); blob(s, gx + 80 * Math.cos(a + .05), gy + 80 * Math.sin(a + .05), 1.7, 'var(--nucleus)'); }
+  blob(s, gx, gy, 74, 'var(--fluid)');
+  /* discus proligerus */
+  el('path', {d: `M${gx - 74} ${gy + 10} Q${gx - 40} ${gy - 30} ${gx - 34} ${gy + 4} Q${gx - 30} ${gy + 40} ${gx - 70} ${gy + 32} Z`, fill: 'var(--cyto)'}, s);
+  oocyte(gx - 46, gy + 8, 14);
+  lab(s, 4, 12, 'surface epithelium', 'start', 8.5); lab(s, 396, 12, 'tunica albuginea ↓', 'end', 8.5);
+  lab(s, 96, 50, 'primordial follicles', 'start', 8.5);
+  lab(s, 60, 168, 'growing follicle', 'middle', 8.5);
+  lab(s, gx + 10, gy - 4, 'antrum (fluid)', 'start', 9);
+  lab(s, gx - 46, gy + 38, 'oocyte + zona', 'middle', 8.5);
+  lab(s, gx + 40, gy + 82, 'granulosa', 'start', 8.5); lab(s, gx + 92, gy - 96, 'theca', 'start', 8.5); el('line', {x1: gx + 70, y1: gy - 70, x2: gx + 90, y2: gy - 94, stroke: 'var(--ink)', 'stroke-width': .7}, s);
+  lab(s, 4, 296, 'medulla: vessels, no follicles', 'start', 8.5);
+  return [['--cyto', 'Follicle (granulosa) cells, oocyte'], ['--nucleus', 'Nuclei'], ['--fluid', 'Follicular fluid'], ['--collagen', 'Stroma, theca', .6], ['--t-endo', 'Vessels (endothelium)']];
+}
+
+function drawCL(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--collagen)', opacity: .3}, s);
+  const cx = 200, cy = 150;
+  const outer = a => 128 + 6 * Math.sin(3 * a);
+  const inner = a => 58 + 22 * Math.sin(7 * a) + 6 * Math.sin(13 * a);
+  el('path', {d: polar(cx, cy, a => outer(a) + 8), fill: 'var(--collagen)', opacity: .7}, s);
+  el('path', {d: polar(cx, cy, outer), fill: 'var(--horm)'}, s);
+  /* large lutein cells */
+  for (let x = cx - 130; x < cx + 130; x += 13) for (let y = cy - 130; y < cy + 130; y += 13) { const xx = x + ((y / 13) % 2) * 6, a = Math.atan2(y - cy, xx - cx), r = Math.hypot(xx - cx, y - cy); if (r > inner(a) + 8 && r < outer(a) - 14) blob(s, xx, y, 2.2, 'var(--nucleus)', {opacity: .8}); }
+  /* small lutein cells at the edge, from the theca */
+  for (let i = 0; i < 70; i++) { const a = i * 2 * Math.PI / 70, r = outer(a) - 6; blob(s, cx + r * Math.cos(a), cy + r * Math.sin(a), 3.2, 'var(--horm)', {stroke: 'var(--nucleus)', 'stroke-width': 1.2}); }
+  /* vessels growing in */
+  for (let i = 0; i < 7; i++) { const a = i * 2 * Math.PI / 7 + .2; el('line', {x1: cx + (outer(a) + 6) * Math.cos(a), y1: cy + (outer(a) + 6) * Math.sin(a), x2: cx + (inner(a) + 6) * Math.cos(a), y2: cy + (inner(a) + 6) * Math.sin(a), stroke: 'var(--t-endo)', 'stroke-width': 2.4}, s); }
+  el('path', {d: polar(cx, cy, inner), fill: 'var(--collagen)', opacity: .5}, s);
+  lab(s, cx, cy + 3, 'former follicle cavity', 'middle', 9);
+  lab(s, cx, cy - 90, 'large (granulosa-) lutein cells', 'middle', 9);
+  lab(s, 396, 22, 'small (theca-) lutein cells (placed schematically)', 'end', 8.5); el('line', {x1: cx + 110, y1: cy - 70, x2: 330, y2: 26, stroke: 'var(--ink)', 'stroke-width': .7}, s);
+  lab(s, 4, 290, 'vessels grow in from outside; wall folded', 'start', 8.5);
+  return [['--horm', 'Lutein cells (make progesterone)'], ['--nucleus', 'Nuclei'], ['--t-endo', 'Ingrowing vessels (endothelium)'], ['--collagen', 'Connective tissue', .6]];
+}
+
+function drawUterus(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 14, width: 400, height: 136, fill: 'var(--collagen)', opacity: .35}, s);
+  el('rect', {x: 0, y: 14, width: 400, height: 5, fill: 'var(--cyto)'}, s);
+  for (let i = 0; i < 160; i++) blob(s, (i * 61) % 400, 24 + (i * 29) % 120, 1.4, 'var(--nucleus)', {opacity: .6});
+  for (let x = 20; x < 400; x += 36) { el('path', {d: `M${x} 18 q 5 30 0 60 q -5 30 0 66`, fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 8, 'stroke-linecap': 'round'}, s); el('path', {d: `M${x} 18 q 5 30 0 60 q -5 30 0 66`, fill: 'none', stroke: 'var(--surface)', 'stroke-width': 2}, s); }
+  el('line', {x1: 0, y1: 112, x2: 400, y2: 112, stroke: 'var(--ink)', 'stroke-width': .8, 'stroke-dasharray': '5 4'}, s);
+  /* myometrium: three layers, middle with vessels */
+  el('rect', {x: 0, y: 150, width: 400, height: 140, fill: 'var(--t-musc)'}, s);
+  for (let y = 154; y < 190; y += 5) el('line', {x1: 0, y1: y, x2: 400, y2: y, stroke: 'var(--surface)', 'stroke-width': .5, opacity: .5}, s);
+  for (let x = -40; x < 400; x += 10) el('line', {x1: x, y1: 240, x2: x + 50, y2: 192, stroke: 'var(--surface)', 'stroke-width': .5, opacity: .5}, s);
+  for (const x of [40, 120, 200, 280, 360]) el('ellipse', {cx: x, cy: 216, rx: 10, ry: 6, fill: 'var(--lumen-v)', stroke: 'var(--t-endo)', 'stroke-width': 1.8}, s);
+  for (let x = 4; x < 400; x += 8) for (let y = 246; y < 286; y += 6) blob(s, x + (y % 2) * 3, y, 1.2, 'var(--surface)', {opacity: .6});
+  el('rect', {x: 0, y: 288, width: 400, height: 8, fill: 'var(--collagen)', opacity: .6}, s);
+  lab(s, 4, 10, 'lumen — simple columnar epithelium', 'start', 8.5);
+  lab(s, 396, 70, 'functional layer (shed)', 'end', 9); lab(s, 396, 132, 'basal layer', 'end', 9);
+  lab(s, 4, 132, 'simple tubular glands', 'start', 9);
+  lab(s, 396, 172, 'myometrium: three ill-defined layers', 'end', 9); lab(s, 396, 236, 'middle layer: most vessels (Gray)', 'end', 9);
+  lab(s, 396, 298, 'serosa', 'end', 8.5);
+  return [['--cyto', 'Epithelium, glands'], ['--collagen', 'Cellular stroma', .35], ['--nucleus', 'Stromal nuclei'], ['--t-musc', 'Smooth muscle'], ['--t-endo', 'Vessels (endothelium)']];
+}
+
+function drawCervix(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 30, width: 400, height: 270, fill: 'var(--collagen)', opacity: .35}, s);
+  /* endocervix on the left: tall columnar, branched deep glands; ectocervix on the right: stratified squamous */
+  el('rect', {x: 0, y: 30, width: 230, height: 5, fill: 'var(--cyto)'}, s);
+  for (const x of [30, 90, 150, 205]) {
+    const d = `M${x} 34 L${x + 6} 120 M${x + 3} 80 L${x + 26} 140 M${x + 5} 110 L${x - 16} 170`;
+    el('path', {d, fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 9, 'stroke-linecap': 'round'}, s);
+    el('path', {d, fill: 'none', stroke: 'var(--surface)', 'stroke-width': 2.5, 'stroke-linecap': 'round'}, s);
+  }
+  blob(s, 120, 220, 22, 'var(--surface)', {stroke: 'var(--cyto)', 'stroke-width': 4});
+  el('path', {d: 'M230 30 L400 30 L400 62 L230 36 Z', fill: 'var(--cyto)'}, s);
+  for (let x = 240; x < 400; x += 10) for (let k = 0; k < 3; k++) blob(s, x + k * 3, 34 + k * 7 + (x - 230) * 0.03, 1.4, 'var(--nucleus)');
+  el('line', {x1: 230, y1: 26, x2: 230, y2: 46, stroke: 'var(--ink)', 'stroke-width': 1.4}, s);
+  lab(s, 115, 10, 'endocervix (canal)', 'middle', 9); lab(s, 115, 22, 'tall mucous columnar', 'middle', 9);
+  lab(s, 318, 10, 'ectocervix (vaginal)', 'middle', 9); lab(s, 318, 22, 'stratified squamous', 'middle', 9);
+  lab(s, 236, 56, 'squamocolumnar', 'start', 8.5); lab(s, 236, 67, 'junction', 'start', 8.5);
+  lab(s, 60, 190, 'deep mucous glands', 'end', 8.5);
+  lab(s, 148, 224, 'Nabothian cyst (blocked gland)', 'start', 8.5);
+  return [['--cyto', 'Epithelium, glands'], ['--nucleus', 'Nuclei'], ['--collagen', 'Stroma', .35]];
+}
+
+function drawVilli(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--lumen-v)'}, s);
+  const villus = (cx, cy, rx, ry, rot, big) => {
+    const g = el('g', {transform: `rotate(${rot} ${cx} ${cy})`}, s);
+    el('ellipse', {cx, cy, rx, ry, fill: 'var(--cyto)'}, g);
+    el('ellipse', {cx, cy, rx: rx - 4, ry: ry - 4, fill: 'var(--collagen)', opacity: .9}, g);
+    el('ellipse', {cx, cy, rx: rx - 4, ry: ry - 4, fill: 'var(--surface)', opacity: .45}, g);
+    const n = Math.round((rx + ry) / 3);
+    for (let i = 0; i < n; i++) { const a = i * 2 * Math.PI / n; blob(g, cx + (rx - 2) * Math.cos(a), cy + (ry - 2) * Math.sin(a), 1.4, 'var(--nucleus)'); }
+    if (big) for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3 + .4; el('ellipse', {cx: cx + (rx - 9) * Math.cos(a), cy: cy + (ry - 9) * Math.sin(a), rx: 2.6, ry: 2, fill: 'var(--surface)', stroke: 'var(--nucleus)', 'stroke-width': .8}, g); }
+    for (const [dx, dy] of [[-rx * .3, -ry * .2], [rx * .25, ry * .25], [0, ry * .4]]) el('circle', {cx: cx + dx, cy: cy + dy, r: Math.min(rx, ry) * .14, fill: 'var(--lumen-v)', stroke: 'var(--t-endo)', 'stroke-width': 1.5}, g);
+  };
+  villus(150, 150, 96, 74, 0, true);
+  villus(330, 70, 52, 34, 30); villus(340, 220, 46, 40, 0); villus(40, 40, 36, 26, 20); villus(30, 260, 40, 30, -20); villus(280, 290, 30, 18, 0);
+  lab(s, 150, 150, 'villus core', 'middle', 9.5);
+  el('line', {x1: 232, y1: 116, x2: 270, y2: 130, stroke: 'var(--ink)', 'stroke-width': .7}, s); lab(s, 272, 134, 'syncytiotrophoblast', 'start', 9);
+  el('line', {x1: 231, y1: 175, x2: 270, y2: 152, stroke: 'var(--ink)', 'stroke-width': .7}, s); lab(s, 272, 156, 'cytotrophoblast', 'start', 9);
+  el('line', {x1: 168, y1: 170, x2: 200, y2: 262, stroke: 'var(--ink)', 'stroke-width': .7}, s); lab(s, 196, 274, 'fetal capillary', 'end', 9);
+  lab(s, 120, 20, 'intervillous space (maternal blood)', 'middle', 9);
+  return [['--cyto', 'Trophoblast'], ['--nucleus', 'Nuclei'], ['--collagen', 'Villus core (connective tissue)', .5], ['--t-endo', 'Fetal capillary wall (endothelium)'], ['--lumen-v', 'Maternal blood space']];
+}
+
+function drawCord(s) {
+  s.replaceChildren(); vb(s, 300);
+  blob(s, 200, 150, 138, 'var(--cyto)');
+  blob(s, 200, 150, 134, 'var(--surface)');
+  blob(s, 200, 150, 134, 'var(--collagen)', {opacity: .22});
+  for (let i = 0; i < 90; i++) { const a = i * 2.39996, r = Math.sqrt(i / 90) * 126; el('path', {d: `M${200 + r * Math.cos(a) - 4} ${150 + r * Math.sin(a)} l4 -2 l4 2`, fill: 'none', stroke: 'var(--collagen)', 'stroke-width': 1}, s); }
+  const art = (x, y) => { blob(s, x, y, 30, 'var(--t-musc)'); for (let r = 14; r < 29; r += 4) el('circle', {cx: x, cy: y, r, fill: 'none', stroke: 'var(--surface)', 'stroke-width': .5, opacity: .6}, s); blob(s, x, y, 9, 'var(--surface)', {stroke: 'var(--artery)', 'stroke-width': 2}); };
+  art(140, 200); art(262, 200);
+  blob(s, 200, 92, 40, 'var(--t-musc)', {opacity: .6}); blob(s, 200, 92, 30, 'var(--surface)', {stroke: 'var(--vein)', 'stroke-width': 2.5});
+  lab(s, 200, 95, 'vein (one)', 'middle', 9);
+  lab(s, 140, 248, 'artery', 'middle', 9); lab(s, 262, 248, 'artery', 'middle', 9);
+  lab(s, 200, 160, 'Wharton\'s jelly', 'middle', 9.5);
+  lab(s, 342, 20, 'amnion-covered surface', 'end', 8.5); el('line', {x1: 300, y1: 52, x2: 320, y2: 26, stroke: 'var(--ink)', 'stroke-width': .7}, s);
+  return [['--t-musc', 'Smooth muscle of the vessels'], ['--artery', 'Artery lumen edge'], ['--vein', 'Vein lumen edge'], ['--collagen', 'Wharton\'s jelly', .22], ['--cyto', 'Covering epithelium']];
+}
+
+/* ===================== PAGE ===================== */
+$('lede').textContent = DATA.lede; $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models; $('images').innerHTML = DATA.images;
+const mk = (box, id) => Histo.micro(box, Object.assign({id, file: id + '.jpg'}, DATA.micros[id]));
+const section = (p, items, cap) => { $(p + '-cap').innerHTML = cap; Histo.organs({chips: $(p + '-chips'), svg: $(p + '-svg'), key: $(p + '-key'), text: $(p + '-text'), micro: $(p + '-micro'), items: items.map(it => Object.assign({}, it, {micros: (it.micros || []).filter(id => DATA.micros[id])})), mk}); };
+section('uri', DATA.uri, DATA.uriCap);
+Histo.table($('neph-table'), ['', 'Where', 'Epithelium', 'Clue'], DATA.nephRows);
+section('male', DATA.male, DATA.maleCap);
+section('fem', DATA.fem, DATA.femCap);
+Histo.table($('foll-table'), ['Stage', 'What you see'], DATA.follRows);
+section('plac', DATA.plac, DATA.placCap);
+Histo.table($('tube-table'), ['Tube', 'Epithelium', 'Lumen', 'Muscle'], DATA.tubeRows);
+window.ready = true;
+</script>
+</body>
+</html>

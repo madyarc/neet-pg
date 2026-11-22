@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Endocrine Glands, Senses and CNS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<link rel="stylesheet" href="histo.css">
+<style>
+/* page colours, one meaning each (same values as the other histology pages where the meaning is the same):
+   --nucleus (nuclei), --cyto (epithelial / parenchymal cell cytoplasm), --collagen (connective tissue), --fibre (skeletal muscle),
+   --eosin (eosin-stained (acidophilic) cells and material: colloid, acidophil, oxyphil and parietal cells; same on respiratory-digestive),
+   --baso (basophil cells), --pale (pale-staining cells: chromophobes, C cells), --chromaffin (adrenal medulla cells),
+   --fat (lipid; shared value), --pigment (pigment: melanin, reticularis pigment), --calc (calcified concretions), --lumen-v (blood spaces),
+   --t-endo (endothelium: capillary and small-vessel walls; same as nervous-vascular), --fluid (body fluids: CSF, endolymph, perilymph,
+   aqueous; shared value), --nissl (neuron cell bodies and their dendrites), --axon (nerve fibres drawn singly: unmyelinated axons, retinal
+   nerve fibre layer), --grey / --cordw (grey and white matter: same values and meanings as general/nervous-system.html and the neuro pages),
+   --neuropil (glia and nerve-cell processes outside the brain's grey matter: posterior pituitary, pineal, retinal layers),
+   --sensory (receptor cells: rods and cones, hair cells, olfactory neurons; same on respiratory-digestive), --bm (acellular membranes),
+   --zym (serous gland cells), --sebum (sebaceous glands), --sweat (sweat glands), --hair (hair); --bone, --artery, --vein from atlas.css */
+:root{--nucleus:#1e4f99;--cyto:#c8b6e2;--collagen:#e39b9b;--fibre:#e6a4a0;--eosin:#f4a3b5;--baso:#8c7bd0;--pale:#9cf6de;--chromaffin:#b4b44b;--fat:#f3e3a6;
+  --pigment:#2d2d00;--calc:#b9a77a;--lumen-v:#d6e0f3;--t-endo:#e98f86;--fluid:#d9edc6;--nissl:#5a3f8c;--axon:#305038;--grey:#9c8f99;--cordw:#d9cbe0;
+  --neuropil:#42c0cc;--sensory:#68c078;--bm:#8a93a3;--zym:#6b3e26;--sebum:#ffd6a5;--sweat:#6bb8e8;--hair:#5c4033}
+:root[data-theme="dark"]{--nucleus:#9fb0ff;--cyto:#6d5a8c;--collagen:#b86a6a;--fibre:#a8605c;--eosin:#8c4a5c;--baso:#a99be8;--pale:#a0d8f0;--chromaffin:#5a7800;--fat:#7d6f3c;
+  --pigment:#a5870f;--calc:#8a7b52;--lumen-v:#28344c;--t-endo:#f0a59d;--fluid:#4e6638;--nissl:#c9a6ff;--axon:#d0c0e8;--grey:#8a7d88;--cordw:#6d6080;
+  --neuropil:#085050;--sensory:#a0c898;--bm:#7d8696;--zym:#d09a7a;--sebum:#8a6a3f;--sweat:#3f7a91;--hair:#c9a27e}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Endocrine Glands, Senses and CNS</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="Histology pages"><span class="muted">Histology:</span> <a href="epithelium-glands.html">Epithelium and glands</a> <a href="nervous-vascular.html">Nervous tissue and blood vessels</a> <a href="lymphoid-bone-skin.html">Lymphoid organs, bone and skin</a> <a href="respiratory-digestive.html">Respiratory and digestive organs</a> <a href="urinary-reproductive.html">Urinary and reproductive organs</a> <b>Endocrine glands, senses and CNS</b></nav>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-endo">Endocrine glands</a> <a href="#h-sense">Nose, eye and ear</a> <a href="#h-cns">Spinal cord, cerebellum, cerebrum</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-endo">
+  <h2 id="h-endo">Endocrine glands</h2>
+  <p class="cap key" id="endo-cap"></p>
+  <div class="chips" id="endo-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="endo-svg" viewBox="0 0 400 300" role="img" aria-label="Schematic of the chosen gland"></svg>
+      <div class="legend2" id="endo-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="endo-text"></div>
+    </div>
+    <div id="endo-micro" class="stack"></div>
+  </div>
+  <h3>How to tell them apart</h3>
+  <div class="scroll"><table id="endo-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sense">
+  <h2 id="h-sense">Nose, eye and ear</h2>
+  <p class="cap key" id="sense-cap"></p>
+  <div class="chips" id="sense-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="sense-svg" viewBox="0 0 400 300" role="img" aria-label="Schematic of the chosen structure"></svg>
+      <div class="legend2" id="sense-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="sense-text"></div>
+    </div>
+    <div id="sense-micro" class="stack"></div>
+  </div>
+  <div class="grid2">
+    <div><h3>The ten layers of the retina</h3><div class="scroll"><table id="ret-table"></table></div></div>
+    <div><h3>The five layers of the cornea</h3><div class="scroll"><table id="cor-table"></table></div></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cns">
+  <h2 id="h-cns">Spinal cord, cerebellum and cerebrum</h2>
+  <p class="cap key" id="cns-cap"></p>
+  <div class="chips" id="cns-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="cns-svg" viewBox="0 0 400 300" role="img" aria-label="Schematic of the chosen part"></svg>
+      <div class="legend2" id="cns-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="cns-text"></div>
+    </div>
+    <div id="cns-micro" class="stack"></div>
+  </div>
+  <div class="grid2">
+    <div><h3>Spinal cord levels (Gray 1918)</h3><div class="scroll"><table id="lev-table"></table></div></div>
+    <div><h3>Cerebellar or cerebral cortex?</h3><div class="scroll"><table id="ctx-table"></table></div></div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+  <p id="images"></p>
+</footer>
+</div>
+
+<script src="histo.js"></script>
+<script>
+/* ===================== DATA (checked in sources-local/facts/fill-histo2.md, Parts H–J and K) ===================== */
+const LIC = {
+  pd: ['Public domain', 'https://creativecommons.org/publicdomain/mark/1.0/'], cc0: ['CC0', 'https://creativecommons.org/publicdomain/zero/1.0/'],
+  by2: ['CC BY 2.0', 'https://creativecommons.org/licenses/by/2.0/'], by4: ['CC BY 4.0', 'https://creativecommons.org/licenses/by/4.0/'],
+  bysa3: ['CC BY-SA 3.0', 'https://creativecommons.org/licenses/by-sa/3.0/'], bysa4: ['CC BY-SA 4.0', 'https://creativecommons.org/licenses/by-sa/4.0/'],
+};
+const cr = (file, author, lic, done) => Histo.credit({file, author, lic: LIC[lic][0], licUrl: LIC[lic][1], done});
+const DATA = {
+  lede: 'Organ slides of the endocrine glands, the special senses and the central nervous system: pick an organ to see a drawing of its plan, a labelled micrograph where an open one exists, and the features that identify it. The tongue, lip and epiglottis are on the respiratory and digestive page; the salivary glands and tonsil on the basic-tissue pages linked above.',
+  endoCap: 'Endocrine glands have no ducts: their cells lie in <b>cords, clusters or follicles</b> close to blood vessels. The arrangement of the cells identifies the gland.',
+  endo: [
+    {k: 'ap', name: 'Pituitary: anterior lobe', ident: '<b>Cords of epithelial cells</b> of three kinds — acidophils, basophils and chromophobes — between large, thin-walled blood vessels.',
+      text: 'The pituitary has an anterior and a posterior lobe that differ in development and structure (Gray). In the anterior lobe (pars distalis) the cells are chromophils — acidophils and basophils — and chromophobes (Wikipedia). <b>Acidophils</b> are the growth-hormone (somatotroph) and prolactin (lactotroph) cells; <b>basophils</b> are the ACTH (corticotroph), TSH (thyrotroph) and FSH/LH (gonadotroph) cells (Wikipedia; pituitary stem-cell review). What <b>chromophobes</b> are is described differently: an endocrine-pathology review calls them hormone cells in a degranulated state (and lists thyrotrophs and gonadotrophs with them); the stem-cell review, hormone-negative cells that include the stem cells and progenitors. The pars intermedia holds small follicles of colloid.',
+      micros: ['pituitary'], draw: drawAntPit},
+    {k: 'pp', name: 'Pituitary: posterior lobe', ident: 'No glandular cells: pale <b>nerve fibres</b> from the hypothalamus with glial <b>pituicytes</b> among them.',
+      text: 'The axons carry hormones made in the hypothalamus and store them here until they are released (StatPearls; Wikipedia), into the capillaries of the lobe (Wikipedia). Their swollen endings, Herring bodies, are where the hormones are held (Wikipedia). Pituicytes are glial cells resembling astrocytes (Wikipedia). Gray (1918) saw only neuroglia here and wrote that the lobe contains "no nerve cells or fibers".',
+      micros: [], none: 'No open micrograph of the posterior lobe was found; see the drawing.', draw: drawPostPit},
+    {k: 'th', name: 'Thyroid', ident: '<b>Follicles</b> lined by one layer of cuboidal cells round <b>colloid</b>, with <b>parafollicular (C) cells</b>, larger and paler than the follicular cells (Wikipedia).',
+      text: 'A thin capsule sends septa into the gland, dividing it into lobules. The follicular cells are cuboidal (Gray), flat to columnar depending on how active they are (Wikipedia). The colloid is mostly thyroglobulin (Wikipedia) and stains readily with eosin (Gray). Parafollicular (C) cells lie inside the basement membrane of the follicle (Wikipedia) and make calcitonin.',
+      micros: ['thyroid'], draw: drawThyroid},
+    {k: 'pt', name: 'Parathyroid', ident: 'Columns of <b>chief cells</b> with a rich capillary supply and <b>no follicles</b>; a few larger <b>oxyphil cells</b>.',
+      text: 'The columns are supported by connective tissue with many blood capillaries; most cells are clear (Gray). Chief cells make parathyroid hormone (Wikipedia), which the glands release when serum calcium is low (StatPearls). The larger cells with oxyphil granules (Gray) are oxyphil cells; they increase with age (Wikipedia). Colloid vesicles have been described but, Gray notes, the observation was not confirmed.',
+      micros: ['parathyroid'], draw: drawParathyroid},
+    {k: 'ad', name: 'Suprarenal (adrenal)', ident: 'A <b>cortex in three zones</b> — rounded clusters under the capsule, long radial columns, then a network — round a <b>medulla</b> of large cells among venous sinusoids.',
+      text: '<b>Glomerulosa</b>: cells in rounded groups or arches; aldosterone (Wikipedia). <b>Fasciculata</b>: radial columns (cords) of cells holding lipid globules (Gray), large clear cells that store glucocorticoid (endocrine-pathology review). <b>Reticularis</b>, next to the medulla: cords running in different directions like a net, darker from pigment granules (Gray); precursor androgens (Wikipedia). <b>Medulla</b>: large chromaffin cells round venous sinusoids, secreting adrenaline and noradrenaline; they are modified postganglionic neurons (Wikipedia).',
+      micros: ['adrenal-cortex'], draw: drawAdrenal},
+    {k: 'pi', name: 'Pineal', ident: 'Cords of <b>pinealocytes</b> in glial tissue, with calcified concretions (<b>corpora arenacea</b>, "brain sand").',
+      text: 'Pinealocytes are the main cells (Wikipedia; StatPearls; 2021 review) and make melatonin (Wikipedia; review). The concretions — phosphate and carbonate of calcium (Gray) — and the glial tissue increase with age (Wikipedia; review).',
+      micros: [], none: 'No open micrograph of the pineal gland was found; see the drawing.', draw: drawPineal},
+  ],
+  endoRows: [
+    ['Anterior pituitary', 'Cords of three cell types', 'Acidophils, basophils, chromophobes; wide vessels'],
+    ['Posterior pituitary', 'Nerve fibres + glial cells', 'No glandular cells; Herring bodies (Wikipedia)'],
+    ['Thyroid', 'Follicles', 'Colloid; C cells'],
+    ['Parathyroid', 'Columns, no follicles', 'Clear chief cells; larger oxyphil cells'],
+    ['Suprarenal', 'Zones: clusters → columns → network; medulla', 'Lipid-rich fasciculata; chromaffin cells'],
+    ['Pineal', 'Cords of pinealocytes', 'Brain sand'],
+  ],
+  senseCap: 'The special-sense organs: the <b>olfactory epithelium</b>, the <b>eyelid</b>, the <b>cornea</b> and its junction with the sclera, the <b>retina</b> and <b>optic nerve</b>, and the <b>cochlea</b> with the organ of Corti.',
+  sense: [
+    {k: 'ol', name: 'Olfactory epithelium', ident: 'A tall epithelium of non-ciliated <b>supporting cells</b>, bipolar <b>olfactory neurons</b> and <b>basal cells</b>, with serous <b>Bowman\'s glands</b> in the lamina propria.',
+      text: 'It is pseudostratified columnar (Wikipedia). Each olfactory neuron sends one dendrite to the surface — ending in non-motile cilia that carry the odorant receptors (Wikipedia) — and one unmyelinated axon to the olfactory bulb. Basal cells replace the other cells (Wikipedia). Bowman\'s glands are serous (Gray); their ducts cross the epithelium (Wikipedia). Goblet cells are described in the neighbouring respiratory region (Gray).',
+      micros: ['olfactory'], draw: drawOlf},
+    {k: 'el', name: 'Eyelid', ident: 'From front to back: thin skin, loose areolar tissue, <b>orbicularis oculi</b> (skeletal muscle), the <b>tarsus</b> holding long <b>tarsal (Meibomian) glands</b>, and the <b>conjunctiva</b>.',
+      text: 'Tarsal glands are modified sebaceous glands — a straight tube with many small side pockets (Gray) — that secrete the lipid part of the tear film (Wikipedia). At the margin are the eyelashes, with the glands of Moll (modified sweat glands: Gray, Wikipedia) and the glands of Zeis (sebaceous: Wikipedia).',
+      micros: [], none: 'No open micrograph of a whole eyelid section was found; see the drawing.', draw: drawEyelid},
+    {k: 'co', name: 'Cornea', ident: '<b>Five layers</b> and <b>no blood vessels</b>: epithelium, Bowman\'s layer, stroma, Descemet\'s membrane, endothelium (table below).',
+      text: 'The epithelium is non-keratinized stratified squamous, several cells deep (about six, Wikipedia), and continuous with the conjunctival epithelium; the endothelium is a single layer of flat cells. Gray (1918) counts four layers, noting that some anatomists treat the layer under the epithelium (Bowman\'s) as a separate membrane.',
+      micros: [], none: 'No open micrograph sharp enough to show the corneal layers was found; see the drawing and the table.', draw: drawCornea},
+    {k: 'li', name: 'Sclero-corneal junction', ident: 'Where cornea meets sclera: the corneal epithelium continues as the conjunctiva, small vessels appear, and the <b>canal of Schlemm</b> lies in the inner sclera next to the <b>trabecular meshwork</b>.',
+      text: 'The limbus is a highly vascular, pigmented zone between cornea, conjunctiva and sclera (Wikipedia). Aqueous humour drains from the anterior chamber through the spaces of the trabecular meshwork (spaces of Fontana) into the endothelium-lined canal of Schlemm (sinus venosus sclerae), and from there into the episcleral vessels (Wikipedia).',
+      micros: [], none: 'No open micrograph of the limbus was found; see the drawing.', draw: drawLimbus},
+    {k: 're', name: 'Retina', ident: '<b>Ten layers</b> (table below); light passes through the inner layers before it reaches the rods and cones at the back (Wikipedia).',
+      text: 'Gray (1918) describes an outer pigmented layer and seven nervous layers, besides the two limiting membranes. The inner nuclear layer holds bipolar, horizontal and amacrine cells; the ganglion cell layer is a single row of large cells except at the macula, where there are several (Gray).',
+      micros: [], none: 'No open micrograph of the retina was found; see the drawing and the table.', draw: drawRetina},
+    {k: 'on', name: 'Optic nerve', ident: 'Bundles of <b>myelinated fibres</b> wrapped in <b>all three meninges</b> (dura, arachnoid, pia) instead of epineurium and perineurium.',
+      text: 'The optic nerve is really a tract of the brain: its fibres come from the ganglion cells of the retina and are myelinated by oligodendrocytes, not Schwann cells (Wikipedia). Just behind the eyeball the central artery of the retina and its vein run inside it (Gray).',
+      micros: ['optic-nerve'], draw: drawOptic},
+    {k: 'ch', name: 'Cochlea', ident: 'A bony canal coiled round a central <b>modiolus</b>; each turn cut across shows three spaces — <b>scala vestibuli</b>, the triangular <b>cochlear duct</b> and <b>scala tympani</b>.',
+      text: 'The canal winds two and three-quarter turns round the modiolus, whose spiral canal lodges the spiral ganglion (Gray). The osseous spiral lamina and the basilar membrane separate the cochlear duct from the scala tympani below; Reissner\'s (vestibular) membrane separates it from the scala vestibuli above. The duct holds endolymph, made by the stria vascularis on its outer wall (Wikipedia).',
+      micros: [], none: 'No open micrograph of the cochlea was found; see the drawing.', draw: drawCochlea},
+    {k: 'oc', name: 'Organ of Corti', ident: 'On the basilar membrane: <b>inner and outer pillar cells</b> enclosing a triangular tunnel, <b>one row of inner hair cells</b> and <b>three rows of outer hair cells</b> on Deiters\' cells, under the <b>tectorial membrane</b>.',
+      text: 'Gray (1918) gives three or four rows of outer hair cells; Wikipedia three. The tectorial membrane lies over the hair cells.',
+      micros: [], none: 'No open micrograph of the organ of Corti was found; see the drawing.', draw: drawCorti},
+  ],
+  retRows: [
+    ['1', 'Retinal pigment epithelium', 'One layer of cuboidal cells with melanin (next to the choroid)'],
+    ['2', 'Rods and cones', 'Inner and outer segments of the photoreceptors'],
+    ['3', 'External limiting membrane', 'Separates the inner segments from their nuclei'],
+    ['4', 'Outer nuclear layer', 'Cell bodies of rods and cones'],
+    ['5', 'Outer plexiform layer', 'Rod and cone endings synapse with bipolar and horizontal cells'],
+    ['6', 'Inner nuclear layer', 'Bipolar, horizontal and amacrine cells'],
+    ['7', 'Inner plexiform layer', 'Bipolar axons synapse with ganglion and amacrine cells'],
+    ['8', 'Ganglion cell layer', 'Ganglion cells, whose axons become the optic nerve'],
+    ['9', 'Nerve fibre layer', 'Axons of the ganglion cells'],
+    ['10', 'Internal limiting membrane', 'Basement membrane of Müller cells (next to the vitreous)'],
+  ],
+  corRows: [
+    ['Epithelium', 'Non-keratinized stratified squamous; continuous with the conjunctiva'],
+    ['Bowman\'s layer', 'Anterior limiting (elastic) lamina under the epithelium'],
+    ['Stroma', 'Substantia propria'],
+    ['Descemet\'s membrane', 'Posterior limiting (elastic) lamina'],
+    ['Endothelium', 'A single layer of flat cells facing the anterior chamber'],
+  ],
+  cnsCap: 'In the <b>spinal cord</b> the grey matter is inside the white; in the <b>cerebellum</b> and <b>cerebrum</b> it is outside, as a layered cortex. See also <a href="../neuro/meninges-cord.html">Meninges, CSF and spinal cord</a>.',
+  cns: [
+    {k: 'sc', name: 'Spinal cord', ident: 'An <b>H-shaped</b> (butterfly) core of grey matter — anterior and posterior horns, a lateral horn in thoracic segments — with the <b>central canal</b> in its middle, inside a rim of white matter.',
+      text: 'The white matter is almost all myelinated axons (Wikipedia). Large motor neurons in the anterior horn send their axons out in the anterior (ventral) roots. The posterior horn is capped by the substantia gelatinosa (Gray). The lateral horn is present only from T1 to L2 (Wikipedia; Gray: evident in the thoracic region). The cord is enlarged in the cervical and lumbar regions, where the grey matter is greatly increased.',
+      micros: [], none: 'No open micrograph of a whole cord section was found; see the drawing and the level table.', draw: drawCord},
+    {k: 'cb', name: 'Cerebellum', ident: 'Folds (folia), each a core of white matter under a cortex of <b>three layers</b>: molecular, a narrow layer of large <b>Purkinje cells</b>, and a densely packed <b>granular</b> layer.',
+      text: 'The molecular layer holds the flat dendritic trees of the Purkinje cells, parallel fibres, and stellate and basket cells (Wikipedia). Purkinje cells have flask-shaped bodies and large, flat, intricately branched dendritic trees. Gray (1918) counts two layers — molecular and "nuclear" (granular) — with an incomplete layer of Purkinje cells between them.',
+      micros: ['cerebellum', 'purkinje'], draw: drawCerebellum},
+    {k: 'cr', name: 'Cerebrum', ident: 'Grey matter on the surface in <b>six layers</b> (neocortex) with <b>pyramidal cells</b>; white matter beneath.',
+      text: 'From the surface: I molecular; II external granular; III external pyramidal; IV internal granular; V internal pyramidal — in the primary motor cortex it holds the giant <b>Betz cells</b>; VI polymorphic (multiform). The primary motor cortex has almost no layer IV (Wikipedia). Gray (1918), following Cajal, describes four layers of nerve cells.',
+      micros: [], none: 'No usable open micrograph of the cerebral cortex was found (the candidates were out of focus or photographs of a glass slide); see the drawing.', draw: drawCerebrum},
+  ],
+  levRows: [
+    ['Cervical', 'Enlargement: grey matter greatly increased', 'Anterior horn broad, posterior horn narrow'],
+    ['Thoracic', 'Grey matter small, also relative to the white', 'Both horns slender; lateral horn evident'],
+    ['Lumbar', 'Enlargement: grey matter greatly increased', 'Both horns expanded'],
+    ['Conus medullaris', 'Grey matter greatest in proportion to white', '—'],
+  ],
+  ctxRows: [
+    ['Layers', 'Three: molecular, Purkinje, granular', 'Six (neocortex)'],
+    ['Signature cell', 'Purkinje cell (flask-shaped, one narrow layer)', 'Pyramidal cell; giant Betz cells in the motor cortex'],
+    ['Small-cell (granular) layers', 'Granular layer, deepest: densely packed granule cells', 'II external granular: small pyramidal and many stellate neurons (Wikipedia); IV internal granular: many small spherical neurons (2022 review)'],
+  ],
+  micros: {
+    pituitary: {w: 720, h: 532, title: 'Anterior pituitary, high power', alt: 'Clusters of cells, some with pink cytoplasm, around capillaries with red blood cells',
+      cap: 'Cords and clusters of cells separated by thin connective tissue and <b>capillaries</b> (red blood cells). Cells with pink (eosin-stained) cytoplasm are <b>acidophils</b>; the others are basophils and chromophobes. Uploader: pars distalis of the anterior pituitary, high magnification.',
+      credit: cr('High magnification histology of pars distalis of the anterior pituitary gland.png', 'Mikael Häggström', 'cc0', 'resized'),
+      labels: [[0.41, 0.62, 'Acidophil'], [0.33, 0.45, 'Capillary (red cells)']]},
+    thyroid: {w: 720, h: 406, title: 'Thyroid, H&amp;E, 100×', alt: 'Round follicles of different sizes filled with pale pink colloid',
+      cap: 'Follicles filled with pale <b>colloid</b>, each ringed by a single layer of follicular cells, with connective tissue at the edge of the field. Uploader: human thyroid gland, H&amp;E, 100×.',
+      credit: cr('Parafollicular Cells at the Periphery Human Thyroid Gland (32546733317).jpg', 'Berkshire Community College Bioscience Image Library', 'cc0', 'resized'),
+      labels: [[0.57, 0.80, 'Colloid'], [0.95, 0.5, 'Connective tissue']]},
+    parathyroid: {w: 720, h: 732, title: 'Parathyroid beside thyroid, low power', alt: 'A dense mass of small cells next to pink colloid-filled follicles',
+      cap: 'The parathyroid is a solid mass of cells with <b>no follicles</b>; the neighbouring <b>thyroid</b> (top right) shows pink colloid-filled follicles. Uploader: thyroid and parathyroid glands. Contrast increased for this page.',
+      credit: cr('Thyroid and parathyroid glands histology.jpg', 'Netha Hussain', 'bysa3', 'cropped, resized, contrast increased'),
+      labels: [[0.3, 0.5, 'Parathyroid cells'], [0.8, 0.33, 'Thyroid follicles']]},
+    'adrenal-cortex': {w: 720, h: 540, title: 'Suprarenal gland, low power', alt: 'An elongated section with a capsule, radially striped cortex and a central medulla',
+      cap: 'A thin <b>capsule</b>; the <b>cortex</b> with its radial columns; the <b>medulla</b> in the centre with large veins. Uploader: human adrenal gland. The black pointer (top) is the uploader\'s: it reaches the outermost cortex just under the capsule, where the zona glomerulosa lies.',
+      credit: cr('Adrenal gland (cortex).JPG', 'Jpogi', 'pd', 'resized'),
+      labels: [[0.4, 0.09, 'Capsule'], [0.3, 0.22, 'Cortex'], [0.62, 0.45, 'Medulla'], [0.89, 0.44, 'Vein']]},
+    olfactory: {w: 720, h: 220, title: 'Olfactory epithelium, thin section', alt: 'A tall epithelium with nuclei at several levels over connective tissue',
+      cap: 'A tall <b>epithelium</b> with nuclei at several levels, over the <b>lamina propria</b>. Uploader: olfactory epithelium, 1.5 µm section, H&amp;E (teaching slide). The black pointer is the uploader\'s: its tip ends at the base of the epithelium.',
+      credit: cr('Olfactory Epithelium Thin Section 1.5 microns H & E Stain Ward\'s 2.jpg', 'Iceclanl', 'bysa3', 'cropped and resized'),
+      labels: [[0.3, 0.3, 'Olfactory epithelium'], [0.8, 0.85, 'Lamina propria']]},
+    cerebellum: {w: 720, h: 406, title: 'Cerebellum, silver stain, 40×', alt: 'A folium with a pale outer layer over a dark brown cellular layer',
+      cap: 'The pale outer <b>molecular layer</b> lies on the dark, densely cellular <b>granular layer</b>. Uploader: cerebellum cross section, 40×, silver stain.',
+      credit: cr('Cerebellum Cross Section (40559391653).jpg', 'Berkshire Community College Bioscience Image Library', 'cc0', 'resized'),
+      labels: [[0.32, 0.21, 'Molecular layer'], [0.35, 0.32, 'Granular layer']]},
+    purkinje: {w: 720, h: 406, title: 'Cerebellum: Purkinje cells, silver stain, 200×', alt: 'A row of large round cell bodies with dark fibres running up from them, densely packed small cells below',
+      cap: 'A row of large <b>Purkinje cell</b> bodies between the densely cellular <b>granular layer</b> (lower left) and the <b>molecular layer</b> (upper right), into which their dendrites run. Uploader: cerebellum cross section, Purkinje cells, 200×, silver impregnation.',
+      credit: cr('Cerebellum Cross Section Purkinje Cells (27187967707).jpg', 'Berkshire Community College Bioscience Image Library', 'cc0', 'resized'),
+      labels: [[0.708, 0.72, 'Purkinje cell'], [0.12, 0.55, 'Granular layer'], [0.85, 0.15, 'Molecular layer']]},
+    'optic-nerve': {w: 720, h: 480, title: 'Optic nerve and its sheaths', alt: 'Nerve fibre bundles on the left, a thin membrane, a gap and a thick pink sheath on the right',
+      cap: 'Bundles of nerve fibres (left) and the thick <b>dura mater</b> sheath (right); the thin membrane between them is part of the meningeal sheath. Uploader: partial cross section of the optic nerve, H&amp;E.',
+      credit: cr('Optic nerve -- low mag.jpg', 'Librepath', 'bysa3', 'resized'),
+      labels: [[0.15, 0.4, 'Nerve fibre bundles'], [0.72, 0.45, 'Dura mater']]},
+  },
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918: ductless glands, nose, eye, ear, spinal cord, cerebellum, cerebrum); StatPearls (NCBI Bookshelf); open-access reviews (endocrine pathology, adrenal zonation, pineal gland, olfactory epithelium, cerebellar cortex, cortical layers); Wikipedia (articles checked for OpenStax and Gray-1918 copying). Where Gray (1918) differs from modern accounts (posterior pituitary fibres, cornea and cortex layer counts), the modern account is used and Gray\'s is noted.',
+  models: 'Drawings: schematic, not to scale; label points on the micrographs placed by eye and checked on the image (approximate).',
+  images: 'Micrographs via Wikimedia Commons (each credited under its picture): Mikael Häggström (CC0), Berkshire Community College Bioscience Image Library (CC0), Netha Hussain (CC BY-SA 3.0), Jpogi (public domain), Librepath (CC BY-SA 3.0), Iceclanl (CC BY-SA 3.0); cropped/resized and labelled for this page.',
+};
+
+/* ===================== DRAWINGS ===================== */
+const {$, el, text, lab, keyHTML} = Histo;
+const blob = (s, cx, cy, r, fill, extra = {}) => el('circle', Object.assign({cx, cy, r, fill}, extra), s);
+const vb = (s, h) => s.setAttribute('viewBox', `0 0 400 ${h}`);
+const line = (s, x1, y1, x2, y2, c = 'var(--ink)', w = .7, extra = {}) => el('line', Object.assign({x1, y1, x2, y2, stroke: c, 'stroke-width': w}, extra), s);
+const polar = (cx, cy, rf, n = 120) => { let d = ''; for (let i = 0; i <= n; i++) { const a = i / n * 2 * Math.PI, r = rf(a); d += (i ? 'L' : 'M') + (cx + r * Math.cos(a)).toFixed(1) + ' ' + (cy + r * Math.sin(a)).toFixed(1); } return d + 'Z'; };
+/* horizontal bands, top to bottom: rows = [[height, fill, label, opacity, paint(y0, y1)]]; labels on the right */
+function bands(s, x0, x1, y, rows, labX = x1 + 6) {
+  for (const [h, fill, label, op, paint] of rows) {
+    if (fill) el('rect', {x: x0, y, width: x1 - x0, height: h, fill, opacity: op ?? 1}, s);
+    if (paint) paint(y, y + h);
+    if (label) lab(s, labX, y + h / 2 + 3, label, 'start', 8.5);
+    y += h;
+  }
+  return y;
+}
+
+function drawAntPit(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--lumen-v)'}, s);
+  const kinds = ['var(--eosin)', 'var(--baso)', 'var(--pale)'];
+  const cords = [[20, 20, 360, 70], [40, 110, 330, 70], [10, 210, 370, 70]];
+  cords.forEach(([x, y, w, h], j) => {
+    el('rect', {x, y, width: w, height: h, rx: 30, fill: 'var(--collagen)', opacity: .35}, s);
+    for (let i = 0; i < Math.floor(w / 26); i++) for (let r = 0; r < 2; r++) {
+      const cx = x + 18 + i * 26 + r * 12, cy = y + 20 + r * 30, k = (i * 3 + r * 5 + j * 2) % 7;
+      const fill = k < 3 ? kinds[0] : k < 5 ? kinds[1] : kinds[2];
+      el('rect', {x: cx - 11, y: cy - 12, width: 22, height: 24, rx: 5, fill, stroke: 'var(--ink)', 'stroke-width': .4}, s);
+      blob(s, cx, cy, 4, 'var(--nucleus)');
+    }
+  });
+  for (const y of [100, 200]) line(s, 0, y - 6, 400, y - 6, 'var(--t-endo)', 1.6);
+  lab(s, 396, 104, 'wide, thin-walled vessels between the cords', 'end', 8.5);
+  return [['--eosin', 'Acidophils'], ['--baso', 'Basophils'], ['--pale', 'Chromophobes'], ['--lumen-v', 'Vessel lumen'], ['--t-endo', 'Vessel wall (endothelium)'], ['--nucleus', 'Nuclei']];
+}
+
+function drawPostPit(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--neuropil)', opacity: .35}, s);
+  /* axons from above (hypothalamus) ending on capillaries with swollen endings */
+  const caps = [[100, 220], [250, 190], [340, 250]];
+  for (const [cx, cy] of caps) el('ellipse', {cx, cy, rx: 34, ry: 16, fill: 'var(--lumen-v)', stroke: 'var(--t-endo)', 'stroke-width': 1.8}, s);
+  for (let i = 0; i < 16; i++) {
+    const x0 = 20 + i * 24, [cx, cy] = caps[i % 3], ex = cx + ((i % 5) - 2) * 10, ey = cy - 20;
+    el('path', {d: `M${x0} 0 C ${x0} 80, ${ex} ${ey - 80}, ${ex} ${ey}`, fill: 'none', stroke: 'var(--axon)', 'stroke-width': 1.2, opacity: .8}, s);
+    if (i % 2 === 0) blob(s, ex, ey, 5, 'var(--axon)', {opacity: .85});
+  }
+  for (const [x, y] of [[60, 120], [180, 90], [300, 120], [200, 260], [30, 270]]) { el('path', {d: `M${x - 14} ${y - 8} L${x} ${y} L${x + 16} ${y - 10} M${x} ${y} L${x + 4} ${y + 14} M${x} ${y} L${x - 12} ${y + 10}`, stroke: 'var(--ink)', 'stroke-width': .8, fill: 'none'}, s); blob(s, x, y, 5, 'var(--cyto)', {stroke: 'var(--nucleus)', 'stroke-width': 1.5}); }
+  lab(s, 4, 12, '↓ axons from the hypothalamus', 'start', 9);
+  lab(s, 282, 150, 'Herring bodies', 'start', 8.5); lab(s, 282, 161, '(axon endings)', 'start', 8.5); line(s, 280, 152, 271, 165);
+  lab(s, 196, 86, 'pituicyte (glial cell)', 'start', 8.5);
+  lab(s, 4, 292, 'capillaries (Wikipedia)', 'start', 8.5);
+  return [['--axon', 'Axons and their swollen endings'], ['--cyto', 'Pituicytes'], ['--neuropil', 'Background: nerve fibres and glia', .35], ['--lumen-v', 'Capillary lumen'], ['--t-endo', 'Capillary wall (endothelium)']];
+}
+
+function drawThyroid(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--collagen)', opacity: .3}, s);
+  el('rect', {x: 0, y: 0, width: 400, height: 12, fill: 'var(--collagen)', opacity: .9}, s);
+  line(s, 270, 12, 250, 300, 'var(--collagen)', 6);
+  const foll = (cx, cy, rx, ry) => {
+    el('ellipse', {cx, cy, rx: rx + 2, ry: ry + 2, fill: 'none', stroke: 'var(--bm)', 'stroke-width': 1}, s);
+    el('ellipse', {cx, cy, rx, ry, fill: 'var(--cyto)'}, s);
+    el('ellipse', {cx, cy, rx: rx - 9, ry: ry - 9, fill: 'var(--eosin)'}, s);
+    const n = Math.round((rx + ry) / 5);
+    for (let i = 0; i < n; i++) { const a = i * 2 * Math.PI / n; blob(s, cx + (rx - 4.5) * Math.cos(a), cy + (ry - 4.5) * Math.sin(a), 2, 'var(--nucleus)'); }
+  };
+  foll(70, 70, 50, 40); foll(180, 70, 46, 44); foll(80, 190, 58, 52); foll(185, 200, 40, 46); foll(330, 90, 50, 56); foll(330, 230, 46, 44);
+  /* C cells: larger, pale, inside the basement membrane */
+  /* placed in the outer part of the follicle wall, between the follicular cells and the basement membrane, not reaching the colloid */
+  for (const [x, y] of [[222, 70], [134, 190]]) { blob(s, x, y, 4.6, 'var(--pale)', {stroke: 'var(--ink)', 'stroke-width': .8}); blob(s, x, y, 1.9, 'var(--nucleus)'); }
+  lab(s, 4, 9, 'capsule', 'start', 8);
+  lab(s, 70, 73, 'colloid', 'middle', 9);
+  line(s, 222, 75, 236, 140); lab(s, 236, 150, 'C cell (pale)', 'middle', 8.5);
+  line(s, 100, 40, 120, 26); lab(s, 122, 26, 'cuboidal follicular cells', 'start', 8.5);
+  lab(s, 266, 296, 'septum', 'start', 8.5);
+  return [['--cyto', 'Follicular cells'], ['--eosin', 'Colloid (eosin-stained, Gray)'], ['--pale', 'Parafollicular (C) cells: larger, paler (Wikipedia)'], ['--bm', 'Basement membrane'], ['--collagen', 'Capsule, septa', .3]];
+}
+
+function drawParathyroid(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--collagen)', opacity: .3}, s);
+  for (let j = 0; j < 4; j++) {
+    const y = 20 + j * 72;
+    el('rect', {x: 0, y: y + 50, width: 400, height: 10, fill: 'var(--lumen-v)', stroke: 'var(--t-endo)', 'stroke-width': 1.4}, s);
+    for (let i = 0; i < 18; i++) for (let r = 0; r < 2; r++) {
+      const cx = 12 + i * 22 + r * 10, cy = y + 12 + r * 22, ox = (i * 5 + j * 3 + r) % 17 === 0;
+      const sz = ox ? 13 : 9;
+      el('rect', {x: cx - sz, y: cy - sz, width: sz * 2, height: sz * 2, rx: 4, fill: ox ? 'var(--eosin)' : 'var(--cyto)', opacity: ox ? 1 : .6, stroke: 'var(--ink)', 'stroke-width': .3}, s);
+      blob(s, cx, cy, ox ? 3.6 : 3, 'var(--nucleus)');
+    }
+  }
+  lab(s, 396, 296, 'capillary between columns', 'end', 8.5);
+  return [['--cyto', 'Chief cells (clear)', .6], ['--eosin', 'Oxyphil cells (larger)'], ['--lumen-v', 'Capillary lumen'], ['--t-endo', 'Capillary wall (endothelium)'], ['--collagen', 'Connective tissue', .3]];
+}
+
+function drawAdrenal(s) {
+  s.replaceChildren(); vb(s, 300);
+  const X0 = 0, X1 = 270;
+  let y = bands(s, X0, X1, 0, [
+    [14, 'var(--collagen)', 'capsule', .9],
+    [46, 'var(--collagen)', 'zona glomerulosa', .25, (a, b) => { for (let x = 14; x + 28 <= X1; x += 34) { el('path', {d: `M${x} ${b - 4} Q${x} ${a + 4} ${x + 14} ${a + 4} Q${x + 28} ${a + 4} ${x + 28} ${b - 4}`, fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 9}, s); for (const t of [.15, .5, .85]) blob(s, x + 28 * t, t === .5 ? a + 5 : (a + b) / 2, 2, 'var(--nucleus)'); } }],
+    [120, 'var(--collagen)', 'zona fasciculata', .25, (a, b) => { for (let x = 8; x + 12 <= X1; x += 18) { el('rect', {x, y: a + 2, width: 12, height: b - a - 4, rx: 4, fill: 'var(--fat)', stroke: 'var(--ink)', 'stroke-width': .3}, s); for (let yy = a + 8; yy < b - 4; yy += 12) { blob(s, x + 6, yy, 1.8, 'var(--nucleus)'); blob(s, x + 3.5, yy + 5, 1.4, 'var(--surface)'); blob(s, x + 8.5, yy + 4, 1.2, 'var(--surface)'); } } }],
+    [50, 'var(--collagen)', 'zona reticularis', .25, (a, b) => { for (let i = 0; i < 26; i++) { const x = (i * 37) % (X1 - 40), yy = a + 6 + (i * 13) % (b - a - 12); el('path', {d: `M${x} ${yy} l18 8 l-6 14 M${x + 18} ${yy + 8} l16 -6`, fill: 'none', stroke: 'var(--pigment)', 'stroke-width': 6, 'stroke-linecap': 'round', opacity: .7}, s); } }],
+    [70, 'var(--lumen-v)', 'medulla', 1, (a, b) => { for (let x = 6; x + 34 <= X1; x += 30) for (const yy of [a + 16, a + 46]) { el('rect', {x: x + ((yy / 30) % 2) * 10, y: yy - 11, width: 22, height: 22, rx: 6, fill: 'var(--chromaffin)', stroke: 'var(--ink)', 'stroke-width': .3}, s); blob(s, x + 11 + ((yy / 30) % 2) * 10, yy, 3, 'var(--nucleus)'); } }],
+  ]);
+  lab(s, 276, 290, 'blood spaces: venous sinusoids', 'start', 8);
+  return [['--cyto', 'Glomerulosa cells'], ['--fat', 'Lipid-laden fasciculata cells'], ['--pigment', 'Pigmented reticularis cords'], ['--chromaffin', 'Chromaffin cells'], ['--lumen-v', 'Sinusoids'], ['--collagen', 'Capsule, stroma', .5]];
+}
+
+function drawPineal(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--neuropil)', opacity: .4}, s);
+  for (const [x, y, w, h] of [[10, 10, 180, 120], [210, 10, 180, 120], [10, 150, 120, 140], [150, 150, 240, 140]]) {
+    el('rect', {x, y, width: w, height: h, rx: 18, fill: 'var(--cyto)', opacity: .55}, s);
+    for (let i = 0; i < w * h / 260; i++) blob(s, x + 10 + ((i * 0.618034) % 1) * (w - 20), y + 10 + ((i * 0.7548777 + 0.3) % 1) * (h - 20), 3, 'var(--nucleus)', {opacity: .85});
+  }
+  for (const [x, y, r] of [[110, 140, 16], [296, 210, 22], [60, 250, 10]]) for (let k = r; k > 2; k -= 4) blob(s, x, y, k, k === r ? 'var(--calc)' : 'none', {stroke: 'var(--ink)', 'stroke-width': .6});
+  lab(s, 100, 70, 'pinealocytes', 'middle', 9.5);
+  lab(s, 200, 145, 'glial tissue between lobules', 'start', 8.5);
+  lab(s, 322, 214, 'brain sand', 'start', 8.5);
+  return [['--cyto', 'Pinealocytes', .55], ['--neuropil', 'Glial tissue', .4], ['--calc', 'Calcified concretion']];
+}
+
+function drawOlf(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 30, width: 400, height: 150, fill: 'var(--surface)'}, s);
+  el('rect', {x: 0, y: 180, width: 400, height: 120, fill: 'var(--collagen)', opacity: .35}, s);
+  /* supporting cells (tall), nuclei high */
+  for (let x = 6; x < 400; x += 22) { el('rect', {x, y: 30, width: 18, height: 150, fill: 'var(--cyto)', opacity: .65}, s); blob(s, x + 9, 56, 3.6, 'var(--nucleus)'); }
+  /* receptor neurons: nucleus in the middle, dendrite up with cilia, axon down */
+  for (let x = 26; x < 400; x += 44) {
+    line(s, x, 34, x, 110, 'var(--sensory)', 2.4); blob(s, x, 34, 3.2, 'var(--sensory)');
+    for (const dx of [-8, -3, 3, 8]) line(s, x, 34, x + dx, 22, 'var(--sensory)', .8);
+    el('ellipse', {cx: x, cy: 118, rx: 6, ry: 8, fill: 'var(--sensory)'}, s); blob(s, x, 118, 3.4, 'var(--nucleus)');
+    line(s, x, 126, x + 4, 260, 'var(--sensory)', 1.2);
+  }
+  /* basal cells */
+  for (let x = 14; x < 400; x += 26) { el('ellipse', {cx: x, cy: 172, rx: 6, ry: 5, fill: 'var(--cyto)'}, s); blob(s, x, 172, 2.6, 'var(--nucleus)'); }
+  /* Bowman's gland with its duct through the epithelium */
+  for (const [dx, dy] of [[-10, 0], [10, 0], [0, -10], [0, 10], [0, 0]]) blob(s, 330 + dx, 236 + dy, 7, 'var(--zym)', {stroke: 'var(--surface)', 'stroke-width': 1});
+  line(s, 330, 226, 330, 30, 'var(--zym)', 3);
+  lab(s, 4, 14, 'surface: cilia of the olfactory neurons (non-motile)', 'start', 8.5);
+  lab(s, 4, 294, 'axons → olfactory bulb', 'start', 8.5);
+  lab(s, 396, 270, 'Bowman\'s gland (serous)', 'end', 8.5);
+  lab(s, 36, 76, 'supporting cells', 'start', 8.5); lab(s, 36, 146, 'olfactory neurons', 'start', 8.5); lab(s, 36, 196, 'basal cells', 'start', 8.5);
+  return [['--cyto', 'Supporting and basal cells', .65], ['--sensory', 'Olfactory neurons'], ['--zym', 'Bowman\'s gland'], ['--collagen', 'Lamina propria', .35]];
+}
+
+function drawEyelid(s) {
+  s.replaceChildren(); vb(s, 300);
+  /* sagittal section of the upper lid: front (skin) on the left, back (conjunctiva) on the right, free margin at the bottom */
+  const L = 70, R = 300;
+  el('path', {d: `M${L} 0 L${L} 250 Q${L} 280 ${L + 30} 280 L${R - 20} 280 Q${R} 280 ${R} 250 L${R} 0 Z`, fill: 'var(--collagen)', opacity: .25}, s);
+  el('path', {d: `M${L} 0 L${L} 250 Q${L} 280 ${L + 30} 280`, fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 5}, s);
+  el('path', {d: `M${R - 20} 280 Q${R} 280 ${R} 250 L${R} 0`, fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 5}, s);
+  /* orbicularis oculi bundles */
+  for (let y = 20; y < 230; y += 22) el('ellipse', {cx: 120, cy: y, rx: 18, ry: 8, fill: 'var(--fibre)'}, s);
+  /* tarsus with a Meibomian gland */
+  el('rect', {x: 200, y: 60, width: 80, height: 210, rx: 10, fill: 'var(--collagen)', opacity: .8}, s);
+  line(s, 240, 80, 240, 278, 'var(--sebum)', 8);
+  for (let y = 90; y < 260; y += 18) { blob(s, 228, y, 7, 'var(--sebum)'); blob(s, 252, y + 9, 7, 'var(--sebum)'); }
+  /* eyelashes with Zeis (sebaceous) and Moll (sweat) glands */
+  for (const x of [100, 122]) line(s, x, 220, x - 20, 300, 'var(--hair)', 2.5);
+  blob(s, 128, 240, 6, 'var(--sebum)'); blob(s, 160, 246, 5, 'var(--sweat)'); el('path', {d: 'M160 246 q 8 -10 0 -18 q -8 -8 0 -16', fill: 'none', stroke: 'var(--sweat)', 'stroke-width': 3}, s);
+  lab(s, L - 6, 20, 'skin (thin)', 'end', 9); lab(s, L - 6, 32, 'front', 'end', 8.5);
+  lab(s, 120, 12, 'orbicularis oculi', 'middle', 9);
+  lab(s, 240, 52, 'tarsus', 'middle', 9);
+  lab(s, R + 6, 120, 'conjunctiva', 'start', 9); lab(s, R + 6, 132, '(back, on the eye)', 'start', 8.5);
+  lab(s, R + 6, 200, 'tarsal (Meibomian)', 'start', 8.5); lab(s, R + 6, 212, 'gland', 'start', 8.5); line(s, 262, 200, R + 4, 200);
+  lab(s, 60, 296, 'eyelashes', 'end', 8.5);
+  lab(s, 168, 228, 'Moll', 'start', 8); lab(s, 132, 256, 'Zeis', 'start', 8);
+  return [['--cyto', 'Epithelium (skin, conjunctiva)'], ['--fibre', 'Skeletal muscle'], ['--sebum', 'Sebaceous glands (tarsal, Zeis)'], ['--sweat', 'Gland of Moll'], ['--hair', 'Eyelashes'], ['--collagen', 'Connective tissue, tarsus', .5]];
+}
+
+function drawCornea(s) {
+  s.replaceChildren(); vb(s, 300);
+  lab(s, 4, 12, 'front (tear film)', 'start', 8.5);
+  const y = bands(s, 0, 270, 18, [
+    [44, 'var(--cyto)', 'epithelium', .8, (a, b) => { for (let r = 0; r < 6; r++) for (let x = 6 + (r % 2) * 8; x < 270; x += 16) el('ellipse', {cx: x, cy: a + 4 + r * 7.2, rx: r === 5 ? 3 : r < 2 ? 5 : 3.5, ry: r < 2 ? 1.6 : 2.6, fill: 'var(--nucleus)'}, s); }],
+    [8, 'var(--bm)', 'Bowman\'s layer', .7],
+    [160, 'var(--collagen)', 'stroma', .35, (a, b) => { for (let yy = a + 8; yy < b; yy += 10) { line(s, 0, yy, 270, yy, 'var(--collagen)', 1.2); el('ellipse', {cx: (yy * 7) % 260 + 5, cy: yy - 4, rx: 7, ry: 1.3, fill: 'var(--nucleus)'}, s); } }],
+    [6, 'var(--bm)', '', .9],
+    [8, 'var(--cyto)', '', .8, (a, b) => { for (let x = 10; x < 270; x += 20) el('ellipse', {cx: x, cy: a + 4, rx: 5, ry: 1.6, fill: 'var(--nucleus)'}, s); }],
+  ]);
+  lab(s, 276, y - 14, 'Descemet\'s membrane', 'start', 8.5); lab(s, 276, y + 2, 'endothelium', 'start', 8.5);
+  el('rect', {x: 0, y, width: 270, height: 296 - y, fill: 'var(--fluid)'}, s);
+  lab(s, 4, y + 30, 'anterior chamber (aqueous humour)', 'start', 8.5);
+  lab(s, 276, 290, 'no blood vessels', 'start', 8.5);
+  return [['--cyto', 'Epithelium, endothelium', .8], ['--bm', 'Limiting membranes'], ['--collagen', 'Stroma', .35], ['--nucleus', 'Nuclei'], ['--fluid', 'Aqueous humour']];
+}
+
+function drawLimbus(s) {
+  s.replaceChildren(); vb(s, 300);
+  /* cornea on the left blends into sclera on the right; anterior chamber below-left; iris root at the angle */
+  el('path', {d: 'M0 40 L400 40 L400 200 Q300 210 250 250 L0 140 Z', fill: 'var(--collagen)', opacity: .35}, s);
+  el('path', {d: 'M0 40 L200 40 L400 52', fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 9}, s);
+  el('path', {d: 'M0 140 L246 248', fill: 'none', stroke: 'var(--bm)', 'stroke-width': 3}, s);
+  el('path', {d: 'M0 140 L0 300 L190 300 L240 250 Z', fill: 'var(--fluid)'}, s);
+  /* conjunctival vessels at the margin */
+  for (const x of [220, 260, 300, 350]) el('ellipse', {cx: x, cy: 62, rx: 6, ry: 3.5, fill: 'var(--lumen-v)', stroke: 'var(--t-endo)', 'stroke-width': 1.4}, s);
+  /* Schlemm's canal and trabecular meshwork */
+  el('ellipse', {cx: 268, cy: 196, rx: 22, ry: 8, fill: 'var(--fluid)', stroke: 'var(--vein)', 'stroke-width': 1.6, transform: 'rotate(-30 268 196)'}, s);
+  for (let i = 0; i < 6; i++) line(s, 236 + i * 5, 212 + i * 3, 250 + i * 5, 238 - i * 2, 'var(--collagen)', 1.4);
+  /* iris root */
+  el('path', {d: 'M240 252 Q200 270 120 280 L120 290 Q200 284 252 262 Z', fill: 'var(--pigment)', opacity: .8}, s);
+  lab(s, 60, 32, 'corneal epithelium', 'middle', 8.5); lab(s, 330, 34, 'conjunctiva', 'middle', 8.5);
+  lab(s, 70, 96, 'cornea', 'middle', 9.5); lab(s, 340, 130, 'sclera', 'middle', 9.5);
+  lab(s, 396, 80, 'small vessels at the limbus', 'end', 8.5);
+  line(s, 286, 186, 320, 168); lab(s, 322, 166, 'canal of Schlemm', 'start', 8.5);
+  line(s, 250, 226, 320, 228); lab(s, 322, 232, 'trabecular meshwork', 'start', 8.5);
+  lab(s, 60, 220, 'anterior chamber', 'middle', 8.5); lab(s, 130, 296, 'iris', 'start', 8.5);
+  return [['--cyto', 'Epithelium'], ['--collagen', 'Corneal stroma and sclera', .35], ['--fluid', 'Aqueous humour'], ['--vein', 'Canal of Schlemm wall'], ['--t-endo', 'Limbal vessels (endothelium)'], ['--pigment', 'Iris root (pigment)']];
+}
+
+function drawRetina(s) {
+  s.replaceChildren(); vb(s, 300);
+  /* vitreous at the top, choroid at the bottom (light comes from above) */
+  lab(s, 4, 10, 'vitreous ↓ light', 'start', 8.5);
+  const X1 = 220;
+  lab(s, X1 + 6, 20, '10 inner limiting membrane', 'start', 8.5);
+  const y = bands(s, 0, X1, 24, [
+    [4, 'var(--bm)', ''],
+    [16, 'var(--neuropil)', '9 nerve fibre layer', .3, (a, b) => { for (let yy = a + 3; yy < b; yy += 3.5) line(s, 0, yy, X1, yy, 'var(--axon)', .9); }],
+    [22, 'var(--neuropil)', '8 ganglion cell layer', .7, (a, b) => { for (let x = 16; x < X1; x += 34) el('path', {d: `M${x - 7} ${b - 3} L${x} ${a + 3} L${x + 7} ${b - 3} Z`, fill: 'var(--nissl)'}, s); }],
+    [26, 'var(--neuropil)', '7 inner plexiform layer', .4],
+    [34, 'var(--neuropil)', '6 inner nuclear layer', .7, (a, b) => { for (let r = 0; r < 3; r++) for (let x = 6 + r * 5; x < X1; x += 13) blob(s, x, a + 7 + r * 10, 3.2, 'var(--nucleus)'); }],
+    [20, 'var(--neuropil)', '5 outer plexiform layer', .4],
+    [36, 'var(--neuropil)', '4 outer nuclear layer', .7, (a, b) => { for (let r = 0; r < 4; r++) for (let x = 4 + r * 3; x < X1; x += 10) blob(s, x, a + 6 + r * 8, 2.8, 'var(--nucleus)'); }],
+    [3, 'var(--bm)', '3 external limiting membrane'],
+    [40, null, '2 rods and cones', 1, (a, b) => { for (let x = 4; x < X1; x += 8) { const cone = x % 40 === 4; el('rect', {x: x - 2, y: a + 2, width: 4, height: cone ? 22 : 34, rx: 2, fill: 'var(--sensory)', opacity: cone ? 1 : .7}, s); if (cone) el('path', {d: `M${x - 3} ${a + 24} L${x} ${a + 34} L${x + 3} ${a + 24} Z`, fill: 'var(--sensory)'}, s); } }],
+    [16, 'var(--pigment)', '1 pigment epithelium', .85],
+  ]);
+  el('rect', {x: 0, y, width: X1, height: 296 - y, fill: 'var(--lumen-v)'}, s);
+  lab(s, 4, y + 14, 'choroid (vessels)', 'start', 8.5);
+  return [['--sensory', 'Rods and cones (receptor cells)'], ['--nucleus', 'Nuclei'], ['--nissl', 'Ganglion cells'], ['--axon', 'Ganglion-cell axons (nerve fibre layer)'], ['--neuropil', 'Plexiform (synaptic) layers', .4], ['--pigment', 'Pigment epithelium']];
+}
+
+function drawOptic(s) {
+  s.replaceChildren(); vb(s, 300);
+  const cx = 150, cy = 150;
+  blob(s, cx, cy, 140, 'var(--collagen)', {opacity: .9});
+  blob(s, cx, cy, 128, 'var(--fluid)');
+  blob(s, cx, cy, 120, 'var(--collagen)', {opacity: .4});
+  blob(s, cx, cy, 116, 'var(--cordw)');
+  /* fascicles separated by septa from the pia */
+  for (let i = 0; i < 26; i++) { const a = i * 2.39996, r = Math.sqrt((i + .5) / 26) * 98; el('path', {d: polar(cx + r * Math.cos(a), cy + r * Math.sin(a), t => 15 + 3 * Math.sin(3 * t + i)), fill: 'none', stroke: 'var(--collagen)', 'stroke-width': 2}, s); }
+  blob(s, cx + 6, cy - 2, 7, 'var(--surface)', {stroke: 'var(--artery)', 'stroke-width': 3}); blob(s, cx - 10, cy + 6, 8, 'var(--surface)', {stroke: 'var(--vein)', 'stroke-width': 2});
+  line(s, cx + 128, cy - 66, 300, 40); lab(s, 302, 40, 'dura mater', 'start', 9);
+  line(s, cx + 124, cy - 30, 300, 80); lab(s, 302, 80, 'arachnoid + space', 'start', 9);
+  line(s, cx + 118, cy, 300, 120); lab(s, 302, 120, 'pia mater', 'start', 9);
+  line(s, cx + 80, cy + 40, 300, 170); lab(s, 302, 170, 'myelinated fibres', 'start', 9); lab(s, 302, 182, 'in bundles', 'start', 9);
+  line(s, cx + 6, cy + 6, 300, 230); lab(s, 302, 230, 'central artery', 'start', 9); lab(s, 302, 242, 'and vein (front part)', 'start', 9);
+  return [['--cordw', 'Myelinated fibres (oligodendrocyte myelin, as in CNS white matter)'], ['--collagen', 'Meningeal sheaths, septa'], ['--fluid', 'Subarachnoid space (CSF)'], ['--artery', 'Central artery'], ['--vein', 'Central vein']];
+}
+
+function drawCochlea(s) {
+  s.replaceChildren(); vb(s, 300);
+  /* one turn in section: modiolus on the left, outer bony wall on the right */
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--bone)'}, s);
+  el('ellipse', {cx: 230, cy: 150, rx: 150, ry: 130, fill: 'var(--fluid)'}, s);
+  /* osseous spiral lamina + basilar membrane (floor of the duct) */
+  el('path', {d: 'M80 160 L190 160 L190 168 L80 168 Z', fill: 'var(--bone)'}, s);
+  line(s, 190, 164, 352, 170, 'var(--bm)', 3);
+  /* Reissner's membrane: roof */
+  line(s, 186, 156, 330, 80, 'var(--bm)', 1.6);
+  /* cochlear duct (triangular) */
+  el('path', {d: 'M186 156 L330 80 Q366 120 352 170 L190 164 Z', fill: 'var(--fluid)', stroke: 'var(--cyto)', 'stroke-width': 1}, s);
+  el('path', {d: 'M186 156 L330 80 Q366 120 352 170 L190 164 Z', fill: 'var(--surface)', opacity: .35}, s);
+  /* stria vascularis on the outer wall */
+  el('path', {d: 'M332 84 Q362 118 352 164', fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 7}, s);
+  for (const [x, y] of [[352, 104], [358, 124], [356, 144]]) blob(s, x, y, 2.4, 'var(--lumen-v)', {stroke: 'var(--t-endo)', 'stroke-width': 1});
+  /* organ of Corti on the basilar membrane */
+  el('path', {d: 'M240 166 Q262 136 300 150 L310 168 Z', fill: 'var(--cyto)'}, s);
+  /* spiral ganglion in the modiolus */
+  for (const [x, y] of [[50, 170], [60, 182], [44, 190], [62, 160]]) blob(s, x, y, 5, 'var(--nissl)');
+  lab(s, 230, 56, 'scala vestibuli', 'middle', 9.5);
+  lab(s, 230, 240, 'scala tympani', 'middle', 9.5);
+  lab(s, 272, 128, 'cochlear duct', 'middle', 9); lab(s, 272, 140, '(endolymph)', 'middle', 8.5);
+  line(s, 250, 120, 214, 96); lab(s, 212, 92, 'Reissner\'s membrane', 'end', 8.5);
+  line(s, 280, 168, 286, 196); lab(s, 286, 206, 'basilar membrane', 'middle', 8.5);
+  lab(s, 270, 158, 'organ of Corti', 'end', 8);
+  lab(s, 396, 112, 'stria', 'end', 8.5); lab(s, 396, 124, 'vascularis', 'end', 8.5);
+  lab(s, 130, 152, 'osseous spiral lamina', 'middle', 8.5);
+  lab(s, 4, 140, 'modiolus:', 'start', 8.5); lab(s, 4, 210, 'spiral ganglion', 'start', 8.5);
+  return [['--bone', 'Bone'], ['--fluid', 'Perilymph / endolymph'], ['--bm', 'Basilar and Reissner\'s membranes'], ['--cyto', 'Epithelium, organ of Corti'], ['--nissl', 'Spiral ganglion cells']];
+}
+
+function drawCorti(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--fluid)', opacity: .6}, s);
+  /* basilar membrane */
+  line(s, 20, 250, 390, 250, 'var(--bm)', 4);
+  /* pillars and tunnel */
+  el('path', {d: 'M140 250 L176 150 L184 150 L150 250 Z', fill: 'var(--cyto)'}, s);
+  el('path', {d: 'M226 250 L186 150 L194 150 L236 250 Z', fill: 'var(--cyto)'}, s);
+  el('path', {d: 'M152 248 L184 158 L224 248 Z', fill: 'var(--fluid)'}, s);
+  /* inner hair cell (one) */
+  el('rect', {x: 112, y: 140, width: 18, height: 50, rx: 8, fill: 'var(--sensory)'}, s); blob(s, 121, 176, 4, 'var(--nucleus)');
+  el('rect', {x: 90, y: 190, width: 46, height: 60, fill: 'var(--cyto)', opacity: .6}, s);
+  /* three outer hair cells on Deiters' cells */
+  for (let i = 0; i < 3; i++) {
+    const x = 248 + i * 36;
+    el('rect', {x, y: 140, width: 16, height: 44, rx: 7, fill: 'var(--sensory)'}, s); blob(s, x + 8, 172, 4, 'var(--nucleus)');
+    el('path', {d: `M${x - 4} 250 L${x - 4} 190 L${x + 20} 190 L${x + 20} 250 Z`, fill: 'var(--cyto)', opacity: .6}, s);
+    line(s, x + 18, 192, x + 30, 140, 'var(--cyto)', 2.5);
+  }
+  /* stereocilia */
+  for (const x of [121, 256, 292, 328]) for (const dx of [-4, 0, 4]) line(s, x + dx, 140, x + dx, 128, 'var(--ink)', 1);
+  /* tectorial membrane */
+  el('path', {d: 'M0 100 L80 100 Q200 104 360 122 L360 130 Q200 116 80 112 L0 112 Z', fill: 'var(--bm)', opacity: .55}, s);
+  lab(s, 4, 94, 'tectorial membrane', 'start', 9);
+  lab(s, 121, 210, '', 'middle', 8);
+  lab(s, 100, 290, 'inner hair cell (1 row)', 'start', 8.5); line(s, 121, 190, 120, 280);
+  lab(s, 300, 290, 'outer hair cells (3 rows)', 'middle', 8.5); line(s, 292, 184, 300, 280);
+  lab(s, 188, 236, 'tunnel', 'middle', 8.5);
+  lab(s, 188, 142, 'pillar cells', 'middle', 8.5);
+  lab(s, 396, 210, 'Deiters\' cells', 'end', 8.5);
+  lab(s, 396, 264, 'basilar membrane', 'end', 8.5);
+  lab(s, 4, 264, '← modiolus side', 'start', 8.5);
+  return [['--sensory', 'Hair cells'], ['--cyto', 'Supporting cells (pillars, Deiters\')'], ['--bm', 'Basilar and tectorial membranes'], ['--fluid', 'Endolymph / perilymph']];
+}
+
+function drawCord(s) {
+  s.replaceChildren(); vb(s, 300);
+  const cx = 150, cy = 150;
+  el('ellipse', {cx, cy, rx: 140, ry: 112, fill: 'var(--cordw)'}, s);
+  el('ellipse', {cx, cy, rx: 140, ry: 112, fill: 'none', stroke: 'var(--collagen)', 'stroke-width': 3}, s);
+  /* H-shaped grey matter (thoracic: slender horns + lateral horn) */
+  const g = 'M150 128 C 130 128, 120 120, 112 100 C 104 82, 96 70, 92 56 C 98 54, 104 58, 110 70 C 118 90, 126 108, 136 118 Z';
+  for (const sx of [1, -1]) {
+    const t = sx < 0 ? 'translate(300 0) scale(-1 1)' : '';
+    const grp = el('g', {transform: t}, s);
+    el('path', {d: 'M150 132 C 128 132, 116 126, 108 110 C 100 94, 98 76, 86 52 L 96 48 C 108 70, 116 88, 124 102 C 132 114, 140 120, 150 120 Z', fill: 'var(--grey)'}, grp);
+    el('path', {d: 'M150 168 C 128 168, 112 176, 104 196 C 98 214, 100 226, 106 236 L 128 232 C 126 220, 128 206, 134 194 C 140 184, 146 180, 150 180 Z', fill: 'var(--grey)'}, grp);
+    el('path', {d: 'M150 120 C 120 120, 110 140, 112 150 C 114 160, 124 170, 150 180 Z', fill: 'var(--grey)'}, grp);
+    el('path', {d: 'M112 146 L 94 150 L 112 156 Z', fill: 'var(--grey)'}, grp);
+    el('path', {d: 'M86 52 L 96 48 L 100 58 L 90 62 Z', fill: 'var(--surface)', opacity: .7}, grp);
+    for (const [x, y] of [[116, 210], [124, 222], [110, 200]]) el('path', {d: `M${x - 5} ${y + 4} L${x} ${y - 5} L${x + 5} ${y + 4} Z`, fill: 'var(--nissl)'}, grp);
+  }
+  blob(s, cx, cy, 5, 'var(--fluid)', {stroke: 'var(--cyto)', 'stroke-width': 1.5});
+  el('path', {d: `M${cx} ${cy + 112} L${cx} ${cy + 76}`, stroke: 'var(--collagen)', 'stroke-width': 3}, s);
+  line(s, 100, 70, 300, 40); lab(s, 302, 40, 'posterior horn', 'start', 9);
+  line(s, 92, 54, 300, 22); lab(s, 302, 22, 'substantia gelatinosa', 'start', 8.5);
+  line(s, 206, 150, 300, 120); lab(s, 302, 120, 'lateral horn (T1–L2)', 'start', 8.5);
+  line(s, 186, 222, 300, 236); lab(s, 302, 236, 'anterior horn:', 'start', 9); lab(s, 302, 248, 'motor neurons', 'start', 9);
+  line(s, 154, 152, 300, 160); lab(s, 302, 160, 'central canal', 'start', 9);
+  line(s, 50, 150, 300, 196); lab(s, 302, 196, 'white matter', 'start', 9);
+  lab(s, 150, 296, 'front (anterior) ↓', 'middle', 8.5);
+  return [['--grey', 'Grey matter'], ['--cordw', 'White matter (myelinated axons)'], ['--nissl', 'Motor neurons'], ['--fluid', 'Central canal (CSF)']];
+}
+
+function drawCerebellum(s) {
+  s.replaceChildren(); vb(s, 300);
+  /* one folium: white core, granular, Purkinje, molecular */
+  const B = 178, R1 = 130, R2 = 84, R3 = 34;
+  const top = r => B - r * .2;
+  const fol = r => `M${200 - r} 300 L${200 - r} ${top(r)} A${r} ${r} 0 0 1 ${200 + r} ${top(r)} L${200 + r} 300 Z`;
+  const inside = (x, y, r) => Math.abs(x - 200) < r && (y > top(r) || Math.hypot(x - 200, y - top(r)) < r);
+  el('path', {d: fol(R1), fill: 'var(--grey)', opacity: .45}, s);
+  el('path', {d: fol(R2), fill: 'var(--nucleus)', opacity: .28}, s);
+  for (let i = 0; i < 520; i++) { const x = 200 - R2 + (i * 37) % (2 * R2), y = 20 + (i * 53) % 280; if (inside(x, y, R2) && !inside(x, y, R3 + 3)) blob(s, x, y, 1.6, 'var(--nucleus)'); }
+  el('path', {d: fol(R3), fill: 'var(--cordw)'}, s);
+  /* Purkinje cells along the edge of the granular layer, dendrites into the molecular layer */
+  for (let i = 0; i <= 12; i++) {
+    const a = Math.PI + i * Math.PI / 12, x = 200 + (R2 + 3) * Math.cos(a), y = top(R2) + (R2 + 3) * Math.sin(a);
+    el('path', {d: `M${x - 5} ${y + 5} Q${x} ${y - 9} ${x + 5} ${y + 5} Z`, fill: 'var(--nissl)'}, s);
+    const ox = 200 + (R1 - 16) * Math.cos(a), oy = top(R2) + (R1 - 16) * Math.sin(a);
+    line(s, x, y - 3, ox, oy, 'var(--nissl)', 1.2);
+    line(s, x + (ox - x) * .5, y + (oy - y) * .5, x + (ox - x) * .8 + 6, y + (oy - y) * .8, 'var(--nissl)', .8);
+  }
+  for (const y of [200, 250]) { blob(s, 84, y, 1.4, 'var(--nucleus)'); blob(s, 316, y + 20, 1.4, 'var(--nucleus)'); }
+  lab(s, 200, 260, 'white matter', 'middle', 9);
+  lab(s, 4, 40, 'molecular layer', 'start', 9); line(s, 60, 46, 92, 120);
+  lab(s, 396, 40, 'Purkinje cell layer', 'end', 9); line(s, 330, 46, 263, 108);
+  lab(s, 396, 220, 'granular layer', 'end', 9); line(s, 340, 216, 262, 210);
+  return [['--grey', 'Grey matter (cortex): molecular layer', .45], ['--nissl', 'Purkinje cells and dendrites'], ['--nucleus', 'Granule cells (nuclei)'], ['--cordw', 'White matter']];
+}
+
+function drawCerebrum(s) {
+  s.replaceChildren(); vb(s, 300);
+  lab(s, 4, 10, 'surface (pia)', 'start', 8.5);
+  const X1 = 270;
+  const pyr = (x, y, h) => { el('path', {d: `M${x - h * .35} ${y + h * .5} L${x} ${y - h * .5} L${x + h * .35} ${y + h * .5} Z`, fill: 'var(--nissl)'}, s); line(s, x, y - h * .5, x, y - h * 1.6, 'var(--nissl)', .8); };
+  const y = bands(s, 0, X1, 14, [
+    [30, 'var(--grey)', 'I molecular', .35, (a, b) => { for (let x = 30; x < X1; x += 60) blob(s, x, (a + b) / 2, 1.8, 'var(--nucleus)'); }],
+    [30, 'var(--grey)', 'II external granular', .6, (a, b) => { for (let x = 6; x < X1; x += 9) blob(s, x, a + 8 + (x % 3) * 6, 2, 'var(--nissl)'); }],
+    [52, 'var(--grey)', 'III external pyramidal', .45, (a, b) => { for (let x = 14; x < X1; x += 22) pyr(x, a + 18 + (x % 4) * 6, 10 + (x % 4) * 2); }],
+    [28, 'var(--grey)', 'IV internal granular', .6, (a, b) => { for (let x = 4; x < X1; x += 7) blob(s, x, a + 6 + (x % 4) * 5, 2, 'var(--nissl)'); }],
+    [56, 'var(--grey)', 'V internal pyramidal', .45, (a, b) => { for (let x = 24; x < X1; x += 36) pyr(x, a + 34, 18); pyr(150, a + 34, 28); }],
+    [40, 'var(--grey)', 'VI polymorphic (multiform)', .55, (a, b) => { for (let x = 10; x < X1; x += 16) el('ellipse', {cx: x, cy: a + 12 + (x % 5) * 4, rx: 3.5, ry: 2, transform: `rotate(${x * 7} ${x} ${a + 12 + (x % 5) * 4})`, fill: 'var(--nissl)'}, s); }],
+  ]);
+  el('rect', {x: 0, y, width: X1, height: 296 - y, fill: 'var(--cordw)'}, s);
+  lab(s, X1 + 6, y + 18, 'white matter', 'start', 8.5);
+  lab(s, 276, 198, '(giant Betz cell', 'start', 8); lab(s, 276, 208, ' in motor cortex)', 'start', 8); line(s, 160, 190, 272, 200);
+  return [['--nissl', 'Neurons'], ['--grey', 'Grey matter', .45], ['--cordw', 'White matter']];
+}
+
+/* ===================== PAGE ===================== */
+$('lede').textContent = DATA.lede; $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models; $('images').innerHTML = DATA.images;
+const mk = (box, id) => Histo.micro(box, Object.assign({id, file: id + '.jpg'}, DATA.micros[id]));
+const section = (p, items, cap) => { $(p + '-cap').innerHTML = cap; Histo.organs({chips: $(p + '-chips'), svg: $(p + '-svg'), key: $(p + '-key'), text: $(p + '-text'), micro: $(p + '-micro'), items: items.map(it => Object.assign({}, it, {micros: (it.micros || []).filter(id => DATA.micros[id])})), mk}); };
+section('endo', DATA.endo, DATA.endoCap);
+Histo.table($('endo-table'), ['', 'Arrangement', 'Identify by'], DATA.endoRows);
+section('sense', DATA.sense, DATA.senseCap);
+Histo.table($('ret-table'), ['', 'Layer (outside → in)', 'Contents'], DATA.retRows);
+Histo.table($('cor-table'), ['Layer (front → back)', 'What it is'], DATA.corRows);
+section('cns', DATA.cns, DATA.cnsCap);
+Histo.table($('lev-table'), ['Level', 'Grey matter', 'Horns'], DATA.levRows);
+Histo.table($('ctx-table'), ['', 'Cerebellum', 'Cerebrum'], DATA.ctxRows);
+window.ready = true;
+</script>
+</body>
+</html>

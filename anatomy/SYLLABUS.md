@@ -240,7 +240,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 25. Thorax
 
-- [ ] **AN25.1** Identify, draw and label a slide of trachea and lung
+- [x] **AN25.1** Identify, draw and label a slide of trachea and lung — *trachea and lung micrographs with labels, bronchus drawn: [Respiratory and Digestive Organs](histology/respiratory-digestive.html)*
 - [ ] **AN25.2** Describe development of pleura, lung & heart
 - [ ] **AN25.3** Describe fetal circulation and changes occurring at birth
 - [ ] **AN25.4** Describe embryological basis of: 1) atrial septal defect, 2) ventricular septal defect, 3) Fallot’s tetralogy & 4) tracheoesophageal fistula
@@ -384,8 +384,8 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 ### 43. Head & neck Joints, Histology, Development, Radiography & Surface marking
 
 - [x] **AN43.1** Describe & demonstrate the movements with muscles producing the movements of atlantooccipital joint & atlantoaxial joint — *nodding and turning in 3D, muscles, ligaments: [Joints of the Jaw, Spine and Pelvis](back/joints.html); [Muscles of the Back](back/muscles.html)*
-- [ ] **AN43.2** Identify, describe and draw the microanatomy of pituitary gland, thyroid, parathyroid gland, tongue, salivary glands, tonsil, epiglottis, cornea, retina
-- [ ] **AN43.3** Identify, describe and draw microanatomy of olfactory epithelium, eyelid, lip, sclero-corneal junction, optic nerve, cochlea- organ of corti, pineal gland
+- [~] **AN43.2** Identify, describe and draw the microanatomy of pituitary gland, thyroid, parathyroid gland, tongue, salivary glands, tonsil, epiglottis, cornea, retina — *pituitary (anterior lobe), thyroid, parathyroid micrographs in [Endocrine Glands, Senses and CNS](histology/endocrine-senses-cns.html); cornea and retina drawn with layer tables there; tongue and epiglottis drawn in [Respiratory and Digestive Organs](histology/respiratory-digestive.html); salivary glands in [Epithelium and Glands](histology/epithelium-glands.html); partial: no usable open micrograph of the posterior pituitary, tongue (vallate papilla), epiglottis, cornea, retina or tonsil — drawings only*
+- [~] **AN43.3** Identify, describe and draw microanatomy of olfactory epithelium, eyelid, lip, sclero-corneal junction, optic nerve, cochlea- organ of corti, pineal gland — *olfactory epithelium and optic nerve micrographs, eyelid, sclero-corneal junction, cochlea, organ of Corti and pineal drawn: [Endocrine Glands, Senses and CNS](histology/endocrine-senses-cns.html); lip drawn in [Respiratory and Digestive Organs](histology/respiratory-digestive.html); partial: no open micrograph of the eyelid, lip, limbus, cochlea or pineal — drawings only*
 - [ ] **AN43.4** Describe the development and developmental basis of congenital anomalies of face, palate, tongue, branchial apparatus, pituitary gland, thyroid gland & eye
 - [x] **AN43.5** Demonstrate- 1) Testing of muscles of facial expression, extraocular muscles, muscles of mastication, 2) Palpation of carotid arteries, facial artery, superficial temporal artery, 3) Location of internal and external jugular veins, 4) Location of hyoid bone, thyroid cartilage and cricoid cartilage with their vertebral levels — *testing facial, extraocular and masticatory muscles; carotid, facial and superficial temporal pulses, jugular veins and hyoid/thyroid/cricoid levels in 3D: [Muscles of the Head and Neck](head-neck/muscles.html)*
 - [~] **AN43.6** Demonstrate surface projection of- Thyroid gland, Parotid gland and duct, Pterion, Common carotid artery, Internal jugular vein, Subclavian vein, External jugular vein, Facial artery in the face & accessory nerve — *common carotid, IJV, EJV, facial artery and accessory nerve lines in [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html); thyroid, parotid and duct, pterion in [Face and Neck: Regions and Glands](head-neck/regions.html); subclavian vein only as behind the clavicle*
@@ -467,9 +467,9 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 52. Histology & Embryology
 
-- [ ] **AN52.1** Describe & identify the microanatomical features of Gastro-intestinal system: Oesophagus, Fundus of stomach, Pylorus of stomach, Duodenum, Jejunum, Ileum, Large intestine, Appendix, Liver, Gall bladder, Pancreas & Suprarenal gland
-- [ ] **AN52.2** Describe & identify the microanatomical features of: Urinary system: Kidney, Ureter & Urinary bladder Male Reproductive System: Testis, Epididymis, Vas deferens, Prostate & penis Female reproductive system: Ovary, Uterus, Uterine tube, Cervix, Placenta & Umbilical cord
-- [ ] **AN52.3** Describe & identify the microanatomical features of Cardiooesophageal junction, Corpus luteum
+- [x] **AN52.1** Describe & identify the microanatomical features of Gastro-intestinal system: Oesophagus, Fundus of stomach, Pylorus of stomach, Duodenum, Jejunum, Ileum, Large intestine, Appendix, Liver, Gall bladder, Pancreas & Suprarenal gland — *gut wall drawings and comparison tables with micrographs (ileum drawn only: no open Peyer's patch micrograph), liver, gall bladder, pancreas: [Respiratory and Digestive Organs](histology/respiratory-digestive.html); suprarenal: [Endocrine Glands, Senses and CNS](histology/endocrine-senses-cns.html)*
+- [x] **AN52.2** Describe & identify the microanatomical features of: Urinary system: Kidney, Ureter & Urinary bladder Male Reproductive System: Testis, Epididymis, Vas deferens, Prostate & penis Female reproductive system: Ovary, Uterus, Uterine tube, Cervix, Placenta & Umbilical cord — *all with drawings and micrographs (penis drawn only: no open micrograph), plus a table of tubes that look alike: [Urinary and Reproductive Organs](histology/urinary-reproductive.html)*
+- [x] **AN52.3** Describe & identify the microanatomical features of Cardiooesophageal junction, Corpus luteum — *cardio-oesophageal junction micrograph: [Respiratory and Digestive Organs](histology/respiratory-digestive.html); corpus luteum drawn, with a corpus albicans micrograph (no open micrograph of a normal corpus luteum): [Urinary and Reproductive Organs](histology/urinary-reproductive.html)*
 - [ ] **AN52.4** Describe the development of anterior abdominal wall
 - [ ] **AN52.5** Describe the development and congenital anomalies of Diaphragm
 - [ ] **AN52.6** Describe the development and congenital anomalies of: Foregut, Midgut & Hindgut
@@ -551,7 +551,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 64. Histology & Embryology
 
-- [ ] **AN64.1** Describe & identify the microanatomical features of Spinal cord, Cerebellum & Cerebrum
+- [x] **AN64.1** Describe & identify the microanatomical features of Spinal cord, Cerebellum & Cerebrum — *cerebellum micrographs (folium, Purkinje cells); spinal cord with a level table and cerebrum with its six layers drawn (no usable open micrograph): [Endocrine Glands, Senses and CNS](histology/endocrine-senses-cns.html)*
 - [ ] **AN64.2** Describe the development of neural tube, spinal cord, medulla oblongata, pons, midbrain, cerebral hemisphere & cerebellum
 - [ ] **AN64.3** Describe various types of open neural tube defects with its embryological basis
 

@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Respiratory and Digestive Organs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<link rel="stylesheet" href="histo.css">
+<style>
+/* page colours, one meaning each (same values as the other histology pages where the meaning is the same):
+   --nucleus (nuclei), --cyto (epithelial cell cytoplasm), --collagen (connective tissue), --mucin (mucus: goblet cells, mucous glands),
+   --zym (serous / zymogen cells: chief cells, serous glands, pancreatic acini), --macro (macrophages: alveolar macrophages, Kupffer cells),
+   --sensory (receptor cells: taste buds; same as endocrine-senses-cns), --eosin (eosin-stained cells: parietal cells; same as endocrine-senses-cns), --t-musc (smooth muscle),
+   --fibre (skeletal muscle fibres), --perich (perichondrium), --elastic (elastic fibres), --kerat (keratin), --lymph / --gc (lymphoid tissue,
+   germinal centre), --lumen-v (blood spaces: sinusoids, capillaries), --t-endo (endothelium: capillary walls; same as nervous-vascular), --hair (hair);
+   --cart, --artery, --vein from atlas.css */
+:root{--nucleus:#1e4f99;--cyto:#c8b6e2;--collagen:#e39b9b;--mucin:#a8dadc;--zym:#6b3e26;--eosin:#f4a3b5;--t-musc:#c96f68;--fibre:#e6a4a0;
+  --perich:#c4b796;--elastic:#c5a8f0;--kerat:#b5838d;--gc:#eaf5b0;--lumen-v:#d6e0f3;--t-endo:#e98f86;--hair:#5c4033;--macro:#687008;--sensory:#68c078}
+:root[data-theme="dark"]{--nucleus:#9fb0ff;--cyto:#6d5a8c;--collagen:#b86a6a;--mucin:#4f7f82;--zym:#d09a7a;--eosin:#8c4a5c;--t-musc:#9c4e48;--fibre:#a8605c;
+  --perich:#8a7f6a;--elastic:#4a2f6b;--kerat:#e0a9b4;--gc:#4d6b3a;--lumen-v:#28344c;--t-endo:#f0a59d;--hair:#c9a27e;--macro:#089890;--sensory:#a0c898}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Respiratory and Digestive Organs</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="Histology pages"><span class="muted">Histology:</span> <a href="epithelium-glands.html">Epithelium and glands</a> <a href="nervous-vascular.html">Nervous tissue and blood vessels</a> <a href="lymphoid-bone-skin.html">Lymphoid organs, bone and skin</a> <b>Respiratory and digestive organs</b> <a href="urinary-reproductive.html">Urinary and reproductive organs</a> <a href="endocrine-senses-cns.html">Endocrine glands, senses and CNS</a></nav>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-resp">Trachea and lung</a> <a href="#h-oral">Lip, tongue, epiglottis</a> <a href="#h-gut">Oesophagus to appendix</a> <a href="#h-gland">Liver, gall bladder, pancreas</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-resp">
+  <h2 id="h-resp">Trachea and lung</h2>
+  <p class="cap key" id="resp-cap"></p>
+  <div class="chips" id="resp-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="resp-svg" viewBox="0 0 400 300" role="img" aria-label="Schematic of the chosen airway"></svg>
+      <div class="legend2" id="resp-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="resp-text"></div>
+    </div>
+    <div id="resp-micro" class="stack"></div>
+  </div>
+  <h3>Down the airway: what changes</h3>
+  <div class="scroll"><table id="resp-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-oral">
+  <h2 id="h-oral">Lip, tongue and epiglottis</h2>
+  <p class="cap key" id="oral-cap"></p>
+  <div class="chips" id="oral-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="oral-svg" viewBox="0 0 400 300" role="img" aria-label="Schematic of the chosen organ"></svg>
+      <div class="legend2" id="oral-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="oral-text"></div>
+    </div>
+    <div id="oral-micro" class="stack"></div>
+  </div>
+  <h3>Lingual papillae</h3>
+  <div class="scroll"><table id="pap-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gut">
+  <h2 id="h-gut">Oesophagus to appendix</h2>
+  <p class="cap key" id="gut-cap"></p>
+  <div class="chips" id="gut-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="gut-svg" viewBox="0 0 400 300" role="img" aria-label="Schematic of the wall of the chosen part of the gut, lumen at the top"></svg>
+      <div class="legend2" id="gut-key"></div>
+      <p class="muted">Wall of the chosen part, lumen at the top. Schematic, not to scale.</p>
+      <div class="prose info" id="gut-text"></div>
+    </div>
+    <div id="gut-micro" class="stack"></div>
+  </div>
+  <h3>The gut tube compared</h3>
+  <div class="scroll"><table id="gut-table"></table></div>
+  <div class="grid2">
+    <div><h3>Fundus or pylorus?</h3><div class="scroll"><table id="fp-table"></table></div></div>
+    <div><h3>Duodenum, jejunum or ileum?</h3><div class="scroll"><table id="dji-table"></table></div></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gland">
+  <h2 id="h-gland">Liver, gall bladder and pancreas</h2>
+  <p class="cap key" id="gland-cap"></p>
+  <div class="chips" id="gland-chips"></div>
+  <div class="grid2">
+    <div>
+      <svg class="fig" id="gland-svg" viewBox="0 0 400 300" role="img" aria-label="Schematic of the chosen gland"></svg>
+      <div class="legend2" id="gland-key"></div>
+      <p class="muted">Schematic, not to scale.</p>
+      <div class="prose info" id="gland-text"></div>
+    </div>
+    <div id="gland-micro" class="stack"></div>
+  </div>
+  <h3>How to tell them apart</h3>
+  <div class="scroll"><table id="gland-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+  <p id="images"></p>
+</footer>
+</div>
+
+<script src="histo.js"></script>
+<script>
+/* ===================== DATA (checked in sources-local/facts/fill-histo2.md, Parts A–D) ===================== */
+const LIC = {
+  pd: ['Public domain', 'https://creativecommons.org/publicdomain/mark/1.0/'], cc0: ['CC0', 'https://creativecommons.org/publicdomain/zero/1.0/'],
+  by25: ['CC BY 2.5', 'https://creativecommons.org/licenses/by/2.5/'], by4: ['CC BY 4.0', 'https://creativecommons.org/licenses/by/4.0/'],
+  bysa2: ['CC BY-SA 2.0', 'https://creativecommons.org/licenses/by-sa/2.0/'], bysa3: ['CC BY-SA 3.0', 'https://creativecommons.org/licenses/by-sa/3.0/'],
+  bysa4: ['CC BY-SA 4.0', 'https://creativecommons.org/licenses/by-sa/4.0/'],
+};
+const cr = (file, author, lic, done) => Histo.credit({file, author, lic: LIC[lic][0], licUrl: LIC[lic][1], done});
+const DATA = {
+  lede: 'Organ slides of the airway and the digestive tract: pick an organ to see its wall drawn layer by layer, a labelled micrograph where an open one exists, and the one or two features that identify it. Tables compare the organs that are easy to confuse. The basic tissues (epithelia, glands, lymphoid tissue) are on the histology pages linked above.',
+  respCap: 'The airway keeps its <b>ciliated epithelium</b> almost to the end, but loses its <b>cartilage</b> and <b>glands</b> step by step: C-shaped rings in the trachea, plates in the bronchi, none in the bronchioles. Gas exchange happens in the <b>alveoli</b>.',
+  resp: [
+    {k: 'tr', name: 'Trachea', ident: '<b>C-shaped hyaline cartilage</b> open behind, where the <b>trachealis</b> (smooth muscle) bridges the gap; ciliated epithelium with goblet cells; glands in the submucosa.',
+      text: 'There are 16–20 incomplete rings. The mucosa: pseudostratified ciliated columnar epithelium (Gray 1918 calls it "stratified" with a ciliated surface layer) with goblet cells on a well-marked basement membrane; glands lie in the submucosa and their ducts open on the surface; adventitia outside. Epithelium in detail: <a href="epithelium-glands.html">Epithelium and glands</a>.',
+      micros: ['trachea'], draw: s => Histo.wall(s, {parts: [{epi: 'resp', goblet: 1}], lp: 16, sub: 76, subf: ['mucous', 'cart'], me: [], outer: 'adventitia', subLab: 'submucosa'})},
+    {k: 'br', name: 'Bronchus', ident: 'Cartilage as <b>irregular plates</b> (not rings), a <b>layer of circular smooth muscle</b>, ciliated epithelium and glands.',
+      text: 'Inside the lung the bronchi keep the ciliated lining and mucous glands, but the cartilage breaks up into irregular plates and a continuous layer of smooth muscle — the bronchial muscle — lies inside them.',
+      micros: [], none: 'No open micrograph of a bronchus with its cartilage plates was found; see the drawing.', draw: s => Histo.wall(s, {parts: [{epi: 'resp', goblet: 1}], lp: 14, mm: 8, mmLab: 'circular smooth muscle', sub: 70, subf: ['mucous', 'plates'], me: [], outer: 'adventitia'})},
+    {k: 'lu', name: 'Bronchiole and alveoli', ident: 'A tube with <b>no cartilage and no glands</b>, ringed by smooth muscle, among thin-walled <b>alveoli</b>.',
+      text: 'Bronchioles are lined by ciliated cuboidal cells (smaller ones) with <b>club cells</b> — non-ciliated secretory cells. Respiratory bronchioles lead to alveolar ducts, alveolar sacs and alveoli. Alveoli are lined by flat <b>type I</b> cells (about 95% of the surface) with scattered cuboidal <b>type II</b> cells, which make surfactant; the thin wall between neighbouring alveoli carries a close network of capillaries and elastic fibres; <b>alveolar macrophages</b> move about in the air spaces.',
+      micros: ['lung'], draw: drawLung},
+  ],
+  respRows: [
+    ['Trachea', 'C-shaped rings', 'Yes', 'Pseudostratified ciliated + goblet cells', 'Trachealis, only across the gap of the C'],
+    ['Bronchus', 'Irregular plates', 'Yes', 'Ciliated columnar', 'Continuous circular layer'],
+    ['Bronchiole', 'None', 'None', 'Ciliated cuboidal (smaller ones) + club cells', 'Prominent ring'],
+    ['Alveolus', 'None', 'None', 'Flat type I cells + cuboidal type II cells', '—'],
+  ],
+  oralCap: 'The mouth is lined by <b>stratified squamous</b> epithelium; its keratinization depends on the site (StatPearls). The <a href="lymphoid-bone-skin.html#h-lym">palatine tonsil</a> and the <a href="epithelium-glands.html">salivary glands</a> are on the basic-tissue pages.',
+  oral: [
+    {k: 'lip', name: 'Lip', ident: '<b>Skin on one side, mucous membrane on the other</b>, with skeletal muscle (orbicularis oris) in between.',
+      text: 'Outside: skin (stratified squamous, with hairs and glands). The red margin (vermilion) has a thin, differently keratinized stratified squamous covering; its skin has no hairs and no sweat glands (Wikipedia). Inside: the oral mucous membrane, stratified squamous. Between them lie the orbicularis oris, the labial vessels and nerves, and small labial glands (Gray).',
+      micros: [], none: 'No open micrograph of a whole lip section was found.', draw: drawLip},
+    {k: 'tongue', name: 'Tongue', ident: 'A core of <b>skeletal muscle</b> (intrinsic and extrinsic muscles) covered by mucous membrane with <b>papillae</b> on the dorsum.',
+      text: 'Intrinsic muscles run within the tongue and change its shape; extrinsic muscles arise outside it. The front two-thirds of the dorsum is rough with papillae (table below). Taste buds sit in the side walls of the vallate papillae; serous (von Ebner\'s) glands open into the trench round them.',
+      micros: [], none: 'No open micrograph in which the vallate papilla could be identified with confidence was found; see the drawing.', draw: drawTongue},
+    {k: 'epi', name: 'Epiglottis', ident: 'A leaf of <b>elastic cartilage</b> with two linings: stratified squamous in front, ciliated columnar on the lower laryngeal surface.',
+      text: 'The cartilage starts as hyaline and becomes elastic (Gray: "yellow fibrocartilage"). The anterior (lingual) surface and the upper half of the posterior surface carry non-keratinized stratified squamous epithelium; the rest of the posterior surface carries ciliated columnar (respiratory) epithelium with goblet cells.',
+      micros: [], none: 'No open micrograph of the epiglottis was found.', draw: drawEpiglottis},
+  ],
+  papRows: [
+    ['Filiform', 'Most numerous; cover the front two-thirds of the dorsum', 'Thread-like, with a thick, whitish epithelium', 'None'],
+    ['Fungiform', 'Scattered among the filiform, mostly tip and sides (Wikipedia)', 'Mushroom-shaped', 'On the upper surface'],
+    ['Vallate (circumvallate)', 'One row in front of the sulcus terminalis — about 8–14 (sources differ: Gray 8–12, Wikipedia 10–14)', 'Large, sunk in a trench; serous glands (von Ebner) open into the trench', 'In the side walls'],
+    ['Foliate', 'Sides of the back of the tongue (Wikipedia)', 'Leaf-like folds; serous glands drain into them (Wikipedia)', 'Yes'],
+  ],
+  gutCap: 'Every part of the tube has the same four coats — <b>mucosa</b> (epithelium, lamina propria, muscularis mucosae), <b>submucosa</b>, <b>muscle coat</b>, <b>serosa or adventitia</b>. Each part is identified by its epithelium, by what sits in the mucosa and submucosa, and by its muscle. Pick a part.',
+  gut: [
+    {k: 'oes', name: 'Oesophagus', ident: '<b>Non-keratinized stratified squamous</b> epithelium, <b>mucous glands in the submucosa</b>, skeletal muscle above and smooth muscle below, adventitia.',
+      text: 'The muscle coat is striated (skeletal) in the upper third, smooth in the lower third and mixed in the middle (inner circular, outer longitudinal). The outer coat is a fibrous adventitia; the short abdominal part has a serosa (Wikipedia).',
+      micros: ['oesophagus'], draw: s => Histo.wall(s, {parts: [{epi: 'sq'}], lp: 20, mm: 6, sub: 42, subf: ['mucous'], me: [['mixed', 'circ', 16, 'inner circular'], ['mixed', 'long', 14, 'outer longitudinal']], outer: 'adventitia', labels: [[200, 'skeletal (left) → smooth (right):']]})},
+    {k: 'cej', name: 'Cardio-oesophageal junction', ident: '<b>Abrupt change</b> from stratified squamous (oesophagus) to simple columnar epithelium with pits and <b>cardiac glands</b> (stomach).',
+      text: 'The change of epithelium is sudden at the cardiac orifice (Gray; Wikipedia). Seen through an endoscope the line is zig-zag — the "Z-line" (Wikipedia). The cardiac glands are few, lie close to the cardiac orifice and resemble the glands of the pylorus (Gray).',
+      micros: ['gej'], draw: s => Histo.wall(s, {parts: [{x0: 0, x1: 115, epi: 'sq'}, {x0: 115, x1: 250, epi: 'col', glands: 'cardiac'}], lp: 46, mm: 5, sub: 22, me: [['smooth', 'circ', 14, 'circular'], ['smooth', 'long', 10, 'longitudinal']], outer: 'adventitia', epiLab: 'squamous | columnar', labels: [[10, 'oesophagus  |  stomach']]})},
+    {k: 'fun', name: 'Fundus / body', ident: '<b>Short pits, long straight gastric glands</b> packed with <b>parietal</b> and <b>chief cells</b>; three muscle layers.',
+      text: 'The surface and the pits are lined by the same columnar epithelium (Gray). The fundic (oxyntic) glands — several open into each pit — are long, straight tubes; the pit (duct) may be only a sixth of their length (Gray). Parietal cells make HCl and intrinsic factor and stain deeply with eosin (Gray); chief cells release pepsinogen (Wikipedia). The muscle coat has an inner oblique, a middle circular and an outer longitudinal layer (Gray).',
+      micros: ['fundus', 'parietal'], draw: s => Histo.wall(s, {parts: [{epi: 'col', glands: 'fundic'}], lp: 84, mm: 5, sub: 22, me: [['smooth', 'obl', 10, 'inner oblique'], ['smooth', 'circ', 14, 'middle circular'], ['smooth', 'long', 10, 'outer longitudinal']], outer: 'serosa'})},
+    {k: 'pyl', name: 'Pylorus', ident: '<b>Deep pits</b> (about half the mucosa) leading to <b>short, wavy glands</b> with only scattered parietal cells (Wikipedia); very thick circular muscle.',
+      text: 'The pyloric glands contain mucous cells and G cells (Wikipedia). The circular muscle is gathered into a thick ring, the pyloric sphincter.',
+      micros: ['pylorus'], draw: s => Histo.wall(s, {parts: [{epi: 'col', glands: 'pyloric'}], lp: 72, mm: 5, sub: 22, me: [['smooth', 'circ', 26, 'thick circular (sphincter)'], ['smooth', 'long', 10, 'longitudinal']], outer: 'serosa'})},
+    {k: 'duo', name: 'Duodenum', ident: 'Villi + crypts, and <b>Brunner\'s glands in the submucosa</b> — the feature that separates it from jejunum and ileum.',
+      text: 'Brunner\'s (duodenal) glands are compound glands in the submucosa; they are largest and most numerous near the pylorus and disappear at the duodenojejunal junction (Gray). Their alkaline mucus protects the duodenum from acid (Wikipedia).',
+      micros: ['brunner'], draw: s => Histo.wall(s, {parts: [{epi: 'col', surf: 'villi', glands: 'crypts'}], vh: 40, lp: 28, mm: 4, sub: 44, subf: ['brunner'], me: [['smooth', 'circ', 14, 'inner circular'], ['smooth', 'long', 10, 'outer longitudinal']], outer: 'serosa'})},
+    {k: 'jej', name: 'Jejunum', ident: '<b>Tall, finger-like villi</b> on large, numerous <b>circular folds</b>; very few Brunner\'s glands or Peyer\'s patches (Wikipedia).',
+      text: 'The circular folds (plicae circulares) are permanent folds of mucosa and submucosa; they are best developed in the jejunum. Wikipedia: jejunal villi are much longer than duodenal or ileal ones; Gray: villi are largest and most numerous in duodenum and jejunum.',
+      micros: ['jejunum'], draw: s => Histo.wall(s, {parts: [{epi: 'col', surf: 'villi', glands: 'crypts'}], vh: 58, lp: 28, mm: 4, sub: 26, me: [['smooth', 'circ', 14, 'inner circular'], ['smooth', 'long', 10, 'outer longitudinal']], outer: 'serosa'})},
+    {k: 'ile', name: 'Ileum', ident: '<b>Peyer\'s patches</b> — aggregated lymphoid follicles in the mucosa reaching into the submucosa; shorter villi.',
+      text: 'Villi become fewer and smaller in the ileum, and the circular folds disappear toward its lower end, while the aggregated lymphoid nodules become larger and more numerous.',
+      micros: [], none: 'No open micrograph of a Peyer\'s patch was found; see the drawing.', draw: s => Histo.wall(s, {parts: [{epi: 'col', surf: 'short', glands: 'crypts', goblet: 3}], vh: 46, lp: 28, mm: 4, sub: 40, subf: ['peyer'], me: [['smooth', 'circ', 14, 'inner circular'], ['smooth', 'long', 10, 'outer longitudinal']], outer: 'serosa'})},
+    {k: 'col', name: 'Colon', ident: '<b>No villi</b>; straight crypts crowded with <b>goblet cells</b>; outer longitudinal muscle in three <b>taeniae coli</b>.',
+      text: 'The mucosa is flat, with straight tubular crypts lined by columnar cells and many goblet cells. Paneth cells are absent from colonic crypts (Wikipedia). The longitudinal muscle does not form a continuous layer: it is gathered into three ribbons, the taeniae coli.',
+      micros: ['colon'], draw: s => Histo.wall(s, {parts: [{epi: 'col', glands: 'crypts', goblet: 4}], lp: 44, mm: 4, sub: 26, me: [['smooth', 'circ', 14, 'inner circular'], ['smooth', 'taenia', 18, 'taenia coli']], outer: 'serosa'})},
+    {k: 'app', name: 'Appendix', ident: 'A small colon-like tube (no villi) with <b>fewer crypts</b> and <b>lymphoid follicles</b> all round in the mucosa and submucosa.',
+      text: 'Lymphoid cells in the mucosa and submucosa distinguish the appendix from the colon (StatPearls). Its longitudinal muscle is a complete layer, not three taeniae (Gray).',
+      micros: ['appendix'], draw: s => Histo.wall(s, {parts: [{epi: 'col', glands: 'crypts-few', goblet: 3}], lp: 46, mm: 4, sub: 34, subf: ['lymph'], me: [['smooth', 'circ', 14, 'inner circular'], ['smooth', 'long', 10, 'outer longitudinal']], outer: 'serosa'})},
+  ],
+  gutRows: [
+    ['Oesophagus', 'Stratified squamous', 'Flat, no glands in it', 'Mucous glands', 'Skeletal above, smooth below', 'Adventitia'],
+    ['Fundus / body', 'Simple columnar', 'Short pits; long straight glands with parietal + chief cells', '—', 'Three layers (oblique, circular, longitudinal: Gray)', 'Serosa'],
+    ['Pylorus', 'Simple columnar', 'Deep pits; short wavy glands (mucous cells: Wikipedia; Gray: "finely granular" cells)', '—', 'Thick circular (sphincter)', 'Serosa'],
+    ['Duodenum', 'Columnar + goblet cells', 'Villi + crypts', '<b>Brunner\'s glands</b>', 'Two layers', 'Serosa'],
+    ['Jejunum', 'Columnar + goblet cells', 'Tall villi on large circular folds', '—', 'Two layers', 'Serosa'],
+    ['Ileum', 'Columnar + goblet cells', 'Shorter, fewer villi', '<b>Peyer\'s patches</b> (from the mucosa)', 'Two layers', 'Serosa'],
+    ['Colon', 'Columnar, many goblet cells', '<b>No villi</b>; straight crypts', '—', 'Three taeniae coli', 'Serosa'],
+    ['Appendix', 'Columnar', 'No villi; fewer crypts', '<b>Lymphoid follicles</b> all round', 'Complete longitudinal layer (Gray)', 'Serosa'],
+  ],
+  fpRows: [
+    ['Pits', 'Short (Gray: may be 1/6 of the gland)', 'Deep — about half the mucosa'],
+    ['Glands', 'Long, straight', 'Short, wavy'],
+    ['Cells', 'Parietal (eosin-stained, Gray) + chief', 'Mucous and G cells; only scattered parietal cells (Wikipedia)'],
+    ['Muscle', 'Three layers', 'Thick circular sphincter'],
+  ],
+  djiRows: [
+    ['Brunner\'s glands', 'Yes', 'Very few (Wikipedia)', 'No'],
+    ['Villi', 'Present', 'Tall, finger-like', 'Shorter, fewer'],
+    ['Circular folds', 'Present', 'Large, numerous — best developed here', 'Fewer; gone at the lower end'],
+    ['Peyer\'s patches', 'No', 'Very few (Wikipedia)', 'Many — the identifying feature'],
+  ],
+  glandCap: 'The three glands of the digestive tract: the <b>liver</b> (cords of hepatocytes between blood sinusoids), the <b>gall bladder</b> (a folded mucosa on a thin fibromuscular wall) and the <b>pancreas</b> (serous acini with islets, which stain lightly: Gray).',
+  gland: [
+    {k: 'liv', name: 'Liver', ident: '<b>Polygonal lobules</b>, each with a <b>central vein</b>; plates of hepatocytes and sinusoids radiate from it; <b>portal triads</b> at the corners.',
+      text: 'Each portal canal (in connective tissue, Glisson\'s capsule) carries a branch of the <b>portal vein</b>, of the <b>hepatic artery</b> and a <b>bile duct</b>. Blood from both vessels enters the sinusoids at the edge of the lobule and flows to the central vein. The sinusoid lining is discontinuous, with <b>Kupffer cells</b> (macrophages) in it; the space of Disse lies between the lining and the hepatocytes (Wikipedia). Bile runs the other way: from bile canaliculi between hepatocytes out to the portal bile ducts.',
+      micros: ['liver'], draw: drawLiver},
+    {k: 'gb', name: 'Gall bladder', ident: 'A <b>folded mucosa</b> of tall columnar cells on an irregular <b>fibromuscular coat</b>, with <b>no muscularis mucosae</b> (Wikipedia); neither Gray nor Wikipedia lists a submucosa among its coats.',
+      text: 'Gray lists three coats: serous, fibromuscular and mucous; the columnar epithelium carries microvilli (Wikipedia). Deep pockets of mucosa reaching into the muscle — Rokitansky–Aschoff sinuses — are characteristic (Wikipedia). The peritoneum covers the fundus completely but the body and neck only on their lower surface (Gray).',
+      micros: ['gallbladder'], draw: s => Histo.wall(s, {parts: [{epi: 'col', surf: 'folds'}], vh: 30, lp: 20, mm: 0, sub: 0, me: [['smooth', 'bundles', 30, 'fibromuscular coat']], outer: 'serosa', labels: [[0, '']]})},
+    {k: 'pan', name: 'Pancreas', ident: 'Lobules of <b>serous acini</b> (dark bases, granular tips) with <b>centroacinar cells</b>, and scattered <b>islets</b> of Langerhans, paler than the acini (Gray).',
+      text: 'Built like a salivary gland but looser and softer (Gray). The acinar cells almost fill the acinus, so the lumen is hardly seen; the terminal duct runs into the acinus as centroacinar cells. The islets — endocrine clusters with many capillaries, about 1–2% of the gland — stain lightly (Gray); their cells include alpha, beta and delta cells (StatPearls).',
+      micros: ['islet'], draw: drawPancreas},
+  ],
+  glandRows: [
+    ['Liver', 'Plates of hepatocytes + sinusoids', 'Central vein; portal triads', 'Kupffer cells in the sinusoids'],
+    ['Gall bladder', 'Folded columnar mucosa', 'No muscularis mucosae (Wikipedia); no submucosa listed (Gray, Wikipedia)', 'Rokitansky–Aschoff sinuses (Wikipedia)'],
+    ['Pancreas', 'Serous acini, centroacinar cells', 'Pale islets of Langerhans (Gray)', 'Endocrine islets among exocrine acini; compare the serous <a href="epithelium-glands.html">parotid</a>'],
+  ],
+  micros: {
+    trachea: {w: 720, h: 719, title: 'Trachea, H&amp;E', alt: 'A band of purple hyaline cartilage above loose tissue and a thin dark epithelium lining the lumen',
+      cap: '<b>Hyaline cartilage</b> (purple) in its pink perichondrium; deep to it the loose submucosa, and the dark band of <b>epithelium</b> lining the lumen (lower right). Uploader: histological section of the trachea; the hyaline cartilage is very clear.',
+      credit: cr('Trakearen ebaketa histologikoa.png', 'Urkiurmo', 'bysa4', 'resized'),
+      labels: [[0.45, 0.4, 'Hyaline cartilage'], [0.55, 0.63, 'Submucosa'], [0.545, 0.675, 'Epithelium'], [0.72, 0.78, 'Lumen']]},
+    lung: {w: 720, h: 540, title: 'Lung, H&amp;E', alt: 'Thin-walled alveoli around a branching air space',
+      cap: 'A honeycomb of <b>alveoli</b> with thin walls. The larger branching space with knobbed walls, which the uploader\'s black pointer marks, is named a respiratory bronchiole by the uploader; with alveoli opening along it, it may equally be the next segment, an <b>alveolar duct</b>, so it is labelled with both names. No cartilage and no glands are visible. Uploader\'s title: human tertiary bronchus – respiratory bronchiole (no bronchus is in this field).',
+      credit: cr('Human tertiary bronchus - Respiratory bronchiole.jpg', 'Jpogi', 'pd', 'resized'),
+      labels: [[0.27, 0.42, 'Alveolus'], [0.405, 0.27, 'Alveolar wall'], [0.45, 0.72, 'Resp. bronchiole / alveolar duct']]},
+    oesophagus: {w: 720, h: 613, title: 'Oesophagus, low power', alt: 'Folded stratified squamous epithelium with large pale mucous glands in the submucosa',
+      cap: 'Thick <b>stratified squamous</b> epithelium lines the lumen; deep to it, groups of pale <b>mucous glands</b> lie in the submucosa — the feature of the oesophagus. Uploader: "systemic slide" (oesophagus). The thin black line is the uploader\'s pointer: its tip ends in the loose connective tissue between the epithelium and the glands.',
+      credit: cr('Oesophagus09.jpg', 'Abdulrazakca', 'pd', 'cropped and resized'),
+      labels: [[0.09, 0.45, 'Lumen'], [0.25, 0.25, 'Stratified squamous epithelium'], [0.70, 0.47, 'Mucous glands (submucosa)']]},
+    gej: {w: 720, h: 540, title: 'Gastro-oesophageal junction', alt: 'Thick squamous epithelium on the right meeting columnar mucosa with glands on the left',
+      cap: 'On the right, the thick <b>stratified squamous</b> epithelium of the oesophagus; at the pointer it changes abruptly to the <b>simple columnar</b> lining of the stomach, with rounded <b>cardiac glands</b> beneath.',
+      credit: cr('Gastro-esophageal jxn.JPG', 'Jpogi', 'pd', 'resized'),
+      labels: [[0.82, 0.32, 'Stratified squamous'], [0.2, 0.37, 'Simple columnar'], [0.31, 0.27, 'Junction'], [0.3, 0.62, 'Cardiac glands']]},
+    fundus: {w: 720, h: 372, title: 'Stomach wall (fundus/body pattern)', alt: 'Short pits at the surface leading into long straight tubular glands',
+      cap: '<b>Short pits</b> at the surface lead into <b>long, straight gastric glands</b> — the pattern of the fundus and body. Uploader: human stomach wall.',
+      credit: cr('Stomach.JPG', 'Jpogi', 'pd', 'cropped (the uploader\'s pointer cut off) and resized'),
+      labels: [[0.42, 0.218, 'Gastric pits'], [0.3, 0.544, 'Long gastric glands'], [0.18, 0.88, 'Submucosa']]},
+    parietal: {w: 720, h: 448, title: 'Gastric glands, high power', alt: 'Gland cells, some large with pink cytoplasm, others purple',
+      cap: 'Gastric glands cut across: the large cells with pink (eosin-stained) cytoplasm are <b>parietal cells</b>. Uploader: human parietal cells.',
+      credit: cr('Parietal cells.jpg', 'Jpogi', 'pd', 'cropped (the uploader\'s pointer cut off) and resized'),
+      labels: [[0.44, 0.725, 'Parietal cell'], [0.84, 0.639, 'Parietal cell']]},
+    jejunum: {w: 720, h: 540, title: 'Jejunum, low power', alt: 'Many long finger-like villi projecting into the lumen from a thin outer wall',
+      cap: 'Long, finger-like <b>villi</b> project into the lumen; the thin pink band outside is the muscle coat. Uploader: human jejunum, low power.',
+      credit: cr('Jejunum histology.jpg', 'Netha Hussain', 'bysa3', 'resized'),
+      labels: [[0.35, 0.55, 'Villi'], [0.66, 0.79, 'Muscle coat']]},
+    pylorus: {w: 720, h: 540, title: 'Pylorus', alt: 'Deep wide pits occupying the upper half of the mucosa, with short glands below',
+      cap: '<b>Deep pits</b> take up much of the mucosa; the short <b>pyloric glands</b> lie below them. Uploader: human pyloric stomach. The black pointer is the uploader\'s: it lies in one of the deep pits.',
+      credit: cr('Pyloric stomach LPO.JPG', 'Jpogi', 'pd', 'resized'),
+      labels: [[0.44, 0.3, 'Deep pits'], [0.58, 0.9, 'Pyloric glands']]},
+    brunner: {w: 720, h: 540, title: 'Duodenum', alt: 'Villi on the right, pale glands below the mucosa, thick muscle on the left',
+      cap: '<b>Villi</b> and crypts in the mucosa, and pale <b>Brunner\'s glands</b> in the submucosa beneath them (at the pointer); the <b>muscle coat</b> on the left.',
+      credit: cr('Duodenum-brunner\'s glands.JPG', 'Jpogi', 'pd', 'resized'),
+      labels: [[0.62, 0.5, 'Villi'], [0.5, 0.76, 'Brunner\'s glands'], [0.22, 0.45, 'Muscle coat']]},
+    colon: {w: 720, h: 408, title: 'Colon, low power', alt: 'Flat mucosa with straight crypts, submucosa, and a thick band of muscle',
+      cap: 'A flat surface with <b>no villi</b>, packed with straight <b>crypts</b>; below them the submucosa and the muscle coat.',
+      credit: cr('Colon, low mag.jpg', 'CoRus13', 'bysa4', 'cropped and resized'),
+      labels: [[0.3, 0.294, 'Crypts'], [0.75, 0.494, 'Submucosa'], [0.4, 0.753, 'Muscle coat']]},
+    appendix: {w: 720, h: 631, title: 'Appendix, cross-section, low power', alt: 'A narrow three-armed lumen with crypts around it and large purple rounded lymphoid masses all round',
+      cap: 'A narrow, branched (three-armed) <b>lumen</b>; colon-like <b>crypts</b> and no villi; large, rounded <b>lymphoid follicles</b> (purple) all round the wall; the <b>muscle coat</b> at the lower right. Uploader: vermiform appendix.',
+      credit: cr('KirmėlinėAtauga.JPG', 'Andrjusgeo at Lithuanian Wikipedia', 'bysa3', 'cropped and resized'),
+      labels: [[0.485, 0.52, 'Lumen'], [0.56, 0.64, 'Crypts'], [0.15, 0.55, 'Lymphoid follicle'], [0.80, 0.82, 'Muscle coat']]},
+    liver: {w: 720, h: 540, title: 'Liver, high power', alt: 'Plates of hepatocytes with pale sinusoids between them',
+      cap: '<b>Hepatocytes</b> in plates separated by pale <b>sinusoids</b> (the pointer marks one). Uploader: human liver sinusoid.',
+      credit: cr('Sinusoid.JPG', 'Jpogi', 'pd', 'resized'),
+      labels: [[0.4, 0.45, 'Sinusoid'], [0.575, 0.277, 'Hepatocyte']]},
+    gallbladder: {w: 720, h: 540, title: 'Gall bladder, low power', alt: 'Tall folds of mucosa projecting into the lumen on the right',
+      cap: 'The mucosa is thrown into tall <b>folds</b> that project into the lumen (right). Uploader: gall bladder, low power. Contrast increased for this page.',
+      credit: cr('Gallbladder histology.jpg', 'Netha Hussain', 'bysa3', 'resized, contrast increased'),
+      labels: [[0.72, 0.66, 'Mucosal fold']]},
+    islet: {w: 596, h: 518, title: 'Pancreas: islet', alt: 'A pale cluster of small cells surrounded by darker acinar cells',
+      cap: 'A pale <b>islet of Langerhans</b> in the centre, surrounded by darker <b>serous acini</b>. Haemalum-eosin.',
+      credit: cr('Langerhanssche Insel.jpg', 'Polarlys', 'by25', 'shown at original size'),
+      labels: [[0.45, 0.42, 'Islet'], [0.25, 0.9, 'Acini']]},
+  },
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918: trachea, lungs, mouth and tongue, larynx, oesophagus, stomach, intestines, liver, pancreas); StatPearls (NCBI Bookshelf); open-access reviews on alveolar type II cells, club cells, the lip vermilion, gastric and intestinal mucosa; Wikipedia (articles checked for OpenStax and Gray-1918 copying). Gray (1918) calls the tracheal epithelium stratified; the modern term pseudostratified is used.',
+  models: 'Drawings: schematic, not to scale; label points on the micrographs placed by eye (approximate).',
+  images: 'Micrographs via Wikimedia Commons (each credited under its picture): Jpogi (public domain), Abdulrazakca (public domain), CoRus13 (CC BY-SA 4.0), Netha Hussain (CC BY-SA 3.0), Andrjusgeo (CC BY-SA 3.0), Polarlys (CC BY 2.5), Urkiurmo (CC BY-SA 4.0); cropped/resized and labelled for this page.',
+};
+
+/* ===================== DRAWINGS ===================== */
+const {$, el, text, lab, keyHTML} = Histo;
+const blob = (s, cx, cy, r, fill, extra = {}) => el('circle', Object.assign({cx, cy, r, fill}, extra), s);
+const vb = (s, h) => s.setAttribute('viewBox', `0 0 400 ${h}`);
+
+function drawLung(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--surface)'}, s);
+  /* alveoli: a honeycomb of thin septa */
+  const cells = [];
+  for (let r = 0; r < 6; r++) for (let c = 0; c < 9; c++) {
+    const cx = 22 + c * 44 + (r % 2) * 22, cy = 24 + r * 46;
+    if (Math.hypot(cx - 130, cy - 150) < 78) continue;
+    cells.push([cx, cy]);
+    const pts = []; for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; pts.push(`${(cx + 25 * Math.cos(a)).toFixed(1)},${(cy + 25 * Math.sin(a)).toFixed(1)}`); }
+    el('polygon', {points: pts.join(' '), fill: 'var(--surface)', stroke: 'var(--collagen)', 'stroke-width': 3}, s);
+  }
+  for (const [i, [cx, cy]] of cells.entries()) {
+    if (i % 3 === 0) blob(s, cx + 21, cy, 2.6, 'var(--lumen-v)', {stroke: 'var(--t-endo)', 'stroke-width': 1.2});
+    if (i % 4 === 1) el('ellipse', {cx: cx - 12, cy: cy - 19, rx: 4, ry: 1.6, fill: 'var(--nucleus)'}, s);
+    if (i % 5 === 2) { el('rect', {x: cx + 12, y: cy + 10, width: 8, height: 8, rx: 2, fill: 'var(--cyto)', stroke: 'var(--ink)', 'stroke-width': .5}, s); blob(s, cx + 16, cy + 14, 1.8, 'var(--nucleus)'); }
+  }
+  /* a macrophage in one alveolus */
+  const [mx, my] = cells[13]; blob(s, mx, my, 6, 'var(--macro)', {opacity: .8}); blob(s, mx + 1, my, 2.4, 'var(--nucleus)');
+  /* bronchiole: smooth muscle ring, ciliated cuboidal epithelium, no cartilage */
+  blob(s, 130, 150, 70, 'var(--collagen)', {opacity: .35});
+  blob(s, 130, 150, 60, 'var(--t-musc)');
+  blob(s, 130, 150, 52, 'var(--collagen)', {opacity: .6});
+  let d = ''; for (let i = 0; i <= 24; i++) { const a = i * Math.PI / 12, r = 44 + (i % 2 ? 6 : 0); d += (i ? 'L' : 'M') + (130 + r * Math.cos(a)).toFixed(1) + ' ' + (150 + r * Math.sin(a)).toFixed(1); }
+  el('path', {d: d + 'Z', fill: 'var(--cyto)'}, s);
+  let d2 = ''; for (let i = 0; i <= 24; i++) { const a = i * Math.PI / 12, r = 37 + (i % 2 ? 6 : 0); d2 += (i ? 'L' : 'M') + (130 + r * Math.cos(a)).toFixed(1) + ' ' + (150 + r * Math.sin(a)).toFixed(1); }
+  el('path', {d: d2 + 'Z', fill: 'var(--surface)'}, s);
+  el('path', {d: d2 + 'Z', fill: 'none', stroke: 'var(--ink)', 'stroke-width': 2.4, 'stroke-dasharray': '.6 1.8', opacity: .7}, s);
+  lab(s, 130, 153, 'lumen', 'middle', 9);
+  lab(s, 130, 80, 'bronchiole: no cartilage', 'middle', 9);
+  el('line', {x1: 182, y1: 186, x2: 252, y2: 236, stroke: 'var(--ink)', 'stroke-width': .7}, s); lab(s, 254, 240, 'smooth muscle ring', 'start', 9);
+  el('line', {x1: 165, y1: 175, x2: 252, y2: 258, stroke: 'var(--ink)', 'stroke-width': .7}, s); lab(s, 254, 262, 'ciliated cuboidal epith.', 'start', 9);
+  lab(s, 396, 16, 'alveoli (thin septa)', 'end', 9);
+  lab(s, 396, 286, 'type I (flat) · type II (cuboidal)', 'end', 9);
+  lab(s, mx + 9, my - 8, 'macrophage', 'start', 8.5);
+  return [['--cyto', 'Epithelium (type II cells drawn as squares)'], ['--nucleus', 'Type I cell nucleus'], ['--collagen', 'Septum / connective tissue'], ['--t-endo', 'Capillary in septum (endothelium)'], ['--t-musc', 'Smooth muscle'], ['--macro', 'Alveolar macrophage']];
+}
+
+function drawLip(s) {
+  s.replaceChildren(); vb(s, 300);
+  /* lip in sagittal section: outer surface (skin) on the left, free red margin at the bottom, inner surface (mucosa) on the right */
+  const outline = 'M90 10 L90 200 Q90 286 180 286 Q270 286 270 200 L270 10 Z';
+  el('path', {d: outline, fill: 'var(--collagen)', opacity: .35}, s);
+  el('path', {d: 'M90 10 L90 200 Q90 286 180 286', fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 7}, s);
+  el('path', {d: 'M90 10 L90 200', fill: 'none', stroke: 'var(--kerat)', 'stroke-width': 2, transform: 'translate(-4 0)'}, s);
+  el('path', {d: 'M180 286 Q270 286 270 200 L270 10', fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 14}, s);
+  /* hairs and glands in the skin */
+  for (const y of [40, 90, 140]) { el('line', {x1: 80, y1: y - 10, x2: 112, y2: y + 14, stroke: 'var(--hair)', 'stroke-width': 2}, s); blob(s, 112, y + 15, 4, 'var(--hair)'); }
+  /* orbicularis oris: skeletal muscle bundles cut across */
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) el('ellipse', {cx: 140 + c * 24 + (r % 2) * 10, cy: 70 + r * 34, rx: 10, ry: 7, fill: 'var(--fibre)', stroke: 'var(--surface)', 'stroke-width': 1}, s);
+  /* labial glands under the mucosa */
+  for (const y of [50, 110, 170]) for (const [dx, dy] of [[-6, 0], [6, 0], [0, -6], [0, 6]]) blob(s, 248 + dx, y + dy, 4, 'var(--cyto)', {stroke: 'var(--ink)', 'stroke-width': .6});
+  lab(s, 84, 30, 'skin', 'end', 9.5); lab(s, 84, 42, '(hairs, glands)', 'end', 8.5);
+  lab(s, 72, 250, 'red margin', 'end', 9.5); lab(s, 72, 262, '(vermilion)', 'end', 8.5);
+  lab(s, 280, 30, 'mucous', 'start', 9.5); lab(s, 280, 42, 'membrane', 'start', 9.5); lab(s, 280, 54, '(strat. squamous)', 'start', 8.5);
+  lab(s, 280, 110, 'labial glands', 'start', 9);
+  lab(s, 180, 210, 'orbicularis oris', 'middle', 9.5);
+  lab(s, 180, 22, 'outside ←      → mouth', 'middle', 9);
+  return [['--cyto', 'Epithelial cells: stratified squamous epithelium and labial glands (Gray; gland type not shown)'], ['--kerat', 'Keratin (skin side)'], ['--collagen', 'Connective tissue', .35], ['--fibre', 'Skeletal muscle'], ['--hair', 'Hair']];
+}
+
+function drawTongue(s) {
+  s.replaceChildren(); vb(s, 300);
+  const top = 90;
+  el('rect', {x: 0, y: top, width: 400, height: 210, fill: 'var(--collagen)', opacity: .3}, s);
+  /* papillae along the dorsum */
+  const filiform = x => { el('path', {d: `M${x - 8} ${top} L${x - 2} ${top - 34} L${x + 2} ${top - 34} L${x + 8} ${top} Z`, fill: 'var(--cyto)'}, s); el('path', {d: `M${x - 2} ${top - 34} L${x} ${top - 46} L${x + 2} ${top - 34} Z`, fill: 'var(--kerat)'}, s); };
+  for (const x of [14, 34, 54, 150, 170, 380]) filiform(x);
+  /* fungiform */
+  el('path', {d: `M84 ${top} L88 ${top - 20} Q70 ${top - 22} 72 ${top - 36} Q100 ${top - 56} 128 ${top - 36} Q130 ${top - 22} 112 ${top - 20} L116 ${top} Z`, fill: 'var(--cyto)'}, s);
+  el('ellipse', {cx: 100, cy: top - 45, rx: 4, ry: 6, fill: 'var(--sensory)'}, s);
+  /* vallate papilla sunk in a trench, taste buds in the side walls, serous glands opening into the trench */
+  const vx = 270;
+  el('path', {d: `M200 ${top} L222 ${top} L226 ${top + 40} L238 ${top + 40} L240 ${top - 6} L300 ${top - 6} L302 ${top + 40} L314 ${top + 40} L318 ${top} L360 ${top}`, fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 9, 'stroke-linejoin': 'round'}, s);
+  el('rect', {x: 244, y: top - 2, width: 52, height: 40, fill: 'var(--collagen)', opacity: .5}, s);
+  for (const y of [top + 6, top + 18, top + 30]) { el('ellipse', {cx: 242, cy: y, rx: 3, ry: 5, fill: 'var(--sensory)'}, s); el('ellipse', {cx: 298, cy: y, rx: 3, ry: 5, fill: 'var(--sensory)'}, s); }
+  for (const gx of [232, 308]) { for (const [dx, dy] of [[-6, 0], [6, 0], [0, -6], [0, 6]]) blob(s, gx + dx, top + 74 + dy, 4, 'var(--zym)', {opacity: .85}); el('line', {x1: gx, y1: top + 66, x2: gx, y2: top + 42, stroke: 'var(--cyto)', 'stroke-width': 2}, s); }
+  /* skeletal muscle in three directions */
+  const my = top + 100;
+  for (let x = 6; x < 396; x += 26) el('rect', {x, y: my, width: 20, height: 7, rx: 3, fill: 'var(--fibre)'}, s);
+  for (let x = 10; x < 396; x += 30) el('rect', {x, y: my + 14, width: 7, height: 40, rx: 3, fill: 'var(--fibre)'}, s);
+  for (let x = 24; x < 396; x += 30) for (const y of [my + 20, my + 34, my + 48]) blob(s, x, y, 3.4, 'var(--fibre)', {stroke: 'var(--t-musc)', 'stroke-width': .6});
+  for (let x = 6; x < 396; x += 26) el('rect', {x, y: my + 62, width: 20, height: 7, rx: 3, fill: 'var(--fibre)'}, s);
+  lab(s, 34, top - 54, 'filiform', 'middle', 9); lab(s, 100, top - 64, 'fungiform', 'middle', 9);
+  lab(s, 270, top - 16, 'vallate', 'middle', 9); lab(s, 270, top + 56, 'trench', 'middle', 8.5);
+  lab(s, 190, top + 30, 'taste buds →', 'end', 8.5); lab(s, 320, top + 96, 'serous (von Ebner) glands', 'end', 8.5);
+  lab(s, 4, my + 86, 'skeletal muscle, bundles cut in different planes (schematic)', 'start', 9);
+  return [['--cyto', 'Stratified squamous epithelium'], ['--kerat', 'Keratin tip (filiform)'], ['--sensory', 'Taste buds (receptor cells)'], ['--zym', 'Serous glands'], ['--collagen', 'Connective tissue', .3], ['--fibre', 'Skeletal muscle']];
+}
+
+function drawEpiglottis(s) {
+  s.replaceChildren(); vb(s, 300);
+  /* leaf in sagittal section: anterior (lingual) surface left, posterior (laryngeal) surface right */
+  const leaf = 'M200 18 Q150 40 150 150 Q150 250 196 292 L214 292 Q252 250 252 150 Q252 40 200 18 Z';
+  el('path', {d: leaf, fill: 'var(--collagen)', opacity: .35}, s);
+  const core = 'M200 40 Q172 60 172 150 Q172 240 200 278 Q230 240 230 150 Q230 60 200 40 Z';
+  el('path', {d: core, fill: 'var(--cart)', stroke: 'var(--perich)', 'stroke-width': 3}, s);
+  for (let y = 70; y < 260; y += 14) el('path', {d: `M${186} ${y} q 14 -6 28 0`, fill: 'none', stroke: 'var(--elastic)', 'stroke-width': 1.6}, s);
+  el('path', {d: 'M200 18 Q150 40 150 150 Q150 250 196 292', fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 10}, s);
+  el('path', {d: 'M200 18 Q252 40 252 150', fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 10}, s);
+  el('path', {d: 'M252 150 Q252 250 214 292', fill: 'none', stroke: 'var(--cyto)', 'stroke-width': 5}, s);
+  el('path', {d: 'M252 150 Q252 250 214 292', fill: 'none', stroke: 'var(--ink)', 'stroke-width': 3, 'stroke-dasharray': '.6 1.8', transform: 'translate(4 0)', opacity: .7}, s);
+  lab(s, 140, 90, 'anterior (lingual) surface:', 'end', 9); lab(s, 140, 102, 'stratified squamous', 'end', 9);
+  lab(s, 262, 70, 'upper posterior:', 'start', 9); lab(s, 262, 82, 'stratified squamous', 'start', 9);
+  lab(s, 262, 200, 'lower posterior:', 'start', 9); lab(s, 262, 212, 'ciliated columnar', 'start', 9); lab(s, 262, 224, '+ goblet cells', 'start', 9);
+  lab(s, 140, 200, 'elastic cartilage →', 'end', 9);
+  lab(s, 200, 12, 'tip', 'middle', 9);
+  return [['--cyto', 'Epithelium'], ['--cart', 'Cartilage'], ['--elastic', 'Elastic fibres'], ['--perich', 'Perichondrium'], ['--collagen', 'Connective tissue', .35]];
+}
+
+function drawLiver(s) {
+  s.replaceChildren(); vb(s, 300);
+  const cx = 200, cy = 150, R = 120;
+  const P = i => [cx + R * Math.cos(Math.PI / 6 + i * Math.PI / 3), cy + R * Math.sin(Math.PI / 6 + i * Math.PI / 3)];
+  el('polygon', {points: [0, 1, 2, 3, 4, 5].map(i => P(i).map(v => v.toFixed(1)).join(',')).join(' '), fill: 'var(--lumen-v)', stroke: 'var(--collagen)', 'stroke-width': 2, 'stroke-dasharray': '5 4'}, s);
+  /* radiating hepatocyte plates with sinusoids between them */
+  for (let i = 0; i < 36; i++) {
+    const a = i * Math.PI / 18; const x1 = cx + 16 * Math.cos(a), y1 = cy + 16 * Math.sin(a), x2 = cx + 100 * Math.cos(a), y2 = cy + 100 * Math.sin(a);
+    el('line', {x1, y1, x2, y2, stroke: 'var(--cyto)', 'stroke-width': 7, 'stroke-linecap': 'round'}, s);
+    for (const t of [.35, .6, .85]) blob(s, x1 + (x2 - x1) * t, y1 + (y2 - y1) * t, 1.6, 'var(--nucleus)');
+  }
+  for (const i of [3, 14, 25]) { const a = i * Math.PI / 18 + Math.PI / 36; blob(s, cx + 70 * Math.cos(a), cy + 70 * Math.sin(a), 3, 'var(--macro)'); }
+  blob(s, cx, cy, 14, 'var(--surface)', {stroke: 'var(--vein)', 'stroke-width': 3});
+  /* portal triads at the corners */
+  for (let i = 0; i < 6; i++) {
+    const [x, y] = P(i);
+    blob(s, x, y, 16, 'var(--collagen)', {opacity: .7});
+    blob(s, x - 5, y - 3, 6, 'var(--surface)', {stroke: 'var(--vein)', 'stroke-width': 2});
+    blob(s, x + 6, y - 4, 2.6, 'var(--artery)');
+    blob(s, x + 3, y + 7, 3.4, 'var(--surface)', {stroke: 'var(--cyto)', 'stroke-width': 2.4});
+  }
+  /* flow arrows: blood inward (vein colour), bile outward (dashed) */
+  const d = el('defs', {}, s);
+  const mk = (id, c) => { const m = el('marker', {id, viewBox: '0 0 6 6', refX: 3, refY: 3, markerWidth: 4, markerHeight: 4, orient: 'auto'}, d); el('path', {d: 'M0 0 L6 3 L0 6 Z', fill: c}, m); };
+  mk('ar-b', 'var(--vein)'); mk('ar-i', 'var(--ink)');
+  for (const i of [0, 3]) { const [x, y] = P(i); el('line', {x1: x + (cx - x) * .2, y1: y + (cy - y) * .2, x2: x + (cx - x) * .62, y2: y + (cy - y) * .62, stroke: 'var(--vein)', 'stroke-width': 2.4, 'marker-end': 'url(#ar-b)'}, s); }
+  { const [x, y] = P(4); el('line', {x1: x + (cx - x) * .55, y1: y + (cy - y) * .55, x2: x + (cx - x) * .2, y2: y + (cy - y) * .2, stroke: 'var(--ink)', 'stroke-width': 1.6, 'stroke-dasharray': '4 3', 'marker-end': 'url(#ar-i)'}, s); }
+  lab(s, cx, cy + 28, 'central vein', 'middle', 9);
+  const [tx, ty] = P(5); lab(s, tx + 20, ty - 16, 'portal triad', 'start', 9);
+  lab(s, 396, 292, 'blood → centre · bile → edge', 'end', 9);
+  lab(s, 4, 14, 'one classic lobule', 'start', 9);
+  return [['--cyto', 'Hepatocyte plates (bile duct ring)'], ['--lumen-v', 'Sinusoids'], ['--macro', 'Kupffer cell'], ['--vein', 'Portal vein branch, central vein'], ['--artery', 'Hepatic artery branch'], ['--collagen', 'Portal connective tissue', .7]];
+}
+
+function drawPancreas(s) {
+  s.replaceChildren(); vb(s, 300);
+  el('rect', {x: 0, y: 0, width: 400, height: 300, fill: 'var(--collagen)', opacity: .25}, s);
+  const acinus = (x, y) => {
+    for (let i = 0; i < 8; i++) {
+      const a0 = i * Math.PI / 4, a1 = a0 + Math.PI / 4, R = 24, r = 4;
+      const p = (rr, a) => `${(x + rr * Math.cos(a)).toFixed(1)} ${(y + rr * Math.sin(a)).toFixed(1)}`;
+      el('path', {d: `M${p(r, a0)} L${p(R, a0)} A${R} ${R} 0 0 1 ${p(R, a1)} L${p(r, a1)} Z`, fill: 'var(--cyto)', stroke: 'var(--surface)', 'stroke-width': 1}, s);
+      el('path', {d: `M${p(r, a0)} L${p(12, a0)} A12 12 0 0 1 ${p(12, a1)} L${p(r, a1)} Z`, fill: 'var(--zym)', opacity: .8}, s);
+      blob(s, x + 18 * Math.cos(a0 + Math.PI / 8), y + 18 * Math.sin(a0 + Math.PI / 8), 2.4, 'var(--nucleus)');
+    }
+    blob(s, x, y, 3.2, 'var(--surface)', {stroke: 'var(--ink)', 'stroke-width': .6});
+  };
+  const acini = [[40, 40], [96, 30], [150, 44], [36, 100], [92, 92], [36, 160], [36, 222], [92, 240], [150, 256], [210, 262], [268, 250], [330, 258], [374, 200], [370, 140], [372, 80], [330, 30], [270, 30], [214, 34]];
+  for (const [x, y] of acini) acinus(x, y);
+  /* islet */
+  blob(s, 230, 150, 78, 'var(--cyto)', {opacity: .35});
+  for (let i = 0; i < 46; i++) { const a = i * 2.4, r = 8 + (i * 37) % 64; blob(s, 230 + r * Math.cos(a), 150 + r * Math.sin(a), 2.4, 'var(--nucleus)', {opacity: .8}); }
+  for (const [a, r] of [[0.4, 30], [2.2, 44], [4.1, 24], [5.3, 52]]) el('ellipse', {cx: 230 + r * Math.cos(a), cy: 150 + r * Math.sin(a), rx: 9, ry: 3, fill: 'var(--lumen-v)', stroke: 'var(--t-endo)', 'stroke-width': 1.3}, s);
+  /* intercalated duct into an acinus */
+  el('line', {x1: 92, y1: 92, x2: 120, y2: 150, stroke: 'var(--cyto)', 'stroke-width': 6, 'stroke-linecap': 'round'}, s);
+  lab(s, 230, 154, 'islet (paler, Gray)', 'middle', 9.5);
+  lab(s, 124, 166, 'duct', 'start', 9); lab(s, 4, 290, 'serous acini: dark bases, granular tips', 'start', 9);
+  lab(s, 60, 132, 'centroacinar cell', 'start', 8.5); el('line', {x1: 62, y1: 128, x2: 92, y2: 96, stroke: 'var(--ink)', 'stroke-width': .7}, s);
+  return [['--cyto', 'Acinar / duct / islet cells'], ['--zym', 'Zymogen granules (acinar tips)'], ['--nucleus', 'Nuclei'], ['--t-endo', 'Capillaries in the islet (endothelium)'], ['--collagen', 'Connective tissue', .25]];
+}
+
+/* ===================== PAGE ===================== */
+$('lede').textContent = DATA.lede; $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models; $('images').innerHTML = DATA.images;
+const mk = (box, id) => Histo.micro(box, Object.assign({id, file: id + '.jpg'}, DATA.micros[id]));
+const section = (p, items, cap) => { $(p + '-cap').innerHTML = cap; Histo.organs({chips: $(p + '-chips'), svg: $(p + '-svg'), key: $(p + '-key'), text: $(p + '-text'), micro: $(p + '-micro'), items: items.map(it => Object.assign({}, it, {micros: (it.micros || []).filter(id => DATA.micros[id])})), mk}); };
+section('resp', DATA.resp, DATA.respCap);
+Histo.table($('resp-table'), ['', 'Cartilage', 'Glands', 'Epithelium', 'Smooth muscle'], DATA.respRows);
+section('oral', DATA.oral, DATA.oralCap);
+Histo.table($('pap-table'), ['Papilla', 'Where', 'Look', 'Taste buds'], DATA.papRows);
+section('gut', DATA.gut, DATA.gutCap);
+Histo.table($('gut-table'), ['', 'Epithelium', 'Mucosa', 'Submucosa', 'Muscle coat', 'Outer coat'], DATA.gutRows);
+Histo.table($('fp-table'), ['', 'Fundus / body', 'Pylorus'], DATA.fpRows);
+Histo.table($('dji-table'), ['', 'Duodenum', 'Jejunum', 'Ileum'], DATA.djiRows);
+section('gland', DATA.gland, DATA.glandCap);
+Histo.table($('gland-table'), ['', 'Parenchyma', 'Landmarks', 'Special'], DATA.glandRows);
+window.ready = true;
+</script>
+</body>
+</html>

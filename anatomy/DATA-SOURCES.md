@@ -1211,3 +1211,51 @@ tubercles.
   amniocentesis needle through the placenta and the CVS catheter in the wall, germ-layer colours too close to artery,
   nerve and vein colours, life-chart bars misaligned, uterus without a lumen, dates and attributions, drawing slips,
   accessibility of the flow button and steppers.
+
+## Histology II: Respiratory and Digestive Organs; Urinary and Reproductive Organs; Endocrine Glands, Senses and CNS — `histology/respiratory-digestive.html`, `histology/urinary-reproductive.html`, `histology/endocrine-senses-cns.html`
+
+- Fact sheet `sources-local/facts/fill-histo2.md` (528 quotes, script-checked against `sources-local/modern/fill-histo2/`,
+  built from `fill-histo2-scripts/spec-*.md` with `assemble.sh`, downloads 2026-11-22): Gray 1918 pages 3, 12, 185, 187,
+  189, 197, 223, 225, 227, 232, 236, 237, 240, 242, 245, 247–251, 253–255, 258, 259, 262, 263, 266–268, 272, 273, 275–277;
+  StatPearls (24 chapters); open papers PMC10024030, PMC11188711, PMC12481553, PMC12721976, PMC12776365, PMC13093675,
+  PMC13297954, PMC13400080, PMC13745872, PMC4736353, PMC4908136, PMC59567, PMC6895843, PMC7384063, PMC7496161,
+  PMC7764992, PMC7961977, PMC8071372, PMC8948418; Wikipedia, including the hormone table of "Anterior pituitary"
+  (rebuilt from the wikitext). Excluded for OpenStax notices: Wikipedia Lung, Stomach, Gastric glands, Ovary, Uterus,
+  Adrenal gland. Wikipedia sentences copying Gray (villus circulation) counted as Gray only.
+- Contested, stated on the page: tracheal epithelium (Gray "stratified"); both convoluted tubules alike (Gray) vs a brush
+  border on the proximal tubule; ureter muscle order (Gray external longitudinal first) and the extra outer layer in
+  the lower part; vas deferens three muscle layers (Wikipedia) vs two for most of its length (Gray); epididymis
+  "ciliated" (Gray) vs stereocilia; posterior pituitary "no nerve fibers" (Gray) vs hypothalamic axons; cornea four
+  (Gray) vs five layers; cerebral cortex four cell layers (Gray) vs six; vallate papillae 8–12 (Gray) vs 10–14;
+  outer hair-cell rows; what chromophobes are (degranulated hormone cells vs hormone-negative stem cells).
+- Single source, attributed: pyloric mucous and G cells, scattered parietal cells, Z-line, Brunner's glands' alkaline
+  mucus, Rokitansky–Aschoff sinuses, no muscularis mucosae in the gall bladder, macula densa, squamocolumnar junction,
+  Herring bodies, C cells larger, paler and inside the basement membrane (Wikipedia); pale islets, labial glands,
+  complete longitudinal muscle of the appendix, colloid eosin-stained, substantia gelatinosa (Gray); corpus luteum
+  stops within 14 days (StatPearls); layer II and IV cell types (Wikipedia; PMC8948418).
+- Left out (one source or none): "densest" cortical layer, cardiac glands mucous (only OpenStax-flagged source), the
+  widest adrenal zone, unmyelinated posterior-pituitary axons, the kind of labial glands, a separate statement that the
+  gall bladder has no submucosa (neither source states it; the page says neither lists one).
+- Micrographs (Wikimedia Commons; licences read from the Commons API 2026-11-22; all resized to 720 px and labelled,
+  labels approximate and each checked on the image): Jpogi, public domain (lung, gastro-oesophageal junction, fundus
+  and parietal cells — both cropped to remove the uploader's pointer, pylorus, duodenum, liver sinusoid, kidney cortex
+  — cropped likewise, kidney medulla, ureter, testis, epididymis, vas deferens, ovarian follicle, corpus albicans,
+  endometrium, uterine tube, placenta, adrenal gland; the other uploader pointers are explained in the captions);
+  Abdulrazakca, "Oesophagus09.jpg", public domain (cropped); Urkiurmo, "Trakearen ebaketa histologikoa.png",
+  CC BY-SA 4.0; CoRus13, "Colon, low mag.jpg", CC BY-SA 4.0 (cropped); Andrjusgeo, "KirmėlinėAtauga.JPG" (appendix),
+  CC BY-SA 3.0 (cropped); Netha Hussain, jejunum, gall bladder (contrast raised), umbilical cord (cropped), thyroid
+  and parathyroid (cropped, contrast raised), CC BY-SA 3.0; Polarlys, islet of Langerhans and bladder urothelium,
+  CC BY 2.5; Ed Uthman, "Renal corpuscle.jpg", CC BY-SA 2.0, and the cervix squamocolumnar junction, CC BY 2.0;
+  Mikael Häggström, normal prostate and anterior pituitary, CC0; Nephron, "Corpora amylacea intermed mag.jpg",
+  CC BY-SA 3.0; Berkshire Community College Bioscience Image Library, thyroid, cerebellum and Purkinje cells, CC0;
+  Iceclanl, olfactory epithelium, CC BY-SA 3.0 (cropped); Librepath, "Optic nerve -- low mag.jpg", CC BY-SA 3.0.
+  No usable open micrograph (drawings only): bronchus, lip, tongue (vallate papilla), epiglottis, ileum (Peyer's
+  patch), penis, normal corpus luteum, posterior pituitary, pineal, eyelid, limbus, cornea, retina, cochlea, organ of
+  Corti, whole spinal cord, cerebral cortex, Leydig cells, separate adrenal zones, portal triad.
+- Independent review (2026-11-22), fixed: pituitary cell types misread from one source (now three sources, and the
+  chromophobe disagreement shown); umbilical-cord image height; six micrograph labels on the neighbouring layer; lung
+  airway labelled respiratory bronchiole / alveolar duct; blurred appendix image replaced; colour clashes (grey and
+  white matter now the neuro pages' tokens, receptor cells and macrophages given their own colours, capillary walls
+  drawn as endothelium, not artery, one colour for eosin-stained cells, unmyelinated retinal fibres not drawn as
+  myelin); thyroid C cells inside the basement membrane; one-source statements attributed; uploader pointers
+  explained or cropped; page code (missing micrographs, observers released, drawing labels for screen readers).

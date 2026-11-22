@@ -8,10 +8,20 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 41 agent (systemic embryology) running.
+- 2026-11-22 11:15 crash: Claude Code 2.1.330 segfaulted itself (coredump; no kernel/amdgpu errors at that time;
+  user's memtest and scrub are clean). Same as the 11-20 crashes of 2.1.327/328. Repaired 3 corrupt .git loose objects
+  (fsck clean). System python stringprep.py fails its pacman checksum and breaks http.server: needs
+  `sudo pacman -S python` (also git github-cli gzip syndication tdb texlive-fontsextra) before http.server runs. Meanwhile the server is
+  scratchpad/srv/serve.py (avoids getaddrinfo): `python3 -I <scratchpad>/srv/serve.py ~/personal/neet-pg`.
+  Module 40 review and module 41 build resumed. Later found 2 tracked files changed on disk with mtime unchanged
+  (ul-nv.json, ll-nv.pack; git status missed them) and restored them from git; check with a full
+  `git ls-files -s` vs `git hash-object --stdin-paths` compare before each commit.
 - Module 40 (histology II): [x] build (520 quotes, 37 Commons micrographs, pages respiratory-digestive,
   urinary-reproductive, endocrine-senses-cns; OpenStax-flagged quotes found and removed; AN43.2, 43.3 partial)
-  [ ] review (running) [ ] fixes [ ] docs (+ module 38 pages' Histology links) [ ] commit.
+  [x] review (15 findings: pituitary basophil fact, cord image h, --gm/--rcpt colour clashes, markers,
+  appendix image, attributions; browser checks not run, server down) [x] fixes (all 15 items; +prostate corpora amylacea and Purkinje micrographs; 528 quotes)
+  [x] browser checks (6 pages, 0 JS errors, no phone overflow) + colours softened
+  [x] docs (+ module 38 pages' Histology links) [x] commit. Done 2026-11-22.
 - Module 41 (systemic embryology: AN25.2–25.6, 43.4, 52.4–52.8, 64.2–64.3) started 2026-11-22: sheet fill-embryo2,
   pages in anatomy/embryology/. After: genetics (73–75), then leftovers (general 1–6, radiology 54, sectional 51,
   osteology 53, surface 55, limb leftovers).
