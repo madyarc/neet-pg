@@ -10,9 +10,7 @@ Last updated: 2026-11-21
 
 - 2026-11-22 11:15 crash: Claude Code 2.1.330 segfaulted itself (coredump; no kernel/amdgpu errors at that time;
   user's memtest and scrub are clean). Same as the 11-20 crashes of 2.1.327/328. Repaired 3 corrupt .git loose objects
-  (fsck clean). System python stringprep.py fails its pacman checksum and breaks http.server: needs
-  `sudo pacman -S python` (also git github-cli gzip syndication tdb texlive-fontsextra) before http.server runs. Meanwhile the server is
-  scratchpad/srv/serve.py (avoids getaddrinfo): `python3 -I <scratchpad>/srv/serve.py ~/personal/neet-pg`.
+  (fsck clean). User reinstalled python, git and the others (clean); module 40 pushed.
   Module 40 review and module 41 build resumed. Later found 2 tracked files changed on disk with mtime unchanged
   (ul-nv.json, ll-nv.pack; git status missed them) and restored them from git; check with a full
   `git ls-files -s` vs `git hash-object --stdin-paths` compare before each commit.
@@ -23,7 +21,12 @@ Last updated: 2026-11-21
   [x] browser checks (6 pages, 0 JS errors, no phone overflow) + colours softened
   [x] docs (+ module 38 pages' Histology links) [x] commit. Done 2026-11-22.
 - Module 41 (systemic embryology: AN25.2–25.6, 43.4, 52.4–52.8, 64.2–64.3) started 2026-11-22: sheet fill-embryo2,
-  pages in anatomy/embryology/. After: genetics (73–75), then leftovers (general 1–6, radiology 54, sectional 51,
+  pages in anatomy/embryology/. [x] build (747 quotes; heart-vessels, gut-urogenital, head-neck-cns; not browser-tested,
+  gjs+rsvg only) [x] review (14 findings: fetal IVC into RV, arch/coarctation drawing, PDA chip, flexures, malrotation chips,
+  ~30 unquoted or unattributed claims, --telen vs --parathy, text clipping; no JS errors) [ ] fixes + docs (running) [ ] docs (index count 2→5,
+  search index, DATA-SOURCES/SYLLABUS text in build report) [ ] commit.
+- Module 40 commit 9a481ee is local only: push failed (git pack-objects SIGSEGV; /usr/bin/git fails pacman check).
+  Push after `sudo pacman -S git ...`. After: genetics (73–75), then leftovers (general 1–6, radiology 54, sectional 51,
   osteology 53, surface 55, limb leftovers).
 - Local test server: 127.0.0.1:8765.
 
