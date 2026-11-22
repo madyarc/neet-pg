@@ -10,8 +10,9 @@ Last updated: 2026-11-21
 
 - Resumed 2026-11-22 05:31: module 36 finishing agent (continues from files on disk: meninges-cord.html,
   brainstem.html, models/neuro1, fill-neuro1) (running); home Joints/Organs layers done.
-- PAUSED new modules (user, 2026-11-22): finish modules 35 and 36 (review, fixes, docs, commit), then do the
-  navigation work below before module 37.
+- Navigation work done (below); modules resumed. Module 37 (neuro II: sections 7, 62, 63) started 2026-11-22: sheet
+  fill-neuro2, model models/neuro2 (tools/neuro/neuro2_config.py), pages anatomy/neuro/cerebrum.html (+ maybe
+  general/nervous-system.html).
 - Navigation work (user request 2026-11-22):
   1. [x] done 2026-11-22. Search: `tools/home/search_index.py` → `search-index.json` (every page: title, subject, region, type, lede,
      h2 headings with ids, 3D topic names); search box on the root index and the Anatomy index; results link to the
