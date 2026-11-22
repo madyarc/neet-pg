@@ -4,8 +4,9 @@ Z-Anatomy (https://github.com/Z-Anatomy/Models-of-human-anatomy, `Z-Anatomy.zip`
 format) is BodyParts3D extended with the muscles, tendons, ligaments, fasciae and bursae that BodyParts3D lacks
 (masseter, temporalis, facial muscles, rectus abdominis, latissimus dorsi…). Licence: CC BY-SA 4.0; credit both
 "BodyParts3D – The Database Center for Life Science – CC BY-SA 2.1 Japan" and "Z-Anatomy – The libre 3D atlas of
-anatomy – CC BY-SA 4.0". **Do not use** its inner ear (CC BY-NC-SA) or kidney (CC BY-NC) models, or the unlicensed
-"Brainder"/"White matter" brain models. Download and archive: `sources-local/zanat/` (not in git).
+anatomy – CC BY-SA 4.0". Its inner ear (CC BY-NC-SA) and kidney ("Kidney - by Lissie Cowley - CC-BY-NC 4.0") models are
+allowed since the project went non-commercial (2026-11-21): credit them with their own licence. Still do not use the
+unlicensed "Brainder"/"White matter" brain models. Download and archive: `sources-local/zanat/` (not in git).
 
 ## Reading the .blend without Blender
 

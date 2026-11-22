@@ -89,18 +89,19 @@ Z-Anatomy, CC BY-SA 4.0 (built on BodyParts3D).
 
 ## Licence
 
-This project stays open: anyone may use, copy, change and share it, but every copy and every changed version must stay
-open under the same terms.
+This project is free and not for commercial use: anyone may use, copy, change and share it for non-commercial
+purposes, and every changed version must stay open under the same terms.
 
 | What | Licence |
 |---|---|
 | Code: JavaScript and CSS (including the scripts and styles inside the HTML pages), `anatomy/assets/`, `tools/` | [GNU AGPL-3.0 or later](LICENSE): changed versions, including ones run as a website, must publish their source under the AGPL |
-| Content: page text, diagrams, data, syllabus files, notes | [CC BY-SA 4.0](LICENSE-CONTENT): credit this project and share changed versions under the same licence |
-| 3D models in `anatomy/models/` | adapted from BodyParts3D (CC BY-SA 2.1 Japan) and Z-Anatomy (CC BY-SA 4.0); shared under the same licences |
+| Content: page text, diagrams, data, syllabus files, notes | [CC BY-NC-SA 4.0](LICENSE-CONTENT): credit this project, no commercial use, share changed versions under the same licence |
+| 3D models in `anatomy/models/` | each part keeps its source's licence: BodyParts3D (CC BY-SA 2.1 Japan), Z-Anatomy (CC BY-SA 4.0), and the few Z-Anatomy parts made by others under a non-commercial licence (e.g. the kidney, CC BY-NC 4.0); `anatomy/DATA-SOURCES.md` says which models use them |
 | Photos and micrographs in `img/` folders | the licence of each file, listed in that subject's `DATA-SOURCES.md` |
 
-Quotes from Gray's *Anatomy* (1918) are in the public domain. Content based on Wikipedia follows its CC BY-SA licence,
-which these terms keep.
+Quotes from Gray's *Anatomy* (1918) are in the public domain. Facts are not owned by anyone; the page text is our own
+wording. Anything adapted from a CC BY-SA source (such as Wikipedia text or the BodyParts3D and Z-Anatomy meshes) stays
+under CC BY-SA as that licence requires.
 
 ## Adding to it
 

@@ -34,7 +34,9 @@ cord), lymph node groups (models/body-lymph; no lymph vessels, no thoracic duct)
 by mirroring: copy the loading code from anatomy/general/blood-vessels.html and anatomy/index.html (loadExtra).
 Regional packed models follow tools/upper-limb/nv_config.py. Viewer API: anatomy/assets/viewer.js. Colours: only
 tokens from anatomy/assets/atlas.css with their one meaning; a page may define its own extra tokens for schematics but
-never reuse a meaning colour. Keep downloads small; load extra layers only when the reader opens that topic.
+never reuse a meaning colour. Licences: NC models and images are allowed (project is non-commercial); pick the
+more accurate and lighter mesh, never ND or unlicensed (e.g. Z-Anatomy's Brainder brain), and credit NC parts with
+their own licence in the footer and your DATA-SOURCES text. Keep downloads small; load extra layers only when the reader opens that topic.
 
 ## Memory (hard)
 Run every heavy command through tools/capped (Blender exports, `bones build`, ffshot.py, large Python jobs). It caps

@@ -90,6 +90,9 @@ builds at the same time.
 
 ## Log (newest first)
 
+- 2026-11-21: Licence: content now CC BY-NC-SA 4.0 (user: never commercial); NC models/images allowed, chosen by
+  accuracy and load speed (Z-Anatomy kidney and inner ear now usable). Code stays AGPL.
+
 - 2026-11-21: Module 30 (lungs, pleura, trachea): 372 quotes, 168-part 798 KB `models/lung`, surface lines computed on
   the model's ribs, CC0 chest X-ray and CC BY-SA barium frame; review found 13 items (a tap level below the pleura,
   dropped labels, colours), all fixed; 7 ticked, AN25.9 still partial. Pulmonary vessels on the home open the page.
