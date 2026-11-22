@@ -8,11 +8,6 @@ Last updated: 2026-11-21
 
 ## Now
 
-- Module 33 (mouth, pharynx, nose, larynx) started 2026-11-21: [x] build (421 quotes, 107-part 653 KB oro) [x] review
-  (10 items: pyriform fold swapped in model, V2 clipped away, model caveats, attributions, label collisions) [ ] fixes
-  (sent). Agent a5600e55; sheet fill-oro, model
-  models/oro (tools/head-neck/oro_config.py), page head-neck/mouth-pharynx-nose.html. Target AN36.1, 36.2, 36.4–36.7,
-  37.1–37.3, 38.2.
 - Module 34 (ear and eye) started 2026-11-22: agent (eareye); sheet fill-eareye, model models/eareye (or ear + eye),
   page head-neck/ear-eye.html (may split). Target AN40.1–40.5, 41.1–41.3, 31.4, 30.5 (+ AN31.5 gap).
 - Local test server: 127.0.0.1:8765.
@@ -45,11 +40,12 @@ For each region: add it to `REGION_PAGES` in anatomy/index.html so a second tap 
   relations): Gray only (Wikipedia copies Gray); modules 27–28.
 - AN27.1: scalp wound bleeding and gaping (Wikipedia only).
 - AN43.6: only the subclavian vein's surface line is missing (one source).
+- AN37.2: sinus functions are Wikipedia only (module 33).
 - AN47.6: the clinical use of the splenic notch has no open source (module 31).
 - AN13.7: surface lines and pulses are done (module 24); the muscle tests for pectoralis major, serratus anterior,
   latissimus dorsi, deltoid, biceps and brachioradialis are not. Could go on the upper-limb muscles page.
 
-Progress: anatomy 207 covered, 13 partial, 193 not started; ophthalmology 6 covered, 1 partial, 55 not started.
+Progress: anatomy 216 covered, 14 partial, 183 not started; ophthalmology 6 covered, 1 partial, 55 not started.
 
 ## Steps for every module (do them in this order, tick them here as they finish)
 
@@ -94,6 +90,10 @@ builds at the same time.
   that disproves each claim.
 
 ## Log (newest first)
+
+- 2026-11-22: Module 33 (mouth, pharynx, nose, larynx): 430 quotes, 107-part 653 KB `models/oro` with a midline clip;
+  review found 10 items (pyriform fold lateral in the model, V2 clipped away, model caveats), all fixed; 9 ticked,
+  AN37.2 partial.
 
 - 2026-11-22: Module 32 (face and neck regions and glands): 531 quotes, 141-part 636 KB `models/hn-reg`; review found 13
   items (face sensory map, parotid section mirrored, carotid sheath contents, model caveats), all fixed except thyroid

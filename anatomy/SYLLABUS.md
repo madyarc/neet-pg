@@ -336,24 +336,24 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 36. Mouth, Pharynx & Palate
 
-- [ ] **AN36.1** Describe and demonstrate the structures of the vestibule of the mouth and oral cavity proper.
-- [ ] **AN36.2** Describe the 1) morphology, relations, blood supply andapplied anatomy of palatine tonsil 2) composition of soft palate
+- [x] **AN36.1** Describe and demonstrate the structures of the vestibule of the mouth and oral cavity proper. — *vestibule, oral cavity proper, ducts, palate, teeth in 3D: [Mouth, Pharynx, Nose and Larynx](head-neck/mouth-pharynx-nose.html)*
+- [x] **AN36.2** Describe the 1) morphology, relations, blood supply andapplied anatomy of palatine tonsil 2) composition of soft palate — *tonsil morphology, bed, vessels, nerves; soft-palate muscles and nerves: [Mouth, Pharynx, Nose and Larynx](head-neck/mouth-pharynx-nose.html)*
 - [x] **AN36.3** Describe and demonstrate the muscles, nerve supply, blood supply and lymphatic drainage of the pharynx — *muscles, nerve supply, arteries, veins, lymph nodes in 3D, sensory supply: [Muscles of the Head and Neck](head-neck/muscles.html)*
-- [ ] **AN36.4** Describe the components and functions of Waldeyer’s lymphatic ring
-- [ ] **AN36.5** Describe the pharyngeal spaces. Also describe the boundaries and clinical significance of pyriform fossa
-- [ ] **AN36.6** Describe the anatomical basis of tonsillitis, tonsillectomy, adenoids and peri-tonsillar abscess
-- [ ] **AN36.7** Describe the clinical significance of Killian’s dehiscence
+- [x] **AN36.4** Describe the components and functions of Waldeyer’s lymphatic ring — *components and function of Waldeyer's ring: [Mouth, Pharynx, Nose and Larynx](head-neck/mouth-pharynx-nose.html)*
+- [x] **AN36.5** Describe the pharyngeal spaces. Also describe the boundaries and clinical significance of pyriform fossa — *parts of the pharynx, retro- and parapharyngeal spaces, pyriform fossa: [Mouth, Pharynx, Nose and Larynx](head-neck/mouth-pharynx-nose.html)*
+- [x] **AN36.6** Describe the anatomical basis of tonsillitis, tonsillectomy, adenoids and peri-tonsillar abscess — *tonsillitis, tonsillectomy, adenoids, quinsy: [Mouth, Pharynx, Nose and Larynx](head-neck/mouth-pharynx-nose.html)*
+- [x] **AN36.7** Describe the clinical significance of Killian’s dehiscence — *Killian's dehiscence and Zenker's pouch: [Mouth, Pharynx, Nose and Larynx](head-neck/mouth-pharynx-nose.html)*
 
 ### 37. Cavity of Nose
 
-- [ ] **AN37.1** Describe & demonstrate features of nasal septum, lateral wall of nose, their blood supply and nerve supply
-- [ ] **AN37.2** Describe location and functional anatomy of paranasal sinuses
-- [ ] **AN37.3** Describe anatomical basis of sinusitis & maxillary sinus tumours
+- [x] **AN37.1** Describe & demonstrate features of nasal septum, lateral wall of nose, their blood supply and nerve supply — *septum, lateral wall, arteries, Little's area, nerves: [Mouth, Pharynx, Nose and Larynx](head-neck/mouth-pharynx-nose.html)*
+- [~] **AN37.2** Describe location and functional anatomy of paranasal sinuses — *location and drainage in [Mouth, Pharynx, Nose and Larynx](head-neck/mouth-pharynx-nose.html); functions have one source (Wikipedia, debated)*
+- [x] **AN37.3** Describe anatomical basis of sinusitis & maxillary sinus tumours — *ostiomeatal complex, dental sinusitis, maxillary carcinoma spread, Ohngren's line: [Mouth, Pharynx, Nose and Larynx](head-neck/mouth-pharynx-nose.html)*
 
 ### 38. Larynx
 
 - [x] **AN38.1** Describe & demonstrate the morphology, identify structure of the wall, nerve supply, blood supply and actions of intrinsic and extrinsic muscles of the larynx — *cartilages, membranes, cavity, intrinsic and extrinsic muscles, nerves, sensory supply, arteries: [Muscles of the Head and Neck](head-neck/muscles.html)*
-- [ ] **AN38.2** Describe the anatomical aspects of laryngitis
+- [x] **AN38.2** Describe the anatomical aspects of laryngitis — *laryngitis: three regions, Reinke's space, croup, epiglottitis: [Mouth, Pharynx, Nose and Larynx](head-neck/mouth-pharynx-nose.html)*
 - [x] **AN38.3** Describe anatomical basis of recurrent laryngeal nerve injury — *unilateral and bilateral RLN injury: [Nerves, Vessels and Lymph Nodes of the Head and Neck](head-neck/nerves-vessels.html)*
 
 ### 39. Tongue

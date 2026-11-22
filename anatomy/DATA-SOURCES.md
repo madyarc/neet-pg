@@ -1022,3 +1022,29 @@ tubercles.
   section orientation, carotid sheath contents, model caveats for parathyroids and the lingual nerve, swallow
   animation, RLN crossing the inferior thyroid artery, faint labels (now none), about eight one-source statements,
   colours; added the accessory nerve surface line.
+
+## Mouth, Pharynx, Nose and Larynx — `head-neck/mouth-pharynx-nose.html`
+
+- Fact sheet `sources-local/facts/fill-oro.md` (430 quotes, script-checked against `sources-local/modern/fill-oro/`,
+  downloads 2026-11-21): Gray 1918 pages 223, 236, 242–244; StatPearls; Wikipedia (no OpenStax notices; about 40
+  articles carry Gray text and the copied sentences are not counted); open-access papers (tonsils and adenoids,
+  adenotonsillectomy, soft palate, Killian's triangle, pyriform sinus, hypopharyngeal cancer, epistaxis, sinonasal CT,
+  rhinosinusitis 2024, sinonasal tumours, maxillary carcinoma, ICA distance in tonsillectomy).
+- Contested, stated on the page: palate muscle nerve (accessory or vagus), tonsil crypt count, four or five arteries
+  at Kiesselbach's plexus, back wall of the retropharyngeal space (alar or prevertebral fascia), adenoid peak age, croup
+  peak age, timing of secondary haemorrhage.
+- Single source, attributed: sinus functions (Wikipedia, debated), adenoid facies, uvula deviation, quinsy as the
+  commonest deep neck infection (StatPearls), aspiration or incision (Wikipedia), pyriform foreign-body removal and
+  nerve block (one paper each), molar roots and nasal branch areas (Gray), the "about half" pyriform cancer figure.
+- Left out (one source): supratonsillar fossa, the paratonsillar vein as the bleeding source, the RLN under the pyriform
+  mucosa, ear pain after tonsillectomy.
+- Model `models/oro` (`tools/head-neck/oro_config.py`; Z-Anatomy soft tissues exported with modifiers applied,
+  `z-bp3d-oro*.zip`): 107 parts, 653 KB pack, 57 left parts mirrored in the page; midline topics use a clip plane. No
+  maxillary sinus mesh in either source: markers placed inside the model's maxilla. Adenoid, tubal and lingual
+  tonsils, Little's area, Killian's dehiscence, pyriform fossa, aryepiglottic fold and retropharyngeal nodes are
+  hand-placed and labelled approximate. The model's quadrangular membrane and retropharyngeal nodes sit wrongly, its
+  glossopharyngeal nerve and septal arteries stop short (said on the page). Missing: levator and tensor veli palatini,
+  palatoglossus, vocal folds, tonsillar and lingual arteries, palatine and laryngeal nerves.
+- Independent review (2026-11-22), fixed: pyriform fold drawn lateral to the fossa, maxillary nerve cut away by the
+  clip, maxillary markers off-canvas, model caveats, quinsy, epistaxis and pyriform sourcing, laryngeal epithelium,
+  label collisions, dark contrast, colours, accessibility.

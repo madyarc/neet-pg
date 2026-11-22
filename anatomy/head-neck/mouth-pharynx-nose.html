@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mouth, Pharynx, Nose and Larynx</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone, --tooth, --cart (cartilage; also the auditory tube), --lig (ligaments and
+   membranes of the larynx), --artery, --vein, --nerve, --lymph (tonsils and nodes), --clin (clinical points: Little's area,
+   Killian's dehiscence, a tumour, pus arrows). Shared with other pages, same meaning: --musc (muscle; the value of --musc on
+   general/connective-tissue.html), --airway (trachea; as on thorax/lungs.html), --gut (oesophagus; as on lungs.html), --pus (an
+   abscess; as on abdomen-pelvis/organs.html). Page-only tokens, used for nothing else: --muc (mucous membrane: pharynx,
+   nasal mucosa, gums), --palate (soft palate and uvula), --sinus (paranasal sinus air spaces). Checked against every colour
+   token on the site (sources-local/facts/fill-oro-scripts/colcheck.py: nearest existing light colours 10-13 apart; --muc and --palate shifted away from --musc and --n-median after review). */
+:root{--musc:#c96f68;--airway:#2f7d79;--gut:#d9a066;--pus:#cfd08a;--muc:#e9a04a;--palate:#b0609e;--sinus:#5aa7c8}
+:root[data-theme="dark"]{--musc:#9c4e48;--airway:#5cb3ad;--gut:#c08a52;--pus:#7a7b3c;--muc:#b87a34;--palate:#94487f;--sinus:#4a8fb0;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.grp{display:flex;flex-direction:column;gap:4px}
+.grp .lbl{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+#topics{display:flex;flex-direction:column;gap:10px}
+#topic-text p+p,#topic-text p+ul,#topic-text ul+p{margin-top:8px}
+#topic-text ul{margin:4px 0 0;padding-left:20px}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t tr[data-k]{cursor:pointer}
+table.t tr[aria-pressed="true"] td{background:var(--bg)}
+.scroll{overflow-x:auto}
+.scroll,.schbox{scrollbar-color:var(--line) transparent}
+.pick{font-size:13.5px;color:var(--muted);min-height:1.4em}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:620px;margin:0 auto}
+.schbox{overflow-x:auto}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:500px}.swipe{display:inline}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.onb{fill:#3a3f4a}   /* text drawn on a --bone fill: fixed dark so it stays readable in the dark theme */
+svg.sch .bone{fill:var(--bone);stroke:var(--muted);stroke-width:1}
+svg.sch .cart{fill:var(--cart);stroke:var(--muted);stroke-width:1}
+svg.sch .mus{fill:var(--musc);fill-opacity:.55;stroke:var(--muted);stroke-width:.8}
+svg.sch .muc{fill:var(--muc);fill-opacity:.35;stroke:var(--muc);stroke-width:1.4}
+svg.sch .pal{fill:var(--palate);fill-opacity:.75;stroke:var(--muted);stroke-width:.8}
+svg.sch .sin{fill:var(--sinus);fill-opacity:.55;stroke:var(--muted);stroke-width:.8}
+svg.sch .lym{fill:var(--lymph);stroke:var(--muted);stroke-width:.8}
+svg.sch .air{fill:var(--surface);stroke:var(--muted);stroke-width:.8}
+svg.sch .gut{fill:var(--gut);fill-opacity:.6;stroke:var(--muted);stroke-width:.8}
+svg.sch .awy{fill:var(--airway);fill-opacity:.45;stroke:var(--muted);stroke-width:.8}
+svg.sch .pus{fill:var(--pus);stroke:var(--muted);stroke-width:.8}
+svg.sch .art{stroke:var(--artery);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+svg.sch .artf{fill:var(--artery)}
+svg.sch .vn{fill:var(--vein)}
+svg.sch .nv{stroke:var(--nerve);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .clin{stroke:var(--clin);stroke-width:2.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+svg.sch .clinf{fill:var(--clin)}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .dash{stroke-dasharray:5 4}
+svg.sch .fas{stroke:var(--muted);stroke-width:1.6;fill:none}
+svg.sch .zone{fill:var(--ink);fill-opacity:.06;stroke:none}
+svg.sch .arr{stroke:var(--ink);stroke-width:1.8;fill:none;marker-end:url(#arr)}
+svg.sch .arrc{stroke:var(--clin);stroke-width:2.2;fill:none;marker-end:url(#arrc)}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.clinlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.clinlist .item{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg);font-size:14px}
+.clinlist .item b.t{display:block;font:600 14.5px var(--f-body);margin-bottom:4px}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a></nav>
+
+<header class="stack">
+  <h1>Mouth, Pharynx, Nose and Larynx</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="split" aria-label="Mouth, pharynx and nose in 3D">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <div class="key" id="key3d"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mouth">
+  <h2 id="h-mouth">The mouth: vestibule and oral cavity proper</h2>
+  <div class="scroll"><table class="t stack" id="mouth-table"></table></div>
+  <p class="muted" id="mouth-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-phar">
+  <h2 id="h-phar">The pharynx in section: parts, Waldeyer's ring, spaces</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="sag-svg" viewBox="0 0 560 560" role="img" aria-label="Schematic median sagittal section of the head and neck: nasal cavity, mouth, the three parts of the pharynx, larynx, oesophagus and trachea, with the vertebral column behind"></svg></div>
+      <div class="toggles" id="sag-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic median section, not to scale. Seen from the right, as in the 3D "Right" view: front on your right, head at the top.</p>
+    </div>
+    <div class="prose" id="sag-text"></div>
+  </div>
+  <div class="two">
+    <div class="scroll"><table class="t stack" id="pyr-table"></table></div>
+    <div class="prose" id="space-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tonsil">
+  <h2 id="h-tonsil">Soft palate and palatine tonsil</h2>
+  <div class="two">
+    <div class="scroll"><table class="t stack" id="palate-table"></table></div>
+    <div class="scroll"><table class="t stack" id="tonsil-table"></table></div>
+  </div>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="bed-svg" viewBox="0 0 540 380" role="img" aria-label="Schematic horizontal section through the right tonsil seen from above: from medial to lateral the tonsil, its capsule, the peritonsillar space, the superior constrictor, the facial artery and the parapharyngeal space with the internal carotid artery behind"></svg></div>
+      <div class="toggles" id="bed-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic horizontal section through the right tonsil, not to scale. Seen from above: front at the top, the midline on your left, the body's right side on your right.</p>
+    </div>
+    <div class="prose" id="bed-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-killian">
+  <h2 id="h-killian">Killian's dehiscence</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="kil-svg" viewBox="0 0 480 420" role="img" aria-label="Schematic posterior view of the lower pharynx: the thyropharyngeus part of the inferior constrictor with oblique fibres above, the horizontal cricopharyngeus below, and the triangular Killian's dehiscence between them in the midline"></svg></div>
+      <div class="toggles" id="kil-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. Seen from behind, as in the 3D "Back" view: the body's right on your right.</p>
+    </div>
+    <div class="prose" id="kil-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-nose">
+  <h2 id="h-nose">Nasal cavity: septum, lateral wall, vessels and nerves</h2>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="sep-svg" viewBox="0 0 540 400" role="img" aria-label="Schematic of the nasal septum seen from the right: septal cartilage in front, perpendicular plate of the ethmoid above and behind, vomer below and behind, with the arteries meeting at Little's area (four; some count five) in the front lower part"></svg></div>
+      <div class="toggles" id="sep-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. The septum seen from the right, as in the 3D "Right" view: front on your right.</p>
+    </div>
+    <div>
+      <div class="schbox"><svg class="fig sch" id="lat-svg" viewBox="0 0 540 400" role="img" aria-label="Schematic of the lateral wall of the nasal cavity seen from the medial side: the three conchae and their meatuses, and with the conchae removed the openings of the sinuses and the nasolacrimal duct"></svg></div>
+      <div class="toggles" id="lat-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. The left lateral wall seen from the right (from the septum's side), as in the 3D "Lateral wall" topic: front on your right.</p>
+    </div>
+  </div>
+  <div class="two">
+    <div class="scroll"><table class="t stack" id="art-table"></table></div>
+    <div class="scroll"><table class="t stack" id="nerve-table"></table></div>
+  </div>
+  <div class="prose" id="nose-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sinus">
+  <h2 id="h-sinus">Paranasal sinuses</h2>
+  <div class="scroll"><table class="t stack" id="sinus-table"></table></div>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="cor-svg" viewBox="0 0 540 420" role="img" aria-label="Schematic coronal section through the orbits, nasal cavity and maxillary sinuses: the maxillary ostium opens high on the medial wall into the middle meatus; arrows show drainage or the directions of tumour spread"></svg></div>
+      <div class="toggles" id="cor-tg"></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic coronal section, not to scale. Seen from the front, as in the 3D "Front" view: the body's right on your left.</p>
+    </div>
+    <div class="prose" id="sinus-text"></div>
+  </div>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="ohn-svg" viewBox="0 0 480 360" role="img" aria-label="Schematic side view of the face with Ohngren's line from the medial canthus of the eye to the angle of the mandible dividing the maxillary sinus into an antero-inferior and a supero-posterior part"></svg></div>
+      <p class="muted"><span class="swipe">Swipe sideways to see all of it. </span>Schematic, not to scale. Seen from the right: front on your right. The sinus outline is drawn as if seen through the cheek.</p>
+    </div>
+    <div class="prose" id="ohn-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lar">
+  <h2 id="h-lar">Laryngitis: where the larynx swells</h2>
+  <div class="prose" id="lar-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-clin">
+  <h2 id="h-clin">Applied anatomy</h2>
+  <div class="clinlist" id="clin-list"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources: sources-local/facts/fill-oro.md, anatomy/DATA-SOURCES.md) ===================== */
+const L = k => k + '_l';                 // the mirrored (left) copy of a right-only part
+const MU = 'muscles.html';   // same folder
+const LINK_MU = `<a href="${MU}">Muscles of the Head and Neck</a>`, LINK_NV = '<a href="nerves-vessels.html">Nerves, Vessels and Lymph Nodes of the Head and Neck</a>';
+const BONES_NOSE = ['ethmoid', 'vomer', 'sphenoid_bone', 'frontal_bone', 'right_maxilla', 'left_maxilla', 'right_palatine_bone', 'left_palatine_bone',
+  'right_inferior_nasal_concha', 'left_inferior_nasal_concha', 'right_nasal_bone', 'left_nasal_bone', 'right_lacrimal_bone', 'left_lacrimal_bone'];
+const SKULL_BACK = ['occipital_bone', 'right_temporal_bone', 'left_temporal_bone'];
+const NECK = ['atlas', 'axis', 'third_cervical_vertebra', 'fourth_cervical_vertebra', 'fifth_cervical_vertebra', 'sixth_cervical_vertebra'];
+const JAW = ['mandible', 'hyoid_bone'];
+const TEETH = ['t_upper_teeth', 't_lower_teeth'];
+const LARYNX = ['thyroid_cart', 'cricoid_cart', 'aryt_cart_r', 'aryt_cart_l', 'epiglottis', 'c_corniculate', L('c_corniculate')];
+const LARLIG = ['g_quadrangular', L('g_quadrangular'), 'g_cricothyroid', 'g_thyrohyoid', 'g_thyrohyoid_lat', L('g_thyrohyoid_lat')];
+const PHAR = ['z_nasopharynx', 'z_oropharynx', 'z_laryngopharynx'];
+const PALATE = ['z_soft_palate', 'z_uvula'];
+const ETH = ['s_ethmoid_ant', 's_ethmoid_mid', 's_ethmoid_post'];
+const SINUS = ['s_frontal', 's_sphenoid', ...ETH, ...ETH.map(L)];
+const both = keys => keys.flatMap(k => [k, L(k)]);
+const M = k => 'm_' + k, A = k => 'v_' + k + '_r', N = k => 'n_' + k;
+const CONSTR = both([M('sup_constrictor'), M('mid_constrictor'), M('inf_constrictor')]);
+const TONSIL = ['l_palatine_tonsil_r', L('l_palatine_tonsil_r')];
+const SEPTAL_ART = [A('anterior_septal_branches_of_anterior_ethmoidal_artery'), A('septal_branches_of_posterior_ethmoidal_artery'),
+  A('posterior_septal_branches_of_sphenopalatine_artery'), A('greater_palatine_artery'), A('superior_labial_artery')];
+const FRONT = [0, -1, 0.1], BACK = [0, 1, 0.1], RIGHT = [-1, 0, 0.05], LEFT = [1, 0, 0.05], BELOW_FRONT = [0, -0.8, -0.6];
+const MID = 2, LAT = -2.5;   // clip: keep x >= -2 (the septum and the left half) / keep x >= 2.5 (the left half without the septum)
+/* hand-placed points (mm, body frame: +x left, +y back, +z up), approximate: placed from the textbook words on the model's parts
+   and checked in screenshots; the maxillary sinus point is the centre of the space the model's right maxilla encloses
+   (sources-local/facts/fill-oro-scripts/maxsinus.py) */
+const PTS = {tubal_l: [11, -110, 1512], max_r: [-20, -155, 1503], max_l: [20, -155, 1503], little: [-1.5, -197, 1496], killian: [-1.5, -94, 1415], pyr: [-12.5, -108, 1428], aef: [-6, -110, 1430], retro: [-11, -100, 1481],
+  adenoid: [0, -110, 1519], tubal: [-11, -110, 1512], lingual: [0, -124, 1467], fauces: [0, -128, 1479]};
+/* 3D topics. lit = parts in full colour; ctx = parts drawn as faint glass; bones = show the listed bone set as glass (default: nose, jaw,
+   neck); clip = MID or LAT (cut away the right side); labels = [key, text, point to search from (mm)] (key null: the point itself);
+   pts = [PTS key, label, colour token] */
+const TOPICS = [
+  {grp: 'Mouth', id: 'vestibule', name: 'Vestibule', clip: MID,
+    lit: [...TEETH, 'z_gingiva', L(M('orb_oris')), L(M('buccinator'))], ctx: ['z_tongue', ...PALATE], bones: ['left_maxilla', 'mandible'], view: RIGHT, zoom: 0.95,
+    fit: [...TEETH, L(M('orb_oris'))],
+    labels: [[L(M('orb_oris')), 'Lips (orbicularis oris)', [2, -190, 1472]], [null, 'Vestibule', [0, -186, 1468]],
+      ['z_gingiva', 'Gums', [0, -176, 1452]], ['t_upper_teeth', 'Upper incisor', [0, -186, 1480]], ['t_lower_teeth', 'Lower incisor', [0, -181, 1455]]],
+    text: `<p>The <b>vestibule</b> is the slit between the <b>lips and cheeks</b> outside and the <b>gums and teeth</b> inside; above and below it ends where the mucosa turns from the lips and cheeks onto the gums (Gray). The <b>parotid duct</b> opens into it on a small papilla opposite the <b>upper second molar</b>.</p>
+<p>Each lip is joined to the gum in the midline by a fold, the <b>frenulum</b>; orbicularis oris lies inside the lips, buccinator in the cheek. The gums are dense fibrous tissue and mucosa over the alveolar processes, round the necks of the teeth.</p>
+<p class="muted">Cut in the midline and seen from the right: the vestibule is the gap between the lip and the incisors.</p>`},
+  {grp: 'Mouth', id: 'proper', name: 'Oral cavity proper', clip: MID,
+    lit: ['z_tongue', ...PALATE, L(M('genioglossus')), L(M('mylohyoid')), L(M('geniohyoid')), ...TEETH], ctx: ['z_oropharynx'],
+    view: RIGHT, zoom: 0.95,
+    labels: [['z_tongue', 'Tongue', [0, -160, 1472]], ['z_soft_palate', 'Soft palate and uvula', [0, -130, 1490]],
+      ['left_maxilla', 'Hard palate', [1, -160, 1487]], [L(M('mylohyoid')), 'Mylohyoid', [4, -150, 1440]], [null, 'Fauces', PTS.fauces]],
+    text: `<p>Inside the arches of teeth is the <b>oral cavity proper</b>: in front and at the sides the alveolar arches and teeth; the <b>roof</b> is the palate (hard in front, soft behind); the <b>floor</b> is mainly the tongue, with <b>mylohyoid</b> below it; behind, it opens into the oropharynx through the <b>isthmus of the fauces</b>.</p>
+<p>The <b>submandibular duct</b> opens on a small papilla (the sublingual caruncle) beside the frenulum of the tongue; most small <b>sublingual ducts</b> open on the sublingual fold. Here the model is cut in the midline and seen from the right.</p>`},
+  {grp: 'Mouth', id: 'teeth', name: 'Teeth', lit: TEETH, ctx: ['z_gingiva', 'z_tongue'], view: BELOW_FRONT, zoom: 0.95,
+    labels: [['t_upper_teeth', 'Upper teeth', [-25, -160, 1470]], ['t_lower_teeth', 'Lower teeth', [20, -175, 1450]]],
+    text: `<p><b>32 permanent teeth</b>: in each jaw 4 incisors, 2 canines, 4 premolars and 6 molars (2-1-2-3 in each quadrant). <b>20 deciduous teeth</b>: in each jaw 4 incisors, 2 canines and 4 molars (2-1-0-2).</p>
+<p class="muted">The model has 28 teeth: BodyParts3D has no third molars.</p>`},
+  {grp: 'Palate and tonsil', id: 'palate', name: 'Soft palate', clip: MID,
+    lit: [...PALATE, L(M('palatopharyngeus')), L('z_auditory_tube')], ctx: ['z_nasopharynx', 'z_oropharynx', 'z_tongue', ...both([M('sup_constrictor')])],
+    view: [-1, 0.25, 0.15], zoom: 0.9,
+    labels: [['z_soft_palate', 'Soft palate', [0, -140, 1490]], ['z_uvula', 'Uvula', [0, -112, 1480]], [L(M('palatopharyngeus')), 'Palatopharyngeus', [8, -104, 1460]],
+      [L('z_auditory_tube'), 'Auditory tube', [12, -104, 1516]], ['left_palatine_bone', 'Hard palate (palatine)', [3, -145, 1484]]],
+    text: `<p>The <b>soft palate</b> hangs from the back of the hard palate, a movable partition between mouth and pharynx: mucous membrane over <b>five muscles</b> and the <b>palatine aponeurosis</b> (Gray also lists vessels, nerves, lymphoid tissue and glands); the <b>uvula</b> hangs from its free border. The muscles and their nerves: the table below.</p>
+<p class="muted">Z-Anatomy has no levator or tensor veli palatini, palatoglossus or musculus uvulae; palatopharyngeus and the auditory tube are shown.</p>`},
+  {grp: 'Palate and tonsil', id: 'tonsil', name: 'Palatine tonsil',
+    lit: [...TONSIL, ...both([M('sup_constrictor'), M('palatopharyngeus')]), A('internal_carotid_artery')], ctx: ['z_oropharynx', 'z_tongue', ...PALATE],
+    view: [-0.55, -1, 0.05], zoom: 0.9,
+    labels: [['l_palatine_tonsil_r', 'Palatine tonsil', [-30, -130, 1493]], [M('sup_constrictor'), 'Superior constrictor', [-30, -118, 1478]],
+      [A('internal_carotid_artery'), 'Internal carotid', [-34, -110, 1500]], [M('palatopharyngeus'), 'Palatopharyngeus', [-16, -108, 1470]]],
+    text: `<p>Each <b>palatine tonsil</b> lies in the lateral wall of the oropharynx, in the <b>tonsillar fossa</b> between the <b>palatoglossal arch</b> in front and the <b>palatopharyngeal arch</b> behind. Its medial surface has the openings of the <b>crypts</b> (about 10–30; Gray counts 12–15); its lateral surface is attached to a fibrous <b>capsule</b>.</p>
+<p><b>Lateral relations</b> (the tonsil bed): loose tissue (the peritonsillar space), then the <b>superior constrictor</b>, outside it the facial artery with its tonsillar and ascending palatine branches; the <b>internal carotid artery</b> is behind and lateral, about 2–2.5 cm away in adults (Gray, a 2023 review; 22 mm on this model), as close as 1.5 cm in small children (review).</p>
+<p class="muted">The Z-Anatomy tonsil is an approximate blob and sits a little high, level with the soft palate; the palatoglossal arch and the arches' muscles are not separate parts.</p>`},
+  {grp: 'Palate and tonsil', id: 'tonsilsupply', name: 'Tonsil: vessels and nerve',
+    lit: [...TONSIL, A('facial_artery'), A('ascending_pharyngeal_artery'), A('descending_palatine_artery'), A('greater_palatine_artery'), A('maxillary_artery'),
+      A('external_carotid_artery'), N('glossopharyngeal_nerve_ix_r'), 'l_jugulodigastric_node_r', 'v_internal_jugular_vein_r'], ctx: ['z_oropharynx', ...PALATE],
+    view: [-1, -0.45, 0.05], zoom: 0.9,
+    labels: [[A('facial_artery'), 'Facial artery', [-34, -150, 1470]], [A('ascending_pharyngeal_artery'), 'Ascending pharyngeal', [-20, -120, 1480]],
+      [A('descending_palatine_artery'), 'Descending palatine', [-25, -137, 1502]], [N('glossopharyngeal_nerve_ix_r'), 'Glossopharyngeal (IX)', [-28, -112, 1462]],
+      ['l_palatine_tonsil_r', 'Tonsil', [-27, -126, 1493]]],
+    text: `<p><b>Arteries</b>: mainly the <b>tonsillar branch of the facial artery</b> (Wikipedia; a 2023 review lists it first), with the ascending palatine (facial), dorsal lingual (lingual), ascending pharyngeal and descending (lesser) palatine (maxillary) arteries. <b>Veins</b>: the peritonsillar plexus, to the lingual and pharyngeal veins and the internal jugular. <b>Lymph</b>: to the upper deep cervical (jugulodigastric) node below the angle of the mandible. <b>Nerves</b>: glossopharyngeal and the lesser palatine nerves.</p>
+<p class="muted">The jugulodigastric node is hidden behind the internal jugular vein in this view: turn the model to see it. Z-Anatomy's glossopharyngeal nerve passes 30 mm from its tonsil (the tonsil sits high). Not in the model: the tonsillar, ascending palatine and lingual arteries, the lesser palatine nerves. Here the facial artery runs low, below the tonsil.</p>`},
+  {grp: 'Pharynx', id: 'parts', name: 'Three parts', clip: MID,
+    lit: [...PHAR, 'epiglottis', 'z_oesophagus', 'z_trachea'], ctx: [...PALATE, 'z_tongue', 'z_nasal_mucosa', 'cricoid_cart', 'thyroid_cart'], bones: [...NECK, 'hyoid_bone', 'sphenoid_bone', 'occipital_bone'],
+    view: RIGHT, zoom: 1.0,
+    labels: [['z_nasopharynx', 'Nasopharynx', [0, -112, 1510]], ['z_oropharynx', 'Oropharynx', [0, -110, 1470]], ['z_laryngopharynx', 'Laryngopharynx', [0, -100, 1420]],
+      ['epiglottis', 'Epiglottis', [0, -120, 1440]], ['z_oesophagus', 'Oesophagus', [0, -90, 1360]], ['z_trachea', 'Trachea', [0, -105, 1340]], ['sixth_cervical_vertebra', 'C6', [0, -60, 1405]]],
+    text: `<p>The <b>pharynx</b> runs from the base of the skull to the level of the <b>cricoid cartilage</b> in front and <b>C6</b> behind, where it becomes the oesophagus. <b>Nasopharynx</b>: behind the nose, above the soft palate, opening forward through the choanae. <b>Oropharynx</b>: from the soft palate to the hyoid, opening into the mouth through the isthmus of the fauces. <b>Laryngopharynx</b>: from the hyoid to the lower border of the cricoid, with the laryngeal inlet in front.</p>
+<p class="muted">On the model the laryngopharynx ends at the lower border of the cricoid, level with C6.</p>`},
+  {grp: 'Pharynx', id: 'naso', name: 'Nasopharynx', clip: MID,
+    lit: ['z_nasopharynx', L('z_auditory_tube'), ...PALATE], ctx: ['z_nasal_mucosa', 'z_oropharynx'], bones: ['sphenoid_bone', 'occipital_bone', 'atlas', 'axis', 'vomer', 'left_palatine_bone'],
+    view: [-1, 0.2, 0.1], zoom: 0.9,
+    labels: [[L('z_auditory_tube'), 'Auditory tube', [12, -104, 1516]], [null, 'Adenoid (approx.)', PTS.adenoid], ['z_soft_palate', 'Soft palate', [0, -128, 1488]]],
+    pts: [['adenoid', '', '--lymph']],
+    text: `<p>On the lateral wall of the nasopharynx is the opening of the <b>auditory tube</b>, with the tubal elevation (torus) behind it and the <b>pharyngeal recess</b> (fossa of Rosenmüller) behind that. The <b>pharyngeal tonsil (adenoid)</b> lies in the roof and back wall. The mucosa here is respiratory (ciliated).</p>
+<p class="muted">The adenoid is not in the model: the marker is hand-placed on the back wall, approximate. Z-Anatomy's auditory tube ends at the very back of its nasopharynx, not on the side wall.</p>`},
+  {grp: 'Pharynx', id: 'waldeyer', name: "Waldeyer's ring", clip: MID,
+    lit: [...TONSIL, 'z_tongue', L('z_auditory_tube')], ctx: [...PHAR, ...PALATE], bones: ['sphenoid_bone', 'occipital_bone', 'atlas', 'axis'],
+    view: [-1, 0.15, 0.05], zoom: 0.9,
+    labels: [[null, 'Pharyngeal tonsil (adenoid)', PTS.adenoid], [null, 'Lingual tonsil', PTS.lingual], [L('l_palatine_tonsil_r'), 'Palatine tonsil', [27, -126, 1493]],
+      [null, 'Tubal tonsil', PTS.tubal_l]],
+    pts: [['adenoid', '', '--lymph'], ['lingual', '', '--lymph'], ['tubal_l', '', '--lymph']],
+    text: `<p><b>Waldeyer's ring</b> is the ring of lymphoid tissue round the entrance to the airway and food passage: the <b>pharyngeal tonsil (adenoid)</b> in the roof and back wall of the nasopharynx, the two <b>tubal tonsils</b> at the openings of the auditory tubes, the two <b>palatine tonsils</b> in the oropharynx and the <b>lingual tonsil</b> on the back of the tongue, with smaller patches between them.</p>
+<p><b>Function</b>: the first immune response to inhaled or swallowed antigens; the crypts give a large surface for antigen sampling (M cells in the epithelium). The adenoid grows until about 5–7 years, then shrinks by adolescence.</p>
+<p class="muted">Only the palatine tonsils are model parts; the other markers are hand-placed, approximate.</p>`},
+  {grp: 'Pharynx', id: 'pyriform', name: 'Pyriform fossa',
+    lit: ['thyroid_cart', 'epiglottis', 'aryt_cart_r', 'aryt_cart_l', 'cricoid_cart', 'g_thyrohyoid_lat'], ctx: ['hyoid_bone'], bones: [],
+    view: [-0.5, 1, 0.6], zoom: 0.9,
+    labels: [[null, 'Pyriform fossa', PTS.pyr], [null, 'Aryepiglottic fold', PTS.aef],
+      ['thyroid_cart', 'Thyroid lamina', [-20, -112, 1425]], ['epiglottis', 'Epiglottis', [0, -118, 1447]]],
+    pts: [['pyr', '', '--muc'], ['aef', '', '--ink']],
+    text: `<p>On each side of the laryngeal inlet the laryngopharynx forms a recess, the <b>pyriform fossa</b>: bounded, in Gray's words, <b>medially by the aryepiglottic fold</b> and <b>laterally by the thyroid cartilage and thyrohyoid membrane</b> (endoscopic studies see the inner surface of the thyrohyoid membrane in its lateral wall). Significance: the table below the section.</p>
+<p class="muted">Seen from behind and above, with the constrictors and the pharyngeal mucosa removed. Both points are hand-placed, approximate: the aryepiglottic fold runs from the side of the epiglottis to the arytenoid, and the fossa lies between it and the thyroid lamina. Z-Anatomy's quadrangular membrane (the fold's framework) sits too far lateral, against the thyroid lamina, so it is not shown here.</p>`},
+  {grp: 'Pharynx', id: 'killian', name: "Killian's dehiscence",
+    lit: both([M('inf_constrictor'), M('mid_constrictor')]), ctx: ['z_oesophagus', 'thyroid_cart', 'cricoid_cart', 'hyoid_bone', ...both([M('sup_constrictor')])], bones: [],
+    view: BACK, zoom: 0.85,
+    labels: [[M('inf_constrictor'), 'Inferior constrictor', [-16, -96, 1440]], [M('mid_constrictor'), 'Middle constrictor', [-12, -100, 1468]],
+      [null, "Killian's (approx.)", PTS.killian]],
+    pts: [['killian', '', '--clin']],
+    text: `<p>The <b>inferior constrictor</b> has two parts: <b>thyropharyngeus</b> (oblique fibres from the thyroid cartilage) and <b>cricopharyngeus</b> (horizontal fibres from the cricoid, continuous with the oesophagus: the upper oesophageal sphincter). Between them, in the posterior midline, is a triangular weak area: <b>Killian's dehiscence</b>. Details: the schematic below.</p>
+<p class="muted">Z-Anatomy's inferior constrictor is one mesh: the two parts are not separate, and the marker is hand-placed at the upper border of the cricoid lamina, approximate.</p>`},
+  {grp: 'Pharynx', id: 'spaces', name: 'Pharyngeal spaces',
+    lit: [...CONSTR, 'l_retropharyngeal_nodes_r', L('l_retropharyngeal_nodes_r'), A('internal_carotid_artery'), 'v_internal_jugular_vein_r', 'n_vagus_nerve_x_r'],
+    ctx: [M('stylopharyngeus')], bones: [...NECK, 'occipital_bone', 'right_temporal_bone', 'mandible'],
+    pts: [['retro', '', '--lymph']],
+    view: [-1, 0.9, 0.15], zoom: 0.9, fit: [...CONSTR, A('internal_carotid_artery'), 'l_retropharyngeal_nodes_r'],
+    labels: [[null, 'Retropharyngeal nodes', PTS.retro], [A('internal_carotid_artery'), 'Internal carotid', [-34, -96, 1470]],
+      ['v_internal_jugular_vein_r', 'Internal jugular', [-36, -84, 1460]], ['n_vagus_nerve_x_r', 'Vagus', [-30, -88, 1440]], [M('sup_constrictor'), 'Constrictors', [-25, -104, 1470]]],
+    text: `<p>Behind the pharynx is the <b>retropharyngeal space</b>, from the skull base to the mediastinum, between the buccopharyngeal fascia on the pharynx and the alar fascia (Wikipedia; StatPearls makes the prevertebral fascia its back wall, with the alar fascia dividing off the danger space); its upper part holds the <b>retropharyngeal nodes</b>, which drain most of the pharynx. Behind the alar fascia lies the <b>danger space</b>, which leads down into the posterior mediastinum. Beside the pharynx is the <b>parapharyngeal space</b>, an inverted pyramid, with the carotid sheath (internal carotid, internal jugular, vagus) lateral to it and below (Wikipedia).</p>
+<p>The full account of the deep spaces of the neck is on ${LINK_MU} (Nerves, spaces, clinical tab).</p>
+<p class="muted">Z-Anatomy puts its retropharyngeal nodes between the mucosa and the constrictor, in front of the muscle; the labelled point behind the constrictor is hand-placed where the nodes lie in life, approximate.</p>`},
+  {grp: 'Nose', id: 'septum', name: 'Nasal septum', clip: MID,
+    lit: ['c_septal', 'vomer', 'ethmoid', 'left_nasal_bone', 'left_maxilla'], ctx: ['left_palatine_bone', 'sphenoid_bone', 's_sphenoid', 's_frontal'], bones: ['frontal_bone'],
+    view: RIGHT, zoom: 0.9,
+    labels: [['c_septal', 'Septal cartilage', [0, -195, 1505]], ['vomer', 'Vomer', [0, -150, 1500]], ['ethmoid', 'Perpendicular plate', [0, -160, 1520]],
+      ['left_nasal_bone', 'Nasal bone', [0, -192, 1530]], ['left_maxilla', 'Maxillary crest', [1, -180, 1488]]],
+    text: `<p>The <b>nasal septum</b>: the <b>septal (quadrangular) cartilage</b> in front, the <b>perpendicular plate of the ethmoid</b> above and behind, the <b>vomer</b> below and behind, and along the floor the crests of the maxillae and palatine bones; the movable lowest front part (columella) is skin over the medial crura of the alar cartilages. It is often <b>deviated</b> to one side, with spurs, narrowing one cavity.</p>
+<p class="muted">Cut just right of the midline and seen from the right; the perpendicular plate is part of the ethmoid mesh. The alar cartilages are not in the model.</p>`},
+  {grp: 'Nose', id: 'little', name: "Septal arteries, Little's area", fit: ['c_septal', 'vomer', A('posterior_septal_branches_of_sphenopalatine_artery')],
+    lit: [...SEPTAL_ART, A('anterior_ethmoidal_artery'), A('posterior_ethmoidal_artery'), A('maxillary_artery'), A('descending_palatine_artery'), A('facial_artery')],
+    ctx: ['c_septal', 'vomer'], bones: ['left_maxilla', 'left_nasal_bone', 'left_palatine_bone'],
+    view: RIGHT, zoom: 0.75,
+    labels: [[A('anterior_septal_branches_of_anterior_ethmoidal_artery'), 'Ant. ethmoidal', [-2, -160, 1525]],
+      [A('posterior_septal_branches_of_sphenopalatine_artery'), 'Sphenopalatine', [-4, -140, 1500]],
+      [A('greater_palatine_artery'), 'Greater palatine', [-5, -170, 1484]], [A('superior_labial_artery'), 'Superior labial', [-12, -180, 1481]],
+      [null, "Little's area", PTS.little]],
+    pts: [['little', '', '--clin']],
+    text: `<p>The septum is supplied by the <b>anterior and posterior ethmoidal</b> arteries (ophthalmic, internal carotid system) from above, the <b>sphenopalatine</b> artery (the terminal branch of the maxillary, the main artery of the nasal cavity) from behind, the <b>greater palatine</b> artery (through the incisive canal, Gray) from below, and the septal branch of the <b>superior labial</b> (facial) from the front.</p>
+<p>They meet in the antero-inferior septum, <b>Little's area (Kiesselbach's plexus)</b>: four arteries (some count the posterior ethmoidal as a fifth). It sits at the entrance to the nose, exposed to dry air and fingers; about 90% of anterior nosebleeds start here (StatPearls).</p>
+<p class="muted">The right-side arteries are shown on the right face of the septum (the right nasal wall hidden). The Little's area marker is hand-placed on the septal cartilage, approximate; none of Z-Anatomy's septal arteries reaches it (they stop 2–5 cm short), so the plexus itself is not in the model. Arteries are Z-Anatomy curves.</p>`},
+  {grp: 'Nose', id: 'lateral', name: 'Lateral wall', clip: LAT,
+    lit: ['left_inferior_nasal_concha', 'ethmoid', ...ETH.map(L), 's_sphenoid', 's_frontal'], ctx: ['left_palatine_bone', 'left_maxilla', 'sphenoid_bone', 'left_lacrimal_bone', 'left_nasal_bone'], bones: ['frontal_bone'],
+    view: RIGHT, zoom: 0.9,
+    labels: [['left_inferior_nasal_concha', 'Inferior concha', [6, -165, 1497]], ['ethmoid', 'Middle concha', [5, -160, 1510]],
+      [L('s_ethmoid_ant'), 'Ethmoidal cells', [6, -155, 1528]], ['s_sphenoid', 'Sphenoidal sinus', [3, -128, 1532]], ['s_frontal', 'Frontal sinus', [4, -178, 1552]]],
+    text: `<p>The <b>lateral wall</b> carries three <b>conchae</b> — the superior and middle are parts of the ethmoid, the inferior is a bone of its own — each overhanging a <b>meatus</b>; above and behind the superior concha is the <b>sphenoethmoidal recess</b>. The openings into the meatuses: the schematic and table below.</p>
+<p class="muted">Cut 2.5 mm left of the midline (septum removed) and seen from the right: the left lateral wall from the septum's side. The superior and middle conchae are inside the ethmoid mesh (their label is approximate); the mucosa, which makes the conchae look larger in life, is hidden.</p>`},
+  {grp: 'Nose', id: 'nervesnose', name: 'Nerves and the olfactory region', clip: MID,
+    lit: [L(N('olfactory_nerve_i_r')), L(N('maxillary_nerve_r')), 'ethmoid'], ctx: ['c_septal', 'vomer'], bones: ['frontal_bone', 'sphenoid_bone', 'left_maxilla'],
+    view: [-1, -0.2, 0.15], zoom: 0.9,
+    labels: [[L(N('olfactory_nerve_i_r')), 'Olfactory nerve (I)', [6, -150, 1545]], [L(N('maxillary_nerve_r')), 'Maxillary nerve (V2)', [20, -120, 1525]], ['ethmoid', 'Cribriform plate region', [3, -150, 1538]]],
+    text: `<p><b>Smell</b>: the olfactory region is the roof of the cavity — the superior concha and the facing septum; the olfactory nerve fibres pass up through the <b>cribriform plate</b> of the ethmoid to the olfactory bulb. <b>General sensation</b>: V1 (anterior ethmoidal branch of the nasociliary nerve: the front of the septum and lateral wall) and V2 (the nasopalatine nerve to the septum, and nasal branches through the pterygopalatine ganglion; the table below).</p>
+<p class="muted">Cut in the midline: the left-side nerves are shown. The olfactory part of the model shows the bulb and tract region; the nasopalatine, greater palatine and anterior ethmoidal nerves are not in Z-Anatomy.</p>`},
+  {grp: 'Sinuses', id: 'sinuses', name: 'All sinuses',
+    lit: [...SINUS], ctx: ['z_nasal_mucosa'], bones: [...BONES_NOSE],
+    view: [-0.35, -1, 0.1], zoom: 0.85, fit: [...SINUS, 't_upper_teeth'],   // the teeth (hidden) extend the fit down to the maxillary markers
+    labels: [['s_frontal', 'Frontal', [-10, -181, 1555]], [L('s_ethmoid_ant'), 'Ethmoidal cells', [10, -158, 1525]], ['s_sphenoid', 'Sphenoidal', [-12, -128, 1530]],
+      [null, 'Maxillary (approx.)', PTS.max_l]],
+    pts: [['max_r', '', '--sinus'], ['max_l', '', '--sinus']],
+    text: `<p>Four paired groups, each named after its bone: <b>frontal</b> (behind the brow ridges), <b>ethmoidal</b> cells (between the upper nasal cavity and the orbit, behind thin bone), <b>sphenoidal</b> (in the body of the sphenoid) and <b>maxillary</b> (in the body of the maxilla, beside the nose, below the orbit). All are lined by ciliated respiratory mucosa continuous with the nose; the cilia sweep mucus to the openings.</p>
+<p class="muted">Z-Anatomy and BodyParts3D have no maxillary sinus: the two markers are hand-placed in the space the model's maxilla encloses, approximate.</p>`},
+  {grp: 'Sinuses', id: 'maxillary', name: 'Maxillary sinus and teeth',
+    lit: ['t_upper_teeth', A('infra_orbital_artery'), A('posterior_superior_alveolar_artery'), 's_ethmoid_ant', 's_ethmoid_mid', 's_ethmoid_post'], ctx: ['right_inferior_nasal_concha'], bones: ['right_palatine_bone', 'left_maxilla'],
+    fit: ['t_upper_teeth', A('infra_orbital_artery'), 's_ethmoid_mid'],
+    view: [-1, -0.6, 0.05], zoom: 0.9,
+    labels: [[null, 'Maxillary sinus (approx.)', PTS.max_r], ['t_upper_teeth', 'Upper molars', [-27, -150, 1478]], [A('infra_orbital_artery'), 'Infra-orbital artery (roof)', [-26, -160, 1510]],
+      ],
+    pts: [['max_r', '', '--sinus']],
+    text: `<p>The <b>maxillary sinus</b> (antrum) is the largest: a pyramid in the body of the maxilla, its base the lateral wall of the nose, its apex in the zygomatic process. Its <b>roof</b> is the floor of the orbit, crossed by the infra-orbital nerve and vessels; its <b>floor</b> is the alveolar process, where (Gray) the roots of the first and second molars raise the floor, sometimes through it. Its opening is high on the medial wall: the coronal section below.</p>
+<p class="muted">The right maxilla is hidden so that the hand-placed sinus marker (approximate) can be seen with the molars below it and the ethmoidal cells above and medial.</p>`},
+  {grp: 'Larynx', id: 'larynx', name: 'Laryngitis: the three regions', clip: MID,
+    lit: [...LARYNX, ...LARLIG, L(M('thyroaryt')), L(M('lat_cricoaryt'))], ctx: ['z_laryngopharynx', 'z_trachea', 'hyoid_bone'], bones: [],
+    view: RIGHT, zoom: 0.9,
+    labels: [['epiglottis', 'Epiglottis', [0, -121, 1442]], [L('g_quadrangular'), 'Quadrangular membrane', [8, -112, 1436]],
+      [L(M('thyroaryt')), 'Vocal fold', [4, -114, 1418]], ['cricoid_cart', 'Cricoid', [1, -112, 1402]], ['thyroid_cart', 'Thyroid cartilage', [2, -126, 1425]]],
+    text: `<p>The larynx has three regions: the <b>supraglottis</b> (above the vocal folds: the epiglottis and aryepiglottic folds), the <b>glottis</b> (the vocal folds and the gap between them) and the <b>subglottis</b> (below, to the lower border of the cricoid). Laryngitis and its anatomy: the section below. Cartilages, membranes, muscles and nerves: ${LINK_MU}.</p>
+<p class="muted">Cut in the midline and seen from the right. There is no vocal-fold mesh: the label marks thyro-arytenoid, which lies in the vocal fold. Z-Anatomy's quadrangular membrane lies too far lateral, against the thyroid lamina; in life it is in the aryepiglottic fold, medial to the pyriform fossa.</p>`}];
+
+const MOUTH_ROWS = [
+  ['Vestibule', 'Outside: lips and cheeks. Inside: gums and teeth. Above and below: where the mucosa turns onto the gums (Gray).', 'Parotid duct, on a papilla opposite the upper second molar.', 'vestibule'],
+  ['Oral cavity proper', 'In front and at the sides: the alveolar arches and teeth. Roof: hard and soft palate. Floor: mainly the tongue, mylohyoid below. Behind: the isthmus of the fauces.', 'Submandibular duct on the sublingual caruncle beside the frenulum of the tongue; most sublingual ducts on the sublingual fold.', 'proper'],
+  ['Isthmus of the fauces', 'Above: the soft palate. Below: the back of the tongue. At the sides: the palatoglossal arches (front pillars).', 'Leads into the oropharynx.', 'proper'],
+  ['Hard palate', 'Palatine processes of the maxillae in front, horizontal plates of the palatine bones behind; about two-thirds of the palate (StatPearls).', 'The soft palate (no bone) hangs from its back edge.', 'proper']];
+const MOUTH_NOTE = 'Tap a row to see it in 3D. The parotid duct, glands and frenula are not in the model.';
+const SAG_TEXT = {
+  parts: `<p>The three parts in section: <b>nasopharynx</b> above the soft palate (behind the choanae), <b>oropharynx</b> from the soft palate to the hyoid (behind the mouth), <b>laryngopharynx</b> from the hyoid to the lower border of the cricoid (C6), behind the larynx. Below it the oesophagus behind and the trachea in front.</p>
+<p>The nasopharynx is lined by respiratory (ciliated) epithelium; the oral and laryngeal parts by stratified squamous epithelium.</p>`,
+  ring: `<p><b>Waldeyer's ring</b>: pharyngeal tonsil (adenoid) on the roof and back wall of the nasopharynx; tubal tonsils behind the openings of the auditory tubes on the lateral walls; palatine tonsils between the arches in the oropharynx; lingual tonsil on the back of the tongue. The palatine and tubal tonsils are on the side walls: drawn here as if seen through the section (dashed).</p>
+<p>It guards the entrance to the airway and food passage: the first immune contact with inhaled and swallowed antigens.</p>`,
+  spaces: `<p>Behind the pharynx: the <b>retropharyngeal space</b> (buccopharyngeal fascia in front, alar fascia behind; skull base to mediastinum; it holds the retropharyngeal nodes in its upper part), then the <b>danger space</b> (behind the alar fascia, down to the posterior mediastinum), then the prevertebral fascia and muscles. In children the medial retropharyngeal nodes are still present (they atrophy in childhood, StatPearls), so retropharyngeal abscess is commoner in children.</p>
+<p class="muted">Wikipedia makes the alar fascia the back wall of the retropharyngeal space; StatPearls the prevertebral fascia, with the alar fascia dividing off the danger space. Full account: ${LINK_MU}.</p>`};
+const PYR_ROWS = [
+  ['Boundaries', 'Medially the aryepiglottic fold; laterally the thyroid cartilage and thyrohyoid membrane (Gray; endoscopic and cancer-surgery papers agree on the lateral wall and the medial aryepiglottic fold).', 'pyriform'],
+  ['Foreign bodies', 'Fish bones and food lodge here (with the tonsils, base of tongue and vallecula among the commonest sites); a 2026 case series found removal from here harder than from the tonsil.', 'pyriform'],
+  ['Internal laryngeal nerve', 'Runs just under the mucosa after piercing the thyrohyoid membrane: it can be injured by a sharp object or a puncture, and an endoscopic study (2026) targets it through the fossa to treat laryngeal sensory problems.', 'pyriform'],
+  ['Cancer', 'The pyriform fossa is the commonest site of hypopharyngeal cancer (about half; a 2025 review); tumours here are hard to see and present late.', 'pyriform']];
+const SPACE_TEXT = `<p>Peritonsillar abscess and the tonsil bed: the soft palate and tonsil section below. Infection of the peritonsillar space can spread to the parapharyngeal space.</p>`;
+const PALATE_ROWS = [
+  ['Levator veli palatini', 'Raises the soft palate against the back wall of the pharynx, closing off the nasopharynx in swallowing.', 'Pharyngeal plexus (vagus)'],
+  ['Tensor veli palatini', 'Tenses the palate; Wikipedia adds that it opens the auditory tube. Its tendon hooks round the pterygoid hamulus into the aponeurosis (Gray).', '<b>Mandibular nerve (V3)</b>: the only one not from the plexus'],
+  ['Musculus uvulae', 'Shortens the uvula.', 'Pharyngeal plexus (vagus)'],
+  ['Palatoglossus', 'Pulls the palate down to the tongue, narrowing the isthmus of the fauces; forms the palatoglossal arch.', 'Pharyngeal plexus (vagus)'],
+  ['Palatopharyngeus', 'Tenses the palate and draws the pharynx up and forward in swallowing; forms the palatopharyngeal arch.', 'Pharyngeal plexus (vagus)']];
+const PALATE_NOTE = 'Gray (1918) says the pharyngeal-plexus fibres come from the accessory nerve; Wikipedia, the vagus. Arteries of the palate: the greater and lesser palatine (maxillary) and the ascending palatine (facial). Sensory: the palatine and nasopalatine nerves, and the glossopharyngeal.';
+const TONSIL_ROWS = [
+  ['Where', 'Lateral wall of the oropharynx, in the tonsillar fossa between the palatoglossal (front) and palatopharyngeal (back) arches.', 'tonsil'],
+  ['Medial surface', 'Free; the openings of the crypts (about 10–30; Gray 12–15), which give a large surface for antigen sampling.', 'tonsil'],
+  ['Lateral surface (bed)', 'Fibrous capsule; loose tissue (the peritonsillar space); superior constrictor; outside it the facial artery and its tonsillar and ascending palatine branches. Internal carotid about 2–2.5 cm behind and lateral in adults (Gray; a review), as close as 1.5 cm in children under 11 kg.', 'tonsil'],
+  ['Arteries', 'Mainly the tonsillar branch of the facial; also ascending palatine, dorsal lingual, ascending pharyngeal, descending (lesser) palatine.', 'tonsilsupply'],
+  ['Veins, lymph, nerves', 'Peritonsillar plexus → lingual and pharyngeal veins → internal jugular. Lymph to the jugulodigastric node. Nerves: glossopharyngeal, lesser palatine.', 'tonsilsupply'],
+  ['Age', 'Relatively larger in children (Gray); most active in early life (StatPearls).', 'tonsil']];
+const BED_TEXT = {
+  normal: `<p>From the tonsil outward: the <b>capsule</b>, a layer of <b>loose tissue</b> (the peritonsillar space), the <b>superior constrictor</b>, then the <b>facial artery</b> and its branches outside the muscle, and the parapharyngeal space with the <b>internal carotid</b> behind and lateral. In <b>tonsillectomy</b> the whole tonsil is removed with its capsule by dissecting in the peritonsillar space, between the capsule and the muscle wall.</p>`,
+  quinsy: `<p><b>Peritonsillar abscess (quinsy)</b>: pus in the peritonsillar space, between the capsule and the superior constrictor; the commonest deep neck infection (StatPearls). Throat pain, fever, <b>trismus</b> and a muffled voice; Wikipedia adds the uvula pushed to the other side and the "hot potato" voice. The loose tissue lets it spread to the parapharyngeal space, the soft palate and the base of the tongue. Treated with antibiotics and drainage (needle aspiration or incision, Wikipedia).</p>`};
+const KIL_TEXT = {
+  normal: `<p><b>Thyropharyngeus</b> (from the thyroid cartilage) has oblique fibres that rise to the median raphe; <b>cricopharyngeus</b> (from the cricoid) has horizontal fibres continuous with the oesophagus and acts as the upper oesophageal sphincter. Between them, in the posterior midline, is the triangular weak area: <b>Killian's dehiscence</b> (Killian's triangle).</p>
+<p class="muted">Related areas: the Killian–Jamieson area at the side below cricopharyngeus, and Laimer's triangle between cricopharyngeus and the oesophageal muscle. A 2020 cadaver study found the two parts overlapping with no true gap and called the term a misnomer.</p>`,
+  pouch: `<p><b>Clinical significance</b>: this is where a <b>pharyngeal pouch (Zenker's diverticulum)</b> forms — a false (pulsion) diverticulum of mucosa and submucosa pushed out through the posterior wall above a <b>cricopharyngeus that does not relax</b> properly. Dysphagia, regurgitation of undigested food, cough and bad breath (Wikipedia; also on ${LINK_MU}).</p>`};
+const ART_ROWS = [
+  ['Anterior and posterior ethmoidal', 'Ophthalmic (internal carotid system)', 'Roof, upper septum and lateral wall', 'little'],
+  ['Sphenopalatine', 'Maxillary (terminal branch); the main artery', 'Conchae, meatuses and septum (septal and posterior lateral nasal branches)', 'little'],
+  ['Greater palatine', 'Maxillary (descending palatine)', 'Front of the septum, through the incisive canal (Gray)', 'little'],
+  ['Superior labial (septal branch)', 'Facial', 'Front of the septum', 'little'],
+  ["Little's area", 'Anastomosis of the four (some add the posterior ethmoidal)', 'Antero-inferior septum: most anterior nosebleeds', 'little']];
+const NERVE_ROWS = [
+  ['Olfactory (I)', 'Smell: the roof — superior concha and the facing septum; through the cribriform plate', 'nervesnose'],
+  ['Anterior ethmoidal (V1)', 'Nasociliary branch: the front and upper septum and lateral wall', 'nervesnose'],
+  ['Nasopalatine (V2)', 'The septum (Gray: middle; Wikipedia: postero-inferior part), then the gum behind the upper incisors', 'nervesnose'],
+  ['Nasal branches of the pterygopalatine ganglion (V2)', 'The nasal mucosa (Wikipedia); Gray: the upper and back part of the septum and the superior concha, and through the greater palatine nerve the lower lateral wall', 'nervesnose']];
+const NOSE_TEXT = `<p><b>Anterior nosebleed</b> (the commoner kind) usually comes from Little's area and often stops with pressure. <b>Posterior nosebleed</b> is less common but more serious: usually from the <b>sphenopalatine artery</b> (Woodruff's area, with the posterior ethmoidal); more likely with anticoagulants, hypertension or bleeding disorders (StatPearls); packing first, then surgical (endoscopic) ligation or embolisation.</p>
+<p>The nasal cavity warms, humidifies and filters the air (mucociliary clearance), and drains the sinuses. A <b>deviated septum</b> can narrow the middle meatus and block the sinus openings.</p>`;
+const SINUS_ROWS = [
+  ['Frontal', 'In the frontal bone, behind the brow ridges; rarely symmetrical', 'Middle meatus (frontal recess; often via the ethmoidal infundibulum)', 'Absent; develops in childhood, full size after puberty', 'sinuses'],
+  ['Ethmoidal: anterior', 'Ethmoidal labyrinth, between the nose and the orbit', 'Middle meatus (ethmoidal infundibulum, hiatus semilunaris)', 'Present', 'sinuses'],
+  ['Ethmoidal: middle', '(same)', 'Middle meatus (on or above the ethmoidal bulla, Gray)', 'Present', 'sinuses'],
+  ['Ethmoidal: posterior', '(same)', 'Superior meatus', 'Present', 'sinuses'],
+  ['Sphenoidal', 'Body of the sphenoid', 'Sphenoethmoidal recess', 'Minute; grows mainly after puberty (Gray)', 'sinuses'],
+  ['Maxillary', 'Body of the maxilla: the largest', 'Middle meatus, through the hiatus semilunaris; the ostium is high on the medial wall', 'Present (small)', 'maxillary']];
+const SINUS_TEXT = {
+  drain: `<p>The <b>maxillary ostium</b> is high on the medial wall (Gray: near the roof), opening into the hiatus semilunaris of the middle meatus; mucus is carried up to it by the <b>cilia</b>, not by gravity. The frontal, anterior ethmoidal and maxillary sinuses all drain into the same narrow region of the middle meatus, the <b>ostiomeatal complex</b>: when its mucosa swells, all three are blocked — the anatomical basis of <b>sinusitis</b>, and the region opened in functional endoscopic sinus surgery.</p>
+<p><b>Sinusitis</b> (rhinosinusitis, StatPearls: acute under 4 weeks, chronic over 12): facial or dental pain, nasal blockage, purulent discharge, loss of smell. The roots of the upper molars lie close to the maxillary floor, so dental infection, extraction (oro-antral fistula) and implants can cause maxillary sinusitis, and sinus pain can feel like toothache. Complications include <b>orbital</b> ones (preseptal cellulitis, orbital abscess), osteomyelitis and mucocele, rarely intracranial (StatPearls).</p>
+<p class="muted">Proposed functions of the sinuses (Wikipedia; still debated): a lighter skull and resonance of the voice. Their lining secretes mucus that drains into the nose (two sources).</p>`,
+  tumour: `<p><b>Maxillary sinus tumours</b>: the maxillary sinus is the commonest site of sinus carcinoma, most of them squamous cell carcinomas (a 60-year series). Early symptoms are few and like sinusitis (blocked or runny nose, nosebleeds), so more than half are advanced at diagnosis.</p>
+<p>Signs follow the walls the tumour breaks through: <b>up</b> into the orbit (proptosis, double vision); <b>medially</b> into the nasal cavity (obstruction, bleeding); <b>down</b> into the palate; <b>forward</b> into the cheek (facial swelling); <b>back</b> into the pterygopalatine and infratemporal fossae (trismus, toothache, numbness of the mid-face or jaw: Wikipedia).</p>`};
+const OHN_TEXT = `<p><b>Ohngren's line</b> runs from the <b>medial canthus</b> of the eye to the <b>angle of the mandible</b>. It divides the maxillary sinus into an <b>antero-inferior</b> part, where tumours have a better prognosis, and a <b>supero-posterior</b> part, where tumours do worse and were once thought unresectable.</p>
+<p class="muted">A historical guide; TNM staging is used today.</p>`;
+const LAR_TEXT = `<p><b>Laryngitis</b> is inflammation of the larynx: <b>acute</b> if under 3 weeks, <b>chronic</b> beyond (StatPearls; Wikipedia agrees). The main symptom is <b>hoarseness</b>, up to loss of voice, because the vocal folds swell or stiffen; also early vocal fatigue and a dry cough. Commonest cause: a viral upper respiratory infection; also voice overuse, smoking and inhaled irritants, and laryngopharyngeal reflux.</p>
+<ul><li><b>Glottis</b>: the vocal fold is covered by thin stratified squamous epithelium, closely bound over the vocal ligament (Gray: the aryepiglottic folds also have stratified squamous epithelium; most of the rest is ciliated). Just under it is <b>Reinke's space</b>, the gel-like superficial lamina propria that lets the fold vibrate. Its swelling, <b>Reinke's oedema</b> (polypoid laryngitis), comes with smoking, voice abuse and reflux and deepens the voice. Gray calls the rima glottidis the narrowest part of the larynx.</li>
+<li><b>Supraglottis</b>: in acute laryngitis the epiglottis swells a little; in <b>epiglottitis</b> (supraglottitis) the swelling can block the airway, and securing the airway comes first.</li>
+<li><b>Subglottis</b>: mild swelling in acute laryngitis. In young children (peak 6 months to 3–5 years) the infection runs down as <b>croup</b> (laryngotracheitis, usually parainfluenza virus): swelling in the larynx and trachea gives a barking cough and inspiratory stridor.</li></ul>
+<p>Marked breathlessness or stridor in an adult with "laryngitis" suggests something more serious (StatPearls). Cartilages, membranes, muscles and nerves of the larynx: ${LINK_MU}; recurrent laryngeal nerve injury: ${LINK_NV}.</p>`;
+const CLIN = [
+  ['Tonsillitis', 'The tonsils are common sites of infection, especially in children; usually viral, sometimes streptococcal (Wikipedia). Sore throat, fever, enlarged tonsils, trouble swallowing, enlarged neck nodes (Wikipedia).', 'tonsil'],
+  ['Tonsillectomy', 'The tonsil is removed with its capsule through the peritonsillar space. Bleeding is the commonest complication: primary (first 24 h) or secondary (about a week later, days 6–11, when the slough separates). The glossopharyngeal nerve in the bed can be injured (taste and sensation lost over the back third of the tongue); ear pain afterwards is common (Wikipedia).', 'tonsilsupply'],
+  ['Adenoids', 'Big adenoids block the back of the nose and the openings of the auditory tubes: mouth breathing, obstructive sleep apnoea, voice change, Eustachian tube dysfunction with recurrent otitis media; "adenoid facies" (Wikipedia). Adenoidectomy relieves the obstruction. Blood: mainly the ascending pharyngeal artery.', 'naso'],
+  ['Peritonsillar abscess (quinsy)', 'Pus between the tonsil capsule and the superior constrictor: throat pain, fever, trismus, muffled voice; the uvula pushed to the other side (Wikipedia). Can spread to the parapharyngeal space. Antibiotics and drainage (needle aspiration or incision, Wikipedia).', 'tonsil'],
+  ['Pyriform fossa', 'Fish bones lodge here; the internal laryngeal nerve under its mucosa can be injured; the commonest site of hypopharyngeal cancer, which is hard to see.', 'pyriform'],
+  ["Zenker's diverticulum", "A pulsion pouch of mucosa and submucosa through Killian's dehiscence, above a tight cricopharyngeus: dysphagia, regurgitation, cough, halitosis.", 'killian'],
+  ['Epistaxis', "Anterior: Little's area, exposed to dry air and fingers. Posterior: the sphenopalatine artery, more serious, more likely in hypertensive or anticoagulated patients (StatPearls).", 'little'],
+  ['Sinusitis', 'Swelling at the ostiomeatal complex blocks the frontal, anterior ethmoidal and maxillary sinuses together; the high maxillary ostium relies on the cilia; molar roots next to the maxillary floor (dental sinusitis); orbital complications.', 'maxillary'],
+  ['Maxillary sinus carcinoma', "Few early symptoms; spread up (orbit), medially (nose), down (palate), forward (cheek), back (pterygoid region: trismus, toothache, numbness). Ohngren's line: the hard-to-treat part is above and behind.", 'maxillary'],
+  ['Laryngitis and croup', 'Hoarseness from swollen vocal folds; Reinke\'s oedema in smokers; croup in small children (subglottic and tracheal swelling, barking cough, stridor); epiglottitis threatens the airway.', 'larynx']];
+
+const DATA = {
+  lede: 'The mouth, palate and tonsil, the three parts of the pharynx, the nasal cavity and the paranasal sinuses in 3D, with sections of the pharynx, the tonsil bed, Killian\'s dehiscence, the septum and lateral wall of the nose, the sinuses and Ohngren\'s line; then laryngitis and applied anatomy. Pick a topic to light its parts (the rest stay as faint glass); tap a part to name it. The muscles of the pharynx and the larynx itself are on Muscles of the Head and Neck.',
+  note3d: 'Tongue, soft palate, gums, pharynx, nasal mucosa, sinuses, cartilages and membranes are Z-Anatomy\'s and approximate (smooth, stylised); vessels and nerves are tubes along curves. Parts Z-Anatomy has on the right only are mirrored to the left. Not in the model: the maxillary sinus (hand-placed markers), the adenoid, tubal and lingual tonsils (markers), levator and tensor veli palatini, palatoglossus, musculus uvulae, salpingopharyngeus, the vocal folds as parts, the tonsillar, lingual and superior laryngeal arteries, the greater palatine, nasopalatine and laryngeal nerves, third molars, the parotid duct. All hand-placed points are approximate.',
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (the anatomy of the tonsils and adenoids, adenotonsillectomy complications, a cadaveric study of the soft palate and of Killian's triangle, Killian–Jamieson and Zenker's diverticula, fish-bone impaction and the internal laryngeal nerve in the pyriform sinus, hypopharyngeal carcinoma, the vascular anatomy of epistaxis and its endovascular treatment, sinonasal anatomy and its variations on CT, rhinosinusitis 2024, sinonasal tumour imaging, maxillary sinus carcinoma outcomes, a peritonsillar abscess case).",
+  models: 'Models used: bones, teeth and the upper oesophagus from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); tongue, soft palate and uvula, gums, pharynx, nasal mucosa, frontal, ethmoidal and sphenoidal sinuses, laryngeal and nasal cartilages, laryngeal membranes, auditory tube, trachea, muscles, vessels, nerves, the palatine tonsil and lymph nodes from Z-Anatomy (CC BY-SA 4.0, built on BodyParts3D), moved onto the same bones; vessels and nerves are tubes swept along Z-Anatomy curves; right-only parts mirrored. Maxillary sinus, adenoid, tubal and lingual tonsil, Little\'s area, Killian\'s dehiscence and pyriform fossa markers are hand-placed and approximate. Schematics are not to scale. Simplified meshes, shared under the same licences.'
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v')); window.atlas = v;
+let kind = {}, names = {}, cur = null;
+const COL = {bone: '--bone', tooth: '--tooth', cart: '--cart', tube: '--cart', lig: '--lig', muscle: '--musc', tongue: '--musc', palate: '--palate', gum: '--muc',
+  phar: '--muc', nmuc: '--muc', sinus: '--sinus', airway: '--airway', gut: '--gut', artery: '--artery', vein: '--vein', nerve: '--nerve', tonsil: '--lymph', node: '--lymph'};
+const WHAT = {bone: 'bone', tooth: 'teeth', cart: 'cartilage', tube: 'auditory tube', lig: 'ligament or membrane', muscle: 'muscle', tongue: 'tongue', palate: 'soft palate',
+  gum: 'mucous membrane', phar: 'pharynx (mucosa)', nmuc: 'mucous membrane', sinus: 'paranasal sinus', airway: 'airway', gut: 'oesophagus', artery: 'artery', vein: 'vein',
+  nerve: 'nerve', tonsil: 'lymphoid organ', node: 'lymph nodes'};
+const DEFAULT_BONES = [...BONES_NOSE, ...JAW, ...NECK, ...SKULL_BACK];
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+function anchor(key, near, n) {   // a vertex of the part near a point, on the side facing the camera (n: direction to the camera)
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos, d2 = [], clip = v.clip;
+  for (let i = 0; i < pos.length; i += 3) {
+    if (clip && pos[i] * clip[0] + pos[i + 1] * clip[1] + pos[i + 2] * clip[2] > clip[3]) continue;
+    d2.push([(pos[i] - near[0]) ** 2 + (pos[i + 1] - near[1]) ** 2 + (pos[i + 2] - near[2]) ** 2, i]);
+  }
+  if (!d2.length) return null;
+  d2.sort((a, b) => a[0] - b[0]);
+  const r2 = Math.max(16, d2[0][0] * 2.25), cand = d2.filter((x, j) => j < 12 || x[0] <= r2);
+  let best = cand[0][1], bs = -1e18;
+  for (const [, i] of cand) { const s = pos[i] * n[0] + pos[i + 1] * n[1] + pos[i + 2] * n[2]; if (s > bs) { bs = s; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+function showTopic(id) {
+  const t = TOPICS.find(t => t.id === id); if (!t) return; cur = t;
+  const has = k => v.parts.has(k);
+  v.setClip(t.clip !== undefined ? [-1, 0, 0] : null, t.clip);
+  const lit = (t.lit || []).filter(has), ctx = new Set([...(t.ctx || []), ...(t.bones || DEFAULT_BONES)]);
+  const on = new Set([...lit, ...ctx]);
+  for (const k in kind) { v.setVisible(k, on.has(k)); v.setColour(k, css(COL[kind[k]])); }
+  v.setFocus(lit);
+  v.ghostAlpha = 0.14;
+  const fk = (t.fit || lit).filter(has);
+  v.fit(fk.length ? fk : null);
+  const view = t.view || FRONT;
+  v.face(view, {zoom: t.zoom || 1});
+  const marks = [];
+  for (const [k, label, near] of t.labels || []) {
+    const p = k ? anchor(k, near, view) : near;
+    if (!p || (k && v.parts.get(k).visible === false)) continue;
+    marks.push({p, label, color: css(!k ? '--ink' : kind[k] === 'bone' || kind[k] === 'tooth' ? '--ink' : kind[k] === 'cart' ? '--muted' : COL[kind[k]]), always: true});
+  }
+  for (const [n, label, col] of t.pts || []) marks.push({p: PTS[n], label, color: css(col), always: true, big: true});
+  v.setMarkers(marks);
+  $('topic-text').innerHTML = t.text || '';
+  $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === t.id));
+}
+const toView = () => $('v').scrollIntoView({behavior: 'smooth', block: 'start'});
+function buildTopics() {
+  const box = $('topics');
+  for (const g of [...new Set(TOPICS.map(t => t.grp))]) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => {
+  if (!hit || !kind[hit.key]) { $('pick').textContent = ''; return; }
+  $('pick').textContent = `${names[hit.key]}: ${WHAT[kind[hit.key]]}`;
+};
+async function loadModel() {
+  const base = '../models/oro/';
+  const meta = await (await fetch(base + 'kinds.json')).json(), MI = meta.mirror;
+  const man = await v.load(base + 'oro.json', null, {
+    extra: (m, items) => items.filter(it => meta.parts[it.key] && meta.parts[it.key].mirror)
+      .map(it => ({key: L(it.key), m: v.mirrored(it.m, MI.m, MI.t), info: {name: it.info.name}}))});
+  for (const [k, d] of Object.entries(meta.parts)) for (const left of d.mirror ? [false, true] : [false]) {
+    const key = left ? L(k) : k, p = v.parts.get(key); if (!p) continue;
+    let nm = p.info.name;
+    if (d.mirror) nm = (left ? 'Left ' : 'Right ') + nm.replace(/^(Right|Left) /i, '').replace(/^./, c => c.toLowerCase());
+    names[key] = nm; kind[key] = d.kind; v.setColour(key, css(COL[d.kind]));
+  }
+  return man;
+}
+
+/* ===================== schematics ===================== */
+const T = (x, y, s, cls = '', anchor = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${s}</text>`;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+const DEFS = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink)"/></marker>' +
+  '<marker id="arrc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--clin)"/></marker></defs>';
+function drawSagittal(mode) {   // median section seen from the right: front on the viewer's right, head up
+  let h = DEFS;
+  // vertebral column (C1-C6) behind
+  for (let i = 0; i < 6; i++) h += `<rect x="96" y="${170 + i * 48}" width="56" height="38" rx="5" class="bone"/>`;
+  h += `<path class="bone" d="M60 40 L330 40 L330 66 L250 70 L200 118 L150 128 L60 120 Z"/>`;          // skull base (sphenoid, basiocciput)
+  h += `<path class="air" d="M262 72 L470 70 Q498 110 492 170 L300 172 L262 160 Z"/>`;                 // nasal cavity
+  h += `<path class="bone" d="M300 172 L470 172 L470 184 L300 184 Z"/>`;                              // hard palate
+  h += `<path class="pal" d="M300 172 Q270 180 252 206 Q246 222 238 236 Q250 236 262 214 Q280 192 300 184 Z"/>`;   // soft palate and uvula
+  h += `<path class="mus" d="M300 198 Q372 186 430 206 Q452 240 420 278 Q380 296 320 290 Q282 278 270 250 Q266 220 300 198 Z"/>`;   // tongue
+  // pharynx: back wall at x 168-180; three parts
+  h += `<path class="muc" d="M168 128 L262 72 L262 160 L238 236 L268 300 L292 330 L262 446 L208 446 L176 330 L168 230 Z"/>`;
+  h += `<path class="cart" d="M268 318 Q276 300 296 288 L300 300 Q284 312 280 330 Z"/>`;               // epiglottis
+  h += `<path class="cart" d="M292 334 L352 334 L356 404 L300 404 Z"/>` + `<path class="cart" d="M262 404 L356 404 L356 446 L262 446 Z" style="fill-opacity:.7"/>`;   // thyroid, cricoid
+  h += `<path class="gut" d="M208 446 L262 446 L258 540 L212 540 Z"/>` + `<path class="awy" d="M276 446 L344 446 L340 540 L280 540 Z"/>`;
+  h += `<path class="bone" d="M330 300 L380 296 L384 308 L334 312 Z"/>`;                              // hyoid
+  if (mode === 'parts') {
+    h += `<path class="lead dash" d="M150 172 L300 172"/><path class="lead dash" d="M150 304 L340 304"/><path class="lead dash" d="M150 446 L380 446"/>`;
+    h += T(226, 118, 'Nasopharynx', '', 'middle') + T(212, 262, 'Oropharynx', '', 'middle') + T(222, 380, 'Laryngo-', '', 'middle') + T(222, 395, 'pharynx', '', 'middle');
+    h += T(40, 176, 'soft palate', 's') + T(40, 308, 'hyoid', 's') + T(40, 450, 'cricoid (C6)', 's');
+  }
+  if (mode === 'ring') {
+    h += `<ellipse cx="200" cy="104" rx="26" ry="12" class="lym" transform="rotate(-30 200 104)"/>`;                    // adenoid
+    h += `<circle cx="236" cy="138" r="9" class="lym" style="stroke-dasharray:3 2"/><circle cx="236" cy="138" r="3" class="air"/>`;   // tubal tonsil round the tube opening
+    h += `<ellipse cx="250" cy="262" rx="9" ry="17" class="lym" style="fill-opacity:.7;stroke-dasharray:3 2"/>`;      // palatine tonsil (side wall)
+    h += `<path class="lym" d="M272 246 Q274 226 290 218 Q300 232 294 252 Q282 258 272 246 Z"/>`;                       // lingual tonsil
+    h += lead(196, 96, 176, 30) + T(60, 24, 'Pharyngeal tonsil (adenoid)');
+    h += lead(244, 132, 300, 120) + T(304, 124, 'Tubal tonsil (side wall)');
+    h += lead(250, 250, 330, 160) + T(306, 154, 'Palatine tonsil (side wall)');
+    h += lead(292, 238, 352, 232) + T(356, 236, 'Lingual tonsil', 's');
+  }
+  if (mode === 'spaces') {
+    h += `<path class="zone" d="M154 128 L168 128 L168 230 L176 330 L208 446 L196 540 L170 540 L164 446 L156 330 Z" style="fill-opacity:.16"/>`;
+    h += `<path class="fas" d="M168 128 L168 230 L176 330 L208 446 L212 540"/>`;        // buccopharyngeal fascia on the pharynx
+    h += `<path class="fas dash" d="M160 128 L160 330 L172 446 L182 540"/>`;             // alar fascia
+    h += `<path class="fas" d="M154 128 L154 540"/>`;                                    // prevertebral fascia
+    h += lead(162, 220, 40, 200) + T(10, 196, 'Retropharyngeal', 's') + T(10, 208, 'space', 's');
+    h += lead(157, 380, 40, 400) + T(10, 404, 'Danger space', 's');
+    h += lead(154, 500, 40, 520) + T(10, 524, 'Prevertebral fascia', 's');
+    h += `<circle cx="163" cy="172" r="5" class="lym"/>` + lead(163, 172, 40, 160) + T(10, 156, 'Retropharyngeal node', 's');
+  }
+  if (mode !== 'ring') h += T(380, 124, 'Nasal cavity') + T(372, 262, 'Tongue') + T(400, 198, 'Hard palate', 's') + lead(262, 206, 300, 222) + T(304, 226, 'Soft palate', 's');
+  h += T(360, 380, 'Larynx', 's') + T(236, 520, 'Oesophagus', 's', 'middle') + T(310, 520, 'Trachea', 's', 'middle') + T(124, 242, 'C2', 's onb', 'middle') + T(124, 434, 'C6', 's onb', 'middle');
+  h += T(110, 94, 'Skull base', 's onb', 'middle') + T(392, 312, 'Hyoid', 's');
+  $('sag-svg').innerHTML = h;
+  $('sag-text').innerHTML = SAG_TEXT[mode];
+}
+function drawBed(mode) {   // horizontal section through the right tonsil seen from above: front at the top, midline on the left
+  let h = DEFS;
+  h += `<path class="lead dash" d="M40 20 L40 360"/>` + T(46, 30, 'midline', 's');
+  h += `<path class="air" d="M40 90 L150 90 Q170 180 150 290 L40 290 Z"/>` + T(50, 110, 'Oropharynx', 's');   // lumen
+  const quinsy = mode === 'quinsy';
+  const tx = quinsy ? 132 : 160;
+  h += `<path class="lym" d="M${tx} 120 Q${tx - 24} 190 ${tx} 260 Q${tx + 30} 190 ${tx} 120 Z"/>`;          // tonsil
+  h += `<path class="fas" d="M${tx + 2} 118 Q${tx + 34} 190 ${tx + 2} 262"/>`;                                 // capsule
+  h += quinsy ? `<path class="pus" d="M${tx + 4} 124 Q${tx + 70} 190 ${tx + 4} 256 Q${tx + 40} 190 ${tx + 4} 124 Z"/>` : '';
+  h += `<path class="mus" d="M210 80 Q236 190 210 300 L226 300 Q252 190 226 80 Z"/>`;                         // superior constrictor
+  h += `<path class="fas dash" d="M232 80 Q258 190 232 300"/>`;                                                 // buccopharyngeal fascia
+  h += `<path class="art" d="M290 150 Q300 190 292 230"/><path class="art" d="M291 190 L240 190"/>`;           // facial artery and tonsillar branch
+  h += `<circle cx="330" cy="300" r="13" class="artf"/>` + `<circle cx="372" cy="318" r="16" class="vn"/>`;    // ICA, IJV
+  h += `<path class="zone" d="M240 70 L420 70 L420 350 L240 350 Z"/>` + T(330, 92, 'Parapharyngeal space', 's', 'middle');
+  h += lead(tx, 190, 100, 330).replace(`M${tx} 190`, `M${tx - 4} 240`) + T(60, 344, 'Palatine tonsil', '');
+  h += lead(tx + 18, 160, 180, 40) + T(150, 36, 'Capsule', 's');
+  h += lead(218, 120, 230, 40).replace('230 40', '250 44') + T(252, 48, 'Superior constrictor', 's');
+  h += lead(292, 210, 416, 200) + T(420, 204, 'Facial artery', 's') + T(420, 218, '(its tonsillar branch', 's') + T(420, 232, 'pierces the muscle)', 's');
+  h += lead(330, 300, 416, 280) + T(420, 284, 'Internal carotid', 's') + T(420, 298, '(~2.5 cm, adults)', 's');
+  h += lead(372, 318, 416, 330) + T(420, 334, 'Internal jugular', 's');
+  if (quinsy) h += lead(tx + 40, 214, 200, 340).replace(`M${tx + 40} 214`, `M${tx + 36} 220`) + T(200, 356, 'Pus: peritonsillar abscess', 's');
+  else h += lead(tx + 28, 220, 200, 340) + T(200, 356, 'Peritonsillar space (loose tissue)', 's');
+  h += T(20, 14, 'FRONT ↑', 'h');
+  $('bed-svg').innerHTML = h;
+  $('bed-text').innerHTML = BED_TEXT[mode];
+}
+function drawKillian(mode) {   // posterior view: the body's right on the viewer's right
+  let h = DEFS;
+  const cx = 240;
+  h += `<path class="cart" d="M150 60 L330 60 L320 190 L160 190 Z" style="fill-opacity:.35"/>` + T(cx - 8, 54, 'thyroid cartilage (behind the muscle)', 's', 'end');
+  // thyropharyngeus: oblique fibres from each side up to the raphe
+  for (let i = 0; i < 6; i++) {
+    const y = 100 + i * 22;
+    h += `<path class="mus" d="M${cx - 6} ${y - 30} L${cx - 110} ${y + 26} L${cx - 110} ${y + 40} L${cx - 6} ${y - 14} Z"/>`;
+    h += `<path class="mus" d="M${cx + 6} ${y - 30} L${cx + 110} ${y + 26} L${cx + 110} ${y + 40} L${cx + 6} ${y - 14} Z"/>`;
+  }
+  h += `<path class="fas" d="M${cx} 62 L${cx} 210"/>` + T(cx + 8, 54, 'median raphe', 's');
+  // cricopharyngeus: horizontal band
+  h += `<path class="mus" d="M${cx - 120} 252 L${cx + 120} 252 L${cx + 120} 282 L${cx - 120} 282 Z" style="fill-opacity:.8"/>`;
+  // oesophagus below
+  h += `<path class="gut" d="M${cx - 70} 282 L${cx + 70} 282 L${cx + 66} 400 L${cx - 66} 400 Z"/>`;
+  // Killian's triangle between the lowest thyropharyngeal fibres and cricopharyngeus
+  h += `<path class="zone" d="M${cx - 60} 250 L${cx + 60} 250 L${cx} 206 Z" style="fill-opacity:.18"/>`;
+  if (mode === 'pouch') h += `<path class="muc" d="M${cx - 30} 240 Q${cx - 50} 300 ${cx - 10} 330 Q${cx + 40} 340 ${cx + 30} 280 Q${cx + 26} 248 ${cx + 20} 240 Z" style="fill-opacity:.7"/>` + lead(cx + 30, 310, 360, 330) + T(330, 346, "Zenker's diverticulum", 's');
+  else h += `<path class="clin" d="M${cx - 60} 250 L${cx + 60} 250 L${cx} 206 Z"/>`;
+  h += lead(cx - 80, 150, 120, 134) + T(10, 124, 'Thyropharyngeus', '') + T(10, 138, '(oblique fibres)', 's');
+  h += lead(cx - 110, 278, 100, 296) + T(10, 304, 'Cricopharyngeus', '') + T(10, 318, '(horizontal; upper', 's') + T(10, 330, 'oesophageal sphincter)', 's');
+  h += lead(cx + 20, 232, 400, 200) + T(330, 194, "Killian's dehiscence", '');
+  h += T(cx, 372, 'Oesophagus', 's', 'middle');
+  if (mode !== 'pouch') h += lead(cx + 70, 300, 400, 300) + T(372, 296, 'Killian–Jamieson', 's') + T(372, 308, 'area (side)', 's');
+  $('kil-svg').innerHTML = h;
+  $('kil-text').innerHTML = KIL_TEXT[mode];
+}
+function drawSeptum(mode) {   // septum seen from the right: front on the viewer's right
+  let h = DEFS;
+  h += `<path class="bone" d="M60 60 L330 40 L350 70 L250 110 L150 150 L60 150 Z" style="fill-opacity:.35"/>` + T(90, 140, 'skull base', 's');
+  h += `<path class="bone" d="M110 170 L150 150 L330 74 L340 220 L230 232 Z"/>`;                       // perpendicular plate of ethmoid
+  h += `<path class="bone" d="M110 170 L230 232 L340 220 L340 300 L120 300 Z"/>`;                       // vomer
+  h += `<path class="cart" d="M330 74 L400 64 L470 230 L440 300 L340 300 L340 220 Z"/>`;        // septal cartilage
+  h += `<path class="bone" d="M400 64 L430 40 L470 150 Z"/>`;                                   // nasal bone
+  h += `<path class="bone" d="M100 300 L470 300 L470 318 L100 318 Z"/>`;                        // crest of maxilla and palatine
+  if (mode === 'bones') {
+    h += lead(240, 170, 240, 30).replace('240 30', '260 24') + T(220, 20, 'Perpendicular plate');
+    h += lead(200, 270, 150, 350) + T(80, 364, 'Vomer');
+    h += lead(400, 200, 480, 350) + T(430, 364, 'Septal cartilage');
+    h += lead(440, 80, 490, 40) + T(450, 32, 'Nasal bone');
+    h += lead(300, 310, 300, 350) + T(250, 380, 'Crests of maxilla and palatine', 's');
+  } else {
+    h += `<path class="art" d="M300 40 Q330 120 420 236"/>` + T(250, 30, 'Anterior ethmoidal', 's');
+    h += `<path class="art" d="M200 70 Q240 120 300 150"/>` + T(120, 60, 'Posterior ethmoidal', 's');
+    h += `<path class="art" d="M70 220 Q220 230 420 250"/>` + T(10, 216, 'Sphenopalatine (septal)', 's');
+    h += `<path class="art" d="M380 380 L420 300 L428 262"/>` + T(330, 396, 'Greater palatine (incisive canal)', 's');
+    h += `<path class="art" d="M520 330 Q470 300 440 262"/>` + T(450, 352, 'Superior labial', 's');
+    h += `<circle cx="428" cy="250" r="22" class="clin dash"/>` + lead(450, 244, 500, 200) + T(470, 194, "Little's area", '');
+  }
+  h += T(14, 392, 'FRONT →', 'h');
+  $('sep-svg').innerHTML = h;
+}
+function drawLateral(mode) {   // left lateral wall seen from the right (medial side): front on the viewer's right
+  let h = DEFS;
+  h += `<path class="bone" d="M60 330 L480 330 L480 344 L60 344 Z"/>` + T(270, 362, 'floor: hard palate', 's', 'middle');
+  h += `<path class="bone" d="M80 70 L440 50 L470 120 L460 330 L60 330 Z" style="fill-opacity:.25"/>`;
+  h += `<path class="sin" d="M370 34 L430 30 L440 70 L380 76 Z"/>` + T(436, 24, 'Frontal sinus', 's');
+  h += `<path class="sin" d="M70 110 L150 100 L160 180 L80 190 Z"/>` + T(70, 204, 'Sphenoidal sinus', 's');
+  h += `<path class="air" d="M60 230 Q80 210 100 230 L100 270 Q80 290 60 270 Z"/>` + T(60, 300, 'auditory tube', 's');
+  const conchae = mode === 'conchae';
+  const cls = conchae ? 'bone' : 'bone" style="fill:none;stroke-dasharray:4 3';
+  h += `<path class="${cls}" d="M180 120 Q260 100 300 116 Q270 140 190 142 Z"/>`;            // superior concha
+  h += `<path class="${cls}" d="M150 160 Q280 140 400 170 Q360 210 160 205 Z"/>`;            // middle concha
+  h += `<path class="${cls}" d="M120 240 Q290 220 440 250 Q400 300 130 296 Z"/>`;            // inferior concha
+  if (conchae) {
+    h += lead(240, 124, 240, 60).replace('240 60', '230 50') + T(170, 46, 'Superior concha (ethmoid)', 's');
+    h += lead(330, 166, 436, 152) + T(440, 154, 'Middle concha', 's') + T(440, 166, '(ethmoid)', 's');
+    h += lead(400, 262, 436, 274) + T(440, 276, 'Inferior concha', 's') + T(440, 288, '(own bone)', 's');
+    h += T(306, 136, 'superior meatus', 's') + T(220, 222, 'middle meatus', 's') + T(240, 318, 'inferior meatus', 's');
+    h += lead(170, 106, 140, 76).replace('140 76', '160 84') + T(170, 84, 'sphenoethmoidal recess', 's').replace('x="170" y="84"', 'x="168" y="92"');
+  } else {
+    h += `<ellipse cx="270" cy="180" rx="44" ry="12" class="bone"/>` + T(270, 184, 'bulla', 's onb', 'middle');      // ethmoidal bulla
+    h += `<path class="clin" d="M220 200 Q290 214 360 196"/>`;                                                  // hiatus semilunaris
+    const dot = (x, y) => `<circle cx="${x}" cy="${y}" r="5" class="clinf"/>`;
+    h += dot(150, 120) + lead(150, 120, 120, 60).replace('120 60', '150 62') + '';
+    h += dot(230, 134) + dot(300, 168) + dot(352, 198) + dot(280, 208) + dot(390, 270);
+    h += lead(300, 168, 426, 112) + T(430, 104, 'Middle ethmoidal', 's') + T(430, 116, '(on the bulla)', 's');
+    h += lead(352, 198, 426, 154) + T(430, 146, 'Frontal and anterior', 's') + T(430, 158, 'ethmoidal (hiatus)', 's');
+    h += lead(280, 208, 280, 240).replace('280 240', '300 242') + T(250, 254, 'Maxillary ostium (hiatus)', 's');
+    h += lead(390, 270, 436, 306) + T(440, 314, 'Nasolacrimal duct', 's');
+    h += lead(230, 134, 200, 44) + T(90, 38, 'Posterior ethmoidal (superior meatus)', 's');
+    h += T(160, 70, 'Sphenoidal (recess)', 's', 'middle').replace('y="70"', 'y="74"');
+  }
+  h += T(500, 344, 'FRONT →', 'h', 'end');
+  $('lat-svg').innerHTML = h;
+}
+function drawCoronal(mode) {   // coronal section seen from the front: the body's right on the viewer's left
+  let h = DEFS;
+  const C = 270;
+  h += `<path class="bone" d="M40 60 L500 60 L500 400 L40 400 Z" style="fill-opacity:.25"/>`;
+  h += `<circle cx="140" cy="120" r="56" class="air"/><circle cx="400" cy="120" r="56" class="air"/>` + T(140, 124, 'orbit', 's', 'middle') + T(400, 124, 'orbit', 's', 'middle');
+  h += `<path class="sin" d="M220 80 L262 80 L262 170 L220 170 Z"/><path class="sin" d="M278 80 L320 80 L320 170 L278 170 Z"/>` + T(C, 76, 'ethmoidal cells', 's', 'middle');
+  h += `<path class="air" d="M200 180 L262 120 L262 330 L196 330 Z"/><path class="air" d="M340 180 L278 120 L278 330 L344 330 Z"/>`;   // nasal cavities
+  h += `<path class="bone" d="M264 100 L276 100 L276 330 L264 330 Z"/>`;                                     // septum
+  h += `<path class="bone" d="M200 200 Q226 210 230 236 Q214 230 204 220 Z"/><path class="bone" d="M340 200 Q314 210 310 236 Q326 230 336 220 Z"/>`;   // middle conchae
+  h += `<path class="bone" d="M196 270 Q234 280 240 312 Q216 304 198 296 Z"/><path class="bone" d="M344 270 Q306 280 300 312 Q324 304 342 296 Z"/>`;  // inferior conchae
+  h += `<path class="sin" d="M70 200 L192 190 L192 320 L120 340 L70 300 Z"/><path class="sin" d="M470 200 L348 190 L348 320 L420 340 L470 300 Z"/>`;   // maxillary sinuses
+  h += `<path class="bone" d="M70 330 L192 330 L192 350 L70 350 Z"/><path class="bone" d="M348 330 L470 330 L470 350 L348 350 Z"/><path class="bone" d="M196 330 L344 330 L344 346 L196 346 Z"/>`;
+  for (const x of [110, 150, 390, 430]) h += `<path class="bone" d="M${x - 10} 380 L${x + 10} 380 L${x + 6} 350 Q${x} 336 ${x - 6} 350 Z" style="fill:var(--tooth)"/>`;   // molar roots
+  h += T(C, 396, 'upper molars (roots near the sinus floor)', 's', 'middle');
+  h += `<path class="air" d="M192 206 L202 206 L202 216 L192 216 Z"/><path class="air" d="M338 206 L348 206 L348 216 L338 216 Z"/>`;   // ostia
+  if (mode === 'drain') {
+    h += `<path class="arr" d="M120 320 Q90 270 120 220 Q150 200 186 210"/><path class="arr" d="M420 320 Q450 270 420 220 Q390 200 354 210"/>`;
+    h += T(150, 282, 'cilia carry', 's', 'middle') + T(150, 294, 'mucus up', 's', 'middle');
+    h += lead(196, 212, 160, 170).replace('160 170', '214 160') + T(40, 176, 'ostium high on', 's') + T(40, 188, 'the medial wall', 's');
+    h += lead(214, 246, 300, 380).replace('300 380', '232 262') + T(204, 276, 'middle meatus', 's');
+  } else {
+    h += `<path class="arrc" d="M110 240 L120 180"/><path class="arrc" d="M150 260 L210 260"/><path class="arrc" d="M120 310 L120 360"/><path class="arrc" d="M80 270 L40 270"/>`;
+    h += `<circle cx="120" cy="270" r="22" class="clinf" style="fill-opacity:.35"/>` + T(120, 274, 'tumour', 's', 'middle');
+    h += T(128, 196, 'to orbit', 's') + T(214, 254, 'nose', 's') + T(40, 262, 'cheek', 's') + T(126, 372, 'palate', 's');
+  }
+  h += T(40, 54, "BODY'S RIGHT", 'h') + T(500, 54, 'LEFT', 'h', 'end');
+  $('cor-svg').innerHTML = h;
+  $('sinus-text').innerHTML = SINUS_TEXT[mode];
+}
+function drawOhngren() {   // side view from the right: front on the viewer's right
+  let h = DEFS;
+  h += `<path class="air" d="M120 40 Q300 10 380 80 L400 130 L430 170 L405 190 L420 230 L400 250 L408 290 L340 330 L250 340 L190 300 L150 220 L120 140 Z"/>`;   // face outline
+  h += `<ellipse cx="330" cy="120" rx="30" ry="12" class="air"/>` + `<circle cx="352" cy="122" r="4" class="clinf"/>` + T(356, 108, 'medial canthus', 's');
+  h += `<path class="sin" d="M270 150 L370 150 L380 230 L290 240 Z"/>` + T(330, 200, 'maxillary sinus', 's', 'middle');
+  h += `<circle cx="200" cy="300" r="4" class="clinf"/>` + T(130, 326, 'angle of the mandible', 's');
+  h += `<path class="clin" d="M352 122 L200 300"/>` + T(392, 270, 'antero-inferior:', 's', 'end').replace('x="392"', 'x="420"') ;
+  h += T(410, 286, 'better prognosis', 's', 'end') + T(250, 160, 'supero-posterior:', 's', 'end') + T(250, 174, 'worse prognosis', 's', 'end');
+  h += T(320, 36, "Ohngren's line", '');
+  h += T(460, 350, 'FRONT →', 'h', 'end');
+  $('ohn-svg').innerHTML = h;
+}
+const row = (cells, heads, k) => `<tr${k ? ` data-k="${k}" aria-pressed="false" tabindex="0"` : ''}>` + cells.map((c, i) => `<td data-h="${heads[i]}">${i === 0 ? '<b>' + c + '</b>' : c}</td>`).join('') + '</tr>';
+const head = hs => '<tr>' + hs.map(x => `<th>${x}</th>`).join('') + '</tr>';
+function rowsToTopic(tableId) {
+  $(tableId).querySelectorAll('tr[data-k]').forEach(r => r.onclick = () => { $(tableId).querySelectorAll('tr[data-k]').forEach(x => x.setAttribute('aria-pressed', x === r)); showTopic(r.dataset.k); toView(); });
+}
+document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('tr[data-k]')) { e.preventDefault(); e.target.click(); } });
+function buildTables() {
+  $('mouth-table').innerHTML = head(['Part', 'Boundaries', 'Opens / receives']) + MOUTH_ROWS.map(r => row(r.slice(0, 3), ['', 'Boundaries', 'Opens'], r[3])).join('');
+  rowsToTopic('mouth-table');
+  $('pyr-table').innerHTML = head(['Pyriform fossa', 'Detail']) + PYR_ROWS.map(r => row(r.slice(0, 2), ['', ''], r[2])).join('');
+  rowsToTopic('pyr-table');
+  $('palate-table').innerHTML = head(['Soft-palate muscle', 'Action', 'Nerve']) + PALATE_ROWS.map(r => row(r, ['', 'Action', 'Nerve'], 'palate')).join('') +
+    `<tr><td colspan="3" class="muted" data-h="">${PALATE_NOTE}</td></tr>`;
+  rowsToTopic('palate-table');
+  $('tonsil-table').innerHTML = head(['Palatine tonsil', 'Detail']) + TONSIL_ROWS.map(r => row(r.slice(0, 2), ['', ''], r[2])).join('');
+  rowsToTopic('tonsil-table');
+  $('art-table').innerHTML = head(['Artery', 'From', 'Supplies']) + ART_ROWS.map(r => row(r.slice(0, 3), ['', 'From', 'Supplies'], r[3])).join('');
+  rowsToTopic('art-table');
+  $('nerve-table').innerHTML = head(['Nerve', 'Area']) + NERVE_ROWS.map(r => row(r.slice(0, 2), ['', ''], r[2])).join('');
+  rowsToTopic('nerve-table');
+  $('sinus-table').innerHTML = head(['Sinus', 'Where', 'Opens into', 'At birth']) + SINUS_ROWS.map(r => row(r.slice(0, 4), ['', 'Where', 'Opens', 'Birth'], r[4])).join('');
+  rowsToTopic('sinus-table');
+  $('clin-list').innerHTML = CLIN.map(([t, d, k]) => `<div class="item"><b class="t">${t}</b>${d}${k ? ` <button class="chip" data-k="${k}" aria-label="Show in 3D: ${TOPICS.find(x => x.id === k).name}">3D</button>` : ''}</div>`).join('');
+  $('clin-list').querySelectorAll('button[data-k]').forEach(b => b.onclick = () => { showTopic(b.dataset.k); toView(); });
+}
+function legend() {
+  const items = [['--bone', 'Bone'], ['--tooth', 'Teeth'], ['--cart', 'Cartilage'], ['--lig', 'Ligament, membrane'], ['--musc', 'Muscle, tongue'], ['--palate', 'Soft palate'],
+    ['--muc', 'Mucous membrane'], ['--sinus', 'Sinus'], ['--lymph', 'Tonsil, nodes'], ['--airway', 'Trachea'], ['--gut', 'Oesophagus'], ['--artery', 'Artery'], ['--vein', 'Vein'], ['--nerve', 'Nerve'], ['--clin', 'Clinical point']];
+  $('key3d').innerHTML = items.map(([c, l]) => `<span><i style="background:var(${c})"></i>${l}</span>`).join('');
+}
+function toggles(boxId, opts, def, draw) {
+  for (const [k, label] of opts) {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = label; b.setAttribute('aria-pressed', k === def);
+    b.onclick = () => { $(boxId).querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); draw(k); }; $(boxId).append(b);
+  }
+  draw(def);
+}
+
+(async () => {
+  $('lede').innerHTML = DATA.lede; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('mouth-note').textContent = MOUTH_NOTE; $('space-text').innerHTML = SPACE_TEXT; $('nose-text').innerHTML = NOSE_TEXT; $('ohn-text').innerHTML = OHN_TEXT; $('lar-text').innerHTML = LAR_TEXT;
+  toggles('sag-tg', [['parts', 'Three parts'], ['ring', "Waldeyer's ring"], ['spaces', 'Spaces behind']], 'parts', drawSagittal);
+  toggles('bed-tg', [['normal', 'Tonsil bed'], ['quinsy', 'Quinsy']], 'normal', drawBed);
+  toggles('kil-tg', [['normal', 'The dehiscence'], ['pouch', "Zenker's pouch"]], 'normal', drawKillian);
+  toggles('sep-tg', [['bones', 'Parts of the septum'], ['arteries', "Arteries, Little's area"]], 'bones', drawSeptum);
+  toggles('lat-tg', [['conchae', 'Conchae and meatuses'], ['openings', 'Openings (conchae removed)']], 'conchae', drawLateral);
+  toggles('cor-tg', [['drain', 'Drainage, sinusitis'], ['tumour', 'Tumour spread']], 'drain', drawCoronal);
+  drawOhngren();
+  buildTables(); legend();
+  const bar = $('vbar');
+  for (const [label, dir] of [['Front', [0, -1, 0]], ['Back', [0, 1, 0]], ['Right', [-1, 0, 0]], ['Left', [1, 0, 0]], ['Below', [0, -0.3, -1]]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic('parts');
+  window.J = {TOPICS, PTS, showTopic, names, kind};   // for tests
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>
