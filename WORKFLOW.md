@@ -29,7 +29,8 @@ Last updated: 2026-11-21
   [x] commit. Done 2026-11-22. AN3.3: reviewer also found no downloadable open source (J Anat 1959/1978 scans only; PDF fetch blocked);
   stays unticked — ask user whether to fetch those PDFs by hand.
 - Module 44 (abdominopelvic: sheet fill-abdo2; bony-pelvis, imaging-abdomen, surface-sections + ap.js/css)
-  [x] build (492 quotes, 7 Commons radiographs, sections cut from 3D models) [ ] review (running) [ ] fixes
+  [x] build (492 quotes, 7 Commons radiographs, sections cut from 3D models) [x] review (T10 cut through T11 so no oesophagus,
+  section labels on wrong organs, true-conjugate naming, unsourced claims, T1/T2 missing) [ ] fixes (running)
   [ ] docs [ ] commit.
 - Module 45 (limb leftovers AN8.4, 9.2–9.3, 12.9/10/15, 13.5/6/8, 18.7, 20.6/7/10: sheet fill-limbs3; breast.html,
   radiographs-landmarks per limb, embryology/limb-development.html + additions) [ ] build (running) [ ] review [ ] fixes
