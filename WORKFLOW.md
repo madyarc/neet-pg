@@ -19,7 +19,8 @@ Last updated: 2026-11-21
   Wikipedia, PMC13074981 cites OpenStax, Ca²⁺ arrows, --na near --n-ventral-rami, Darrow–Yannet loss missing)
   [x] fixes (680 quotes) [x] docs [x] commit. Done 2026-11-22.
   Physiology 02 haematology (fill-physio2, physiology/blood/) and 03 cardiovascular (fill-physio3, physiology/cvs/)
-  [ ] build (both running in parallel) [ ] review [ ] fixes [ ] docs [ ] commit. Then respiratory, renal, GI, endocrine,
+  03: [x] build (550 quotes; 3 pages; no new tokens) [ ] review (running). 02: [ ] build (running).
+  Then respiratory, renal, GI, endocrine,
   reproductive, CNS, senses.
 
 - 2026-11-22 11:15 crash: Claude Code 2.1.330 segfaulted itself (coredump; no kernel/amdgpu errors at that time;
