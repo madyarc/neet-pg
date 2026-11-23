@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Haemostasis, Blood Groups, Tests</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+/* page-only classes; colours are the shared physiology tokens in ../assets/phys.css */
+svg.sch .fx{fill:var(--surface);stroke:var(--ink);stroke-width:1.3;cursor:pointer}
+svg.sch .fx.off{fill:color-mix(in srgb, var(--clin) 18%, var(--surface));stroke:var(--clin);stroke-width:2.4}
+svg.sch .fx.on{stroke:var(--accent);stroke-width:3}
+svg.sch .plt{fill:var(--platelet);stroke:var(--ink);stroke-width:.6}
+svg.sch .rc{fill:var(--rbc)}
+svg.sch .wall{fill:var(--collagen);opacity:.55}
+.readout2{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.readout2 div{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px}
+.readout2 b{display:block;font:600 14px var(--f-body)}
+.readout2 .bad b{color:var(--clin)}
+table.grid{border-collapse:collapse;font:500 13px var(--f-mono)}
+table.grid th,table.grid td{border:1px solid var(--line);padding:0;text-align:center;width:40px;height:34px}
+table.grid th{font-size:11.5px;color:var(--muted);background:var(--bg);white-space:nowrap;padding:0 4px}
+table.grid td button{all:unset;display:block;width:100%;height:100%;cursor:pointer;color:var(--ink);font-weight:600}
+table.grid td button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+table.grid td.ok{background:var(--surface)}
+table.grid td.no{background:color-mix(in srgb, var(--clin) 22%, var(--surface))}
+table.grid td.d{background:color-mix(in srgb, var(--clin) 9%, var(--surface))}
+table.grid td.sel{outline:3px solid var(--accent);outline-offset:-3px}
+.grid-wrap{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+#hs-svg{max-width:640px} #fib-svg{max-width:420px} #hdn-svg{max-width:420px} #esr-svg,#hct-svg{max-width:300px} #of-svg{max-width:520px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 02: <a href="blood-cells.html">Blood and its cells</a> · <a href="haemoglobin-anaemia.html">Haemoglobin and anaemia</a> · <span aria-current="page">Haemostasis, blood groups, tests</span> · <a href="immunity.html">Immunity</a></span></nav>
+
+<header class="stack">
+  <h1>Haemostasis, Blood Groups and the Blood Tests</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-hs">Haemostasis</a> <a href="#h-cas">Coagulation cascade, PT and aPTT</a> <a href="#h-fib">Anticoagulants and fibrinolysis</a> <a href="#h-bleed">Bleeding disorders</a> <a href="#h-abo">ABO and Rh</a> <a href="#h-grid">Donor–recipient grid</a> <a href="#h-tx">Transfusion</a> <a href="#h-tests">ESR, fragility, haematocrit, counts</a> <a href="#h-norm">Normal values</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-hs">
+  <h2 id="h-hs">Haemostasis, step by step</h2>
+  <div class="step" id="hs-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="hs-svg" viewBox="0 0 560 270" role="img" aria-label="A cut blood vessel seen in section at the chosen stage: vessel spasm, platelets sticking to collagen through von Willebrand factor, platelets activating and releasing granules, platelets aggregating, fibrin mesh trapping red cells, and plasmin dissolving the fibrin"></svg></div>
+    <div class="prose find" id="hs-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="hs-key"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cas">
+  <h2 id="h-cas">The coagulation cascade: what stops, and which test is prolonged</h2>
+  <p class="muted">Tap a factor to remove it, or choose a drug or a disorder.</p>
+  <div class="chips" id="cas-drug" aria-label="Drugs"></div>
+  <div class="chips" id="cas-dis" aria-label="Disorders"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="cas-svg" viewBox="0 0 600 420" role="img" aria-label="Coagulation cascade: intrinsic pathway factor XII, XI, IX with VIII; extrinsic pathway factor VII with tissue factor; both activate factor X, which with V turns prothrombin into thrombin, which turns fibrinogen into fibrin, cross-linked by XIII. Factors tested by PT and by aPTT are marked. Blocked factors are shown in the clinical colour."></svg></div>
+    <div class="stack"><div class="readout2" id="cas-out" aria-live="polite"></div><div class="prose find" id="cas-find" aria-live="polite"></div></div>
+  </div>
+  <div class="key" id="cas-key"></div>
+  <div class="prose" id="cas-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fib">
+  <h2 id="h-fib">Natural anticoagulants and fibrinolysis</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="fib-svg" viewBox="0 0 400 230" role="img" aria-label="Fibrinolysis: tissue plasminogen activator and urokinase turn plasminogen into plasmin, which cuts fibrin into degradation products including D-dimer; PAI-1 blocks the activators and alpha-2-antiplasmin blocks plasmin"></svg></div>
+    <div class="prose" id="fib-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-bleed">
+  <h2 id="h-bleed">Bleeding disorders compared</h2>
+  <div class="scroll"><table id="bleed-table"></table></div>
+  <div class="prose" id="bleed-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-abo">
+  <h2 id="h-abo">ABO and Rh</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="abo-svg" viewBox="0 0 560 230" role="img" aria-label="The four ABO groups: red cells carrying A antigens (triangles), B antigens (squares), both or neither, and the antibodies (Y shapes) present in the plasma against the missing antigens"></svg></div>
+    <div class="prose" id="abo-text"></div>
+  </div>
+  <h3>Haemolytic disease of the fetus and newborn (Rh)</h3>
+  <div class="step" id="hdn-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="hdn-svg" viewBox="0 0 400 200" role="img" aria-label="An Rh-negative mother and Rh-positive fetus across the placenta at the chosen step: fetal cells entering the mother, anti-D IgG made, IgG crossing to a later fetus, prevention with anti-D immunoglobulin"></svg></div>
+    <div class="prose find" id="hdn-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-grid">
+  <h2 id="h-grid">Donor–recipient compatibility grid</h2>
+  <div class="chips" id="grid-tg" aria-label="Component"></div>
+  <div class="grid-wrap">
+    <div class="scroll"><table class="grid" id="grid"></table></div>
+    <div class="prose find" id="grid-find" aria-live="polite" style="flex:1;min-width:240px"></div>
+  </div>
+  <div class="key" id="grid-key"></div>
+  <p class="muted" id="grid-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-tx">
+  <h2 id="h-tx">Transfusion and its reactions</h2>
+  <div class="prose" id="tx-text"></div>
+  <div class="scroll"><table id="tx-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tests">
+  <h2 id="h-tests">ESR, osmotic fragility, haematocrit, reticulocyte and platelet counts</h2>
+  <h3>Erythrocyte sedimentation rate (Westergren)</h3>
+  <div class="chips" id="esr-tg" aria-label="Sample"></div>
+  <div class="sliders" id="esr-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="esr-svg" viewBox="0 0 330 300" role="img" aria-label="Westergren tube of citrated blood: after the chosen time the red cells have settled, leaving a column of clear plasma whose height is the ESR; schematic"></svg></div>
+    <div class="prose find" id="esr-find" aria-live="polite"></div>
+  </div>
+  <h3>Osmotic fragility</h3>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="of-svg" viewBox="0 0 480 260" role="img" aria-label="Schematic osmotic fragility curves: per cent haemolysis against saline strength; spherocytes burst in less hypotonic saline (curve moved toward isotonic), thalassaemia cells resist (curve moved toward more dilute saline)"></svg></div>
+    <div class="prose" id="of-text"></div>
+  </div>
+  <div class="two" id="test-micro"></div>
+  <h3>Haematocrit (packed cell volume)</h3>
+  <div class="sliders" id="hct-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="hct-svg" viewBox="0 0 260 300" role="img" aria-label="Centrifuged microhaematocrit tube: red cells at the bottom, a thin white layer of white cells and platelets, plasma on top; haematocrit is the red-cell column divided by the whole"></svg></div>
+    <div class="prose find" id="hct-find" aria-live="polite"></div>
+  </div>
+  <h3>Reticulocyte count</h3>
+  <div class="sliders" id="ret-sl"></div>
+  <div class="calc-out readout2" id="ret-out" aria-live="polite"></div>
+  <div class="prose" id="ret-text"></div>
+  <h3>Platelet count and how counts are made</h3>
+  <div class="prose" id="plt-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-norm">
+  <h2 id="h-norm">Normal values: the range each source gives</h2>
+  <div class="scroll"><table id="norm-table"></table></div>
+  <p class="muted" id="norm-note"></p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio2.md, Parts C and E; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Step through a cut vessel sealing itself, knock out a clotting factor or give an anticoagulant and see which test goes long, cross-match every donor with every recipient, and run the classic tests — ESR, osmotic fragility, haematocrit, reticulocyte count. The cells themselves: <a href="blood-cells.html">Blood and its cells</a>.';
+
+/* haemostasis steps: [label, stage index, text] */
+const HS = [
+  ['Vascular spasm', '<h3>1 · Vascular spasm</h3><p>The injured vessel <b>constricts</b>, cutting flow to the site; exposed collagen helps trigger it (a 2023 review). It is the first response (StatPearls, Wikipedia).</p>'],
+  ['Adhesion', '<h3>2 · Platelet adhesion</h3><p><b>Von Willebrand factor (vWF)</b> bridges the exposed <b>subendothelial collagen</b> and the platelet receptor <b>GPIb</b>, so platelets stick to the wound.</p>'],
+  ['Activation', '<h3>3 · Activation and release</h3><p>Stuck platelets <b>release their granules</b>: <b>ADP</b>, <b>serotonin</b> and thromboxane A₂ (Wikipedia), which recruit more platelets and add to vasoconstriction.</p>'],
+  ['Aggregation', '<h3>4 · Aggregation: the platelet plug</h3><p>Activation switches on <b>GPIIb/IIIa</b>, which binds <b>fibrinogen</b> (and vWF) bridging platelet to platelet: a temporary <b>platelet plug</b>. Aspirin (COX-1) and clopidogrel (P2Y12) act here (Wikipedia).</p>'],
+  ['Coagulation', '<h3>5 · Coagulation: the fibrin clot</h3><p>The clotting cascade ends with <b>thrombin turning fibrinogen into fibrin</b>; <b>factor XIII</b> cross-links it into a stable mesh that holds the plug. <a href="#h-cas">The cascade</a>.</p>'],
+  ['Fibrinolysis', '<h3>6 · Fibrinolysis: the clot dissolves</h3><p>As the wound heals the plug is remodelled and dissolved (StatPearls): <b>plasmin</b> cuts fibrin into degradation products, among them <b>D-dimer</b> (StatPearls). <a href="#h-fib">Fibrinolysis</a>.</p>'],
+];
+
+/* cascade nodes: [id, label, x, y, inPT, inAPTT] */
+const NODES = [
+  ['XII', 'XII', 80, 40, 0, 1], ['XI', 'XI', 80, 110, 0, 1], ['IX', 'IX', 80, 180, 0, 1], ['VIII', 'VIII', 190, 180, 0, 1],
+  ['VII', 'VII + tissue factor', 470, 180, 1, 0], ['X', 'X', 290, 250, 1, 1], ['V', 'V', 400, 250, 1, 1],
+  ['II', 'II prothrombin → thrombin', 290, 320, 1, 1], ['I', 'I fibrinogen → fibrin', 290, 390, 1, 1], ['XIII', 'XIII cross-links', 500, 390, 0, 0],
+];
+const EDGES = [['XII', 'XI'], ['XI', 'IX'], ['IX', 'X'], ['VII', 'X'], ['X', 'II'], ['II', 'I'], ['XIII', 'I']];
+/* scenarios: {chip, blocked factors, pt, aptt, other: [[label, value, bad]], text} */
+const DRUGS = {
+  warf: ['Warfarin', ['II', 'VII', 'IX', 'X'], 'prolonged (INR used to monitor)', 'may rise too', [['Acts on', 'vitamin K epoxide reductase', 0]], '<h3>Warfarin</h3><p>Blocks <b>vitamin K epoxide reductase</b>, so fewer active vitamin K–dependent factors <b>II, VII, IX, X</b> (and proteins C and S) are made. It has no effect on factors already formed, so full effect takes <b>days</b> (Wikipedia: "a few days"; a review: peak 4–5 days). Monitored by <b>PT/INR</b>; factor VII has the shortest half-life (4–6 h; two reviews), and vitamin K antagonists "mainly prolong PT" (a 2023 review). Reversed with <b>vitamin K</b>, fresh frozen plasma or prothrombin complex concentrate.</p>'],
+  ufh: ['Heparin (unfractionated)', ['II', 'X'], 'not used to monitor', 'prolonged (used to monitor)', [['Acts through', 'antithrombin', 0], ['Antidote', 'protamine', 0]], '<h3>Unfractionated heparin</h3><p>Binds and activates <b>antithrombin</b>, which inactivates <b>thrombin (IIa) and Xa</b> (StatPearls adds IXa). Given parenterally. Monitored by the <b>aPTT</b>; reversed by <b>protamine</b>.</p>'],
+  lmwh: ['LMWH', ['X'], '—', 'insensitive (Wikipedia); prolonged only at therapeutic doses (one review)', [['Monitor', 'anti-Xa activity', 0]], '<h3>Low-molecular-weight heparin</h3><p>Works mainly against <b>Xa</b>; the aPTT is insensitive to it (Wikipedia) and is prolonged only at therapeutic doses, so anti-Xa activity is measured (a 2023 review).</p>'],
+  xa: ['Rivaroxaban, apixaban, edoxaban', ['X'], 'not shown', 'not shown', [['Class', 'direct oral Xa inhibitors', 0]], '<h3>Direct factor Xa inhibitors</h3><p>Oral drugs that block <b>factor Xa</b> (Wikipedia, a 2022 review); directly, without antithrombin (one review). <span class="muted">Their effect on the routine PT and aPTT is not shown: we did not find two open sources stating it.</span></p>'],
+  dab: ['Dabigatran', ['II'], 'not shown', 'detects it (one review)', [['Class', 'direct thrombin inhibitor', 0]], '<h3>Dabigatran</h3><p>A <b>direct thrombin inhibitor</b>: binds the active site of thrombin reversibly (Wikipedia, a 2013 review). The thrombin time and aPTT can detect it in plasma (one review).</p>'],
+};
+const DIS = {
+  hA: ['Haemophilia A', ['VIII'], 'normal', 'prolonged', [['Bleeding', 'joints, muscles', 1], ['Inheritance', 'X-linked recessive', 0]], '<h3>Haemophilia A — factor VIII</h3><p>The commonest haemophilia (StatPearls); <b>X-linked recessive</b>, so almost only males. Severe disease gives spontaneous bleeding into <b>joints (haemarthrosis)</b> and deep muscles. <b>aPTT prolonged, PT normal</b> (PT does not include VIII).</p>'],
+  hB: ['Haemophilia B', ['IX'], 'normal', 'prolonged', [['Bleeding', 'joints, muscles', 1], ['Inheritance', 'X-linked recessive', 0]], '<h3>Haemophilia B (Christmas disease) — factor IX</h3><p>Clinically like haemophilia A; named after Stephen Christmas. <b>aPTT prolonged, PT normal</b>. (Haemophilia C, factor XI, is rare: StatPearls.)</p>'],
+  vwd: ['von Willebrand disease', ['VIII'], 'normal', 'may be prolonged (low VIII)', [['Bleeding time / PFA-100', 'may be prolonged', 1], ['Bleeding', 'skin and mucosa', 1]], '<h3>von Willebrand disease</h3><p>The <b>commonest inherited bleeding disorder</b> (Wikipedia: about 1% of people), mostly <b>autosomal dominant</b>. vWF both <b>sticks platelets to collagen</b> and <b>carries and protects factor VIII</b>, so platelet-type (mucocutaneous) bleeding is the rule and the aPTT may be long when VIII is low. Bleeding time and PFA-100 are less sensitive screening tests; PFA-100 is abnormal in severe type 1 and type 3 (a 2011 review). Types: <b>1</b> partial lack (commonest, about 60–70%), <b>2</b> abnormal vWF, <b>3</b> almost none (one review gives the shares).</p>'],
+  vitk: ['Vitamin K deficiency', ['II', 'VII', 'IX', 'X'], 'prolonged', 'prolonged, less than PT', [['Same factors as', 'warfarin', 0]], '<h3>Vitamin K deficiency</h3><p>Fewer active II, VII, IX, X and proteins C and S. Causes (StatPearls): poor intake, fat malabsorption, liver disease, drugs; <b>newborns</b> have low stores, hence vitamin K at birth. Both PT and aPTT are prolonged, the PT slightly more, because factor VII has the shortest half-life (a 2010 review on inherited deficiency of these factors; half-lives also a 2016 review).</p>'],
+  dic: ['DIC', ['I'], 'prolonged (high INR)', 'not shown', [['Platelets', 'low', 1], ['Fibrinogen', 'low', 1], ['D-dimer / FDP', 'high', 1]], '<h3>Disseminated intravascular coagulation</h3><p>Widespread clotting <b>uses up platelets and clotting factors</b>, so bleeding follows. Causes: <b>sepsis</b>, major <b>trauma</b> and surgery, <b>obstetric complications</b> (e.g. placental abruption), <b>cancer</b>. Findings: <b>low platelets, low fibrinogen, high INR, high D-dimer</b> (Wikipedia, two DIC scoring reviews). Only fibrinogen is marked on the cascade: our sources do not say which other factors fall.</p>'],
+};
+const CAS_TEXT = '<p><b>PT</b> (prothrombin time; reported as the <b>INR</b>) adds tissue factor, calcium and phospholipid: it tests the <b>extrinsic and common</b> pathways — VII, X, V, II and fibrinogen. <b>aPTT</b> uses an activator and phospholipid without tissue factor: it tests the <b>intrinsic and common</b> pathways — all factors except VII and XIII. Typical times: PT about 12–13 s (INR 0.8–1.2) and aPTT 25–33 s, but each laboratory has its own range (Wikipedia). <b>Factor XIII</b> is tested by neither. <b>Factor XII</b> (and prekallikrein, HMWK) deficiency prolongs the aPTT but causes <b>no bleeding</b> (a 2023 review). The same review: the extrinsic pathway is started by tissue factor released from damaged tissue.</p><p><b>Vitamin K–dependent proteins:</b> factors <b>II, VII, IX, X</b> and the anticoagulant <b>proteins C and S</b>. Vitamin K lets them be γ-carboxylated so they can bind calcium (Wikipedia, a 2010 review).</p>';
+
+/* fibrinolysis and natural anticoagulants */
+const FIB_TEXT = '<p><b>Fibrinolysis:</b> plasminogen is built into the clot as it forms (Wikipedia); <b>tissue plasminogen activator (tPA)</b>, from the endothelium (Wikipedia), and <b>urokinase</b> turn it into <b>plasmin</b>, which cuts fibrin into <b>fibrin degradation products</b> — one of them is <b>D-dimer</b>, a marker that clotting and clot breakdown are going on (StatPearls). <b>PAI-1</b> blocks the activators; <b>α₂-antiplasmin</b> blocks plasmin (one review).</p><p><b>Natural anticoagulants:</b> <b>antithrombin</b> — the main one — inactivates thrombin and Xa (StatPearls adds IXa), and heparin multiplies its effect; <b>proteins C and S</b> (vitamin K–dependent) — thrombin bound to thrombomodulin activates protein C, which inactivates <b>Va and VIIIa</b> (Wikipedia); deficiency of protein C or S causes thrombosis. Tissue factor pathway inhibitor is another (one review). Intact endothelium releases nitric oxide and prostacyclin, which keep platelets from aggregating (Wikipedia).</p>';
+
+/* bleeding disorders table */
+const BLEED = [['', 'Platelet count', 'Bleeding time / PFA', 'PT', 'aPTT', 'Typical bleeding'], [
+  ['Thrombocytopenia (e.g. ITP)', 'low (< 150,000/µL)', '—', '—', '—', 'skin and mucosa'],
+  ['von Willebrand disease', '—', 'may be prolonged', '—', 'may be prolonged', 'skin and mucosa'],
+  ['Haemophilia A / B', '—', '—', 'normal †', 'prolonged', 'joints, deep muscles'],
+  ['Vitamin K deficiency / warfarin', '—', '—', 'prolonged', 'prolonged (less) †', '—'],
+  ['DIC', 'low', '—', 'prolonged', '—', 'bleeding with clotting'],
+]];
+const BLEED_TEXT = '<p><b>Platelet-type bleeding</b> (low or faulty platelets, vWD): prompt, excessive bleeding from cuts that pressure controls; spontaneous bleeding into the skin — <b>petechiae</b> (under 3 mm), <b>purpura</b> (3–10 mm), <b>ecchymoses</b> (over 1 cm) — and from mucous membranes: gums, nose, gut, heavy periods (Wikipedia; mucocutaneous bleeding in vWD, a 2011 review). <b>Coagulation-factor bleeding</b> (haemophilia): deep bleeding into <b>joints</b> and <b>muscles</b> (StatPearls, a 2019 review).</p><p><b>Thrombocytopenia:</b> platelets below 150,000/µL; StatPearls: 100–150,000 usually without symptoms, below 50,000 bleeding at surgery, below 10,000 spontaneous bleeding. <b>ITP</b>: IgG autoantibodies coat the platelets; <b>TTP</b>: low ADAMTS13 leaves very large vWF multimers that clump platelets into microthrombi (StatPearls). "—" = not stated by our sources. † follows from what each test measures (PT does not include VIII or IX) and, for vitamin K deficiency, a 2010 review.</p>';
+
+/* ABO groups: [group, antigens, antibodies] */
+const ABO = [['A', ['A'], ['anti-B']], ['B', ['B'], ['anti-A']], ['AB', ['A', 'B'], []], ['O', [], ['anti-A', 'anti-B']]];
+const ABO_TEXT = '<p>Discovered by <b>Karl Landsteiner in 1901</b>. Red cells carry <b>A, B, both or neither</b> antigen; the plasma has <b>antibodies against the antigens the person lacks</b> (group O both anti-A and anti-B, group AB neither). Grouping checks both: <b>forward</b> (antigens on the cells) and <b>reverse</b> (antibodies in the serum) (StatPearls).</p><p>Anti-A and anti-B are mainly <b>IgM</b> (Wikipedia; a 2014 study: most ABO-related transfusion and transplant reactions are caused by IgM ABO antibodies, though IgG matters too). Wikipedia: they form in the first years of life without any transfusion, against food, bacterial and viral substances. IgM does not cross the placenta, so <b>ABO haemolytic disease of the newborn is usually mild</b> (Wikipedia).</p><p><b>Rh:</b> Rh-positive means the <b>D antigen</b> is present. Rh-negative people usually have <b>no anti-D</b> until they meet D-positive cells in pregnancy or transfusion; anti-D is <b>IgG</b> and crosses the placenta. About 94% of people worldwide are Rh-positive (Wikipedia).</p>';
+/* HDFN steps */
+const HDN = [
+  ['First pregnancy', '<h3>1 · Rh-negative mother, Rh-positive baby</h3><p>Fetal D-positive red cells enter the mother\'s circulation through feto-maternal bleeding, before or during delivery (StatPearls, Wikipedia). The harm comes in later pregnancies (StatPearls).</p>'],
+  ['Sensitisation', '<h3>2 · The mother makes anti-D</h3><p>Her immune system makes <b>anti-D IgG</b>, which can persist for life (StatPearls).</p>'],
+  ['Next pregnancy', '<h3>3 · A later Rh-positive baby</h3><p>Maternal <b>IgG anti-D crosses the placenta</b> and destroys fetal red cells: haemolytic anaemia, jaundice, and in severe cases <b>hydrops fetalis</b> or kernicterus after birth (StatPearls, Wikipedia).</p>'],
+  ['Prevention', '<h3>4 · Anti-D immunoglobulin</h3><p>Giving the Rh-negative mother <b>anti-D immunoglobulin</b> stops her becoming sensitised and has significantly reduced Rh disease (StatPearls, two reviews, Wikipedia); it was approved in 1968 (a 2020 review, Wikipedia). Wikipedia gives a schedule of 28 weeks, 34 weeks and within 48 hours of delivery; schedules vary by national guideline.</p>'],
+];
+
+/* compatibility grid */
+const GROUPS = ['O−', 'O+', 'A−', 'A+', 'B−', 'B+', 'AB−', 'AB+'];
+const ANT = g => ({A: g.startsWith('A'), B: g.includes('B'), D: g.endsWith('+')});
+const GRID_NOTE = 'Rule for red cells: the donor\'s cells must not carry an ABO antigen that the recipient\'s plasma has antibody against; D-positive cells are not given to D-negative recipients, who can make anti-D (Wikipedia: about 80% of D-negative people given one D-positive unit make anti-D). For plasma the direction reverses (only ABO shown). "Universal donor" (O RhD-negative red cells) and "universal recipient" (AB RhD-positive) are Wikipedia\'s terms; group-O plasma can carry high-titre anti-A/anti-B ("dangerous universal donors", a 2016 study), and in practice every transfusion is grouped and cross-matched.';
+
+/* transfusion */
+const TX_TEXT = '<p>Donated blood is separated by centrifugation into <b>components</b> — packed red cells, plasma (fresh frozen plasma), platelet concentrates, cryoprecipitate — and patients get the part they need (Wikipedia, StatPearls). <b>Compatibility testing</b> before a transfusion: <b>ABO and RhD typing</b>, an <b>antibody screen</b> for other blood-group antibodies, and a <b>crossmatch</b> of the recipient\'s plasma against the donor\'s red cells (Wikipedia; StatPearls on forward and reverse grouping). If a reaction is suspected, <b>stop the transfusion</b> at once and tell the blood bank (StatPearls).</p>';
+const TX = [['Reaction', 'When', 'Cause', 'Features'], [
+  ['Acute haemolytic', 'within 24 h (StatPearls)', 'mostly <b>ABO incompatibility</b>, usually human error; IgM fixes complement and lyses the cells (Wikipedia)', 'fever, low blood pressure, breathlessness, <b>red urine (haemoglobinuria)</b>, shock, DIC'],
+  ['Febrile non-haemolytic', '—', '— (among the commonest reactions: Swiss haemovigilance, 2020)', 'fever, chills'],
+  ['Allergic / anaphylactic', '—', 'anaphylaxis: e.g. anti-IgA antibodies in IgA-deficient patients (one review)', 'urticaria, itching; anaphylaxis'],
+  ['TRALI', 'within 6 h', 'donor antibodies against HLA or neutrophil antigens (Wikipedia)', 'non-cardiogenic pulmonary oedema, hypoxaemia, fever, low BP'],
+  ['TACO', '—', 'volume overload (StatPearls)', 'pulmonary oedema, like TRALI but from overload (StatPearls)'],
+  ['Delayed haemolytic', 'after 24 h, usually about 2 weeks, up to 30 days (StatPearls)', 'previously transfused patients whose undetectable antibodies react again on re-exposure (StatPearls)', 'red-cell destruction'],
+]];
+
+/* tests */
+const ESR = {norm: ['Normal plasma', 0.045], infl: ['Inflammation: more fibrinogen', 0.3], poly: ['Polycythaemia', 0.012]};
+const ESR_TEXT = {
+  norm: '<h3>Normal</h3><p>Red cells settle slowly. The ESR is the height of clear plasma at the top of a <b>Westergren tube</b> of <b>citrated</b> blood after <b>1 hour</b>, in mm (StatPearls, Wikipedia; the ICSH reference method). Upper limits rise with age: Wikipedia gives men = age ÷ 2, women = (age + 10) ÷ 2 mm/h.</p>',
+  infl: '<h3>Inflammation: raised ESR</h3><p>Plasma proteins, mainly <b>fibrinogen</b>, make red cells stack into <b>rouleaux</b> that fall faster (Wikipedia; Gray 1918 describes rouleaux in drawn blood). A non-specific marker of inflammation — infection, autoimmune disease, tumours (StatPearls).</p>',
+  poly: '<h3>Low ESR</h3><p>Lower in <b>polycythaemia</b> (higher blood viscosity) and <b>sickle cell disease</b> (the cells cannot stack) (Wikipedia).</p>',
+};
+const OF_TEXT = '<p>Red cells are placed in <b>saline of falling strength</b>; in hypotonic saline water enters, they swell into spheres and burst (Gray 1918: in water they "swell up … and become globular"; in salt stronger than plasma they <b>crenate</b>). The test measures how much haemolysis occurs at each strength (Wikipedia; a 2021 protocol).</p><ul><li><b>Increased fragility</b> — lysis in less dilute saline: <b>hereditary spherocytosis</b> (spectrin, ankyrin, band 3 or 4.2 defects) (StatPearls, Wikipedia, two reviews).</li><li><b>Decreased fragility</b> — the cells resist: <b>thalassaemia</b> (Wikipedia; a 2018 study uses a one-tube test to screen thalassaemia trait) and iron deficiency (Wikipedia).</li></ul><p class="muted">Curves are schematic: no saline percentages are shown because we did not find two open sources for them.</p>';
+const HCT_TEXT = '<p>Spin anticoagulated blood in a capillary (microhaematocrit) tube: <b>red cells</b> at the bottom, a thin middle layer of <b>white cells and platelets</b>, <b>plasma</b> on top. Haematocrit = red-cell column ÷ whole column (StatPearls). Wikipedia: 10,000 rpm for 5 minutes. Normal: StatPearls men 40–54%, women 36–48%; Wikipedia men 40.7–50.3%, women 36.1–44.3%; Korean reference study (ages 15–99) men 38.7–50.0%, women 33.0–44.0%.</p>';
+const RET_TEXT = '<p>Reticulocytes still carry ribosomal RNA, which a <b>supravital stain</b> (new methylene blue) shows as blue dots and threads (Wikipedia; ICSH: at least two blue-staining particles, a 2021 letter). Analysers count them with fluorescent RNA dyes. Normal about <b>0.5–2.5%</b> in adults, 2–6% in infants (Wikipedia; repeated word for word in the 2021 letter, so one source). A raised count means the marrow is compensating, as in haemolysis (a review); a low count in anaemia means it is not (Wikipedia). Because the percentage rises when red cells fall, it is <b>corrected</b>: reticulocyte index = retic % × patient Hct ÷ normal Hct; the production index then divides by the maturation time in days (formulas: the 2021 letter; Wikipedia names the production index; maturation times not shown here).</p>';
+const PLT_TEXT = '<p><b>Platelets:</b> about 150–400 × 10⁹/L (Wikipedia; StatPearls 150–350,000/µL; another Wikipedia article 150–450,000; Korean reference study 159–367 × 10⁹/L, ages 12–99). <b>How counts are made:</b> a complete blood count is usually done by an <b>automated analyser</b>, which counts cells and gives a white-cell differential; manual methods confirm abnormal results (Wikipedia, StatPearls). Wikipedia adds that about 10–25% of samples need a stained smear checked under the microscope, and that where no analyser is available cells are counted in a <b>haemocytometer</b>. <b>Bleeding time</b> (Ivy): a standard cut on the forearm, timed until bleeding stops; it tests platelet function but is insensitive and has largely been replaced by the PFA-100 (StatPearls, Wikipedia).</p><p class="muted"><b>PY2.11</b> (doing these counts at the bench) is a practical skill and is not taught here: the bench steps (diluting fluids, chamber squares) are not covered because we found no two open sources for them.</p>';
+
+/* normal values: [test, Wikipedia, second source, Korean reference study (PMC6056383)] */
+const NORM = [['Test', 'Wikipedia', 'Other source', 'Korean reference study (age band)'], [
+  ['Haemoglobin (g/dL)', 'men 13.8–18.0; women 12.1–15.1', 'WHO 2024 anaemia cut-offs: men 13, women 12', 'men 13.0–17.0; women 11.1–14.8 (ages 18–99)'],
+  ['Red cells (million/µL)', 'men 4.7–6.1; women 4.2–5.4', 'Gray 1918: 4–5', 'men 4.4–5.6; women 3.8–5.1 (ages 3–45)'],
+  ['White cells (/µL)', '4,000–11,000', 'Gray 1918: 7,000–12,000; StatPearls: leucocytosis above 11,000', 'men 4,000–10,300; women 3,500–9,600 (ages 3–99)'],
+  ['Neutrophils (%)', '40–70 (or 60–70)', 'Gray 1918: about 60', '37.2–70.0 (ages 15–99)'],
+  ['Lymphocytes (%)', '18–42', 'StatPearls: 20–40', '21.9–52.6 (ages 15–99)'],
+  ['Monocytes (%)', '2–10', 'StatPearls: about 5', '3.9–10.0 (ages 3–99)'],
+  ['Eosinophils (%)', '1–3 (or 2–4)', 'Gray 1918: 1–4', '0.4–7.5 (ages 3–99)'],
+  ['Basophils (%)', '0.5–1', 'a 2022 review: about 0.5', '0.1–1.2 (ages 12–99)'],
+  ['Platelets (× 10⁹/L)', '150–400 (or 150–450)', 'StatPearls: 150–350', '159–367 (ages 12–99)'],
+  ['Haematocrit (%)', 'men 40.7–50.3; women 36.1–44.3', 'StatPearls: men 40–54; women 36–48', 'men 38.7–50.0; women 33.0–44.0 (ages 15–99)'],
+  ['ESR (mm/h)', 'men: age ÷ 2; women: (age + 10) ÷ 2', '—', '—'],
+  ['Reticulocytes (%)', '0.5–2.5 (infants 2–6)', '—', '—'],
+]];
+const NORM_NOTE = 'Ranges differ between sources and laboratories: learn the approximate figure and use the local reference range. The Korean study (PMC6056383) measured 781,857 health-check examinees aged 3–99 by analyser; one population; its figures are for the age band shown.';
+
+const IMG = {
+  sph: {id: 'sph', file: 'img/spherocytes.jpg', w: 720, h: 540, title: 'Spherocytes', alt: 'Blood smear with a neutrophil and red cells, several of them small, round and dense without a pale centre (spherocytes)',
+    cap: 'Spherocytes in warm autoimmune haemolytic anaemia (Ed Uthman\'s description: "4+ spherocytes"); a neutrophil in the centre. Hereditary spherocytosis also makes spherocytes — the cells that burst early in the fragility test.', labels: [[0.5, 0.302, 'spherocyte'], [0.455, 0.52, 'neutrophil']],
+    credit: {file: 'Warm Autoimmune Hemolytic Anemia (2989438061).jpg', author: 'Ed Uthman', lic: 'CC BY 2.0', licUrl: 'https://creativecommons.org/licenses/by/2.0', done: 'resized; labels added (approximate)'}},
+  ret: {id: 'ret', file: 'img/reticulocytes.jpg', w: 720, h: 480, title: 'Reticulocytes (supravital stain)', alt: 'Supravitally stained blood: pale blue-green red cells, three of them containing dark blue dots and threads (reticulocytes)',
+    cap: 'Supravital stain of blood from a patient with haemolytic anaemia: <b>reticulocytes</b> show dark blue dots and threads (the reticulum); mature red cells do not.', labels: [[0.615, 0.18, 'reticulocyte'], [0.303, 0.767, 'reticulocyte'], [0.211, 0.2, 'mature red cell']],
+    credit: {file: 'Reticulocytes Human Blood Supravital Stain.jpg', author: 'Ed Uthman', lic: 'CC BY 3.0', licUrl: 'https://creativecommons.org/licenses/by/3.0', done: 'resized; labels added (approximate)'}},
+};
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); Gray\'s <i>Anatomy</i> (1918), "The Blood"; open-access reviews on tissue factor, isolated aPTT prolongation, prothrombin-time testing, vitamin K–dependent factor deficiency, anticoagulant pharmacology, haemophilia, von Willebrand disease, DIC, fibrinolysis, ABO antibodies and "dangerous universal donors", plasma transfusion, haemolytic disease of the newborn and anti-D prophylaxis, transfusion reactions, hereditary spherocytosis and osmotic fragility, the reticulocyte count, and a Korean blood-count reference study (Europe PMC); Wikipedia (articles that cite OpenStax — Coagulation, Blood plasma — were not used).';
+const MODELS = '<b>Models used:</b> all drawings are schematic, not to scale; the cascade is the textbook laboratory model; the ESR tube, fragility curves and haematocrit tube are schematic and show direction, not measured values; the grid follows the ABO/RhD rule stated under it. Micrographs from Wikimedia Commons by Ed Uthman (CC BY 2.0 and CC BY 3.0), resized, labels added (approximate).';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* ---- haemostasis stepper ---- */
+const HSS = {s: 0};
+function plt(x, y, act, r = 7) { return act ? `<path d="M${x - r} ${y} l${r * 0.4} ${-r * 0.9} l${r * 0.5} ${r * 0.4} l${r * 0.5} ${-r * 0.8} l${r * 0.3} ${r * 0.9} l${r * 0.7} ${r * 0.2} l${-r * 0.6} ${r * 0.6} l${r * 0.3} ${r * 0.8} l${-r * 0.9} ${-r * 0.2} l${-r * 0.5} ${r * 0.6} l${-r * 0.3} ${-r * 0.9} z" class="plt"/>` : `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * 0.45}" class="plt"/>`; }
+function drawHs() {
+  const st = HSS.s; let s = Phys.arrowDef('arrH', 'var(--ink)');
+  const narrow = st >= 0 ? 14 : 0;
+  s += `<rect x="10" y="${170 - 0}" width="540" height="60" class="wall"/>` + T(20, 222, 'vessel wall', 's');
+  s += `<rect x="10" y="${20 + narrow}" width="540" height="${150 - narrow}" style="fill:var(--fluid);opacity:.5"/>` + T(20, 40 + narrow, 'blood (lumen)', 's');
+  s += `<path d="M240 170 L280 230 L320 170 Z" style="fill:var(--surface)"/>` + T(280, 250, 'cut: collagen exposed', 's', 'middle');
+  s += `<path d="M242 172 L280 228 L318 172" style="fill:none;stroke:var(--collagen);stroke-width:5"/>`;
+  if (st === 0) s += `<path d="M120 20 L120 ${20 + narrow + 10}" style="stroke:var(--ink);stroke-width:2" marker-end="url(#arrH)"/><path d="M440 20 L440 ${20 + narrow + 10}" style="stroke:var(--ink);stroke-width:2" marker-end="url(#arrH)"/>` + T(280, 70, 'vessel constricts', 'b', 'middle');
+  const pts = [[260, 176], [300, 176], [280, 196], [250, 160], [310, 160], [280, 150], [230, 150], [330, 150], [265, 135], [295, 135]];
+  const n = [0, 3, 3, 10, 10, 10][st];
+  if (st >= 1) for (let i = 0; i < n; i++) { const [x, y] = pts[i]; if (st === 1) s += `<path d="M${x} ${y + 4} L${x} ${Math.min(y + 18, 200)}" style="stroke:var(--ink);stroke-width:1.2;stroke-dasharray:2 2"/>`; s += plt(x, y, st >= 2); }
+  if (st === 1) s += T(370, 120, 'vWF bridges collagen', 's') + T(370, 136, 'and platelet GPIb', 's');
+  if (st === 2) { for (const [x, y] of [[245, 130], [320, 128], [282, 115], [230, 182], [335, 182]]) s += `<circle cx="${x}" cy="${y}" r="3" style="fill:var(--ink)"/>`; s += T(370, 110, 'ADP, serotonin, TXA₂ released', 's'); }
+  if (st === 3) { for (let i = 0; i < 9; i++) { const [x1, y1] = pts[i], [x2, y2] = pts[i + 1]; s += `<path d="M${x1} ${y1} L${x2} ${y2}" style="stroke:var(--ink);stroke-width:1.2"/>`; } s += T(370, 110, 'GPIIb/IIIa + fibrinogen', 's') + T(370, 126, 'link platelets: plug', 's'); }
+  if (st >= 4) { const dash = st === 5 ? 'stroke-dasharray:6 5;' : ''; for (let i = 0; i < 14; i++) s += `<path d="M${200 + i * 11} ${110 + (i % 3) * 8} L${232 + i * 9} ${205 - (i % 4) * 9}" style="stroke:var(--clot);stroke-width:2;${dash}"/>`; s += T(370, 96, st === 4 ? 'fibrin mesh (XIII cross-links)' : 'plasmin cuts fibrin → D-dimer', 's'); }
+  $('hs-svg').innerHTML = s; $('hs-find').innerHTML = HS[st][1];
+}
+Phys.stepper('hs-step', HS.map(r => r[0]), drawHs, HSS);
+Phys.key('hs-key', [['--platelet', 'platelets'], ['--collagen', 'vessel wall, collagen'], ['--clot', 'fibrin (clot)'], ['--fluid', 'plasma']]);
+
+/* ---- cascade ---- */
+const CA = {off: new Set(), mode: null, key: null};
+const nodeW = lab => Math.max(44, lab.length * 7 + 16);
+function drawCas() {
+  let s = Phys.arrowDef('arrK', 'var(--ink)');
+  const N = Object.fromEntries(NODES.map(n => [n[0], n]));
+  s += `<rect x="20" y="15" width="150" height="200" rx="10" style="fill:var(--ink);opacity:.04"/>` + T(30, 230, 'intrinsic', 'h');
+  s += `<rect x="380" y="150" width="190" height="60" rx="10" style="fill:var(--ink);opacity:.04"/>` + T(560, 228, 'extrinsic', 'h', 'end');
+  s += `<rect x="180" y="225" width="270" height="190" rx="10" style="fill:var(--ink);opacity:.04"/>` + T(440, 300, 'common', 'h', 'end');
+  for (const [a, b] of EDGES) { const A = N[a], B = N[b]; const x1 = A[2], y1 = A[3] + (a === 'XIII' ? 0 : 14), x2 = B[2] + (a === 'XIII' ? nodeW(B[1]) / 2 + 2 : 0), y2 = B[3] - (a === 'XIII' ? 0 : 16); s += `<path d="M${a === 'XIII' ? A[2] - nodeW(A[1]) / 2 : x1} ${a === 'XIII' ? A[3] : y1} L${x2} ${y2}" style="stroke:var(--ink);stroke-width:1.3;${CA.off.has(a) ? 'opacity:.25' : ''}" marker-end="url(#arrK)"/>`; }
+  s += `<path d="M${N.VIII[2] - 22} ${N.VIII[3]} L${N.IX[2] + 24} ${N.IX[3]}" class="lead dash"/>` + `<path d="M${N.V[2] - 22} ${N.V[3]} L${N.X[2] + 24} ${N.X[3]}" class="lead dash"/>`;
+  for (const [id, lab, x, y, pt, ap] of NODES) {
+    const w = nodeW(lab), off = CA.off.has(id);
+    s += `<g class="hit" data-id="${id}" tabindex="0" role="button" aria-label="Factor ${lab}"><rect x="${x - w / 2}" y="${y - 14}" width="${w}" height="28" rx="7" class="fx${off ? ' off' : ''}${CA.key === id ? ' on' : ''}"/>` + T(x, y + 4.5, lab, 'b', 'middle');
+    s += '</g>';
+  }
+  s += T(330, 30, 'PT tests: VII + the common pathway', 's') + T(330, 48, 'aPTT tests: XII, XI, IX, VIII + common', 's') + T(330, 66, 'neither tests: XIII', 's');
+  $('cas-svg').innerHTML = s;
+  $('cas-svg').querySelectorAll('.hit').forEach(g => { const go = () => { const id = g.dataset.id; CA.mode = 'factor'; CA.key = id; CA.off = new Set([id]); clearChips(); drawCas(); report(); const f = $('cas-svg').querySelector(`[data-id="${id}"]`); if (f) f.focus(); }; g.onclick = go; g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }; });
+}
+function clearChips() { document.querySelectorAll('#cas-drug button, #cas-dis button').forEach(b => b.setAttribute('aria-pressed', 'false')); }
+function report() {
+  let pt = 'normal', ap = 'normal', other = [], txt = '<p>Tap a factor, a drug or a disorder.</p>';
+  if (CA.mode === 'factor') {
+    const n = NODES.find(r => r[0] === CA.key); pt = n[4] ? 'prolonged' : 'normal'; ap = n[5] ? 'prolonged' : 'normal';
+    txt = `<h3>Factor ${n[1]} missing</h3><p>${n[4] || n[5] ? `Tested by ${[n[4] ? 'PT' : '', n[5] ? 'aPTT' : ''].filter(Boolean).join(' and ')}.` : 'Neither PT nor aPTT includes factor XIII: the aPTT tests all factors except VII and XIII (StatPearls, Wikipedia).'}${CA.key === 'XII' ? ' But factor XII deficiency causes <b>no bleeding</b> (a 2023 review).' : ''}${CA.key === 'XIII' ? ' XIII cross-links fibrin into a stable mesh.' : ''}</p>`;
+  } else if (CA.mode) {
+    const d = (CA.mode === 'drug' ? DRUGS : DIS)[CA.key]; pt = d[2]; ap = d[3]; other = d[4]; txt = d[5];
+  }
+  const cell = (lab, v, bad) => `<div class="${bad ? 'bad' : ''}"><span class="tag">${lab}</span><b>${v}</b></div>`;
+  $('cas-out').innerHTML = cell('PT / INR', pt, /prolong/.test(pt)) + cell('aPTT', ap, /prolong/.test(ap)) + other.map(o => cell(o[0], o[1], o[2])).join('');
+  $('cas-find').innerHTML = txt;
+}
+const pick = (mode, tab) => k => { CA.mode = mode; CA.key = k; CA.off = new Set(tab[k][1]); document.querySelectorAll(mode === 'drug' ? '#cas-dis button' : '#cas-drug button').forEach(b => b.setAttribute('aria-pressed', 'false')); drawCas(); report(); };
+Phys.toggles('cas-drug', Object.entries(DRUGS).map(([k, v]) => [k, v[0]]), pick('drug', DRUGS), null);
+Phys.toggles('cas-dis', Object.entries(DIS).map(([k, v]) => [k, v[0]]), pick('dis', DIS), null);
+Phys.key('cas-key', [['--clin', 'blocked or missing'], ['--accent', 'factor you chose']]);
+$('cas-text').innerHTML = CAS_TEXT; drawCas(); report();
+
+/* ---- fibrinolysis ---- */
+(function () {
+  let s = Phys.arrowDef('arrF', 'var(--ink)') + Phys.arrowDef('arrX', 'var(--clin)');
+  const pill = (x, y, t, w = 120) => `<rect x="${x - w / 2}" y="${y - 15}" width="${w}" height="30" rx="15" style="fill:var(--surface);stroke:var(--muted)"/>` + T(x, y + 5, t, 'b', 'middle');
+  s += pill(80, 40, 'plasminogen') + pill(80, 130, 'plasmin') + `<path d="M80 56 L80 112" style="stroke:var(--ink);stroke-width:1.5" marker-end="url(#arrF)"/>` + T(88, 104, 'tPA, urokinase', 's');
+  s += `<path d="M150 130 L232 130" style="stroke:var(--ink);stroke-width:1.5" marker-end="url(#arrF)"/>`;
+  for (let i = 0; i < 8; i++) s += `<path d="M${246 + i * 14} ${110} L${262 + i * 12} ${150}" style="stroke:var(--clot);stroke-width:2;stroke-dasharray:${i % 2 ? '5 4' : 'none'}"/>`;
+  s += T(310, 100, 'fibrin', 's', 'middle') + T(310, 176, '→ FDPs, D-dimer', 's', 'middle');
+  s += `<path d="M200 60 L90 76" style="stroke:var(--ink);stroke-width:1.5;stroke-dasharray:4 3" marker-end="url(#arrF)"/>` + T(205, 64, 'PAI-1 blocks', 'b');
+  s += `<path d="M200 200 L130 146" style="stroke:var(--ink);stroke-width:1.5;stroke-dasharray:4 3" marker-end="url(#arrF)"/>` + T(205, 210, 'α₂-antiplasmin blocks', 'b');
+  $('fib-svg').innerHTML = s;
+})();
+$('fib-text').innerHTML = FIB_TEXT;
+
+/* ---- bleeding disorders ---- */
+Phys.table('bleed-table', BLEED[0], BLEED[1]); $('bleed-text').innerHTML = BLEED_TEXT;
+
+/* ---- ABO ---- */
+(function () {
+  let s = '';
+  ABO.forEach(([g, ag, ab], i) => {
+    const cx = 70 + i * 140, cy = 80;
+    s += `<circle cx="${cx}" cy="${cy}" r="44" class="rc"/>` + T(cx, 150, 'Group ' + g, 'b', 'middle');
+    for (let j = 0; j < 6; j++) { const a = j * Math.PI / 3, x = cx + 50 * Math.cos(a), y = cy + 50 * Math.sin(a), kind = ag.length === 2 ? ag[j % 2] : ag[0]; if (!kind) continue; s += kind === 'A' ? `<path d="M${x} ${y - 6} L${x + 6} ${y + 5} L${x - 6} ${y + 5} Z" style="fill:var(--ink)"/>` : `<rect x="${x - 5}" y="${y - 5}" width="10" height="10" style="fill:var(--ink)"/>`; }
+    s += T(cx, 170, ag.length ? 'antigen ' + ag.join(' + ') : 'no A or B antigen', 's', 'middle');
+    s += T(cx, 196, ab.length ? 'plasma: ' + ab.join(', ') : 'plasma: no anti-A/B', ab.length ? 'b' : 's', 'middle');
+    ab.forEach((t, k) => { const x = cx - 14 + k * 28, y = 218; s += `<path d="M${x} ${y + 8} L${x} ${y} L${x - 6} ${y - 7} M${x} ${y} L${x + 6} ${y - 7}" style="fill:none;stroke:var(--ink);stroke-width:2"/>`; });
+  });
+  s += `<path d="M500 16 L506 27 L494 27 Z" style="fill:var(--ink)"/>` + T(512, 26, 'A', 's') + `<rect x="530" y="17" width="10" height="10" style="fill:var(--ink)"/>` + T(544, 26, 'B', 's');
+  $('abo-svg').innerHTML = s;
+})();
+$('abo-text').innerHTML = ABO_TEXT;
+const HDS = {s: 0};
+function drawHdn() {
+  const st = HDS.s; let s = Phys.arrowDef('arrD', 'var(--ink)');
+  s += `<rect x="20" y="20" width="160" height="150" rx="20" style="fill:var(--surface);stroke:var(--muted)"/>` + T(100, 190, 'mother: Rh−', 'b', 'middle');
+  s += `<rect x="220" y="20" width="160" height="150" rx="20" style="fill:var(--surface);stroke:var(--muted)"/>` + T(300, 190, st >= 2 ? 'next baby: Rh+' : 'baby: Rh+', 'b', 'middle');
+  s += `<path d="M200 20 L200 170" style="stroke:var(--muted);stroke-width:4;stroke-dasharray:2 4"/>` + T(200, 14, 'placenta', 's', 'middle');
+  for (const [x, y] of [[270, 70], [320, 90], [290, 120]]) s += `<circle cx="${x}" cy="${y}" r="12" class="rc" style="${st === 2 ? 'opacity:.35' : ''}"/>` + `<circle cx="${x + 10}" cy="${y - 8}" r="3.5" style="fill:var(--ink)"/>`;
+  if (st === 0) s += `<circle cx="130" cy="110" r="12" class="rc"/><circle cx="140" cy="102" r="3.5" style="fill:var(--ink)"/>` + `<path d="M250 110 L150 110" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#arrD)"/>` + T(100, 60, 'fetal D+ cells', 's', 'middle') + T(100, 76, 'before or at delivery', 's', 'middle');
+  const y = (x, yy) => `<path d="M${x} ${yy + 8} L${x} ${yy} L${x - 6} ${yy - 7} M${x} ${yy} L${x + 6} ${yy - 7}" style="fill:none;stroke:var(--clin);stroke-width:2.2"/>`;
+  if (st >= 1 && st < 3) for (const [a, b] of [[60, 60], [90, 100], [130, 80], [70, 130]]) s += y(a, b);
+  if (st === 1) s += T(100, 156, 'anti-D IgG', 'c', 'middle');
+  if (st === 2) { s += y(205, 90) + `<path d="M165 90 L240 90" style="stroke:var(--clin);stroke-width:1.6" marker-end="url(#arrD)"/>` + y(282, 66) + y(332, 86) + T(300, 154, 'fetal red cells destroyed', 'c', 'middle'); }
+  if (st === 3) s += `<rect x="60" y="70" width="80" height="40" rx="8" style="fill:var(--surface);stroke:var(--ink);stroke-width:2.4"/>` + T(100, 88, 'anti-D Ig', 'b', 'middle') + T(100, 104, 'given', 's', 'middle') + T(100, 140, 'no sensitisation', 's', 'middle');
+  $('hdn-svg').innerHTML = s; $('hdn-find').innerHTML = HDN[st][1];
+}
+Phys.stepper('hdn-step', HDN.map(r => r[0]), drawHdn, HDS);
+
+/* ---- grid ---- */
+const GR = {mode: 'rbc', d: 'O−', r: 'AB+'};
+function compat(d, r, mode) {
+  const D = ANT(d), R = ANT(r);
+  if (mode === 'plasma') return (R.A && !D.A) || (R.B && !D.B) ? 'no' : 'ok';
+  if ((D.A && !R.A) || (D.B && !R.B)) return 'no';
+  if (D.D && !R.D) return 'd';
+  return 'ok';
+}
+function focusCell() { const b = $('grid').querySelector(`button[data-d="${GR.d}"][data-r="${GR.r}"]`); if (b) b.focus(); }
+function drawGrid() {
+  let h = '<tr><th>donor ↓ recipient →</th>' + GROUPS.map(g => `<th>${g}</th>`).join('') + '</tr>';
+  for (const d of GROUPS) h += `<tr><th>${d}</th>` + GROUPS.map(r => { const c = compat(d, r, GR.mode); return `<td class="${c}${GR.d === d && GR.r === r ? ' sel' : ''}"><button type="button" data-d="${d}" data-r="${r}" aria-label="${d} to ${r}: ${c === 'ok' ? 'compatible' : 'not compatible'}">${c === 'ok' ? '✓' : c === 'd' ? 'D' : '✗'}</button></td>`; }).join('') + '</tr>';
+  $('grid').innerHTML = h;
+  /* roving tabindex: one cell in the tab order; arrow keys move, focus survives the redraw */
+  $('grid').querySelectorAll('button').forEach(b => {
+    b.tabIndex = (b.dataset.d === GR.d && b.dataset.r === GR.r) ? 0 : -1;
+    b.onclick = () => { GR.d = b.dataset.d; GR.r = b.dataset.r; drawGrid(); focusCell(); };
+    b.onkeydown = e => {
+      const di = GROUPS.indexOf(b.dataset.d), ri = GROUPS.indexOf(b.dataset.r), mv = {ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1], Home: [0, -9], End: [0, 9]}[e.key];
+      if (!mv) return; e.preventDefault();
+      GR.d = GROUPS[Math.max(0, Math.min(7, di + mv[0]))]; GR.r = GROUPS[Math.max(0, Math.min(7, ri + mv[1]))]; drawGrid(); focusCell();
+    };
+  });
+  const D = ANT(GR.d), R = ANT(GR.r), c = compat(GR.d, GR.r, GR.mode), what = GR.mode === 'rbc' ? 'red cells' : 'plasma';
+  const abs = g => { const a = ANT(g); return [!a.A ? 'anti-A' : '', !a.B ? 'anti-B' : ''].filter(Boolean).join(' and ') || 'no anti-A/B'; };
+  let t = `<h3>${GR.d} ${what} → ${GR.r} recipient: ${c === 'ok' ? 'compatible' : c === 'd' ? 'avoid (RhD)' : 'incompatible'}</h3>`;
+  if (GR.mode === 'rbc') t += `<p>Donor cells carry ${[D.A ? 'A' : '', D.B ? 'B' : ''].filter(Boolean).join(' and ') || 'no A or B'} antigen${D.D ? ' and D' : ''}; recipient plasma has ${abs(GR.r)}${R.D ? '' : ' and could make anti-D'}.</p>`;
+  else t += `<p>Donor plasma has ${abs(GR.d)}; recipient cells carry ${[R.A ? 'A' : '', R.B ? 'B' : ''].filter(Boolean).join(' and ') || 'no A or B'} antigen.</p>`;
+  if (GR.mode === 'rbc' && GR.d === 'O−') t += '<p><b>O RhD-negative</b> red cells are often called the <b>universal donor</b> (Wikipedia).</p>';
+  if (GR.mode === 'rbc' && GR.r === 'AB+') t += '<p><b>AB RhD-positive</b> people are called <b>universal recipients</b> (Wikipedia).</p>';
+  if (GR.mode === 'plasma' && GR.d.startsWith('AB')) t += '<p><b>AB plasma</b> has neither anti-A nor anti-B, so it can be given to any group in an emergency (Wikipedia, a 2013 review).</p>';
+  $('grid-find').innerHTML = t;
+}
+Phys.toggles('grid-tg', [['rbc', 'Red cells'], ['plasma', 'Plasma']], k => { GR.mode = k; GR.d = k === 'rbc' ? 'O−' : 'AB+'; GR.r = k === 'rbc' ? 'AB+' : 'O−'; drawGrid(); }, 'rbc');
+Phys.key('grid-key', [['var(--surface)', '✓ compatible'], ['color-mix(in srgb, var(--clin) 22%, var(--surface))', '✗ ABO incompatible'], ['color-mix(in srgb, var(--clin) 9%, var(--surface))', 'D: RhD-positive cells to an RhD-negative recipient — avoid']]);
+$('grid-note').textContent = GRID_NOTE; drawGrid();
+
+/* ---- transfusion ---- */
+$('tx-text').innerHTML = TX_TEXT; Phys.table('tx-table', TX[0], TX[1]);
+
+/* ---- ESR ---- */
+const ES = {k: 'norm', t: 60};
+function drawEsr() {
+  const rate = ESR[ES.k][1], top = 30, H = 240, fall = Math.min(H * 0.55, H * rate * ES.t / 60); let s = '';
+  s += `<rect x="90" y="${top}" width="34" height="${H}" rx="4" style="fill:var(--fluid);stroke:var(--muted);stroke-width:1.2"/>`;
+  s += `<rect x="91" y="${top + fall}" width="32" height="${H - fall}" class="rc"/>`;
+  for (let v = 0; v <= 200; v += 20) { const y = top + v * H / 200; s += `<path class="axis" d="M80 ${y} L88 ${y}"/>` + (v % 40 === 0 ? T(76, y + 4, v, 's', 'end') : ''); }
+  s += T(76, 16, 'mm', 's', 'end') + `<path d="M130 ${top} L150 ${top} M130 ${top + fall} L150 ${top + fall}" class="lead"/><path d="M144 ${top} L144 ${top + fall}" style="stroke:var(--mark);stroke-width:3"/>` + T(154, top + fall / 2 + 4, `clear plasma ${Math.round(fall * 200 / H)} mm`, 'b');
+  s += T(154, top + fall / 2 + 20, `after ${ES.t} min (schematic)`, 's');
+  $('esr-svg').innerHTML = s; $('esr-find').innerHTML = ESR_TEXT[ES.k];
+}
+Phys.toggles('esr-tg', Object.entries(ESR).map(([k, v]) => [k, v[0]]), k => { ES.k = k; drawEsr(); }, 'norm');
+Phys.slider('esr-sl', {id: 'esrt', label: 'Time standing', min: 0, max: 60, step: 5, value: 60, fmt: v => v + ' min'}, v => { ES.t = v; drawEsr(); }).init(); drawEsr();
+
+/* ---- osmotic fragility (schematic) ---- */
+(function () {
+  const x0 = 60, x1 = 460, y0 = 20, y1 = 210; let s = `<path class="axis" d="M${x0} ${y0} L${x0} ${y1} L${x1} ${y1}"/>`;
+  s += T(x0 - 6, y0 + 4, '100%', 's', 'end') + T(x0 - 6, y1, '0', 's', 'end') + T(x0 - 8, (y0 + y1) / 2, 'lysis', 's', 'end');
+  s += T(x0, y1 + 18, 'more dilute (hypotonic)', 's', 'start') + T(x1, y1 + 18, 'isotonic saline', 's', 'end') + T((x0 + x1) / 2, y1 + 36, 'saline strength → (schematic, no values)', 's', 'middle');
+  const curve = (mid, lab, dash, ly) => { const pts = []; for (let x = x0; x <= x1; x += 4) { const u = (x - mid) / 28; pts.push([x, y1 - (y1 - y0) / (1 + Math.exp(u))]); } return `<path d="${Phys.path(pts)}" class="trace" style="${dash}"/>` + T(mid + 14, ly, lab, 'l b', 'start'); };
+  s += curve(250, 'normal', '', y0 + 95) + curve(330, 'spherocytosis', 'stroke-dasharray:7 4', y0 + 45) + curve(170, 'thalassaemia', 'stroke-dasharray:2 4', y0 + 150);
+  $('of-svg').innerHTML = s;
+})();
+$('of-text').innerHTML = OF_TEXT;
+for (const k of ['sph', 'ret']) { const d = document.createElement('div'); $('test-micro').append(d); Phys.micro(d, Object.assign({}, IMG[k], {credit: Phys.credit(IMG[k].credit)})); }
+
+/* ---- haematocrit ---- */
+const HC = {v: 45};
+function drawHct() {
+  const top = 30, H = 230, r = HC.v / 100; let s = `<rect x="100" y="${top}" width="36" height="${H}" rx="6" style="fill:var(--fluid);stroke:var(--muted);stroke-width:1.2"/>`;
+  s += `<rect x="101" y="${top + H * (1 - r)}" width="34" height="${H * r}" class="rc"/><rect x="101" y="${top + H * (1 - r) - 4}" width="34" height="4" style="fill:var(--surface);stroke:var(--muted);stroke-width:.6"/>`;
+  s += T(146, top + H * (1 - r) / 2, 'plasma', 's') + T(146, top + H * (1 - r) - 2, 'white cells + platelets', 's') + T(146, top + H * (1 - r / 2), `red cells ${HC.v}%`, 'b');
+  $('hct-svg').innerHTML = s;
+  $('hct-find').innerHTML = HCT_TEXT;
+}
+Phys.slider('hct-sl', {id: 'hct', label: 'Haematocrit', min: 20, max: 65, step: 1, value: 45, fmt: v => v + '%'}, v => { HC.v = v; drawHct(); }).init(); drawHct();
+
+/* ---- reticulocyte index ---- */
+const RT = {p: 6, h: 25, n: 45};
+function drawRet() { const ri = RT.p * RT.h / RT.n; $('ret-out').innerHTML = `<div><span class="tag">reticulocytes</span><b>${RT.p.toFixed(1)}%</b>raw count</div><div><span class="tag">index = % × Hct ÷ ${RT.n}</span><b>${ri.toFixed(1)}%</b>corrected for the anaemia</div>`; }
+for (const [k, lab, mn, mx, st, u] of [['p', 'Reticulocytes', 0.5, 20, 0.5, '%'], ['h', 'Patient haematocrit', 15, 50, 1, '%'], ['n', 'Normal haematocrit used', 40, 48, 1, '%']]) Phys.slider('ret-sl', {id: 'r' + k, label: lab, min: mn, max: mx, step: st, value: RT[k], fmt: v => v + u}, v => { RT[k] = v; drawRet(); }).init();
+drawRet(); $('ret-text').innerHTML = RET_TEXT + '<p class="muted">Default normal haematocrit 45%: Wikipedia ("normally about 45%"). The example values are illustrative.</p>';
+$('plt-text').innerHTML = PLT_TEXT;
+
+/* ---- normal values ---- */
+Phys.table('norm-table', NORM[0], NORM[1]); $('norm-note').textContent = NORM_NOTE;
+Phys.swipeHints();
+</script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blood, Plasma and Blood Cells</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+/* page-only classes; colours are the shared physiology tokens in ../assets/phys.css */
+svg.sch .pl{fill:var(--fluid)} svg.sch .rc{fill:var(--rbc)} svg.sch .cyt{fill:var(--cyto);stroke:var(--muted);stroke-width:1}
+svg.sch .nuc{fill:var(--nucleus)} svg.sch .node{fill:var(--surface);stroke:var(--line);stroke-width:1.4;cursor:pointer}
+svg.sch .node.on{stroke:var(--accent);stroke-width:3} svg.sch .hit{cursor:pointer}
+svg.sch .sel{stroke:var(--accent);stroke-width:3;fill:none}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.facts div{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13.5px}
+.facts b{display:block;font:600 17px var(--f-mono)}
+#rbc-svg{max-width:460px} #cell-svg{max-width:340px} #gran-svg{max-width:440px} #comp-svg{max-width:420px}
+#wbc-micro .mg{max-width:640px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 02: <span aria-current="page">Blood and its cells</span> · <a href="haemoglobin-anaemia.html">Haemoglobin and anaemia</a> · <a href="haemostasis-blood-groups.html">Haemostasis, blood groups, tests</a> · <a href="immunity.html">Immunity</a></span></nav>
+
+<header class="stack">
+  <h1>Blood, Plasma Proteins and the Blood Cells</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-comp">Composition</a> <a href="#h-prot">Plasma proteins</a> <a href="#h-hsc">Haematopoiesis</a> <a href="#h-ery">Erythropoiesis</a> <a href="#h-epo">Erythropoietin</a> <a href="#h-rbc">The red cell</a> <a href="#h-wbc">White cells</a> <a href="#h-plt">Platelets</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-comp">
+  <h2 id="h-comp">What blood is made of</h2>
+  <div class="two">
+    <div class="stack">
+      <div class="schbox"><svg class="fig sch fit" id="comp-svg" viewBox="0 0 420 300" role="img" aria-label="Blood split into plasma (about 55 per cent) above and cells below: a thin layer of white cells and platelets over the red cells (about 45 per cent). Tap a layer."></svg></div>
+      <div class="prose find" id="comp-find" aria-live="polite"></div>
+    </div>
+    <div id="comp-micro"></div>
+  </div>
+  <div class="facts" id="comp-facts"></div>
+  <div class="prose" id="comp-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-prot">
+  <h2 id="h-prot">Plasma proteins and oncotic pressure</h2>
+  <div class="scroll"><table id="prot-table"></table></div>
+  <div class="sliders" id="onc-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="onc-svg" viewBox="0 0 540 250" role="img" aria-label="A capillary between tissue spaces: blood pressure pushes fluid out, the oncotic pull of plasma proteins (mostly albumin) draws it back; when albumin falls the pull weakens and fluid collects in the tissues"></svg></div>
+    <div class="prose find" id="onc-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="onc-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-hsc">
+  <h2 id="h-hsc">Haematopoiesis: one stem cell, every blood cell</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="hsc-svg" viewBox="0 0 590 290" role="img" aria-label="Lineage tree: haematopoietic stem cell to common myeloid progenitor (red cells, megakaryocytes and platelets, neutrophils, eosinophils, basophils, monocytes) and common lymphoid progenitor (B cells, T cells, NK cells). Tap a cell."></svg></div>
+    <div class="prose find" id="hsc-find" aria-live="polite"></div>
+  </div>
+  <h3>Where blood is made</h3>
+  <div class="chips" id="site-tg" aria-label="Age"></div>
+  <div class="prose" id="site-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ery">
+  <h2 id="h-ery">Erythropoiesis, step by step</h2>
+  <div class="step" id="ery-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ery-svg" viewBox="0 0 540 250" role="img" aria-label="The erythroid cell at the chosen stage, drawn beside the earlier stages: it shrinks, its nucleus condenses and is pushed out, and its cytoplasm turns from blue (RNA) to red (haemoglobin)"></svg></div>
+    <div class="prose find" id="ery-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="ery-key"></div>
+  <p class="muted" id="ery-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-epo">
+  <h2 id="h-epo">Erythropoietin: the oxygen feedback loop</h2>
+  <div class="chips" id="epo-tg" aria-label="Situation"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="epo-svg" viewBox="0 0 540 290" role="img" aria-label="Feedback loop: low oxygen in the kidney cortex makes the peritubular interstitial cells release erythropoietin, which drives red cell production in the marrow; more red cells carry more oxygen and the signal falls"></svg></div>
+    <div class="prose find" id="epo-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="epo-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-rbc">
+  <h2 id="h-rbc">The red cell</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="rbc-svg" viewBox="0 0 400 258" role="img" aria-label="A red cell from above (a disc with a pale centre) and cut through (a biconcave disc about 7.5 micrometres across and 2 micrometres thick), and its 120-day life from marrow to removal by macrophages"></svg></div>
+    <div class="prose" id="rbc-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-wbc">
+  <h2 id="h-wbc">White cells: the differential count</h2>
+  <div class="two">
+    <div class="stack">
+      <div class="schbox"><svg class="fig sch" id="dlc-svg" viewBox="0 0 560 312" role="img" aria-label="Range of each white cell type as a percentage of all white cells, as given by Wikipedia, Gray 1918 and a large reference study; tap a row to see the cell"></svg></div>
+      <div class="key" id="dlc-key"></div>
+    </div>
+    <div class="stack">
+      <div class="schbox"><svg class="fig sch fit" id="cell-svg" viewBox="0 0 220 150" role="img" aria-label="Schematic drawing of the chosen white cell"></svg></div>
+      <div class="prose find" id="dlc-find" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="prose" id="wbc-text"></div>
+  <h3>Leucopoiesis: making a neutrophil</h3>
+  <div class="step" id="gran-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="gran-svg" viewBox="0 0 420 150" role="img" aria-label="Granulocyte precursor at the chosen stage: myeloblast, promyelocyte, myelocyte, metamyelocyte, band, segmented neutrophil"></svg></div>
+    <div class="prose find" id="gran-find" aria-live="polite"></div>
+  </div>
+  <div id="wbc-micro"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-plt">
+  <h2 id="h-plt">Platelets</h2>
+  <div class="two">
+    <div id="plt-micro"></div>
+    <div class="prose" id="plt-text"></div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio2.md, Parts A and E; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Tap the layers of a spun blood sample, drop the albumin and watch fluid leave the capillary, follow one stem cell to every blood cell, step a red cell through its development, set the kidney\'s oxygen sensor to altitude or kidney failure, and compare the white-cell ranges that different sources give. Haemoglobin is on the <a href="haemoglobin-anaemia.html">next page</a>; clotting, blood groups and the laboratory tests on <a href="haemostasis-blood-groups.html">the third</a>.';
+
+/* blood composition: [key, label, % by volume (shown), colour class, text] */
+const COMP = [
+  ['plasma', 'Plasma', 55, 'pl', '<h3>Plasma — about 55%</h3><p>The straw-yellow fluid part: mostly <b>water (about 92%)</b> with <b>proteins</b> (albumin, globulins, fibrinogen), electrolytes, nutrients, hormones, dissolved gases and wastes. <b>Serum</b> is what is left after blood clots: plasma without fibrinogen and most clotting factors.</p>'],
+  ['buffy', 'White cells + platelets', 1, 'buffy', '<h3>White cells and platelets — under 1%</h3><p>A thin pale middle layer between plasma and red cells in a spun tube (StatPearls). White cells are about 0.7% of blood by volume (Wikipedia).</p>'],
+  ['red', 'Red cells', 44, 'rc', '<h3>Red cells — about 45%</h3><p>The red-cell fraction is the <b>haematocrit</b>, normally about 45% (Wikipedia; sex-specific ranges with the <a href="haemostasis-blood-groups.html#h-tests">laboratory tests</a>). StatPearls\' Blood Volume chapter rounds it to plasma 60% : red cells 40% — the sources differ by a few per cent.</p>'],
+];
+const FACTS = [['about 5 L', 'blood volume in an adult (StatPearls, Wikipedia); women less than men (StatPearls)'], ['about 1.06', 'specific gravity (Gray 1918; Wikipedia 1060 kg/m³)'], ['7.35–7.45', 'blood pH (Wikipedia)'], ['about 7%', 'of body weight (Wikipedia)']];
+const COMP_TEXT = '<p><b>Blood</b> is plasma with three kinds of cells suspended in it: <b>red cells</b> (erythrocytes), <b>white cells</b> (leucocytes) and <b>platelets</b>. It <b>carries</b> oxygen, nutrients, hormones and wastes; it helps keep <b>fluid balance, pH and temperature</b>; its antibodies, complement and white cells <b>defend</b> the body; and its platelets and clotting factors stop <b>bleeding</b>.</p>';
+
+/* plasma proteins */
+const PROT = [['Protein', 'Share of plasma protein', 'Made by', 'Main jobs'], [
+  ['Albumin', 'about half; 55% (Wikipedia); 3.5–5 g/dL (StatPearls)', 'liver (10–15 g a day, StatPearls)', 'the main <b>oncotic pressure</b>; carries fatty acids, hormones, drugs and bilirubin; half-life about 21 days (Wikipedia)'],
+  ['Globulins (α, β, γ)', '38% (Wikipedia)', 'α and β mostly liver; γ-globulins (antibodies) by plasma cells (Wikipedia)', 'carriers of ions, hormones and lipids (Wikipedia); γ-globulins = immunoglobulins (<a href="immunity.html#h-ab">antibodies</a>)'],
+  ['Fibrinogen (factor I)', '7% (Wikipedia)', 'liver', 'turned into <b>fibrin</b> by thrombin to form the clot (<a href="haemostasis-blood-groups.html#h-cas">coagulation</a>)'],
+]];
+const ONC0 = 4.2;
+const ONC_NOTE = 'Schematic: arrow lengths show the direction of the balance, not measured pressures. Wikipedia gives a capillary oncotic pressure of about 28 mmHg, about 22 mmHg of it from albumin (about 80%); StatPearls: proteins, unlike Na⁺ and Cl⁻, stay in the plasma, so they draw water in from the interstitium. Causes of low albumin (Wikipedia): liver disease, nephrotic syndrome, burns, protein-losing enteropathy, malnutrition.';
+
+/* haematopoiesis tree: [key, label, x, y, parent, text] */
+const HSC = [
+  ['hsc', 'Stem cell (HSC)', 290, 30, null, '<h3>Haematopoietic stem cell</h3><p>Can <b>self-renew</b> or give rise to progenitors; it lives in the bone marrow. Its daughters (myeloid and lymphoid progenitors) cannot renew themselves (StatPearls, Wikipedia). Growth factors — erythropoietin, interleukins, colony-stimulating factors — and the marrow niche decide which way a cell goes (StatPearls).</p>'],
+  ['cmp', 'Myeloid progenitor', 160, 100, 'hsc', '<h3>Common myeloid progenitor</h3><p>Gives <b>red cells, megakaryocytes (→ platelets), neutrophils, eosinophils, basophils and monocytes</b> (→ macrophages).</p>'],
+  ['clp', 'Lymphoid progenitor', 460, 100, 'hsc', '<h3>Common lymphoid progenitor</h3><p>Gives <b>B cells, T cells and natural killer (NK) cells</b> — see <a href="immunity.html">Immunity</a>.</p>'],
+  ['rbc', 'Red cell', 46, 196, 'cmp', '<h3>Red cell</h3><p>Through the erythroblast stages (<a href="#h-ery">below</a>); driven by <b>erythropoietin</b>.</p>'],
+  ['mk', 'Megakaryocyte', 86, 262, 'cmp', '<h3>Megakaryocyte → platelets</h3><p>A large marrow cell with a lobed nucleus that sheds platelets (<a href="#h-plt">below</a>); driven by thrombopoietin.</p>'],
+  ['neu', 'Neutrophil', 150, 196, 'cmp', '<h3>Neutrophil</h3><p>Via myeloblast → promyelocyte → myelocyte → metamyelocyte → band (<a href="#gran-step">leucopoiesis</a>); G-CSF drives it.</p>'],
+  ['eos', 'Eosinophil', 196, 262, 'cmp', '<h3>Eosinophil</h3><p>A granulocyte with eosin-red granules.</p>'],
+  ['bas', 'Basophil', 256, 196, 'cmp', '<h3>Basophil</h3><p>The rarest granulocyte; dark (basic-dye) granules.</p>'],
+  ['mono', 'Monocyte', 300, 262, 'cmp', '<h3>Monocyte → macrophage</h3><p>Leaves the blood and becomes a <b>macrophage</b> (or dendritic cell) in the tissues.</p>'],
+  ['b', 'B cell', 392, 196, 'clp', '<h3>B lymphocyte</h3><p>Matures in the bone marrow; becomes an antibody-secreting <b>plasma cell</b>.</p>'],
+  ['t', 'T cell', 468, 262, 'clp', '<h3>T lymphocyte</h3><p>Leaves the marrow young and <b>matures in the thymus</b>.</p>'],
+  ['nk', 'NK cell', 540, 196, 'clp', '<h3>Natural killer cell</h3><p>A lymphocyte of innate immunity that kills virus-infected and tumour cells.</p>'],
+];
+/* sites of blood formation by age: [key, label, text] */
+const SITES = [
+  ['emb', 'Early embryo', '<p><b>Yolk sac</b> blood islands (Wikipedia; mouse and human data in a 2014 review).</p>'],
+  ['fet', 'Fetus', '<p>The <b>liver</b> is the main blood-forming organ while the bones and marrow are still forming (Wikipedia; red-cell formation moves to the liver by the 3rd–4th month). The fetal liver is also the main source of <b>erythropoietin</b>.</p>'],
+  ['late', 'From about 7 months', '<p>The <b>bone marrow</b> takes over (Wikipedia, "after seven months").</p>'],
+  ['child', 'Child', '<p>Red marrow of the <b>long bones</b> too, such as the femur and tibia (Wikipedia).</p>'],
+  ['adult', 'Adult', '<p>Mainly the <b>pelvis, skull, vertebrae and sternum</b> (Wikipedia). In some cases the liver, thymus and spleen can resume making blood — extramedullary haematopoiesis (Wikipedia). Histology of the spleen and thymus: <a href="../../anatomy/histology/lymphoid-bone-skin.html#h-lym">Lymphoid organs</a>.</p>'],
+];
+
+/* erythropoiesis stages: [label, cell radius, nucleus radius (0 = none), blue fraction (0–1), text] */
+const ERY = [
+  ['Progenitors', 30, 18, 1, '<h3>BFU-E → CFU-E (progenitors)</h3><p>Committed red-cell progenitors that are not yet recognisable on a smear: the burst-forming and colony-forming units (one review). <b>Erythropoietin keeps these late progenitors alive</b> and lets them multiply.</p>'],
+  ['Proerythroblast', 30, 20, 1, '<h3>Proerythroblast (pronormoblast)</h3><p>The first recognisable red-cell precursor: a large cell with a large nucleus and <b>blue</b> cytoplasm (Wikipedia: blue at the proerythroblast and basophilic stages).</p>'],
+  ['Basophilic', 26, 16, 0.85, '<h3>Basophilic (early) erythroblast</h3><p>Still dividing; cytoplasm still blue. Through the stages the cell divides a few times, shrinks, gains haemoglobin, loses RNA and its nucleus condenses (a 2014 review).</p>'],
+  ['Polychromatophilic', 22, 12, 0.5, '<h3>Polychromatophilic (intermediate) erythroblast</h3><p>Haemoglobin is building up and the cytoplasm turns from blue towards pinkish red (Wikipedia). By Wikipedia\'s account this is the last stage that divides.</p>'],
+  ['Orthochromatic', 18, 7, 0.15, '<h3>Orthochromatic (late) erythroblast — normoblast</h3><p>The small, condensed nucleus is then <b>pushed out (enucleation)</b> and eaten by a marrow macrophage.</p>'],
+  ['Reticulocyte', 17, 0, 0.08, '<h3>Reticulocyte</h3><p>No nucleus, but a mesh of ribosomal RNA (seen with new methylene blue) and it can still make haemoglobin (Wikipedia). Released into the blood, where it matures in about 1–2 days (Wikipedia: "one to two days"; "about a day").</p>'],
+  ['Red cell', 16, 0, 0, '<h3>Mature red cell</h3><p>A biconcave disc full of haemoglobin, about 95 fL in volume against 900 fL for the proerythroblast (Wikipedia). It circulates for about <b>120 days</b>.</p>'],
+];
+const ERY_NOTE = 'Schematic drawing; sizes and colours show the trend, not measurements. Stages: Wikipedia and three reviews (PMC3904103, PMC6016880, PMC5288342); Gray 1918 calls the nucleated precursors "erythroblasts or normoblasts". Vitamin B12 and folate are needed for DNA synthesis in the dividing stages (lack → megaloblastic anaemia) and iron for haem: <a href="haemoglobin-anaemia.html">Haemoglobin and anaemia</a>.';
+
+/* EPO loop situations: [key, label, O2 sensed (0 low – 2 high), EPO level (0 low – 2 high), red cell mass (0–2), text] */
+const EPO = {
+  norm: ['Normal', 1, 1, 1, '<h3>Steady state</h3><p>About 2 million red cells are made every second (two reviews, Wikipedia) to replace those removed after about 120 days. EPO levels run <b>inversely to haemoglobin</b>: as Hb falls, EPO rises steeply (StatPearls).</p>'],
+  hyp: ['Hypoxia: altitude, lung disease', 0, 2, 2, '<h3>Low oxygen → more EPO</h3><p>Less oxygen reaches the kidney: <b>HIF</b> (hypoxia-inducible factor) is no longer broken down, switches on the EPO gene, and the marrow makes more red cells. Lasting hypoxaemia (altitude, chronic lung disease) causes <b>secondary polycythaemia</b> (<a href="haemoglobin-anaemia.html#h-poly">polycythaemia</a>). <b>Anaemia</b> also raises EPO (Wikipedia), but there the red-cell mass is low, not high.</p>'],
+  ckd: ['Chronic kidney disease', 0, 0, 0, '<h3>Kidney failure → too little EPO</h3><p>As renal tissue is lost, the EPO response to anaemia is blunted: a relative <b>EPO deficiency</b> that causes much of the anaemia of CKD (StatPearls, a 2015 review). Recombinant EPO (erythropoiesis-stimulating agents) is used where red-cell production is impaired (StatPearls).</p>'],
+  pv: ['Polycythaemia vera', 2, 0, 2, '<h3>Marrow clone → EPO suppressed</h3><p>In polycythaemia vera the marrow makes red cells on its own (a JAK2 mutation): red cell mass rises and serum <b>EPO is low</b> — the opposite of secondary polycythaemia.</p>'],
+};
+const EPO_TEXT = '<p><b>Where EPO comes from:</b> mainly the <b>peritubular interstitial (fibroblast-like) cells of the renal cortex</b> (StatPearls, Wikipedia, a mouse study, PMC3191152) — Wikipedia puts it at about 90% from the kidney and 10% from the liver in adults; before birth the <b>liver</b> is the main source. <b>What it does:</b> keeps late erythroid progenitors alive so they multiply and mature. <b>What it needs:</b> iron (for haem), vitamin B12 and folate (for DNA synthesis).</p>';
+
+/* red cell */
+const RBC_TEXT = '<p>A <b>biconcave disc</b> about <b>7.5 µm</b> across and about <b>2 µm</b> thick (Gray 1918; Wikipedia gives 6.2–8.2 µm and 2–2.5 µm). It has <b>no nucleus or organelles</b>: it is a bag of haemoglobin. Its membrane and cytoskeleton let it <b>deform</b> through capillaries and spring back to a disc (Wikipedia, a 2014 review).</p><p>It lives about <b>120 days</b> (three reviews; Wikipedia and one review give 100–120). Old cells change their membrane and are eaten by <b>macrophages of the spleen (red pulp), liver and marrow</b>; their haemoglobin is recycled (<a href="haemoglobin-anaemia.html#h-bili">breakdown and bilirubin</a>). <b>Count:</b> men about 4.7–6.1, women 4.2–5.4 million/µL (Wikipedia; another Wikipedia article: 5–6 and 4–5; Gray 1918: 4–5 million/mm³; a Korean reference study of 781,857 people, ages 3–45: men 4.4–5.6, women 3.8–5.1 × 10¹²/L).</p>';
+
+/* white cells: [key, name, ranges {w: Wikipedia, g: Gray 1918 or StatPearls, k: reference study (PMC6056383, ages 15–99)}, gLabel, text] */
+const WBC = [
+  ['neu', 'Neutrophil', {w: [40, 70], g: [59, 61], k: [37.2, 70.0]}, 'Gray 60', '<h3>Neutrophil — the commonest</h3><p><b>Nucleus</b> of several lobes joined by chromatin threads (Wikipedia: 2–5 lobes; Gray 1918: two or three parts); very fine granules (Gray 1918). A <b>phagocyte</b> of innate immunity and one of the <b>first cells to reach acute (especially bacterial) inflammation</b>. Short-lived in the blood: circulating half-life 6–8 h (one review); lifespan 5–135 h by different methods (Wikipedia).</p>'],
+  ['lym', 'Lymphocyte', {w: [18, 42], g: [20, 40], k: [21.9, 52.6]}, 'StatPearls 20–40', '<h3>Lymphocyte</h3><p>A large, dark, <b>round nucleus</b> with only a thin rim of cytoplasm. Three kinds: <b>B cells</b> (antibodies), <b>T cells</b> (cell-mediated immunity) and <b>NK cells</b>. Lymphocytosis: absolute count above 4000/µL in adults (StatPearls). <a href="immunity.html">Immunity</a>.</p>'],
+  ['mono', 'Monocyte', {w: [2, 10], g: null, k: [3.9, 10.0]}, '', '<h3>Monocyte — the largest</h3><p>Largest white cell (15–22 µm) with a <b>kidney- or bean-shaped nucleus</b> (Wikipedia). Circulates for about 1–3 days (StatPearls), then enters the tissues to become a <b>macrophage</b> or dendritic cell.</p>'],
+  ['eos', 'Eosinophil', {w: [1, 3], g: [1, 4], k: [0.4, 7.5]}, 'Gray 1–4', '<h3>Eosinophil</h3><p><b>Bilobed nucleus</b> (Wikipedia; Gray 1918: horseshoe-shaped) and coarse granules that stain <b>red with eosin</b>. Fights <b>parasites (helminths)</b> and takes part in <b>allergy and asthma</b>. Eosinophilia: above 500/mm³ (StatPearls). Another Wikipedia article gives 2–4%.</p>'],
+  ['bas', 'Basophil', {w: [0.5, 1], g: null, k: [0.1, 1.2]}, '', '<h3>Basophil — the rarest</h3><p>Large dark granules that <b>stain with basic dyes</b> and hide the nucleus (Wikipedia). Granules hold <b>histamine and heparin</b>; the surface carries the high-affinity <b>IgE receptor</b>, as on mast cells — allergy.</p>'],
+];
+const WBC_TEXT = '<p><b>Total white count: 4,000–11,000/µL</b> (Wikipedia); a large Korean reference study (781,857 people, ages 3–99) found 4.0–10.3 × 10⁹/L in men and 3.5–9.6 in women; Gray 1918 gave 7,000–12,000. Above the upper limit is <b>leucocytosis</b> (StatPearls: above 11,000/µL in adults — infection, inflammation, allergy, malignancy); below the lower limit, <b>leucopenia</b> (Wikipedia). <b>Granulocytes</b> (neutrophils, eosinophils, basophils) have stained granules; <b>agranulocytes</b> (lymphocytes, monocytes) do not.</p><p class="muted">The bars show the range each source gives: they differ, so learn the order (neutrophils &gt; lymphocytes &gt; monocytes &gt; eosinophils &gt; basophils) and the approximate figures. Gray 1918 gives neutrophils 60% and lymphocytes with monocytes together 20–30%; the lymphocyte bar marked S is StatPearls (20–40%).</p>';
+
+/* granulopoiesis: [label, nucleus shape, granules, text] */
+const GRAN = [
+  ['Myeloblast', 'round', 0, '<h3>Myeloblast</h3><p>The first cell recognisable as a granulocyte precursor (Wikipedia); large nucleus, few or no granules — the primary (azurophilic) granules belong to the myeloblast and promyelocyte stages (one review).</p>'],
+  ['Promyelocyte', 'oval', 1, '<h3>Promyelocyte</h3><p>Still a large oval nucleus, more cytoplasm; the first (<b>primary, azurophilic</b>) granules form.</p>'],
+  ['Myelocyte', 'oval', 2, '<h3>Myelocyte</h3><p><b>Secondary (specific) granules</b> appear; the last stage that divides (one review).</p>'],
+  ['Metamyelocyte', 'kidney', 2, '<h3>Metamyelocyte</h3><p>The nucleus becomes <b>kidney-shaped</b> (Wikipedia); terminal differentiation.</p>'],
+  ['Band', 'band', 2, '<h3>Band (stab) cell</h3><p>The nucleus bends further into a band. Bands are reported separately on a differential; in <b>infection</b> ("emergency granulopoiesis") immature bands are released with the neutrophils (one review).</p>'],
+  ['Segmented', 'seg', 2, '<h3>Segmented neutrophil</h3><p>The mature cell: a <b>segmented</b> nucleus of 2–5 lobes.</p>'],
+];
+const GRAN_NOTE = '<p class="muted">Driven by <b>G-CSF</b> (granulocyte colony-stimulating factor), which commits cells to the granulocyte line; GM-CSF acts earlier (Wikipedia). One 2011 study adds that G-CSF is given to shorten neutropenia after chemotherapy and that GM-CSF acts more broadly, on neutrophils, monocytes and macrophages. Nucleus shapes in the drawing follow Wikipedia; schematic.</p>';
+
+/* platelets */
+const PLT_TEXT = '<p><b>Platelets</b> are small <b>fragments of megakaryocyte cytoplasm</b> without a nucleus, shed in the bone marrow; resting platelets are lens-shaped discs 2–3 µm across (Wikipedia).</p><ul><li><b>Count:</b> about <b>150–400 × 10⁹/L</b> (150,000–400,000/µL; Wikipedia) — StatPearls says 150,000–350,000/µL, another Wikipedia article 150,000–450,000, the Korean reference study 159–367 × 10⁹/L (ages 12–99). Below 150,000/µL is <b>thrombocytopenia</b>.</li><li><b>Life:</b> about 7–10 days (StatPearls; Wikipedia 8–9 days); aged platelets are removed by the spleen (StatPearls).</li><li><b>Spleen pool:</b> about 30% of the platelet mass sits in the spleen as an exchangeable pool (one review).</li><li><b>Control:</b> <b>thrombopoietin</b>, made mainly in the <b>liver</b> (less in the kidney), drives megakaryocytes (two reviews, StatPearls, Wikipedia); its level runs inversely to the platelet count (one review).</li><li><b>Granules:</b> dense granules (ADP, calcium, serotonin) and α-granules (factor V, fibrinogen, vWF, growth factors) (Wikipedia).</li></ul><p>What they do — adhesion, release, aggregation: <a href="haemostasis-blood-groups.html#h-hs">Haemostasis</a>. How they are counted: <a href="haemostasis-blood-groups.html#h-tests">Laboratory tests</a>.</p>';
+
+/* micrographs (Wikimedia Commons; licences in the footer and physiology/DATA-SOURCES.md) */
+const IMG = {
+  sem: {id: 'sem', file: 'img/sem-blood.jpg', w: 640, h: 604, title: 'Blood under the scanning electron microscope', alt: 'Scanning electron micrograph of normal human blood: many biconcave red cells, several round knobbly white cells and a few small platelets',
+    cap: 'Normal human blood (scanning electron micrograph): biconcave <b>red cells</b>, knobbly <b>white cells</b> and small <b>platelets</b>.', labels: [[0.547, 0.569, 'white cell'], [0.687, 0.338, 'red cell'], [0.541, 0.866, 'platelet']],
+    credit: {file: 'SEM blood cells.jpg', author: 'Bruce Wetzel and Harry Schaefer (National Cancer Institute)', lic: 'public domain', licUrl: '', done: 'cropped top and bottom, resized; labels added (approximate)'}},
+  eos: {id: 'eos', file: 'img/eosinophils.jpg', w: 720, h: 639, title: 'Eosinophils in a peripheral blood smear', alt: 'Blood smear with three eosinophils with bilobed nuclei and red granules, a small lymphocyte, many red cells with pale centres and scattered small purple platelets',
+    cap: 'Three <b>eosinophils</b> (bilobed nucleus, red granules), a small <b>lymphocyte</b> (round dark nucleus, thin rim), <b>red cells</b> with pale centres and purple <b>platelets</b>.', labels: [[0.191, 0.423, 'eosinophil'], [0.746, 0.902, 'lymphocyte'], [0.619, 0.478, 'platelet'], [0.374, 0.554, 'red cell']],
+    credit: {file: 'Eosinophils in Peripheral Blood Smear (4746281402).jpg', author: 'Ed Uthman', lic: 'CC BY 2.0', licUrl: 'https://creativecommons.org/licenses/by/2.0', done: 'resized; labels added (approximate)'}},
+  mk: {id: 'mk', file: 'img/megakaryocyte.jpg', w: 720, h: 576, title: 'A megakaryocyte in a bone-marrow film', alt: 'Bone marrow film with one very large purple cell, the megakaryocyte, among red cells and smaller marrow cells',
+    cap: 'A <b>megakaryocyte</b> — the very large marrow cell that sheds platelets — among red cells and smaller marrow precursors.', labels: [[0.465, 0.70, 'megakaryocyte']],
+    credit: {file: 'Megakaryocyte (Marrow).jpg', author: 'Prof. Erhabor Osaro', lic: 'CC BY-SA 4.0', licUrl: 'https://creativecommons.org/licenses/by-sa/4.0', done: 'cropped (the uploader\'s scale bar removed), resized; label added (approximate)'}},
+};
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); Gray\'s <i>Anatomy</i> (1918), "The Blood"; open-access reviews on erythropoiesis, erythropoietin and its renal source, red-cell clearance by macrophages, eryptosis, neutrophil kinetics and biology, eosinophils, basophils, monocytes, G-CSF and granulopoiesis, thrombopoietin and platelet life span, and a large Korean study of blood-count reference intervals (Europe PMC); Wikipedia (articles that cite OpenStax — Blood plasma, Thrombopoiesis — were not used).';
+const MODELS = '<b>Models used:</b> all drawings are schematic, not to scale. The composition bar uses round figures (plasma 55%, cells 45%). The oncotic-pressure arrows show direction only. The feedback-loop levels are qualitative. Micrographs from Wikimedia Commons: "SEM blood cells.jpg" (National Cancer Institute, public domain); "Eosinophils in Peripheral Blood Smear" (Ed Uthman, CC BY 2.0); "Megakaryocyte (Marrow).jpg" (Prof. Erhabor Osaro, CC BY-SA 4.0) — cropped and resized, labels added.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+/* keep keyboard focus on the same control after an SVG redraw */
+const refocus = (svgId, k) => { const el = $(svgId).querySelector(`[data-k="${k}"]`); if (el) el.focus(); };
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* ---- composition ---- */
+const CS = {sel: 'plasma'};
+function drawComp() {
+  const x = 40, w = 90, top = 30, H = 240; let y = top, s = '';
+  const tube = `M${x} ${top - 12} L${x} ${top + H} Q${x} ${top + H + 16} ${x + 16} ${top + H + 16} L${x + w - 16} ${top + H + 16} Q${x + w} ${top + H + 16} ${x + w} ${top + H} L${x + w} ${top - 12}`;
+  s += `<defs><clipPath id="tubeclip"><path d="${tube} Z"/></clipPath></defs>`;
+  for (const [k, lab, pct, cls] of COMP) {
+    const h = pct === 1 ? 6 : H * pct / 100; const fill = cls === 'buffy' ? 'var(--surface)' : `var(--${cls === 'pl' ? 'fluid' : 'rbc'})`;
+    s += `<g class="hit" data-k="${k}" tabindex="0" role="button" aria-label="${lab}"><rect x="${x + 1}" y="${y}" width="${w - 2}" height="${h + (k === 'red' ? 16 : 0)}" clip-path="url(#tubeclip)" style="fill:${fill};${k === 'buffy' ? 'stroke:var(--muted);stroke-width:.8' : ''}"/>`;
+    if (CS.sel === k) s += `<rect x="${x - 4}" y="${y - 2}" width="${w + 8}" height="${h + 4 + (k === 'red' ? 16 : 0)}" rx="4" class="sel"/>`;
+    const ly = y + Math.max(h, 6) / 2 + 4;
+    s += `<path class="lead" d="M${x + w + 6} ${ly - 4} L${x + w + 30} ${ly - 4}"/>` + T(x + w + 36, ly, lab, 'b', 'start') + T(x + w + 36, ly + 16, pct > 1 ? `about ${k === 'red' ? 45 : pct}%` : 'under 1%', 's', 'start') + '</g>';
+    y += h;
+  }
+  s += `<path d="${tube}" style="fill:none;stroke:var(--muted);stroke-width:1.5"/>` + T(x + w / 2, 14, 'spun blood (schematic)', 's', 'middle');
+  $('comp-svg').innerHTML = s;
+  $('comp-svg').querySelectorAll('.hit').forEach(g => { const go = () => { CS.sel = g.dataset.k; drawComp(); refocus('comp-svg', CS.sel); }; g.onclick = go; g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }; });
+  $('comp-find').innerHTML = COMP.find(c => c[0] === CS.sel)[4];
+}
+drawComp();
+$('comp-facts').innerHTML = FACTS.map(([v, t]) => `<div><b>${v}</b>${t}</div>`).join('');
+$('comp-text').innerHTML = COMP_TEXT;
+Phys.micro('comp-micro', Object.assign({}, IMG.sem, {credit: Phys.credit(IMG.sem.credit)}));
+
+/* ---- plasma proteins and oncotic pressure ---- */
+Phys.table('prot-table', PROT[0], PROT[1]);
+const ON = {alb: ONC0};
+function drawOnc() {
+  const a = ON.alb, pull = 20 + 90 * Math.min(1, a / 5), push = 83; let s = Phys.arrowDef('arrO', 'var(--ink)');
+  const net = push - pull; // >0 = fluid leaves (schematic)
+  s += `<rect x="10" y="10" width="520" height="70" rx="6" style="fill:var(--fluid);opacity:${(0.25 + Math.max(0, net) / 90).toFixed(2)}"/>` + T(20, 28, 'tissue (interstitial fluid)', 's');
+  s += `<rect x="10" y="170" width="520" height="70" rx="6" style="fill:var(--fluid);opacity:${(0.25 + Math.max(0, net) / 90).toFixed(2)}"/>` + T(20, 232, 'tissue (interstitial fluid)', 's');
+  s += `<rect x="10" y="92" width="520" height="66" rx="30" style="fill:var(--fluid);stroke:var(--muted);stroke-width:1.2"/>` + T(270, 120, 'capillary plasma', 'b', 'middle');
+  for (let i = 0; i < Math.round(a * 3); i++) s += `<circle cx="${40 + (i * 37) % 470}" cy="${135 + (i % 3) * 7}" r="4" style="fill:var(--ink);opacity:.55"/>`;
+  s += T(270, 152, `albumin ${a.toFixed(1)} g/dL (dots)`, 's', 'middle');
+  s += `<path d="M130 90 L130 ${90 - push * 0.7}" style="stroke:var(--ink);stroke-width:3" marker-end="url(#arrO)"/>` + T(140, 62, 'blood pressure pushes out', 's');
+  s += `<path d="M400 ${84 - pull * 0.6} L400 86" style="stroke:var(--ink);stroke-width:3" marker-end="url(#arrO)"/>` + T(390, 30, 'oncotic pull draws in', 's', 'end');
+  $('onc-svg').innerHTML = s;
+  $('onc-find').innerHTML = a >= 3.5 ? `<h3>Albumin ${a.toFixed(1)} g/dL — normal (3.5–5)</h3><p>The protein pull balances the pressure push along the capillary; little fluid is left behind in the tissues.</p>` : `<h3>Albumin ${a.toFixed(1)} g/dL — low</h3><p><b>Hypoalbuminaemia</b> weakens the oncotic pull: fluid stays in the tissues — <b>oedema</b> — and blood volume falls (Wikipedia; StatPearls describes the same balance of hydrostatic and oncotic pressure).</p>`;
+}
+Phys.slider('onc-sl', {id: 'alb', label: 'Plasma albumin', min: 1.5, max: 5, step: 0.1, value: ONC0, fmt: v => v.toFixed(1) + ' g/dL'}, v => { ON.alb = v; drawOnc(); }).init();
+$('onc-note').textContent = ONC_NOTE; drawOnc();
+
+/* ---- haematopoiesis tree ---- */
+const HS = {sel: 'hsc'};
+function drawHsc() {
+  let s = '';
+  /* elbow lines: parent → bus → child (no line crosses a node) */
+  for (const [k, lab, x, y, par] of HSC) if (par) { const p = HSC.find(r => r[0] === par), bus = p[3] + 40; s += `<path class="lead" d="M${p[2]} ${p[3] + 14} L${p[2]} ${bus} L${x} ${bus} L${x} ${y - 14}" style="stroke-width:1.3"/>`; }
+  for (const [k, lab, x, y] of HSC) {
+    const w = Math.max(64, lab.length * 7.2 + 14);
+    s += `<g class="hit" data-k="${k}" tabindex="0" role="button" aria-label="${lab}"><rect x="${x - w / 2}" y="${y - 14}" width="${w}" height="28" rx="14" class="node${HS.sel === k ? ' on' : ''}"/>` + T(x, y + 4.5, lab, '', 'middle') + '</g>';
+  }
+  $('hsc-svg').innerHTML = s;
+  $('hsc-svg').querySelectorAll('.hit').forEach(g => { const go = () => { HS.sel = g.dataset.k; drawHsc(); refocus('hsc-svg', HS.sel); }; g.onclick = go; g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }; });
+  $('hsc-find').innerHTML = HSC.find(r => r[0] === HS.sel)[5];
+}
+drawHsc();
+Phys.toggles('site-tg', SITES.map(s => [s[0], s[1]]), k => { $('site-find').innerHTML = SITES.find(s => s[0] === k)[2]; }, 'adult');
+$('site-find').innerHTML = SITES[4][2];
+
+/* ---- erythropoiesis stepper ---- */
+const ES = {s: 1};
+const mix = f => `color-mix(in srgb, var(--baso) ${Math.round(f * 100)}%, var(--rbc))`;
+function cellE(cx, cy, st, small) {
+  const [lab, r, nr, blue] = st, k = small ? 0.55 : 1, R = r * k; let g = '';
+  if (lab === 'Red cell') return `<circle cx="${cx}" cy="${cy}" r="${R}" class="rc"/><circle cx="${cx}" cy="${cy}" r="${R * 0.38}" style="fill:var(--surface);opacity:.45"/>`;
+  g += `<circle cx="${cx}" cy="${cy}" r="${R}" style="fill:${mix(blue)};stroke:var(--muted);stroke-width:.8"/>`;
+  if (nr) g += `<circle cx="${cx + (lab === 'Orthochromatic' ? R * 0.35 : 0)}" cy="${cy}" r="${nr * k}" class="nuc"/>`;
+  if (lab === 'Reticulocyte') for (let i = 0; i < 5; i++) g += `<path d="M${cx - R * 0.6 + i * R * 0.3} ${cy - R * 0.4} l${R * 0.15} ${R * 0.8}" style="stroke:var(--nucleus);stroke-width:1.2;opacity:.8"/>`;
+  return g;
+}
+function drawEry() {
+  let s = Phys.arrowDef('arrE', 'var(--muted)'); const n = ERY.length, x0 = 34, dx = (540 - 2 * x0) / (n - 1);
+  ERY.forEach((st, i) => {
+    const x = x0 + i * dx, y = 70, on = i === ES.s;
+    s += cellE(x, y, st, true);
+    if (on) s += `<circle cx="${x}" cy="${y}" r="${st[1] * 0.55 + 6}" style="fill:none;stroke:var(--accent);stroke-width:2.5"/>`;
+    if (i < n - 1) s += `<path d="M${x + 22} ${y} L${x + dx - 22} ${y}" style="stroke:var(--muted);stroke-width:1.2" marker-end="url(#arrE)"/>`;
+  });
+  s += T(34, 22, 'bone marrow', 'h') + T(540 - 34, 22, 'blood', 'h', 'end');
+  s += `<path class="grid dash" d="M${x0 + 4.5 * dx} 30 L${x0 + 4.5 * dx} 112"/>` + T(x0 + 4.5 * dx + 4, 108, 'nucleus out', 's');
+  const st = ERY[ES.s]; s += cellE(200, 180, st, false) + T(260, 172, st[0], 'b') + T(260, 192, st[2] ? 'nucleated' : 'no nucleus', 's');
+  $('ery-svg').innerHTML = s; $('ery-find').innerHTML = st[4];
+}
+Phys.stepper('ery-step', ERY.map(r => r[0]), drawEry, ES);
+Phys.key('ery-key', [['--baso', 'blue (basophilic) cytoplasm'], ['--rbc', 'haemoglobin'], ['--nucleus', 'nucleus'], ['--accent', 'this step']]);
+$('ery-note').innerHTML = ERY_NOTE;
+
+/* ---- EPO loop ---- */
+const EP = {k: 'norm'};
+function drawEpo() {
+  const [lab, o2, epo, mass, txt] = EPO[EP.k]; let s = Phys.arrowDef('arrL', 'var(--ink)');
+  const lvl = v => ['low', 'normal', 'high'][v];
+  const box = (x, y, w, h, t1, t2, fill) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" style="fill:${fill};stroke:var(--line);stroke-width:1.2"/>` + T(x + w / 2, y + 22, t1, 'b', 'middle') + T(x + w / 2, y + 40, t2, 's', 'middle');
+  s += box(20, 20, 210, 56, 'Kidney cortex', 'peritubular interstitial cells', 'var(--surface)');
+  s += box(310, 20, 210, 56, 'Bone marrow', 'erythroid progenitors', 'var(--surface)');
+  s += box(310, 200, 210, 56, 'Red cell mass', 'carries O₂', 'color-mix(in srgb, var(--rbc) 15%, var(--surface))');
+  s += box(20, 200, 210, 56, 'Oxygen delivered', 'sensed by the kidney (HIF)', 'var(--surface)');
+  const ar = (d, w) => `<path d="${d}" style="stroke:var(--ink);stroke-width:${w}" marker-end="url(#arrL)"/>`;
+  const wd = v => [1.2, 2.4, 4.6][v];
+  s += ar('M230 48 L306 48', wd(epo)) + T(268, 40, 'EPO', 'b', 'middle') + T(268, 66, lvl(epo), 's', 'middle');
+  s += ar('M415 78 L415 196', wd(mass)) + T(424, 140, 'red cells made', 's') + T(424, 156, lvl(mass), 's');
+  s += ar('M308 228 L234 228', wd(mass)) + T(270, 220, 'more O₂', 's', 'middle');
+  s += ar('M125 198 L125 80', 1.4) + T(116, 132, 'low O₂ → more EPO', 's', 'end') + T(116, 148, 'high O₂ → less', 's', 'end');
+  s += T(125, 280, `O₂ sensed: ${lvl(o2)}`, 'b', 'middle');
+  if (EP.k === 'ckd') s += `<path d="M40 30 L210 70 M210 30 L40 70" style="stroke:var(--clin);stroke-width:3;opacity:.8"/>` + T(125, 96, 'renal tissue lost', 'c', 'middle');
+  if (EP.k === 'pv') s += T(424, 100, 'JAK2 clone makes', 'c', 'start') + T(424, 116, 'red cells by itself', 'c', 'start');
+  $('epo-svg').innerHTML = s; $('epo-find').innerHTML = txt;
+}
+Phys.toggles('epo-tg', Object.entries(EPO).map(([k, v]) => [k, v[0]]), k => { EP.k = k; drawEpo(); }, 'norm');
+$('epo-text').innerHTML = EPO_TEXT; drawEpo();
+
+/* ---- red cell ---- */
+(function drawRbc() {
+  let s = Phys.arrowDef('arrR', 'var(--muted)');
+  s += `<circle cx="80" cy="80" r="56" class="rc"/><circle cx="80" cy="80" r="22" style="fill:var(--surface);opacity:.45"/>` + T(80, 14, 'from above', 's', 'middle');
+  s += `<path d="M180 80 C180 52 210 50 240 62 C258 69 282 69 300 62 C330 50 360 52 360 80 C360 108 330 110 300 98 C282 91 258 91 240 98 C210 110 180 108 180 80 Z" class="rc"/>` + T(270, 14, 'cut through (biconcave)', 's', 'middle');
+  s += `<path class="axis" d="M180 128 L360 128" marker-end="url(#arrR)" marker-start="url(#arrR)"/>` + T(270, 144, 'about 7.5 µm', 'm', 'middle');
+  s += `<path class="axis" d="M372 58 L372 102" marker-end="url(#arrR)" marker-start="url(#arrR)"/>` + T(366, 46, '2 µm', 'm', 'end');
+  const X = Phys.scale(0, 120, 30, 370);
+  s += `<rect x="30" y="196" width="340" height="12" rx="6" style="fill:var(--rbc);opacity:.6"/>`;
+  for (const d of [0, 30, 60, 90, 120]) s += `<path class="axis" d="M${X(d)} 208 L${X(d)} 214"/>` + T(X(d), 228, d, 's', 'middle');
+  s += T(30, 188, 'marrow → blood', 's') + T(370, 188, 'macrophages (spleen, liver)', 's', 'end') + T(200, 250, 'days in the circulation (about 120)', 's', 'middle');
+  $('rbc-svg').innerHTML = s;
+})();
+$('rbc-text').innerHTML = RBC_TEXT;
+
+/* ---- white cells: differential chart and cell drawing ---- */
+const WS = {sel: 'neu'};
+function cellW(k, cx, cy, R) {
+  let g = `<circle cx="${cx}" cy="${cy}" r="${R}" class="cyt"/>`;
+  const dots = (col, n, rr, spread) => { let d = ''; for (let i = 0; i < n; i++) { const a = i * 2.39996, rad = spread * Math.sqrt((i + 0.5) / n); d += `<circle cx="${(cx + rad * Math.cos(a)).toFixed(1)}" cy="${(cy + rad * Math.sin(a)).toFixed(1)}" r="${rr}" style="fill:${col}"/>`; } return d; };
+  if (k === 'neu') { g += dots('var(--muted)', 40, 1.1, R * 0.85); for (const [dx, dy] of [[-R * 0.38, -R * 0.15], [0, R * 0.25], [R * 0.4, -R * 0.12]]) g += `<circle cx="${cx + dx}" cy="${cy + dy}" r="${R * 0.24}" class="nuc"/>`; g += `<path d="M${cx - R * 0.38} ${cy - R * 0.15} L${cx} ${cy + R * 0.25} L${cx + R * 0.4} ${cy - R * 0.12}" style="fill:none;stroke:var(--nucleus);stroke-width:2"/>`; }
+  if (k === 'eos') { g += dots('var(--eosin)', 46, 2.6, R * 0.85); g += `<circle cx="${cx - R * 0.33}" cy="${cy}" r="${R * 0.3}" class="nuc"/><circle cx="${cx + R * 0.33}" cy="${cy}" r="${R * 0.3}" class="nuc"/><path d="M${cx - R * 0.1} ${cy} L${cx + R * 0.1} ${cy}" style="stroke:var(--nucleus);stroke-width:3"/>`; }
+  if (k === 'bas') { g += `<circle cx="${cx}" cy="${cy}" r="${R * 0.42}" class="nuc" style="opacity:.6"/>` + dots('var(--baso)', 34, 3.6, R * 0.82) + dots('var(--ink)', 14, 2.2, R * 0.7); }
+  if (k === 'lym') g = `<circle cx="${cx}" cy="${cy}" r="${R * 0.78}" class="cyt"/><circle cx="${cx}" cy="${cy}" r="${R * 0.66}" class="nuc"/>`;
+  if (k === 'mono') g += `<path d="M${cx - R * 0.55} ${cy - R * 0.25} C${cx - R * 0.5} ${cy - R * 0.65} ${cx + R * 0.5} ${cy - R * 0.65} ${cx + R * 0.55} ${cy - R * 0.25} C${cx + R * 0.6} ${cy + R * 0.3} ${cx + R * 0.15} ${cy + R * 0.5} ${cx} ${cy + R * 0.12} C${cx - R * 0.15} ${cy + R * 0.5} ${cx - R * 0.6} ${cy + R * 0.3} ${cx - R * 0.55} ${cy - R * 0.25} Z" class="nuc"/>`;
+  return g;
+}
+function drawDlc() {
+  const x0 = 150, x1 = 540, X = Phys.scale(0, 75, x0, x1); let s = '';
+  s += `<path class="axis" d="M${x0} 270 L${x1} 270"/>`;
+  for (const v of [0, 10, 20, 30, 40, 50, 60, 70]) s += `<path class="grid" d="M${X(v)} 30 L${X(v)} 270"/>` + T(X(v), 286, v, 's', 'middle');
+  s += T(x1, 298, '% of white cells', 's', 'end');
+  WBC.forEach(([k, name, r], i) => {
+    const y = 44 + i * 46, on = WS.sel === k;
+    s += `<g class="hit" data-k="${k}" tabindex="0" role="button" aria-label="${name}">`;
+    s += `<rect x="4" y="${y - 18}" width="${x1 - 2}" height="42" rx="6" style="fill:${on ? 'var(--bg)' : 'transparent'};stroke:${on ? 'var(--accent)' : 'transparent'};stroke-width:2"/>`;
+    s += T(12, y + 6, name, 'b');
+    const bar = (rg, dy, op, tag) => rg ? `<rect x="${X(rg[0])}" y="${y + dy - 4}" width="${Math.max(3, X(rg[1]) - X(rg[0]))}" height="8" rx="3" style="fill:var(--ink);opacity:${op}"/>` + T(Math.min(X(rg[1]) + 5, x1 - 10), y + dy + 4, tag, 's') : '';
+    s += bar(r.w, -9, 0.85, 'W') + bar(r.g, 3, 0.5, k === 'lym' ? 'S' : 'G') + bar(r.k, 15, 0.25, 'K') + '</g>';
+  });
+  $('dlc-svg').innerHTML = s;
+  $('dlc-svg').querySelectorAll('.hit').forEach(g => { const go = () => { WS.sel = g.dataset.k; drawDlc(); refocus('dlc-svg', WS.sel); }; g.onclick = go; g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }; });
+  const row = WBC.find(r => r[0] === WS.sel);
+  $('cell-svg').innerHTML = cellW(WS.sel, 70, 75, WS.sel === 'mono' ? 60 : WS.sel === 'lym' ? 44 : 54) + T(150, 70, row[1], 'b', 'start') + T(150, 88, 'schematic', 's', 'start');
+  $('dlc-find').innerHTML = row[4];
+}
+drawDlc();
+Phys.key('dlc-key', [['var(--ink)', 'W = Wikipedia', 'opacity:.85'], ['var(--ink)', 'G = Gray 1918 · S = StatPearls', 'opacity:.5'], ['var(--ink)', 'K = Korean reference study (ages 15–99)', 'opacity:.25']]);
+$('wbc-text').innerHTML = WBC_TEXT;
+
+/* ---- granulopoiesis ---- */
+const GS = {s: 0};
+function drawGran() {
+  const [lab, shape, gr, txt] = GRAN[GS.s]; let s = ''; const cx = 80, cy = 75, R = 56 - GS.s * 3;
+  s += `<circle cx="${cx}" cy="${cy}" r="${R}" class="cyt"/>`;
+  for (let i = 0; i < (gr ? 40 : 0); i++) { const a = i * 2.39996, rad = R * 0.85 * Math.sqrt((i + 0.5) / 40); s += `<circle cx="${(cx + rad * Math.cos(a)).toFixed(1)}" cy="${(cy + rad * Math.sin(a)).toFixed(1)}" r="${gr === 1 ? 2.2 : 1.3}" style="fill:${gr === 1 ? 'var(--ink)' : 'var(--muted)'}"/>`; }
+  if (shape === 'round') s += `<circle cx="${cx}" cy="${cy}" r="${R * 0.7}" class="nuc"/>`;
+  if (shape === 'oval') s += `<ellipse cx="${cx - 4}" cy="${cy}" rx="${R * 0.55}" ry="${R * 0.45}" class="nuc"/>`;
+  if (shape === 'kidney') s += `<path d="M${cx - R * 0.5} ${cy - R * 0.2} C${cx - R * 0.45} ${cy - R * 0.6} ${cx + R * 0.45} ${cy - R * 0.6} ${cx + R * 0.5} ${cy - R * 0.2} C${cx + R * 0.55} ${cy + R * 0.35} ${cx + R * 0.15} ${cy + R * 0.45} ${cx} ${cy + R * 0.05} C${cx - R * 0.15} ${cy + R * 0.45} ${cx - R * 0.55} ${cy + R * 0.35} ${cx - R * 0.5} ${cy - R * 0.2} Z" class="nuc"/>`;
+  if (shape === 'band') s += `<path d="M${cx - R * 0.5} ${cy + R * 0.3} C${cx - R * 0.6} ${cy - R * 0.55} ${cx + R * 0.6} ${cy - R * 0.55} ${cx + R * 0.5} ${cy + R * 0.3}" style="fill:none;stroke:var(--nucleus);stroke-width:${R * 0.22}"/>`;
+  if (shape === 'seg') { for (const [dx, dy] of [[-R * 0.4, R * 0.1], [0, -R * 0.3], [R * 0.4, R * 0.1]]) s += `<circle cx="${cx + dx}" cy="${cy + dy}" r="${R * 0.22}" class="nuc"/>`; s += `<path d="M${cx - R * 0.4} ${cy + R * 0.1} L${cx} ${cy - R * 0.3} L${cx + R * 0.4} ${cy + R * 0.1}" style="fill:none;stroke:var(--nucleus);stroke-width:2"/>`; }
+  s += T(160, 62, lab, 'b') + T(160, 82, ['no granules', 'primary (azurophilic) granules', 'specific granules', 'specific granules', 'specific granules', 'specific granules'][GS.s], 's') + T(160, 100, 'schematic', 's');
+  $('gran-svg').innerHTML = s; $('gran-find').innerHTML = txt + (GS.s === GRAN.length - 1 ? GRAN_NOTE : '');
+}
+Phys.stepper('gran-step', GRAN.map(r => r[0]), drawGran, GS);
+Phys.micro('wbc-micro', Object.assign({}, IMG.eos, {credit: Phys.credit(IMG.eos.credit)}));
+
+/* ---- platelets ---- */
+Phys.micro('plt-micro', Object.assign({}, IMG.mk, {credit: Phys.credit(IMG.mk.credit)}));
+$('plt-text').innerHTML = PLT_TEXT;
+Phys.swipeHints();
+</script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Immunity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+/* page-only classes; colours are the shared physiology tokens in ../assets/phys.css */
+svg.sch .hc{fill:color-mix(in srgb, var(--ink) 30%, var(--surface));stroke:var(--ink);stroke-width:1.2}
+svg.sch .lc{fill:var(--surface);stroke:var(--ink);stroke-width:1.2}
+svg.sch .cell{fill:var(--cyto);stroke:var(--muted);stroke-width:1}
+svg.sch .nuc{fill:var(--nucleus)}
+svg.sch .box{fill:var(--bg);stroke:var(--line);stroke-width:1.2}
+svg.sch .boxon{fill:var(--bg);stroke:var(--mark);stroke-width:2.6}
+#ab-svg{max-width:520px} #resp-svg{max-width:620px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 02: <a href="blood-cells.html">Blood and its cells</a> · <a href="haemoglobin-anaemia.html">Haemoglobin and anaemia</a> · <a href="haemostasis-blood-groups.html">Haemostasis, blood groups, tests</a> · <span aria-current="page">Immunity</span></span></nav>
+
+<header class="stack">
+  <h1>Immunity: Innate and Adaptive, T and B Cells, Antibodies</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-two">Innate vs adaptive</a> <a href="#h-adapt">An adaptive response</a> <a href="#h-ab">Antibodies</a> <a href="#h-resp">Primary and secondary response</a> <a href="#h-comp">Complement</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-two">
+  <h2 id="h-two">Innate and adaptive immunity</h2>
+  <div class="scroll"><table id="two-table"></table></div>
+  <div class="prose" id="two-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-adapt">
+  <h2 id="h-adapt">An adaptive response, step by step</h2>
+  <div class="step" id="ad-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ad-svg" viewBox="0 0 560 270" role="img" aria-label="Antigen-presenting cell showing peptide on MHC class II to a CD4 helper T cell, which helps a B cell become an antibody-secreting plasma cell and helps CD8 cytotoxic T cells, which kill an infected cell showing peptide on MHC class I"></svg></div>
+    <div class="prose find" id="ad-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="ad-key"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ab">
+  <h2 id="h-ab">Antibodies (immunoglobulins)</h2>
+  <div class="chips" id="ab-tg" aria-label="Class"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ab-svg" viewBox="0 0 420 300" role="img" aria-label="Antibody drawn as a Y of two heavy and two light chains joined by disulfide bonds, two Fab arms that bind antigen and an Fc stem; IgM shown as a pentamer and IgA as a dimer with the J chain"></svg></div>
+    <div class="prose find" id="ab-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="ab-key"></div>
+  <div class="scroll"><table id="ab-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-resp">
+  <h2 id="h-resp">Primary and secondary responses; active and passive immunity</h2>
+  <div class="chips" id="resp-tg" aria-label="Exposure"></div>
+  <div class="schbox"><svg class="fig sch" id="resp-svg" viewBox="0 0 600 250" role="img" aria-label="Schematic antibody level against time after a first and a second exposure: the first response is slow and mainly IgM, the second faster and larger and mainly IgG"></svg></div>
+  <div class="prose" id="resp-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-comp">
+  <h2 id="h-comp">Complement</h2>
+  <div class="prose" id="comp-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio2.md, Part D; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Compare the two arms of immunity, follow an antigen from the antigen-presenting cell to antibodies and killer T cells, take an antibody apart class by class, and see why a second exposure (or a vaccine booster) gives a faster, bigger response. The white cells themselves: <a href="blood-cells.html#h-wbc">Blood and its cells</a>.';
+
+const TWO = [['', 'Innate', 'Adaptive'], [
+  ['Specificity', 'non-specific: broad categories of pathogen', 'antigen-specific'],
+  ['Speed', 'immediate — minutes to hours', 'lag before the maximal response'],
+  ['Memory', 'none', 'yes: faster, stronger response next time'],
+  ['Parts', 'barriers (skin, mucous membranes, secretions, lysozyme), complement, phagocytes (neutrophils, macrophages), dendritic cells, mast cells, basophils, eosinophils, NK cells', 'lymphocytes: B cells (antibodies, humoral) and T cells (cell-mediated)'],
+]];
+const TWO_TEXT = '<p>Behind the physical and chemical <b>barriers</b> the immune system has two lines of defence (a 2018 review, StatPearls). <b>Innate</b> immunity acts at once and in the same way every time; <b>adaptive</b> immunity recognises a particular antigen, takes time the first time and <b>remembers</b>. They work together: complement and antibodies link them.</p><p><b>Natural killer (NK) cells</b> are innate lymphocytes that kill virus-infected and tumour cells, releasing perforin and granzyme to trigger apoptosis (StatPearls, Wikipedia); Wikipedia: they recognise stressed cells that have lost MHC class I.</p><p><b>Where lymphocytes mature:</b> B cells in the <b>bone marrow</b>; T cells start in the marrow and mature in the <b>thymus</b> (a 2018 review, StatPearls, Wikipedia).</p>';
+
+/* adaptive steps: [label, highlighted box, text] */
+const AD = [
+  ['Antigen presented', 'apc', '<h3>1 · An antigen-presenting cell shows the antigen</h3><p>An antigen-presenting cell shows peptides from an extracellular (exogenous) antigen on <b>MHC class II</b>. T cells cannot recognise free antigen — only peptide bound to MHC (StatPearls).</p>'],
+  ['CD4 helper T', 'th', '<h3>2 · A CD4⁺ helper T cell recognises it</h3><p>Its T-cell receptor binds the peptide–MHC II complex. Activated helper cells release <b>cytokines</b> that steer B cells and boost cytotoxic T cells. Subsets: Th1 (intracellular pathogens), Th2 (extracellular parasites), Th17, follicular helpers for B cells, and <b>regulatory T cells</b> that keep self-tolerance (a 2014 review).</p>'],
+  ['B → plasma cell', 'b', '<h3>3 · B cell → plasma cell → antibodies (humoral immunity)</h3><p>A B cell whose receptor binds the antigen multiplies and becomes an <b>antibody-secreting plasma cell</b>; some become <b>memory B cells</b>.</p>'],
+  ['CD8 cytotoxic T', 'tc', '<h3>4 · CD8⁺ cytotoxic T cells kill infected cells (cell-mediated immunity)</h3><p>Every nucleated cell shows peptides from inside it on <b>MHC class I</b>. A CD8⁺ cell whose receptor fits kills the virus-infected or tumour cell by <b>apoptosis</b>.</p>'],
+];
+const AD_TEXT_MHC = '<p class="muted">MHC (HLA, on chromosome 6p, StatPearls): class I (HLA-A, B, C) on all nucleated cells presents endogenous peptides to CD8 cells; class II (HLA-DP, DQ, DR) on antigen-presenting cells presents exogenous peptides to CD4 cells (a 2018 review, StatPearls, Wikipedia).</p>';
+
+/* antibody classes: [key, label, units (1 monomer, 2 dimer, 5 pentamer), text] */
+const AB = {
+  G: ['IgG', 1, '<h3>IgG — monomer</h3><p>The commonest antibody in blood (Wikipedia: about 75%); the main antibody of the <b>secondary response</b>; the <b>only class that crosses the placenta</b> (via the FcRn receptor), protecting the newborn (a 2018 review, a 2019 review, Wikipedia). Neutralises toxins and viruses, coats (opsonises) antigen, fixes complement. Anti-D (Rh) is IgG.</p>'],
+  M: ['IgM', 5, '<h3>IgM — pentamer with a J chain</h3><p>The <b>first antibody</b> made in a primary response; the largest antibody; secreted IgM is mostly a <b>pentamer</b> (StatPearls, Wikipedia, two reviews). Fixes complement (a 2018 review). Naive B cells carry IgM as their receptor. Anti-A and anti-B are mainly IgM.</p>'],
+  A: ['IgA', 2, '<h3>IgA — dimer with a J chain (secretory IgA)</h3><p>The antibody of <b>mucous membranes</b> — gut, airways, urogenital tract (StatPearls, Wikipedia); Wikipedia adds secretions such as tears, saliva and colostrum, and that the dimer with its secretory component is secretory IgA. StatPearls: the second most abundant immunoglobulin. Breast-milk IgA protects the neonate (Wikipedia).</p>'],
+  E: ['IgE', 1, '<h3>IgE — on mast cells and basophils</h3><p>Mostly bound to <b>mast cells and basophils</b> through the high-affinity receptor FcεRI; cross-linking by antigen causes <b>immediate (type I) hypersensitivity</b> — allergy, anaphylaxis. Also defends against <b>parasitic worms</b> (StatPearls, Wikipedia).</p>'],
+  D: ['IgD', 1, '<h3>IgD</h3><p>Function unclear; appears to be involved in homeostasis (a 2018 review).</p>'],
+};
+const AB_TABLE = [['Class', 'Form', 'Remember'], [
+  ['IgG', 'monomer', 'most abundant; secondary response; crosses the placenta'],
+  ['IgM', 'pentamer (J chain)', 'first in the primary response; ABO antibodies'],
+  ['IgA', 'dimer in secretions (J chain)', 'mucosal and secretory immunity; breast milk'],
+  ['IgE', 'bound to mast cells and basophils', 'allergy (type I), parasites'],
+  ['IgD', '—', 'function unclear (one review)'],
+]];
+
+const RESP_TEXT = '<p><b>Primary response</b> (first exposure): a lag, then a modest rise, mostly <b>IgM</b>. <b>Secondary response</b> (re-exposure): memory B and T cells give a <b>faster, larger</b> response, mostly <b>IgG</b> (a 2018 review, StatPearls, Wikipedia). The curve above is schematic, without times or titres.</p><p><b>Active immunity</b> = the body\'s own specific response to an antigen — after infection or a <b>vaccine</b>; it has memory (StatPearls). <b>Passive immunity</b> = ready-made antibodies transferred from someone else: from mother to fetus across the placenta (IgG) and in breast milk, or given as immunoglobulin, such as anti-D; it makes no memory cells and lasts days to months (a 2018 review; duration: Wikipedia).</p>';
+const COMP_TEXT = '<p><b>Complement</b> is a cascade of plasma proteins (mostly C1–C9). Three pathways start it: the <b>classical</b> pathway (triggered by antibody — the link to adaptive immunity), the <b>alternative</b> and the <b>lectin</b> pathways; StatPearls: all of them convert <b>C3 to C3a and C3b</b>. Effects: <b>opsonisation</b> (coating microbes for phagocytes), <b>inflammation</b> that draws in more phagocytes, and the <b>membrane attack complex</b> that punches holes and lyses the cell (StatPearls, Wikipedia, a 2018 review). Complement-mediated lysis is how an ABO-incompatible transfusion destroys red cells (Wikipedia; <a href="haemostasis-blood-groups.html#h-tx">Transfusion</a>).</p>';
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews: "An introduction to immunology and immunopathology" (Allergy Asthma Clin Immunol 2018), antibody structure and function (2019), plasticity of CD4 T-cell subsets (2014) (Europe PMC); Wikipedia (articles checked for OpenStax: none of those used cites it).';
+const MODELS = '<b>Models used:</b> all drawings are schematic: the antibody is a simplified Y (domains not drawn), the cell diagram is not to scale, and the response curves show shape only.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+Phys.table('two-table', TWO[0], TWO[1]); $('two-text').innerHTML = TWO_TEXT;
+
+/* ---- adaptive response ---- */
+const ADS = {s: 0};
+function drawAd() {
+  const on = AD[ADS.s][1]; let s = Phys.arrowDef('arrA', 'var(--ink)');
+  const cell = (k, x, y, r, t1, t2) => `<circle cx="${x}" cy="${y}" r="${r}" class="cell" style="${on === k ? 'stroke:var(--mark);stroke-width:3' : ''}"/><circle cx="${x}" cy="${y}" r="${r * 0.5}" class="nuc"/>` + T(x, y + r + 16, t1, 'b', 'middle') + T(x, y + r + 31, t2, 's', 'middle');
+  s += cell('apc', 70, 90, 34, 'antigen-presenting', 'cell (MHC II)');
+  s += cell('th', 230, 90, 26, 'CD4⁺ helper T', 'TCR + CD4');
+  s += cell('b', 390, 60, 24, 'B cell', '→ plasma cell');
+  s += cell('tc', 390, 190, 24, 'CD8⁺ cytotoxic T', 'TCR + CD8');
+  s += `<circle cx="510" cy="190" r="26" class="cell" style="opacity:.6"/>` + T(510, 232, 'infected cell', 'b', 'middle') + T(510, 247, '(MHC I)', 's', 'middle');
+  s += `<rect x="98" y="80" width="12" height="20" rx="3" style="fill:var(--ink)"/>` + T(104, 40, 'peptide on MHC II', 's', 'middle') + `<path class="lead" d="M104 44 L104 78"/>`;
+  const ar = (d, k) => `<path d="${d}" style="fill:none;stroke:var(--ink);stroke-width:${ADS.s >= k ? 2 : 1};opacity:${ADS.s >= k ? 1 : 0.3}" marker-end="url(#arrA)"/>`;
+  s += ar('M112 90 L198 90', 1) + ar('M256 80 L360 62', 2) + T(300, 58, 'cytokines', 's', 'middle') + ar('M252 108 L366 180', 3);
+  if (ADS.s >= 2) for (let i = 0; i < 5; i++) { const x = 440 + i * 20, y = 40; s += `<path d="M${x} ${y + 10} L${x} ${y} L${x - 6} ${y - 7} M${x} ${y} L${x + 6} ${y - 7}" style="fill:none;stroke:var(--ink);stroke-width:1.8"/>`; }
+  if (ADS.s >= 2) s += T(480, 70, 'antibodies', 's', 'middle');
+  s += ar('M416 190 L480 190', 3) + (ADS.s >= 3 ? T(448, 180, 'kills', 'b', 'middle') : '');
+  $('ad-svg').innerHTML = s; $('ad-find').innerHTML = AD[ADS.s][2] + AD_TEXT_MHC;
+}
+Phys.stepper('ad-step', AD.map(r => r[0]), drawAd, ADS);
+Phys.key('ad-key', [['--cyto', 'cell'], ['--nucleus', 'nucleus'], ['--mark', 'this step']]);
+
+/* ---- antibody ---- */
+const ABS = {k: 'G'};
+function yShape(cx, cy, k, labels) {
+  /* heavy chains: stem + inner arms; light chains: outer arms (k = scale) */
+  let g = '';
+  g += `<path d="M${cx - 9 * k} ${cy + 70 * k} L${cx - 9 * k} ${cy} L${cx - 52 * k} ${cy - 60 * k} L${cx - 38 * k} ${cy - 70 * k} L${cx} ${cy - 16 * k} L${cx} ${cy + 70 * k} Z" class="hc"/>`;
+  g += `<path d="M${cx + 9 * k} ${cy + 70 * k} L${cx + 9 * k} ${cy} L${cx + 52 * k} ${cy - 60 * k} L${cx + 38 * k} ${cy - 70 * k} L${cx} ${cy - 16 * k} L${cx} ${cy + 70 * k} Z" class="hc"/>`;
+  g += `<path d="M${cx - 60 * k} ${cy - 52 * k} L${cx - 30 * k} ${cy - 12 * k} L${cx - 20 * k} ${cy - 22 * k} L${cx - 50 * k} ${cy - 62 * k} Z" class="lc"/>`;
+  g += `<path d="M${cx + 60 * k} ${cy - 52 * k} L${cx + 30 * k} ${cy - 12 * k} L${cx + 20 * k} ${cy - 22 * k} L${cx + 50 * k} ${cy - 62 * k} Z" class="lc"/>`;
+  g += `<path d="M${cx - 8 * k} ${cy + 6 * k} L${cx + 8 * k} ${cy + 6 * k} M${cx - 8 * k} ${cy + 14 * k} L${cx + 8 * k} ${cy + 14 * k}" style="stroke:var(--ink);stroke-width:${2 * k}"/>`;
+  if (labels) {
+    g += `<path class="lead" d="M${cx - 50 * k} ${cy - 60 * k} L${cx - 90} ${cy - 92}"/>` + T(cx - 92, cy - 96, 'antigen-binding tip (variable)', 's', 'middle');
+    g += T(cx - 108, cy - 20, 'light chain', 's', 'end') + `<path class="lead" d="M${cx - 45 * k} ${cy - 37 * k} L${cx - 104} ${cy - 24}"/>`;
+    g += T(cx + 100, cy - 20, 'heavy chain', 's', 'start') + `<path class="lead" d="M${cx + 25 * k} ${cy - 20 * k} L${cx + 96} ${cy - 24}"/>`;
+    g += T(cx + 22, cy + 10, 'disulfide bonds', 's', 'start') + T(cx + 18 * k, cy + 60 * k, 'Fc stem', 'b', 'start') + T(cx - 78, cy - 70, 'Fab', 'b', 'end') + T(cx + 78, cy - 70, 'Fab', 'b', 'start');
+  }
+  return g;
+}
+function drawAb() {
+  const [lab, n, txt] = AB[ABS.k]; let s = '';
+  if (n === 1) s += yShape(210, 150, 1.3, true);
+  else if (n === 2) { s += `<g transform="rotate(-90 120 150)">${yShape(120, 150, 0.9, false)}</g><g transform="rotate(90 300 150)">${yShape(300, 150, 0.9, false)}</g>`; s += `<path d="M183 150 L237 150" style="stroke:var(--ink);stroke-width:3"/><circle cx="210" cy="150" r="8" style="fill:var(--ink)"/>` + `<path class="lead" d="M210 160 L210 222"/>` + T(210, 236, 'J chain joins the Fc stems', 's', 'middle'); }
+  else { for (let i = 0; i < 5; i++) { const a = -Math.PI / 2 + i * 2 * Math.PI / 5; s += `<g transform="rotate(${(a * 180 / Math.PI + 90).toFixed(1)} 210 150)">${yShape(210, 70, 0.6, false)}</g>`; } s += `<circle cx="210" cy="150" r="7" style="fill:var(--ink)"/>` + `<path class="lead" d="M216 156 L330 262"/>` + T(334, 270, 'J chain', 's'); }
+  s += T(210, 290, lab, 'b', 'middle');
+  $('ab-svg').innerHTML = s; $('ab-find').innerHTML = (n === 1 && ABS.k === 'G' ? '<p>Each antibody is a <b>Y</b> of <b>two identical heavy chains and two identical light chains</b> joined by disulfide bonds. The two <b>Fab</b> arms carry identical antigen-binding sites at their variable tips; the <b>Fc</b> stem binds receptors and complement and decides what the antibody does (a 2019 review, Wikipedia). There are five classes: IgG, IgA, IgM, IgE, IgD (StatPearls, Wikipedia).</p>' : '') + txt;
+}
+Phys.toggles('ab-tg', Object.entries(AB).map(([k, v]) => [k, v[0]]), k => { ABS.k = k; drawAb(); }, 'G');
+Phys.key('ab-key', [['color-mix(in srgb, var(--ink) 30%, var(--surface))', 'heavy chain'], ['var(--surface)', 'light chain']]);
+Phys.table('ab-table', AB_TABLE[0], AB_TABLE[1]); drawAb();
+
+/* ---- responses ---- */
+const RS = {k: 'both'};
+function drawResp() {
+  const x0 = 50, x1 = 580, y0 = 20, y1 = 200, X = Phys.scale(0, 100, x0, x1); let s = Phys.arrowDef('arrR', 'var(--ink)');
+  s += `<path class="axis" d="M${x0} ${y0} L${x0} ${y1} L${x1} ${y1}"/>` + T(x0 + 6, y0 + 10, 'antibody', 's', 'start') + T(x1, y1 + 32, 'time → (schematic)', 's', 'end');
+  const bump = (t0, lag, peak, w) => t => { const u = (t - t0 - lag) / w; return u <= 0 ? 0 : peak * u * u * Math.exp(2 * (1 - u)); };
+  const igm1 = bump(5, 6, 0.35, 6), igg1 = bump(5, 10, 0.25, 9), igm2 = bump(55, 3, 0.3, 4), igg2 = bump(55, 3, 0.8, 9);
+  const line = (f, dash) => { const pts = []; for (let t = 0; t <= 100; t += 0.5) pts.push([X(t), y1 - (y1 - y0) * f(t)]); return `<path d="${Phys.path(pts)}" class="trace" style="${dash}"/>`; };
+  const show1 = RS.k !== 'second', show2 = RS.k !== 'first';
+  if (show1) s += line(igm1, 'stroke-dasharray:6 4') + line(igg1, '');
+  if (show2) s += line(t => t < 55 ? 0 : igm2(t), 'stroke-dasharray:6 4') + line(t => t < 55 ? 0 : igg2(t), '');
+  s += `<path d="M${X(5)} ${y1 + 4} L${X(5)} ${y1 - 8}" style="stroke:var(--mark);stroke-width:3"/>` + T(X(5), y1 + 18, '1st exposure', 's', 'middle');
+  s += `<path d="M${X(55)} ${y1 + 4} L${X(55)} ${y1 - 8}" style="stroke:var(--mark);stroke-width:3"/>` + T(X(55), y1 + 18, '2nd exposure', 's', 'middle');
+  s += T(X(18), y0 + 100, 'primary: mostly IgM', 's', 'middle') + T(x1, y0 + 70, 'secondary: faster, larger,', 's', 'end') + T(x1, y0 + 86, 'mostly IgG', 's', 'end');
+  s += `<path d="M${x1 - 150} ${y0 + 40} l30 0" class="trace" style="stroke-dasharray:6 4"/>` + T(x1 - 114, y0 + 44, 'IgM', 's') + `<path d="M${x1 - 70} ${y0 + 40} l30 0" class="trace"/>` + T(x1 - 34, y0 + 44, 'IgG', 's');
+  $('resp-svg').innerHTML = s;
+}
+Phys.toggles('resp-tg', [['first', 'First exposure'], ['second', 'Second exposure'], ['both', 'Both']], k => { RS.k = k; drawResp(); }, 'both');
+$('resp-text').innerHTML = RESP_TEXT; drawResp();
+$('comp-text').innerHTML = COMP_TEXT;
+Phys.swipeHints();
+</script>
+</body>
+</html>

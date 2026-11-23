@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Haemoglobin, Jaundice and Anaemia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+/* page-only classes; colours are the shared physiology tokens in ../assets/phys.css */
+svg.sch .chainA{fill:var(--surface);stroke:var(--ink);stroke-width:1.6}
+svg.sch .chainB{fill:color-mix(in srgb, var(--ink) 16%, var(--surface));stroke:var(--ink);stroke-width:1.6}
+svg.sch .haem{fill:var(--rbc);stroke:var(--ink);stroke-width:.8}
+svg.sch .comp{fill:var(--bg);stroke:var(--line);stroke-width:1.4}
+svg.sch .compon{fill:var(--bg);stroke:var(--mark);stroke-width:2.6}
+svg.sch .mito{fill:color-mix(in srgb, var(--ink) 7%, var(--surface));stroke:var(--muted);stroke-width:1.2}
+svg.sch .pill{fill:var(--surface);stroke:var(--muted);stroke-width:1}
+.calc-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.calc-out div{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px}
+.calc-out b{display:block;font:700 20px var(--f-mono)}
+.calc-out .f{font:500 11.5px var(--f-mono);color:var(--muted)}
+.ok2{font-weight:600} .one{color:var(--muted);font-size:12px}
+#hb-svg{max-width:420px} #poly-svg{max-width:420px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 02: <a href="blood-cells.html">Blood and its cells</a> · <span aria-current="page">Haemoglobin and anaemia</span> · <a href="haemostasis-blood-groups.html">Haemostasis, blood groups, tests</a> · <a href="immunity.html">Immunity</a></span></nav>
+
+<header class="stack">
+  <h1>Haemoglobin, Bilirubin and Jaundice, Anaemia and Polycythaemia</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-hb">Haemoglobin and its types</a> <a href="#h-syn">Haem synthesis</a> <a href="#h-bili">Breakdown, bilirubin, jaundice</a> <a href="#h-anaem">Anaemia and red-cell indices</a> <a href="#h-poly">Polycythaemia</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-hb">
+  <h2 id="h-hb">Haemoglobin: four chains, four haems</h2>
+  <div class="chips" id="hb-tg" aria-label="Haemoglobin type"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="hb-svg" viewBox="0 0 360 290" role="img" aria-label="Haemoglobin as a tetramer: two alpha chains and two partner chains (beta in HbA, delta in HbA2, gamma in HbF, sickle beta in HbS), each holding one haem with ferrous iron"></svg></div>
+    <div class="prose find" id="hb-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="hb-table"></table></div>
+  <div class="prose" id="hb-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-syn">
+  <h2 id="h-syn">Haem synthesis, step by step</h2>
+  <div class="step" id="syn-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="syn-svg" viewBox="0 0 540 270" role="img" aria-label="An erythroid precursor with a mitochondrion: ALA is made in the mitochondrion, the middle steps run partly in the cytosol, iron is put into protoporphyrin IX back in the mitochondrion, and haem joins globin chains made on cytosolic ribosomes"></svg></div>
+    <div class="prose find" id="syn-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="syn-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-bili">
+  <h2 id="h-bili">Breakdown of haemoglobin, bilirubin and the three jaundices</h2>
+  <div class="chips" id="jx-tg" aria-label="Jaundice type"></div>
+  <div class="step" id="bili-step"></div>
+  <div class="schbox"><svg class="fig sch" id="bili-svg" viewBox="0 0 660 340" role="img" aria-label="Bilirubin pathway from macrophage to blood, liver, gut and kidney, with the step chosen marked; a jaundice type marks where the pathway is overloaded or blocked"></svg></div>
+  <div class="two">
+    <div class="prose find" id="bili-find" aria-live="polite"></div>
+    <div class="stack"><div class="scroll"><table id="lab-table"></table></div><p class="muted" id="lab-note"></p></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-anaem">
+  <h2 id="h-anaem">Anaemia: cut-offs, red-cell indices and the MCV classes</h2>
+  <div class="prose" id="who-text"></div>
+  <div class="scroll"><table id="who-table"></table></div>
+  <h3>Red-cell indices calculator</h3>
+  <div class="chips" id="ri-pre" aria-label="Example"></div>
+  <div class="chips" id="ri-sex" aria-label="Person"></div>
+  <div class="sliders" id="ri-sl"></div>
+  <div class="calc-out" id="ri-out" aria-live="polite"></div>
+  <div class="schbox"><svg class="fig sch" id="mcv-svg" viewBox="0 0 560 120" role="img" aria-label="MCV scale from 50 to 140 femtolitres with the microcytic (below 80), normocytic (80 to 100) and macrocytic (above 100) zones and the calculated MCV marked"></svg></div>
+  <div class="prose find" id="ri-find" aria-live="polite"></div>
+  <p class="muted" id="ri-note"></p>
+  <div class="two" id="anaem-micro"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-poly">
+  <h2 id="h-poly">Polycythaemia</h2>
+  <div class="chips" id="poly-tg" aria-label="Kind"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="poly-svg" viewBox="0 0 360 250" role="img" aria-label="Two spun tubes, normal and the chosen kind of polycythaemia, comparing red cell and plasma volumes, with the erythropoietin level"></svg></div>
+    <div class="prose find" id="poly-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="poly-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio2.md, Parts B and E; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Swap the partner chain of haemoglobin, build haem in the mitochondrion, follow bilirubin from the spleen to the stool and urine and switch on each kind of jaundice to see where it breaks and what the lab shows, then put a blood count into the red-cell indices calculator. Where the cells are made: <a href="blood-cells.html">Blood and its cells</a>.';
+
+/* haemoglobin types: [key, chip, partner chain label, adult share, text] */
+const HB = {
+  A: ['HbA', 'β', 'about 97% (Wikipedia; "over 95%" in another article)', '<h3>HbA — α₂β₂, the adult haemoglobin</h3><p>A <b>tetramer of four globin chains</b>, two α and two β. Each chain holds one <b>haem</b>: a protoporphyrin ring with <b>ferrous iron (Fe²⁺)</b> that binds one O₂, so one molecule carries up to <b>four O₂</b>. α-globin genes are on <b>chromosome 16</b>, β on <b>chromosome 11</b>.</p>'],
+  A2: ['HbA2', 'δ', '1.5–3.5% (Wikipedia); 1.5–3.1% (another Wikipedia article); "less than 3%" (a 2015 review)', '<h3>HbA2 — α₂δ₂</h3><p>A small normal fraction after infancy. It is <b>raised in β-thalassaemia trait</b>, which is why HbA2 is measured when screening for carriers (Wikipedia, a 2015 review).</p>'],
+  F: ['HbF', 'γ', 'under 1% after the first year (Wikipedia; "very low levels" a year after birth, a 2022 review)', '<h3>HbF — α₂γ₂, fetal haemoglobin</h3><p>The main haemoglobin of the fetus, made from about 10–12 weeks of pregnancy through the first 6 months after birth (StatPearls). It has a <b>higher oxygen affinity</b> than HbA (two reviews, Wikipedia), so the fetus can take oxygen from maternal blood: its dissociation curve lies to the left (Wikipedia), which ascribes this to 2,3-BPG binding HbA more than HbF. At birth HbF is 70–90% of the haemoglobin (one review).</p>'],
+  S: ['HbS', 'βˢ', 'replaces HbA in sickle cell disease', '<h3>HbS — α₂βˢ₂, sickle haemoglobin</h3><p>A point mutation in the β-globin gene puts <b>valine in place of glutamic acid at position 6</b>. When <b>deoxygenated</b>, HbS <b>polymerises</b> and the red cell sickles: chronic haemolysis and vaso-occlusion. <b>HbF protects</b>: it dilutes HbS and stays out of the polymer (one review). Sickle cells may survive only 10–20 days (one review). The mutation as a missense example: <a href="../../anatomy/genetics/aberrations-clinical.html#h-var">Genetics</a>.</p>'],
+};
+const HB_TABLE = [['Type', 'Chains', 'Share in adults', 'Point to remember'], [
+  ['HbA', 'α₂β₂', 'about 97% (Wikipedia)', 'the adult haemoglobin'],
+  ['HbA2', 'α₂δ₂', 'about 1.5–3.5% (sources differ)', 'raised in β-thalassaemia trait'],
+  ['HbF', 'α₂γ₂', 'under 1% after year 1', 'higher O₂ affinity; main fetal Hb; reduces sickling'],
+  ['HbS', 'α₂βˢ₂', '—', 'β6 Glu → Val; polymerises when deoxygenated'],
+]];
+const HB_TEXT = '<p><b>Thalassaemias</b> are a shortfall of a globin chain: too little α (α-thalassaemia) or β (β-thalassaemia); in β-thalassaemia unpaired α chains form unstable tetramers that kill developing red cells (a 2018 review). They cause a <a href="#h-anaem">microcytic, hypochromic anaemia</a>.</p><p class="muted">The oxygen–haemoglobin dissociation curve belongs to respiration and will be covered there. Here only: HbF shifts it to the left (Wikipedia). Haemoglobin carries about 98% of the blood\'s oxygen (StatPearls; Wikipedia 98.5%); 1.34 mL O₂ per gram (Wikipedia).</p>';
+
+/* haem synthesis steps: [label, where (mito|cyto|both|cell), text] */
+const SYN = [
+  ['ALA synthase', 'mito', '<h3>1 · Glycine + succinyl-CoA → δ-aminolevulinic acid (ALA)</h3><p>In the <b>mitochondrion</b>. <b>ALA synthase</b> is the <b>first and rate-limiting enzyme</b> (three reviews, Wikipedia). Haem itself damps it down (Wikipedia); in erythroid cells low iron stops ALAS2 being translated (one review).</p>'],
+  ['Middle steps', 'both', '<h3>2 · ALA → the porphyrin ring</h3><p>The pathway has <b>eight enzymatic steps</b> shared between the <b>mitochondria and the cytosol</b> (StatPearls, two reviews). The middle steps build the porphyrin ring, partly in the cytosol.</p>'],
+  ['Protoporphyrin IX', 'mito', '<h3>3 · Protoporphyrin IX</h3><p>The finished ring, back in the mitochondrion, ready for iron.</p>'],
+  ['Ferrochelatase', 'mito', '<h3>4 · Ferrochelatase puts Fe²⁺ into protoporphyrin IX → haem</h3><p>The last enzyme, inside the mitochondrion (one review). When iron is short it inserts <b>zinc</b> instead: raised zinc protoporphyrin in iron deficiency (two reviews).</p>'],
+  ['Haem + globin', 'cell', '<h3>5 · Haem + globin → haemoglobin</h3><p><b>Globin chains</b> are made on ribosomes in the <b>cytosol</b>; haem switches on globin-gene transcription (StatPearls). Two α + two β chains, each with a haem, make HbA.</p>'],
+];
+const SYN_NOTE = 'Schematic cell, not to scale. Defects in the pathway cause the porphyrias and sideroblastic anaemias (StatPearls). Which of the middle steps happen in the cytosol is not drawn: we found no two open sources for the exact split.';
+
+/* bilirubin pathway steps: [label, compartment highlighted, text] */
+const BILI = [
+  ['Old red cell', 'mac', '<h3>1 · Old red cells are eaten by macrophages</h3><p>Senescent red cells are taken up by macrophages, mainly in the <b>spleen</b> (red pulp), bone marrow and liver (Kupffer cells). About <b>80% of bilirubin</b> comes from red-cell haemoglobin; the rest from other haem proteins such as myoglobin and cytochromes (StatPearls).</p>'],
+  ['Haem → biliverdin', 'mac', '<h3>2 · Haem oxygenase: haem → biliverdin + Fe²⁺ + CO</h3><p><b>Haem oxygenase</b> opens the ring: the iron is released as Fe²⁺ (and recycled), carbon monoxide is given off, and the green pigment <b>biliverdin</b> is formed (green: Wikipedia). Haem oxygenase is suggested to be the rate-limiting step (StatPearls).</p>'],
+  ['→ bilirubin', 'mac', '<h3>3 · Biliverdin reductase: biliverdin → bilirubin</h3><p>Still inside the macrophage. This bilirubin is <b>unconjugated</b>: fat-soluble and essentially insoluble in water.</p>'],
+  ['Albumin carries it', 'blood', '<h3>4 · Unconjugated bilirubin travels on albumin</h3><p>Tightly bound to <b>albumin</b>, it cannot pass into urine. In the lab it is the <b>"indirect"</b> fraction (it reacts only after an accelerator is added). It makes up most of the normal plasma bilirubin (StatPearls: over 90%, or about 95%).</p>'],
+  ['Liver: conjugation', 'liver', '<h3>5 · The hepatocyte takes it up and conjugates it</h3><p><b>UGT1A1</b> (UDP-glucuronosyltransferase) joins bilirubin to <b>glucuronic acid</b> → mono- and diglucuronides: <b>conjugated, water-soluble</b> ("direct") bilirubin.</p>'],
+  ['Into bile', 'liver', '<h3>6 · Secreted into bile by MRP2</h3><p>Conjugated bilirubin is pumped across the canalicular membrane by <b>MRP2 (ABCC2)</b> and flows with bile into the duodenum.</p>'],
+  ['Gut bacteria', 'gut', '<h3>7 · Bacteria make urobilinogen; stercobilin colours the stool</h3><p>In the gut, bacteria turn bilirubin into <b>urobilinogen</b>. Most becomes <b>stercobilin</b>, which makes <b>stool brown</b> (colour: Wikipedia).</p>'],
+  ['Urine urobilin', 'kidney', '<h3>8 · Some urobilinogen is reabsorbed → urobilin in urine</h3><p>Part is reabsorbed into the portal blood (StatPearls: about half; Wikipedia: "a lesser amount"); Wikipedia: most returns to the liver, and some reaches the kidney, where <b>urobilin</b> gives urine its yellow colour.</p>'],
+];
+/* jaundice types: [key, chip, block compartment, text] */
+const JX = {
+  none: ['Normal', null, ''],
+  pre: ['Pre-hepatic (haemolytic)', 'mac', '<h3>Pre-hepatic: too much bilirubin made</h3><p>Usually <b>haemolysis</b>: more red cells broken down than the liver can conjugate, so <b>unconjugated</b> bilirubin rises. It is albumin-bound, so <b>no bilirubin appears in urine</b>. Haemolysis also gives raised <b>reticulocytes and LDH</b> and low <b>haptoglobin</b> (a review of haemolysis markers). Causes (Wikipedia\'s list): haemolytic anaemias — hereditary spherocytosis, sickle cell disease, thalassaemia, G6PD deficiency — and infections such as malaria.</p>'],
+  hep: ['Hepatic', 'liver', '<h3>Hepatic: the liver cell fails</h3><p>Damage to hepatocytes (Wikipedia: infection, drugs, autoimmune disease, inherited disease) impairs uptake, conjugation and secretion, so <b>both fractions</b> may rise, with <b>raised ALT/AST</b> (markers of hepatocellular injury). In <b>Gilbert syndrome</b> and <b>Crigler–Najjar syndrome</b> UGT1A1 activity is low, so <b>unconjugated</b> bilirubin rises without liver damage (StatPearls, a review on UGT1A1, Wikipedia). In <b>Dubin–Johnson syndrome</b> MRP2 (ABCC2) is faulty and conjugated bilirubin rises (one review).</p>'],
+  post: ['Post-hepatic (obstructive)', 'duct', '<h3>Post-hepatic: bile cannot reach the gut</h3><p>A block of the bile ducts (obstructive or extrahepatic cholestasis) makes <b>conjugated</b> bilirubin back up into the blood; being water-soluble it spills into <b>urine (dark urine)</b>, while little reaches the gut, so <b>urobilinogen falls</b> and stools are <b>pale</b> (Wikipedia). <b>Alkaline phosphatase</b> rises (StatPearls). Retained bile acids cause <b>itching</b>; fat and fat-soluble vitamins are poorly absorbed (StatPearls).</p>'],
+};
+/* lab pattern: [row, pre, hepatic, post, how sure] */
+const LAB = [['Test', 'Pre-hepatic', 'Hepatic', 'Post-hepatic'], [
+  ['Unconjugated (indirect) bilirubin', '↑', '↑', 'normal *'],
+  ['Conjugated (direct) bilirubin', 'normal *', '↑', '↑'],
+  ['Bilirubin in urine', 'absent', 'present', 'present'],
+  ['Urobilinogen (urine)', 'normal or ↑ *', 'variable *', '↓ or absent *'],
+  ['Stool colour', 'brown *', 'slightly pale *', 'pale *'],
+  ['ALP', 'normal *', '↑ *', '↑ (↑↑ *)'],
+  ['ALT / AST', 'normal *', '↑ (↑↑ *)', '↑ *'],
+  ['Also', 'reticulocytes ↑, LDH ↑, haptoglobin ↓ (one review)', '—', 'itching (StatPearls)'],
+]];
+const LAB_NOTE = 'Based on Wikipedia\'s table (which cites the Oxford Handbook of Clinical Diagnosis). Cells marked * are Wikipedia\'s table only; unmarked cells are confirmed by a second source (StatPearls on conjugated bilirubin, cholestasis, ALP and liver-cell injury; the water-solubility of conjugated bilirubin). Wikipedia\'s table gives hepatic urobilinogen as decreased; it is shown as variable here. Normal values (Wikipedia): total bilirubin 0.1–1.2 mg/dL, direct 0–0.3 mg/dL; jaundice is usually visible above about 2–3 mg/dL. StatPearls defines conjugated hyperbilirubinaemia as direct bilirubin above 2 mg/dL or more than 20% of the total.';
+
+/* WHO 2024 anaemia cut-offs (as summarised by StatPearls; adults also Wikipedia) */
+const WHO_TEXT = '<p><b>Anaemia</b> is a fall in red-cell mass, measured as a low haemoglobin, haematocrit or red-cell count. Cut-offs from the <b>WHO guideline on haemoglobin cut-offs (2024)</b> (WHO; adult rows also StatPearls and Wikipedia), the first major update since 1968 (StatPearls):</p>';
+const WHO = [['Group', 'Anaemia if Hb below (g/dL)'], [
+  ['Adult men', '13.0'], ['Adult non-pregnant women', '12.0'], ['Pregnant women', '11.0 (1st and 3rd trimesters); 10.5 (2nd trimester, 2024)'],
+  ['Children 6–23 months', '10.5 (new in 2024; StatPearls: was 11.0)'], ['Children 24–59 months', '11.0'], ['Children 5–11 years', '11.5'], ['Children 12–14 years', '12.0'],
+]];
+/* indices calculator */
+const RI0 = {hb: 15, hct: 45, rbc: 5.0, sex: 'm'};
+const RI_PRE = {
+  norm: ['Normal man (example)', {hb: 15, hct: 45, rbc: 5.0}],
+  ida: ['Iron deficiency (example)', {hb: 9, hct: 30, rbc: 4.4}],
+  meg: ['B12/folate deficiency (example)', {hb: 9, hct: 27, rbc: 2.3}],
+  loss: ['After blood loss (example)', {hb: 10, hct: 30, rbc: 3.4}],
+};
+const SEX = {m: ['Man', 13.0], f: ['Non-pregnant woman', 12.0], p: ['Pregnant (1st/3rd trimester)', 11.0]};
+const MCV_CLASS = {
+  micro: '<h3>Microcytic (MCV below 80 fL)</h3><p>Usually also <b>hypochromic</b> (low MCH, MCHC). Causes: <b>iron deficiency</b> — the commonest cause of anaemia worldwide (StatPearls, Wikipedia) — <b>thalassaemia</b> and <b>anaemia of chronic disease</b> (iron stores locked in macrophages); less often lead poisoning (StatPearls).</p>',
+  normo: '<h3>Normocytic (MCV 80–100 fL)</h3><p>Causes (Wikipedia): <b>blood loss</b>, some <b>chronic diseases</b>, <b>kidney disease</b> (too little erythropoietin). The <b>reticulocyte count</b> shows whether the marrow is responding: it rises when the marrow compensates, as in haemolysis (a review), and stays low when the marrow cannot respond (Wikipedia).</p>',
+  macro: '<h3>Macrocytic (MCV above 100 fL)</h3><p><b>Megaloblastic</b>: DNA synthesis fails from <b>vitamin B12 or folate deficiency</b> (pernicious anaemia is autoimmune B12 malabsorption); the smear shows <b>hypersegmented neutrophils</b> (Wikipedia: six or more lobes, or over 3% with five). <b>Non-megaloblastic</b> macrocytosis has several other causes.</p>',
+};
+const RI_NOTE = 'The calculator uses MCV = Hct (%) × 10 ÷ RBC (10¹²/L); MCH = Hb (g/dL) × 10 ÷ RBC; MCHC = Hb × 100 ÷ Hct (MCV: StatPearls, Wikipedia and a 2022 laboratory review; MCH and MCHC: Wikipedia and that review). Normal ranges differ by source: MCV 80–100 fL (Wikipedia) or 83.3–98.0 (Korean reference study, ages 15–99); MCH 27–33 pg (Wikipedia MCH), 27–31 (Wikipedia RBC indices), 27.7–33.2 (Korean study, ages 15–99); MCHC 32–36 g/dL (Wikipedia) or about 31.7–35.9 (Korean study, ages 3–99). Here: below 80 / above 100 fL for the classes and MCHC below 32 g/dL or MCH below 27 pg for "hypochromic". The example values are illustrative, not patient data.';
+
+/* polycythaemia */
+const POLY = {
+  rel: ['Relative', 0.52, 0.45, 1, '<h3>Relative (pseudo-) polycythaemia</h3><p>The red-cell mass is normal but <b>plasma volume is reduced</b> (for example dehydration), so the haematocrit rises (Wikipedia; StatPearls defines true polycythaemia as a rise in absolute red-cell mass).</p>'],
+  pv: ['Primary: polycythaemia vera', 0.62, 1, 0, '<h3>Primary — polycythaemia vera</h3><p>A <b>myeloproliferative neoplasm</b>: a marrow clone with a <b>JAK2 mutation</b> — JAK2 mutations drive virtually all cases, and about 97% of them are V617F (a 2020 review); Wikipedia: V617F in 95% of patients — makes red cells regardless of EPO; white cells and platelets often rise too. Serum <b>EPO is low</b> (subnormal EPO is a diagnostic criterion). Symptoms such as headache, dizziness and thrombosis come from hyperviscosity (StatPearls).</p>'],
+  sec: ['Secondary', 0.6, 1, 2, '<h3>Secondary — driven by EPO</h3><p>Hypoxia (high altitude, chronic lung disease) raises <b>EPO</b> through HIF in the kidney, and more red cells are made. EPO can also be raised inappropriately by tumours, most notably <b>renal cell carcinoma</b>, or by testosterone (Wikipedia).</p>'],
+};
+const POLY_TEXT = '<p><b>Polycythaemia</b> (erythrocytosis) = a rise in red-cell mass, seen as a raised haemoglobin or haematocrit for age and sex (StatPearls). StatPearls: a haematocrit above 51% (men) / 48% (women) or haemoglobin above 18.5 / 16.5 g/dL usually means a raised red-cell mass. The EPO loop is drawn on <a href="blood-cells.html#h-epo">Blood and its cells</a>.</p>';
+
+/* micrographs (Wikimedia Commons) */
+const IMG = {
+  ida: {id: 'ida', file: 'img/iron-deficiency.jpg', w: 720, h: 479, title: 'Iron-deficiency anaemia: small, pale red cells', alt: 'Blood smear with many small pale red cells with wide pale centres, some elongated, and one lymphocyte',
+    cap: 'Iron-deficiency anaemia: many <b>hypochromic</b> (pale) and <b>small</b> red cells; a lymphocyte for comparison (Ed Uthman notes the smear is from an extremely advanced case).', labels: [[0.578, 0.41, 'lymphocyte'], [0.421, 0.449, 'small, pale red cell']],
+    credit: {file: 'Iron-deficiency Anemia, Peripheral Blood Smear (4422704616).jpg', author: 'Ed Uthman', lic: 'CC BY 2.0', licUrl: 'https://creativecommons.org/licenses/by/2.0', done: 'resized; labels added (approximate)'}},
+  sickle: {id: 'sickle', file: 'img/sickle.jpg', w: 720, h: 480, title: 'Sickle cell anaemia', alt: 'Blood smear with many elongated crescent-shaped sickle cells among red cells, and a neutrophil at the top right',
+    cap: 'Sickle cell anaemia: crescent-shaped <b>sickle cells</b> among the red cells; a neutrophil at the top right.', labels: [[0.516, 0.375, 'sickle cell'], [0.925, 0.188, 'neutrophil']],
+    credit: {file: 'Sickle Cell Anemia (5610746554).jpg', author: 'Ed Uthman', lic: 'CC BY 2.0', licUrl: 'https://creativecommons.org/licenses/by/2.0', done: 'resized; labels added (approximate)'}},
+};
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews on haemoglobin and haem synthesis, fetal haemoglobin, HbA2, sickle cell disease, β-thalassaemia, haem oxygenase and haemoglobin scavenging, bilirubin metabolism and UGT1A1, inherited conjugated hyperbilirubinaemias, haemolysis markers, iron deficiency and anaemia of inflammation, anaemia cut-offs, erythrocytosis and polycythaemia vera, unreliable automated blood counts, and a Korean blood-count reference study (Europe PMC); Wikipedia (articles that cite OpenStax were not used). Anaemia cut-offs: WHO guideline on haemoglobin cut-offs (2024), as summarised by StatPearls.';
+const MODELS = '<b>Models used:</b> all drawings are schematic, not to scale. The calculator applies the standard index formulas to the values you set; example presets are illustrative. Micrographs from Wikimedia Commons by Ed Uthman (CC BY 2.0), resized, labels added (approximate).';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* ---- haemoglobin ---- */
+const HBS = {k: 'A'};
+function drawHb() {
+  const [chip, partner, share, txt] = HB[HBS.k]; let s = '';
+  const chain = (cx, cy, isA, lab) => {
+    let g = `<path d="M${cx - 58} ${cy} C${cx - 62} ${cy - 48} ${cx - 10} ${cy - 66} ${cx + 30} ${cy - 50} C${cx + 66} ${cy - 36} ${cx + 62} ${cy + 30} ${cx + 30} ${cy + 50} C${cx - 4} ${cy + 66} ${cx - 54} ${cy + 46} ${cx - 58} ${cy} Z" class="${isA ? 'chainA' : 'chainB'}"/>`;
+    g += `<rect x="${cx - 4}" y="${cy - 14}" width="28" height="28" rx="6" transform="rotate(45 ${cx + 10} ${cy})" class="haem"/>` + `<circle cx="${cx + 10}" cy="${cy}" r="4" style="fill:var(--surface);stroke:var(--ink);stroke-width:.8"/>`;
+    g += T(cx - 28, cy + 5, lab, 'b', 'middle');
+    return g;
+  };
+  s += chain(95, 80, true, 'α') + chain(255, 80, false, partner) + chain(95, 200, false, partner) + chain(255, 200, true, 'α');
+  s += T(180, 278, `${chip}: α₂${partner}₂`, 'b', 'middle');
+  s += T(20, 18, 'haem = Fe²⁺ in a porphyrin ring', 's');
+  if (HBS.k === 'S') s += `<circle cx="255" cy="30" r="9" style="fill:none;stroke:var(--clin);stroke-width:2.5"/>` + T(270, 22, 'β6 Glu → Val', 'c', 'start');
+  $('hb-svg').innerHTML = s;
+  $('hb-find').innerHTML = txt + `<p class="muted">Share of adult haemoglobin: ${share}.</p>`;
+}
+Phys.toggles('hb-tg', Object.entries(HB).map(([k, v]) => [k, v[0]]), k => { HBS.k = k; drawHb(); }, 'A');
+Phys.table('hb-table', HB_TABLE[0], HB_TABLE[1]);
+$('hb-text').innerHTML = HB_TEXT; drawHb();
+
+/* ---- haem synthesis ---- */
+const SY = {s: 0};
+function drawSyn() {
+  const [lab, where, txt] = SYN[SY.s]; let s = Phys.arrowDef('arrS', 'var(--ink)');
+  s += `<rect x="10" y="10" width="520" height="250" rx="40" style="fill:var(--surface);stroke:var(--muted);stroke-width:1.4"/>` + T(30, 34, 'erythroid precursor — cytosol', 'h');
+  s += `<ellipse cx="190" cy="150" rx="175" ry="100" class="mito"/>` + T(190, 72, 'mitochondrion', 'h', 'middle');
+  const pill = (x, y, t, on) => `<rect x="${x - 70}" y="${y - 15}" width="140" height="30" rx="15" class="pill" style="${on ? 'stroke:var(--mark);stroke-width:2.6' : ''}"/>` + T(x, y + 5, t, on ? 'b' : '', 'middle');
+  const ar = (d, op = 1) => `<path d="${d}" style="fill:none;stroke:var(--ink);stroke-width:1.4;opacity:${op}" marker-end="url(#arrS)"/>`;
+  s += pill(110, 105, 'glycine + succinyl-CoA', false) + pill(110, 195, 'ALA', SY.s === 0) + ar('M110 121 L110 178') + T(118, 154, 'ALA synthase', 's');
+  s += pill(450, 80, 'middle steps', SY.s === 1) + ar('M160 180 C158 40 330 30 378 74');
+  s += pill(250, 125, 'protoporphyrin IX', SY.s === 2) + ar('M392 94 C380 120 350 125 322 125');
+  s += pill(250, 205, 'haem', SY.s === 3) + ar('M250 141 L250 188') + T(258, 160, '+ Fe²⁺', 's') + T(258, 174, 'ferrochelatase', 's');
+  s += pill(450, 222, 'globin chains', false) + T(450, 248, 'made on cytosolic ribosomes', 's', 'middle');
+  const on4 = SY.s === 4;
+  s += `<rect x="385" y="140" width="130" height="34" rx="8" style="fill:var(--surface);stroke:${on4 ? 'var(--mark)' : 'var(--line)'};stroke-width:${on4 ? 2.6 : 1.2};${on4 ? '' : 'stroke-dasharray:4 3'}"/>` + T(450, 162, 'haemoglobin', on4 ? 'b' : 's', 'middle');
+  s += ar('M322 200 L383 166', on4 ? 1 : 0.35) + ar('M450 206 L450 176', on4 ? 1 : 0.35);
+  $('syn-svg').innerHTML = s; $('syn-find').innerHTML = txt;
+}
+Phys.stepper('syn-step', SYN.map(r => r[0]), drawSyn, SY);
+$('syn-note').textContent = SYN_NOTE;
+
+/* ---- bilirubin pathway with jaundice types ---- */
+const BI = {s: 0, jx: 'none'};
+function drawBili() {
+  const st = BILI[BI.s], jx = JX[BI.jx]; let s = Phys.arrowDef('arrB', 'var(--ink)') + Phys.arrowDef('arrC', 'var(--clin)');
+  const box = (k, x, y, w, h, t1, t2) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" class="${st[1] === k ? 'compon' : 'comp'}"/>` + T(x + 10, y + 20, t1, 'b') + (t2 ? T(x + 10, y + 36, t2, 's') : '');
+  s += box('mac', 10, 30, 150, 160, 'Macrophage', 'spleen, marrow, liver');
+  s += box('blood', 175, 30, 130, 160, 'Blood (plasma)', '');
+  s += box('liver', 320, 30, 160, 160, 'Hepatocyte', 'liver');
+  s += box('gut', 500, 30, 150, 160, 'Gut', 'duodenum → colon');
+  s += box('kidney', 320, 238, 160, 92, 'Kidney', '');
+  /* contents */
+  const tx = (x, y, t, cls = '') => T(x, y, t, cls);
+  s += tx(20, 84, 'old red cell') + tx(20, 106, '→ haem') + tx(20, 128, '→ biliverdin') + tx(28, 144, '+ Fe²⁺, CO', 's') + tx(20, 166, '→ bilirubin');
+  s += tx(185, 84, 'unconjugated') + tx(185, 102, 'bilirubin') + tx(185, 122, '+ albumin', 's');
+  s += tx(330, 84, 'uptake') + tx(330, 106, 'UGT1A1 +') + tx(330, 124, 'glucuronic acid', 's') + tx(330, 146, '→ conjugated') + tx(330, 166, 'MRP2 → bile', 's');
+  s += tx(510, 84, 'bacteria') + tx(510, 106, '→ urobilinogen') + tx(510, 128, '→ stercobilin') + tx(510, 146, '(brown stool)', 's');
+  s += tx(330, 284, 'urobilin (yellow urine)') + tx(330, 304, 'conjugated bilirubin', 's') + tx(330, 318, 'only if raised in blood', 's');
+  /* flows; widths change with the jaundice type */
+  const w = {unc: 2, con: 2, gut: 2, uro: 1.4, back: 0};
+  if (BI.jx === 'pre') { w.unc = 5; w.gut = 3; w.uro = 2.4; }
+  if (BI.jx === 'hep') { w.unc = 3; w.con = 1.2; w.gut = 1.2; w.uro = 1; w.back = 2.4; }
+  if (BI.jx === 'post') { w.con = 2; w.gut = 0.6; w.uro = 0.6; w.back = 4.5; }
+  const ar = (d, ww, col = 'var(--ink)', m = 'arrB') => ww ? `<path d="${d}" style="fill:none;stroke:${col};stroke-width:${ww}" marker-end="url(#${m})"/>` : '';
+  s += ar('M160 110 L172 110', w.unc) + ar('M305 110 L317 110', w.unc) + ar('M480 110 L497 110', w.gut);
+  s += ar('M560 190 C560 260 520 284 484 282', w.uro) + T(566, 228, 'reabsorbed', 's', 'start');
+  if (w.back) s += ar('M340 190 C320 215 270 215 250 194', w.back, 'var(--clin)', 'arrC') + T(150, 232, 'conjugated backs up', 'c', 'middle') + ar('M240 196 C240 260 280 290 316 298', w.back * 0.7, 'var(--clin)', 'arrC');
+  /* block markers */
+  if (BI.jx === 'pre') s += T(85, 216, 'haemolysis: extra load', 'c', 'middle') + `<path d="M30 200 L140 200" style="stroke:var(--clin);stroke-width:3"/>`;
+  if (BI.jx === 'hep') s += `<path d="M330 40 L470 180 M470 40 L330 180" style="stroke:var(--clin);stroke-width:2.5;opacity:.55"/>` + T(400, 20, 'liver cells damaged', 'c', 'middle');
+  if (BI.jx === 'post') s += `<path d="M489 90 L489 130" style="stroke:var(--clin);stroke-width:6"/>` + T(489, 20, 'duct blocked', 'c', 'middle');
+  $('bili-svg').innerHTML = s;
+  $('bili-find').innerHTML = (BI.jx === 'none' ? '' : jx[2]) + st[2];
+  const col = {pre: 1, hep: 2, post: 3}[BI.jx];
+  Phys.table('lab-table', LAB[0], LAB[1].map(r => r.map((c, i) => (col && i === col) ? `<b>${c}</b>` : c)));
+}
+Phys.stepper('bili-step', BILI.map(r => r[0]), drawBili, BI);
+Phys.toggles('jx-tg', Object.entries(JX).map(([k, v]) => [k, v[0]]), k => { BI.jx = k; drawBili(); }, 'none');
+$('lab-note').textContent = LAB_NOTE;
+
+/* ---- anaemia: WHO cut-offs and the indices calculator ---- */
+$('who-text').innerHTML = WHO_TEXT;
+Phys.table('who-table', WHO[0], WHO[1]);
+const RI = Object.assign({}, RI0), RIS = {};
+function drawRi() {
+  const mcv = RI.hct * 10 / RI.rbc, mch = RI.hb * 10 / RI.rbc, mchc = RI.hb * 100 / RI.hct, cut = SEX[RI.sex][1];
+  const cls = mcv < 80 ? 'micro' : mcv > 100 ? 'macro' : 'normo', hypo = mchc < 32 || mch < 27, anaemic = RI.hb < cut;
+  $('ri-out').innerHTML = `<div><span class="f">MCV = Hct × 10 ÷ RBC</span><b>${mcv.toFixed(0)} fL</b>${cls === 'micro' ? 'microcytic' : cls === 'macro' ? 'macrocytic' : 'normocytic'}</div>`
+    + `<div><span class="f">MCH = Hb × 10 ÷ RBC</span><b>${mch.toFixed(1)} pg</b>${mch < 27 ? 'low' : mch > 33 ? 'high' : 'in range'}</div>`
+    + `<div><span class="f">MCHC = Hb × 100 ÷ Hct</span><b>${mchc.toFixed(1)} g/dL</b>${mchc < 32 ? 'low (hypochromic)' : mchc > 36 ? 'high — check the sample' : 'in range'}</div>`
+    + `<div><span class="f">Hb against the WHO cut-off</span><b>${RI.hb.toFixed(1)} g/dL</b>${anaemic ? `anaemia (below ${cut.toFixed(1)})` : `not anaemic (cut-off ${cut.toFixed(1)})`}</div>`;
+  const X = Phys.scale(50, 140, 20, 540); let s = '';
+  s += `<rect x="${X(50)}" y="40" width="${X(80) - X(50)}" height="26" style="fill:var(--ink);opacity:.14"/><rect x="${X(80)}" y="40" width="${X(100) - X(80)}" height="26" style="fill:var(--ink);opacity:.04"/><rect x="${X(100)}" y="40" width="${X(140) - X(100)}" height="26" style="fill:var(--ink);opacity:.14"/>`;
+  s += T((X(50) + X(80)) / 2, 22, 'microcytic', 's', 'middle') + T((X(80) + X(100)) / 2, 22, 'normocytic', 's', 'middle') + T((X(100) + X(140)) / 2, 22, 'macrocytic', 's', 'middle');
+  for (const v of [50, 60, 70, 80, 90, 100, 110, 120, 130, 140]) s += `<path class="axis" d="M${X(v)} 66 L${X(v)} 72"/>` + T(X(v), 86, v, 's', 'middle');
+  s += T(540, 106, 'MCV (fL)', 's', 'end');
+  const m = Math.max(50, Math.min(140, mcv));
+  s += `<path d="M${X(m)} 36 L${X(m)} 72" style="stroke:var(--mark);stroke-width:3"/><circle cx="${X(m)}" cy="53" r="7" style="fill:var(--mark);stroke:var(--surface);stroke-width:2"/>`;
+  $('mcv-svg').innerHTML = s;
+  $('ri-find').innerHTML = MCV_CLASS[cls] + (hypo && cls !== 'micro' ? '<p class="muted">The cells are also hypochromic by these cut-offs.</p>' : '');
+}
+const RISPEC = [['hb', 'Haemoglobin', 4, 20, 0.1, ' g/dL'], ['hct', 'Haematocrit', 15, 65, 0.5, ' %'], ['rbc', 'Red cell count', 1.5, 7, 0.05, ' × 10¹²/L']];
+for (const [k, lab, mn, mx, st, u] of RISPEC) { RIS[k] = Phys.slider('ri-sl', {id: k, label: lab, min: mn, max: mx, step: st, value: RI0[k], fmt: v => v.toFixed(k === 'rbc' ? 2 : 1) + u}, v => { RI[k] = v; drawRi(); }); RIS[k].init(); }
+Phys.toggles('ri-pre', Object.entries(RI_PRE).map(([k, v]) => [k, v[0]]), k => { const p = RI_PRE[k][1]; for (const kk in p) RIS[kk].set(p[kk]); }, 'norm');
+Phys.toggles('ri-sex', Object.entries(SEX).map(([k, v]) => [k, v[0]]), k => { RI.sex = k; drawRi(); }, 'm');
+$('ri-note').textContent = RI_NOTE; drawRi();
+for (const k of ['ida', 'sickle']) { const d = document.createElement('div'); $('anaem-micro').append(d); Phys.micro(d, Object.assign({}, IMG[k], {credit: Phys.credit(IMG[k].credit)})); }
+
+/* ---- polycythaemia ---- */
+const PO = {k: 'pv'};
+function drawPoly() {
+  const [lab, hct, volScale, epo, txt] = POLY[PO.k]; let s = '';
+  const tube = (x, h, v, title) => { const H = 170 * v, top = 40 + (170 - H); let g = `<rect x="${x}" y="${top}" width="60" height="${H}" rx="6" style="fill:var(--fluid);stroke:var(--muted);stroke-width:1.2"/>`; g += `<rect x="${x}" y="${top + H * (1 - h)}" width="60" height="${H * h}" rx="6" style="fill:var(--rbc)"/>`; return g + T(x + 30, 228, title, 'b', 'middle') + T(x + 30, 244, `Hct ${Math.round(h * 100)}% (schematic)`, 's', 'middle'); };
+  s += tube(40, 0.45, 1, 'Normal') + tube(160, hct, PO.k === 'rel' ? 0.85 : 1.15, lab.split(':')[0]);
+  s += T(290, 60, 'EPO', 'b', 'middle') + T(290, 80, ['low', 'normal', 'high'][epo], epo === 1 ? 's' : 'c', 'middle');
+  s += `<path d="M290 92 L290 ${92 + [20, 50, 80][epo]}" style="stroke:var(--ink);stroke-width:${[1.2, 2.4, 4.6][epo]}"/>`;
+  $('poly-svg').innerHTML = s; $('poly-find').innerHTML = txt;
+}
+Phys.toggles('poly-tg', Object.entries(POLY).map(([k, v]) => [k, v[0]]), k => { PO.k = k; drawPoly(); }, 'pv');
+$('poly-text').innerHTML = POLY_TEXT; drawPoly();
+Phys.swipeHints();
+</script>
+</body>
+</html>

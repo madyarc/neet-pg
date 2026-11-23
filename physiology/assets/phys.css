@@ -9,7 +9,11 @@
    --collagen (connective-tissue sheaths: endoneurium; as anatomy/histology/nervous-vascular.html).
    Physiology tokens (new; chosen with sources-local/facts/fill-physio1-scripts/pick3.py and colcheck3.py, >=20 from atlas meaning colours,
    >=15 from every --n-* token, >=12 from other pages): --na (Na+), --k (K+), --cl (Cl−), --ca (Ca2+), --ach (acetylcholine), --gate (the Na+
-   channel inactivation gate). Ion colours are used for shapes only; ion names in text are ink with a coloured swatch (contrast). */
+   channel inactivation gate). Ion colours are used for shapes only; ion names in text are ink with a coloured swatch (contrast).
+   Module 02 (blood) adds, checked with sources-local/facts/fill-physio2-scripts/colcheck3.py (atlas >=20, others >=12): --rbc (red cells and
+   their haemoglobin; one hue family, vivid red, kept >=20 from --artery) and --platelet (platelets). Reused with their anatomy meanings and values:
+   --clot (a clot/thrombus and its fibrin mesh; anatomy/general/blood-vessels.html), --eosin (eosin-stained material: eosinophil granules) and --baso (basophilic staining: basophil granules,
+   basophilic cytoplasm of early erythroblasts; anatomy/histology/endocrine-senses-cns.html). Plasma uses --fluid (a body fluid). */
 html,body{margin:0} [hidden]{display:none!important}
 :root{
   --bg:#f5f6f9; --surface:#ffffff; --ink:#1a2130; --muted:#5a6375; --line:#dce0e8;
@@ -17,6 +21,7 @@ html,body{margin:0} [hidden]{display:none!important}
   --fluid:#d9edc6; --cyto:#c8b6e2; --nucleus:#1e4f99; --myelin:#c8ffd8; --schwann:#f2cc8f; --nissl:#5a3f8c; --rcpt:#ff006e; --vesicle:#e9d8a6;
   --musc:#c96f68; --actin:#2f8f6a; --myosin:#c0532a; --zline:#1a1d24; --ttub:#2f6fb5; --sr:#d4a72c;
   --na:#ff4d00; --k:#8143bf; --cl:#28a608; --ca:#d90bc4; --ach:#0a6654; --gate:#663300; --collagen:#e39b9b;
+  --rbc:#f20c42; --platelet:#c300ff; --clot:#541244; --eosin:#f4a3b5; --baso:#8c7bd0;
   --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
   --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
@@ -26,7 +31,8 @@ html,body{margin:0} [hidden]{display:none!important}
   --accent:#7d9dff; --mark:#ff7b6f; --clin:#ff7b6f; --nerve:#f0d24a; --artery:#e0566a;
   --fluid:#4e6638; --cyto:#6d5a8c; --nucleus:#9fb0ff; --myelin:#3f7a55; --schwann:#8c6f3f; --nissl:#c9a6ff; --rcpt:#ff5c9d; --vesicle:#9c8f60;
   --musc:#9c4e48; --actin:#59c79a; --myosin:#ef8a5f; --zline:#f2f2f2; --ttub:#6fa8e8; --sr:#e6c55a;
-  --na:#ff4d00; --k:#9455f2; --cl:#56a621; --ca:#d94cd9; --ach:#22e6dc; --gate:#8f4f00; --collagen:#b86a6a; color-scheme:dark}
+  --na:#ff4d00; --k:#9455f2; --cl:#56a621; --ca:#d94cd9; --ach:#22e6dc; --gate:#8f4f00; --collagen:#b86a6a;
+  --rbc:#ff1953; --platelet:#df0dff; --clot:#bd2898; --eosin:#8c4a5c; --baso:#a99be8; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
@@ -117,3 +123,15 @@ svg.sch .memb{fill:var(--bg);stroke:var(--muted);stroke-width:1}
 .ion-na::before,.ion-k::before,.ion-cl::before,.ion-ca::before,.ion-hco::before{content:'';display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:0}
 .ion-na::before{background:var(--na)} .ion-k::before{background:var(--k)} .ion-cl::before{background:var(--cl)} .ion-ca::before{background:var(--ca)} .ion-hco::before{background:var(--muted)}
 table.t th .u,.tag .u{text-transform:none}
+/* module 02 (blood): micrographs with switchable labels (as anatomy/histology/histo.css .mg) */
+.mg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.mg .im{position:relative;width:100%;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:var(--bg)}
+.mg .im img{width:100%;height:auto;display:block}
+.mg .im svg{position:absolute;inset:0;width:100%;height:100%}
+.mg .im svg text{font:600 var(--mg-fs,18px) var(--f-body);fill:#fff;paint-order:stroke;stroke:#000;stroke-width:var(--mg-sw,3px)}
+.mg .im svg line{stroke:#ffd54a;stroke-width:var(--mg-lw,1.5px)}
+.mg .im svg circle{fill:#ffd54a;stroke:#000;stroke-width:var(--mg-sw,3px)}
+.mg .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.mg .bar .t{font:600 13.5px var(--f-body);margin-right:auto}
+.mg figcaption{font-size:13.5px;line-height:1.45}
+.mg .cr{display:block;font-size:12px;color:var(--muted);margin-top:4px}

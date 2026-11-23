@@ -47,3 +47,56 @@ where only one source has it, the page names that source.
   PMC10416754; an OpenStax-citing paper; axon protein wording; Ca²⁺ arrows at the NMJ; all-or-none stimulus bar; colour
   meanings and ion-token contrast; HCO₃⁻ range; Darrow–Yannet losses; units; death-receptor position; duplication with
   the anatomy pages (now linked).
+
+## 02 Haematology and immunity — `blood/blood-cells.html`, `blood/haemoglobin-anaemia.html`, `blood/haemostasis-blood-groups.html`, `blood/immunity.html`
+
+- Fact sheet `sources-local/facts/fill-physio2.md` (800 quotes, script-checked against `sources-local/modern/fill-physio2/`,
+  downloads 2026-11-22).
+- Excluded: Wikipedia Blood plasma, Coagulation, Thrombopoiesis (cite OpenStax); PMC5767294 (its references include
+  Lumen's Boundless A&P, an OpenStax remix, and its wording echoes it). Not counted as independent: PMC8490160 repeats
+  Wikipedia's reticulocyte range; Wikipedia Eosinophil shares a sentence with PMC6156898; PMC8977343's MCH formula is a
+  misprint and is not used.
+- WHO Guideline on haemoglobin cutoffs (2024, IRIS, CC BY-NC-SA 3.0 IGO) for the anaemia cut-offs by age (filed under
+  the MLP- key in the sheet); StatPearls' merged 2–11-year row is not used.
+- Sources: Gray 1918 "The Blood"; StatPearls; Wikipedia; EPO PMC3191152, PMC7503180; erythropoiesis PMC3904103,
+  PMC6016880, PMC5288342; haem synthesis PMC9505951, PMC9267699, PMC8705723; bilirubin PMC3678498, PMC11896460,
+  PMC9486497, PMC4706896; coagulation and tests PMC10305031, PMC3176495, PMC8068903, PMC4715843, PMC3654192,
+  PMC9600347, PMC2913942; vWD PMC5406777, PMC3224412; DIC PMC4267589, PMC6710154; transfusion PMC9144124, PMC3999321,
+  PMC4997901, PMC7371205; immunity PMC6156898, PMC6963682, PMC4267263; index formulas PMC9057813; reference intervals
+  PMC6056383 (Korea, ages 3–99, shown with age bands).
+- Contested, shown: each source's normal ranges, HbA2 share, neutrophil life, urobilinogen reabsorption, MCH range,
+  platelet lifespan, hepatic urobilinogen (variable).
+- Images (Commons, licences read 2026-11-22; resized, labelled): SEM blood cells (public domain, NCI); Ed Uthman smears
+  (eosinophils, iron deficiency, sickle cell, spherocytes CC BY 2.0; reticulocytes CC BY 3.0); megakaryocyte (Erhabor
+  Osaro, CC BY-SA 4.0, cropped to remove a wrong scale bar).
+- Colour tokens: `--rbc`, `--platelet` (new, in phys.css); `--clot` (fibrin), `--eosin`, `--baso`, `--fluid` (plasma)
+  reused with their meanings.
+- Independent review 2026-11-22, fixed: undefined `--ok`; WHO children's cut-offs; PMC5767294 exclusion; lab-table
+  starring; about 40 attributions; DIC and LMWH readouts; vWD screening wording; ESR preset; keyboard focus and grid
+  arrow keys; antibody, IgA, haem-synthesis and red-cell drawings; colour meanings.
+
+## 03 Cardiovascular physiology — `cvs/cardiac-electrophysiology.html`, `cvs/cardiac-cycle-output.html`, `cvs/haemodynamics-bp-regulation.html`
+
+- Fact sheet `sources-local/facts/fill-physio3.md` (576 quotes, script-checked against `sources-local/modern/fill-physio3/`,
+  downloads 2026-11-22).
+- Excluded (cite OpenStax or cnx): Wikipedia Cardiac conduction system, Stroke volume, Cardiac output, Heart rate,
+  Coronary circulation. Wikipedia Sinus arrhythmia copies StatPearls (counted once).
+- 03a electrophysiology: phases PMC8424989, PMC4823581, Wikipedia; If PMC3387723, PMC4346881; rates PMC4823581,
+  PMC4179748; AV delay 0.09 s (Wikipedia) vs 0.13 s (PMC8424989); ECG PMC5875041, PMC4040880, PMC11508899, StatPearls;
+  blocks PMC8142363, PMC11390567, PMC3232542; STEMI PMC5388060, PMC13179089, PMC8142368; K⁺ PMC11041971, PMC11215665,
+  PMC3043756.
+- 03b cycle and output: PMC5018161, PMC7333110, PMC2805814, PMC4070490, PMC7700364, PMC9595280, StatPearls, Wikipedia
+  (Jugular venous pressure for the a, c, v waves). Wiggers curves hand-set, valve states computed from them (schematic).
+- 03c haemodynamics: PMC6842957, PMC7512016, PMC9917827, PMC4164098, PMC3959699, PMC2906723, PMC3144666, PMC8056939,
+  PMC5073467, PMC6617132, PMC5018168, PMC2590178, PMC5523632, PMC10382122, PMC4239778 (ESICM 2014), PMC3672555,
+  PMC6520577, PMC6507212, PMC8541346, PMC7252783, PMC4220427, PMC8126502, PMC10704008.
+- Contested, shown: AV delay; upper limit of the normal axis (+90 vs +105); QRS and QTc limits; bradycardia and VT
+  thresholds; ventricular RMP; the share of If in setting the rate; classic Starling vs the glycocalyx revision.
+- Not shown for want of an open source: S4 as a stiff ventricle, why inspiratory S2 splitting widens, filling pressures
+  and SVR in most shock types, EF 55–70% (the page gives 50–65% and ≥50% preserved), BP guideline thresholds.
+- No new colour tokens: `--conduct`, `--valve` (from anatomy heart.html), `--heart`, `--vein`, `--artery`, `--nerve`,
+  `--fluid` with their meanings; all figures are data-drawn schematics.
+- Independent review 2026-11-22, fixed: stepper keyboard handler in phys.js; shock claims without a source removed;
+  systolic-failure preset (EF 39%); tetanus, sinus-tachycardia and escape-rhythm wording; a, c, v waves labelled; LV
+  pressure rise after the R wave; colour meanings; MAP slider limit; label collisions; a note that the 20/17/3 L figures
+  are the classic model.

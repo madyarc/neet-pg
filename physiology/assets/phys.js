@@ -38,7 +38,7 @@
     };
     labels.forEach((l, i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.onclick = () => go(i); row.append(b); });
     prev.onclick = () => go(state.s - 1); next.onclick = () => go(state.s + 1);
-    box.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { go(state.s + 1); e.preventDefault(); } if (e.key === 'ArrowLeft') { go(state.s - 1); e.preventDefault(); } });
+    box.onkeydown = e => { if (e.key === 'ArrowRight') { go(state.s + 1); e.preventDefault(); } if (e.key === 'ArrowLeft') { go(state.s - 1); e.preventDefault(); } }; // property, not addEventListener: a rebuilt stepper replaces the old handler
     box.append(prev, row, next); go(state.s);
     return go;
   };
@@ -71,5 +71,38 @@
   P.dot = (x, y, ion, r = 4.2) => `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" style="fill:var(${P.ION[ion][1]});stroke:var(--surface);stroke-width:1"/>`;
   /* reduced motion */
   P.reduced = () => { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
+  /* ---- added for module 02 (blood): a micrograph with switchable labels, as anatomy/histology/histo.js H.micro.
+     m = {id, file (path relative to the page), w, h, alt, title, cap, credit, labels: [[x, y, text], ...] (fractions of the image)} ---- */
+  P.micro = (box, m) => {
+    const f = document.createElement('figure'); f.className = 'mg'; f.id = 'mg-' + m.id;
+    f.innerHTML = `<div class="bar"><span class="t">${m.title}</span></div><div class="im"><img src="${m.file}" width="${m.w}" height="${m.h}" loading="lazy" alt="${m.alt}"><svg viewBox="0 0 ${m.w} ${m.h}" aria-hidden="true"></svg></div><figcaption>${m.cap}<span class="cr">${m.credit}</span></figcaption>`;
+    (typeof box === 'string' ? P.$(box) : box).append(f);
+    const st = {on: true};
+    const draw = () => {
+      const S = f.querySelector('svg'), wpx = Math.max(160, f.querySelector('.im').clientWidth || 400), k = m.w / wpx, fs = 12.5 * k;
+      S.style.setProperty('--mg-fs', fs.toFixed(1) + 'px'); S.style.setProperty('--mg-sw', (2.6 * k).toFixed(1) + 'px'); S.style.setProperty('--mg-lw', (1.5 * k).toFixed(1) + 'px');
+      let h = ''; const boxes = [];
+      if (st.on) for (const [x, y, t] of m.labels || []) {
+        const X = x * m.w, Y = y * m.h, tw = t.length * fs * 0.56, gap = 9 * k;
+        let right = x < 0.55; if (right && X + gap + tw > m.w - 4) right = false; if (!right && X - gap - tw < 4) right = true;
+        const tx = Math.max(4 + (right ? 0 : tw), Math.min(m.w - 4 - (right ? tw : 0), right ? X + gap : X - gap));
+        let ty = Math.max(fs, Math.min(m.h - 4, Y + fs * 0.35)); const x0 = right ? tx : tx - tw, x1 = right ? tx + tw : tx;
+        for (let i = 0; i < 6; i++) { const hit = boxes.find(q => x0 < q[2] && x1 > q[0] && ty - fs < q[3] && ty > q[1] - fs * 0.15); if (!hit) break; ty = Math.min(m.h - 4, hit[3] + fs * 1.15); }
+        boxes.push([x0, ty - fs, x1, ty]);
+        if (Math.abs(ty - (Y + fs * 0.35)) > fs * 0.6) h += `<line x1="${X.toFixed(1)}" y1="${Y.toFixed(1)}" x2="${tx.toFixed(1)}" y2="${(ty - fs * 0.35).toFixed(1)}"/>`;
+        h += `<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="${(4.5 * k).toFixed(1)}"/><text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" text-anchor="${right ? 'start' : 'end'}">${t}</text>`;
+      }
+      S.innerHTML = h;
+    };
+    if (m.labels && m.labels.length) {
+      const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = 'Labels'; b.setAttribute('aria-pressed', 'true');
+      b.onclick = () => { st.on = !st.on; b.setAttribute('aria-pressed', String(st.on)); draw(); };
+      f.querySelector('.bar').append(b);
+    }
+    draw();
+    if (window.ResizeObserver) new ResizeObserver(draw).observe(f.querySelector('.im'));
+    return f;
+  };
+  P.credit = c => `Image: <a href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(c.file.replace(/ /g, '_'))}">${c.file}</a> by ${c.author}, ${c.licUrl ? `<a href="${c.licUrl}">${c.lic}</a>` : c.lic}, via Wikimedia Commons; ${c.done}.`;
   window.Phys = P;
 })();

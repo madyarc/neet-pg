@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Haemodynamics and Blood Pressure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+/* page tokens reused with their meaning (atlas.css): --vein, --heart. --artery, --nerve, --fluid from phys.css. */
+:root{--vein:#3a5ba8;--heart:#b8655c}
+:root[data-theme="dark"]{--vein:#6d8fd8;--heart:#c98078}
+svg.sch .wall{fill:var(--artery);fill-opacity:.22;stroke:var(--artery);stroke-width:1.2}
+svg.sch .lum{fill:var(--surface)}
+svg.sch .nv{stroke:var(--nerve);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .nvoff{opacity:.25}
+svg.sch .node{fill:var(--surface);stroke:var(--muted);stroke-width:1.2}
+svg.sch .nodeon{fill:var(--surface);stroke:var(--ink);stroke-width:2.2}
+svg.sch.fitmax{max-width:440px}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 03: <a href="cardiac-electrophysiology.html">Electrophysiology and ECG</a> · <a href="cardiac-cycle-output.html">Cardiac cycle and output</a> · <span aria-current="page">Haemodynamics and BP</span></span></nav>
+
+<header class="stack">
+  <h1>Haemodynamics, Blood Pressure and Its Regulation</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-flow">Flow and resistance</a> <a href="#h-rey">Laminar and turbulent</a> <a href="#h-bp">Blood pressure</a> <a href="#h-baro">Baroreflex</a> <a href="#h-local">Autoregulation and RAAS</a> <a href="#h-reg">Regional circulations</a> <a href="#h-starling">Capillary exchange</a> <a href="#h-shock">Shock, syncope, heart failure</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-flow">
+  <h2 id="h-flow">Flow, resistance and Poiseuille's law</h2>
+  <div class="sliders" id="poi-sl"></div>
+  <div class="vrow" aria-live="polite" id="poi-out"></div>
+  <div class="schbox"><svg class="fig sch" id="poi-svg" viewBox="0 0 600 170" role="img" aria-label="A vessel drawn at the chosen radius and length with a parabolic laminar velocity profile; the flow relative to the starting vessel is shown"></svg></div>
+  <div class="prose" id="poi-text"></div>
+  <div class="two">
+    <div class="stack"><h3>Resistances in series and in parallel (Ohm's-law arithmetic)</h3><div class="sliders" id="ser-sl"></div></div>
+    <div class="prose" id="ser-out" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-rey">
+  <h2 id="h-rey">Laminar and turbulent flow: the Reynolds number</h2>
+  <div class="sliders" id="rey-sl"></div>
+  <div class="vrow" aria-live="polite"><span><span class="tag">Reynolds number</span> <span class="big" id="rey-val"></span></span><span class="readout" id="rey-cls"></span></div>
+  <div class="prose" id="rey-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-bp">
+  <h2 id="h-bp">Blood pressure: pulse pressure, mean arterial pressure, compliance</h2>
+  <div class="two">
+    <div class="stack"><div class="sliders" id="bp-sl"></div><div class="prose" id="bp-out" aria-live="polite"></div></div>
+    <div class="schbox"><svg class="fig sch fit fitmax" id="bp-svg" viewBox="0 0 360 230" role="img" aria-label="Schematic arterial pressure wave over one beat with systolic, diastolic, pulse pressure and mean arterial pressure marked"></svg></div>
+  </div>
+  <div class="two">
+    <div class="stack"><h3>Pulse pressure ≈ stroke volume ÷ arterial compliance</h3><div class="sliders" id="pp-sl"></div></div>
+    <div class="prose" id="pp-out" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="bp-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-baro">
+  <h2 id="h-baro">The baroreceptor reflex: what happens when blood pressure falls</h2>
+  <div class="step" id="baro-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="baro-svg" viewBox="0 0 540 330" role="img" aria-label="Schematic baroreflex arc: carotid sinus and aortic arch receptors, glossopharyngeal and vagus afferents to the nucleus tractus solitarius in the medulla, vagal and sympathetic outflow to heart and vessels; the current step is highlighted"></svg></div>
+    <div class="prose find" id="baro-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="baro-key"></div>
+  <p class="muted" id="baro-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-local">
+  <h2 id="h-local">Local autoregulation, and the renin–angiotensin–aldosterone system</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="auto-svg" viewBox="0 0 360 240" role="img" aria-label="Schematic autoregulation curve: cerebral blood flow nearly constant between perfusion pressures of about 50 and 150 mmHg"></svg></div>
+    <div class="prose" id="auto-text"></div>
+  </div>
+  <div class="step" id="raas-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="raas-svg" viewBox="0 0 560 230" role="img" aria-label="Renin–angiotensin–aldosterone cascade from the kidney, liver and lung to the effects of angiotensin II; the current step is highlighted"></svg></div>
+    <div class="prose find" id="raas-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-reg">
+  <h2 id="h-reg">Regional circulations</h2>
+  <div class="chips" id="reg-tg" aria-label="Circulation"></div>
+  <div class="prose find" id="reg-find" aria-live="polite"></div>
+  <div class="scroll"><table id="reg-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-starling">
+  <h2 id="h-starling">Capillary exchange: a Starling-forces calculator</h2>
+  <div class="chips" id="st-tg" aria-label="Preset"></div>
+  <div class="sliders" id="st-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="st-svg" viewBox="0 0 360 250" role="img" aria-label="Capillary wall with the hydrostatic and oncotic pressures on each side drawn as arrows and the net movement of fluid"></svg></div>
+    <div class="prose" id="st-out" aria-live="polite"></div>
+  </div>
+  <div class="key" id="st-key"></div>
+  <div class="prose" id="st-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-shock">
+  <h2 id="h-shock">Shock, syncope and heart failure</h2>
+  <div class="chips" id="sh-tg" aria-label="Shock type"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="sh-svg" viewBox="0 0 360 200" role="img" aria-label="Typical haemodynamic pattern of the chosen type of shock as arrows: cardiac output and systemic vascular resistance"></svg></div>
+    <div class="prose find" id="sh-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="sh-table"></table></div>
+  <div class="prose" id="sh-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio3.md, Part C; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Change a vessel\'s radius and watch flow change with the fourth power; find when flow turns turbulent; get mean arterial pressure from systolic and diastolic; step through the baroreflex after a fall in blood pressure; follow the renin–angiotensin cascade; compare regional circulations; balance the Starling forces across a capillary; and compare the four kinds of shock. Vessel types and microcirculation anatomy: <a href="../../anatomy/general/blood-vessels.html#h-micro">Blood Vessels</a>.';
+
+const POI0 = {r: 1, l: 1, eta: 1, dp: 1};
+const POI_TEXT = '<p><b>Flow = pressure difference ÷ resistance.</b> By <b>Poiseuille\'s law</b>, R = 8ηL ÷ πr⁴: resistance rises with vessel <b>length</b> and blood <b>viscosity</b> and falls with the <b>fourth power of the radius</b>, so halving the radius raises resistance <b>16-fold</b> (StatPearls; Wikipedia; a 2019 review). Radius therefore matters far more than viscosity; vasoconstriction raises resistance, vasodilatation lowers it. The <b>arterioles</b> are the main resistance vessels and the largest pressure drop in the systemic circulation (about 70% of it, Wikipedia) and regulate systemic vascular resistance.</p><p class="muted">The law assumes steady laminar flow of a Newtonian fluid in a long rigid tube; blood flow is pulsatile and blood is not Newtonian, so it is an approximation (Wikipedia; StatPearls).</p>';
+const SER0 = {r1: 2, r2: 3, r3: 6};
+
+const REY0 = {v: 30, d: 10, eta: 3.5};
+const REY_TEXT = '<p><b>Laminar</b> flow moves in smooth layers; <b>turbulent</b> flow has eddies and lateral mixing. The <b>Reynolds number</b> Re = ρvD/η (density × mean velocity × diameter ÷ viscosity) predicts the change: high velocity, wide vessels and low viscosity favour turbulence (Wikipedia; the same variables in StatPearls). Wikipedia\'s thresholds for a pipe: below about <b>2300</b> laminar, above about <b>4000</b> turbulent. Turbulence makes vibrations loud enough to hear: <b>murmurs</b> (StatPearls; Wikipedia).</p><p class="muted"><b>A disagreement:</b> a 2020 paper argues that physiological blood flow is turbulent, against the usual teaching that it is laminar. Density is fixed here at 1.06 g/mL (illustrative); slider values are illustrative, not measured vessel data.</p>';
+
+const BP0 = {sbp: 120, dbp: 80};
+const PP0 = {sv: 80, c: 2};
+const BP_TEXT = '<p><b>Mean arterial pressure = cardiac output × systemic vascular resistance</b> (central venous pressure is small enough to neglect; StatPearls, Wikipedia, a 2023 review). Cardiac output depends on heart rate and stroke volume (preload, contractility, afterload); resistance mainly on vessel radius, a little on viscosity (StatPearls). MAP is a major determinant of organ perfusion (Wikipedia). A typical adult value is about 120/80 mmHg (StatPearls\' example); hypertension thresholds come from dated guidelines and are not given here.</p><p><b>Compliance</b> = ΔV/ΔP. Veins are much more compliant than arteries — about 30 times (Wikipedia) — and hold most of the blood (the "capacitance vessels", over 70%; Wikipedia). The aorta and large elastic arteries distend in systole and recoil in diastole (the <b>Windkessel</b> effect; Wikipedia; a 2016 review).</p>';
+
+/* baroreflex steps: [label, highlighted parts, text] */
+const BARO = [
+  ['BP falls', ['bp'], '<h3>1. Blood pressure falls</h3><p>For example on standing up or after blood loss. The carotid sinus and aortic arch walls are stretched less.</p>'],
+  ['Less stretch, fewer impulses', ['cs', 'aa'], '<h3>2. Baroreceptors fire less</h3><p>Baroreceptors are <b>stretch receptors</b> — the most sensitive in the <b>carotid sinuses</b> and <b>aortic arch</b> (Wikipedia; StatPearls; a 2014 review). Less stretch means fewer action potentials.</p>'],
+  ['IX and X to the NTS', ['n9', 'n10', 'nts'], '<h3>3. Afferents to the medulla</h3><p>Carotid-sinus fibres run in the <b>glossopharyngeal nerve (IX)</b> (via the carotid sinus nerve); aortic-arch fibres in the <b>vagus (X)</b>. Both end in the <b>nucleus tractus solitarius (NTS)</b> in the medulla (Wikipedia; StatPearls; 2014 and 2023 reviews).</p>'],
+  ['Less vagal, more sympathetic', ['nts', 'vag', 'sym'], '<h3>4. Autonomic outflow shifts</h3><p>The medulla reduces <b>parasympathetic (vagal)</b> outflow and increases <b>sympathetic</b> outflow (StatPearls; Wikipedia, which traces the sympathetic arm through the caudal and rostral ventrolateral medulla).</p>'],
+  ['Heart and vessels respond', ['heart', 'vess'], '<h3>5. Effects</h3><p><b>Heart rate</b> and <b>contractility</b> rise and <b>vascular resistance</b> rises (StatPearls; Wikipedia); splanchnic veins constrict, helping to hold blood pressure when upright (a 2017 study).</p>'],
+  ['BP restored', ['bp'], '<h3>6. Blood pressure returns towards normal</h3><p>A rapid <b>negative-feedback</b> loop for <b>short-term</b> control; slower and longer-term control comes from the kidney and the renin–angiotensin system (StatPearls; Wikipedia). Low-pressure (cardiopulmonary) receptors in the atria, ventricles and pulmonary vessels monitor central blood volume (StatPearls).</p>'],
+];
+const BARO_NOTE = 'Schematic, not anatomical. The same reflex runs the other way when pressure rises: more stretch, more firing, more vagal and less sympathetic outflow, slower heart rate (Wikipedia; a 2014 review). Carotid sinus massage uses it to diagnose carotid sinus syncope (Wikipedia; a 2014 review).';
+
+const AUTO_TEXT = '<p><b>Autoregulation</b> keeps a tissue\'s blood flow nearly constant over a range of perfusion pressures — clearest in the <b>kidney, heart and brain</b> (Wikipedia). Mechanisms: <b>myogenic</b> (the Bayliss response of arteriolar smooth muscle to stretch), <b>metabolic</b> (flow linked to local need), endothelial and neurogenic (a 2016 review; StatPearls; Wikipedia). In the coronary bed a fall in driving pressure is matched by a fall in resistance (a 2010 review).</p><p class="muted">Curve: cerebral autoregulation between perfusion pressures of about <b>50 and 150 mmHg</b> (one 2011 review; Wikipedia gives no range). Schematic shape.</p>';
+const RAAS = [
+  ['Trigger', ['kid'], '<h3>Trigger</h3><p>Reduced renal perfusion, less NaCl reaching the macula densa, or β-adrenergic (sympathetic) stimulation (StatPearls; Wikipedia).</p>'],
+  ['Renin', ['kid', 'ren'], '<h3>Renin</h3><p><b>Juxtaglomerular cells</b> of the kidney release the enzyme <b>renin</b>, made from prorenin (Wikipedia; a 2019 review; a 2023 review).</p>'],
+  ['Angiotensin I', ['liv', 'a1'], '<h3>Angiotensinogen → angiotensin I</h3><p>Renin converts <b>angiotensinogen</b>, made by the liver, to <b>angiotensin I</b> (Wikipedia; a 2019 review), which has no biological function of its own (Wikipedia).</p>'],
+  ['ACE → angiotensin II', ['lung', 'a2'], '<h3>ACE → angiotensin II</h3><p><b>Angiotensin-converting enzyme</b> on vascular endothelium, mainly in the <b>lungs</b>, makes <b>angiotensin II</b> (Wikipedia; a 2019 review). ACE inhibitors block this step and angiotensin-receptor blockers block AT1 receptors (Wikipedia; a 2019 review).</p>'],
+  ['Effects', ['a2', 'eff'], '<h3>Effects of angiotensin II (AT1 receptors)</h3><p><b>Vasoconstriction</b>; <b>aldosterone</b> from the adrenal cortex (Na⁺ and water retained, extracellular volume up); <b>vasopressin (ADH)</b> release and <b>thirst</b> (a 2023 review). Blood pressure rises — acute and chronic control (StatPearls).</p>'],
+];
+
+/* regional circulations: [key, name, facts html] */
+const REG = [
+  ['cor', 'Coronary', '<h3>Coronary circulation</h3><p>About <b>5% of cardiac output</b> (StatPearls). The <b>left ventricle is perfused almost entirely in diastole</b> (a 2014 review; Wikipedia: "nearly all coronary perfusion … occurs during diastole"); in systole extravascular forces from the contracting ventricle add to the resistance (a 2010 review). The normal right coronary artery has almost as much flow in systole as in diastole (a 2014 review). So the time spent in diastole (a 2014 review) and the diastolic pressure (Wikipedia) matter for left-ventricular flow. Coronary flow autoregulates and follows oxygen demand. Arteries and territories: <a href="../../anatomy/thorax/heart.html#h-cor">The Heart</a>.</p>'],
+  ['cer', 'Cerebral', '<h3>Cerebral circulation</h3><p>About <b>750 mL/min, roughly 15% of cardiac output</b> (Wikipedia; StatPearls: 15–20% for 2% of body weight). <b>Autoregulation</b> holds flow constant over a range of perfusion pressures (about 50–150 mmHg in one review). <b>CO₂ dilates</b> cerebral vessels and low CO₂ constricts them, acting through H⁺ (Wikipedia; a 2011 review). Raised intracranial pressure lowers cerebral perfusion pressure and triggers the <b>Cushing reflex</b>: rising blood pressure, slowing heart rate and irregular breathing (StatPearls; Wikipedia). Circle of Willis: <a href="../../anatomy/general/blood-vessels.html">Blood Vessels</a>.</p>'],
+  ['pul', 'Pulmonary', '<h3>Pulmonary circulation</h3><p><b>Low pressure</b> (about 25/8 mmHg, mean 15; Wikipedia; StatPearls) and <b>low resistance</b> — about a tenth of systemic (StatPearls) — so the whole cardiac output passes at low pressure. <b>Hypoxic pulmonary vasoconstriction</b>: small pulmonary arteries constrict where alveolar O₂ is low, diverting blood to well-ventilated alveoli (ventilation–perfusion matching); with global hypoxia, as at altitude, it raises pulmonary vascular resistance (Wikipedia; a 2016 review). <a href="../../anatomy/general/blood-vessels.html#h-circ">Pulmonary vs systemic</a>.</p>'],
+  ['skin', 'Skin', '<h3>Skin circulation</h3><p>Serves <b>temperature regulation</b>: heat increases skin blood flow to lose heat (Wikipedia; a 1986 review); cold constricts skin vessels to save heat (Wikipedia). Baroreceptor stimulation has only a modest effect on skin vessels (a 2023 review). Arteriovenous anastomoses: <a href="../../anatomy/general/blood-vessels.html#h-micro">Blood Vessels</a>.</p>'],
+  ['spl', 'Splanchnic', '<h3>Splanchnic circulation</h3><p>The circulation of the gut organs, from the coeliac trunk and the superior and inferior mesenteric arteries (Wikipedia). Splanchnic <b>vaso- and venoconstriction</b> help hold blood pressure when upright (a 2017 study), and its veins are thought to be a large <b>capacitance</b> reservoir (a 2023 study, which notes the evidence is limited).</p>'],
+  ['fet', 'Fetal', '<h3>Fetal circulation</h3><p>The lungs are not used before birth, so shunts carry oxygenated blood from the placenta to the tissues (Wikipedia). Step through it, and the changes at birth: <a href="../../anatomy/embryology/heart-vessels.html#h-fetal">Embryology: fetal circulation</a>.</p>'],
+  ['lym', 'Lymphatic', '<h3>Lymphatic circulation</h3><p>Lymph begins as interstitial fluid that has left the blood; lymphatic capillaries absorb it and return it to the circulation, preventing fluid build-up in the tissues (StatPearls; Wikipedia; a 2016 review). See capillary exchange below.</p>'],
+];
+const REG_TABLE = [
+  ['Coronary', 'About 5% of CO', 'LV flow mainly in diastole; autoregulated'],
+  ['Cerebral', 'About 15% of CO (750 mL/min)', 'Autoregulated; CO₂ dilates'],
+  ['Pulmonary', 'Whole CO at low pressure', 'Low resistance; hypoxia constricts'],
+  ['Skin', '—', 'Temperature regulation'],
+  ['Splanchnic', '—', 'Constricts when upright; possible venous reservoir'],
+];
+
+/* Starling forces (mmHg; illustrative values, not measurements) */
+const ST0 = {pc: 30, pi: 0, pic: 25, pii: 5, sig: 0.9};
+const ST_PRESET = {art: ['Arterial end (illustrative)', {pc: 30}], ven: ['Venous end (illustrative)', {pc: 12}], hi: ['High capillary pressure', {pc: 45}], lo: ['Low plasma oncotic pressure', {pic: 12}]};
+const ST_TEXT = '<p><b>Starling equation:</b> Jv = Kf [(Pc − Pi) − σ(πc − πi)] — net filtration is driven by the capillary minus interstitial <b>hydrostatic</b> pressure and opposed by the plasma minus interstitial <b>oncotic</b> (colloid osmotic) pressure, scaled by the reflection coefficient σ and the filtration coefficient Kf (Wikipedia; a 2021 review).</p><p><b>Two views:</b> the classic textbook picture (Starling\'s own proposal) has filtration at the arterial end and reabsorption at the venous end. The revised view says the endothelial <b>glycocalyx</b> is the real filter and there is <b>little steady reabsorption</b> in most tissues — the "traditional view … has little justification" (a 2021 review; also a 2016 review). Either way, the fluid that stays out returns as <b>lymph</b> (StatPearls; Wikipedia; a 2016 review).</p><p class="muted">The anatomy page quotes Wikipedia\'s classic daily balance — about 20 L filtered, 17 L reabsorbed, 3 L returned as lymph (<a href="../../anatomy/general/blood-vessels.html#h-lymcmp">Blood Vessels</a>). Those figures belong to the classic filtration–reabsorption picture; the glycocalyx revision (2021 review) disputes that much reabsorption, so treat them as the textbook model, not measurements.</p><p class="muted">Values are illustrative. Positive net pressure = filtration out of the capillary; negative = absorption.</p>';
+
+/* shock: [key, name, causes, CO arrow, SVR arrow (1 up, -1 down, null not given), main problem, text] */
+const SHOCK = [
+  ['hypo', 'Hypovolaemic', 'Blood loss (haemorrhage, trauma), fluid loss (dehydration, burns)', -1, 1, 'Decreased preload (too little volume)', '<h3>Hypovolaemic shock</h3><p>Too little circulating volume: <b>decreased preload</b> (a 2012 review). Low-flow state. Compensation: tachycardia and vasoconstriction (pale, cold skin), so a large blood loss — up to about 30% of blood volume (a 2021 review) — may look stable at first (StatPearls; Wikipedia).</p>'],
+  ['card', 'Cardiogenic', 'Myocardial infarction, cardiomyopathy, valve disease, severe arrhythmias', -1, 1, 'Pump failure (altered contractility); wedge pressure >15 mmHg', '<h3>Cardiogenic shock</h3><p>The pump fails (altered contractility; a 2012 review), most often after an acute MI (a 2019 review). Criteria: systolic BP ≤90 mmHg for ≥30 min (or support needed to keep it there), cardiac index ≤2.2 L/min/m², pulmonary capillary wedge pressure >15 mmHg (StatPearls; a 2019 review). "Cold and wet": low cardiac index, high SVR, high wedge pressure (a 2019 review).</p>'],
+  ['obs', 'Obstructive', 'Cardiac tamponade, pulmonary embolism, tension pneumothorax', -1, null, 'Obstruction to flow: increased afterload, or filling prevented (tamponade)', '<h3>Obstructive shock</h3><p>A physical obstruction to blood flow into or out of the heart (Wikipedia; a 2012 review: increased afterload). Tamponade prevents normal filling by compressing the heart (Wikipedia; StatPearls: impaired diastolic filling). Low-flow state. Our sources give no SVR pattern for this type.</p>'],
+  ['dist', 'Distributive', 'Sepsis, anaphylaxis, neurogenic (high spinal cord injury), adrenal insufficiency', 1, -1, 'Vasodilatation (low SVR); capillary leak', '<h3>Distributive (vasodilatory) shock</h3><p>Excessive arteriolar <b>vasodilatation</b> lowers systemic vascular resistance (warm extremities; a 2019 review); capillaries leak (StatPearls). Despite myocardial depression, cardiac output is generally <b>increased</b> — a hyperkinetic state (a 2012 review; the 2014 ESICM consensus). <b>Neurogenic</b> shock — loss of sympathetic vascular tone, usually after spinal cord injury above about T6 — is a subset (StatPearls; Wikipedia); acute adrenal insufficiency is another cause (Wikipedia).</p>'],
+];
+const SH_TEXT = '<p><b>Shock</b> is acute circulatory failure: the circulation fails to give cells enough oxygen (a 2012 review; StatPearls; Wikipedia: inadequate blood flow). The <b>2014 ESICM consensus</b> recommends measuring <b>lactate</b> (typically above 2 mmol/L in shock) and does not require hypotension (systolic &lt;90, MAP &lt;65 mmHg or a fall ≥40 mmHg) for the diagnosis. Four types: three <b>low-flow</b> (hypovolaemic, cardiogenic, obstructive) and one <b>hyperkinetic</b> (distributive) (2014 ESICM consensus; 2012 review; Wikipedia; StatPearls).</p><p class="muted">Typical patterns, not rules — mixed forms occur. Filling pressures are not tabulated: apart from the wedge pressure in cardiogenic shock, our sources do not give them.</p>'
+ + '<h3>Syncope</h3><p>A <b>transient loss of consciousness and postural tone</b> from reduced cerebral blood flow, with spontaneous recovery (StatPearls; Wikipedia; a 2017 study). Three groups: <b>reflex</b> (neurally mediated — vasovagal, the commonest; situational, e.g. cough or micturition; carotid sinus), <b>orthostatic hypotension</b> and <b>cardiac</b> (arrhythmia, valve or muscle disease) (Wikipedia; StatPearls). In <b>vasovagal syncope</b> both a slowing heart and loss of vascular tone lower the pressure (StatPearls; a 2014 review: hypotension and bradycardia); in young patients reduced vascular resistance predominates, in older ones reduced cardiac output (a 2017 study). Carotid sinus syndrome is diagnosed by reproducing symptoms with 10 s of carotid sinus massage (ESC guideline, cited in a 2014 review).</p>'
+ + '<h3>Heart failure</h3><p>Categories by left-ventricular ejection fraction (2021 ESC and 2022 ACC/AHA/HFSA guidelines): <b>reduced (HFrEF) ≤40%</b>, <b>mildly reduced (HFmrEF) 41–49%</b>, <b>preserved (HFpEF) ≥50%</b> (StatPearls; Wikipedia; a 2023 summary). The failing heart works on a lower Frank–Starling curve (<a href="cardiac-cycle-output.html#h-co">curve</a>). <b>Neurohormonal compensation</b> — sympathetic and renin–angiotensin activation — raises heart rate and contractility (a 2021 review) but long-term leads to fibrosis, dilatation and remodelling (Wikipedia; a 2021 review). <b>Physiological basis of treatment:</b> relieve <b>congestion</b> (lower preload, e.g. diuretics for fluid retention), <b>reduce afterload</b> (stroke volume falls as afterload rises; it helps systolic failure), and <b>block the neurohormonal systems</b> (Wikipedia; StatPearls; 2016 and 2021 reviews; the drug classes recommended by the 2022 AHA/ACC guideline are listed by Wikipedia, not here).</p>';
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews on blood rheology, physiological turbulence, blood-pressure control and haemorrhagic shock, the heart and heart-rate variability, fainting, coronary flow and the myocardial oxygen supply–demand index, cerebral blood-flow regulation, the Starling principle and microvascular exchange, the tissue renin–angiotensin system, the right ventricle and pulmonary circulation, circulatory shock (ESICM 2014 consensus; 2012 review; cardiogenic shock 2019), syncope, heart-failure guidelines 2021–2022 (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> the Poiseuille, series/parallel, Reynolds, MAP, pulse-pressure and Starling calculators compute their formulas from the slider values (illustrative, not patient data). The pressure wave, baroreflex arc, autoregulation curve, RAAS diagram and shock arrows are schematic.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* ---- Poiseuille (relative to a starting vessel) ---- */
+const PO = Object.assign({}, POI0);
+function drawPoi() {
+  const R = PO.l * PO.eta / Math.pow(PO.r, 4), Q = PO.dp / R;
+  $('poi-out').innerHTML = `<span><span class="tag">Flow</span> <span class="big">${Q >= 10 ? Q.toFixed(0) : Q.toFixed(2)} ×</span></span><span class="readout">resistance ${R >= 10 ? R.toFixed(0) : R.toFixed(2)} × the starting vessel</span>`;
+  const cy = 85, rad = 26 * PO.r, len = 360 * Math.min(1.4, PO.l) / 1.4 + 120, x0 = 30;
+  let s = Phys.arrowDef('ap', 'var(--ink)');
+  s += `<rect x="${x0}" y="${cy - rad - 8}" width="${len}" height="${2 * rad + 16}" rx="6" class="wall"/><rect x="${x0}" y="${cy - rad}" width="${len}" height="${2 * rad}" class="lum"/>`;
+  const vmax = Math.min(1, Q / 4) * 0.8 + 0.2, xm = x0 + len * 0.45;
+  for (let k = -4; k <= 4; k++) { const y = cy + rad * k / 4.6, f = 1 - (k / 4.6) ** 2, L = 70 * vmax * f; if (L > 3) s += `<path d="M${xm} ${y.toFixed(1)} L${(xm + L).toFixed(1)} ${y.toFixed(1)}" style="stroke:var(--ink);stroke-width:1.3" marker-end="url(#ap)"/>`; }
+  s += T(x0, 160, 'arrows: laminar (parabolic) velocity profile, schematic', 's', 'start') + T(x0, 16, `radius ${PO.r.toFixed(2)} ×, length ${PO.l.toFixed(2)} ×, viscosity ${PO.eta.toFixed(2)} ×, pressure difference ${PO.dp.toFixed(2)} ×`, 's', 'start');
+  $('poi-svg').innerHTML = s;
+}
+for (const [k, lab, mn, mx, st] of [['r', 'Radius', 0.5, 1.5, 0.05], ['l', 'Length', 0.5, 2, 0.05], ['eta', 'Viscosity', 0.5, 2, 0.05], ['dp', 'Pressure difference', 0.5, 2, 0.05]]) Phys.slider('poi-sl', {id: 'p' + k, label: lab + ' (× start)', min: mn, max: mx, step: st, value: POI0[k], fmt: v => v.toFixed(2) + ' ×'}, v => { PO[k] = v; drawPoi(); }).init();
+$('poi-text').innerHTML = POI_TEXT; drawPoi();
+const SR = Object.assign({}, SER0);
+function drawSer() {
+  const ser = SR.r1 + SR.r2 + SR.r3, par = 1 / (1 / SR.r1 + 1 / SR.r2 + 1 / SR.r3);
+  $('ser-out').innerHTML = `<p><span class="tag">Series</span> <span class="readout">R = R1 + R2 + R3 = ${ser.toFixed(2)}</span></p><p><span class="tag">Parallel</span> <span class="readout">1/R = 1/R1 + 1/R2 + 1/R3 → R = ${par.toFixed(2)}</span></p><p class="muted">Ohm\'s-law arithmetic (arbitrary units), the electrical analogy StatPearls uses for vascular resistance: in series resistances add; in parallel the total is lower than the smallest one.</p>`;
+}
+for (const k of ['r1', 'r2', 'r3']) Phys.slider('ser-sl', {id: k, label: k.toUpperCase(), min: 1, max: 10, step: 0.5, value: SER0[k], fmt: v => v.toFixed(1)}, v => { SR[k] = v; drawSer(); }).init();
+drawSer();
+
+/* ---- Reynolds ---- */
+const RY = Object.assign({}, REY0);
+function drawRey() {
+  const re = 1060 * (RY.v / 100) * (RY.d / 1000) / (RY.eta / 1000);
+  $('rey-val').textContent = re.toFixed(0);
+  $('rey-cls').textContent = re < 2300 ? 'below 2300: laminar' : re <= 4000 ? '2300–4000: transitional' : 'above 4000: turbulent';
+}
+for (const [k, lab, mn, mx, st, u] of [['v', 'Mean velocity', 5, 150, 1, ' cm/s'], ['d', 'Diameter', 1, 30, 0.5, ' mm'], ['eta', 'Viscosity', 1, 6, 0.1, ' mPa·s (cP)']]) Phys.slider('rey-sl', {id: 'y' + k, label: lab, min: mn, max: mx, step: st, value: REY0[k], fmt: v => (st < 1 ? v.toFixed(1) : v) + u}, v => { RY[k] = v; drawRey(); }).init();
+$('rey-text').innerHTML = REY_TEXT; drawRey();
+
+/* ---- BP ---- */
+const BPv = Object.assign({}, BP0);
+function drawBp() {
+  const dbp = BPv.dbp, pp = BPv.sbp - dbp, map = dbp + pp / 3, map2 = dbp + 0.412 * pp;
+  $('bp-out').innerHTML = `<p><span class="tag">Pulse pressure</span> <span class="readout">${pp} mmHg</span> &nbsp; <span class="tag">MAP ≈ DBP + ⅓ PP</span> <span class="readout">${map.toFixed(1)} mmHg</span></p><p>Pulse pressure = systolic − diastolic (about 40 mmHg at 120/80). MAP is estimated as diastolic plus a third of the pulse pressure, i.e. (2 × DBP + SBP) ÷ 3 (StatPearls; Wikipedia). Wikipedia also gives DBP + 0.412 × PP as more accurate: ${map2.toFixed(1)} mmHg. ${pp < 0.25 * BPv.sbp ? 'Pulse pressure below 25% of systolic: <b>narrow</b> (StatPearls; Wikipedia), e.g. low stroke volume.' : ''}</p>`;
+  const x0 = 40, x1 = 250, X = Phys.scale(0, 1, x0, x1), Y = Phys.scale(40, 200, 200, 20);
+  const A = BPv.sbp - 0.25 * pp, tau = 0.3, e0 = Math.exp(-0.64 / tau);
+  const wave = u => u < 0.12 ? dbp + pp * Math.sin(Math.PI / 2 * u / 0.12) : u < 0.33 ? BPv.sbp - 0.25 * pp * ((u - 0.12) / 0.21) ** 1.4 : u < 0.36 ? A - 3 * Math.sin(Math.PI * (u - 0.33) / 0.03) : dbp + (A - dbp) * (Math.exp(-(u - 0.36) / tau) - e0) / (1 - e0);
+  let s = `<path class="axis" d="M${x0} 20 L${x0} 200 L${x1} 200"/>`;
+  for (const v of [40, 80, 120, 160, 200]) s += T(x0 - 6, Y(v) + 4, v, 's', 'end');
+  s += T(x0 + 6, 16, 'mmHg (schematic wave)', 's', 'start');
+  const pts = []; for (let u = 0; u <= 1; u += 0.005) pts.push([X(u), Y(wave(u))]);
+  s += `<path class="trace" style="stroke:var(--artery)" d="${Phys.path(pts)}"/>`;
+  s += `<path class="grid dash" d="M${x0} ${Y(BPv.sbp)} L${x1} ${Y(BPv.sbp)}"/><path class="grid dash" d="M${x0} ${Y(dbp)} L${x1} ${Y(dbp)}"/><path d="M${x0} ${Y(map)} L${x1} ${Y(map)}" style="stroke:var(--ink);stroke-width:1.6;stroke-dasharray:8 3"/>`;
+  { const labs = [[Y(BPv.sbp) - 4, 'systolic ' + BPv.sbp, 'l'], [Y(map) + 4, 'MAP ' + map.toFixed(0), 'l b'], [Y(dbp) + 12, 'diastolic ' + dbp, 'l']];
+    for (let i = 1; i < labs.length; i++) labs[i][0] = Math.max(labs[i][0], labs[i - 1][0] + 15);
+    for (const [y, t, c] of labs) s += T(x1 + 4, y, t, c, 'start'); }
+  s += `<path d="M${X(0.8)} ${Y(BPv.sbp)} L${X(0.8)} ${Y(dbp)}" style="stroke:var(--ink);stroke-width:1.2"/>` + T(X(0.8) + 6, (Y(BPv.sbp) + Y(dbp)) / 2 + 4, 'PP', 'l', 'start');
+  $('bp-svg').innerHTML = s;
+}
+const BPS = {};
+for (const [k, lab, mn, mx] of [['sbp', 'Systolic', 80, 200], ['dbp', 'Diastolic', 40, 120]]) { BPS[k] = Phys.slider('bp-sl', {id: k, label: lab, min: mn, max: mx, step: 1, value: BP0[k], fmt: v => v + ' mmHg'}, v => { BPv[k] = v; if (k === 'sbp') limitDbp(); drawBp(); }); BPS[k].init(); }
+/* diastolic can never reach systolic: its slider maximum follows systolic − 5 */
+function limitDbp() { const mx = Math.min(120, BPv.sbp - 5); BPS.dbp.el.max = mx; if (BPv.dbp > mx) BPS.dbp.set(mx); }
+limitDbp();
+drawBp();
+const PPv = Object.assign({}, PP0);
+function drawPp() { const pp = PPv.sv / PPv.c; $('pp-out').innerHTML = `<p><span class="tag">Pulse pressure ≈ SV ÷ C</span> <span class="big">${pp.toFixed(0)} mmHg</span></p><p>StatPearls\' example: stroke volume about 80 mL ÷ arterial compliance about 2 mL/mmHg ≈ 40 mmHg. A larger stroke volume widens the pulse pressure; stiffer arteries (lower compliance) widen it too (StatPearls; Wikipedia).</p>`; }
+for (const [k, lab, mn, mx, st, u] of [['sv', 'Stroke volume', 30, 150, 1, ' mL'], ['c', 'Arterial compliance', 0.5, 4, 0.1, ' mL/mmHg']]) Phys.slider('pp-sl', {id: k, label: lab, min: mn, max: mx, step: st, value: PP0[k], fmt: v => (st < 1 ? v.toFixed(1) : v) + u}, v => { PPv[k] = v; drawPp(); }).init();
+drawPp(); $('bp-text').innerHTML = BP_TEXT;
+
+/* ---- baroreflex arc ---- */
+const BS = {s: 0};
+function drawBaro() {
+  const on = new Set(BARO[BS.s][1]);
+  const hl = k => on.has(k);
+  let s = Phys.arrowDef('ab', 'var(--ink)');
+  // medulla box with NTS
+  s += `<rect x="210" y="20" width="150" height="80" rx="12" class="${hl('nts') ? 'nodeon' : 'node'}"/>` + T(285, 44, 'medulla', 's', 'middle') + T(285, 66, 'NTS', 'b', 'middle') + T(285, 86, 'nucleus tractus solitarius', 's', 'middle');
+  // carotid sinus and aortic arch
+  s += `<path d="M60 250 C60 200 70 170 90 150 M90 150 C82 130 82 110 86 92 M90 150 C100 130 104 112 104 92" style="stroke:var(--artery);stroke-width:8;fill:none;stroke-linecap:round;opacity:${hl('cs') || hl('bp') ? 1 : .55}"/>` + `<circle cx="90" cy="150" r="11" style="fill:var(--artery);opacity:${hl('cs') ? 1 : .55}"/>` + T(110, 160, 'carotid sinus', 'l', 'start');
+  s += `<path d="M150 290 C150 230 200 215 230 240 C250 258 250 290 250 300" style="stroke:var(--artery);stroke-width:12;fill:none;stroke-linecap:round;opacity:${hl('aa') || hl('bp') ? 1 : .55}"/>` + T(200, 214, 'aortic arch', 'l', 'middle');
+  // afferents
+  s += `<path class="nv ${hl('n9') ? '' : 'nvoff'}" d="M98 146 C140 110 180 80 210 62"/>` + T(140, 104, 'IX', 'l b', 'middle');
+  s += `<path class="nv ${hl('n10') ? '' : 'nvoff'}" d="M235 232 C240 170 250 130 262 100"/>` + T(232, 168, 'X', 'l b', 'end');
+  // efferents
+  s += `<path class="nv ${hl('vag') ? '' : 'nvoff'}" d="M330 100 C350 150 380 180 420 200" style="stroke-dasharray:6 4"/>` + T(392, 160, 'vagal ↓', 'l b', 'start');
+  s += `<path class="nv ${hl('sym') ? '' : 'nvoff'}" d="M360 70 C420 70 470 100 480 150"/>` + T(430, 72, 'sympathetic ↑', 'l b', 'start');
+  // heart and vessels
+  s += `<path d="M420 205 C410 180 440 170 450 190 C460 170 490 180 480 205 L450 245 Z" style="fill:var(--heart);fill-opacity:${hl('heart') ? .8 : .35};stroke:var(--heart)"/>` + T(450, 268, 'heart: rate ↑, contractility ↑', 'l', 'middle');
+  s += `<path d="M470 150 L530 150" style="stroke:var(--artery);stroke-width:${hl('vess') ? 4 : 7};opacity:${hl('vess') ? 1 : .55}"/><path d="M470 120 L530 120" style="stroke:var(--vein);stroke-width:${hl('vess') ? 5 : 8};opacity:${hl('vess') ? 1 : .55}"/>` + T(500, 108, 'veins', 's', 'middle') + T(500, 140, 'arterioles', 's', 'middle');
+  s += T(20, 318, hl('bp') ? (BS.s === 0 ? 'blood pressure ↓' : 'blood pressure back towards normal') : '', 'l b', 'start');
+  $('baro-svg').innerHTML = s; $('baro-find').innerHTML = BARO[BS.s][2];
+}
+Phys.stepper('baro-step', BARO.map(r => r[0]), drawBaro, BS);
+Phys.key('baro-key', [['--artery', 'artery (carotid sinus, aortic arch, arterioles)'], ['--vein', 'vein'], ['--nerve', 'nerve (afferent and efferent)'], ['--heart', 'heart']]);
+$('baro-note').textContent = BARO_NOTE;
+
+/* ---- autoregulation curve and RAAS ---- */
+{
+  const x0 = 50, x1 = 340, X = Phys.scale(0, 200, x0, x1), Y = Phys.scale(0, 2, 200, 20);
+  const f = p => p < 50 ? 1 * p / 50 * 0.95 + 0.0 : p <= 150 ? 0.95 + 0.05 * (p - 50) / 100 : 1 + (p - 150) / 50 * 0.8;
+  let s = `<path class="axis" d="M${x0} 20 L${x0} 200 L${x1} 200"/>`;
+  for (const v of [0, 50, 100, 150, 200]) s += T(X(v), 216, v, 's', 'middle');
+  s += T(x1, 232, 'perfusion pressure (mmHg) →', 's', 'end') + T(x0 + 6, 16, 'blood flow (relative)', 's', 'start');
+  s += `<rect x="${X(50)}" y="20" width="${X(150) - X(50)}" height="180" style="fill:var(--ink);fill-opacity:.06"/>` + T((X(50) + X(150)) / 2, 40, 'autoregulated', 's', 'middle');
+  const pts = []; for (let p = 0; p <= 200; p += 2) pts.push([X(p), Y(f(p))]); s += `<path class="trace" d="${Phys.path(pts)}"/>`;
+  $('auto-svg').innerHTML = s; $('auto-text').innerHTML = AUTO_TEXT;
+}
+const RS = {s: 0};
+function drawRaas() {
+  const on = new Set(RAAS[RS.s][1]);
+  const box = (k, x, y, w, lab, sub) => `<rect x="${x}" y="${y}" width="${w}" height="44" rx="8" class="${on.has(k) ? 'nodeon' : 'node'}"/>` + T(x + w / 2, y + 20, lab, 'b', 'middle') + T(x + w / 2, y + 36, sub, 's', 'middle');
+  let s = Phys.arrowDef('ar', 'var(--ink)');
+  s += box('kid', 10, 20, 130, 'Kidney', 'JG cells');
+  s += box('ren', 10, 100, 130, 'Renin', '');
+  s += box('liv', 175, 20, 130, 'Liver', 'angiotensinogen');
+  s += box('a1', 175, 100, 130, 'Angiotensin I', '');
+  s += box('lung', 340, 20, 130, 'Lung endothelium', 'ACE');
+  s += box('a2', 340, 100, 130, 'Angiotensin II', 'AT1 receptors');
+  s += box('eff', 175, 176, 375, 'Vasoconstriction · aldosterone · ADH, thirst', 'blood pressure and volume ↑');
+  const ar = d => `<path d="${d}" style="stroke:var(--ink);stroke-width:1.5;fill:none" marker-end="url(#ar)"/>`;
+  s += ar('M75 64 L75 98') + ar('M140 122 L173 122') + ar('M240 64 L240 98') + ar('M305 122 L338 122') + ar('M405 64 L405 98') + ar('M405 144 L405 174');
+  $('raas-svg').innerHTML = s; $('raas-find').innerHTML = RAAS[RS.s][2];
+}
+Phys.stepper('raas-step', RAAS.map(r => r[0]), drawRaas, RS);
+
+/* ---- regional ---- */
+Phys.toggles('reg-tg', REG.map(r => [r[0], r[1]]), k => { $('reg-find').innerHTML = REG.find(r => r[0] === k)[2]; }, 'cor');
+$('reg-find').innerHTML = REG[0][2];
+Phys.table('reg-table', ['Circulation', 'Share of output', 'Key feature'], REG_TABLE);
+
+/* ---- Starling ---- */
+const STv = Object.assign({}, ST0);
+const STS = {};
+function drawSt() {
+  const hyd = STv.pc - STv.pi, onc = STv.sig * (STv.pic - STv.pii), net = hyd - onc;
+  $('st-out').innerHTML = `<p><span class="tag">Net filtration pressure</span> <span class="big">${Phys.mn((net > 0 ? '+' : '') + net.toFixed(1))} mmHg</span></p><p>(Pc − Pi) − σ(πc − πi) = (${STv.pc} − ${STv.pi}) − ${STv.sig.toFixed(2)} × (${STv.pic} − ${STv.pii}) = ${Phys.mn(hyd.toFixed(1))} − ${Phys.mn(onc.toFixed(1))}. <b>${net > 0.05 ? 'Filtration: fluid leaves the capillary.' : net < -0.05 ? 'Absorption: fluid enters the capillary.' : 'Balanced.'}</b></p>`;
+  let s = Phys.arrowDef('as', 'var(--ink)');
+  s += `<rect x="20" y="20" width="320" height="70" style="fill:var(--artery);fill-opacity:.12;stroke:none"/>` + T(30, 40, 'capillary (plasma)', 's', 'start');
+  s += `<path d="M20 95 L340 95" style="stroke:var(--artery);stroke-width:4"/>` + `<rect x="20" y="100" width="320" height="110" style="fill:var(--fluid)"/>` + T(30, 200, 'interstitial fluid', 's', 'start');
+  const arrow = (x, y1, y2, w, lab) => Math.abs(y2 - y1) < 2 ? T(x + 8, y1 + 4, lab, 'l', 'start') : `<path d="M${x} ${y1} L${x} ${y2}" style="stroke:var(--ink);stroke-width:${w}" marker-end="url(#as)"/>` + T(x + 8, y2 + (y2 > y1 ? -2 : 12), lab, 'l', 'start');
+  const sc = v => 2.2, len = v => Math.min(85, Math.abs(v) * 3);
+  { const L = len; const pc = STv.pc, ppc = STv.pic * STv.sig, ppi = STv.pii * STv.sig; s += arrow(70, 95 - L(pc) / 2, 95 + L(pc) / 2, 2.2, 'Pc ' + Phys.mn(pc)) + arrow(150, 95 + L(ppc) / 2, 95 - L(ppc) / 2, 2.2, 'σπc ' + Phys.mn(ppc.toFixed(0)));
+    s += (STv.pi >= 0 ? arrow(230, 95 + L(STv.pi) / 2, 95 - L(STv.pi) / 2, 2.2, 'Pi ' + STv.pi) : arrow(230, 95 - L(STv.pi) / 2, 95 + L(STv.pi) / 2, 2.2, 'Pi ' + Phys.mn(STv.pi))) + arrow(300, 95 - L(ppi) / 2, 95 + L(ppi) / 2, 2.2, 'σπi ' + Phys.mn(ppi.toFixed(0))); }
+  s += T(180, 236, net > 0.05 ? 'net: out of the capillary' : net < -0.05 ? 'net: into the capillary' : 'net: none', 'l b', 'middle');
+  $('st-svg').innerHTML = s;
+}
+for (const [k, lab, mn, mx, st] of [['pc', 'Capillary hydrostatic Pc', 0, 60, 1], ['pi', 'Interstitial hydrostatic Pi', -5, 10, 1], ['pic', 'Plasma oncotic πc', 5, 35, 1], ['pii', 'Interstitial oncotic πi', 0, 15, 1], ['sig', 'Reflection coefficient σ', 0, 1, 0.05]]) { STS[k] = Phys.slider('st-sl', {id: k, label: lab, min: mn, max: mx, step: st, value: ST0[k], fmt: v => k === 'sig' ? v.toFixed(2) : v + ' mmHg'}, v => { STv[k] = v; drawSt(); }); STS[k].init(); }
+Phys.toggles('st-tg', Object.entries(ST_PRESET).map(([k, v]) => [k, v[0]]), k => { const p = Object.assign({}, ST0, ST_PRESET[k][1]); for (const kk in STS) STS[kk].set(p[kk]); }, 'art');
+Phys.key('st-key', [['--artery', 'capillary blood'], ['--fluid', 'interstitial fluid']]);
+$('st-text').innerHTML = ST_TEXT; drawSt();
+
+/* ---- shock ---- */
+const ARW = v => v === 1 ? '↑' : v === -1 ? '↓' : 'not given by our sources';
+function drawShock(k) {
+  const r = SHOCK.find(x => x[0] === k);
+  let s = '';
+  const col = (x, lab, v) => { const y0 = 100; s += T(x, 186, lab, 's', 'middle'); if (v === null) { s += T(x, y0, 'not given', 's', 'middle'); return; } const up = v === 1; s += `<path d="M${x} ${up ? y0 + 40 : y0 - 40} L${x} ${up ? y0 - 40 : y0 + 40}" style="stroke:var(--ink);stroke-width:6"/><path d="M${x - 14} ${up ? y0 - 30 : y0 + 30} L${x} ${up ? y0 - 52 : y0 + 52} L${x + 14} ${up ? y0 - 30 : y0 + 30} Z" style="fill:var(--ink)"/>`; };
+  col(110, 'cardiac output', r[3]); col(250, 'SVR', r[4]);
+  s += T(180, 22, r[1] + ' shock (typical pattern)', 'l b', 'middle');
+  $('sh-svg').innerHTML = s; $('sh-find').innerHTML = r[6];
+}
+Phys.toggles('sh-tg', SHOCK.map(r => [r[0], r[1]]), drawShock, 'hypo'); drawShock('hypo');
+Phys.table('sh-table', ['Type', 'Causes', 'Cardiac output', 'SVR', 'Main problem'], SHOCK.map(r => [r[1], r[2], ARW(r[3]), ARW(r[4]), r[5]]));
+$('sh-text').innerHTML = SH_TEXT;
+Phys.swipeHints();
+</script>
+</body>
+</html>

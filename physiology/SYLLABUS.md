@@ -22,19 +22,19 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 2. Haematology
 
-- [ ] **PY2.1** Describe the composition and functions of blood and its components
-- [ ] **PY2.2** Discuss the origin, forms, variations and functions of plasma proteins and its clinical implications
-- [ ] **PY2.3** Describe the physiological structure, synthesis, functions and breakdown of Hemoglobin. Discuss its variants and clinical significance.
-- [ ] **PY2.4** Describe Erythropoiesis & discuss its regulation in physiological and pathological situations
-- [ ] **PY2.5** Describe anaemias, polycythemia & jaundice and discuss its physiological principles of management
-- [ ] **PY2.6** Describe the formation of WBC (Leucopoiesis), structure and function of various WBC types and their regulatory mechanisms:
-- [ ] **PY2.7** Discuss 'Immunity' in terms of its types, development, regulation and physiological significance
-- [ ] **PY2.8** Describe the formation of platelets (thrombopoiesis), structure, functions and variations.
-- [ ] **PY2.9** Describe hemostasis, coagulation pathways, mechanism of action of anticoagulants and briefly discuss pathophysiological aspects of bleeding & clotting disorders (e.g. hemophilia, purpura)
-- [ ] **PY2.10** Discuss types of blood groups, clinical importance of blood grouping, blood banking and transfusion
+- [x] **PY2.1** Describe the composition and functions of blood and its components — *composition, plasma 55%, functions: [Blood, Plasma Proteins and the Blood Cells](blood/blood-cells.html)*
+- [x] **PY2.2** Discuss the origin, forms, variations and functions of plasma proteins and its clinical implications — *albumin, globulins, fibrinogen, oncotic pressure slider: [Blood, Plasma Proteins and the Blood Cells](blood/blood-cells.html)*
+- [x] **PY2.3** Describe the physiological structure, synthesis, functions and breakdown of Hemoglobin. Discuss its variants and clinical significance. — *HbA, HbA2, HbF, HbS; haem synthesis stepper; breakdown: [Haemoglobin, Bilirubin and Jaundice, Anaemia and Polycythaemia](blood/haemoglobin-anaemia.html)*
+- [x] **PY2.4** Describe Erythropoiesis & discuss its regulation in physiological and pathological situations — *erythropoiesis stepper, EPO from peritubular cells, 120 days: [Blood, Plasma Proteins and the Blood Cells](blood/blood-cells.html)*
+- [x] **PY2.5** Describe anaemias, polycythemia & jaundice and discuss its physiological principles of management — *WHO 2024 cut-offs, indices calculator, MCV classes, polycythaemia, jaundice types with lab patterns (several lab cells rest on Wikipedia's table): [Haemoglobin, Bilirubin and Jaundice, Anaemia and Polycythaemia](blood/haemoglobin-anaemia.html)*
+- [x] **PY2.6** Describe the formation of WBC (Leucopoiesis), structure and function of various WBC types and their regulatory mechanisms: — *leucopoiesis, WBC types, differential from three sources: [Blood, Plasma Proteins and the Blood Cells](blood/blood-cells.html)*
+- [x] **PY2.7** Discuss 'Immunity' in terms of its types, development, regulation and physiological significance — *innate vs adaptive, T and B cells, antibodies, responses: [Immunity: Innate and Adaptive, T and B Cells, Antibodies](blood/immunity.html)*
+- [~] **PY2.8** Describe the formation of platelets (thrombopoiesis), structure, functions and variations. — *platelets, megakaryocyte, TPO in [Blood, Plasma Proteins and the Blood Cells](blood/blood-cells.html); granule contents rest on Wikipedia only*
+- [x] **PY2.9** Describe hemostasis, coagulation pathways, mechanism of action of anticoagulants and briefly discuss pathophysiological aspects of bleeding & clotting disorders (e.g. hemophilia, purpura) — *haemostasis stepper, cascade with PT/aPTT, anticoagulants, haemophilia, vWD, DIC, fibrinolysis (cell-based model not covered): [Haemostasis, Blood Groups and the Blood Tests](blood/haemostasis-blood-groups.html)*
+- [x] **PY2.10** Discuss types of blood groups, clinical importance of blood grouping, blood banking and transfusion — *ABO and Rh, HDFN, compatibility grid, transfusion reactions: [Haemostasis, Blood Groups and the Blood Tests](blood/haemostasis-blood-groups.html)*
 - [ ] **PY2.11** Estimate Hb, RBC, TLC, DLC, Blood groups, BT/CT, RBC indices *(skill)*
-- [ ] **PY2.12** Describe the test to measure Erythrocyte Sedimentation Rate (ESR), Osmotic fragility, Hematocrit, and interpret its findings
-- [ ] **PY2.13** Describe steps for reticulocyte and platelet count
+- [x] **PY2.12** Describe the test to measure Erythrocyte Sedimentation Rate (ESR), Osmotic fragility, Hematocrit, and interpret its findings — *ESR, osmotic fragility, haematocrit: [Haemostasis, Blood Groups and the Blood Tests](blood/haemostasis-blood-groups.html)*
+- [~] **PY2.13** Describe steps for reticulocyte and platelet count — *reticulocyte index and platelet count in [Haemostasis, Blood Groups and the Blood Tests](blood/haemostasis-blood-groups.html); manual counting steps lack two open sources*
 
 ### 3. Nerve and Muscle Physiology
 
@@ -68,19 +68,19 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 5. Cardiovascular Physiology
 
-- [ ] **PY5.1** Describe the functional anatomy of heart including chambers and coronary circulation
-- [ ] **PY5.2** Describe the properties of cardiac muscle including its morphology, electrical, mechanical and metabolic functions
-- [ ] **PY5.3** Describe generation and conduction of cardiac impulse along with the conduction pathway ( including pacemaker potential).
-- [ ] **PY5.4** Discuss the physiological events occurring during the cardiac cycle, concurrent pressure volume changes, generation of heart sounds and murmur
-- [ ] **PY5.5** Describe the physiology of electrocardiogram (E.C.G), the cardiac axis and its applications
-- [ ] **PY5.6** Discuss physiological variations in ECG waveforms, abnormal waveforms and intervals, arrhythmias, heart blocks and myocardial Infarction
-- [ ] **PY5.7** Discuss haemodynamics of circulatory system
-- [ ] **PY5.8** Describe and discuss local and systemic cardiovascular regulatory mechanisms
-- [ ] **PY5.9** Describe heart rate, factors affecting heart rate, and its regulation:
-- [ ] **PY5.10** Describe cardiac output, factors affecting cardiac output and its regulation.
-- [ ] **PY5.11** Describe blood pressure, factors affecting blood pressure and its regulation
-- [ ] **PY5.12** Describe & discuss regional circulation including microcirculation, lymphatic circulation, cerebral, capillary, skin, foetal, pulmonary and splanchnic circulation
-- [ ] **PY5.13** Describe the patho-physiology of shock, syncope heart failure with physiological basis of its management
+- [~] **PY5.1** Describe the functional anatomy of heart including chambers and coronary circulation — *coronary flow in [Haemodynamics, Blood Pressure and Its Regulation](cvs/haemodynamics-bp-regulation.html); anatomy on [The Heart](../anatomy/thorax/heart.html)*
+- [x] **PY5.2** Describe the properties of cardiac muscle including its morphology, electrical, mechanical and metabolic functions — *properties of cardiac muscle: [Cardiac Electrophysiology and the ECG](cvs/cardiac-electrophysiology.html)*
+- [x] **PY5.3** Describe generation and conduction of cardiac impulse along with the conduction pathway ( including pacemaker potential). — *pacemaker and ventricular APs, conduction: [Cardiac Electrophysiology and the ECG](cvs/cardiac-electrophysiology.html)*
+- [x] **PY5.4** Discuss the physiological events occurring during the cardiac cycle, concurrent pressure volume changes, generation of heart sounds and murmur — *Wiggers diagram with a time slider, PV loop, heart sounds: [The Cardiac Cycle, Heart Sounds and Cardiac Output](cvs/cardiac-cycle-output.html)*
+- [x] **PY5.5** Describe the physiology of electrocardiogram (E.C.G), the cardiac axis and its applications — *ECG waves and intervals, QTc and axis calculators: [Cardiac Electrophysiology and the ECG](cvs/cardiac-electrophysiology.html)*
+- [x] **PY5.6** Discuss physiological variations in ECG waveforms, abnormal waveforms and intervals, arrhythmias, heart blocks and myocardial Infarction — *rhythm strips, AV blocks, MI changes, potassium: [Cardiac Electrophysiology and the ECG](cvs/cardiac-electrophysiology.html)*
+- [x] **PY5.7** Discuss haemodynamics of circulatory system — *Poiseuille, resistance, Reynolds, compliance: [Haemodynamics, Blood Pressure and Its Regulation](cvs/haemodynamics-bp-regulation.html)*
+- [x] **PY5.8** Describe and discuss local and systemic cardiovascular regulatory mechanisms — *baroreflex, autoregulation, RAAS: [Haemodynamics, Blood Pressure and Its Regulation](cvs/haemodynamics-bp-regulation.html)*
+- [x] **PY5.9** Describe heart rate, factors affecting heart rate, and its regulation: — *heart rate and its regulation: [The Cardiac Cycle, Heart Sounds and Cardiac Output](cvs/cardiac-cycle-output.html)*
+- [x] **PY5.10** Describe cardiac output, factors affecting cardiac output and its regulation. — *cardiac output, Frank–Starling: [The Cardiac Cycle, Heart Sounds and Cardiac Output](cvs/cardiac-cycle-output.html)*
+- [x] **PY5.11** Describe blood pressure, factors affecting blood pressure and its regulation — *MAP and pulse pressure, BP regulation: [Haemodynamics, Blood Pressure and Its Regulation](cvs/haemodynamics-bp-regulation.html)*
+- [x] **PY5.12** Describe & discuss regional circulation including microcirculation, lymphatic circulation, cerebral, capillary, skin, foetal, pulmonary and splanchnic circulation — *coronary, cerebral, pulmonary, skin, splanchnic, fetal and microcirculation with Starling forces: [Haemodynamics, Blood Pressure and Its Regulation](cvs/haemodynamics-bp-regulation.html)*
+- [x] **PY5.13** Describe the patho-physiology of shock, syncope heart failure with physiological basis of its management — *shock types, syncope, heart failure: [Haemodynamics, Blood Pressure and Its Regulation](cvs/haemodynamics-bp-regulation.html)*
 - [ ] **PY5.14** Record blood pressure & pulse at rest and in different grades of exercise and postures in a volunteer or simulated environment *(skill)*
 - [ ] **PY5.15** Record and interpret normal ECG in a volunteer or simulated environment *(skill)*
 - [ ] **PY5.16** Obtain relevant history and conduct General and Clinical examination of the cardiovascular system in a normal volunteer or simulated environment *(skill)*

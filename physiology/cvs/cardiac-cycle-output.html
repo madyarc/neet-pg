@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cardiac Cycle and Output</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+/* page tokens reused with their meaning: --valve (heart valves) as anatomy/thorax/heart.html; --heart (myocardium) as atlas.css.
+   Pressure traces (one choice for the module): aorta = --artery (solid), left ventricle = --ink (solid), left atrium = --muted (dashed). */
+:root{--valve:#9fd3bd;--heart:#b8655c}
+:root[data-theme="dark"]{--valve:#6fb59a;--heart:#c98078}
+svg.sch .pao{stroke:var(--artery);stroke-width:2.2;fill:none} svg.sch .plv{stroke:var(--ink);stroke-width:2.2;fill:none} svg.sch .pla{stroke:var(--muted);stroke-width:2;fill:none;stroke-dasharray:6 4}
+svg.sch .ecg{stroke:var(--ink);stroke-width:1.6;fill:none}
+svg.sch .cur{stroke:var(--mark);stroke-width:1.5}
+svg.sch .ph{fill:var(--ink);fill-opacity:.05} svg.sch .phon{fill:var(--accent);fill-opacity:.14}
+svg.sch .ch{fill:var(--heart);fill-opacity:.25;stroke:var(--heart);stroke-width:1.2}
+svg.sch .vlv{stroke:var(--valve);stroke-width:5;stroke-linecap:round}
+svg.sch .ghost{stroke:var(--muted);stroke-width:1.6;fill:none;stroke-dasharray:5 4}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+.sw{display:inline-block;width:18px;height:0;border-top:2.5px solid;vertical-align:4px;margin-right:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 03: <a href="cardiac-electrophysiology.html">Electrophysiology and ECG</a> · <span aria-current="page">Cardiac cycle and output</span> · <a href="haemodynamics-bp-regulation.html">Haemodynamics and BP</a></span></nav>
+
+<header class="stack">
+  <h1>The Cardiac Cycle, Heart Sounds and Cardiac Output</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-wig">Wiggers diagram</a> <a href="#h-pv">Pressure–volume loop</a> <a href="#h-hs">Heart sounds</a> <a href="#h-hr">Heart rate</a> <a href="#h-co">Cardiac output, Frank–Starling</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-wig">
+  <h2 id="h-wig">The cardiac cycle: a Wiggers diagram you can scrub</h2>
+  <div class="chips" id="wig-tg" aria-label="Phase"></div>
+  <div class="sliders" id="wig-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="wig-svg" viewBox="0 0 560 540" role="img" aria-label="Schematic Wiggers diagram of the left heart over one cycle: aortic, left-ventricular and left-atrial pressures, left-ventricular volume, ECG and heart sounds, with the chosen moment marked"></svg></div>
+    <div class="stack">
+      <div class="schbox"><svg class="fig sch fit" id="valve-svg" viewBox="0 0 330 150" role="img" aria-label="Left atrium, left ventricle and aorta with the mitral and aortic valves shown open or closed at the chosen moment"></svg></div>
+      <div class="prose find" id="wig-find" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="key" id="wig-key"></div>
+  <p class="muted" id="wig-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-pv">
+  <h2 id="h-pv">The pressure–volume loop: preload, afterload, contractility</h2>
+  <div class="chips" id="pv-tg" aria-label="Preset"></div>
+  <div class="sliders" id="pv-sl"></div>
+  <div class="vrow" aria-live="polite" id="pv-out"></div>
+  <div class="key" id="pv-key"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pv-svg" viewBox="0 0 520 380" role="img" aria-label="Left-ventricular pressure–volume loop with the end-systolic and end-diastolic pressure–volume relations, the arterial elastance line, and the baseline loop dashed"></svg></div>
+    <div class="prose" id="pv-text"></div>
+  </div>
+  <p class="muted" id="pv-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-hs">
+  <h2 id="h-hs">Heart sounds S1–S4</h2>
+  <div class="scroll"><table id="hs-table"></table></div>
+  <p class="muted" id="hs-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-hr">
+  <h2 id="h-hr">Heart rate and its regulation</h2>
+  <div class="chips" id="hr-tg" aria-label="Autonomic input"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="hr-svg" viewBox="0 0 540 250" role="img" aria-label="Schematic SA-node potentials over three seconds with the chosen autonomic input; a steeper pacemaker potential reaches threshold sooner"></svg></div>
+    <div class="prose find" id="hr-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="hr-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-co">
+  <h2 id="h-co">Cardiac output = stroke volume × heart rate, and the Frank–Starling curve</h2>
+  <div class="chips" id="co-tg" aria-label="Contractility"></div>
+  <div class="sliders" id="co-sl"></div>
+  <div class="vrow" aria-live="polite" id="co-out"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="fs-svg" viewBox="0 0 520 330" role="img" aria-label="Schematic Frank–Starling curves: stroke volume against end-diastolic volume for raised contractility, normal and heart failure, with the chosen point marked"></svg></div>
+    <div class="prose" id="co-text"></div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio3.md, Part B; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Scrub through one cardiac cycle and watch the valves open and close where the pressure traces cross; change preload, afterload and contractility on a pressure–volume loop; place the four heart sounds; slow and speed the SA node; and build cardiac output from stroke volume and heart rate on a Frank–Starling curve. Chambers, valves and coronary arteries: <a href="../../anatomy/thorax/heart.html#h-ch">The Heart</a>.';
+
+/* Wiggers phases: [key, label, text] — the time of each phase comes from the model's own valve events */
+const PHASES = {
+  asys: ['Atrial systole', '<h3>Atrial systole</h3><p>Late in ventricular diastole the atria contract and force a final amount of blood into the ventricles (the P wave comes just before). The mitral valve is open; ventricular volume reaches its end-diastolic value.</p>'],
+  ivc: ['Isovolumetric contraction', '<h3>Isovolumetric (isovolumic) contraction</h3><p>The ventricle starts to contract; as its pressure rises above atrial pressure the <b>mitral valve closes</b> (<b>S1</b>). Ventricular pressure is still below aortic pressure, so the aortic valve stays shut: <b>all valves closed, volume unchanged</b>, pressure rising steeply.</p>'],
+  rej: ['Rapid ejection', '<h3>Ejection, rapid</h3><p>Ventricular pressure exceeds aortic pressure and the <b>aortic valve opens</b>; blood is ejected and volume falls fast while both pressures rise to their peak.</p>'],
+  redej: ['Reduced ejection', '<h3>Ejection, slower (reduced)</h3><p>Ejection continues more slowly as pressures fall past their peak (Wikipedia\'s "ventricular systole–second phase"). The T wave (repolarisation) comes in this phase, ending around the second heart sound (a 2020 review).</p>'],
+  ivr: ['Isovolumetric relaxation', '<h3>Isovolumetric (isovolumic) relaxation</h3><p>As ventricular pressure falls below aortic pressure the <b>aortic valve closes</b> (<b>S2</b>); the aortic pressure trace shows a notch, the incisura (Wikipedia). Ventricular pressure falls steeply with <b>both valves closed and volume unchanged</b>, while the atrium fills.</p>'],
+  rfill: ['Rapid filling', '<h3>Rapid filling</h3><p>When ventricular pressure drops below atrial pressure the <b>mitral valve opens</b> and blood rushes in (rapid inflow). A third sound (S3) may be heard here.</p>'],
+  diast: ['Diastasis', '<h3>Diastasis</h3><p>The middle part of inflow, between rapid filling and the next atrial systole (Wikipedia); drawn here with little further filling (schematic).</p>'],
+};
+const WIG_NOTE = 'Schematic, not a recording: one left-heart cycle at 75/min (0.8 s), pressures in mmHg and volume in mL drawn from hand-set points (EDV 120 mL, ESV 50 mL, stroke volume 70 mL, ejection fraction 58% — Wikipedia\'s example). The valve states are not drawn by hand: they are computed from the curves — mitral open while atrial ≥ ventricular pressure, aortic open while ventricular ≥ aortic pressure — and the volume changes only while a valve is open. The right heart has the same sequence at lower pressures. Atrial waves: a = atrial contraction, c = ventricular contraction bulging the closed AV valve back into the atrium, v = venous filling against the closed valve; the fall after v is emptying into the ventricle when the valve opens — named for the jugular venous (right-atrial) pulse by Wikipedia (one source); the left-atrial trace is drawn with the same pattern, schematically. Incisura: the notch in aortic pressure at aortic-valve closure (Wikipedia).';
+
+/* PV loop model (schematic time-varying elastance): ESPVR P = Ees (V − V0); EDPVR P = A e^(B V); Ea = Pes / SV */
+const PV0 = {edv: 120, ea: 1.43, ees: 2.5};
+const PV_V0 = 10, PV_A = 0.745, PV_B = 0.0198;
+const PV_PRESET = {base: ['Baseline', {}], pre: ['More preload', {edv: 150}], aft: ['More afterload', {ea: 2.3}], con: ['More contractility', {ees: 4}], hf: ['Systolic failure', {ees: 1.0, edv: 170}]};
+const PV_TEXT = '<p>The loop runs anticlockwise: <b>filling</b> along the bottom (mitral open), <b>isovolumetric contraction</b> up the right side, <b>ejection</b> across the top (aortic open), <b>isovolumetric relaxation</b> down the left side. It is bounded below by the <b>end-diastolic pressure–volume relation</b> and above by the <b>end-systolic pressure–volume relation (ESPVR)</b>.</p><ul><li><b>Preload</b> (end-diastolic volume/pressure) ↑ → stroke volume ↑ (Frank–Starling).</li><li><b>Afterload</b> ↑ (aortic pressure; drawn as the arterial elastance line Ea) → stroke volume ↓.</li><li><b>Contractility</b> ↑ → steeper ESPVR (its slope Ees or Emax measures contractility) → stroke volume ↑.</li><li>The <b>area of the loop = stroke work</b>.</li></ul>';
+const PV_NOTE = 'Schematic model, not patient data: ESPVR line through 10 mL, an exponential end-diastolic curve, and the end-systolic point where the ESPVR meets the arterial elastance line (Ea = end-systolic pressure ÷ stroke volume, as in 2016 and 2020 reviews). The aortic valve is drawn opening at 80% of end-systolic pressure. Numbers are illustrative.';
+
+/* heart sounds */
+const HS = [
+  ['S1 ("lub")', 'Closure of the atrioventricular valves (mitral M1, tricuspid T1)', 'Start of ventricular systole, isovolumetric contraction', 'Normal'],
+  ['S2 ("dub")', 'Closure of the semilunar valves (aortic A2, pulmonary P2)', 'End of ejection, start of isovolumetric relaxation', 'Normal; A2 comes before P2, and the split is heard especially in inspiration (Wikipedia)'],
+  ['S3', 'Low-pitched early-diastolic sound during rapid ventricular filling', 'Early diastole', 'Benign in the young, some trained athletes and sometimes pregnancy; new later in life it suggests heart failure or volume overload'],
+  ['S4', 'Just after atrial contraction, at the end of diastole, immediately before S1; needs an atrial contraction', 'Late diastole (atrial systole)', 'Called a presystolic or atrial gallop when audible in adults (Wikipedia)'],
+];
+const HS_NOTE = 'S1 and S2 come from the closing valves (the sudden block of flow reversal sets the blood reverberating; Wikipedia), matching mitral and aortic closure on phonocardiography (a 2020 review). S3: Wikipedia and a 2022 modelling paper. Not shown, for want of an open source here: the stiff-ventricle explanation of S4 and why inspiration widens the S2 split. Murmurs: turbulent flow makes sounds loud enough to hear; turbulence depends on viscosity, density, velocity and vessel diameter (StatPearls; Wikipedia) — see <a href="haemodynamics-bp-regulation.html#h-flow">laminar and turbulent flow</a>.';
+
+/* heart rate: autonomic states [key, label, slope factor, text] */
+const HR_ST = [
+  ['vag', 'Strong vagal (parasympathetic)', 45, '<h3>Strong vagal input</h3><p>The vagus slows spontaneous depolarisation in the SA and AV nodes (a 2014 review); in the SA node it acts through a G protein that blocks the cAMP pathway (Wikipedia). The parasympathetic branch can slow the heart to 20 or 30 beats/min or briefly stop it (a 2014 review citing a textbook). Drawn here: about 45/min (schematic).</p>'],
+  ['rest', 'At rest', 75, '<h3>At rest: vagal tone predominates</h3><p>Parasympathetic activity predominates at rest, giving an average of about 75 beats/min (a 2014 review); the normal resting range is 60–100.</p>'],
+  ['none', 'No autonomic input (intrinsic)', 100, '<h3>Intrinsic SA-node rate</h3><p>Without nerves the SA node fires faster than the resting rate: on average about 107/min at 20 years, falling to about 90/min at 50 (a 2014 review). Drawn here: 100/min (schematic).</p>'],
+  ['sym', 'Sympathetic', 160, '<h3>Sympathetic input</h3><p>Sympathetic nerves speed spontaneous depolarisation in the SA and AV nodes, raising the rate and strengthening contraction (a 2014 review). The funny current is modulated by cAMP (a 2012 review). There is a delay of up to 5 s before the rate starts to rise; it reaches a steady level in 20–30 s (a 2014 review). Drawn here: about 160/min (schematic).</p>'],
+];
+const HR_TEXT = '<p><b>Other influences on heart rate:</b> the <b>baroreceptor reflex</b> (a fall in blood pressure speeds the heart; <a href="haemodynamics-bp-regulation.html#h-baro">stepper</a>); <b>respiratory sinus arrhythmia</b> (<a href="cardiac-electrophysiology.html#h-rhy">ECG strip</a>); and the <b>Bainbridge reflex</b>, in which stretch of the right atrium speeds the heart through vagal afferents and the medulla, matching rate to the blood returning (Wikipedia only).</p>';
+
+/* cardiac output and Frank–Starling: SV = SVmax (1 − e^(−(EDV − 40)/60)), schematic */
+const FS = {up: ['Contractility raised (e.g. sympathetic)', 120], norm: ['Normal', 95], hf: ['Heart failure', 55]};
+const CO0 = {edv: 120, hr: 75};
+const CO_TEXT = '<p><b>Cardiac output = stroke volume × heart rate</b> (StatPearls; a 2016 review). Stroke volume = end-diastolic minus end-systolic volume, normally about 60–100 mL at rest (StatPearls); cardiac output is about 5–6 L/min (StatPearls).</p><p><b>Frank–Starling law:</b> a larger end-diastolic volume stretches the fibres and increases the force of contraction (length-dependent activation of the sarcomeres), so the heart matches its output to the venous return without outside control. Greater contractility shifts the curve up; in heart failure the ventricle no longer contracts adequately for a given end-diastolic volume (StatPearls; 2009 and 2014 reviews; Wikipedia).</p><p><b>Factors:</b> stroke volume is set by <b>preload, afterload and contractility</b>; output also by <b>heart rate</b>. Preload depends on blood volume and venous compliance (StatPearls). Factors in blood pressure: <a href="haemodynamics-bp-regulation.html#h-bp">MAP = CO × SVR</a>.</p>';
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews on the heart and heart-rate variability, time-varying elastance and ventriculo-arterial coupling, the Frank–Starling mechanism (titin and troponin; thin-filament regulation), the funny current, gyrocardiography and seismocardiography, the third heart sound (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> the Wiggers diagram, pressure–volume loop, pacemaker potentials and Frank–Starling curves are schematic drawings from simple formulas, not recordings. The valve states in the Wiggers diagram are computed from its pressure curves.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* ---- schematic Wiggers model (one left-heart cycle, 0.8 s): hand-set control points, cosine interpolation; valves derived from pressures ---- */
+const W = (function () {
+  const T0 = 0.8;
+  /* monotone cubic (Fritsch–Carlson) interpolation through [t, v] points: smooth, no overshoot */
+  const curve = pts => {
+    const n = pts.length, h = [], d = [], m = [];
+    for (let i = 0; i < n - 1; i++) { h.push(pts[i + 1][0] - pts[i][0]); d.push((pts[i + 1][1] - pts[i][1]) / h[i]); }
+    m[0] = d[0]; m[n - 1] = d[n - 2];
+    for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : 3 * (h[i - 1] + h[i]) / ((2 * h[i] + h[i - 1]) / d[i - 1] + (h[i] + 2 * h[i - 1]) / d[i]);
+    return t => {
+      if (t <= pts[0][0]) return pts[0][1];
+      if (t >= pts[n - 1][0]) return pts[n - 1][1];
+      let i = 0; while (t > pts[i + 1][0]) i++;
+      const u = (t - pts[i][0]) / h[i], u2 = u * u, u3 = u2 * u;
+      return (2 * u3 - 3 * u2 + 1) * pts[i][1] + (u3 - 2 * u2 + u) * h[i] * m[i] + (-2 * u3 + 3 * u2) * pts[i + 1][1] + (u3 - u2) * h[i] * m[i + 1];
+    };
+  };
+  const LA = curve([[0, 6], [0.05, 6], [0.11, 10], [0.165, 6.5], [0.20, 6], [0.225, 8], [0.255, 4], [0.30, 3], [0.555, 12.5], [0.60, 9], [0.67, 5.5], [0.80, 6]]);
+  const LVsys = curve([[0.20, LA(0.20) - 1], [0.215, 12], [0.237, 42], [0.263, 84], [0.34, 122], [0.44, 108], [0.50, 101.5], [0.515, 70], [0.545, 25], [0.58, 2], [0.80, 2]]);
+  const LV = t => (t < 0.20 ? LA(t) - 1 : Math.max(LVsys(t), t > 0.5 ? LA(t) - 1 : -99));
+  const TAU = 2.33, PA = 100;
+  const runoff = t => PA * Math.exp(-((t < 0.53 ? t + T0 : t) - 0.53) / TAU);
+  const notch = curve([[0.50, 99.5], [0.508, 96], [0.53, 100]]);
+  const AO = t => { if (t >= 0.50 && t < 0.53) return notch(t); if (t >= 0.53 || t < 0.2) return runoff(t); const gr = 3 - 2.5 * Math.min(1, Math.max(0, (t - 0.263) / 0.15)); return Math.max(runoff(t), LV(t) - gr); };
+  const mitralOpen = t => LA(t) >= LV(t);
+  const aorticOpen = t => t > 0.2 && t < 0.53 && LV(t) >= AO(t);
+  const ev = {};
+  { let pm = mitralOpen(0), pa = aorticOpen(0); for (let i = 1; i <= 8000; i++) { const t = i * T0 / 8000, m = mitralOpen(t), a = aorticOpen(t); if (pm && !m) ev.MC = t; if (!pm && m) ev.MO = t; if (!pa && a) ev.AO = t; if (pa && !a) ev.AC = t; pm = m; pa = a; } }
+  const EDV = 120, ESV = 50;
+  const fill = curve([[ev.MO, ESV], [ev.MO + 0.10, 92], [0.80, 100]]), kick = curve([[0, 100], [0.06, 100], [0.15, EDV]]), eject = curve([[ev.AO, EDV], [ev.AO + 0.11, 72], [ev.AC, ESV]]);
+  const VOL = t => t < ev.MC ? Math.min(EDV, kick(t)) : t < ev.AO ? EDV : t < ev.AC ? eject(t) : t < ev.MO ? ESV : fill(t);
+  const g = (t, c, w, a) => a * Math.exp(-((t - c) * (t - c)) / (2 * w * w));
+  const ECG = t => g(t, 0.045, 0.016, 0.15) + g(t, 0.175, 0.006, -0.10) + g(t, 0.195, 0.009, 1.1) + g(t, 0.215, 0.007, -0.25) + g(t, 0.43, 0.035, 0.30);
+  const phase = t => { const m = mitralOpen(t), a = aorticOpen(t); if (a) return t < ev.AO + 0.11 ? 'rej' : 'redej'; if (!m) return t < 0.4 ? 'ivc' : 'ivr'; if (t >= ev.MO) return t < ev.MO + 0.10 ? 'rfill' : 'diast'; return t < 0.06 ? 'diast' : 'asys'; };
+  return {T: T0, LA, LV, AO, VOL, ECG, mitralOpen, aorticOpen, ev, phase, S: {S1: ev.MC, S2: ev.AC, S3: ev.MO + 0.06, S4: 0.12}};
+})();
+/* phase spans (from the derived phase function) */
+window.Wiggers = W; /* exposed for testing */
+const SPANS = []; { let p = W.phase(0), t0 = 0; for (let i = 1; i <= 800; i++) { const t = i / 1000, q = i === 800 ? null : W.phase(t); if (q !== p) { SPANS.push([p, t0, t]); p = q; t0 = t; } } }
+window.WiggersPhases = SPANS;
+const WG = {t: 0.10};
+function drawWig() {
+  const x0 = 58, x1 = 545, X = Phys.scale(0, 0.8, x0, x1), t = WG.t, ph = W.phase(t);
+  const Yp = Phys.scale(0, 130, 245, 20), Yv = Phys.scale(40, 130, 360, 285), Ye = Phys.scale(-0.4, 1.2, 455, 390);
+  let s = '';
+  for (const [k, a, b] of SPANS) s += `<rect x="${X(a)}" y="14" width="${X(b) - X(a)}" height="500" class="${k === ph ? 'phon' : 'ph'}" style="${k === ph ? '' : 'fill-opacity:' + (SPANS.indexOf(SPANS.find(r => r[1] === a)) % 2 ? .02 : .06)}"/>`;
+  // panels
+  s += `<path class="axis" d="M${x0} 20 L${x0} 245 L${x1} 245"/>` + [0, 40, 80, 120].map(v => `<path class="axis" d="M${x0 - 4} ${Yp(v)} L${x0} ${Yp(v)}"/>` + T(x0 - 7, Yp(v) + 4, v, 's', 'end')).join('') + T(x0 - 50, 14, 'mmHg', 's', 'start');
+  s += `<path class="axis" d="M${x0} 285 L${x0} 360"/>` + [50, 120].map(v => `<path class="axis" d="M${x0 - 4} ${Yv(v)} L${x0} ${Yv(v)}"/>` + T(x0 - 7, Yv(v) + 4, v, 's', 'end')).join('') + T(x0 - 50, 279, 'LV volume, mL', 's', 'start');
+  s += T(x0 - 50, 384, 'ECG', 's', 'start') + T(x0 - 50, 484, 'Sounds', 's', 'start');
+  const tr = (f, Y, cls) => { const pts = []; for (let i = 0; i <= 800; i++) pts.push([X(i / 1000), Y(f(i / 1000))]); return `<path class="${cls}" d="${Phys.path(pts)}"/>`; };
+  s += tr(W.LA, Yp, 'pla') + tr(W.AO, Yp, 'pao') + tr(W.LV, Yp, 'plv') + tr(W.VOL, Yv, 'plv') + tr(W.ECG, Ye, 'ecg');
+  s += T(X(0.36), Yp(W.AO(0.36)) - 8, 'aorta', 'l', 'middle') + T(X(0.40), Yp(W.LV(0.40)) + 18, 'LV', 'l', 'middle') + T(X(0.70), Yp(W.LA(0.70)) - 8, 'LA', 'l', 'middle');
+  s += T(X(0.11), Yp(W.LA(0.11)) - 12, 'a', 'l', 'middle') + T(X(0.225), Yp(W.LA(0.225)) - 12, 'c', 'l', 'middle') + T(X(0.555), Yp(W.LA(0.555)) - 10, 'v', 'l', 'middle') + T(X(0.508) + 4, Yp(W.AO(0.508)) + 18, 'incisura', 's', 'start');
+  s += T(X(0.02), Ye(0.15) - 8, 'P', 'l b', 'middle') + T(X(0.195), Ye(1.1) - 4, 'QRS', 'l b', 'middle') + T(X(0.43), Ye(0.3) - 6, 'T', 'l b', 'middle');
+  s += T(X(0.13) + 4, Yv(120) - 6, 'EDV', 's', 'start') + T(X(0.53), Yv(50) + 14, 'ESV', 's', 'middle');
+  // valve events
+  for (const [k, lab] of [['MC', 'mitral closes'], ['AO', 'aortic opens'], ['AC', 'aortic closes'], ['MO', 'mitral opens']]) {
+    const xe = X(W.ev[k]); s += `<path d="M${xe} 20 L${xe} 245" style="stroke:var(--valve);stroke-width:1.4;stroke-dasharray:2 3"/>`;
+  }
+  s += T(X(W.ev.MC) - 3, 268, 'MC', 's', 'end') + T(X(W.ev.AO) + 3, 268, 'AO', 's', 'start') + T(X(W.ev.AC) - 3, 268, 'AC', 's', 'end') + T(X(W.ev.MO) + 3, 268, 'MO', 's', 'start');
+  // sounds
+  for (const [k, solid] of [['S4', 0], ['S1', 1], ['S2', 1], ['S3', 0]]) {
+    const xs = X(W.S[k]);
+    s += `<path d="M${xs} 478 L${xs} 506" style="stroke:var(--ink);stroke-width:${solid ? 3 : 1.6};${solid ? '' : 'stroke-dasharray:3 3'}"/>` + T(xs, 470, k, solid ? 'l b' : 'l', 'middle');
+  }
+  // time axis
+  for (let tt = 0; tt <= 0.8001; tt += 0.2) s += T(X(tt), 528, tt.toFixed(1), 's', 'middle');
+  s += T(x0 - 50, 528, 'time, s', 's', 'start');
+  // cursor
+  s += `<path style="stroke:var(--ink);stroke-width:1.5" d="M${X(t)} 14 L${X(t)} 514"/><circle cx="${X(t)}" cy="${Yp(W.LV(t))}" r="4.5" style="fill:var(--ink)"/>`;
+  $('wig-svg').innerHTML = s;
+  // valve mini-diagram
+  const mo = W.mitralOpen(t), ao = W.aorticOpen(t);
+  let v = Phys.arrowDef('af', 'var(--ink)');
+  v += `<rect x="10" y="30" width="80" height="70" rx="14" class="ch"/><rect x="120" y="22" width="100" height="90" rx="20" class="ch"/><rect x="250" y="40" width="70" height="50" rx="8" style="fill:var(--artery);fill-opacity:.18;stroke:var(--artery)"/>`;
+  v += T(50, 70, 'LA', 'b', 'middle') + T(170, 72, 'LV', 'b', 'middle') + T(285, 70, 'aorta', 'b', 'middle');
+  const valve = (x, open) => open ? `<path class="vlv" d="M${x} 42 L${x - 8} 52 M${x} 88 L${x - 8} 78"/>` : `<path class="vlv" d="M${x} 42 L${x} 88"/>`;
+  v += valve(106, mo) + valve(236, ao);
+  if (mo) v += `<path d="M70 65 L148 65" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#af)"/>`;
+  if (ao) v += `<path d="M190 65 L268 65" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#af)"/>`;
+  v += T(106, 128, 'mitral ' + (mo ? 'open' : 'closed'), 's', 'middle') + T(236, 128, 'aortic ' + (ao ? 'open' : 'closed'), 's', 'middle');
+  v += T(10, 16, `LA ${W.LA(t).toFixed(0)} · LV ${W.LV(t).toFixed(0)} · aorta ${W.AO(t).toFixed(0)} mmHg · LV ${W.VOL(t).toFixed(0)} mL`, 's', 'start');
+  $('valve-svg').innerHTML = v;
+  $('wig-find').innerHTML = PHASES[ph][1];
+  document.querySelectorAll('#wig-tg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === ph)));
+}
+const wsl = Phys.slider('wig-sl', {id: 'wt', label: 'Time in the cycle', min: 0, max: 0.8, step: 0.005, value: WG.t, fmt: v => v.toFixed(3) + ' s'}, v => { WG.t = Math.min(0.799, v); drawWig(); });
+wsl.init();
+const order = ['asys', 'ivc', 'rej', 'redej', 'ivr', 'rfill', 'diast'];
+Phys.toggles('wig-tg', order.map(k => [k, PHASES[k][0]]), k => { const sp = SPANS.filter(r => r[0] === k).sort((a, b) => (b[2] - b[1]) - (a[2] - a[1]))[0]; wsl.set(+((sp[1] + sp[2]) / 2).toFixed(3)); }, 'asys');
+drawWig();
+const ln = (st) => `<svg width="24" height="8" aria-hidden="true"><line x1="1" y1="4" x2="23" y2="4" style="${st}"/></svg>`;
+$('wig-key').innerHTML = '<span>' + ln('stroke:var(--artery);stroke-width:2.5') + 'aortic pressure</span><span>' + ln('stroke:var(--ink);stroke-width:2.5') + 'left-ventricular pressure (and volume)</span><span>' + ln('stroke:var(--muted);stroke-width:2.5;stroke-dasharray:5 3') + 'left-atrial pressure</span><span><i style="background:var(--valve)"></i>valve event (MC, AO, AC, MO)</span><span><i style="background:var(--accent);opacity:.4"></i>current phase</span>';
+$('wig-note').textContent = WIG_NOTE;
+
+/* ---- PV loop ---- */
+const PV = Object.assign({}, PV0);
+function pvLoop(p) {
+  const edp = PV_A * Math.exp(PV_B * p.edv), esv = (p.ees * PV_V0 + p.ea * p.edv) / (p.ees + p.ea), pes = p.ees * (esv - PV_V0), sv = p.edv - esv, pdia = 0.8 * pes;
+  const pts = [];
+  for (let v = esv; v <= p.edv; v += 1) pts.push([v, PV_A * Math.exp(PV_B * v)]); // filling along EDPVR
+  pts.push([p.edv, edp]);
+  for (let i = 1; i <= 10; i++) pts.push([p.edv, edp + (pdia - edp) * i / 10]); // isovolumetric contraction
+  for (let i = 1; i <= 30; i++) { const u = i / 30, v = p.edv - u * sv; pts.push([v, pdia + (pes - pdia) * u + 0.35 * pes * Math.sin(Math.PI * u) * (1 - 0.3 * u)]); } // ejection
+  const edpEs = PV_A * Math.exp(PV_B * esv);
+  for (let i = 1; i <= 10; i++) pts.push([esv, pes + (edpEs - pes) * i / 10]); // isovolumetric relaxation
+  return {pts, edp, esv, pes, sv, ef: sv / p.edv, pdia, edpEs};
+}
+function drawPv() {
+  const x0 = 60, x1 = 500, y0 = 20, y1 = 330, X = Phys.scale(0, 200, x0, x1), Y = Phys.scale(0, 200, y1, y0);
+  const L = pvLoop(PV), B = pvLoop(PV0);
+  let s = `<path class="axis" d="M${x0} ${y0} L${x0} ${y1} L${x1} ${y1}"/>`;
+  for (const v of [0, 50, 100, 150, 200]) s += `<path class="axis" d="M${X(v)} ${y1} L${X(v)} ${y1 + 4}"/>` + T(X(v), y1 + 16, v, 's', 'middle');
+  for (const v of [50, 100, 150, 200]) s += `<path class="axis" d="M${x0 - 4} ${Y(v)} L${x0} ${Y(v)}"/>` + T(x0 - 7, Y(v) + 4, v, 's', 'end');
+  s += T(x1, y1 + 32, 'LV volume (mL) →', 's', 'end') + T(x0 + 6, y0 + 4, 'LV pressure (mmHg)', 's', 'start');
+  // ESPVR, EDPVR, Ea
+  const vTop = Math.min(200, PV_V0 + 200 / PV.ees);
+  s += `<path style="stroke:var(--muted);stroke-width:1.3;stroke-dasharray:7 4;fill:none" d="M${X(PV_V0)} ${Y(0)} L${X(vTop)} ${Y(PV.ees * (vTop - PV_V0))}"/>`;
+  const ed = []; for (let v = 20; v <= 200; v += 2) { const pp = PV_A * Math.exp(PV_B * v); if (pp <= 60) ed.push([X(v), Y(pp)]); } s += `<path d="${Phys.path(ed)}" style="stroke:var(--muted);stroke-width:1.2;stroke-dasharray:1 3;fill:none"/>`;
+  const eaEnd = Math.max(0, PV.edv - 200 / PV.ea);
+  s += `<path d="M${X(PV.edv)} ${Y(0)} L${X(eaEnd)} ${Y(PV.ea * (PV.edv - eaEnd))}" style="stroke:var(--artery);stroke-width:1.2;stroke-dasharray:2 3;fill:none"/>`;
+  s += `<path class="ghost" d="${Phys.path(B.pts.map(([v, pp]) => [X(v), Y(pp)]))} Z"/>`;
+  s += `<path d="${Phys.path(L.pts.map(([v, pp]) => [X(v), Y(pp)]))} Z" style="fill:var(--ink);fill-opacity:.06;stroke:var(--ink);stroke-width:2.4"/>`;
+  // corners
+  const c = [[PV.edv, L.edp, 'mitral closes', 'start', 8, -6], [PV.edv, L.pdia, 'aortic opens', 'start', 8, 4], [L.esv, L.pes, 'aortic closes', 'end', -8, -4], [L.esv, L.edpEs, 'mitral opens', 'end', -8, -6]];
+  for (let [v, pp, lab, an, dx, dy] of c) { let lx = X(v) + dx; if (an === 'end' && lx - 100 < (lab === 'mitral opens' ? 4 : x0 + 4)) { an = 'start'; lx = X(v) + 8; dy = dy < 0 ? -14 : 20; } if (an === 'start' && lx + 100 > 516) { an = 'end'; lx = X(v) - 8; } s += `<circle cx="${X(v)}" cy="${Y(pp)}" r="4" style="fill:var(--valve);stroke:var(--ink);stroke-width:1"/>` + T(lx, Y(pp) + dy, lab, 'l', an); }
+  s += `<path d="M${X(L.esv)} ${y1 + 2} L${X(PV.edv)} ${y1 + 2}" style="stroke:var(--ink);stroke-width:3"/>` + (X(PV.edv) - X(L.esv) > 70 ? T((X(L.esv) + X(PV.edv)) / 2, Y((L.pdia + L.edp) / 2), 'SV ' + L.sv.toFixed(0) + ' mL', 'l b', 'middle') : '');
+  $('pv-svg').innerHTML = s;
+  $('pv-out').innerHTML = `<span><span class="tag">Stroke volume</span> <span class="big">${L.sv.toFixed(0)} mL</span></span><span class="readout">EF ${(L.ef * 100).toFixed(0)}% · ESV ${L.esv.toFixed(0)} mL · end-systolic P ${L.pes.toFixed(0)} mmHg · EDP ${L.edp.toFixed(0)} mmHg</span>`;
+}
+const PVS = {};
+for (const [k, lab, mn, mx, st, f] of [['edv', 'Preload: end-diastolic volume', 70, 190, 1, v => v + ' mL'], ['ea', 'Afterload: arterial elastance Ea', 0.7, 3.5, 0.01, v => v.toFixed(2) + ' mmHg/mL'], ['ees', 'Contractility: ESPVR slope Ees', 0.8, 5, 0.05, v => v.toFixed(2) + ' mmHg/mL']]) { PVS[k] = Phys.slider('pv-sl', {id: k, label: lab, min: mn, max: mx, step: st, value: PV0[k], fmt: f}, v => { PV[k] = v; drawPv(); }); PVS[k].init(); }
+Phys.toggles('pv-tg', Object.entries(PV_PRESET).map(([k, v]) => [k, v[0]]), k => { const p = Object.assign({}, PV0, PV_PRESET[k][1]); for (const kk in PVS) PVS[kk].set(p[kk]); }, 'base');
+{ const ln = st => `<svg width="24" height="8" aria-hidden="true"><line x1="1" y1="4" x2="23" y2="4" style="${st}"/></svg>`; $('pv-key').innerHTML = '<span>' + ln('stroke:var(--ink);stroke-width:2.4') + 'loop</span><span>' + ln('stroke:var(--muted);stroke-width:1.6;stroke-dasharray:5 4') + 'baseline loop</span><span>' + ln('stroke:var(--muted);stroke-width:1.3;stroke-dasharray:7 4') + 'ESPVR (end-systolic)</span><span>' + ln('stroke:var(--muted);stroke-width:1.6;stroke-dasharray:1 3') + 'EDPVR (end-diastolic)</span><span>' + ln('stroke:var(--artery);stroke-width:1.6;stroke-dasharray:2 3') + 'Ea (arterial elastance, afterload)</span><span><i style="background:var(--valve)"></i>valve event</span>'; }
+$('pv-text').innerHTML = PV_TEXT; $('pv-note').textContent = PV_NOTE; drawPv();
+
+/* ---- heart sounds ---- */
+Phys.table('hs-table', ['Sound', 'Cause', 'When', 'Normal or not'], HS); $('hs-note').innerHTML = HS_NOTE;
+
+/* ---- heart rate: SA node potentials, slope scaled ---- */
+const HRS = {k: 'rest'};
+function drawHr() {
+  const st = HR_ST.find(r => r[0] === HRS.k), rate = st[2], cyc = 60 / rate, k = Math.min(1, cyc / 0.8);
+  const upT = 0.07 * k, dnT = 0.13 * k, p4 = cyc - upT - dnT; // the pacemaker slope (phase 4 length) sets the rate
+  const x0 = 50, x1 = 530, X = Phys.scale(0, 3, x0, x1), Y = Phys.scale(20, -70, 20, 200);
+  const V = t => { const u = t % cyc, up = upT, dn = dnT; if (u < p4) return -62 + 22 * Math.pow(u / p4, 1.25); if (u < p4 + up) return -40 + 50 * Math.sin((u - p4) / up * Math.PI / 2); return 10 - 72 * (1 - Math.cos((u - p4 - up) / dn * Math.PI)) / 2; };
+  let s = `<path class="axis" d="M${x0} 20 L${x0} 200 L${x1} 200"/>`;
+  for (const v of [0, -40]) s += T(x0 - 7, Y(v) + 4, v, 's', 'end');
+  s += T(x0 + 6, 16, 'mV', 's', 'start') + `<path class="grid dash" d="M${x0} ${Y(-40)} L${x1} ${Y(-40)}"/>` + T(x0 + 6, Y(-40) - 4, 'threshold', 's', 'start');
+  for (let t = 0; t <= 3; t++) s += T(X(t), 216, t + ' s', 's', 'middle');
+  const pts = []; for (let t = 0; t <= 3; t += 0.004) pts.push([X(t), Y(V(t))]);
+  s += `<path class="trace" d="${Phys.path(pts)}"/>` + T(x1, 238, `≈ ${rate.toFixed(0)} beats/min (schematic)`, 'l b', 'end');
+  $('hr-svg').innerHTML = s; $('hr-find').innerHTML = st[3];
+}
+Phys.toggles('hr-tg', HR_ST.map(r => [r[0], r[1]]), k => { HRS.k = k; drawHr(); }, 'rest'); drawHr();
+$('hr-text').innerHTML = HR_TEXT;
+
+/* ---- cardiac output and Frank–Starling ---- */
+const CO = Object.assign({contr: 'norm'}, CO0);
+const svOf = (edv, k) => Math.max(0, FS[k][1] * (1 - Math.exp(-(edv - 40) / 60)));
+function drawCo() {
+  const x0 = 60, x1 = 500, y0 = 20, y1 = 280, X = Phys.scale(40, 200, x0, x1), Y = Phys.scale(0, 130, y1, y0);
+  let s = `<path class="axis" d="M${x0} ${y0} L${x0} ${y1} L${x1} ${y1}"/>`;
+  for (const v of [40, 80, 120, 160, 200]) s += T(X(v), y1 + 16, v, 's', 'middle');
+  for (const v of [40, 80, 120]) s += T(x0 - 7, Y(v) + 4, v, 's', 'end');
+  s += T(x1, y1 + 32, 'end-diastolic volume, mL (preload) →', 's', 'end') + T(x0 + 6, y0 + 4, 'stroke volume (mL)', 's', 'start');
+  for (const k of ['up', 'norm', 'hf']) {
+    const pts = []; for (let v = 40; v <= 200; v += 2) pts.push([X(v), Y(svOf(v, k))]);
+    s += `<path d="${Phys.path(pts)}" style="fill:none;stroke:var(--ink);stroke-width:${k === CO.contr ? 2.6 : 1.2};${k === 'norm' ? '' : 'stroke-dasharray:6 4'}"/>` + T(X(196), Y(svOf(196, k)) - 6, FS[k][0].split(' (')[0], 'l', 'end');
+  }
+  const sv = svOf(CO.edv, CO.contr);
+  s += `<circle cx="${X(CO.edv)}" cy="${Y(sv)}" r="7" style="fill:var(--mark);stroke:var(--surface);stroke-width:2"/>`;
+  $('fs-svg').innerHTML = s;
+  const co = sv * CO.hr / 1000;
+  $('co-out').innerHTML = `<span><span class="tag">Cardiac output</span> <span class="big">${co.toFixed(1)} L/min</span></span><span class="readout">= SV ${sv.toFixed(0)} mL × HR ${CO.hr}/min · EF ${(sv / CO.edv * 100).toFixed(0)}%</span>`;
+}
+for (const [k, lab, mn, mx, st, u] of [['edv', 'End-diastolic volume (preload)', 60, 200, 1, ' mL'], ['hr', 'Heart rate', 40, 180, 1, '/min']]) Phys.slider('co-sl', {id: 'co' + k, label: lab, min: mn, max: mx, step: st, value: CO0[k], fmt: v => v + u}, v => { CO[k] = v; drawCo(); }).init();
+Phys.toggles('co-tg', Object.entries(FS).map(([k, v]) => [k, v[0]]), k => { CO.contr = k; drawCo(); }, 'norm');
+$('co-text').innerHTML = CO_TEXT; drawCo();
+Phys.swipeHints();
+</script>
+</body>
+</html>

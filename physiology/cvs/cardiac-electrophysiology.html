@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cardiac Electrophysiology and the ECG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+/* page tokens reused with their meaning: --conduct (conducting tissue) and --heart (myocardium) as anatomy/thorax/heart.html and atlas.css */
+:root{--conduct:#d81b78;--heart:#b8655c}
+:root[data-theme="dark"]{--conduct:#f06aa8;--heart:#c98078}
+svg.sch .arp{fill:var(--ink);fill-opacity:.13} svg.sch .rrp{fill:var(--ink);fill-opacity:.06}
+svg.sch .gs{stroke:var(--line);stroke-width:.6;fill:none} svg.sch .gl{stroke:var(--muted);stroke-opacity:.45;stroke-width:.9;fill:none}
+svg.sch .ecg{stroke:var(--ink);stroke-width:1.7;fill:none;stroke-linejoin:round}
+svg.sch .band{fill:var(--accent);fill-opacity:.16}
+svg.sch .myo{fill:var(--heart);fill-opacity:.28;stroke:var(--heart);stroke-width:1.4}
+svg.sch .cs{stroke:var(--conduct);stroke-width:4;fill:none;stroke-linecap:round}
+svg.sch .off{opacity:.22}
+svg.sch.fitmax{max-width:440px}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 03: <span aria-current="page">Electrophysiology and ECG</span> · <a href="cardiac-cycle-output.html">Cardiac cycle and output</a> · <a href="haemodynamics-bp-regulation.html">Haemodynamics and BP</a></span></nav>
+
+<header class="stack">
+  <h1>Cardiac Electrophysiology and the ECG</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-musc">Cardiac muscle</a> <a href="#h-ap">Action potentials</a> <a href="#h-cond">Conduction</a> <a href="#h-ecg">The ECG</a> <a href="#h-axis">Axis</a> <a href="#h-rhy">Rhythms and blocks</a> <a href="#h-mi">Infarction</a> <a href="#h-k">Potassium</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-musc">
+  <h2 id="h-musc">Cardiac muscle: what makes it different</h2>
+  <div class="scroll"><table id="musc-table"></table></div>
+  <p class="muted" id="musc-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ap">
+  <h2 id="h-ap">Ventricular and pacemaker action potentials, phase by phase</h2>
+  <div class="chips" id="ap-tg" aria-label="Cell"></div>
+  <div class="step" id="ap-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ap-svg" viewBox="0 -6 540 356" role="img" aria-label="Schematic action potential of the chosen cell with the current phase marked and the ions that move in that phase"></svg></div>
+    <div class="prose find" id="ap-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="ap-key"></div>
+  <p class="muted" id="ap-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-cond">
+  <h2 id="h-cond">Conduction: from the SA node to the ventricles</h2>
+  <div class="sliders" id="cond-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="cond-svg" viewBox="0 0 420 470" role="img" aria-label="Schematic heart with the conducting system; parts already activated at the chosen time are drawn solid, the rest faint; the ECG below grows with time"></svg></div>
+    <div class="stack">
+      <div class="prose find" id="cond-find" aria-live="polite"></div>
+      <div class="scroll"><table id="rate-table"></table></div>
+    </div>
+  </div>
+  <div class="prose" id="cond-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ecg">
+  <h2 id="h-ecg">The ECG, wave by wave, with a QTc calculator</h2>
+  <div class="chips" id="ecg-tg" aria-label="Highlight"></div>
+  <div class="schbox"><svg class="fig sch" id="ecg-svg" viewBox="0 0 600 275" role="img" aria-label="One schematic ECG beat on standard ECG paper with the chosen wave or interval highlighted"></svg></div>
+  <div class="prose" id="ecg-find" aria-live="polite"></div>
+  <div class="scroll"><table id="norm-table"></table></div>
+  <div class="two">
+    <div class="stack"><h3>QTc calculator</h3><div class="sliders" id="qt-sl"></div></div>
+    <div class="prose" id="qt-out" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="ecg-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-axis">
+  <h2 id="h-axis">Cardiac axis from leads I and aVF</h2>
+  <div class="two">
+    <div class="stack"><div class="sliders" id="axis-sl"></div><div class="vrow" aria-live="polite"><span><span class="tag">QRS axis</span> <span class="big" id="axis-val"></span></span><span class="readout" id="axis-cls"></span></div><div class="prose" id="axis-find" aria-live="polite"></div></div>
+    <div class="schbox"><svg class="fig sch fit fitmax" id="axis-svg" viewBox="0 0 360 360" role="img" aria-label="Hexaxial reference system with the six limb leads and the calculated QRS axis drawn as an arrow; normal, left and right deviation sectors shaded"></svg></div>
+  </div>
+  <div class="prose" id="axis-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-rhy">
+  <h2 id="h-rhy">Sinus rhythm, arrhythmias and heart block</h2>
+  <div class="chips" id="rhy-tg" aria-label="Rhythm"></div>
+  <div class="schbox"><svg class="fig sch" id="rhy-svg" viewBox="0 0 680 230" role="img" aria-label="Schematic five-second rhythm strip of the chosen rhythm, with P waves and PR intervals labelled"></svg></div>
+  <div class="prose find" id="rhy-find" aria-live="polite"></div>
+  <p class="muted" id="rhy-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-mi">
+  <h2 id="h-mi">Myocardial infarction: how the ECG evolves, and where</h2>
+  <div class="step" id="mi-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="mi-svg" viewBox="0 0 350 320" role="img" aria-label="One schematic beat in a lead facing the infarct at the chosen stage, drawn over a faint normal beat"></svg></div>
+    <div class="prose find" id="mi-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="terr-table"></table></div>
+  <div class="prose" id="mi-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-k">
+  <h2 id="h-k">Potassium and the ECG</h2>
+  <div class="chips" id="k-tg" aria-label="Potassium"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="k-svg" viewBox="0 0 350 320" role="img" aria-label="One schematic beat at the chosen potassium disturbance, drawn over a faint normal beat"></svg></div>
+    <div class="prose find" id="k-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="k-note"></p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio3.md, Part A; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Step through the phases of a ventricular and a pacemaker action potential and see which ions move; send an impulse from the SA node and watch the ECG build; highlight each wave and interval and correct the QT for rate; find the axis from two leads; compare rhythm strips of sinus rhythm, arrhythmias and the three degrees of heart block; follow an infarct and a potassium disturbance on the ECG. Anatomy of the conducting system and the coronary arteries: <a href="../../anatomy/thorax/heart.html#h-cond">The Heart</a>.';
+
+/* cardiac muscle properties: [property, what the sources say] */
+const MUSC = [
+  ['Structure', 'Striated: made of sarcomeres like skeletal muscle, but under <b>involuntary</b> control (StatPearls). Cells are joined end to end by <b>intercalated discs</b> with <b>gap junctions</b>, so the impulse spreads cell to cell and the myocardium contracts as a <b>functional syncytium</b> (Wikipedia; a 2016 review).'],
+  ['Autorhythmicity', 'Pacemaker cells depolarise spontaneously (automaticity). The SA node fires fastest and sets the rate; the AV node and Purkinje fibres are slower, latent pacemakers (see <a href="#h-cond">Conduction</a>).'],
+  ['Excitability and refractoriness', 'The long plateau gives a long <b>absolute refractory period</b> (from phase 0 to part way through phase 3), followed by a relative one; the plateau gives the ventricles time for an optimal contraction (a 2021 review). The refractory period of cardiac muscle is distinct from skeletal muscle\'s very short one: in the heart, contractions must be spaced to maintain a rhythm (Wikipedia).'],
+  ['Contraction (excitation–contraction coupling)', 'Ca²⁺ entering through L-type channels in the plateau triggers a much larger release from the sarcoplasmic reticulum: <b>calcium-induced calcium release</b> (Wikipedia). Skeletal-muscle coupling: <a href="../nerve-muscle/muscle.html#h-ecc">Muscle</a>.'],
+  ['Metabolism', 'Many mitochondria make it highly resistant to fatigue; it needs a constant flow of blood for oxygen, and makes ATP mainly from fatty acids (Wikipedia).'],
+];
+const MUSC_NOTE = 'Histology of cardiac muscle: <a href="../../anatomy/general/muscle.html#h-types">Muscle (anatomy)</a>.';
+
+/* action potentials. Ventricular: rest about −90 mV. Steps: [label, time ms marked, ions moving [[ion, 'in'|'out', label]], text] */
+const AP = {
+  vent: {name: 'Ventricular myocyte', steps: [
+    ['Phase 4 (rest)', 30, [['k', 'out', 'IK1 (K⁺ leak)']], '<h3>Phase 4: resting potential, about −90 mV</h3><p>K⁺ currents, especially <b>IK1</b>, hold the membrane at rest (a 2021 review gives about −90 mV for human ventricle; Wikipedia −85 to −90 mV; another review −80 to −64 mV).</p>'],
+    ['Phase 0', 54, [['na', 'in', 'fast Na⁺ channels']], '<h3>Phase 0: rapid upstroke (Na⁺ in)</h3><p>Depolarisation spreading from a neighbour opens <b>voltage-gated fast Na⁺ channels</b>; Na⁺ rushes in and the membrane depolarises in under 2 ms.</p>'],
+    ['Phase 1', 62, [['k', 'out', 'Ito (transient outward K⁺)']], '<h3>Phase 1: early, brief repolarisation</h3><p>Na⁺ channels <b>inactivate</b> and the <b>transient outward K⁺ current (Ito)</b> flows, giving a small notch.</p>'],
+    ['Phase 2 (plateau)', 160, [['ca', 'in', 'L-type Ca²⁺'], ['k', 'out', 'delayed rectifier K⁺']], '<h3>Phase 2: plateau</h3><p>Ca²⁺ enters through <b>L-type Ca²⁺ channels</b> while K⁺ leaves through delayed-rectifier channels; the two roughly balance, so the potential stays almost constant. The ST segment of the ECG corresponds to this plateau.</p>'],
+    ['Phase 3', 285, [['k', 'out', 'IKr, IKs (delayed rectifier K⁺)']], '<h3>Phase 3: repolarisation (K⁺ out)</h3><p>L-type Ca²⁺ channels close while the delayed-rectifier K⁺ currents (<b>IKr, IKs</b>) carry K⁺ out and the potential returns to rest. The T wave of the ECG corresponds to this phase.</p>'],
+  ]},
+  sa: {name: 'SA node (pacemaker)', steps: [
+    ['Phase 4 (pacemaker potential)', 140, [['na', 'in', 'If (funny current, HCN)'], ['ca', 'in', 'T-type Ca²⁺ (late)']], '<h3>Phase 4: slow diastolic depolarisation</h3><p>There is no stable resting potential: the membrane drifts up from about −60 mV towards threshold. The <b>funny current (If)</b> through <b>HCN channels</b> carries Na⁺ (and K⁺) inward and is a main driver (Wikipedia; a 2012 review; mouse knock-out work cited there suggests If matters less for basal rate). T-type Ca²⁺ channels add to the final part of phase 4 (one 2021 review).</p>'],
+    ['Phase 0', 255, [['ca', 'in', 'L-type Ca²⁺']], '<h3>Phase 0: slow upstroke (Ca²⁺ in)</h3><p>The upstroke is due mainly to <b>L-type Ca²⁺ channels</b>, which open more slowly than Na⁺ channels, so the slope is less steep and the peak lower than in a ventricular cell.</p>'],
+    ['Phase 3', 330, [['k', 'out', 'delayed rectifier K⁺']], '<h3>Phase 3: repolarisation (K⁺ out)</h3><p>Ca²⁺ channels close and K⁺ channels carry K⁺ out; the membrane returns to its most negative value and phase 4 starts again. <b>No phase 1 and no plateau</b> in pacemaker cells.</p>'],
+  ]},
+};
+const AP_NOTE = 'Schematic traces, not recordings: ventricular rest −90 mV, peak about +25 mV, action potential about 0.3 s; SA node from about −60 mV, threshold about −40 mV (the If range is −40 to −60 mV in a 2012 review). Shading: absolute (darker) and relative refractory periods.';
+
+/* conduction: parts with activation times (s, schematic), and the intrinsic rate table */
+const RATES = [['SA node', '60–100/min', 'Normal pacemaker: fastest, so it is dominant'], ['AV node', '40–60/min', 'Takes over if the SA node fails (escape)'], ['Purkinje fibres', '20–40/min', 'Last resort when other pacemakers fail']];
+const COND_STEPS = [
+  [0.000, 'SA node fires', 'The impulse starts in the <b>SA node</b> in the right atrium. The node is too small to show on the ECG: its activity is inferred from the P wave (StatPearls).'],
+  [0.030, 'Atria; AV node reached', 'The impulse spreads through the atria (the <b>P wave</b>) and reaches the <b>AV node</b> in about <b>0.03 s</b>.'],
+  [0.040, 'AV-node delay', 'The AV node conducts slowly and <b>delays</b> the impulse by about a tenth of a second — <b>0.09 s</b> (Wikipedia) or <b>about 0.13 s</b> (a 2021 review). On the ECG this is the flat line between P and QRS.'],
+  [0.120, 'Bundle of His and branches', 'The <b>bundle of His</b> carries the impulse quickly to the <b>right and left bundle branches</b> on the septum; the left branch divides into anterior and posterior fascicles.'],
+  [0.150, 'Purkinje fibres and ventricles', '<b>Purkinje fibres</b> conduct rapidly and activate the ventricles almost together: the <b>QRS complex</b>.'],
+];
+const COND_TEXT = '<p>Conduction is <b>slow through the AV node</b> and <b>fast through the bundle of His and the Purkinje fibres</b> (Wikipedia; 2021 and 2026 reviews). The intrinsic rates set a hierarchy: the fastest pacemaker resets the slower ones, which stay latent. Sympathetic nerves speed and the vagus slows depolarisation in the SA and AV nodes; sympathetic nerves also strengthen contraction (a 2014 review; Wikipedia). The AV node also conducts <b>decrementally</b> — the faster it is stimulated, the slower it conducts — which protects the ventricles from rapid atrial rhythms (Wikipedia; a 2021 review). Anatomy: <a href="../../anatomy/thorax/heart.html#h-cond">conducting system and its arteries</a>.</p><p class="muted">Conduction speeds in m/s are not shown: we found no two open sources for them. The timings on the slider are schematic (atria 0.03 s to the AV node, AV delay drawn at 0.09 s).</p>';
+
+/* ECG: highlights [key, label, t0, t1 (s from P onset), text] */
+const ECG_HL = [
+  ['P', 'P wave', 0.00, 0.09, '<b>P wave</b>: atrial depolarisation.'],
+  ['PR', 'PR interval', 0.00, 0.16, '<b>PR interval</b>: from the start of P to the start of QRS — the time for the impulse to reach the ventricles; normally <b>0.12–0.20 s</b>.'],
+  ['QRS', 'QRS complex', 0.16, 0.24, '<b>QRS complex</b>: ventricular depolarisation (atrial repolarisation is hidden inside it; Wikipedia). Normally about <b>0.06–0.10 s</b>.'],
+  ['ST', 'ST segment', 0.24, 0.34, '<b>ST segment</b>: the isoelectric interval between depolarisation and repolarisation; it corresponds to the plateau (phase 2).'],
+  ['T', 'T wave', 0.34, 0.50, '<b>T wave</b>: ventricular repolarisation (phase 3).'],
+  ['QT', 'QT interval', 0.16, 0.50, '<b>QT interval</b>: from the start of QRS to the end of T, the whole ventricular action potential; it varies with heart rate, so it is <b>corrected</b> for rate (QTc).'],
+  ['U', 'U wave', 0.54, 0.64, '<b>U wave</b>: small, often absent; its origin is uncertain (Wikipedia gives papillary-muscle repolarisation in one article and "unclear" in another).'],
+];
+const NORM = [
+  ['Heart rate', '60–100/min', 'Sinus rhythm at rest'],
+  ['PR interval', '0.12–0.20 s', 'Above 0.20 s = first-degree block; below 0.12 s suggests pre-excitation (Wikipedia)'],
+  ['QRS duration', 'about 0.06–0.10 s', '0.06–0.10 s (2018 review) or 0.08–0.10 (up to 0.11) s (Wikipedia); 0.12 s or more is wide (a 2024 review: narrow is "&lt;120 ms")'],
+  ['QTc', 'definitions vary', 'Normal limits quoted from ≤0.40 to ≤0.44 s; borderline 0.431–0.450 s in men and 0.451–0.470 s in women (Wikipedia); one review uses a 0.45 s cut-off; long-QT syndrome is diagnosed at ≥0.48 s (a 2024 review)'],
+  ['QRS axis', '−30° to +90° (or +105°)', 'See the axis calculator below'],
+];
+const ECG_NOTE = 'ECG paper (Wikipedia): small square 1 mm = 0.04 s and 0.1 mV; large square 5 mm = 0.20 s and 0.5 mV, at the standard 25 mm/s. So heart rate = 300 ÷ large squares between R waves (arithmetic from 0.20 s per square). Schematic beat drawn with PR 0.16 s, QRS 0.08 s, QT 0.34 s.';
+
+/* QTc: Bazett QTc = QT/√RR; Fridericia QT/∛RR (RR in s) */
+const QT0 = {qt: 380, hr: 75};
+
+/* axis classes (degrees): normal −30..+90 (one review) or +105 (Wikipedia); LAD < −30; RAD > +90/+105; −90..−180 indeterminate/extreme */
+const AXIS_TEXT = '<p>The <b>axis</b> is the mean direction of ventricular depolarisation in the frontal plane. In the <b>hexaxial</b> system (Wikipedia) the limb leads sit 30° apart in the order aVL, I, −aVR, II, aVF, III: lead I at 0°, II at +60°, aVF at +90°, so aVL is −30°, III +120° and aVR −150°; positive angles are inferior. A lead records an upright QRS when the vector points towards it, so the net QRS in lead I (left–right) and aVF (up–down) gives the quadrant and, as perpendicular components, the angle (Wikipedia: "mostly positive in I and aVF" is normal if +90° is the upper limit).</p><p class="muted">Diagram: light shading = normal (−30° to +90°); darker band = 90°–105°. <b>The sources disagree on the upper limit of normal:</b> +90° (a 2018 review; Wikipedia\'s hexaxial article) or +105° (Wikipedia\'s ECG article, from population data); all put the lower limit at −30°. Left deviation −30° to −90°, right deviation beyond +90°, extreme (indeterminate) −90° to −180° (Wikipedia). The angle here treats I and aVF as perpendicular, as the hexaxial diagram does — approximate. Lead II is computed from I and aVF on the same diagram.</p>';
+
+/* rhythms: generator parameters (schematic); text */
+const RHY = {
+  nsr: ['Normal sinus', 'Sinus rhythm', '<h3>Normal sinus rhythm</h3><p>Every QRS is preceded by a P wave at a constant PR interval; rate <b>60–100/min</b> (here 75).</p>'],
+  tachy: ['Sinus tachycardia', 'Sinus rhythm faster than 100', '<h3>Sinus tachycardia</h3><p>Faster firing of the SA node (a 2016 review): sinus rhythm above 100/min (here 120). Wikipedia lists sinus tachycardia among the forms of sinus rhythm that can be normal.</p>'],
+  brady: ['Sinus bradycardia', 'Sinus rhythm, slow', '<h3>Sinus bradycardia</h3><p>Sinus rhythm with a slow rate (here 50/min). <b>Cut-offs differ</b>: traditionally below 60/min, but StatPearls diagnoses sinus bradycardia below 50/min. Common in trained athletes (a 2024 review).</p>'],
+  sarr: ['Sinus arrhythmia', 'Rate varies with breathing', '<h3>Sinus arrhythmia</h3><p>P waves of one shape (from the sinus node), but the R–R interval varies by more than 0.12 s; with breathing the vagus is intermittently active, so the rate changes beat to beat (StatPearls; Wikipedia, which copies that text, adds that the rate rises in inspiration and falls in expiration).</p>'],
+  b1: ['1st-degree block', 'PR > 0.20 s, all conducted', '<h3>First-degree AV block</h3><p>The PR interval is <b>longer than 0.20 s</b> but the same on every beat, and every P is followed by a QRS (here 0.28 s). Above 0.30 s is marked (StatPearls). Often seen in aerobic athletes from vagal tone (a 2024 review).</p>'],
+  m1: ['2nd-degree Mobitz I', 'PR lengthens, then a P is dropped', '<h3>Second-degree AV block, Mobitz I (Wenckebach)</h3><p>The PR interval <b>lengthens progressively</b> from beat to beat until a P wave is <b>not conducted</b>; then the cycle starts again. It reflects the AV node\'s decremental conduction and is considered more benign than type II (Wikipedia).</p>'],
+  m2: ['2nd-degree Mobitz II', 'Constant PR, sudden dropped P', '<h3>Second-degree AV block, Mobitz II</h3><p>P waves are intermittently <b>not conducted</b> with <b>no PR lengthening before</b> and no shortening after; an unchanged PR after the block is essential to the diagnosis. The block is in the <b>His–Purkinje system</b> and is an indication for a pacemaker (a 2024 review; Wikipedia).</p>'],
+  b3: ['3rd-degree (complete)', 'P and QRS independent', '<h3>Third-degree (complete) AV block</h3><p>No impulse reaches the ventricles: the atria and ventricles beat <b>independently (AV dissociation)</b>. An <b>escape rhythm</b> drives the ventricles — narrow if from the AV junction, wide if from the ventricles (Wikipedia; drawn here: wide, 40/min, with P waves at 86/min). Most patients need a permanent pacemaker (StatPearls).</p>'],
+  af: ['Atrial fibrillation', 'No P waves, irregular', '<h3>Atrial fibrillation</h3><p>Disorganised atrial activity: <b>no P waves</b> and <b>irregularly spaced QRS complexes</b> (Wikipedia; StatPearls).</p>'],
+  vt: ['Ventricular tachycardia', 'Wide, fast, regular', '<h3>Ventricular tachycardia</h3><p><b>Three or more wide QRS complexes in a row</b>, arising below the AV bundle. Rate cut-offs differ: above 100/min (StatPearls) or above 120/min (Wikipedia). Here 170/min.</p>'],
+  vf: ['Ventricular fibrillation', 'Chaotic, no output', '<h3>Ventricular fibrillation</h3><p>Disorganised electrical activity: the ventricles quiver, there is <b>no cardiac output</b> and no pulse — cardiac arrest (StatPearls; Wikipedia).</p>'],
+};
+const RHY_NOTE = 'Schematic strips drawn from a model, not patient recordings; 25 mm/s, 5 s. Mechanisms: abnormal automaticity, early and delayed afterdepolarisations (in phases 2–3 and phase 4) and re-entry, where an impulse re-excites tissue that has recovered from refractoriness (2016 and 2021 reviews).';
+
+/* MI evolution stepper and territory table */
+const MI_STEPS = [
+  ['Normal', {}, '<h3>Normal beat</h3><p>Isoelectric ST segment, upright T.</p>'],
+  ['Hyperacute T', {tA: 0.75, tW: 0.05}, '<h3>Hyperacute T waves</h3><p>Sometimes the earliest sign: tall, broad T waves (Wikipedia; listed as "atypical STEMI in evolution" in the 2017 Indian position statement). They must be told apart from the peaked T of hyperkalaemia.</p>'],
+  ['ST elevation', {st: 0.35, tA: 0.45}, '<h3>ST elevation (STEMI)</h3><p>New ST elevation at the <b>J point</b> in at least <b>two contiguous leads</b>: ≥1 mm in most leads; in V2–V3 ≥2 mm in men (2.5 mm in men under 40, Wikipedia) and ≥1.5 mm in women (Fourth Universal Definition of MI, 2018). <b>Transmural</b> ischaemia elevates the ST segment; <b>subendocardial</b> ischaemia depresses it and inverts the T (a 2026 review).</p>'],
+  ['Q waves, T inversion', {st: 0.12, q: -0.45, tA: -0.3}, '<h3>Evolved: Q waves and T inversion</h3><p>Pathological <b>Q waves</b> appear within hours or after more than a day; the T wave usually inverts within 24 h as the ST elevation resolves, and Q waves persist in about 90% (Wikipedia); most STEMI patients develop Q waves (2017 position statement).</p>'],
+];
+const TERR = [
+  ['Inferior', 'II, III, aVF', 'Usually the RCA (via the posterior descending artery in right dominance)'],
+  ['Septal', 'V1–V2', 'LAD'],
+  ['Anterior', 'V3–V4', 'LAD'],
+  ['Lateral', 'I, aVL, V5–V6', 'LCx (anterolateral: LAD)'],
+  ['Posterior', 'ST <b>depression</b> in V1–V3 (mirror image); ST elevation in V7–V9', 'LCx or a dominant RCA'],
+];
+const MI_TEXT = '<p>Leads and walls: Wikipedia, a 2021 review, StatPearls. The artery column is StatPearls\' (one source); the territories of each coronary artery are on <a href="../../anatomy/thorax/heart.html#h-cor">The Heart: coronary arteries</a>. AV and sinoatrial block are more frequent in inferior than anterior STEMI, partly because the AV-nodal branch usually comes from the RCA (a 2021 review; StatPearls).</p>';
+
+/* potassium: [label, beat params, text] — order of change, no thresholds (they vary) */
+const KST = [
+  ['Normal', {}, '<h3>Normal potassium</h3><p>Serum K⁺ about 3.5–5.0 mmol/L (StatPearls). Membrane effects: <a href="../nerve-muscle/membrane-potentials.html#h-rmp">Membrane potentials</a>.</p>'],
+  ['High K⁺: early', {tA: 0.8, tW: 0.018}, '<h3>Hyperkalaemia, early</h3><p><b>Tall, peaked T waves</b> — the first and commonest change (Wikipedia; a 2024 ECG review; in a 2024 emergency study peaked T was the commonest finding at every severity).</p>'],
+  ['High K⁺: later', {tA: 0.7, tW: 0.02, pA: 0.05, pr: 0.22, wide: 1}, '<h3>Hyperkalaemia, more severe</h3><p>PR lengthens, P waves flatten, the QRS widens (Wikipedia; 2024 reviews).</p>'],
+  ['High K⁺: severe', {sine: 1}, '<h3>Hyperkalaemia, severe</h3><p>P waves disappear and the widened QRS merges with T into a <b>sine wave</b> (Wikipedia; a 2024 study); heart block, ventricular fibrillation and arrest can follow (Wikipedia; a 2026 review calls hyperkalaemic ST–T changes life-threatening).</p>'],
+  ['Low K⁺', {tA: 0.08, st: -0.08, u: 0.22}, '<h3>Hypokalaemia</h3><p>T waves flatten (the earliest sign), the ST segment is depressed, and a prominent <b>U wave</b> appears; when it merges with T the QT looks prolonged (a Q–U interval) (Wikipedia; 2010 and 2024 reviews).</p>'],
+];
+const K_NOTE = 'The potassium level at which each change appears varies (Wikipedia: "somewhat variable"), so no thresholds are drawn; one 2024 review tabulates them. Schematic beats.';
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews on cardiac ion channels and the ECG, mechanisms of arrhythmias, the funny current, the heart and heart-rate variability, QT measurement, the athlete\'s ECG, Mobitz II and Wenckebach block, congenital heart block, STEMI (Cardiological Society of India 2017; Fourth Universal Definition of MI 2018), potassium and the ECG (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> action potentials, the ECG beat, rhythm strips and the conduction timeline are schematic drawings from simple formulas, not recordings. The axis is calculated from leads I and aVF as perpendicular components (approximate). QTc uses the Bazett and Fridericia formulas.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+Phys.table('musc-table', ['Property', 'In cardiac muscle'], MUSC); $('musc-note').innerHTML = MUSC_NOTE;
+
+/* ---- action potentials ---- */
+const ventV = t => { // ms -> mV
+  t = ((t % 400) + 400) % 400;
+  if (t < 50) return -90;
+  if (t < 52) return -90 + 115 * (t - 50) / 2;
+  if (t < 60) return 25 - 25 * (t - 52) / 8;
+  if (t < 230) return 0 - 12 * (t - 60) / 170;
+  if (t < 320) { const u = (t - 230) / 90; return -12 - 78 * (1 - Math.cos(u * Math.PI)) / 2; }
+  return -90;
+};
+const saV = t => { // pacemaker, cycle 400 ms (schematic)
+  t = ((t % 400) + 400) % 400;
+  if (t < 230) return -62 + 22 * Math.pow(t / 230, 1.25);
+  if (t < 280) { const u = (t - 230) / 50; return -40 + 50 * Math.sin(u * Math.PI / 2); }
+  if (t < 380) { const u = (t - 280) / 100; return 10 - 72 * (1 - Math.cos(u * Math.PI)) / 2; }
+  return -62;
+};
+const APS = {cell: 'vent', s: 0};
+function drawAp() {
+  const cell = AP[APS.cell], st = cell.steps[APS.s], f = APS.cell === 'vent' ? ventV : saV;
+  const x0 = 60, x1 = 520, X = Phys.scale(0, 400, x0, x1), Y = Phys.scale(40, -100, 14, 220);
+  let s = Phys.arrowDef('ain', 'var(--ink)');
+  if (APS.cell === 'vent') s += `<rect x="${X(50)}" y="14" width="${X(290) - X(50)}" height="206" class="arp"/><rect x="${X(290)}" y="14" width="${X(320) - X(290)}" height="206" class="rrp"/>` + T((X(50) + X(290)) / 2, 28, 'absolute refractory', 's', 'middle') + T(X(305), 44, 'relative', 's', 'middle');
+  s += `<path class="axis" d="M${x0} 14 L${x0} 220 L${x1} 220"/>`;
+  for (const v of [40, 0, -40, -80]) s += `<path class="axis" d="M${x0 - 4} ${Y(v)} L${x0} ${Y(v)}"/>` + T(x0 - 7, Y(v) + 4, v, 's', 'end');
+  s += T(x0 + 6, 8, 'mV', 's', 'start') + T(x1, 250, 'time (ms) →', 's', 'end');
+  for (let t = 0; t <= 400; t += 100) s += `<path class="axis" d="M${X(t)} 220 L${X(t)} 224"/>` + T(X(t), 236, t, 's', 'middle');
+  s += `<path class="grid dash" d="M${x0} ${Y(0)} L${x1} ${Y(0)}"/>`;
+  const pts = []; for (let t = 0; t <= 400; t += 1) pts.push([X(t), Y(f(t))]);
+  s += `<path class="trace" d="${Phys.path(pts)}"/>`;
+  // phase labels on the trace
+  const lab = APS.cell === 'vent' ? [[20, -90, '4'], [36, -20, '0'], [66, 22, '1'], [150, 6, '2'], [300, -40, '3'], [360, -90, '4']] : [[120, -48, '4'], [262, -12, '0'], [335, -10, '3']];
+  for (const [t, v, l] of lab) s += T(X(t) + 6, Y(v) - 6, l, 'm', 'middle');
+  s += `<circle cx="${X(st[1])}" cy="${Y(f(st[1]))}" r="7" style="fill:var(--mark);stroke:var(--surface);stroke-width:2"/>`;
+  // membrane with ion arrows
+  const my = 292;
+  s += `<rect x="${x0}" y="${my - 8}" width="${x1 - x0}" height="16" class="memb"/>` + T(x0, my - 16, 'outside', 's') + T(x0, my + 26, 'inside', 's');
+  st[2].forEach(([ion, dir, label], i) => {
+    const cx = x0 + 110 + i * 200, y1 = dir === 'in' ? my - 28 : my + 28, y2 = dir === 'in' ? my + 28 : my - 28;
+    s += `<path d="M${cx} ${y1} L${cx} ${y2}" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#ain)"/>` + Phys.dot(cx, (y1 + my) / 2, ion, 5);
+    s += T(cx + 12, my + 4, P_ION(ion) + ' ' + dir + ': ' + label, 'l', 'start');
+  });
+  $('ap-svg').innerHTML = s; $('ap-find').innerHTML = st[3];
+}
+const P_ION = ion => Phys.ION[ion][0];
+let apGo = null;
+const apStepper = () => { apGo = Phys.stepper('ap-step', AP[APS.cell].steps.map(r => r[0]), drawAp, APS); };
+Phys.toggles('ap-tg', Object.entries(AP).map(([k, v]) => [k, v.name]), k => { APS.cell = k; APS.s = 0; apStepper(); }, 'vent');
+apStepper();
+Phys.key('ap-key', [['--na', 'Na⁺'], ['--k', 'K⁺'], ['--ca', 'Ca²⁺'], ['--mark', 'this phase']]);
+$('ap-note').textContent = AP_NOTE;
+
+/* ---- schematic ECG beat generator (shared by the ECG, conduction, rhythm, MI and K⁺ figures) ---- */
+const g = (t, c, w, a) => a * Math.exp(-((t - c) * (t - c)) / (2 * w * w));
+const sstep = (t, a, b) => t <= a ? 0 : t >= b ? 1 : (1 - Math.cos(Math.PI * (t - a) / (b - a))) / 2;
+/* one beat; t in s from the beat's P onset (or QRS onset - pr); o: options */
+function beat(t, o = {}) {
+  const pr = o.pr ?? 0.16, q0 = pr, pA = o.pA ?? 0.15, tA = o.tA ?? 0.30, tW = o.tW ?? 0.035, qt = o.qt ?? 0.34;
+  if (o.sine) { const u = t - q0 + 0.02; return u > 0 && u < 0.5 ? 0.7 * Math.sin(2 * Math.PI * u / 0.5) * sstep(u, 0, 0.05) * (1 - sstep(u, 0.45, 0.5)) : 0; }
+  let v = 0;
+  if (!o.noP) v += g(t, 0.045, 0.016, pA);
+  if (o.noQRS) return v;
+  if (o.wide) { const k = o.ww || 1; v += g(t, q0 + 0.045 * k, 0.022 * k, 1.0) + g(t, q0 + 0.10 * k, 0.024 * k, -0.35); }
+  else { v += g(t, q0 + 0.015, 0.006, o.q ?? -0.10) + g(t, q0 + 0.035, 0.009, o.q && o.q < -0.2 ? 0.7 : 1.1) + g(t, q0 + 0.055, 0.007, -0.25); }
+  const qe = q0 + (o.wide ? 0.14 : 0.08);
+  if (o.st) v += o.st * sstep(t, qe - 0.01, qe + 0.02) * (1 - sstep(t, q0 + qt - 0.1, q0 + qt));
+  v += g(t, q0 + qt - 0.07 + (o.wide ? 0.03 : 0), tW, tA);
+  if (o.u) v += g(t, q0 + qt + 0.08, 0.03, o.u);
+  return v;
+}
+/* draw ECG paper and a trace from fn(t) over [0, dur] s; returns svg string */
+function paper(x0, y0, w, h, pxmm) {
+  let s = '';
+  for (let x = 0; x <= w + 0.01; x += pxmm) s += `<path class="${Math.round(x / pxmm) % 5 ? 'gs' : 'gl'}" d="M${(x0 + x).toFixed(1)} ${y0} L${(x0 + x).toFixed(1)} ${y0 + h}"/>`;
+  for (let y = 0; y <= h + 0.01; y += pxmm) s += `<path class="${Math.round(y / pxmm) % 5 ? 'gs' : 'gl'}" d="M${x0} ${(y0 + y).toFixed(1)} L${x0 + w} ${(y0 + y).toFixed(1)}"/>`;
+  return s;
+}
+const traceSvg = (fn, x0, yb, pxs, pxmv, dur, step = 0.002, cls = 'ecg') => { const pts = []; for (let t = 0; t <= dur + 1e-9; t += step) pts.push([x0 + t * pxs, yb - fn(t) * pxmv]); return `<path class="${cls}" d="${Phys.path(pts)}"/>`; };
+
+/* ---- conduction ---- */
+const CS = {t: 0.0};
+/* schematic heart (frontal view): myocardium outline and conducting parts with activation times */
+const HEART = 'M150 70 C110 70 80 100 80 140 C80 175 95 200 110 230 C130 275 175 330 215 360 C255 330 300 280 320 230 C335 195 345 165 340 135 C335 95 300 70 265 75 C240 78 225 90 210 100 C195 85 175 70 150 70 Z';
+const CPARTS = [ // [path, t start, label, lx, ly]
+  ['M120 112 l0 0', 0.000, 'SA node', 98, 100],
+  ['M120 112 C150 120 175 140 196 170', 0.010, '', 0, 0],
+  ['M120 112 C150 105 230 110 280 125', 0.010, '', 0, 0],
+  ['M196 172 l0 0', 0.030, 'AV node', 140, 178],
+  ['M196 172 L206 196', 0.120, 'bundle of His', 262, 186],
+  ['M206 196 C200 240 196 280 204 330', 0.130, 'right branch', 120, 290],
+  ['M206 196 C226 240 240 270 246 300', 0.130, 'left branch', 250, 250],
+  ['M204 330 C180 320 150 290 130 250 M204 330 C230 335 270 300 300 240 M246 300 C270 300 300 270 314 220', 0.150, 'Purkinje fibres', 268, 330],
+];
+function drawCond() {
+  const t = CS.t;
+  let s = `<path class="myo" d="${HEART}"/>` + `<path d="M210 100 L210 360" style="stroke:var(--heart);stroke-width:1;stroke-dasharray:3 4;fill:none"/>` + T(124, 60, 'right atrium', 's', 'middle') + T(290, 62, 'left atrium', 's', 'middle') + T(150, 225, 'RV', 's', 'middle') + T(275, 205, 'LV', 's', 'middle');
+  // atrial activation wave: fill the atria up to a radius from the SA node
+  const ra = Math.min(1, t / 0.08);
+  if (t > 0) s += `<clipPath id="atr"><path d="M80 70 L345 70 L345 150 L80 150 Z"/></clipPath><circle cx="120" cy="112" r="${(ra * 200).toFixed(0)}" clip-path="url(#atr)" style="fill:var(--conduct);fill-opacity:.12"/>`;
+  if (t >= 0.15) { const rv = Math.min(1, (t - 0.15) / 0.07); s += `<clipPath id="vnt"><path d="${HEART}"/></clipPath><rect x="80" y="${(360 - rv * 220).toFixed(0)}" width="270" height="${(rv * 220).toFixed(0)}" clip-path="url(#vnt)" style="fill:var(--conduct);fill-opacity:.12"/>`; }
+  for (const [d, t0, lab, lx, ly] of CPARTS) {
+    const on = t >= t0, dot = /l0 0$/.test(d);
+    s += dot ? `<circle cx="${d.split(' ')[0].slice(1)}" cy="${d.split(' ')[1]}" r="8" class="${on ? '' : 'off'}" style="fill:var(--conduct)"/>` : `<path class="cs ${on ? '' : 'off'}" d="${d}"/>`;
+    if (lab) s += T(lx, ly, lab, 'l', 'middle');
+  }
+  // ECG growing with time
+  const ex0 = 40, eyb = 440, pxs = 1400, mv = 34;
+  s += `<path class="axis" d="M${ex0} ${eyb} L${ex0 + 0.25 * pxs} ${eyb}"/>`;
+  s += traceSvg(u => beat(u), ex0, eyb, pxs, mv, Math.min(0.25, t + 0.001)) + T(ex0 + 0.25 * pxs + 6, eyb + 4, 'ECG', 's', 'start');
+  $('cond-svg').innerHTML = s;
+  const step = [...COND_STEPS].reverse().find(r => t >= r[0]) || COND_STEPS[0];
+  $('cond-find').innerHTML = `<h3>${step[1]} (t = ${t.toFixed(3)} s)</h3><p>${step[2]}</p>`;
+}
+const csl = Phys.slider('cond-sl', {id: 'ct', label: 'Time after the SA node fires', min: 0, max: 0.24, step: 0.005, value: 0, fmt: v => v.toFixed(3) + ' s'}, v => { CS.t = v; drawCond(); });
+csl.init(); drawCond();
+Phys.table('rate-table', ['Pacemaker', 'Intrinsic rate', 'Role'], RATES.map(r => [r[0], `<span class="num">${r[1]}</span>`, r[2]]));
+$('cond-text').innerHTML = COND_TEXT;
+
+/* ---- ECG beat with highlights ---- */
+const EG = {k: 'P'};
+function drawEcg() {
+  const x0 = 8, y0 = 10, pxmm = 14, w = 42 * pxmm, h = 18 * pxmm, pxs = 25 * pxmm, mv = 10 * pxmm, yb = y0 + 13.2 * pxmm, tOff = 0.12;
+  let s = paper(x0, y0, w, h, pxmm);
+  const hl = ECG_HL.find(r => r[0] === EG.k);
+  s += `<rect class="band" x="${x0 + (tOff + hl[2]) * pxs}" y="${y0}" width="${(hl[3] - hl[2]) * pxs}" height="${h}"/>`;
+  s += traceSvg(t => beat(t - tOff, {u: 0.05}) + beat(t - tOff - 0.8), x0, yb, pxs, mv, w / pxs, 0.002);
+  const lab = [['P', 0.045, 0.24], ['Q', 0.165, -0.2], ['R', 0.195, 1.2], ['S', 0.215, -0.4], ['T', 0.43, 0.42], ['U', 0.58, 0.16]];
+  for (const [l, t, v] of lab) s += T(x0 + (tOff + t) * pxs, yb - v * mv + (v < 0 ? 14 : -4), l, 'l b', 'middle');
+  s += T(x0 + w - 4, y0 + 18, hl[1] + ' ' + (hl[0] === 'U' ? '' : ((hl[3] - hl[2]).toFixed(2) + ' s')), 'l b', 'end');
+  s += T(x0 + w - 4, y0 + h - 8, '1 small square = 0.04 s, 0.1 mV', 's', 'end');
+  $('ecg-svg').innerHTML = s;
+  $('ecg-find').innerHTML = '<p>' + hl[4] + '</p>';
+}
+Phys.toggles('ecg-tg', ECG_HL.map(r => [r[0], r[1]]), k => { EG.k = k; drawEcg(); }, 'P'); drawEcg();
+Phys.table('norm-table', ['Measure', 'Normal', 'Notes'], NORM.map(r => [r[0], `<span class="num">${r[1]}</span>`, r[2]]));
+$('ecg-note').textContent = ECG_NOTE;
+const QT = Object.assign({}, QT0);
+function drawQt() {
+  const rr = 60 / QT.hr, baz = QT.qt / Math.sqrt(rr), fri = QT.qt / Math.cbrt(rr);
+  $('qt-out').innerHTML = `<p><span class="tag">RR</span> <span class="readout">${(rr * 1000).toFixed(0)} ms</span> &nbsp; <span class="tag">Bazett QTc</span> <span class="readout">${baz.toFixed(0)} ms</span> &nbsp; <span class="tag">Fridericia QTc</span> <span class="readout">${fri.toFixed(0)} ms</span></p><p>Bazett: QTc = QT ÷ √RR; Fridericia: QT ÷ ∛RR (RR in seconds). Bazett is the most used; Fridericia is thought more accurate at fast rates, and both have limits at slow rates (a 2014 review). ${baz >= 480 ? 'A QTc of 480 ms or more on repeated ECGs is one criterion for long-QT syndrome (a 2024 review).' : baz > 450 ? 'Above 450 ms: prolonged by the 450 ms cut-off one review uses (other definitions differ).' : 'Within the usual limits quoted (definitions differ).'}</p>`;
+}
+for (const [k, lab, mn, mx, st, u] of [['qt', 'Measured QT', 280, 520, 5, ' ms'], ['hr', 'Heart rate', 40, 150, 1, '/min']]) Phys.slider('qt-sl', {id: k, label: lab, min: mn, max: mx, step: st, value: QT0[k], fmt: v => v + u}, v => { QT[k] = v; drawQt(); }).init();
+drawQt();
+
+/* ---- axis ---- */
+const AX = {i: 6, f: 4};
+function axisClass(a) {
+  if (a >= -30 && a <= 90) return ['Normal', 'The vector lies between −30° and +90°: normal by both sources.'];
+  if (a > 90 && a <= 105) return ['Borderline (90° to 105°)', 'Normal by the +105° limit (Wikipedia ECG article), right axis deviation by the +90° limit (a 2018 review; Wikipedia hexaxial article).'];
+  if (a > 105 && a <= 180) return ['Right axis deviation', 'Beyond +90° (or +105°).'];
+  if (a < -30 && a >= -90) return ['Left axis deviation', 'Beyond −30°.'];
+  return ['Extreme (−90° to −180°)', 'Very rare; called extreme or indeterminate axis (Wikipedia).'];
+}
+function drawAxis() {
+  const cx = 180, cy = 180, R = 140, a = Math.atan2(AX.f, AX.i) * 180 / Math.PI, mag = Math.hypot(AX.i, AX.f);
+  const pt = (deg, r) => [cx + r * Math.cos(deg * Math.PI / 180), cy + r * Math.sin(deg * Math.PI / 180)];
+  const arc = (d0, d1, r, cls) => { const [xa, ya] = pt(d0, r), [xb, yb] = pt(d1, r); return `<path d="M${cx} ${cy} L${xa.toFixed(1)} ${ya.toFixed(1)} A${r} ${r} 0 ${d1 - d0 > 180 ? 1 : 0} 1 ${xb.toFixed(1)} ${yb.toFixed(1)} Z" style="${cls}"/>`; };
+  let s = Phys.arrowDef('aax', 'var(--ink)');
+  s += arc(-30, 90, R, 'fill:var(--ink);fill-opacity:.07') + arc(90, 105, R, 'fill:var(--ink);fill-opacity:.14');
+  s += `<circle cx="${cx}" cy="${cy}" r="${R}" style="fill:none;stroke:var(--line)"/>`;
+  const leads = [['I', 0], ['II', 60], ['III', 120], ['aVF', 90], ['aVL', -30], ['aVR', -150]];
+  for (const [l, d] of leads) { const [x, y] = pt(d, R), [xo, yo] = pt(d + 180, R); s += `<path d="M${xo.toFixed(1)} ${yo.toFixed(1)} L${x.toFixed(1)} ${y.toFixed(1)}" style="stroke:var(--muted);stroke-width:.8;stroke-dasharray:${l === 'I' || l === 'aVF' ? '0' : '3 3'}"/>`; const [lx, ly] = pt(d, R + 14); s += T(lx, ly + 4, l + ' ' + (d > 0 ? '+' : '') + d + '°', 's', 'middle'); }
+  if (mag > 0.01) { const [x, y] = pt(a, R * Math.min(1, 0.35 + mag / 14)); s += `<path d="M${cx} ${cy} L${x.toFixed(1)} ${y.toFixed(1)}" style="stroke:var(--ink);stroke-width:3.5" marker-end="url(#aax)"/>`; }
+    $('axis-svg').innerHTML = s;
+  const cls = axisClass(a), ii = AX.i * 0.5 + AX.f * Math.sqrt(3) / 2;
+  $('axis-val').textContent = mag > 0.01 ? Phys.mn((a >= 0 ? '+' : '') + a.toFixed(0)) + '°' : '—';
+  $('axis-cls').textContent = mag > 0.01 ? cls[0] : 'no net QRS';
+  $('axis-find').innerHTML = mag > 0.01 ? `<p>${cls[1]} Lead II from the same vector: ${Phys.mn(ii.toFixed(1))} mm (${ii > 0 ? 'positive' : 'negative'}).</p>` : '<p>Both leads equiphasic: the axis cannot be found from these two leads.</p>';
+}
+for (const [k, lab] of [['i', 'Net QRS in lead I (R − S)'], ['f', 'Net QRS in aVF (R − S)']]) Phys.slider('axis-sl', {id: 'ax' + k, label: lab, min: -10, max: 10, step: 0.5, value: AX[k], fmt: v => (v > 0 ? '+' : '') + v.toFixed(1) + ' mm'}, v => { AX[k] = v; drawAxis(); }).init();
+$('axis-text').innerHTML = AXIS_TEXT; drawAxis();
+
+/* ---- rhythm strips ---- */
+const DUR = 5;
+const prand = n => { const a = []; let x = 0.37; for (let i = 0; i < n; i++) { x = (x * 9301 + 0.4927) % 1; a.push(x); } return a; };
+function events(k) { // returns [{tp: P onset or null, tq: QRS onset or null, o: beat options, lab}]
+  const ev = [];
+  const sinus = (rr, pr = 0.16, qt = 0.34) => { for (let t = 0.2; t < DUR; t += rr) ev.push({tp: t, tq: t + pr, o: {qt}, lab: ''}); };
+  if (k === 'nsr') sinus(0.8);
+  if (k === 'tachy') sinus(0.5, 0.14, 0.28);
+  if (k === 'brady') sinus(1.2, 0.17, 0.38);
+  if (k === 'sarr') { let t = 0.2, i = 0; while (t < DUR) { ev.push({tp: t, tq: t + 0.16, o: {}, lab: ''}); t += 0.9 + 0.22 * Math.sin(i++ * 0.9); } }
+  if (k === 'b1') for (let t = 0.2; t < DUR; t += 0.9) ev.push({tp: t, tq: t + 0.28, o: {}, lab: 'PR 0.28'});
+  if (k === 'm1') { const prs = [0.16, 0.24, 0.30, null]; let i = 0; for (let t = 0.15; t < DUR; t += 0.8, i++) { const pr = prs[i % 4]; ev.push(pr ? {tp: t, tq: t + pr, o: {}, lab: 'PR ' + pr.toFixed(2)} : {tp: t, tq: null, o: {}, lab: 'not conducted', drop: 1}); } }
+  if (k === 'm2') { let i = 0; for (let t = 0.15; t < DUR; t += 0.8, i++) ev.push(i % 3 === 2 ? {tp: t, tq: null, o: {}, lab: 'not conducted', drop: 1} : {tp: t, tq: t + 0.16, o: {}, lab: 'PR 0.16'}); }
+  if (k === 'b3') { for (let t = 0.1; t < DUR; t += 0.7) ev.push({tp: t, tq: null, o: {}, lab: 'P'}); for (let t = 0.45; t < DUR; t += 1.5) ev.push({tp: null, tq: t, o: {wide: 1, noP: 1, qt: 0.44}, lab: ''}); }
+  if (k === 'af') { const r = prand(12); let t = 0.25, i = 0; while (t < DUR) { ev.push({tp: null, tq: t, o: {noP: 1}, lab: ''}); t += 0.45 + 0.5 * r[i++ % 12]; } }
+  if (k === 'vt') for (let t = 0.1; t < DUR; t += 0.35) ev.push({tp: null, tq: t, o: {wide: 1, ww: 1.5, noP: 1, qt: 0.3, tA: -0.35, tW: 0.045}, lab: ''});
+  return ev;
+}
+function rhythmFn(k) {
+  if (k === 'vf') return t => 0.45 * Math.sin(2 * Math.PI * 4.7 * t + Math.sin(3.1 * t) * 2) * (0.6 + 0.4 * Math.sin(1.3 * t + 0.4)) + 0.15 * Math.sin(2 * Math.PI * 7.3 * t);
+  const ev = events(k);
+  return t => {
+    let v = k === 'af' ? 0.05 * Math.sin(2 * Math.PI * 6.3 * t) + 0.035 * Math.sin(2 * Math.PI * 8.9 * t + 1) + 0.02 * Math.sin(2 * Math.PI * 11.7 * t + 2) : 0;
+    for (const e of ev) {
+      if (e.tp !== null && t > e.tp - 0.1 && t < e.tp + 0.2) v += g(t - e.tp, 0.045, 0.016, 0.15);
+      if (e.tq !== null && t > e.tq - 0.1 && t < e.tq + 0.7) v += beat(t - e.tq + 0.16, Object.assign({noP: 1}, e.o));
+    }
+    return v;
+  };
+}
+const RH = {k: 'nsr'};
+function drawRhy() {
+  const x0 = 15, y0 = 10, pxmm = 5, w = 130 * pxmm, h = 40 * pxmm, pxs = 25 * pxmm, mv = 10 * pxmm, yb = y0 + 25 * pxmm;
+  let s = paper(x0, y0, w, h, pxmm);
+  const fn = rhythmFn(RH.k);
+  s += traceSvg(fn, x0, yb, pxs, mv, DUR, 0.002);
+  if (RH.k !== 'vf') for (const e of events(RH.k)) if (e.lab) { const x = x0 + (e.tp ?? e.tq) * pxs + 12; if (x < x0 + w - 20) s += T(x, y0 + 16, e.lab, e.drop ? 'l c' : 'l', 'middle') + (e.drop ? `<path class="lead" d="M${x} ${y0 + 20} L${x} ${yb - 12}"/>` : ''); }
+  s += T(x0 + w, y0 + h + 14, '5 s at 25 mm/s · schematic', 's', 'end');
+  $('rhy-svg').innerHTML = s; $('rhy-find').innerHTML = RHY[RH.k][2];
+}
+Phys.toggles('rhy-tg', Object.entries(RHY).map(([k, v]) => [k, v[0]]), k => { RH.k = k; drawRhy(); }, 'nsr'); drawRhy();
+$('rhy-note').textContent = RHY_NOTE;
+
+/* ---- single-beat figures (MI, K⁺) ---- */
+function oneBeat(svgId, o) {
+  const x0 = 10, y0 = 10, pxmm = 15, w = 22 * pxmm, h = 20 * pxmm, pxs = 25 * pxmm, mv = 10 * pxmm, yb = y0 + 12.5 * pxmm;
+  let s = paper(x0, y0, w, h, pxmm);
+  s += traceSvg(t => beat(t - 0.06), x0, yb, pxs, mv, w / pxs, 0.002, 'ecg off');
+  s += traceSvg(t => beat(t - 0.06, o), x0, yb, pxs, mv, w / pxs, 0.002);
+  s += T(x0 + w, y0 + h - 4, 'faint: normal beat', 's', 'end');
+  $(svgId).innerHTML = s;
+}
+const MS = {s: 0};
+Phys.stepper('mi-step', MI_STEPS.map(r => r[0]), () => { oneBeat('mi-svg', MI_STEPS[MS.s][1]); $('mi-find').innerHTML = MI_STEPS[MS.s][2]; }, MS);
+Phys.table('terr-table', ['Wall', 'Leads', 'Usual artery'], TERR); $('mi-text').innerHTML = MI_TEXT;
+Phys.toggles('k-tg', KST.map((r, i) => [String(i), r[0]]), k => { oneBeat('k-svg', KST[+k][1]); $('k-find').innerHTML = KST[+k][2]; }, '0');
+oneBeat('k-svg', KST[0][1]); $('k-find').innerHTML = KST[0][2]; $('k-note').textContent = K_NOTE;
+Phys.swipeHints();
+</script>
+</body>
+</html>
