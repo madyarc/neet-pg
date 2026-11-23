@@ -18,7 +18,9 @@ Last updated: 2026-11-21
   --na --k --cl --ca --ach) [x] review (cross-bridge drawing wrong, block-order disagreement, PMC10416754 copies
   Wikipedia, PMC13074981 cites OpenStax, Ca²⁺ arrows, --na near --n-ventral-rami, Darrow–Yannet loss missing)
   [x] fixes (680 quotes) [x] docs [x] commit. Done 2026-11-22.
-  Physiology next: P2 haematology (PY2.1–2.13), then CVS, respiratory, renal, GI, endocrine, reproductive, CNS, senses.
+  Physiology 02 haematology (fill-physio2, physiology/blood/) and 03 cardiovascular (fill-physio3, physiology/cvs/)
+  [ ] build (both running in parallel) [ ] review [ ] fixes [ ] docs [ ] commit. Then respiratory, renal, GI, endocrine,
+  reproductive, CNS, senses.
 
 - 2026-11-22 11:15 crash: Claude Code 2.1.330 segfaulted itself (coredump; no kernel/amdgpu errors at that time;
   user's memtest and scrub are clean). Same as the 11-20 crashes of 2.1.327/328. Repaired 3 corrupt .git loose objects
