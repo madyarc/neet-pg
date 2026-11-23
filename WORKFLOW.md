@@ -18,7 +18,7 @@ Last updated: 2026-11-21
   GitHub since 2025-07-15 (github.blog changelog); issue-form fields prefill by element id in the URL (docs.github.com
   form schema). Return-to-form after sign-up untested (can't log in headless): don't promise it in the wording. Google Form relay = fallback if reports stay low.
   Built (uncommitted): .github/ISSUE_TEMPLATE/feedback.yml + config.yml, label `feedback` created, tools/home/feedback_links.py
-  (idempotent; inserts <!-- feedback --> block after </footer>; tested on cardiac-cycle-output). Run on all pages after 04+05 commit. Anatomy partials after that.
+  (idempotent; inserts <!-- feedback --> block after </footer>; tested on cardiac-cycle-output). [x] Run on all 88 pages 2026-11-23, committed. Anatomy partials after that.
 
 - 2026-11-22 evening: resumed modules 44 (fixes) and 45 (build). Session was not under claude-8g, so the 7G/8G/1G
   limits were written to this tab's cgroup directly (verify each session: cat memory.max in /proc/self/cgroup's path).

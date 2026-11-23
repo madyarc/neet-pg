@@ -191,4 +191,6 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
 1. List its NMC competencies. 2. Verify every fact; record the sources in `<subject>/DATA-SOURCES.md`.
 3. Build `<subject>/<branch>/<name>.html` from an existing module. 4. Add a row to `<subject>/index.html` and update the
 subject's line in the root `index.html`. 5. Check light/dark, phone width, no console errors. 6. Tick the SYLLABUS.
-7. Commit and push (GitHub Pages updates automatically).
+7. Run `tools/home/feedback_links.py <page>` (adds the "Report it" note after the footer: opens the GitHub issue
+form `.github/ISSUE_TEMPLATE/feedback.yml` with the page filled in), and `tools/home/search_index.py`.
+8. Commit and push (GitHub Pages updates automatically). Reader reports arrive as issues labelled `feedback`.
