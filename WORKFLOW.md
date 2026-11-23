@@ -14,7 +14,9 @@ Last updated: 2026-11-21
 - Next subject: PHYSIOLOGY (136 competencies, 0 done). P1 = general physiology + nerve and muscle (PY1.1–1.7,
   PY3.1–3.10): pages under physiology/general/ and physiology/nerve-muscle/, sheet fill-physio1, physiology/index.html
   created by the first module (CLAUDE.md: create subject index with the first module), root index line updated by
-  main session. Started 2026-11-22 (build running).
+  main session. [x] build (679 quotes; 4 pages + physiology/index.html + assets/phys.css/js; ion tokens
+  --na --k --cl --ca --ach) [ ] review (running) [ ] fixes [ ] docs (physiology/DATA-SOURCES.md, SYLLABUS ticks, root
+  index line) [ ] commit.
 
 - 2026-11-22 11:15 crash: Claude Code 2.1.330 segfaulted itself (coredump; no kernel/amdgpu errors at that time;
   user's memtest and scrub are clean). Same as the 11-20 crashes of 2.1.327/328. Repaired 3 corrupt .git loose objects
