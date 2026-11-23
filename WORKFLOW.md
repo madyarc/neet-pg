@@ -23,9 +23,10 @@ Last updated: 2026-11-21
   [x] fixes (680 quotes) [x] docs [x] commit. Done 2026-11-22.
   Physiology 02 haematology (fill-physio2, physiology/blood/) and 03 cardiovascular (fill-physio3, physiology/cvs/)
   03: [x] build (550 quotes; 3 pages; no new tokens) [x] review (11 items: AP stepper keyboard bug in phys.js,
-  shock SVR/filling unsourced, HF preset EF 43%, unquoted claims, colours, labels, Wiggers timing) [ ] fixes (running).
+  shock SVR/filling unsourced, HF preset EF 43%, unquoted claims, colours, labels, Wiggers timing) [x] fixes (576 quotes; phys.js stepper uses onkeydown).
+  Commit 02+03 together after 02's fixes (shared phys.js/css and index carry 02's additions).
   02: [x] build (791 quotes; 4 pages incl. immunity; tokens --rbc --platelet in phys.css; 7 Commons smears) [ ] review
-  (running). 04 GI and 05 respiratory queued (max two agents).
+  (running). 04 GI [ ] build (running; fill-physio4, physiology/gi/). 05 respiratory queued.
   Then respiratory, renal, GI, endocrine,
   reproductive, CNS, senses.
 
