@@ -25,8 +25,9 @@ Last updated: 2026-11-21
   03: [x] build (550 quotes; 3 pages; no new tokens) [x] review (11 items: AP stepper keyboard bug in phys.js,
   shock SVR/filling unsourced, HF preset EF 43%, unquoted claims, colours, labels, Wiggers timing) [x] fixes (576 quotes; phys.js stepper uses onkeydown).
   Commit 02+03 together after 02's fixes (shared phys.js/css and index carry 02's additions).
-  02: [x] build (791 quotes; 4 pages incl. immunity; tokens --rbc --platelet in phys.css; 7 Commons smears) [ ] review
-  (running). 04 GI [ ] build (running; fill-physio4, physiology/gi/). 05 respiratory queued.
+  02: [x] build (791 quotes; 4 pages incl. immunity; tokens --rbc --platelet in phys.css; 7 Commons smears) [x] review
+  (13 items: --ok undefined, WHO child cut-off, PMC5767294 via Boundless/OpenStax, LAB_NOTE over-claims, attributions,
+  DIC readout, ESR preset, keyboard focus, IgA drawing) [ ] fixes (running). 04 GI [ ] build (running; fill-physio4, physiology/gi/). 05 respiratory queued.
   Then respiratory, renal, GI, endocrine,
   reproductive, CNS, senses.
 
