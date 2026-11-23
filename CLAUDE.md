@@ -88,7 +88,9 @@ Anatomy branches follow the NMC regions: `upper-limb/`, `lower-limb/`, `thorax/`
 ## Technical rules
 
 - No build step for the reader, no framework. External resources: Google Fonts only.
-- Non-anatomy modules: one self-contained HTML file each. **Anatomy** pages share `anatomy/assets/viewer.js` (WebGL
+- Pages in one subject may share small helper files in that subject (e.g. `physiology/assets/phys.css` + `phys.js`;
+  in anatomy `histology/histo.js`, `genetics/gen.js`, `abdomen-pelvis/ap.js`); nothing is shared across subjects except
+  fonts. **Anatomy** pages share `anatomy/assets/viewer.js` (WebGL
   viewer) and `anatomy/assets/atlas.css`, and load model files from `anatomy/models/<group>/` (the femur page is still
   the older self-contained version).
 - Every module starts with `<nav class="back"><a href="../index.html">← <Subject></a></nav>` (adjust `../` to depth).

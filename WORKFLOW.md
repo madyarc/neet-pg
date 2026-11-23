@@ -15,7 +15,9 @@ Last updated: 2026-11-21
   PY3.1–3.10): pages under physiology/general/ and physiology/nerve-muscle/, sheet fill-physio1, physiology/index.html
   created by the first module (CLAUDE.md: create subject index with the first module), root index line updated by
   main session. [x] build (679 quotes; 4 pages + physiology/index.html + assets/phys.css/js; ion tokens
-  --na --k --cl --ca --ach) [ ] review (running) [ ] fixes [ ] docs (physiology/DATA-SOURCES.md, SYLLABUS ticks, root
+  --na --k --cl --ca --ach) [x] review (cross-bridge drawing wrong, block-order disagreement, PMC10416754 copies
+  Wikipedia, PMC13074981 cites OpenStax, Ca²⁺ arrows, --na near --n-ventral-rami, Darrow–Yannet loss missing)
+  [ ] fixes (running) [ ] docs (physiology/DATA-SOURCES.md, SYLLABUS ticks, root
   index line) [ ] commit.
 
 - 2026-11-22 11:15 crash: Claude Code 2.1.330 segfaulted itself (coredump; no kernel/amdgpu errors at that time;
