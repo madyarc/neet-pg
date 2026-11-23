@@ -9,7 +9,11 @@ Last updated: 2026-11-21
 ## Now
 
 - USER 2026-11-23: finish physiology modules 01–05 (01 done; 02 haematology, 03 CVS, 04 GI, 05 respiratory), then STOP,
-  clean caches and background processes (server, agents); user has other work. Anatomy partials after that.
+  clean caches and background processes (server, agents); user has other work.
+  BEFORE cleanup (user 2026-11-23): feedback → GitHub issues. Per-page "Report a problem" link (prefilled title + page
+  URL via issues/new?template=feedback.yml&title=…&page=…), .github/ISSUE_TEMPLATE/feedback.yml issue form (type: wrong
+  fact / typo / drawing-label / bug / suggestion; what; correction + source; device/theme), labels feedback + type;
+  home-page "Feedback" link. Needs a GitHub account (no-account option later if wanted). Anatomy partials after that.
 
 - 2026-11-22 evening: resumed modules 44 (fixes) and 45 (build). Session was not under claude-8g, so the 7G/8G/1G
   limits were written to this tab's cgroup directly (verify each session: cat memory.max in /proc/self/cgroup's path).
