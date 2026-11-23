@@ -22,7 +22,8 @@ Last updated: 2026-11-21
   Wikipedia, PMC13074981 cites OpenStax, Ca²⁺ arrows, --na near --n-ventral-rami, Darrow–Yannet loss missing)
   [x] fixes (680 quotes) [x] docs [x] commit. Done 2026-11-22.
   Physiology 02 haematology (fill-physio2, physiology/blood/) and 03 cardiovascular (fill-physio3, physiology/cvs/)
-  03: [x] build (550 quotes; 3 pages; no new tokens) [ ] review (running). 02: [ ] build (running).
+  03: [x] build (550 quotes; 3 pages; no new tokens) [x] review (11 items: AP stepper keyboard bug in phys.js,
+  shock SVR/filling unsourced, HF preset EF 43%, unquoted claims, colours, labels, Wiggers timing) [ ] fixes (running). 02: [ ] build (running).
   Then respiratory, renal, GI, endocrine,
   reproductive, CNS, senses.
 
