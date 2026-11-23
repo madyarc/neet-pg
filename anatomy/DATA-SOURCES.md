@@ -1377,3 +1377,35 @@ tubercles.
 - Independent review 2026-11-22, fixed: aneurysm wall layers drawn in the wrong order; ipsilateral/contralateral sides
   swapped; the nutrient-artery Wikipedia copy counted as a second source; the S1 dermatome band; colour hues and clashes;
   lymph-territory encoding aligned with the thorax page; attribution slips; label clipping.
+
+## Bony Pelvis; Imaging the Abdomen; Surface Marking and Sections — `abdomen-pelvis/bony-pelvis.html`, `abdomen-pelvis/imaging-abdomen.html`, `abdomen-pelvis/surface-sections.html`
+
+- Fact sheet `sources-local/facts/fill-abdo2.md` (511 quotes, script-checked against `sources-local/modern/fill-abdo2/`,
+  downloads 2026-11-22): Gray 1918; StatPearls; Wikipedia; open-access papers on pelvimetry and pelvic types, subpubic
+  angle, sciatic notch, inlet shape, sex estimation, lumbosacral transitional vertebrae, the abdominal radiograph,
+  pneumoperitoneum, volvulus, barium studies, HSG, MRCP vs ERCP, CT vs IVU, ultrasound, PET, MRI basics (2021),
+  Hounsfield values (2024, 2026), renal angle, McBurney terminology, pancreas (2024).
+- Excluded: Wikipedia "Pelvis" (cites OpenStax); Wikipedia sentences copying Gray (Coccyx, Thoracic diaphragm, Aortic
+  hiatus, Pelvic brim, Pelvic inlet, Pelvic outlet); "Transpyloric plane" not counted for the halfway definition (Gray
+  template); Wikipedia's pelvic-type text copies the StatPearls Pelvic Inlet chapter.
+- Contested, shown on the page: subpubic angle in four studies; sacral curvature; pelvic diameters and outlet cut-offs;
+  "true" conjugate (Gray's anteroposterior diameter vs the obstetric "true" conjugate); pelvic-type frequencies;
+  McBurney's point (one-third vs halfway); deep ring position; SMA origin; caval opening (T8 vs T8/9 disc); HSG day;
+  air-fluid levels (erect only vs supine and erect); Hounsfield ranges for fat and bone.
+- Single source, attributed: Gray's surface outlines (liver, Morris's parallelogram, ureter, spleen axis) and the
+  transpyloric halfway definition; DSA mask, cathode and anode (StatPearls); 1 mL of free gas (one review); metal as
+  densest (Wikipedia); Murphy's-sign manoeuvre; coccydynia figures; Castellvi classes (2026 review).
+- Left out (no second source): hip-bone muscle list, sentinel loop, "3-6-9" as a name, control film, thoracic duct in
+  the hiatus, embolisation, pelvic tumours on MRI.
+- Sections are cut from the lung and abdo models (z 1203 T8/9, 1159 T10, 1075 L1 mm) with `fill-abdo2-scripts/slice.py`;
+  pelvis landmarks from points.py; both approximate and labelled so. Label points are checked to lie on their part.
+- Images (Wikimedia Commons, licences read 2026-11-22; resized, labelled): Heilman small-bowel obstruction CC BY-SA 3.0;
+  Hellerhoff Rigler sign CC BY-SA 3.0 (cropped); small-bowel follow-through public domain (R marker kept); Jmarchn HSG
+  CC BY-SA 3.0; Guntau ERCP CC BY-SA 3.0; Ptrump16 MRCP CC BY-SA 4.0; UCSD pelvis AP public domain. Barium swallow,
+  double-contrast enema, IVU and CT images not obtained (Commons rate limits): drawings instead.
+- New colour tokens on bony-pelvis.html: `--inlet`, `--outlet` (outlet and midpelvis), `--sx-f`, `--sx-m` (one hue in
+  both themes; sex labels drawn in ink).
+- Independent review 2026-11-22, fixed: T10 cut through T11 (no oesophagus); section labels on the wrong organs;
+  "true" conjugate naming; pubic-arch drawing; 3D zoom on phone and clip notes; about ten unsourced or misattributed
+  claims; T1/T2, Hounsfield and density order added; colour rules and contrast; Rigler and fluid drawing; label clashes;
+  image crop. lower-limb/bones.html: the subpubic-angle line no longer rests on the OpenStax-citing "Pelvis" article.

@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Imaging the Abdomen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<link rel="stylesheet" href="ap.css">
+<style>
+/* colours, one meaning each. atlas.css: --bone, --artery, --ink, --muted, --line, --surface, --accent (UI selection only), --clin (a
+   pathological finding: free gas, an obstruction, a twist). Shared with organs.html and pelvis.html, same meaning and values: --stom
+   (stomach), --gut (digestive tube: oesophagus, small intestine), --colon (large intestine), --bile (gall bladder and bile
+   ducts), --panc (pancreas and its duct), --kidney (kidneys, ureters, bladder), --uter (uterus and uterine tubes). No new tokens.
+   The "radiograph" panels are drawn in fixed greys, black for gas and white for bone or contrast, as on a film, in both themes. */
+:root{--stom:#e7b7c8;--gut:#d9a066;--colon:#a89a5a;--bile:#5e8c6a;--panc:#8f6aa8;--kidney:#b46e48;--uter:#e9967a}
+:root[data-theme="dark"]{--stom:#8c5468;--gut:#c08a52;--colon:#8f8248;--bile:#6fa07b;--panc:#9d7ab6;--kidney:#c07a52;--uter:#d08066;color-scheme:dark}
+svg.sch .film{fill:#3a3a3a}
+svg.sch text.w{fill:#fff;paint-order:stroke;stroke:#000;stroke-width:3px;stroke-linejoin:round}
+svg.sch text.cw{fill:#ffb4a8;font-weight:600;paint-order:stroke;stroke:#000;stroke-width:3px}
+svg.sch .org{stroke:var(--muted);stroke-width:1}
+svg.sch .dimo{opacity:.18}
+svg.sch .route{stroke:var(--ink);stroke-width:2.2;fill:none;marker-end:url(#arr)}
+svg.sch .clin{stroke:var(--clin);stroke-width:3;fill:none}
+.mod-tbl td:first-child{white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> <span class="muted" style="font-size:13px">· Abdomen and pelvis: <a href="organs.html">Organs</a> · <a href="pelvis.html">Pelvic viscera</a> · <a href="perineum.html">Perineum</a> · <a href="nerves-vessels.html">Nerves and vessels</a> · <a href="bony-pelvis.html">Bony pelvis</a> · <span aria-current="page">Imaging</span> · <a href="surface-sections.html">Surface marking, sections</a></span></nav>
+
+<header class="stack">
+  <h1>Imaging the Abdomen</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-mod">How each method works</a> <a href="#h-axr">Plain X-ray abdomen</a> <a href="#h-con">Contrast studies</a> <a href="#h-role">ERCP, CT, MRI, arteriography</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-mod">
+  <h2 id="h-mod">How each method works</h2>
+  <div class="step" id="mod-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="mod-svg" viewBox="0 0 520 320" role="img" aria-label="Schematic of the chosen imaging method: X-ray tube and detector, fluoroscopy with contrast, CT gantry, MRI magnet and radio waves, ultrasound probe and echoes, PET annihilation photons, or digital subtraction"></svg></div>
+    <div class="prose find" id="mod-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematics, not to scale.</p>
+  <div class="scroll"><table id="mod-table" class="mod-tbl"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-axr">
+  <h2 id="h-axr">The plain abdominal radiograph</h2>
+  <div class="chips" id="axr-tg" aria-label="Pattern"></div>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="axr-svg" viewBox="0 0 460 480" role="img" aria-label="Schematic supine abdominal radiograph with the gas pattern, organ outlines, psoas shadows and bones; toggles show small and large bowel obstruction, sigmoid volvulus and free gas"></svg></div>
+      <p class="muted">Schematic "film", not a real image: gas black, bone white, soft tissue grey. Patient's right on your left, as on a film.</p>
+    </div>
+    <div class="prose find" id="axr-find" aria-live="polite"></div>
+  </div>
+  <h3>Reading it, step by step</h3>
+  <div class="scroll"><table id="axr-table"></table></div>
+  <div class="imgs" id="axr-imgs"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-con">
+  <h2 id="h-con">Contrast studies</h2>
+  <div class="chips" id="con-tg" aria-label="Study"></div>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="con-svg" viewBox="0 0 420 470" role="img" aria-label="Schematic of the trunk showing which organs the chosen contrast study fills and the route by which the contrast is given"></svg></div>
+      <div class="key" id="con-key"></div>
+      <p class="muted">Schematic, not to scale; front view, patient's right on your left. Arrow: where the contrast goes in.</p>
+    </div>
+    <div class="prose find" id="con-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="con-table"></table></div>
+  <div class="imgs" id="con-imgs"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-role">
+  <h2 id="h-role">The role of ERCP, CT, MRI and arteriography</h2>
+  <div class="cards" id="role-cards"></div>
+  <h3>Which first test for which question</h3>
+  <div class="scroll"><table id="which-table"></table></div>
+  <p class="muted">A summary of the statements above with their sources; local practice and guidelines vary.</p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+  <p id="images"></p>
+</footer>
+</div>
+<script src="ap.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (every fact checked in two sources unless attributed: sources-local/facts/fill-abdo2.md, Part B; anatomy/DATA-SOURCES.md) ===================== */
+const LEDE = 'How X-rays, fluoroscopy, CT, MRI, ultrasound, PET and digital subtraction angiography make their images; what a plain abdominal film shows (gas pattern, air-fluid levels, psoas shadows, free gas); what each contrast study fills — barium swallow, meal, follow-through and enema, IVU, HSG, oral cholecystography — and where ERCP, MRCP, CT, MRI and arteriography fit.';
+const MOD_STEPS = [
+  ['X-ray', `<p><b>X-rays</b> are electromagnetic radiation made in a tube: electrons from a heated cathode filament are accelerated on to an anode (StatPearls). Passing through the body they are <b>absorbed (attenuated) according to density and composition</b>: dense, calcium-rich bone stops most and looks white; gas stops least and looks black; fat, soft tissue and fluid are shades of grey between (StatPearls; Wikipedia). In order of increasing density: <b>gas &lt; fat &lt; soft tissue and fluid &lt; bone</b> (Hounsfield values: Wikipedia; 2024 and 2026 reviews), and <b>metal</b> densest of all, white like bone or whiter (Wikipedia).</p>`],
+  ['Fluoroscopy, contrast', `<p><b>Fluoroscopy</b> shows X-ray images on a monitor in real time, so swallowing, peristalsis and filling can be watched (StatPearls; Wikipedia). <b>Contrast media</b> outline hollow organs and vessels: positive (radio-opaque) agents absorb X-rays — <b>barium sulfate</b> for the gut, <b>iodinated agents</b> into veins, arteries and the uterus; <b>gas</b> is a negative contrast; barium plus gas gives a <b>double-contrast</b> study (2019 editorial; Wikipedia; StatPearls).</p>`],
+  ['CT', `<p><b>Computed tomography</b>: an X-ray tube and a row of detectors <b>rotate round the patient</b> in a gantry; a computer reconstructs <b>cross-sectional slices</b> from the attenuation measured at many angles (StatPearls; Wikipedia). Attenuation is given in <b>Hounsfield units</b>: water 0, air −1000 (Wikipedia); fat is negative (Wikipedia −120 to −90; muscle-fat studies use −190 to −30, 2026 review) and cortical bone high (Wikipedia +500 to +1900; 700–1500 in a 2024 review) — so on CT, as on a film, air &lt; fat &lt; water and soft tissue &lt; bone. CT uses ionising radiation; a routine abdominal CT is about three years of background radiation (Wikipedia).</p>`],
+  ['MRI', `<p><b>MRI</b>: a strong magnet (clinically 1.5–3 tesla), gradient coils and <b>radio-frequency</b> pulses (StatPearls; Wikipedia). Hydrogen nuclei (protons), plentiful in water and fat, absorb and re-emit radio energy that the coils detect (Wikipedia). <b>No ionising radiation</b> (StatPearls; Wikipedia); better soft-tissue contrast than CT (Wikipedia). <b>T1</b> and <b>T2</b> are two relaxation times; images can be weighted to either (Wikipedia). On <b>T2</b>-weighted images water and other fluids are <b>bright</b>; on <b>T1</b> fat is bright (2021 MRI review; heavily T2-weighted MRCP shows the fluid in the ducts, Wikipedia).</p>`],
+  ['Ultrasound', `<p><b>Ultrasound</b>: sound above 20 kHz, made by <b>piezoelectric crystals</b> in the probe; the pulses <b>echo</b> off tissues and return to the probe, which builds the image in real time (Wikipedia; 2026 review). It uses <b>no ionising radiation</b> (2026 review) and is the first test when gallstones are suspected (Wikipedia; 2025 study).</p>`],
+  ['PET', `<p><b>PET</b>: a positron-emitting tracer, usually <b>18F-FDG</b> (a glucose analogue), collects where metabolism is high. Each positron meets an electron and the two <b>annihilate into two gamma rays in opposite directions</b>, picked up by a ring of detectors (StatPearls; Wikipedia; 2026 review). Mainly used in oncology (StatPearls), now as combined <b>PET/CT</b> (2026 review).</p>`],
+  ['DSA', `<p><b>Angiography</b>: contrast injected through a catheter (usually from the femoral artery, Seldinger technique — Wikipedia) outlines the vessel lumen on a series of X-rays (StatPearls). In <b>digital subtraction angiography</b> an image taken <b>before</b> contrast (the "mask") is <b>subtracted</b> from the later images, leaving only the contrast-filled vessels (Wikipedia; one source).</p>`],
+];
+const MOD_HEAD = ['Method', 'Uses', 'Ionising radiation', 'Image', 'Sources'];
+const MOD_ROWS = [
+  ['Plain radiograph', 'X-rays through the body on to a detector', 'Yes', 'Still projection; densities: gas, fat, soft tissue, bone', 'StatPearls; Wikipedia'],
+  ['Fluoroscopy / contrast studies', 'X-rays shown live; barium, iodine or gas', 'Yes', 'Real-time, functional', 'StatPearls; Wikipedia; 2019 editorial'],
+  ['CT', 'Rotating X-ray tube and detectors; computer reconstruction', 'Yes', 'Cross-sectional slices (Hounsfield units)', 'StatPearls; Wikipedia'],
+  ['MRI', 'Magnet, gradients, radio waves; hydrogen nuclei', 'No', 'Slices; soft-tissue contrast (fluid bright on T2, fat bright on T1)', 'StatPearls; Wikipedia; 2021 review'],
+  ['Ultrasound', 'High-frequency sound; piezoelectric probe; echoes', 'No', 'Real-time', 'Wikipedia; 2026 review'],
+  ['PET (PET/CT)', 'Positron-emitting tracer (FDG); paired gamma rays', 'Yes (tracer)', 'Metabolic map', 'StatPearls; Wikipedia; 2026 review'],
+  ['DSA', 'Contrast images minus a pre-contrast mask', 'Yes', 'Vessels only', 'Wikipedia; StatPearls (angiography)'],
+];
+const AXR_ITEMS = {
+  norm: ['Normal', `<p>A <b>supine AP</b> film is the usual abdominal radiograph (Ulster Med J review; Wikipedia); it covers the diaphragm to the symphysis. Look at: the <b>gas pattern</b> (stomach, colon; small bowel normally not dilated), the <b>liver, spleen and renal outlines</b> (kidneys may be hidden by gas), the <b>psoas shadows</b>, the <b>bones</b> and any <b>calcification</b> (stones).</p><p>CT is more accurate for the acute abdomen (Wikipedia ×2).</p>`],
+  sbo: ['Small bowel obstruction', `<p><b>Small bowel</b> is <b>central</b>, with <b>valvulae conniventes</b> crossing the <b>whole width</b> of the loop; normal small bowel is <b>under 3 cm</b> (Ulster Med J review; Wikipedia). In obstruction: dilated loops, and on an <b>erect</b> (horizontal-beam) film <b>multiple air-fluid levels</b> (2018 study; Wikipedia). Commonest causes: <b>adhesions</b>, then <b>hernias</b> (StatPearls; review). CT confirms it (StatPearls).</p>`],
+  lbo: ['Large bowel obstruction', `<p><b>Colon</b> lies <b>peripherally</b>; its <b>haustral folds do not cross the whole width</b>. Dilated over <b>6 cm</b>, or <b>9 cm</b> for the caecum (Ulster Med J review; one source). Commonest causes: colorectal cancer, diverticular stricture (same review).</p>`],
+  vol: ['Sigmoid volvulus', `<p><b>Volvulus</b> is commonest in the <b>sigmoid</b>, then the caecum (Wikipedia; review), in elderly, constipated, bed-bound patients (StatPearls; Wikipedia). The plain-film <b>"coffee bean" sign</b>: a hugely dilated, twisted sigmoid loop rising towards the upper abdomen (two 2026 papers); a redundant sigmoid can mimic it.</p>`],
+  air: ['Free gas (perforation)', `<p><b>Free intraperitoneal gas</b> (pneumoperitoneum), usually from a perforated peptic ulcer (Wikipedia): the <b>erect chest radiograph</b> is the most sensitive plain film — gas under the diaphragm, the most sensitive plain film (two papers; as little as 1 mL, Ulster Med J review). On a <b>supine</b> film: <b>Rigler's (double-wall) sign</b>, gas on both sides of the bowel wall (StatPearls; two papers), and the <b>football sign</b> in massive pneumoperitoneum (Wikipedia; 2015 letter). Colon between liver and diaphragm (Chilaiditi) can mimic it (2015 letter).</p>`],
+  psoas: ['Psoas shadow lost', `<p>The lateral margins of the <b>psoas muscles</b> are looked for on the film; <b>loss or blurring of the psoas shadow</b> is a sign of retroperitoneal blood, abscess or mass (a blunt-trauma series, a Pott's abscess case and a fracture review). Appendicitis can make psoas spasm, with the spine curved convex to the left (Ulster Med J review).</p>`],
+};
+const AXR_HEAD = ['Look at', 'Normal', 'Abnormal'];
+const AXR_ROWS = [
+  ['Projection', 'Supine AP, diaphragm to symphysis', 'Erect chest film if perforation is suspected'],
+  ['Small bowel', 'Central; under 3 cm; valvulae cross the whole width', 'Dilated loops, multiple air-fluid levels (erect): obstruction'],
+  ['Large bowel', 'Peripheral; haustra do not cross the whole width', 'Over 6 cm (caecum 9 cm): obstruction; coffee bean: sigmoid volvulus'],
+  ['Free gas', 'None', 'Under the diaphragm (erect chest); Rigler\'s sign; football sign'],
+  ['Soft tissues', 'Liver, spleen, renal and psoas outlines', 'Loss of the psoas shadow: retroperitoneal blood, pus or mass'],
+  ['Calcification', '—', 'Renal stones (irregular, uniformly dense) vs phleboliths (round, lucent centre) — Ulster Med J review'],
+];
+/* contrast studies: [chip, organs filled, route, finding] */
+const CON = {sel: 'swallow'};
+const CON_ITEMS = {
+  swallow: ['Barium swallow', ['oes'], 'mouth', `<p><b>Barium swallow</b> (barium oesophagogram): the <b>pharynx and oesophagus</b> under fluoroscopy (Wikipedia; StatPearls). Masses, strictures, perforation, motility disorders, hiatus hernia, reflux (StatPearls). <b>Single contrast</b> for motility and strictures; <b>double contrast</b> (effervescent granules then barium) for mucosal detail — reflux, cancer, oesophagitis (2019 pictorial essay). Still the first test for dysphagia in many centres (same essay).</p>`],
+  meal: ['Barium meal', ['oes', 'stom', 'duo'], 'mouth', `<p><b>Barium meal</b>: the <b>lower oesophagus, stomach and duodenum</b> (Wikipedia; 2019 editorial). <b>Double contrast</b>: gas distends the stomach while a thin coat of barium lines the mucosa, so fine surface detail shows — Japanese gastric-cancer screening uses it and reads the areae gastricae (Wikipedia; 2014 study). The gas usually comes from effervescent granules, as in the double-contrast swallow (2019 essay). An injection of hyoscine butylbromide or glucagon distends the stomach and slows emptying; the patient rolls to coat the wall (Wikipedia).</p>`],
+  ft: ['Follow-through', ['stom', 'duo', 'sb'], 'mouth', `<p><b>Barium follow-through</b>: barium by mouth, then films as it passes through the <b>small intestine</b> (Wikipedia; 2019 editorial) — every 20–30 minutes, 1–3 hours in all, to the caecum (Wikipedia). Used for Crohn's and coeliac disease, malabsorption, partial obstruction (Wikipedia). <b>Enteroclysis</b> (small-bowel enema) runs barium through a tube in the jejunum (Wikipedia). Largely superseded by newer imaging (2025 paediatric study).</p>`],
+  enema: ['Barium enema', ['colon'], 'rectum', `<p><b>Barium enema</b>: barium runs into the <b>colon</b> through a rectal tube (Wikipedia). <b>Double contrast</b> — barium coats the wall, the excess drains and <b>air</b> is blown in — shows the mucosa (polyps, cancer) (Wikipedia; 2019 editorial; 1983 survey). Single contrast for obstruction and in children (Wikipedia). Colonoscopy and CT colonography are now preferred (Wikipedia); a 2012 comparison found more lesions with CT colonography.</p>`],
+  ivu: ['IVU / IVP', ['kid'], 'vein', `<p><b>Intravenous urography</b> (pyelography): iodinated contrast into a vein is <b>filtered by the kidneys and excreted</b>, outlining the <b>kidneys, calyces, pelves, ureters and bladder</b> on timed films (StatPearls; Wikipedia). For haematuria and stones (StatPearls). Introduced in 1923; now largely replaced by <b>CT urography</b>, ultrasound and MRI (StatPearls; 2019 review).</p>`],
+  hsg: ['HSG', ['uter'], 'cervix', `<p><b>Hysterosalpingography</b>: water-soluble iodinated contrast through a cannula in the <b>cervix</b>, under fluoroscopy, fills the <b>uterine cavity</b> and the <b>tubes</b>; <b>free spill into the peritoneal cavity</b> means the tubes are patent (StatPearls; 2012 review; Wikipedia). For <b>female infertility</b>. Done after menstruation in the follicular phase — the days differ: 4th–10th (Wikipedia), 7th–12th (2012 review) — and not in pregnancy or pelvic infection (Wikipedia).</p>`],
+  ocg: ['Oral cholecystography', ['gb'], 'mouth', `<p><b>Oral cholecystography</b> (Graham and Cole, 1924): an iodinated agent such as <b>iopanoic acid</b> taken by mouth is absorbed, excreted by the liver into the bile and <b>concentrated by the gall bladder</b>, which then shows on X-ray (Wikipedia; 1926 and 1979 papers). It needs a working liver, a patent cystic duct and a functioning gall bladder (1926 paper). Most gallstones are not radio-opaque and show as filling defects (Wikipedia: 90%). Now replaced by <b>ultrasound</b> (and CT) (Wikipedia).</p>`],
+  ercp: ['ERCP', ['bile', 'pd', 'duo'], 'scope', `<p><b>ERCP</b>: a side-viewing duodenoscope to the <b>2nd part of the duodenum</b>; the <b>major papilla</b> is cannulated and contrast injected into the <b>bile duct and/or pancreatic duct</b> under fluoroscopy (StatPearls; Wikipedia). Now mainly <b>therapeutic</b>: sphincterotomy, stone extraction, stents, dilatation, since MRCP and endoscopic ultrasound took over diagnosis (StatPearls; Wikipedia; 2006 review). The routine endoscopy with the highest complication risk: <b>pancreatitis</b>, bleeding, perforation, infection (StatPearls).</p>`],
+  mrcp: ['MRCP', ['bile', 'pd', 'gb'], 'none', `<p><b>MRCP</b>: heavily T2-weighted MRI (Wikipedia) that shows the bile and pancreatic ducts <b>non-invasively</b>; it replaces diagnostic ERCP when biliary obstruction is suspected but <b>cannot treat</b> (2006 systematic review; StatPearls).</p>`],
+};
+const CON_HEAD = ['Study', 'Contrast and route', 'Shows', 'Main use', 'Now'];
+const CON_ROWS = [
+  ['Barium swallow', 'Barium by mouth (± effervescent granules)', 'Pharynx, oesophagus', 'Dysphagia, reflux, strictures, motility', 'Still used'],
+  ['Barium meal', 'Barium + gas by mouth (double contrast)', 'Lower oesophagus, stomach, duodenum', 'Mucosal lesions; gastric-cancer screening (Japan)', 'Largely endoscopy'],
+  ['Follow-through', 'Barium by mouth, serial films', 'Small intestine to the caecum', 'Crohn\'s, malabsorption, partial obstruction', 'Largely superseded'],
+  ['Barium enema', 'Barium + air per rectum', 'Colon and rectum', 'Polyps, cancer, strictures', 'Colonoscopy, CT colonography preferred'],
+  ['IVU / IVP', 'Iodinated, intravenous', 'Kidneys, calyces, ureters, bladder', 'Haematuria, stones', 'CT urography'],
+  ['HSG', 'Iodinated, through the cervix', 'Uterine cavity, tubes, peritoneal spill', 'Infertility (tubal patency)', 'Still used'],
+  ['Oral cholecystography', 'Iodinated (iopanoic acid) by mouth', 'Gall bladder (concentrated contrast)', 'Gallstones (filling defects)', 'Ultrasound'],
+  ['ERCP', 'Iodinated, through the papilla by endoscope', 'Bile and pancreatic ducts', 'Treatment of duct stones, strictures', 'Therapeutic'],
+  ['MRCP', 'Non-invasive (T2-weighted MRI)', 'Bile and pancreatic ducts', 'Diagnosis of duct obstruction', 'First diagnostic test'],
+];
+const ROLE = [
+  ['ERCP', 'Mainly therapeutic now: stones, strictures, stents, sphincterotomy; diagnosis has moved to MRCP and endoscopic ultrasound. Highest complication rate of routine endoscopy (StatPearls; Wikipedia; 2006 review).'],
+  ['CT abdomen', 'The usual test for acute abdominal pain; more accurate than plain films for obstruction and helps plan surgery (Wikipedia; StatPearls). Wikipedia also lists: staging of cancer, gastrointestinal bleeding, kidney stones (non-contrast CT the gold standard), trauma. Has replaced IVU for the urinary tract (2019 review; StatPearls). Cost: ionising radiation.'],
+  ['MRI abdomen', 'Soft-tissue contrast without radiation (StatPearls; Wikipedia): the ducts (MRCP), the urinary tract (StatPearls), focal liver lesions (Wikipedia), pelvimetry (2025 pelvimetry review).'],
+  ['Arteriography', 'Invasive catheter angiography remains the gold standard for most vascular disease and allows treatment in the same sitting (StatPearls), for example angioplasty or stenting of a narrowing (Wikipedia); a common visceral indication is to evaluate and guide treatment of gastrointestinal bleeding (Wikipedia). CT angiography, with contrast through a peripheral vein, is a good first-line non-invasive test (StatPearls).'],
+  ['Ultrasound', 'First test for gallstones and acute cholecystitis: stones, wall thickening, pericholecystic fluid, sonographic Murphy sign (tenderness when the probe presses on the gall bladder); in one series more sensitive than CT (83% vs 39%) (2025 study; Wikipedia).'],
+];
+const WHICH_HEAD = ['Question', 'First imaging'];
+const WHICH_ROWS = [
+  ['Perforation?', 'Erect chest X-ray (gas under the diaphragm), then CT'],
+  ['Obstruction?', 'Supine abdominal film (± erect), then CT'],
+  ['Gallstones, cholecystitis?', 'Ultrasound'],
+  ['Bile duct stone?', 'MRCP to diagnose, ERCP to treat'],
+  ['Urinary stone?', 'Non-contrast CT (Wikipedia)'],
+  ['Tubal patency?', 'HSG'],
+  ['Dysphagia?', 'Barium swallow (and endoscopy)'],
+  ['Colon?', 'Colonoscopy or CT colonography (barium enema older)'],
+  ['Bleeding vessel?', 'CT angiography; catheter angiography to find and guide treatment (Wikipedia)'],
+];
+/* radiographs with labels (fractions of the processed image; placed on the image and checked with marks.py, zoomed) */
+const PHOTOS = {
+  sbo: {id: 'sbo', narrow: true, file: 'sbo-erect.jpg', w: 760, h: 1050, dark: true, title: 'Small bowel obstruction, erect film', alt: 'Erect abdominal radiograph with dilated small bowel loops and several air-fluid levels',
+    cap: 'Erect abdominal film: dilated loops with <b>air-fluid levels</b> (flat lines where gas sits on fluid) in small bowel obstruction.', labels: [[0.85, 0.245, 'Air-fluid level'], [0.10, 0.545, 'Air-fluid level'], [0.30, 0.648, 'Air-fluid level'], [0.78, 0.555, 'Dilated loop']], credit: ''},
+  rigler: {id: 'rigler', file: 'rigler.jpg', w: 760, h: 514, dark: true, title: 'Free gas: under the diaphragm and Rigler\'s sign', alt: 'Chest and upper abdominal radiograph with a crescent of free gas under the right diaphragm and bowel wall outlined on both sides',
+    cap: 'Free intraperitoneal gas: a crescent of gas between the liver and the right diaphragm, and bowel wall outlined by gas on both sides (Rigler\'s sign; the original red arrows).', labels: [[0.215, 0.49, 'Free gas over the liver'], [0.205, 0.639, 'Liver'], [0.836, 0.619, 'Rigler\'s sign']], credit: ''},
+  ft: {id: 'ft', narrow: true, file: 'follow-through.jpg', w: 484, h: 698, dark: true, title: 'Barium follow-through', alt: 'Radiograph with barium in the stomach and the small intestine',
+    cap: 'Barium in the stomach and filling the coils of small intestine.', labels: [[0.78, 0.18, 'Stomach'], [0.35, 0.62, 'Small intestine']], credit: ''},
+  hsg: {id: 'hsg', file: 'hsg.jpg', w: 760, h: 645, dark: true, title: 'Hysterosalpingogram, normal', alt: 'Hysterosalpingogram with contrast in the uterine cavity and both uterine tubes spilling into the pelvis',
+    cap: 'Contrast through the cervical cannula fills the triangular uterine cavity and both tubes, and spills into the peritoneal cavity: the tubes are patent.', labels: [[0.44, 0.33, 'Uterine cavity'], [0.26, 0.27, 'Uterine tube'], [0.66, 0.52, 'Uterine tube'], [0.73, 0.63, 'Free spill'], [0.47, 0.50, 'Cannula in the cervix']], credit: ''},
+  ercp: {id: 'ercp', file: 'ercp.jpg', w: 519, h: 515, dark: true, title: 'ERCP', alt: 'ERCP image with the endoscope in the duodenum and contrast in the bile ducts',
+    cap: 'The duodenoscope curves into the duodenum; contrast through the papilla fills the bile duct and the intrahepatic ducts. The uploader describes stones in the gall bladder and cystic duct. Here the contrast is shown dark.', labels: [[0.73, 0.30, 'Endoscope'], [0.27, 0.24, 'Intrahepatic ducts'], [0.42, 0.56, 'Bile duct'], [0.60, 0.66, 'Pancreatic duct'], [0.22, 0.47, 'Gall bladder, stones']], credit: ''},
+  mrcp: {id: 'mrcp', file: 'mrcp.jpg', w: 640, h: 640, dark: true, title: 'MRCP, normal', alt: 'MRCP image with bright fluid in the gall bladder, bile duct and pancreatic duct',
+    cap: 'Static fluid is bright: gall bladder, bile ducts and pancreatic duct, non-invasively. The uploader notes a left renal cyst.', labels: [[0.25, 0.53, 'Gall bladder'], [0.42, 0.57, 'Bile duct'], [0.55, 0.533, 'Pancreatic duct'], [0.66, 0.72, 'Renal cyst']], credit: ''},
+};
+const DATA = {
+  based: "Based on: StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (Ulster Med J review of the abdominal radiograph, erect-film study, pneumoperitoneum letter, sigmoid volvulus papers, radiocontrast editorial, barium oesophagogram essay, double-contrast barium studies, HSG review, MRCP vs ERCP review, CT vs IVU review, ultrasound and PET reviews, sonographic Murphy sign study, oral cholecystography papers of 1926 and 1979).",
+  models: 'Drawings: schematic, not to scale.',
+};
+
+/* ===================== drawings ===================== */
+const $ = id => document.getElementById(id), T = AP.T, lead = AP.lead, DEFS = AP.DEFS;
+const MOD = {s: 0};
+function drawMod() {
+  const S = $('mod-svg'); let h = DEFS; const s = MOD.s;
+  const body = (cx, cy, rx, ry) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.5"/><ellipse cx="${cx}" cy="${cy + ry * 0.35}" rx="${rx * 0.22}" ry="${ry * 0.22}" style="fill:var(--bone);stroke:var(--muted)"/>`;
+  if (s === 0 || s === 1) {
+    h += `<rect x="40" y="40" width="80" height="44" rx="6" class="box"/>` + T(80, 66, 'X-ray tube', 's', 'middle');
+    for (const dx of [-30, -10, 10, 30]) h += `<path class="flow" d="M80 86 L${250 + dx * 3} 250"/>`;
+    h += body(250, 170, 120, 55);
+    h += `<rect x="90" y="262" width="330" height="22" style="fill:var(--ink);fill-opacity:.85"/>` + T(255, 278, 'Detector', 's', 'middle').replace('class="s"', 'class="w"');
+    h += T(380, 36, 'Bone absorbs most: white', 's') + T(380, 52, 'Gas absorbs least: black', 's');
+    if (s === 0) { const sc = [['Gas', '#0a0a0a'], ['Fat', '#3c3c3c'], ['Soft tissue', '#7a7a7a'], ['Bone', '#d2d2d2'], ['Metal', '#ffffff']];
+      sc.forEach(([t, c], i) => { h += `<rect x="${300 + i * 42}" y="76" width="40" height="22" style="fill:${c};stroke:var(--muted)"/>` + T(320 + i * 42, 112, t, 's', 'middle'); }); h += T(300, 70, 'Density on the film (schematic):', 's'); }
+    if (s === 1) h += `<path d="M190 150 Q250 120 310 150" style="fill:none;stroke:var(--ink);stroke-width:7;stroke-opacity:.8"/>` + T(250, 112, 'Barium-filled loop', 's', 'middle') + T(250, 306, 'Shown live on a monitor (fluoroscopy)', 's', 'middle');
+  } else if (s === 2) {
+    h += `<circle cx="260" cy="160" r="130" style="fill:none;stroke:var(--line);stroke-width:26"/>` + body(260, 160, 95, 60);
+    h += `<rect x="232" y="18" width="56" height="26" rx="5" class="box"/>` + T(260, 36, 'Tube', 's', 'middle');
+    h += `<path d="M190 292 A130 130 0 0 0 330 292" style="fill:none;stroke:var(--ink);stroke-width:8"/>` + T(352, 312, 'Detectors (opposite the tube)', 's');
+    h += `<path class="flow" d="M260 46 L230 270"/><path class="flow" d="M260 46 L290 270"/>`;
+    h += `<path class="flow" d="M396 110 A140 140 0 0 1 396 210"/>` + T(410, 160, 'Both rotate', 's');
+    h += T(4, 12, 'Cross-section (a "slice")', 'h');
+  } else if (s === 3) {
+    h += `<rect x="60" y="70" width="400" height="180" rx="80" style="fill:none;stroke:var(--line);stroke-width:26"/>` + T(260, 52, 'Magnet (1.5–3 T) with gradient coils', 's', 'middle');
+    h += body(260, 160, 110, 50);
+    for (const [x, y] of [[200, 150], [230, 170], [300, 150], [320, 175], [270, 140]]) h += `<path class="flow" d="M${x} ${y + 8} L${x} ${y - 10}"/>`;
+    h += T(260, 280, 'Protons (H) line up; radio pulses tip them;', 's', 'middle') + T(260, 296, 'their returning radio signal is read by coils', 's', 'middle');
+  } else if (s === 4) {
+    h += body(260, 190, 150, 80) + `<rect x="235" y="90" width="50" height="22" rx="6" style="fill:var(--ink)"/>` + T(300, 92, 'Probe (piezoelectric crystals)', 's');
+    for (const r of [30, 55, 80]) h += `<path d="M${260 - r * 0.7} ${112 + r} Q260 ${122 + r} ${260 + r * 0.7} ${112 + r}" style="fill:none;stroke:var(--ink);stroke-width:1.5"/>`;
+    h += `<ellipse cx="300" cy="215" rx="36" ry="20" style="fill:var(--bile);fill-opacity:.5;stroke:var(--ink)"/>` + T(346, 232, 'Interface reflects', 's');
+    h += `<path class="flow" d="M290 196 L276 118"/>` + T(160, 140, 'Echo returns', 's', 'end') + T(260, 300, 'Sound above 20 kHz; no ionising radiation', 's', 'middle');
+  } else if (s === 5) {
+    h += `<circle cx="260" cy="160" r="130" style="fill:none;stroke:var(--ink);stroke-width:10;stroke-dasharray:6 6"/>` + T(260, 312, 'Ring of detectors', 's', 'middle');
+    h += body(260, 160, 95, 60);
+    h += `<circle cx="225" cy="150" r="9" style="fill:var(--clin)"/>` + T(225, 126, 'FDG uptake', 's', 'middle');
+    h += `<path class="flow" d="M225 150 L118 70"/><path class="flow" d="M225 150 L332 230"/>` + T(110, 60, 'γ', 'b', 'middle') + T(344, 246, 'γ', 'b', 'middle');
+    h += T(4, 12, 'Two gamma rays in opposite directions', 'h');
+  } else {
+    const panel = (x, lab, vess, bones) => {
+      let p = `<rect x="${x}" y="70" width="140" height="160" class="film"/>`;
+      if (bones) p += `<rect x="${x + 58}" y="80" width="24" height="140" style="fill:#d9d9d9"/><path d="M${x + 10} 200 Q${x + 70} 240 ${x + 130} 200" style="fill:none;stroke:#d9d9d9;stroke-width:10"/>`;
+      if (vess) p += `<path d="M${x + 76} 74 L${x + 74} 196 M${x + 74} 196 L${x + 40} 228 M${x + 74} 196 L${x + 108} 228 M${x + 75} 120 L${x + 110} 112 M${x + 75} 125 L${x + 38} 118" style="fill:none;stroke:#fff;stroke-width:6;stroke-linecap:round"/>`;
+      return p + T(x + 70, 252, lab, 's', 'middle');
+    };
+    h += panel(20, 'Mask (before contrast)', false, true) + T(180, 150, '−', 'b', 'middle').replace('class="b"', 'class="b" style="font-size:28px"');
+    h += panel(190, 'After contrast', true, true) + T(350, 150, '=', 'b', 'middle').replace('class="b"', 'class="b" style="font-size:28px"');
+    h += panel(360, 'Subtracted: vessels only', true, false);
+    h += T(260, 40, 'Digital subtraction angiography', 'h', 'middle');
+  }
+  S.innerHTML = h; $('mod-find').innerHTML = MOD_STEPS[s][1];
+}
+const AXR = {sel: 'norm'};
+function drawAxr() {
+  const sel = AXR.sel, S = $('axr-svg'); let h = DEFS;
+  const G = (d, f, extra = '') => `<path d="${d}" style="fill:${f};${extra}"/>`;
+  h += `<rect x="10" y="10" width="440" height="460" rx="6" class="film"/>`;
+  // bones: lower ribs, spine, pelvis
+  for (let i = 0; i < 5; i++) { const y = 40 + i * 22; h += `<path d="M228 ${y + 6} Q150 ${y - 6} 40 ${y + 40}" style="fill:none;stroke:#bdbdbd;stroke-width:6"/><path d="M232 ${y + 6} Q310 ${y - 6} 420 ${y + 40}" style="fill:none;stroke:#bdbdbd;stroke-width:6"/>`; }
+  for (let i = 0; i < 9; i++) h += `<rect x="212" y="${40 + i * 38}" width="36" height="30" rx="4" style="fill:#d6d6d6"/>`;
+  h += G('M60 400 Q90 330 180 360 L200 420 L190 470 L80 470 Z', '#d6d6d6') + G('M400 400 Q370 330 280 360 L260 420 L270 470 L380 470 Z', '#d6d6d6');
+  // soft tissue: liver (patient's right = viewer's left), spleen, kidneys, psoas
+  h += G('M20 60 Q120 40 210 70 L200 150 Q130 190 30 200 Z', '#7a7a7a') + G('M350 90 Q420 100 430 160 Q400 190 360 170 Z', '#6e6e6e');
+  h += G('M150 175 q-26 30 -10 74 q30 10 40 -20 q4 -40 -30 -54 Z', '#808080') + G('M310 165 q26 30 10 74 q-30 10 -40 -20 q-4 -40 30 -54 Z', '#808080');
+  const psoasLost = sel === 'psoas';
+  h += `<path d="M206 200 L150 380" style="fill:none;stroke:#9a9a9a;stroke-width:3"/>`;
+  h += `<path d="M254 200 L310 380" style="fill:none;stroke:${psoasLost ? '#555' : '#9a9a9a'};stroke-width:3;${psoasLost ? 'stroke-dasharray:3 9' : ''}"/>`;
+  // gas: stomach bubble (left upper), colon frame
+  const gas = '#101010';
+  const colonD = 'M110 330 Q90 250 100 200 Q140 180 220 190 Q300 180 360 200 Q370 260 360 330 Q320 380 260 380';
+  if (sel === 'lbo') h += `<path d="${colonD}" style="fill:none;stroke:${gas};stroke-width:52;stroke-linecap:round"/>`;
+  else h += `<path d="${colonD}" style="fill:none;stroke:${gas};stroke-width:16;stroke-linecap:round;stroke-dasharray:22 10"/>`;
+  if (sel === 'lbo') for (let i = 0; i < 12; i++) { const t = i / 11; h += `<path d="M${104 + t * 10} ${320 - t * 110} l26 -4" style="stroke:#555;stroke-width:3"/>`; }
+  h += G('M300 120 Q350 100 370 140 Q340 160 300 150 Z', gas);
+  if (sel === 'sbo') {
+    for (const [x, y] of [[180, 230], [250, 240], [210, 280], [280, 290], [170, 320], [240, 330]]) {
+      h += `<rect x="${x - 34}" y="${y - 16}" width="68" height="32" rx="14" style="fill:${gas};stroke:#666;stroke-width:2"/><path d="M${x - 33} ${y + 4} L${x + 33} ${y + 4} L${x + 30} ${y + 14} Q${x} ${y + 17} ${x - 30} ${y + 14} Z" style="fill:#8a8a8a"/>`;
+      for (let k = -2; k <= 2; k++) h += `<path d="M${x + k * 12} ${y - 16} L${x + k * 12} ${y + 16}" style="stroke:#666;stroke-width:2"/>`;
+      h += `<path d="M${x - 34} ${y + 4} L${x + 34} ${y + 4}" style="stroke:#fff;stroke-width:2"/>`;
+    }
+    h += T(225, 372, 'Air-fluid levels (erect film)', 'w', 'middle');
+  }
+  if (sel === 'vol') { h += `<path d="M150 360 Q120 160 230 150 Q340 160 300 360 Q250 300 225 360 Q200 300 150 360 Z" style="fill:${gas};stroke:#777;stroke-width:3"/>` + `<path d="M225 180 L225 350" style="stroke:#888;stroke-width:4"/>` + T(225, 140, '"Coffee bean"', 'cw', 'middle'); }
+  if (sel === 'air') { h += `<path d="M30 58 Q120 34 210 64 Q120 50 30 72 Z" style="fill:#000;stroke:none"/><path d="M28 56 Q120 30 212 62" class="clin"/>` + T(120, 30, 'Gas under the diaphragm (erect)', 'cw', 'middle');
+    h += `<path d="M160 250 q50 -40 100 0" style="fill:none;stroke:#000;stroke-width:22"/><path d="M160 250 q50 -40 100 0" style="fill:none;stroke:#e0e0e0;stroke-width:3"/>` + T(210, 300, 'Rigler: gas on both sides of the wall', 'cw', 'middle'); }
+  if (psoasLost) h += T(330, 400, 'Left psoas outline lost', 'cw', 'middle');
+  const lab = [['Liver', 70, 120], ['Spleen', 400, 140], ['Gastric bubble', 318, 100], ['Kidney', 136, 200], ['Psoas', 168, 300], ['Spine', 230, 120]];
+  if (sel === 'norm') { for (const [t, x, y] of lab) h += T(x, y, t, 'w', 'middle'); h += T(110, 260, 'Colon gas', 'w', 'middle'); }
+  h += T(20, 464, 'R', 'w') + T(440, 464, 'L', 'w', 'end');
+  S.innerHTML = h; $('axr-find').innerHTML = AXR_ITEMS[sel][1];
+}
+/* contrast map: organ shapes in a trunk outline; ids: oes, stom, duo, sb, colon, kid, uter, gb, bile, pd */
+function drawCon() {
+  const [label, fill, route] = CON_ITEMS[CON.sel], S = $('con-svg'); let h = DEFS;
+  const on = k => fill.includes(k), cls = k => on(k) ? 'org' : 'org dimo';
+  h += `<path d="M110 20 Q210 0 310 20 L340 140 Q350 300 320 440 L100 440 Q70 300 80 140 Z" style="fill:var(--surface);stroke:var(--line);stroke-width:2"/>`;
+  h += `<path class="${cls('oes')}" d="M203 10 L203 120" style="stroke:var(--gut);stroke-width:12;fill:none;stroke-linecap:round;${on('oes') ? '' : 'opacity:.18'}"/>`;
+  h += `<path class="${cls('stom')}" style="fill:var(--stom)" d="M205 118 Q250 100 280 130 Q300 190 240 210 Q210 215 196 196 Q230 186 228 160 Q220 140 205 140 Z"/>`;
+  h += `<path class="${cls('duo')}" style="fill:none;stroke:var(--gut);stroke-width:11" d="M196 198 Q160 200 158 228 Q160 262 200 262 Q232 262 236 240"/>`;
+  h += `<path class="${cls('colon')}" style="fill:none;stroke:var(--colon);stroke-width:16;stroke-linejoin:round" d="M150 370 L130 360 L128 250 Q140 226 210 238 Q290 226 300 250 L300 360 Q270 390 240 380 L218 430"/>`;
+  h += `<g class="${cls('sb')}">` + [[180, 290], [220, 300], [260, 290], [190, 330], [235, 340]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="24" ry="13" style="fill:var(--gut);stroke:var(--muted)"/>`).join('') + '</g>';
+  h += `<path class="${cls('kid')}" style="fill:var(--kidney)" d="M128 180 q-24 30 -8 66 q26 8 34 -18 q2 -36 -26 -48 Z M292 172 q24 30 8 66 q-26 8 -34 -18 q-2 -36 26 -48 Z"/>`;
+  h += `<path class="${cls('kid')}" style="fill:none;stroke:var(--kidney);stroke-width:4" d="M146 236 L170 390 M276 228 L250 390"/><ellipse class="${cls('kid')}" cx="210" cy="402" rx="34" ry="20" style="fill:var(--kidney)"/>`;
+  h += `<path class="${cls('uter')}" style="fill:var(--uter)" d="M188 372 L232 372 L216 410 L204 410 Z"/><path class="${cls('uter')}" style="fill:none;stroke:var(--uter);stroke-width:4" d="M188 374 Q160 360 150 380 M232 374 Q260 360 270 380"/>`;
+  h += `<path class="${cls('gb')}" style="fill:var(--bile)" d="M150 150 q-12 24 6 36 q14 -4 10 -30 Z"/>`;
+  h += `<path class="${cls('bile')}" style="fill:none;stroke:var(--bile);stroke-width:4" d="M140 110 L176 150 L186 196 M166 108 L176 150"/>`;
+  h += `<path class="${cls('pd')}" style="fill:none;stroke:var(--panc);stroke-width:4" d="M188 200 Q230 196 280 184"/>`;
+  const R = {mouth: [203, 2, 203, 30], rectum: [218, 466, 218, 436], vein: [380, 120, 330, 150], cervix: [210, 466, 210, 414], scope: [203, 2, 180, 200], none: null}[route];
+  if (R) h += `<path class="route" d="M${R[0]} ${R[1]} L${R[2]} ${R[3]}"/>`;
+  const rl = {mouth: 'By mouth', rectum: 'Per rectum', vein: 'Into a vein', cervix: 'Through the cervix', scope: 'Endoscope to the papilla', none: 'Non-invasive (MRI)'}[route];
+  h += T(14, 462, rl, 'h');
+  h += T(14, 22, label, 'b');
+  S.innerHTML = h; $('con-find').innerHTML = CON_ITEMS[CON.sel][3];
+  const ph = {ft: 'ft', hsg: 'hsg', ercp: 'ercp', mrcp: 'mrcp'}[CON.sel];
+  document.querySelectorAll('#con-imgs figure').forEach(f => f.hidden = ph ? f.id !== 'mg-' + ph : false);
+}
+
+
+PHOTOS.sbo.credit = AP.credit('Upright X-ray demonstrating small bowel obstruction.jpg', 'James Heilman, MD', 'bysa3', 'cropped (side margins with text removed), resized', true);
+PHOTOS.rigler.credit = AP.credit('Rigler-Zeichen.jpg', 'Hellerhoff', 'bysa3', 'cropped (a side-marker bracket at the top right removed), resized', true);
+PHOTOS.ft.credit = AP.credit('Smallbowel.jpg', 'Glitzy queen00 at English Wikipedia', 'pd', 'recompressed; the original R side marker kept', true);
+PHOTOS.hsg.credit = AP.credit('Hysterosalpingography Normal.png', 'Jmarchn', 'bysa3', 'bottom edge trimmed, resized, converted to JPEG', true);
+PHOTOS.ercp.credit = AP.credit('ERCP Roentgen.jpg', 'J. Guntau at German Wikipedia', 'bysa3', 'recompressed', true);
+PHOTOS.mrcp.credit = AP.credit('MRCP normal.tif', 'Ptrump16', 'bysa4', 'resized, converted to JPEG', true);
+/* ===================== init ===================== */
+(() => {
+  $('lede').textContent = LEDE; $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  AP.stepper('mod-step', MOD_STEPS.map(x => x[0]), drawMod, MOD);
+  AP.table('mod-table', MOD_HEAD, MOD_ROWS);
+  AP.toggles('axr-tg', Object.entries(AXR_ITEMS).map(([k, d]) => [k, d[0]]), k => { AXR.sel = k; drawAxr(); }, 'norm');
+  AP.table('axr-table', AXR_HEAD, AXR_ROWS);
+  AP.toggles('con-tg', Object.entries(CON_ITEMS).map(([k, d]) => [k, d[0]]), k => { CON.sel = k; drawCon(); }, 'swallow');
+  AP.key('con-key', [['--gut', 'Oesophagus, small intestine'], ['--stom', 'Stomach'], ['--colon', 'Colon'], ['--kidney', 'Urinary tract'], ['--uter', 'Uterus, tubes'], ['--bile', 'Gall bladder, bile ducts'], ['--panc', 'Pancreatic duct']]);
+  AP.table('con-table', CON_HEAD, CON_ROWS);
+  $('role-cards').innerHTML = ROLE.map(([t, d]) => `<div class="item"><h3>${t}</h3><p>${d}</p></div>`).join('');
+  AP.table('which-table', WHICH_HEAD, WHICH_ROWS);
+  const cred = [];
+  for (const k of ['sbo', 'rigler']) if (PHOTOS[k].credit) { AP.micro($('axr-imgs'), PHOTOS[k]); cred.push(PHOTOS[k].credit); }
+  for (const k of ['ft', 'hsg', 'ercp', 'mrcp']) if (PHOTOS[k].credit) { AP.micro($('con-imgs'), PHOTOS[k]); cred.push(PHOTOS[k].credit); }
+  $('images').innerHTML = cred.length ? 'Radiographs: ' + cred.join(' ') : '';
+  drawAxr(); drawCon();
+  AP.swipeHints();
+  window.ready = true;
+})();
+</script>
+</body>
+</html>

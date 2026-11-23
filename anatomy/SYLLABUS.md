@@ -462,8 +462,8 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 51. Sectional Anatomy
 
-- [ ] **AN51.1** Describe & identify the cross-section at the level of T8, T10 and L1 (transpyloric plane)
-- [ ] **AN51.2** Describe & identify the midsagittal section of male and female pelvis
+- [x] **AN51.1** Describe & identify the cross-section at the level of T8, T10 and L1 (transpyloric plane) — *transverse sections at T8, T10 and L1 cut from the 3D models: [Surface Marking and Sections of the Abdomen](abdomen-pelvis/surface-sections.html)*
+- [x] **AN51.2** Describe & identify the midsagittal section of male and female pelvis — *midsagittal male pelvis: [Surface Marking and Sections of the Abdomen](abdomen-pelvis/surface-sections.html); female: [Pelvic Viscera](abdomen-pelvis/pelvis.html)*
 
 ### 52. Histology & Embryology
 
@@ -478,22 +478,22 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 53. Osteology
 
-- [ ] **AN53.1** Identify & hold the bone in the anatomical position, Describe the salient features, articulations & demonstrate the attachments of muscle groups
-- [ ] **AN53.2** Demonstrate the anatomical position of bony pelvis & show boundaries of pelvic inlet, pelvic cavity, pelvic outlet
-- [ ] **AN53.3** Define true pelvis and false pelvis and demonstrate sex determination in male & female bony pelvis
-- [ ] **AN53.4** Explain and demonstrate clinical importance of bones of abdominopelvic region (sacralization of lumbar vertebra, Lumbarization of 1st sacral vertebra, types of bony pelvis & Coccyx)
+- [x] **AN53.1** Identify & hold the bone in the anatomical position, Describe the salient features, articulations & demonstrate the attachments of muscle groups — *lumbar vertebrae, sacrum, coccyx and hip bone in 3D, bone cards, links to vertebrae and lower-limb bones: [The Bony Pelvis](abdomen-pelvis/bony-pelvis.html)*
+- [x] **AN53.2** Demonstrate the anatomical position of bony pelvis & show boundaries of pelvic inlet, pelvic cavity, pelvic outlet — *anatomical position, brim, inlet and outlet: [The Bony Pelvis](abdomen-pelvis/bony-pelvis.html)*
+- [x] **AN53.3** Define true pelvis and false pelvis and demonstrate sex determination in male & female bony pelvis — *true and false pelvis, sex differences, pelvic types: [The Bony Pelvis](abdomen-pelvis/bony-pelvis.html)*
+- [x] **AN53.4** Explain and demonstrate clinical importance of bones of abdominopelvic region (sacralization of lumbar vertebra, Lumbarization of 1st sacral vertebra, types of bony pelvis & Coccyx) — *transitional vertebrae, fractures, coccydynia, obstetric diameters: [The Bony Pelvis](abdomen-pelvis/bony-pelvis.html)*
 
 ### 54. Radiodiagnosis
 
-- [ ] **AN54.1** Describe the principles of Plain and contrast radiography, Computed Tomography, Magnetic Resonance Imaging, Positron Emission Tomography scan and Digital subtraction angiography
-- [ ] **AN54.2** Describe & identify features of plain X ray abdomen
-- [ ] **AN54.3** Describe & identify the special radiographs of abdominopelvic region (contrast X ray Barium swallow, Barium meal, Barium enema, Cholecystography, Intravenous pyelography & Hysterosalpingography)
-- [ ] **AN54.4** Describe role of ERCP, CT abdomen, MRI, Arteriography in radiodiagnosis of abdomen
+- [x] **AN54.1** Describe the principles of Plain and contrast radiography, Computed Tomography, Magnetic Resonance Imaging, Positron Emission Tomography scan and Digital subtraction angiography — *X-ray, contrast, CT, MRI (T1/T2), ultrasound, PET, DSA; densities and Hounsfield values: [Imaging the Abdomen](abdomen-pelvis/imaging-abdomen.html)*
+- [x] **AN54.2** Describe & identify features of plain X ray abdomen — *plain abdominal film: gas pattern, obstruction, volvulus, free gas, psoas: [Imaging the Abdomen](abdomen-pelvis/imaging-abdomen.html)*
+- [x] **AN54.3** Describe & identify the special radiographs of abdominopelvic region (contrast X ray Barium swallow, Barium meal, Barium enema, Cholecystography, Intravenous pyelography & Hysterosalpingography) — *contrast studies from swallow to HSG, with radiographs: [Imaging the Abdomen](abdomen-pelvis/imaging-abdomen.html)*
+- [x] **AN54.4** Describe role of ERCP, CT abdomen, MRI, Arteriography in radiodiagnosis of abdomen — *ERCP, MRCP, CT, MRI and arteriography: [Imaging the Abdomen](abdomen-pelvis/imaging-abdomen.html)*
 
 ### 55. Surface marking
 
-- [ ] **AN55.1** Demonstrate the surface marking of Regions and planes of abdomen, Superficial inguinal ring, Deep inguinal ring, McBurney’s point, Renal Angle & Murphy’s point
-- [ ] **AN55.2** Demonstrate the surface projections of: Stomach, Liver, Fundus of gall bladder, Spleen, Duodenum, Pancreas, Ileocaecal junction, Kidneys & Root of mesentery
+- [x] **AN55.1** Demonstrate the surface marking of Regions and planes of abdomen, Superficial inguinal ring, Deep inguinal ring, McBurney’s point, Renal Angle & Murphy’s point — *regions and planes, organ projections, inguinal rings: [Surface Marking and Sections of the Abdomen](abdomen-pelvis/surface-sections.html)*
+- [x] **AN55.2** Demonstrate the surface projections of: Stomach, Liver, Fundus of gall bladder, Spleen, Duodenum, Pancreas, Ileocaecal junction, Kidneys & Root of mesentery — *surface projections of stomach, liver, gall bladder, spleen, duodenum, pancreas, caecum, appendix, kidneys, ureters: [Surface Marking and Sections of the Abdomen](abdomen-pelvis/surface-sections.html)*
 
 ### 56. Meninges & CSF
 

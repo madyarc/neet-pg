@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Bony Pelvis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<link rel="stylesheet" href="ap.css">
+<style>
+/* colours, one meaning each. atlas.css: --bone, --ink, --muted, --line, --surface, --accent (UI selection only), --clin (clinical points:
+   a fracture line, a fused or extra element in a variant). Page tokens (checked with sources-local/facts/fill-abdo2-scripts/colcheck3.py
+   against atlas.css and every page): --inlet (the pelvic brim / inlet and its diameters), --outlet (the outlet and the midpelvis below the brim: the outlet lozenge and the interspinous and outlet diameters),
+   --sx-f (the female pelvis in the male-female comparison), --sx-m (the male pelvis in that comparison). */
+:root{--inlet:#7a318c;--outlet:#155904;--sx-f:#f255b3;--sx-m:#67734b}
+:root[data-theme="dark"]{--inlet:#c355f2;--outlet:#0cf27f;--sx-f:#f230cb;--sx-m:#77a608;color-scheme:dark}
+svg.sch .bone{fill:var(--bone);stroke:var(--muted);stroke-width:1}
+svg.sch .inl{fill:none;stroke:var(--inlet);stroke-width:2.6;stroke-linejoin:round}
+svg.sch .inlf{fill:var(--inlet);fill-opacity:.12;stroke:var(--inlet);stroke-width:2.2}
+svg.sch .outl{fill:none;stroke:var(--outlet);stroke-width:2.6;stroke-dasharray:7 5;stroke-linejoin:round}
+svg.sch .dia{stroke:var(--inlet);stroke-width:2;fill:none}
+svg.sch .dio{stroke:var(--outlet);stroke-width:2;fill:none}
+svg.sch .fem{fill:none;stroke:var(--sx-f);stroke-width:2.6;stroke-linejoin:round}
+svg.sch .mal{fill:none;stroke:var(--sx-m);stroke-width:2.6;stroke-linejoin:round;stroke-dasharray:8 5}
+svg.sch .femf{fill:var(--sx-f);fill-opacity:.12}
+svg.sch .malf{fill:var(--sx-m);fill-opacity:.12}
+svg.sch .clin{stroke:var(--clin);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .hat{fill:url(#hatch);stroke:var(--ink);stroke-width:1.2}
+svg.sch text.fl,svg.sch text.ml{fill:var(--ink);font-weight:600}
+svg.sch text.il{fill:var(--inlet);font-weight:600} svg.sch text.ol{fill:var(--outlet);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> <span class="muted" style="font-size:13px">· Abdomen and pelvis: <a href="organs.html">Organs</a> · <a href="pelvis.html">Pelvic viscera</a> · <a href="perineum.html">Perineum</a> · <a href="nerves-vessels.html">Nerves and vessels</a> · <span aria-current="page">Bony pelvis</span> · <a href="imaging-abdomen.html">Imaging</a> · <a href="surface-sections.html">Surface marking, sections</a></span></nav>
+
+<header class="stack">
+  <h1>The Bony Pelvis</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-3d">3D pelvis</a> <a href="#h-bones">The bones</a> <a href="#h-sex">Male and female</a> <a href="#h-dia">Diameters</a> <a href="#h-types">Pelvic types</a> <a href="#h-xr">Radiograph</a> <a href="#h-clin">Clinical</a></nav>
+</header>
+
+<section class="split" aria-labelledby="h-3d">
+  <div class="panel">
+    <div id="v"></div>
+    <div class="vbar scrollrow" id="vbar" aria-label="Model"></div>
+  </div>
+  <div class="panel stack">
+    <h2 id="h-3d" style="margin:0">The pelvis in 3D</h2>
+    <div id="topics"></div>
+    <div id="topic-text"></div>
+    <div class="key" id="key3d"></div>
+    <p class="pick" id="pick" aria-live="polite"></p>
+    <p class="note" id="note3d"></p>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-bones">
+  <h2 id="h-bones">The bones: lumbar vertebrae, sacrum, coccyx, hip bone</h2>
+  <p class="muted">Short cards; each bone is shown in detail, turnable, on its own page.</p>
+  <div class="cards" id="bone-cards"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sex">
+  <h2 id="h-sex">Male and female pelvis</h2>
+  <div class="chips" id="sex-tg" aria-label="Pelvis shown"></div>
+  <div class="two">
+    <div>
+      <div class="schbox"><svg class="fig sch" id="sex-svg" viewBox="0 0 560 420" role="img" aria-label="Schematic front views of a female and a male pelvis side by side, with the inlet, the subpubic angle and the greater sciatic notch"></svg></div>
+      <div class="key" id="sex-key"></div>
+      <p class="muted">Schematic, not to scale: drawn from the textbook descriptions (outlines simplified). The angles are drawn at published averages (subpubic about 83° and 65°, 2026 CT study; sciatic notch about 74° and 50°, Wikipedia), not measured.</p>
+    </div>
+    <div class="prose find" id="sex-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="sex-table"></table></div>
+  <p class="muted" id="sex-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-dia">
+  <h2 id="h-dia">Inlet, cavity and outlet: the diameters</h2>
+  <div class="step" id="dia-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="dia-svg" viewBox="0 0 560 360" role="img" aria-label="Two schematics: the pelvis in median section seen from the right with the conjugates and the outlet diameter, and the inlet seen from above with the transverse and oblique diameters"></svg></div>
+    <div class="prose find" id="dia-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="dia-table"></table></div>
+  <p class="muted" id="dia-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-types">
+  <h2 id="h-types">Pelvic types (Caldwell–Moloy)</h2>
+  <div class="chips" id="type-tg" aria-label="Pelvic type"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="type-svg" viewBox="0 0 520 300" role="img" aria-label="The four pelvic inlet shapes of the Caldwell-Moloy classification, seen from above, the chosen one highlighted"></svg></div>
+    <div class="prose find" id="type-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="type-table"></table></div>
+  <p class="muted" id="type-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-xr">
+  <h2 id="h-xr">On a radiograph</h2>
+  <div class="imgs" id="xr-imgs"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-clin">
+  <h2 id="h-clin">Clinical importance</h2>
+  <div class="chips" id="lstv-tg" aria-label="Lumbosacral junction"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="lstv-svg" viewBox="0 0 480 330" role="img" aria-label="Schematic front view of the lower lumbar vertebrae and the sacrum: normal, sacralization of L5 on one or both sides, and lumbarization of S1"></svg></div>
+    <div class="prose find" id="lstv-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, not to scale. Hatched: the enlarged transverse process or the separated first sacral segment.</p>
+  <div class="clinlist" id="clin-list"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+  <p id="images"></p>
+</footer>
+</div>
+<script src="../assets/viewer.js"></script>
+<script src="ap.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (every fact checked in two sources unless attributed: sources-local/facts/fill-abdo2.md, Part A; anatomy/DATA-SOURCES.md) ===================== */
+const LEDE = 'The bony pelvis — two hip bones, the sacrum and the coccyx, with the lumbar spine above it — held in the anatomical position: the brim that divides the false from the true pelvis, the inlet, cavity and outlet and their diameters, how a female pelvis differs from a male one, the four classical pelvic types, and the clinical points: transitional vertebrae (sacralization, lumbarization), the coccyx and pelvic fractures.';
+
+/* computed on the model by sources-local/facts/fill-abdo2-scripts/points.py (BodyParts3D frame: mm, +x body's left, +y back, +z up) */
+const PT = {"sym_top":[-7.6,-140.0,813.9],"sym_bottom":[8.5,-115.4,777.9],"sym_back":[-6.1,-137.8,813.1],"promontory":[-2.0,-94.3,904.1],"coccyx_tip":[-2.1,-26.9,790.7],"spine_r":[-47.0,-49.4,829.2],"spine_l":[44.1,-49.3,829.0],"tub_r":[-67.4,-48.0,781.5],"tub_l":[64.2,-47.9,781.2],"asis_r":[-120.8,-149.3,906.3],"asis_l":[118.3,-149.1,905.9],"ptub_r":[-23.8,-146.2,810.9],"ptub_l":[21.0,-146.2,810.8],"ipe_r":[-56.1,-123.0,830.6],"ipe_l":[53.3,-122.9,830.4],"arcuate_r":[-56.8,-99.9,850.2],"arcuate_l":[54.0,-99.8,850.0],"ala_r":[-50.0,-75.3,902.6],"ala_l":[47.4,-75.2,902.4],"si_r":[-46.2,-60.6,888.1],"si_l":[43.5,-60.6,887.9],"pecten_r":[-44.9,-128.8,822.2],"pecten_l":[42.0,-128.7,822.0]};
+const BRIM = [[-0.5,-94.3,904.8],[-11.5,-92.2,903.8],[-18.2,-86.9,904.4],[-24.3,-82.0,905.2],[-31.1,-77.3,901.9],[-44.8,-75.2,903.1],[-48.4,-77.2,899.0],[-49.8,-78.3,897.0],[-52.0,-79.9,894.6],[-51.4,-81.3,890.8],[-52.2,-82.0,885.3],[-53.9,-81.5,882.6],[-57.3,-82.8,875.6],[-59.3,-87.6,871.1],[-59.7,-89.1,865.2],[-60.8,-92.5,863.9],[-59.0,-97.7,855.4],[-56.9,-97.3,851.2],[-58.0,-103.6,850.7],[-53.2,-104.5,844.0],[-49.9,-111.3,836.8],[-53.6,-118.2,838.0],[-57.5,-121.9,833.6],[-56.6,-122.5,831.8],[-52.6,-124.2,827.9],[-51.2,-127.2,821.9],[-45.1,-129.4,820.7],[-40.5,-130.3,821.2],[-37.1,-132.6,818.7],[-32.8,-136.4,815.3],[-29.8,-137.5,815.1],[-27.6,-141.7,812.5],[-21.8,-147.7,811.1],[-19.1,-143.1,813.5],[-14.2,-145.1,813.7],[-7.6,-140.0,813.9],[4.8,-140.0,813.9],[11.3,-145.0,813.6],[16.2,-143.1,813.4],[18.9,-147.6,811.0],[24.7,-141.7,812.4],[26.9,-137.5,814.9],[29.9,-136.4,815.2],[34.3,-132.6,818.5],[37.7,-130.3,821.1],[42.2,-129.4,820.5],[48.3,-127.1,821.7],[49.7,-124.2,827.7],[53.7,-122.5,831.6],[54.7,-121.8,833.4],[50.7,-118.1,837.8],[47.0,-111.2,836.6],[50.4,-104.5,843.7],[55.2,-103.5,850.5],[54.1,-97.2,851.0],[56.3,-97.6,855.1],[58.1,-92.4,863.6],[56.9,-89.0,865.0],[56.6,-87.6,870.9],[54.6,-82.8,875.4],[51.2,-81.4,882.3],[49.5,-81.9,885.1],[48.7,-81.2,890.6],[49.3,-79.8,894.4],[47.2,-78.2,896.8],[45.8,-77.1,898.8],[42.2,-75.1,902.9],[28.5,-77.3,901.8],[21.7,-82.0,905.1],[15.6,-86.9,904.3],[8.9,-92.2,903.8],[-2.1,-94.3,904.8]];
+/* the inlet plane through the promontory and the top of the symphysis, with the left-right axis in it: n·p = d */
+const INLET_N = (() => { const v = [0, PT.sym_top[1] - PT.promontory[1], PT.sym_top[2] - PT.promontory[2]]; let n = [0, -v[2], v[1]]; const l = Math.hypot(...n); n = n.map(x => x / l); if (n[2] < 0) n = n.map(x => -x); return n; })();
+const INLET_D = INLET_N[0] * PT.promontory[0] + INLET_N[1] * PT.promontory[1] + INLET_N[2] * PT.promontory[2];
+const MEAS = {anat: 101, obst: 101, diag: 128, trans: 119, obliq: 131, inter: 91, outap: 90};   /* mm on this (male) model, points.py; transverse = widest of the drawn brim */
+
+const BONES = ['l1', 'l2', 'l3', 'l4', 'l5', 'sacrum', 'hip_r', 'hip_l'];
+const DISCS = ['disc_l1', 'disc_l2', 'disc_l3', 'disc_l4', 'disc_l5'];
+const FRONT = [0, -1, 0.12], RIGHT = [-1, 0, 0.05], ABOVE = [0, -0.62, 1], BELOW = [0, -0.25, -1], BACK = [0, 1, 0.12];
+const seg = (a, b, color, dash) => ({a, b, color, dash});
+const loopLines = (pts, color, dash) => pts.slice(1).map((p, i) => seg(pts[i], p, color, dash));
+const OUTLET = [PT.sym_bottom, PT.tub_r, PT.coccyx_tip, PT.tub_l, PT.sym_bottom];
+/* 3D topics: lit = parts in full colour (rest faint); labels = [part or null, text, point]; lines from computed points (approximate) */
+const TOPICS = [
+  {grp: 'Position and apertures', id: 'pos', name: 'Anatomical position', view: RIGHT, zoom: 0.8, fit: ['hip_r', 'sacrum', 'l5'],
+    lines: () => [seg([PT.asis_r[0], PT.asis_r[1], PT.asis_r[2] + 30], [PT.asis_r[0], PT.asis_r[1], PT.sym_top[2] - 40], '--muted', '6 5'),
+      seg(PT.asis_r, [PT.sym_top[0], PT.sym_top[1], PT.sym_top[2]], '--ink')],
+    labels: [[null, 'ASIS', PT.asis_r], [null, 'Top of symphysis', PT.sym_top]],
+    text: `<p>Hold the pelvis so that the two <b>anterior superior iliac spines</b> and the front of the <b>top of the pubic symphysis</b> lie in <b>one vertical (coronal) plane</b> (Gray 1918). Seen from the right: the solid line joins the ASIS to the symphysis; the dashed line is vertical.</p>
+<p>The pelvis is then strongly tilted: Gray gives the plane of the inlet <b>50–60°</b> to the horizontal and the outlet about 15°. On this model the ASIS–symphysis line is about 6° off vertical and the inlet plane about 63° to the horizontal (approximate).</p>`},
+  {grp: 'Position and apertures', id: 'brim', name: 'Pelvic brim (inlet)', view: ABOVE, hide: ['l1', 'l2', 'l3', 'l4', 'l5', ...DISCS], zoom: 0.85, fit: ['hip_r', 'hip_l', 'sacrum'],
+    lines: () => loopLines(BRIM, '--inlet'),
+    labels: [['sacrum', 'Promontory', PT.promontory], [null, 'Sacral ala', PT.ala_r], ['hip_r', 'Arcuate line', PT.arcuate_r], [null, 'Pecten pubis', PT.pecten_r], [null, 'Pubic tubercle', PT.ptub_l], [null, 'Symphysis', PT.sym_top]],
+    text: `<p>The <b>pelvic brim</b> (linea terminalis) is the edge of the inlet: from the <b>sacral promontory</b> along the front of the <b>alae</b>, the <b>arcuate line</b> of the ilium, the <b>pectineal line</b> (pecten pubis) and the <b>pubic crest</b> to the upper margin of the <b>symphysis</b> (Gray; an MRI study traces the same curve).</p>
+<p class="muted">The purple line is computed on the model through these landmarks (approximate). The pubic crest runs from the tubercle to the symphysis.</p>`},
+  {grp: 'Position and apertures', id: 'false', name: 'False pelvis (above the brim)', view: [0, -0.7, 1], hide: ['l1', 'l2', 'l3', 'l4', ...DISCS], zoom: 0.85, fit: ['hip_r', 'hip_l', 'sacrum'], clip: 'below',
+    lines: () => loopLines(BRIM, '--inlet'),
+    labels: [],
+    text: `<p>The <b>false (greater) pelvis</b> is the expanded part above and in front of the brim, between the iliac blades; it is open in front, where the abdominal wall closes it, and it holds intestine — it is part of the abdominal cavity (Gray; Wikipedia).</p>
+<p class="muted">The model is cut along the plane of the inlet: only the part above it is shown — the iliac blades with their hollow inner faces, the iliac fossae. The cut plane runs on beyond the brim, so it also trims the back of the blades: look at the part in front of and beside the brim.</p>`},
+  {grp: 'Position and apertures', id: 'true', name: 'True pelvis (below the brim)', view: [0, -0.6, 1], zoom: 0.85, fit: ['hip_r', 'hip_l', 'sacrum'], clip: 'above',
+    lines: () => loopLines(BRIM, '--inlet').concat(loopLines(OUTLET, '--outlet', '7 5')),
+    labels: [['hip_r', 'Ischial spine', PT.spine_r], ['hip_l', 'Ischial spine', PT.spine_l], [null, 'Pubic symphysis', PT.sym_top]],
+    text: `<p>The <b>true (lesser) pelvis</b> lies below and behind the brim: an <b>inlet</b> (the brim), a <b>cavity</b> and an <b>outlet</b> (Gray; StatPearls). The cavity is a short curved canal, much deeper behind (sacrum and coccyx) than in front (symphysis) (Gray). It holds the bladder in front, the rectum behind and, in the female, the uterus and vagina between them.</p>
+<p class="muted">The model is cut along the inlet plane: only the part below it is shown. The cut plane runs on beyond the brim, so the lumbar spine and the back of the iliac blades below it also show: the true pelvis is only what lies inside the brim. Purple: the brim; green dashes: the outlet.</p>`},
+  {grp: 'Position and apertures', id: 'outlet', name: 'Outlet (from below)', view: BELOW, zoom: 0.85, fit: ['hip_r', 'hip_l', 'sacrum'],
+    lines: () => loopLines(OUTLET, '--outlet', '7 5'),
+    labels: [['sacrum', 'Tip of coccyx', PT.coccyx_tip], ['hip_r', 'Ischial tuberosity', PT.tub_r], ['hip_l', 'Pubic arch', [10, -112, 780]]],
+    text: `<p>The <b>outlet</b> is bounded by the <b>tip of the coccyx</b> behind, the <b>ischial tuberosities</b> at the sides and the <b>pubic arch</b> (the inferior pubic and ischial rami meeting below the symphysis) in front (Gray; StatPearls). With the ligaments in place it is <b>lozenge-shaped</b>, the sacrotuberous ligaments forming its back sides (Gray).</p>
+<p class="muted">Green dashes: the lozenge through the computed points (approximate); the ligaments are not in this model.</p>`},
+  {grp: 'Position and apertures', id: 'diam', name: 'Diameters on the model', view: [-1, -0.05, 0.1], clip: 'mid', zoom: 0.85, fit: ['hip_r', 'hip_l', 'sacrum'],
+    lines: () => [seg(PT.promontory, PT.sym_top, '--inlet'), seg(PT.promontory, PT.sym_bottom, '--inlet', '5 4'), seg(PT.spine_r, PT.spine_l, '--outlet'), seg(PT.coccyx_tip, PT.sym_bottom, '--outlet', '5 4')],
+    labels: [[null, 'Promontory', PT.promontory], [null, 'Symphysis', [-1.5, PT.sym_top[1], PT.sym_top[2]]], ['hip_l', 'Ischial spine (left)', PT.spine_l], [null, 'Coccyx tip', [-1.5, PT.coccyx_tip[1], PT.coccyx_tip[2]]]],
+    text: `<p>On this model (a <b>male</b> pelvis) the conjugate from the promontory to the symphysis measures about <b>101 mm</b> (solid purple), the diagonal conjugate to the lower symphysis about 128 mm (dashed purple), the widest transverse diameter of the drawn brim about 119 mm, the interspinous diameter about <b>91 mm</b> (green) and the outlet from coccyx to lower symphysis about 90 mm (dashed green).</p>
+<p>Gray's female averages are larger: conjugate 110 mm, transverse 135 mm. The diameters and their sources are in the section <a href="#h-dia">Diameters</a> below.</p>
+<p class="muted">On this model the point of the symphysis nearest the promontory is at its top, so the anatomical and obstetric conjugates coincide, and the diagonal conjugate is 27 mm longer — the "1.5 cm" rule is a clinical estimate made per vaginam, not a fixed difference. Measured between computed points on the model (approximate). The model is cut in the median plane and seen from the right; the green interspinous line runs to the left ischial spine.</p>`},
+  {grp: 'The bones', id: 'lumbar', name: 'Lumbar vertebrae', view: [-0.5, -1, 0.25], zoom: 0.8, fit: ['l1', 'l2', 'l3', 'l4', 'l5'], lit: ['l1', 'l2', 'l3', 'l4', 'l5', ...DISCS],
+    labels: [['l1', 'L1', [-20, -100, 1060]], ['l3', 'L3', [-20, -100, 1010]], ['l5', 'L5', [-25, -100, 945]], ['l4', 'Transverse process', [-45, -75, 985]]],
+    text: `<p>Five <b>lumbar vertebrae</b>, the largest of the movable column: large bodies, no foramen transversarium and no costal facets; a thick, broad, quadrilateral spinous process; a <b>mammillary process</b> on each superior articular process (Gray; StatPearls). <b>L5</b> has the largest body and transverse processes, its body deeper in front than behind (the lumbosacral angle).</p>
+<p>Each one turnable, with its landmarks: <a href="../back/vertebrae.html">The Vertebrae</a>.</p>`},
+  {grp: 'The bones', id: 'sacrum', name: 'Sacrum and coccyx', view: [0.3, -1, 0.1], zoom: 0.8, fit: ['sacrum'], lit: ['sacrum', 'l5'],
+    labels: [['sacrum', 'Promontory', PT.promontory], ['sacrum', 'Ala', PT.ala_r], ['sacrum', 'Sacral foramina', [-23, -31, 870]], ['sacrum', 'Coccyx', PT.coccyx_tip]],
+    text: `<p>The <b>sacrum</b>: five fused vertebrae forming a triangle; its base (body of S1, the <b>promontory</b>, the <b>alae</b>) faces up and forward, its apex down to the coccyx; four pairs of anterior and posterior sacral foramina; it articulates with L5, the coccyx and both hip bones (Gray; Wikipedia; StatPearls).</p>
+<p>The <b>coccyx</b>: usually four (three to five) rudimentary vertebrae joined to the sacrum at the sacrococcygeal joint, which allows a little movement (Gray; StatPearls). Detail: <a href="../back/vertebrae.html">The Vertebrae</a>.</p>
+<p class="muted">The BodyParts3D sacrum mesh includes the coccyx.</p>`},
+  {grp: 'The bones', id: 'hip', name: 'Hip bone', view: [-1, -0.35, 0.1], zoom: 0.8, fit: ['hip_r'], lit: ['hip_r'],
+    labels: [['hip_r', 'Ilium', [-104, -111, 905]], ['hip_r', 'Acetabulum', [-62, -100, 826]], ['hip_r', 'Ischial tuberosity', PT.tub_r], ['hip_r', 'Pubis', PT.ptub_r], ['hip_r', 'Greater sciatic notch', [-73, -66, 859]]],
+    text: `<p>Each <b>hip bone</b> is three bones — <b>ilium</b> above, <b>ischium</b> below and behind, <b>pubis</b> in front — separate in the child and fused in the adult in and around the <b>acetabulum</b> (Gray; StatPearls). The two pubic bones meet at the symphysis; behind, the ilia meet the sacrum at the sacroiliac joints, closing the ring.</p>
+<p>Side determination, landmarks and attachments: <a href="../lower-limb/bones.html">Bones of the Lower Limb</a>; the joints and ligaments: <a href="../back/joints.html">Joints of the Jaw, Spine and Pelvis</a>.</p>`},
+];
+
+const BONE_CARDS = [
+  ['Lumbar vertebrae (L1–L5)', 'Large bodies; no foramen transversarium, no costal facets; thick quadrilateral spinous processes; mammillary processes; L5: largest body and transverse processes, wedge-shaped (deeper in front) (Gray; StatPearls).', '../back/vertebrae.html', 'The Vertebrae'],
+  ['Sacrum', 'Five fused vertebrae; triangular; base with the promontory and alae; four pairs of sacral foramina; median sacral crest; sacral hiatus (laminae of S5, sometimes S4, unfused); auricular surface for the ilium; articulates with L5, coccyx and both hip bones (Gray; StatPearls; Wikipedia).', '../back/vertebrae.html', 'The Vertebrae'],
+  ['Coccyx', 'Usually four (3–5) rudimentary vertebrae; sacrococcygeal joint (a little movement, forward flexion in sitting). Attachments: pelvic floor (levator ani, coccygeus) in front, gluteus maximus behind, sacrotuberous and sacrospinous ligaments at the sides (Gray; StatPearls).', '../back/vertebrae.html', 'The Vertebrae'],
+  ['Hip bone', 'Ilium, ischium and pubis fused at the acetabulum; the two pubic bones meet at the symphysis (Gray; StatPearls). Its muscle attachments are shown on the limb and back muscle pages.', '../lower-limb/bones.html', 'Bones of the Lower Limb'],
+];
+
+/* male vs female: [feature, female, male, sources] */
+const SEX_HEAD = ['Feature', 'Female', 'Male', 'Sources'];
+const SEX_ROWS = [
+  ['Build', 'Lighter, thinner, more gracile bones; muscle markings faint', 'Heavier, more robust; larger acetabula and ischia', 'Gray; 2023 virtual-anthropology study; 2026 CT study'],
+  ['Inlet', 'Larger, rounder or oval (more elliptical)', 'Smaller, heart-shaped (the promontory projects)', 'Gray; 2025 image study; 2022 review'],
+  ['Cavity', 'Shallower and wider', 'Deeper and narrower', 'Gray; 2024 review (wider in both planes)'],
+  ['Subpubic angle', 'Wide, rounded pubic arch', 'Narrow angle ("an angle rather than an arch")', 'Gray; CT and radiograph studies (values below)'],
+  ['Greater sciatic notch', 'Wider and shallower', 'Narrower and deeper', 'Gray; 2026 CT study (87.9° vs 71.6°); Wikipedia (74° vs 50°)'],
+  ['Sacrum', 'Relatively wider: the S1 body takes less than a third of the width of the base', 'S1 body more than a third of the base width', 'Gray; 2023 sacroiliac study. Caveat: a 2026 CT study found no significant difference in anterior sacral breadth'],
+  ['Outlet', 'Larger; tuberosities wider apart and everted; coccyx more movable', 'Smaller', 'Gray; 2026 CT study (transverse outlet larger in females)'],
+  ['Ventral arc on the pubis', 'Often present', 'Absent (a ridge at most)', 'Phenice trait: 2024 validation study, 2023 study'],
+  ['Only in Gray (attributed)', 'Obturator foramen triangular; ischial spines project less; preauricular sulcus more often present; acetabula smaller, facing forward', 'Obturator foramen larger, oval', 'Gray 1918'],
+];
+const SEX_NOTE = 'Sacral curvature is not used here as a sign: the sources disagree (Gray: the male sacrum is more evenly and more strongly curved, the female upper half nearly straight). Wikipedia\'s "Pelvis" article is not used: it cites OpenStax. All of these are averages that overlap between individuals and populations; sex is judged from several traits together. The differences are present before birth (Gray: by the fourth fetal month; a 2024 fetal CT study).';
+const SPA = [   /* subpubic angle studies: [study, female, male, note] */
+  ['Textbook cut-off (quoted by the Malaysian study)', 'over 90°', 'under 90°', 'a "widely accepted" rule'],
+  ['Malaysia, 3D CT (2020)', '87.4° ± 6.5°', '68.6° ± 7.6°', 'best cut-off 78.6° (94% correct)'],
+  ['Turkey, CT (2026)', '83.4° ± 7.9°', '64.9° ± 7.2°', 'Japanese females 112.7°, Western Australian 89.4° (cited there)'],
+  ['Nepal, radiographs (2022)', '138.0° ± 12.5°', '101.1° ± 12.6°', 'plain AP films'],
+];
+const SEX_ITEMS = {
+  all: ['All', `<p>The <b>female</b> pelvis is lighter and wider; its <b>inlet</b> is larger and rounder, the <b>pubic arch</b> wide and rounded, the <b>greater sciatic notch</b> wide. The <b>male</b> pelvis is heavier and narrower, deeper, with a heart-shaped inlet, a narrow subpubic angle and a narrow sciatic notch (Gray; CT and image studies in the table).</p>`],
+  inlet: ['Inlet', `<p><b>Inlet</b>: larger and rounder or oval in the female; smaller and heart-shaped in the male, where the sacral promontory projects (Gray; 2025 inlet study; 2022 review). The female inlet suits the passage of the fetal head (2025 study).</p>`],
+  arch: ['Subpubic angle', `<p><b>Pubic arch / subpubic angle</b>: wide and rounded in the female, a narrow angle in the male — "an angle rather than an arch" (Gray). Larger in females in every study, but the numbers differ (table below).</p>`],
+  notch: ['Sciatic notch', `<p><b>Greater sciatic notch</b>: wider and shallower in the female (Gray; 2026 CT study: 87.9° vs 71.6°; Wikipedia gives about 74° vs 50°); it is scored in sex estimation and becomes more "male" in older women (2024 study).</p>`],
+};
+const TYPE_HEAD = ['Type', 'Inlet shape', 'Textbook frequency', 'Textbook birth outcome'];
+const TYPE_ROWS = [
+  ['Gynaecoid', 'Round or oval; wide interspinous diameter', '40–50%', 'Favourable; occiput anterior'],
+  ['Anthropoid', 'Long anteroposterior oval (AP > transverse)', '25%', 'Favourable; occiput posterior'],
+  ['Android', 'Heart-shaped; short AP and interspinous diameters (the male type)', '20%', 'Fetopelvic disproportion; deep arrest'],
+  ['Platypelloid', 'Flat: short AP, wide transverse', '2–5%', 'Disproportion; the head must engage transversely'],
+];
+const TYPE_ITEMS = {
+  gyn: ['Gynaecoid', 0], ant: ['Anthropoid', 1], and: ['Android', 2], pla: ['Platypelloid', 3]};
+const TYPE_TEXT = [
+  `<p><b>Gynaecoid</b>: a round or oval inlet with a wide interspinous distance — the commonest type, about half of women (textbook 40–50%; 47% in a Nepalese radiograph series).</p>`,
+  `<p><b>Anthropoid</b>: a long anteroposterior oval, the anteroposterior diameter greater than the transverse.</p>`,
+  `<p><b>Android</b>: a small heart-shaped inlet with short anteroposterior and interspinous diameters, as in the male pelvis; the textbooks link it to fetopelvic disproportion.</p>`,
+  `<p><b>Platypelloid</b>: a flattened gynaecoid pelvis, short anteroposterior and wide transverse; the rarest.</p>`];
+const TYPE_NOTE = 'Sources: Caldwell–Moloy as summarised in a 2025 pelvimetry review and a 2022 review of textbook tables (which quote Williams Obstetrics), a Nepalese radiograph study, StatPearls. Frequencies vary by sample: Caldwell and Moloy\'s own White sample was 41% gynaecoid, 33% android, 24% anthropoid, 3% platypelloid; their Black sample 42%, 16%, 41%, 2%. The 2022 review argues the typology was built on biased samples and that true fetopelvic disproportion is rare in healthy women (more often from malnutrition, e.g. rickets).';
+/* diameters stepper: [label, finding, which drawn] */
+const DIA_STEPS = [
+  ['Brim', `<p>The <b>inlet</b> is bounded by the brim: promontory, alae, arcuate and pectineal lines, pubic crests, top of the symphysis (Gray). Gray: <b>heart-shaped</b> in general, encroached on behind by the promontory; in the female larger and <b>more nearly circular</b>.</p>`, 'brim'],
+  ['Conjugates', `<p><b>Anatomical conjugate</b>: promontory to the top of the symphysis — Gray's "anteroposterior or conjugate diameter", about <b>110 mm</b> (female). The word "true" is used differently: the 2025 review calls the <i>obstetric</i> conjugate the "obstetrical (true) conjugate". <b>Obstetric conjugate</b>: the shortest distance from the promontory to the back of the symphysis, typically about <b>10.5 cm</b>; under 10 cm counts as contracted (a 2022 review quoting Williams Obstetrics). <b>Diagonal conjugate</b>: promontory to the <b>lower</b> border of the symphysis, felt per vaginam; the obstetric conjugate is estimated by <b>subtracting 1.5 cm</b> (2025 review; 2022 review).</p>`, 'conj'],
+  ['Transverse, oblique', `<p><b>Transverse</b>: the widest diameter of the inlet — Gray about <b>135 mm</b> (female); 13 cm "typical" in the 2022 review; 13.7 cm measured in gynaecoid pelves on Nepalese radiographs. <b>Oblique</b>: iliopubic eminence to the opposite sacroiliac joint, Gray about <b>125 mm</b>.</p>`, 'trans'],
+  ['Midpelvis', `<p>The <b>interspinous diameter</b> (between the ischial spines) is the narrowest space the fetal head passes (2025 review); typical 10.5 cm, under 8 cm contracted (2022 review).</p>`, 'mid'],
+  ['Outlet', `<p><b>Anteroposterior</b>: tip of the coccyx to the lower symphysis, Gray <b>90–115 mm</b>, changing with the mobile coccyx. <b>Transverse (intertuberous)</b>: between the ischial tuberosities, Gray about <b>115 mm</b>. Clinically a fist between the tuberosities: 8.5 cm counted adequate (2025 review); under 8 cm contracted (2022 review).</p>`, 'out'],
+];
+const DIA_HEAD = ['Diameter', 'Gray 1918 (female)', 'Obstetric texts (2022 review)', 'This male model'];
+const DIA_ROWS = [
+  ['Inlet: anatomical conjugate', '110 mm', '—', '101 mm'],
+  ['Inlet: obstetric conjugate', '—', '10.5 cm (contracted < 10)', '101 mm'],
+  ['Inlet: diagonal conjugate', '—', 'obstetric + 1.5 cm (contracted < 11.5)', '128 mm'],
+  ['Inlet: transverse', '135 mm', '13 cm (contracted < 12)', '119 mm'],
+  ['Inlet: oblique', '125 mm', '—', '131 mm'],
+  ['Midpelvis: interspinous', '—', '10.5 cm (contracted < 8)', '91 mm'],
+  ['Outlet: anteroposterior', '90–115 mm', '—', '90 mm'],
+  ['Outlet: intertuberous', '115 mm', 'contracted < 8 cm', '—'],
+];
+const DIA_NOTE = 'Gray notes that "different figures are given by various authors", from differences in physique between populations. The model values are measured between computed points (approximate) on a male pelvis, so they are expected to be smaller than female values. Pelvimetry (manual, X-ray, CT, MRI) estimates these diameters; how well it predicts the course of labour is debated (2025 review). A smaller inlet area was found in women delivered by caesarean section than in those delivered vaginally (one 2023 study).';
+const LSTV = {sel: 'norm'};
+const LSTV_ITEMS = {
+  norm: ['Normal', `<p>Five lumbar vertebrae; L5 sits on the sacrum (five fused segments) with a disc between them.</p>`],
+  sac1: ['Sacralization, one side', `<p><b>Sacralization</b>: the last lumbar vertebra takes on sacral features — an enlarged transverse process <b>fused or articulating</b> with the sacrum (or ilium), here on one side (two reviews; StatPearls; Wikipedia). It is graded by the Castellvi classification on a frontal radiograph (2026 review).</p>`],
+  sac2: ['Sacralization, both sides', `<p>Both transverse processes of L5 enlarged and fused with the sacrum (Wikipedia; 2026 review). Fusion prevents motion at L5–S1, so movement increases at the level above (StatPearls).</p>`],
+  lum: ['Lumbarization of S1', `<p><b>Lumbarization</b>: the first sacral segment stays separate and lumbar-like, giving what looks like a sixth lumbar vertebra (two reviews; Wikipedia).</p>`],
+};
+const LSTV_COMMON = `<p>Together: <b>lumbosacral transitional vertebrae</b> (LSTV), reported in 5–43% (pooled 15.9% of 53,085 adults in one review). Most are symptomless; low back pain with an LSTV is <b>Bertolotti syndrome</b> (StatPearls) — from the false joint, extra movement and disc degeneration at the level above, or L5 nerve root irritation (Wikipedia). Vertebrae may be <b>miscounted</b>, so wrong-level surgery is commoner (two reviews): count from above on images that show the whole spine.</p>`;
+const CLIN = [
+  ['Pelvic fractures', 'The pelvis is a ring: breaking it needs high energy, and ring injuries often come with other injuries (StatPearls; Wikipedia). The danger is <b>bleeding</b>, mostly venous (posterior venous plexus) or from the bone surfaces (StatPearls; Wikipedia), first controlled with a pelvic binder (Wikipedia); bladder and other visceral injuries must be looked for. An isolated iliac-wing fracture spares the ring; the posterior sacroiliac complex matters most for stability (StatPearls).'],
+  ['Coccydynia (tailbone pain)', 'Pain at the coccyx, worse on sitting, often after a fall on to it (StatPearls; Wikipedia) or after childbirth (Wikipedia); about five times commoner in women (Wikipedia). Most settle with cushions and simple measures; a few need coccygectomy (StatPearls).'],
+  ['Sacralization of the coccyx', 'Fusion of the fifth sacral with the first coccygeal vertebra, giving five pairs of sacral foramina; usually symptomless (one 2022 study).'],
+  ['Cephalopelvic disproportion', 'The fetus cannot descend through the pelvis (2025 review). Pelvic diameters and shape are assessed for it (StatPearls); a contracted pelvis may follow disease such as rickets (2022 review).'],
+  ['Sex and identification', 'Sex is estimated from several pelvic traits together (subpubic angle, sciatic notch, ventral arc, inlet); values overlap and differ between populations, so local reference data are needed (CT and radiograph studies above).'],
+];
+const XR = {id: 'pelvis', file: 'pelvis-ap.jpg', w: 760, h: 610, title: 'Pelvis, AP radiograph (18-year-old male)', alt: 'Anteroposterior radiograph of a young adult male pelvis',
+  cap: 'Normal male pelvis on a frontal radiograph (patient\'s right on your left): the subpubic angle is narrow. Bone is white, soft tissue grey, gas in the bowel black.', labels: [[0.15, 0.25, 'Ilium'], [0.5, 0.32, 'Sacrum'], [0.29, 0.52, 'Pelvic brim'], [0.36, 0.85, 'Obturator foramen'], [0.5, 0.80, 'Pubic symphysis'], [0.5, 0.94, 'Subpubic angle'], [0.30, 0.93, 'Ischial tuberosity']], credit: ''};
+XR.credit = AP.credit('X-ray of the pelvis of an 18 year old male - case 1 - anteroposterior.jpg', 'staff of the Department of Radiology, UC San Diego Health (bonepit.com)', 'pd', 'left edge with a side marker trimmed, resized', true);
+
+const DATA = {
+  note3d: 'The model is a male pelvis (BodyParts3D, simplified): L1–L5 and the sacrum with the coccyx from the spine model, the right hip bone from the lower-limb model and its mirror image for the left. Lines and points are computed on the model and approximate. Drag to turn; tap a bone to name it.',
+  based: "Based on: Gray's <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers (pelvimetry and pelvic-type reviews, subpubic-angle, sciatic-notch, inlet-shape and sex-estimation studies, lumbosacral transitional vertebra reviews, a fetal pelvis study).",
+  models: 'Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified; the left hip bone is a mirror copy of the right). Brim, outlet and diameters computed on the model (approximate). Drawings: schematic.',
+};
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const T = AP.T, lead = AP.lead;
+const css = t => getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+const v = new AtlasViewer($('v')); window.atlas = v;
+const NAME = {l1: 'L1 vertebra', l2: 'L2 vertebra', l3: 'L3 vertebra', l4: 'L4 vertebra', l5: 'L5 vertebra', sacrum: 'Sacrum and coccyx', hip_r: 'Right hip bone', hip_l: 'Left hip bone'};
+function anchor(key, near, n) {   // a vertex of the part near a point, on the side facing the camera, kept by the clip
+  const p = v.parts.get(key); if (!p) return null;
+  const pos = p.m.pos, d2 = [], c = v.clip;
+  for (let i = 0; i < pos.length; i += 3) {
+    if (c && pos[i] * c[0] + pos[i + 1] * c[1] + pos[i + 2] * c[2] > c[3]) continue;
+    d2.push([(pos[i] - near[0]) ** 2 + (pos[i + 1] - near[1]) ** 2 + (pos[i + 2] - near[2]) ** 2, i]);
+  }
+  if (!d2.length) return null;
+  d2.sort((a, b) => a[0] - b[0]);
+  const r2 = Math.max(9, d2[0][0] * 1.5), cand = d2.filter((x, j) => j < 6 || x[0] <= r2);
+  let best = cand[0][1], bs = -1e18;
+  for (const [, i] of cand) { const s = pos[i] * n[0] + pos[i + 1] * n[1] + pos[i + 2] * n[2]; if (s > bs) { bs = s; best = i; } }
+  return [pos[best], pos[best + 1], pos[best + 2]];
+}
+function showTopic(id) {
+  const t = TOPICS.find(t => t.id === id); if (!t) return;
+  const has = k => v.parts.has(k);
+  if (t.clip === 'below') v.setClip(INLET_N.map(x => -x), -INLET_D);           // keep n·p >= d (above the inlet plane)
+  else if (t.clip === 'above') v.setClip(INLET_N, INLET_D);                      // keep n·p <= d (below it)
+  else if (t.clip === 'mid') v.setClip([-1, 0, 0], 2);                           // keep x >= -2: the left half, cut in the median plane
+  else v.setClip(null);
+  const lit = (t.lit || BONES).filter(has);
+  for (const k of v.parts.keys()) { v.setVisible(k, !(t.hide || []).includes(k)); v.setColour(k, css(DISCS.includes(k) ? '--cart' : '--bone')); }
+  v.setFocus(t.lit ? lit : null);
+  v.ghostAlpha = 0.18;
+  v.fit((t.fit || lit).filter(has));
+  const view = t.view || FRONT;
+  v.face(view, {zoom: (t.zoom || 1) * Math.min(1, Math.max(0.8, (v.w / v.h) / 0.95))});
+  v.setLines(t.lines ? t.lines() : []);
+  const marks = [];
+  for (const [k, label, near] of t.labels || []) {
+    const p = k ? anchor(k, near, view) : near;
+    if (!p) continue;
+    marks.push({p, label, color: css('--ink'), always: true});
+  }
+  v.setMarkers(marks);
+  $('topic-text').innerHTML = t.text;
+  $('pick').textContent = '';
+  document.querySelectorAll('#topics button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id === t.id)));
+  const keys = [];
+  if (t.lines) { const ls = t.lines(); if (ls.some(l => l.color === '--inlet')) keys.push(['--inlet', 'Brim / inlet']); if (ls.some(l => l.color === '--outlet')) keys.push(['--outlet', 'Outlet / midpelvis']); }
+  AP.key('key3d', keys);
+}
+function buildTopics() {
+  const box = $('topics');
+  for (const g of [...new Set(TOPICS.map(t => t.grp))]) {
+    const el = document.createElement('div'); el.className = 'grp';
+    el.innerHTML = `<span class="lbl">${g}</span>`;
+    const row = document.createElement('div'); row.className = 'chips';
+    for (const t of TOPICS.filter(t => t.grp === g)) {
+      const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.dataset.id = t.id; b.textContent = t.name;
+      b.onclick = () => showTopic(t.id); row.append(b);
+    }
+    el.append(row); box.append(el);
+  }
+}
+v.onPick = hit => { $('pick').textContent = hit && NAME[hit.key] ? NAME[hit.key] : ''; };
+async function loadModel() {
+  const mir = (await (await fetch('../models/pelv/kinds.json')).json()).mirror;
+  await v.load('../models/spine/spine.json', ['l1', 'l2', 'l3', 'l4', 'l5', 'sacrum', ...DISCS]);
+  await v.load('../models/lower-limb/lower-limb.json', ['hip'], {fit: false, extra: (m, items) => {
+    const h = items.find(it => it.key === 'hip'); h.key = 'hip_r';
+    return [{key: 'hip_l', m: v.mirrored(h.m, mir.m, mir.t), info: {name: 'Left hip bone'}}];
+  }});
+}
+
+/* ===================== schematics ===================== */
+const DEFS = AP.DEFS;
+/* front-view outline of a pelvis, parametric: w = half width of the iliac blades, ph = pubic arch half-angle (deg), inlet = [rx, ry, heart] */
+function pelvisPath(cx, top, w, depth, arch) {
+  const bot = top + depth, a = arch * Math.PI / 180, sy = bot - 34;
+  const ax = 18 + Math.tan(a) * 40;            // half width of the pubic arch opening at 40 px below its apex
+  return `M${cx - 34} ${top + 18} Q${cx - w * 0.55} ${top - 18} ${cx - w} ${top + 10} Q${cx - w - 12} ${top + 70} ${cx - w * 0.7} ${top + 120}`
+    + ` Q${cx - w * 0.62} ${bot - 40} ${cx - ax - 34} ${bot} L${cx - ax} ${bot} L${cx - 9} ${sy} L${cx + 9} ${sy} L${cx + ax} ${bot} L${cx + ax + 34} ${bot}`
+    + ` Q${cx + w * 0.62} ${bot - 40} ${cx + w * 0.7} ${top + 120} Q${cx + w + 12} ${top + 70} ${cx + w} ${top + 10} Q${cx + w * 0.55} ${top - 18} ${cx + 34} ${top + 18}`;
+}
+function heartPath(cx, cy, rx, ry, k) {   // inlet seen from the front-above: k = 0 oval, 1 heart (promontory indents the back)
+  const n = 48, pts = [];
+  for (let i = 0; i <= n; i++) {
+    const t = i / n * 2 * Math.PI, x = rx * Math.sin(t), yb = -ry * Math.cos(t);
+    const dent = k * ry * 0.42 * Math.exp(-((t % (2 * Math.PI)) ** 2 + 0) / 0.18) + k * ry * 0.42 * Math.exp(-((t - 2 * Math.PI) ** 2) / 0.18);
+    pts.push([cx + x, cy + yb + dent - (k ? ry * 0.08 * Math.cos(t) ** 2 : 0)]);
+  }
+  return 'M' + pts.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L') + ' Z';
+}
+function pelvisFront(cx, P) {   // schematic front view of one pelvis; P = {W half width, crest y, tub [x offset, y], sac [top half width, height]}
+  let h = '';
+  for (const s of [-1, 1]) {
+    const ac = [cx + s * P.W * 0.62, 205], asis = [cx + s * P.W, 105], crest = [cx + s * P.W * 0.62, P.crest], ala = [cx + s * (P.sac[0] + 4), 78];
+    const tub = [cx + s * P.tub[0], P.tub[1]], sb = [cx + s * 3, 246], st = [cx + s * 3, 224];
+    h += `<path class="bone" d="M${st[0]} ${st[1]} L${cx + s * 34} 216 Q${ac[0] - s * 10} 214 ${ac[0]} ${ac[1]} Q${asis[0] + s * 6} 160 ${asis[0]} ${asis[1]} Q${asis[0]} ${P.crest + 4} ${crest[0]} ${crest[1]} Q${cx + s * (P.sac[0] + 30)} ${P.crest + 10} ${ala[0]} ${ala[1]} L${ala[0]} 150 Q${cx + s * P.W * 0.5} 190 ${cx + s * 34} 214 L${st[0]} ${st[1]} Z"/>`;
+    h += `<path class="bone" d="M${ac[0]} ${ac[1]} L${tub[0]} ${tub[1]} Q${tub[0] - s * 10} ${tub[1] + 8} ${tub[0] - s * 18} ${tub[1] - 6} L${sb[0]} ${sb[1]} L${st[0]} ${st[1]} L${cx + s * 34} 216 Q${ac[0] - s * 10} 214 ${ac[0]} ${ac[1]} Z"/>`;
+  }
+  const [sw, sh] = P.sac;
+  h += `<path class="bone" d="M${cx - sw} 70 L${cx + sw} 70 L${cx + 10} ${70 + sh} L${cx - 10} ${70 + sh} Z"/>`;
+  return h;
+}
+function drawSex(sel) {
+  const S = $('sex-svg'); let h = DEFS;
+  const F = {W: 128, crest: 50, tub: [33, 282], sac: [38, 112], inlet: [70, 50, 0.12], half: 41.5, notch: 74}, M = {W: 116, crest: 34, tub: [24, 284], sac: [30, 132], inlet: [56, 52, 1], half: 32.5, notch: 50};
+  const panel = (cx, P, cls, title, txtCls) => {
+    let p = pelvisFront(cx, P);
+    const hi = k => sel === 'all' || sel === k;
+    p += `<path class="${cls}" style="fill:var(--surface);fill-opacity:.9;${hi('inlet') ? '' : 'opacity:.35'}" d="${heartPath(cx, 152, P.inlet[0] * 0.9, P.inlet[1] * 0.75, P.inlet[2])}"/>`;
+    // subpubic angle: the two inferior rami meet below the symphysis
+    const ax = cx, ay = 246, a = Math.atan2(P.tub[0], P.tub[1] - ay), r = 30;   // the angle follows the drawn rami
+    p += `<path class="${cls}" style="${hi('arch') ? '' : 'opacity:.35'}" d="M${(ax - Math.sin(a) * r).toFixed(1)} ${(ay + Math.cos(a) * r).toFixed(1)} A${r} ${r} 0 0 0 ${(ax + Math.sin(a) * r).toFixed(1)} ${(ay + Math.cos(a) * r).toFixed(1)}"/>`;
+    p += T(cx, 26, title, txtCls, 'middle');
+    if (hi('inlet')) p += T(cx, 156, 'Inlet', 's', 'middle');
+    if (hi('arch')) p += T(cx, 318, P === F ? 'Pubic arch: wide' : 'Subpubic angle: narrow', txtCls, 'middle');
+    // greater sciatic notch, side view: the angle between the two borders of the notch
+    const nx = cx, ny = 366, n = P.notch * Math.PI / 360, L2 = 34;
+    p += `<path class="${cls}" style="${hi('notch') ? '' : 'opacity:.35'}" d="M${(nx - Math.sin(n) * L2).toFixed(1)} ${(ny - Math.cos(n) * L2).toFixed(1)} L${nx} ${ny} L${(nx + Math.sin(n) * L2).toFixed(1)} ${(ny - Math.cos(n) * L2).toFixed(1)}"/>`;
+    if (hi('notch')) p += T(cx, 396, P === F ? 'Sciatic notch: wide' : 'Sciatic notch: narrow', txtCls, 'middle');
+    return p;
+  };
+  h += panel(140, F, 'fem', 'Female', 'fl') + panel(420, M, 'mal', 'Male', 'ml');
+  h += `<path d="M280 40 L280 400" style="stroke:var(--line)"/>` + T(8, 414, 'Front view (notch: side view below); schematic', 'h');
+  S.innerHTML = h;
+  $('sex-find').innerHTML = SEX_ITEMS[sel][1] + '<h3>Subpubic angle in different studies</h3>' +
+    '<table class="t"><tr><th>Study</th><th>♀</th><th>♂</th></tr>' + SPA.map(r => `<tr><td>${r[0]}<br><span class="muted">${r[3]}</span></td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('') + '</table>' +
+    '<p class="muted">The values differ widely with population and method (3D CT or plain film): no single cut-off works everywhere.</p>';
+}
+const DIA = {s: 0};
+function drawDia() {
+  const st = DIA_STEPS[DIA.s][2], S = $('dia-svg'); let h = DEFS;
+  // left: median section seen from the right (front on the viewer's right)
+  h += T(140, 18, 'Median section (from the right)', 'h', 'middle');
+  h += `<path class="bone" d="M60 50 Q96 120 96 190 Q96 240 122 270 L134 262 Q112 236 112 190 Q112 116 80 44 Z"/>` + T(58, 40, 'Sacrum', 's');
+  h += `<path class="bone" d="M122 270 Q132 292 154 300 L158 290 Q142 284 134 262 Z"/>` + T(150, 318, 'Coccyx', 's', 'middle');
+  h += `<ellipse class="bone" cx="236" cy="226" rx="11" ry="30" transform="rotate(-24 236 226)"/>` + T(268, 194, 'Symphysis', 's');
+  const P = [92, 70], St = [226, 200], Sb = [246, 252], Sk = [224, 208], Ct = [150, 294];
+  h += `<circle cx="${P[0]}" cy="${P[1]}" r="3.5" style="fill:var(--ink)"/>` + T(104, 66, 'Promontory', 's');
+  if (st === 'conj' || st === 'brim') {
+    h += `<path class="dia" d="M${P[0]} ${P[1]} L${St[0]} ${St[1]}"/>` + T(170, 120, 'Anatomical', 'il', 'middle');
+    if (st === 'conj') h += `<path class="dia" style="stroke-dasharray:3 3" d="M${P[0]} ${P[1]} L${Sk[0]} ${Sk[1]}"/>` + T(118, 150, 'Obstetric', 'il', 'middle') + lead(126, 146, 150, 135)
+      + `<path class="dia" style="stroke-dasharray:8 4" d="M${P[0]} ${P[1]} L${Sb[0]} ${Sb[1]}"/>` + T(206, 168, 'Diagonal', 'il') + lead(204, 166, 192, 182);
+  }
+  if (st === 'mid') h += `<circle cx="150" cy="200" r="6" style="fill:var(--outlet)"/>` + T(150, 226, 'Ischial spines (seen end-on)', 'ol', 'middle');
+  if (st === 'out') h += `<path class="dio" d="M${Ct[0]} ${Ct[1]} L${Sb[0]} ${Sb[1]}"/>` + T(200, 300, 'Outlet AP', 'ol', 'middle');
+  h += T(20, 344, 'Back', 'h') + T(262, 344, 'Front', 'h', 'end');
+  // right: inlet from above (front at the bottom)
+  const cx = 420, cy = 180;
+  h += T(cx, 18, 'Inlet from above', 'h', 'middle');
+  h += `<path class="inlf" d="${heartPath(cx, cy, 100, 78, 0.55)}"/>`;
+  h += T(cx, cy - 92, 'Promontory', 's', 'middle') + T(cx, cy + 98, 'Symphysis', 's', 'middle');
+  if (st === 'trans') h += `<path class="dia" d="M${cx - 100} ${cy + 6} L${cx + 100} ${cy + 6}"/>` + T(cx, cy - 2, 'Transverse', 'il', 'middle')
+    + `<path class="dia" style="stroke-dasharray:6 4" d="M${cx - 70} ${cy + 54} L${cx + 62} ${cy - 50}"/>` + T(cx + 30, cy + 40, 'Oblique', 'il');
+  if (st === 'conj' || st === 'brim') h += `<path class="dia" d="M${cx} ${cy - 78 + 33} L${cx} ${cy + 78}"/>` + T(cx + 8, cy + 50, 'AP (conjugate)', 'il');
+  if (st === 'mid') h += `<path class="dio" d="M${cx - 64} ${cy + 18} L${cx + 64} ${cy + 18}"/>` + T(cx, cy + 12, 'Interspinous', 'ol', 'middle') + `<circle cx="${cx - 64}" cy="${cy + 18}" r="4" style="fill:var(--outlet)"/><circle cx="${cx + 64}" cy="${cy + 18}" r="4" style="fill:var(--outlet)"/>`;
+  if (st === 'out') h += `<path class="outl" d="M${cx} ${cy + 96} L${cx - 70} ${cy + 20} L${cx} ${cy - 60} L${cx + 70} ${cy + 20} Z"/>` + `<path class="dio" d="M${cx - 70} ${cy + 20} L${cx + 70} ${cy + 20}"/>` + T(cx, cy + 14, 'Intertuberous', 'ol', 'middle') + T(cx, cy + 128, 'Outlet (lozenge), from below', 's', 'middle');
+  h += T(330, 344, 'Body\'s right', 'h') + T(540, 344, 'left', 'h', 'end');
+  S.innerHTML = h; $('dia-find').innerHTML = DIA_STEPS[DIA.s][1];
+}
+const TYPE = {sel: 'gyn'};
+function drawType() {
+  const S = $('type-svg'); let h = DEFS;
+  const shapes = [['Gynaecoid', 62, 54, 0.15], ['Anthropoid', 46, 66, 0.1], ['Android', 56, 52, 1], ['Platypelloid', 72, 36, 0.12]];
+  shapes.forEach(([n, rx, ry, k], i) => {
+    const cx = 70 + i * 125, cy = 140, on = TYPE_ITEMS[TYPE.sel][1] === i; rx *= 0.8; ry *= 0.8;
+    h += `<path class="${on ? 'inlf' : 'inl'}" style="${on ? '' : 'opacity:.45'}" d="${heartPath(cx, cy, rx, ry, k)}"/>` + T(cx, 236, n, on ? 'b' : 's', 'middle');
+    h += T(cx, cy - ry - 10, 'back', 's', 'middle');
+  });
+  h += T(260, 280, 'Inlets seen from above, front at the bottom; schematic proportions', 's', 'middle');
+  S.innerHTML = h; $('type-find').innerHTML = TYPE_TEXT[TYPE_ITEMS[TYPE.sel][1]];
+}
+function drawLstv() {
+  const sel = LSTV.sel, S = $('lstv-svg'); let h = DEFS;
+  const vert = (y, lab, tpW, hatchL, hatchR, fuseL, fuseR) => {
+    let s = `<rect class="bone" x="200" y="${y}" width="80" height="34" rx="6"/>` + T(240, y + 22, lab, 'b', 'middle');
+    s += `<path class="${hatchL ? 'hat' : 'bone'}" d="M200 ${y + 10} L${200 - tpW} ${y + 6} L${200 - tpW} ${y + 22} L200 ${y + 24} Z"/>`;
+    s += `<path class="${hatchR ? 'hat' : 'bone'}" d="M280 ${y + 10} L${280 + tpW} ${y + 6} L${280 + tpW} ${y + 22} L280 ${y + 24} Z"/>`;
+    return s;
+  };
+  let y = 20;
+  h += vert(y, 'L3', 40) ; y += 44; h += vert(y, 'L4', 42); y += 44;
+  const s1sep = sel === 'lum';
+  const bigL = sel === 'sac1' || sel === 'sac2', bigR = sel === 'sac2';
+  h += vert(y, 'L5', 46, bigL && false, false);
+  if (bigL) h += `<path class="hat" d="M200 ${y + 8} L130 ${y + 6} L132 ${y + 40} L200 ${y + 30} Z"/>`;
+  if (bigR) h += `<path class="hat" d="M280 ${y + 8} L350 ${y + 6} L348 ${y + 40} L280 ${y + 30} Z"/>`;
+  const sy = y + 44;
+  // sacrum: triangle; S1 separate in lumbarization
+  if (s1sep) { h += `<path class="hat" d="M170 ${sy} L310 ${sy} L306 ${sy + 30} L174 ${sy + 30} Z"/>` + T(240, sy + 20, 'S1 (separate)', 'b', 'middle'); }
+  h += `<path class="bone" d="M${s1sep ? 176 : 150} ${s1sep ? sy + 40 : sy} L${s1sep ? 304 : 330} ${s1sep ? sy + 40 : sy} L250 ${sy + 160} L230 ${sy + 160} Z"/>` + T(240, sy + 90, 'Sacrum', 'b', 'middle');
+  if (bigL) h += T(124, y + 64, 'Fused / false joint', 's', 'end') + lead(126, y + 60, 140, y + 40);
+  h += T(20, 324, 'Front view, schematic', 'h');
+  S.innerHTML = h; $('lstv-find').innerHTML = LSTV_ITEMS[sel][1] + LSTV_COMMON;
+}
+
+/* ===================== init ===================== */
+(async () => {
+  $('lede').textContent = LEDE; $('note3d').textContent = DATA.note3d;
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('bone-cards').innerHTML = BONE_CARDS.map(([t, d, href, l]) => `<div class="item"><h3>${t}</h3><p>${d}</p><p><a href="${href}">${l} →</a></p></div>`).join('');
+  AP.table('sex-table', SEX_HEAD, SEX_ROWS); $('sex-note').textContent = SEX_NOTE;
+  AP.toggles('sex-tg', Object.entries(SEX_ITEMS).map(([k, d]) => [k, d[0]]), drawSex, 'all');
+  AP.key('sex-key', [['--sx-f', 'Female'], ['--sx-m', 'Male']]);
+  AP.stepper('dia-step', DIA_STEPS.map(x => x[0]), drawDia, DIA);
+  AP.table('dia-table', DIA_HEAD, DIA_ROWS); $('dia-note').textContent = DIA_NOTE;
+  AP.toggles('type-tg', Object.entries(TYPE_ITEMS).map(([k, d]) => [k, d[0]]), k => { TYPE.sel = k; drawType(); }, 'gyn');
+  AP.table('type-table', TYPE_HEAD, TYPE_ROWS); $('type-note').textContent = TYPE_NOTE;
+  AP.toggles('lstv-tg', Object.entries(LSTV_ITEMS).map(([k, d]) => [k, d[0]]), k => { LSTV.sel = k; drawLstv(); }, 'norm');
+  $('clin-list').innerHTML = CLIN.map(([t, d]) => `<div class="item"><b class="t">${t}</b>${d}</div>`).join('');
+  if (XR.credit) { AP.micro($('xr-imgs'), XR); $('images').innerHTML = 'Radiograph: ' + XR.credit; } else $('h-xr').parentElement.hidden = true;
+  drawSex('all'); drawType(); drawLstv();
+  AP.swipeHints();
+  const bar = $('vbar');
+  for (const [label, dir] of [['Front', FRONT], ['Right', RIGHT], ['Above', ABOVE], ['Below', BELOW], ['Back', BACK]]) {
+    const b = document.createElement('button'); b.className = 'btn'; b.type = 'button'; b.textContent = label; b.onclick = () => v.face(dir, {zoom: v.zoom}); bar.append(b);
+  }
+  buildTopics();
+  await loadModel();
+  showTopic('pos');
+  window.J = {TOPICS, showTopic};
+  window.ready = true;
+})().catch(e => { $('topic-text').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

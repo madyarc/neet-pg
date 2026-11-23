@@ -14,7 +14,7 @@ Last updated: 2026-11-21
 - Next subject: PHYSIOLOGY (136 competencies, 0 done). P1 = general physiology + nerve and muscle (PY1.1–1.7,
   PY3.1–3.10): pages under physiology/general/ and physiology/nerve-muscle/, sheet fill-physio1, physiology/index.html
   created by the first module (CLAUDE.md: create subject index with the first module), root index line updated by
-  main session. Launch when one of the two anatomy agents finishes (max two agents).
+  main session. Started 2026-11-22 (build running).
 
 - 2026-11-22 11:15 crash: Claude Code 2.1.330 segfaulted itself (coredump; no kernel/amdgpu errors at that time;
   user's memtest and scrub are clean). Same as the 11-20 crashes of 2.1.327/328. Repaired 3 corrupt .git loose objects
@@ -38,9 +38,9 @@ Last updated: 2026-11-21
   stays unticked — ask user whether to fetch those PDFs by hand.
 - Module 44 (abdominopelvic: sheet fill-abdo2; bony-pelvis, imaging-abdomen, surface-sections + ap.js/css)
   [x] build (492 quotes, 7 Commons radiographs, sections cut from 3D models) [x] review (T10 cut through T11 so no oesophagus,
-  section labels on wrong organs, true-conjugate naming, unsourced claims, T1/T2 missing) [ ] fixes (PAUSED by user 2026-11-22 mid-fix: items 1–14 worked
-  on, was starting item 15 lower-limb/bones.html; abdomen-pelvis nav lines edited; uncommitted. Resume the same agent
-  and ask it to finish 15 and re-run all checks) [ ] docs [ ] commit.
+  section labels on wrong organs, true-conjugate naming, unsourced claims, T1/T2 missing) [x] fixes (511 quotes) [x] docs [x] commit. Done 2026-11-22.
+  Left for later: pre-existing label overlaps on pelvis/perineum/organs drawings; lower-limb/bones.html heading still
+  credits "Wikipedia" (the OpenStax-citing Pelvis article); organs.html still counts WP Transpyloric plane.
 - Module 45 (limb leftovers AN8.4, 9.2–9.3, 12.9/10/15, 13.5/6/8, 18.7, 20.6/7/10: sheet fill-limbs3; breast.html,
   radiographs-landmarks per limb, embryology/limb-development.html + additions) [ ] build (PAUSED by user 2026-11-22: specs a–c written in
   fill-limbs3-scripts, was on spec-d osteoarthritis; no page edits yet) [ ] review [ ] fixes
