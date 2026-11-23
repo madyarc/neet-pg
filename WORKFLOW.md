@@ -14,8 +14,9 @@ Last updated: 2026-11-21
   URL via issues/new?template=feedback.yml&title=…&page=…), .github/ISSUE_TEMPLATE/feedback.yml issue form (type: wrong
   fact / typo / drawing-label / bug / suggestion; what; correction + source; device/theme), labels feedback + type;
   home-page "Feedback" link. Needs a GitHub account: user chose to keep GitHub + a nudge line ("sign up with your Google
-  account in seconds; sign-in keeps out spam; reports are public, no personal details"). Verify GitHub's Google sign-up
-  and the post-login return to the prefilled form before wording it. Google Form relay = fallback if reports stay low. Anatomy partials after that.
+  account in seconds; sign-in keeps out spam; reports are public, no personal details"). Checked 2026-11-23: Google sign-up GA on
+  GitHub since 2025-07-15 (github.blog changelog); issue-form fields prefill by element id in the URL (docs.github.com
+  form schema). Return-to-form after sign-up untested (can't log in headless): don't promise it in the wording. Google Form relay = fallback if reports stay low. Anatomy partials after that.
 
 - 2026-11-22 evening: resumed modules 44 (fixes) and 45 (build). Session was not under claude-8g, so the 7G/8G/1G
   limits were written to this tab's cgroup directly (verify each session: cat memory.max in /proc/self/cgroup's path).
