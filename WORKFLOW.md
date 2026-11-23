@@ -16,7 +16,9 @@ Last updated: 2026-11-21
   home-page "Feedback" link. Needs a GitHub account: user chose to keep GitHub + a nudge line ("sign up with your Google
   account in seconds; sign-in keeps out spam; reports are public, no personal details"). Checked 2026-11-23: Google sign-up GA on
   GitHub since 2025-07-15 (github.blog changelog); issue-form fields prefill by element id in the URL (docs.github.com
-  form schema). Return-to-form after sign-up untested (can't log in headless): don't promise it in the wording. Google Form relay = fallback if reports stay low. Anatomy partials after that.
+  form schema). Return-to-form after sign-up untested (can't log in headless): don't promise it in the wording. Google Form relay = fallback if reports stay low.
+  Built (uncommitted): .github/ISSUE_TEMPLATE/feedback.yml + config.yml, label `feedback` created, tools/home/feedback_links.py
+  (idempotent; inserts <!-- feedback --> block after </footer>; tested on cardiac-cycle-output). Run on all pages after 04+05 commit. Anatomy partials after that.
 
 - 2026-11-22 evening: resumed modules 44 (fixes) and 45 (build). Session was not under claude-8g, so the 7G/8G/1G
   limits were written to this tab's cgroup directly (verify each session: cat memory.max in /proc/self/cgroup's path).
@@ -35,7 +37,7 @@ Last updated: 2026-11-21
   02: [x] build (791 quotes; 4 pages incl. immunity; tokens --rbc --platelet in phys.css; 7 Commons smears) [x] review
   (13 items: --ok undefined, WHO child cut-off, PMC5767294 via Boundless/OpenStax, LAB_NOTE over-claims, attributions,
   DIC readout, ESR preset, keyboard focus, IgA drawing) [ ] fixes (running). 04 GI [x] build (623 quotes; 3 pages; no new tokens) [x] review (no wrong facts; LFT picker
-  classification, defecation arrow, ~15 attributions, --stom misuse, drawing labels) [ ] fixes (running). Root card on commit.
+  classification, defecation arrow, ~15 attributions, --stom misuse, drawing labels) [x] fixes (630 quotes). Commit with 05 (index lists 05). Root card on commit.
   (Reviewer's "st is undefined" on cardiac-electrophysiology: not reproducible via real chips/stepper/keys; stale-node clicks.) 05 respiratory [x] build (518 quotes; 3 pages; no new tokens) [x] review (5 wrong facts: DLCO shunt
   direction, hypoxaemia definition, A–a gradient, HAPE HPV disagreement, review year; attributions; classifier clip)
   [ ] fixes (running).
