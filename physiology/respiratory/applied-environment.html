@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Applied and Environmental Respiration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+/* page token reused with its meaning: --vein (deoxygenated blood / deoxy-Hb) as atlas.css; --artery (oxygenated Hb) from phys.css; --clin only for
+   the failing step in the hypoxia pathway (a clinical point). Gases are written in ink. No new tokens. */
+:root{--vein:#3a5ba8}
+:root[data-theme="dark"]{--vein:#6d8fd8}
+svg.sch .node{fill:var(--surface);stroke:var(--muted);stroke-width:1.2}
+svg.sch .nodeon{fill:var(--surface);stroke:var(--ink);stroke-width:2.6}
+svg.sch .band{fill:var(--ink);fill-opacity:.05}
+svg.sch .cur{stroke:var(--mark);stroke-width:1.5}
+svg.sch.fitmax{max-width:440px}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+.qrow{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:14px}
+.qrow .q{min-width:0;flex:1 1 260px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 05: <a href="mechanics-volumes.html">Mechanics and lung volumes</a> · <a href="gas-transport-control.html">Gas transport and control</a> · <span aria-current="page">Applied and environmental</span></span></nav>
+
+<header class="stack">
+  <h1>Hypoxia, Cyanosis, Abnormal Breathing, High Altitude and Diving</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-dys">Dyspnoea</a> <a href="#h-hyp">Hypoxia</a> <a href="#h-cya">Cyanosis</a> <a href="#h-asp">Asphyxia and drowning</a> <a href="#h-per">Periodic breathing</a> <a href="#h-oxy">Oxygen therapy</a> <a href="#h-alt">High altitude</a> <a href="#h-div">Diving</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-dys">
+  <h2 id="h-dys">Dyspnoea</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="dys-svg" viewBox="0 0 380 220" role="img" aria-label="Schematic of the mismatch idea of dyspnoea: afferent signals from chemoreceptors, lungs and chest wall compared in the brain with the outgoing drive to breathe"></svg></div>
+    <div class="prose" id="dys-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-hyp">
+  <h2 id="h-hyp">Hypoxia: four types, and a classifier</h2>
+  <div class="prose" id="hyp-text"></div>
+  <div class="chips" id="hyp-tg" aria-label="Example"></div>
+  <div class="stack" id="hyp-q"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="hyp-svg" viewBox="0 0 380 230" role="img" aria-label="The oxygen pathway from air to blood to flow to the cell, with the step that fails for the chosen answers highlighted"></svg></div>
+    <div class="prose find" id="hyp-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="hyp-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cya">
+  <h2 id="h-cya">Cyanosis: why it depends on deoxygenated haemoglobin</h2>
+  <div class="chips" id="cya-tg" aria-label="Preset"></div>
+  <div class="sliders" id="cya-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="cya-svg" viewBox="0 0 380 150" role="img" aria-label="Bar of the chosen haemoglobin split into oxygenated and deoxygenated parts, with the 5 g/dL threshold for cyanosis"></svg></div>
+    <div class="prose" id="cya-out" aria-live="polite"></div>
+  </div>
+  <div class="key" id="cya-key"></div>
+  <div class="scroll"><table id="cya-table"></table></div>
+  <div class="prose" id="cya-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-asp">
+  <h2 id="h-asp">Asphyxia and drowning</h2>
+  <div class="prose" id="asp-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-per">
+  <h2 id="h-per">Periodic and abnormal breathing patterns</h2>
+  <div class="chips" id="per-tg" aria-label="Pattern"></div>
+  <div class="schbox"><svg class="fig sch" id="per-svg" viewBox="0 0 560 176" role="img" aria-label="Schematic trace of breathing depth over time for the chosen pattern"></svg></div>
+  <div class="prose find" id="per-find" aria-live="polite"></div>
+  <div class="prose" id="per-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-oxy">
+  <h2 id="h-oxy">Oxygen therapy and oxygen toxicity</h2>
+  <div class="prose" id="oxy-text"></div>
+  <div class="scroll"><table id="oxy-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-alt">
+  <h2 id="h-alt">High altitude: less O₂ in every breath, and acclimatisation</h2>
+  <div class="sliders" id="alt-sl"></div>
+  <div class="vrow" aria-live="polite" id="alt-out"></div>
+  <div class="schbox"><svg class="fig sch" id="alt-svg" viewBox="0 0 560 230" role="img" aria-label="Approximate barometric pressure and alveolar PO2 from sea level to the summit of Everest, with the chosen altitude marked"></svg></div>
+  <div class="prose" id="alt-note"></div>
+  <h3>Acclimatisation, step by step</h3>
+  <div class="step" id="acc-step"></div>
+  <div class="prose find" id="acc-find" aria-live="polite"></div>
+  <div class="scroll"><table id="ill-table"></table></div>
+  <div class="prose" id="alt-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-div">
+  <h2 id="h-div">Diving: Boyle's law, nitrogen narcosis, decompression sickness</h2>
+  <div class="sliders" id="div-sl"></div>
+  <div class="vrow" aria-live="polite" id="div-out"></div>
+  <div class="schbox"><svg class="fig sch" id="div-svg" viewBox="0 0 560 250" role="img" aria-label="A diver's gas volume shrinking with depth by Boyle's law, with the depth beyond which nitrogen narcosis usually becomes noticeable"></svg></div>
+  <div class="prose" id="div-text"></div>
+</section>
+
+<p class="muted" id="skill-note"></p>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio5.md, Part C; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Sort hypoxia into its four types with a classifier; see why anaemia can hide cyanosis; compare Cheyne–Stokes, Biot\'s and Kussmaul breathing; climb from sea level to Everest and watch the alveolar PO₂ fall; and dive to 60 m and watch the gas in the lungs shrink. The normal physiology is on the other two pages: <a href="mechanics-volumes.html">mechanics</a> and <a href="gas-transport-control.html">gas transport and control</a>.';
+const DYS_TEXT = '<p><b>Dyspnoea</b> is "a subjective experience of breathing discomfort that consists of qualitatively distinct sensations that vary in intensity" (the American Thoracic Society\'s definition, quoted by Wikipedia; StatPearls; a 2026 review). The sensations include effort or work of breathing, chest tightness and <b>air hunger</b> (Wikipedia; StatPearls). It is normal with heavy exertion and abnormal at rest or with light exertion (Wikipedia). Acute dyspnoea develops over hours to days, subacute over up to 4 weeks, chronic lasts more than 4 weeks (StatPearls).</p><p>It is thought to arise when the brain finds a <b>mismatch</b> between the afferent signals — from the carotid bodies, medulla, lungs and chest wall — and the outgoing drive to breathe (Wikipedia); chemoreceptors take part (a 2021 review). Causes may be respiratory, cardiac, neuromuscular, systemic or psychogenic (StatPearls).</p>';
+/* hypoxia classifier: questions; answers true = "yes" */
+const HYP_Q = [
+  ['lowpa', 'Is the arterial PO₂ low (hypoxaemia)?'],
+  ['lowcap', 'Is the blood\'s O₂-carrying capacity low (anaemia, CO, methaemoglobin)?'],
+  ['lowflow', 'Is blood flow to the tissue low (shock, heart failure, arrest)?'],
+  ['nouse', 'Are the cells unable to use O₂ (e.g. cyanide)?'],
+];
+const HYP_EX = {
+  alt: ['High altitude', {lowpa: true, lowcap: false, lowflow: false, nouse: false}],
+  anae: ['Severe anaemia', {lowpa: false, lowcap: true, lowflow: false, nouse: false}],
+  co: ['Carbon monoxide', {lowpa: false, lowcap: true, lowflow: false, nouse: false}],
+  shock: ['Shock', {lowpa: false, lowcap: false, lowflow: true, nouse: false}],
+  cn: ['Cyanide', {lowpa: false, lowcap: false, lowflow: false, nouse: true}],
+};
+const HYP_TYPE = {
+  lowpa: ['Hypoxic (hypoxaemic) hypoxia', 'air', 'Low O₂ tension in arterial blood: too little O₂ in the inspired gas, as at <b>altitude</b> (Wikipedia; a 2021 review), or lungs that cannot oxygenate the blood — hypoventilation, diffusion impairment, V/Q mismatch, shunt (Wikipedia; a 2017 review).'],
+  lowcap: ['Anaemic (hypaemic) hypoxia', 'blood', 'The blood cannot carry its normal load of O₂: <b>anaemia</b> (StatPearls; Wikipedia), <b>carbon monoxide</b> forming carboxyhaemoglobin (Wikipedia), <b>methaemoglobin</b> (Fe³⁺, which cannot carry O₂: a "functional anaemia"; StatPearls). PaO₂ can stay normal (a 2017 review).'],
+  lowflow: ['Stagnant (circulatory, ischaemic) hypoxia', 'flow', 'Too little blood flow (Wikipedia; a 2021 review: impaired cerebral perfusion causes stagnant hypoxia); Wikipedia\'s examples are shock, cardiac arrest and severe heart failure. StatPearls lists "restriction of blood supply" among the causes of hypoxia.'],
+  nouse: ['Histotoxic hypoxia', 'cell', 'The cells cannot use the O₂ they receive: <b>cyanide</b> inhibits cytochrome c oxidase (Wikipedia; a 2024 rabbit study: "a classical histotoxic hypoxia agent"). Blood and tissue O₂ levels are normal (a 2017 review); Wikipedia notes a cherry-red colour from high venous saturation.'],
+};
+const HYP_TABLE = [
+  ['Hypoxic', 'Low', 'Altitude, hypoventilation, lung disease (V/Q mismatch, shunt, diffusion)'],
+  ['Anaemic', 'Can be normal (a 2017 review)', 'Anaemia, CO poisoning, methaemoglobinaemia'],
+  ['Stagnant', 'Not given by our sources', 'Shock, cardiac arrest, heart failure (Wikipedia)'],
+  ['Histotoxic', 'Normal (a 2017 review)', 'Cyanide'],
+];
+const HYP_TEXT = '<p><b>Hypoxia</b>: too little O₂ at the tissues; <b>hypoxaemia</b>: too little O₂ in the arterial blood (StatPearls; Wikipedia). Wikipedia says serious hypoxaemia typically occurs when PaO₂ is below 60 mmHg, where the steep part of the dissociation curve begins. Causes of hypoxaemia: low inspired PO₂, hypoventilation, diffusion impairment, <b>V/Q mismatch</b> — the commonest — and <b>shunt</b> (a 2017 review; a 2021 review). Hypoventilation keeps a normal A–a gradient, while V/Q mismatch, diffusion limitation and shunt widen it; V/Q mismatch corrects easily with O₂, shunt does not (a 2017 review; see the <a href="gas-transport-control.html#h-alv">alveolar gas equation</a>).</p><p>The four classic types follow the O₂ pathway — air, blood, flow, cell. Answer the questions or pick an example; the categories are not mutually exclusive (Wikipedia), so more than one can apply.</p>';
+/* cyanosis: deoxy-Hb = Hb × (1 − SaO2); visible from about 5 g/dL (StatPearls; Wikipedia) */
+const CYA0 = {hb: 15, sat: 98};
+const CYA_PRESET = {
+  norm: ['Normal', {hb: 15, sat: 98}],
+  hyp: ['Hypoxaemia', {hb: 15, sat: 65}],
+  anae: ['Severe anaemia + hypoxaemia', {hb: 6, sat: 40}],
+  poly: ['Polycythaemia + hypoxaemia (SaO₂ 70%)', {hb: 20, sat: 70}],
+};
+const CYA_TABLE = [
+  ['Central', 'Generalised blue colour of the body and the visible mucous membranes (StatPearls); from low arterial saturation or abnormal Hb (StatPearls; Wikipedia)', 'Mucous membranes blue'],
+  ['Peripheral', 'Blue extremities from poor or obstructed circulation (StatPearls; Wikipedia)', 'Mucous membranes stay pink (Wikipedia; StatPearls: not generally involved)'],
+];
+const CYA_TEXT = '<p><b>Cyanosis</b> appears when <b>deoxygenated haemoglobin reaches about 5 g/dL</b> (StatPearls; Wikipedia), best seen where skin is thin and vascular — lips, mucous membranes, nail beds, ear lobes (StatPearls; Wikipedia). Because it depends on the amount of deoxy-Hb, a patient with <b>severe anaemia</b> may not look cyanosed despite hypoxaemia, while one with <b>polycythaemia</b> looks cyanosed sooner (Wikipedia). It is neither sensitive nor specific for hypoxaemia (StatPearls). Methaemoglobinaemia also causes a blue colour (Wikipedia). In <b>CO poisoning</b> the skin may be "cherry red" instead (Wikipedia), but this is rarely seen in living patients (Wikipedia; a 2024 review).</p><p class="muted">The bar uses arterial saturation, as Wikipedia\'s description of central cyanosis does; the threshold line is the 5 g/dL figure.</p>';
+const ASP_TEXT = '<p><b>Asphyxia</b> (Wikipedia) is a deficient supply of O₂ to the body from abnormal breathing; it causes generalised hypoxia. In mechanical asphyxia — smothering, choking, strangulation, drowning and others — some mechanical means interferes with the exchange of both O₂ and CO₂ (a forensic-pathology textbook cited by Wikipedia). Cyanide is called a chemical "asphyxiant" because it stops cells using O₂ (a 2024 rabbit study) — histotoxic hypoxia, <a href="#h-hyp">above</a>.</p><p><b>Drowning</b> is "the process of experiencing respiratory impairment from submersion/immersion in liquid" (WHO 2005 and the 2002 World Congress on Drowning, quoted by Wikipedia; StatPearls). The terms <b>"wet", "dry" and "near" drowning are no longer accepted</b>: outcomes are fatal or non-fatal drowning (StatPearls; Wikipedia: "dry drowning" is discredited). Most harm in non-fatal drowning comes from <b>tissue hypoxia</b>, particularly of the brain (StatPearls). Significant water usually enters the lungs late, when an inhalation can no longer be held back (Wikipedia). Cold water can protect the brain, especially in children (StatPearls).</p><p class="muted">Fresh- versus salt-water fluid shifts are not covered: none of our sources gives them.</p>';
+/* breathing patterns: [label, html]; traces are schematic */
+const PER = {
+  norm: ['Normal', '<h3>Normal breathing</h3><p>Regular breaths of similar depth; 12–20 a minute in adults (Wikipedia).</p>'],
+  cs: ['Cheyne–Stokes', '<h3>Cheyne–Stokes respiration</h3><p>Breaths grow deeper and then shallower — a <b>crescendo–decrescendo</b> pattern — alternating with <b>central apnoea</b> (StatPearls; Wikipedia; a 2023 mouse study that compares its pattern with human recordings). Each cycle usually lasts 30 seconds to 2 minutes (Wikipedia). It is strongly associated with <b>heart failure</b> — in about a third of patients — and <b>stroke</b> (StatPearls; a 2019 review; the 2023 study\'s introduction); Wikipedia adds newborns, newcomers to high altitude and the end of life.</p><p><b>Mechanism</b>: unstable feedback in the control of breathing (Wikipedia; a 2019 review). Apnoea lets CO₂ rise, which drives an overshoot of hyperventilation; CO₂ then falls below the apnoeic threshold and breathing stops again (Wikipedia; a 2019 review: high "loop gain", over-responsive chemoreceptors). The European Respiratory Society task force prefers the term "periodic breathing in heart failure" (a 2019 review).</p>'],
+  biot: ['Biot\'s (ataxic)', '<h3>Biot\'s (ataxic) breathing</h3><p>Variable tidal volumes with random apnoeas, from damage to the <b>medulla and pons</b> — trauma, stroke, opioids, raised intracranial pressure with herniation (Wikipedia). It is often mistaken for Cheyne–Stokes respiration (Wikipedia).</p>'],
+  kuss: ['Kussmaul', '<h3>Kussmaul breathing</h3><p>Deep, laboured breathing of severe <b>metabolic acidosis</b>, particularly diabetic ketoacidosis; a form of hyperventilation that lowers CO₂. In milder acidosis breathing is first rapid and shallow (Wikipedia).</p>'],
+};
+const PER_TEXT = '<p><b>Periodic breathing</b> in general: clusters of breaths separated by apnoea or near-apnoea; it can occur in healthy people during sleep, and is a normal variant in premature and full-term infants (Wikipedia).</p><p class="muted">Traces are schematic: the shapes follow the descriptions above; timing and depth are not to scale. Biot\'s and Kussmaul breathing rest on Wikipedia only.</p>';
+const OXY_TEXT = '<p><b>Oxygen therapy</b> is given for hypoxaemia and for carbon monoxide poisoning (Wikipedia; StatPearls: oxygen must be prescribed carefully outside emergencies); CO poisoning is treated with 100% O₂ (Wikipedia). In acute hypoxaemia, Wikipedia gives target saturations of <b>94–96%</b> in most patients and <b>88–92%</b> in people with COPD, citing the UK ambulance (JRCALC) oxygen guideline update of 2009 and a 2018 systematic review; it adds that in 2018 the <i>BMJ</i> recommended stopping oxygen above 96% and not starting it above 90–93%. In people at risk of CO₂ retention, extra O₂ may reduce the drive to breathe and let CO₂ accumulate (Wikipedia). Targets change: check the current national guideline. <b>Hyperbaric oxygen</b> is pure O₂ at more than atmospheric pressure (StatPearls); it treats decompression sickness (<a href="#h-div">below</a>).</p><p><b>Oxygen toxicity</b> comes from breathing O₂ at raised partial pressures, which produces reactive oxygen species (StatPearls; Wikipedia; a 2026 review).</p>';
+const OXY_TABLE = [
+  ['Central nervous system (acute)', 'Short exposure to high partial pressures above atmospheric pressure: seizures — a risk for divers and in hyperbaric therapy (StatPearls; Wikipedia).'],
+  ['Lungs (chronic)', 'Longer exposure at normal pressure: lung damage, difficult and painful breathing (StatPearls; Wikipedia).'],
+  ['Eyes', 'Longer exposure, mainly in newborn and premature infants (Wikipedia; StatPearls lists premature infants among those at risk).'],
+];
+/* altitude: barometric pressure approximated as halving every 5,500 m (Wikipedia); FiO2 0.21; PH2O 47; R 0.8 */
+const ALT0 = {h: 0, pco2: 40};
+const ALT_MARK = [[1500, 'high altitude', 'StatPearls'], [2500, 'illness above', 'StatPearls; Wikipedia'], [8000, 'death zone', 'Wikipedia']];
+const ALT_NOTE = '<p class="muted">Approximate: pressure is drawn as halving every 5,500 m (Wikipedia); that gives about 250 mmHg at the summit of Everest, against Wikipedia\'s 33.7 kPa (253 mmHg). PAO₂ is the alveolar gas equation with the PaCO₂ you choose and R 0.8 — lowering PaCO₂ is what hyperventilation does. Real values vary with weather and latitude.</p>';
+const ACC = [
+  ['Hypoxia sensed', '<h3>1. The carotid bodies sense the low PO₂</h3><p>In the short term the lack of O₂ is sensed by the <b>carotid bodies</b>, which increase the depth and rate of breathing (Wikipedia; a 2021 review: hypoxia-induced hyperventilation).</p>'],
+  ['Hyperventilation, alkalosis', '<h3>2. Hyperventilation and respiratory alkalosis</h3><p>Breathing more lowers PaCO₂ (hypocapnia; a 2021 review) and causes a <b>respiratory alkalosis</b>, which holds the breathing rate back (Wikipedia). Lower CO₂ also blunts the response to hypoxia (a 2021 review).</p>'],
+  ['2,3-BPG rises', '<h3>3. 2,3-BPG rises within about a day</h3><p>Red-cell <b>2,3-BPG</b> rises as a natural response to altitude, within about 24 h (a 2025 review); it shifts the dissociation curve right and helps O₂ unloading (two reviews; <a href="gas-transport-control.html#h-odc">curve</a>).</p>'],
+  ['Kidneys excrete HCO₃⁻', '<h3>4. Renal compensation</h3><p>Gradually the kidneys <b>excrete bicarbonate</b>, correcting the alkalosis so that breathing can stay high (Wikipedia).</p>'],
+  ['EPO, more red cells', '<h3>5. Erythropoietin and polycythaemia</h3><p>The kidneys make more <b>erythropoietin</b> under hypoxia (Wikipedia), which drives red-cell production in the marrow (a 2026 review on high-altitude polycythaemia); <b>polycythaemia</b> is one of the responses to altitude (Wikipedia; the same review). Full acclimatisation takes days or even weeks (Wikipedia). EPO loop: <a href="../blood/blood-cells.html#h-epo">blood cells</a>.</p>'],
+  ['Pulmonary vessels constrict', '<h3>6. Hypoxic pulmonary vasoconstriction</h3><p>Low alveolar O₂ makes pulmonary vessels constrict and pulmonary arterial pressure rise — the basis of HAPE (below). <b>A disagreement</b>: Wikipedia says the constriction at altitude is diffuse, in all areas of the lung; a 2025 review calls it heterogeneous. Above about 8,000 m ("the death zone") no one acclimatises (Wikipedia).</p>'],
+];
+const ILL_TABLE = [
+  ['Acute mountain sickness (AMS)', 'Headache, nausea or vomiting, fatigue, dizziness, poor sleep (Wikipedia; a 2025 review). Can start at 2,000–2,500 m (a 2025 review); illness is rare below 2,500 m (StatPearls; Wikipedia).', 'Descent and fluids (Wikipedia); for mild cases Wikipedia lists ibuprofen, acetazolamide or dexamethasone'],
+  ['High-altitude pulmonary oedema (HAPE)', '<b>Non-cardiogenic</b> pulmonary oedema (StatPearls; Wikipedia) from hypoxic pulmonary vasoconstriction and pulmonary hypertension (Wikipedia; a 2025 review) — <b>diffuse</b>, in all areas of the lung, says Wikipedia; <b>heterogeneous</b>, says the 2025 review; risk rises above 3,500 m in fast, unacclimatised climbers (a 2025 review); the commonest cause of altitude deaths (StatPearls).', 'Descent and O₂ (StatPearls; Wikipedia); nifedipine to prevent it (Wikipedia; a 2025 review), and to treat it (the 2025 review)'],
+  ['High-altitude cerebral oedema (HACE)', 'The most severe end of AMS: <b>ataxia</b>, altered consciousness, severe headache (StatPearls; the headache from a 2025 review); usually above 4,000 m (StatPearls); vasogenic brain oedema (Wikipedia).', 'Immediate descent and O₂ (StatPearls; Wikipedia); dexamethasone (Wikipedia)'],
+];
+const ALT_TEXT = '<p>"High altitude" starts at 1,500 m (StatPearls). Atmospheric pressure falls with height while O₂ stays 21% of the air, so the PO₂ of the air falls: about half its sea-level value at 5,000 m and a third at the top of Everest (Wikipedia). The responses — hyperventilation, polycythaemia, more capillaries in muscle, hypoxic pulmonary vasoconstriction — make up acclimatisation (Wikipedia). The only definite treatment for severe AMS, HAPE and HACE is to <b>descend</b> (Wikipedia; StatPearls).</p><p class="muted">Drug doses are not given (guideline material, not in our sources).</p>';
+/* diving: P = 1 + depth/10 atm (1 atm per 10 m of sea water); V = V0 / P (Boyle) */
+const DIV0 = {d: 0, v0: 6};
+const DIV_TEXT = '<p>Pressure rises by about <b>1 atmosphere for every 10 m</b> of sea water: 2 atm at 10 m (2021 and 2026 reviews). By <b>Boyle\'s law</b> (P₁V₁ = P₂V₂ at constant temperature; Wikipedia), doubling the pressure halves the volume of gas in the lungs (2021 and 2026 reviews). By <b>Henry\'s law</b> more gas dissolves in the tissues at depth (Wikipedia; StatPearls) and comes out again as the diver ascends (Wikipedia).</p><p><b>Nitrogen narcosis</b> ("raptures of the deep"): an anaesthetic effect of gases at high partial pressure, nitrogen above all; it does not usually become noticeable shallower than about <b>30 m</b> (Wikipedia; StatPearls); it is reversible (StatPearls; Wikipedia), within a few minutes of ascending (Wikipedia). Helium is not narcotic, so deep divers breathe heliox (StatPearls; Wikipedia).</p><p><b>Decompression sickness</b> ("the bends"): gas dissolved under pressure, mostly <b>nitrogen</b>, comes out of solution as <b>bubbles</b> when pressure falls too fast — on a fast ascent, and also on flying or going to altitude (StatPearls; Wikipedia). Bubbles block vessels and damage tissues (StatPearls): joint pain ("bends"), breathing problems ("chokes"), neurological problems ("staggers") (Wikipedia). Prevented by slow ascent, decompression stops and dive planning; treated with high-flow O₂ and <b>hyperbaric oxygen</b> in a recompression chamber (StatPearls; Wikipedia).</p><p><b>Oxygen toxicity</b> is a further risk for divers (CNS seizures at raised pressure; StatPearls; Wikipedia). Breath-hold divers risk <b>hypoxic blackout</b> under water (a 2026 review). The <b>diving reflex</b> — triggered by wetting and chilling the face while holding the breath — slows the heart and constricts peripheral vessels (Wikipedia).</p>';
+const SKILL = 'PY6.10–6.13 (performing spirometry, artificial respiration, the clinical examination of the respiratory system, peak-flow measurement) are practical skills and are not covered here.';
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews on mechanisms of hypoxaemia (2017), respiratory physiology and COVID-19 (2021), hypoxic hypoxia in military aviation (2021), dyspnoea in heart failure (2026), carbon monoxide poisoning (2024), periodic breathing in heart failure (2019); experimental studies of cyanide in rabbits (2024) and of Cheyne–Stokes breathing in mice (2023), oxygen toxicity (2026), 2,3-diphosphoglycerate (2025), high-altitude polycythaemia (2026), acute high-altitude illness (2025), breath-hold diving (2021, 2026) (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> the hypoxia classifier maps four yes/no answers onto the sourced definitions; cyanosis bar = Hb × (1 − SaO₂); altitude pressure approximated as halving every 5,500 m with the alveolar gas equation; diving pressure 1 atm per 10 m with Boyle\'s law. Breathing traces and drawings are schematic.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+/* a preset chip stays highlighted only while its values are unchanged: a manual change clears it */
+let APPLYING = false;
+const clearPre = id => { if (!APPLYING) $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); };
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS; $('skill-note').innerHTML = SKILL;
+
+/* ---- dyspnoea mismatch (schematic) ---- */
+{
+  let s = Phys.arrowDef('ad', 'var(--ink)');
+  const box = (x, y, w, t1, t2) => `<rect x="${x}" y="${y}" width="${w}" height="40" rx="8" class="node"/>` + T(x + w / 2, y + 17, t1, 'b', 'middle') + T(x + w / 2, y + 32, t2, 's', 'middle');
+  s += box(130, 20, 120, 'Brain compares', 'need vs drive');
+  s += `<rect x="10" y="120" width="160" height="56" rx="8" class="node"/>` + T(90, 137, 'Afferent signals', 'b', 'middle') + T(90, 152, 'carotid bodies, medulla,', 's', 'middle') + T(90, 167, 'lungs, chest wall', 's', 'middle');
+  s += box(210, 120, 160, 'Efferent drive', 'to the breathing muscles');
+  s += `<path d="M90 118 L160 64" style="stroke:var(--ink);stroke-width:1.5;fill:none" marker-end="url(#ad)"/><path d="M220 64 L290 118" style="stroke:var(--ink);stroke-width:1.5;fill:none" marker-end="url(#ad)"/>`;
+  s += T(190, 210, 'mismatch → dyspnoea (Wikipedia; schematic)', 'l b', 'middle');
+  $('dys-svg').innerHTML = s; $('dys-text').innerHTML = DYS_TEXT;
+}
+
+/* ---- hypoxia classifier ---- */
+const HA = Object.assign({}, HYP_EX.alt[1]);
+const HQ = {};
+function drawHyp() {
+  const types = HYP_Q.map(q => q[0]).filter(k => HA[k]);
+  const stage = {air: 0, blood: 1, flow: 2, cell: 3}, hit = new Set(types.map(k => stage[HYP_TYPE[k][1]]));
+  let s = Phys.arrowDef('ay', 'var(--ink)');
+  const st = [['air', 'Air → lungs', 'PaO₂'], ['blood', 'Blood', 'O₂ capacity'], ['flow', 'Flow', 'to the tissue'], ['cell', 'Cell', 'uses O₂']];
+  st.forEach(([k, t1, t2], i) => {
+    const x = 10 + i * 92, bad = hit.has(i);
+    s += `<rect x="${x}" y="50" width="78" height="56" rx="10" class="${bad ? 'nodeon' : 'node'}"/>` + T(x + 39, 74, t1, 'b', 'middle') + T(x + 39, 92, t2, 's', 'middle');
+    if (bad) s += T(x + 39, 128, '✗ fails', 'c', 'middle');
+    if (i < 3) s += `<path d="M${x + 80} 78 L${x + 90} 78" style="stroke:var(--ink);stroke-width:1.4" marker-end="url(#ay)"/>`;
+  });
+  s += T(10, 30, 'The O₂ pathway (schematic)', 's', 'start');
+  if (types.length) types.forEach((k, i) => { s += T(10, 160 + i * 17, HYP_TYPE[k][0], 'l b', 'start'); });
+  else s += T(10, 160, 'No answer points to hypoxia', 'l b', 'start');
+  $('hyp-svg').innerHTML = s;
+  $('hyp-find').innerHTML = types.length ? types.map(k => `<h3>${HYP_TYPE[k][0]}</h3><p>${HYP_TYPE[k][2]}</p>`).join('') : '<p>Answer "yes" to at least one question.</p>';
+}
+{
+  const box = $('hyp-q');
+  for (const [k, q] of HYP_Q) {
+    const row = document.createElement('div'); row.className = 'qrow';
+    row.innerHTML = `<span class="q">${q}</span><span class="chips" id="hq-${k}"></span>`; box.append(row);
+  }
+  const build = () => { for (const [k] of HYP_Q) Phys.toggles('hq-' + k, [['y', 'Yes'], ['n', 'No']], v => { HA[k] = v === 'y'; clearPre('hyp-tg'); drawHyp(); }, HA[k] ? 'y' : 'n'); };
+  build();
+  /* presets set the answers by updating the existing Yes/No chips (no rebuild, so keyboard focus stays on the preset chip) */
+  Phys.toggles('hyp-tg', Object.entries(HYP_EX).map(([k, v]) => [k, v[0]]), k => {
+    Object.assign(HA, HYP_EX[k][1]);
+    for (const [q] of HYP_Q) $('hq-' + q).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String((b.dataset.k === 'y') === HA[q])));
+    drawHyp();
+  }, 'alt');
+}
+Phys.table('hyp-table', ['Type', 'Arterial PO₂', 'Examples'], HYP_TABLE);
+$('hyp-text').innerHTML = HYP_TEXT; drawHyp();
+
+/* ---- cyanosis ---- */
+const CY = Object.assign({}, CYA0), CYS = {};
+function drawCya() {
+  const deoxy = CY.hb * (1 - CY.sat / 100), oxy = CY.hb - deoxy, x0 = 20, X = Phys.scale(0, 22, x0, 360);
+  let s = `<rect x="${x0}" y="40" width="${(X(oxy) - x0).toFixed(1)}" height="34" style="fill:var(--artery);fill-opacity:.85"/><rect x="${X(oxy).toFixed(1)}" y="40" width="${(X(CY.hb) - X(oxy)).toFixed(1)}" height="34" style="fill:var(--vein);fill-opacity:.85"/>`;
+  for (const v of [0, 5, 10, 15, 20]) s += T(X(v), 96, v, 's', 'middle');
+  s += T(360, 114, 'g/dL', 's', 'end');
+  // threshold: 5 g/dL of deoxy-Hb, drawn from the right-hand end of the bar
+  const xt = X(CY.hb) - (X(5) - x0);
+  if (xt > x0) s += `<path d="M${xt.toFixed(1)} 30 L${xt.toFixed(1)} 84" style="stroke:var(--ink);stroke-width:1.6;stroke-dasharray:4 3"/>` + T(xt, 24, '5 g/dL deoxy-Hb', 's', xt > 300 ? 'end' : xt < 80 ? 'start' : 'middle');
+  s += T(x0, 136, deoxy >= 5 ? 'deoxy-Hb ≥ 5 g/dL: cyanosis expected' : 'deoxy-Hb below 5 g/dL: no cyanosis expected', 'l b', 'start');
+  $('cya-svg').innerHTML = s;
+  $('cya-out').innerHTML = `<p><span class="tag"><span class="u">Deoxy-Hb = Hb × (1 − SaO₂)</span></span> <span class="big">${deoxy.toFixed(1)}</span> g/dL</p><p class="readout">${CY.hb.toFixed(1)} × (1 − ${(CY.sat / 100).toFixed(2)}) = ${deoxy.toFixed(2)}</p><p>${deoxy >= 5 ? '<b>At or above 5 g/dL</b>: cyanosis expected (StatPearls; Wikipedia).' : '<b>Below 5 g/dL</b>: no cyanosis expected.'}${CY.hb < 10 && deoxy < 5 && 15 * (1 - CY.sat / 100) >= 5 ? ` With a normal Hb of 15 g/dL the same saturation would give ${(15 * (1 - CY.sat / 100)).toFixed(1)} g/dL: severe anaemia hides cyanosis despite hypoxaemia (Wikipedia).` : ''}${CY.hb > 17 && deoxy >= 5 && 15 * (1 - CY.sat / 100) < 5 ? ` With a normal Hb of 15 g/dL the same saturation would give only ${(15 * (1 - CY.sat / 100)).toFixed(1)} g/dL: polycythaemia shows cyanosis sooner (Wikipedia).` : ''}</p>`;
+}
+for (const [k, lab, mn, mx, st, f] of [['hb', 'Haemoglobin', 4, 22, 0.5, v => v.toFixed(1) + ' g/dL'], ['sat', 'Arterial saturation SaO₂', 30, 100, 1, v => v + '%']]) { CYS[k] = Phys.slider('cya-sl', {id: 'y' + k, label: lab, min: mn, max: mx, step: st, value: CYA0[k], fmt: f}, v => { CY[k] = v; clearPre('cya-tg'); drawCya(); }); CYS[k].init(); }
+Phys.toggles('cya-tg', Object.entries(CYA_PRESET).map(([k, v]) => [k, v[0]]), k => { APPLYING = true; for (const kk in CYS) CYS[kk].set(CYA_PRESET[k][1][kk]); APPLYING = false; }, 'norm');
+Phys.key('cya-key', [['--artery', 'oxygenated Hb'], ['--vein', 'deoxygenated Hb']]);
+Phys.table('cya-table', ['Cyanosis', 'What it is', 'Tongue and mucous membranes'], CYA_TABLE);
+$('cya-text').innerHTML = CYA_TEXT; drawCya();
+
+$('asp-text').innerHTML = ASP_TEXT;
+
+/* ---- breathing patterns (schematic traces of breath depth over time) ---- */
+function drawPer(k) {
+  const x0 = 40, x1 = 545, X = Phys.scale(0, 120, x0, x1), Y = Phys.scale(-1, 1, 150, 46);
+  const amp = t => {
+    if (k === 'norm') return 0.35;
+    if (k === 'kuss') return 0.9;
+    if (k === 'cs') { const c = t % 60; return c < 40 ? 0.85 * Math.sin(Math.PI * c / 40) : 0; }
+    if (k === 'biot') { const seg = Math.floor(t / 12); const r = [0.5, 0.2, 0, 0.7, 0.35, 0, 0, 0.6, 0.25, 0.45][seg % 10]; return r; }
+    return 0;
+  };
+  const rate = k === 'kuss' ? 0.35 : k === 'cs' ? 0.4 : 0.3;
+  const pts = []; for (let t = 0; t <= 120; t += 0.1) pts.push([X(t), Y(amp(t) * Math.sin(2 * Math.PI * rate * t))]);
+  let s = `<path class="axis" d="M${x0} 40 L${x0} 152"/><path class="grid" d="M${x0} ${Y(0)} L${x1} ${Y(0)}"/>` + T(x0 - 6, Y(0) + 4, '0', 's', 'end') + T(x0 + 4, 14, 'breath depth (schematic)', 's', 'start') + T(x1, 168, 'time → (schematic, about 2 minutes)', 's', 'end');
+  if (k === 'cs') s += T(X(50), 34, 'apnoea', 's', 'middle') + T(X(20), 34, 'crescendo–decrescendo', 's', 'middle');
+  s += `<path class="trace" d="${Phys.path(pts)}"/>`;
+  $('per-svg').innerHTML = s; $('per-find').innerHTML = PER[k][1];
+}
+Phys.toggles('per-tg', Object.entries(PER).map(([k, v]) => [k, v[0]]), drawPer, 'cs'); drawPer('cs');
+$('per-text').innerHTML = PER_TEXT;
+
+$('oxy-text').innerHTML = OXY_TEXT;
+Phys.table('oxy-table', ['Type', 'Exposure and effect'], OXY_TABLE);
+
+/* ---- altitude ---- */
+const AL = Object.assign({}, ALT0);
+const pbAt = h => 760 * Math.pow(2, -h / 5500);
+const paAt = (h, pco2) => 0.21 * (pbAt(h) - 47) - pco2 / 0.8;
+function drawAlt() {
+  const pb = pbAt(AL.h), pi = 0.21 * (pb - 47), pa = paAt(AL.h, AL.pco2);
+  $('alt-out').innerHTML = `<span><span class="tag">Barometric (approx.)</span> <span class="readout">${pb.toFixed(0)} mmHg</span></span><span><span class="tag">Inspired <span class="u">PO₂</span></span> <span class="readout">${pi.toFixed(0)} mmHg</span></span><span><span class="tag">Alveolar <span class="u">PAO₂</span></span> <span class="big">${pa > 0 ? pa.toFixed(0) : '≤ 0'}</span> mmHg</span>` + (pa <= 0 ? '<span class="readout">At this PaCO₂ the equation leaves no alveolar O₂: it needs a lower PaCO₂ (more ventilation)</span>' : '');
+  const x0 = 50, x1 = 540, X = Phys.scale(0, 9000, x0, x1), Y = Phys.scale(0, 800, 200, 20);
+  let s = `<path class="axis" d="M${x0} 20 L${x0} 200 L${x1} 200"/>`;
+  for (const v of [200, 400, 600, 800]) s += T(x0 - 6, Y(v) + 4, v, 's', 'end');
+  for (const v of [0, 2000, 4000, 6000, 8000]) s += T(X(v), 216, v + ' m', 's', 'middle');
+  s += T(x0 + 4, 14, 'mmHg', 's', 'start');
+  ALT_MARK.forEach(([h, lab], i) => { s += `<path class="grid dash" d="M${X(h)} 20 L${X(h)} 200"/>` + T(X(h) + 3, i % 2 ? 46 : 30, lab, 's', 'start'); });
+  const c1 = [], c2 = [];
+  for (let h = 0; h <= 9000; h += 50) { c1.push([X(h), Y(pbAt(h))]); const v = paAt(h, AL.pco2); if (v > 0) c2.push([X(h), Y(v)]); }
+  s += `<path class="trace" style="stroke-dasharray:6 4" d="${Phys.path(c1)}"/><path class="trace" d="${Phys.path(c2)}"/>`;
+  s += T(X(3300), Y(pbAt(3300)) - 8, 'barometric (dashed)', 'l', 'start') + (paAt(3300, AL.pco2) > 0 ? T(X(3300), Y(paAt(3300, AL.pco2)) - 8, 'alveolar PO₂', 'l', 'start') : '');
+  s += `<path class="cur" d="M${X(AL.h)} 20 L${X(AL.h)} 200"/><circle cx="${X(AL.h)}" cy="${Y(pb)}" r="4" style="fill:var(--mark)"/>` + (pa > 0 ? `<circle cx="${X(AL.h)}" cy="${Y(pa)}" r="5" style="fill:var(--mark)"/>` : '');
+  $('alt-svg').innerHTML = s;
+}
+for (const [k, lab, mn, mx, st, f] of [['h', 'Altitude', 0, 8848, 1, v => v + ' m'], ['pco2', 'PaCO₂ (lower = more hyperventilation)', 10, 45, 1, v => v + ' mmHg']]) Phys.slider('alt-sl', {id: 'h' + k, label: lab, min: mn, max: mx, step: st, value: ALT0[k], fmt: f}, v => { AL[k] = v; drawAlt(); }).init();
+$('alt-note').innerHTML = ALT_NOTE; drawAlt();
+const ACS = {s: 0};
+Phys.stepper('acc-step', ACC.map(r => r[0]), () => { $('acc-find').innerHTML = ACC[ACS.s][1]; }, ACS);
+Phys.table('ill-table', ['Illness', 'Features', 'Treatment'], ILL_TABLE);
+$('alt-text').innerHTML = ALT_TEXT;
+
+/* ---- diving ---- */
+const DV = Object.assign({}, DIV0);
+function drawDiv() {
+  const P = 1 + DV.d / 10, V = DV.v0 / P;
+  $('div-out').innerHTML = `<span><span class="tag">Pressure <span class="u">1 + depth/10</span></span> <span class="big">${P.toFixed(1)}</span> atm</span><span><span class="tag">Gas volume <span class="u">V₀ ÷ P</span></span> <span class="big">${V.toFixed(2)}</span> L</span><span><span class="tag">PO₂ of air breathed <span class="u">0.21 × P</span></span> <span class="readout">${(0.21 * P).toFixed(2)} atm</span></span>` + (DV.d >= 30 ? '<span class="readout">Beyond about 30 m: nitrogen narcosis usually noticeable</span>' : '');
+  const x0 = 40, x1 = 360, Y = Phys.scale(0, 60, 30, 230);
+  let s = `<rect x="${x0}" y="30" width="${x1 - x0}" height="200" style="fill:var(--ink);fill-opacity:.03"/>` + T(x0 + 4, 22, 'sea surface (1 atm)', 's', 'start');
+  for (const v of [0, 10, 20, 30, 40, 50, 60]) s += `<path class="grid" d="M${x0} ${Y(v)} L${x1} ${Y(v)}"/>` + T(x0 - 6, Y(v) + 4, v + ' m', 's', 'end');
+  s += `<rect x="${x0}" y="${Y(30)}" width="${x1 - x0}" height="${Y(60) - Y(30)}" style="fill:var(--ink);fill-opacity:.06"/>` + T(x1 - 6, Y(30) + 16, 'narcosis usually noticeable', 's', 'end');
+  // volume curve V(d) drawn on the right
+  const vx0 = 400, vx1 = 540, VX = Phys.scale(0, DV.v0, vx0, vx1);
+  s += `<path class="axis" d="M${vx0} 30 L${vx0} 230"/>` + T(vx0, 22, 'gas volume (L)', 's', 'start');
+  const pts = []; for (let d = 0; d <= 60; d += 0.5) pts.push([VX(DV.v0 / (1 + d / 10)), Y(d)]);
+  s += `<path class="trace" d="${Phys.path(pts)}"/>` + T(vx1, 244, DV.v0 + ' L at the surface', 's', 'end');
+  // the diver's lungs as a balloon at the chosen depth (area proportional to volume)
+  const r = 26 * Math.sqrt(V / DV.v0), cx = 200, cy = Y(DV.d);
+  s += `<circle cx="${cx}" cy="${cy}" r="${Math.max(3, r).toFixed(1)}" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.8"/>`;
+  s += `<path class="cur" d="M${x0} ${cy} L${vx1} ${cy}"/><circle cx="${VX(V)}" cy="${cy}" r="4.5" style="fill:var(--mark)"/>`;
+  $('div-svg').innerHTML = s;
+}
+for (const [k, lab, mn, mx, st, f] of [['d', 'Depth', 0, 60, 1, v => v + ' m'], ['v0', 'Gas volume at the surface (breath-hold)', 1, 6, 0.5, v => v.toFixed(1) + ' L']]) Phys.slider('div-sl', {id: 'd' + k, label: lab, min: mn, max: mx, step: st, value: DIV0[k], fmt: f}, v => { DV[k] = v; drawDiv(); }).init();
+$('div-text').innerHTML = DIV_TEXT; drawDiv();
+Phys.swipeHints();
+</script>
+</body>
+</html>

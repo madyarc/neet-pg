@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Respiratory Mechanics and Lung Volumes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+/* page tokens reused with their meaning: --airway (an airway: the bronchiole joining the two alveoli) as anatomy/thorax/lungs.html;
+   --vein (deoxygenated blood: the pulmonary arterial blood arriving at the alveoli) as atlas.css. --fluid (alveolar lining fluid) from
+   phys.css. Traces and ventilation bars are ink; the selected volume or capacity uses --accent (UI selection). No new tokens. */
+:root{--airway:#2f7d79;--vein:#3a5ba8}
+:root[data-theme="dark"]{--airway:#5cb3ad;--vein:#6d8fd8}
+svg.sch .band{fill:var(--ink);fill-opacity:.04}
+svg.sch .bandon{fill:var(--accent);fill-opacity:.16}
+svg.sch .cur{stroke:var(--mark);stroke-width:1.5}
+svg.sch .ghost{stroke:var(--muted);stroke-width:1.6;fill:none;stroke-dasharray:5 4}
+svg.sch .alv{fill:var(--surface);stroke:var(--ink);stroke-width:1.6}
+svg.sch .lin{fill:var(--fluid);stroke:none}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+.sw{display:inline-block;width:18px;height:0;border-top:2.5px solid;vertical-align:4px;margin-right:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 05: <span aria-current="page">Mechanics and lung volumes</span> · <a href="gas-transport-control.html">Gas transport and control</a> · <a href="applied-environment.html">Applied and environmental</a></span></nav>
+
+<header class="stack">
+  <h1>Mechanics of Breathing, Lung Volumes and Lung Function Tests</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-anat">Functional anatomy</a> <a href="#h-cyc">Breathing cycle</a> <a href="#h-vol">Volumes and capacities</a> <a href="#h-comp">Compliance and surfactant</a> <a href="#h-dead">Dead space</a> <a href="#h-vq">V/Q</a> <a href="#h-diff">Diffusion</a> <a href="#h-pft">Lung function tests</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-anat">
+  <h2 id="h-anat">Functional anatomy and the non-respiratory functions of the lungs</h2>
+  <div class="prose" id="anat-text"></div>
+  <div class="scroll"><table id="nrf-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cyc">
+  <h2 id="h-cyc">One quiet breath: pressures and volume</h2>
+  <div class="sliders" id="cyc-sl"></div>
+  <div class="vrow" aria-live="polite" id="cyc-out"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="cyc-svg" viewBox="0 0 560 480" role="img" aria-label="Schematic quiet breath over five seconds: lung volume change, alveolar pressure, intrapleural pressure and transpulmonary pressure, with a cursor at the chosen time"></svg></div>
+    <div class="prose find" id="cyc-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="cyc-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-vol">
+  <h2 id="h-vol">Lung volumes and capacities: a spirogram you can build</h2>
+  <div class="chips" id="vol-tg" aria-label="Volume or capacity"></div>
+  <div class="sliders" id="vol-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="vol-svg" viewBox="0 0 560 330" role="img" aria-label="Spirogram: tidal breaths, a maximal inspiration and a maximal expiration, with the chosen volume or capacity highlighted"></svg></div>
+    <div class="prose find" id="vol-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="vol-table"></table></div>
+  <div class="prose" id="vol-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-comp">
+  <h2 id="h-comp">Compliance, surface tension, surfactant and airway resistance</h2>
+  <div class="prose" id="comp-text"></div>
+  <h3>Laplace's law: two alveoli joined by one airway</h3>
+  <div class="chips" id="lap-tg" aria-label="Surfactant"></div>
+  <div class="sliders" id="lap-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="lap-svg" viewBox="0 0 380 210" role="img" aria-label="A small and a large alveolus joined by an airway, with the pressure inside each from P = 2T/r and the direction air would move"></svg></div>
+    <div class="prose" id="lap-out" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="res-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-dead">
+  <h2 id="h-dead">Dead space and alveolar ventilation</h2>
+  <div class="chips" id="dead-tg" aria-label="Preset"></div>
+  <div class="sliders" id="dead-sl"></div>
+  <div class="vrow" aria-live="polite" id="dead-out"></div>
+  <div class="prose" id="dead-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-vq">
+  <h2 id="h-vq">Ventilation–perfusion: apex to base</h2>
+  <div class="chips" id="vq-tg" aria-label="Region"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" style="max-width:460px" id="vq-svg" viewBox="0 0 380 300" role="img" aria-label="Upright lung, schematic: ventilation and blood flow per unit of lung at the apex, middle and base, and the ventilation–perfusion ratio"></svg></div>
+    <div class="prose find" id="vq-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="vq-key"></div>
+  <div class="prose" id="vq-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-diff">
+  <h2 id="h-diff">Diffusion across the respiratory membrane, and DLCO</h2>
+  <div class="prose" id="diff-text"></div>
+  <div class="scroll"><table id="diff-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pft">
+  <h2 id="h-pft">Lung function tests: FEV1, FVC, the ratio and the flow–volume loop</h2>
+  <div class="chips" id="pft-tg" aria-label="Preset"></div>
+  <div class="sliders" id="pft-sl"></div>
+  <div class="vrow" aria-live="polite" id="pft-out"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="fv-svg" viewBox="0 0 400 300" role="img" aria-label="Flow–volume loop for the chosen values, schematic, with the normal loop dashed"></svg></div>
+    <div class="schbox"><svg class="fig sch" id="vt-svg" viewBox="0 0 400 300" role="img" aria-label="Volume–time curve of the forced expiration with FEV1 at one second and the FVC"></svg></div>
+  </div>
+  <div class="key" id="pft-key"></div>
+  <div class="scroll"><table id="pft-table"></table></div>
+  <div class="prose" id="pft-text"></div>
+</section>
+
+<p class="muted" id="skill-note"></p>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio5.md, Part A; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Scrub through a quiet breath and watch the pleural, alveolar and transpulmonary pressures move; build a spirogram and see each capacity as a sum of volumes; join a small and a large alveolus and see why surfactant matters; work out alveolar ventilation; compare apex and base; and read obstructive and restrictive patterns off a flow–volume loop. Anatomy is on other pages: <a href="../../anatomy/thorax/lungs.html">Lungs and pleura</a>, <a href="../../anatomy/histology/respiratory-digestive.html#h-resp">airway and alveolar histology</a>, <a href="../../anatomy/embryology/heart-vessels.html#h-lung">lung development</a>.';
+const ANAT_TEXT = '<p>The airways form a <b>conducting zone</b> — nose, trachea, bronchi and bronchioles down to the <b>terminal bronchioles</b> (about generations 0–16) — that only carries air, and a <b>respiratory zone</b> — respiratory bronchioles, alveolar ducts and alveoli (about generations 17–23) — where gas exchange happens (Wikipedia; StatPearls; a 2015 review). The air in the conducting zone is the <b>anatomical dead space</b> (<a href="#h-dead">below</a>). There are about <b>300 million alveoli</b> (StatPearls; Wikipedia; another Wikipedia article gives 480 million). <b>Type I cells</b> are thin and squamous and cover most of the alveolar surface (Wikipedia); <b>type II cells</b> make <b>surfactant</b>, stored in lamellar bodies (Wikipedia; 2022 and 2025 reviews), and can replace damaged type I cells (Wikipedia).</p><p>In quiet breathing the <b>diaphragm</b> is the main inspiratory muscle (StatPearls; a 2022 review; Wikipedia) and <b>expiration is passive</b>, by elastic recoil (Wikipedia; 2021 and 2022 reviews). Forced expiration adds the <b>abdominal</b> and <b>internal intercostal</b> muscles (Wikipedia; a 2022 review). Muscles and nerves: <a href="../../anatomy/thorax/wall-muscles.html">Thoracic wall</a>.</p>';
+const NRF = [
+  ['Metabolic', 'The lung has metabolic, non-respiratory functions, including lipid metabolism and making surfactant (a 2016 review).'],
+  ['Angiotensin', 'Angiotensin-converting enzyme on the lung\'s vascular endothelium makes angiotensin II: see <a href="../cvs/haemodynamics-bp-regulation.html#h-local">the renin–angiotensin cascade</a>.'],
+  ['Defence', 'Mucociliary clearance — the "mucociliary escalator" — removes particles and pathogens from the airways (Wikipedia); cilia: <a href="../../anatomy/histology/respiratory-digestive.html#h-resp">histology</a>.'],
+  ['Acid–base', 'Removing CO₂ is, with the kidney, the main way the body regulates blood pH (StatPearls).'],
+];
+/* breathing cycle (mmHg): intrapleural about −4 at rest, falling about 2 in inspiration (Wikipedia). Timing 2 s in, 3 s out and the alveolar
+   swing are schematic (no source gives them). */
+const CYC = {ti: 2, tt: 5, vt: 0.5, palv: 0.5, ptp0: 4, ptp1: 6, u: 'mmHg', yPpl: [-7, -3], tPpl: [-6, -4], yPtp: [3, 7], tPtp: [4, 6]};
+const CYC_PHASE = [
+  [0, 0.05, '<h3>End of expiration (FRC)</h3><p>No air flows: alveolar pressure is atmospheric. The lung\'s recoil inward and the chest wall\'s pull outward hold the <b>intrapleural pressure</b> slightly below atmospheric, about <b>−4 mmHg</b> (Wikipedia). Transpulmonary pressure = alveolar − intrapleural = +4 mmHg keeps the lung open.</p>'],
+  [0.05, 1.95, '<h3>Inspiration</h3><p>The diaphragm contracts and the chest enlarges, so the <b>intrapleural pressure falls</b> (by about 2 mmHg in a quiet breath; Wikipedia). The lung expands, <b>alveolar pressure falls below atmospheric</b>, and air flows in down that gradient (Wikipedia). Transpulmonary pressure rises with volume — it equals the lung\'s elastic recoil at that volume (Wikipedia).</p>'],
+  [1.95, 2.05, '<h3>End of inspiration</h3><p>Flow stops for a moment: alveolar pressure is back to atmospheric, intrapleural pressure is at its most negative (about −6 mmHg in this model), and the lung holds about 0.5 L more.</p>'],
+  [2.05, 4.95, '<h3>Expiration (passive)</h3><p>The diaphragm relaxes; the lung\'s <b>elastic recoil</b> compresses the alveolar gas, so <b>alveolar pressure rises above atmospheric</b> and air flows out (Wikipedia). Intrapleural pressure returns towards −4 mmHg. It stays negative throughout quiet breathing (Wikipedia); a 2015 review says the negative pleural pressure is what distends the lungs in inspiration.</p>'],
+  [4.95, 5, '<h3>Back to the start</h3><p>The cycle repeats, about 12–20 times a minute in adults (Wikipedia).</p>'],
+];
+const CYC_TEXT = '<p><b>Transpulmonary pressure = alveolar − intrapleural pressure</b> (Wikipedia; 2015 and 2021 reviews); in health it is always positive (Wikipedia). If air enters the pleural space (<b>pneumothorax</b>) the negative pressure is lost and the lung collapses by its own recoil (Wikipedia).</p><p class="muted">Schematic. The −4 and −6 mmHg values are Wikipedia\'s; the timing (2 s in, 3 s out) and the size of the alveolar swing are the drawing\'s own — no source here gives them, so the alveolar trace has no scale. Intrapleural pressure also varies with height in the chest: about −8 cmH₂O at the apex and −1.5 cmH₂O at the base in quiet breathing (a 2015 review); see <a href="#h-vq">V/Q</a>. Pleura: <a href="../../anatomy/thorax/lungs.html#h-pl">anatomy</a>.</p>';
+/* volumes and capacities: [name, definition, formula, note] */
+const VOL = {
+  TV: ['Tidal volume', 'Volume breathed in and out with each normal breath (StatPearls; Wikipedia).', 'TV', 'About 500 mL (StatPearls; Wikipedia).'],
+  IRV: ['Inspiratory reserve volume', 'Extra volume that can be breathed in after a normal inspiration (StatPearls).', 'IRV', 'IRV = IC − TV.'],
+  ERV: ['Expiratory reserve volume', 'Extra volume that can be breathed out after a normal expiration (StatPearls).', 'ERV', 'Measured directly with a spirometer (Wikipedia).'],
+  RV: ['Residual volume', 'Volume left in the lungs after a maximal expiration (StatPearls).', 'RV', 'Cannot be measured by spirometry (StatPearls; Wikipedia): body plethysmography, helium dilution or nitrogen washout are used (Wikipedia).'],
+  IC: ['Inspiratory capacity', 'Volume that can be breathed in from the end of a normal expiration (StatPearls; the 2019 ATS/ERS standard).', 'IC = IRV + TV', 'From FRC to TLC.'],
+  FRC: ['Functional residual capacity', 'Volume left in the lungs after a normal expiration (StatPearls; a 2015 review).', 'FRC = ERV + RV', 'Contains the residual volume, which spirometry cannot measure (StatPearls; Wikipedia). Wikipedia\'s articles conflict on FRC: Lung volumes lists only TV, VC, IC and ERV as measured directly with a spirometer; Exhalation says TLC, FRC, RV and VC can all be tested by spirometry.'],
+  VC: ['Vital capacity', 'Maximum volume breathed out after a maximal inspiration (StatPearls).', 'VC = IRV + TV + ERV', 'About 4–5 L in an average 70 kg adult (a 2015 review).'],
+  TLC: ['Total lung capacity', 'Volume in the lungs after a maximal inspiration (StatPearls).', 'TLC = IRV + TV + ERV + RV', 'About 6 L in adult men (StatPearls; Wikipedia). Contains RV; for spirometry, Wikipedia\'s articles conflict (see FRC).'],
+};
+const VOL0 = {irv: 3.3, tv: 0.5, erv: 1.1, rv: 1.2};
+const VOL_TABLE = [
+  ['IRV', '3.3', '1.9', '—'], ['TV', '0.5', '0.5', '—'], ['ERV', '1.1', '0.7', '—'], ['RV', '1.2', '1.1', '—'],
+  ['VC', '4.8', '3.1', 'IRV + TV + ERV'], ['IC', '3.8', '2.4', 'IRV + TV'], ['FRC', '2.4', '1.8', 'ERV + RV'], ['TLC', '6.0', '4.2', 'IRV + TV + ERV + RV']];
+const VOL_TEXT = '<p class="muted">Average adult values from Wikipedia\'s table (one source; by its rounding the table\'s VC and TLC are 0.1 L less, and its FRC 0.1 L more, than the sums of its own volumes (IC matches)). A 2015 review gives FRC 2.8–3.1 L standing and VC 4–5 L. Volumes vary with age, sex, height and ethnicity (StatPearls; Wikipedia). The sliders start at the table\'s values for men; the readouts are the sums of the sliders.</p>';
+const COMP_TEXT = '<p><b>Compliance = ΔV ÷ ΔP</b>, the change in lung volume per change in distending pressure (StatPearls; Wikipedia; a 2021 review). One review gives about <b>0.2–0.3 L/cmH₂O</b> (2015). It depends on the lung\'s <b>elastin</b> and on <b>surface tension</b> (StatPearls), is highest at middle volumes and lowest at the extremes (Wikipedia; a 2015 review), and is <b>low in fibrosis</b> (a stiff lung; Wikipedia; a 2022 review) and <b>high in emphysema</b> (Wikipedia).</p><p><b>Surfactant</b> — a phospholipid–protein complex, mainly dipalmitoylphosphatidylcholine (DPPC), from <b>type II cells</b> (Wikipedia; a 2025 review) — <b>lowers alveolar surface tension</b> (StatPearls; Wikipedia; 2016 and 2019 reviews). That <b>raises compliance and lowers the work of breathing</b> (Wikipedia), keeps alveoli from collapsing (<b>atelectasis</b>; StatPearls; a 2019 review) and stops surface tension drawing fluid into the alveoli (Wikipedia; a 2016 review). Full production comes late in pregnancy, about 34–36 weeks (a 2016 review; adequate after 35 weeks, a 2019 review), so <b>premature babies lack it</b>: neonatal respiratory distress syndrome (StatPearls; Wikipedia). Lung development: <a href="../../anatomy/embryology/heart-vessels.html#h-lung">embryology</a>.</p>';
+const LAP = {t0: 50, tsurf: 25};
+const LAP_TEXT = {
+  col: '<b>Without surfactant</b> the small alveolus has the higher pressure, so it would empty into the large one and collapse.',
+  rev: '<b>Without surfactant</b> the smaller alveolus has the higher pressure, so it would empty into the larger one and collapse.',
+  eq: '<b>Pressures equal</b>: no air moves between them — the two alveoli are stable together.',
+  note: 'For a sphere, P = 2T/r (the Young–Laplace equation; Wikipedia): at the same surface tension, the smaller the radius, the higher the pressure needed to keep it open (Wikipedia; a 2002 review gives the airway form P = T/r; a 2022 review). Surfactant lowers tension more in smaller alveoli because it is more concentrated there (Wikipedia), which is how the "with surfactant" setting is drawn: tension proportional to radius (schematic). Tensions are illustrative units; Wikipedia gives 70 mN/m for water and about 25 in the lung, near zero at the end of expiration.',
+};
+const RES_TEXT = '<p><b>Airway resistance</b> = driving pressure ÷ airflow; it comes from friction in the airways (StatPearls; Wikipedia; a 2021 review) and depends on airway <b>diameter</b> and whether flow is laminar or turbulent (Wikipedia). By Poiseuille\'s law resistance rises steeply as the radius falls (<a href="../cvs/haemodynamics-bp-regulation.html#h-flow">calculator</a>). Each small airway resists more than a large one, but there are so many in parallel that total resistance is <b>greatest in the medium-sized bronchi</b>, about the 4th–8th divisions (Wikipedia). Flow is <b>turbulent in the trachea</b> and more laminar further down (StatPearls).</p>';
+const DEAD0 = {vt: 500, rr: 12, vd: 150};
+const DEAD_PRESET = {
+  norm: ['Quiet breathing (500 mL × 12)', {vt: 500, rr: 12, vd: 150}],
+  shallow: ['Rapid shallow (250 mL × 24)', {vt: 250, rr: 24, vd: 150}],
+  deep: ['Slow deep (1000 mL × 6)', {vt: 1000, rr: 6, vd: 150}],
+  vd: ['Larger dead space (VD 300)', {vt: 500, rr: 12, vd: 300}],
+};
+const DEAD_TEXT = '<p><b>Dead space</b> is ventilated air that takes no part in gas exchange (StatPearls). <b>Anatomical</b> dead space is the air in the conducting airways, <b>about 150 mL</b> in adults (StatPearls; Wikipedia; a 2015 review). <b>Alveolar</b> dead space — alveoli that are ventilated but not perfused — is negligible in health (StatPearls; Wikipedia); in lung disease dead space grows with V/Q mismatch (StatPearls: physiological dead space; Wikipedia: alveolar dead space). <b>Physiological dead space = anatomical + alveolar</b> (StatPearls; Wikipedia).</p><p><b>Minute ventilation = VT × rate</b> (0.5 L × 12 = 6 L/min; Wikipedia). <b>Alveolar ventilation = (VT − VD) × rate</b>: of each 500 mL breath, only 350 mL reaches the alveoli (Wikipedia; Bohr\'s split of each breath into alveolar ventilation and dead space, a 2026 review). A 2015 review gives normal alveolar ventilation as about 5 L/min. The presets show that the same minute ventilation gives less alveolar ventilation when breaths are shallow (arithmetic of the formula).</p><p class="muted"><b>Bohr equation</b>: VD/VT = (PaCO₂ − PECO₂) ÷ PaCO₂, using arterial PCO₂ as Enghoff proposed in 1938 (Wikipedia; 2023 and 2026 reviews); PECO₂ is mixed expired PCO₂.</p>';
+/* V/Q regions (upright lung): [name, ventilation bar 0–1, perfusion bar 0–1 (schematic lengths; only the order is sourced), text, label] */
+const VQ = {
+  apex: ['Apex', 0.5, 0.2, '<h3>Apex: V/Q high</h3><p>Both ventilation and blood flow per unit of lung are <b>lowest at the apex</b>; blood flow falls more, so <b>V/Q is highest</b> (Wikipedia; 2015 and 2017 reviews). Alveolar PO₂ is higher and PCO₂ lower here (a 2017 review; Wikipedia). Where alveolar pressure exceeds arterial (<b>zone 1</b>: PA &gt; Pa &gt; Pv) there is no flow at all — alveolar dead space; it is not present in healthy lungs but can appear with haemorrhage or positive-pressure ventilation (Wikipedia; a 2015 review).</p>', 'V/Q highest'],
+  mid: ['Middle', 0.7, 0.62, '<h3>Middle: zone 2</h3><p><b>Pa &gt; PA &gt; Pv</b>: flow depends on the arterial–alveolar difference (Wikipedia; a 2015 review). Ventilation and flow both rise towards the base.</p>', 'zone 2'],
+  base: ['Base', 0.85, 1, '<h3>Base: V/Q low</h3><p>Blood flow rises most towards the base, so <b>V/Q is lowest</b> (Wikipedia; 2015 and 2017 reviews); ventilation is also greatest at the base: at rest the basal alveoli have a smaller distending pressure (pleural pressure about −1.5 cmH₂O against −8 at the apex), which a 2015 review gives as the reason for the preferential ventilation of the base. <b>Zone 3</b>: Pa &gt; Pv &gt; PA, flow driven by the arterial–venous difference; most of the healthy lung (Wikipedia).</p>', 'V/Q lowest'],
+};
+const VQ_TEXT = '<p><b>Ventilation (V̇)</b> is the flow of air into and out of the alveoli; <b>perfusion (Q̇)</b> the flow of blood to the alveolar capillaries (StatPearls). The apex-to-base gradient is caused by <b>gravity</b> and the pleural-pressure gradient (Wikipedia; a 2017 review). For the whole lung V/Q is about <b>0.8</b> (Wikipedia) or "approximately one" (a 2015 review: alveolar ventilation about 5 L/min against a cardiac output of 5 L/min). Two extremes (Wikipedia; a 2017 review): perfusion without ventilation, <b>V/Q = 0 — shunt</b>; ventilation without perfusion, <b>V/Q → ∞ — dead space</b>. Hypoxic vasoconstriction steers blood away from poorly ventilated alveoli: <a href="../cvs/haemodynamics-bp-regulation.html#h-reg">pulmonary circulation</a>.</p><p class="muted">Bar lengths are schematic: no source here gives numbers for apex and base V/Q, so none are shown.</p>';
+const DIFF_TEXT = '<p><b>Fick\'s law</b> (StatPearls): gas transferred per unit time V̇ = k × A × ΔP ÷ T — proportional to the membrane\'s <b>area</b> and the <b>partial-pressure difference</b>, inversely proportional to its <b>thickness</b>. The respiratory membrane is alveolar epithelium, interstitium and capillary endothelium (StatPearls). A higher diffusing capacity means more gas moves for a given gradient (Wikipedia).</p><p><b>DLCO</b> (transfer factor) uses carbon monoxide because it binds haemoglobin so strongly that its uptake is limited by the membrane, not by blood flow (StatPearls; Wikipedia). Hypoxaemia also has other causes — hypoventilation, V/Q mismatch, shunt, low inspired PO₂ (a 2017 review): see <a href="applied-environment.html#h-hyp">hypoxia</a>.</p>';
+const DIFF_TABLE = [
+  ['Low', 'Loss of surface area: <b>emphysema</b>; thickened barrier: <b>fibrosis</b>, alveolitis (Wikipedia; StatPearls uses DLCO in emphysema and interstitial lung disease); pulmonary embolism (Wikipedia); anaemia (StatPearls).'],
+  ['High', 'Blood in the alveoli: <b>alveolar haemorrhage</b> (StatPearls; Wikipedia); also polycythaemia, asthma (which can also give a normal DLCO), exercise, mild left heart failure and left-to-right intracardiac shunting (Wikipedia).'],
+];
+/* forced expiration presets: values chosen so each preset falls inside the page's own categories (PFT_CUT):
+   normal FEV1/FVC 0.83, FVC 100% · obstructive 0.40, FVC 84% · restrictive 0.89, FVC 60% (computed by the model below) */
+const PFT_PRESET = {
+  norm: ['Normal', {fvc: 5.0, pef: 9.0, k: 1.0, pif: 6.0}],
+  obs: ['Obstructive (e.g. COPD, asthma)', {fvc: 4.2, pef: 3.5, k: 2.4, pif: 5.0}],
+  res: ['Restrictive (e.g. fibrosis)', {fvc: 3.0, pef: 6.5, k: 1.0, pif: 4.5}],
+};
+const PFT_PRED = 5.0;
+const PFT_CUT = {ratio: 0.70, fvc: 80};
+const PFT_CLS = {
+  obs: 'FEV1/FVC below 0.70: obstructive pattern',
+  res: 'Ratio 0.70 or more but FVC below 80% of predicted: possible restriction — confirm with TLC',
+  norm: 'Ratio 0.70 or more and FVC 80% or more of predicted: normal spirometry',
+};
+const PFT_TABLE = [
+  ['FEV1', 'Reduced: airway resistance to expiratory flow rises (Wikipedia)', 'Reduced, in proportion with FVC (Wikipedia)'],
+  ['FVC', 'Normal or reduced (early airway closure; Wikipedia)', 'Reduced (Wikipedia)'],
+  ['FEV1/FVC', '<b>&lt; 0.70</b> (StatPearls, after GOLD; Wikipedia; post-bronchodilator)', '<b>Normal or raised</b> (Wikipedia; a 2024 review)'],
+  ['TLC, RV', 'RV and TLC often raised in COPD (Wikipedia)', '<b>TLC reduced</b> — needed to call it restriction (a 2024 review; StatPearls; Wikipedia: ≤ 80% of predicted in one definition)'],
+  ['Examples', 'Asthma, COPD, bronchiectasis, bronchitis (Wikipedia)', 'Interstitial lung disease and fibrosis; chest-wall deformity, neuromuscular disease, obesity (Wikipedia; a 2024 review)'],
+];
+const PFT_TEXT = '<p><b>Spirometry</b> measures the volume breathed out by force after a maximal inspiration: <b>FVC</b> (all of it), <b>FEV1</b> (the first second) and their ratio (StatPearls; Wikipedia). In obstruction FEV1 falls more than FVC, so the ratio falls (Wikipedia); in restriction both fall together and the ratio is normal or even raised (Wikipedia; a 2024 review), which Wikipedia links to the lower compliance of the fibrotic lung. A restrictive pattern is defined by a <b>low TLC</b>, not by FVC alone (a 2024 review; StatPearls; Wikipedia) — a low FVC with a preserved ratio can also be obstruction or a "non-specific" pattern (PRISm; a 2024 review).</p><p><b>Flow–volume loop</b>: flow on the y-axis (expiration up), volume on the x-axis (Wikipedia; the 2019 ATS/ERS standard, which requires both the flow–volume and the volume–time display). Peak expiratory flow comes early and depends on effort (2019 ATS/ERS standard); it is reduced in obstruction (Wikipedia). The 2019 ATS/ERS standard notes that measures of the <b>concavity of the expiratory limb</b> agree with expert judgement and are useful in asthma and cystic fibrosis in children; the flow–volume curve is mainly diagnostic of obstruction (a 2024 review).</p><p class="cap warn"><b>A disagreement on the cut-off.</b> GOLD uses a fixed post-bronchodilator FEV1/FVC &lt; 0.70 (StatPearls; Wikipedia). StatPearls adds that the lower limit of normal avoids overdiagnosis in older people; a 2024 review notes 0.70 was never explicitly recommended in spirometry guidelines, yet finds the fixed ratio more robust. This page uses 0.70.</p><p class="muted">The loop is a schematic model: expiratory flow rises to PEF by 12% of the FVC, then falls along a limb whose concavity the slider sets; FEV1 is read off the volume–time curve integrated from it. Predicted FVC is fixed at 5.0 L (illustrative), and the 80%-of-predicted line for FVC is a simplification (a 2024 review quotes 80% predicted as an operational cut-off for FEV1); the restrictive loop\'s shape is the model\'s, not a pattern from a source.</p>';
+const SKILL = 'PY6.10–6.13 (performing spirometry, artificial respiration, the clinical examination of the respiratory system, peak-flow measurement) are practical skills and are not covered here.';
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews on respiratory anatomy and physiology for anaesthesia, mechanisms of hypoxaemia, respiratory mechanics, respiratory muscles, developmental and paediatric respiratory physiology, surfactant (lamellar bodies, synthetic surfactant, airway surfactant), metabolic functions of the lung, dead space, ventilation–perfusion mismatch, pulmonary function test interpretation (2024) and the ATS/ERS spirometry standard (2019) (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> the breathing cycle, spirogram, Laplace pair, V/Q bars and flow–volume loop are schematic (the breathing-cycle pressures use Wikipedia\'s −4 and −6 mmHg; the flow–volume model is the page\'s own); the alveolar-ventilation calculator applies (VT − VD) × rate. Slider values are illustrative, not patient data.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+/* a preset chip stays highlighted only while its values are unchanged: a manual change clears it */
+let APPLYING = false;
+const clearPre = id => { if (!APPLYING) $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); };
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS; $('skill-note').innerHTML = SKILL;
+$('anat-text').innerHTML = ANAT_TEXT;
+Phys.table('nrf-table', ['Function', 'What the lung does'], NRF);
+
+/* ---- breathing cycle: schematic model. V(t) rises over inspiration (0–CYC.ti s) and falls over expiration; alveolar pressure is
+   the resistive part (−k·dV/dt: below atmospheric while air flows in, above while it flows out); transpulmonary = elastic recoil
+   = CYC.ptp0 + V/C; intrapleural = alveolar − transpulmonary. Units and end values from CYC (sourced), the shape is schematic. ---- */
+const cycV = t => t <= CYC.ti ? CYC.vt * (1 - Math.cos(Math.PI * t / CYC.ti)) / 2 : CYC.vt * (1 + Math.cos(Math.PI * (t - CYC.ti) / (CYC.tt - CYC.ti))) / 2;
+const cycF = t => t <= CYC.ti ? CYC.vt * Math.PI / (2 * CYC.ti) * Math.sin(Math.PI * t / CYC.ti) : -CYC.vt * Math.PI / (2 * (CYC.tt - CYC.ti)) * Math.sin(Math.PI * (t - CYC.ti) / (CYC.tt - CYC.ti));
+const fmax = CYC.vt * Math.PI / (2 * CYC.ti);
+const cycPalv = t => -CYC.palv * cycF(t) / fmax;
+const cycPtp = t => CYC.ptp0 + (CYC.ptp1 - CYC.ptp0) * cycV(t) / CYC.vt;
+const cycPpl = t => cycPalv(t) - cycPtp(t);
+const CS = {t: 1};
+function drawCyc() {
+  const t = CS.t, x0 = 70, x1 = 540, X = Phys.scale(0, CYC.tt, x0, x1);
+  const rows = [
+    ['Lung volume change (L)', cycV, 0, CYC.vt * 1.15, [0, CYC.vt], v => v.toFixed(2)],
+    ['Alveolar pressure (relative to atmospheric; no scale)', cycPalv, -CYC.palv * 1.6, CYC.palv * 1.6, [0], v => 'atm'],
+    ['Intrapleural pressure (' + CYC.u + ')', cycPpl, CYC.yPpl[0], CYC.yPpl[1], CYC.tPpl, v => v.toFixed(1)],
+    ['Transpulmonary pressure (' + CYC.u + ')', cycPtp, CYC.yPtp[0], CYC.yPtp[1], CYC.tPtp, v => v.toFixed(1)]];
+  let s = `<rect x="${X(0)}" y="18" width="${X(CYC.ti) - X(0)}" height="${rows.length * 108 + 2}" style="fill:var(--ink);fill-opacity:.04"/>` + T((X(0) + X(CYC.ti)) / 2, 14, 'inspiration', 's', 'middle') + T((X(CYC.ti) + X(CYC.tt)) / 2, 14, 'expiration', 's', 'middle');
+  rows.forEach(([lab, f, lo, hi, ticks, fmt], i) => {
+    const top = 30 + i * 108, Y = Phys.scale(lo, hi, top + 90, top + 18);
+    s += T(x0 + 4, top + 6, lab, 'h l', 'start') + `<path class="axis" d="M${x0} ${top + 12} L${x0} ${top + 94}"/>`;
+    for (const v of ticks) s += `<path class="grid" d="M${x0} ${Y(v).toFixed(1)} L${x1} ${Y(v).toFixed(1)}"/>` + T(x0 - 6, Y(v) + 4, fmt(v), 's', 'end');
+    const pts = []; for (let u = 0; u <= CYC.tt + 1e-9; u += CYC.tt / 200) pts.push([X(u), Y(f(u))]);
+    s += `<path class="trace" d="${Phys.path(pts)}"/><circle cx="${X(t).toFixed(1)}" cy="${Y(f(t)).toFixed(1)}" r="4.5" style="fill:var(--mark)"/>`;
+  });
+  s += `<path class="cur" d="M${X(t).toFixed(1)} 18 L${X(t).toFixed(1)} ${30 + rows.length * 108 - 12}"/>`;
+  for (let k = 0; k <= CYC.tt; k++) s += T(X(k), 30 + rows.length * 108 + 6, k + ' s', 's', 'middle');
+  $('cyc-svg').innerHTML = s;
+  const f = cycF(t), ph = CYC_PHASE.find(r => t >= r[0] && t <= r[1]) || CYC_PHASE[0];
+  $('cyc-out').innerHTML = `<span><span class="tag">volume</span> <span class="readout">+${cycV(t).toFixed(2)} L</span></span><span><span class="tag">alveolar</span> <span class="readout">${Math.abs(f) < 0.02 ? 'atmospheric' : f > 0 ? 'below atmospheric' : 'above atmospheric'}</span></span><span><span class="tag">intrapleural</span> <span class="readout">${Phys.mn(cycPpl(t).toFixed(1))} ${CYC.u}</span></span><span><span class="tag">transpulmonary</span> <span class="readout">${Phys.mn(cycPtp(t).toFixed(1))} ${CYC.u}</span></span><span><span class="tag">air</span> <span class="readout">${Math.abs(f) < 0.02 ? 'no flow' : f > 0 ? 'flowing in' : 'flowing out'}</span></span>`;
+  $('cyc-find').innerHTML = ph[2];
+}
+Phys.slider('cyc-sl', {id: 'cyt', label: 'Time in the breath', min: 0, max: CYC.tt, step: 0.05, value: CS.t, fmt: v => v.toFixed(2) + ' s'}, v => { CS.t = v; drawCyc(); }).init();
+$('cyc-text').innerHTML = CYC_TEXT; drawCyc();
+
+/* ---- spirogram builder ---- */
+const VS = Object.assign({}, VOL0, {sel: 'TV'});
+const CAP = {TV: ['tv'], IRV: ['irv'], ERV: ['erv'], RV: ['rv'], IC: ['irv', 'tv'], FRC: ['erv', 'rv'], VC: ['irv', 'tv', 'erv'], TLC: ['irv', 'tv', 'erv', 'rv']};
+function drawVol() {
+  const {irv, tv, erv, rv} = VS, tlc = irv + tv + erv + rv;
+  const ymax = Math.max(7, Math.ceil(tlc)), x0 = 60, x1 = 400, Y = Phys.scale(0, ymax, 300, 26);
+  // band edges (litres from zero): RV | ERV | TV | IRV
+  const e = {rv: [0, rv], erv: [rv, rv + erv], tv: [rv + erv, rv + erv + tv], irv: [rv + erv + tv, tlc]};
+  const on = new Set(CAP[VS.sel]);
+  let s = '';
+  for (const k of ['rv', 'erv', 'tv', 'irv']) s += `<rect x="${x0}" y="${Y(e[k][1]).toFixed(1)}" width="${x1 - x0}" height="${(Y(e[k][0]) - Y(e[k][1])).toFixed(1)}" class="${on.has(k) ? 'bandon' : 'band'}"/>`;
+  for (let v = 0; v <= ymax; v++) s += T(x0 - 6, Y(v) + 4, v, 's', 'end');
+  s += `<path class="axis" d="M${x0} 26 L${x0} 300 L${x1} 300"/>` + T(x0 - 40, 12, 'litres in the lungs', 's', 'start') + T(x1, 318, 'time → (schematic)', 's', 'end');
+  // trace: tidal breaths, max inspiration, max expiration, tidal again
+  const base = rv + erv, pts = [];
+  const seg = (u0, u1, f) => { for (let u = u0; u <= u1 + 1e-9; u += 0.01) pts.push([u, f(u)]); };
+  seg(0, 3, u => base + tv * (1 - Math.cos(2 * Math.PI * u)) / 2);
+  seg(3, 3.6, u => base + (tv + irv) * (1 - Math.cos(Math.PI * (u - 3) / 0.6)) / 2);
+  seg(3.6, 4.6, u => tlc - (irv + tv + erv) * (1 - Math.cos(Math.PI * (u - 3.6) / 1)) / 2);
+  seg(4.6, 5.2, u => rv + erv * (1 - Math.cos(Math.PI * (u - 4.6) / 0.6)) / 2);
+  seg(5.2, 7, u => base + tv * (1 - Math.cos(2 * Math.PI * (u - 5.2))) / 2);
+  const X = Phys.scale(0, 7, x0, x1);
+  s += `<path class="trace" d="${Phys.path(pts.map(p => [X(p[0]), Y(p[1])]))}"/>`;
+  // labels of the four volumes at the right edge
+  for (const [k, n] of [['irv', 'IRV'], ['tv', 'TV'], ['erv', 'ERV'], ['rv', 'RV']]) s += T(x1 + 8, (Y(e[k][0]) + Y(e[k][1])) / 2 + 4, `${n} ${(e[k][1] - e[k][0]).toFixed(1)}`, on.has(k) ? 'm' : 's', 'start');
+  // bracket for the selected item
+  const lo = Math.min(...CAP[VS.sel].map(k => e[k][0])), hi = Math.max(...CAP[VS.sel].map(k => e[k][1])), bx = 485;
+  s += `<path d="M${bx} ${Y(hi)} L${bx + 8} ${Y(hi)} L${bx + 8} ${Y(lo)} L${bx} ${Y(lo)}" style="stroke:var(--accent);stroke-width:2;fill:none"/>` + T(bx + 14, (Y(lo) + Y(hi)) / 2 + 4, VS.sel, 'b', 'start') + T(bx + 14, (Y(lo) + Y(hi)) / 2 + 19, (hi - lo).toFixed(1) + ' L', 'm', 'start');
+  if (VS.sel === 'RV' || VS.sel === 'FRC' || VS.sel === 'TLC') s += T(x0 + 6, Y(rv / 2) + 4, VS.sel === 'RV' ? 'RV: not measured by spirometry' : 'contains RV', 's', 'start');
+  $('vol-svg').innerHTML = s;
+  const r = VOL[VS.sel];
+  $('vol-find').innerHTML = `<h3>${r[0]} (${VS.sel})</h3><p>${r[1]}</p><p class="readout">${r[2]} = ${(hi - lo).toFixed(1)} L</p><p class="muted">${r[3]}</p>`;
+}
+Phys.toggles('vol-tg', Object.keys(VOL).map(k => [k, k]), k => { VS.sel = k; drawVol(); }, 'TV');
+for (const [k, lab, mn, mx] of [['irv', 'Inspiratory reserve volume (IRV)', 1, 4], ['tv', 'Tidal volume (TV)', 0.3, 1], ['erv', 'Expiratory reserve volume (ERV)', 0.4, 2], ['rv', 'Residual volume (RV)', 0.6, 2.5]]) Phys.slider('vol-sl', {id: 'v' + k, label: lab, min: mn, max: mx, step: 0.1, value: VOL0[k], fmt: v => v.toFixed(1) + ' L'}, v => { VS[k] = v; drawVol(); }).init();
+Phys.table('vol-table', ['', 'Men (L)', 'Women (L)', 'Made of'], VOL_TABLE);
+$('vol-text').innerHTML = VOL_TEXT; drawVol();
+
+/* ---- Laplace: P = 2T/r for a small and a large alveolus ---- */
+const LS = {sf: 'no', r1: 50, r2: 100};
+function drawLap() {
+  const t0 = LAP.t0, T1 = LS.sf === 'no' ? t0 : LAP.tsurf * LS.r1 / 100, T2 = LS.sf === 'no' ? t0 : LAP.tsurf * LS.r2 / 100; // with surfactant: tension falls as the surface shrinks (schematic: proportional to radius)
+  const p1 = 2 * T1 / LS.r1, p2 = 2 * T2 / LS.r2, d = p1 - p2;
+  const sc = 0.55, c1 = [90, 110], c2 = [280, 110];
+  let s = Phys.arrowDef('al', 'var(--ink)');
+  s += `<path d="M${c1[0] + LS.r1 * sc} 110 L${c2[0] - LS.r2 * sc} 110" style="stroke:var(--airway);stroke-width:12"/>`;
+  for (const [c, r] of [[c1, LS.r1], [c2, LS.r2]]) s += `<circle cx="${c[0]}" cy="${c[1]}" r="${(r * sc + 4).toFixed(1)}" class="lin"/><circle cx="${c[0]}" cy="${c[1]}" r="${(r * sc).toFixed(1)}" class="alv"/>`;
+  s += T(c1[0], 112, 'P ' + p1.toFixed(2), 'm', 'middle') + T(c2[0], 112, 'P ' + p2.toFixed(2), 'm', 'middle');
+  s += T(c1[0], 200, `r ${LS.r1} µm, T ${T1.toFixed(0)}`, 's', 'middle') + T(c2[0], 200, `r ${LS.r2} µm, T ${T2.toFixed(0)}`, 's', 'middle');
+  const mid = (c1[0] + LS.r1 * sc + c2[0] - LS.r2 * sc) / 2;
+  if (Math.abs(d) > 0.005) s += `<path d="M${mid - 18 * Math.sign(d)} 88 L${mid + 18 * Math.sign(d)} 88" style="stroke:var(--ink);stroke-width:1.8" marker-end="url(#al)"/>` + T(mid, 78, 'air', 's', 'middle');
+  else s += T(mid, 84, 'no net flow', 's', 'middle');
+  $('lap-svg').innerHTML = s;
+  $('lap-out').innerHTML = `<p><span class="tag">Laplace <span class="u">P = 2T ÷ r</span></span></p><p class="readout">small: 2 × ${T1.toFixed(0)} ÷ ${LS.r1} = ${p1.toFixed(2)}<br>large: 2 × ${T2.toFixed(0)} ÷ ${LS.r2} = ${p2.toFixed(2)}</p><p>${Math.abs(d) < 0.005 ? LAP_TEXT.eq : d > 0 ? LAP_TEXT.col : LAP_TEXT.rev}</p><p class="muted">${LAP_TEXT.note}</p>`;
+}
+Phys.toggles('lap-tg', [['no', 'No surfactant'], ['yes', 'With surfactant']], k => { LS.sf = k; drawLap(); }, 'no');
+for (const k of ['r1', 'r2']) Phys.slider('lap-sl', {id: 'l' + k, label: k === 'r1' ? 'Radius of the left alveolus' : 'Radius of the right alveolus', min: 30, max: 140, step: 5, value: LS[k], fmt: v => v + ' µm (illustrative)'}, v => { LS[k] = v; drawLap(); }).init();
+$('comp-text').innerHTML = COMP_TEXT; $('res-text').innerHTML = RES_TEXT; drawLap();
+
+/* ---- dead space and alveolar ventilation ---- */
+const DS = Object.assign({}, DEAD0), DSL = {};
+function drawDead() {
+  const ve = DS.vt * DS.rr / 1000, va = Math.max(0, DS.vt - DS.vd) * DS.rr / 1000;
+  $('dead-out').innerHTML = `<span><span class="tag">Minute ventilation VT × RR</span> <span class="big">${ve.toFixed(2)}</span> <span class="readout">L/min</span></span><span><span class="tag">Alveolar ventilation (VT − VD) × RR</span> <span class="big">${va.toFixed(2)}</span> <span class="readout">L/min</span></span><span><span class="tag">VD/VT</span> <span class="readout">${(DS.vd / DS.vt).toFixed(2)}</span></span>` + (DS.vd >= DS.vt ? '<span class="readout">dead space ≥ tidal volume: no fresh air reaches the alveoli</span>' : '');
+}
+for (const [k, lab, mn, mx, st, u] of [['vt', 'Tidal volume VT', 100, 1000, 10, ' mL'], ['rr', 'Respiratory rate RR', 4, 40, 1, ' /min'], ['vd', 'Dead space VD', 50, 400, 10, ' mL']]) { DSL[k] = Phys.slider('dead-sl', {id: 'd' + k, label: lab, min: mn, max: mx, step: st, value: DEAD0[k], fmt: v => v + u}, v => { DS[k] = v; clearPre('dead-tg'); drawDead(); }); DSL[k].init(); }
+Phys.toggles('dead-tg', Object.entries(DEAD_PRESET).map(([k, v]) => [k, v[0]]), k => { const p = Object.assign({}, DEAD0, DEAD_PRESET[k][1]); APPLYING = true; for (const kk in DSL) DSL[kk].set(p[kk]); APPLYING = false; }, Object.keys(DEAD_PRESET)[0]);
+$('dead-text').innerHTML = DEAD_TEXT; drawDead();
+
+/* ---- V/Q apex to base (schematic) ---- */
+const VQS = {k: 'apex'};
+function drawVq() {
+  let s = '';
+  // upright lung outline (schematic)
+  s += `<path d="M110 30 C70 40 40 120 36 200 C34 250 50 280 90 282 L180 282 C186 282 190 276 190 268 L190 60 C190 40 150 25 110 30 Z" style="fill:var(--bg);stroke:var(--ink);stroke-width:1.3"/>`;
+  const ys = {apex: 70, mid: 160, base: 250};
+  for (const [k, r] of Object.entries(VQ)) {
+    const y = ys[k], on = k === VQS.k, bw = 70;
+    s += `<path d="M28 ${y} L198 ${y}" class="grid dash"/>` + T(206, y + 4, r[0], on ? 'b' : 's', 'start');
+    s += `<rect x="250" y="${y - 16}" width="${(bw * r[1]).toFixed(1)}" height="12" style="fill:var(--ink);fill-opacity:.7"/>` + `<rect x="250" y="${y + 2}" width="${(bw * r[2]).toFixed(1)}" height="12" style="fill:var(--vein)"/>`;
+    s += T(250, y + 30, r[4], 's', 'start');
+    if (on) s += `<rect x="24" y="${y - 24}" width="${348}" height="62" rx="6" style="fill:none;stroke:var(--accent);stroke-width:2"/>`;
+  }
+  s += T(250, 18, 'per unit of lung', 's', 'start') + T(250, 32, '(schematic)', 's', 'start') + T(110, 296, 'upright lung', 's', 'middle');
+  $('vq-svg').innerHTML = s; $('vq-find').innerHTML = VQ[VQS.k][3];
+}
+Phys.toggles('vq-tg', Object.entries(VQ).map(([k, v]) => [k, v[0]]), k => { VQS.k = k; drawVq(); }, 'apex');
+Phys.key('vq-key', [['--ink', 'ventilation (V̇), upper bar'], ['--vein', 'blood flow (Q̇), lower bar: pulmonary arterial blood is deoxygenated']]);
+$('vq-text').innerHTML = VQ_TEXT; drawVq();
+
+/* ---- diffusion ---- */
+$('diff-text').innerHTML = DIFF_TEXT;
+Phys.table('diff-table', ['DLCO', 'Conditions (examples)'], DIFF_TABLE);
+
+/* ---- forced expiration model (schematic): expiratory flow over the fraction x of FVC exhaled rises to PEF by x = 0.12, then falls as
+   ((1 − x) / 0.88)^k (k = 1 straight, larger k = concave, "scooped"); time comes from integrating dV / flow, so FEV1 and the
+   ratio follow from the drawn curve. Inspiratory limb: a half-ellipse below the axis. ---- */
+const PF = {}, PFS = {};
+const flowAt = (x, p) => x < 0.12 ? p.pef * Math.max(0.04, Math.sin(Math.PI / 2 * x / 0.12)) : p.pef * Math.pow(Math.max(1e-4, (1 - x) / 0.88), p.k);
+function fev(p) { // returns {fev1, curve: [[t, V]]}
+  const n = 2000, dx = 1 / n; let t = 0, fev1 = null; const curve = [[0, 0]];
+  for (let i = 0; i < n; i++) { const x = (i + 0.5) * dx, f = flowAt(x, p); t += dx * p.fvc / f; if (fev1 === null && t >= 1) fev1 = x * p.fvc; if (i % 20 === 0) curve.push([t, (i + 1) * dx * p.fvc]); if (t > 12) break; }
+  return {fev1: fev1 === null ? p.fvc : fev1, curve};
+}
+function classify(ratio, fvcPct) { return ratio < PFT_CUT.ratio ? 'obs' : fvcPct < PFT_CUT.fvc ? 'res' : 'norm'; }
+function drawPft() {
+  const p = {fvc: PF.fvc, pef: PF.pef, k: PF.k}, r = fev(p), ratio = r.fev1 / p.fvc, pct = 100 * p.fvc / PFT_PRED, cls = classify(ratio, pct);
+  const n0 = PFT_PRESET.norm[1], rn = fev(n0);
+  $('pft-out').innerHTML = `<span><span class="tag">FEV1</span> <span class="big">${r.fev1.toFixed(2)}</span> L</span><span><span class="tag">FVC</span> <span class="big">${p.fvc.toFixed(2)}</span> L <span class="muted">(${pct.toFixed(0)}% of ${PFT_PRED.toFixed(1)} L)</span></span><span><span class="tag">FEV1/FVC</span> <span class="big">${ratio.toFixed(2)}</span></span><span class="readout">${PFT_CLS[cls]}</span>`;
+  // flow–volume loop: x axis volume exhaled from TLC (left) towards RV (right)
+  { const x0 = 50, x1 = 380, X = Phys.scale(0, 6, x0, x1), Y = Phys.scale(-8, 12, 270, 20);
+    let s = `<path class="axis" d="M${x0} 20 L${x0} 270"/><path class="axis" d="M${x0} ${Y(0)} L${x1} ${Y(0)}"/>`;
+    for (const v of [-8, -4, 0, 4, 8, 12]) s += T(x0 - 6, Y(v) + 4, v, 's', 'end');
+    for (const v of [0, 2, 4, 6]) s += T(X(v), Y(0) + 14, v, 's', 'middle');
+    s += T(x0 + 4, 14, 'flow (L/s): expiration up', 's', 'start') + T(x1, 292, 'volume exhaled (L) →', 's', 'end');
+    const loop = q => { const ex = [], ins = []; for (let i = 0; i <= 200; i++) { const x = i / 200; ex.push([X(x * q.fvc), Y(flowAt(x, q))]); ins.push([X((1 - x) * q.fvc), Y(-q.pif * Math.sin(Math.PI * (1 - x)))]); } return Phys.path(ex) + ' ' + Phys.path(ins).replace('M', 'L'); };
+    s += `<path class="ghost" d="${loop(n0)}"/><path class="trace" d="${loop(Object.assign({pif: PF.pif}, p))}"/>`;
+    s += T(X(0.12 * p.fvc) + 6, Y(p.pef) - 6, 'PEF', 's', 'start');
+    $('fv-svg').innerHTML = s; }
+  // volume–time
+  { const x0 = 50, x1 = 380, X = Phys.scale(0, 6, x0, x1), Y = Phys.scale(0, 6, 270, 20);
+    let s = `<path class="axis" d="M${x0} 20 L${x0} 270 L${x1} 270"/>`;
+    for (const v of [0, 2, 4, 6]) s += T(x0 - 6, Y(v) + 4, v, 's', 'end') + T(X(v), 286, v + ' s', 's', 'middle');
+    s += T(x0 + 4, 14, 'volume exhaled (L)', 's', 'start');
+    const cv = c => Phys.path(c.filter(q => q[0] <= 6).concat([[6, c[c.length - 1][1]]]).map(q => [X(q[0]), Y(q[1])]));
+    s += `<path class="ghost" d="${cv(rn.curve)}"/><path class="trace" d="${cv(r.curve)}"/>`;
+    s += `<path class="grid dash" d="M${X(1)} 20 L${X(1)} 270"/><circle cx="${X(1)}" cy="${Y(r.fev1)}" r="4.5" style="fill:var(--mark)"/>` + T(X(1) + 6, Y(r.fev1) + 14, 'FEV1 ' + r.fev1.toFixed(2), 'l', 'start');
+    s += `<path class="grid dash" d="M${x0} ${Y(p.fvc)} L${x1} ${Y(p.fvc)}"/>` + T(x1, Y(p.fvc) - 5, 'FVC ' + p.fvc.toFixed(2), 'l', 'end');
+    $('vt-svg').innerHTML = s; }
+}
+for (const [k, lab, mn, mx, st, u] of [['fvc', 'FVC', 1.5, 6, 0.05, ' L'], ['pef', 'Peak expiratory flow', 2, 11, 0.1, ' L/s'], ['k', 'Concavity of the expiratory limb (airway narrowing)', 0.8, 3, 0.05, ''], ['pif', 'Peak inspiratory flow', 2, 8, 0.1, ' L/s']]) { PFS[k] = Phys.slider('pft-sl', {id: 'f' + k, label: lab, min: mn, max: mx, step: st, value: PFT_PRESET.norm[1][k], fmt: v => (st < 0.1 ? v.toFixed(2) : v.toFixed(1)) + u}, v => { PF[k] = v; clearPre('pft-tg'); drawPft(); }); PF[k] = PFT_PRESET.norm[1][k]; PFS[k].init(); }
+Phys.toggles('pft-tg', Object.entries(PFT_PRESET).map(([k, v]) => [k, v[0]]), k => { APPLYING = true; for (const kk in PFS) PFS[kk].set(PFT_PRESET[k][1][kk]); APPLYING = false; }, 'norm');
+Phys.key('pft-key', [['--ink', 'chosen values'], ['--muted', 'normal preset (dashed)'], ['--mark', 'FEV1 at 1 s']]);
+Phys.table('pft-table', ['', 'Obstructive', 'Restrictive'], PFT_TABLE);
+$('pft-text').innerHTML = PFT_TEXT; drawPft();
+Phys.swipeHints();
+</script>
+</body>
+</html>

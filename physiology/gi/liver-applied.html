@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Liver, Bile and Applied GI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+/* page tokens reused with their anatomy meaning and values: --stom, --gut, --colon, --liver, --bile (anatomy/abdomen-pelvis/organs.html), --vein (atlas.css).
+   --nerve, --musc, --fluid, --cyto, --cl from phys.css. --accent marks only the selected item; --clin marks clinical points only. */
+:root{--stom:#e7b7c8;--gut:#d9a066;--colon:#a89a5a;--liver:#9b6b5e;--bile:#5e8c6a;--vein:#3a5ba8}
+:root[data-theme="dark"]{--stom:#8c5468;--gut:#c08a52;--colon:#8f8248;--liver:#a77464;--bile:#6fa07b;--vein:#6d8fd8}
+svg.sch .sel{stroke:var(--accent);stroke-width:3;fill:none;stroke-dasharray:7 4}
+svg.sch .dim{opacity:.3}
+svg.sch .org{stroke:var(--muted);stroke-width:1}
+svg.sch .nv{stroke:var(--nerve);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .bar{stroke:none}
+svg.sch.fitmax{max-width:460px}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 04: <a href="secretions.html">Secretions and hormones</a> · <a href="digestion-motility.html">Digestion, absorption, motility</a> · <span aria-current="page">Liver and applied</span></span></nav>
+
+<header class="stack">
+  <h1>The Liver, Bile and Applied GI Physiology</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-liv">Liver functions</a> <a href="#h-bile">Bile and bile acids</a> <a href="#h-ehc">Enterohepatic circulation</a> <a href="#h-lft">Liver function tests</a> <a href="#h-app">Applied: ulcer to Hirschsprung</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-liv">
+  <h2 id="h-liv">What the liver does</h2>
+  <div class="chips" id="lv-tg" aria-label="Function"></div>
+  <div class="prose find" id="lv-find" aria-live="polite"></div>
+  <div class="scroll"><table id="lv-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-bile">
+  <h2 id="h-bile">Bile and bile acids</h2>
+  <div class="prose" id="bile-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ehc">
+  <h2 id="h-ehc">The enterohepatic circulation of bile salts</h2>
+  <div class="step" id="eh-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="eh-svg" viewBox="0 0 560 336" role="img" aria-label="Schematic loop: liver makes bile acids, bile goes down the bile duct to the gall bladder and duodenum, bile salts work in the small intestine, about 95% are taken back in the terminal ileum and return in the portal vein to the liver, the rest pass to the colon where bacteria make secondary bile acids and about 5% is lost in faeces; the current step is outlined"></svg></div>
+    <div class="prose find" id="eh-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="eh-key"></div>
+  <p class="muted" id="eh-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-lft">
+  <h2 id="h-lft">Liver function tests: which pattern is it?</h2>
+  <div class="chips" id="lf-tg" aria-label="Example"></div>
+  <div class="sliders" id="lf-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="lf-svg" viewBox="0 0 400 220" role="img" aria-label="Bars of ALT, AST, ALP and GGT as multiples of the upper limit of normal, with the upper limit marked"></svg></div>
+    <div class="prose find" id="lf-out" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="lf-table"></table></div>
+  <div class="prose" id="lf-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-app">
+  <h2 id="h-app">Applied physiology</h2>
+  <div class="chips" id="ap-tg" aria-label="Condition"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ap-svg" viewBox="0 0 560 300" role="img" aria-label="Schematic for the chosen condition"></svg></div>
+    <div class="prose find" id="ap-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll" id="ap-tbox"><table id="ap-table"></table></div>
+  <p class="muted">PY4.12 (history and clinical examination of the abdomen) is a skill and is not covered on these pages.</p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio4.md, Part C; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Walk round the enterohepatic circulation, read liver tests as hepatocellular or cholestatic, and see the physiology behind peptic ulcer, reflux, vomiting, diarrhoea, constipation, adynamic ileus and Hirschsprung disease. Bilirubin and the three kinds of jaundice: <a href="../blood/haemoglobin-anaemia.html#h-bili">Haemoglobin and bilirubin</a>; the liver, biliary tree and portal vein: <a href="../../anatomy/abdomen-pelvis/organs.html#h-org">Abdominal organs</a>; liver lobule and cells: <a href="../../anatomy/histology/respiratory-digestive.html#h-gland">Histology</a>.';
+
+/* liver functions: key -> [label, text] */
+const LV = {
+  carb: ['Carbohydrate', '<h3>Carbohydrate</h3><p>Takes up glucose and stores it as <b>glycogen</b>; is the main site of <b>gluconeogenesis</b>, keeping blood glucose up in fasting (StatPearls; Wikipedia). Liver glycogen supplies glucose for the whole body, especially the brain (Wikipedia).</p>'],
+  lip: ['Lipid', '<h3>Lipid</h3><p>The principal site of cholesterol, triglyceride and lipoprotein synthesis (StatPearls; Wikipedia).</p>'],
+  pro: ['Protein', '<h3>Protein</h3><p>Makes most plasma proteins (not immunoglobulins) — <b>albumin</b> and the <b>clotting factors</b> (StatPearls; Wikipedia; a 2018 guideline). StatPearls: albumin at 10–15 g a day. Ammonia is converted to <b>urea</b> in the liver (Wikipedia).</p>'],
+  bile: ['Bile', '<h3>Bile</h3><p>Makes <b>bile acids from cholesterol</b> and secretes bile, which helps absorb fat and the fat-soluble vitamins (StatPearls; Wikipedia). <a href="#h-bile">Bile and bile acids</a>.</p>'],
+  drug: ['Drugs and toxins', '<h3>Biotransformation</h3><p>The main site where drugs, toxins and the body\'s own substances are made water-soluble for excretion (StatPearls; Wikipedia).</p>'],
+  store: ['Storage', '<h3>Storage</h3><p>Processes and stores absorbed nutrients — amino acids, sugars, fats, vitamins and minerals; all blood from the gut passes through it first (StatPearls). Vitamin B12 is stored in the liver (StatPearls).</p>'],
+  imm: ['Kupffer cells', '<h3>Kupffer cells</h3><p>Phagocytic macrophages lining the sinusoids — the largest population of tissue macrophages (Wikipedia). Microscopy: <a href="../../anatomy/histology/respiratory-digestive.html#h-gland">Histology</a>.</p>'],
+  blood: ['Blood supply', '<h3>Dual blood supply</h3><p>About 75% from the portal vein and 25% from the hepatic artery (StatPearls). The vessels: <a href="../../anatomy/abdomen-pelvis/organs.html#h-org">Abdominal organs</a>.</p>'],
+};
+const LV_TABLE = [
+  ['Carbohydrate', 'Glycogen store; gluconeogenesis in fasting'],
+  ['Lipid', 'Cholesterol, triglyceride, lipoprotein synthesis'],
+  ['Protein', 'Albumin, clotting factors; urea from ammonia (Wikipedia)'],
+  ['Bile', 'Bile acids from cholesterol; bile secretion'],
+  ['Biotransformation', 'Drugs and toxins made water-soluble'],
+  ['Storage', 'Nutrients, vitamins (B12), minerals'],
+  ['Defence', 'Kupffer cells (Wikipedia)'],
+];
+
+const BILE_TEXT = '<p><b>Bile</b> is made by hepatocytes, secreted into the bile canaliculi and modified by the duct cells (cholangiocytes); it is stored and concentrated in the gall bladder (StatPearls; Wikipedia). It is mostly <b>water</b>, with <b>bile salts</b>, cholesterol, phospholipids (lecithin), conjugated bilirubin and electrolytes (StatPearls ×2; Wikipedia). StatPearls: the passage of bile salts into the canaliculi is the main driver of bile flow, with water following by osmosis. <b>Secretin</b> adds water and bicarbonate from the bile-duct cells (StatPearls; Wikipedia).</p><p><b>Bile acids.</b> <b>Primary</b> bile acids — <b>cholic</b> and <b>chenodeoxycholic</b> acid — are made from cholesterol in the liver and <b>conjugated</b> with glycine or taurine to form bile salts (a 2017 review; StatPearls; Wikipedia); Wikipedia: conjugation keeps them ionised and water-soluble in the duodenum. Colonic bacteria deconjugate and dehydroxylate them to <b>secondary</b> bile acids: <b>deoxycholic</b> (from cholic) and <b>lithocholic</b> (from chenodeoxycholic) (a 2017 review; StatPearls; Wikipedia).</p><p><b>What bile does:</b> emulsifies fat and forms micelles (<a href="digestion-motility.html#h-abs">fat absorption</a>), excretes cholesterol and bilirubin, and is antimicrobial (StatPearls; Wikipedia).</p><p><b>Gall bladder.</b> Stores bile between meals and concentrates it (StatPearls; a 2023 review) — Wikipedia: 3–10-fold, by active transport of Na⁺ and Cl⁻ with water following. Fat in the duodenum releases <b>CCK</b> from I cells; CCK <b>contracts the gall bladder</b> and <b>relaxes the sphincter of Oddi</b>, so bile enters the duodenum (StatPearls; a 2023 review; Wikipedia).</p><p class="muted">Our sources give no reliable figure for the daily volume of bile or the gall-bladder capacity, so none is shown.</p>';
+
+/* enterohepatic steps: [label, highlighted parts, text] */
+const EH = [
+  ['Liver makes them', ['liver'], '<h3>1. Liver: synthesis and conjugation</h3><p>Hepatocytes make primary bile acids from cholesterol and conjugate them with glycine or taurine (bile salts) (a 2017 review; StatPearls; Wikipedia).</p>'],
+  ['Store, concentrate', ['gb', 'duct'], '<h3>2. Gall bladder: stored and concentrated</h3><p>Between meals bile is stored and concentrated in the gall bladder (StatPearls; a 2023 review).</p>'],
+  ['CCK: into duodenum', ['gb', 'duod'], '<h3>3. A meal: CCK empties the gall bladder</h3><p>Fat in the duodenum releases CCK; the gall bladder contracts and the sphincter of Oddi relaxes (StatPearls; a 2023 review; Wikipedia).</p>'],
+  ['Micelles', ['jej'], '<h3>4. Small intestine: fat digestion</h3><p>Bile salts emulsify fat and form micelles with its digestion products (StatPearls; Wikipedia).</p>'],
+  ['Terminal ileum: ~95% back', ['ile', 'portal'], '<h3>5. Terminal ileum: about 95% reclaimed</h3><p>About 95% of the bile acids are reabsorbed, actively and Na⁺-dependently (ASBT), in the terminal ileum (a 2015 review; StatPearls; Wikipedia), and return in the <b>portal vein</b>, where hepatocytes take them up very efficiently (Wikipedia; StatPearls).</p>'],
+  ['Colon: ~5% lost', ['col'], '<h3>6. Colon: secondary bile acids, about 5% lost</h3><p>Bacteria make secondary bile acids (a 2017 review; Wikipedia); only about 5% of bile acids are lost in the faeces (StatPearls; a 2015 review); Wikipedia: new synthesis in the liver replaces what is lost.</p>'],
+  ['Round again', ['liver', 'portal', 'duct'], '<h3>7. Round again</h3><p>The pool is recycled several times a day — sources differ: 4–12 times a day (a 2017 review); "several times each day" with a 4–6 g pool (Wikipedia); each molecule reused about 20 times (another Wikipedia article). Less recycling leaves a smaller pool of bile acids for micelles (a 2015 review).</p>'],
+];
+const EH_NOTE = 'Schematic, not to scale; arrows show the direction of flow. Urobilinogen, made from bilirubin in the gut, also cycles partly back through the liver (Wikipedia): <a href="../blood/haemoglobin-anaemia.html#h-bili">bilirubin pathway</a>.';
+
+/* LFT presets: key -> [label, ALT, AST, ALP, GGT] (multiples of the upper limit of normal; illustrative, not patient data) */
+const LF = {nor: ['Within limits', 0.6, 0.7, 0.7, 0.6], hep: ['Hepatocellular', 10, 8, 1.3, 1.5], cho: ['Cholestatic', 1.6, 1.4, 4, 5], mix: ['Mixed', 4, 3, 1.5, 2], alc: ['Alcohol-related', 3, 7, 1.1, 4], bone: ['Raised ALP, normal GGT', 0.8, 0.8, 3, 0.8]};
+const LF_TABLE = [
+  ['ALT', 'Mainly hepatocytes: the more liver-specific marker of hepatocyte injury'],
+  ['AST', 'Hepatocytes, but also heart and skeletal muscle (a 2021 review; Wikipedia); Wikipedia adds kidney and red cells'],
+  ['ALP', 'Liver (canalicular membrane) and bone; also intestine, placenta: marks cholestasis'],
+  ['GGT', 'Liver and biliary tract, kidney, pancreas — not bone: a raised GGT confirms that a raised ALP is hepatobiliary'],
+  ['Bilirubin', 'Excretory function (Wikipedia); an isolated raised bilirubin is most often Gilbert syndrome (a 2018 guideline)'],
+  ['Albumin, PT/INR', 'Synthetic function: albumin is made only by the liver; clotting factors II, V, VII, IX, X. PT is also prolonged by vitamin K lack (fat malabsorption, chronic cholestasis)'],
+];
+const LF_TEXT = '<p>The name is imprecise: the panel mostly shows <b>injury</b> and <b>cholestasis</b> rather than function, and the American College of Gastroenterology prefers "liver chemistries" (StatPearls). ALT and AST leak from injured hepatocytes; predominantly raised ALP and GGT indicate cholestasis; bilirubin, albumin and INR reflect function (a 2018 guideline; a 2021 review; StatPearls; Wikipedia). Reference ranges vary between laboratories (StatPearls; Wikipedia), so no normal values are given here; even albumin and INR are not liver-specific (StatPearls).</p><p class="muted">Example values are illustrative multiples of the upper limit of normal (ULN), not patient data. The R value and its cut-offs come from one 2021 review.</p>';
+
+/* applied: key -> [label, text] (drawings in drawAp) */
+const AP = {
+  pud: ['Peptic ulcer', '<h3>Peptic ulcer</h3><p>A break in the lining caused by <b>acid and pepsin</b>, usually in the stomach or proximal duodenum (StatPearls; Wikipedia). A 2019 review describes <i>idiopathic</i> ulcer (no H. pylori, no NSAID) as an imbalance between mucosal defence and aggressive insults. The main causes are <b><i>H. pylori</i></b> and <b>NSAIDs</b> (a 2019 review; Wikipedia; a 2016 review); NSAIDs inhibit <b>COX-1</b>, so less prostaglandin, mucosal blood flow, mucus and bicarbonate (a 2019 review; Wikipedia). Less common: smoking (Wikipedia; a 2019 review), alcohol (a 2019 review), <b>Zollinger–Ellison syndrome</b> — a gastrin-secreting tumour driving excess acid (Wikipedia; a 2019 review; a 2021 review). <b>Pain:</b> gastric ulcer soon after a meal (15–30 min, StatPearls); duodenal ulcer about 2–3 h after meals and at night, relieved by eating (StatPearls; Wikipedia). Acid-secretion tests: <a href="secretions.html#h-gft">gastric function tests</a>.</p>'],
+  gerd: ['GERD', '<h3>Gastro-oesophageal reflux disease</h3><p>Chronic symptoms or mucosal damage from reflux of gastric contents into the oesophagus (American College of Gastroenterology definition, undated, as given by StatPearls). The main mechanism is <b>transient lower-oesophageal-sphincter relaxations (TLESRs)</b> — relaxations without swallowing, vagally mediated, triggered by gastric distension after meals — rather than just a low LES pressure (2024 and 2026 reviews). A weak LES and a <b>hiatal hernia</b> add to it (Wikipedia; 2024 and 2026 reviews). Refluxed acid is cleared by peristalsis and neutralised by salivary bicarbonate (2024 and 2026 reviews). Complications: oesophagitis, stricture, <b>Barrett oesophagus</b> (StatPearls; Wikipedia).</p>'],
+  vom: ['Vomiting', '<h3>Vomiting: the CTZ and the vomiting centre</h3><p>The <b>chemoreceptor trigger zone (CTZ)</b> lies in the <b>area postrema</b> on the floor of the fourth ventricle, <b>outside the blood–brain barrier</b>, so emetic substances in the blood reach it (StatPearls; a 2021 review; Wikipedia). It relays to the <b>vomiting centre</b> in the medulla (StatPearls; Wikipedia) — one 2025 review stresses that this is not a single nucleus but a network of medullary neurons that fire in sequence as a <b>central pattern generator</b>. The area postrema lies next to the nucleus tractus solitarius (StatPearls; Wikipedia). <b>Inputs:</b> the CTZ (dopamine D2, 5-HT3, NK1, histamine H1, opioid receptors); <b>vagal afferents</b> from the gut, where serotonin from enterochromaffin cells acts on 5-HT3 receptors; the <b>vestibular system</b> (motion sickness; histamine H1 in one review); and the cortex (2021 and 2025 reviews). <b>The act:</b> retching — the diaphragm and abdominal muscles contract together against a closed glottis — then expulsion (Wikipedia; a 2025 review). <b>Losing gastric juice</b> causes hypochloraemia, ECF volume loss and <b>metabolic alkalosis with hypokalaemia</b> (a 2022 review; Wikipedia).</p>'],
+  dia: ['Diarrhoea', '<h3>Diarrhoea</h3><p>Three or more loose or watery stools in 24 h (StatPearls; WHO definition, Wikipedia); chronic if it lasts four weeks or more (StatPearls). The three types are in the table below.</p>'],
+  con: ['Constipation', '<h3>Constipation</h3><p>Difficult, infrequent bowel movements — about three or fewer a week — with hard stools and straining (StatPearls; Wikipedia). Causes: too little fibre and fluid, <b>slow colonic transit</b>, <b>pelvic-floor dyssynergia</b> (a 2018 review; Wikipedia); drugs such as opioids, anticholinergics and some antacids, and hypothyroidism (Wikipedia). In infants, Hirschsprung disease is the most common medical cause (Wikipedia).</p>'],
+  ile: ['Adynamic ileus', '<h3>Adynamic (paralytic) ileus</h3><p>A <b>non-mechanical</b> slowing or stopping of intestinal flow — unlike obstruction, there is no physical block (StatPearls; Wikipedia). Common after <b>abdominal surgery</b>, also in sepsis (StatPearls). After surgery a <b>neurogenic phase</b> (a shift to sympathetic dominance) is followed by an <b>inflammatory phase</b> (one 2021 review). Opioids and electrolyte imbalance make it worse (a 2021 review; Wikipedia), hypokalaemia in particular (Wikipedia). StatPearls: the small bowel recovers first (0–24 h).</p>'],
+  hd: ['Hirschsprung disease', '<h3>Hirschsprung disease</h3><p>Congenital <b>absence of ganglion cells</b> in the submucosal (Meissner) and myenteric (Auerbach) plexuses of the <b>distal bowel</b> (StatPearls; Wikipedia; 2019 and 2021 reviews), because enteric neural-crest cells fail to migrate down the gut and colonise its end (2013 and 2019 reviews; Wikipedia). The aganglionic segment stays <b>tonically contracted</b> — a functional obstruction — and the normal bowel above it <b>dilates</b> (megacolon) (a 2019 review; Wikipedia). Slow-wave activity is absent in the aganglionic segment (a 2013 review). About <b>80% are short-segment</b> (rectum and sigmoid) (2013 and 2021 reviews). About <b>1 in 5000</b> births (StatPearls; a 2013 review; Wikipedia); boys about <b>4:1</b> in short-segment disease (2013 and 2021 reviews). <b>RET</b> is the major gene (a 2021 review; Wikipedia). Wikipedia: suspect it if a newborn has not passed meconium by 36–48 h; diagnosis is confirmed by biopsy and treatment is surgical removal of the segment. It is the leading cause of neonatal functional intestinal obstruction (a 2021 review). Development: <a href="../../anatomy/embryology/gut-urogenital.html#h-gut">Embryology</a>.</p>'],
+};
+const DIA_TABLE = [
+  ['Secretory', 'Active Cl⁻ secretion: cholera toxin raises cAMP, opening CFTR, and Na-Cl absorption falls (2014 and 2018 reviews; Wikipedia)', 'Wikipedia: isotonic, continues during fasting'],
+  ['Osmotic', 'Unabsorbed solute draws water in: lactose (lactase deficiency), magnesium, sorbitol (Wikipedia; a 2015 review)', 'Wikipedia: stops when the agent is stopped'],
+  ['Inflammatory / exudative', 'Blood and pus; inflammatory bowel disease, invasive infection (Wikipedia; a 2018 review)', '—'],
+];
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews and guidelines on abnormal liver blood tests (BSG 2018 guideline), abnormal liver enzymes (2021), enterohepatic bile acids (2015, 2017), gall-bladder motility (2023), peptic ulcer (2019), H. pylori and acid (2016), gastrinoma (2021), GERD (2024, 2026), nausea and vomiting (2021, 2025), metabolic alkalosis (2022), infectious diarrhoea (2018), oral rehydration (2014), lactose intolerance (2015), constipation (2018), postoperative ileus (2021), Hirschsprung disease (2013, 2019, 2021), interstitial cells of Cajal (2013) (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> the enterohepatic loop and the condition drawings are schematic, not to scale; liver-test example values are illustrative multiples of the upper limit of normal.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* ---- liver functions ---- */
+Phys.toggles('lv-tg', Object.entries(LV).map(([k, v]) => [k, v[0]]), k => { $('lv-find').innerHTML = LV[k][1]; }, 'carb');
+$('lv-find').innerHTML = LV.carb[1];
+Phys.table('lv-table', ['Function', 'Examples'], LV_TABLE);
+$('bile-text').innerHTML = BILE_TEXT;
+
+/* ---- enterohepatic stepper ---- */
+const ES = {s: 0};
+function drawEh() {
+  const on = new Set(EH[ES.s][1]), sel = k => on.has(k);
+  let s = Phys.arrowDef('ab', 'var(--bile)') + Phys.arrowDef('av', 'var(--vein)') + Phys.arrowDef('ai', 'var(--ink)');
+  // liver
+  s += `<path class="org" d="M30 60 C40 30 150 22 230 40 C250 46 250 80 230 96 C190 124 100 130 50 118 C26 110 22 84 30 60 Z" style="fill:var(--liver);fill-opacity:.5"/>` + T(90, 74, 'liver', 'b', 'start') + T(90, 92, 'cholesterol → primary', 's', 'start') + T(90, 106, 'bile acids, conjugated', 's', 'start');
+  if (sel('liver')) s += `<path class="sel" d="M24 58 C34 24 152 14 236 34 C258 42 258 84 236 102 C192 132 98 138 46 124 C18 114 16 84 24 58 Z"/>`;
+  // bile duct and gall bladder
+  s += `<path d="M222 96 L222 190 L250 210" style="stroke:var(--bile);stroke-width:5;fill:none" marker-end="url(#ab)"/>` + T(228, 150, 'bile duct', 's', 'start');
+  s += `<ellipse class="org" cx="160" cy="160" rx="24" ry="14" style="fill:var(--bile);fill-opacity:.7"/><path d="M182 158 L222 150" style="stroke:var(--bile);stroke-width:4"/>` + T(132, 190, 'gall bladder', 's', 'middle');
+  if (sel('gb')) s += `<ellipse class="sel" cx="160" cy="160" rx="32" ry="22"/>`;
+  if (sel('duct')) s += `<path class="sel" d="M222 96 L222 190 L250 210" style="stroke-opacity:.6;stroke-width:9"/>`;
+  // gut: duodenum → jejunum → ileum → colon
+  s += `<path d="M250 210 L330 210" style="stroke:var(--gut);stroke-width:18;stroke-linecap:round"/>` + T(290, 240, 'duodenum', 's', 'middle');
+  s += `<path d="M340 210 L430 210" style="stroke:var(--gut);stroke-width:18;stroke-linecap:round"/>` + T(385, 240, 'jejunum: micelles', 's', 'middle');
+  s += `<path d="M440 210 L500 210" style="stroke:var(--gut);stroke-width:18;stroke-linecap:round"/>` + T(458, 170, 'terminal ileum', 's', 'start') + T(458, 186, 'ASBT: ~95% back', 's', 'start');
+  s += `<path d="M510 210 L510 300 L330 300" style="stroke:var(--colon);stroke-width:18;fill:none;stroke-linecap:round"/>` + T(420, 284, 'colon: bacteria → secondary bile acids', 's', 'middle') + T(316, 304, '~5% in faeces', 's', 'end');
+  for (const [k, x0, x1, y] of [['duod', 250, 330, 210], ['jej', 340, 430, 210], ['ile', 440, 500, 210]]) if (sel(k)) s += `<rect class="sel" x="${x0 - 10}" y="${y - 16}" width="${x1 - x0 + 20}" height="32" rx="8"/>`;
+  if (sel('col')) s += `<path class="sel" d="M510 196 L510 300 L330 300" style="stroke-opacity:.6;stroke-width:26"/>`;
+  // portal vein back to liver
+  s += `<path d="M446 198 C446 120 360 70 250 68" style="stroke:var(--vein);stroke-width:4;fill:none" marker-end="url(#av)"/>` + T(458, 120, 'portal vein', 'l', 'start') + T(458, 136, '→ liver', 's', 'start');
+  if (sel('portal')) s += `<path class="sel" d="M446 198 C446 120 360 70 250 68" style="stroke-opacity:.55;stroke-width:10"/>`;
+  s += T(20, 330, 'schematic; arrows show flow', 's', 'start');
+  $('eh-svg').innerHTML = s; $('eh-find').innerHTML = EH[ES.s][2];
+}
+Phys.stepper('eh-step', EH.map(r => r[0]), drawEh, ES);
+Phys.key('eh-key', [['--liver', 'liver'], ['--bile', 'bile (duct, gall bladder)'], ['--gut', 'small intestine'], ['--colon', 'colon'], ['--vein', 'portal vein'], ['--accent', 'current step (selection)']]);
+$('eh-note').innerHTML = EH_NOTE;
+
+/* ---- LFT pattern picker ---- */
+const LV2 = {alt: 10, ast: 8, alp: 1.3, ggt: 1.5};
+const LS = {};
+function drawLf() {
+  const {alt, ast, alp, ggt} = LV2, R = alt / alp, ratio = ast / alt;
+  const names = [['ALT', alt], ['AST', ast], ['ALP', alp], ['GGT', ggt]];
+  const x0 = 70, x1 = 380, X = Phys.scale(0, 20, x0, x1);
+  let s = `<path class="axis" d="M${x0} 20 L${x0} 180 L${x1} 180"/>`;
+  for (const v of [0, 5, 10, 15, 20]) s += T(X(v), 196, v + '×', 's', 'middle');
+  s += T(x1, 214, 'multiple of the upper limit of normal (ULN)', 's', 'end');
+  names.forEach(([n, v], i) => { const y = 30 + i * 38; s += `<rect class="bar" x="${x0}" y="${y}" width="${(X(Math.min(v, 20)) - x0).toFixed(1)}" height="22" style="fill:var(--muted);fill-opacity:.55"/>` + T(x0 - 8, y + 15, n, 'b', 'end') + T(Math.min(X(Math.min(v, 20)) + 6, x1 - 30), y + 15, v.toFixed(1) + '×', 'm', 'start'); });
+  s += `<path d="M${X(1)} 22 L${X(1)} 180" style="stroke:var(--ink);stroke-width:1.4;stroke-dasharray:4 3"/>` + T(X(1) + 4, 16, 'ULN', 's', 'start');
+  $('lf-svg').innerHTML = s;
+  /* classify by R only when ALT is raised, or when ALP and GGT are both raised (a raised ALP with normal GGT is likely not from the liver) */
+  const nonHep = alp > 1 && ggt <= 1, usable = !nonHep && (alt > 1 || (alp > 1 && ggt > 1));
+  let pat = nonHep ? '<b>R not applicable</b>: raised ALP with normal GGT — likely non-hepatic ALP' : !usable ? (ast > 1 ? 'Pattern not applicable: ALT and ALP within limits — see AST:ALT' : 'ALT and ALP within the limits: no injury pattern to classify') : (R > 5 ? '<b>Hepatocellular</b> (R &gt; 5)' : R >= 2 ? '<b>Mixed</b> (R 2–5)' : '<b>Cholestatic</b> (R &lt; 2)') + ' — rule from one 2021 review';
+  let lines = `<p><span class="tag">R = (ALT ÷ ULN) ÷ (ALP ÷ ULN)</span> <span class="big">${usable ? R.toFixed(1) : '—'}</span></p><p>${pat}.</p>`;
+  if (ast > 1 && ratio > 2) lines += '<p><b>AST:ALT = ' + ratio.toFixed(1) + '</b> — above 2 suggests alcohol-related liver disease (a 2021 review; Wikipedia).</p>';
+  if (alp > 1) lines += ggt > 1 ? '<p>ALP and GGT both raised: the ALP is from the <b>liver or biliary tract</b> (a 2018 guideline; a 2021 review; Wikipedia).</p>' : '<p>ALP raised but GGT normal: GGT is not in bone, so think of a <b>bone</b> (or other non-liver) source (a 2018 guideline; Wikipedia).</p>';
+  $('lf-out').innerHTML = lines;
+}
+for (const [k, lab] of [['alt', 'ALT'], ['ast', 'AST'], ['alp', 'ALP'], ['ggt', 'GGT']]) { LS[k] = Phys.slider('lf-sl', {id: k, label: lab + ' (× ULN)', min: 0.2, max: 20, step: 0.1, value: LV2[k], fmt: v => v.toFixed(1) + '×'}, v => { LV2[k] = v; drawLf(); }); LS[k].init(); }
+Phys.toggles('lf-tg', Object.entries(LF).map(([k, v]) => [k, v[0]]), k => { const p = LF[k]; LS.alt.set(p[1]); LS.ast.set(p[2]); LS.alp.set(p[3]); LS.ggt.set(p[4]); }, 'hep');
+drawLf();
+Phys.table('lf-table', ['Test', 'What it tells you'], LF_TABLE); $('lf-text').innerHTML = LF_TEXT;
+
+/* ---- applied ---- */
+function drawAp(k) {
+  let s = Phys.arrowDef('ap', 'var(--ink)');
+  if (k === 'pud') {
+    s += `<path d="M280 70 L280 250 M200 250 L360 250" style="stroke:var(--ink);stroke-width:3"/><path d="M130 110 L430 90" style="stroke:var(--ink);stroke-width:4"/>`;
+    s += `<rect x="60" y="112" width="150" height="110" rx="10" class="box"/>` + T(135, 134, 'aggressive', 'b', 'middle');
+    ['acid, pepsin', 'H. pylori', 'NSAIDs', 'smoking, gastrinoma'].forEach((t, i) => { s += T(135, 156 + i * 18, t, 's', 'middle'); });
+    s += `<rect x="350" y="92" width="150" height="110" rx="10" class="box"/>` + T(425, 114, 'mucosal defence', 'b', 'middle');
+    ['mucus, bicarbonate', 'prostaglandins', 'mucosal blood flow', '(NSAIDs cut these)'].forEach((t, i) => { s += T(425, 136 + i * 18, t, 's', 'middle'); });
+    s += T(280, 286, 'imbalance model: a 2019 review, said of idiopathic ulcer; schematic', 's', 'middle');
+  } else if (k === 'gerd') {
+    s += `<path d="M260 10 L260 140" style="stroke:var(--muted);stroke-opacity:.5;stroke-width:26"/>` + T(290, 40, 'oesophagus', 's', 'start');
+    s += `<path class="org" d="M246 150 C200 150 170 200 190 250 C210 290 330 290 360 240 C380 200 340 150 274 150 Z" style="fill:var(--stom)"/>` + T(270, 230, 'stomach (distended)', 's', 'middle');
+    s += `<rect x="238" y="132" width="44" height="18" rx="5" style="fill:var(--musc)"/>` + T(226, 128, 'LES', 'b', 'end');
+    s += `<path d="M170 140 L360 140" style="stroke:var(--muted);stroke-width:3;stroke-dasharray:8 4"/>` + T(366, 144, 'diaphragm', 's', 'start');
+    s += `<path d="M262 160 L262 70" style="stroke:var(--ink);stroke-width:2" marker-end="url(#ap)"/>` + T(298, 96, 'reflux during a TLESR', 'l b', 'start') + T(298, 112, '(vagal, after a meal)', 's', 'start');
+    s += T(30, 286, 'also: hiatal hernia, weak LES; clearance by peristalsis and saliva', 's', 'start');
+  } else if (k === 'vom') {
+    const box = (x, y, w, h, t, u) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" class="box"/>` + T(x + w / 2, y + 20, t, 'b', 'middle') + (u ? T(x + w / 2, y + 36, u, 's', 'middle') : '');
+    s += box(20, 20, 150, 56, 'blood-borne emetics', 'drugs, toxins') + box(20, 96, 150, 56, 'gut (vagal afferents)', '5-HT → 5-HT3') + box(20, 172, 150, 56, 'vestibular system', 'motion (H1)') + box(20, 236, 150, 46, 'cortex', 'fear, anxiety (one review)');
+    s += box(210, 14, 150, 64, 'CTZ (area postrema)', 'outside the BBB') + T(285, 68, 'D2, 5-HT3, NK1', 's', 'middle');
+    s += box(210, 120, 150, 90, 'vomiting centre', 'medullary neurons') + T(285, 186, 'central pattern', 's', 'middle') + T(285, 200, 'generator (one review)', 's', 'middle');
+    s += box(400, 110, 150, 110, 'output', '') + T(475, 152, 'retching: diaphragm +', 's', 'middle') + T(475, 168, 'abdominal muscles,', 's', 'middle') + T(475, 184, 'glottis closed', 's', 'middle') + T(475, 204, 'then expulsion', 's', 'middle');
+    const ar = (x1, y1, x2, y2) => `<path d="M${x1} ${y1} L${x2} ${y2}" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#ap)"/>`;
+    s += ar(170, 48, 206, 48) + ar(285, 78, 285, 116) + ar(170, 124, 206, 150) + ar(170, 200, 206, 180) + ar(170, 258, 206, 200) + ar(362, 165, 396, 165);
+    s += T(285, 250, 'loss of gastric juice →', 's', 'middle') + T(285, 266, 'metabolic alkalosis, low K⁺, low Cl⁻', 'c', 'middle');
+  } else if (k === 'dia') {
+    s += `<rect x="20" y="20" width="520" height="60" style="fill:var(--fluid)"/>` + T(30, 38, 'lumen', 's', 'start');
+    s += `<rect x="60" y="90" width="180" height="150" rx="10" style="fill:var(--cyto);fill-opacity:.4;stroke:var(--muted)"/>` + T(150, 260, 'crypt cell', 's', 'middle');
+    s += `<rect x="140" y="80" width="22" height="18" rx="4" style="fill:var(--surface);stroke:var(--ink)"/>` + T(170, 112, 'CFTR', 's', 'start');
+    s += `<path d="M151 100 L151 50" style="stroke:var(--ink);stroke-width:2" marker-end="url(#ap)"/>` + Phys.dot(151, 104, 'cl') + T(160, 56, 'Cl⁻ out, water follows', 'l b', 'start');
+    s += T(150, 160, 'cholera toxin', 'c', 'middle') + T(150, 176, '→ cAMP ↑', 's', 'middle') + T(150, 300 - 16, 'SECRETORY', 'b', 'middle');
+    s += `<circle cx="380" cy="50" r="8" style="fill:var(--surface);stroke:var(--ink)"/><circle cx="410" cy="56" r="8" style="fill:var(--surface);stroke:var(--ink)"/><circle cx="440" cy="46" r="8" style="fill:var(--surface);stroke:var(--ink)"/>` + T(410, 100, 'unabsorbed solute', 'l', 'middle') + T(410, 116, '(e.g. lactose) holds water', 's', 'middle');
+    s += `<path d="M490 200 L490 70" style="stroke:var(--ink);stroke-width:2;stroke-dasharray:5 3" marker-end="url(#ap)"/>` + T(482, 160, 'water drawn in', 's', 'end') + T(410, 284, 'OSMOTIC', 'b', 'middle');
+  } else if (k === 'con') {
+    s += `<path d="M60 60 L60 200 L300 200 L300 60 L460 60 L460 230 L380 230" style="stroke:var(--colon);stroke-width:26;fill:none;stroke-linecap:round;stroke-linejoin:round"/>` + T(180, 40, 'slow colonic transit', 'l b', 'middle');
+    s += `<rect x="350" y="240" width="40" height="40" rx="6" style="fill:var(--musc);fill-opacity:.6"/>` + T(396, 270, 'outlet: pelvic-floor', 'l b', 'start') + T(396, 286, 'dyssynergia', 'l b', 'start');
+    s += T(180, 118, 'low fibre and fluid,', 's', 'middle') + T(180, 134, 'drugs (opioids), hypothyroidism', 's', 'middle');
+  } else if (k === 'ile') {
+    for (let i = 0; i < 4; i++) s += `<path d="M${60 + i * 110} 150 C${80 + i * 110} 90 ${130 + i * 110} 90 ${150 + i * 110} 150 C${170 + i * 110} 210 ${190 + i * 110} 210 ${170 + i * 110} 150" style="stroke:var(--gut);stroke-width:24;fill:none;stroke-linecap:round"/>`;
+    s += T(280, 40, 'loops stop moving: no mechanical block', 'l b', 'middle') + T(280, 58, 'abdominal distension (StatPearls)', 's', 'middle');
+    s += T(280, 250, 'surgery → sympathetic shift, then inflammation (one review)', 's', 'middle') + T(280, 268, 'worse with opioids, electrolyte imbalance (low K⁺)', 's', 'middle');
+  } else if (k === 'hd') {
+    s += `<path d="M60 150 L300 150" style="stroke:var(--colon);stroke-width:110;stroke-linecap:round"/><path d="M300 150 L530 150" style="stroke:var(--colon);stroke-width:26;stroke-linecap:round"/>`;
+    for (let x = 40; x < 340; x += 28) s += `<circle cx="${x}" cy="100" r="5" style="fill:var(--nerve);stroke:var(--ink)"/><circle cx="${x}" cy="200" r="5" style="fill:var(--nerve);stroke:var(--ink)"/>`;
+    s += T(200, 40, 'normal bowel: ganglia present,', 'l b', 'middle') + T(200, 56, 'dilated above the block (megacolon)', 's', 'middle');
+    s += T(450, 112, 'aganglionic segment:', 'l b', 'middle') + T(450, 128, 'no ganglion cells,', 's', 'middle') + T(450, 196, 'tonically contracted', 's', 'middle') + T(450, 212, '(rectum ± sigmoid, ~80%)', 's', 'middle');
+    s += T(540, 260, 'distal → anus', 's', 'end') + T(20, 260, '← proximal', 's', 'start');
+  }
+  $('ap-svg').innerHTML = s; $('ap-find').innerHTML = AP[k][1];
+  $('ap-tbox').hidden = k !== 'dia';
+}
+Phys.toggles('ap-tg', Object.entries(AP).map(([k, v]) => [k, v[0]]), drawAp, 'pud'); drawAp('pud');
+Phys.table('ap-table', ['Type', 'Mechanism', 'Clue'], DIA_TABLE);
+Phys.swipeHints();
+</script>
+</body>
+</html>

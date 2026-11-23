@@ -53,17 +53,17 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 4. Gastro-intestinal Physiology
 
-- [ ] **PY4.1** Describe the functional anatomy of digestive system
-- [ ] **PY4.2** Enumerate various Gastrointestinal hormones (GI) hormones, discuss their functions and regulation
-- [ ] **PY4.3** Describe the composition, mechanism of secretion, functions, and regulation of saliva
-- [ ] **PY4.4** Describe the composition, mechanism of secretion, functions, and regulation of gastric juice. Discuss various gastric function tests
-- [ ] **PY4.5** Describe the composition, mechanism of secretion, functions, and regulation of pancreatic juice including various pancreatic exocrine function tests
-- [ ] **PY4.6** Describe the composition, mechanism of secretion, functions, and regulation of intestinal juices
-- [ ] **PY4.7** Describe the physiology of digestion and absorption of nutrients
-- [ ] **PY4.8** Describe GIT movements, its regulation and physiological significance including defecation reflex and the role of dietary fibres:
-- [ ] **PY4.9** Describe the structure, functions and secretion of liver and gallbladder with elaboration of various liver function tests
-- [ ] **PY4.10** Describe the Gut-Brain Axis and its physiological significance
-- [ ] **PY4.11** Discuss (in brief) the applied physiology of GIT viz. Peptic ulcer, gastroesophageal reflux disease, vomiting, diarrhoea, constipation, Adynamic ileus, Hirschsprung's disease
+- [x] **PY4.1** Describe the functional anatomy of digestive system — *enteric plexuses, gut-wall layers (brief; anatomy linked): [GI Secretions and Hormones: Saliva, Gastric, Pancreatic and Intestinal Juice](gi/secretions.html)*
+- [x] **PY4.2** Enumerate various Gastrointestinal hormones (GI) hormones, discuss their functions and regulation — *hormone picker on a gut map, 7 hormones with cell, stimulus, actions: [GI Secretions and Hormones: Saliva, Gastric, Pancreatic and Intestinal Juice](gi/secretions.html)*
+- [x] **PY4.3** Describe the composition, mechanism of secretion, functions, and regulation of saliva — *saliva composition, two-stage secretion, control: [GI Secretions and Hormones: Saliva, Gastric, Pancreatic and Intestinal Juice](gi/secretions.html)*
+- [x] **PY4.4** Describe the composition, mechanism of secretion, functions, and regulation of gastric juice. Discuss various gastric function tests — *gastric cells, parietal-cell stepper with PPI/H2 blocks, phases slider, gastric function tests: [GI Secretions and Hormones: Saliva, Gastric, Pancreatic and Intestinal Juice](gi/secretions.html)*
+- [x] **PY4.5** Describe the composition, mechanism of secretion, functions, and regulation of pancreatic juice including various pancreatic exocrine function tests — *pancreatic juice, secretin/CCK/vagus, enzyme activation, function tests: [GI Secretions and Hormones: Saliva, Gastric, Pancreatic and Intestinal Juice](gi/secretions.html)*
+- [x] **PY4.6** Describe the composition, mechanism of secretion, functions, and regulation of intestinal juices — *intestinal juice: [GI Secretions and Hormones: Saliva, Gastric, Pancreatic and Intestinal Juice](gi/secretions.html)*
+- [x] **PY4.7** Describe the physiology of digestion and absorption of nutrients — *absorption map for 9 nutrients with transporters, digestion table, lactose intolerance: [Digestion, Absorption, GI Movements and the Gut–Brain Axis](gi/digestion-motility.html)*
+- [x] **PY4.8** Describe GIT movements, its regulation and physiological significance including defecation reflex and the role of dietary fibres: — *slow waves, MMC stepper, peristalsis, gastric emptying, gastrocolic and defecation reflexes, dietary fibre: [Digestion, Absorption, GI Movements and the Gut–Brain Axis](gi/digestion-motility.html)*
+- [x] **PY4.9** Describe the structure, functions and secretion of liver and gallbladder with elaboration of various liver function tests — *liver functions, bile, gall bladder, enterohepatic stepper, LFT pattern picker (R value, AST:ALT, GGT): [The Liver, Bile and Applied GI Physiology](gi/liver-applied.html)*
+- [x] **PY4.10** Describe the Gut-Brain Axis and its physiological significance — *gut–brain axis pathway picker: [Digestion, Absorption, GI Movements and the Gut–Brain Axis](gi/digestion-motility.html)*
+- [x] **PY4.11** Discuss (in brief) the applied physiology of GIT viz. Peptic ulcer, gastroesophageal reflux disease, vomiting, diarrhoea, constipation, Adynamic ileus, Hirschsprung's disease — *peptic ulcer, GERD, vomiting, diarrhoea, constipation, adynamic ileus, Hirschsprung: [The Liver, Bile and Applied GI Physiology](gi/liver-applied.html)*
 - [ ] **PY4.12** Obtain relevant history and conduct correct General and Clinical examination of the abdomen in a normal volunteer or simulated environment *(skill)*
 
 ### 5. Cardiovascular Physiology
@@ -87,15 +87,15 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 6. Respiratory Physiology
 
-- [ ] **PY6.1** Describe the functional anatomy of respiratory tract and non-respiratory functions of lungs
-- [ ] **PY6.2** Describe the mechanics of normal respiration, pressure changes during ventilation, lung volume and capacities (Static and Dynamic)
-- [ ] **PY6.3** Describe the alveolar surface tension, compliance, airway resistance, ventilation, V/P ratio, diffusion capacity of lungs
-- [ ] **PY6.4** Discuss the transport of respiratory gases viz Oxygen and Carbon dioxide across lungs and whole body
-- [ ] **PY6.5** Describe the chemoreceptors (peripheral and central) and neural centres of respiration including chemical and neural regulation of respiration:
-- [ ] **PY6.6** Describe and discuss the pathophysiology of dyspnoea, hypoxia, cyanosis, asphyxia, drowning, periodic breathing and oxygen therapy
-- [ ] **PY6.7** Discuss various lung function tests and their clinical significance in obstructive and restrictive lung diseases
-- [ ] **PY6.8** Discuss the physiology of high altitude and acclimatization
-- [ ] **PY6.9** Discuss the physiology of deep sea diving and decompression sickness
+- [x] **PY6.1** Describe the functional anatomy of respiratory tract and non-respiratory functions of lungs — *zones, alveolar cells, muscles, non-respiratory functions: [Mechanics of Breathing, Lung Volumes and Lung Function Tests](respiratory/mechanics-volumes.html)*
+- [x] **PY6.2** Describe the mechanics of normal respiration, pressure changes during ventilation, lung volume and capacities (Static and Dynamic) — *breathing-cycle pressures on a slider, spirogram builder: [Mechanics of Breathing, Lung Volumes and Lung Function Tests](respiratory/mechanics-volumes.html)*
+- [x] **PY6.3** Describe the alveolar surface tension, compliance, airway resistance, ventilation, V/P ratio, diffusion capacity of lungs — *compliance, surfactant and Laplace, resistance, dead space, V/Q zones, DLCO: [Mechanics of Breathing, Lung Volumes and Lung Function Tests](respiratory/mechanics-volumes.html)*
+- [x] **PY6.4** Discuss the transport of respiratory gases viz Oxygen and Carbon dioxide across lungs and whole body — *O₂ dissociation curve with shifts, O₂ content and alveolar gas calculators, CO₂ transport, Bohr and Haldane: [Transport of Oxygen and Carbon Dioxide, and the Control of Breathing](respiratory/gas-transport-control.html)*
+- [x] **PY6.5** Describe the chemoreceptors (peripheral and central) and neural centres of respiration including chemical and neural regulation of respiration: — *respiratory centres, central and peripheral chemoreceptors, Hering–Breuer stepper: [Transport of Oxygen and Carbon Dioxide, and the Control of Breathing](respiratory/gas-transport-control.html)*
+- [x] **PY6.6** Describe and discuss the pathophysiology of dyspnoea, hypoxia, cyanosis, asphyxia, drowning, periodic breathing and oxygen therapy — *dyspnoea, hypoxia classifier, cyanosis, asphyxia, drowning, periodic breathing, O₂ therapy: [Hypoxia, Cyanosis, Abnormal Breathing, High Altitude and Diving](respiratory/applied-environment.html)*
+- [x] **PY6.7** Discuss various lung function tests and their clinical significance in obstructive and restrictive lung diseases — *spirometry, flow–volume loop presets, obstructive vs restrictive: [Mechanics of Breathing, Lung Volumes and Lung Function Tests](respiratory/mechanics-volumes.html)*
+- [x] **PY6.8** Discuss the physiology of high altitude and acclimatization — *altitude slider, acclimatisation stepper, AMS/HAPE/HACE: [Hypoxia, Cyanosis, Abnormal Breathing, High Altitude and Diving](respiratory/applied-environment.html)*
+- [x] **PY6.9** Discuss the physiology of deep sea diving and decompression sickness — *Boyle, narcosis, decompression sickness, O₂ toxicity: [Hypoxia, Cyanosis, Abnormal Breathing, High Altitude and Diving](respiratory/applied-environment.html)*
 - [ ] **PY6.10** Perform Spirometry and interpret the findings (Digital / Manual) *(skill)*
 - [ ] **PY6.11** Describe principles and methods of artificial respiration *(skill)*
 - [ ] **PY6.12** Obtain relevant history and conduct correct General and Clinical examination of the respiratory system in a normal volunteer or simulated environment *(skill)*

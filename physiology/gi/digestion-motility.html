@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Digestion, Absorption and Motility</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+/* page tokens reused with their anatomy meaning and values: --stom, --gut, --colon (anatomy/abdomen-pelvis/organs.html), --lymph (atlas.css).
+   Ions (--na, --k, --ca), --fluid, --cyto, --nerve, --musc, --artery from phys.css. --accent marks only the selected item. */
+:root{--stom:#e7b7c8;--gut:#d9a066;--colon:#a89a5a;--lymph:#7cb342}
+:root[data-theme="dark"]{--stom:#8c5468;--gut:#c08a52;--colon:#8f8248;--lymph:#9ccc65}
+svg.sch .sel{stroke:var(--accent);stroke-width:3;fill:none;stroke-dasharray:7 4}
+svg.sch .dim{opacity:.3}
+svg.sch .tp{fill:var(--surface);stroke:var(--ink);stroke-width:1.3}
+svg.sch .nv{stroke:var(--nerve);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch.fitmax{max-width:460px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 04: <a href="secretions.html">Secretions and hormones</a> · <span aria-current="page">Digestion, absorption, motility</span> · <a href="liver-applied.html">Liver and applied</a></span></nav>
+
+<header class="stack">
+  <h1>Digestion, Absorption, GI Movements and the Gut–Brain Axis</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-abs">Absorption map</a> <a href="#h-dig">Digestion</a> <a href="#h-sw">Slow waves</a> <a href="#h-mmc">Migrating motor complex</a> <a href="#h-per">Peristalsis</a> <a href="#h-ge">Stomach filling and emptying</a> <a href="#h-def">Defecation reflex</a> <a href="#h-fib">Dietary fibre</a> <a href="#h-gba">Gut–brain axis</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-abs">
+  <h2 id="h-abs">Absorption map: where and how each nutrient is absorbed</h2>
+  <div class="chips" id="ab-tg" aria-label="Nutrient"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ab-svg" viewBox="0 0 560 362" role="img" aria-label="Above, the gut from stomach to colon with the main site of absorption of the chosen nutrient outlined; below, a schematic enterocyte with the lumen and brush border on top and the blood and lymph below, showing the transporters for that nutrient"></svg></div>
+    <div class="prose find" id="ab-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="ab-key"></div>
+  <p class="muted" id="ab-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-dig">
+  <h2 id="h-dig">Digestion: enzymes and products</h2>
+  <div class="scroll"><table id="dig-table"></table></div>
+  <div class="prose" id="dig-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sw">
+  <h2 id="h-sw">Slow waves: the gut's pacemaker rhythm</h2>
+  <div class="chips" id="sw-tg" aria-label="Region"></div>
+  <div class="schbox"><svg class="fig sch" id="sw-svg" viewBox="0 0 560 190" role="img" aria-label="Schematic smooth-muscle membrane potential over one minute in the chosen region: slow waves at that region's frequency, with spikes (action potentials) on some plateaus, which are the ones that cause contraction"></svg></div>
+  <div class="prose" id="sw-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mmc">
+  <h2 id="h-mmc">The migrating motor complex (fasting)</h2>
+  <div class="step" id="mmc-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="mmc-svg" viewBox="0 0 560 230" role="img" aria-label="Schematic contraction record over one fasting cycle with phases I to IV and plasma motilin peaking with phase III; the current phase is outlined"></svg></div>
+    <div class="prose find" id="mmc-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="mmc-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-per">
+  <h2 id="h-per">Peristalsis and segmentation</h2>
+  <div class="chips" id="pe-tg" aria-label="Movement"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pe-svg" viewBox="0 0 560 190" role="img" aria-label="Schematic gut segment with a bolus: in peristalsis the muscle contracts on the oral side and relaxes on the anal side; in segmentation rings contract at intervals and mix the contents"></svg></div>
+    <div class="prose find" id="pe-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ge">
+  <h2 id="h-ge">Receptive relaxation, gastric emptying and the gastrocolic reflex</h2>
+  <div class="prose" id="ge-text"></div>
+  <div class="scroll"><table id="ge-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-def">
+  <h2 id="h-def">The defecation reflex</h2>
+  <div class="step" id="df-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="df-svg" viewBox="0 0 400 330" role="img" aria-label="Schematic rectum and anal canal in section: the internal anal sphincter (smooth muscle) and external anal sphincter (skeletal muscle); each is drawn thick when contracted and thin when relaxed in the current step"></svg></div>
+    <div class="prose find" id="df-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="df-key"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fib">
+  <h2 id="h-fib">Dietary fibre</h2>
+  <div class="scroll"><table id="fib-table"></table></div>
+  <div class="prose" id="fib-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gba">
+  <h2 id="h-gba">The gut–brain axis</h2>
+  <div class="chips" id="gb-tg" aria-label="Pathway"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="gb-svg" viewBox="0 0 400 306" role="img" aria-label="Schematic of the brain above and the gut with its enteric nervous system and microbiota below, joined by neural, endocrine, immune and metabolic pathways; the chosen pathway is drawn solid and the others faint"></svg></div>
+    <div class="prose find" id="gb-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="gb-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio4.md, Part B; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Pick a nutrient and see where it is absorbed and through which transporters; watch slow waves at each level of the gut; step through the fasting migrating motor complex and the defecation reflex; compare peristalsis with segmentation; see what dietary fibre does; and follow the pathways between gut and brain. The intestine under the microscope: <a href="../../anatomy/histology/respiratory-digestive.html#h-gut">Histology</a>.';
+
+/* absorption: key -> [label, gut segments, apical items, basolateral items, other items, text]; items are [x, label, direction] drawn on the cell */
+const AB = {
+  glu: ['Glucose, galactose', ['duo', 'jej'], [[200, 'SGLT1', 'in', 'glucose or galactose + 2 Na⁺']], [[180, 'GLUT2', 'out', 'to the blood'], [250, 'Na⁺/K⁺ pump', 'na', 'Na⁺ out']], [],
+    '<h3>Glucose and galactose</h3><p>Taken up across the brush border by <b>SGLT1</b>, coupled to Na⁺ (SGLT1 is the prime intestinal glucose transporter: a 2014 study; Wikipedia) — 2 Na⁺ per glucose (Wikipedia). The basolateral Na⁺/K⁺ pump keeps the cell\'s Na⁺ low, so Na⁺ runs downhill into the cell and drags glucose in against its gradient (Wikipedia). <b>GLUT2</b> lets them out across the basolateral membrane (a 2014 study; Wikipedia). Most nutrients are absorbed in the small intestine; the jejunum is specialised for it (Wikipedia).</p><p class="muted"><b>Disagreement:</b> Wikipedia says GLUT2 also appears in the brush border when luminal glucose is high; a 2014 mouse study found GLUT2 only on the basolateral side.</p>'],
+  fru: ['Fructose', ['duo', 'jej'], [[200, 'GLUT5', 'in', 'fructose (facilitated diffusion)']], [[200, 'GLUT2', 'out', 'to the blood']], [],
+    '<h3>Fructose</h3><p><b>GLUT5</b> in the brush border takes up fructose (Wikipedia; a 2015 review); Wikipedia: by facilitated diffusion, down its concentration gradient. <b>GLUT2</b> on the basolateral side lets it out (Wikipedia).</p>'],
+  pro: ['Peptides, amino acids', ['duo', 'jej'], [[170, 'amino-acid carriers', 'in', 'free amino acids'], [300, 'PepT1', 'in', 'di- and tripeptides (H⁺-coupled)']], [[230, '', 'out', 'amino acids to the blood']], [],
+    '<h3>Proteins</h3><p>Pepsin, trypsin and chymotrypsin and the brush-border peptidases break proteins down to small peptides and amino acids (Wikipedia; StatPearls). Free amino acids enter through several apical amino-acid transporters; <b>di- and tripeptides</b> only through <b>PepT1</b>, a proton-coupled transporter (one 2017 review); products of digestion pass to the blood (Wikipedia).</p>'],
+  fat: ['Fats', ['duo', 'jej'], [[200, 'micelle', 'mic', 'fatty acids + monoglycerides']], [[300, 'chylomicron', 'lym', 'to the lacteal (lymph)']], [[250, 'packed into chylomicrons', 'mid']],
+    '<h3>Fats</h3><p>Bile salts emulsify fat; pancreatic <b>lipase with colipase</b> splits triglycerides into free fatty acids and monoglycerides (StatPearls; Wikipedia), which form <b>micelles</b> with bile salts and reach the brush border (a 2019 review; StatPearls). Inside the enterocyte the lipids are packed into <b>chylomicrons</b>, which go to the <b>lacteals</b> and lymph (chyle) and then the blood at the subclavian veins (a 2019 review; StatPearls; Wikipedia). Micelles also carry the fat-soluble vitamins A, D, E and K (Wikipedia; StatPearls: cholestasis causes their malabsorption).</p>'],
+  fe: ['Iron', ['duo'], [[170, 'Dcytb', 'red', 'Fe³⁺ → Fe²⁺'], [290, 'DMT1', 'in', 'Fe²⁺']], [[230, 'ferroportin', 'out', 'Fe²⁺ → Fe³⁺ (hephaestin) → transferrin']], [[370, 'hepcidin (from the liver, when high) blocks ferroportin', 'hep']],
+    '<h3>Iron</h3><p>Absorbed mainly in the <b>duodenum</b> and upper jejunum (two reviews; Wikipedia). Dietary Fe³⁺ is reduced to <b>Fe²⁺</b> by gastric acid and <b>duodenal cytochrome b (Dcytb)</b>, then enters through <b>DMT1</b>; haem iron is absorbed intact and more efficiently (3–4 times, a 2020 review). Iron leaves through <b>ferroportin</b>; <b>hephaestin</b> oxidises it back to Fe³⁺ for transferrin. <b>Hepcidin</b> from the liver blocks ferroportin. Vitamin C helps absorption (2020 and 2022 reviews; Wikipedia). Iron-deficiency anaemia: <a href="../blood/haemoglobin-anaemia.html#h-anaem">Anaemia</a>.</p>'],
+  b12: ['Vitamin B12', ['tile'], [[230, 'cubilin + amnionless (cubam)', 'endo', 'IF–B12 complex']], [[230, '', 'out', 'B12 on transcobalamin II']], [],
+    '<h3>Vitamin B12</h3><p>Acid and pepsin free B12 from food; in the stomach it binds <b>haptocorrin</b> (R protein, from saliva); in the duodenum pancreatic proteases free it and it binds <b>intrinsic factor</b> from the parietal cells. The IF–B12 complex is taken up by the <b>cubilin–amnionless (cubam) receptor in the terminal ileum</b>, and B12 travels in plasma on <b>transcobalamin II</b> (StatPearls ×3; a 2014 study; Wikipedia). The liver stores it (StatPearls). Without intrinsic factor — <b>pernicious anaemia</b>, autoimmune loss of parietal cells — B12 is not absorbed (StatPearls; Wikipedia).</p>'],
+  ca: ['Calcium', ['duo', 'jej', 'ile'], [[250, 'TRPV6', 'in', 'Ca²⁺ (vitamin D-regulated)']], [[250, 'pump out', 'out', 'Ca²⁺ to blood']], [[250, 'calbindin carries it across', 'mid'], [120, 'paracellular', 'para']],
+    '<h3>Calcium</h3><p>Two routes (a 2022 review; Wikipedia). <b>Transcellular</b>: active, saturable and regulated by vitamin D (calcitriol) — Ca²⁺ enters through TRPV6 (the proposed main channel) and is carried across by <b>calbindin</b>; mainly in the <b>duodenum</b>, and dominant when intake is low. A 2022 review adds the last step, extrusion across the basolateral membrane. <b>Paracellular</b>: passive, through the tight junctions, along the jejunum and ileum, dominant when intake is high; a 2022 review names claudin-2 and -12.</p>'],
+  bs: ['Bile salts', ['tile'], [[230, 'ASBT (Na⁺-dependent)', 'in', 'conjugated bile salts']], [[230, '', 'out', 'to the portal vein → liver']], [],
+    '<h3>Bile salts</h3><p>About 95% are reabsorbed, actively, in the <b>terminal ileum</b> by the sodium-dependent transporter ASBT and return to the liver in the portal vein (a 2015 review; StatPearls; Wikipedia): the <a href="liver-applied.html#h-ehc">enterohepatic circulation</a>.</p>'],
+  wat: ['Water, Na⁺', ['jej', 'ile', 'col'], [[200, 'SGLT1', 'in', 'Na⁺ + glucose, water follows']], [[220, 'Na⁺/K⁺ pump', 'na', 'Na⁺ out']], [],
+    '<h3>Water and electrolytes</h3><p>Villous cells absorb Na⁺, crypt cells secrete Cl⁻ (2014 and 2018 reviews). Glucose-coupled Na⁺ absorption through <b>SGLT1</b> is not blocked by cAMP — even during cholera — so a glucose–salt <b>oral rehydration solution</b> still drives Na⁺ and water absorption (a 2014 review; Wikipedia). The <b>colon</b> absorbs water and electrolytes (StatPearls; Wikipedia). Our sources do not give the daily volumes, so none are shown.</p>'],
+};
+const SEG = [['sto', 'stomach', 20, 90], ['duo', 'duodenum', 90, 175], ['jej', 'jejunum', 175, 300], ['ile', 'ileum', 300, 420], ['tile', 'terminal ileum', 420, 470], ['col', 'colon', 470, 540]];
+const AB_NOTE = 'Schematic, not to scale; one cell stands for the whole lining. Sites are the main ones our sources name.';
+
+const DIG = [
+  ['Carbohydrate', 'Salivary and pancreatic amylase; brush-border lactase, sucrase, maltase', 'Monosaccharides: glucose, galactose, fructose'],
+  ['Protein', 'Pepsin (stomach); trypsin, chymotrypsin (pancreas); brush-border peptidases', 'Amino acids, di- and tripeptides'],
+  ['Fat', 'Lingual lipase (start); bile salts emulsify; pancreatic lipase + colipase', 'Free fatty acids and monoglycerides, in micelles'],
+];
+const DIG_TEXT = '<p>Amylase breaks starch into smaller chains (maltose, dextrins) and the brush-border enzymes finish the job (Wikipedia; a 2019 review; StatPearls). <b>Lactase</b> splits lactose into glucose and galactose (StatPearls; Wikipedia). <b>Lactose intolerance</b>: too little lactase — primary lactose intolerance as lactase falls with age; unabsorbed lactose causes osmotic diarrhoea and is fermented in the colon; a <b>hydrogen breath test</b> supports the diagnosis (Wikipedia; a 2015 review). Pancreatic enzymes and their activation: <a href="secretions.html#h-panc">Pancreatic juice</a>.</p>';
+
+/* slow waves: [key, label, per min, note] */
+const SW = [['sto', 'Stomach', 3, 'about 3/min (Wikipedia); 3–5/min in the distal stomach (a 2019 review)'], ['duo', 'Duodenum', 12, '11–12/min (Wikipedia)'], ['ile', 'Ileum', 9, 'about 9/min (Wikipedia)'], ['col', 'Colon', 3, '2–6/min (a 2020 consensus); 3/min (Wikipedia)']];
+const SW_TEXT = '<p><b>Interstitial cells of Cajal</b> are the pacemakers that make the slow waves (StatPearls; Wikipedia; a 2013 review). Slow waves alone do not contract the muscle: a contraction needs <b>action potentials (spikes)</b> on the slow-wave plateau, so the slow-wave frequency sets the most contractions possible, and nerves and hormones set their strength (Wikipedia). The frequency is highest in the duodenum and falls along the small intestine (a 2013 review: a falling gradient; numbers from Wikipedia).</p><p class="muted">Trace schematic: wave shape and which waves carry spikes are illustrative.</p>';
+
+/* MMC steps: [label, phase index, text] */
+const MMC = [
+  ['Phase I', 0, '<h3>Phase I: quiescence</h3><p>Virtually no contractions (a 2012 review; Wikipedia).</p>'],
+  ['Phase II', 1, '<h3>Phase II: irregular contractions</h3><p>Intermittent, irregular, low-amplitude contractions (a 2012 review; Wikipedia).</p>'],
+  ['Phase III', 2, '<h3>Phase III: the sweep</h3><p>A short burst of <b>regular high-amplitude contractions</b> that sweeps from the stomach through the small intestine (a 2012 review; Wikipedia) — the "interdigestive housekeeper" that cleans the empty stomach and carries food remnants and bacteria on to the colon (a 2019 review; a 2012 review; Wikipedia). <b>Motilin</b> peaks with gastric phase III and triggers it (a 2012 review; Wikipedia; StatPearls), through a vagovagal reflex in a 2012 review.</p>'],
+  ['Phase IV', 3, '<h3>Phase IV: transition</h3><p>A short transition back to the quiet of phase I (a 2012 review; Wikipedia).</p>'],
+  ['A meal', 4, '<h3>Eating stops it</h3><p>The MMC is the <b>interdigestive</b> (fasting) pattern (2019 and 2021 reviews); Wikipedia: a meal interrupts it. Loss of the MMC is linked to <b>small-bowel bacterial overgrowth</b> (a 2012 review; Wikipedia).</p>'],
+];
+const MMC_NOTE = 'Cycle length — sources differ: phase III recurs every 90–120 min (2012 and 2013 reviews from one research group); Wikipedia: every 90–230 min; motilin is released about every 100 min (Wikipedia). Phase lengths on the trace are schematic (Wikipedia: phase I 40–60% of the cycle, II 20–30%).';
+
+const PE = {
+  per: ['Peristalsis', '<h3>Peristalsis</h3><p>Distension by a bolus makes the gut <b>contract on the oral side</b> and <b>relax on the anal side</b>, so the bolus is pushed on (StatPearls; a 2020 review; Wikipedia). Wikipedia: the contraction uses acetylcholine and substance P, the relaxation nitric oxide and VIP, through the myenteric plexus.</p>'],
+  seg: ['Segmentation', '<h3>Segmentation</h3><p>Rings of muscle contract at intervals and mix the contents <b>without moving them on</b> (StatPearls; Wikipedia), helping absorption.</p>'],
+};
+
+const GE_TEXT = '<p><b>Receptive relaxation and accommodation.</b> As food fills the stomach the fundus relaxes and becomes more compliant, so a large meal is held (a 2019 review; a 2026 review). These are vagovagal inhibitory reflexes, and proximal gastric vagotomy impairs them (a 2019 review).</p><p><b>Gastric emptying.</b> Digestible solids leave only after being ground to particles under 2–3 mm; liquids leave sooner; the rate depends on the volume, osmolality, composition and calories of the meal (a 2019 review). <b>Fat, low pH and hypertonic chyme</b> in the duodenum slow the stomach (Wikipedia; a 2019 review on high-fat meals); <b>CCK</b> slows emptying (2019 and 2021 reviews; Wikipedia), while motilin and ghrelin speed it (a 2019 review).</p><p><b>Gastrocolic reflex.</b> Stretch of the stomach after a meal increases colonic motility through the myenteric plexus, giving the urge to defecate after meals (StatPearls; Wikipedia). <b>Mass movements</b> move faeces into the rectum and start the defecation reflex (StatPearls); Wikipedia: they occur one to three times a day.</p>';
+const GE_TABLE = [['Low-calorie liquid', 'Half has left the stomach by about 1 h'], ['High-calorie liquid', 'Half still in the stomach at 2 h'], ['Digestible solid', 'Leaves after being ground to particles under 2–3 mm']];
+
+/* defecation steps: [label, IAS state, EAS state, faeces level, text] states: 1 contracted, 0 relaxed */
+const DF = [
+  ['Mass movement', 1, 1, 0, '<h3>1. A mass movement fills the rectum</h3><p>The process begins with a mass movement from the colon to the rectum (StatPearls).</p>'],
+  ['Stretch → urge', 1, 1, 1, '<h3>2. Rectal stretch gives the urge</h3><p>Wikipedia: stretch receptors in the rectal wall signal the desire to defecate. The rectum contracts (StatPearls; a 2022 study).</p>'],
+  ['RAIR', 0, 1, 1, '<h3>3. Rectoanal inhibitory reflex</h3><p>The <b>internal anal sphincter</b> (smooth muscle, involuntary) relaxes briefly so the anal canal can sample the contents (a 2022 study; Wikipedia); Wikipedia adds that the <b>external sphincter</b> (skeletal, voluntary) first contracts.</p>'],
+  ['Defer', 1, 1, 0, '<h3>4a. Not now</h3><p>The external sphincter stays closed; Wikipedia: the contents are often moved back into the colon, where more water is absorbed.</p>'],
+  ['Defecate', 0, 0, 2, '<h3>4b. Defecation</h3><p>Voluntary relaxation of the <b>external anal sphincter</b> and pelvic floor lets the faeces out (a 2022 study; StatPearls); Wikipedia: straining (abdominal muscles and diaphragm) raises the pressure. In infants it happens by reflex alone (Wikipedia).</p>'],
+];
+
+const FIB = [
+  ['Insoluble (cellulose, hemicellulose, lignin)', 'Holds water, adds bulk, increases stool weight, shortens transit', 'Low intake favours constipation'],
+  ['Soluble, viscous (e.g. psyllium, oat β-glucan)', 'Binds bile acids; delays gastric emptying (Wikipedia)', 'Modestly lowers LDL cholesterol'],
+  ['Fermentable (resistant starch, inulin)', 'Fermented by colonic bacteria to short-chain fatty acids', 'Feeds the gut microbiota'],
+];
+const FIB_TEXT = '<p>Dietary fibre is plant carbohydrate (and lignin) that resists digestion in the small intestine and is partly or fully fermented in the colon, making short-chain fatty acids (StatPearls; Wikipedia; a 2020 review). Bulking fibre increases stool weight and shortens colonic transit, and a low-fibre diet induces constipation (StatPearls; a 2018 review; Wikipedia). Soluble fibre binds bile acids and modestly lowers LDL cholesterol (StatPearls; Wikipedia).</p>';
+
+/* gut-brain pathways: key -> [label, parts, text] */
+const GB = {
+  vag: ['Vagus', ['vag'], '<h3>Vagus nerve</h3><p>The main neural route; about <b>80% of its fibres are afferent</b>, carrying information from the gut to the brain (a 2018 review). Gut microbes and their products, such as short-chain fatty acids, can activate vagal afferents (2018 review; Wikipedia).</p>'],
+  sym: ['Sympathetic and spinal', ['sym'], '<h3>Sympathetic and spinal routes</h3><p>The enteric nervous system talks to the brain through the parasympathetic (vagus) and sympathetic (prevertebral ganglia) systems (Wikipedia; spinal route also a 2018 review).</p>'],
+  hpa: ['HPA axis (stress)', ['hpa'], '<h3>Hypothalamic–pituitary–adrenal axis</h3><p>Stress hormones are one endocrine route between brain and gut (a 2015 review; a 2018 review; Wikipedia).</p>'],
+  imm: ['Immune (cytokines)', ['imm'], '<h3>Immune signals</h3><p>Cytokines carry signals between the gut and the brain (a 2018 review; Wikipedia).</p>'],
+  hor: ['Gut hormones', ['hor'], '<h3>Gut hormones: hunger and satiety</h3><p>After a meal <b>CCK, GLP-1, GIP and PYY</b> are satiety signals; in fasting the stomach releases <b>ghrelin</b>, which triggers eating (a 2021 review; a 2019 review; Wikipedia).</p>'],
+  mic: ['Microbiota', ['mic', 'vag'], '<h3>Gut microbiota</h3><p>Microbial products (short-chain fatty acids, neuroactive molecules) act on the gut and on vagal afferents (a 2018 review; Wikipedia). Wikipedia cautions that the "microbiota–gut–brain axis" rests on preliminary, mostly animal research.</p>'],
+};
+const GB_TEXT = '<p>The <b>gut–brain axis</b> is two-way communication between the central nervous system and the gut\'s <a href="secretions.html#h-anat">enteric nervous system</a>, through neural, endocrine (HPA axis), immune and metabolic routes (2015, 2018 and 2021 reviews; Wikipedia). <b>Why it matters:</b> hunger and satiety, the effects of stress on the gut, and disorders of gut–brain interaction — one review finds brain-to-gut dysfunction dominant in irritable bowel syndrome (a 2015 review). Nausea and vomiting run through the same axis: <a href="liver-applied.html#h-app">Vomiting</a>.</p>';
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews and studies on intestinal glucose and fructose transport (2014, 2015), the peptide transporter PepT1 (2017), chylomicron secretion (2019), intestinal iron (2020, 2022) and calcium absorption (2022), cubilin in the human ileum (2014), lactose intolerance (2015), oral rehydration (2014), infectious diarrhoea (2018), interstitial cells of Cajal (2013), gastric emptying (2019), the migrating motor complex (2012, 2013), colonic motility (2020 consensus), the enteric nervous system (2020), the anorectal defecation reflex (2022), constipation (2018), dietary fibre (2020), gut hormones (2019, 2021), the gut–brain axis (2015, 2018) and nausea and vomiting (2021), GERD (2026), enterohepatic bile acids (2015) (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> the absorption map, slow-wave trace, MMC record, peristalsis, defecation and gut–brain drawings are schematic, not to scale; trace shapes and phase lengths are illustrative.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* ---- absorption map ---- */
+function drawAb(k) {
+  const r = AB[k]; let s = Phys.arrowDef('aa', 'var(--ink)');
+  /* gut strip */
+  for (const [kk, lab, x0, x1] of SEG) {
+    const col = kk === 'sto' ? '--stom' : kk === 'col' ? '--colon' : '--gut';
+    s += `<rect x="${x0}" y="22" width="${x1 - x0}" height="24" style="fill:var(${col});stroke:var(--surface);stroke-width:2"/>`;
+    s += T((x0 + x1) / 2, kk === 'tile' ? 72 : 62, lab, 's', 'middle');
+    if (r[1].includes(kk)) s += `<rect class="sel" x="${x0 + 1}" y="16" width="${x1 - x0 - 2}" height="36" rx="5"/>`;
+  }
+  s += T(20, 12, 'main site of absorption (outlined)', 's', 'start');
+  /* enterocyte */
+  s += `<rect x="20" y="92" width="520" height="34" style="fill:var(--fluid)"/>` + T(30, 106, 'lumen', 's', 'start');
+  let mv = 'M120 140'; for (let x = 120; x < 440; x += 12) mv += ` L${x} 128 L${x + 6} 128 L${x + 6} 140`; s += `<path d="${mv}" style="stroke:var(--muted);fill:none"/>` + T(450, 136, 'brush border', 's', 'start');
+  s += `<rect x="120" y="140" width="320" height="150" rx="10" style="fill:var(--cyto);fill-opacity:.35;stroke:var(--muted)"/>` + T(432, 156, 'enterocyte', 's', 'end');
+  s += `<rect x="20" y="300" width="250" height="40" style="fill:var(--artery);fill-opacity:.12"/>` + T(30, 334, 'blood', 's', 'start');
+  s += `<rect x="290" y="300" width="250" height="40" style="fill:var(--lymph);fill-opacity:.22"/>` + T(530, 334, 'lacteal (lymph)', 's', 'end');
+  // neighbour cell edge for the paracellular route
+  s += `<rect x="80" y="140" width="40" height="150" style="fill:var(--cyto);fill-opacity:.2;stroke:var(--muted)"/>`;
+  const ar = (x1, y1, x2, y2) => `<path d="M${x1} ${y1} L${x2} ${y2}" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#aa)"/>`;
+  r[2].forEach(([x, lab, dir, sub], ii) => { const ly = 192 + ii * 18;
+    if (dir === 'mic') { s += `<circle cx="${x}" cy="108" r="13" style="fill:var(--surface);stroke:var(--ink)"/>` + T(x + 18, 112, 'micelle (in the lumen)', 'l', 'start') + ar(x + 6, 132, x + 6, 176) + T(x + 14, ly, sub + ' enter', 'l', 'start'); return; }
+    if (dir === 'red') { s += `<rect x="${x - 22}" y="130" width="44" height="18" rx="4" class="tp"/>` + T(x, 143, lab, 's', 'middle') + T(x, 116, sub, 'l', 'middle'); return; }
+    if (dir === 'endo') { s += `<rect x="${x - 30}" y="130" width="60" height="18" rx="4" class="tp"/>` + T(x - 20, 112, sub + ' → ' + lab, 'l', 'start') + T(x, 143, 'cubam', 's', 'middle') + ar(x, 150, x, 186) + `<circle cx="${x}" cy="196" r="9" style="fill:var(--surface);stroke:var(--ink)"/>` + T(x + 16, 200, 'endocytosis', 's', 'start'); return; }
+    s += `<rect x="${x - 22}" y="130" width="44" height="18" rx="4" class="tp"/>` + T(x, 143, lab.length > 8 ? '' : lab, 's', 'middle') + ar(x, 112, x, 176) + T(x + 8, ly, (lab.length > 8 ? lab + ': ' : '') + sub, 'l', 'start');
+  });
+  for (const [x, lab, dir, sub] of r[3]) {
+    if (dir === 'na') { s += `<circle cx="${x}" cy="290" r="12" class="tp"/>` + ar(x, 278, x, 318) + Phys.dot(x - 10, 312, 'na') + T(x + 16, 274, lab + ': ' + sub, 's', 'start'); continue; }
+    if (dir === 'lym') { s += `<ellipse cx="${x}" cy="268" rx="12" ry="9" style="fill:var(--surface);stroke:var(--ink)"/>` + ar(x, 278, x, 318) + T(x + 18, 272, lab + ' ' + sub, 'l', 'start'); continue; }
+    if (lab) s += `<rect x="${x - 26}" y="282" width="52" height="18" rx="4" class="tp"/>` + T(x, 295, lab.length > 10 ? '' : lab, 's', 'middle');
+    s += ar(x, 232, x, 318) + T(x + 8, 250, (lab.length > 10 ? lab + ': ' : '') + sub, 'l', 'start');
+  }
+  for (const [x, lab, kind] of r[4]) {
+    if (kind === 'mid') s += T(x, 222, lab, 'l b', 'middle');
+    if (kind === 'para') s += ar(120, 112, 120, 318) + T(114, 206, lab, 's', 'end') + T(114, 220, '(tight junctions)', 's', 'end');
+    if (kind === 'hep') s += `<path class="xb" d="M224 278 L236 290 M236 278 L224 290" style="stroke:var(--ink);stroke-width:2.4"/>` + T(250, 354, lab, 's', 'start');
+  }
+  $('ab-svg').innerHTML = s; $('ab-find').innerHTML = r[5];
+}
+Phys.toggles('ab-tg', Object.entries(AB).map(([k, v]) => [k, v[0]]), drawAb, 'glu'); drawAb('glu');
+Phys.key('ab-key', [['--accent', 'site (selection)'], ['--gut', 'small intestine'], ['--colon', 'colon'], ['--fluid', 'lumen contents'], ['--cyto', 'enterocyte'], ['--artery', 'blood'], ['--lymph', 'lymph']]);
+$('ab-note').textContent = AB_NOTE;
+
+/* ---- digestion table ---- */
+Phys.table('dig-table', ['Food', 'Enzymes', 'Absorbed as'], DIG); $('dig-text').innerHTML = DIG_TEXT;
+
+/* ---- slow waves ---- */
+function drawSw(k) {
+  const r = SW.find(x => x[0] === k), f = r[2];
+  const x0 = 50, x1 = 540, X = Phys.scale(0, 60, x0, x1), Y = Phys.scale(-70, -30, 150, 40);
+  let s = `<path class="axis" d="M${x0} 30 L${x0} 150 L${x1} 150"/>` + T(x0 + 4, 24, 'membrane potential (schematic)', 's', 'start');
+  for (const t of [0, 20, 40, 60]) s += T(X(t), 168, t + ' s', 's', 'middle');
+  const per = 60 / f, pts = [];
+  for (let t = 0; t <= 60; t += 0.05) { const ph = (t % per) / per; const v = ph < 0.15 ? -65 + 25 * ph / 0.15 : ph < 0.45 ? -41 : ph < 0.6 ? -41 - 24 * (ph - 0.45) / 0.15 : -65; pts.push([X(t), Y(v)]); }
+  s += `<path class="trace" d="${Phys.path(pts)}"/>`;
+  for (let i = 0; i < f; i++) if (i % 2 === 0) { const tc = i * per + per * 0.3; const xs = X(tc); s += `<path d="M${(xs - 4).toFixed(1)} ${Y(-41)} L${xs.toFixed(1)} ${Y(-30)} L${(xs + 4).toFixed(1)} ${Y(-41)}" style="stroke:var(--ink);stroke-width:1.4;fill:none"/>`; }
+  s += T(x0, 184, r[1] + ': ' + r[3], 's', 'start') + T(x1, 24, '▲ spike on a plateau → contraction', 's', 'end');
+  $('sw-svg').innerHTML = s;
+}
+Phys.toggles('sw-tg', SW.map(r => [r[0], r[1]]), drawSw, 'sto'); drawSw('sto'); $('sw-text').innerHTML = SW_TEXT;
+
+/* ---- MMC stepper ---- */
+const MS = {s: 0};
+function drawMmc() {
+  const ph = MMC[MS.s][1], x0 = 40, x1 = 540, X = Phys.scale(0, 100, x0, x1);
+  const B = [[0, 45], [45, 75], [75, 85], [85, 100]];
+  let s = `<path class="axis" d="M${x0} 150 L${x1} 150"/>` + T(x0, 170, 'one fasting cycle (schematic; 90–120 min in a 2012 review)', 's', 'start');
+  const names = ['I', 'II', 'III', 'IV'];
+  B.forEach(([a, b], i) => { s += `<rect x="${X(a)}" y="40" width="${X(b) - X(a)}" height="112" style="fill:var(--ink);fill-opacity:${i % 2 ? .05 : .02}"/>` + T((X(a) + X(b)) / 2, 34, 'phase ' + names[i], 's', 'middle'); });
+  if (ph < 4) s += `<rect class="sel" x="${X(B[ph][0])}" y="40" width="${X(B[ph][1]) - X(B[ph][0])}" height="112" rx="4"/>`;
+  // contractions as bars
+  let seed = 7; const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+  for (let t = 0.5; t < 100; t += 1) {
+    let h = 0; if (t >= 45 && t < 75) h = rnd() < 0.45 ? 15 + 35 * rnd() : 0; else if (t >= 75 && t < 85) h = 85; else if (t >= 85) h = rnd() < 0.3 ? 15 * rnd() : 0;
+    if (ph === 4 && t > 50) h = 0;
+    if (h) s += `<path d="M${X(t).toFixed(1)} 150 L${X(t).toFixed(1)} ${(150 - h).toFixed(1)}" style="stroke:var(--ink);stroke-width:2"/>`;
+  }
+  // motilin curve
+  const mp = []; for (let t = 0; t <= 100; t += 1) mp.push([X(t), 200 - 30 * Math.exp(-Math.pow((t - 76) / 7, 2))]);
+  s += `<path d="${Phys.path(mp)}" style="stroke:var(--ink);stroke-width:1.4;stroke-dasharray:5 3;fill:none"/>` + T(X(76) - 12, 188, 'plasma motilin peaks with phase III', 's', 'end');
+  if (ph === 4) s += `<rect x="${X(50)}" y="40" width="${X(100) - X(50)}" height="112" style="fill:var(--surface);fill-opacity:.85"/>` + T(X(75), 100, 'meal: MMC interrupted', 'l b', 'middle');
+  s += T(x0, 222, 'contractions (bars) and motilin (dashed); not measured data', 's', 'start');
+  $('mmc-svg').innerHTML = s; $('mmc-find').innerHTML = MMC[MS.s][2];
+}
+Phys.stepper('mmc-step', MMC.map(r => r[0]), drawMmc, MS); $('mmc-note').textContent = MMC_NOTE;
+
+/* ---- peristalsis ---- */
+function drawPe(k) {
+  let s = Phys.arrowDef('ae', 'var(--ink)');
+  const y0 = 60, y1 = 130, wall = (x, top, w) => `<path d="M${x} ${top ? y0 : y1} L${x + 20} ${top ? y0 : y1}" style="stroke:var(--musc);stroke-width:${w}"/>`;
+  if (k === 'per') {
+    for (let x = 20; x < 540; x += 20) { const c = x >= 160 && x < 220 ? 22 : x >= 240 && x < 360 ? 4 : 10; s += wall(x, 1, c) + wall(x, 0, c); }
+    s += `<ellipse cx="300" cy="95" rx="56" ry="26" style="fill:var(--gut)"/>` + T(300, 99, 'bolus', 'b', 'middle');
+    s += T(190, 34, 'contracts (oral side)', 'l b', 'middle') + T(190, 166, 'ACh, substance P (Wikipedia)', 's', 'middle');
+    s += T(300, 34, 'relaxes (anal side)', 'l b', 'start') + T(320, 166, 'NO, VIP (Wikipedia)', 's', 'start');
+    s += `<path d="M380 95 L470 95" style="stroke:var(--ink);stroke-width:2" marker-end="url(#ae)"/>` + T(470, 84, 'moves on', 's', 'end');
+    s += T(20, 186, '← towards the mouth (oral)', 's', 'start') + T(540, 186, 'towards the anus (aboral) →', 's', 'end');
+  } else {
+    for (let x = 20; x < 540; x += 20) { const c = [80, 200, 320, 440].some(m => x >= m && x < m + 40) ? 24 : 6; s += wall(x, 1, c) + wall(x, 0, c); }
+    for (const cx of [150, 270, 390]) s += `<ellipse cx="${cx}" cy="95" rx="36" ry="22" style="fill:var(--gut)"/>`;
+    s += T(280, 34, 'rings contract at intervals: contents mixed, not moved on', 'l b', 'middle');
+    for (const cx of [150, 270, 390]) s += `<path d="M${cx - 20} 120 C${cx - 6} 140 ${cx + 6} 140 ${cx + 20} 120" style="stroke:var(--ink);stroke-width:1.4;fill:none" marker-end="url(#ae)"/>`;
+  }
+  $('pe-svg').innerHTML = s; $('pe-find').innerHTML = PE[k][1];
+}
+Phys.toggles('pe-tg', Object.entries(PE).map(([k, v]) => [k, v[0]]), drawPe, 'per'); drawPe('per');
+
+/* ---- emptying ---- */
+$('ge-text').innerHTML = GE_TEXT; Phys.table('ge-table', ['Meal', 'Emptying (a 2019 review)'], GE_TABLE);
+
+/* ---- defecation stepper ---- */
+const DS = {s: 0};
+function drawDf() {
+  const [lab, ias, eas, lev, txt] = DF[DS.s];
+  let s = Phys.arrowDef('ad', 'var(--ink)');
+  s += `<path d="M140 30 L140 200 M260 30 L260 200" style="stroke:var(--musc);stroke-width:10"/>` + T(200, 22, 'rectum', 'b', 'middle');
+  if (lev) s += `<rect x="148" y="${lev === 2 ? 110 : 70}" width="104" height="${lev === 2 ? 170 : 130}" rx="18" style="fill:var(--muted);fill-opacity:.45"/>` + T(200, 150, 'faeces', 'l', 'middle');
+  if (DS.s === 0) s += `<path d="M200 30 L200 90" style="stroke:var(--ink);stroke-width:2" marker-end="url(#ad)"/>` + T(206, 70, 'mass movement', 's', 'start');
+  if (DS.s === 1) { for (const y of [90, 130, 170]) s += `<circle cx="140" cy="${y}" r="6" style="fill:var(--nerve);stroke:var(--ink)"/><circle cx="260" cy="${y}" r="6" style="fill:var(--nerve);stroke:var(--ink)"/>`; s += T(272, 126, 'stretch', 's', 'start') + T(272, 142, 'receptors', 's', 'start'); }
+  const iw = ias ? 22 : 8, ew = eas ? 22 : 8, gap = ias || eas ? (ias && eas ? 4 : 16) : 44;
+  const xi = 200 - gap / 2, xe = xi - iw;   // left internal sphincter spans xe..xi
+  s += `<rect x="${xe}" y="200" width="${iw}" height="90" style="fill:var(--musc)"/><rect x="${200 + gap / 2}" y="200" width="${iw}" height="90" style="fill:var(--musc)"/>`;
+  s += `<rect x="${xe - ew}" y="230" width="${ew}" height="80" style="fill:var(--musc);fill-opacity:.4;stroke:var(--musc)"/><rect x="${200 + gap / 2 + iw}" y="230" width="${ew}" height="80" style="fill:var(--musc);fill-opacity:.4;stroke:var(--musc)"/>`;
+  s += `<path class="lead" d="M${xe + 2} 214 L112 214"/>` + T(8, 210, 'internal sphincter', 's', 'start') + T(8, 224, '(smooth, involuntary)', 's', 'start') + T(8, 240, ias ? 'contracted' : 'relaxed', 'b', 'start');
+  s += `<path class="lead" d="M${200 + gap / 2 + iw + ew - 2} 290 L300 290"/>` + T(392, 276, 'external sphincter', 's', 'end') + T(392, 290, '(skeletal, voluntary)', 's', 'end') + T(392, 306, eas ? 'contracted' : 'relaxed', 'b', 'end');
+  if (lev === 2) s += `<path d="M200 284 L200 324" style="stroke:var(--ink);stroke-width:2" marker-end="url(#ad)"/>`;
+  if (DS.s === 3) s += `<path d="M200 120 L200 40" style="stroke:var(--ink);stroke-width:2;stroke-dasharray:5 3" marker-end="url(#ad)"/>` + T(206, 100, 'back to colon', 's', 'start') + T(206, 114, '(Wikipedia)', 's', 'start');
+  $('df-svg').innerHTML = s; $('df-find').innerHTML = txt;
+}
+Phys.stepper('df-step', DF.map(r => r[0]), drawDf, DS);
+Phys.key('df-key', [['--musc', 'muscle (sphincter thick = contracted, thin = relaxed)'], ['--muted', 'faeces (neutral grey)'], ['--nerve', 'stretch receptors']]);
+
+/* ---- fibre ---- */
+Phys.table('fib-table', ['Type', 'What it does', 'Effect'], FIB); $('fib-text').innerHTML = FIB_TEXT;
+
+/* ---- gut-brain ---- */
+function drawGb(k) {
+  const on = new Set(GB[k][1]), c = p => on.has(p) ? '' : ' class="dim"';
+  let s = Phys.arrowDef('ag', 'var(--ink)');
+  s += `<rect x="120" y="12" width="160" height="50" rx="14" class="box"/>` + T(200, 42, 'brain (CNS)', 'b', 'middle');
+  s += `<rect x="60" y="214" width="280" height="70" rx="14" style="fill:var(--gut);fill-opacity:.22;stroke:var(--muted)"/>` + T(200, 240, 'gut and its enteric', 's', 'middle') + T(200, 254, 'nervous system', 's', 'middle');
+  s += `<g${c('mic')}>` + T(200, 276, 'microbiota (SCFAs, neuroactive molecules)', 's', 'middle') + `</g>`;
+  s += `<g${c('vag')}><path class="nv" d="M140 64 C110 110 110 170 130 212"/><path d="M118 180 L122 120" style="stroke:var(--ink);stroke-width:1.4" marker-end="url(#ag)"/>` + T(94, 140, 'vagus', 'l b', 'end') + T(94, 156, '~80% afferent', 's', 'end') + `</g>`;
+  s += `<g${c('sym')}><path class="nv" d="M260 64 C290 110 290 170 270 212" style="stroke-dasharray:6 4"/>` + T(300, 140, 'sympathetic,', 'l b', 'start') + T(300, 156, 'spinal', 'l b', 'start') + `</g>`;
+  s += `<g${c('hpa')}><path d="M180 64 L180 210" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#ag)"/>` + T(174, 100, 'HPA', 'l b', 'end') + T(174, 116, '(stress)', 's', 'end') + `</g>`;
+  s += `<g${c('imm')}><path d="M200 212 L200 66" style="stroke:var(--ink);stroke-width:1.6;stroke-dasharray:2 3" marker-end="url(#ag)"/>` + T(206, 190, 'cytokines', 'l b', 'start') + `</g>`;
+  s += `<g${c('hor')}><path d="M232 212 L232 66" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#ag)"/>` + T(238, 100, 'CCK, GLP-1,', 's', 'start') + T(238, 114, 'PYY, ghrelin', 's', 'start') + `</g>`;
+  s += T(200, 298, 'schematic', 's', 'middle');
+  $('gb-svg').innerHTML = s; $('gb-find').innerHTML = GB[k][2];
+}
+Phys.toggles('gb-tg', Object.entries(GB).map(([k, v]) => [k, v[0]]), drawGb, 'vag'); drawGb('vag'); $('gb-text').innerHTML = GB_TEXT;
+Phys.swipeHints();
+</script>
+</body>
+</html>

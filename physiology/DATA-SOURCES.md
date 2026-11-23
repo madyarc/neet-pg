@@ -100,3 +100,48 @@ where only one source has it, the page names that source.
   systolic-failure preset (EF 39%); tetanus, sinus-tachycardia and escape-rhythm wording; a, c, v waves labelled; LV
   pressure rise after the R wave; colour meanings; MAP slider limit; label collisions; a note that the 20/17/3 L figures
   are the classic model.
+
+## 04 Gastro-intestinal physiology — `gi/secretions.html`, `gi/digestion-motility.html`, `gi/liver-applied.html`
+
+- Fact sheet `sources-local/facts/fill-physio4.md` (630 quotes, script-checked against `sources-local/modern/fill-physio4/`,
+  downloads 2026-11-22/23). Wikipedia text from the API (14) or from wikitext via wt2txt.py (template numbers dropped,
+  not used).
+- Excluded: Wikipedia Gastric glands, Stomach (cite OpenStax); Large intestine (Gray 1918 text). PMC3400812 and
+  PMC5137267 counted as one source (same group); Wikipedia Gut–brain axis shares a sentence with PMC4367209 (not quoted).
+- 04a: hormones PMC6785288, PMC8788842, PMC8226753, StatPearls, Wikipedia; acid secretion PMC2589780, PMC2588922,
+  PMC2589756 (abstracts), PMC10947768, PMC6406303, PMC2974194; saliva PMC6769486, PMC8461045; gastrinoma PMC8475006;
+  pancreas PMC4831246, PMC6432881, PMC5301368; intestinal juice PMC3950600, PMC6007821.
+- 04b: PMC3935955, PMC4817407, PMC5726373, PMC6396431, PMC7509542, PMC9219084, PMC4187553, PMC9416674, PMC4586575,
+  PMC3603487, PMC6850045, PMC3400812, PMC7136172, PMC7599184, PMC9541108, PMC5976340, PMC7589116, PMC4367209,
+  PMC5808284, PMC8198651.
+- 04c: PMC5754852 (BSG 2018), PMC8637680, PMC4629214, PMC5681992, PMC10035990, PMC10824640, PMC12279320, PMC12054289,
+  PMC8473635, PMC3725693, PMC6743154, PMC8374333.
+- Contested, shown: main salivary gland (parotid vs submandibular), gastric pH, acid shares by phase, apical GLUT2, MMC
+  cycle length, colonic slow-wave rate, bile-acid recycling. Drawings schematic; LFT values illustrative. No new colour
+  tokens (organ tokens from anatomy organs.html; oesophagus and generic mucosa drawn neutral).
+- Independent review 2026-11-23, fixed: LFT picker classification (R only when ALT, or ALP with GGT, is raised;
+  non-hepatic ALP), defecation arrow, attributions (MMC, stretch receptors, motilin, mass-movement frequency cut,
+  idiopathic-ulcer imbalance model, alcohol, Gilbert, AST tissues, calcium claudins, cortex), unquoted labels cut,
+  colours, drawing positions.
+
+## 05 Respiratory physiology — `respiratory/mechanics-volumes.html`, `respiratory/gas-transport-control.html`, `respiratory/applied-environment.html`
+
+- Fact sheet `sources-local/facts/fill-physio5.md` (528 quotes, script-checked against `sources-local/modern/fill-physio5/`,
+  downloads 2026-11-22/23).
+- Excluded (cite OpenStax or Boundless): Wikipedia Lung, Respiratory center (and its DRG/VRG/pneumotaxic/apneustic
+  redirects), Carbaminohemoglobin, Fick's laws of diffusion, Hyperbaric medicine, Gas exchange. No paper cites OpenStax;
+  copy check clean.
+- Main sources: PMC4613399 (2015), PMC5234199 (hypoxaemia, 2017), PMC4666443 (ODC, 2015), PMC11242573 (PFT
+  interpretation, 2024), PMC6794117 (ATS/ERS spirometry 2019), PMC8360707, PMC9237333, PMC10384777 (CO₂), PMC12189567
+  (carotid body), PMC11305331 (preBötC), PMC12832471 (altitude illness, 2025), PMC8176094, PMC13131091 (diving);
+  experimental: PMC9944137 (mouse), PMC11123099 (rabbit); StatPearls; Wikipedia. Years are Europe PMC's publication
+  year, except PMC7930571 (2021).
+- Contested, shown: alveolar count; FRC; whole-lung V/Q; FEV1/FVC 0.70 vs LLN; P50; CO affinity; 1.34 vs 1.36; CO₂
+  carriage shares; PH₂O 45 vs 47; HAPE vasoconstriction diffuse vs heterogeneous; whether spirometry measures FRC/TLC.
+- Oxygen targets dated as Wikipedia cites them (JRCALC 2009; Chu 2018; BMJ 2018), with "check the current national
+  guideline".
+- Models: breathing cycle, flow–volume loop, Laplace pair, V/Q bars, ODC shifts (Hill equation, illustrative
+  magnitudes), altitude pressure (halving every 5,500 m) and all drawings are schematic. No new colour tokens.
+- Independent review 2026-11-23, fixed: DLCO shunt direction, hypoxaemia wording, A–a causes, HAPE disagreement,
+  years, FRC/TLC spirometry, dated O₂ targets, rounding note, classifier clipping, 13 attributions, Laplace labels,
+  preset chips, small layout fixes.

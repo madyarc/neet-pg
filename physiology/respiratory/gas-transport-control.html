@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gas Transport and Control of Breathing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+/* colours from phys.css with their meanings: --artery (arterial blood), --nerve (afferent nerves), --rbc (red cells), --fluid (CSF and plasma:
+   body fluids), --cl (Cl⁻). Gases (O₂, CO₂) are written in ink, not given colours. No new tokens. */
+svg.sch .node{fill:var(--surface);stroke:var(--muted);stroke-width:1.2}
+svg.sch .nodeon{fill:var(--surface);stroke:var(--ink);stroke-width:2.6}
+svg.sch .nv{stroke:var(--nerve);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .nvoff{opacity:.25}
+svg.sch .ghost{stroke:var(--muted);stroke-width:1.6;fill:none;stroke-dasharray:5 4}
+svg.sch .cur{stroke:var(--mark);stroke-width:1.5}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 05: <a href="mechanics-volumes.html">Mechanics and lung volumes</a> · <span aria-current="page">Gas transport and control</span> · <a href="applied-environment.html">Applied and environmental</a></span></nav>
+
+<header class="stack">
+  <h1>Transport of Oxygen and Carbon Dioxide, and the Control of Breathing</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-odc">O₂ dissociation curve</a> <a href="#h-cont">O₂ content</a> <a href="#h-alv">Alveolar gas equation</a> <a href="#h-co2">CO₂ transport</a> <a href="#h-ctrl">Control of breathing</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-odc">
+  <h2 id="h-odc">The oxygen–haemoglobin dissociation curve</h2>
+  <div class="chips" id="odc-tg" aria-label="Preset"></div>
+  <div class="chips" id="odc-y" aria-label="Y axis"></div>
+  <div class="sliders" id="odc-sl"></div>
+  <div class="vrow" aria-live="polite" id="odc-out"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="odc-svg" viewBox="0 0 520 360" role="img" aria-label="Oxygen–haemoglobin dissociation curve for the chosen conditions, with the normal curve dashed, the P50 and the saturation at the chosen PO2"></svg></div>
+    <div class="prose find" id="odc-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="odc-key"></div>
+  <div class="prose" id="odc-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cont">
+  <h2 id="h-cont">Oxygen content: a calculator</h2>
+  <div class="chips" id="cont-tg" aria-label="Preset"></div>
+  <div class="sliders" id="cont-sl"></div>
+  <div class="vrow" aria-live="polite" id="cont-out"></div>
+  <div class="prose" id="cont-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-alv">
+  <h2 id="h-alv">The alveolar gas equation and the A–a gradient</h2>
+  <div class="chips" id="alv-tg" aria-label="Preset"></div>
+  <div class="sliders" id="alv-sl"></div>
+  <div class="vrow" aria-live="polite" id="alv-out"></div>
+  <div class="prose" id="alv-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-co2">
+  <h2 id="h-co2">Carbon dioxide transport, the chloride shift, the Bohr and Haldane effects</h2>
+  <div class="chips" id="co2-tg" aria-label="Source"></div>
+  <div class="schbox"><svg class="fig sch fit" id="co2-bar" viewBox="0 0 520 90" role="img" aria-label="How CO2 is carried in blood: bicarbonate, carbamino compounds and dissolved, as percentages from the chosen source"></svg></div>
+  <h3>In a red cell in a tissue capillary: step through</h3>
+  <div class="step" id="cs-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="cs-svg" viewBox="0 0 520 300" role="img" aria-label="Schematic red cell in a tissue capillary: CO2 entering, carbonic anhydrase, H+ buffered by haemoglobin, bicarbonate leaving in exchange for chloride; the current step is highlighted"></svg></div>
+    <div class="prose find" id="cs-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="cs-key"></div>
+  <div class="prose" id="co2-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ctrl">
+  <h2 id="h-ctrl">Control of breathing: centres, chemoreceptors and reflexes</h2>
+  <div class="chips" id="ch-tg" aria-label="Stimulus"></div>
+  <div class="step" id="ch-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ch-svg" viewBox="0 0 540 400" role="img" aria-label="Schematic brainstem with the pontine and medullary respiratory groups, the central chemoreceptor area, the carotid and aortic bodies with their nerves and the lungs; the current step is highlighted"></svg></div>
+    <div class="prose find" id="ch-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="ch-key"></div>
+  <div class="scroll"><table id="ch-table"></table></div>
+  <div class="prose" id="ch-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio5.md, Part B; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Shift the oxygen dissociation curve with pH, CO₂, temperature and 2,3-BPG and read the P50 and saturation; compare fetal haemoglobin and carbon monoxide; work out oxygen content and alveolar PO₂; follow CO₂ through a red cell; and trace what happens when CO₂ rises or O₂ falls. Haemoglobin types are on <a href="../blood/haemoglobin-anaemia.html#h-hb">Haemoglobin and anaemia</a>.';
+/* ODC presets: shifts are ILLUSTRATIVE sizes (directions sourced; magnitudes are the model's) */
+const ODC0 = {po2: 100, ph: 7.4, pco2: 40, temp: 37, bpg: 1, hb: 'A'};
+const ODC_PRESET = {
+  norm: ['Normal (arterial)', {po2: 100, ph: 7.4, pco2: 40, temp: 37, bpg: 1, hb: 'A'}],
+  tis: ['Active muscle (right shift)', {po2: 30, ph: 7.2, pco2: 55, temp: 39, bpg: 1, hb: 'A'}],
+  alt: ['Chronic hypoxia, more 2,3-BPG', {po2: 50, ph: 7.4, pco2: 40, temp: 37, bpg: 1.6, hb: 'A'}],
+  alk: ['Alkalosis (hyperventilation)', {po2: 60, ph: 7.55, pco2: 25, temp: 37, bpg: 1, hb: 'A'}],
+  hbf: ['Fetal haemoglobin', {po2: 30, ph: 7.4, pco2: 40, temp: 37, bpg: 1, hb: 'F'}],
+  co: ['Carbon monoxide (half the Hb as COHb)', {po2: 100, ph: 7.4, pco2: 40, temp: 37, bpg: 1, hb: 'CO'}],
+};
+const ODC_NOTE = {
+  A: '<h3>Adult haemoglobin</h3><p>The curve is <b>sigmoid</b>: Hb binds up to four O₂ and each bound O₂ makes the next bind more easily (a 2015 review; StatPearls; Wikipedia). It is <b>flat above about 60 mmHg</b> (saturation above 90% changes little) and <b>steep below</b>, where tissues unload O₂ (Wikipedia; 2015 and 2021 reviews).</p>',
+  F: '<h3>Fetal haemoglobin (α₂γ₂)</h3><p>HbF has a <b>higher O₂ affinity</b> than HbA (two reviews; Wikipedia). Wikipedia draws its curve to the <b>left</b> of the adult curve and attributes this to 2,3-BPG binding HbA more than HbF. The higher affinity lets the fetus take O₂ from the mother\'s blood across the placenta (Wikipedia; a 2022 review: HbF facilitates transplacental gas exchange). Hb types: <a href="../blood/haemoglobin-anaemia.html#h-hb">HbA, HbF, HbA2</a>.</p>',
+  CO: '<h3>Carbon monoxide</h3><p>CO binds Hb about <b>200–250 times</b> more avidly than O₂ (StatPearls; a 2024 review; "about 200" a 2015 review; Wikipedia: 210 times). Carboxyhaemoglobin carries no O₂, so <b>content falls</b>, and the rest of the Hb holds its O₂ more tightly — a <b>left shift</b> (a 2015 review; a 2024 review). Switch the y-axis to content to see both. PaO₂ can be normal (Wikipedia); most pulse oximeters read COHb as oxyhaemoglobin (a 2015 review).</p>',
+};
+const ODC_TEXT = '<p>O₂ is carried mostly <b>bound to haemoglobin</b> — about 98% — and a little <b>dissolved</b> in plasma, about 2% (StatPearls; a 2015 review). <b>P50</b>, the PO₂ at which Hb is 50% saturated, is about <b>26–27 mmHg</b> (Wikipedia 26.6; a 2025 review 26.7; a 2015 review "approximately 26"); a higher P50 is a <b>right shift</b> — lower affinity — and a lower P50 a left shift (Wikipedia; two reviews).</p><p><b>Right shift</b> (more unloading): ↑PCO₂, ↑H⁺ (↓pH), ↑temperature, ↑2,3-BPG (Wikipedia; 2015 and 2025 reviews; StatPearls) — the conditions in working tissue (a 2015 review). 2,3-BPG rises in chronic hypoxia and at altitude (two reviews; Wikipedia). <b>Left shift</b> with the opposite, as in the lungs (a 2015 review) or with alkalosis from hyperventilation (a 2021 review). The <b>Bohr effect</b> is the shift caused by CO₂ and H⁺: CO₂ forms carbonic acid, pH falls and Hb releases O₂ in the tissues (StatPearls; Wikipedia).</p><p class="muted">The curve is a Hill equation with an illustrative coefficient (2.7) and P50 26.7 mmHg; the size of each shift is illustrative too — the sources give the directions, not these magnitudes. Hb is set to 15 g/dL for the content axis.</p>';
+const CONT_PRESET = {
+  norm: ['Normal arterial', {hb: 15, sat: 98, po2: 100}],
+  anae: ['Anaemia (Hb 7.5)', {hb: 7.5, sat: 98, po2: 100}],
+  hyp: ['Hypoxaemia', {hb: 15, sat: 75, po2: 40}],
+  o2: ['Breathing 100% O₂', {hb: 15, sat: 100, po2: 600}],
+};
+const CONT_TEXT = '<p><b>CaO₂ = 1.34 × Hb × SaO₂ + 0.003 × PaO₂</b> (mL O₂ per dL): the first term is O₂ bound to Hb, the second the dissolved O₂ (a 2017 review gives 1.34 and 0.0031; a 2025 review 1.34 mL O₂ per g Hb; a 2021 review uses 1.36 and 0.003 — the two constants in use). Arterial content is about <b>20 mL/dL</b> (a 2015 review; StatPearls); StatPearls gives venous content about 15. Dissolved O₂ is normally a minimal part (a 2017 review) and is proportional to PO₂ (Henry\'s law; StatPearls). Mixed venous saturation is about 75% at rest (a 2015 review). <b>Anaemia halves content but not saturation</b> (a 2015 review), and PaO₂ can stay normal (a 2017 review). O₂ delivery = content × cardiac output (a 2015 review).</p>';
+const ALV_PRESET = {
+  sea: ['Sea level, air', {pb: 760, fio2: 0.21, pco2: 40, r: 0.8, pao2: 95}],
+  o2: ['Sea level, 100% O₂', {pb: 760, fio2: 1, pco2: 40, r: 0.8, pao2: 500}],
+  hyp: ['Hypoventilation (PaCO₂ 70)', {pb: 760, fio2: 0.21, pco2: 70, r: 0.8, pao2: 55}],
+  half: ['Half sea-level pressure (about 5,500 m)', {pb: 380, fio2: 0.21, pco2: 40, r: 0.8, pao2: 15}],
+};
+const ALV_TEXT = '<p><b>PAO₂ = FiO₂ × (Patm − PH₂O) − PaCO₂ ÷ R</b> (StatPearls; a 2017 review; Wikipedia). At sea level, (760 − 47) × 0.21 − 40 ÷ 0.8 = 99.7 mmHg (StatPearls). PH₂O is 47 mmHg at 37 °C (a 2017 review; Wikipedia; StatPearls also writes "approximately 45"). R, the respiratory quotient, averages about 0.82 on a mixed diet (StatPearls). Alveolar PO₂ cannot be sampled, so it is calculated (StatPearls; Wikipedia).</p><p><b>A–a gradient = PAO₂ − PaO₂</b>. Hypoxaemia from <b>hypoventilation</b> keeps a normal gradient; <b>V/Q mismatch, shunt and diffusion limitation widen it</b> (a 2017 review). Altitude: atmospheric pressure roughly halves every 5,500 m while O₂ stays 21% (Wikipedia); hyperventilation lowers PaCO₂, which this equation shows raises PAO₂ — see <a href="applied-environment.html#h-alt">high altitude</a>.</p><p class="muted">The calculator applies the equation; the PaO₂ values in the presets are illustrative, and no normal range for the gradient is given (none in our sources).</p>';
+/* CO2 carriage: [bicarbonate, carbamino, dissolved] (% of total) by source */
+const CO2_SRC = {
+  wp: ['Wikipedia', [[80, 90], [5, 10], null], 'Bicarbonate 80–90%, carbamino 5–10%, "a small amount" dissolved (Wikipedia).'],
+  rev: ['A 2023 review', [[80, 80], [10, 10], [10, 10]], 'Dissolved 10%, bicarbonate 80%, carbamate on Hb 10% (a 2023 review).'],
+};
+/* chloride-shift stepper (after Wikipedia: Chloride shift, Haldane effect, Carbonic anhydrase articles; one source, named on the page) */
+const CS_STEPS = [
+  ['CO₂ enters', ['co2in'], '<h3>1. CO₂ diffuses in</h3><p>CO₂ made by the tissues dissolves in plasma and enters the red cell (Wikipedia).</p>'],
+  ['Carbonic anhydrase', ['ca'], '<h3>2. Carbonic anhydrase</h3><p>Inside the red cell, <b>carbonic anhydrase</b> hydrates CO₂ to carbonic acid, H₂CO₃ (Wikipedia). There is no carbonic anhydrase in plasma (Wikipedia).</p>'],
+  ['H⁺ + HCO₃⁻', ['diss'], '<h3>3. Carbonic acid dissociates</h3><p>H₂CO₃ → <b>H⁺ + HCO₃⁻</b> (Wikipedia).</p>'],
+  ['H⁺ on Hb (Haldane)', ['hb'], '<h3>4. Deoxygenated Hb takes up H⁺ and CO₂</h3><p>Deoxygenated haemoglobin is less acidic, which favours binding CO₂ directly as <b>carbamino</b> groups (Wikipedia), so deoxygenated blood carries more CO₂ — the <b>Haldane effect</b> (Wikipedia; a 2026 review). It also takes up the H⁺, which it releases again in the lungs (Wikipedia).</p>'],
+  ['HCO₃⁻ out, Cl⁻ in', ['band3'], '<h3>5. The chloride shift</h3><p>HCO₃⁻ leaves the cell through the anion exchanger <b>band 3</b> in exchange for Cl⁻ (Wikipedia; band 3 as the red-cell anion exchanger, a 2015 review). So venous plasma carries most CO₂ as bicarbonate, and venous chloride is lower than arterial (Wikipedia).</p>'],
+  ['In the lungs: reversed', ['lung'], '<h3>6. In the lungs everything runs backwards</h3><p>O₂ binds Hb, which releases H⁺ (the Haldane effect falls); HCO₃⁻ comes back in for Cl⁻, carbonic anhydrase turns it into CO₂, and CO₂ is breathed out (Wikipedia).</p>'],
+];
+const CO2_TEXT = '<p><b>Most CO₂ is carried as bicarbonate</b> (Wikipedia; a 2023 review); the rest as <b>carbamino</b> compounds, almost all on haemoglobin, and dissolved (Wikipedia; a 2023 review). The two sources differ on the shares — compare them with the chips above.</p><p><b>Haldane effect</b>: deoxygenated Hb carries more CO₂ (Wikipedia; a 2026 review), so blood takes up CO₂ in the tissues, where it gives up O₂, and releases it in the lungs (Wikipedia). Wikipedia adds that it roughly doubles the blood\'s CO₂ transport capacity, that deoxygenated Hb has 3.5 times the carbamino capacity, and that it matters more for CO₂ than the Bohr effect does for O₂. <b>Bohr</b> = CO₂ and H⁺ change O₂ binding; <b>Haldane</b> = O₂ changes CO₂ binding.</p><p class="muted">The red-cell steps follow Wikipedia (Chloride shift, Haldane effect and Carbonic anhydrase articles: one source). Schematic, not to scale.</p>';
+/* control of breathing: paths of steps; each step = [label, highlighted parts, text] */
+const CH_PATHS = {
+  co2: ['PaCO₂ rises', [
+    ['PaCO₂ rises', ['blood'], '<h3>1. Arterial CO₂ rises</h3><p>Under most conditions the <b>PCO₂ of the blood sets the rate of breathing</b> (Wikipedia).</p>'],
+    ['CO₂ into the CSF', ['bbb', 'csf'], '<h3>2. CO₂ crosses into the brain</h3><p>CO₂ diffuses across the blood–brain barrier far more readily than H⁺ does, and forms H⁺ in the fluid round the medulla (Wikipedia).</p>'],
+    ['Central chemoreceptors', ['cc'], '<h3>3. Central chemoreceptors</h3><p>On the <b>ventral surface of the medulla</b> (the retrotrapezoid region), they sense <b>H⁺ / pH of the CSF</b> produced from CO₂ (Wikipedia; 2022 and 2024 reviews; StatPearls). They are the main source of feedback while blood gases are near normal (Wikipedia), and they respond more slowly than the peripheral receptors (a 2015 review). Wikipedia contrasts them with the peripheral chemoreceptors, which monitor blood O₂ directly.</p>'],
+    ['Respiratory centres', ['drg', 'vrg'], '<h3>4. Medullary respiratory groups</h3><p>The chemoreceptors relay their information to the respiratory centre (Wikipedia), whose dorsal and ventral groups control inhalation and exhalation (Wikipedia; a 2022 review), and so the rate and depth of breathing (Wikipedia).</p>'],
+    ['Ventilation ↑, CO₂ falls', ['out', 'blood'], '<h3>5. More ventilation</h3><p>Rate and depth rise, alveolar ventilation increases, and PaCO₂ falls back: negative feedback (StatPearls: chemoreceptors change alveolar ventilation to restore pH).</p>'],
+  ]],
+  o2: ['PaO₂ falls', [
+    ['PaO₂ falls', ['blood'], '<h3>1. Arterial O₂ falls</h3><p>Ventilation changes little until PaO₂ falls to about <b>60 mmHg</b>; the response to PaO₂ is hyperbolic (a 2021 review). Blood O₂ becomes important in hypoxia (Wikipedia).</p>'],
+    ['Carotid and aortic bodies', ['cb', 'ab'], '<h3>2. Peripheral chemoreceptors</h3><p>The <b>carotid bodies</b>, at the bifurcation of each common carotid artery, sense mainly arterial <b>PO₂</b> (also CO₂ and pH, Wikipedia and a 2015 review; and temperature, Wikipedia) through glomus type I cells (Wikipedia; a 2025 review: chemosensory cells); they are the main peripheral chemoreceptor (Wikipedia). The <b>aortic bodies</b> lie on the aortic arch (Wikipedia). Their sensitivity to low PO₂ is greater when pH is low and PCO₂ high (Wikipedia). They respond quickly (a 2015 review).</p>'],
+    ['IX and X to the medulla', ['n9', 'n10', 'drg'], '<h3>3. Afferent nerves</h3><p>Carotid body: the <b>carotid sinus nerve</b> to the medulla (Wikipedia), ending in the nucleus of the solitary tract (a 2025 review), a branch of the <b>glossopharyngeal (IX)</b> nerve (Wikipedia). Aortic bodies: the <b>vagus (X)</b> to the dorsal respiratory group (Wikipedia).</p>'],
+    ['Respiratory centres', ['drg', 'vrg'], '<h3>4. Medullary respiratory groups</h3><p>The signal reaches the respiratory groups (Wikipedia; a 2025 review: the nucleus of the solitary tract projects to the ventral respiratory group).</p>'],
+    ['Ventilation ↑', ['out'], '<h3>5. More ventilation</h3><p>Ventilation rises. Low CO₂ from the extra breathing blunts this response, partly through the carotid body and partly through less central drive (a 2021 review).</p>'],
+  ]],
+  hb: ['Lung inflates (Hering–Breuer)', [
+    ['Lung stretches', ['lung'], '<h3>1. A large inspiration</h3><p><b>Pulmonary stretch receptors</b> in the walls of the bronchi and bronchioles respond to stretch (Wikipedia).</p>'],
+    ['Vagus to the medulla', ['n10l', 'drg'], '<h3>2. Vagal afferents</h3><p>They send impulses up the <b>vagus</b> to the inspiratory area of the medulla (and, Wikipedia adds, the apneustic centre in the pons) (Wikipedia).</p>'],
+    ['Inspiration stops', ['out'], '<h3>3. Inspiration is cut short</h3><p>Inspiratory drive is inhibited and expiration begins: the <b>Hering–Breuer inflation reflex</b> prevents over-inflation (Wikipedia; a 2022 review: lung distension reduces or abolishes inspiratory muscle activity and prolongs expiration).</p>'],
+  ]],
+};
+const CH_TABLE = [
+  ['Dorsal respiratory group (medulla)', 'Mostly inspiration and its timing (Wikipedia; a 2022 review: the dorsal medulla is responsible for inhalation). In the nucleus of the solitary tract (Wikipedia).'],
+  ['Ventral respiratory group (medulla)', 'Contains the <b>pre-Bötzinger complex</b>, which generates the inspiratory rhythm (Wikipedia; 2023 and 2024 reviews); controls forced expiration (Wikipedia; a 2022 review: the ventral medulla regulates exhalation).'],
+  ['Pontine respiratory group', 'Regulates the medullary signals for a smooth switch between inspiration and expiration (a 2022 review). Wikipedia names a pneumotaxic and an apneustic centre.'],
+  ['Central chemoreceptors', 'Ventral medulla; H⁺/pH of the CSF from CO₂ (Wikipedia; 2022 and 2024 reviews). Slower (a 2015 review).'],
+  ['Peripheral chemoreceptors', 'Carotid bodies (IX) and aortic bodies (X): mainly low PO₂, also high CO₂ and H⁺ (Wikipedia; 2015 and 2025 reviews). Fast (a 2015 review).'],
+  ['Pulmonary stretch receptors', 'Hering–Breuer inflation reflex via the vagus (Wikipedia; a 2022 review).'],
+];
+const CH_TEXT = '<p>The <b>respiratory centres</b> lie in the <b>medulla and pons</b> (Wikipedia; a 2015 review): two groups in the medulla and two in the pons (Wikipedia). They also receive the vagus and glossopharyngeal nerves carrying lung-receptor input (Wikipedia). The pre-Bötzinger complex works with other medullary and pontine nuclei during normal breathing (a 2024 review). Brainstem anatomy: <a href="../../anatomy/neuro/brainstem.html">neuroanatomy</a>.</p><p class="muted">Schematic, not anatomical. The excluded Wikipedia article "Respiratory center" (it cites OpenStax) is not used; the pneumotaxic and apneustic names come from Wikipedia\'s "Control of ventilation" and "Hering–Breuer reflex" articles.</p>';
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews on the haemoglobin–oxygen dissociation curve (2015), drugs and the dissociation curve (2025), 2,3-diphosphoglycerate (2025), fetal haemoglobin, carbon monoxide poisoning (2024), mechanisms of hypoxaemia (2017), respiratory physiology and COVID-19 (2021), breath-hold diving (2021, 2026), venous–arterial CO₂ gradients (2023), respiratory muscles and control (2022), the pre-Bötzinger complex (2023, 2024), central chemoreceptors (2024), carotid-body oxygen sensing (2025), developmental respiratory physiology (2022) and respiratory anatomy and physiology for anaesthesia (2015) (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> the dissociation curve is a Hill equation (coefficient 2.7, P50 26.7 mmHg) with illustrative shift sizes; the content and alveolar-gas calculators apply the quoted equations; the red cell and brainstem drawings are schematic.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+/* a preset chip stays highlighted only while its values are unchanged: a manual change clears it */
+let APPLYING = false;
+const clearPre = id => { if (!APPLYING) $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); };
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+/* ---- oxygen dissociation curve: Hill equation S = P^n / (P^n + P50^n), n = 2.7 (illustrative); shift sizes illustrative ---- */
+const HILL = 2.7, P50N = 26.7, HBG = 15;
+const OD = Object.assign({}, ODC0), ODS = {};
+let ODY = 'sat';
+const p50Of = q => {
+  let p = P50N * Math.pow(10, -0.48 * (q.ph - 7.4)) * Math.pow(q.pco2 / 40, 0.1) * Math.pow(10, 0.024 * (q.temp - 37)) * Math.pow(q.bpg, 0.3);
+  if (q.hb === 'F') p *= 0.72;
+  if (q.hb === 'CO') p *= 0.6;
+  return p;
+};
+const satOf = (po2, p50) => Math.pow(po2, HILL) / (Math.pow(po2, HILL) + Math.pow(p50, HILL));
+const capOf = q => (q.hb === 'CO' ? 0.5 : 1) * 1.34 * HBG; // mL O2/dL available on Hb
+function drawOdc() {
+  const p50 = p50Of(OD), sat = satOf(OD.po2, p50), cont = capOf(OD) * sat + 0.003 * OD.po2, base = Object.assign({}, ODC0);
+  const x0 = 56, x1 = 500, X = Phys.scale(0, 120, x0, x1), Ys = Phys.scale(0, 100, 320, 24), Yc = Phys.scale(0, 22, 320, 24);
+  const y = (q, p) => ODY === 'sat' ? Ys(100 * satOf(p, p50Of(q)) * (q.hb === 'CO' ? 1 : 1)) : Yc(capOf(q) * satOf(p, p50Of(q)) + 0.003 * p);
+  let s = `<path class="axis" d="M${x0} 24 L${x0} 320 L${x1} 320"/>`;
+  for (const v of [0, 20, 40, 60, 80, 100, 120]) s += T(X(v), 336, v, 's', 'middle');
+  s += T(x1, 352, 'PO₂ (mmHg) →', 's', 'end');
+  const yt = ODY === 'sat' ? [0, 25, 50, 75, 100] : [0, 5, 10, 15, 20];
+  for (const v of yt) s += `<path class="grid" d="M${x0} ${(ODY === 'sat' ? Ys(v) : Yc(v)).toFixed(1)} L${x1} ${(ODY === 'sat' ? Ys(v) : Yc(v)).toFixed(1)}"/>` + T(x0 - 6, (ODY === 'sat' ? Ys(v) : Yc(v)) + 4, v, 's', 'end');
+  s += T(x0 + 4, 16, ODY === 'sat' ? 'Hb saturation (%)' : 'O₂ content (mL/dL), Hb 15 g/dL', 's', 'start');
+  const curve = q => { const pts = []; for (let p = 0.5; p <= 120; p += 0.5) pts.push([X(p), y(q, p)]); return Phys.path(pts); };
+  s += `<path class="ghost" d="${curve(base)}"/><path class="trace" d="${curve(OD)}"/>`;
+  // P50 marker (on the saturation axis only; on the content axis the 50% point is still drawn at half of the chosen capacity)
+  const y50 = ODY === 'sat' ? Ys(50) : Yc(capOf(OD) * 0.5 + 0.003 * p50);
+  s += `<path class="grid dash" d="M${X(p50).toFixed(1)} ${y50.toFixed(1)} L${X(p50).toFixed(1)} 320"/><circle cx="${X(p50).toFixed(1)}" cy="${y50.toFixed(1)}" r="4" style="fill:var(--ink)"/>` + T(X(p50) + 7, y50 + 16, 'P50 ' + p50.toFixed(1), 'l', 'start');
+  // chosen PO2
+  const yp = ODY === 'sat' ? Ys(100 * sat) : Yc(cont);
+  s += `<path class="cur" d="M${X(OD.po2).toFixed(1)} 24 L${X(OD.po2).toFixed(1)} 320"/><circle cx="${X(OD.po2).toFixed(1)}" cy="${yp.toFixed(1)}" r="5" style="fill:var(--mark)"/>`;
+  const lab = ODY === 'sat' ? (100 * sat).toFixed(0) + '%' : cont.toFixed(1) + ' mL/dL';
+  s += T(OD.po2 > 90 ? X(OD.po2) - 8 : X(OD.po2) + 8, OD.po2 > 90 ? Math.min(312, yp + 22) : Math.max(40, yp - 10), lab, 'l b', OD.po2 > 90 ? 'end' : 'start');
+  $('odc-svg').innerHTML = s;
+  const sh = p50 > P50N + 0.4 ? 'right shift (lower affinity)' : p50 < P50N - 0.4 ? 'left shift (higher affinity)' : 'normal position';
+  $('odc-out').innerHTML = `<span><span class="tag">P50</span> <span class="big">${p50.toFixed(1)}</span> mmHg</span><span><span class="tag">${OD.hb === 'CO' ? 'Saturation of the Hb not holding CO, at' : 'Saturation at'} <span class="u">${OD.po2} mmHg</span></span> <span class="big">${(100 * sat).toFixed(0)}%</span></span><span><span class="tag">O₂ content</span> <span class="readout">${cont.toFixed(1)} mL/dL</span></span><span class="readout">${sh}</span>`;
+  $('odc-find').innerHTML = ODC_NOTE[OD.hb];
+}
+for (const [k, lab, mn, mx, st, f] of [['po2', 'PO₂', 0, 120, 1, v => v + ' mmHg'], ['ph', 'pH', 7.0, 7.8, 0.01, v => v.toFixed(2)], ['pco2', 'PCO₂', 20, 80, 1, v => v + ' mmHg'], ['temp', 'Temperature', 34, 42, 0.5, v => v.toFixed(1) + ' °C'], ['bpg', '2,3-BPG (× normal)', 0.5, 2, 0.05, v => v.toFixed(2) + ' ×']]) { ODS[k] = Phys.slider('odc-sl', {id: 'o' + k, label: lab, min: mn, max: mx, step: st, value: ODC0[k], fmt: f}, v => { OD[k] = v; clearPre('odc-tg'); drawOdc(); }); ODS[k].init(); }
+Phys.toggles('odc-tg', Object.entries(ODC_PRESET).map(([k, v]) => [k, v[0]]), k => { const p = ODC_PRESET[k][1]; OD.hb = p.hb; APPLYING = true; for (const kk in ODS) ODS[kk].set(p[kk]); APPLYING = false; drawOdc(); }, 'norm');
+Phys.toggles('odc-y', [['sat', 'Y: saturation %'], ['cont', 'Y: O₂ content']], k => { ODY = k; drawOdc(); }, 'sat');
+Phys.key('odc-key', [['--ink', 'chosen conditions'], ['--muted', 'normal curve (dashed)'], ['--mark', 'chosen PO₂']]);
+$('odc-text').innerHTML = ODC_TEXT; drawOdc();
+
+/* ---- O2 content ---- */
+const CT = Object.assign({}, CONT_PRESET.norm[1]), CTS = {};
+function drawCont() {
+  const b = 1.34 * CT.hb * CT.sat / 100, d = 0.003 * CT.po2, b2 = 1.36 * CT.hb * CT.sat / 100;
+  $('cont-out').innerHTML = `<span><span class="tag">Bound <span class="u">1.34 × Hb × SaO₂</span></span> <span class="readout">${b.toFixed(2)}</span></span><span><span class="tag">Dissolved <span class="u">0.003 × PaO₂</span></span> <span class="readout">${d.toFixed(2)}</span></span><span><span class="tag"><span class="u">CaO₂</span></span> <span class="big">${(b + d).toFixed(1)}</span> mL/dL</span><span class="muted">with 1.36: ${(b2 + d).toFixed(1)} mL/dL</span>`;
+}
+for (const [k, lab, mn, mx, st, f] of [['hb', 'Haemoglobin', 4, 20, 0.5, v => v.toFixed(1) + ' g/dL'], ['sat', 'SaO₂', 40, 100, 1, v => v + '%'], ['po2', 'PaO₂', 20, 600, 5, v => v + ' mmHg']]) { CTS[k] = Phys.slider('cont-sl', {id: 'c' + k, label: lab, min: mn, max: mx, step: st, value: CT[k], fmt: f}, v => { CT[k] = v; clearPre('cont-tg'); drawCont(); }); CTS[k].init(); }
+Phys.toggles('cont-tg', Object.entries(CONT_PRESET).map(([k, v]) => [k, v[0]]), k => { APPLYING = true; for (const kk in CTS) CTS[kk].set(CONT_PRESET[k][1][kk]); APPLYING = false; }, 'norm');
+$('cont-text').innerHTML = CONT_TEXT; drawCont();
+
+/* ---- alveolar gas equation ---- */
+const AG = Object.assign({}, ALV_PRESET.sea[1]), AGS = {};
+function drawAlv() {
+  const pio2 = AG.fio2 * (AG.pb - 47), pa = pio2 - AG.pco2 / AG.r, grad = pa - AG.pao2;
+  $('alv-out').innerHTML = `<span><span class="tag">Inspired <span class="u">PO₂ = FiO₂ × (Patm − 47)</span></span> <span class="readout">${pio2.toFixed(1)} mmHg</span></span><span><span class="tag"><span class="u">PAO₂</span></span> <span class="big">${pa > 0 ? pa.toFixed(1) : '≤ 0'}</span> mmHg</span><span><span class="tag"><span class="u">A–a = PAO₂ − PaO₂</span></span> <span class="readout">${pa > 0 ? Phys.mn(grad.toFixed(1)) + ' mmHg' : '—'}</span></span>` + (pa <= 0 ? '<span class="readout">Not possible: at this PaCO₂ no O₂ would be left — the equation needs a lower PaCO₂ (more ventilation)</span>' : pa < AG.pao2 ? '<span class="readout">PaO₂ above PAO₂: not possible, lower the PaO₂</span>' : '');
+}
+for (const [k, lab, mn, mx, st, f] of [['pb', 'Atmospheric pressure', 250, 760, 1, v => v + ' mmHg'], ['fio2', 'FiO₂', 0.21, 1, 0.01, v => v.toFixed(2)], ['pco2', 'PaCO₂', 15, 80, 1, v => v + ' mmHg'], ['r', 'Respiratory quotient R', 0.7, 1, 0.01, v => v.toFixed(2)], ['pao2', 'Measured PaO₂ (for the A–a gradient)', 10, 600, 1, v => v + ' mmHg']]) { AGS[k] = Phys.slider('alv-sl', {id: 'a' + k, label: lab, min: mn, max: mx, step: st, value: AG[k], fmt: f}, v => { AG[k] = v; clearPre('alv-tg'); drawAlv(); }); AGS[k].init(); }
+Phys.toggles('alv-tg', Object.entries(ALV_PRESET).map(([k, v]) => [k, v[0]]), k => { APPLYING = true; for (const kk in AGS) AGS[kk].set(ALV_PRESET[k][1][kk]); APPLYING = false; }, 'sea');
+$('alv-text').innerHTML = ALV_TEXT; drawAlv();
+
+/* ---- CO2 carriage bar ---- */
+function drawCo2(k) {
+  const [name, v, note] = CO2_SRC[k], x0 = 20, W = 480, fmt = r => r[0] === r[1] ? r[0] + '%' : r[0] + '–' + r[1] + '%';
+  let s = '', x = x0;
+  const parts = [['bicarbonate', v[0], .55], ['carbamino', v[1], .3], ['dissolved', v[2], .12]];
+  for (const [lab, r, op] of parts) {
+    if (!r) continue;
+    const w = W * r[0] / 100;
+    s += `<rect x="${x.toFixed(1)}" y="8" width="${w.toFixed(1)}" height="32" style="fill:var(--ink);fill-opacity:${op};stroke:var(--surface);stroke-width:2"/>`;
+    if (w > 120) s += T(x + w / 2, 29, lab + ' ' + fmt(r), 'l b', 'middle');
+    x += w;
+  }
+  s += T(x0, 60, parts.map(([lab, r]) => lab + ' ' + (r ? fmt(r) : '"a small amount"')).join(' · '), 'm', 'start');
+  s += T(x0, 80, note, 's', 'start');
+  $('co2-bar').innerHTML = s;
+}
+Phys.toggles('co2-tg', Object.entries(CO2_SRC).map(([k, v]) => [k, v[0]]), drawCo2, 'wp'); drawCo2('wp');
+
+/* ---- red-cell stepper (chloride shift) ---- */
+const CSS = {s: 0};
+function drawCs() {
+  const on = new Set(CS_STEPS[CSS.s][1]), hl = k => on.has(k), lung = hl('lung');
+  let s = Phys.arrowDef('ac', 'var(--ink)');
+  s += `<rect x="10" y="20" width="500" height="260" rx="14" style="fill:var(--fluid);fill-opacity:.55"/>` + T(20, 40, lung ? 'plasma in a pulmonary capillary' : 'plasma in a tissue capillary', 's', 'start');
+  s += `<ellipse cx="270" cy="160" rx="170" ry="105" style="fill:var(--rbc);fill-opacity:.16;stroke:var(--rbc);stroke-width:2"/>` + T(270, 76, 'red cell', 's', 'middle');
+  const box = (k, x, y, w, t1, t2) => `<rect x="${x}" y="${y}" width="${w}" height="40" rx="8" class="${hl(k) ? 'nodeon' : 'node'}"/>` + T(x + w / 2, y + 17, t1, 'b', 'middle') + T(x + w / 2, y + 32, t2, 's', 'middle');
+  const ar = (d, k) => `<path d="${d}" style="stroke:var(--ink);stroke-width:${hl(k) ? 2.4 : 1.3};fill:none;opacity:${hl(k) ? 1 : .55}" marker-end="url(#ac)"/>`;
+  // CO2 in (reversed in lungs)
+  s += ar(lung ? 'M150 130 L40 130' : 'M40 130 L150 130', lung ? 'lung' : 'co2in') + T(48, 122, 'CO₂', 'l b', 'start');
+  s += box('ca', 155, 110, 120, 'CO₂ + H₂O ⇄ H₂CO₃', 'carbonic anhydrase');
+  s += ar(lung ? 'M310 130 L280 130' : 'M280 130 L310 130', lung ? 'lung' : 'ca');
+  s += box('diss', 315, 110, 105, 'H₂CO₃ ⇄', 'H⁺ + HCO₃⁻');
+  s += ar(lung ? 'M300 200 L350 155' : 'M350 155 L300 200', lung ? 'lung' : 'hb');
+  s += box('hb', 180, 195, 150, 'Hb', lung ? 'O₂ on: H⁺ released' : 'deoxy-Hb: takes H⁺, CO₂');
+  // band 3
+  s += `<rect x="424" y="${hl('band3') ? 108 : 112}" width="22" height="${hl('band3') ? 48 : 40}" rx="5" style="fill:var(--surface);stroke:var(--ink);stroke-width:${hl('band3') ? 2.4 : 1.2}"/>` + T(435, 176, 'band 3', 's', 'middle');
+  s += ar(lung ? 'M500 122 L452 122' : 'M452 122 L500 122', lung ? 'lung' : 'band3') + T(466, 114, 'HCO₃⁻', 'l', 'start');
+  s += ar(lung ? 'M452 148 L500 148' : 'M500 148 L452 148', lung ? 'lung' : 'band3') + `<circle cx="490" cy="164" r="5" style="fill:var(--cl)"/>` + T(482, 168, 'Cl⁻', 'l', 'end');
+  if (lung) s += T(40, 262, 'O₂ enters, CO₂ leaves (all arrows reversed)', 'l b', 'start');
+  else s += T(24, 274, 'O₂ leaves for the tissue (not drawn)', 's', 'start');
+  $('cs-svg').innerHTML = s; $('cs-find').innerHTML = CS_STEPS[CSS.s][2];
+}
+Phys.stepper('cs-step', CS_STEPS.map(r => r[0]), drawCs, CSS);
+Phys.key('cs-key', [['--rbc', 'red cell'], ['--fluid', 'plasma'], ['--cl', 'Cl⁻']]);
+$('co2-text').innerHTML = CO2_TEXT;
+
+/* ---- control of breathing ---- */
+const CHS = {p: 'co2', s: 0};
+function drawCh() {
+  const steps = CH_PATHS[CHS.p][1]; CHS.s = Math.min(CHS.s, steps.length - 1);
+  const on = new Set(steps[CHS.s][1]), hl = k => on.has(k);
+  let s = Phys.arrowDef('ah', 'var(--ink)');
+  // brainstem, side view: ventral to the left, dorsal to the right; pons above the medulla (schematic)
+  s += T(176, 18, '← ventral', 's', 'end') + T(224, 18, 'dorsal →', 's', 'start');
+  s += `<path d="M175 30 C150 30 146 70 150 120 L154 270 C156 290 170 296 200 296 C230 296 244 290 246 270 L250 120 C254 70 250 30 225 30 Z" style="fill:var(--bg);stroke:var(--muted);stroke-width:1.4"/>`;
+  s += `<path d="M150 128 L250 128" class="grid dash"/>` + T(200, 50, 'pons', 's', 'middle') + T(200, 286, 'medulla', 's', 'middle');
+  const node = (k, x, y, w, t1, t2) => `<rect x="${x}" y="${y}" width="${w}" height="${t2 ? 42 : 26}" rx="6" class="${hl(k) ? 'nodeon' : 'node'}"/>` + T(x + w / 2, y + 17, t1, hl(k) ? 'b' : '', 'middle') + (t2 ? T(x + w / 2, y + 34, t2, 's', 'middle') : '');
+  s += node('prg', 166, 66, 68, 'pontine');
+  s += node('drg', 196, 160, 46, 'DRG');
+  s += node('vrg', 162, 210, 56, 'VRG', 'pre-BötC');
+  // CSF on the ventral surface and the central chemoreceptor strip
+  s += `<path d="M92 176 L148 176 L150 262 L92 262 Z" style="fill:var(--fluid);opacity:${hl('csf') || hl('cc') ? 1 : .55}"/>` + T(98, 254, 'CSF', 's', 'start');
+  s += `<rect x="146" y="190" width="10" height="56" rx="3" class="${hl('cc') ? 'nodeon' : 'node'}"/>`;
+  s += `<path d="M100 150 L146 196" class="lead"/>` + T(10, 128, 'central', hl('cc') ? 'l b' : 'l', 'start') + T(10, 147, 'chemoreceptors', hl('cc') ? 'l b' : 'l', 'start');
+  // arterial blood reaching the brain
+  s += `<path d="M16 360 C60 340 96 300 110 262" style="stroke:var(--artery);stroke-width:${hl('blood') ? 9 : 6};fill:none;stroke-linecap:round;opacity:${hl('blood') ? 1 : .55}"/>` + T(12, 388, 'arterial blood', hl('blood') ? 'l b' : 'l', 'start');
+  if (hl('bbb')) s += `<path d="M112 262 L118 230" style="stroke:var(--ink);stroke-width:2" marker-end="url(#ah)"/>` + T(60, 300, 'CO₂ crosses', 'l b', 'start');
+  // carotid bifurcation and aortic arch
+  s += `<path d="M330 392 L330 312 M330 312 C322 292 320 272 322 252 M330 312 C340 292 344 272 344 252" style="stroke:var(--artery);stroke-width:7;fill:none;stroke-linecap:round;opacity:.7"/>`;
+  s += `<circle cx="330" cy="312" r="${hl('cb') ? 9 : 7}" class="${hl('cb') ? 'nodeon' : 'node'}"/>` + T(346, 326, 'carotid body', hl('cb') ? 'l b' : 'l', 'start');
+  s += `<path d="M436 396 C436 350 496 348 506 380" style="stroke:var(--artery);stroke-width:10;fill:none;stroke-linecap:round;opacity:.7"/>`;
+  s += `<circle cx="466" cy="356" r="${hl('ab') ? 9 : 7}" class="${hl('ab') ? 'nodeon' : 'node'}"/>` + T(466, 338, 'aortic body', hl('ab') ? 'l b' : 'l', 'middle');
+  // afferent nerves to the dorsal medulla
+  s += `<path class="nv ${hl('n9') ? '' : 'nvoff'}" d="M326 304 C310 260 280 210 242 182"/>` + T(300, 236, 'IX', 'l b', 'start');
+  s += `<path class="nv ${hl('n10') ? '' : 'nvoff'}" d="M462 348 C440 270 330 200 242 176"/>` + T(390, 262, 'X', 'l b', 'start');
+  // lung with stretch receptors; vagal afferent (dashed)
+  s += `<path d="M420 40 C392 40 382 90 384 140 C386 170 410 176 440 172 C462 168 466 130 462 90 C458 54 446 40 420 40 Z" style="fill:var(--surface);stroke:${hl('lung') ? 'var(--ink)' : 'var(--muted)'};stroke-width:${hl('lung') ? 2.4 : 1.2}"/>` + T(424, 104, 'lung', 's', 'middle') + T(424, 120, 'stretch', 's', 'middle') + T(424, 134, 'receptors', 's', 'middle');
+  s += `<path class="nv ${hl('n10l') ? '' : 'nvoff'}" d="M384 112 C330 120 280 140 242 168" style="stroke-dasharray:6 4"/>` + T(312, 112, 'X (vagus)', 'l', 'middle');
+  // output to the breathing muscles
+  s += `<path d="M200 298 L200 346" style="stroke:var(--ink);stroke-width:${hl('out') ? 2.6 : 1.2};fill:none;opacity:${hl('out') ? 1 : .5}" marker-end="url(#ah)"/>` + T(200, 366, 'to the diaphragm and', 's', 'middle') + T(200, 380, 'respiratory muscles', 's', 'middle');
+  if (hl('out')) s += T(208, 326, CHS.p === 'hb' ? 'inspiration stops' : 'ventilation ↑', 'l b', 'start');
+  $('ch-svg').innerHTML = s; $('ch-find').innerHTML = steps[CHS.s][2];
+}
+function chStepper() { Phys.stepper('ch-step', CH_PATHS[CHS.p][1].map(r => r[0]), drawCh, CHS); }
+Phys.toggles('ch-tg', Object.entries(CH_PATHS).map(([k, v]) => [k, v[0]]), k => { CHS.p = k; CHS.s = 0; chStepper(); }, 'co2');
+chStepper();
+Phys.key('ch-key', [['--artery', 'artery (arterial blood)'], ['--nerve', 'afferent nerve'], ['--fluid', 'CSF']]);
+Phys.table('ch-table', ['Part', 'Role'], CH_TABLE);
+$('ch-text').innerHTML = CH_TEXT;
+Phys.swipeHints();
+</script>
+</body>
+</html>

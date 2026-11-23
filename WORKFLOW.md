@@ -37,10 +37,10 @@ Last updated: 2026-11-21
   02: [x] build (791 quotes; 4 pages incl. immunity; tokens --rbc --platelet in phys.css; 7 Commons smears) [x] review
   (13 items: --ok undefined, WHO child cut-off, PMC5767294 via Boundless/OpenStax, LAB_NOTE over-claims, attributions,
   DIC readout, ESR preset, keyboard focus, IgA drawing) [ ] fixes (running). 04 GI [x] build (623 quotes; 3 pages; no new tokens) [x] review (no wrong facts; LFT picker
-  classification, defecation arrow, ~15 attributions, --stom misuse, drawing labels) [x] fixes (630 quotes). Commit with 05 (index lists 05). Root card on commit.
+  classification, defecation arrow, ~15 attributions, --stom misuse, drawing labels) [x] fixes (630 quotes) [x] committed with 05 2026-11-23.
   (Reviewer's "st is undefined" on cardiac-electrophysiology: not reproducible via real chips/stepper/keys; stale-node clicks.) 05 respiratory [x] build (518 quotes; 3 pages; no new tokens) [x] review (5 wrong facts: DLCO shunt
   direction, hypoxaemia definition, A–a gradient, HAPE HPV disagreement, review year; attributions; classifier clip)
-  [ ] fixes (running).
+  [x] fixes (528 quotes) [x] committed with 04 2026-11-23.
   Then respiratory, renal, GI, endocrine,
   reproductive, CNS, senses.
 
