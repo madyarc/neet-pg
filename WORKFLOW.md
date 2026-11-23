@@ -30,10 +30,12 @@ Last updated: 2026-11-21
   stays unticked — ask user whether to fetch those PDFs by hand.
 - Module 44 (abdominopelvic: sheet fill-abdo2; bony-pelvis, imaging-abdomen, surface-sections + ap.js/css)
   [x] build (492 quotes, 7 Commons radiographs, sections cut from 3D models) [x] review (T10 cut through T11 so no oesophagus,
-  section labels on wrong organs, true-conjugate naming, unsourced claims, T1/T2 missing) [ ] fixes (running)
-  [ ] docs [ ] commit.
+  section labels on wrong organs, true-conjugate naming, unsourced claims, T1/T2 missing) [ ] fixes (PAUSED by user 2026-11-22 mid-fix: items 1–14 worked
+  on, was starting item 15 lower-limb/bones.html; abdomen-pelvis nav lines edited; uncommitted. Resume the same agent
+  and ask it to finish 15 and re-run all checks) [ ] docs [ ] commit.
 - Module 45 (limb leftovers AN8.4, 9.2–9.3, 12.9/10/15, 13.5/6/8, 18.7, 20.6/7/10: sheet fill-limbs3; breast.html,
-  radiographs-landmarks per limb, embryology/limb-development.html + additions) [ ] build (running) [ ] review [ ] fixes
+  radiographs-landmarks per limb, embryology/limb-development.html + additions) [ ] build (PAUSED by user 2026-11-22: specs a–c written in
+  fill-limbs3-scripts, was on spec-d osteoarthritis; no page edits yet) [ ] review [ ] fixes
   [ ] docs [ ] commit. Then 46: AN23.1, 26.2, 42.1, 43.7, 43.9, 82.1; then partials.
 - Module 42 (genetics: AN73.1–75.5) started 2026-11-22: sheet fill-genetics, pages in anatomy/genetics/.
   [x] build (688 quotes; chromosomes-karyotype, inheritance-pedigrees, aberrations-clinical; 6 Commons images;
