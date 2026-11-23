@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nerve and Neuromuscular Junction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+svg.sch .soma{fill:var(--cyto);stroke:var(--muted);stroke-width:1}
+svg.sch .ax{fill:var(--nerve);stroke:var(--muted);stroke-width:.6}
+svg.sch .my{fill:var(--myelin);stroke:var(--muted);stroke-width:.8}
+svg.sch .musc{fill:var(--musc);fill-opacity:.55;stroke:var(--muted);stroke-width:1}
+svg.sch .ves{fill:var(--vesicle);stroke:var(--muted);stroke-width:.8}
+svg.sch .selo{stroke:var(--accent);stroke-width:3;fill:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 01: <a href="../general/cell-transport-fluids.html">Cell, transport, fluids</a> · <a href="membrane-potentials.html">Membrane potentials</a> · <span aria-current="page">Nerve and NMJ</span> · <a href="muscle.html">Muscle</a></span></nav>
+
+<header class="stack">
+  <h1>The Neuron, Nerve Injury and the Neuromuscular Junction</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-neuron">Neuron</a> <a href="#h-glia">Neuroglia</a> <a href="#h-ngf">Nerve growth factors</a> <a href="#h-inj">Nerve injury</a> <a href="#h-wal">Degeneration and regeneration</a> <a href="#h-nmj">Neuromuscular junction</a> <a href="#h-rns">MG vs LEMS</a> <a href="#h-nmb">Blocking drugs</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-neuron">
+  <h2 id="h-neuron">The neuron</h2>
+  <div class="chips" id="nr-tg" aria-label="Part"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="nr-svg" viewBox="0 0 560 220" role="img" aria-label="Schematic motor neuron: dendrites, cell body with nucleus and Nissl bodies, axon hillock and initial segment, myelinated axon with nodes of Ranvier, axon terminals; the chosen part is outlined"></svg></div>
+    <div class="prose find" id="nr-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="nr-text"></div>
+  <p class="muted">Schematics, not to scale.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-glia">
+  <h2 id="h-glia">Neuroglia</h2>
+  <div class="prose" id="glia-text"></div>
+  <p class="muted" id="glia-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ngf">
+  <h2 id="h-ngf">Nerve growth factors (neurotrophins)</h2>
+  <div class="scroll"><table id="ngf-table"></table></div>
+  <div class="prose" id="ngf-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-inj">
+  <h2 id="h-inj">Classifying nerve injury: Seddon and Sunderland</h2>
+  <div class="chips" id="inj-tg" aria-label="Injury"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="inj-svg" viewBox="0 0 520 230" role="img" aria-label="Longitudinal schematic of a peripheral nerve: axon, myelin, endoneurium, perineurium and epineurium, with the layers broken by the chosen grade of injury"></svg></div>
+    <div class="prose find" id="inj-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="inj-key"></div>
+  <div class="scroll"><table id="inj-table"></table></div>
+  <p class="muted" id="inj-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-wal">
+  <h2 id="h-wal">Wallerian degeneration and regeneration</h2>
+  <div class="step" id="wal-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="wal-svg" viewBox="0 0 560 200" role="img" aria-label="A cut motor axon from the cell body to the muscle: changes in the cell body, the proximal stump and the distal segment at the chosen stage"></svg></div>
+    <div class="prose find" id="wal-find" aria-live="polite"></div>
+  </div>
+  <div class="sliders" id="wal-sl"></div>
+  <p class="readout" id="wal-out" aria-live="polite"></p>
+  <p class="muted">Schematic. The regrowth estimate uses the clinical rule of about 1 mm a day (1 inch a month); it ignores the delay before sprouting and the time to reinnervate the target.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-nmj">
+  <h2 id="h-nmj">Neuromuscular transmission, and where MG and LEMS strike</h2>
+  <div class="chips" id="nmj-tg" aria-label="Condition"></div>
+  <div class="step" id="nmj-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="nmj-svg" viewBox="0 0 520 330" role="img" aria-label="Neuromuscular junction: motor nerve terminal with ACh vesicles and calcium channels, synaptic cleft with acetylcholinesterase, end plate with junctional folds, receptors on the crests and sodium channels in the depths; the current step and any disease site are marked"></svg></div>
+    <div class="prose find" id="nmj-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="nmj-key"></div>
+  <p class="muted">Schematic, not to scale.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-rns">
+  <h2 id="h-rns">Myasthenia gravis vs Lambert–Eaton</h2>
+  <div class="chips" id="rns-tg" aria-label="Condition"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="rns-svg" viewBox="0 0 420 230" role="img" aria-label="Schematic compound muscle action potential amplitudes in a train of slow repetitive stimuli, and after brief exercise, for the chosen condition"></svg></div>
+    <div class="prose find" id="rns-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic bars to show the direction of change (decrement, increment), not measured values.</p>
+  <div class="scroll"><table id="mg-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-nmb">
+  <h2 id="h-nmb">Neuromuscular blocking drugs and toxins</h2>
+  <div class="scroll"><table id="nmb-table"></table></div>
+  <p class="muted" id="nmb-note"></p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio1.md, Part C; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Pick out the parts of a neuron, grade a nerve injury and watch Wallerian degeneration and regrowth, then step through the neuromuscular junction and see where the antibodies of myasthenia gravis and Lambert–Eaton syndrome act. Myelin and saltatory conduction: <a href="membrane-potentials.html#h-cond">Membrane Potentials</a>; the muscle side: <a href="muscle.html">Muscle</a>.';
+
+const NR = {
+  dend: ['Dendrites', 'Branched processes that <b>receive</b> signals from other neurons and carry them to the cell body; they give a large receiving surface.'],
+  soma: ['Cell body (soma)', 'Holds the <b>nucleus</b> and <b>Nissl bodies</b> — clumps of rough ER and ribosomes that make proteins. Nissl bodies reach into the dendrites but not the axon (Gray 1918); most axonal proteins are made in the cell body and carried down the axon (Wikipedia).'],
+  hill: ['Axon hillock, initial segment', 'The axon leaves the cell body at a cone-shaped <b>axon hillock</b>. The unmyelinated <b>initial segment</b> beyond it is packed with voltage-gated Na⁺ channels, so the action potential starts here.'],
+  axon: ['Axon, myelin, nodes', 'One long process that conducts impulses <b>away</b> from the cell body. In peripheral nerves Schwann cells wrap it in myelin, interrupted at the <b>nodes of Ranvier</b> (<a href="membrane-potentials.html#h-cond">saltatory conduction</a>).'],
+  term: ['Axon terminals', 'End on the next cell at synapses — on skeletal muscle, the <a href="#h-nmj">neuromuscular junction</a>.'],
+};
+const NR_TEXT = '<p><b>Neuron shapes</b> (pseudounipolar, bipolar, multipolar) and the histology of nerve fibres are on the anatomy pages: <a href="../../anatomy/general/nervous-system.html#h-neu">Nervous System: General Plan</a> and <a href="../../anatomy/histology/nervous-vascular.html#h-neu">Nervous Tissue</a>.</p><p><b>Axonal transport.</b> Proteins made in the cell body travel down the axon. <b>Anterograde</b> transport (towards the terminal) uses <b>kinesin</b>; <b>retrograde</b> transport (back to the cell body) uses <b>dynein</b>. Tetanus toxin and rabies virus travel retrogradely (Wikipedia).</p>';
+
+const GLIA_TEXT = '<p>The glial cell types are listed and drawn on <a href="../../anatomy/general/nervous-system.html#h-tis">Nervous System: General Plan</a>. Their physiological jobs: <b>oligodendrocytes</b> (CNS) and <b>Schwann cells</b> (PNS) make the myelin that allows <a href="membrane-potentials.html#h-cond">saltatory conduction</a>; one oligodendrocyte myelinates several axons, one Schwann cell one axon (Wikipedia). <b>Astrocytes</b> contact vessels, synapses and nodes and take up the K⁺ released by active neurons; they help maintain the blood–brain barrier (Wikipedia). <b>Microglia</b> are the resident macrophages of the CNS, arising from the embryonic yolk sac. <b>Schwann cells</b> also guide regeneration after injury (see below).</p>';
+const GLIA_NOTE = 'Gray (1918) described neuroglia as found only in the brain and spinal cord and as ectodermal; modern sources include the peripheral Schwann and satellite cells, and trace microglia to the yolk sac.';
+const NGF = [['Neurotrophin', 'High-affinity receptor', 'Low-affinity receptor'], [
+  ['NGF (nerve growth factor)', 'TrkA', 'p75NTR'], ['BDNF', 'TrkB', 'p75NTR'], ['NT-3', 'TrkC', 'p75NTR'], ['NT-4 (Wikipedia)', 'not shown (not in our sources)', 'p75NTR'],
+]];
+const NGF_TEXT = '<p>Neurotrophins are proteins that keep neurons <b>alive</b> and promote <b>axon growth</b>, synaptic function and plasticity. <b>NGF</b> was the first found, in the 1950s, by <b>Rita Levi-Montalcini</b> — with Viktor Hamburger in one account (a 2017 review) and Stanley Cohen, who shared the Nobel Prize with her, in another (Wikipedia). NGF is critical for the survival of sympathetic and sensory neurons (Wikipedia).</p>';
+
+/* injury grades: key -> [label, intact layers, text] ; layers: ax, my, endo, peri, epi */
+const INJ = {
+  norm: ['Normal', ['ax', 'my', 'endo', 'peri', 'epi'], '<h3>Normal nerve</h3><p>Each axon (with myelin) sits in its <b>endoneurium</b>; fascicles are wrapped in <b>perineurium</b> (the main blood–nerve barrier); the whole nerve in <b>epineurium</b>.</p>'],
+  npx: ['Neurapraxia', ['ax', 'endo', 'peri', 'epi'], '<h3>Neurapraxia (Seddon; Sunderland I)</h3><p>A <b>conduction block</b> from local damage to myelin; the <b>axon is intact</b>, so there is <b>no Wallerian degeneration</b> and the nerve below the lesion still conducts. Full recovery, usually in weeks. Often from compression, e.g. poor positioning during surgery (one review).</p>'],
+  axm: ['Axonotmesis', ['endo', 'peri', 'epi'], '<h3>Axonotmesis (Sunderland II–IV)</h3><p>The <b>axon and its myelin are divided</b> but the connective-tissue framework (endoneurial tubes, perineurium, epineurium) is preserved. The distal part undergoes <b>Wallerian degeneration</b>; recovery is by regrowth along the old tubes, so it takes time.</p>'],
+  ntm: ['Neurotmesis', [], '<h3>Neurotmesis (Sunderland V)</h3><p>The <b>whole nerve is divided</b>: axons and all connective tissue. No full spontaneous recovery; <b>surgical repair</b> is needed.</p>'],
+};
+const INJ_TABLE = [['Seddon (1940s)', 'Sunderland (1951)', 'What is damaged', 'Wallerian degeneration', 'Outlook'], [
+  ['Neurapraxia', 'I', 'Myelin (local); axon intact', 'No', 'Full recovery'],
+  ['Axonotmesis', 'II–IV', 'Axon and myelin; framework kept (more of it lost in III–IV)', 'Yes', 'Regrowth, slow'],
+  ['Neurotmesis', 'V', 'Whole nerve', 'Yes', 'Needs surgery'],
+]];
+const INJ_NOTE = 'Seddon\'s year is given as 1941, 1942 or 1943 by different sources; his colleague Henry Cohen gave the Greek names (review PMC10484240). Sources map Sunderland\'s middle degrees onto Seddon\'s classes variably; a sixth (mixed) degree was added by Mackinnon and Dellon.';
+
+/* Wallerian stages: [label, text] */
+const WAL = [
+  ['Injury', '<h3>The axon is cut</h3><p>The part of the axon beyond the cut (distal) has lost its cell body.</p>'],
+  ['Wallerian degeneration', '<h3>Wallerian (anterograde) degeneration</h3><p>The <b>distal</b> axon and its myelin break down; Schwann cells and macrophages clear the debris. The <b>proximal</b> stump degenerates back only a short way — to the first node of Ranvier (Gray 1918).</p>'],
+  ['Cell body: chromatolysis', '<h3>Chromatolysis</h3><p>The cell body swells, the <b>nucleus moves to the edge</b> and the Nissl bodies (rough ER) break up and disperse; the cell switches on regeneration genes.</p>'],
+  ['Bands of Büngner', '<h3>Schwann cells line up</h3><p>In the distal stump Schwann cells multiply and line up inside the old endoneurial tubes — <b>bands of Büngner</b> — a scaffold for the new axon.</p>'],
+  ['Regrowth', '<h3>Sprouting and regrowth</h3><p>The proximal stump forms a <b>growth cone</b> and sprouts; a sprout that enters a tube grows down it at about <b>1 mm a day</b> (about 1 inch a month). Faster rates are reported in experiments (3–4 mm/day after crush, 2–3 after cutting; one review). Regeneration needs the cell body to survive; there is little or none in the CNS (one review).</p>'],
+];
+
+/* NMJ steps: [label, text] */
+const NMJ_STEPS = [
+  ['AP arrives', 'The motor nerve action potential reaches the terminal.'],
+  ['Ca²⁺ enters', 'It opens <b>P/Q-type voltage-gated Ca²⁺ channels</b> at the active zones; Ca²⁺ flows in.'],
+  ['ACh released', 'Ca²⁺ triggers vesicles to fuse with the membrane (SNARE proteins) and release their acetylcholine in packets (<b>quanta</b>) by exocytosis.'],
+  ['ACh binds', 'ACh crosses the cleft and binds <b>nicotinic ACh receptors</b> — ligand-gated cation channels clustered on the crests of the junctional folds (two ACh sites per receptor).'],
+  ['End-plate potential', 'Na⁺ flows in: the <b>end-plate potential</b>. Normally it is well above threshold (the <b>safety factor</b>), so voltage-gated Na⁺ channels — concentrated in the depths of the folds (one review) — fire a <b>muscle action potential</b>. One vesicle alone gives a miniature EPP of about 0.5 mV (Wikipedia).'],
+  ['ACh broken down', '<b>Acetylcholinesterase</b> in the cleft — anchored to the basal lamina by ColQ (one review; Wikipedia instead names dystrophin and rapsyn) — splits ACh into choline and acetate, so one ACh cannot keep activating receptors.'],
+];
+const NMJ_COND = {
+  norm: ['Normal', ''],
+  mg: ['Myasthenia gravis', '<p class="cap warn"><b>MG:</b> autoantibodies against the <b>postsynaptic ACh receptors</b> (a minority against MuSK or LRP4) block, destroy or reduce them. ACh release is normal but the EPP is smaller; with repeated use it falls below threshold in more fibres — <b>fatigable weakness</b>.</p>'],
+  lems: ['Lambert–Eaton', '<p class="cap warn"><b>LEMS:</b> autoantibodies against the <b>presynaptic P/Q-type Ca²⁺ channels</b> (about 90% of patients). Less Ca²⁺ enters, so <b>less ACh is released</b>. Repeated firing lets Ca²⁺ build up in the terminal (facilitation), so strength briefly improves with use.</p>'],
+};
+const MG_TABLE = [['', 'Myasthenia gravis', 'Lambert–Eaton syndrome'], [
+  ['Antibody target', 'Postsynaptic ACh receptor (some: MuSK, LRP4)', 'Presynaptic P/Q voltage-gated Ca²⁺ channel'],
+  ['Effect', 'Fewer working receptors', 'Less ACh released'],
+  ['Weakness', 'Fatigable: worse with exertion and later in the day, better with rest', 'Proximal, legs first; improves briefly after exercise'],
+  ['Typical start', 'Eyes: ptosis, diplopia; bulbar, limbs', 'Proximal legs; dry mouth and other autonomic symptoms'],
+  ['Reflexes', '—', 'Reduced or absent; increase after muscle use'],
+  ['Associated with', 'Thymus: hyperplasia (early onset), thymoma (later onset)', 'Small-cell lung cancer in about half to 60%'],
+  ['Repetitive nerve stimulation', 'Decrement', 'Small CMAP; decrement at low rates, increment after brief exercise or fast stimulation'],
+  ['Anticholinesterase', 'Edrophonium (Tensilon) test: short-acting; strength improves, usually within 30–60 s (one review); anticholinesterases also treat', 'Amifampridine (3,4-diaminopyridine) improves symptoms'],
+]];
+const RNS = {
+  norm: ['Normal', [100, 100, 100, 100, 100, 100], 100, '<h3>Normal</h3><p>ACh release runs down a little with repeated stimuli (Wikipedia), but the <b>safety factor</b> keeps the end-plate potential above threshold, so the response holds.</p>'],
+  mg: ['Myasthenia gravis', [100, 88, 80, 76, 75, 76], 85, '<h3>Myasthenia gravis</h3><p>The response <b>falls</b> over the first few stimuli (<b>decrement</b>): with fewer receptors, more fibres fail to reach threshold as ACh release runs down. Edrophonium, by stopping ACh breakdown, briefly improves strength. Note: edrophonium is now rarely available (Wikipedia: production stopped in 2008).</p>'],
+  lems: ['Lambert–Eaton', [35, 31, 29, 28, 28, 29], 80, '<h3>Lambert–Eaton</h3><p>A <b>small</b> first response, a further decrement at low rates, and a large <b>increment</b> after brief exercise or fast stimulation, as Ca²⁺ builds up in the terminal.</p>'],
+};
+const NMB = [['Drug or toxin', 'How it acts', 'Notes'], [
+  ['Depolarising: succinylcholine (suxamethonium)', 'Opens the ACh receptor and depolarises the end plate (phase I); brief fasciculations, then block (Wikipedia)', 'Short-acting'],
+  ['Non-depolarising: rocuronium, vecuronium, atracurium', 'Competitive antagonists at the ACh receptor', 'Reversed by anticholinesterases such as neostigmine (more ACh competes)'],
+  ['Botulinum toxin', 'Blocks ACh release from the nerve terminal (Wikipedia)', 'Botulism'],
+]];
+const NMB_NOTE = 'Sugammadex is not covered here (one source only).';
+
+const BASED = '<b>Based on:</b> Gray\'s <i>Anatomy</i> (1918); StatPearls (NCBI Bookshelf; abstracts); open-access reviews on peripheral nerve anatomy and injury (Cureus 2023), the neuromuscular junction, myasthenia gravis, Lambert–Eaton syndrome, neurotrophins, microglia, astrocytes, axonal transport, the edrophonium test and neostigmine (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> all drawings are schematic, not to scale. The repetitive-stimulation bars show the direction of change only. The regrowth time is distance ÷ 1 mm per day.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* ---- neuron ---- */
+const NRS = {sel: 'soma'};
+function drawNr() {
+  const k = NRS.sel; let s = '';
+  // dendrites
+  s += `<g style="stroke:var(--cyto);stroke-width:5;stroke-linecap:round;fill:none">` + [[90, 110, 30, 60], [90, 110, 24, 112], [90, 110, 36, 166], [100, 90, 80, 30], [104, 130, 86, 194]].map(([a, b, c, d]) => `<path d="M${a} ${b} Q${(a + c) / 2 - 8} ${(b + d) / 2} ${c} ${d}"/>`).join('') + '</g>';
+  s += `<circle cx="100" cy="110" r="34" class="soma"/><circle cx="96" cy="108" r="12" style="fill:var(--nucleus)"/>`;
+  for (const [x, y] of [[78, 92], [118, 96], [82, 128], [116, 126], [104, 86]]) s += `<rect x="${x - 4}" y="${y - 2}" width="8" height="4" rx="1" style="fill:var(--nissl)"/>`;
+  s += `<path d="M132 104 L150 108 L150 112 L132 116 Z" class="soma"/>`;
+  s += `<rect x="150" y="106" width="380" height="8" class="ax"/>`;
+  for (let x = 178; x < 500; x += 58) s += `<rect x="${x}" y="99" width="50" height="22" rx="10" class="my"/>`;
+  s += `<g style="stroke:var(--nerve);stroke-width:4;fill:none;stroke-linecap:round"><path d="M528 110 L548 90 M528 110 L550 112 M528 110 L548 132"/></g>`;
+  const hi = {dend: 'M18 26 L118 26 L118 200 L18 200 Z', soma: 'M62 70 L140 70 L140 150 L62 150 Z', hill: 'M128 96 L178 96 L178 124 L128 124 Z', axon: 'M176 94 L506 94 L506 126 L176 126 Z', term: 'M520 82 L556 82 L556 140 L520 140 Z'}[k];
+  s += `<path d="${hi}" class="selo" rx="6"/>`;
+  const L = [['dend', 40, 214, 'dendrites'], ['soma', 100, 166, 'cell body'], ['hill', 152, 86, 'hillock / initial segment'], ['axon', 340, 168, 'myelinated axon (nodes between)'], ['term', 520, 160, 'terminals']];
+  for (const [kk, x, y, t] of L) s += T(x, y, t, 'l' + (kk === k ? ' b' : ''), 'middle');
+  s += T(232, 140, 'node', 's', 'middle') + `<path class="lead" d="M232 130 L232 122"/>`;
+  $('nr-svg').innerHTML = s; $('nr-find').innerHTML = `<h3>${NR[k][0]}</h3><p>${NR[k][1]}</p>`;
+}
+Phys.toggles('nr-tg', Object.entries(NR).map(([k, v]) => [k, v[0]]), k => { NRS.sel = k; drawNr(); }, NRS.sel); drawNr();
+$('nr-text').innerHTML = NR_TEXT;
+$('glia-text').innerHTML = GLIA_TEXT; $('glia-note').textContent = GLIA_NOTE;
+Phys.table('ngf-table', NGF[0], NGF[1]); $('ngf-text').innerHTML = NGF_TEXT;
+
+/* ---- injury ---- */
+const IJ = {sel: 'norm'};
+function drawInj() {
+  const keep = INJ[IJ.sel][1], cut = 250, g = 18; let s = '';
+  const band = (key, y, h, style, lab) => {
+    const ok = keep.includes(key);
+    let o = `<rect x="20" y="${y}" width="${ok ? 480 : cut - g - 20}" height="${h}" style="${style}"/>`;
+    if (!ok) o += `<rect x="${cut + g}" y="${y}" width="${500 - cut - g}" height="${h}" style="${style}"/>`;
+    return o + (lab ? T(506, y + h / 2 + 4, lab, 's', 'end') : '');
+  };
+  s += band('epi', 30, 170, 'fill:var(--bg);stroke:var(--muted);stroke-width:2', '');
+  s += band('peri', 55, 120, 'fill:var(--surface);stroke:var(--ink);stroke-width:1.5;stroke-dasharray:6 3', '');
+  s += band('endo', 85, 60, 'fill:var(--collagen);fill-opacity:.45;stroke:var(--muted);stroke-width:1', '');
+  // myelin and axon
+  const myOk = keep.includes('my'), axOk = keep.includes('ax');
+  for (let x = 30; x < 490; x += 46) { if (!myOk && x > cut - 40 && x < cut + 40 && IJ.sel === 'npx') continue; if (!myOk && IJ.sel !== 'npx' && x > cut - 46 && x < cut + g) continue; s += `<rect x="${x}" y="100" width="40" height="30" rx="12" style="fill:var(--myelin);stroke:var(--muted);stroke-width:.8;opacity:${!axOk && x > cut ? .35 : 1}"/>`; }
+  if (axOk) s += `<rect x="20" y="110" width="480" height="10" class="ax" style="fill:var(--nerve)"/>`;
+  else { s += `<rect x="20" y="110" width="${cut - g - 20}" height="10" style="fill:var(--nerve)"/><rect x="${cut + g}" y="110" width="${500 - cut - g}" height="10" style="fill:var(--nerve);opacity:.35"/>`; s += T(380, 165, 'distal axon degenerates', 's', 'middle'); }
+  if (IJ.sel === 'npx') s += `<rect x="${cut - 30}" y="104" width="60" height="22" style="fill:var(--clin);fill-opacity:.25"/>` + T(cut, 160, 'myelin damaged here: block', 'l', 'middle');
+  if (IJ.sel !== 'norm') s += `<path d="M${cut} 14 L${cut} 26" class="flow"/>` + T(cut, 12, 'lesion', 's', 'middle');
+  s += T(26, 46, 'epineurium', 's') + T(26, 72, 'perineurium', 's') + T(26, 96, 'endoneurium', 's') + T(26, 222, 'cell body ←', 's') + T(500, 222, '→ muscle', 's', 'end');
+  $('inj-svg').innerHTML = s; $('inj-find').innerHTML = INJ[IJ.sel][2];
+}
+Phys.toggles('inj-tg', Object.entries(INJ).map(([k, v]) => [k, v[0]]), k => { IJ.sel = k; drawInj(); }, IJ.sel);
+Phys.key('inj-key', [['--nerve', 'axon'], ['--myelin', 'myelin'], ['--collagen', 'endoneurium (tube)']]);
+Phys.table('inj-table', INJ_TABLE[0], INJ_TABLE[1]); $('inj-note').textContent = INJ_NOTE; drawInj();
+
+/* ---- Wallerian ---- */
+const WS = {s: 0, d: 200};
+function drawWal() {
+  const st = WS.s, cut = 220; let s = '';
+  s += `<rect x="470" y="60" width="80" height="80" rx="8" class="musc"/>` + T(510, 156, 'muscle', 's', 'middle');
+  const sw = st >= 2 ? 32 : 26;
+  s += `<circle cx="50" cy="100" r="${sw}" class="soma"/><circle cx="${st >= 2 ? 34 : 48}" cy="100" r="9" style="fill:var(--nucleus)"/>`;
+  if (st < 2) for (const [x, y] of [[40, 86], [62, 90], [44, 116], [62, 114]]) s += `<rect x="${x - 4}" y="${y - 2}" width="8" height="4" rx="1" style="fill:var(--nissl)"/>`;
+  else for (const [x, y] of [[60, 80], [66, 96], [58, 120], [70, 108], [52, 84]]) s += `<circle cx="${x}" cy="${y}" r="1.4" style="fill:var(--nissl)"/>`;
+  // proximal
+  const pEnd = st === 0 ? cut - 6 : cut - 30;
+  s += `<rect x="80" y="96" width="${pEnd - 80}" height="8" class="ax"/>`;
+  for (let x = 96; x < pEnd - 30; x += 40) s += `<rect x="${x}" y="90" width="34" height="20" rx="9" class="my"/>`;
+  // distal
+  if (st === 0) { s += `<rect x="${cut + 6}" y="96" width="${470 - cut - 6}" height="8" class="ax"/>`; for (let x = cut + 14; x < 450; x += 40) s += `<rect x="${x}" y="90" width="34" height="20" rx="9" class="my"/>`; }
+  if (st === 1 || st === 2) { for (let x = cut + 14; x < 450; x += 22) s += `<rect x="${x}" y="${96 + (x % 3)}" width="12" height="6" rx="3" style="fill:var(--nerve);opacity:.6"/><circle cx="${x + 16}" cy="${90 + (x % 7)}" r="3" style="fill:var(--myelin);stroke:var(--muted);stroke-width:.6"/>`; s += T(340, 138, 'axon and myelin break down; debris cleared', 's', 'middle'); }
+  if (st >= 3) { for (let x = cut + 10; x < 466; x += 18) s += `<ellipse cx="${x}" cy="100" rx="8" ry="5" style="fill:var(--schwann);stroke:var(--muted);stroke-width:.6"/>`; s += T(340, 138, 'bands of Büngner (Schwann cells in the tube)', 's', 'middle'); }
+  if (st >= 4) { s += `<rect x="${pEnd}" y="97" width="70" height="6" style="fill:var(--nerve)"/><path d="M${pEnd + 70} 100 l10 -7 l0 14 z" style="fill:var(--nerve);stroke:var(--muted)"/>` + T(pEnd + 76, 82, 'growth cone →', 'l', 'start'); }
+  s += `<path d="M${cut} 70 L${cut} 130" style="stroke:var(--clin);stroke-width:2;stroke-dasharray:4 3"/>` + T(cut, 62, 'cut', 'c', 'middle');
+  s += T(50, 150, st >= 2 ? 'chromatolysis' : 'cell body', 's', 'middle') + T(150, 138, 'proximal', 's', 'middle');
+  $('wal-svg').innerHTML = s; $('wal-find').innerHTML = WAL[st][1];
+}
+Phys.stepper('wal-step', WAL.map(r => r[0]), drawWal, WS);
+Phys.slider('wal-sl', {id: 'dist', label: 'Distance from the cut to the muscle', min: 10, max: 800, step: 10, value: 200, fmt: v => v + ' mm'}, v => { $('wal-out').textContent = `≈ ${v} days (${(v / 30.4).toFixed(1)} months) of regrowth at 1 mm/day`; }).set(200);
+
+/* ---- NMJ ---- */
+const NM = {cond: 'norm', s: 0};
+function drawNmj() {
+  const st = NM.s, c = NM.cond; let s = Phys.arrowDef('arrc', 'var(--ca)') + Phys.arrowDef('arrn', 'var(--na)');
+  // terminal
+  s += `<path d="M120 20 L400 20 Q420 20 420 40 L420 120 Q420 140 400 140 L120 140 Q100 140 100 120 L100 40 Q100 20 120 20 Z" style="fill:var(--nerve);fill-opacity:.35;stroke:var(--muted)"/>` + T(110, 38, 'motor nerve terminal', 'h');
+  const released = st >= 2;
+  const vx = [150, 200, 250, 300, 350], fused = released ? (c === 'lems' ? 1 : 3) : 0;
+  vx.forEach((x, i) => { const y = i < fused ? 130 : 95; s += `<circle cx="${x}" cy="${y}" r="15" class="ves"/>`; for (let j = 0; j < 4; j++) s += `<circle cx="${x - 6 + (j % 2) * 12}" cy="${y - 5 + Math.floor(j / 2) * 10}" r="2.6" style="fill:var(--ach)"/>`; });
+  // VGCC
+  for (const x of [175, 275, 375]) { s += `<rect x="${x - 7}" y="132" width="14" height="16" rx="3" style="fill:var(--ca);fill-opacity:.85"/>`; if (c === 'lems') s += `<path d="M${x - 10} 122 l10 10 l10 -10" style="fill:none;stroke:var(--clin);stroke-width:3"/>`; }
+  if (st === 1) for (const x of [175, 275, 375]) { if (c === 'lems' && x !== 175) continue; s += Phys.dot(x - 12, 162, 'ca', 3.2) + `<path d="M${x} 164 L${x} 128" style="stroke:var(--ca);stroke-width:2" marker-end="url(#arrc)"/>`; }
+  // cleft & AChE
+  s += T(430, 172, 'cleft', 's', 'start');
+  for (let x = 120; x < 410; x += 26) s += `<rect x="${x}" y="166" width="10" height="5" rx="2" style="fill:var(--muted);opacity:${st >= 5 ? 1 : .5}"/>`;
+  // ACh in cleft
+  if (released && st < 5) { const n = c === 'lems' ? 4 : 12; for (let i = 0; i < n; i++) s += `<circle cx="${140 + (i * 23) % 260}" cy="${156 + (i % 3) * 7}" r="2.8" style="fill:var(--ach)"/>`; }
+  if (st >= 5) for (let i = 0; i < 6; i++) s += T(150 + i * 45, 162, '·', 'b', 'middle');
+  // end plate with folds
+  let d = 'M100 190'; for (let x = 100; x < 420; x += 64) d += ` L${x + 20} 190 L${x + 20} 250 L${x + 44} 250 L${x + 44} 190 L${x + 64} 190`;
+  s += `<path d="${d} L420 300 L100 300 Z" class="musc"/>` + T(110, 290, 'muscle end plate (junctional folds)', 'h');
+  // AChR on crests
+  for (let x = 100; x < 420; x += 64) for (const dx of [4, 52]) { const rx = x + dx; const keep = c !== 'mg' || dx === 4; s += `<rect x="${rx}" y="182" width="10" height="10" rx="2" style="fill:var(--rcpt);opacity:${keep ? 1 : .25}"/>`; if (c === 'mg' && !keep) s += `<path d="M${rx - 2} 176 l7 6 l7 -6" style="fill:none;stroke:var(--clin);stroke-width:3"/>`; if (st >= 3 && keep && (c !== 'lems' || rx < 200)) s += `<circle cx="${rx + 5}" cy="180" r="2.8" style="fill:var(--ach)"/>`; }
+  // Na channels in depths
+  for (let x = 100; x < 420; x += 64) s += `<rect x="${x + 27}" y="244" width="10" height="8" rx="2" style="fill:var(--na)"/>`;
+  if (st >= 4) { const ok = c === 'norm' || st === 4 && false; s += `<path d="M150 312 L380 312" style="stroke:var(--na);stroke-width:2.5;stroke-dasharray:${c === 'norm' ? '0' : '6 5'}" marker-end="url(#arrn)"/>` + T(264, 326, c === 'norm' ? 'muscle action potential' : 'EPP smaller: may fail to reach threshold', 'l', 'middle'); }
+  $('nmj-svg').innerHTML = s;
+  $('nmj-find').innerHTML = `<h3>${st + 1}. ${NMJ_STEPS[st][0]}</h3><p>${NMJ_STEPS[st][1]}</p>${NMJ_COND[c][1]}`;
+}
+Phys.toggles('nmj-tg', Object.entries(NMJ_COND).map(([k, v]) => [k, v[0]]), k => { NM.cond = k; drawNmj(); }, NM.cond);
+Phys.stepper('nmj-step', NMJ_STEPS.map(r => r[0]), drawNmj, NM);
+Phys.key('nmj-key', [['--ach', 'acetylcholine'], ['--ca', 'P/Q Ca²⁺ channel / Ca²⁺'], ['--rcpt', 'nicotinic ACh receptor'], ['--na', 'Na⁺ channel'], ['--muted', 'acetylcholinesterase'], ['--clin', 'autoantibody']]);
+
+/* ---- RNS ---- */
+const RN = {sel: 'mg'};
+function drawRns() {
+  const [lab, bars, post, txt] = RNS[RN.sel], yb = 190, Y = v => yb - v * 1.5; let s = '';
+  s += `<path class="axis" d="M40 30 L40 ${yb} L410 ${yb}"/>` + T(40, 20, 'response (CMAP), % of normal (schematic)', 's');
+  for (const v of [0, 50, 100]) s += `<path class="axis" d="M36 ${Y(v)} L40 ${Y(v)}"/>` + T(33, Y(v) + 4, v, 's', 'end');
+  bars.forEach((v, i) => { s += `<rect x="${50 + i * 40}" y="${Y(v)}" width="26" height="${yb - Y(v)}" style="fill:var(--muted);fill-opacity:.8"/>`; });
+  s += T(150, yb + 18, 'slow repetitive stimuli 1–6', 's', 'middle');
+  s += `<rect x="330" y="${Y(post)}" width="34" height="${yb - Y(post)}" style="fill:var(--ink);fill-opacity:.8"/>` + T(347, yb + 18, 'after brief exercise', 's', 'middle');
+  $('rns-svg').innerHTML = s; $('rns-find').innerHTML = txt;
+}
+Phys.toggles('rns-tg', Object.entries(RNS).map(([k, v]) => [k, v[0]]), k => { RN.sel = k; drawRns(); }, RN.sel); drawRns();
+Phys.table('mg-table', MG_TABLE[0], MG_TABLE[1]);
+Phys.table('nmb-table', NMB[0], NMB[1]); $('nmb-note').textContent = NMB_NOTE;
+Phys.swipeHints();
+</script>
+</body>
+</html>

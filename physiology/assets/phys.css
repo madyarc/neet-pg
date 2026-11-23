@@ -1,0 +1,119 @@
+/* Shared styles for the physiology pages (physiology/<branch>/*.html). Base layout copied from anatomy/assets/atlas.css (no 3D viewer
+   parts) and the schematic/stepper styles from anatomy/genetics/gen.css.
+   Colour tokens carry ONE meaning each, on every physiology page:
+   UI and meaning colours shared with anatomy (same values as anatomy/assets/atlas.css): --accent (UI selection only), --clin (a clinical
+   point: disease, antibody, drug), --mark (the selected point on a graph), --nerve (axon), --artery.
+   Tissue colours reused from anatomy pages where the meaning is the same: --fluid (extracellular fluid / any body fluid), --cyto (cytoplasm =
+   intracellular fluid), --nucleus, --myelin, --schwann (Schwann cell), --nissl, --rcpt (receptors), --vesicle (synaptic vesicles), --musc
+   (muscle tissue; type I fibres solid, type II pale), --actin, --myosin, --zline, --ttub (T tubule), --sr (sarcoplasmic reticulum).
+   --collagen (connective-tissue sheaths: endoneurium; as anatomy/histology/nervous-vascular.html).
+   Physiology tokens (new; chosen with sources-local/facts/fill-physio1-scripts/pick3.py and colcheck3.py, >=20 from atlas meaning colours,
+   >=15 from every --n-* token, >=12 from other pages): --na (Na+), --k (K+), --cl (Cl−), --ca (Ca2+), --ach (acetylcholine), --gate (the Na+
+   channel inactivation gate). Ion colours are used for shapes only; ion names in text are ink with a coloured swatch (contrast). */
+html,body{margin:0} [hidden]{display:none!important}
+:root{
+  --bg:#f5f6f9; --surface:#ffffff; --ink:#1a2130; --muted:#5a6375; --line:#dce0e8;
+  --accent:#2c56cc; --mark:#cf3f33; --clin:#cc3311; --nerve:#e6c229; --artery:#c0283d;
+  --fluid:#d9edc6; --cyto:#c8b6e2; --nucleus:#1e4f99; --myelin:#c8ffd8; --schwann:#f2cc8f; --nissl:#5a3f8c; --rcpt:#ff006e; --vesicle:#e9d8a6;
+  --musc:#c96f68; --actin:#2f8f6a; --myosin:#c0532a; --zline:#1a1d24; --ttub:#2f6fb5; --sr:#d4a72c;
+  --na:#ff4d00; --k:#8143bf; --cl:#28a608; --ca:#d90bc4; --ach:#0a6654; --gate:#663300; --collagen:#e39b9b;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+:root[data-theme="dark"]{
+  --bg:#0f131a; --surface:#161b24; --ink:#e5e8ee; --muted:#97a0b0; --line:#29303c;
+  --accent:#7d9dff; --mark:#ff7b6f; --clin:#ff7b6f; --nerve:#f0d24a; --artery:#e0566a;
+  --fluid:#4e6638; --cyto:#6d5a8c; --nucleus:#9fb0ff; --myelin:#3f7a55; --schwann:#8c6f3f; --nissl:#c9a6ff; --rcpt:#ff5c9d; --vesicle:#9c8f60;
+  --musc:#9c4e48; --actin:#59c79a; --myosin:#ef8a5f; --zline:#f2f2f2; --ttub:#6fa8e8; --sr:#e6c55a;
+  --na:#ff4d00; --k:#9455f2; --cl:#56a621; --ca:#d94cd9; --ach:#22e6dc; --gate:#8f4f00; --collagen:#b86a6a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:30px}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,4vw,38px);line-height:1.1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h2{font-family:var(--f-display);font-weight:600;font-size:21px;margin:0 0 4px;text-wrap:balance}
+h3{font-size:15px;margin:0 0 4px}
+p{margin:0}
+a{color:var(--accent)}
+sub,sup{line-height:0}
+.back a{font-size:14px;color:var(--muted);text-decoration:none} .back a:hover{color:var(--accent)}
+.back .muted a{font-size:13px;color:var(--accent)}
+.lede{max-width:72ch;color:var(--muted)}
+.muted{color:var(--muted);font-size:13.5px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.stack{display:flex;flex-direction:column;gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 12.5px var(--f-body);background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:4px 11px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{font:500 13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer}
+.btn[disabled]{opacity:.45;cursor:default}
+.cap{border-left:3px solid var(--line);padding:2px 0 2px 10px;font-size:14px;max-width:80ch}
+.cap.key{border-left-color:var(--accent)} .cap.warn{border-left-color:var(--clin)}
+footer{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:12px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);letter-spacing:.02em} /* no uppercase: it turns µ into Μ */
+table.t td:first-child{font-weight:600}
+table.t td.num{font-family:var(--f-mono);font-size:13px;white-space:nowrap}
+@media (max-width:600px){
+  .wrap{gap:18px} .lede{font-size:14px} .panel{padding:10px}
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);margin-right:8px}
+}
+/* blocks, schematics, steppers (as anatomy/genetics/gen.css) */
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.prose p{margin:0 0 8px;max-width:80ch}
+.prose ul{margin:4px 0 8px;padding-left:20px}
+.prose h3{font-size:15px;margin:0 0 4px}
+.scroll{overflow-x:auto}
+.two{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+.jump{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13.5px}
+svg.sch{max-width:680px;margin:0 auto}
+.schbox{overflow-x:auto;scrollbar-color:var(--line) transparent}
+.swipe{display:none}
+@media (max-width:600px){.schbox svg.sch{min-width:520px}.schbox svg.sch.fit{min-width:0}.swipe{display:block}}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.h{font:600 11px var(--f-mono);fill:var(--muted);letter-spacing:.04em}
+svg.sch text.b{font-weight:700}
+svg.sch text.m{font:600 12px var(--f-mono)}
+svg.sch text.c{fill:var(--clin);font-weight:600}
+svg.sch text.l,svg.sch text.s{paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .flow{stroke:var(--ink);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+svg.sch .box{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .axis{stroke:var(--muted);stroke-width:1;fill:none}
+svg.sch .grid{stroke:var(--line);stroke-width:1;fill:none}
+svg.sch .trace{stroke:var(--ink);stroke-width:2.2;fill:none;stroke-linejoin:round;stroke-linecap:round}
+svg.sch .hl{stroke:var(--accent);stroke-width:2.4;fill:none}
+svg.sch .dash{stroke-dasharray:5 4}
+svg.sch .memb{fill:var(--bg);stroke:var(--muted);stroke-width:1}
+.step{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.step .chips{flex:1;min-width:0}
+.step .btn{white-space:nowrap}
+.find{font-size:14px;min-height:6em}
+.find h3{font-size:15px;margin:0 0 4px}
+/* sliders */
+.sliders{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 18px}
+@media (max-width:600px){.sliders{grid-template-columns:minmax(0,1fr)}}
+.sl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center;font-size:13.5px}
+.sl label{font-weight:500}
+.sl output{font:500 13px var(--f-mono);color:var(--ink);text-align:right;white-space:nowrap}
+.sl input[type=range]{grid-column:1 / -1;width:100%;accent-color:var(--accent);margin:2px 0}
+.readout{font:600 15px var(--f-mono)}
+.big{font:700 26px var(--f-mono);line-height:1.1}
+.swatch{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.tag{font:500 10.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.note{font-size:13px;color:var(--muted)}
+.ion-na::before,.ion-k::before,.ion-cl::before,.ion-ca::before,.ion-hco::before{content:'';display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:0}
+.ion-na::before{background:var(--na)} .ion-k::before{background:var(--k)} .ion-cl::before{background:var(--cl)} .ion-ca::before{background:var(--ca)} .ion-hco::before{background:var(--muted)}
+table.t th .u,.tag .u{text-transform:none}

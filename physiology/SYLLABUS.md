@@ -12,13 +12,13 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 1. General Physiology
 
-- [ ] **PY1.1** Describe the structure and functions of a cell, intercellular communication and their applications in Clinical care and research
-- [ ] **PY1.2** Discuss the principles of homeostasis and feedback mechanism
-- [ ] **PY1.3** Describe apoptosis (programmed cell death), explain its mechanism of action and physiological significance.
-- [ ] **PY1.4** Describe and discuss various transport mechanisms across cell membranes
-- [ ] **PY1.5** Describe the fluid compartments of the body, its ionic composition & measurement methods
-- [ ] **PY1.6** Describe the concept of pH & Buffer systems in the body
-- [ ] **PY1.7** Describe the molecular basis of resting membrane potential (RMP) and generation of action potential in a nerve fibre
+- [~] **PY1.1** Describe the structure and functions of a cell, intercellular communication and their applications in Clinical care and research — *organelles and signalling in [The Cell, Membrane Transport and Body Fluids](general/cell-transport-fluids.html); clinical and research applications not covered*
+- [x] **PY1.2** Discuss the principles of homeostasis and feedback mechanism — *feedback loops, feedforward, examples: [The Cell, Membrane Transport and Body Fluids](general/cell-transport-fluids.html)*
+- [x] **PY1.3** Describe apoptosis (programmed cell death), explain its mechanism of action and physiological significance. — *intrinsic and extrinsic pathways, apoptosis vs necrosis: [The Cell, Membrane Transport and Body Fluids](general/cell-transport-fluids.html)*
+- [~] **PY1.4** Describe and discuss various transport mechanisms across cell membranes — *nine transport mechanisms in [The Cell, Membrane Transport and Body Fluids](general/cell-transport-fluids.html); endocytosis types rest on Wikipedia only*
+- [x] **PY1.5** Describe the fluid compartments of the body, its ionic composition & measurement methods — *60–40–20 compartments, indicator dilution, ion composition, Darrow–Yannet gain and loss: [The Cell, Membrane Transport and Body Fluids](general/cell-transport-fluids.html)*
+- [~] **PY1.6** Describe the concept of pH & Buffer systems in the body — *pH and the bicarbonate buffer with a Henderson–Hasselbalch calculator in [The Cell, Membrane Transport and Body Fluids](general/cell-transport-fluids.html); phosphate and haemoglobin buffers and compensation timing lack two open sources*
+- [x] **PY1.7** Describe the molecular basis of resting membrane potential (RMP) and generation of action potential in a nerve fibre — *Nernst/GHK calculator, action potential stepper, refractory periods: [Membrane Potentials](nerve-muscle/membrane-potentials.html)*
 
 ### 2. Haematology
 
@@ -38,16 +38,16 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 3. Nerve and Muscle Physiology
 
-- [ ] **PY3.1** Describe the structure and functions of a neuron and neuroglia; Discuss nerve growth factors
-- [ ] **PY3.2** Describe the types, functions, properties of nerve fibers including strength duration curve, chronaxie and rheobase
-- [ ] **PY3.3** Classify nerve injury and discuss the mechanism of degeneration and regeneration in peripheral nerves
-- [ ] **PY3.4** Describe the microscopic structure of neuro-muscular junction (NMJ) and mechanism of neuromuscular transmission
-- [ ] **PY3.5** Discuss the applied aspects of neuromuscular junction: myasthenia gravis, Lambert Eaton syndrome and neuromuscular blocking agents.
-- [ ] **PY3.6** Describe the different types of muscle fibres, their structure and physiological basis of action potential:
-- [ ] **PY3.7** Describe properties, action potential and molecular basis of muscle contraction in skeletal muscle
-- [ ] **PY3.8** Describe properties, action potential and molecular basis of muscle contraction in smooth muscle
-- [ ] **PY3.9** Describe the mode of muscle contraction (isometric and isotonic), energy source, muscle metabolism and gradation of muscular activity
-- [ ] **PY3.10** Enumerate and briefly discuss myopathies
+- [x] **PY3.1** Describe the structure and functions of a neuron and neuroglia; Discuss nerve growth factors — *neuron, axonal transport, neurotrophins (glia on the anatomy pages): [The Neuron, Nerve Injury and the Neuromuscular Junction](nerve-muscle/nerve-nmj.html)*
+- [~] **PY3.2** Describe the types, functions, properties of nerve fibers including strength duration curve, chronaxie and rheobase — *fibre classes, strength–duration, rheobase and chronaxie, block order shown as a disagreement in [Membrane Potentials](nerve-muscle/membrane-potentials.html); hypoxia sensitivity and utilization time lack open sources*
+- [x] **PY3.3** Classify nerve injury and discuss the mechanism of degeneration and regeneration in peripheral nerves — *Seddon and Sunderland, Wallerian degeneration, regeneration: [The Neuron, Nerve Injury and the Neuromuscular Junction](nerve-muscle/nerve-nmj.html)*
+- [x] **PY3.4** Describe the microscopic structure of neuro-muscular junction (NMJ) and mechanism of neuromuscular transmission — *NMJ stepper: [The Neuron, Nerve Injury and the Neuromuscular Junction](nerve-muscle/nerve-nmj.html)*
+- [x] **PY3.5** Discuss the applied aspects of neuromuscular junction: myasthenia gravis, Lambert Eaton syndrome and neuromuscular blocking agents. — *myasthenia gravis vs Lambert–Eaton, blockers: [The Neuron, Nerve Injury and the Neuromuscular Junction](nerve-muscle/nerve-nmj.html)*
+- [x] **PY3.6** Describe the different types of muscle fibres, their structure and physiological basis of action potential: — *muscle types, sarcomere and length–tension: [Muscle](nerve-muscle/muscle.html)*
+- [x] **PY3.7** Describe properties, action potential and molecular basis of muscle contraction in skeletal muscle — *EC coupling and the cross-bridge cycle in skeletal muscle: [Muscle](nerve-muscle/muscle.html)*
+- [x] **PY3.8** Describe properties, action potential and molecular basis of muscle contraction in smooth muscle — *smooth muscle: calmodulin, MLCK, latch: [Muscle](nerve-muscle/muscle.html)*
+- [x] **PY3.9** Describe the mode of muscle contraction (isometric and isotonic), energy source, muscle metabolism and gradation of muscular activity — *isometric and isotonic, energy, summation and tetanus, size principle: [Muscle](nerve-muscle/muscle.html)*
+- [~] **PY3.10** Enumerate and briefly discuss myopathies — *myopathies in [Muscle](nerve-muscle/muscle.html); several details single-source (attributed)*
 - [ ] **PY3.11** Perform Ergography and calculate the work done by a skeletal muscle *(skill)*
 - [ ] **PY3.12** Observe with Computer assisted learning (i) Amphibian nerve -muscle experiments (ii) Amphibian cardiac experiments *(skill)*
 

@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muscle Physiology</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+svg.sch .musc{fill:var(--musc);fill-opacity:.55;stroke:var(--muted);stroke-width:1}
+svg.sch .thin{stroke:var(--actin);stroke-width:3.5;stroke-linecap:round}
+svg.sch .thick{stroke:var(--myosin);stroke-width:8;stroke-linecap:round}
+svg.sch .z{stroke:var(--zline);stroke-width:3}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 01: <a href="../general/cell-transport-fluids.html">Cell, transport, fluids</a> · <a href="membrane-potentials.html">Membrane potentials</a> · <a href="nerve-nmj.html">Nerve and NMJ</a> · <span aria-current="page">Muscle</span></span></nav>
+
+<header class="stack">
+  <h1>Muscle: Contraction, Fibre Types and Myopathies</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-types">Three kinds of muscle</a> <a href="#h-sarc">Sliding filaments, length–tension</a> <a href="#h-ecc">Excitation–contraction coupling</a> <a href="#h-xb">Cross-bridge cycle</a> <a href="#h-fib">Fibre types</a> <a href="#h-mode">Isometric, isotonic, energy</a> <a href="#h-grad">Gradation, tetanus</a> <a href="#h-myo">Myopathies</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-types">
+  <h2 id="h-types">Three kinds of muscle</h2>
+  <div class="scroll"><table id="types-table"></table></div>
+  <p class="muted" id="types-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-sarc">
+  <h2 id="h-sarc">Sliding filaments and the length–tension curve</h2>
+  <div class="sliders" id="sarc-sl"></div>
+  <div class="vrow" aria-live="polite" id="sarc-out"></div>
+  <div class="schbox"><svg class="fig sch" id="sarc-svg" viewBox="0 0 600 170" role="img" aria-label="One sarcomere at the chosen length: Z discs, thin actin filaments, thick myosin filaments, the A band, I band and H zone"></svg></div>
+  <div class="schbox"><svg class="fig sch" id="lt-svg" viewBox="0 -14 600 254" role="img" aria-label="Active tension against sarcomere length, with the current length marked"></svg></div>
+  <div class="key" id="sarc-key"></div>
+  <div class="prose" id="sarc-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ecc">
+  <h2 id="h-ecc">Excitation–contraction coupling: skeletal vs smooth</h2>
+  <div class="chips" id="ecc-tg" aria-label="Muscle"></div>
+  <div class="step" id="ecc-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ecc-svg" viewBox="0 0 520 300" role="img" aria-label="Schematic of the chosen muscle cell showing the current step of excitation–contraction coupling"></svg></div>
+    <div class="prose find" id="ecc-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="ecc-key"></div>
+  <p class="muted">Schematic, not to scale.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-xb">
+  <h2 id="h-xb">The cross-bridge cycle</h2>
+  <div class="step" id="xb-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="xb-svg" viewBox="0 0 400 204" role="img" aria-label="A myosin head and an actin filament at the chosen stage of the cross-bridge cycle"></svg></div>
+    <div class="prose find" id="xb-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fib">
+  <h2 id="h-fib">Skeletal muscle fibre types</h2>
+  <div class="scroll"><table id="fib-table"></table></div>
+  <div class="prose" id="fib-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mode">
+  <h2 id="h-mode">Isometric and isotonic contraction; energy for contraction</h2>
+  <div class="chips" id="mode-tg" aria-label="Contraction"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="mode-svg" viewBox="0 0 400 220" role="img" aria-label="A muscle holding or moving a load: length and tension in the chosen type of contraction"></svg></div>
+    <div class="prose find" id="mode-find" aria-live="polite"></div>
+  </div>
+  <h3>Where the ATP comes from</h3>
+  <div class="schbox"><svg class="fig sch" id="en-svg" viewBox="0 0 600 140" role="img" aria-label="Share of energy from the phosphagen system, glycolysis and mitochondrial respiration in a 10-second and a 30-second sprint"></svg></div>
+  <div class="prose" id="en-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-grad">
+  <h2 id="h-grad">Grading force: recruitment, summation and tetanus</h2>
+  <div class="sliders" id="grad-sl"></div>
+  <div class="schbox"><svg class="fig sch" id="tw-svg" viewBox="0 0 600 220" role="img" aria-label="Force over time for a train of stimuli at the chosen frequency: single twitches, summation, incomplete and complete tetanus"></svg></div>
+  <div class="prose find" id="grad-find" aria-live="polite"></div>
+  <div class="schbox"><svg class="fig sch" id="mu-svg" viewBox="0 0 600 120" role="img" aria-label="Motor units in recruitment order, small first; the recruited ones filled"></svg></div>
+  <div class="prose" id="grad-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-myo">
+  <h2 id="h-myo">Myopathies</h2>
+  <div class="prose" id="myo-text"></div>
+  <div class="scroll"><table id="myo-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio1.md, Part D; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Stretch a sarcomere and read the tension off the length–tension curve, step through excitation–contraction coupling in skeletal and smooth muscle and through the cross-bridge cycle, then raise the stimulation rate until twitches fuse into tetanus. The neuromuscular junction: <a href="nerve-nmj.html#h-nmj">Nerve and NMJ</a>.';
+
+const TYPES = [['', 'Skeletal', 'Cardiac', 'Smooth'], [
+  ['Control', 'Voluntary', 'Involuntary (autonomic)', 'Involuntary (autonomic, hormones, local)'],
+  ['Cells joined', 'Separate fibres', 'Intercalated discs, gap junctions (Wikipedia)', 'Single-unit sheets coupled as a syncytium (Wikipedia)'],
+  ['Ca²⁺ switch', 'Troponin C on actin', 'Troponin C (needs outside Ca²⁺, Wikipedia)', 'Calmodulin → myosin light-chain kinase'],
+  ['Ca²⁺ source', 'Sarcoplasmic reticulum (outside Ca²⁺ not needed)', '—', 'Mostly outside (L-type channels), some SR'],
+]];
+const TYPES_NOTE = 'Structure (striations, sarcomere bands, fibre architecture) is on the anatomy page <a href="../../anatomy/general/muscle.html#h-types">Muscle Tissue</a>; this table keeps the physiological differences. Smooth muscle has no sarcomeres; its actin anchors to scattered dense bodies (one review). Cardiac muscle is covered in the cardiovascular module.';
+
+/* sarcomere geometry (µm) from PMC5642817: thick 1.6, thin 1.0 each side, Z disc 0.05 */
+const SARC = {thick: 1.6, thin: 1.0, z: 0.05};
+const SARC_TEXT = '<p>Sarcomere bands (A, I, H, Z) are described on <a href="../../anatomy/general/muscle.html#h-sarc">Muscle Tissue</a>. In contraction the filaments <b>slide</b> past each other and keep their length: the <b>A band stays the same</b>, while the I band and H zone shorten (sliding filament theory, 1954: Andrew Huxley and Niedergerke, Hugh Huxley and Hanson; Wikipedia).</p><p><b>Length–tension.</b> Isometric tension is greatest at an intermediate length, where all the myosin heads can reach actin: a plateau at about <b>2.0–2.25 µm</b>. Stretched further, overlap and tension fall <b>linearly</b> to zero at about <b>3.65 µm</b>. Shorter than the plateau, tension also falls (the left side is drawn schematically).</p>';
+
+const ECC = {
+  sk: ['Skeletal muscle', [
+    ['AP into T tubules', 'The end-plate potential fires a muscle action potential that runs along the sarcolemma and down the <b>T tubules</b> into the fibre.'],
+    ['DHPR senses voltage', 'In the T tubule the <b>dihydropyridine receptor</b> (an L-type Ca²⁺ channel, CaV1.1) senses the depolarisation. At the <b>triad</b> (a T tubule between two SR cisternae) it is mechanically coupled to the ryanodine receptor.'],
+    ['RyR1 releases Ca²⁺', 'The <b>ryanodine receptor (RyR1)</b> of the sarcoplasmic reticulum opens and Ca²⁺ floods out of the SR store. Ca²⁺ entering from outside is <b>not needed</b> in skeletal muscle.'],
+    ['Troponin C, tropomyosin', 'Ca²⁺ binds <b>troponin C</b>; the troponin–tropomyosin complex shifts and uncovers the myosin-binding sites on actin. (A review notes thick-filament regulation also matters.)'],
+    ['Cross-bridges cycle', 'Myosin heads bind actin and pull: the filaments slide (see the <a href="#h-xb">cycle</a>).'],
+    ['SERCA: relaxation', '<b>SERCA</b> pumps Ca²⁺ back into the SR; Ca²⁺ leaves troponin C, tropomyosin covers the sites again and the muscle relaxes.'],
+  ]],
+  sm: ['Smooth muscle', [
+    ['Ca²⁺ in', 'Much of the Ca²⁺ comes <b>from outside</b> through L-type Ca²⁺ channels; less from the smaller SR, released through IP₃ (and ryanodine) receptors.'],
+    ['Calmodulin', 'Smooth muscle has <b>no troponin</b>. Ca²⁺ binds <b>calmodulin</b>.'],
+    ['MLCK', 'Ca²⁺–calmodulin activates <b>myosin light-chain kinase (MLCK)</b>.'],
+    ['Light chain phosphorylated', 'MLCK phosphorylates the <b>regulatory light chain of myosin</b>: myosin is switched on and cross-bridges cycle. (Regulation is on the myosin side, not actin.)'],
+    ['Contraction', 'Contraction can be <b>tonic</b> (slow, sustained — e.g. vessels, sphincters) or <b>phasic</b> (fast contraction and relaxation). Force may be held by slowly cycling "latch-bridges" (a hypothesis; Wikipedia).'],
+    ['MLCP: relaxation', '<b>Myosin light-chain phosphatase</b> removes the phosphate and the muscle relaxes.'],
+  ]],
+};
+const XB = [
+  ['ATP binds', 'ATP binds the myosin head and <b>detaches</b> it from actin.'],
+  ['ATP hydrolysed', 'Myosin splits ATP while detached; the energy "cocks" the head.'],
+  ['Head binds actin', 'The cocked head binds a new site on actin (exposed when Ca²⁺ is on troponin).'],
+  ['Power stroke', 'Release of phosphate starts the <b>power stroke</b> (Wikipedia): the head tilts and pulls actin towards the centre of the sarcomere.'],
+  ['Rigor', 'ADP leaves; the head stays <b>bound</b> at the end of the stroke until a new ATP arrives. Without ATP the heads cannot let go — the rigor of <b>rigor mortis</b> (Wikipedia).'],
+];
+
+const FIB = [['', 'Type I', 'Type IIA', 'Type IIX (older books: IIB)'], [
+  ['Also called', 'Slow-twitch oxidative (SO); red', 'Fast-twitch oxidative-glycolytic (FOG)', 'Fast-twitch glycolytic (FG); white'],
+  ['Speed', 'Slow', 'Fast', 'Fast'],
+  ['Fatigue', 'Resistant', 'Intermediate', 'Fatigue quickly'],
+  ['Force, motor neuron', 'Low force; small motor neurons, recruited first (Wikipedia)', '—', 'High force; large motor neurons, recruited last (Wikipedia)'],
+  ['Colour', 'Red (myoglobin)', '—', 'White'],
+]];
+const FIB_TEXT = '<p>Fibres are typed by their <b>myosin heavy chain</b> (I, IIA, IIX), their speed and their metabolism. <b>Caution</b> (a 2024 review): the pairing "slow = oxidative = fatigue-resistant, fast = glycolytic = fatigable" is a tendency, not a rule — some type II fibres are highly oxidative and some type I fibres glycolytic.</p>';
+
+const MODE = {
+  iso: ['Isometric', '<h3>Isometric</h3><p><b>Length stays the same, tension rises</b> — holding a dumbbell still, or a sleeping child in your arms. Contraction does not have to mean shortening.</p>'],
+  con: ['Isotonic: concentric', '<h3>Isotonic, concentric</h3><p><b>Tension stays the same, the muscle shortens</b> because its force exceeds the load — lifting (Wikipedia).</p>'],
+  ecc: ['Isotonic: eccentric', '<h3>Isotonic, eccentric</h3><p>The load is greater than the force: the muscle <b>lengthens while contracting</b> — lowering a weight under control (Wikipedia).</p><p class="muted">In real movement neither length nor tension stays exactly constant (Wikipedia).</p>'],
+};
+const EN = [['10-second sprint', 53, 44, 3], ['30-second sprint', 23, 49, 28]];
+const EN_TEXT = '<p>The muscle\'s own ATP is small (about 5 mM; one review). It is rebuilt by three systems, fastest first: the <b>phosphagen</b> system — <b>phosphocreatine</b> gives its phosphate to ADP through <b>creatine kinase</b>, needing no oxygen; <b>glycolysis</b> of glycogen and glucose (fast, makes lactate); and <b>mitochondrial (oxidative) respiration</b> (slowest). The bars are one review\'s estimates.</p>';
+
+const GRAD_TEXT = '<p><b>Recruitment.</b> A <b>motor unit</b> is one motor neuron and the muscle fibres it supplies. For more force, more units are recruited in order of size: <b>small units first</b> (slow, fatigue-resistant), large units later — Henneman\'s <b>size principle</b>.</p><p><b>Rate (frequency).</b> One action potential gives a <b>twitch</b>. If the next arrives before the muscle has relaxed, the twitches <b>add (summation)</b>; at high rates they fuse into a smooth maximal contraction, <b>tetanus</b> (maximal tetanic force at rates up to about 100 Hz in one review — higher than in most voluntary contractions).</p><p><b>Fatigue</b> is a fall in the maximum force or power with activity (one review).</p>';
+
+const MYO_TEXT = '<p>A <b>myopathy</b> is a disease of the muscle itself, not of its nerve. Weakness is the main sign — mostly <b>proximal</b> (rising from a chair, climbing stairs) — sometimes with pain, cramps or stiffness; nerve conduction studies are usually normal.</p>';
+const MYO = [['Group', 'Examples', 'Key points'], [
+  ['Muscular dystrophies', 'Duchenne, Becker', 'Mutations in the <b>dystrophin</b> gene (X-linked recessive); dystrophin links actin to the connective tissue round each fibre. Duchenne is severe, Becker milder. CK raised. Gowers\' sign and calf pseudohypertrophy (Wikipedia); death usually in the twenties in Duchenne (StatPearls).'],
+  ['', 'Myotonic dystrophy', 'Commonest adult-onset dystrophy; <b>autosomal dominant</b> (DM1: <i>DMPK</i>); <b>myotonia</b> = slow relaxation after contraction; cataracts, heart conduction defects.'],
+  ['Inflammatory', 'Polymyositis, dermatomyositis, inclusion body myositis', 'Autoimmune; proximal weakness; dermatomyositis has a typical rash (heliotrope, Gottron\'s papules: Wikipedia); raised cancer risk. Inclusion body myositis: commonest over 50; quadriceps and finger flexors.'],
+  ['Metabolic', 'McArdle disease (glycogen storage type V)', 'No <b>myophosphorylase</b>, so muscle glycogen cannot be used: exercise intolerance, cramps, rhabdomyolysis; autosomal recessive (StatPearls).'],
+  ['Endocrine, toxic', 'Hypothyroid myopathy; statin myopathy', 'Hypothyroidism: proximal weakness, aches (StatPearls). Statins: muscle pain, weakness, rarely rhabdomyolysis (one review).'],
+  ['Channelopathies', 'Periodic paralysis', 'Episodes of weakness with low (hypokalaemic) or high (hyperkalaemic; Wikipedia) K⁺; familial ion-channel mutations; hypokalaemic form also with hyperthyroidism.'],
+]];
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews on sliding filaments and the two Huxleys, the sarcomere length–tension relation (J Gen Physiol 1978), excitation–contraction coupling, smooth muscle, fibre types, muscle energy systems, motor units, fatigue, dystrophin, statin myopathy (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> the sarcomere uses frog filament lengths (thick 1.6 µm, thin 1.0 µm, Z disc 0.05 µm); its tension curve is the overlap model (plateau 2.0–2.25 µm, zero at 3.65 µm), with the left limb drawn schematically. The twitch and tetanus trace adds a fixed twitch shape for each stimulus and caps the force (schematic). Other drawings are schematic, not to scale.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+Phys.table('types-table', TYPES[0], TYPES[1]); $('types-note').innerHTML = TYPES_NOTE;
+
+/* ---- sarcomere and length–tension ---- */
+const SA = {L: 2.2};
+const tension = L => L >= 3.65 ? 0 : L >= 2.25 ? (3.65 - L) / 1.4 : L >= 2.0 ? 1 : L <= 1.3 ? 0 : (L - 1.3) / 0.7;
+function drawSarc() {
+  const L = SA.L, X = Phys.scale(0, 4.0, 20, 580), mid = 300, half = L / 2;
+  const zl = mid - (X(half) - X(0)), zr = mid + (X(half) - X(0)), sc = X(1) - X(0);
+  let s = '';
+  s += `<path class="z" d="M${zl} 30 L${zl} 120 M${zr} 30 L${zr} 120"/>`;
+  for (let i = 0; i < 5; i++) { const y = 40 + i * 20; if (i % 2 === 0) s += `<path class="thin" d="M${zl} ${y} L${Math.min(zl + SARC.thin * sc, zr)} ${y} M${zr} ${y} L${Math.max(zr - SARC.thin * sc, zl)} ${y}"/>`; else s += `<path class="thick" d="M${mid - SARC.thick / 2 * sc} ${y} L${mid + SARC.thick / 2 * sc} ${y}"/>`; }
+  const A0 = mid - SARC.thick / 2 * sc, A1 = mid + SARC.thick / 2 * sc, H = Math.max(0, Math.min(SARC.thick, L - 2 * SARC.thin)), I = Math.max(0, L - SARC.thick);
+  s += `<path class="lead" d="M${A0} 130 L${A1} 130"/>` + T(mid, 146, `A band ${SARC.thick.toFixed(2)} µm (constant)`, 'l', 'middle');
+  if (H > 0.05) s += `<path d="M${mid - H / 2 * sc} 22 L${mid + H / 2 * sc} 22" style="stroke:var(--ink);stroke-width:2"/>` + T(mid, 16, `H zone ${H.toFixed(2)}`, 'l', 'middle');
+  if (I > 0.05) s += T((zl + A0) / 2, 164, `I band ${(I / 2).toFixed(2)} + ${(I / 2).toFixed(2)}`, 's', 'middle');
+  s += T(zl, 132, 'Z', 'b', 'middle') + T(zr, 132, 'Z', 'b', 'middle');
+  $('sarc-svg').innerHTML = s;
+  // curve
+  const x0 = 60, x1 = 580, y0 = 20, y1 = 200, XL = Phys.scale(1.2, 4.0, x0, x1), YT = Phys.scale(0, 1, y1, y0);
+  let c = `<path class="axis" d="M${x0} ${y0} L${x0} ${y1} L${x1} ${y1}"/>`;
+  for (const v of [1.5, 2.0, 2.5, 3.0, 3.5, 4.0]) c += `<path class="axis" d="M${XL(v)} ${y1} L${XL(v)} ${y1 + 4}"/>` + T(XL(v), y1 + 16, v.toFixed(1), 's', 'middle');
+  c += T(x1, y1 + 32, 'sarcomere length (µm) →', 's', 'end') + T(x0 - 6, y0 + 4, '100%', 's', 'end') + T(x0 - 6, y1, '0', 's', 'end') + T(x0 + 4, y0 - 6, 'active tension', 's', 'start');
+  const pl = [], pr = [];
+  for (let v = 1.3; v <= 2.0001; v += 0.02) pl.push([XL(v), YT(tension(v))]);
+  for (let v = 2.0; v <= 3.8001; v += 0.02) pr.push([XL(v), YT(tension(v))]);
+  c += `<path class="trace dash" d="${Phys.path(pl)}"/><path class="trace" d="${Phys.path(pr)}"/>`;
+  c += T(XL(1.55), YT(0.7), 'schematic', 's', 'middle') + T(XL(2.12), y0 - 12, 'plateau', 's', 'middle');
+  c += `<circle cx="${XL(L)}" cy="${YT(tension(L))}" r="7" style="fill:var(--mark);stroke:var(--surface);stroke-width:2"/>`;
+  $('lt-svg').innerHTML = c;
+  $('sarc-out').innerHTML = `<span><span class="tag">Sarcomere</span> <span class="readout">${L.toFixed(2)} µm</span></span><span><span class="tag">Active tension</span> <span class="readout">${(tension(L) * 100).toFixed(0)}%</span></span><span><span class="tag">I band (each)</span> <span class="readout">${(I / 2).toFixed(2)} µm</span></span><span><span class="tag">H zone</span> <span class="readout">${H.toFixed(2)} µm</span></span>`;
+}
+Phys.slider('sarc-sl', {id: 'L', label: 'Sarcomere length', min: 1.6, max: 3.8, step: 0.05, value: 2.2, fmt: v => v.toFixed(2) + ' µm'}, v => { SA.L = v; drawSarc(); }).init();
+Phys.key('sarc-key', [['--actin', 'thin filament (actin)'], ['--myosin', 'thick filament (myosin)'], ['--zline', 'Z disc'], ['--mark', 'current length']]);
+$('sarc-text').innerHTML = SARC_TEXT; drawSarc();
+
+/* ---- excitation–contraction coupling ---- */
+const EC = {m: 'sk', s: 0};
+function drawEcc() {
+  const sm = EC.m === 'sm', st = EC.s; let s = Phys.arrowDef('arrc', 'var(--ca)');
+  if (!sm) {
+    s += `<rect x="20" y="20" width="480" height="260" rx="10" style="fill:var(--musc);fill-opacity:.18;stroke:var(--muted)"/>` + T(30, 40, 'skeletal muscle fibre', 'h');
+    // T tubule
+    s += `<rect x="236" y="20" width="18" height="150" style="fill:var(--ttub);fill-opacity:${st === 0 ? 1 : .6}"/>` + T(262, 62, 'T tubule', 'l', 'start');
+    // SR cisternae
+    s += `<rect x="150" y="100" width="80" height="50" rx="14" style="fill:var(--sr);fill-opacity:.7"/><rect x="260" y="100" width="80" height="50" rx="14" style="fill:var(--sr);fill-opacity:.7"/>` + T(110, 96, 'SR', 'l b', 'middle') + T(372, 96, 'SR', 'l b', 'middle') + T(245, 186, 'triad', 's', 'middle');
+    // DHPR and RyR
+    s += `<rect x="232" y="${118}" width="26" height="12" rx="3" style="fill:var(--surface);stroke:var(--ink);stroke-width:${st === 1 ? 3 : 1}"/>` + T(245, 214, 'DHPR – RyR1', 'l', 'middle');
+    s += `<path class="lead" d="M245 130 L245 200"/>`;
+    if (st >= 2 && st < 5) for (let i = 0; i < 10; i++) s += Phys.dot(150 + (i * 37) % 200, 160 + (i * 13) % 40, 'ca', 3.5);
+    if (st >= 2 && st < 5) s += `<path d="M190 150 L180 176" style="stroke:var(--ca);stroke-width:2" marker-end="url(#arrc)"/><path d="M300 150 L312 176" style="stroke:var(--ca);stroke-width:2" marker-end="url(#arrc)"/>`;
+    if (st === 5) s += `<path d="M200 220 L190 156" style="stroke:var(--ca);stroke-width:2" marker-end="url(#arrc)"/>` + T(200, 236, 'SERCA pumps Ca²⁺ back', 'l', 'middle');
+    // myofilaments
+    s += `<path class="thin" d="M40 250 L480 250"/>` + `<path class="thick" d="M120 266 L400 266"/>`;
+    if (st >= 3) for (let x = 140; x < 400; x += 40) s += `<circle cx="${x}" cy="250" r="3.5" style="fill:var(--ca)"/>`;
+    if (st >= 4 && st < 5) for (let x = 150; x < 390; x += 40) s += `<path d="M${x} 262 L${x + 8} 252" style="stroke:var(--myosin);stroke-width:3"/>`;
+    s += T(486, 254, 'actin', 's', 'end') + T(410, 286, 'myosin', 's', 'start');
+    if (st === 0) s += `<path d="M245 10 L245 160" style="stroke:var(--mark);stroke-width:2;stroke-dasharray:4 3"/>` + T(262, 30, 'AP →', 'l b', 'start');
+  } else {
+    s += `<ellipse cx="260" cy="150" rx="240" ry="120" style="fill:var(--musc);fill-opacity:.18;stroke:var(--muted)"/>` + T(60, 56, 'smooth muscle cell', 'h');
+    for (const x of [140, 380]) s += `<rect x="${x - 8}" y="26" width="16" height="16" rx="3" style="fill:var(--ca)"/>`;
+    s += T(140, 20, 'L-type Ca²⁺ channel', 's', 'middle');
+    s += `<rect x="330" y="200" width="90" height="32" rx="12" style="fill:var(--sr);fill-opacity:.7"/>` + T(375, 250, 'SR (IP₃ receptor)', 's', 'middle');
+    if (st >= 0) { s += `<path d="M140 44 L150 90" style="stroke:var(--ca);stroke-width:2" marker-end="url(#arrc)"/><path d="M380 44 L370 90" style="stroke:var(--ca);stroke-width:2" marker-end="url(#arrc)"/><path d="M360 198 L330 160" style="stroke:var(--ca);stroke-width:1.6" marker-end="url(#arrc)"/>`; }
+    const box = (x, y, t, on) => `<rect x="${x - 54}" y="${y - 16}" width="108" height="28" rx="14" style="fill:var(--surface);stroke:${on ? 'var(--accent)' : 'var(--line)'};stroke-width:${on ? 2.5 : 1}"/>` + T(x, y + 3, t, 'b', 'middle');
+    s += box(150, 120, 'Ca²⁺–calmodulin', st >= 1) + box(270, 120, 'MLCK active', st >= 2) + box(390, 120, 'myosin-P', st >= 3 && st < 5);
+    s += `<path class="flow" d="M204 120 L214 120"/><path class="flow" d="M324 120 L334 120"/>`;
+    s += `<path class="thin" d="M110 180 L290 180"/><path class="thick" d="M150 196 L260 196"/>`;
+    if (st >= 3 && st < 5) for (let x = 160; x < 260; x += 30) s += `<path d="M${x} 192 L${x + 8} 182" style="stroke:var(--myosin);stroke-width:3"/>`;
+    if (st === 5) s += box(200, 236, 'MLCP removes P', true);
+    for (const [x, y] of [[110, 180], [290, 180]]) s += `<circle cx="${x}" cy="${y}" r="6" style="fill:var(--zline)"/>`;
+    s += T(110, 168, 'dense body', 's', 'middle');
+  }
+  $('ecc-svg').innerHTML = s;
+  const step = ECC[EC.m][1][st]; $('ecc-find').innerHTML = `<h3>${st + 1}. ${step[0]}</h3><p>${step[1]}</p>`;
+}
+let eccGo;
+Phys.toggles('ecc-tg', Object.entries(ECC).map(([k, v]) => [k, v[0]]), k => { EC.m = k; EC.s = 0; eccGo = Phys.stepper('ecc-step', ECC[k][1].map(r => r[0]), drawEcc, EC); }, EC.m);
+eccGo = Phys.stepper('ecc-step', ECC.sk[1].map(r => r[0]), drawEcc, EC);
+Phys.key('ecc-key', [['--ca', 'Ca²⁺'], ['--ttub', 'T tubule'], ['--sr', 'sarcoplasmic reticulum'], ['--actin', 'actin'], ['--myosin', 'myosin']]);
+
+/* ---- cross-bridge ---- */
+const XS = {s: 0};
+function drawXb() {
+  /* myosin head on a lever pivoting at (190,140); angle from vertical, + = towards the M line (right). Bound heads reach actin (y 58). */
+  const st = XS.s, dx = st >= 3 ? 24 : 0;
+  let s = Phys.DEFS;
+  s += `<path class="thin" d="M${20 + dx} 50 L${380 + dx} 50"/>` + T(380, 36, 'actin', 's', 'end');
+  for (let x = 30; x < 380; x += 24) s += `<circle cx="${x + dx}" cy="50" r="5" style="fill:var(--actin);fill-opacity:.6"/>`;
+  s += `<path class="thick" d="M40 150 L360 150"/>` + T(360, 176, 'myosin (thick filament)', 's', 'end') + T(360, 194, 'towards the M line (sarcomere centre) →', 's', 'end');
+  const ang = [30, -30, -30, 30, 30][st], bound = st >= 2, L = bound ? 92 : 70;
+  const a = ang * Math.PI / 180, bx = 190, by = 140, hx = bx + L * Math.sin(a), hy = by - L * Math.cos(a);
+  s += `<path d="M${bx} ${by} L${hx.toFixed(1)} ${hy.toFixed(1)}" style="stroke:var(--myosin);stroke-width:6;stroke-linecap:round"/><ellipse cx="${hx.toFixed(1)}" cy="${(hy + (bound ? 6 : 0)).toFixed(1)}" rx="16" ry="11" style="fill:var(--myosin)"/>`;
+  const tag = ['ATP', 'ADP + Pi', 'ADP + Pi', 'ADP', ''][st];
+  if (tag) s += T(hx + 22, hy + 22, tag, 'm l', 'start');
+  if (st === 3) s += `<path class="flow" d="M110 24 L150 24"/>` + T(104, 28, 'actin pulled', 's', 'end');
+  if (st === 1) s += T(hx - 22, hy - 6, 'recocked', 's', 'end');
+  $('xb-svg').innerHTML = s; $('xb-find').innerHTML = `<h3>${st + 1}. ${XB[st][0]}</h3><p>${XB[st][1]}</p>`;
+}
+Phys.stepper('xb-step', XB.map(r => r[0]), drawXb, XS);
+
+Phys.table('fib-table', FIB[0], FIB[1]); $('fib-text').innerHTML = FIB_TEXT;
+
+/* ---- modes ---- */
+const MD = {sel: 'iso'};
+function drawMode() {
+  const k = MD.sel, len = k === 'iso' ? 100 : k === 'con' ? 70 : 125; let s = '';
+  s += `<rect x="20" y="20" width="360" height="12" style="fill:var(--muted)"/>`;
+  s += `<path d="M200 32 L200 ${32 + 10}" style="stroke:var(--ink);stroke-width:3"/>`;
+  s += `<rect x="176" y="42" width="48" height="${len}" rx="20" class="musc"/>` + T(232, 42 + len / 2, `length ${k === 'iso' ? 'constant' : k === 'con' ? 'shortens' : 'lengthens'}`, 'l', 'start');
+  s += `<path d="M200 ${42 + len} L200 ${52 + len}" style="stroke:var(--ink);stroke-width:2"/><rect x="170" y="${52 + len}" width="60" height="${k === 'ecc' ? 34 : 24}" rx="4" style="fill:var(--ink)"/>` + T(200, 52 + len + (k === 'ecc' ? 22 : 17), 'load', 'b', 'middle', ' style="fill:var(--surface)"');
+  s += T(30, 210, k === 'iso' ? 'tension rises, no movement' : k === 'con' ? 'force > load: shortens' : 'load > force: lengthens', 's');
+  $('mode-svg').innerHTML = s; $('mode-find').innerHTML = MODE[k][1];
+}
+Phys.toggles('mode-tg', Object.entries(MODE).map(([k, v]) => [k, v[0]]), k => { MD.sel = k; drawMode(); }, MD.sel); drawMode();
+(function () {
+  let s = ''; const x0 = 140, w = 440, cols = ['var(--ink)', 'var(--muted)', 'var(--line)'], names = ['phosphagen', 'glycolysis', 'mitochondrial'];
+  EN.forEach(([lab, ...v], i) => { const y = 24 + i * 44; let x = x0; s += T(x0 - 8, y + 18, lab, 'b', 'end'); v.forEach((p, j) => { const ww = p / 100 * w; s += `<rect x="${x}" y="${y}" width="${ww}" height="26" style="fill:${cols[j]};fill-opacity:${[.8, .55, 1][j]};stroke:var(--surface)"/>`; if (ww > 34) s += T(x + ww / 2, y + 18, p + '%', 'm l', 'middle'); x += ww; }); });
+  names.forEach((n, j) => { s += `<rect x="${x0 + j * 150}" y="118" width="12" height="12" style="fill:${cols[j]};fill-opacity:${[.8, .55, 1][j]}"/>` + T(x0 + j * 150 + 18, 128, n, 's'); });
+  $('en-svg').innerHTML = s; $('en-text').innerHTML = EN_TEXT;
+})();
+
+/* ---- twitch summation ---- */
+const GR = {f: 5, n: 3};
+function drawTw() {
+  const f = GR.f, x0 = 50, x1 = 580, y0 = 20, y1 = 190, T1 = 0.5; // seconds shown
+  const X = Phys.scale(0, T1, x0, x1), Y = Phys.scale(0, 1.25, y1, y0);
+  const tw = t => t < 0 ? 0 : (t / 0.03) * Math.exp(1 - t / 0.03) * 0.3; // twitch peak 0.3 at 30 ms
+  const stim = []; for (let t = 0.02; t < T1; t += 1 / f) stim.push(t);
+  const pts = []; for (let t = 0; t <= T1; t += 0.002) { let F = 0; for (const s0 of stim) F += tw(t - s0); F = 1 - Math.exp(-F / 0.85 * 1.2); pts.push([X(t), Y(F / (1 - Math.exp(-1.2 * 1.2 / 0.85)) * 1.0)]); }
+  let s = `<path class="axis" d="M${x0} ${y0} L${x0} ${y1} L${x1} ${y1}"/>` + T(x1, y1 + 16, 'time →', 's', 'end') + T(x0 + 4, y0 - 6, 'force', 's', 'start');
+  for (const s0 of stim) s += `<path d="M${X(s0)} ${y1} L${X(s0)} ${y1 + 8}" style="stroke:var(--ink);stroke-width:1.5"/>`;
+  s += `<path class="trace" d="${Phys.path(pts)}"/>`;
+  $('tw-svg').innerHTML = s;
+  const st = f <= 8 ? ['Separate twitches', 'Each stimulus gives a twitch that relaxes before the next.'] : f <= 25 ? ['Summation', 'Each twitch starts before the last has relaxed, so force adds up.'] : f <= 60 ? ['Incomplete tetanus', 'Twitches fuse but the force still ripples.'] : ['Complete (fused) tetanus', 'Force is smooth and maximal.'];
+  $('grad-find').innerHTML = `<h3>${f} stimuli per second: ${st[0]}</h3><p>${st[1]}</p><p class="muted">Schematic: the frequency bands are illustrative; the real values depend on the muscle and fibre type.</p>`;
+  // motor units
+  let m = ''; const sizes = [8, 9, 10, 12, 14, 16, 19, 22, 26, 30];
+  let x = 20; sizes.forEach((r, i) => { const on = i < GR.n; m += `<circle cx="${x + r}" cy="56" r="${r}" style="fill:${on ? 'var(--musc)' : 'var(--surface)'};stroke:var(--muted);stroke-width:1.2"/>`; x += 2 * r + 12; });
+  m += T(20, 108, 'small units (slow, fatigue-resistant) first →→ large units last', 's');
+  $('mu-svg').innerHTML = m;
+}
+Phys.slider('grad-sl', {id: 'f', label: 'Stimulation rate', min: 1, max: 100, step: 1, value: 5, fmt: v => v + ' /s'}, v => { GR.f = v; drawTw(); }).init();
+Phys.slider('grad-sl', {id: 'n', label: 'Motor units recruited', min: 0, max: 10, step: 1, value: 3, fmt: v => v + ' of 10'}, v => { GR.n = v; drawTw(); }).init();
+$('grad-text').innerHTML = GRAD_TEXT; drawTw();
+
+$('myo-text').innerHTML = MYO_TEXT; Phys.table('myo-table', MYO[0], MYO[1]);
+Phys.swipeHints();
+</script>
+</body>
+</html>

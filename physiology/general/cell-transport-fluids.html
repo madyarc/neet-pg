@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cell, Transport and Body Fluids</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+/* page-only classes; colours are the shared physiology tokens in ../assets/phys.css */
+svg.sch .icf{fill:var(--cyto)} svg.sch .ecf{fill:var(--fluid)} svg.sch .pl{fill:url(#hatch)}
+svg.sch .old{fill:none;stroke:var(--ink);stroke-width:1.3;stroke-dasharray:5 4}
+svg.sch .cellb{fill:var(--cyto);stroke:var(--muted);stroke-width:1.2}
+svg.sch .nuc{fill:var(--nucleus);fill-opacity:.85}
+svg.sch .org{stroke:var(--ink);stroke-width:1;stroke-opacity:.55}
+svg.sch .sel{stroke:var(--accent);stroke-width:3}
+.phbar{height:14px;border-radius:7px;background:linear-gradient(90deg,var(--line),var(--line))}
+.ph-out{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 01: <span aria-current="page">Cell, transport, fluids</span> · <a href="../nerve-muscle/membrane-potentials.html">Membrane potentials</a> · <a href="../nerve-muscle/nerve-nmj.html">Nerve and NMJ</a> · <a href="../nerve-muscle/muscle.html">Muscle</a></span></nav>
+
+<header class="stack">
+  <h1>The Cell, Membrane Transport and Body Fluids</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-cell">The cell</a> <a href="#h-comm">Communication</a> <a href="#h-homeo">Homeostasis</a> <a href="#h-apop">Apoptosis</a> <a href="#h-trans">Membrane transport</a> <a href="#h-fluid">Fluid compartments</a> <a href="#h-dy">Adding fluid (Darrow–Yannet)</a> <a href="#h-ion">Ionic composition</a> <a href="#h-ph">pH and buffers</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-cell">
+  <h2 id="h-cell">The cell and its parts</h2>
+  <div class="chips" id="org-tg" aria-label="Part of the cell"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="cell-svg" viewBox="0 0 400 270" role="img" aria-label="Schematic cell: plasma membrane, nucleus, mitochondria, rough endoplasmic reticulum with ribosomes, Golgi apparatus, lysosomes and cytoskeleton; the chosen part is outlined"></svg></div>
+    <div class="prose find" id="org-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic cell, not to scale.</p>
+  <div class="prose" id="cell-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-comm">
+  <h2 id="h-comm">How cells talk to each other</h2>
+  <div class="chips" id="sig-tg" aria-label="Kind of signalling"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="sig-svg" viewBox="0 0 420 220" role="img" aria-label="The chosen kind of cell signalling: which cell releases the messenger and which cell it reaches"></svg></div>
+    <div class="prose find" id="sig-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-homeo">
+  <h2 id="h-homeo">Homeostasis and feedback</h2>
+  <div class="chips" id="fb-tg" aria-label="Kind of feedback"></div>
+  <div class="two">
+    <div class="stack">
+      <div class="schbox"><svg class="fig sch fit" id="loop-svg" viewBox="0 0 400 200" role="img" aria-label="Control loop: a sensor detects the regulated variable, an integrating centre compares it with the set point, an effector acts on the variable"></svg></div>
+      <div class="schbox"><svg class="fig sch fit" id="fb-svg" viewBox="0 0 400 190" role="img" aria-label="The regulated variable over time after a disturbance with the chosen kind of feedback"></svg></div>
+    </div>
+    <div class="prose find" id="fb-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic curves, not data: negative feedback is drawn as a damped return to the set point, positive feedback as a growing change that stops when an outside event ends it.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-apop">
+  <h2 id="h-apop">Apoptosis: programmed cell death</h2>
+  <div class="chips" id="ap-tg" aria-label="Pathway"></div>
+  <div class="step" id="ap-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ap-svg" viewBox="0 0 520 280" role="img" aria-label="Apoptosis pathway step by step: the trigger, mitochondria or death receptor, initiator caspase, executioner caspases, the dying cell and its removal"></svg></div>
+    <div class="prose find" id="ap-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic.</p>
+  <div class="scroll"><table id="ap-table"></table></div>
+  <div class="prose" id="ap-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-trans">
+  <h2 id="h-trans">Transport across the cell membrane</h2>
+  <div class="chips" id="tr-tg" aria-label="Mechanism"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="tr-svg" viewBox="0 0 520 250" role="img" aria-label="A strip of cell membrane, outside above and the cell inside below, showing the chosen transport mechanism and the direction of movement"></svg></div>
+    <div class="prose find" id="tr-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="tr-key"></div>
+  <p class="muted">Schematic; the number of dots shows which side has more, not the real concentration.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-fluid">
+  <h2 id="h-fluid">Body fluid compartments: the 60–40–20 rule</h2>
+  <div class="chips" id="tbw-tg" aria-label="Person"></div>
+  <div class="sliders" id="fl-sl"></div>
+  <div class="schbox"><svg class="fig sch" id="fl-svg" viewBox="0 0 640 190" role="img" aria-label="Bars for total body water split into intracellular fluid (two-thirds) and extracellular fluid (one-third), the extracellular part split into interstitial fluid (three-quarters) and plasma (one-quarter), in litres"></svg></div>
+  <div class="key" id="fl-key"></div>
+  <div class="prose" id="fl-text"></div>
+  <h3>Measuring the compartments: indicator dilution</h3>
+  <div class="chips" id="mk-tg" aria-label="Marker"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="mk-svg" viewBox="0 0 400 150" role="img" aria-label="Which compartments the chosen marker spreads into"></svg></div>
+    <div class="prose find" id="mk-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-dy">
+  <h2 id="h-dy">Adding fluid: a Darrow–Yannet diagram</h2>
+  <div class="chips" id="dy-tg" aria-label="Fluid added"></div>
+  <div class="sliders" id="dy-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="dy-svg" viewBox="0 0 520 290" role="img" aria-label="Darrow–Yannet diagram: width is volume (intracellular left, extracellular right), height is osmolality; dashed outline before, filled after the chosen fluid"></svg></div>
+    <div class="prose find" id="dy-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="dy-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ion">
+  <h2 id="h-ion">Ionic composition of ECF and ICF</h2>
+  <div class="schbox"><svg class="fig sch" id="ion-svg" viewBox="0 0 600 230" role="img" aria-label="Paired bars of sodium, potassium, chloride and bicarbonate in extracellular and intracellular fluid, in millimoles per litre"></svg></div>
+  <div class="scroll"><table id="ion-table"></table></div>
+  <div class="prose" id="ion-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ph">
+  <h2 id="h-ph">pH, buffers and the Henderson–Hasselbalch equation</h2>
+  <div class="two">
+    <div class="stack">
+      <div class="sliders" id="ph-sl"></div>
+      <div class="ph-out" aria-live="polite"><span><span class="tag">pH</span> <span class="big" id="ph-val"></span></span><span><span class="tag">[H⁺]</span> <span class="readout" id="h-val"></span></span><span><span class="tag">HCO₃⁻ : dissolved CO₂</span> <span class="readout" id="r-val"></span></span></div>
+      <div class="schbox"><svg class="fig sch fit" id="ph-svg" viewBox="0 0 400 90" role="img" aria-label="pH scale from 6.8 to 7.8 with the normal range 7.35 to 7.45 shaded and a marker at the calculated pH"></svg></div>
+    </div>
+    <div class="prose find" id="ph-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="ph-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio1.md, Part A; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Click through the parts of a cell, the ways cells signal, the feedback loops of homeostasis, the two pathways of apoptosis and each way things cross the membrane; then size the body\'s fluid compartments, add saline or water and watch the cells swell or shrink, and move bicarbonate and CO₂ to see the pH. Resting and action potentials: <a href="../nerve-muscle/membrane-potentials.html">Membrane Potentials</a>.';
+
+/* the cell: key -> [label, drawing id, what it does, attribution] */
+const ORG = {
+  nuc: ['Nucleus', 'The control centre: it holds the DNA, the cell\'s hereditary material, and directs the cell to grow, mature, divide or die.', ''],
+  mito: ['Mitochondria', 'Convert energy from food into a form the cell can use. They have their own DNA, separate from the nucleus, and can copy themselves.', ''],
+  rer: ['Rough ER and ribosomes', 'Ribosomes read the genetic instructions and make proteins; they float free or sit on the endoplasmic reticulum (rough ER). The ER processes the molecules the cell makes and sends them to where they are needed.', ' The ER sentence is from MedlinePlus.'],
+  golgi: ['Golgi apparatus', 'Processes and packages proteins and lipids from the ER, for transport out of the cell or to other destinations.', ''],
+  lyso: ['Lysosomes', 'Lysosomes and peroxisomes (not drawn) are the cell\'s recycling centre: they digest invading bacteria, get rid of toxic substances and recycle worn-out parts (MedlinePlus).', ''],
+  cyto: ['Cytoskeleton', 'A network of long fibres: it gives the cell its shape, takes part in cell division, lets cells move and acts as tracks for moving organelles (MedlinePlus).', ''],
+  memb: ['Plasma membrane', 'The outer lining: it separates the cell from its surroundings and lets materials enter and leave. It is a bilayer of phospholipids (with cholesterol) carrying proteins — the "fluid mosaic" model (Wikipedia).', ''],
+};
+const CELL_TEXT = '<p>The cell is the basic unit of life; Gray (1918) defined it as "a nucleated mass of protoplasm of microscopic size". Organelles are specialised parts that each do one job.</p>';
+
+/* signalling: key -> [label, text] */
+const SIG = {
+  auto: ['Autocrine', '<h3>Autocrine</h3><p>A cell secretes a messenger that acts on <b>its own</b> receptors.</p>'],
+  para: ['Paracrine', '<h3>Paracrine</h3><p>The messenger acts on <b>nearby</b> cells and need not enter the blood. Synaptic transmission at a chemical synapse is a special case (Wikipedia).</p>'],
+  endo: ['Endocrine', '<h3>Endocrine</h3><p>A hormone is secreted into the <b>bloodstream</b> and carried to distant target cells.</p>'],
+  juxta: ['Juxtacrine', '<h3>Juxtacrine</h3><p>Signalling by <b>direct contact</b> between cells (membrane molecules touching).</p>'],
+  gap: ['Gap junction', '<h3>Gap junctions</h3><p>Channels made of <b>connexins</b> join the cytoplasm of neighbouring cells, so ions, small molecules and second messengers (Ca²⁺, IP₃, cAMP) pass straight from cell to cell.</p>'],
+};
+const SIG_NOTE = '<p class="muted">Messengers act on receptors in the membrane; lipid-soluble ones cross the membrane and act on receptors inside the cell (StatPearls).</p>';
+
+/* feedback: key -> [label, text] */
+const FB = {
+  neg: ['Negative feedback', '<h3>Negative feedback</h3><p>Homeostasis keeps a variable within limits around a <b>set point</b>: sensors detect the variable, an integrating centre compares it with the set point, and effectors act to <b>oppose the deviation</b>.</p><p>Examples (Wikipedia): body temperature, blood glucose, thyroid hormone and blood electrolyte levels.</p><p class="muted">Claude Bernard (1865) described the stable <i>milieu intérieur</i>; Walter Cannon coined "homeostasis" (1926).</p>'],
+  pos: ['Positive feedback', '<h3>Positive feedback</h3><p>The response <b>adds to</b> the change, so it grows until something outside the loop ends it.</p><ul><li><b>Labour (Ferguson reflex — a positive feedback loop, also called feed-forward):</b> pressure of the fetus on the cervix and vagina → more oxytocin → stronger contractions → more pressure; it ends with birth.</li><li><b>Ovulation:</b> oestrogen feedback switches from negative to positive in the late follicular phase and triggers the LH surge (one review).</li><li>The rising phase of the action potential: Na⁺ entry depolarises, which opens more Na⁺ channels (<a href="../nerve-muscle/membrane-potentials.html#h-ap">Membrane Potentials</a>).</li></ul>'],
+  ff: ['Feedforward', '<h3>Feedforward (anticipation)</h3><p>Feedback corrects a deviation <b>after</b> it happens; feedforward responses act on an <b>expected</b> change before it occurs, and the brain coordinates them alongside feedback (review PMC13126257).</p>'],
+};
+
+/* apoptosis steps: [label, intrinsic text, extrinsic text] (both pathways share the last steps) */
+const AP_STEPS = [
+  ['Trigger', 'Stress inside the cell (e.g. damage) acts on the <b>Bcl-2 family</b>: pro-apoptotic Bax and Bak against anti-apoptotic members.', 'A death ligand outside the cell — <b>TNF-α or Fas ligand</b> — binds its death receptor on the cell surface.'],
+  ['Signal', 'The outer mitochondrial membrane becomes permeable and releases <b>cytochrome c</b>.', 'The receptors gather a <b>death-inducing signalling complex (DISC)</b>.'],
+  ['Initiator caspase', 'Cytochrome c with Apaf-1 and ATP forms the <b>apoptosome</b>, which activates <b>caspase-9</b>.', 'The DISC activates <b>caspase-8</b>.'],
+  ['Executioner caspases', 'Both pathways activate the executioner caspases — <b>caspase-3</b> (the review lists 3, 6 and 7) — proteases that take the cell apart.', 'Both pathways activate the executioner caspases — <b>caspase-3</b> (the review lists 3, 6 and 7) — proteases that take the cell apart.'],
+  ['Cell dies', 'The cell <b>shrinks</b>, chromatin <b>condenses</b>, DNA fragments and the membrane <b>blebs</b>; the cell breaks into <b>apoptotic bodies</b>.', 'The cell <b>shrinks</b>, chromatin <b>condenses</b>, DNA fragments and the membrane <b>blebs</b>; the cell breaks into <b>apoptotic bodies</b>.'],
+  ['Cleared', 'Phagocytes engulf the apoptotic bodies before the contents spill: <b>no inflammation</b>.', 'Phagocytes engulf the apoptotic bodies before the contents spill: <b>no inflammation</b>.'],
+];
+const AP_TABLE = [['Feature', 'Apoptosis', 'Necrosis'], [
+  ['Control', 'Regulated, genetically programmed, needs ATP (caspases)', 'Uncontrolled, after severe injury (toxins, trauma)'],
+  ['Cell size', 'Shrinks', 'Swells (cytoplasm and organelles)'],
+  ['Nucleus', 'Chromatin condenses, DNA fragments', '—'],
+  ['Membrane', 'Blebs; cell splits into apoptotic bodies', 'Ruptures; cell lyses'],
+  ['Neighbours', 'Phagocytosed in an orderly way, no inflammation', 'Contents spill; inflammation'],
+]];
+const AP_TEXT = '<p><b>Why it matters.</b> Apoptosis is needed in embryonic development (Wikipedia\'s example: separating the fingers and toes), in regulating the immune system and in keeping tissues in balance through adult life. <b>Too little</b> lets damaged cells survive and multiply (cancer); <b>too much</b> loses cells (atrophy; neuronal loss in Alzheimer disease).</p>';
+
+/* membrane transport: key -> [label, group, text] */
+const TR = {
+  simp: ['Simple diffusion', '<h3>Simple diffusion</h3><p><b>Passive:</b> molecules move down their concentration gradient through the lipid bilayer itself, without metabolic energy and without a transport protein; lipid-soluble (hydrophobic) substances cross this way (Wikipedia).</p>'],
+  chan: ['Channel', '<h3>Facilitated diffusion: channel</h3><p><b>Passive:</b> ions move down their gradient through a channel protein; channels are selective (Na⁺ channels for Na⁺, K⁺ channels for K⁺). No ATP is used in the transport step.</p>'],
+  carr: ['Carrier', '<h3>Facilitated diffusion: carrier</h3><p><b>Passive:</b> a carrier protein binds the molecule and changes shape to carry it across, still down the gradient — e.g. glucose transporters (GLUT) (Wikipedia).</p>'],
+  osm: ['Osmosis', '<h3>Osmosis</h3><p>Net movement of <b>water</b> across a semipermeable membrane, from the side of lower osmolality to the side of higher osmolality. In a hypotonic solution a cell takes in water and swells; in a hypertonic one it loses water and shrinks; in an isotonic one there is no net movement.</p><p class="muted">Osmolality = mOsm per kg of solvent; osmolarity = mOsm per litre of solution. Normal plasma osmolality is about 275–295 mOsm/kg (some laboratories to 299).</p>'],
+  pump: ['Na⁺/K⁺ pump', '<h3>Primary active transport: the Na⁺/K⁺ ATPase</h3><p>Uses one <b>ATP</b> to move <b>3 Na⁺ out and 2 K⁺ in</b>, against both gradients. Because it moves more positive charge out than in, it is <b>electrogenic</b>. It keeps Na⁺ high outside and K⁺ high inside — the gradients behind the resting potential — and helps control cell volume.</p>'],
+  sym: ['Symport', '<h3>Secondary active transport: symport</h3><p>Na⁺ flows back in down the gradient the pump made, and the carrier uses that energy to bring <b>glucose in with it, against glucose\'s own gradient</b> — SGLT1 in the gut, SGLT2 in the kidney. Symporters move both in the same direction (Wikipedia).</p>'],
+  anti: ['Antiport', '<h3>Secondary active transport: antiport (exchange)</h3><p>Na⁺ entering down its gradient drives another ion <b>out</b> — e.g. the <b>Na⁺/Ca²⁺ exchanger</b> (NCX) removes Ca²⁺. Antiporters move the two in opposite directions (Wikipedia).</p>'],
+  endo: ['Endocytosis', '<h3>Endocytosis (Wikipedia)</h3><p>The membrane folds round material outside and buds off inside as a vesicle: <b>phagocytosis</b> (large particles, e.g. bacteria), <b>pinocytosis</b> (fluid with its solutes), <b>receptor-mediated</b> endocytosis (clathrin-coated pits). It uses energy.</p>'],
+  exo: ['Exocytosis', '<h3>Exocytosis</h3><p>A vesicle <b>fuses with the membrane</b> and releases its contents outside — secretion, and transmitter release at synapses (Ca²⁺-triggered fusion through SNARE proteins; see <a href="../nerve-muscle/nerve-nmj.html#h-nmj">the NMJ</a>).</p>'],
+};
+
+/* body water: fraction of body weight by person (sources: adult ~60%; infant ~75%; older persons 50–60%) */
+const TBW_PRESET = {adult: ['Adult (60%)', 60], infant: ['Infant (75%)', 75], older: ['Older adult (55%)', 55]};
+const FL_TEXT = '<p>Water is about <b>60% of adult body weight</b> (about 75% in infants, 50–60% in older people; lower in women — about 58% in men and 48% in women in one large sample (Wikipedia)).</p><p><b>Two-thirds</b> of it is inside cells (ICF) and <b>one-third</b> outside (ECF). Of the ECF about <b>three-quarters is interstitial</b> fluid and <b>one-quarter plasma</b> (StatPearls). Multiplying out gives the rule of thumb <b>60–40–20</b>: TBW 60%, ICF 40%, ECF 20% of body weight. A small transcellular part (CSF, joint, pleural, peritoneal and pericardial fluid, gut secretions; one review) is not shown.</p>';
+const MARK = {
+  d2o: ['Heavy water (D₂O)', ['icf', 'isf', 'pl'], '<h3>Total body water</h3><p>Deuterium oxide (heavy water) or tritiated water mixes with all body water. Volume = amount given ÷ concentration after mixing (indicator dilution).</p>'],
+  br: ['Bromide / inulin', ['isf', 'pl'], '<h3>ECF</h3><p>A marker that stays outside cells: <b>bromide</b> (review PMC12849772) or <b>inulin</b> (Wikipedia).</p>'],
+  eb: ['Evans blue', ['pl'], '<h3>Plasma</h3><p>Evans blue stays in the plasma (Wikipedia).</p>'],
+  sub: ['By subtraction', ['icf'], '<h3>ICF and interstitial fluid</h3><p>No marker stays only inside cells or only in the interstitium: <b>ICF = TBW − ECF</b> and <b>interstitial = ECF − plasma</b>.</p>'],
+};
+
+/* Darrow–Yannet simulator: osmolality of the added fluid relative to plasma (schematic), and where its solute stays */
+const DY = {
+  iso: ['Isotonic saline (0.9%)', 1, 'Isotonic saline keeps its Na⁺ and Cl⁻ in the extracellular space, so <b>only the ECF expands</b> and osmolality does not change; the cells are untouched. About a quarter stays in the plasma (the plasma share of the ECF).'],
+  hypo: ['Water / hypotonic', 0, 'Free water spreads through <b>all compartments</b> in proportion to their size: ECF and ICF both expand, osmolality <b>falls</b> and cells swell. Only a small part stays in the plasma.'],
+  hyper: ['Hypertonic saline', 3, 'Hypertonic saline adds more solute than water to the ECF, so water is <b>drawn out of the cells</b>: ECF expands by more than the volume given, ICF shrinks, osmolality <b>rises</b>.'],
+  lossIso: ['Loss: isotonic', 1, 'Losing fluid with the same osmolality as plasma takes it from the <b>ECF only</b>: osmolality is unchanged, so water does not move and the cells are untouched (isotonic dehydration).', -1],
+  lossWater: ['Loss: water', 0, 'Losing water without salt (water-loss, hypertonic dehydration — e.g. too little intake, heavy sweating; one review) concentrates the ECF: osmolality <b>rises</b> and water leaves the cells, so <b>both</b> compartments shrink in proportion.', -1],
+  lossSalt: ['Loss: more salt than water', 3, 'Losing more solute than water from the ECF (hypotonic dehydration) <b>lowers</b> osmolality: water moves <b>into the cells</b>, so the ECF shrinks by more than the volume lost while the ICF swells. (Schematic: the lost fluid is set at three times plasma osmolality.)', -1],
+};
+const DY_NOTE = 'Schematic calculation, not a prediction for a patient: cells are treated as perfect osmometers, solute gained or lost is in the ECF only, nothing is excreted, and plasma is kept at one-quarter of the ECF (StatPearls). A review classes dehydration as isotonic, hypotonic or hypertonic. Starting osmolality 290 mOsm/kg (within the normal 275–295); "hypertonic" is set at three times plasma osmolality. Real infusions spread over time (a review found small volumes stay in plasma at first, larger ones reach the interstitium) and the kidneys respond. Darrow and Yannet drew these diagrams in 1934 (Wikipedia).';
+
+/* ionic composition (mmol/L; approximate, sources vary): [ion, ECF value used for the bar, ECF text, ICF value used, ICF text, note] */
+const IONS = [
+  ['na', 'Na⁺', 142, '140–142 (135–145)', 10, '~10 (5–15)', 'main ECF cation'],
+  ['k', 'K⁺', 4, '4–5 (3.5–5.0)', 140, '~140 (100–160)', 'main ICF cation; 98% of body K⁺ is inside cells'],
+  ['cl', 'Cl⁻', 100, '~100 (97–107)', 10, 'about 10 (2–90 by cell type; one review)', 'main ECF anion'],
+  ['hco', 'HCO₃⁻', 25, '24–27', null, '—', 'ICF value not shown (one unclear source)'],
+];
+const ION_CA = ['ca', 'Ca²⁺ (free)', '~1 (ionised)', '~0.0001 (0.1–0.5 µM)', '10 000-fold gradient; a signal when it rises in the cell'];
+const ION_TEXT = '<p>Na⁺ and Cl⁻ dominate the ECF; K⁺ dominates the ICF. The Na⁺/K⁺ pump keeps this difference. Free Ca²⁺ inside a resting cell is about 10 000 times lower than outside, so a small rise is a strong signal (see <a href="../nerve-muscle/muscle.html">Muscle</a>). Values are approximate and rounded; sources differ slightly. Serum K⁺: normal 3.5–5.0 mmol/L; effects of high and low K⁺ on excitability are on <a href="../nerve-muscle/membrane-potentials.html#h-rmp">Membrane Potentials</a>.</p>';
+
+/* pH */
+const PH = {pka: 6.1, s: 0.03, hco3: 24, pco2: 40};
+const PH_TEXT = '<p><b>pH = −log₁₀[H⁺].</b> Arterial pH is kept between <b>7.35 and 7.45</b> (mean 7.40); below 7.35 is <b>acidaemia</b>, above 7.45 <b>alkalaemia</b>. At pH 7.40, [H⁺] is about 40 nmol/L (calculated).</p><p><b>Buffers</b> resist a change in pH. The <b>CO₂/bicarbonate system</b> is the most important buffer of the blood and ECF; proteins and other buffers also act (Wikipedia). It is powerful because both halves can be adjusted: the <b>lungs</b> change CO₂ by breathing faster or slower, and the <b>kidneys</b> change HCO₃⁻ by reabsorbing it and excreting H⁺. A metabolic change is met by a respiratory one (and vice versa) — compensation, which seldom brings the pH all the way back to 7.40.</p><p class="muted">Henderson–Hasselbalch for blood: pH = 6.1 + log₁₀([HCO₃⁻] ÷ (0.03 × P<sub>CO₂</sub>)); pKa 6.1 and the CO₂ solubility 0.03 mmol/L per mmHg are Wikipedia\'s values; a ratio of 20 : 1 gives 7.40. Plasma HCO₃⁻ is about 24–27 mmol/L in two clinical composition tables; the calculator starts at 24 with P<sub>CO₂</sub> 40 (no P<sub>CO₂</sub> reference range is stated here).</p>';
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); MedlinePlus Genetics (U.S. National Library of Medicine); Gray\'s <i>Anatomy</i> (1918); open-access reviews on apoptosis, gap junctions, homeostasis teaching, oxytocin in labour, kisspeptin, body water and fluid therapy, chloride, potassium and calcium, and acid–base (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> all drawings are schematic, not to scale. Feedback curves are illustrative. The fluid bars multiply body weight by the stated fractions (rule of thumb). The Darrow–Yannet simulator is an ideal-osmometer calculation (see its note). Ion values are rounded from the sources. The pH readout is computed from the Henderson–Hasselbalch equation.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* ---- the cell ---- */
+const CELL = {sel: 'nuc'};
+function drawCell() {
+  const k = CELL.sel, sel = x => x === k ? ' sel' : '';
+  let s = Phys.DEFS;
+  s += `<ellipse cx="200" cy="135" rx="185" ry="118" class="cellb${sel('memb')}" ${k === 'memb' ? 'style="stroke:var(--accent);stroke-width:4"' : ''}/>`;
+  // cytoskeleton lines
+  s += `<g style="stroke:var(--muted);stroke-width:${k === 'cyto' ? 2.2 : 1};stroke-opacity:${k === 'cyto' ? .95 : .35};fill:none">` + [[40, 120, 120, 60], [60, 200, 160, 225], [280, 40, 360, 120], [300, 230, 370, 160], [30, 140, 70, 230]].map(([a, b, c, d]) => `<path d="M${a} ${b} Q${(a + c) / 2 + 20} ${(b + d) / 2 - 20} ${c} ${d}"/>`).join('') + '</g>';
+  // nucleus
+  s += `<circle cx="190" cy="132" r="44" class="nuc${sel('nuc')}" ${k === 'nuc' ? 'style="stroke:var(--accent);stroke-width:4"' : 'style="stroke:var(--ink);stroke-width:1;stroke-opacity:.4"'}/><circle cx="200" cy="124" r="10" style="fill:var(--surface);fill-opacity:.35"/>`;
+  // rough ER with ribosomes
+  const rer = 'M240 92 q20 -10 40 0 q20 10 40 0 M244 108 q20 -10 40 0 q20 10 40 0 M248 124 q20 -10 40 0 q16 8 30 2';
+  s += `<path d="${rer}" style="fill:none;stroke:var(--nissl);stroke-width:${k === 'rer' ? 4 : 2.4}"/>`;
+  for (let i = 0; i < 14; i++) { const x = 246 + (i % 7) * 12, y = 88 + Math.floor(i / 7) * 18 + ((i % 2) ? 3 : -3); s += `<circle cx="${x}" cy="${y}" r="1.8" style="fill:var(--ink)"/>`; }
+  // golgi
+  s += `<g style="fill:none;stroke:var(--ink);stroke-opacity:.6;stroke-width:${k === 'golgi' ? 4.5 : 3};stroke-linecap:round">` + [0, 1, 2, 3].map(i => `<path d="M${250 + i * 2} ${165 + i * 9} q30 -14 60 0"/>`).join('') + '</g>';
+  // mitochondria
+  for (const [x, y, r] of [[95, 85, -20], [110, 190, 15], [300, 205, 0]]) s += `<g transform="translate(${x} ${y}) rotate(${r})"><ellipse rx="24" ry="11" class="org" style="fill:var(--surface);${k === 'mito' ? 'stroke:var(--accent);stroke-width:3;stroke-opacity:1' : ''}"/><path d="M-16 0 q4 -8 8 0 q4 8 8 0 q4 -8 8 0 q4 8 8 0" style="fill:none;stroke:var(--ink);stroke-width:1.2"/></g>`;
+  // lysosomes
+  for (const [x, y] of [[70, 140], [150, 215], [330, 150]]) s += `<circle cx="${x}" cy="${y}" r="8" class="org" style="fill:var(--muted);fill-opacity:.7;${k === 'lyso' ? 'stroke:var(--accent);stroke-width:3;stroke-opacity:1' : ''}"/>`;
+  // labels
+  const L = [['nuc', 190, 132, 'Nucleus', 'middle'], ['rer', 296, 80, 'Rough ER', 'middle'], ['golgi', 285, 160, 'Golgi', 'middle'], ['mito', 95, 66, 'Mitochondrion', 'middle'], ['lyso', 70, 160, 'Lysosome', 'middle'], ['memb', 200, 262, 'Plasma membrane', 'middle'], ['cyto', 352, 98, 'Cytoskeleton', 'middle']];
+  for (const [kk, x, y, t, a] of L) s += T(x, y + 4, t, 'l' + (kk === k ? ' b' : ''), a);
+  $('cell-svg').innerHTML = s;
+  const o = ORG[k]; $('org-find').innerHTML = `<h3>${o[0]}</h3><p>${o[1]}${o[2]}</p>`;
+}
+Phys.toggles('org-tg', Object.entries(ORG).map(([k, v]) => [k, v[0]]), k => { CELL.sel = k; drawCell(); }, CELL.sel);
+$('cell-text').innerHTML = CELL_TEXT; drawCell();
+
+/* ---- signalling ---- */
+const SG = {sel: 'para'};
+function drawSig() {
+  const k = SG.sel; let s = Phys.DEFS + Phys.arrowDef('arra', 'var(--ink)');
+  const cell = (x, y, lab, cls = '') => `<ellipse cx="${x}" cy="${y}" rx="34" ry="24" class="cellb" ${cls}/>` + `<circle cx="${x - 6}" cy="${y}" r="8" class="nuc"/>` + T(x, y + 40, lab, 's', 'middle');
+  const msg = (x, y) => `<circle cx="${x}" cy="${y}" r="3.6" style="fill:var(--ink)"/>`;
+  const arr = (d) => `<path d="${d}" style="fill:none;stroke:var(--ink);stroke-width:1.8" marker-end="url(#arra)"/>`;
+  if (k === 'auto') { s += cell(150, 100, 'secreting cell = target'); s += arr('M178 84 C220 40 230 120 186 108'); s += msg(216, 72) + msg(222, 92); }
+  if (k === 'para') { s += cell(110, 100, 'secreting cell') + cell(260, 100, 'nearby target'); s += arr('M146 96 L222 96'); s += msg(170, 92) + msg(190, 100) + msg(205, 92); }
+  if (k === 'endo') { s += cell(70, 70, 'endocrine cell') + cell(360, 150, 'distant target'); s += `<path d="M20 112 C140 96 260 120 400 106" style="fill:none;stroke:var(--artery);stroke-width:12;stroke-opacity:.35;stroke-linecap:round"/>` + T(210, 132, 'blood', 's', 'middle'); s += arr('M86 92 L110 104 C200 110 280 112 334 130'); s += msg(150, 106) + msg(220, 110) + msg(290, 112); }
+  if (k === 'juxta') { s += cell(150, 100, 'cell 1') + cell(218, 100, 'cell 2'); s += `<rect x="178" y="88" width="12" height="24" rx="3" style="fill:var(--muted)"/>` + T(184, 70, 'contact', 's', 'middle'); }
+  if (k === 'gap') { s += cell(150, 100, 'cell 1') + cell(218, 100, 'cell 2'); for (const y of [90, 100, 110]) s += `<rect x="176" y="${y - 3}" width="16" height="6" rx="2" style="fill:var(--surface);stroke:var(--ink);stroke-width:1"/>`; s += arr('M160 74 C180 60 196 60 208 74'); s += T(184, 54, 'ions, small molecules', 's', 'middle'); s += T(184, 168, 'connexin channels', 's', 'middle'); }
+  $('sig-svg').innerHTML = s; $('sig-find').innerHTML = SIG[k][1] + SIG_NOTE;
+}
+Phys.toggles('sig-tg', Object.entries(SIG).map(([k, v]) => [k, v[0]]), k => { SG.sel = k; drawSig(); }, SG.sel); drawSig();
+
+/* ---- feedback ---- */
+const FBS = {sel: 'neg'};
+function drawLoop() {
+  const k = FBS.sel; let s = Phys.DEFS;
+  const box = (x, y, w, t, sub) => `<rect x="${x}" y="${y}" width="${w}" height="40" rx="8" class="box"/>` + T(x + w / 2, y + 18, t, 'b', 'middle') + T(x + w / 2, y + 33, sub, 's', 'middle');
+  s += box(20, 20, 110, 'Sensor', 'detects the variable') + box(145, 20, 120, 'Integrator', 'compares with set point') + box(280, 20, 100, 'Effector', 'acts');
+  s += `<path class="flow" d="M130 40 L143 40"/><path class="flow" d="M265 40 L278 40"/>`;
+  s += `<rect x="120" y="128" width="160" height="40" rx="20" style="fill:var(--bg);stroke:var(--muted)"/>` + T(200, 153, 'Regulated variable', 'b', 'middle');
+  s += `<path class="flow" d="M330 62 C330 110 300 140 282 146"/><path class="flow" d="M120 148 C70 140 70 90 75 64"/>`;
+  const sign = k === 'pos' ? '+ adds to the change' : (k === 'ff' ? 'acts before the change' : '− opposes the change');
+  s += T(345, 110, sign, 'l b', 'end', '');
+  if (k === 'ff') s += `<path class="flow dash" d="M200 190 L200 172"/>` + T(214, 196, 'expected disturbance → act early', 's', 'start');
+  $('loop-svg').innerHTML = s;
+}
+function drawFb() {
+  const k = FBS.sel, W = 400, H = 190, x0 = 60, x1 = 384, y0 = 20, y1 = 160;
+  const X = Phys.scale(0, 10, x0, x1), Y = Phys.scale(-1.2, 2.2, y1, y0);
+  let s = `<path class="axis" d="M${x0} ${y0} L${x0} ${y1} L${x1} ${y1}"/>` + T(x0 - 6, Y(0) + 4, 'set point', 's', 'end') + `<path class="grid dash" d="M${x0} ${Y(0)} L${x1} ${Y(0)}"/>` + T(x1, y1 + 16, 'time →', 's', 'end') + T(x0, y0 - 6, 'variable', 's', 'start');
+  const pts = [];
+  for (let t = 0; t <= 10; t += 0.05) {
+    let v = 0;
+    if (k === 'neg') v = t < 1 ? 0 : 1.0 * Math.exp(-(t - 1) * 0.7) * Math.cos((t - 1) * 1.6);
+    if (k === 'pos') v = t < 1 ? 0 : (t < 7 ? Math.min(2.1, 0.06 * Math.exp((t - 1) * 0.62)) : Math.max(0, 2.1 * (1 - (t - 7) * 0.9)));
+    if (k === 'ff') v = t < 1 ? 0 : 0.25 * Math.exp(-(t - 1) * 0.9) * Math.sin((t - 1) * 1.8);
+    pts.push([X(t), Y(v)]);
+  }
+  s += `<path class="trace" d="${Phys.path(pts)}"/>`;
+  s += `<path class="lead" d="M${X(1)} ${y1} L${X(1)} ${y0 + 10}"/>` + T(X(1) + 4, y0 + 12, k === 'ff' ? 'disturbance (anticipated)' : 'disturbance', 's', 'start');
+  if (k === 'pos') s += `<path class="lead" d="M${X(7)} ${y1} L${X(7)} ${y0 + 30}"/>` + T(X(7) - 4, y0 + 32, 'outside event ends it (birth)', 's', 'end');
+  $('fb-svg').innerHTML = s;
+  $('fb-find').innerHTML = FB[k][1];
+}
+Phys.toggles('fb-tg', Object.entries(FB).map(([k, v]) => [k, v[0]]), k => { FBS.sel = k; drawLoop(); drawFb(); }, FBS.sel); drawLoop(); drawFb();
+
+/* ---- apoptosis ---- */
+const AP = {path: 'int', s: 0};
+function drawAp() {
+  const ext = AP.path === 'ext', st = AP.s; let s = Phys.DEFS;
+  const on = i => st >= i ? 1 : .22;
+  // cell outline
+  const shrink = st >= 4 ? .72 : 1;
+  s += `<g opacity="${st >= 5 ? .35 : 1}"><ellipse cx="170" cy="130" rx="${150 * shrink}" ry="${105 * shrink}" class="cellb"/></g>`;
+  if (st >= 4) for (const [x, y] of [[70, 70], [270, 70], [80, 200], [262, 196]]) s += `<circle cx="${x}" cy="${y}" r="10" class="cellb"/>`;
+  s += `<circle cx="120" cy="${st >= 4 ? 140 : 130}" r="${st >= 4 ? 22 : 32}" class="nuc" ${st >= 4 ? 'style="fill-opacity:1"' : ''}/>` + T(120, st >= 4 ? 176 : 176, st >= 4 ? 'condensed chromatin' : 'nucleus', 's', 'middle');
+  if (!ext) {
+    s += `<g opacity="${on(0)}"><ellipse cx="240" cy="90" rx="38" ry="18" style="fill:var(--surface);stroke:var(--ink)"/>` + T(240, 64, 'mitochondrion', 's', 'middle') + T(240, 122, 'Bcl-2 family', 's', 'middle') + '</g>';
+    if (st >= 1) for (let i = 0; i < 5; i++) s += `<circle cx="${210 + i * 9}" cy="${142 + (i % 2) * 8}" r="3.2" style="fill:var(--ink)"/>`;
+    if (st >= 1) s += T(232, 170, 'cytochrome c', 'l', 'middle');
+    if (st >= 2) s += `<circle cx="300" cy="170" r="16" style="fill:var(--surface);stroke:var(--ink)"/>` + T(300, 174, '9', 'm', 'middle') + T(300, 200, 'apoptosome → caspase-9', 'l', 'middle');
+  } else {
+    // death receptor sits in this cell's own membrane (right edge of the cell)
+    const ex = 170 + 150 * shrink;
+    s += `<g opacity="${on(0)}"><rect x="${ex - 10}" y="122" width="22" height="14" rx="3" style="fill:var(--rcpt)"/>` + `<path d="M${ex + 28} 129 l14 -8 l0 16 z" style="fill:var(--ink)"/>` + T(ex + 46, 112, 'TNF / Fas ligand', 'l', 'start') + T(ex + 6, 160, 'death receptor', 'l', 'middle') + '</g>';
+    if (st >= 1) s += `<rect x="${ex - 70}" y="114" width="44" height="24" rx="6" style="fill:var(--surface);stroke:var(--ink)"/>` + T(ex - 48, 131, 'DISC', 'm', 'middle');
+    if (st >= 2) s += `<circle cx="300" cy="190" r="16" style="fill:var(--surface);stroke:var(--ink)"/>` + T(300, 194, '8', 'm', 'middle') + T(300, 222, 'caspase-8', 'l', 'middle');
+  }
+  if (st >= 3) s += `<circle cx="200" cy="215" r="16" style="fill:var(--ink)"/>` + T(200, 219, '3', 'm', 'middle', ' style="fill:var(--surface)"') + T(200, 248, 'executioner caspases', 'l', 'middle');
+  if (st >= 5) s += `<path d="M330 230 q30 -20 60 0 q-10 20 -30 20 q-20 0 -30 -20 z" style="fill:var(--cyto);stroke:var(--ink)"/>` + T(360, 266, 'phagocyte', 's', 'middle');
+  $('ap-svg').innerHTML = s;
+  const row = AP_STEPS[st]; $('ap-find').innerHTML = `<h3>${st + 1}. ${row[0]} — ${ext ? 'extrinsic (death receptor)' : 'intrinsic (mitochondrial)'}</h3><p>${ext ? row[2] : row[1]}</p>`;
+}
+Phys.toggles('ap-tg', [['int', 'Intrinsic (mitochondrial)'], ['ext', 'Extrinsic (death receptor)']], k => { AP.path = k; drawAp(); }, AP.path);
+Phys.stepper('ap-step', AP_STEPS.map(r => r[0]), drawAp, AP);
+Phys.table('ap-table', AP_TABLE[0], AP_TABLE[1]); $('ap-text').innerHTML = AP_TEXT;
+
+/* ---- transport ---- */
+const TRS = {sel: 'simp', t: 0};
+function drawTr() {
+  const k = TRS.sel; let s = Phys.DEFS + Phys.arrowDef('arrn', 'var(--na)') + Phys.arrowDef('arrk', 'var(--k)') + Phys.arrowDef('arri', 'var(--ink)') + Phys.arrowDef('arrc', 'var(--ca)');
+  const top = 92, bot = 150; // membrane band
+  s += `<rect x="0" y="0" width="520" height="${top}" style="fill:var(--fluid);fill-opacity:.6"/>` + `<rect x="0" y="${bot}" width="520" height="${250 - bot}" style="fill:var(--cyto);fill-opacity:.55"/>`;
+  s += `<rect x="0" y="${top}" width="520" height="${bot - top}" style="fill:var(--bg)"/>`;
+  for (let x = 6; x < 520; x += 14) s += `<circle cx="${x}" cy="${top + 6}" r="5" style="fill:var(--surface);stroke:var(--muted)"/><circle cx="${x}" cy="${bot - 6}" r="5" style="fill:var(--surface);stroke:var(--muted)"/><path d="M${x - 2} ${top + 11} L${x - 2} ${top + 27} M${x + 2} ${top + 11} L${x + 2} ${top + 27} M${x - 2} ${bot - 11} L${x - 2} ${bot - 27} M${x + 2} ${bot - 11} L${x + 2} ${bot - 27}" style="stroke:var(--muted);stroke-width:1"/>`;
+  s += T(10, 20, 'Outside (ECF)', 'h') + T(10, 240, 'Inside (cytoplasm)', 'h');
+  const prot = (x, w, col, lab) => `<rect x="${x - w / 2}" y="${top - 8}" width="${w}" height="${bot - top + 16}" rx="10" style="fill:${col};stroke:var(--ink);stroke-width:1;stroke-opacity:.5"/>` + T(x, bot + 30, lab, 'l', 'middle');
+  const dots = (ion, n, x0, x1, y0, y1, seed) => { let o = ''; for (let i = 0; i < n; i++) { const r = Math.sin(seed * 9.1 + i * 12.7) * 0.5 + 0.5, q = Math.sin(seed * 3.3 + i * 7.9) * 0.5 + 0.5; o += Phys.dot(x0 + r * (x1 - x0), y0 + q * (y1 - y0), ion); } return o; };
+  const mol = (n, x0, x1, y0, y1, seed, col = 'var(--ink)') => { let o = ''; for (let i = 0; i < n; i++) { const r = Math.sin(seed * 5.1 + i * 11.3) * 0.5 + 0.5, q = Math.sin(seed * 2.7 + i * 6.1) * 0.5 + 0.5; o += `<rect x="${(x0 + r * (x1 - x0) - 3).toFixed(1)}" y="${(y0 + q * (y1 - y0) - 3).toFixed(1)}" width="6" height="6" rx="1.5" style="fill:${col}"/>`; } return o; };
+  const arrow = (x, y1, y2, m = 'arri', col = 'var(--ink)') => `<path d="M${x} ${y1} L${x} ${y2}" style="stroke:${col};stroke-width:2.2;fill:none" marker-end="url(#${m})"/>`;
+  if (k === 'simp') { s += mol(14, 20, 240, 30, 80, 1, 'var(--ink)') + mol(4, 20, 240, 165, 225, 2) + arrow(130, 60, 190) + T(150, 128, 'lipid-soluble molecules', 's', 'start'); }
+  if (k === 'chan') { s += prot(260, 34, 'var(--na)', 'Na⁺ channel (open)') + `<rect x="253" y="${top - 8}" width="14" height="${bot - top + 16}" style="fill:var(--bg)"/>` + dots('na', 14, 20, 500, 25, 80, 3) + dots('na', 3, 20, 500, 165, 225, 4) + arrow(260, 54, 190, 'arrn', 'var(--na)'); }
+  if (k === 'carr') { s += prot(260, 56, 'var(--surface)', 'carrier (e.g. GLUT)') + mol(10, 20, 500, 25, 80, 5) + mol(3, 20, 500, 165, 225, 6) + arrow(260, 54, 190, 'arri') + `<rect x="254" y="114" width="12" height="12" rx="2" style="fill:var(--ink)"/>` + T(300, 60, 'glucose', 'l', 'start'); }
+  if (k === 'osm') { s += `<path d="M120 54 L120 194" style="stroke:var(--ink);stroke-width:3;fill:none" marker-end="url(#arri)"/>` + T(132, 50, 'water moves to the side with more solute', 'l', 'start') + mol(4, 200, 500, 25, 80, 7) + mol(14, 200, 500, 165, 225, 8) + T(200, 125, 'membrane: water passes, solute does not', 's', 'start'); }
+  if (k === 'pump') { s += prot(260, 64, 'var(--surface)', 'Na⁺/K⁺ ATPase') + dots('na', 12, 20, 200, 25, 80, 9) + dots('na', 3, 20, 200, 165, 225, 10) + dots('k', 3, 320, 500, 25, 80, 11) + dots('k', 12, 320, 500, 165, 225, 12);
+    s += arrow(244, 190, 52, 'arrn', 'var(--na)') + arrow(276, 52, 190, 'arrk', 'var(--k)') + T(236, 60, '3 Na⁺ out', 'l b', 'end') + T(284, 196, '2 K⁺ in', 'l b', 'start') + T(260, 214, 'ATP → ADP + Pi', 'm', 'middle'); }
+  if (k === 'sym') { s += prot(260, 64, 'var(--surface)', 'SGLT (symport)') + dots('na', 12, 20, 230, 25, 80, 13) + dots('na', 3, 20, 230, 165, 225, 14) + mol(3, 300, 500, 25, 80, 15) + mol(10, 300, 500, 165, 225, 16);
+    s += arrow(246, 52, 190, 'arrn', 'var(--na)') + arrow(274, 52, 190, 'arri') + T(238, 50, 'Na⁺ (down its gradient)', 'l', 'end') + T(282, 50, 'glucose (up its gradient)', 'l', 'start'); }
+  if (k === 'anti') { s += prot(260, 64, 'var(--surface)', 'Na⁺/Ca²⁺ exchanger (antiport)') + dots('na', 12, 20, 230, 25, 80, 17) + dots('na', 3, 20, 230, 165, 225, 18) + dots('ca', 10, 300, 500, 25, 80, 19) + dots('ca', 2, 300, 500, 165, 225, 20);
+    s += arrow(246, 52, 190, 'arrn', 'var(--na)') + arrow(274, 190, 52, 'arrc', 'var(--ca)') + T(238, 50, 'Na⁺ in', 'l', 'end') + T(282, 196, 'Ca²⁺ out', 'l', 'start'); }
+  if (k === 'endo') { s += `<path d="M200 ${top} q60 70 120 0" style="fill:var(--fluid);stroke:var(--muted)"/><circle cx="380" cy="200" r="22" style="fill:var(--fluid);stroke:var(--muted)"/>` + mol(4, 370, 392, 190, 210, 21) + mol(3, 236, 284, 100, 130, 22) + arrow(330, 140, 186) + T(380, 238, 'vesicle', 's', 'middle'); }
+  if (k === 'exo') { s += `<circle cx="200" cy="200" r="22" style="fill:var(--vesicle);stroke:var(--muted)"/>` + mol(4, 190, 210, 190, 210, 23) + `<path d="M300 ${bot} q30 -60 60 0" style="fill:var(--vesicle);stroke:var(--muted)"/>` + mol(5, 300, 360, 40, 80, 24) + arrow(330, 140, 70) + T(200, 238, 'vesicle', 's', 'middle') + T(372, 120, 'fuses', 's', 'start'); }
+  $('tr-svg').innerHTML = s; $('tr-find').innerHTML = TR[k][1];
+}
+Phys.toggles('tr-tg', Object.entries(TR).map(([k, v]) => [k, v[0]]), k => { TRS.sel = k; drawTr(); }, TRS.sel);
+Phys.key('tr-key', [['--na', 'Na⁺'], ['--k', 'K⁺'], ['--ca', 'Ca²⁺'], ['--fluid', 'extracellular fluid'], ['--cyto', 'cytoplasm (ICF)']]);
+drawTr();
+
+/* ---- fluid compartments ---- */
+const FL = {w: 70, f: 60};
+function drawFl() {
+  const tbw = FL.w * FL.f / 100, icf = tbw * 2 / 3, ecf = tbw / 3, isf = ecf * 3 / 4, pl = ecf / 4;
+  const x0 = 20, x1 = 620, sc = (x1 - x0) / Math.max(tbw, 1);
+  let s = Phys.DEFS;
+  const seg = (x, w, y, h, cls, lab, val) => `<rect x="${x.toFixed(1)}" y="${y}" width="${Math.max(w, 1).toFixed(1)}" height="${h}" class="${cls}" style="stroke:var(--surface);stroke-width:2"/>` + (w > 54 ? T(x + w / 2, y + h / 2 - 2, lab, 'b l', 'middle') + T(x + w / 2, y + h / 2 + 14, val, 'm l', 'middle') : '');
+  s += T(x0, 22, `Total body water ${tbw.toFixed(1)} L = ${FL.f}% of ${FL.w} kg`, 'h');
+  s += seg(x0, icf * sc, 34, 56, 'icf', 'ICF (2/3)', icf.toFixed(1) + ' L');
+  s += seg(x0 + icf * sc, ecf * sc, 34, 56, 'ecf', 'ECF (1/3)', ecf.toFixed(1) + ' L');
+  s += seg(x0 + icf * sc, isf * sc, 112, 46, 'ecf', 'Interstitial (3/4)', isf.toFixed(1) + ' L') + seg(x0 + (icf + isf) * sc, pl * sc, 112, 46, 'pl', '', '');
+  s += T(x0 + (icf + isf + pl / 2) * sc, 176, `Plasma ${pl.toFixed(1)} L`, 'l b', 'middle');
+  s += `<path class="lead" d="M${(x0 + icf * sc).toFixed(1)} 92 L${(x0 + icf * sc).toFixed(1)} 110 M${x1} 92 L${x1} 110"/>`;
+  s += T(x0, 176, `ICF ≈ ${(icf / FL.w * 100).toFixed(0)}% · ECF ≈ ${(ecf / FL.w * 100).toFixed(0)}% of body weight`, 's');
+  $('fl-svg').innerHTML = s;
+}
+const flW = Phys.slider('fl-sl', {id: 'w', label: 'Body weight', min: 3, max: 120, step: 1, value: 70, fmt: v => v + ' kg'}, v => { FL.w = v; drawFl(); });
+const flF = Phys.slider('fl-sl', {id: 'f', label: 'Water as % of body weight', min: 45, max: 80, step: 1, value: 60, fmt: v => v + '%'}, v => { FL.f = v; drawFl(); });
+flW.init(); flF.init();
+Phys.toggles('tbw-tg', Object.entries(TBW_PRESET).map(([k, v]) => [k, v[0]]), k => { flF.set(TBW_PRESET[k][1]); if (k === 'infant') flW.set(4); else if (FL.w < 30) flW.set(70); }, 'adult');
+Phys.key('fl-key', [['--cyto', 'intracellular fluid'], ['--fluid', 'extracellular fluid'], ['url(#x)', 'plasma (hatched)', 'background:repeating-linear-gradient(45deg,var(--fluid) 0 3px,var(--muted) 3px 4px)']]);
+$('fl-text').innerHTML = FL_TEXT; drawFl();
+/* markers */
+const MK = {sel: 'd2o'};
+function drawMk() {
+  const on = MARK[MK.sel][1]; let s = Phys.DEFS;
+  const box = (x, w, key, cls, lab) => `<rect x="${x}" y="30" width="${w}" height="70" class="${cls}" style="stroke:${on.includes(key) ? 'var(--ink)' : 'var(--surface)'};stroke-width:${on.includes(key) ? 4 : 2};opacity:${on.includes(key) ? 1 : .35}"/>` + T(x + w / 2, 70, lab, 'b l', 'middle');
+  s += box(10, 240, 'icf', 'icf', 'ICF') + box(250, 105, 'isf', 'ecf', 'Interstitial') + box(355, 35, 'pl', 'pl', '') + T(372, 120, 'Plasma', 's', 'middle');
+  s += T(10, 20, 'shaded = where the marker spreads', 's');
+  $('mk-svg').innerHTML = s; $('mk-find').innerHTML = MARK[MK.sel][2];
+}
+Phys.toggles('mk-tg', Object.entries(MARK).map(([k, v]) => [k, v[0]]), k => { MK.sel = k; drawMk(); }, MK.sel); drawMk();
+
+/* ---- Darrow–Yannet ---- */
+const DYS = {sel: 'iso', v: 1, w: 70};
+function dyCalc() {
+  const osm0 = 290, tbw = DYS.w * 0.6, icf0 = tbw * 2 / 3, ecf0 = tbw / 3;
+  const os = DY[DYS.sel][1] * osm0, V = DYS.v * (DY[DYS.sel][3] || 1);
+  const osm1 = (osm0 * tbw + os * V) / (tbw + V), icf1 = osm0 * icf0 / osm1, ecf1 = tbw + V - icf1;
+  return {osm0, icf0, ecf0, osm1, icf1, ecf1};
+}
+function drawDy() {
+  const r = dyCalc(), x0 = 40, x1 = 500, yb = 250, ytop = 30, tot = Math.max(r.icf0 + r.ecf0, r.icf1 + r.ecf1);
+  const sx = (x1 - x0) / (tot * 1.02), sy = v => yb - (v - 150) * (yb - ytop) / (420 - 150);
+  let s = Phys.DEFS;
+  // after (filled)
+  s += `<rect x="${x0}" y="${sy(r.osm1).toFixed(1)}" width="${(r.icf1 * sx).toFixed(1)}" height="${(yb - sy(r.osm1)).toFixed(1)}" class="icf"/>`;
+  s += `<rect x="${(x0 + r.icf1 * sx).toFixed(1)}" y="${sy(r.osm1).toFixed(1)}" width="${(r.ecf1 * sx).toFixed(1)}" height="${(yb - sy(r.osm1)).toFixed(1)}" class="ecf"/>`;
+  // before (dashed)
+  s += `<rect x="${x0}" y="${sy(r.osm0).toFixed(1)}" width="${(r.icf0 * sx).toFixed(1)}" height="${(yb - sy(r.osm0)).toFixed(1)}" class="old"/>`;
+  s += `<rect x="${(x0 + r.icf0 * sx).toFixed(1)}" y="${sy(r.osm0).toFixed(1)}" width="${(r.ecf0 * sx).toFixed(1)}" height="${(yb - sy(r.osm0)).toFixed(1)}" class="old"/>`;
+  s += `<path class="axis" d="M${x0} ${ytop - 10} L${x0} ${yb} L${x1} ${yb}"/>`;
+  for (const o of [200, 250, 300, 350, 400]) s += `<path class="axis" d="M${x0 - 4} ${sy(o)} L${x0} ${sy(o)}"/>` + T(x0 - 7, sy(o) + 4, o, 's', 'end');
+  s += T(x0, ytop - 16, 'osmolality (mOsm/kg)', 's', 'start') + T(x1, yb + 36, 'volume →', 's', 'end');
+  s += T(x0 + r.icf1 * sx / 2, yb + 18, `ICF ${r.icf0.toFixed(1)} → ${r.icf1.toFixed(1)} L`, 'm', 'middle');
+  s += T(x0 + (r.icf1 + r.ecf1 / 2) * sx, yb + 18, `ECF ${r.ecf0.toFixed(1)} → ${r.ecf1.toFixed(1)} L`, 'm', 'middle');
+  s += T(x0 + 8, sy(r.osm1) - 6, `${r.osm0} → ${r.osm1.toFixed(0)} mOsm/kg`, 'l b', 'start');
+  $('dy-svg').innerHTML = s;
+  const d = (a, b) => (b - a >= 0 ? '+' : '−') + Math.abs(b - a).toFixed(2) + ' L';
+  $('dy-find').innerHTML = `<h3>${DY[DYS.sel][0]}, ${DYS.v.toFixed(1)} L ${DY[DYS.sel][3] ? 'lost by' : 'into'} a ${DYS.w} kg adult</h3><p>${DY[DYS.sel][2]}</p><p class="m">ICF ${d(r.icf0, r.icf1)} · ECF ${d(r.ecf0, r.ecf1)} · plasma ${d(r.ecf0 / 4, r.ecf1 / 4)}</p>`;
+}
+Phys.toggles('dy-tg', Object.entries(DY).map(([k, v]) => [k, v[0]]), k => { DYS.sel = k; drawDy(); }, DYS.sel);
+const dyV = Phys.slider('dy-sl', {id: 'v', label: 'Volume given or lost', min: 0, max: 3, step: 0.1, value: 1, fmt: v => v.toFixed(1) + ' L'}, v => { DYS.v = v; drawDy(); });
+const dyW = Phys.slider('dy-sl', {id: 'dw', label: 'Body weight (water 60%)', min: 40, max: 100, step: 1, value: 70, fmt: v => v + ' kg'}, v => { DYS.w = v; drawDy(); });
+dyV.init(); dyW.init(); $('dy-note').textContent = DY_NOTE; drawDy();
+
+/* ---- ions ---- */
+(function () {
+  const x0 = 70, yb = 190, yt = 24, max = 160, Y = v => yb - v * (yb - yt) / max; let s = '';
+  for (const v of [0, 40, 80, 120, 160]) s += `<path class="grid" d="M${x0} ${Y(v)} L590 ${Y(v)}"/>` + T(x0 - 6, Y(v) + 4, v, 's', 'end');
+  s += T(x0 - 6, yt - 10, 'mmol/L', 's', 'end');
+  IONS.forEach(([k, lab, e, , i], j) => {
+    const cx = x0 + 70 + j * 130, col = k === 'hco' ? 'var(--muted)' : `var(--${k})`;
+    s += `<rect x="${cx - 30}" y="${Y(e)}" width="28" height="${yb - Y(e)}" style="fill:${col};stroke:var(--surface)"/>` + (i === null ? '' : `<rect x="${cx + 2}" y="${Y(i)}" width="28" height="${yb - Y(i)}" style="fill:${col};fill-opacity:.38;stroke:${col}"/>`);
+    s += T(cx - 16, Y(e) - 5, e, 'm', 'middle') + (i === null ? T(cx + 16, yb - 5, '—', 'm', 'middle') : T(cx + 16, Y(i) - 5, i, 'm', 'middle')) + T(cx, yb + 18, lab, 'b', 'middle') + T(cx - 16, yb + 32, 'ECF', 's', 'middle') + T(cx + 16, yb + 32, 'ICF', 's', 'middle');
+  });
+  $('ion-svg').innerHTML = s;
+  Phys.table('ion-table', ['Ion', 'ECF (plasma), mmol/L', 'ICF, mmol/L', 'Note'], IONS.map(r => [`<span class="ion-${r[0]}">${r[1]}</span>`, r[3], r[5], r[6]]).concat([[`<span class="ion-ca">${ION_CA[1]}</span>`, ION_CA[2], ION_CA[3], ION_CA[4]]]));
+  $('ion-text').innerHTML = ION_TEXT;
+})();
+
+/* ---- pH ---- */
+function drawPh() {
+  const ratio = PH.hco3 / (PH.s * PH.pco2), ph = PH.pka + Math.log10(ratio), h = Math.pow(10, -ph) * 1e9;
+  $('ph-val').textContent = ph.toFixed(2); $('h-val').textContent = h.toFixed(0) + ' nmol/L'; $('r-val').textContent = ratio.toFixed(1) + ' : 1';
+  const x0 = 20, x1 = 380, X = Phys.scale(6.8, 7.8, x0, x1); let s = '';
+  s += `<rect x="${x0}" y="30" width="${x1 - x0}" height="16" rx="8" style="fill:var(--bg);stroke:var(--line)"/>` + `<rect x="${X(7.35)}" y="30" width="${X(7.45) - X(7.35)}" height="16" style="fill:var(--muted);fill-opacity:.35;stroke:var(--muted)"/>`;
+  for (const v of [6.8, 7.0, 7.2, 7.4, 7.6, 7.8]) s += `<path class="axis" d="M${X(v)} 46 L${X(v)} 52"/>` + T(X(v), 66, v.toFixed(1), 's', 'middle');
+  s += T(X(7.1), 22, 'acidaemia', 's', 'middle') + T(X(7.62), 22, 'alkalaemia', 's', 'middle');
+  const px = X(Math.max(6.8, Math.min(7.8, ph)));
+  s += `<path d="M${px} 26 L${px - 6} 14 L${px + 6} 14 z" style="fill:var(--mark)"/><path d="M${px} 26 L${px} 50" style="stroke:var(--mark);stroke-width:2.5"/>`;
+  $('ph-svg').innerHTML = s;
+  const dH = PH.hco3 - 24, dC = PH.pco2 - 40; let state = ph < 7.35 ? 'acidaemia' : ph > 7.45 ? 'alkalaemia' : 'normal range';
+  const parts = [];
+  if (Math.abs(dH) >= 1) parts.push(`HCO₃⁻ ${dH > 0 ? 'raised' : 'lowered'} (metabolic change: ${dH > 0 ? 'pH up' : 'pH down'})`);
+  if (Math.abs(dC) >= 1) parts.push(`P<sub>CO₂</sub> ${dC > 0 ? 'raised' : 'lowered'} (respiratory change: ${dC > 0 ? 'pH down' : 'pH up'})`);
+  $('ph-find').innerHTML = `<h3>pH ${ph.toFixed(2)}: ${state}</h3><p>${parts.length ? parts.join('; ') + '.' : 'HCO₃⁻ 24 and P<sub>CO₂</sub> 40 give a ratio of 20 : 1 and pH 7.40.'}</p><p class="muted">Move both together to see compensation: the pH moves back towards 7.40 when the ratio does.</p>`;
+}
+const phH = Phys.slider('ph-sl', {id: 'hco3', label: 'HCO₃⁻ (mmol/L)', min: 5, max: 50, step: 1, value: 24, fmt: v => v + ' mmol/L'}, v => { PH.hco3 = v; drawPh(); });
+const phC = Phys.slider('ph-sl', {id: 'pco2', label: 'P<sub>CO₂</sub> (mmHg)', min: 10, max: 100, step: 1, value: 40, fmt: v => v + ' mmHg'}, v => { PH.pco2 = v; drawPh(); });
+phH.init(); phC.init(); $('ph-text').innerHTML = PH_TEXT; drawPh();
+
+Phys.swipeHints();
+</script>
+</body>
+</html>

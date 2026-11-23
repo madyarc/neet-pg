@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Membrane Potentials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/phys.css">
+<style>
+svg.sch .arp{fill:var(--ink);fill-opacity:.13} svg.sch .rrp{fill:var(--ink);fill-opacity:.06}
+svg.sch .ax{fill:var(--nerve)} svg.sch .my{fill:var(--myelin);stroke:var(--muted);stroke-width:.8}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Physiology</a> <span class="muted">· Module 01: <a href="../general/cell-transport-fluids.html">Cell, transport, fluids</a> · <span aria-current="page">Membrane potentials</span> · <a href="nerve-nmj.html">Nerve and NMJ</a> · <a href="muscle.html">Muscle</a></span></nav>
+
+<header class="stack">
+  <h1>Membrane Potentials: Resting, Action, Conduction</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-rmp">Resting potential (Nernst, GHK)</a> <a href="#h-ap">Action potential</a> <a href="#h-aon">All-or-none, local potentials</a> <a href="#h-sd">Strength–duration</a> <a href="#h-fib">Nerve fibre types</a> <a href="#h-cond">Saltatory conduction</a> <a href="#h-block">Block</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-rmp">
+  <h2 id="h-rmp">The resting membrane potential: a Nernst and GHK calculator</h2>
+  <div class="chips" id="rmp-tg" aria-label="Preset"></div>
+  <div class="two">
+    <div class="stack">
+      <div class="sliders" id="rmp-sl"></div>
+      <div class="vrow" aria-live="polite"><span><span class="tag">Membrane potential (GHK)</span> <span class="big" id="vm-val"></span></span><span class="readout" id="e-vals"></span></div>
+    </div>
+    <div class="schbox"><svg class="fig sch fit" id="rmp-svg" viewBox="0 0 360 330" role="img" aria-label="Vertical millivolt scale with the equilibrium potentials of K+, Na+ and Cl− and the calculated membrane potential"></svg></div>
+  </div>
+  <div class="prose" id="rmp-find" aria-live="polite"></div>
+  <div class="prose" id="rmp-text"></div>
+  <p class="muted" id="rmp-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ap">
+  <h2 id="h-ap">The action potential, step by step</h2>
+  <div class="step" id="ap-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ap-svg" viewBox="0 -8 540 338" role="img" aria-label="Schematic action potential trace with the current step marked, absolute and relative refractory periods shaded, and the state of the sodium and potassium channels"></svg></div>
+    <div class="prose find" id="ap-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="ap-key"></div>
+  <p class="muted">Schematic trace, not a recording: rest −70 mV, threshold about −55 mV, peak about +30 mV; refractory shading is schematic, drawn at about 1.5 ms (absolute) and 3.5 ms (relative) inside one review's ranges of 1–2 and 3–4 ms; the absolute/relative definitions are confirmed by a second paper (PMC9826316).</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-aon">
+  <h2 id="h-aon">All-or-none, and local (graded) potentials</h2>
+  <div class="sliders" id="aon-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="aon-svg" viewBox="0 0 400 220" role="img" aria-label="Membrane response to a stimulus of the chosen strength: a small local potential below threshold, a full action potential of the same size at any strength above threshold"></svg></div>
+    <div class="prose find" id="aon-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="loc-table"></table></div>
+  <p class="muted" id="aon-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-sd">
+  <h2 id="h-sd">Strength–duration curve: rheobase and chronaxie</h2>
+  <div class="sliders" id="sd-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="sd-svg" viewBox="0 -6 520 306" role="img" aria-label="Strength–duration curve: stimulus strength against pulse duration, with rheobase, twice rheobase, chronaxie and the chosen test pulse marked above or below the curve"></svg></div>
+    <div class="prose find" id="sd-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="sd-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fib">
+  <h2 id="h-fib">Nerve fibre types (Erlanger–Gasser)</h2>
+  <div class="scroll"><table id="fib-table"></table></div>
+  <div class="prose" id="fib-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cond">
+  <h2 id="h-cond">Saltatory vs continuous conduction</h2>
+  <div class="step"><div class="chips" id="cond-tg" aria-label="Fibre"></div><button class="btn" type="button" id="cond-run">▶ Send an impulse</button></div>
+  <div class="schbox"><svg class="fig sch" id="cond-svg" viewBox="0 0 620 230" role="img" aria-label="Two axons side by side: a myelinated axon where the impulse jumps from node to node, and an unmyelinated axon where it spreads continuously; the impulse position after the same time"></svg></div>
+  <div class="prose" id="cond-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-block">
+  <h2 id="h-block">Which fibres are blocked first</h2>
+  <div class="prose" id="block-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script src="../assets/phys.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-physio1.md, Part B; physiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Set the ion concentrations and permeabilities and watch the resting potential move; step through an action potential with its channels and refractory periods; find rheobase and chronaxie on a strength–duration curve; race an impulse along a myelinated and an unmyelinated fibre. Ion concentrations: <a href="../general/cell-transport-fluids.html#h-ion">Cell, Transport and Body Fluids</a>.';
+
+/* RMP calculator defaults (mmol/L; ECF/ICF values of Part A, A14) and presets */
+const RMP0 = {ko: 4, ki: 140, nao: 142, nai: 12, clo: 104, cli: 7, pna: 0.05, pcl: 0, T: 37};
+const RMP_PRESET = {
+  nerve: ['Nerve at rest', {ko: 4}],
+  hyperk: ['Hyperkalaemia (K⁺ 7)', {ko: 7}],
+  hypok: ['Hypokalaemia (K⁺ 2.5)', {ko: 2.5}],
+  konly: ['K⁺ only (PNa = 0)', {ko: 4, pna: 0}],
+};
+const RMP_TEXT = '<p>The <b>resting membrane potential</b> is the potential across the membrane of a cell at rest, inside negative: about <b>−70 mV in nerve</b> and about <b>−90 mV in skeletal muscle</b> (Wikipedia; a 2023 review that reuses Wikipedia text gives the same) — StatPearls gives about <b>−60 mV</b> for neurons.</p><p><b>Why negative:</b> at rest K⁺ channels are open (Wikipedia: "leak" channels) and outnumber open Na⁺ channels, so the membrane is far more permeable to K⁺. K⁺ leaks out down its gradient and leaves negative charge behind, so the RMP sits close to the K⁺ equilibrium potential. The <b>Na⁺/K⁺ pump</b> (3 Na⁺ out, 2 K⁺ in) maintains the gradients.</p><p>Each ion\'s <b>equilibrium (Nernst) potential</b> is where its electrical and concentration forces balance: E = (RT/zF) ln([out]/[in]). The <b>Goldman–Hodgkin–Katz</b> equation combines the permeant ions, weighted by their permeabilities, to give the resting potential.</p>';
+const RMP_NOTE = 'Calculated from R, F and 37 °C (61.5 mV per tenfold ratio for a monovalent ion). Default permeabilities are illustrative: PNa about 5% of PK (Wikipedia), PCl 0 (move it to include chloride). Real RMPs vary from cell to cell.';
+const K_TEXT = {
+  normal: '<h3>Serum K⁺ 3.5–5.0 mmol/L</h3><p>__VM__</p>',
+  hyper: '<h3>Hyperkalaemia (above 5.0–5.5 mmol/L)</h3><p>Less K⁺ gradient → the RMP becomes <b>less negative</b>, closer to threshold. Moderate: Na⁺ channels open more readily — <b>more excitable</b>. Severe: the sustained depolarisation <b>inactivates Na⁺ channels</b> and cells become refractory — weakness, paralysis and dangerous <b>cardiac arrhythmias</b>.</p>',
+  hypo: '<h3>Hypokalaemia (below 3.5 mmol/L)</h3><p>The RMP becomes <b>more negative (hyperpolarised)</b>, further from threshold, and the membrane responds less — cramps, <b>weakness</b>, even ascending paralysis; constipation from smooth muscle.</p>',
+};
+
+/* action potential steps: [label, time (ms) marked on the trace, Na state, K state, text] */
+const AP_STEPS = [
+  ['Rest', 0.3, 'closed', 'closed', '<h3>Rest (−70 mV)</h3><p>Voltage-gated Na⁺ and K⁺ channels are closed; the potential is set by the open K⁺ channels and kept by the pump.</p>'],
+  ['Stimulus', 1.0, 'closed', 'closed', '<h3>A stimulus depolarises</h3><p>A small depolarisation is a <b>local potential</b>: if it stays below threshold, K⁺ outflow brings the membrane back to rest.</p>'],
+  ['Threshold', 1.45, 'open', 'closed', '<h3>Threshold (about −55 mV in Wikipedia\'s example)</h3><p>Typically about 15 mV above rest (Wikipedia), voltage-gated <b>Na⁺ channels open</b> and Na⁺ inflow outweighs K⁺ outflow. Each opening depolarises further and opens more Na⁺ channels — <b>positive feedback</b> (Wikipedia).</p>'],
+  ['Overshoot', 1.9, 'open', 'opening', '<h3>Rising phase and overshoot</h3><p>Na⁺ rushes in; the inside becomes <b>positive</b> (overshoot; about +30 mV in Wikipedia\'s example). The absolute refractory period has begun.</p>'],
+  ['Repolarisation', 2.6, 'inactivated', 'open', '<h3>Repolarisation</h3><p>Na⁺ channels <b>inactivate</b> (they close and cannot reopen for now) and voltage-gated <b>K⁺ channels open</b>: K⁺ leaves and the potential falls back.</p>'],
+  ['After-hyperpolarisation', 3.8, 'recovering', 'closing', '<h3>After-hyperpolarisation</h3><p>Some K⁺ channels are slow to close, so the potential dips <b>below rest</b> (Wikipedia). Na⁺ channels are recovering: the <b>relative refractory period</b> — a stronger stimulus can fire another AP.</p>'],
+  ['Back to rest', 6.5, 'closed', 'closed', '<h3>Back to rest</h3><p>Channels are closed and ready again; the Na⁺/K⁺ pump re-establishes the ion balance.</p>'],
+];
+const AP_TAIL = '<p class="muted"><b>Refractory periods:</b> absolute (about 1–2 ms) — no stimulus, however strong, can excite because Na⁺ channels are inactivated; relative (about 3–4 ms) — a stronger stimulus is needed. They make the impulse travel <b>one way</b> and limit the firing rate.</p>';
+
+/* local potential vs action potential */
+const LOC = [['Property', 'Local (graded, electrotonic) potential', 'Action potential'], [
+  ['Size', 'Grows with the stimulus', 'All-or-none: same size once threshold is reached'],
+  ['Spread', 'Passive; fades with distance', 'Regenerated along the membrane; does not fade'],
+  ['Summation', 'Yes (spatial and temporal)', 'No'],
+  ['Threshold, refractory period', 'No threshold, no refractory period', 'Threshold; refractory periods'],
+]];
+const AON_NOTE = 'Local-potential comparison from Wikipedia (one source). All-or-none: a stronger stimulus above threshold gives the same action potential (StatPearls, a review, Wikipedia). Accommodation (one review): a stimulus that rises slowly may give no action potential even when it passes threshold. Schematic traces.';
+
+/* strength–duration: Lapicque form I = Ir (1 + c/t) */
+const SD0 = {ir: 1.0, c: 0.5, t: 0.3, i: 2.0};
+const SD_TEXT = '<p><b>Rheobase</b> is the smallest current that excites when the pulse is very long. <b>Chronaxie</b> is the pulse duration needed at <b>twice rheobase</b>. Louis Lapicque named both (1909). Rheobase and chronaxie are used to measure the <b>excitability</b> of nerve and muscle (a bedside strength–duration test is based on them); chronaxie depends on the density of voltage-gated Na⁺ channels (Wikipedia). The curve is drawn with Lapicque\'s formula, I = rheobase × (1 + chronaxie ÷ duration); Weiss\'s formula is the other classic fit.</p>';
+
+/* fibre classes: Erlanger–Gasser letter, Lloyd number (sensory), diameter µm, myelin, speed m/s, function */
+const FIB = [
+  ['Aα', 'Ia, Ib', '13–20', 'Yes', '80–120', 'Motor to skeletal (extrafusal) muscle; muscle spindle primary endings, Golgi tendon organs'],
+  ['Aβ', 'II', '6–12', 'Yes', '33–75', 'Touch, pressure, vibration (cutaneous mechanoreceptors); spindle secondary endings'],
+  ['Aγ', '—', '5–8', 'Yes', '4–24', 'Motor to the muscle spindle (intrafusal fibres)'],
+  ['Aδ', 'III', '1–5', 'Thin', '3–30', 'Fast (sharp) pain, cold'],
+  ['B', '—', '0.5–3', 'Yes (less)', '3–15', 'Preganglionic autonomic'],
+  ['C', 'IV', '0.2–1.5', 'No', '0.5–2', 'Slow (burning) pain, warmth; postganglionic autonomic'],
+];
+const FIB_TEXT = '<p>Erlanger and Gasser grouped peripheral nerve fibres into <b>A, B and C</b> by diameter, myelin and conduction velocity; A is divided into α, β, γ, δ. Lloyd\'s <b>I–IV</b> numbers sensory fibres only. The thicker and more myelinated, the faster.</p><p class="muted">Diameters: Wikipedia and a 2021 review (PMC7858112), which differ slightly (Aδ 1–5 or 2–5 µm; C 0.2–1.4 or 0.2–1.5 µm). Conduction speeds and the Aγ and B rows: Wikipedia\'s table only.</p>';
+
+/* conduction demo speeds (m/s, schematic picks inside the table ranges) */
+const COND = {aa: ['Aα (myelinated)', 100, true], ab: ['Aβ (myelinated)', 50, true], ad: ['Aδ (thin myelin)', 15, true], c: ['C (unmyelinated)', 1, false]};
+const COND_TEXT = '<p><b>Myelin</b> (Schwann cells in peripheral nerves, oligodendrocytes in the CNS) insulates the axon and lowers its capacitance. Voltage-gated Na⁺ channels are crowded at the <b>nodes of Ranvier</b> and sparse under the myelin, so the action potential is regenerated only at nodes and appears to <b>jump</b> from node to node: <b>saltatory conduction</b>. It is faster and more energy-efficient. In unmyelinated axons the impulse moves <b>continuously</b> like a wave (Wikipedia).</p><p>In myelinated fibres speed rises in proportion to diameter. How much myelin speeds conduction depends on what is compared: "about 50 times" for myelinated vs unmyelinated fibres (one review) or "typically tenfold" for an axon of the same diameter (Wikipedia). Nerve conduction studies measure the speed in large myelinated fibres.</p>';
+const BLOCK_TEXT = '<p><b>Local anaesthetics</b> block voltage-gated Na⁺ channels, and smaller fibres are generally more susceptible (one review). <b>The sources disagree on which fibres go first:</b></p><ul><li><b>Anaesthesia order</b> (Wikipedia, "Local anesthetic"; a 2023 anaesthesia review gives the same order but reuses Wikipedia text): <b>B</b> (autonomic) first, then <b>C and Aδ</b> (pain, temperature), then the larger <b>Aγ, Aβ, Aα</b> (posture, touch, pressure, motor).</li><li><b>Classic physiology table:</b> <b>C</b> fibres most susceptible to local anaesthetics (one 2013 paper).</li></ul><p>Either way pain goes before touch and movement.</p><p><b>Pressure:</b> with a blood-pressure cuff on the arm, the large myelinated A fibres stopped working well before the small unmyelinated C fibres — vibration was lost before heat detection (one 2021 study).</p><p class="muted">The classic rule that <b>hypoxia</b> blocks B fibres first is not shown: we found no open source for it.</p>';
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews on peripheral nerve anatomy and physiology (Cureus 2023), myelinated axons, potassium disorders, ion channels, strength–duration testing, local anaesthetics and nerve blocks (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> the calculator computes the Nernst and Goldman–Hodgkin–Katz equations from the chosen values (37 °C). The action potential, local potentials and conduction race are schematic drawings, not recordings or simulations. The strength–duration curve uses Lapicque\'s formula; the mA and ms scales are illustrative.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Phys;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+const K61 = 8.314 * 310.15 / 96485 * 1000; // mV, RT/F at 37 °C
+
+/* ---- RMP ---- */
+const R = Object.assign({}, RMP0);
+const nernst = (o, i, z) => K61 / z * Math.log(o / i);
+function ghk() { const num = R.ko + R.pna * R.nao + R.pcl * R.cli, den = R.ki + R.pna * R.nai + R.pcl * R.clo; return K61 * Math.log(num / den); }
+function drawRmp() {
+  const ek = nernst(R.ko, R.ki, 1), ena = nernst(R.nao, R.nai, 1), ecl = nernst(R.clo, R.cli, -1), vm = ghk();
+  $('vm-val').textContent = (vm >= 0 ? '+' : '−') + Math.abs(vm).toFixed(0) + ' mV';
+  $('e-vals').innerHTML = Phys.mn(`<span class="ion-k">E<sub>K</sub> ${ek.toFixed(0)}</span> · <span class="ion-na">E<sub>Na</sub> +${ena.toFixed(0)}</span> · <span class="ion-cl">E<sub>Cl</sub> ${ecl.toFixed(0)}</span> mV`);
+  const Y = Phys.scale(80, -120, 20, 310); let s = '';
+  s += `<path class="axis" d="M70 ${Y(80)} L70 ${Y(-120)}"/>`;
+  for (let v = -120; v <= 80; v += 20) s += `<path class="axis" d="M66 ${Y(v)} L70 ${Y(v)}"/>` + T(62, Y(v) + 4, v, 's', 'end');
+  s += T(70, 12, 'mV', 's', 'middle') + `<path class="grid dash" d="M70 ${Y(-55)} L350 ${Y(-55)}"/>` + T(76, Y(-55) - 4, 'threshold ≈ −55', 's', 'start');
+  const bar = (v, col, lab, x) => `<path d="M80 ${Y(v)} L${x - 6} ${Y(v)}" style="stroke:${col};stroke-width:3"/>` + T(x, Y(v) + 4, lab, 'l b', 'start');
+  const items = [[ena, 'var(--na)', `E<tspan baseline-shift="sub" font-size="9">Na</tspan> +${ena.toFixed(0)}`], [ek, 'var(--k)', `E<tspan baseline-shift="sub" font-size="9">K</tspan> ${ek.toFixed(0)}`], [ecl, 'var(--cl)', `E<tspan baseline-shift="sub" font-size="9">Cl</tspan> ${ecl.toFixed(0)}`]];
+  // stagger x if close
+  items.sort((a, b) => a[0] - b[0]); let lastY = 1e9, xs = 160;
+  for (const it of items) { const y = Y(it[0]); const x = Math.abs(y - lastY) < 16 ? xs + 90 : 160; s += bar(Math.max(-120, Math.min(80, it[0])), it[1], it[2], x); lastY = y; xs = x; }
+  s += `<path d="M76 ${Y(vm)} L300 ${Y(vm)}" style="stroke:var(--mark);stroke-width:3.5"/><path d="M300 ${Y(vm)} l10 -7 l0 14 z" style="fill:var(--mark)"/>` + T(318, Math.min(322, Y(vm) + 4), 'V<tspan baseline-shift="sub" font-size="9">m</tspan>', 'l b', 'start');
+  $('rmp-svg').innerHTML = s;
+  const near = Math.abs(vm + 70) <= 8 ? `The calculated potential, ${Phys.mn(vm.toFixed(0))} mV, is close to the usual nerve value (about −70 mV).` : `The calculated potential is ${Phys.mn(vm.toFixed(0))} mV — ${vm > -62 ? 'less negative' : 'more negative'} than the usual nerve value (about −70 mV), because of the concentrations and permeabilities you set.`;
+  $('rmp-find').innerHTML = R.ko > 5.0 ? K_TEXT.hyper : R.ko < 3.5 ? K_TEXT.hypo : K_TEXT.normal.replace('__VM__', near);
+}
+const SL = {};
+const spec = [['ko', '[K⁺] outside', 1, 10, 0.1, ' mM'], ['ki', '[K⁺] inside', 80, 170, 1, ' mM'], ['nao', '[Na⁺] outside', 110, 170, 1, ' mM'], ['nai', '[Na⁺] inside', 4, 40, 1, ' mM'], ['clo', '[Cl⁻] outside', 80, 130, 1, ' mM'], ['cli', '[Cl⁻] inside', 3, 40, 1, ' mM'], ['pna', 'P<sub>Na</sub> ÷ P<sub>K</sub>', 0, 0.3, 0.01, ''], ['pcl', 'P<sub>Cl</sub> ÷ P<sub>K</sub>', 0, 1, 0.05, '']];
+for (const [k, lab, mn, mx, st, u] of spec) { SL[k] = Phys.slider('rmp-sl', {id: k, label: lab, min: mn, max: mx, step: st, value: RMP0[k], fmt: v => (st < 1 ? v.toFixed(st < 0.1 ? 2 : 1) : v) + u}, v => { R[k] = v; drawRmp(); }); SL[k].init(); }
+Phys.toggles('rmp-tg', Object.entries(RMP_PRESET).map(([k, v]) => [k, v[0]]), k => { const p = Object.assign({}, RMP0, RMP_PRESET[k][1]); for (const kk in SL) SL[kk].set(p[kk]); }, 'nerve');
+$('rmp-text').innerHTML = RMP_TEXT; $('rmp-note').textContent = RMP_NOTE; drawRmp();
+
+/* ---- AP stepper ---- */
+const apV = t => { // schematic membrane potential (mV) vs time (ms)
+  if (t < 1) return -70;
+  if (t < 1.45) return -70 + 15 * (t - 1) / 0.45;
+  if (t < 2.0) { const u = (t - 1.45) / 0.55; return -55 + 85 * Math.sin(u * Math.PI / 2); }
+  if (t < 3.0) { const u = (t - 2.0) / 1.0; return 30 - 112 * (1 - Math.cos(u * Math.PI)) / 2; }
+  if (t < 3.3) return -82 + 2 * (t - 3.0) / 0.3 * 0;
+  if (t < 6.5) return -82 + 12 * (1 - Math.exp(-(t - 3.3) / 0.9));
+  return -70;
+};
+const AP = {s: 0};
+function drawAp() {
+  const st = AP_STEPS[AP.s], x0 = 60, x1 = 520, X = Phys.scale(0, 7, x0, x1), Y = Phys.scale(40, -95, 20, 230);
+  let s = '';
+  s += `<rect x="${X(1.45)}" y="20" width="${X(3.0) - X(1.45)}" height="210" class="arp"/>` + `<rect x="${X(3.0)}" y="20" width="${X(6.5) - X(3.0)}" height="210" class="rrp"/>`;
+  s += T((X(1.45) + X(3.0)) / 2, 34, 'absolute', 's', 'middle') + T((X(3.0) + X(6.5)) / 2, 34, 'relative refractory', 's', 'middle');
+  s += `<path class="axis" d="M${x0} 20 L${x0} 230 L${x1} 230"/>`;
+  for (const v of [40, 0, -40, -80]) s += `<path class="axis" d="M${x0 - 4} ${Y(v)} L${x0} ${Y(v)}"/>` + T(x0 - 7, Y(v) + 4, v, 's', 'end');
+  s += T(x0 - 7, 10, 'mV', 's', 'end') + T(x1, 262, 'time (ms) →', 's', 'end');
+  for (let t = 0; t <= 7; t++) s += `<path class="axis" d="M${X(t)} 230 L${X(t)} 234"/>` + T(X(t), 246, t, 's', 'middle');
+  s += `<path class="grid dash" d="M${x0} ${Y(0)} L${x1} ${Y(0)}"/><path class="grid dash" d="M${x0} ${Y(-55)} L${x1} ${Y(-55)}"/>` + T(x1, Y(-55) - 4, 'threshold', 's', 'end') + T(x1, Y(-70) + 14, 'rest −70', 's', 'end');
+  const pts = []; for (let t = 0; t <= 7.001; t += 0.02) pts.push([X(t), Y(apV(t))]);
+  s += `<path class="trace" d="${Phys.path(pts)}"/>`;
+  const tm = st[1]; s += `<circle cx="${X(tm)}" cy="${Y(apV(tm))}" r="7" style="fill:var(--mark);stroke:var(--surface);stroke-width:2"/>`;
+  // channel states
+  const chan = (x, ion, state, lab) => {
+    const col = `var(--${ion})`, open = state === 'open', inact = state === 'inactivated';
+    let g = `<rect x="${x}" y="268" width="56" height="46" rx="8" style="fill:var(--bg);stroke:var(--line)"/>`;
+    g += `<rect x="${x + 8}" y="276" width="14" height="30" rx="3" style="fill:${col}"/><rect x="${x + 34}" y="276" width="14" height="30" rx="3" style="fill:${col}"/>`;
+    if (!open) g += `<rect x="${x + 22}" y="${inact ? 300 : 276}" width="12" height="${inact ? 10 : 6}" style="fill:${inact ? 'var(--gate)' : col}"/>`;
+    if (open) g += Phys.dot(x + 28, 291, ion, 4);
+    return g + T(x + 66, 288, lab, 'b', 'start') + T(x + 66, 304, state, 's', 'start');
+  };
+  s += chan(60, 'na', st[2], 'Na⁺ channel') + chan(300, 'k', st[3], 'K⁺ channel');
+  $('ap-svg').innerHTML = s; $('ap-find').innerHTML = st[4] + AP_TAIL;
+}
+Phys.stepper('ap-step', AP_STEPS.map(r => r[0]), drawAp, AP);
+Phys.key('ap-key', [['--na', 'Na⁺'], ['--k', 'K⁺'], ['--gate', 'inactivation gate (Na⁺)'], ['--mark', 'this step']]);
+
+/* ---- all-or-none ---- */
+const AON = {k: 0.6};
+function drawAon() {
+  const x0 = 50, x1 = 390, X = Phys.scale(0, 6, x0, x1), Y = Phys.scale(40, -90, 20, 190), k = AON.k;
+  let s = `<path class="axis" d="M${x0} 20 L${x0} 190 L${x1} 190"/>`;
+  for (const v of [40, 0, -40, -80]) s += T(x0 - 6, Y(v) + 4, v, 's', 'end');
+  s += `<path class="grid dash" d="M${x0} ${Y(-55)} L${x1} ${Y(-55)}"/>` + T(x1, Y(-55) - 4, 'threshold', 's', 'end') + T(x1, 206, 'time →', 's', 'end');
+  const pts = [];
+  for (let t = 0; t <= 6; t += 0.02) {
+    let v;
+    if (k < 1) v = t < 1 ? -70 : -70 + 15 * k * Math.exp(-Math.max(0, t - 1.4) / 0.8) * Math.min(1, (t - 1) / 0.4);
+    else v = apV(t);
+    pts.push([X(t), Y(v)]);
+  }
+  s += `<path class="trace" d="${Phys.path(pts)}"/>`;
+  s += `<rect x="${X(1)}" y="${192 - 4 * Math.min(k, 3)}" width="${X(1.4) - X(1)}" height="${4 + 4 * Math.min(k, 3)}" style="fill:var(--muted)"/>` + T(X(1.4) + 6, 192, 'stimulus', 's', 'start');
+  $('aon-svg').innerHTML = s;
+  $('aon-find').innerHTML = k < 1 ? `<h3>Below threshold (${k.toFixed(1)}×)</h3><p>A <b>local potential</b> whose size follows the stimulus; it fades and the membrane returns to rest. No action potential.</p>` : `<h3>At or above threshold (${k.toFixed(1)}×)</h3><p>A full action potential — the <b>same size</b> whatever the strength above threshold: <b>all-or-none</b>.</p>`;
+}
+const aonS = Phys.slider('aon-sl', {id: 'k', label: 'Stimulus strength (× threshold)', min: 0, max: 3, step: 0.1, value: 0.6, fmt: v => v.toFixed(1) + '×'}, v => { AON.k = v; drawAon(); });
+aonS.init(); Phys.table('loc-table', LOC[0], LOC[1]); $('aon-note').textContent = AON_NOTE; drawAon();
+
+/* ---- strength–duration ---- */
+const SD = Object.assign({}, SD0);
+function drawSd() {
+  const x0 = 70, x1 = 500, y0 = 20, y1 = 250, lt0 = Math.log10(0.05), lt1 = Math.log10(10);
+  const X = t => x0 + (Math.log10(t) - lt0) / (lt1 - lt0) * (x1 - x0), Y = Phys.scale(0, 6, y1, y0);
+  let s = `<path class="axis" d="M${x0} ${y0} L${x0} ${y1} L${x1} ${y1}"/>`;
+  for (const t of [0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10]) s += `<path class="axis" d="M${X(t)} ${y1} L${X(t)} ${y1 + 4}"/>` + T(X(t), y1 + 16, t, 's', 'middle');
+  for (const i of [1, 2, 3, 4, 5, 6]) s += `<path class="axis" d="M${x0 - 4} ${Y(i)} L${x0} ${Y(i)}"/>` + T(x0 - 7, Y(i) + 4, i, 's', 'end');
+  s += T(x1, y1 + 32, 'pulse duration (ms, log scale) →', 's', 'end') + T(x0 - 7, y0 - 8, 'strength (mA)', 's', 'start');
+  const pts = []; for (let lt = lt0; lt <= lt1 + 1e-9; lt += 0.01) { const t = Math.pow(10, lt), I = SD.ir * (1 + SD.c / t); if (I <= 6.2) pts.push([X(t), Y(Math.min(I, 6.1))]); }
+  s += `<path d="${Phys.path(pts)} L${X(10)} ${y0} L${pts.length ? pts[0][0] : x0} ${y0} Z" style="fill:var(--ink);fill-opacity:.05"/>`;
+  s += `<path class="trace" d="${Phys.path(pts)}"/>`;
+  s += `<path class="grid dash" d="M${x0} ${Y(SD.ir)} L${x1} ${Y(SD.ir)}"/>` + T(x0 + 6, Y(SD.ir) - 5, `rheobase ${SD.ir.toFixed(1)}`, 'l', 'start');
+  s += `<path class="grid dash" d="M${x0} ${Y(2 * SD.ir)} L${X(SD.c)} ${Y(2 * SD.ir)} L${X(SD.c)} ${y1}"/>` + T(x0 + 4, Y(2 * SD.ir) - 5, '2 × rheobase', 's', 'start') + T(X(SD.c) + 4, Y(2 * SD.ir) + 15, `chronaxie ${SD.c.toFixed(2)} ms`, 'l b', 'start');
+  const need = SD.ir * (1 + SD.c / SD.t), ok = SD.i >= need;
+  s += `<circle cx="${X(SD.t)}" cy="${Y(SD.i)}" r="7" style="fill:${ok ? 'var(--mark)' : 'var(--surface)'};stroke:var(--mark);stroke-width:2.5"/>`;
+  s += T(x1 - 4, y0 + 14, 'excites', 's', 'end') + T(x1 - 4, y1 - 3, 'no response', 's', 'end');
+  $('sd-svg').innerHTML = s;
+  $('sd-find').innerHTML = `<h3>Test pulse: ${SD.i.toFixed(1)} mA for ${SD.t.toFixed(2)} ms</h3><p>${ok ? '<b>Excites</b> — the point is on or above the curve.' : '<b>No response</b> — below the curve.'} At this duration it needs at least ${need.toFixed(2)} mA.</p><p class="muted">Shorter pulses need stronger currents; however long the pulse, nothing below rheobase excites.</p>`;
+}
+const sdS = [['ir', 'Rheobase', 0.9, 2.5, 0.1, ' mA'], ['c', 'Chronaxie', 0.05, 2, 0.05, ' ms'], ['t', 'Test pulse duration', 0.05, 10, 0.05, ' ms'], ['i', 'Test pulse strength', 0, 6, 0.1, ' mA']];
+for (const [k, lab, mn, mx, st, u] of sdS) Phys.slider('sd-sl', {id: k, label: lab, min: mn, max: mx, step: st, value: SD0[k], fmt: v => v.toFixed(2) + u}, v => { SD[k] = v; drawSd(); }).init();
+$('sd-text').innerHTML = SD_TEXT; drawSd();
+
+/* ---- fibre table ---- */
+Phys.table('fib-table', ['Erlanger–Gasser', 'Lloyd (sensory)', 'Diameter (µm)', 'Myelin', 'Speed (m/s)', 'Carries'], FIB.map(r => [r[0], r[1], `<span class="num">${r[2]}</span>`, r[3], `<span class="num">${r[4]}</span>`, r[5]]));
+$('fib-text').innerHTML = FIB_TEXT;
+
+/* ---- conduction race ---- */
+const CD = {sel: 'aa', t: 1, raf: 0};
+function drawCond() {
+  const v = COND[CD.sel][1], my = COND[CD.sel][2], x0 = 30, x1 = 600, len = 0.02; // 20 mm drawn
+  const tEnd = 0.2; // ms window shown with the animation
+  const X = d => x0 + d / len * (x1 - x0);
+  let s = Phys.arrowDef('arrn', 'var(--na)');
+  const axon = (y, myel, speed, lab) => {
+    let g = T(x0, y - 30, lab, 'b');
+    g += `<rect x="${x0}" y="${y - 6}" width="${x1 - x0}" height="12" rx="6" class="ax"/>`;
+    const nodes = [];
+    if (myel) { const step = 57; for (let x = x0; x < x1 - 10; x += step) { g += `<rect x="${x + 4}" y="${y - 14}" width="${step - 8}" height="28" rx="12" class="my"/>`; nodes.push(x + step); } }
+    const d = Math.min(len, speed * CD.t * tEnd * 1e-3), px = X(d);
+    if (myel) { // the AP sits at the last node reached
+      const reached = nodes.filter(n => n <= px + 0.5); const nx = reached.length ? reached[reached.length - 1] : x0;
+      g += `<circle cx="${nx}" cy="${y}" r="9" style="fill:var(--na);fill-opacity:.85"/>` + reached.map(n => `<path d="M${n} ${y - 22} L${n} ${y - 9}" style="stroke:var(--na);stroke-width:1.6" marker-end="url(#arrn)"/>`).join('');
+      g += T(x0, y + 32, `${(d * 1000).toFixed(1)} mm in ${(CD.t * tEnd).toFixed(2)} ms · node to node`, 's');
+    } else {
+      g += `<rect x="${x0}" y="${y - 6}" width="${Math.max(0, px - x0)}" height="12" rx="6" style="fill:var(--na);fill-opacity:.35"/><circle cx="${px}" cy="${y}" r="7" style="fill:var(--na)"/>`;
+      g += T(x0, y + 32, `${(d * 1000).toFixed(2)} mm in ${(CD.t * tEnd).toFixed(2)} ms · continuous`, 's');
+    }
+    return g;
+  };
+  s += axon(70, my, v, COND[CD.sel][0] + ` — about ${v} m/s (schematic)`);
+  s += axon(170, false, 1, 'C fibre (unmyelinated) — about 1 m/s, for comparison');
+  $('cond-svg').innerHTML = s;
+}
+function run() {
+  cancelAnimationFrame(CD.raf);
+  if (Phys.reduced()) { CD.t = 1; drawCond(); return; }
+  const t0 = performance.now();
+  const f = now => { CD.t = Math.min(1, (now - t0) / 2500); drawCond(); if (CD.t < 1) CD.raf = requestAnimationFrame(f); };
+  CD.raf = requestAnimationFrame(f);
+}
+Phys.toggles('cond-tg', Object.entries(COND).map(([k, v]) => [k, v[0]]), k => { CD.sel = k; CD.t = 1; drawCond(); }, CD.sel);
+$('cond-run').onclick = run; $('cond-text').innerHTML = COND_TEXT; drawCond();
+$('block-text').innerHTML = BLOCK_TEXT;
+Phys.swipeHints();
+</script>
+</body>
+</html>

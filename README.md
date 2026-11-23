@@ -67,6 +67,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | 03 | [Refractive Errors](ophthalmology/refraction/refractive-errors.html) | Refraction | Ray diagram in a schematic eye: myopia, hypermetropia (latent part shown with cycloplegia), astigmatism (types named live), presbyopia by age; correcting lens, pinhole, a letter blurred to match; accommodation, amblyopia, refractive surgery |
 | 04 | [Diseases of the Optic Nerve](ophthalmology/neuro-ophthalmology/optic-nerve.html) | Neuro-ophthalmology | Schematic disc and both fields for optic neuritis, papilloedema/IIH, NAION vs arteritic AION, LHON, toxic optic neuropathy, atrophy; comparison table; tests; trial-dated treatments; Commons fundus photos |
 
+### Physiology — [`physiology/`](physiology/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [The Cell, Membrane Transport and Body Fluids](physiology/general/cell-transport-fluids.html), [Membrane Potentials](physiology/nerve-muscle/membrane-potentials.html), [The Neuron, Nerve Injury and the NMJ](physiology/nerve-muscle/nerve-nmj.html), [Muscle](physiology/nerve-muscle/muscle.html) | General; nerve and muscle | Organelles and signalling, feedback loops, apoptosis stepper, nine transport mechanisms, 60–40–20 compartments with a Darrow–Yannet gain/loss simulator, Henderson–Hasselbalch; Nernst/GHK calculator, action-potential stepper, strength–duration curve, fibre classes and conduction race; Seddon/Sunderland, Wallerian degeneration, NMJ stepper with myasthenia vs Lambert–Eaton; cross-bridge cycle, length–tension, EC coupling, fibre types, summation and tetanus, myopathies |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and
