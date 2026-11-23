@@ -33,7 +33,7 @@ Last updated: 2026-11-21
   [x] committed with 02 2026-11-23.
   02: [x] build (791 quotes; 4 pages incl. immunity; tokens --rbc --platelet in phys.css; 7 Commons smears) [x] review
   (13 items: --ok undefined, WHO child cut-off, PMC5767294 via Boundless/OpenStax, LAB_NOTE over-claims, attributions,
-  DIC readout, ESR preset, keyboard focus, IgA drawing) [ ] fixes (running). 04 GI [ ] build (running; fill-physio4, physiology/gi/). 05 respiratory [ ] build (running; fill-physio5, physiology/respiratory/).
+  DIC readout, ESR preset, keyboard focus, IgA drawing) [ ] fixes (running). 04 GI [x] build (623 quotes; 3 pages; no new tokens) [ ] review (running). 05 respiratory [ ] build (running; fill-physio5, physiology/respiratory/).
   Then respiratory, renal, GI, endocrine,
   reproductive, CNS, senses.
 
