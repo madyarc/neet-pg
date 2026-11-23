@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Development of the Limbs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone (ossified bone), --cart (cartilage model), --nerve, --accent (UI selection); --clin is not used (dying interdigital cells are ink crosses, arrows are ink).
+   Embryology tokens exactly as on early-development.html: --ecto / --meso (germ layers; the limb bud core is lateral plate mesoderm).
+   Shared with other pages, same meaning and value: --musc (muscle and its precursors; general/joints.html). No new tokens: the signalling
+   centres are told apart by pattern and label (AER a thick ectoderm rim, ZPA a hatched area, the dorsal ectoderm a dotted line), and the
+   preaxial border by a thick dashed line. */
+:root{--ecto:#2ad2f4;--meso:#efa272;--musc:#c96f68}
+:root[data-theme="dark"]{--musc:#9c4e48;color-scheme:dark}
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.prose p+p,.prose p+ul,.prose ul+p{margin-top:8px}
+.prose ul{margin:4px 0 0;padding-left:20px}
+.scroll{overflow-x:auto}
+.two{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.key{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--line)}
+svg.sch{max-width:640px;margin:0 auto}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.c{fill:var(--clin);font-weight:600}
+svg.sch text.b{font-weight:700}
+svg.sch text.l,svg.sch text.s,svg.sch text.c,svg.sch text.b{paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+.step{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.step .chips{flex:1;min-width:0}
+.step .btn{white-space:nowrap}
+.find{font-size:14px;min-height:6em}
+.find h3{font-size:15px;margin:0 0 4px}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t td:first-child{font-weight:600}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> <span class="muted" style="font-size:13px">· Embryology: <a href="early-development.html">Early development</a> · <a href="membranes-placenta.html">Membranes, placenta</a> · <a href="heart-vessels.html">Heart, vessels, lungs</a> · <a href="gut-urogenital.html">Gut, urogenital</a> · <a href="head-neck-cns.html">Head, neck, nervous system</a> · <span aria-current="page">Limbs</span></span></nav>
+
+<header class="stack">
+  <h1>Development of the Limbs</h1>
+  <p class="lede" id="lede"></p>
+  <div class="key" id="key"></div>
+</header>
+
+<section class="block panel" aria-labelledby="h-bud">
+  <h2 id="h-bud">The limb buds</h2>
+  <div class="two">
+    <svg class="fig sch" id="bud-svg" viewBox="0 0 440 300" role="img" aria-label="Side view of an embryo with the upper limb bud opposite the lower cervical segments and the lower limb bud opposite the lumbar and sacral segments; the bud is a core of lateral plate mesoderm under ectoderm, with muscle precursors and spinal nerves entering from the somites"></svg>
+    <div class="prose" id="bud-text"></div>
+  </div>
+  <p class="muted">Schematic side view, head up, not to scale.</p>
+  <div class="scroll"><table class="t stack" id="time-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sig">
+  <h2 id="h-sig">Signalling centres and the three axes</h2>
+  <div class="chips" id="sig-tg" aria-label="Centre"></div>
+  <div class="two">
+    <svg class="fig sch" id="sig-svg" viewBox="0 0 440 320" role="img" aria-label="A limb bud seen from the dorsal side with the apical ectodermal ridge along its tip, the zone of polarizing activity in its posterior mesenchyme, and the dorsal ectoderm; arrows show the proximodistal, anteroposterior and dorsoventral axes"></svg>
+    <div class="prose find" id="sig-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic limb bud from the back (dorsal) side, anterior (preaxial, future thumb or big-toe side) up; the dorsoventral view is a section across the bud.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-shape">
+  <h2 id="h-shape">From paddle to hand</h2>
+  <div class="step" id="shape-step"></div>
+  <div class="two">
+    <svg class="fig sch" id="shape-svg" viewBox="0 0 440 300" role="img" aria-label="The upper limb bud growing into a paddle, then a hand plate with digital rays, the tissue between the rays dying so the digits separate, with cartilage models that later ossify"></svg>
+    <div class="prose find" id="shape-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-rot">
+  <h2 id="h-rot">Rotation of the limbs</h2>
+  <div class="step" id="rot-step"></div>
+  <div class="two">
+    <svg class="fig sch" id="rot-svg" viewBox="0 0 440 396" role="img" aria-label="Cross-sections of the embryo's right arm and thigh: before rotation each limb sticks out with its flexor surface ventral and its preaxial border cranial; after rotation, beside the trunk, the arm's preaxial border is lateral with the flexor surface in front, and the thigh's preaxial border is medial with the flexor surface behind"></svg>
+    <div class="prose find" id="rot-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic cross-sections of the embryo's right arm and thigh, not to scale. Red-brown arc: the flexor surface; thick dashed tick: the preaxial border (radius and thumb; tibia and big toe). The 90° is Gray's figure.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-anom">
+  <h2 id="h-anom">Anomalies</h2>
+  <div class="scroll"><table class="t stack" id="anom-table"></table></div>
+  <p class="muted">Sources are named in each row. Teratogens and the critical period: <a href="early-development.html">Early development</a>.</p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+</div>
+
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources unless attributed: sources-local/facts/fill-limbs3.md, Part H; anatomy/DATA-SOURCES.md) ===================== */
+const LEDE = 'How the limbs grow out of the body wall: the limb buds and when they appear, the signalling centres that shape them (AER, ZPA, dorsal ectoderm), the change from paddle to hand, and the rotation of the limbs that puts the thumb lateral, the big toe medial and the knee in front — which explains the dermatomes and the anomalies.';
+const KEY = [['--ecto', 'Ectoderm'], ['--meso', 'Lateral plate mesoderm'], ['--cart', 'Cartilage model'], ['--bone', 'Bone'], ['--musc', 'Muscle (from the somites)'], ['--nerve', 'Spinal nerve']];
+const BUD_TEXT = '<p>The limbs begin as small <b>buds on the side of the body wall</b>: Wikipedia: the <b>upper limb bud first</b> and the lower limb bud four days later. Each bud is a core of <b>lateral plate mesoderm</b>, which forms the bones, cartilage, tendons and connective tissue, under a cap of <b>ectoderm</b>. Cells from the <b>somites (myotomes)</b> migrate in and form the muscles, bringing the ventral rami of the spinal nerves with them.</p><p>Which limb forms is set early: <b>TBX5</b> is switched on in the upper limb (forelimb) field and <b>TBX4</b> (with PITX1) in the lower limb field. Outgrowth is driven by a signalling loop between <b>FGF10</b> in the limb mesenchyme and <b>FGF8</b> in the ectoderm (review); Wikipedia adds that T-box proteins start FGF10.</p><p>Gray 1918 counted the segments that give each limb its nerves: seven for the upper limb (<b>C4–T2</b>) and ten for the lower limb (<b>T12–S4</b>). These are Gray\'s 1918 figures; the plexuses as taught today (the brachial plexus from <b>C5–T1</b>, a 2026 paper) are on <a href="../upper-limb/nerves-vessels.html">Nerves of the upper limb</a> and <a href="../lower-limb/nerves-vessels.html">Nerves of the lower limb</a>.</p>';
+const TIME_HEAD = ['Source', 'When the limb buds appear'];
+const TIME_ROWS = [['Gray 1918', 'Short buds by the end of the 3rd week; in the 4th week (his figure: an embryo of 27–30 days) oval flattened projections; by the 6th week divided into arm, forearm, hand and thigh, leg, foot'], ['Wikipedia (Limb bud)', 'Upper limb bud in the 3rd week, lower limb bud four days later'], ['StatPearls (Embryology, Hand)', 'Upper limb bud around the 5th week']];
+const SIG = {
+  aer: ['AER (outgrowth)', '<h3>Apical ectodermal ridge (AER): proximodistal outgrowth</h3><p>A <b>thickening of the ectoderm</b> along the tip (distal rim) of the bud; Wikipedia: induced by FGF10 from the mesenchyme. It secretes <b>FGFs (FGF8)</b> that keep the mesenchyme beneath it dividing, so the limb grows out from shoulder to fingertips. In experiments (Wikipedia), removing the AER <b>truncates</b> the limb.</p>'],
+  zpa: ['ZPA (thumb to little finger)', '<h3>Zone of polarizing activity (ZPA): anteroposterior axis</h3><p>Mesenchyme at the <b>posterior (postaxial)</b> margin of the bud that secretes <b>Sonic hedgehog (SHH)</b>. It sets the anteroposterior axis — the thumb (preaxial) to little finger (postaxial) order — and, by Wikipedia, the identity of each digit. Wikipedia adds that the ZPA and AER keep each other going.</p>'],
+  dv: ['Dorsal ectoderm (back to palm)', '<h3>Dorsoventral axis</h3><p><b>WNT7A</b> from the <b>dorsal ectoderm</b> (with LMX1B in the mesenchyme) makes the back of the limb dorsal; the review adds <b>Engrailed-1 (EN1)</b> in the ventral ectoderm for the palm and sole side.</p>'],
+};
+const SHAPE = [
+  ['Bud', '<h3>Limb bud</h3><p>A bulge of lateral plate mesoderm under the ectoderm, the AER along its tip.</p>'],
+  ['Paddle', '<h3>Paddle and segments</h3><p>The bud lengthens into a flattened paddle; Gray 1918: by the 6th week furrows mark off arm, forearm and hand (thigh, leg and foot). The mesenchyme condenses into <b>cartilage models</b> of the bones, from the shoulder girdle towards the hand.</p>'],
+  ['Digit regions', '<h3>Hand plate: digit-forming regions</h3><p>In the hand (and foot) plate, cartilage forms in the <b>digit-forming regions</b>, separated by <b>interdigital regions</b> (review). Joints, ligaments and muscles differentiate from the shoulder towards the hand over weeks 6–8 (StatPearls).</p>'],
+  ['Digits separate', '<h3>Digits separate</h3><p>Cells in the interdigital regions die (<b>programmed cell death</b>; the review: pro-apoptotic programmes predominate there), so the fingers and toes separate — Wikipedia: at about 6 weeks. Failure leaves the digits joined (<b>syndactyly</b>, Wikipedia).</p>'],
+  ['Ossification', '<h3>Ossification</h3><p>The cartilage models ossify from <b>primary centres in the middle of the shafts</b>, from about the <b>6th–8th week</b>: StatPearls: ossification begins in the 6th–7th week; Gray: the femur about the 7th week, the humerus, radius and ulna about the 8th. The ends stay cartilage until the secondary centres appear (see <a href="../general/terminology-bone.html">Bone</a>). (The StatPearls hand chapter says "as early as the 12th week" for the long bones of the hand.)</p>'],
+];
+const ROT = [
+  ['Before rotation', '<h3>Before rotation</h3><p>At first each limb sticks out sideways from the body wall: the future <b>flexor surface faces ventrally</b>, the extensor surface dorsally; the <b>preaxial border faces cranially</b> (towards the head), the postaxial border caudally (Gray 1918). On the preaxial border lie the radius and thumb in the upper limb, the tibia and big toe in the lower limb. The drawing cuts each limb across, seen from its tip.</p>'],
+  ['Upper limb rotates', '<h3>The upper limb rotates laterally</h3><p>The upper limb turns <b>laterally</b> (outward) through about 90° (Gray; a 2026 paper: between the 6th and 8th weeks). Seen in the limb hanging beside the trunk, its <b>preaxial border (radius, thumb) lies laterally</b> and its flexor surface still faces <b>forward</b> (Gray: "turned forward"), so the <b>elbow points backward</b>.</p>'],
+  ['Lower limb rotates', '<h3>The lower limb rotates medially</h3><p>The lower limb turns <b>medially</b> (inward) through about 90° (Gray; medial rotation in the embryonic period: a 2023 study of human embryos). Its <b>preaxial border (tibia, big toe) comes to lie medially</b> and its flexor surface is turned <b>backward</b>, so the <b>knee faces forward</b> and the extensor muscles of the thigh lie in front (Gray).</p>'],
+  ['Dermatomes', '<h3>Why the dermatomes run as they do</h3><p>Nerves of the more cranial segments go to the preaxial border, those of the more caudal segments to the postaxial border (Gray 1918). The rotation then <b>turns this pattern</b> with the limb, shaping the adult dermatomes and muscle supply (a 2026 embryology paper): in the upper limb the cranial segments end up on the lateral (thumb) side; in the lower limb, which turned medially, on the medial side of the leg and the big toe. Wikipedia: in the limbs the dermatomes run along the length of the limb. The dermatome map is on <a href="../general/skin-lymphatics.html">Skin and lymphatics</a>.</p>'],
+];
+const ANOM_HEAD = ['Anomaly', 'What it is', 'Note (sources)'];
+const ANOM_ROWS = [
+  ['Phocomelia', 'Short or absent long bones; the hands or feet small or like stumps, attached close to the body (Wikipedia)', 'Thalidomide in early pregnancy: phocomelia of the upper and lower limbs (a 2021 review; Wikipedia); limb defects followed exposure about days 24–30 after conception (2021 review). See <a href="early-development.html">Early development</a>'],
+  ['Amelia', 'Absence of a limb', 'Also caused by thalidomide (Wikipedia, Thalidomide)'],
+  ['Polydactyly', 'Extra digits', 'Wikipedia: postaxial (little-finger side) is the most common, preaxial (thumb side) rarer; SHH from the ZPA is involved'],
+  ['Syndactyly', 'Fused digits', 'Wikipedia: the tissue between the digits fails to die (normally at about 6 weeks)'],
+];
+const DATA = {
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), the limbs in the chapters on embryology; StatPearls (NCBI Bookshelf: Embryology, Hand; Fibula); open-access papers (a 2026 review of limb development; a 2026 paper on median nerve embryology; a 2023 study of femoral posture in human embryos; a 2021 review of thalidomide embryopathy); Wikipedia. Where they differ, the page says so.',
+  models: 'Drawings: schematic, not to scale.',
+};
+
+/* ===================== helpers ===================== */
+const $ = id => document.getElementById(id);
+const T = (x, y, s, cls = 'l', a = 'start') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${a}">${s}</text>`;
+const L = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+const ARW = '<defs><marker id="arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink)"/></marker><pattern id="hz" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--ink);stroke-width:1.6"/></pattern></defs>';
+function chips(id, items, draw, start) {
+  const box = $(id);
+  for (const [k, d] of Object.entries(items)) {
+    const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = d[0]; b.setAttribute('aria-pressed', String(k === start));
+    b.onclick = () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); draw(k); }; box.append(b);
+  }
+  draw(start);
+}
+function stepper(id, labels, draw) {
+  const box = $(id), st = {s: 0};
+  const prev = document.createElement('button'); prev.className = 'btn'; prev.type = 'button'; prev.textContent = '◀ Back';
+  const next = document.createElement('button'); next.className = 'btn'; next.type = 'button'; next.textContent = 'Next ▶';
+  const row = document.createElement('div'); row.className = 'chips';
+  const go = i => { st.s = Math.max(0, Math.min(labels.length - 1, i)); row.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', String(j === st.s))); prev.disabled = !st.s; next.disabled = st.s === labels.length - 1; draw(st.s); };
+  labels.forEach((l, i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.onclick = () => go(i); row.append(b); });
+  prev.onclick = () => go(st.s - 1); next.onclick = () => go(st.s + 1);
+  box.append(prev, row, next); go(0);
+}
+
+/* ===================== drawings ===================== */
+function drawBud() {
+  let h = ARW;
+  // C-shaped embryo, back on the left, head at the top
+  h += `<path d="M150 40 C70 50 40 140 60 200 C76 250 120 280 170 270 C200 262 220 240 214 214 C240 200 250 170 236 140 C250 110 236 70 200 52 C186 44 168 38 150 40 Z" style="fill:var(--ecto);opacity:.35;stroke:var(--ink);stroke-width:1.2"/>`;
+  for (let i = 0; i < 16; i++) { const a = -1.9 + i * 0.16, x = 140 + Math.cos(a) * 92, y = 158 + Math.sin(a) * 104; h += `<rect x="${x - 6}" y="${y - 5}" width="12" height="9" rx="2" transform="rotate(${a * 57.3 + 90} ${x} ${y})" style="fill:var(--musc);opacity:.75"/>`; }
+  // upper and lower limb buds
+  h += `<path d="M198 112 C226 104 242 118 236 134 C230 148 210 148 200 140 Z" style="fill:var(--meso);stroke:var(--ecto);stroke-width:3"/>`;
+  h += `<path d="M168 226 C192 228 204 246 194 258 C184 268 166 262 160 250 Z" style="fill:var(--meso);stroke:var(--ecto);stroke-width:3"/>`;
+  h += `<path d="M120 124 C150 120 180 120 204 126" style="fill:none;stroke:var(--nerve);stroke-width:2.4"/><path d="M120 214 C140 226 156 236 170 242" style="fill:none;stroke:var(--nerve);stroke-width:2.4"/>`;
+  h += `<path d="M110 132 C140 132 170 132 206 134" style="fill:none;stroke:var(--musc);stroke-width:2;stroke-dasharray:4 3;marker-end:url(#arw)"/>`;
+  h += L(236, 120, 290, 96) + T(294, 92, 'Upper limb bud', 'b') + T(294, 106, 'opposite C4–T2 (Gray)', 's');
+  h += L(196, 252, 290, 250) + T(294, 246, 'Lower limb bud', 'b') + T(294, 260, 'opposite T12–S4 (Gray)', 's');
+  h += L(56, 160, 20, 160) + T(8, 150, 'Somites', 's');
+  h += T(160, 30, 'Head', 's', 'middle');
+  h += L(206, 128, 300, 140) + T(304, 144, 'Core: lateral plate', 's') + T(304, 156, 'mesoderm; cap: ectoderm', 's');
+  h += L(150, 132, 170, 170) + T(130, 182, 'Muscle cells and', 's') + T(130, 194, 'spinal nerves enter', 's');
+  $('bud-svg').innerHTML = h;
+}
+function budShape(h, sel) {
+  const bud = 'M60 70 C200 40 340 90 370 160 C340 230 200 280 60 250 Z';
+  h += `<path d="${bud}" style="fill:var(--meso);stroke:var(--ecto);stroke-width:4"/>`;
+  return h;
+}
+function drawSig(sel) {
+  let h = ARW;
+  if (sel === 'dv') {   // a cross-section across the bud: dorsal up, ventral down, anterior (preaxial) left, posterior right
+    h += `<ellipse cx="220" cy="160" rx="150" ry="96" style="fill:var(--meso)"/>`;
+    h += `<path d="M70 160 A150 96 0 0 1 370 160" style="fill:none;stroke:var(--ecto);stroke-width:8"/><path d="M70 160 A150 96 0 0 1 370 160" style="fill:none;stroke:var(--ink);stroke-width:3;stroke-dasharray:1 6;stroke-linecap:round"/>`;
+    h += `<path d="M70 160 A150 96 0 0 0 370 160" style="fill:none;stroke:var(--ecto);stroke-width:8"/>`;
+    h += `<path d="M330 120 C350 140 352 180 330 200 C310 190 306 130 330 120 Z" style="fill:url(#hz)"/>`;
+    h += T(220, 40, 'Dorsal ectoderm: WNT7A', 'b', 'middle') + T(220, 106, 'dorsal mesenchyme: LMX1B', 's', 'middle');
+    h += T(220, 280, 'Ventral ectoderm: EN1 (review)', 'b', 'middle') + T(220, 214, 'palm / sole side', 's', 'middle');
+    h += T(60, 300, 'Anterior (preaxial)', 's') + T(380, 300, 'Posterior (postaxial)', 's', 'end') + L(330, 160, 396, 120) + T(400, 112, 'ZPA', 'l', 'end');
+    h += T(220, 314, 'Section across the bud (schematic)', 's', 'middle');
+  } else {
+    h += `<rect x="20" y="30" width="40" height="250" rx="8" style="fill:var(--ecto);opacity:.3"/>` + T(40, 22, 'Body wall', 's', 'middle');
+    h = budShape(h, sel);
+    h += `<path d="M300 92 C350 120 372 140 370 160 C372 180 350 202 300 228" style="fill:none;stroke:var(--ecto);stroke-width:${sel === 'aer' ? 14 : 8};stroke-linecap:round"/>`;
+    h += `<path d="M180 248 C230 246 270 232 300 214 C280 196 230 204 186 214 Z" style="fill:url(#hz);opacity:${sel === 'zpa' ? 1 : .45}"/>`;
+    h += `<path d="M60 300 L380 300" style="stroke:var(--ink);stroke-width:1.6;marker-end:url(#arw)"/>` + T(220, 294, 'Proximal → distal', 's', 'middle');
+    h += `<path d="M412 230 L412 90" style="stroke:var(--ink);stroke-width:1.6;marker-start:url(#arw);marker-end:url(#arw)"/>` + T(436, 80, 'Anterior', 's', 'end') + T(436, 248, 'Posterior', 's', 'end');
+    h += L(322, 104, 280, 40) + T(280, 32, 'AER (FGF8)', sel === 'aer' ? 'b' : 'l', 'middle');
+    h += L(236, 222, 190, 262) + T(180, 274, 'ZPA (SHH)', sel === 'zpa' ? 'b' : 'l', 'end');
+    if (sel === 'aer') h += `<path d="M300 160 L360 160" style="stroke:var(--ink);stroke-width:2;marker-end:url(#arw)"/>` + T(250, 150, 'outgrowth', 's', 'middle');
+    if (sel === 'zpa') h += `<path d="M230 220 C230 180 240 140 250 110" style="fill:none;stroke:var(--ink);stroke-width:1.6;stroke-dasharray:4 3;marker-end:url(#arw)"/>` + T(256, 116, 'SHH gradient', 's');
+  }
+  $('sig-svg').innerHTML = h; $('sig-find').innerHTML = SIG[sel][1];
+}
+function drawShape(i) {
+  let h = ARW;
+  if (i === 0) { h += `<path d="M40 100 C120 90 170 110 180 150 C170 190 120 210 40 200 Z" style="fill:var(--meso);stroke:var(--ecto);stroke-width:4"/>` + T(110, 236, 'Limb bud', 'b', 'middle'); }
+  else {
+    // arm paddle: proximal segment, distal hand plate
+    h += `<path d="M30 120 L200 112 L200 188 L30 180 Z" style="fill:var(--meso);stroke:var(--ecto);stroke-width:3"/>`;
+    const plate = i >= 3 ? '' : `<path d="M196 100 C300 60 400 100 404 150 C400 200 300 240 196 200 Z" style="fill:var(--meso);stroke:var(--ecto);stroke-width:3"/>`;
+    h += plate;
+    if (i >= 3) for (let d = 0; d < 5; d++) { const a = -0.44 + d * 0.22, x2 = 230 + Math.cos(a) * 180, y2 = 150 + Math.sin(a) * 180; h += `<path d="M200 150 L${x2} ${y2}" style="stroke:var(--ecto);stroke-width:30;stroke-linecap:round;opacity:.9"/><path d="M200 150 L${x2} ${y2}" style="stroke:var(--meso);stroke-width:24;stroke-linecap:round"/>`; }
+    if (i >= 3) h += `<ellipse cx="210" cy="150" rx="40" ry="46" style="fill:var(--meso)"/>`;
+    // cartilage or bone models
+    const fill = 'var(--cart)', ossi = i === 4;
+    h += `<rect x="50" y="138" width="130" height="24" rx="11" style="fill:${fill};stroke:var(--ink);stroke-width:.8"/>`;
+    if (ossi) h += `<rect x="88" y="140" width="54" height="20" rx="4" style="fill:var(--bone);stroke:var(--ink);stroke-width:.8"/>`;
+    if (i >= 2) for (let d = 0; d < 5; d++) { const a = -0.44 + d * 0.22; for (let k = 0; k < 3; k++) { const r0 = i === 2 ? 46 + k * 34 : 60 + k * 42, x = 210 + Math.cos(a) * r0, y = 150 + Math.sin(a) * r0; h += `<ellipse cx="${x}" cy="${y}" rx="15" ry="6" transform="rotate(${a * 57.3} ${x} ${y})" style="fill:${fill};stroke:var(--ink);stroke-width:.8"/>`; if (ossi) h += `<ellipse cx="${x}" cy="${y}" rx="6" ry="4" transform="rotate(${a * 57.3} ${x} ${y})" style="fill:var(--bone);stroke:var(--ink);stroke-width:.6"/>`; } }
+    if (i === 3) for (let d = 0; d < 4; d++) { const a = -0.33 + d * 0.22, x = 250 + Math.cos(a) * 110, y = 150 + Math.sin(a) * 110; h += `<path d="M${x - 5} ${y - 5} L${x + 5} ${y + 5} M${x + 5} ${y - 5} L${x - 5} ${y + 5}" style="stroke:var(--ink);stroke-width:2"/>`; }
+    h += T(115, 104, 'Arm, forearm', 's', 'middle');
+    if (i === 2) h += L(330, 120, 380, 40) + T(380, 32, 'Digit-forming regions', 'b', 'end');
+    if (i === 3) h += L(352, 150, 410, 250) + T(436, 266, '× interdigital cells die', 'b', 'end');
+    h += L(120, 162, 120, 230) + T(120, 244, i === 4 ? 'Bone in mid-shaft; ends still cartilage' : 'Cartilage model', 'l', 'middle');
+  }
+  $('shape-svg').innerHTML = h; $('shape-find').innerHTML = SHAPE[i][1];
+}
+function drawRot(i) {
+  let h = ARW;
+  /* each limb cut across. Before: the limb sticks out sideways; its section is seen from the tip (head up, front to your left).
+     After: the limb lies beside the trunk; its section is seen from above (front up, the trunk to your left: the embryo's right side). */
+  const sec = (cx, cy, flex, pre, lab) => {   // flex, pre: angle (deg, 0 = right, 90 = up) of the flexor face and the preaxial border
+    const r = 30, P = a => [cx + Math.cos(a * Math.PI / 180) * r, cy - Math.sin(a * Math.PI / 180) * r];
+    let g = `<circle cx="${cx}" cy="${cy}" r="${r}" style="fill:var(--meso);stroke:var(--ecto);stroke-width:3"/><circle cx="${cx}" cy="${cy}" r="8" style="fill:var(--cart);stroke:var(--ink);stroke-width:.8"/>`;
+    const [x1, y1] = P(flex - 50), [x2, y2] = P(flex + 50);
+    g += `<path d="M${x1} ${y1} A${r} ${r} 0 0 0 ${x2} ${y2}" style="fill:none;stroke:var(--musc);stroke-width:8"/>`;
+    const [px, py] = P(pre), [qx, qy] = [cx + Math.cos(pre * Math.PI / 180) * (r + 14), cy - Math.sin(pre * Math.PI / 180) * (r + 14)];
+    g += `<path d="M${px} ${py} L${qx} ${qy}" style="stroke:var(--ink);stroke-width:4;stroke-dasharray:5 3"/>`;
+    g += T(cx, cy + r + 22, lab, 's', 'middle');
+    return g;
+  };
+  h += T(110, 20, 'Before: limb sticks out', 'b', 'middle') + T(110, 34, 'seen from its tip; head up, front left', 's', 'middle');
+  h += T(330, 20, 'After: limb beside the trunk', 'b', 'middle') + T(330, 34, 'seen from above; front up', 's', 'middle');
+  h += `<path d="M220 46 L220 330" style="stroke:var(--line);stroke-width:1"/>`;
+  h += T(10, 110, 'Arm', 'b') + T(10, 270, 'Thigh', 'b');
+  // before: flexor face ventral (left = 180), preaxial cranial (up = 90)
+  h += sec(110, 110, 180, 90, 'preaxial cranial') + sec(110, 270, 180, 90, 'preaxial cranial');
+  // after: trunk sections to the left of the limb
+  const trunk = (cy, txt) => `<rect x="236" y="${cy - 40}" width="92" height="80" rx="30" style="fill:var(--ecto);opacity:.25;stroke:var(--ink)"/>` + T(282, cy + 4, txt, 's', 'middle');
+  if (i >= 1) h += trunk(110, 'chest') + sec(380, 110, 90, 0, 'preaxial lateral');
+  else h += T(330, 114, '…', 's', 'middle');
+  if (i >= 2) h += trunk(270, 'hip') + sec(380, 270, 270, 180, 'preaxial medial');
+  else h += T(330, 274, '…', 's', 'middle');
+  if (i >= 1) h += `<path d="M150 80 C220 44 320 44 372 74" style="fill:none;stroke:var(--ink);stroke-width:1.6;marker-end:url(#arw)"/>` + T(262, 46, 'lateral rotation', 's', 'middle');
+  if (i >= 2) h += `<path d="M150 240 C220 204 320 204 372 234" style="fill:none;stroke:var(--ink);stroke-width:1.6;marker-end:url(#arw)"/>` + T(262, 206, 'medial rotation', 's', 'middle');
+  h += `<path d="M30 382 L58 382" style="stroke:var(--musc);stroke-width:8"/>` + T(64, 386, 'flexor surface (muscle)', 's') + `<path d="M200 382 L224 382" style="stroke:var(--ink);stroke-width:4;stroke-dasharray:5 3"/>` + T(230, 386, 'preaxial border', 's');
+  if (i === 3) h += T(10, 346, 'Cranial segments supply the preaxial border:', 's') + T(10, 359, 'they end lateral in the arm, medial in the leg', 's');
+  $('rot-svg').innerHTML = h; $('rot-find').innerHTML = ROT[i][1];
+}
+function table(id, head, rows) {
+  $(id).innerHTML = '<tr>' + head.map(x => `<th>${x}</th>`).join('') + '</tr>' + rows.map(r => '<tr>' + r.map((c, i) => `<td data-h="${head[i]}">${c}</td>`).join('') + '</tr>').join('');
+}
+
+/* ===================== init ===================== */
+(() => {
+  $('lede').textContent = LEDE;
+  $('key').innerHTML = KEY.map(([t, l]) => `<span><i style="background:var(${t})"></i>${l}</span>`).join('');
+  $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models;
+  $('bud-text').innerHTML = BUD_TEXT; drawBud();
+  table('time-table', TIME_HEAD, TIME_ROWS); table('anom-table', ANOM_HEAD, ANOM_ROWS);
+  chips('sig-tg', SIG, drawSig, 'aer');
+  stepper('shape-step', SHAPE.map(x => x[0]), drawShape);
+  stepper('rot-step', ROT.map(x => x[0]), drawRot);
+  window.ready = true;
+})();
+</script>
+</body>
+</html>

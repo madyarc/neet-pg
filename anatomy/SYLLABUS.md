@@ -71,13 +71,13 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [x] **AN8.1** Identify the given bone, its side, anatomical position, joint formation, important features and clinical anatomy (clavicle, scapula, humerus, radius, ulna, carpal bones) — *features, joints, clinical points, left or right for every bone incl. the carpals: [Bones of the Upper Limb](upper-limb/bones.html)*
 - [x] **AN8.2** Demonstrate important muscle attachments on the given bone — *all attachment areas on a chosen bone, by bone or by muscle: Muscles of the [Upper Limb](upper-limb/muscles.html), [Lower Limb](lower-limb/muscles.html), [Back](back/muscles.html), [Trunk Wall](thorax/wall-muscles.html), [Head and Neck](head-neck/muscles.html)*
 - [x] **AN8.3** Identify and name various bones in articulated hand, Specify the parts of metacarpals and phalanges and enumerate the peculiarities of pisiform — *[Bones of the Upper Limb](upper-limb/bones.html)#hand, [The Upper Limb](upper-limb/upper-limb.html)*
-- [ ] **AN8.4** Describe scaphoid fracture and explain the anatomical basis of avascular necrosis
+- [x] **AN8.4** Describe scaphoid fracture and explain the anatomical basis of avascular necrosis — *scaphoid blood supply, waist fracture and proximal-pole necrosis, snuffbox, repeat film: [Bones of the Upper Limb](upper-limb/bones.html) (hand)*
 
 ### 9. Pectoral region
 
 - [x] **AN9.1** Describe attachment, nerve supply & action of pectoralis major and pectoralis minor and describe clavipectoral fascia — *pectoralis major and minor; what pierces the clavipectoral fascia: [Muscles of the Upper Limb](upper-limb/muscles.html)*
-- [ ] **AN9.2** Describe the location, extent, deep relations, structure, blood supply, lymphatic drainage, microanatomy and applied anatomy of breast
-- [ ] **AN9.3** Describe development of breast, associated age changes and congenital anomalies
+- [x] **AN9.2** Describe the location, extent, deep relations, structure, blood supply, lymphatic drainage, microanatomy and applied anatomy of breast — *position, extent, structure, supply, lymph and axillary levels, microanatomy, applied: [The Breast](upper-limb/breast.html)*
+- [x] **AN9.3** Describe development of breast, associated age changes and congenital anomalies — *milk line, age changes, polythelia, polymastia, amastia, Poland syndrome: [The Breast](upper-limb/breast.html)*
 
 ### 10. Axilla, Shoulder and Scapular region
 
@@ -114,13 +114,13 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [x] **AN12.6** Describe & demonstrate movements of thumb and muscles involved — *[Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [x] **AN12.7** Identify & describe course and branches of important blood vessels and nerves in hand — *palmar arches, median and ulnar nerves in the hand, recurrent branch: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
 - [x] **AN12.8** Describe anatomical basis of Claw hand — *claw hand: [Muscles of the Upper Limb](upper-limb/muscles.html) (Nerve supply, ulnar)*
-- [ ] **AN12.9** Identify & describe fibrous flexor sheaths, ulnar bursa, radial bursa and digital synovial sheaths
-- [ ] **AN12.10** Explain infection of fascial spaces of palm
+- [x] **AN12.9** Identify & describe fibrous flexor sheaths, ulnar bursa, radial bursa and digital synovial sheaths — *flexor sheaths, ulnar and radial bursae, Parona space, horseshoe abscess, Kanavel signs: [Muscles of the Upper Limb](upper-limb/muscles.html)*
+- [x] **AN12.10** Explain infection of fascial spaces of palm — *thenar and midpalmar spaces, web-space and collar-button abscess, pulp space and felon: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [x] **AN12.11** Identify, describe and demonstrate important muscle groups of dorsal forearm with attachments, nerve supply and actions — *[Muscles of the Upper Limb](upper-limb/muscles.html)*
 - [x] **AN12.12** Identify & describe origin, course, relations, branches (or tributaries), termination of important nerves and vessels of back of forearm — *posterior interosseous nerve and artery: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
 - [x] **AN12.13** Describe the anatomical basis of Wrist drop — *wrist drop and PIN lesion: [Muscles of the Upper Limb](upper-limb/muscles.html) (Nerve supply, radial)*
 - [x] **AN12.14** Identify & describe compartments deep to extensor retinaculum and describe the boundaries and contents of anatomical snuff box. — *six extensor compartments; snuffbox boundaries, floor, roof and contents in 3D: [Muscles of the Upper Limb](upper-limb/muscles.html)*
-- [ ] **AN12.15** Identify & describe extensor expansion formation
+- [x] **AN12.15** Identify & describe extensor expansion formation — *extensor hood, central slip, lateral bands; mallet, boutonnière, swan-neck: [Muscles of the Upper Limb](upper-limb/muscles.html)*
 
 ### 13. General Features, Joints, radiographs & surface marking
 
@@ -128,10 +128,10 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [x] **AN13.2** Describe dermatomes of upper limb — *schematic dermatome map (maps differ): [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html)*
 - [~] **AN13.3** Identify & describe the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements, blood and nerve supply of elbow joint, proximal and distal radio-ulnar joints, wrist joint & first carpometacarpal joint — *all in 3D with text; distal radio-ulnar nerves and disc supply, thumb CMC ligaments and nerves; no two open sources for the proximal radio-ulnar joint's own nerves and arteries: [Joints of the Upper Limb](upper-limb/joints.html)*
 - [x] **AN13.4** Describe Sternoclavicular joint, Acromioclavicular joint, Carpometacarpal joints & Metacarpophalangealjoint — *[Joints of the Upper Limb](upper-limb/joints.html)*
-- [ ] **AN13.5** Identify the bones and joints of upper limb seen in anteroposterior and lateral view radiographs of shoulder region, arm, elbow, forearm and hand
-- [ ] **AN13.6** Identify & demonstrate important bony landmarks of upper limb: Jugular notch, sternal angle, acromial angle, spine of the scapula, vertebral level of the medial end and Inferior angle of the scapula
+- [~] **AN13.5** Identify the bones and joints of upper limb seen in anteroposterior and lateral view radiographs of shoulder region, arm, elbow, forearm and hand — *shoulder, elbow AP and lateral, wrist PA in [Upper Limb: Landmarks and Radiographs](upper-limb/radiographs-landmarks.html); no full arm or hand film (Commons download limits)*
+- [x] **AN13.6** Identify & demonstrate important bony landmarks of upper limb: Jugular notch, sternal angle, acromial angle, spine of the scapula, vertebral level of the medial end and Inferior angle of the scapula — *landmarks with vertebral levels computed on the 3D model: [Upper Limb: Landmarks and Radiographs](upper-limb/radiographs-landmarks.html)*
 - [~] **AN13.7** Identify & demonstrate surface projection of: Cephalic and basilic vein, Palpation of Brachial artery, Radial artery, Testing of muscles: Trapezius, pectoralis major, serratus anterior, latissimus dorsi, deltoid, biceps brachii, Brachioradialis — *cephalic and basilic surface lines, brachial and radial pulses: [Nerves, Vessels and Lymph Nodes of the Upper Limb](upper-limb/nerves-vessels.html); trapezius test: [Muscles of the Upper Limb](upper-limb/muscles.html) (other muscle tests not yet)*
-- [ ] **AN13.8** Describe development of upper limb
+- [x] **AN13.8** Describe development of upper limb — *limb bud, signalling centres, rotation: [Development of the Limbs](embryology/limb-development.html)*
 
 ### 14. Features of individual bones (Lower Limb)
 
@@ -171,7 +171,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [x] **AN18.4** Describe and demonstrate the type, articular surfaces, capsule, synovial membrane, ligaments, relations, movements and muscles involved, nerve supply, bursae around the knee joint along with anastomosis around the knee joint — *3D capsule, cruciates, collaterals, menisci, bursae, moving joint: [Joints of the Lower Limb](lower-limb/joints.html)*
 - [x] **AN18.5** Explain the anatomical basis of locking and unlocking of the knee joint — *[Joints of the Lower Limb](lower-limb/joints.html) (Knee); popliteus: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [x] **AN18.6** Describe knee joint injuries with its applied anatomy — *[Joints of the Lower Limb](lower-limb/joints.html) (Knee, Applied)*
-- [ ] **AN18.7** Explain anatomical basis of Osteoarthritis
+- [x] **AN18.7** Explain anatomical basis of Osteoarthritis — *osteoarthritis stepper, Kellgren–Lawrence grades, radiograph: [Joints of the Lower Limb](lower-limb/joints.html)*
 
 ### 19. Back of Leg & Sole
 
@@ -190,11 +190,11 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [x] **AN20.3** Describe and demonstrate Fascia lata, Venous drainage, Lymphatic drainage, Retinacula & Dermatomes of lower limb — *fascia lata, saphenous opening, retinacula, veins and lymph nodes in 3D, schematic dermatome map: [Muscles of the Lower Limb](lower-limb/muscles.html)*
 - [x] **AN20.4** Explain anatomical basis of enlarged inguinal lymph nodes — *drainage areas of the inguinal node groups and why they enlarge: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
 - [x] **AN20.5** Explain anatomical basis of varicose veins and deep vein thrombosis — *saphenous junctions and named perforators: [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html); calf pump and DVT: [Muscles of the Lower Limb](lower-limb/muscles.html)*
-- [ ] **AN20.6** Identify the bones and joints of lower limb seen in anteroposterior and lateral view radiographs of various regions of lower limb
-- [ ] **AN20.7** Identify & demonstrate important bony landmarks of lower limb: - Vertebral levels of highest point of iliac crest, posterior superior iliac spines, iliac tubercle, pubic tubercle, ischial tuberosity, adductor tubercle, -Tibial tuberosity, head of fibula, -Medial and lateral malleoli, Condyles of femur and tibia, sustentaculum tali, tuberosity of fifth metatarsal, tuberosity of the navicular
+- [~] **AN20.6** Identify the bones and joints of lower limb seen in anteroposterior and lateral view radiographs of various regions of lower limb — *knee lateral, ankle AP and lateral in [Lower Limb: Landmarks and Radiographs](lower-limb/radiographs-landmarks.html), AP osteoarthritic knee on the joints page; no foot or child film (Commons download limits)*
+- [x] **AN20.7** Identify & demonstrate important bony landmarks of lower limb: - Vertebral levels of highest point of iliac crest, posterior superior iliac spines, iliac tubercle, pubic tubercle, ischial tuberosity, adductor tubercle, -Tibial tuberosity, head of fibula, -Medial and lateral malleoli, Condyles of femur and tibia, sustentaculum tali, tuberosity of fifth metatarsal, tuberosity of the navicular — *landmarks with vertebral levels on the 3D model: [Lower Limb: Landmarks and Radiographs](lower-limb/radiographs-landmarks.html)*
 - [~] **AN20.8** Identify & demonstrate palpation of femoral, popliteal, posterior tibial, anterior tibial & dorsalis pedis arteries in a simulated environment — *femoral, popliteal, posterior tibial and dorsalis pedis pulses in 3D; the anterior tibial pulse at the ankle has one source (Gray): [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
 - [x] **AN20.9** Demonstrate surface projection of: femoral, popliteal, dorsalis pedis, post tibial arteries, Mid inguinal point, femoral nerve, Saphenous opening, Sciatic, tibial, common peroneal & deep peroneal nerve, Great and small saphenous veins — *surface lines (Gray 1918, approximate): [Nerves, Vessels and Lymph Nodes of the Lower Limb](lower-limb/nerves-vessels.html)*
-- [ ] **AN20.10** Describe basic concept of development of lower limb
+- [x] **AN20.10** Describe basic concept of development of lower limb — *limb bud, rotation of the lower limb, preaxial border, dermatomes: [Development of the Limbs](embryology/limb-development.html)*
 
 ### 21. Thoracic cage
 

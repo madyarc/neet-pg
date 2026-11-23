@@ -20,6 +20,11 @@
 .facts ul{margin:0;padding-left:20px;max-width:75ch}
 .facts li{margin:2px 0}
 @media (max-width:560px){.facts dl{grid-template-columns:minmax(0,1fr)} .facts dd{margin-bottom:6px}}
+/* scaphoid schematic (AN8.4): --bone, --artery, --clin (the fracture), --muted (dead bone) */
+#sc{display:flex;flex-direction:column;gap:8px}
+.sc-two{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:720px){.sc-two{grid-template-columns:minmax(0,1fr)}}
+.sc-svg{width:100%;max-width:460px;height:auto;display:block}
 </style>
 </head>
 <body>
@@ -52,7 +57,7 @@
 <section class="panel stack facts" aria-label="About this bone" id="facts"></section>
 
 <footer>
-  <p>Based on: Gray's <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the bones of the upper extremity; cross-checked with Wikipedia's articles, StatPearls (NCBI Bookshelf) and Radiopaedia; left/right rules from Holden's <i>Human Osteology</i> (1885) and Frazer's <i>Anatomy of the Human Skeleton</i> (1920), Hall et al., <i>Introduction to Human Osteology</i> (Grand Valley State University, 2010), the eForensics osteology pages and open anatomy lab manuals. Where modern sources differ from Gray, both are given.</p>
+  <p>Based on: Gray's <i>Anatomy of the Human Body</i> (20th ed., 1918), chapters on the bones of the upper extremity; cross-checked with Wikipedia's articles, StatPearls (NCBI Bookshelf) and Radiopaedia; left/right rules from Holden's <i>Human Osteology</i> (1885) and Frazer's <i>Anatomy of the Human Skeleton</i> (1920), Hall et al., <i>Introduction to Human Osteology</i> (Grand Valley State University, 2010), the eForensics osteology pages and open anatomy lab manuals. Where modern sources differ from Gray, both are given. Scaphoid fracture: StatPearls, Wikipedia and open-access papers (a 2020 review of scaphoid vascularity, a 2025 MRI study).</p>
   <p>Models used: 3D bones from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (the shown bone at near full detail, the rest of the limb simplified; shared under the same licence).</p>
 </footer>
 </div>
@@ -214,7 +219,16 @@ const VERTS = {
     recognise: ['Carpal rows from the thumb side: "scaphoid, lunate, triquetrum, pisiform; trapezium, trapezoid, capitate, hamate".'],
     atypical: ['The carpal tunnel (Gray, Wikipedia)', ['The flexor retinaculum (Gray: transverse carpal ligament) is attached to four bony points: the pisiform and the hook of the hamate medially, the tubercle of the scaphoid and the ridge of the trapezium laterally.', 'With the hollow front of the carpus it forms the carpal tunnel (the term is from Wikipedia).']],
     side: ['Each bone in the anatomical position (palm forward); lateral = thumb side = the bone\'s own side.', '<b>Scaphoid:</b> convex facet for the radius up, tubercle in front and below; the tubercle points to the bone\'s own side.', '<b>Lunate:</b> its hollow facing down; the narrow crescent facet for the scaphoid faces to the bone\'s own side, the square facet for the triquetrum faces medially.', '<b>Triquetrum:</b> facet for the hamate below, pisiform facet in front; the facet for the lunate faces to the bone\'s own side.', '<b>Pisiform:</b> its facet facing back and up; the bone then leans downward and to the bone\'s own side. This rule is the least reliable of the carpals: forensic texts say a pisiform cannot always be sided.', '<b>Trapezium:</b> groove and ridge in front, saddle facet below; the facets for the trapezoid and 2nd metacarpal face medially, opposite the bone\'s own side.', '<b>Trapezoid:</b> small rough surface in front, scaphoid facet above; the convex facet for the trapezium faces to the bone\'s own side.', '<b>Capitate:</b> head up, large flat surface at the back; the flat side for the hamate faces medially, opposite the bone\'s own side.', '<b>Hamate:</b> hook in front and below; the hollow face of the hook and the facet for the capitate face to the bone\'s own side.'],
-    ossification: 'Each carpal bone from one centre, all after birth. Modern order and ages (Radiopaedia): capitate (1–3 months), hamate (2–4 months), triquetrum (2–3 years), lunate (2–4 years), scaphoid, trapezium and trapezoid (4–6 years), pisiform last (8–12 years). Gray (1918) gives later ages and puts the trapezium before the scaphoid. Metacarpals and phalanges have two centres each; the epiphysis is at the head of metacarpals 2–5 but at the base of the first metacarpal and of every phalanx.'},
+    ossification: 'Each carpal bone from one centre, all after birth. Modern order and ages (Radiopaedia): capitate (1–3 months), hamate (2–4 months), triquetrum (2–3 years), lunate (2–4 years), scaphoid, trapezium and trapezoid (4–6 years), pisiform last (8–12 years). Gray (1918) gives later ages and puts the trapezium before the scaphoid. Metacarpals and phalanges have two centres each; the epiphysis is at the head of metacarpals 2–5 but at the base of the first metacarpal and of every phalanx.',
+    /* AN8.4, sheet sources-local/facts/fill-limbs3.md part A */
+    scaphoid: {
+      steps: [
+        ['Blood supply', 'Branches of the <b>radial artery</b> enter the scaphoid at its <b>distal</b> end and run back to the proximal pole: a <b>retrograde</b> supply.'],
+        ['Waist fracture', 'The scaphoid is the <b>most commonly fractured carpal bone</b>, usually from a fall on the outstretched hand (Wikipedia). The <b>waist</b> (middle third) is the commonest site (Wikipedia: 60–80%). <b>Tenderness in the anatomical snuffbox</b>, whose floor the scaphoid forms, suggests the fracture.'],
+        ['Avascular necrosis', 'The fracture cuts the vessels to the part <b>proximal</b> to it, so the <b>proximal pole</b> may die (<b>avascular necrosis</b>) and the fracture may not unite. The more proximal the fracture, the higher the risk (Wikipedia: about 30% in the proximal third); distal-pole fractures usually unite.'],
+      ],
+      note: 'A first X-ray may miss the fracture: with snuffbox tenderness the wrist is splinted and X-rayed again (Wikipedia: after 7–10 days). A 2025 MRI study of 32 patients found more, not less, blood flow in both fragments after fracture, and questions the purely vascular explanation; the retrograde supply is still the standard teaching.'},
+  },
 };
 /* ===================== PAGE ===================== */
 const REGION_COLOUR = {girdle: '#77AADD', arm: '#EE8866', forearm: '#BBCC33', hand: '#EEDD88'};
@@ -272,7 +286,35 @@ function writeFacts(t) {
   if (t.side) h += `<div><h3>Left or right?</h3><ul>${t.side.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
   if (t.ossification) h += `<div><h3>Ossification</h3><p>${t.ossification}</p></div>`;
   if (t.clinical) h += `<div class="cap warn"><b>Clinical.</b> ${t.clinical}</div>`;
+  if (t.scaphoid) h += `<div id="sc"><h3>Scaphoid fracture and avascular necrosis</h3><div class="sc-row"><div class="chips" id="sc-steps" aria-label="Step"></div></div>`
+    + `<div class="sc-two"><svg class="sc-svg" id="sc-svg" viewBox="0 0 340 200" role="img" aria-label="Schematic right scaphoid seen from the front, with the radial artery branch entering the distal pole, a waist fracture and the proximal pole"></svg><p class="cap key" id="sc-text"></p></div>`
+    + `<p class="muted">Schematic, not to scale: the right scaphoid from the front, proximal (towards the radius) on the left. ${t.scaphoid.note}</p></div>`;
   document.getElementById('facts').innerHTML = h;
+  if (t.scaphoid) scaphoidStep(t.scaphoid, 0);
+}
+/* the scaphoid schematic: 0 supply, 1 waist fracture, 2 AVN of the proximal pole */
+function scaphoidStep(S, i) {
+  const box = document.getElementById('sc-steps');
+  if (!box.children.length) S.steps.forEach(([lab], j) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = (j + 1) + '. ' + lab; b.onclick = () => scaphoidStep(S, j); box.append(b); });
+  box.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', String(j === i)));
+  document.getElementById('sc-text').innerHTML = S.steps[i][1];
+  const bone = 'M40 112 C40 70 92 56 140 66 C178 74 196 92 228 88 C268 82 300 92 302 122 C304 152 268 162 232 154 C196 146 176 140 140 146 C92 154 40 150 40 112 Z';
+  let h = `<defs><clipPath id="sc-prox"><rect x="0" y="0" width="${i ? 168 : 0}" height="200"/></clipPath></defs>`;
+  h += `<path d="${bone}" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.4"/>`;
+  if (i === 2) h += `<path d="${bone}" clip-path="url(#sc-prox)" style="fill:var(--muted);opacity:.55"/>`;
+  // artery: from the radial artery (below right) into the distal pole, then branches running back proximally
+  const dead = i === 2;
+  h += `<path d="M330 186 C318 170 300 160 286 140" style="fill:none;stroke:var(--artery);stroke-width:4;stroke-linecap:round"/>`;
+  h += `<path d="M286 140 C250 120 210 112 172 108" style="fill:none;stroke:var(--artery);stroke-width:2.6;stroke-linecap:round"/>`;
+  h += `<path d="M168 108 C130 104 98 104 70 110" style="fill:none;stroke:var(--artery);stroke-width:2.2;stroke-linecap:round;${i ? 'stroke-dasharray:4 4;opacity:.45' : ''}"/>`;
+  h += `<path d="M180 100 L150 92" style="fill:none;stroke:var(--artery);stroke-width:1.6;${i ? 'opacity:.45;stroke-dasharray:3 3' : ''}"/>`;
+  if (i) h += `<path d="M172 60 L160 92 L174 116 L162 152" style="fill:none;stroke:var(--clin);stroke-width:3;stroke-linejoin:round"/>`;
+  const T = (x, y, s, a = 'middle', st = '') => `<text x="${x}" y="${y}" text-anchor="${a}" style="font:500 12px var(--f-body);fill:var(--ink);${st}">${s}</text>`;
+  h += T(90, 40, 'Proximal pole') + T(250, 40, 'Distal pole') + T(312, 196, 'Radial artery', 'end', 'fill:var(--artery);font-weight:600');
+  if (i) h += T(168, 176, 'Waist fracture', 'middle', 'fill:var(--clin);font-weight:600');
+  if (dead) h += T(96, 132, 'Necrosis', 'middle', 'font-weight:700');
+  h += T(250, 74, 'blood enters distally', 'middle', 'font-size:11px;fill:var(--muted)');
+  document.getElementById('sc-svg').innerHTML = h;
 }
 function buildList(t) {
   const ll = document.getElementById('lm-list'); ll.replaceChildren();

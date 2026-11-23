@@ -31,6 +31,29 @@ dl.jt dd{margin:0}
 table.t{border-collapse:collapse;font-size:13.5px;width:100%}
 table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
 table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+/* osteoarthritis section (module 45): --bone, --cart (articular cartilage), --capsule, --clin (the disease change), --accent (UI);
+   --fluid shared with other pages (#d9edc6 / #4e6638: synovial fluid). Sclerosis is a hatch over bone, cysts are open circles. */
+:root{--fluid:#d9edc6} :root[data-theme="dark"]{--fluid:#4e6638}
+.oa-two{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.oa-two{grid-template-columns:minmax(0,1fr)}}
+.oa-svg{width:100%;max-width:520px;height:auto;display:block;margin:0 auto}
+.oa-svg text{font:500 12.5px var(--f-body);fill:var(--ink)}
+.oa-svg text.s{font-size:11px;fill:var(--muted)}
+.oa-svg text.c{fill:var(--clin);font-weight:600}
+.oa-svg text.l,.oa-svg text.c,.oa-svg text.s{paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+.oa-find{font-size:14px;min-height:7em}
+.oa-find h3{font-size:15px;margin:0 0 4px}
+.mg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0;max-width:520px}
+.mg .im{position:relative;width:100%;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:#000}
+.mg .im img{width:100%;height:auto;display:block}
+.mg .im svg{position:absolute;inset:0;width:100%;height:100%}
+.mg .im svg text{font:600 22px var(--f-body);fill:#fff;paint-order:stroke;stroke:#000;stroke-width:4px}
+.mg .im svg line{stroke:#ffd54a;stroke-width:2.5px}
+.mg .im svg circle{fill:#ffd54a;stroke:#000;stroke-width:3px}
+.mg .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.mg .bar .t{font:600 13.5px var(--f-body);margin-right:auto}
+.mg figcaption{font-size:13.5px;line-height:1.45}
+.mg .cr{display:block;font-size:12px;color:var(--muted);margin-top:4px}
 </style>
 </head>
 <body>
@@ -60,6 +83,19 @@ table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:upper
 <section class="block panel" aria-labelledby="h-joint">
   <h2 id="h-joint"></h2>
   <dl class="jt" id="jtext"></dl>
+</section>
+
+<section class="block panel" aria-labelledby="h-oa">
+  <h2 id="h-oa">Osteoarthritis</h2>
+  <p class="muted">The anatomical basis of osteoarthritis (AN18.7), shown on the knee, the commonest site. Step through the changes; the radiograph below shows them in a real knee.</p>
+  <div class="chips" id="oa-steps" aria-label="Stage"></div>
+  <div class="oa-two">
+    <svg class="oa-svg" id="oa-svg" viewBox="0 0 440 340" role="img" aria-label="Schematic coronal section of the medial and lateral tibiofemoral joint: articular cartilage, joint space, subchondral bone; at each step cartilage thins, the joint space narrows, osteophytes, subchondral sclerosis and cysts appear"></svg>
+    <div class="oa-find" id="oa-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic coronal section of a right knee seen from the front, medial compartment on your right; not to scale. On a plain film cartilage does not show, so the dark gap between the bones is the cartilage (and menisci).</p>
+  <div id="oa-img"></div>
+  <div class="scroll"><table class="t" id="oa-kl"></table></div>
 </section>
 
 <footer>
@@ -205,9 +241,74 @@ const PART = {
 };
 const DATA = {
   lede: 'The joints of the hip, knee, leg, ankle and foot, on the bones of the right lower limb, with their capsules, ligaments, menisci and bursae. Pick a joint; turn the model, peel the capsule, tap a ligament, and make the joint move. General ideas (joint types, synovial joints, Hilton\'s law) are on the <a href="../general/joints.html">Joints</a> page.',
-  based: 'Based on: Gray\'s <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers. Where they differ, the page says so.',
+  based: 'Based on: Gray\'s <i>Anatomy</i> (20th ed., 1918); StatPearls (NCBI Bookshelf); Wikipedia; open-access papers. Osteoarthritis: StatPearls; open-access reviews (Lin et al. 2026, Rawat et al. 2026, a 2026 Cureus review); Wikipedia (Osteophyte, Heberden\'s and Bouchard\'s nodes). Where they differ, the page says so.',
   models: 'Models used: bones from BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan); capsules, ligaments, labrum, menisci and bursae from Z-Anatomy (CC BY-SA 4.0), smoothed and thickened as Z-Anatomy shows them. Articular cartilage and the ankle capsule are not in the model. The axes of movement are fitted to the model and approximate (the inversion–eversion axis is placed schematically); the movements are illustrations, not normal ranges.',
   mnote: 'The bone that moves is darker; the line is the axis. Axes are fitted to the model and approximate; the arcs show the kind of movement, not its range. The capsule and ligaments are hidden while a joint moves (the model cannot stretch them).'};
+
+/* ===================== OSTEOARTHRITIS — AN18.7; sheet sources-local/facts/fill-limbs3.md part D ===================== */
+const OA = {
+  steps: [
+    ['Normal', '<h3>The normal joint</h3><p>The bone ends are covered by smooth <b>articular (hyaline) cartilage</b>; on a radiograph cartilage does not show, so the <b>joint space</b> (the gap between the bones) is the thickness of the cartilage and menisci.</p>', {cM: 12, cL: 12, ost: 0, scl: 0, cyst: 0, gapM: 0}],
+    ['Cartilage loss', '<h3>1. Cartilage breaks down</h3><p>Osteoarthritis, the <b>commonest form of arthritis</b>, is a degenerative ("wear and tear") disease. Mechanical stress and an imbalance between the making and breakdown of cartilage matrix by the chondrocytes lead to <b>progressive loss of articular cartilage</b>, worst where the joint bears weight.</p>', {cM: 6, cL: 11, ost: 0, scl: 0, cyst: 0, gapM: 0, rough: 1}],
+    ['Narrowing, osteophytes', '<h3>2. Joint-space narrowing and osteophytes</h3><p>As the cartilage thins, the <b>joint space narrows</b>, most often in the <b>medial</b> tibiofemoral compartment of the knee (Lin et al.). The bone remodels at the joint margins into bony spurs, <b>osteophytes</b>, the hallmark bony sign of OA.</p>', {cM: 2, cL: 9, ost: 1, scl: 0, cyst: 0, gapM: 8, rough: 1}],
+    ['Sclerosis, cysts', '<h3>3. Subchondral sclerosis and cysts</h3><p>The bone just under the lost cartilage becomes dense (<b>subchondral sclerosis</b>, white on the film) and small <b>subchondral cysts</b> form in it.</p>', {cM: 1, cL: 8, ost: 1.5, scl: 1, cyst: 1, gapM: 12, rough: 1}],
+    ['Severe', '<h3>4. Severe disease</h3><p>Bone on bone, large osteophytes, marked sclerosis and cysts, and <b>deformity</b> or subluxation (Kellgren–Lawrence grade 4, as worded by Lin et al.).</p>', {cM: 0, cL: 7, ost: 2.4, scl: 1.6, cyst: 1.6, gapM: 16, tilt: 1}],
+  ],
+  facts: '<p><b>Where:</b> primary OA affects mainly the <b>weight-bearing joints, knees and hips</b>, and the small joints of the hand (DIP joints); the <b>knee is the commonest site</b>. <b>Who:</b> it rises with age (StatPearls: radiographic OA in most people by 65 and about 80% over 75) and is commoner in women, especially after menopause (Lin et al.). <b>Symptoms:</b> pain on use and weight-bearing, eased by rest; short morning stiffness (under 30 minutes at the knee, Lin et al.). <b>Primary</b> OA has no known cause; <b>secondary</b> OA follows abnormal load (e.g. after injury) or abnormal cartilage (StatPearls). In the hand, osteophytes at the DIP joints are <b>Heberden\'s nodes</b> and at the PIP joints <b>Bouchard\'s nodes</b> (Wikipedia).</p>',
+  kl: [['0', 'Normal: no osteophytes, sclerosis or narrowing'], ['1', 'Doubtful: doubtful narrowing, possible osteophytic lipping'], ['2', 'Mild: definite osteophytes, possible (minimal) narrowing'], ['3', 'Moderate: multiple osteophytes, definite narrowing, some sclerosis, possible deformity of the bone ends'], ['4', 'Severe: large osteophytes, marked narrowing, severe sclerosis and cysts, deformity (wording of Lin et al.)']],
+  klNote: 'Kellgren–Lawrence grades of a knee radiograph, as given in two 2026 reviews; definitions of grade 2 vary between studies. Lin et al.: knee films for OA are taken standing (weight-bearing).',
+  img: {file: 'oa-knee.jpg', w: 760, h: 751, alt: 'Radiograph of an osteoarthritic left knee from the front with a narrowed lateral joint space, osteophytes and dense subchondral bone',
+    title: 'Osteoarthritis of the knee, radiograph', labels: [[0.70, 0.535, 'Narrowed joint space', 0.98, 0.66], [0.30, 0.47, 'Medial joint space', 0.04, 0.36], [0.845, 0.48, 'Osteophyte', 0.98, 0.40], [0.11, 0.475, 'Osteophyte', 0.03, 0.57], [0.42, 0.12, 'Femur', 0.04, 0.08], [0.42, 0.83, 'Tibia', 0.04, 0.93], [0.77, 0.94, 'Fibula', 0.98, 0.86]],
+    cap: 'Left knee from the front (lateral on your right). The author\'s caption: osteophytes, <b>narrowing of the joint space</b> (his arrow, here in the lateral compartment) and increased subchondral bone density. Compare the width of the two compartments.',
+    credit: 'Image: <a href="https://commons.wikimedia.org/wiki/File:Osteoarthritis_left_knee.jpg">Osteoarthritis left knee.jpg</a> by James Heilman, MD, <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>, via Wikimedia Commons; cropped, contrast increased, resized, the author\'s arrow kept, labels added (approximate).'},
+};
+function oaDraw(i) {
+  const p = OA.steps[i][2], S = document.getElementById('oa-svg');
+  const T = (x, y, t, c = 'l', a = 'start') => `<text x="${x}" y="${y}" class="${c}" text-anchor="${a}">${t}</text>`;
+  const L = (x1, y1, x2, y2) => `<path d="M${x1} ${y1} L${x2} ${y2}" style="stroke:var(--muted);stroke-width:1;fill:none"/>`;
+  const yF = 172, yTl = yF + 2 * p.cL + 4, yTm = yF + 2 * p.cM + (p.cM ? 4 : 0), tilt = p.tilt ? 6 : 0;
+  let h = '<defs><pattern id="oa-h" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" style="stroke:var(--ink);stroke-width:1.6"/></pattern></defs>';
+  h += `<path d="M70 120 C50 170 50 220 70 262 L370 262 C390 220 390 170 370 120" style="fill:var(--fluid);stroke:var(--capsule);stroke-width:2"/>`;
+  // femur: fixed; condyle bottoms at yF (lateral x 92-196, medial x 250-356)
+  h += `<path d="M150 0 L290 0 L292 70 C340 80 372 110 370 150 C368 166 360 ${yF} 330 ${yF} L250 ${yF} C236 ${yF} 228 160 220 156 C212 160 204 ${yF} 190 ${yF} L100 ${yF} C80 ${yF} 70 166 70 150 C68 110 100 80 148 70 Z" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.3"/>`;
+  // tibia: plateau tops at yTl (lateral) and yTm (medial), the medial side tilting down in severe disease
+  h += `<path d="M78 ${yTl + 12} C80 ${yTl} 92 ${yTl} 100 ${yTl} L190 ${yTl} C204 ${yTl} 212 ${yTl - 10} 220 ${yTl - 12} C228 ${yTm - 10} 236 ${yTm} 250 ${yTm} L330 ${yTm + tilt} C356 ${yTm + tilt} 362 ${yTm + tilt + 6} 362 ${yTm + tilt + 14} L340 282 L300 340 L150 340 L104 282 Z" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.3"/>`;
+  const cart = (x1, x2, yb, yt, t, rough) => t > 0 ? `<rect x="${x1}" y="${yb}" width="${x2 - x1}" height="${t}" rx="2" style="fill:var(--cart);stroke:var(--ink);stroke-width:.8;${rough ? 'stroke-dasharray:3 2' : ''}"/><rect x="${x1}" y="${yt - t}" width="${x2 - x1}" height="${t}" rx="2" style="fill:var(--cart);stroke:var(--ink);stroke-width:.8;${rough ? 'stroke-dasharray:3 2' : ''}"/>` : '';
+  h += cart(100, 190, yF, yTl, p.cL, 0) + cart(250, 330, yF, yTm, p.cM, p.rough);
+  if (p.scl) h += `<rect x="250" y="${yF - 12 * p.scl}" width="84" height="${12 * p.scl}" style="fill:url(#oa-h);opacity:.85"/><rect x="250" y="${yTm + 1}" width="84" height="${14 * p.scl}" style="fill:url(#oa-h);opacity:.85"/>`;
+  if (p.cyst) for (const [x, y, r] of [[282, yTm + 14, 5], [312, yTm + 20, 6], [300, yF - 14, 5]]) h += `<circle cx="${x}" cy="${y}" r="${r * p.cyst}" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.2"/>`;
+  if (p.ost) { const o = p.ost;
+    h += `<path d="M366 158 L${370 + 14 * o} 166 L360 ${yF} Z" style="fill:var(--bone);stroke:var(--clin);stroke-width:1.6"/>`;
+    h += `<path d="M358 ${yTm + tilt + 8} L${364 + 16 * o} ${yTm + tilt + 2} L360 ${yTm + tilt + 20} Z" style="fill:var(--bone);stroke:var(--clin);stroke-width:1.6"/>`;
+    h += `<path d="M72 156 L${72 - 8 * o} 164 L80 ${yF} Z M80 ${yTl + 8} L${80 - 9 * o} ${yTl + 4} L82 ${yTl + 18} Z" style="fill:var(--bone);stroke:var(--clin);stroke-width:1.4"/>`; }
+  // labels
+  h += T(150, 20, 'Femur', 'l', 'middle') + T(220, 330, 'Tibia', 'l', 'middle');
+  h += T(20, 40, 'Lateral', 's') + T(420, 40, 'Medial', 's', 'end');
+  h += L(140, yTl - 4, 110, 296) + T(110, 310, i ? 'Lateral: cartilage kept' : 'Articular cartilage', 'l', 'middle');
+  if (i === 1) h += L(300, yF + 4, 310, 110) + T(310, 104, 'Cartilage thins, frays', 'c', 'middle');
+  if (i >= 2) h += L(296, yF + 2, 290, 104) + T(290, 98, i === 4 ? 'Bone on bone' : 'Joint space narrows', 'c', 'middle');
+  if (i >= 2) h += L(372 + 10 * p.ost, 166, 400, 128) + T(436, 122, 'Osteophytes', 'c', 'end');
+  if (p.scl) h += L(262, yTm + 10, 236, 262) + T(236, 276, 'Sclerosis (hatched)', 'c', 'end');
+  if (p.cyst) h += L(312, yTm + 24, 330, 296) + T(330, 310, 'Subchondral cysts', 'c', 'middle');
+  if (!i) h += T(220, 248, 'Synovial fluid', 's', 'middle');
+  S.innerHTML = h;
+  document.getElementById('oa-find').innerHTML = OA.steps[i][1] + (i === OA.steps.length - 1 ? OA.facts : '');
+  document.querySelectorAll('#oa-steps button').forEach((b, j) => b.setAttribute('aria-pressed', String(j === i)));
+}
+function oaInit() {
+  const box = document.getElementById('oa-steps');
+  OA.steps.forEach(([lab], j) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = j + '. ' + lab; b.onclick = () => oaDraw(j); box.append(b); });
+  oaDraw(0);
+  const m = OA.img, f = document.createElement('figure'); f.className = 'mg';
+  f.innerHTML = `<div class="bar"><span class="t">${m.title}</span><button class="chip" type="button" aria-pressed="true">Labels</button></div><div class="im"><img src="img/${m.file}" width="${m.w}" height="${m.h}" loading="lazy" alt="${m.alt}"><svg viewBox="0 0 ${m.w} ${m.h}" aria-hidden="true"></svg></div><figcaption>${m.cap}<span class="cr">${m.credit}</span></figcaption>`;
+  document.getElementById('oa-img').append(f);
+  const svg = f.querySelector('svg'), btn = f.querySelector('.chip');
+  const lab = on => { svg.innerHTML = on ? m.labels.map(([x, y, t, tx, ty]) => `<line x1="${x * m.w}" y1="${y * m.h}" x2="${tx * m.w}" y2="${ty * m.h}"/><circle cx="${x * m.w}" cy="${y * m.h}" r="7"/><text x="${tx * m.w}" y="${ty * m.h}" text-anchor="${tx > 0.5 ? 'end' : 'start'}">${t}</text>`).join('') : ''; };
+  btn.onclick = () => { const on = btn.getAttribute('aria-pressed') !== 'true'; btn.setAttribute('aria-pressed', String(on)); lab(on); };
+  lab(true);
+  document.getElementById('oa-kl').innerHTML = '<tr><th>KL grade</th><th>Radiograph</th></tr>' + OA.kl.map(([g, d]) => `<tr><td>${g}</td><td>${d}</td></tr>`).join('') + `<tr><td colspan="2" class="note">${OA.klNote}</td></tr>`;
+}
+oaInit();
 
 /* ===================== 3D ===================== */
 const $ = id => document.getElementById(id);

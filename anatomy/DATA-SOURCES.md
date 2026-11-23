@@ -1409,3 +1409,49 @@ tubercles.
   "true" conjugate naming; pubic-arch drawing; 3D zoom on phone and clip notes; about ten unsourced or misattributed
   claims; T1/T2, Hounsfield and density order added; colour rules and contrast; Rigler and fluid drawing; label clashes;
   image crop. lower-limb/bones.html: the subpubic-angle line no longer rests on the OpenStax-citing "Pelvis" article.
+
+## Limb leftovers: Breast; Landmarks and Radiographs; Development of the Limbs; scaphoid, hand spaces, osteoarthritis — `upper-limb/breast.html`, `upper-limb/radiographs-landmarks.html`, `lower-limb/radiographs-landmarks.html`, `embryology/limb-development.html`, additions to `upper-limb/bones.html`, `upper-limb/muscles.html`, `lower-limb/joints.html`
+
+- Fact sheet `sources-local/facts/fill-limbs3.md` (421 quotes, script-checked against `sources-local/modern/fill-limbs3/`,
+  downloads 2026-11-22). Sources by topic:
+  - Scaphoid: StatPearls (Scaphoid Wrist Fracture, Snuff Box); PMC7672797; PMC12404867 (2025 MRI study questioning the
+    retrograde-supply explanation); Wikipedia.
+  - Breast: Gray 1918 (148, 149, 181, 271, 283); StatPearls (Breast, Mammary Gland, Breast Lymphatics, Axillary Lymph
+    Nodes, Poland syndrome); PMC11909697 (axillary levels), PMC12647528 (breast fascia), accessory and ectopic breast,
+    amastia and Poland reports; Wikipedia.
+  - Sheaths, spaces, extensor expansion: Gray 125, 126, 290; StatPearls (pyogenic flexor tenosynovitis, felon, ulnar
+    bursa, lumbricals, mallet, boutonnière, swan-neck); Flevas 2019; Malizos group 2012/2020 (counted as one source);
+    2024–2026 hand papers; Wikipedia.
+  - Osteoarthritis: StatPearls ×3; PMC13322087, PMC13150102, PMC13150380; Wikipedia (Osteophyte, Heberden's and
+    Bouchard's nodes, Hyaline cartilage).
+  - Landmarks and radiographs: Gray 26, 282, 284, 289–292; Wikipedia; PMC6806572, PMC5063483, PMC4916809, PMC6635173,
+    PMC6283718; acromial-angle studies PMC13179215, PMC11191861; elbow reviews PMC12818852, PMC13217208, PMC13287200,
+    PMC5782864; StatPearls (Bone Age, Elbow Fractures).
+  - Limb development: Gray 13, 15, 51, 53, 59; StatPearls (Embryology Hand, Bone Ossification); PMC13349005,
+    PMC13139040 (C5–T1), PMC10153723; PMC8428198 (thalidomide, 2021, also on early-development.html); Wikipedia.
+- Excluded: Wikipedia "Osteoarthritis" and "Tendon sheath" (OpenStax). Counted as Gray only where Wikipedia copies
+  Gray: Ulnar bursa, Spine of scapula, Posterior superior iliac spine, Malleolus, Fibula, Calcaneus, Fifth metatarsal,
+  Acromion, the interossei articles, and the Breast sentence on nerves.
+- Contested, shown on the page: sternal angle T4–5 (Wikipedia) vs T5 (Gray); CRITOE ages (three schemes, with the
+  StatPearls sex exception); limb-bud timing (3rd vs 5th week); lactiferous duct count; share of breast lymph not going
+  to the axilla; meaning of "acromial angle"; iliac tubercle at the L5 body or spine; intercristal line at L4 spine,
+  body or L4–5; Kanavel 3 vs 4 signs; ossification of the shafts (6th–7th vs 7th–8th week).
+- Single source, attributed: scaphoid waist and necrosis percentages and the 7–10-day repeat film; breast veins,
+  nerves and thoracoacromial branches (Gray); involution; Poland syndrome ratios; ectopic breast diseases; Parona 80%;
+  collar-button abscess; felon necrosis; space walls (Flevas); swan-neck causes and mallet-to-swan-neck; thenar drainage;
+  Heberden's and Bouchard's nodes; standing films (Lin et al.); upper limb bud first and FGF10 (Wikipedia); Gray's 1918
+  segment counts (C4–T2, T12–S4) shown beside modern C5–T1.
+- Left out (no second source): level of the nipple, accessory-nipple prevalence, diaphysis sparing in felon, Klein's
+  line, ankle joint-line level, a day-26–28 limb-bud date, radial vs ulnar styloid height.
+- Model checks (3D skeleton, landmark points placed by hand, levels computed on the model): jugular notch T3, sternal
+  angle T4–T5 disc, spine of scapula T3, inferior angle T7, iliac crest top L4; the hand-placed iliac tubercle point lies
+  level with L4 on this model (said on the page); PSIS shown as a line only.
+- Images (Wikimedia Commons, licences read 2026-11-22; resized, labels added and checked): Mikael Häggström, CC0 —
+  shoulder (cropped), elbow AP (side marker cropped), elbow lateral, wrist PA, ankle AP and lateral, knee lateral (marker
+  cropped); James Heilman, CC BY-SA 3.0 — osteoarthritic knee (cropped, contrast, author's arrow kept). Not obtained
+  (Commons HTTP 429 on two days): knee AP, foot, child knee and hand, scaphoid fracture. Breast and hand are schematics.
+- Colours: the breast's glandular tissue uses the existing `--gland`; no new tokens.
+- Independent review 2026-11-22, fixed: limb rotation redrawn as cross-sections; child elbow side; ankle and wrist
+  labels; pectoralis minor orientation and depth; OA alt text; 3D level notes and disc naming; web-space, dorsal
+  ectoderm and ossification drawings; about 20 unsourced or single-source sentences; colour meanings (`--clin`, `--musc`,
+  `--mamm`); label clipping and faint 3D labels.

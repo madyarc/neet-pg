@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Upper Limb: Landmarks and Radiographs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/atlas.css">
+<style>
+/* colours (atlas.css, one meaning each): --bone, --mark (the selected landmark and its level line), --centre (secondary ossification
+   centre), --cart (cartilage), --clin, --accent (UI selection). Radiographs are shown as they are (grey film) with yellow label pins,
+   the same as the other radiograph pages. No new tokens. */
+section.block{display:flex;flex-direction:column;gap:12px}
+.fig{width:100%;height:auto;display:block}
+.two{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.two{grid-template-columns:minmax(0,1fr)}}
+.lmlist{display:flex;flex-wrap:wrap;gap:6px}
+.find{font-size:14px;min-height:6em}
+.find h3{font-size:15px;margin:0 0 4px}
+.prose p+p{margin-top:8px}
+.scroll{overflow-x:auto}
+table.t{border-collapse:collapse;font-size:13.5px;width:100%}
+table.t th,table.t td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t th{font:600 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+table.t td:first-child{font-weight:600}
+@media (max-width:600px){
+  table.stack tr:first-child{display:none}
+  table.stack tr{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack th,table.stack td{border:0;padding:0}
+  table.stack td::before{content:attr(data-h);font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;margin-right:8px}
+}
+svg.sch{max-width:520px;margin:0 auto}
+svg.sch text{font:500 12.5px var(--f-body);fill:var(--ink)}
+svg.sch text.s{font-size:11px;fill:var(--muted)}
+svg.sch text.b{font-weight:700}
+svg.sch text.l,svg.sch text.s,svg.sch text.b{paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg.sch .lead{stroke:var(--muted);stroke-width:1;fill:none}
+.mg{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.mg .im{position:relative;width:100%;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:#000}
+.mg .im img{width:100%;height:auto;display:block}
+.mg .im svg{position:absolute;inset:0;width:100%;height:100%}
+.mg .im svg text{font:600 var(--fs,20px) var(--f-body);fill:#fff;paint-order:stroke;stroke:#000;stroke-width:var(--sw,4px)}
+.mg .im svg line{stroke:#ffd54a;stroke-width:var(--lw,2px)}
+.mg .im svg circle{fill:#ffd54a;stroke:#000;stroke-width:var(--sw,3px)}
+.mg .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.mg .bar .t{font:600 13.5px var(--f-body);margin-right:auto}
+.mg figcaption{font-size:13.5px;line-height:1.45}
+.mg .cr{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+.mg.narrow{max-width:360px}
+.imgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;align-items:start}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anatomy</a> <span class="muted" style="font-size:13px">· <a href="upper-limb.html">The Upper Limb</a> · <a href="bones.html">Bones</a> · <a href="joints.html">Joints</a> · <a href="../lower-limb/radiographs-landmarks.html">Lower limb: landmarks, radiographs</a></span></nav>
+
+<header class="stack">
+  <h1>Upper Limb: Landmarks and Radiographs</h1>
+  <p class="lede" id="lede"></p>
+</header>
+
+<section class="block panel" aria-labelledby="h-lm">
+  <h2 id="h-lm">Bony landmarks and vertebral levels</h2>
+  <div class="split">
+    <div class="panel" style="padding:0;border:0"><div id="v"></div></div>
+    <div class="stack">
+      <div class="lmlist" id="lm-list" aria-label="Landmark"></div>
+      <div class="prose find" id="lm-find" aria-live="polite"></div>
+    </div>
+  </div>
+  <p class="muted" id="lm-note"></p>
+  <div class="scroll"><table class="t stack" id="lm-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-xr">
+  <h2 id="h-xr">Radiographs</h2>
+  <p class="muted">AP views of the shoulder and elbow, a lateral view of the elbow and a PA view of the wrist (the carpus and the bases of the metacarpals). Tap "Labels" to hide the labels and name the bones yourself.</p>
+  <div class="imgs" id="xr-imgs"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-crit">
+  <h2 id="h-crit">The child's elbow: ossification centres</h2>
+  <div class="two">
+    <svg class="fig sch" id="crit-svg" viewBox="0 0 400 380" role="img" aria-label="Schematic anteroposterior view of a child's left elbow with the six secondary ossification centres: capitulum, radial head, medial (internal) epicondyle, trochlea, olecranon and lateral (external) epicondyle"></svg>
+    <div class="prose" id="crit-text"></div>
+  </div>
+  <p class="muted">Schematic AP view of a child's left elbow (lateral side on your right), not drawn from a radiograph; the cartilage of the epiphyses is shown pale because it does not show on a film.</p>
+  <div class="scroll"><table class="t stack" id="crit-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+  <p id="images"></p>
+</footer>
+</div>
+
+<script src="../assets/viewer.js"></script>
+<script>
+"use strict";
+window.addEventListener('error', e => { window.loadError = window.loadError || String(e.message); });
+/* ===================== DATA (every fact checked in two sources unless attributed: sources-local/facts/fill-limbs3.md, Part E; anatomy/DATA-SOURCES.md) ===================== */
+const LEDE = 'The bony landmarks of the upper limb and the front and back of the chest that a clinician finds by touch, with the vertebral level of each (AN13.6), and the bones and joints seen on radiographs of the shoulder, elbow and wrist, including the ossification centres of a child\'s elbow (AN13.5).';
+/* landmarks: [key, name, bone part, [landmarks file, bone, point], vertebrae at the level (skeleton keys), 'spine' (compare with the spinous process) or 'body', text] */
+const LM = [
+  ['jug', 'Jugular notch', 'manubrium', ['thorax', 'sternum_body', 'jugular_notch'], ['second_thoracic_vertebra', 'third_thoracic_vertebra'], 'body',
+    '<h3>Jugular (suprasternal) notch: T2–T3</h3><p>The dip at the top of the manubrium, between the medial ends of the clavicles. It lies at the level of the <b>T2–T3</b> vertebrae (Gray 1918: the lower border of the body of T2; in women the top of the sternum is a little lower, at T3).</p>'],
+  ['sang', 'Sternal angle', 'body_of_sternum', ['thorax', 'sternum_body', 'sternal_angle'], ['fourth_thoracic_vertebra', 'fifth_thoracic_vertebra'], 'body',
+    '<h3>Sternal angle (of Louis): T4–T5</h3><p>The ridge at the <b>manubriosternal joint</b>; the <b>2nd costal cartilage</b> joins the sternum here, so ribs are counted from it. Vertebral level: the <b>T4–T5 disc</b> (Wikipedia, which notes that sources differ); Gray 1918 puts it at T5.</p><p>The structures at this level are on the <a href="../thorax/thoracic-cage.html">thoracic cage</a> and <a href="../thorax/nerves-vessels.html">thorax</a> pages.</p>'],
+  ['sup', 'Superior angle of scapula', 'right_scapula', ['ul', 'scapula', 'superior_angle'], ['second_thoracic_vertebra'], 'body',
+    '<h3>Superior angle of the scapula: about T2</h3><p>The top corner of the medial border, at about the level of the <b>2nd thoracic vertebra</b> (Wikipedia); Gray: it lies on the <b>2nd rib</b>.</p>'],
+  ['spine', 'Spine of scapula (root)', 'right_scapula', ['ul', 'scapula', 'spine'], ['third_thoracic_vertebra'], 'spine',
+    '<h3>Spine of the scapula: its root at T3</h3><p>The spine is felt under the skin across the back of the scapula. Its <b>root</b>, the medial end where it meets the medial border, is level with the <b>spinous process of T3</b>; clinicians use it to find T3. (The marker sits on the spine; the root is its medial end.)</p>'],
+  ['acr', 'Acromion, acromial angle', 'right_scapula', ['ul', 'scapula', 'acromion'], [], null,
+    '<h3>Acromion and the acromial angle</h3><p>Gray 1918: the acromion forms the <b>point of the shoulder</b>. The <b>acromial angle</b> is the corner felt behind it, where the lateral border of the acromion turns into the crest of the spine; modern studies use it as a standard surface reference point (for example for the course of the radial nerve). Gray 1918 used the name for the angle the acromion makes with the clavicle.</p>'],
+  ['inf', 'Inferior angle of scapula', 'right_scapula', ['ul', 'scapula', 'inferior_angle'], ['seventh_thoracic_vertebra'], 'spine',
+    '<h3>Inferior angle of the scapula: T7</h3><p>The lowest point of the scapula, easily felt; with the arm by the side it lies at the level of the <b>spinous process of T7</b> (Gray: it lies on the 7th rib). A study of palpation notes that such landmarks are often a level out.</p>'],
+];
+/* radiographs: labels are [x, y, text, tx, ty] as fractions of the processed image (pin, then text); placed on the image and checked with marks.py, zoomed */
+const PHOTOS = [
+  {id: 'sh', file: 'shoulder-ap.jpg', w: 620, h: 580, title: 'Shoulder, AP (Grashey) view', alt: 'Radiograph of a right shoulder from the front with the glenoid seen edge-on',
+    cap: 'Right shoulder of an adult. The <b>head of the humerus</b> meets the <b>glenoid cavity</b> (seen edge-on in this view, so the joint space is clear); above them the <b>acromion</b>, meeting the <b>clavicle</b> at the acromioclavicular joint.',
+    labels: [[0.42, 0.55, 'Head of humerus', 0.22, 0.68], [0.715, 0.50, 'Glenoid cavity', 0.80, 0.58], [0.50, 0.19, 'Acromion', 0.30, 0.06], [0.88, 0.13, 'Clavicle', 0.80, 0.04], [0.71, 0.33, 'Coracoid process', 0.62, 0.27], [0.27, 0.47, 'Greater tubercle', 0.18, 0.40], [0.38, 0.78, 'Surgical neck', 0.20, 0.86]],
+    credit: 'Image: <a href="https://commons.wikimedia.org/wiki/File:Anteroposterior_glenoid_(Grashey_view)_X-ray_of_a_normal_shoulder.jpg">Anteroposterior glenoid (Grashey view) X-ray of a normal shoulder.jpg</a> by Mikael Häggström, <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, via Wikimedia Commons; lower part cropped, resized; labels added (approximate).'},
+  {id: 'eap', narrow: true, file: 'elbow-ap.jpg', w: 560, h: 805, title: 'Elbow, AP view', alt: 'Radiograph of a left elbow from the front',
+    cap: 'Left elbow of an adult, from the front (lateral on your right). The <b>trochlea</b> meets the ulna and the <b>capitulum</b> meets the <b>head of the radius</b>; the <b>olecranon fossa</b> shows as a hollow above the trochlea.',
+    labels: [[0.14, 0.30, 'Medial epicondyle', 0.03, 0.06], [0.80, 0.45, 'Lateral epicondyle', 0.97, 0.33], [0.36, 0.47, 'Trochlea', 0.04, 0.56], [0.57, 0.48, 'Capitulum', 0.97, 0.55], [0.47, 0.34, 'Olecranon fossa', 0.50, 0.14], [0.62, 0.60, 'Head of radius', 0.97, 0.67], [0.32, 0.82, 'Ulna', 0.12, 0.88], [0.64, 0.85, 'Radius', 0.84, 0.90]],
+    credit: 'Image: <a href="https://commons.wikimedia.org/wiki/File:X-ray_of_normal_elbow_by_anteroposterior_projection.jpg">X-ray of normal elbow by anteroposterior projection.jpg</a> by Mikael Häggström, <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, via Wikimedia Commons; edges with a side marker cropped, resized; labels added (approximate).'},
+  {id: 'elat', file: 'elbow-lat.jpg', w: 620, h: 630, title: 'Elbow, lateral view', alt: 'Radiograph of a left elbow from the side, bent to a right angle',
+    cap: 'Left elbow from the side, flexed. The <b>trochlea and capitulum</b> overlap as rings; the <b>olecranon</b> forms the point of the elbow and the <b>coronoid process</b> lies in front. On a lateral film the anterior humeral line should pass through the middle third of the capitulum, and a visible posterior fat pad suggests a fracture inside the joint (on this normal film no fat pad shows).',
+    labels: [[0.80, 0.30, 'Humerus', 0.70, 0.22], [0.678, 0.738, 'Trochlea, capitulum', 0.56, 0.40], [0.594, 0.718, 'Head of radius', 0.40, 0.50], [0.642, 0.802, 'Coronoid process', 0.45, 0.97], [0.745, 0.83, 'Olecranon', 0.97, 0.97], [0.30, 0.71, 'Radius', 0.10, 0.60], [0.30, 0.81, 'Ulna', 0.10, 0.97]],
+    credit: 'Image: <a href="https://commons.wikimedia.org/wiki/File:X-ray_of_normal_elbow_by_lateral_projection.jpg">X-ray of normal elbow by lateral projection.jpg</a> by Mikael Häggström, <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, via Wikimedia Commons; resized; labels added (approximate).'},
+  {id: 'wr', narrow: true, file: 'wrist-pa.jpg', w: 520, h: 739, title: 'Wrist, PA view', alt: 'Radiograph of a left wrist from the back with the carpal bones',
+    cap: 'Left wrist of an adult, palm down (thumb side on your right). Proximal row: <b>scaphoid</b>, <b>lunate</b>, <b>triquetrum</b> (the pisiform lies over the triquetrum and is hard to see); distal row: <b>trapezium</b>, <b>trapezoid</b>, <b>capitate</b>, <b>hamate</b>. The scaphoid lies in the floor of the anatomical snuffbox.',
+    labels: [[0.68, 0.38, 'Scaphoid', 0.90, 0.36], [0.47, 0.46, 'Lunate', 0.43, 0.66], [0.32, 0.39, 'Triquetrum', 0.13, 0.41], [0.55, 0.27, 'Capitate', 0.48, 0.10], [0.37, 0.24, 'Hamate', 0.13, 0.20], [0.68, 0.27, 'Trapezoid', 0.78, 0.05], [0.81, 0.31, 'Trapezium', 0.93, 0.18], [0.24, 0.51, 'Ulnar styloid', 0.13, 0.53], [0.83, 0.45, 'Radial styloid', 0.92, 0.50], [0.30, 0.75, 'Ulna', 0.12, 0.80], [0.65, 0.75, 'Radius', 0.90, 0.80]],
+    credit: 'Image: <a href="https://commons.wikimedia.org/wiki/File:X-ray_of_normal_wrist_by_dorsoplantar_projection_(crop).jpg">X-ray of normal wrist by dorsoplantar projection (crop).jpg</a> by Mikael Häggström, <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>, via Wikimedia Commons; resized; labels added (approximate).'},
+];
+const CRIT_TEXT = '<p>A child\'s elbow has <b>six secondary ossification centres</b>, which appear in a fairly constant order, remembered as <b>CRITOE</b>: <b>C</b>apitulum, <b>R</b>adial head, <b>I</b>nternal (medial) epicondyle, <b>T</b>rochlea, <b>O</b>lecranon, <b>E</b>xternal (lateral) epicondyle. The capitulum comes first (about 1 year), the lateral epicondyle last (about 11).</p><p>The ages differ between sources (table). StatPearls: the centres appear (and fuse) earlier in girls, except the capitulum and radial head; the olecranon may appear before the trochlea (a Brazilian study); one review notes the medial epicondyle always comes before the trochlea.</p><p>On a lateral film the <b>anterior humeral line</b> should pass through the middle third of the capitulum, and a visible <b>posterior fat pad</b> suggests a fracture inside the joint (see the lateral elbow film above).</p>';
+const CRIT_HEAD = ['Centre', 'Two reviews (2026)', 'Another review (2026)', 'StatPearls (range)'];
+const CRIT_ROWS = [['Capitulum', '1', '1', '0–1'], ['Radial head', '3', '5', '2–6'], ['Internal (medial) epicondyle', '5', '7', '2–8'], ['Trochlea', '7', '10', '5–11'], ['Olecranon', '9', '10', '6–11'], ['External (lateral) epicondyle', '11', '11', '8–13']];
+const DATA = {
+  based: 'Based on: Gray\'s <i>Anatomy of the Human Body</i> (20th ed., 1918), surface anatomy of the back, thorax and upper extremity; StatPearls (NCBI Bookshelf: Angle of Louis, Bone Age, Elbow Fractures, Anatomical Snuff Box); open-access papers (landmark palpation 2019; a paravertebral block report 2016; acromial-angle studies 2024–2026; reviews of the paediatric elbow and its ossification 2017–2026); Wikipedia. Where they differ, the page says so.',
+  models: 'Models used: the whole-body skeleton from BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan (simplified meshes, shared under the same licence). Landmark points are the hand-placed points of the bone pages (approximate); the level lines and the spinous-process tips are computed on this model (approximate). The child\'s elbow is a schematic.',
+};
+const FIT = ['right_scapula', 'first_thoracic_vertebra', 'eighth_thoracic_vertebra', 'manubrium', 'body_of_sternum', 'right_clavicle'];
+const MODEL_NOTE = 'Back view of the BodyParts3D skeleton, the right side. The dashed line runs level from the landmark to the vertebral column; the vertebra it reaches on this model is given in the text (one model, approximate; levels vary between people and with posture).';
+
+/* ===================== 3D ===================== */
+const $ = id => document.getElementById(id);
+const v = new AtlasViewer($('v'));
+let LMP = {}, tips = {}, sel = null;
+const ORD = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth', 'eleventh', 'twelfth'];
+const VERT = [...ORD.slice(0, 7).map((o, i) => [o + '_cervical_vertebra', 'C' + (i + 1)]), ...ORD.map((o, i) => [o + '_thoracic_vertebra', 'T' + (i + 1)]), ...ORD.slice(0, 5).map((o, i) => [o + '_lumbar_vertebra', 'L' + (i + 1)]), ['sacrum', 'S']];
+const vname = k => (VERT.find(x => x[0] === k) || [0, k])[1];
+function geo(key) {   // spinous tip (most posterior vertex) and body (anterior third) of a vertebra on this model
+  if (tips[key]) return tips[key];
+  const p = v.parts.get(key); if (!p) return null; const pos = p.m.pos; let best = -1e9, bt = null, ymin = 1e9;
+  for (let i = 0; i < pos.length; i += 3) { if (pos[i + 1] > best) { best = pos[i + 1]; bt = [pos[i], pos[i + 1], pos[i + 2]]; } ymin = Math.min(ymin, pos[i + 1]); }
+  let n = 0, s = [0, 0, 0], zl = 1e9, zh = -1e9;
+  for (let i = 0; i < pos.length; i += 3) if (pos[i + 1] < ymin + 14) { n++; s[0] += pos[i]; s[1] += pos[i + 1]; s[2] += pos[i + 2]; zl = Math.min(zl, pos[i + 2]); zh = Math.max(zh, pos[i + 2]); }
+  return tips[key] = {tip: bt, body: s.map(x => x / n), bz: [zl, zh]};
+}
+/* which vertebra does a horizontal plane at height z meet on this model (spinous tips, or bodies)? */
+function levelAt(z, mode) {
+  let best = null, bd = 1e9;
+  for (const [k, n] of VERT) { const g = geo(k); if (!g) continue;
+    if (mode === 'body') { if (z >= g.bz[0] && z <= g.bz[1]) { const d = Math.abs(z - (g.bz[0] + g.bz[1]) / 2); if (d < bd) { bd = d; best = n; } } }
+    else { const d = Math.abs(z - g.tip[2]); if (d < bd) { bd = d; best = n; } } }
+  if (mode === 'body' && !best) {   // between two bodies: a disc
+    const near = VERT.map(([k, n]) => [n, geo(k)]).filter(x => x[1]).sort((a, b) => Math.abs(z - (a[1].bz[0] + a[1].bz[1]) / 2) - Math.abs(z - (b[1].bz[0] + b[1].bz[1]) / 2));
+    if (near.length < 2) return null;
+    const two = near.slice(0, 2).sort((a, b) => VERT.findIndex(v => v[1] === a[0]) - VERT.findIndex(v => v[1] === b[0]));  // upper vertebra first
+    return two[0][0] + '–' + two[1][0] + ' disc'; }
+  return best;
+}
+const SHORT = n => n.replace(/ of (the )?scapula| \(root\)|, acromial angle/g, '').replace('Highest point of iliac crest', 'Top of iliac crest').replace('Posterior superior iliac spine', 'PSIS').replace('Condyles of femur and tibia', 'Medial condyle').replace('Tuberosity of 5th metatarsal', '5th MT tuberosity').replace('Tuberosity of navicular', 'Navicular tuberosity');
+function select(i) {
+  sel = i; const [key, name, part, src, verts, mode, text] = LM[i];
+  document.querySelectorAll('#lm-list button').forEach((b, j) => b.setAttribute('aria-pressed', String(j === i)));
+  const p = LMP[key]; let extra = '';
+  for (const k of v.order) v.setColour(k, '--bone');
+  // a side view for the front landmarks: hide the right limb girdle and ribs, which would hide the sternum and the vertebral bodies
+  for (const k of v.order) v.setVisible(k, !(mode === 'body' && k.startsWith('right_') && k !== part));
+  v.setFocus([part, ...verts].filter(k => v.parts.has(k)));
+  const mk = [], lines = [];
+  if (p) {
+    const near = q => mode === 'body' ? [q[0] - 25, q[1], q[2]] : q;   // front landmarks: draw the pins 25 mm towards the viewer (right side) so the bone does not hide them
+    mk.push({p: near(p), label: SHORT(name), big: true, always: true, color: getComputedStyle(document.documentElement).getPropertyValue('--mark').trim()});
+    if (mode) {
+      const g = geo(verts[0]); const end = mode === 'body' ? [0, g.body[1], p[2]] : [0, g.tip[1] + 6, p[2]];
+      const dz = q => [q[0], q[1], q[2] - 7];   // the level line runs just under the label
+      lines.push({a: dz(near(p)), b: dz(near(end)), color: '--mark', dash: '6 5'});
+      for (const k of verts) { const gg = geo(k); if (gg) mk.push({p: mode === 'body' ? near([gg.body[0], gg.body[1] - 4, gg.body[2]]) : gg.tip, label: vname(k), always: true}); }
+      const lv = levelAt(p[2], mode);
+      if (lv) extra = `<p class="muted">On this model the level line meets ${mode === 'body' ? 'the vertebral column at' : 'the spinous process of'} <b>${lv}</b> (approximate).</p>`;
+    }
+  }
+  v.setMarkers(mk); v.setLines(lines);
+  const ks = [part, ...verts].filter(k => v.parts.has(k));
+  v.fit(ks.concat(FIT.filter(k => v.parts.has(k))));
+  v.face(mode === 'body' ? [-1, 0.15, 0.1] : [-0.25, 1, 0.1], {zoom: 0.95});
+  $('lm-find').innerHTML = text + extra;
+}
+function buildList() {
+  const box = $('lm-list');
+  LM.forEach(([k, name], i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = name; b.onclick = () => select(i); box.append(b); });
+}
+
+/* ===================== radiographs ===================== */
+function micro(box, m) {
+  const f = document.createElement('figure'); f.className = 'mg' + (m.narrow ? ' narrow' : ''); f.id = 'mg-' + m.id;
+  f.innerHTML = `<div class="bar"><span class="t">${m.title}</span>${m.labels.length ? '<button class="chip" type="button" aria-pressed="true">Labels</button>' : ''}</div>`
+    + `<div class="im"><img src="img/${m.file}" width="${m.w}" height="${m.h}" loading="lazy" alt="${m.alt}"><svg viewBox="0 0 ${m.w} ${m.h}" aria-hidden="true"></svg></div>`
+    + `<figcaption>${m.cap}<span class="cr">${m.credit}</span></figcaption>`;
+  box.append(f);
+  const svg = f.querySelector('svg'), im = f.querySelector('.im'), btn = f.querySelector('.chip');
+  let on = true;
+  const draw = () => {   // keep the text the same size on screen whatever the image width
+    const k = m.w / Math.max(im.clientWidth, 1);
+    svg.style.setProperty('--sw', (3 * k).toFixed(1) + 'px'); svg.style.setProperty('--lw', (1.4 * k).toFixed(1) + 'px');
+    const fs = (im.clientWidth < 420 ? 11 : 13) * k;
+    svg.style.setProperty('--fs', fs.toFixed(1) + 'px');
+    svg.innerHTML = on ? m.labels.map(([x, y, t, tx, ty]) => {   // keep each label inside the image: estimate its width and slide it in
+      const est = t.length * fs * 0.56, start = tx > x; let X = tx * m.w;
+      if (start) X = Math.min(X, m.w - est - 4 * k); else X = Math.max(X, est + 4 * k);
+      return `<line x1="${x * m.w}" y1="${y * m.h}" x2="${X}" y2="${ty * m.h}"/><circle cx="${x * m.w}" cy="${y * m.h}" r="${(4 * k).toFixed(1)}"/><text x="${X.toFixed(1)}" y="${(ty * m.h + 4 * k).toFixed(1)}" text-anchor="${start ? 'start' : 'end'}">${t}</text>`;
+    }).join('') : '';
+  };
+  if (btn) btn.onclick = () => { on = !on; btn.setAttribute('aria-pressed', String(on)); draw(); };
+  if (window.ResizeObserver) new ResizeObserver(draw).observe(im); draw();
+}
+function drawCrit() {
+  const T = (x, y, s, c = 'l', a = 'start') => `<text x="${x}" y="${y}" class="${c}" text-anchor="${a}">${s}</text>`;
+  const L = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+  let h = '';
+  // humerus (lower end, cartilage pale) with the metaphysis in bone colour; radius and ulna below
+  h += `<path d="M150 10 L250 10 L262 120 C300 140 320 170 318 196 L82 196 C80 170 100 140 138 120 Z" style="fill:var(--bone);stroke:var(--ink);stroke-width:1"/>`;
+  h += `<path d="M82 196 L318 196 C320 226 300 246 270 246 L130 246 C100 246 80 226 82 196 Z" style="fill:var(--cart);opacity:.55;stroke:var(--ink);stroke-width:.8;stroke-dasharray:4 3"/>`;
+  h += `<path d="M226 262 L292 262 L284 380 L240 380 Z" style="fill:var(--bone);stroke:var(--ink)"/><rect x="224" y="250" width="70" height="22" rx="8" style="fill:var(--cart);opacity:.55;stroke:var(--ink);stroke-dasharray:4 3"/>`;   // radius, head cartilage
+  h += `<path d="M110 250 L210 250 L196 380 L150 380 Z" style="fill:var(--bone);stroke:var(--ink)"/>`;   // ulna
+  h += `<path d="M120 240 C120 300 200 300 204 240" style="fill:var(--cart);opacity:.55;stroke:var(--ink);stroke-dasharray:4 3"/>`;   // olecranon cartilage (seen through)
+  const C = [['C', 'Capitulum', 254, 222, 14], ['R', 'Radial head', 259, 261, 9], ['I', 'Internal (medial) epicondyle', 96, 186, 9], ['T', 'Trochlea', 170, 224, 11], ['O', 'Olecranon', 164, 270, 10], ['E', 'External (lateral) epicondyle', 306, 184, 7]];
+  for (const [l, n, x, y, r] of C) h += `<circle cx="${x}" cy="${y}" r="${r}" style="fill:var(--centre);stroke:var(--ink);stroke-width:1"/>`;
+  h += L(254, 222, 340, 230) + T(344, 234, 'C', 'b') + L(259, 261, 340, 270) + T(344, 274, 'R', 'b') + L(96, 186, 56, 200) + T(52, 204, 'I', 'b', 'end');
+  h += L(170, 224, 56, 240) + T(52, 244, 'T', 'b', 'end') + L(164, 270, 56, 290) + T(52, 294, 'O', 'b', 'end') + L(306, 184, 340, 160) + T(344, 164, 'E', 'b');
+  h += T(200, 60, 'Humerus', 'l', 'middle') + T(262, 360, 'Radius', 's', 'middle') + T(172, 360, 'Ulna', 's', 'middle');
+  h += T(6, 20, 'Medial', 's') + T(394, 20, 'Lateral', 's', 'end');
+  $('crit-svg').innerHTML = h; $('crit-text').innerHTML = CRIT_TEXT;
+  $('crit-table').innerHTML = '<tr>' + CRIT_HEAD.map(x => `<th>${x}</th>`).join('') + '</tr>' + CRIT_ROWS.map(r => '<tr>' + r.map((c, i) => `<td data-h="${CRIT_HEAD[i]}">${c}</td>`).join('') + '</tr>').join('') + '<tr><td colspan="4" class="note">Ages in years at appearance. Two reviews: Chomba et al. and Tran et al.; another: Perera Molligoda Arachchige et al.; StatPearls: Bone Age.</td></tr>';
+}
+
+/* ===================== init ===================== */
+(async () => {
+  $('lede').textContent = LEDE; $('based').innerHTML = DATA.based; $('models').innerHTML = DATA.models; $('lm-note').textContent = MODEL_NOTE;
+  $('lm-table').innerHTML = '<tr><th>Landmark</th><th>Level</th><th>Sources</th></tr>' + [
+    ['Jugular notch', 'T2–T3 (Gray: lower border of T2)', 'Gray, Wikipedia'], ['Sternal angle', 'T4–T5 disc (Gray: T5)', 'Wikipedia, Gray'], ['Superior angle of scapula', 'about the 2nd thoracic vertebra (on the 2nd rib)', 'Wikipedia, Gray'],
+    ['Root of the spine of scapula', 'T3 spinous process', 'Gray, a clinical report'], ['Inferior angle of scapula', 'T7 spinous process', 'Gray, a palpation study'], ['Acromial angle', 'no vertebral level; a surface reference point', 'two modern studies; Gray']]
+    .map(r => '<tr>' + r.map((c, i) => `<td data-h="${['Landmark', 'Level', 'Sources'][i]}">${c}</td>`).join('') + '</tr>').join('');
+  drawCrit();
+  const cred = [];
+  for (const m of PHOTOS) { micro($('xr-imgs'), m); cred.push(m.credit); }
+  $('images').innerHTML = cred.length ? 'Radiographs: ' + cred.join(' ') : '';
+  buildList();
+  const [th, ul] = await Promise.all(['../models/thorax-detail/landmarks.json', '../models/upper-limb-detail/landmarks.json'].map(u => fetch(u).then(r => { if (!r.ok) throw new Error(u + ': ' + r.status); return r.json(); })));
+  const SRC = {thorax: th, ul};
+  for (const [key, , , [f, b, k]] of LM) LMP[key] = SRC[f][b] && SRC[f][b][k] ? SRC[f][b][k].p : null;
+  await v.load('../models/skeleton/skeleton.json');
+  select(0);
+  window.LMT = {LM, LMP, select, levelAt, geo};   // for tests
+  window.ready = true;
+})().catch(e => { $('lm-find').textContent = 'Could not load the 3D model: ' + e.message; window.loadError = String(e); });
+</script>
+</body>
+</html>

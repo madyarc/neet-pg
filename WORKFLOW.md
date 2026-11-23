@@ -49,7 +49,7 @@ Last updated: 2026-11-21
   radiographs-landmarks per limb, embryology/limb-development.html + additions) [x] build (404 quotes; breast, radiographs-landmarks ×2,
   limb-development + additions; AN13.5, 20.6 partial: Commons 429 on films) [x] review (32 items: limb
   rotation drawing, child elbow side, ankle labels, pec minor drawing, OA alt text, 3D levels, unsourced lines,
-  --mamm→--gland) [ ] fixes (running) [ ] fixes
+  --mamm→--gland) [x] fixes (421 quotes) [x] docs [x] commit. Done 2026-11-22. [ ] fixes
   [ ] docs [ ] commit. Then 46: AN23.1, 26.2, 42.1, 43.7, 43.9, 82.1; then partials.
 - Module 42 (genetics: AN73.1–75.5) started 2026-11-22: sheet fill-genetics, pages in anatomy/genetics/.
   [x] build (688 quotes; chromosomes-karyotype, inheritance-pedigrees, aberrations-clinical; 6 Commons images;
