@@ -8,6 +8,9 @@ Last updated: 2026-11-21
 
 ## Now
 
+- USER 2026-11-23: finish physiology modules 01–05 (01 done; 02 haematology, 03 CVS, 04 GI, 05 respiratory), then STOP,
+  clean caches and background processes (server, agents); user has other work. Anatomy partials after that.
+
 - 2026-11-22 evening: resumed modules 44 (fixes) and 45 (build). Session was not under claude-8g, so the 7G/8G/1G
   limits were written to this tab's cgroup directly (verify each session: cat memory.max in /proc/self/cgroup's path).
   User: finish what's incomplete, then start another subject; anatomy partials later after a break.
