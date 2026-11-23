@@ -8,6 +8,14 @@ Last updated: 2026-11-21
 
 ## Now
 
+- 2026-11-22 evening: resumed modules 44 (fixes) and 45 (build). Session was not under claude-8g, so the 7G/8G/1G
+  limits were written to this tab's cgroup directly (verify each session: cat memory.max in /proc/self/cgroup's path).
+  User: finish what's incomplete, then start another subject; anatomy partials later after a break.
+- Next subject: PHYSIOLOGY (136 competencies, 0 done). P1 = general physiology + nerve and muscle (PY1.1–1.7,
+  PY3.1–3.10): pages under physiology/general/ and physiology/nerve-muscle/, sheet fill-physio1, physiology/index.html
+  created by the first module (CLAUDE.md: create subject index with the first module), root index line updated by
+  main session. Launch when one of the two anatomy agents finishes (max two agents).
+
 - 2026-11-22 11:15 crash: Claude Code 2.1.330 segfaulted itself (coredump; no kernel/amdgpu errors at that time;
   user's memtest and scrub are clean). Same as the 11-20 crashes of 2.1.327/328. Repaired 3 corrupt .git loose objects
   (fsck clean). User reinstalled python, git and the others (clean); module 40 pushed. Standard http.server and plain ffshot work again.
