@@ -56,6 +56,8 @@ CLAUDE.md, WORKFLOW.md, pages not listed in your task. Do not commit or push. Do
   elements). Check `window.loadError` is none and there are no JS errors. Look at your screenshots and fix what looks
   wrong. Check dark theme once (--js "document.documentElement.dataset.theme='dark'").
 - Save screenshots only under the scratchpad folder given in your task message, and delete them when done.
+- Wait loops: `until ! pgrep -f name` matches its own command line and never ends; use `pgrep -f '[n]ame'`,
+  and stop every background loop you started before you reply.
 
 ## What reviewers keep finding (check these yourself before you finish)
 - 3D labels: viewer.js silently drops labels that overlap or run off the canvas, and draws labels on hidden anchors

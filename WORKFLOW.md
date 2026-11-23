@@ -4,21 +4,22 @@ Claude reads this file first in every session and updates it after every step (s
 done, build done, review done, commit). It is the single place to recall where the work stands. Rules for the
 content itself are in CLAUDE.md; this file is about the flow and the state.
 
-Last updated: 2026-11-21
+Last updated: 2026-11-23
 
 ## Now
 
-- USER 2026-11-23: finish physiology modules 01–05 (01 done; 02 haematology, 03 CVS, 04 GI, 05 respiratory), then STOP,
-  clean caches and background processes (server, agents); user has other work.
-  BEFORE cleanup (user 2026-11-23): feedback → GitHub issues. Per-page "Report a problem" link (prefilled title + page
-  URL via issues/new?template=feedback.yml&title=…&page=…), .github/ISSUE_TEMPLATE/feedback.yml issue form (type: wrong
-  fact / typo / drawing-label / bug / suggestion; what; correction + source; device/theme), labels feedback + type;
-  home-page "Feedback" link. Needs a GitHub account: user chose to keep GitHub + a nudge line ("sign up with your Google
-  account in seconds; sign-in keeps out spam; reports are public, no personal details"). Checked 2026-11-23: Google sign-up GA on
-  GitHub since 2025-07-15 (github.blog changelog); issue-form fields prefill by element id in the URL (docs.github.com
-  form schema). Return-to-form after sign-up untested (can't log in headless): don't promise it in the wording. Google Form relay = fallback if reports stay low.
-  Built (uncommitted): .github/ISSUE_TEMPLATE/feedback.yml + config.yml, label `feedback` created, tools/home/feedback_links.py
-  (idempotent; inserts <!-- feedback --> block after </footer>; tested on cardiac-cycle-output). [x] Run on all 88 pages 2026-11-23, committed. Anatomy partials after that.
+- PAUSED 2026-11-23 (user has other work). Resume here:
+  - Physiology 01–05 done, reviewed, committed, live (17 pages; PY1, PY2, PY3, PY4.1–4.11, PY5, PY6.1–6.9). Next:
+    module 06 (renal, SYLLABUS §7) by the same flow: builder (fill-physio6, physiology/<branch>/) → independent reviewer →
+    fixes → main session writes SYLLABUS/DATA-SOURCES/README/root card/search index → hash check → commit. Max two agents.
+  - Feedback live: "Report it" note after every page's footer → .github/ISSUE_TEMPLATE/feedback.yml (label `feedback`;
+    GitHub login redirects back to the form). New pages: run tools/home/feedback_links.py (CLAUDE.md step 7). Review open
+    reports with `gh issue list -l feedback`. Google Form relay = fallback if reports stay low.
+  - Anatomy partials, module 46, AN3.3 J Anat PDFs, older label overlaps: still deferred.
+  - Cleaned at pause: test server stopped, agents stopped, stale agent wait-loops killed (pgrep -f self-match bug: tell
+    agents to use `pgrep -f '[f]etch_xml.py'`-style patterns), scratchpad emptied, __pycache__ and pip cache removed.
+    Kept: ~/.cache/selenium (driver for ffshot), sources-local/ downloads, tools/bones-rs/target.
+  - Start next session: verify the 8 GB cap (claude-8g), start `python3 -m http.server 8765 --bind 127.0.0.1`.
 
 - 2026-11-22 evening: resumed modules 44 (fixes) and 45 (build). Session was not under claude-8g, so the 7G/8G/1G
   limits were written to this tab's cgroup directly (verify each session: cat memory.max in /proc/self/cgroup's path).
