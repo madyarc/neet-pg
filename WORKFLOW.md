@@ -13,7 +13,7 @@ Last updated: 2026-11-23
   rest catch up. Skill-only competencies skipped. First module of a subject also creates <subject>/index.html,
   DATA-SOURCES.md, its own small assets (copy the physiology pattern; nothing shared across subjects) and a root card.
   Clinical subjects: doses/schedules/classifications only from a named, dated official guideline (CLAUDE rule 6).
-  Round 1 (37 modules; order alternates basic and clinical; two agents at a time):
+  Round 1 (37 modules; order alternates basic and clinical; three agents at a time, one test browser at a time):
     biochemistry 2: B01 enzymes · B02 carbohydrate metabolism
     pathology 4: P01 cell injury+adaptation · P02 inflammation+healing · P03 haemodynamic disorders · P04 neoplasia
     pharmacology 1: F01 general pharmacology (PK/PD)
@@ -36,7 +36,7 @@ Last updated: 2026-11-23
   every commit.
   Status: B01 [x] build (336 quotes; tokens --enz --sub --inhib --cofac) [x] review (no blocking errors; attributions,
   CK timing, labels, --clin misuse, --inhib vs --ca) [x] fixes (351 quotes) [x] committed 2026-11-24 (b9ac13f). F01 [ ] build (running; pharmacology/general/). P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [x] review (18: metaplasia
-  disagreement, token clash with bioc dark, invisible soaps, dysplasia wording, labels) [ ] fixes (running).
+  disagreement, token clash with bioc dark, invisible soaps, dysplasia wording, labels) [x] fixes (326 quotes) [x] committed 2026-11-24.
   Site-wide colour checker now tools/test/colcheck.py (scans every subject; --skip own files).
   LATER (site-wide): --mark and --clin are identical in dark (#ff7b6f), ΔE 14 light; anatomy --pigment comment says
   "reticularis pigment" (= lipofuscin, now --lipofuscin in pathology).
@@ -44,7 +44,7 @@ Last updated: 2026-11-23
 - PAUSED 2026-11-23 (user has other work). Resume here:
   - Physiology 01–05 done, reviewed, committed, live (17 pages; PY1, PY2, PY3, PY4.1–4.11, PY5, PY6.1–6.9). Next:
     module 06 (renal, SYLLABUS §7) by the same flow: builder (fill-physio6, physiology/<branch>/) → independent reviewer →
-    fixes → main session writes SYLLABUS/DATA-SOURCES/README/root card/search index → hash check → commit. Max two agents.
+    fixes → main session writes SYLLABUS/DATA-SOURCES/README/root card/search index → hash check → commit. Max three agents.
   - Feedback live: "Report it" note after every page's footer → .github/ISSUE_TEMPLATE/feedback.yml (label `feedback`;
     GitHub login redirects back to the form). New pages: run tools/home/feedback_links.py (CLAUDE.md step 7). Review open
     reports with `gh issue list -l feedback`. Google Form relay = fallback if reports stay low.
@@ -52,7 +52,7 @@ Last updated: 2026-11-23
   - Cleaned at pause: test server stopped, agents stopped, stale agent wait-loops killed (pgrep -f self-match bug: tell
     agents to use `pgrep -f '[f]etch_xml.py'`-style patterns), scratchpad emptied, __pycache__ and pip cache removed.
     Kept: ~/.cache/selenium (driver for ffshot), sources-local/ downloads, tools/bones-rs/target.
-  - Start next session: verify the 8 GB cap (claude-8g), start `python3 -m http.server 8765 --bind 127.0.0.1`.
+  - Start next session: verify the 10 GB cap (claude-10g), start `python3 -m http.server 8765 --bind 127.0.0.1`.
 
 - 2026-11-22 evening: resumed modules 44 (fixes) and 45 (build). Session was not under claude-8g, so the 7G/8G/1G
   limits were written to this tab's cgroup directly (verify each session: cat memory.max in /proc/self/cgroup's path).
@@ -188,13 +188,18 @@ Progress: anatomy 316 covered, 19 partial, 78 not started; ophthalmology 6 cover
 The last long session's terminal reached 11.3 GB, mostly from several agents each running headless Firefox or
 builds at the same time.
 
-- The whole session is capped at 8 GB. Start Claude with `claude-8g` (in ~/.local/bin), which puts Claude and
-  everything it starts in one 8 GB cgroup. Without it, the cap can be set by hand on the terminal's cgroup
+- The whole session is capped at 10 GB (user 2026-11-24; was 8 GB; the crash was at ~11.3 GB). Start Claude with
+  `claude-10g` (in ~/.local/bin; `claude-8g` still exists), which puts Claude and everything it starts in one cgroup. Without it, the cap can be set by hand on the terminal's cgroup
   (`memory.max` under /sys/fs/cgroup/…/app-org.kde.konsole-*.scope/tab(*).scope).
 - Every heavy command goes through `tools/capped` (default 4 GB, `--mem` to change): Blender exports,
   `bones build`, `tools/test/ffshot.py`, large Python jobs. It holds a lock, so only one heavy job runs at a time even
   when agents work in parallel.
-- At most two agents at once, and only when their work is independent. Tell each agent to use `tools/capped`.
+- At most three agents at once (user 2026-11-24), and only when their work is independent. Tell each agent to use
+  `tools/capped`.
+- Only ONE test browser at a time, enforced: ~/personal/buildenv/lib/python3.14/site-packages/sitecustomize.py makes
+  every selenium Firefox in the buildenv Python wait for a lock (`$XDG_RUNTIME_DIR/neet-pg-browser.lock`) and forces
+  software rendering (llvmpipe), even in an agent's own script that skips tools/capped. Tested 2026-11-24: a second
+  browser waited for the first to quit; both reported llvmpipe. Re-create the file if the venv is rebuilt.
 - Don't print big files into the context: read with offsets, grep, or summaries. Large downloads stay on disk.
 - Clean up after each module: delete my own screenshots and temporary files in the scratchpad.
 

@@ -83,6 +83,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [Enzymes: Concepts, Classes, Kinetics and Inhibition](biochemistry/enzymes/enzymes-kinetics.html), [Enzymes in the Clinic: Serum Markers and Isoenzymes](biochemistry/enzymes/clinical-enzymes.html) | Enzymes | Cofactor and isoenzyme concepts, seven IUBMB classes, active-site steppers, Michaelis–Menten and Lineweaver–Burk sliders, inhibition picker with drug table, allostery and zymogens; enzyme–organ picker, cardiac-marker time course, 4UDMI 2018 tree, LDH/CK/ALP isoenzymes, Atlanta rule |
 
+### Pathology — [`pathology/`](pathology/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [Cell Injury and Cell Death](pathology/general/cell-injury-death.html), [Cellular Adaptations, Dysplasia, Accumulations, Calcification and Gangrene](pathology/general/adaptations-accumulations.html) | General | Causes and a five-mechanism stepper, reversible→irreversible slider, six necroses with sites, apoptosis vs necrosis, intrinsic and extrinsic apoptosis steppers, telomeres; adaptations, metaplasia, dysplasia→CIS→invasion slider, accumulations and pigments, calcification classifier, gangrene; 3 Commons micrographs |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and

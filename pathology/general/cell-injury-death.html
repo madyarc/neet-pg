@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cell Injury and Cell Death</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/path.css">
+<style>
+/* page tokens: none new. Cell parts use path.css tokens with their meanings: --cyto (cytoplasm), --nucleus, --eosin (eosinophilic necrotic
+   cytoplasm, caseous debris, fibrin-rich vessel wall), --fluid (water entering a swollen cell; the liquefied centre), --fat (lipid), --ca (Ca2+),
+   --calc (calcium soaps), --collagen (vessel wall), --rbc (red cells). Highlighted parts get a thicker ink outline, not a colour. */
+svg.sch .node{fill:var(--surface);stroke:var(--muted);stroke-width:1.2}
+svg.sch .nodeon{fill:var(--surface);stroke:var(--ink);stroke-width:2.6}
+svg.sch .org{fill:var(--surface);stroke:var(--ink);stroke-width:1}
+svg.sch .orgon{fill:var(--surface);stroke:var(--ink);stroke-width:2.6}
+svg.sch.cellbox{max-width:620px}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Pathology</a> <span class="muted">· Module 01: <span aria-current="page">Cell injury and death</span> · <a href="adaptations-accumulations.html">Adaptations and accumulations</a></span></nav>
+
+<header class="stack">
+  <h1>Cell Injury and Cell Death: Necrosis, Apoptosis, Autolysis and Ageing</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-cause">Causes</a> <a href="#h-mech">Mechanisms</a> <a href="#h-rev">Reversible to irreversible</a> <a href="#h-nec">Types of necrosis</a> <a href="#h-avn">Apoptosis vs necrosis</a> <a href="#h-path">Apoptosis pathways</a> <a href="#h-auto">Autolysis</a> <a href="#h-age">Cellular ageing</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-cause">
+  <h2 id="h-cause">Causes of cell injury</h2>
+  <div class="chips" id="cause-tg" aria-label="Cause"></div>
+  <div class="prose find" id="cause-find" aria-live="polite"></div>
+  <div class="prose" id="cause-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mech">
+  <h2 id="h-mech">Mechanisms of injury, step by step</h2>
+  <div class="step" id="mech-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch cellbox" id="mech-svg" viewBox="0 0 620 300" role="img" aria-label="Schematic injured cell with the chosen mechanism drawn on it"></svg></div>
+    <div class="prose find" id="mech-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="mech-key"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-rev">
+  <h2 id="h-rev">From reversible to irreversible injury</h2>
+  <div class="sliders" id="rev-sl"></div>
+  <div class="vrow" id="rev-out" aria-live="polite"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch cellbox" id="rev-svg" viewBox="0 0 620 300" role="img" aria-label="Schematic cell changing as injury becomes more severe: swelling, blebs, then ruptured membranes and nuclear changes"></svg></div>
+    <div class="prose find" id="rev-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="rev-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-nec">
+  <h2 id="h-nec">Types of necrosis and where they happen</h2>
+  <div class="chips" id="nec-tg" aria-label="Type of necrosis"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="nec-svg" viewBox="0 0 520 264" role="img" aria-label="Schematic tissue showing the chosen pattern of necrosis"></svg></div>
+    <div class="prose find" id="nec-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="nec-table"></table></div>
+  <div class="two" id="nec-micro"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-avn">
+  <h2 id="h-avn">Apoptosis and necrosis side by side</h2>
+  <div class="schbox"><svg class="fig sch" id="avn-svg" viewBox="0 0 560 290" role="img" aria-label="Two rows of schematic cells: necrosis (swelling, rupture, inflammation) and apoptosis (shrinkage, condensed chromatin, blebbing, apoptotic bodies eaten by a phagocyte)"></svg></div>
+  <div class="scroll"><table id="avn-table"></table></div>
+  <div class="prose" id="avn-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-path">
+  <h2 id="h-path">The two apoptosis pathways</h2>
+  <div class="chips" id="path-tg" aria-label="Pathway"></div>
+  <div class="step" id="path-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="path-svg" viewBox="0 0 520 330" role="img" aria-label="Schematic of the extrinsic (Fas, FADD, caspase-8) and intrinsic (BCL-2 family, cytochrome c, apoptosome, caspase-9) pathways meeting at the executioner caspases"></svg></div>
+    <div class="prose find" id="path-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="path-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-auto">
+  <h2 id="h-auto">Autolysis</h2>
+  <div class="prose" id="auto-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-age">
+  <h2 id="h-age">Cellular ageing: telomeres and the Hayflick limit</h2>
+  <div class="chips" id="age-tg" aria-label="Telomerase"></div>
+  <div class="sliders" id="age-sl"></div>
+  <div class="schbox"><svg class="fig sch" id="age-svg" viewBox="0 0 520 150" role="img" aria-label="Schematic chromosome whose telomere caps shorten with each cell division until the cell stops dividing"></svg></div>
+  <div class="prose find" id="age-find" aria-live="polite"></div>
+  <div class="prose" id="age-text"></div>
+</section>
+
+<p class="muted" id="skill-note"></p>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BCell%20Injury%20and%20Cell%20Death%3A%20Necrosis%2C%20Apoptosis%2C%20Autolysis%20and%20Ageing%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fpathology%2Fgeneral%2Fcell-injury-death.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/path.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-p01.md, Part A; pathology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Pick a cause of injury, step through the five mechanisms on a cell, then drag the cell from reversible to irreversible injury and watch its nucleus go. Compare the six patterns of necrosis, set apoptosis beside necrosis, step through the intrinsic and extrinsic pathways, and run a cell through its divisions until its telomeres stop it. Adaptations, accumulations, calcification and gangrene are on the <a href="adaptations-accumulations.html">next page</a>; the physiology of apoptosis is in <a href="../../physiology/general/cell-transport-fluids.html#h-apop">physiology</a>.';
+const CAUSE = {
+  hyp: ['Hypoxia and ischaemia', '<p><b>Lack of oxygen</b> (hypoxia) or of blood supply (ischaemia), and impaired supply of nutrients such as glucose or impaired ATP production, deprive the cell of what it needs to survive (Wikipedia; StatPearls lists oxygen deprivation among the noxious stimuli). The mechanisms are <a href="#h-mech">below</a>.</p>'],
+  phys: ['Physical agents', '<p>Heat and radiation (StatPearls; Wikipedia) and ultraviolet irradiation (StatPearls). Wikipedia: physical agents such as heat or radiation can coagulate a cell\'s contents.</p>'],
+  chem: ['Chemicals and drugs', '<p>Chemical agents (Wikipedia). Strong alkalis and acids cause liquefactive and coagulative necrosis respectively (Wikipedia).</p>'],
+  inf: ['Infections', '<p>Bacteria, viruses, fungi and parasites (StatPearls; Wikipedia).</p>'],
+  imm: ['Immunological', '<p>Immunological factors (Wikipedia); Wikipedia\'s examples are allergies and autoimmune diseases.</p>'],
+  gen: ['Genetic', '<p>Genetic factors — Wikipedia\'s examples are Down syndrome and sickle cell anaemia. StatPearls speaks of "intrinsic defects".</p>'],
+  nut: ['Nutritional', '<p>Nutritional factors (Wikipedia), including impaired supply of nutrients such as glucose (Wikipedia).</p>'],
+};
+const CAUSE_TEXT = '<p>Cell injury is the change a cell suffers under stress from outside or inside (Wikipedia). When a cell can no longer adapt it is injured; while the stress is mild, the damage is <b>reversible</b> if the stimulus is removed, but if it persists the damage passes <b>the point of repair</b>, giving irreversible injury and cell death (StatPearls; Wikipedia). Cell death occurs by <b>necrosis</b> or <b>apoptosis</b> (Wikipedia; StatPearls).</p>';
+/* mechanism steps: [chip, html] — drawn on the same schematic cell */
+const MECH = [
+  ['ATP depletion', '<h3>1. ATP depletion</h3><p>In prolonged ischaemia the cell falls back on <b>anaerobic glycolysis</b>: lactate and protons accumulate and <b>ATP and intracellular pH fall</b> (a 2012 review of ischaemia–reperfusion injury; Wikipedia: oxygen deprivation stops ATP generation by the mitochondria).</p><p>Without ATP the <b>Na⁺/K⁺-ATPase</b> and other pumps fail (the 2012 review), and the cell <b>swells</b> — cellular (cloudy) swelling follows damage to the sodium–potassium pump (Wikipedia; the 2012 review: cell swelling and rupture).</p>'],
+  ['Mitochondrial damage', '<h3>2. Mitochondrial damage</h3><p>Ca²⁺ overload of the matrix and reactive oxygen species open the <b>mitochondrial permeability transition (MPT) pore</b>, a non-specific channel in the inner membrane (2012 review). The membrane potential is lost, ATP production fails further and the mitochondrion swells and ruptures (2012 review; Wikipedia). The NCCD (2018) names this <b>MPT-driven necrosis</b>.</p><p>Permeabilisation of the outer membrane releases <b>cytochrome c</b> and other proteins that start apoptosis (2012 review) — the <a href="#h-path">intrinsic pathway</a>.</p>'],
+  ['Ca²⁺ influx', '<h3>3. Calcium influx and overload</h3><p>Without ATP the cell cannot pump Ca²⁺ out or back into the endoplasmic reticulum, so <b>cytosolic and mitochondrial Ca²⁺ rise</b> (2012 review; Wikipedia: membrane damage disturbs cell electrolytes such as calcium).</p><p>High Ca²⁺ activates <b>proteases</b> (calpains, which degrade cytoskeletal, ER and mitochondrial proteins) and <b>phospholipases</b> (2012 review; a 2015 review on necrosis; Wikipedia: calcium influx and calpain in necrosis), and helps open the MPT pore (2012 review; Wikipedia).</p>'],
+  ['Reactive oxygen species', '<h3>4. Reactive oxygen species (free radicals)</h3><p>When ROS build up faster than antioxidants remove them they damage <b>DNA, proteins and lipids</b> — lipid peroxidation of membranes (Wikipedia; the 2012 review: ROS can oxidatively modify virtually every type of biomolecule).</p><p>When blood flow returns after ischaemia, a <b>burst of ROS</b> and incoming neutrophils add to the injury — <b>reperfusion injury</b> (2012 review; Wikipedia).</p>'],
+  ['Membrane damage', '<h3>5. Membrane damage</h3><p>Failing ion transport makes the cell swell and burst, made worse by <b>plasma membrane damage</b> (2012 review). Cell contents leak out and provoke <b>inflammation</b> (Wikipedia; StatPearls).</p><p>Damaged <b>lysosomal membranes</b> release their hydrolytic enzymes into the cytosol (Wikipedia).</p>'],
+];
+const MECH_NOTE = '<p class="muted">How reversible ischaemia finally becomes irreversible is still debated; most likely it needs simultaneous loss of a critical amount of ATP, ROS, membrane and cytoskeletal damage, calcium overload, sodium-pump failure and opening of the MPT pore (2012 review).</p>';
+/* reversible -> irreversible: slider 0-100; stage boundaries are schematic */
+const REV_TEXT = '<p><b>The turn to irreversible injury.</b> Our sources describe it as failure of the <b>mitochondria</b> (ATP production lost; the MPT pore) together with lasting <b>membrane damage</b>: the NCCD (2018) defines cell death as irreversible loss of vital functions, notably ATP production, ending in permanent plasma-membrane permeabilisation; Wikipedia lists disruption of the membranes of cells and organelles among the signs of irreversible injury.</p><p><b>Reversible changes</b> (Wikipedia): cellular swelling — the first sign of almost all injury; small clear vacuoles of distended endoplasmic reticulum (hydropic or vacuolar change); blebs, blunted microvilli, mitochondrial changes, dilated ER; fatty change, which is generally reversible. StatPearls: changes in metabolic pathways and organelles without permanent loss of viability.</p><p><b>Irreversible: the nucleus.</b> Wikipedia gives three stages in necrosis: <b>pyknosis</b> (the nucleus shrinks, chromatin condenses into a dark mass), <b>karyorrhexis</b> (the nucleus fragments) and <b>karyolysis</b> (the chromatin dissolves; the whole cell then stains with eosin). Pyknosis also occurs in apoptosis (Wikipedia). <b>A disagreement</b>: the 2012 review, in a passage contrasting necrosis with the programmed deaths (apoptosis, autophagy), lists "lack of nuclear fragmentation" among the features of necrosis.</p>';
+/* necrosis types: key -> [chip, html] */
+const NEC = {
+  coag: ['Coagulative', '<h3>Coagulative necrosis</h3><p>The <b>default pattern after ischaemia in every organ except the brain</b> (StatPearls; Wikipedia) — e.g. <b>myocardial infarction</b> and the kidney (Wikipedia). Dead tissue keeps its <b>architecture</b> for days: firm, with <b>cell outlines preserved but no nuclei</b> (StatPearls; Wikipedia), and hypereosinophilic cytoplasm (Wikipedia). Wikipedia: injury denatures structural proteins and lysosomal enzymes, so the cells are not digested.</p>'],
+  liq: ['Liquefactive', '<h3>Liquefactive (colliquative) necrosis</h3><p>Dead tissue is <b>digested into a liquid, viscous mass</b> by hydrolytic enzymes from bacteria or lysosomes (StatPearls; Wikipedia). Seen with <b>bacterial (and fungal) infections — abscesses</b>, as creamy yellow pus — and after <b>ischaemia in the brain</b> (StatPearls; Wikipedia). A fluid-filled space and later a cyst wall remain (Wikipedia).</p>'],
+  cas: ['Caseous', '<h3>Caseous necrosis</h3><p>The necrosis of <b>tuberculosis</b> (StatPearls; Wikipedia): white, soft, <b>cheese-like</b> material (StatPearls; Wikipedia). Microscopically an amorphous, granular, <b>eosinophilic centre</b> with no architecture, enclosed in a <b>granuloma</b> — a collar of epithelioid macrophages, giant cells and lymphocytes (StatPearls; Wikipedia). Wikipedia adds fungi (histoplasmosis, cryptococcosis, coccidioidomycosis) and calls it a combination of coagulative and liquefactive necrosis.</p>'],
+  fat: ['Fat', '<h3>Fat necrosis</h3><p>Necrosis of fat by <b>lipases</b>: in <b>acute pancreatitis</b> released pancreatic lipase splits fat into free fatty acids, and whitish deposits of <b>calcium soaps</b> form (StatPearls; Wikipedia). It also follows trauma, typically in the <b>breast</b> (Wikipedia; StatPearls names breast tissue). Microscopically: adipocytes without nuclei, with calcium deposits that stain bluish on H&E (StatPearls).</p>'],
+  fib: ['Fibrinoid', '<h3>Fibrinoid necrosis</h3><p>A lesion of <b>blood vessels</b>: endothelial damage lets plasma proteins, fibrin above all, into the wall (Wikipedia; StatPearls: deposition of fibrin within vessels). Usually <b>immune-mediated</b> — autoimmunity, immune complexes — or infection (StatPearls; Wikipedia). Seen only under the microscope (StatPearls). Wikipedia also gives <b>malignant hypertension</b> (afferent arterioles) and the spiral arterioles in pre-eclampsia.</p>'],
+  gang: ['Gangrenous', '<h3>Gangrenous necrosis</h3><p>A clinical term for ischaemic necrosis of a <b>limb</b>, usually the lower limb (StatPearls). <b>Dry gangrene</b> is coagulative necrosis, like mummified tissue; with superadded bacterial infection it becomes liquefactive — <b>wet gangrene</b> (StatPearls; Wikipedia). Dry, wet and gas gangrene: <a href="adaptations-accumulations.html#h-gang">next page</a>.</p>'],
+};
+const NEC_TABLE = [
+  ['Coagulative', 'Ischaemia in any organ except the brain: heart (MI), kidney', 'Outlines kept, no nuclei'],
+  ['Liquefactive', '<b>Brain</b> after ischaemia; abscesses', 'Liquid; pus, neutrophils'],
+  ['Caseous', '<b>Tuberculosis</b> (also some fungi, Wikipedia)', 'Cheese-like; granuloma'],
+  ['Fat', '<b>Acute pancreatitis</b>; breast trauma', 'Calcium soaps'],
+  ['Fibrinoid', 'Vessel walls: immune-mediated vasculitis; malignant hypertension (Wikipedia)', 'Fibrin in the wall'],
+  ['Gangrenous', 'Limbs, digits', 'Dry = coagulative; wet = liquefactive'],
+];
+/* micrographs (Wikimedia Commons; licences in the footer and pathology/DATA-SOURCES.md) */
+const IMG = {
+  kid: {id: 'kid', file: 'img/kidney-infarct.jpg', w: 720, h: 541, title: 'Coagulative necrosis: edge of a kidney infarct',
+    alt: 'Low-power H&E micrograph of kidney at the edge of an infarct: living tubules and a glomerulus with blue nuclei at upper left, pale pink necrotic tubules and glomeruli without nuclei on the right, red-cell haemorrhage between',
+    cap: 'Renal cortical infarct (H&E, low power). Living kidney at upper left; in the infarct, tubules and glomeruli keep their <b>outlines</b> but have <b>lost their nuclei</b> — coagulative necrosis. Haemorrhage at the border (uploader\'s description).',
+    labels: [[0.16, 0.17, 'living tubules'], [0.29, 0.11, 'living glomerulus'], [0.72, 0.32, 'dead tubules: no nuclei'], [0.44, 0.74, 'haemorrhage'], [0.87, 0.86, 'dead glomerulus']],
+    credit: {file: 'Renal cortical infarction showing coagulative necrosis 4X.jpg', author: 'Department of Pathology, Calicut Medical College', lic: 'CC BY-SA 4.0', licUrl: 'https://creativecommons.org/licenses/by-sa/4.0', done: 'thin frame trimmed, resized; labels added (approximate)'}},
+};
+const AVN_TABLE = [
+  ['Control', 'Regulated, genetically programmed, ATP-dependent, by caspases (StatPearls; Wikipedia)', 'Uncontrolled, after an overwhelming stimulus (StatPearls)'],
+  ['Cell', 'Shrinks (Wikipedia); cytoskeleton breaks down; membrane blebs (StatPearls)', 'Swells with its organelles (StatPearls; 2012 review)'],
+  ['Nucleus', 'Chromatin condenses, DNA fragments (StatPearls; Wikipedia)', 'Pyknosis, karyorrhexis, karyolysis (Wikipedia)'],
+  ['Membrane', 'Stays intact (NCCD 2018); phosphatidylserine flips to the outside (Wikipedia; NCCD 2018)', 'Ruptures; contents spill (StatPearls)'],
+  ['End', 'Apoptotic bodies eaten by phagocytes (Wikipedia; NCCD 2018)', 'Cell lyses (StatPearls)'],
+  ['Inflammation', '<b>None</b> significant (StatPearls; Wikipedia)', '<b>Almost always</b> (StatPearls; Wikipedia)'],
+  ['Physiological?', 'Yes: development, tissue maintenance (StatPearls); separation of fingers and toes (Wikipedia)', 'Almost always pathological (StatPearls)'],
+];
+const AVN_TEXT = '<p>Apoptosis is a genetically programmed, <b>ATP-dependent</b>, enzyme-mediated dismantling of the cell <b>without significant inflammation</b>, mediated by <b>caspases</b> — cysteine proteases that cut after aspartate (StatPearls; Wikipedia). Necrosis also includes regulated forms such as necroptosis, pyroptosis and ferroptosis (StatPearls).</p>';
+/* apoptosis pathways: steps [chip, html, highlighted node keys] */
+const PATH = {
+  int: ['Intrinsic (mitochondrial)', [
+    ['Stress', '<h3>1. Stress inside the cell</h3><p>Intracellular signals from a stressed or damaged cell (Wikipedia) — for example growth-factor withdrawal, DNA damage, ER stress, ROS overload (NCCD 2018) — activate the <b>BH3-only</b> proteins — BIM and PUMA by more synthesis, BID by cleavage to tBID (a 2020 review of the BCL-2 family; NCCD 2018).</p>', ['stress', 'bh3']],
+    ['BAX/BAK vs BCL-2', '<h3>2. BAX and BAK against BCL-2</h3><p><b>BAX and BAK</b> (pro-apoptotic) are activated by the BH3-only proteins and permeabilise the outer mitochondrial membrane, perhaps as a pore (Wikipedia; NCCD 2018; 2025 review). <b>BCL-2</b> and BCL-xL, on the outer mitochondrial membrane, are <b>anti-apoptotic</b> and hold them back; the balance decides whether the cell lives (Wikipedia). This <b>mitochondrial outer membrane permeabilisation (MOMP)</b> is the point of no return (2020 and 2025 reviews; NCCD 2018).</p>', ['bh3', 'baxbak', 'bcl2', 'mito']],
+    ['Cytochrome c out', '<h3>3. Cytochrome c is released</h3><p>MOMP releases <b>cytochrome c</b> from the intermembrane space (2012 review; Wikipedia).</p>', ['mito', 'cytc']],
+    ['Apoptosome → caspase-9', '<h3>4. The apoptosome</h3><p>Cytochrome c binds <b>Apaf-1</b> (with ATP) to form the <b>apoptosome</b>, which activates the initiator <b>caspase-9</b> (Wikipedia; 2012 review).</p>', ['cytc', 'apo']],
+    ['Executioner caspases', '<h3>5. Executioner caspases</h3><p>Caspase-9 activates the executioner caspases <b>-3 and -7</b> (2025 review; Wikipedia; Wikipedia adds caspase-6), which take the cell apart (Wikipedia).</p>', ['apo', 'exec']],
+    ['Cell is removed', '<h3>6. The cell is removed</h3><p>DNA fragments, phosphatidylserine is exposed and apoptotic bodies form (NCCD 2018); phagocytes engulf them before the contents spill (Wikipedia).</p>', ['exec', 'dead']],
+  ]],
+  ext: ['Extrinsic (death receptor)', [
+    ['Ligand binds', '<h3>1. A death ligand binds its receptor</h3><p>Extracellular ligands bind cell-surface <b>death receptors</b> (Wikipedia): <b>Fas ligand</b> binds <b>Fas (CD95)</b>, or TNF binds TNFR1 (Wikipedia; 2025 review). FasL is made mainly by cytotoxic T cells and NK cells (Wikipedia), and removes lymphocytes that attack the body itself (Wikipedia).</p>', ['fasl', 'fas']],
+    ['FADD, DISC', '<h3>2. The death-inducing signalling complex</h3><p>Fas recruits the adaptor <b>FADD</b> and pro-caspase-8 into the <b>DISC</b> (Wikipedia; 2012 review).</p>', ['fas', 'fadd']],
+    ['Caspase-8', '<h3>3. Caspase-8 is activated</h3><p>The DISC activates the initiator <b>caspase-8</b> (and -10, Wikipedia) (2012 review; Wikipedia). <b>c-FLIP</b> blocks this step (Wikipedia; 2025 review).</p>', ['fadd', 'c8', 'flip']],
+    ['Executioner caspases', '<h3>4. Executioner caspases</h3><p>Caspase-8 cleaves and activates <b>caspase-3</b> (2012 review; Wikipedia), and the executioners take the cell apart.</p>', ['c8', 'exec']],
+    ['Link to mitochondria', '<h3>5. The link: BID → tBID</h3><p>In most cell types caspase-8 also cleaves <b>BID</b> to <b>tBID</b>, which activates BAX and BAK at the mitochondrion, joining the intrinsic pathway (Wikipedia; NCCD 2018; 2025 review).</p>', ['c8', 'bh3', 'baxbak']],
+    ['Cell is removed', '<h3>6. The cell is removed</h3><p>DNA fragmentation, cell shrinkage and membrane blebbing (Wikipedia); apoptotic bodies are engulfed by phagocytes (Wikipedia).</p>', ['exec', 'dead']],
+  ]],
+};
+const PATH_TEXT = '<p><b>For the exam.</b> BCL-2 is <b>anti-apoptotic</b>; BAX and BAK are <b>pro-apoptotic</b> (Wikipedia; NCCD 2018; 2020 review). Caspases are <b>cysteine-aspartate proteases</b>: initiators (caspase-8 extrinsic, caspase-9 intrinsic) activate executioners (caspase-3, -7) (2025 review; Wikipedia). Wikipedia: BCL2 was found as the gene of <b>follicular lymphoma</b>, where the t(14;18) translocation places it beside the immunoglobulin heavy-chain locus; and p53 raises BAX expression.</p>';
+const AUTO_TEXT = '<p><b>Autolysis</b> is the destruction of a cell by its <b>own enzymes</b> (Wikipedia; a 2026 forensic study: intracellular digestion by endogenous enzymes after circulation stops). It is uncommon in living adults and usually occurs in necrotic tissue (Wikipedia); after death it proceeds at rates that differ by organ (the 2026 study). Wikipedia: the trigger is failure of respiration and oxidative phosphorylation, and the dead cell is not actively digesting itself. The 2026 study: the <b>pancreas</b>, rich in proteolytic and lipolytic enzymes, autolyses very rapidly; autolysis was first seen about 2 h after death.</p>';
+/* ageing: telomere schematic; the limit of about 50 doublings is Wikipedia's (40-60) */
+const AGE_LIMIT = 50;
+const AGE_TEXT = '<p><b>Telomeres</b> are TTAGGG repeats at the chromosome ends (Wikipedia; a 2021 review); they protect the DNA ends and act as a molecular timer of the cell\'s lifespan (StatPearls). They <b>shorten with every division</b> (Wikipedia); when short enough the end is read as a DNA break and the cell stops dividing — <b>replicative senescence</b> (Wikipedia). Normal human fetal cells divide about <b>50 times</b> in culture (between 40 and 60), the <b>Hayflick limit</b> (Wikipedia).</p><p><b>Telomerase</b>, a reverse transcriptase, rebuilds telomeres: it is active in germ cells, stem cells, some white cells and <b>most cancer cells</b> (Wikipedia; Campisi\'s 2013 review of ageing, senescence and cancer).</p><p>Other mechanisms: <b>DNA damage</b> accumulates with age (Wikipedia); the <b>free-radical theory</b> (Denham Harman, 1950s) holds that cells age by accumulating free-radical damage (Wikipedia); the <b>2013 "Hallmarks of Aging" review</b> (López-Otín et al.) lists nine hallmarks: genomic instability, telomere attrition, epigenetic alterations, loss of proteostasis, deregulated nutrient sensing, mitochondrial dysfunction, cellular senescence, stem-cell exhaustion and altered intercellular communication. <b>Lipofuscin</b> accumulates with age (Wikipedia; StatPearls) — see <a href="adaptations-accumulations.html#h-acc">pigments</a>.</p>';
+const SKILL = 'PA2.8 (identifying cell injury in gross and microscopic specimens) is a practical skill: the labelled micrographs here and on the next page help, but are not a substitute for the specimens.';
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts: liquefactive necrosis and the necrosis patterns, necrosis, apoptosis, gangrene, telomeres, lipofuscin); open-access reviews: cell biology of ischaemia–reperfusion injury (2012), the Nomenclature Committee on Cell Death recommendations (NCCD 2018), the BCL-2 family (2020), caspases (2025), necrosis and necroptosis in the gut (2015), telomeres (2021), ageing, senescence and cancer (Campisi 2013), the Hallmarks of Aging (López-Otín et al. 2013); a forensic study of pancreatic autolysis (2026) (NCBI PMC); Wikipedia.';
+const MODELS = '<b>Models used:</b> the cell, tissue, pathway and telomere drawings are schematic, not to scale; the slider\'s stage boundaries are illustrative (sources give the order of changes, not their timing). Micrograph: Wikimedia Commons, credited under the image.';
+
+/* ===================== CODE ===================== */
+const {$} = Patho;
+/* SVG text: hyphens before digits stay hyphens (caspase-8, BCL-2), as non-breaking hyphens, instead of Patho.T's minus sign */
+const T = (x, y, t, cls, a, extra) => Patho.T(x, y, String(t).replace(/-(?=\d)/g, '\u2011'), cls, a, extra);
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS; $('skill-note').innerHTML = SKILL;
+const clamp = v => Math.max(0, Math.min(1, v));
+const f1 = v => v.toFixed(1);
+
+/* ---- causes ---- */
+Patho.toggles('cause-tg', Object.entries(CAUSE).map(([k, v]) => [k, v[0]]), k => { $('cause-find').innerHTML = CAUSE[k][1]; }, 'hyp');
+$('cause-find').innerHTML = CAUSE.hyp[1]; $('cause-text').innerHTML = CAUSE_TEXT;
+
+/* ---- a schematic cell. o: {swell, blebs, mito, dense, er, fat, rupture, eos, nuc, lyso, hl:Set} ---- */
+function cell(o) {
+  const cx = 260, cy = 150, R = 92 * (1 + 0.2 * (o.swell || 0)), hl = o.hl || new Set();
+  const pt = (a, r) => [cx + r * Math.cos(a), cy + r * Math.sin(a) * 0.86];
+  const outline = []; for (let i = 0; i <= 60; i++) { const a = i / 60 * 2 * Math.PI; outline.push(pt(a, R * (1 + 0.035 * Math.sin(3 * a + 0.4)))); }
+  const d = Patho.path(outline) + ' Z';
+  let s = `<path d="${d}" style="fill:var(--cyto);fill-opacity:.75"/>`;
+  if (o.eos) s += `<path d="${d}" style="fill:var(--eosin);fill-opacity:${(0.85 * o.eos).toFixed(2)}"/>`;
+  if (o.swell) s += `<path d="${d}" style="fill:var(--fluid);fill-opacity:${(0.35 * o.swell * (1 - (o.eos || 0))).toFixed(2)}"/>`;
+  // membrane: solid, or broken (rupture)
+  const per = 2 * Math.PI * R * 0.93, gap = (o.rupture || 0) * per / 14, dash = per / 7 - gap;
+  s += `<path d="${d}" style="fill:none;stroke:var(--ink);stroke-width:${hl.has('memb') ? 3 : 1.6}${o.rupture ? `;stroke-dasharray:${f1(dash)} ${f1(gap)}` : ''}"/>`;
+  // blebs
+  if (o.blebs) for (const a of [-1.2, -0.3, 0.6, 2.2, 3.4]) { const [x, y] = pt(a, R * 1.04); s += `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(11 * o.blebs)}" style="fill:var(--cyto);fill-opacity:.75;stroke:var(--ink);stroke-width:1.2"/>`; }
+  // leaked contents
+  if (o.rupture) for (let i = 0; i < 14; i++) { const a = i * 0.45 + 0.2, [x, y] = pt(a, R * (1.12 + 0.12 * ((i * 7) % 3))); s += `<circle cx="${f1(x)}" cy="${f1(y)}" r="2.6" style="fill:var(--ink);fill-opacity:${(0.6 * o.rupture).toFixed(2)}"/>`; }
+  // nucleus
+  const nx = cx - 18, ny = cy + 2, nr = 30;
+  const nuc = o.nuc || 'norm';
+  if (nuc === 'norm') { s += `<circle cx="${nx}" cy="${ny}" r="${nr}" style="fill:var(--nucleus);fill-opacity:.3;stroke:var(--nucleus);stroke-width:${hl.has('nuc') ? 3 : 1.6}"/>`; for (const [dx, dy] of [[-10, -8], [8, -12], [12, 8], [-6, 12], [0, 0]]) s += `<circle cx="${nx + dx}" cy="${ny + dy}" r="3" style="fill:var(--nucleus)"/>`; }
+  else if (nuc === 'pyk') s += `<circle cx="${nx}" cy="${ny}" r="15" style="fill:var(--nucleus)"/>`;
+  else if (nuc === 'rhex') for (const [dx, dy, r] of [[-14, -10, 5], [6, -16, 4], [16, 2, 5], [-4, 14, 4], [-18, 8, 3.5], [8, 16, 3], [0, -2, 4]]) s += `<circle cx="${nx + dx}" cy="${ny + dy}" r="${r}" style="fill:var(--nucleus)"/>`;
+  else if (nuc === 'lysis') s += `<circle cx="${nx}" cy="${ny}" r="${nr}" style="fill:var(--nucleus);fill-opacity:.07;stroke:var(--nucleus);stroke-opacity:.35;stroke-dasharray:3 4"/>`;
+  // ER (dilated = vacuoles), right of the nucleus
+  const er = o.er || 0;
+  for (let i = 0; i < 3; i++) { const y = cy - 26 + i * 20; s += `<ellipse cx="${cx + 34}" cy="${y}" rx="22" ry="${f1(1.5 + 6 * er)}" style="fill:var(--surface);fill-opacity:${(0.3 + 0.6 * er).toFixed(2)};stroke:var(--ink);stroke-width:${hl.has('er') ? 2.4 : 1}"/>`; }
+  // mitochondria
+  const mpos = [[cx - 60, cy - 50, -0.3], [cx + 58, cy + 46, 0.4], [cx - 54, cy + 52, 0.2]];
+  for (const [x, y, rot] of mpos) {
+    const ry = 8 * (1 + 0.9 * (o.mito || 0)), rx = 17 * (1 + 0.2 * (o.mito || 0));
+    s += `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(rot * 57.3)})"><ellipse rx="${f1(rx)}" ry="${f1(ry)}" class="${hl.has('mito') ? 'orgon' : 'org'}"/>`;
+    if ((o.mito || 0) < 0.6) for (const cxp of [-8, 0, 8]) s += `<path d="M${cxp} ${f1(-ry + 2)} L${cxp} ${f1(ry - 2)}" style="stroke:var(--muted);stroke-width:1"/>`;
+    if (o.dense) for (const [dx, dy] of [[-5, -2], [4, 3], [8, -3]]) s += `<circle cx="${dx}" cy="${dy}" r="2.4" style="fill:var(--ink)"/>`;
+    s += '</g>';
+  }
+  // lysosomes
+  for (const [x, y] of [[cx + 10, cy - 58], [cx + 70, cy - 8]]) {
+    s += `<circle cx="${x}" cy="${y}" r="7" style="fill:var(--surface);stroke:var(--ink);stroke-width:${hl.has('lyso') ? 2.4 : 1}${o.lyso ? ';stroke-dasharray:3 3' : ''}"/><circle cx="${x}" cy="${y}" r="2" style="fill:var(--ink)"/>`;
+    if (o.lyso) for (let i = 0; i < 5; i++) { const a = i * 1.3; s += `<circle cx="${f1(x + 13 * Math.cos(a))}" cy="${f1(y + 13 * Math.sin(a))}" r="1.6" style="fill:var(--ink);fill-opacity:${(0.8 * o.lyso).toFixed(2)}"/>`; }
+  }
+  // fat droplets
+  if (o.fat) for (const [x, y] of [[cx + 40, cy + 30], [cx - 70, cy - 4], [cx + 6, cy + 54]]) s += `<circle cx="${x}" cy="${y}" r="${f1(3 + 6 * o.fat)}" style="fill:var(--fat);stroke:var(--ink);stroke-width:.8"/>`;
+  return s;
+}
+/* labels at the sides with leader lines: items [text, side 'l'|'r', y, tx, ty] */
+/* side labels: the cell is drawn shifted 50 right (CELL_DX) in a 620-wide box; labels sit in the free columns left (x 4-190) and
+   right (x 436-616); "|" breaks a label into lines */
+const CELL_DX = 50;
+function sideLabels(items) {
+  let s = '';
+  for (const [t, side, y, tx, ty] of items) {
+    const lines = t.split('|'), w = Math.max(...lines.map(l => l.length)) * 7;
+    const x = side === 'l' ? 4 : 436, lx = side === 'l' ? Math.min(x + w + 4, tx + CELL_DX - 4) : x - 4;
+    s += `<path class="lead" d="M${f1(lx)} ${y - 4} L${tx + CELL_DX} ${ty}"/>` + lines.map((l, i) => T(x, y + i * 15, l, 'l', 'start')).join('');
+  }
+  return s;
+}
+const inCell = g => `<g transform="translate(${CELL_DX} 0)">${g}</g>`;
+/* ---- mechanism stepper ---- */
+const MS = {s: 0};
+function drawMech() {
+  const k = MS.s; let s = Patho.DEFS + Patho.arrowDef('ai', 'var(--ink)');
+  const base = {swell: 0.35, mito: 0.2, er: 0.3};
+  if (k === 0) {
+    s += inCell(cell(Object.assign({}, base, {hl: new Set(['memb', 'mito'])})) + `<rect x="345" y="138" width="22" height="16" rx="3" style="fill:var(--surface);stroke:var(--ink);stroke-width:2"/>` + T(356, 150, '✗', 'b', 'middle') + `<path d="M400 124 L372 140" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#ai)"/>`);
+    s += sideLabels([['Na⁺ and water in', 'r', 110, 398, 122], ['Na⁺/K⁺-ATPase fails', 'r', 186, 367, 152], ['ATP ↓ (mitochondria)', 'l', 64, 186, 96], ['glycolysis in the|cytosol → lactate,|pH ↓', 'l', 236, 182, 172]]);
+  } else if (k === 1) {
+    let g = cell(Object.assign({}, base, {mito: 0.8, hl: new Set(['mito'])}));
+    for (const [x, y] of [[218, 88], [228, 82], [334, 210]]) g += `<circle cx="${x}" cy="${y}" r="3" style="fill:var(--ink);fill-opacity:.6"/>`;
+    s += inCell(g) + sideLabels([['MPT pore opens,|mitochondria swell', 'l', 60, 190, 92], ['ATP production fails', 'l', 250, 196, 206], ['cytochrome c out|→ apoptosis', 'r', 240, 334, 212]]);
+  } else if (k === 2) {
+    let g = cell(Object.assign({}, base, {hl: new Set(['memb', 'er', 'mito'])}));
+    for (let i = 0; i < 12; i++) { const a = -2.6 + i * 0.35, x = 260 + 70 * Math.cos(a), y = 150 + 58 * Math.sin(a); g += Patho.dot(x, y, 'ca', 4); }
+    g += `<path d="M260 14 L260 50" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#ai)"/>`;
+    s += inCell(g) + sideLabels([['Ca²⁺ in', 'r', 24, 262, 20], ['proteases (calpains)', 'r', 204, 330, 180], ['phospholipases', 'r', 232, 318, 196], ['MPT pore', 'l', 70, 196, 96], ['ER cannot take|Ca²⁺ back', 'r', 100, 316, 126]]);
+  } else if (k === 3) {
+    let g = cell(Object.assign({}, base, {hl: new Set(['memb', 'nuc'])}));
+    const star = (x, y) => `<path d="M${x} ${y - 7} L${x + 2} ${y - 2} L${x + 7} ${y} L${x + 2} ${y + 2} L${x} ${y + 7} L${x - 2} ${y + 2} L${x - 7} ${y} L${x - 2} ${y - 2} Z" style="fill:var(--ink)"/>`;
+    for (const [x, y] of [[168, 104], [352, 112], [244, 140], [300, 214], [180, 200]]) g += star(x, y);
+    s += inCell(g) + sideLabels([['lipid peroxidation|(membranes)', 'l', 90, 168, 104], ['DNA damage', 'l', 160, 234, 146], ['protein oxidation', 'r', 236, 300, 214], ['burst on reperfusion', 'r', 80, 352, 112]]);
+  } else {
+    s += inCell(cell(Object.assign({}, base, {rupture: 0.8, lyso: 0.9, hl: new Set(['memb', 'lyso'])})));
+    s += sideLabels([['plasma membrane breaks', 'r', 60, 340, 80], ['contents leak →|inflammation', 'r', 256, 330, 240], ['lysosomal|enzymes leak', 'l', 60, 268, 92]]);
+  }
+  s += T(10, 292, 'schematic, not to scale', 's', 'start');
+  $('mech-svg').innerHTML = s; $('mech-find').innerHTML = MECH[k][1] + (k === 4 ? MECH_NOTE : '');
+}
+Patho.stepper('mech-step', MECH.map(m => m[0]), drawMech, MS);
+Patho.key('mech-key', [['--cyto', 'cytoplasm'], ['--nucleus', 'nucleus'], ['--fluid', 'water (swelling)'], ['--ca', 'Ca²⁺']]);
+
+/* ---- reversible -> irreversible slider ---- */
+const RV = {v: 0};
+function revState(v) {
+  if (v <= 0) return {o: {}, name: 'Normal cell', phase: 'normal', labels: []};
+  if (v < 40) { const t = v / 39; return {o: {swell: t, blebs: clamp((v - 10) / 25), mito: 0.6 * t, er: t, fat: clamp((v - 20) / 19)}, name: 'Reversible injury', phase: 'rev'}; }
+  const nuc = v < 50 ? 'norm' : v < 65 ? 'pyk' : v < 80 ? 'rhex' : 'lysis';
+  return {o: {swell: 1, blebs: 1, mito: 1, er: 1, eos: clamp((v - 40) / 30), rupture: clamp((v - 39) / 40), lyso: clamp((v - 42) / 15), nuc}, name: 'Irreversible injury', phase: 'irr', nuc};
+}
+const NUC_NAME = {norm: 'nucleus still intact', pyk: 'pyknosis: shrunken, dark nucleus', rhex: 'karyorrhexis: nucleus fragments', lysis: 'karyolysis: chromatin dissolved'};
+function drawRev() {
+  const v = RV.v, st = revState(v);
+  let s = inCell(cell(st.o));
+  if (st.phase === 'rev') {
+    const L = [['cell swells (water in)', 'r', 56, 340, 74]];
+    if (v >= 14) L.push(['blebs', 'r', 120, 352, 92]);
+    L.push(['mitochondria swell', 'l', 64, 190, 96]);
+    L.push(['dilated ER|(clear vacuoles)', 'r', 200, 316, 168]);
+    if (v >= 22) L.push(['small fat vacuoles', 'l', 160, 186, 150]);
+    s += sideLabels(L);
+  } else if (st.phase === 'irr') {
+    const L = [['mitochondria fail', 'l', 64, 190, 96]];
+    L.push(['membranes break', 'r', 40, 340, 64]);
+    L.push(['lysosomal enzymes leak', 'r', 100, 330, 140]);
+    L.push([NUC_NAME[st.nuc].split(':')[0], 'l', 170, 222, 156]);
+    if (v >= 55) L.push(['eosinophilic|cytoplasm', 'r', 230, 320, 200]);
+    s += sideLabels(L);
+  }
+  // progress bar with the point of no return
+  const X = Patho.scale(0, 100, 30, 590);
+  s += `<path class="axis" d="M30 288 L590 288"/><path d="M${f1(X(40))} 276 L${f1(X(40))} 296" style="stroke:var(--ink);stroke-width:1.6;stroke-dasharray:3 2"/>` + T(X(40) - 4, 272, 'reversible', 's', 'end') + T(X(40) + 4, 272, 'irreversible', 's', 'start');
+  s += `<circle cx="${f1(X(v))}" cy="288" r="5" style="fill:var(--mark)"/>`;
+  $('rev-svg').innerHTML = s;
+  $('rev-out').innerHTML = `<span><span class="tag">Stage</span> <span class="readout">${st.name}</span></span>` + (st.phase === 'irr' ? `<span><span class="tag">Nucleus</span> <span class="readout">${NUC_NAME[st.nuc]}</span></span>` : '');
+  const F = {
+    normal: '<h3>Normal cell</h3><p>Drag the slider to injure it.</p>',
+    rev: '<h3>Reversible injury</h3><p><b>Cellular swelling</b> is the first sign of almost all injury: the cell takes in water, the ER dilates into small clear vacuoles (hydropic change), blebs form and the mitochondria change (Wikipedia). Fatty change may appear (Wikipedia). Remove the stimulus now and the cell can recover (StatPearls; Wikipedia).</p>',
+    irr: '<h3>Irreversible injury</h3><p>Mitochondrial function is lost and membranes are damaged — of the plasma membrane and of organelles such as lysosomes, whose enzymes leak (NCCD 2018; Wikipedia). The cytoplasm becomes <b>hypereosinophilic</b> (Wikipedia) and the nucleus goes through <b>pyknosis → karyorrhexis → karyolysis</b> (Wikipedia).</p>',
+  };
+  $('rev-find').innerHTML = F[st.phase];
+}
+Patho.slider('rev-sl', {id: 'rv', label: 'Severity and duration of injury (schematic)', min: 0, max: 100, step: 1, value: 0, fmt: v => v < 40 ? (v === 0 ? 'none' : 'reversible') : 'irreversible'}, v => { RV.v = v; drawRev(); }).init();
+$('rev-text').innerHTML = REV_TEXT; drawRev();
+
+/* ---- necrosis types (schematic tissue) ---- */
+function polyCell(x, y, w, h) { return `M${x + 4} ${y} L${x + w - 4} ${y} L${x + w} ${y + h / 2} L${x + w - 4} ${y + h} L${x + 4} ${y + h} L${x} ${y + h / 2} Z`; }
+function drawNec(k) {
+  let s = '';
+  if (k === 'coag') {
+    for (let r = 0; r < 5; r++) for (let c = 0; c < 9; c++) {
+      const x = 20 + c * 54 + (r % 2) * 10, y = 20 + r * 38, dead = c >= 4;
+      s += `<path d="${polyCell(x, y, 48, 32)}" style="fill:var(${dead ? '--eosin' : '--cyto'});fill-opacity:${dead ? .9 : .7};stroke:var(--ink);stroke-width:1"/>`;
+      if (!dead) s += `<circle cx="${x + 24}" cy="${y + 16}" r="6" style="fill:var(--nucleus)"/>`;
+    }
+    s += `<path d="M${20 + 4 * 54 - 3} 12 L${20 + 4 * 54 - 3} 214" style="stroke:var(--ink);stroke-width:1.6;stroke-dasharray:5 4"/>`;
+    s += T(110, 234, 'living cells: nuclei', 'l b', 'middle') + T(370, 234, 'infarct: outlines kept, no nuclei', 'l b', 'middle');
+  } else if (k === 'liq') {
+    for (let r = 0; r < 5; r++) for (let c = 0; c < 10; c++) { const x = 10 + c * 50 + (r % 2) * 12, y = 8 + r * 38; if (((x + 22 - 260) / 160) ** 2 + ((y + 16 - 118) / 92) ** 2 < 1) continue; s += `<path d="${polyCell(x, y, 44, 32)}" style="fill:var(--cyto);fill-opacity:.6;stroke:var(--ink);stroke-width:.8"/><circle cx="${x + 22}" cy="${y + 16}" r="5" style="fill:var(--nucleus)"/>`; }
+    s += `<ellipse cx="260" cy="118" rx="150" ry="82" style="fill:var(--surface);stroke:var(--ink);stroke-width:4"/><ellipse cx="260" cy="118" rx="146" ry="78" style="fill:var(--fluid)"/>`;
+    for (let i = 0; i < 26; i++) { const a = i * 2.39, rr = 18 + (i * 37) % 110, x = 260 + rr * Math.cos(a), y = 118 + rr * 0.55 * Math.sin(a); if (Math.abs(y - 124) < 22 && Math.abs(x - 260) < 110) continue; if (i % 2) s += [0, 4, 8].map(d => `<circle cx="${f1(x + d - 4)}" cy="${f1(y + (d === 4 ? -3 : 0))}" r="2.4" style="fill:var(--nucleus)"/>`).join(''); else s += `<circle cx="${f1(x)}" cy="${f1(y)}" r="1.8" style="fill:var(--ink);fill-opacity:.5"/>`; }
+    s += T(260, 120, 'liquefied centre: pus, debris', 'l b', 'middle') + T(260, 140, '(neutrophils: lobed nuclei)', 'l s', 'middle') + T(260, 222, 'wall (later a cyst wall)', 'l b', 'middle') + `<path class="lead" d="M260 210 L260 198"/>`;
+  } else if (k === 'cas') {
+    const cx = 260, cy = 120;
+    for (let i = 0; i < 70; i++) { const a = i * 2.4, r = 92 + (i % 3) * 8; s += `<circle cx="${f1(cx + r * Math.cos(a))}" cy="${f1(cy + r * 0.82 * Math.sin(a))}" r="3.4" style="fill:var(--nucleus)"/>`; }
+    for (let i = 0; i < 18; i++) { const a = i / 18 * 2 * Math.PI, r = 70, x = cx + r * Math.cos(a), y = cy + r * 0.82 * Math.sin(a); s += `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(a * 57.3 + 90)})"><ellipse rx="14" ry="7" style="fill:var(--cyto);fill-opacity:.8;stroke:var(--ink);stroke-width:.6"/><ellipse rx="7" ry="2.6" style="fill:var(--nucleus);fill-opacity:.8"/></g>`; }
+    s += `<ellipse cx="${cx}" cy="${cy}" rx="54" ry="44" style="fill:var(--eosin);stroke:var(--ink);stroke-width:.8"/>`;
+    for (let i = 0; i < 40; i++) { const a = i * 2.4, r = (i * 13) % 46; s += `<circle cx="${f1(cx + r * Math.cos(a))}" cy="${f1(cy + r * 0.8 * Math.sin(a))}" r="${i % 4 ? 1.3 : 2}" style="fill:var(${i % 4 ? '--ink' : '--nucleus'});fill-opacity:.55"/>`; }
+    // Langhans giant cell (horseshoe of nuclei)
+    const gx = cx + 104, gy = cy - 50; s += `<ellipse cx="${gx}" cy="${gy}" rx="30" ry="22" style="fill:var(--cyto);stroke:var(--ink);stroke-width:1"/>`;
+    for (let i = 0; i < 9; i++) { const a = Math.PI * (0.15 + i * 0.09) + Math.PI / 2; s += `<circle cx="${f1(gx + 20 * Math.cos(a))}" cy="${f1(gy + 14 * Math.sin(a))}" r="3" style="fill:var(--nucleus)"/>`; }
+    s += sideLabelsN([['caseous centre: granular, eosinophilic', 10, 14, cx - 20, cy - 20, 'start'], ['epithelioid macrophages', 10, 246, cx - 50, cy + 52, 'start'], ['giant cell', 510, 24, gx + 14, gy - 16, 'end'], ['lymphocytes', 510, 246, cx + 90, cy + 66, 'end']]);
+  } else if (k === 'fat') {
+    for (let r = 0; r < 3; r++) for (let c = 0; c < 7; c++) {
+      const x = 16 + c * 70 + (r % 2) * 16, y = 10 + r * 54, necro = (r + c) % 3 === 0 && c > 1 && c < 6;
+      s += `<path d="${polyCell(x, y, 64, 48)}" style="fill:var(--fat);stroke:var(--ink);stroke-width:${necro ? 1 : .9}${necro ? ';stroke-dasharray:4 3' : ''}"/>`;
+      if (necro) for (const [dx, dy, rr] of [[20, 18, 7], [40, 28, 9], [30, 12, 5]]) s += `<circle cx="${x + dx}" cy="${y + dy}" r="${rr}" style="fill:var(--calc);stroke:var(--ink);stroke-width:1.6"/><circle cx="${x + dx}" cy="${y + dy}" r="${rr}" style="fill:url(#soap)"/>`;
+      else s += `<ellipse cx="${x + 10}" cy="${y + 24}" rx="3" ry="7" style="fill:var(--nucleus)"/>`;
+    }
+    s = `<defs><pattern id="soap" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" style="stroke:var(--ink);stroke-width:1.2;stroke-opacity:.7"/></pattern></defs>` + s;
+    s += sideLabelsN([['calcium soaps (dead fat cells)', 300, 196, 318, 140, 'start']]);
+    s += T(260, 240, 'lipase → fatty acids + Ca²⁺ → calcium soaps; dead adipocytes lose their nuclei', 'l b', 'middle');
+  } else if (k === 'fib') {
+    const cx = 260, cy = 134, R0 = 80, R1 = 50;  /* vessel: wall from R1 to R0 */
+    const band = `M${cx - 69} ${cy - 40} A${R0} ${R0} 0 0 1 ${cx + 62} ${cy - 50} L${cx + 39} ${cy - 31} A${R1} ${R1} 0 0 0 ${cx - 43} ${cy - 25} Z`;
+    s += `<defs><pattern id="fibr" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><line x1="0" y1="0" x2="0" y2="5" style="stroke:var(--ink);stroke-width:1.3;stroke-opacity:.75"/></pattern></defs>`;
+    s += `<circle cx="${cx}" cy="${cy}" r="${R0}" style="fill:var(--collagen);fill-opacity:.35;stroke:var(--ink);stroke-width:1"/>`;
+    s += `<path d="${band}" style="fill:var(--eosin);stroke:var(--ink);stroke-width:1"/><path d="${band}" style="fill:url(#fibr);stroke:var(--ink);stroke-width:1.6"/>`;
+    s += `<circle cx="${cx}" cy="${cy}" r="${R1}" style="fill:var(--surface);stroke:var(--ink);stroke-width:1"/>`;
+    for (const [dx, dy] of [[-20, -8], [14, 12], [0, 26], [22, -14], [-24, 20]]) s += `<ellipse cx="${cx + dx}" cy="${cy + dy}" rx="8" ry="6" style="fill:var(--rbc);fill-opacity:.8"/>`;
+    s += sideLabelsN([['fibrin and plasma proteins in the wall', 10, 22, cx - 30, cy - 62, 'start'], ['vessel wall', 510, 236, cx + 60, cy + 50, 'end'], ['lumen with red cells', 10, 236, cx - 20, cy + 22, 'start']]);
+  } else {
+    // a schematic foot seen from above (shifted 30 down): two toes dry-gangrenous with a line of demarcation
+    let g = `<path d="M150 230 C140 160 150 110 175 80 C190 60 330 60 345 80 C370 110 380 160 370 230 Z" style="fill:var(--cyto);fill-opacity:.35;stroke:var(--ink);stroke-width:1.2"/>`;
+    const toes = [[185, 52, 18], [222, 42, 15], [256, 40, 14], [290, 44, 13], [322, 54, 12]];
+    toes.forEach(([x, y, r], i) => { const dead = i < 2; g += `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r + 10}" style="fill:${dead ? 'var(--ink)' : 'var(--cyto)'};fill-opacity:${dead ? .85 : .35};stroke:var(--ink);stroke-width:1.2"/>`; });
+    g += `<path d="M160 74 Q205 84 240 70" style="fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:4 3"/>`;
+    s += `<g transform="translate(-60 30)">${g}</g>`;
+    s += sideLabelsN([['dry gangrene: black toes', 330, 22, 168, 64, 'start'], ['line of demarcation', 330, 110, 150, 112, 'start']]);
+  }
+  s += T(510, 260, 'schematic', 's', 'end');
+  $('nec-svg').innerHTML = s; $('nec-find').innerHTML = NEC[k][1];
+}
+function sideLabelsN(items) { let s = ''; for (const [t, x, y, tx, ty, a] of items) s += `<path class="lead" d="M${a === 'start' ? x + 2 : x - 2} ${y + 4} L${tx} ${ty}"/>` + T(x, y, t, 'l b', a); return s; }
+Patho.toggles('nec-tg', Object.entries(NEC).map(([k, v]) => [k, v[0]]), drawNec, 'coag'); drawNec('coag');
+Patho.table('nec-table', ['Type', 'Typical setting', 'Look'], NEC_TABLE);
+Patho.micro('nec-micro', Object.assign({}, IMG.kid, {credit: Patho.credit(IMG.kid.credit)}));
+
+/* ---- apoptosis vs necrosis ---- */
+function mini(x, y, o) {
+  const r = 24 * (o.k || 1); let s = '';
+  s += `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${f1(r * 0.85)}" style="fill:var(${o.eos ? '--eosin' : '--cyto'});fill-opacity:.8;stroke:var(--ink);stroke-width:1.2${o.rup ? ';stroke-dasharray:6 5' : ''}"/>`;
+  if (o.blebs) for (const a of [-0.8, 0.9, 2.4, 3.8]) s += `<circle cx="${f1(x + r * 1.05 * Math.cos(a))}" cy="${f1(y + r * 0.9 * Math.sin(a))}" r="${o.blebs}" style="fill:var(--cyto);stroke:var(--ink);stroke-width:1"/>`;
+  if (o.nuc === 'n') s += `<circle cx="${x}" cy="${y}" r="9" style="fill:var(--nucleus);fill-opacity:.35;stroke:var(--nucleus)"/>`;
+  if (o.nuc === 'c') s += `<circle cx="${x}" cy="${y}" r="7" style="fill:var(--surface);stroke:var(--nucleus)"/><path d="M${x - 7} ${y} A7 7 0 0 1 ${x + 7} ${y} Z" style="fill:var(--nucleus)"/>`;
+  if (o.nuc === 'p') s += `<circle cx="${x}" cy="${y}" r="5" style="fill:var(--nucleus)"/>`;
+  return s;
+}
+{
+  let s = '';
+  const xs = [70, 205, 340, 475], yN = 70, yA = 205;
+  s += T(10, 20, 'NECROSIS', 'h', 'start') + T(10, 155, 'APOPTOSIS', 'h', 'start');
+  s += mini(xs[0], yN, {nuc: 'n'}) + mini(xs[1], yN, {k: 1.3, nuc: 'n', blebs: 6}) + mini(xs[2], yN, {k: 1.35, nuc: 'p', rup: true, eos: true});
+  for (let i = 0; i < 10; i++) s += `<circle cx="${f1(xs[2] + 46 * Math.cos(i * 0.63))}" cy="${f1(yN + 38 * Math.sin(i * 0.63))}" r="2.4" style="fill:var(--ink);fill-opacity:.6"/>`;
+  // inflammation: neutrophils (lobed nuclei) around debris
+  s += mini(xs[3], yN, {k: 0.8, eos: true, rup: true});
+  for (const [dx, dy] of [[-40, -24], [38, -22], [-36, 28], [40, 26]]) { s += `<circle cx="${xs[3] + dx}" cy="${yN + dy}" r="11" style="fill:var(--cyto);fill-opacity:.5;stroke:var(--ink);stroke-width:.8"/>` + [-4, 0, 4].map(d => `<circle cx="${xs[3] + dx + d}" cy="${yN + dy + (d ? 0 : -3)}" r="2.6" style="fill:var(--nucleus)"/>`).join(''); }
+  s += mini(xs[0], yA, {nuc: 'n'}) + mini(xs[1], yA, {k: 0.75, nuc: 'c'}) + mini(xs[2], yA, {k: 0.72, nuc: 'p', blebs: 5});
+  // phagocyte engulfing apoptotic bodies
+  s += `<path d="M${xs[3] - 50} ${yA + 20} C${xs[3] - 50} ${yA - 46} ${xs[3] + 50} ${yA - 46} ${xs[3] + 50} ${yA + 20} C${xs[3] + 30} ${yA + 30} ${xs[3] - 30} ${yA + 30} ${xs[3] - 50} ${yA + 20} Z" style="fill:var(--cyto);fill-opacity:.4;stroke:var(--ink);stroke-width:1.2"/>`;
+  for (const [dx, dy, r] of [[-14, -2, 8], [6, -12, 7], [16, 4, 6]]) s += `<circle cx="${xs[3] + dx}" cy="${yA + dy}" r="${r}" style="fill:var(--cyto);stroke:var(--ink);stroke-width:1"/><circle cx="${xs[3] + dx}" cy="${yA + dy}" r="${r / 2.4}" style="fill:var(--nucleus)"/>`;
+  const capN = ['normal', 'swells,|blebs', 'membrane ruptures,|contents spill', 'inflammation'];
+  const capA = ['normal', 'shrinks,|chromatin condenses', 'blebs,|breaks up', 'apoptotic bodies eaten|by a phagocyte;|no inflammation'];
+  const wrap = (t, x, y) => t.split('|').map((p, i) => T(x, y + i * 14, p, 's', 'middle')).join('');
+  xs.forEach((x, i) => { s += wrap(capN[i], x, yN + 50) + wrap(capA[i], x, yA + 48); if (i < 3) { s += `<path class="flow" d="M${x + 38} ${yN} L${xs[i + 1] - 40} ${yN}"/><path class="flow" d="M${x + 38} ${yA} L${xs[i + 1] - 40} ${yA}"/>`; } });
+  s += T(550, 14, 'schematic', 's', 'end');
+  $('avn-svg').innerHTML = Patho.DEFS + s;
+}
+Patho.table('avn-table', ['Feature', 'Apoptosis', 'Necrosis'], AVN_TABLE);
+$('avn-text').innerHTML = AVN_TEXT;
+
+/* ---- apoptosis pathways ---- */
+const PNODES = {
+  fasl: [60, 2, 100, 20, 'Fas ligand', 'on T or NK cell'],
+  fas: [60, 34, 100, 26, 'Fas (CD95)', ''],
+  fadd: [60, 86, 100, 26, 'FADD → DISC', ''],
+  c8: [60, 136, 100, 26, 'caspase-8', ''],
+  flip: [8, 190, 70, 22, 'c-FLIP', ''],
+  stress: [300, 80, 200, 26, 'DNA damage, no growth factor', ''],
+  bh3: [300, 122, 200, 26, 'BH3-only: BIM, PUMA, tBID', ''],
+  bcl2: [180, 176, 92, 26, 'BCL-2, BCL-xL', ''],
+  baxbak: [286, 176, 92, 26, 'BAX, BAK', ''],
+  apo: [300, 262, 200, 26, 'cyt c + Apaf-1 → caspase-9', ''],
+  exec: [120, 262, 150, 26, 'caspase-3, -7 (-6)', ''],
+  dead: [120, 300, 150, 24, 'apoptotic cell removed', ''],
+};
+const PT = {p: 'int'}, PS = {s: 0};
+function drawPath() {
+  const steps = PATH[PT.p][1], on = new Set(steps[PS.s][2]);
+  let s = Patho.DEFS;
+  s += `<rect x="0" y="40" width="58" height="8" class="memb"/><rect x="162" y="40" width="138" height="8" class="memb"/>` + T(168, 60, 'cell membrane', 's', 'start');
+  // mitochondrion
+  s += `<ellipse cx="440" cy="196" rx="62" ry="30" class="${on.has('mito') || on.has('cytc') ? 'nodeon' : 'node'}"/>` + T(452, 200, 'mitochondrion', 's', 'middle');
+  for (const [nk, [x, y, w, h, t, sub]] of Object.entries(PNODES)) {
+    const hit = on.has(nk);
+    s += `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" class="${hit ? 'nodeon' : 'node'}"/>` + T(x + w / 2, y + h / 2 + 4, t, hit ? 'b' : '', 'middle');
+    if (sub) s += T(x + w + 6, y + h / 2 + 4, sub, 's', 'start');
+  }
+  const A = (d, dash) => `<path d="${d}" class="flow"${dash ? ' style="stroke-dasharray:5 4"' : ''}/>`;
+  const I = (x1, y1, x2, y2) => `<path d="M${x1} ${y1} L${x2} ${y2}" style="stroke:var(--ink);stroke-width:1.6"/><path d="M${x2 - (y2 === y1 ? 0 : 6)} ${y2 - (y2 === y1 ? 6 : 0)} L${x2 + (y2 === y1 ? 0 : 6)} ${y2 + (y2 === y1 ? 6 : 0)}" style="stroke:var(--ink);stroke-width:2"/>`;
+  s += A('M110 22 L110 33') + A('M110 60 L110 84') + A('M110 112 L110 134') + A('M110 162 L170 260');
+  s += `<path d="M43 190 L43 149 L56 149" style="fill:none;stroke:var(--ink);stroke-width:1.6"/><path d="M58 142 L58 156" style="stroke:var(--ink);stroke-width:2"/>`; // c-FLIP -| caspase-8
+  s += A('M400 106 L400 120') + A('M330 148 L330 174');
+  s += `<path d="M272 189 L282 189" style="stroke:var(--ink);stroke-width:1.6"/><path d="M284 182 L284 196" style="stroke:var(--ink);stroke-width:2"/>`; // BCL-2 -| BAX/BAK
+  for (const [x, y] of [[430, 234], [442, 242], [454, 236]]) s += `<circle cx="${x}" cy="${y}" r="3" style="fill:var(--ink);fill-opacity:${on.has('cytc') ? 1 : .4}"/>`;
+  s += T(466, 246, 'cyt c', 's', 'start') + A('M444 246 L444 260');
+  s += A('M300 275 L272 275') + A('M195 288 L195 298');
+  s += A('M160 149 C220 146 260 136 298 136', true) + T(214, 136, 'BID → tBID', 's', 'middle');
+  s += T(10, 326, 'schematic', 's', 'start');
+  $('path-svg').innerHTML = s; $('path-find').innerHTML = steps[PS.s][1];
+}
+function buildPathStepper() { PS.s = 0; Patho.stepper('path-step', PATH[PT.p][1].map(r => r[0]), drawPath, PS); }
+Patho.toggles('path-tg', Object.entries(PATH).map(([k, v]) => [k, v[0]]), k => { PT.p = k; buildPathStepper(); }, 'int');
+buildPathStepper(); $('path-text').innerHTML = PATH_TEXT;
+
+$('auto-text').innerHTML = AUTO_TEXT;
+
+/* ---- ageing: telomeres ---- */
+const AG = {d: 0, tert: false};
+function drawAge() {
+  const frac = AG.tert ? 1 : clamp(1 - AG.d / AGE_LIMIT), stopped = !AG.tert && AG.d >= AGE_LIMIT;
+  let s = '';
+  const x0 = 60, x1 = 460, cy = 64, capMax = 70, cap = capMax * frac;
+  s += `<rect x="${x0 + capMax}" y="${cy - 16}" width="${x1 - x0 - 2 * capMax}" height="32" rx="14" style="fill:var(--nucleus);fill-opacity:.35;stroke:var(--nucleus)"/>`;
+  s += `<rect x="${f1(x0 + capMax - cap)}" y="${cy - 10}" width="${f1(cap)}" height="20" rx="6" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.4"/>`;
+  s += `<rect x="${x1 - capMax}" y="${cy - 10}" width="${f1(cap)}" height="20" rx="6" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.4"/>`;
+  s += T(260, cy + 5, 'chromosome', 's', 'middle') + T(x0, cy - 22, 'telomere (TTAGGG repeats)', 's', 'start');
+  const X = Patho.scale(0, 60, x0, x1);
+  s += `<path class="axis" d="M${x0} 120 L${x1} 120"/>` + T(x0, 138, '0', 's', 'middle') + T(x1, 138, '60', 's', 'middle') + T(260, 140, 'cell divisions', 's', 'middle');
+  s += `<path d="M${f1(X(AGE_LIMIT))} 110 L${f1(X(AGE_LIMIT))} 128" style="stroke:var(--ink);stroke-width:1.6;stroke-dasharray:3 2"/>` + T(X(AGE_LIMIT), 106, 'about 50 (Hayflick)', 's', 'middle');
+  s += `<circle cx="${f1(X(AG.d))}" cy="120" r="5" style="fill:var(--mark)"/>`;
+  if (stopped) s += T(260, 24, 'senescence: the cell stops dividing', 'l b', 'middle');
+  if (AG.tert) s += T(260, 24, 'telomerase rebuilds the ends', 'l b', 'middle');
+  s += T(516, 100, 'schematic', 's', 'end');
+  $('age-svg').innerHTML = s;
+  $('age-find').innerHTML = AG.tert ? '<p><b>Telomerase on</b> (germ cells, stem cells, most cancer cells): the telomeres are rebuilt and the cell escapes the limit (Wikipedia; Campisi 2013).</p>' : stopped ? '<p><b>Replicative senescence.</b> Telomeres are short enough to be read as DNA breaks: the cell stops dividing (Wikipedia).</p>' : `<p>${AG.d} divisions: the telomeres shorten with each one (Wikipedia).</p>`;
+}
+Patho.toggles('age-tg', [['off', 'Normal somatic cell'], ['on', 'Telomerase active']], k => { AG.tert = k === 'on'; drawAge(); }, 'off');
+Patho.slider('age-sl', {id: 'ag', label: 'Cell divisions (population doublings)', min: 0, max: 60, step: 1, value: 0, fmt: v => String(v)}, v => { AG.d = v; drawAge(); }).init();
+$('age-text').innerHTML = AGE_TEXT; drawAge();
+Patho.swipeHints();
+</script>
+</body>
+</html>

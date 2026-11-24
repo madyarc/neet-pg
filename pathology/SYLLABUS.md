@@ -20,14 +20,14 @@ Source notes: PA29.1 is printed "PA.29.1" in the PDF; restored here.
 
 ### 2. Cell Injury and Adaptation
 
-- [ ] **PA2.1** Describe the causes, mechanisms, types and effects of cell injury and their clinical significance
-- [ ] **PA2.2** Describe the etiology of cell injury. Distinguish between reversible- irreversible injury: mechanisms; morphology of cell injury
-- [ ] **PA2.3** Describe morphological changes in intracellular accumulation of fats, proteins, carbohydrates, pigments
-- [ ] **PA2.4** Describe and explain Cell death- types, mechanisms, necrosis, apoptosis (basic as contrasted with necrosis), autolysis
-- [ ] **PA2.5** Describe types and pathology of calcifications and gangrene
-- [ ] **PA2.6** Describe cellular adaptations: atrophy, metaplasia, dysplasia and carcinoma in situ
-- [ ] **PA2.7** Describe the mechanisms of cellular aging and apoptosis
-- [ ] **PA2.8** Identify and describe various forms of cell injuries with their manifestations and consequences in gross and microscopic specimens *(skill)*
+- [x] **PA2.1** Describe the causes, mechanisms, types and effects of cell injury and their clinical significance — *causes and five-mechanism stepper: [Cell Injury and Cell Death: Necrosis, Apoptosis, Autolysis and Ageing](general/cell-injury-death.html)*
+- [x] **PA2.2** Describe the etiology of cell injury. Distinguish between reversible- irreversible injury: mechanisms; morphology of cell injury — *reversible→irreversible slider, nuclear changes: [Cell Injury and Cell Death: Necrosis, Apoptosis, Autolysis and Ageing](general/cell-injury-death.html)*
+- [x] **PA2.3** Describe morphological changes in intracellular accumulation of fats, proteins, carbohydrates, pigments — *fat, Russell and Mallory–Denk bodies, hyaline, glycogen, pigments: [Cellular Adaptations, Dysplasia, Accumulations, Calcification and Gangrene](general/adaptations-accumulations.html)*
+- [x] **PA2.4** Describe and explain Cell death- types, mechanisms, necrosis, apoptosis (basic as contrasted with necrosis), autolysis — *six necroses with sites, apoptosis vs necrosis, autolysis: [Cell Injury and Cell Death: Necrosis, Apoptosis, Autolysis and Ageing](general/cell-injury-death.html)*
+- [x] **PA2.5** Describe types and pathology of calcifications and gangrene — *dystrophic/metastatic classifier, psammoma (text only), gangrene: [Cellular Adaptations, Dysplasia, Accumulations, Calcification and Gangrene](general/adaptations-accumulations.html)*
+- [x] **PA2.6** Describe cellular adaptations: atrophy, metaplasia, dysplasia and carcinoma in situ — *adaptations, metaplasia (reversibility disputed), dysplasia→CIS→invasion slider: [Cellular Adaptations, Dysplasia, Accumulations, Calcification and Gangrene](general/adaptations-accumulations.html)*
+- [x] **PA2.7** Describe the mechanisms of cellular aging and apoptosis — *apoptosis pathways, telomeres and Hayflick limit, hallmarks of ageing: [Cell Injury and Cell Death: Necrosis, Apoptosis, Autolysis and Ageing](general/cell-injury-death.html)*
+- [~] **PA2.8** Identify and describe various forms of cell injuries with their manifestations and consequences in gross and microscopic specimens *(skill)* — *labelled micrographs only (skill): [Cell Injury and Cell Death: Necrosis, Apoptosis, Autolysis and Ageing](general/cell-injury-death.html), [Cellular Adaptations, Dysplasia, Accumulations, Calcification and Gangrene](general/adaptations-accumulations.html)*
 
 ### 3. Inflammation
 

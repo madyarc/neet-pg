@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Adaptations, Accumulations, Calcification and Gangrene</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/path.css">
+<style>
+/* page tokens: none new. path.css tokens with their meanings: --cyto, --nucleus, --eosin (eosinophilic protein: Russell and Mallory-Denk
+   bodies), --fat (lipid), --mucin (goblet-cell mucin), --calc (calcified deposits), --pigment (melanin), --lipofuscin, --haemosid, --bili
+   (the three pigment tokens), --collagen (connective tissue under the basement membrane). --bili = bilirubin in tissue or plasma (jaundice), distinct from
+   physiology's --bile (bile in the ducts and gall bladder). Lines of demarcation and a breached basement membrane are dashed ink. */
+svg.sch .node{fill:var(--surface);stroke:var(--muted);stroke-width:1.2}
+svg.sch .nodeon{fill:var(--surface);stroke:var(--ink);stroke-width:2.6}
+.qrow{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:14px}
+.qrow .q{min-width:0;flex:1 1 260px}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Pathology</a> <span class="muted">· Module 01: <a href="cell-injury-death.html">Cell injury and death</a> · <span aria-current="page">Adaptations and accumulations</span></span></nav>
+
+<header class="stack">
+  <h1>Cellular Adaptations, Dysplasia, Accumulations, Calcification and Gangrene</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-adapt">Adaptations</a> <a href="#h-meta">Metaplasia</a> <a href="#h-dys">Dysplasia and CIS</a> <a href="#h-acc">Accumulations</a> <a href="#h-calc">Calcification</a> <a href="#h-gang">Gangrene</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-adapt">
+  <h2 id="h-adapt">Adaptations: bigger, more, smaller, different</h2>
+  <div class="chips" id="ad-tg" aria-label="Adaptation"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ad-svg" viewBox="0 0 520 210" role="img" aria-label="Schematic row of cells changed by the chosen adaptation"></svg></div>
+    <div class="prose find" id="ad-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="ad-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-meta">
+  <h2 id="h-meta">Metaplasia: one mature cell type replaced by another</h2>
+  <div class="chips" id="me-tg" aria-label="Example"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="me-svg" viewBox="0 0 520 230" role="img" aria-label="Schematic epithelium before and after metaplasia for the chosen example"></svg></div>
+    <div class="prose find" id="me-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="me-text"></div>
+  <div class="two" id="me-micro"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-dys">
+  <h2 id="h-dys">Dysplasia and carcinoma in situ</h2>
+  <div class="sliders" id="dys-sl"></div>
+  <div class="vrow" id="dys-out" aria-live="polite"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="dys-svg" viewBox="0 0 520 250" role="img" aria-label="Schematic stratified squamous epithelium on a basement membrane, with atypical cells occupying more of its thickness as the grade rises, and breaching the basement membrane in invasive carcinoma"></svg></div>
+    <div class="prose find" id="dys-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="dys-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-acc">
+  <h2 id="h-acc">Intracellular accumulations: fat, proteins, glycogen, pigments</h2>
+  <div class="chips" id="acc-tg" aria-label="Substance"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="acc-svg" viewBox="0 0 520 230" role="img" aria-label="Schematic cell holding the chosen accumulated substance"></svg></div>
+    <div class="prose find" id="acc-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="acc-table"></table></div>
+  <div class="two" id="acc-micro"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-calc">
+  <h2 id="h-calc">Pathological calcification: dystrophic or metastatic?</h2>
+  <div class="stack" id="calc-q"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="calc-svg" viewBox="0 0 520 220" role="img" aria-label="Schematic tissue with calcium deposits: local in dead tissue (dystrophic) or spread through normal tissues (metastatic)"></svg></div>
+    <div class="prose find" id="calc-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="calc-table"></table></div>
+  <div class="prose" id="calc-text"></div>
+  <div class="two" id="calc-micro"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gang">
+  <h2 id="h-gang">Gangrene: dry, wet and gas</h2>
+  <div class="chips" id="ga-tg" aria-label="Type of gangrene"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ga-svg" viewBox="0 0 520 230" role="img" aria-label="Schematic foot with the chosen type of gangrene"></svg></div>
+    <div class="prose find" id="ga-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="ga-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BCellular%20Adaptations%2C%20Dysplasia%2C%20Accumulations%2C%20Calcification%20and%20Gangrene%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fpathology%2Fgeneral%2Fadaptations-accumulations.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/path.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-p01.md, Part B; pathology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Change a row of cells into hypertrophy, hyperplasia, atrophy or metaplasia; drag an epithelium from mild dysplasia to carcinoma in situ and on through the basement membrane; fill a cell with fat, protein, glycogen or a pigment; sort calcification by the tissue and the serum calcium; and compare dry, wet and gas gangrene. Cell injury and death are on the <a href="cell-injury-death.html">previous page</a>; the normal epithelia are in <a href="../../anatomy/histology/epithelium-glands.html">histology</a>.';
+/* adaptations: key -> [chip, html] */
+const AD = {
+  norm: ['Normal', '<h3>Normal tissue</h3><p>Pick an adaptation.</p>'],
+  hyper: ['Hypertrophy', '<h3>Hypertrophy: bigger cells</h3><p>An increase in the <b>size</b> of individual cells, which enlarges the organ (Wikipedia; StatPearls: the left ventricle\'s mass rises as a response to increased workload). Physiological examples (Wikipedia): the <b>uterus in pregnancy</b> (hormone-driven) and <b>skeletal muscle</b> with resistance training. Pathological: <b>left ventricular hypertrophy</b> (StatPearls). Hypertrophy and hyperplasia often occur together (Wikipedia).</p>'],
+  hplas: ['Hyperplasia', '<h3>Hyperplasia: more cells</h3><p>An increase in the <b>number</b> of cells, which look normal (Wikipedia). <b>Physiological</b>: the breast glands multiply in pregnancy (Wikipedia). <b>Pathological</b>, from excess hormone or growth factor (Wikipedia): <b>endometrial hyperplasia</b> from unopposed oestrogen (StatPearls; Wikipedia), which can progress to endometrial cancer (StatPearls; Wikipedia), and <b>benign prostatic hyperplasia</b> (StatPearls; Wikipedia). Wikipedia: the cells stop proliferating when the stimulus is removed.</p>'],
+  atro: ['Atrophy', '<h3>Atrophy: smaller cells</h3><p>Wikipedia: a <b>reduction in size</b> of a cell, organ or tissue after it has reached its normal mature size, from poor nourishment, poor circulation, loss of hormonal support, loss of nerve supply, excessive apoptosis, or <b>disuse</b>; also a part of normal development and of ageing (muscle mass falls with age).</p>'],
+  meta: ['Metaplasia', '<h3>Metaplasia: a different cell type</h3><p>One differentiated cell type replaced by another differentiated type, an <b>adaptation</b> to stress (a 2017 review; Wikipedia). Here, pseudostratified ciliated columnar (simplified) → stratified squamous, as in smokers\' airways. Examples and the micrograph: <a href="#h-meta">below</a>.</p>'],
+};
+const AD_TABLE = [
+  ['Hypertrophy', 'Size ↑', 'Uterus in pregnancy; muscle with training (Wikipedia)', 'Left ventricular hypertrophy (StatPearls)'],
+  ['Hyperplasia', 'Number ↑', 'Breast in pregnancy (Wikipedia)', 'Endometrial hyperplasia; BPH (StatPearls; Wikipedia)'],
+  ['Atrophy', 'Size ↓', 'Development; ageing (Wikipedia)', 'Disuse, denervation, poor circulation or nutrition, loss of hormones (Wikipedia)'],
+  ['Metaplasia', 'Type changes', '—', 'Smokers\' bronchi; Barrett oesophagus (see below)'],
+];
+/* metaplasia examples: key -> [chip, from, to, html] */
+const ME = {
+  bron: ['Smoker\'s bronchus', 'ciliated columnar', 'stratified squamous', '<h3>Airways of smokers: squamous metaplasia</h3><p>Cigarette smoke makes the ciliated pseudostratified <b>columnar</b> epithelium of the airways be replaced by <b>stratified squamous</b> epithelium (Wikipedia; a 2017 review; a 2009 rat study). The metaplasia is a repair response that can reverse, but repeated insults such as continued smoking can make it irreversible (the 2009 study).</p>'],
+  barr: ['Barrett oesophagus', 'stratified squamous', 'columnar with goblet cells', '<h3>Barrett oesophagus: columnar metaplasia</h3><p>The normal <b>squamous</b> epithelium of the lower oesophagus is replaced by <b>columnar</b> epithelium (Wikipedia; StatPearls; the 2017 review) — an adaptation to chronic acid (and bile) reflux (Wikipedia; the 2017 review). It is premalignant (StatPearls), found in 5–12% of people with chronic reflux symptoms (StatPearls; Wikipedia gives 5–15%). Wikipedia: the lining changes to simple columnar epithelium interspersed with <b>goblet cells</b>, normally found only in the intestine, and only goblet cells are diagnostic — as in the micrograph.</p>'],
+  cerv: ['Cervix', 'columnar', 'squamous', '<h3>Cervix: the transformation zone</h3><p>In the cervix, columnar epithelium is replaced by squamous metaplastic epithelium in the <b>transformation zone</b>, where dysplasia arises (StatPearls; the 2017 review names low vaginal pH as a stimulus). Immature metaplastic cells are particularly susceptible to HPV (StatPearls).</p>'],
+};
+const ME_TEXT = '<p class="muted">* The airway lining is pseudostratified ciliated columnar epithelium with goblet cells (<a href="../../anatomy/histology/epithelium-glands.html">histology</a>); the drawing simplifies it.</p><p>Metaplasia is <b>not cancer</b> and not the same as dysplasia (Wikipedia). <b>Does it reverse? Sources differ.</b> Wikipedia says tissues return to normal if the stimulus is removed, and the 2009 rat study calls airway squamous metaplasia reversible given the right conditions; but the 2017 review says "it is not clear whether the tissues can return to their normal pattern of differentiation" (Wikipedia\'s sentence closely follows the review\'s wording). But it can be the first, "adaptive" step of a metaplasia → dysplasia → cancer sequence (the 2017 review; Wikipedia). Wikipedia adds vitamin A deficiency (or overdose) as a cause of squamous metaplasia.</p>';
+const IMG = {
+  barr: {id: 'barr', file: 'img/barrett.jpg', w: 720, h: 506, title: 'Barrett oesophagus (H&E)',
+    alt: 'H&E micrograph: thick stratified squamous epithelium of the oesophagus on the left; in the middle a gland of columnar epithelium with clear goblet cells; on the right columnar epithelium of the stomach',
+    cap: 'Stratified squamous epithelium of the oesophagus (left), <b>intestinal-type columnar epithelium with goblet cells</b> — Barrett metaplasia — (middle), and columnar epithelium of the gastric fundus (right) (uploader\'s description).',
+    labels: [[0.12, 0.55, 'squamous (oesophagus)'], [0.56, 0.46, 'goblet cell'], [0.84, 0.30, 'columnar (stomach)']],
+    credit: {file: 'Histopathology of Barrett\'s esophagus, original.jpg', author: 'Mikael Häggström, M.D.', lic: 'CC0', licUrl: 'https://creativecommons.org/publicdomain/zero/1.0/', done: 'top fifth (empty background) cropped, resized; labels added (approximate)'}},
+  liver: {id: 'liver', file: 'img/fatty-liver.jpg', w: 720, h: 588, title: 'Fatty change of the liver (H&E)',
+    alt: 'Low-power H&E micrograph of liver: pink sheets of liver cells with patches full of round clear fat vacuoles',
+    cap: 'Steatosis around the central veins (zone 3) (uploader\'s description): the round <b>clear spaces</b> are fat vacuoles in the liver cells.',
+    labels: [[0.435, 0.412, 'fat vacuoles'], [0.22, 0.2, 'liver cells without fat']],
+    credit: {file: 'Histopathology of centrilobular steatosis of the liver.jpg', author: 'Mikael Häggström, M.D.', lic: 'CC0', licUrl: 'https://creativecommons.org/publicdomain/zero/1.0/', done: 'resized; labels added (approximate)'}},
+};
+/* dysplasia grades: [name, fraction of epithelium involved (schematic), html]; layer wording from a 2014 review of oral epithelial dysplasia */
+const DYS = [
+  ['Normal', 0, '<h3>Normal stratified squamous epithelium</h3><p>Cells mature from the basal layer to the surface. Drag the slider.</p>'],
+  ['Mild dysplasia', 0.25, '<h3>Mild dysplasia</h3><p>Changes limited to the <b>basal or parabasal layers</b> (a 2014 review of oral epithelial dysplasia).</p>'],
+  ['Moderate dysplasia', 0.5, '<h3>Moderate dysplasia</h3><p>"Basal layer to middle of granular layer" (the 2014 review of oral epithelium).</p>'],
+  ['Severe dysplasia', 0.78, '<h3>Severe dysplasia</h3><p>"From basal layer to upper and middle layer of epithelium" (the 2014 review).</p>'],
+  ['Carcinoma in situ', 1, '<h3>Carcinoma in situ</h3><p>Dysplasia from the basal layer to the <b>surface</b>, with the <b>basement membrane intact</b> (the 2014 review; StatPearls on breast DCIS: abnormal cells confined within the basement membrane). By definition localised, with no potential to metastasise unless it progresses (Wikipedia).</p>'],
+  ['Invasive carcinoma', 1, '<h3>Invasive carcinoma</h3><p><b>Disruption of the basement membrane</b> changes the diagnosis to invasive cancer (StatPearls, for breast DCIS); invasive carcinoma can invade and spread (Wikipedia).</p>'],
+];
+const DYS_TEXT = '<p><b>Dysplasia</b>: cells with abnormal architecture, nuclear atypia, hyperchromasia and <b>loss of polarity</b> (the 2017 metaplasia review); larger, darker nuclei and a higher nuclear-to-cytoplasmic ratio (the 2014 review). It is restricted to its tissue of origin and is often an early neoplastic, precancerous change (Wikipedia). Unlike metaplasia, maturation and differentiation are delayed (Wikipedia).</p><p><b>Cervix</b>: cervical dysplasia is called cervical intraepithelial neoplasia (CIN), the precursor of squamous cell carcinoma, from persistent high-risk HPV (StatPearls). Wikipedia: about 70% of CIN 1 regresses within a year untreated. The grading by layers above is the 2014 review\'s for oral epithelium; the slider is schematic.</p>';
+/* accumulations: key -> [chip, html] */
+const ACC = {
+  fat: ['Fat (steatosis)', '<h3>Fatty change (steatosis)</h3><p>Abnormal retention of fat (triglyceride) in cells, mostly the <b>liver</b> (Wikipedia; StatPearls: alcohol causes hepatic steatosis). When the vacuoles are large enough to push the nucleus aside it is <b>macrovesicular</b>, the commoner form, seen with alcohol, obesity and diabetes; small droplets with a central nucleus are <b>microvesicular</b> (Wikipedia; a 2016 review). Wikipedia: microvesicular fatty change in acute fatty liver of pregnancy and Reye syndrome; fatty change is generally reversible.</p>'],
+  russ: ['Russell bodies', '<h3>Russell bodies (protein)</h3><p>Eosinophilic, homogeneous inclusions of <b>immunoglobulin</b> in plasma cells, in dilated endoplasmic reticulum (Wikipedia; a 2019 report on Russell body gastritis; a 2015 study) — seen in plasma-cell dyscrasias, autoimmune diseases and chronic infections (the 2015 study) and in places with chronic inflammation (Wikipedia). A plasma cell full of them is a Mott cell (Wikipedia).</p>'],
+  mall: ['Mallory–Denk bodies', '<h3>Mallory–Denk bodies (Mallory hyaline)</h3><p>Eosinophilic inclusions in the cytoplasm of <b>liver cells</b> (Wikipedia; a 2016 review shows them in ballooned hepatocytes in non-alcoholic steatohepatitis). Wikipedia: damaged cytokeratin 8/18 filaments; classically in <b>alcoholic liver disease</b> — commonest in alcoholic hepatitis.</p><p><b>Hyaline</b> (Wikipedia): any homogeneously pink, glassy material on H&E, usually acellular and proteinaceous; arterial hyaline is seen in ageing, high blood pressure and diabetes.</p>'],
+  gly: ['Glycogen', '<h3>Glycogen</h3><p>The <b>glycogen storage diseases</b> are inherited errors of carbohydrate metabolism with abnormal glycogen storage; disease comes from failure to use glycogen or from its toxic accumulation (StatPearls; Wikipedia).</p><p class="muted">The granules in the drawing are schematic.</p>'],
+  lipo: ['Lipofuscin', '<h3>Lipofuscin: the "wear-and-tear" pigment</h3><p>Fine <b>yellow-brown</b> granules of lipid-containing residues of lysosomal digestion (Wikipedia; StatPearls: a byproduct of failed catabolism within lysosomes). It <b>accumulates with age</b> (StatPearls; Wikipedia) and is one of the ageing or <b>"wear-and-tear" pigments</b> (Wikipedia), around the nucleus (Wikipedia), in the heart, liver, kidney, nerve cells and retina (Wikipedia).</p>'],
+  haem: ['Haemosiderin', '<h3>Haemosiderin</h3><p>Wikipedia: an <b>iron-storage</b> complex of partly digested ferritin, found inside cells, mostly <b>macrophages</b> after <b>haemorrhage</b>; it stains blue with <b>Perls\' Prussian blue</b>. Excess (haemosiderosis) occurs in iron overload; in haemochromatosis it collects in the liver.</p><p class="muted">Haemosiderin facts rest on Wikipedia (two articles); we found no second source.</p>'],
+  mel: ['Melanin', '<h3>Melanin</h3><p>The pigment made by <b>melanocytes</b> from the amino acid <b>tyrosine</b> (StatPearls; Wikipedia); eumelanin is dark brown or black (Wikipedia).</p>'],
+  bili: ['Bilirubin', '<h3>Bilirubin</h3><p>Made from <b>haem</b> via biliverdin in macrophages (Wikipedia); its excess causes <b>jaundice</b> (Wikipedia). The pathway and the three kinds of jaundice: <a href="../../physiology/blood/haemoglobin-anaemia.html#h-bili">physiology</a>.</p>'],
+};
+const ACC_TABLE = [
+  ['Fat', 'Liver (alcohol, obesity, diabetes)', 'Clear vacuoles; macro- or microvesicular'],
+  ['Russell bodies', 'Plasma cells', 'Eosinophilic immunoglobulin globules'],
+  ['Mallory–Denk bodies', 'Liver cells (alcoholic hepatitis; NASH)', 'Eosinophilic cytokeratin clumps'],
+  ['Glycogen', 'Glycogen storage diseases', '—'],
+  ['Lipofuscin', 'Ageing heart, liver, neurons', 'Yellow-brown, perinuclear; "wear and tear"'],
+  ['Haemosiderin', 'Macrophages after bleeding; iron overload', 'Blue with Perls\' Prussian blue (Wikipedia)'],
+  ['Melanin', 'Melanocytes', 'Brown-black'],
+  ['Bilirubin', 'Jaundice', '—'],
+];
+/* calcification classifier */
+const CQ = [['dead', 'Is the tissue already damaged or dead?'], ['ca', 'Is the serum calcium (or phosphate) raised?']];
+const CEX = {
+  tb: ['Caseous TB', {dead: true, ca: false}], fn: ['Fat necrosis', {dead: true, ca: false}], inf: ['Old infarct', {dead: true, ca: false}],
+  hpt: ['Hyperparathyroidism', {dead: false, ca: true}], vitd: ['Vitamin D toxicity', {dead: false, ca: true}], ckd: ['Kidney failure', {dead: false, ca: true}],
+};
+const CALC_TABLE = [
+  ['Tissue', 'Degenerated or necrotic (Wikipedia)', 'Otherwise normal (Wikipedia; a 2020 case: normal lung interstitium and vessel walls)'],
+  ['Serum calcium', '<b>Normal</b> (Wikipedia)', '<b>Raised</b> (or phosphate raised) (Wikipedia; StatPearls)'],
+  ['Spread', 'Local (Wikipedia)', 'Widespread: vessels, kidneys, lungs, gastric mucosa (Wikipedia)'],
+  ['Examples', 'Caseous TB, fat necrosis (calcium soaps), infarcts, thrombi (phleboliths), damaged tissue (Wikipedia; StatPearls; a 2022 review: fat necrosis)', 'Hyperparathyroidism, PTHrP-secreting tumours, bone destruction (myeloma, metastases), vitamin D intoxication, sarcoidosis, kidney failure (Wikipedia; StatPearls)'],
+];
+const CALC_TEXT = '<p><b>Psammoma bodies</b> are round, <b>laminated</b> (concentric) calcifications seen under the microscope (Wikipedia; a 2022 thyroid review), associated with <b>papillary</b> structures (Wikipedia) and a common though not specific feature of <b>papillary thyroid carcinoma</b> (a 2024 study; Wikipedia). Wikipedia also lists serous papillary tumours of the ovary, meningiomas and mesothelioma.</p><p class="muted">Serum calcium: StatPearls gives about 8.9–10.1 mg/dL as normal, varying with the laboratory; the commonest outpatient cause of hypercalcaemia is primary hyperparathyroidism (StatPearls).</p>';
+/* gangrene: key -> [chip, html] */
+const GA = {
+  dry: ['Dry', '<h3>Dry gangrene</h3><p>Progressive <b>ischaemia without infection</b>, worst in the <b>digits</b>; the tissue dries and may <b>autoamputate</b> (StatPearls; Wikipedia). It is coagulative necrosis (Wikipedia; StatPearls) with a <b>clear line of demarcation</b> (a 2018 review). Risk: atherosclerosis, diabetes, smoking (Wikipedia). Not an emergency like wet or gas gangrene (Wikipedia).</p>'],
+  wet: ['Wet', '<h3>Wet gangrene</h3><p>Necrotic tissue with <b>secondary infection</b>, usually in the lower limb: oedema, redness, pus (StatPearls; Wikipedia). It is liquefactive (StatPearls; Wikipedia). Wikipedia: it develops rapidly, usually from blocked venous (or arterial) flow, swells and smells foul, carries a risk of sepsis, and dry gangrene can turn wet.</p>'],
+  gas: ['Gas', '<h3>Gas gangrene (clostridial myonecrosis)</h3><p>A rapidly progressive, life-threatening necrotising infection by gas-forming bacteria, most commonly <b>Clostridium</b> (C. perfringens) (StatPearls; Wikipedia), which kill muscle with <b>toxins</b> (Wikipedia; StatPearls). Swelling, <b>crepitus</b> and gas visible on X-ray (StatPearls; Wikipedia).</p>'],
+};
+const GA_TABLE = [
+  ['Dry', 'Arterial ischaemia, no infection', 'Coagulative', 'Dry, black, mummified; clear demarcation; may autoamputate'],
+  ['Wet', 'Necrosis + infection', 'Liquefactive', 'Swollen, red, pus; sepsis risk'],
+  ['Gas', 'Clostridium (C. perfringens) toxins', 'Myonecrosis', 'Crepitus, gas on X-ray; life-threatening'],
+];
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts: necrosis patterns, left ventricular hypertrophy, BPH, endometrial hyperplasia, Barrett oesophagus, cervical dysplasia, DCIS, alcohol-associated liver disease, glycogen storage disease, lipofuscin, melanin, hypercalcaemia, primary hyperparathyroidism, vitamin D toxicity, gangrene, C. perfringens); open-access reviews and studies: metaplasia (2017), airway squamous metaplasia in rats (2009), oral epithelial dysplasia (2014), NAFLD histology (2016), Russell bodies (2015) and Russell body gastritis (2019), fat necrosis (2022), metastatic calcification (2020), psammoma bodies in the thyroid (2022, 2024), dry gangrene (2018) (NCBI PMC); Wikipedia.';
+const MODELS = '<b>Models used:</b> all drawings are schematic, not to scale; the dysplasia slider draws the layer wording of a 2014 review of oral dysplasia. Micrographs: Wikimedia Commons, credited under each image.';
+
+/* ===================== CODE ===================== */
+const {$} = Patho;
+const T = (x, y, t, cls, a, extra) => Patho.T(x, y, String(t).replace(/-(?=\d)/g, '‑'), cls, a, extra);
+const f1 = v => v.toFixed(1);
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+const lead = (x1, y1, x2, y2) => `<path class="lead" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+
+/* ---- adaptations ---- */
+function drawAd(k) {
+  let s = `<rect x="10" y="150" width="500" height="10" style="fill:var(--collagen);fill-opacity:.5"/>` + T(14, 178, 'basement membrane and connective tissue', 's', 'start');
+  const cellR = (x, w, h, opt = {}) => {
+    let c = `<rect x="${f1(x)}" y="${f1(150 - h)}" width="${f1(w)}" height="${f1(h)}" rx="5" style="fill:var(--cyto);fill-opacity:${opt.pale ? .4 : .75};stroke:var(--ink);stroke-width:1"/>`;
+    c += `<ellipse cx="${f1(x + w / 2)}" cy="${f1(150 - h * 0.35)}" rx="${f1(Math.min(9, w / 3.4))}" ry="${f1(Math.min(9, h / 6))}" style="fill:var(--nucleus)"/>`;
+    if (opt.cilia) for (let i = 4; i < w - 2; i += 5) c += `<path d="M${f1(x + i)} ${f1(150 - h)} l0 -7" style="stroke:var(--ink);stroke-width:1"/>`;
+    return c;
+  };
+  if (k === 'norm') for (let i = 0; i < 8; i++) s += cellR(40 + i * 56, 50, 70);
+  else if (k === 'hyper') for (let i = 0; i < 5; i++) s += cellR(30 + i * 92, 86, 112);
+  else if (k === 'hplas') for (let i = 0; i < 14; i++) s += cellR(30 + i * 33.5, 30, 70);
+  else if (k === 'atro') for (let i = 0; i < 8; i++) s += cellR(52 + i * 56, 30, 40, {pale: true});
+  else {
+    for (let i = 0; i < 4; i++) s += cellR(30 + i * 56, 50, 100, {cilia: true});
+    // squamous: stacked flattening layers on the right half
+    for (let r = 0; r < 4; r++) for (let c = 0; c < 4 + r % 2; c++) { const w = 62 - r * 4, h = 26 - r * 5, x = 270 + c * (w + 2) - (r % 2) * 20, y = 150 - (r + 1) * 28; if (x > 268 && x + w < 512) s += `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4" style="fill:var(--cyto);fill-opacity:.75;stroke:var(--ink);stroke-width:1"/><ellipse cx="${x + w / 2}" cy="${y + h / 2}" rx="${8 - r}" ry="${Math.max(2, 5 - r)}" style="fill:var(--nucleus)"/>`; }
+    s += `<path d="M258 30 L258 165" style="stroke:var(--ink);stroke-width:1.4;stroke-dasharray:4 3"/>` + T(140, 22, 'ciliated columnar (simplified)', 'l b', 'middle') + T(390, 22, 'stratified squamous', 'l b', 'middle');
+  }
+  const lab = {norm: 'normal cells', hyper: 'fewer, larger cells: hypertrophy', hplas: 'more cells of normal size: hyperplasia', atro: 'smaller cells: atrophy'};
+  if (lab[k]) s += T(260, 22, lab[k], 'l b', 'middle');
+  s += T(510, 204, 'schematic', 's', 'end');
+  $('ad-svg').innerHTML = s; $('ad-find').innerHTML = AD[k][1];
+}
+Patho.toggles('ad-tg', Object.entries(AD).map(([k, v]) => [k, v[0]]), drawAd, 'norm'); drawAd('norm');
+Patho.table('ad-table', ['Adaptation', 'Change', 'Physiological', 'Pathological'], AD_TABLE);
+
+/* ---- metaplasia ---- */
+function epi(x0, x1, type) {
+  let s = '';
+  if (type === 'ciliated columnar' || type === 'columnar' || type === 'columnar with goblet cells') {
+    for (let x = x0, i = 0; x + 26 <= x1; x += 28, i++) {
+      const gob = type === 'columnar with goblet cells' && i % 3 === 1;
+      s += `<rect x="${x}" y="80" width="26" height="90" rx="4" style="fill:var(--cyto);fill-opacity:.75;stroke:var(--ink);stroke-width:1"/>`;
+      if (gob) s += `<ellipse cx="${x + 13}" cy="104" rx="9" ry="18" style="fill:var(--mucin);stroke:var(--ink);stroke-width:.8"/>`;
+      s += `<ellipse cx="${x + 13}" cy="150" rx="6" ry="9" style="fill:var(--nucleus)"/>`;
+      if (type === 'ciliated columnar') for (let j = 3; j < 26; j += 5) s += `<path d="M${x + j} 80 l0 -8" style="stroke:var(--ink);stroke-width:1"/>`;
+    }
+  } else {
+    for (let r = 0; r < 5; r++) { const h = 18 - r * 2.4, w = 30 + r * 8, y = 170 - (r + 1) * 19; for (let x = x0 + (r % 2) * (w / 2) - w / 2; x < x1; x += w + 2) { const xa = Math.max(x0, x), xb = Math.min(x1, x + w); if (xb - xa < 10) continue; s += `<rect x="${f1(xa)}" y="${f1(y)}" width="${f1(xb - xa)}" height="${f1(h)}" rx="4" style="fill:var(--cyto);fill-opacity:.75;stroke:var(--ink);stroke-width:1"/><ellipse cx="${f1((xa + xb) / 2)}" cy="${f1(y + h / 2)}" rx="${f1(Math.max(3, 7 - r))}" ry="${f1(Math.max(1.6, 4.5 - r * .7))}" style="fill:var(--nucleus)"/>`; } }
+  }
+  return s;
+}
+function drawMe(k) {
+  const [, from, to] = ME[k];
+  let s = `<rect x="10" y="172" width="500" height="10" style="fill:var(--collagen);fill-opacity:.5"/>`;
+  s += epi(20, 240, from) + epi(280, 500, to);
+  s += `<path class="flow" d="M244 120 L276 120"/>`;
+  s += T(130, 30, 'before: ' + (from === 'ciliated columnar' ? 'ciliated columnar*' : from), 'l b', 'middle') + T(390, 30, 'after: ' + to, 'l b', 'middle');
+  if (to === 'columnar with goblet cells') s += lead(340, 52, 322, 92) + T(344, 50, 'goblet cell (mucin)', 's', 'start');
+  s += T(510, 214, 'schematic', 's', 'end');
+  $('me-svg').innerHTML = Patho.DEFS + s; $('me-find').innerHTML = ME[k][3];
+}
+Patho.toggles('me-tg', Object.entries(ME).map(([k, v]) => [k, v[0]]), drawMe, 'bron'); drawMe('bron');
+$('me-text').innerHTML = ME_TEXT;
+Patho.micro('me-micro', Object.assign({}, IMG.barr, {credit: Patho.credit(IMG.barr.credit)}));
+
+/* ---- dysplasia slider ---- */
+const DY = {g: 0};
+function drawDys() {
+  const [name, frac, html] = DYS[DY.g], inv = DY.g === 5;
+  const yBM = 190, rows = 8, rowH = 20, x0 = 20, x1 = 500;
+  let s = `<rect x="${x0}" y="${yBM}" width="${x1 - x0}" height="46" style="fill:var(--collagen);fill-opacity:.4"/>`;
+  for (let r = 0; r < rows; r++) {
+    const y = yBM - (r + 1) * rowH, atyp = r < Math.round(frac * rows), w = atyp ? 30 : 30 + r * 6, h = atyp ? rowH - 2 : rowH - 2 - r * 1.2;
+    for (let x = x0 + (r % 2) * w / 2; x + w <= x1; x += w + 2) {
+      s += `<rect x="${f1(x)}" y="${f1(y + (rowH - h) / 2)}" width="${f1(w)}" height="${f1(h)}" rx="4" style="fill:var(--cyto);fill-opacity:.7;stroke:var(--ink);stroke-width:.8"/>`;
+      if (atyp) s += `<ellipse cx="${f1(x + w / 2 + ((x * 7) % 5) - 2)}" cy="${f1(y + rowH / 2)}" rx="${f1(8 + (x % 3))}" ry="${f1(6 + (x % 2))}" style="fill:var(--nucleus)"/>`;
+      else s += `<ellipse cx="${f1(x + w / 2)}" cy="${f1(y + rowH / 2)}" rx="${f1(Math.max(3, 6 - r * .5))}" ry="${f1(Math.max(1.6, 4 - r * .4))}" style="fill:var(--nucleus);fill-opacity:.8"/>`;
+    }
+  }
+  // basement membrane
+  if (inv) {
+    s += `<path d="M${x0} ${yBM} L250 ${yBM}" style="stroke:var(--ink);stroke-width:2.4"/><path d="M330 ${yBM} L${x1} ${yBM}" style="stroke:var(--ink);stroke-width:2.4"/><path d="M250 ${yBM} L330 ${yBM}" style="stroke:var(--ink);stroke-width:2.4;stroke-dasharray:3 6"/>`;
+    for (const [x, y, r] of [[270, 210, 12], [300, 222, 10], [318, 206, 8], [284, 230, 7]]) s += `<circle cx="${x}" cy="${y}" r="${r}" style="fill:var(--cyto);stroke:var(--ink);stroke-width:.8"/><circle cx="${x}" cy="${y}" r="${r / 2}" style="fill:var(--nucleus)"/>`;
+    s += lead(352, 214, 322, 210) + T(356, 214, 'cells through the', 'l b', 'start') + T(356, 230, 'basement membrane', 'l b', 'start');
+  } else s += `<path d="M${x0} ${yBM} L${x1} ${yBM}" style="stroke:var(--ink);stroke-width:2.4"/>` + T(x1, yBM + 18, 'basement membrane intact', 'l b', 'end');
+  // involvement bracket
+  if (frac > 0) { const yt = yBM - Math.round(frac * rows) * rowH; s += `<path d="M508 ${yBM} L514 ${yBM} L514 ${yt} L508 ${yt}" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>`; }
+  s += T(x0, 14, 'surface', 's', 'start') + T(x0, yBM + 40, 'connective tissue', 's', 'start') + T(260, 246, 'schematic', 's', 'middle');
+  $('dys-svg').innerHTML = s;
+  $('dys-out').innerHTML = `<span><span class="tag">Grade</span> <span class="readout">${name}</span></span>`;
+  $('dys-find').innerHTML = html;
+}
+Patho.slider('dys-sl', {id: 'dg', label: 'Grade (schematic)', min: 0, max: 5, step: 1, value: 0, fmt: v => DYS[v][0]}, v => { DY.g = v; drawDys(); }).init();
+$('dys-text').innerHTML = DYS_TEXT; drawDys();
+
+/* ---- accumulations ---- */
+function drawAcc(k) {
+  const cx = 170, cy = 112;
+  let s = '';
+  const body = (rx = 110, ry = 80) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" style="fill:var(--cyto);fill-opacity:.6;stroke:var(--ink);stroke-width:1.4"/>`;
+  const nuc = (x = cx, y = cy, r = 22) => `<circle cx="${x}" cy="${y}" r="${r}" style="fill:var(--nucleus);fill-opacity:.85"/>`;
+  const L = (t, tx, ty) => lead(306, 60, tx, ty) + t.split('|').map((p, i) => T(310, 64 + i * 16, p, 'l b', 'start')).join('');
+  const grains = (tok, n, r0, r1, sz, op = 1) => { let g = ''; for (let i = 0; i < n; i++) { const a = i * 2.39, rr = r0 + ((i * 17) % (r1 - r0)); g += `<circle cx="${f1(cx + rr * Math.cos(a) * 1.3)}" cy="${f1(cy + rr * Math.sin(a) * 0.9)}" r="${sz}" style="fill:var(${tok});fill-opacity:${op}"/>`; } return g; };
+  if (k === 'fat') {
+    s += body() + `<circle cx="${cx + 14}" cy="${cy}" r="62" style="fill:var(--fat);stroke:var(--ink);stroke-width:1"/>` + nuc(cx - 86, cy - 6, 14);
+    s += L('one large fat vacuole|(macrovesicular)', cx + 40, cy - 40) + lead(306, 150, cx - 80, cy) + T(310, 154, 'nucleus pushed aside', 'l b', 'start');
+  } else if (k === 'russ') {
+    s += body(100, 76) + nuc(cx - 70, cy, 18);
+    for (const [dx, dy, r] of [[10, -24, 20], [36, 18, 22], [-10, 30, 14], [56, -20, 12]]) s += `<circle cx="${cx + dx}" cy="${cy + dy}" r="${r}" style="fill:var(--eosin);stroke:var(--ink);stroke-width:1"/>`;
+    s += L('Russell bodies:|immunoglobulin', cx + 30, cy - 30) + T(310, 100, 'in a plasma cell', 's', 'start');
+  } else if (k === 'mall') {
+    s += body() + `<circle cx="${cx}" cy="${cy}" r="18" style="fill:var(--nucleus);fill-opacity:.85"/>`;
+    s += `<path d="M${cx - 60} ${cy + 20} C${cx - 40} ${cy - 10} ${cx - 20} ${cy + 40} ${cx + 6} ${cy + 30} C${cx + 30} ${cy + 22} ${cx + 30} ${cy + 50} ${cx + 50} ${cy + 40}" style="fill:none;stroke:var(--eosin);stroke-width:10;stroke-linecap:round"/>`;
+    s += L('eosinophilic clumps|(schematic)', cx + 30, cy + 34) + T(310, 100, 'in a liver cell', 's', 'start');
+  } else if (k === 'gly') {
+    s += body() + nuc() + grains('--ink', 60, 30, 70, 1.8, .45);
+    s += L('glycogen granules|(schematic)', cx + 50, cy - 30);
+  } else if (k === 'lipo') {
+    s += body() + nuc() + grains('--lipofuscin', 24, 26, 40, 3.2);
+    s += L('lipofuscin granules|around the nucleus', cx + 30, cy - 26);
+  } else if (k === 'haem') {
+    s += body(100, 80) + nuc(cx - 50, cy - 10, 18) + grains('--haemosid', 34, 26, 70, 3.6);
+    s += L('haemosiderin granules|(iron)', cx + 50, cy - 20) + T(310, 100, 'in a macrophage', 's', 'start');
+  } else if (k === 'mel') {
+    s += body() + nuc() + grains('--pigment', 40, 26, 70, 2.8);
+    s += L('melanin granules', cx + 50, cy - 30) + T(310, 100, 'in a melanocyte (schematic)', 's', 'start');
+  } else {
+    s += body() + `<ellipse cx="${cx}" cy="${cy}" rx="110" ry="80" style="fill:var(--bili);fill-opacity:.35"/>` + nuc();
+    s += L('excess bilirubin:|jaundice (schematic)', cx + 60, cy - 20);
+  }
+  s += T(510, 224, 'schematic', 's', 'end');
+  $('acc-svg').innerHTML = s; $('acc-find').innerHTML = ACC[k][1];
+}
+Patho.toggles('acc-tg', Object.entries(ACC).map(([k, v]) => [k, v[0]]), drawAcc, 'fat'); drawAcc('fat');
+Patho.table('acc-table', ['Substance', 'Where / when', 'Look'], ACC_TABLE);
+Patho.micro('acc-micro', Object.assign({}, IMG.liver, {credit: Patho.credit(IMG.liver.credit)}));
+
+/* ---- calcification classifier ---- */
+const CA = Object.assign({}, CEX.tb[1]);
+function drawCalc() {
+  const kind = CA.dead && !CA.ca ? 'dys' : !CA.dead && CA.ca ? 'met' : CA.dead && CA.ca ? 'both' : 'none';
+  let s = '';
+  // tissue patch
+  for (let r = 0; r < 5; r++) for (let c = 0; c < 9; c++) { const x = 20 + c * 54 + (r % 2) * 10, y = 16 + r * 34, dead = CA.dead && c >= 3 && c <= 5 && r >= 1 && r <= 3; s += `<rect x="${x}" y="${y}" width="48" height="28" rx="5" style="fill:var(${dead ? '--eosin' : '--cyto'});fill-opacity:${dead ? .9 : .6};stroke:var(--ink);stroke-width:.8"/>` + (dead ? '' : `<circle cx="${x + 24}" cy="${y + 14}" r="5" style="fill:var(--nucleus)"/>`); }
+  const dep = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}" style="fill:var(--calc);stroke:var(--ink);stroke-width:.8"/>`;
+  if (kind === 'dys' || kind === 'both') for (const [x, y, r] of [[200, 70, 9], [236, 92, 11], [270, 66, 8], [214, 112, 7], [262, 116, 10]]) s += dep(x, y, r);
+  if (kind === 'met' || kind === 'both') for (let i = 0; i < 18; i++) s += dep(40 + (i * 97) % 460, 30 + (i * 53) % 150, 4);
+  if (CA.dead) s += T(260, 200, 'dead tissue in the middle', 's', 'middle');
+  const lab = {dys: 'Dystrophic: local, in dead tissue', met: 'Metastatic: spread through normal tissue', both: 'Both patterns possible', none: 'No pathological calcification expected'};
+  s += T(10, 214, lab[kind], 'l b', 'start') + T(510, 214, 'schematic', 's', 'end');
+  $('calc-svg').innerHTML = s;
+  const F = {
+    dys: '<h3>Dystrophic calcification</h3><p>Calcium salts deposit in <b>degenerated or necrotic tissue</b> even though the <b>serum calcium is normal</b> (Wikipedia; StatPearls: calcium deposits in fat necrosis). Basophilic deposits form first in the mitochondria (Wikipedia).</p>',
+    met: '<h3>Metastatic calcification</h3><p>Calcium salts deposit in <b>otherwise normal tissue</b> because the <b>serum calcium (or phosphate) is raised</b> (Wikipedia; a 2020 case in kidney failure), often widely: vessels, kidneys, lungs, gastric mucosa (Wikipedia). Causes of hypercalcaemia include hyperparathyroidism and vitamin D toxicity (StatPearls; Wikipedia).</p>',
+    both: '<h3>Both answers yes</h3><p><i>Page summary, not from a source:</i> the definitions (Wikipedia) use the tissue for dystrophic and the serum calcium for metastatic; our sources do not discuss a case with both.</p>',
+    none: '<h3>Both answers no</h3><p><i>Page summary, not from a source:</i> neither definition fits living tissue with a normal serum calcium.</p>',
+  };
+  $('calc-find').innerHTML = F[kind];
+}
+{
+  const box = $('calc-q');
+  const pre = document.createElement('div'); pre.className = 'chips'; pre.id = 'calc-ex'; pre.setAttribute('aria-label', 'Example'); box.append(pre);
+  for (const [k, q] of CQ) { const row = document.createElement('div'); row.className = 'qrow'; row.innerHTML = `<span class="q">${q}</span><span class="chips" id="cq-${k}"></span>`; box.append(row); }
+  const clearEx = () => $('calc-ex').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false'));
+  for (const [k] of CQ) Patho.toggles('cq-' + k, [['y', 'Yes'], ['n', 'No']], v => { CA[k] = v === 'y'; clearEx(); drawCalc(); }, CA[k] ? 'y' : 'n');
+  Patho.toggles('calc-ex', Object.entries(CEX).map(([k, v]) => [k, v[0]]), k => {
+    Object.assign(CA, CEX[k][1]);
+    for (const [q] of CQ) $('cq-' + q).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String((b.dataset.k === 'y') === CA[q])));
+    drawCalc();
+  }, 'tb');
+}
+Patho.table('calc-table', ['', 'Dystrophic', 'Metastatic'], CALC_TABLE);
+$('calc-text').innerHTML = CALC_TEXT; drawCalc();
+
+/* ---- gangrene ---- */
+function drawGa(k) {
+  let s = `<g transform="translate(-100 0)"><path d="M150 220 C140 160 150 110 175 84 C190 64 330 64 345 84 C370 110 380 160 370 220 Z" style="fill:var(--cyto);fill-opacity:.35;stroke:var(--ink);stroke-width:1.2"/>`;
+  const toes = [[185, 56, 18], [222, 46, 15], [256, 44, 14], [290, 48, 13], [322, 58, 12]];
+  toes.forEach(([x, y, r], i) => {
+    const dead = i < 2;
+    if (k === 'dry' && dead) s += `<ellipse cx="${x}" cy="${y + 2}" rx="${r - 3}" ry="${r + 7}" style="fill:var(--ink);fill-opacity:.85;stroke:var(--ink);stroke-width:1.2"/>`;
+    else if (k === 'wet' && dead) s += `<ellipse cx="${x}" cy="${y}" rx="${r + 4}" ry="${r + 13}" style="fill:var(--ink);fill-opacity:.55;stroke:var(--ink);stroke-width:1.2"/>`;
+    else s += `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r + 10}" style="fill:var(--cyto);fill-opacity:.35;stroke:var(--ink);stroke-width:1.2"/>`;
+  });
+  s += '</g>';
+  if (k === 'dry') s += `<path transform="translate(-100 0)" d="M160 80 Q205 90 240 76" style="fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:4 3"/>` + lead(300, 80, 138, 78) + T(304, 84, 'clear line of demarcation', 'l b', 'start') + lead(300, 30, 100, 42) + T(304, 34, 'dry, black (mummified)', 'l b', 'start');
+  if (k === 'wet') { s += `<path transform="translate(-100 0)" d="M160 100 C200 140 250 120 270 150 C230 170 190 160 165 150 Z" style="fill:var(--ink);fill-opacity:.25"/>` + lead(300, 30, 106, 40) + T(304, 34, 'swollen, infected', 'l b', 'start') + lead(300, 130, 130, 140) + T(304, 134, 'infected dead tissue', 'l b', 'start'); }
+  if (k === 'gas') { for (let i = 0; i < 22; i++) s += `<circle cx="${f1(90 + (i * 37) % 150)}" cy="${f1(100 + (i * 23) % 100)}" r="${3 + i % 3}" style="fill:var(--surface);stroke:var(--ink);stroke-width:1"/>`; s += lead(300, 130, 220, 150) + T(304, 134, 'gas in the tissues: crepitus', 'l b', 'start') + T(304, 152, 'Clostridium toxins kill muscle', 's', 'start'); }
+  s += T(510, 224, 'schematic', 's', 'end');
+  $('ga-svg').innerHTML = s; $('ga-find').innerHTML = GA[k][1];
+}
+Patho.toggles('ga-tg', Object.entries(GA).map(([k, v]) => [k, v[0]]), drawGa, 'dry'); drawGa('dry');
+Patho.table('ga-table', ['Type', 'Cause', 'Necrosis', 'Look'], GA_TABLE);
+Patho.swipeHints();
+</script>
+</body>
+</html>
