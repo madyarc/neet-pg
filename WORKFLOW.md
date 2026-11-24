@@ -31,7 +31,11 @@ Last updated: 2026-11-23
     ENT 1: E01 ear anatomy-physiology + hearing tests
     obgyn 4: OG01 physiology of conception+placenta · OG02 antenatal care+maternal changes · OG03 labour · OG04 contraception
   Status: B01 [x] build (336 quotes; tokens --enz --sub --inhib --cofac) [x] review (no blocking errors; attributions,
-  CK timing, labels, --clin misuse, --inhib vs --ca) [ ] fixes (running). P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [ ] review (running).
+  CK timing, labels, --clin misuse, --inhib vs --ca) [ ] fixes (running). P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [x] review (18: metaplasia
+  disagreement, token clash with bioc dark, invisible soaps, dysplasia wording, labels) [ ] fixes (running).
+  Site-wide colour checker now tools/test/colcheck.py (scans every subject; --skip own files).
+  LATER (site-wide): --mark and --clin are identical in dark (#ff7b6f), ΔE 14 light; anatomy --pigment comment says
+  "reticularis pigment" (= lipofuscin, now --lipofuscin in pathology).
 
 - PAUSED 2026-11-23 (user has other work). Resume here:
   - Physiology 01–05 done, reviewed, committed, live (17 pages; PY1, PY2, PY3, PY4.1–4.11, PY5, PY6.1–6.9). Next:

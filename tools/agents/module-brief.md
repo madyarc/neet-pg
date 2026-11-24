@@ -43,7 +43,7 @@ checked with sources-local/facts/fill-histo2-scripts/marks.py).
 
 ## Colours
 One meaning per colour site-wide. Reuse existing tokens with their meanings (atlas.css, anatomy organ tokens,
-physiology tokens). New tokens only when needed: check with sources-local/facts/fill-physio1-scripts/colcheck3.py
+physiology tokens). New tokens only when needed: check with tools/test/colcheck.py (`colcheck.py . --skip your.css,page.html name=#light/#dark ...`; scans every subject)
 (≥20 ΔE from atlas.css incl. --n-*, ≥12 from every other page's tokens), chosen by meaning. Never an undefined var().
 
 ## Testing (required)
