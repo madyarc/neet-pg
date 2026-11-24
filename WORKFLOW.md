@@ -38,8 +38,8 @@ Last updated: 2026-11-23
   CK timing, labels, --clin misuse, --inhib vs --ca) [x] fixes (351 quotes) [x] committed 2026-11-24 (b9ac13f). F01 split: first agent ran out of context after setup + ~190 downloads (assets, --ther token, scripts ok).
   F01a [x] PK + PD pages + index (355 quotes; FDA DDI table for inducers/inhibitors). F01b [ ] principles/ADR/PvPI
   page (running; then one review for the whole module; downloads ready, NLEM 2022
-  official text missing). Inducer/inhibitor lists: use FDA DDI table (public domain) + Wikipedia/StatPearls. G01 [x] build (549 quotes; 3 pages; no new tokens; guidelines via open papers) [ ] review (running). M01 [ ] build
-  (running; microbiology/general/). P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [x] review (18: metaplasia
+  official text missing). Inducer/inhibitor lists: use FDA DDI table (public domain) + Wikipedia/StatPearls. G01 [x] build (549 quotes; 3 pages; no new tokens; guidelines via open papers) [ ] review (running). M01 [x] build (635 quotes; 3 pages; 7 stain/structure tokens;
+  Wikipedia Koch's postulates excluded: cites Boundless) [ ] review (running). P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [x] review (18: metaplasia
   disagreement, token clash with bioc dark, invisible soaps, dysplasia wording, labels) [x] fixes (326 quotes) [x] committed 2026-11-24.
   Site-wide colour checker now tools/test/colcheck.py (scans every subject; --skip own files).
   LATER (site-wide): --mark and --clin are identical in dark (#ff7b6f), ΔE 14 light; anatomy --pigment comment says
