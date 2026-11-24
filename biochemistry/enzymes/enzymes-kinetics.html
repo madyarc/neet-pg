@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Enzymes: Concepts, Kinetics and Inhibition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/bioc.css">
+<style>
+/* tokens from bioc.css: --enz (enzyme protein), --sub (substrate), --inhib (inhibitor, and a curve measured with inhibitor), --cofac (cofactor or
+   coenzyme); --accent marks only the selected item; --clin marks clinical points only. No page tokens. */
+svg.sch .sel{stroke:var(--accent);stroke-width:3;fill:none;stroke-dasharray:7 4}
+svg.sch .enz{fill:var(--enz);fill-opacity:.55;stroke:var(--ink);stroke-width:1.2}
+svg.sch .sub{fill:var(--sub);stroke:var(--ink);stroke-width:1.2}
+svg.sch .inh{fill:var(--inhib);stroke:var(--ink);stroke-width:1.2}
+svg.sch .cof{fill:var(--cofac);stroke:var(--ink);stroke-width:1.2}
+svg.sch .ctl{stroke:var(--ink);stroke-width:2.4;fill:none}
+svg.sch .inc{stroke:var(--inhib);stroke-width:2.6;fill:none;stroke-dasharray:7 4}
+svg.sch .guide{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3;fill:none}
+svg.sch .pt{fill:var(--mark);stroke:var(--surface);stroke-width:1.5}
+svg.sch.fit{max-width:460px}
+.plots{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:700px){.plots{grid-template-columns:minmax(0,1fr)}}
+.plots svg{max-width:420px;margin:0 auto}
+.vals{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+.up{color:var(--ink);font-weight:700} .same{color:var(--muted);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Biochemistry</a> <span class="muted">· Module 01: <span aria-current="page">Concepts, kinetics, inhibition</span> · <a href="clinical-enzymes.html">Enzymes in the clinic</a></span></nav>
+
+<header class="stack">
+  <h1>Enzymes: Concepts, Classes, Kinetics and Inhibition</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-con">Concepts</a> <a href="#h-cls">IUBMB classes</a> <a href="#h-site">Active site</a> <a href="#h-fac">Factors</a> <a href="#h-mm">Michaelis–Menten</a> <a href="#h-inh">Inhibition</a> <a href="#h-reg">Regulation</a> <a href="#h-thx">Enzymes as drugs</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-con">
+  <h2 id="h-con">Enzyme, cofactor, isoenzyme: the words</h2>
+  <div class="chips" id="con-tg" aria-label="Concept"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="con-svg" viewBox="0 0 520 280" role="img" aria-label="Schematic for the chosen concept"></svg></div>
+    <div class="prose find" id="con-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="con-key"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cls">
+  <h2 id="h-cls">The seven IUBMB enzyme classes</h2>
+  <p class="muted" id="cls-intro"></p>
+  <div class="chips" id="cls-tg" aria-label="Enzyme class"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="cls-svg" viewBox="0 0 520 220" role="img" aria-label="Schematic of the reaction type of the chosen class"></svg></div>
+    <div class="prose find" id="cls-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="cls-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-site">
+  <h2 id="h-site">The active site: lock and key, or induced fit</h2>
+  <div class="chips" id="site-tg" aria-label="Model"></div>
+  <div class="step" id="site-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="site-svg" viewBox="0 0 520 240" role="img" aria-label="Schematic of substrate binding in the chosen model, step by step"></svg></div>
+    <div class="prose find" id="site-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Use the arrow keys on the step buttons. Schematic shapes, not real structures.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-fac">
+  <h2 id="h-fac">What changes the rate</h2>
+  <div class="chips" id="fac-tg" aria-label="Factor"></div>
+  <div class="sliders" id="fac-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="fac-svg" viewBox="0 0 360 240" role="img" aria-label="Schematic curve of reaction rate against the chosen factor, with the slider position marked"></svg></div>
+    <div class="prose find" id="fac-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mm">
+  <h2 id="h-mm">Michaelis–Menten and Lineweaver–Burk</h2>
+  <div class="chips" id="mm-tg" aria-label="Example"></div>
+  <div class="sliders" id="mm-sl"></div>
+  <div class="plots">
+    <svg class="fig sch fit" id="mm-svg" viewBox="0 0 360 260" role="img" aria-label="Michaelis–Menten curve: rate against substrate concentration, with Vmax, half Vmax and Km marked and the chosen substrate concentration as a point"></svg>
+    <svg class="fig sch fit" id="lb-svg" viewBox="0 0 360 260" role="img" aria-label="Lineweaver–Burk plot: 1/rate against 1/substrate concentration, a straight line with y-intercept 1/Vmax and x-intercept −1/Km"></svg>
+  </div>
+  <div class="prose find" id="mm-out" aria-live="polite"></div>
+  <div class="prose" id="mm-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-inh">
+  <h2 id="h-inh">Inhibition: what happens to Km and Vmax</h2>
+  <div class="chips" id="inh-tg" aria-label="Type of inhibition"></div>
+  <div class="sliders" id="inh-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="inh-svg" viewBox="0 0 520 200" role="img" aria-label="Schematic of where the inhibitor binds for the chosen type"></svg></div>
+    <div class="prose find" id="inh-find" aria-live="polite"></div>
+  </div>
+  <div class="plots">
+    <svg class="fig sch fit" id="inh-mm" viewBox="0 0 360 260" role="img" aria-label="Michaelis–Menten curves without inhibitor (solid) and with inhibitor (dashed)"></svg>
+    <svg class="fig sch fit" id="inh-lb" viewBox="0 0 360 260" role="img" aria-label="Lineweaver–Burk lines without inhibitor (solid) and with inhibitor (dashed)"></svg>
+  </div>
+  <div class="vals" id="inh-vals" aria-live="polite"></div>
+  <div class="key" id="inh-key"></div>
+  <div class="scroll"><table id="inh-table"></table></div>
+  <h3>Drugs that work by inhibiting an enzyme</h3>
+  <div class="scroll"><table id="drug-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-reg">
+  <h2 id="h-reg">Regulation: allostery, feedback, phosphorylation, zymogens</h2>
+  <div class="chips" id="reg-tg" aria-label="Mechanism"></div>
+  <div class="sliders" id="reg-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="reg-svg" viewBox="0 0 520 260" role="img" aria-label="Schematic of the chosen regulatory mechanism"></svg></div>
+    <div class="prose find" id="reg-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-thx">
+  <h2 id="h-thx">Enzymes as therapeutic agents</h2>
+  <div class="scroll"><table id="thx-table"></table></div>
+  <p class="muted">No doses are given here: they belong to dated guidelines on the pharmacology pages.</p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BEnzymes%3A%20Concepts%2C%20Classes%2C%20Kinetics%20and%20Inhibition%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fbiochemistry%2Fenzymes%2Fenzymes-kinetics.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/bioc.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-b01.md, Part A; biochemistry/DATA-SOURCES.md) =====================
+   "a 2015 review" = Robinson, Essays Biochem 2015 (open access); IUBMB = the official Enzyme Nomenclature and the 1981 kinetics recommendations. */
+const LEDE = 'Build a holoenzyme, sort reactions into the seven IUBMB classes, drag K<sub>m</sub> and V<sub>max</sub> on a Michaelis–Menten curve and its Lineweaver–Burk line, then add an inhibitor and watch which intercept moves. Serum enzymes as markers of disease: <a href="clinical-enzymes.html">Enzymes in the clinic</a>.';
+
+/* concepts: key -> [label, text] (drawings in drawCon) */
+const CON = {
+  enz: ['Enzyme', '<h3>Enzyme</h3><p>A biological catalyst, usually a protein (Wikipedia; a 2015 review). Enzymes <b>lower the activation energy</b> by stabilising the transition state (StatPearls; Wikipedia), so the reaction runs faster; they <b>do not change the equilibrium</b>, only how fast it is reached (a 2015 review). They are typically <b>highly specific</b> for their substrates (StatPearls; Wikipedia).</p>'],
+  cof: ['Cofactor, coenzyme', '<h3>Cofactor and coenzyme</h3><p>Many enzymes need a <b>non-protein component</b>, a cofactor, for activity (a 2015 review; Wikipedia). It is either <b>inorganic</b> — a metal ion — or <b>organic</b>, a <b>coenzyme</b> (a 2015 review; Wikipedia). Organic cofactors are often vitamins or made from them (Wikipedia; the 2015 review links dietary vitamins and minerals to these roles). Wikipedia\'s example: carbonic anhydrase with a zinc ion in its active site.</p><p>A coenzyme bound tightly or permanently is a <b>prosthetic group</b> (a 2015 review; Wikipedia). Wikipedia notes that sources draw these lines slightly differently.</p>'],
+  apo: ['Apo- and holoenzyme', '<h3>Apoenzyme + cofactor = holoenzyme</h3><p>When an enzyme needs a cofactor, the inactive protein alone is the <b>apoenzyme</b>; apoenzyme plus cofactor, the active enzyme, is the <b>holoenzyme</b> (a 2015 review; Wikipedia).</p>'],
+  iso: ['Isoenzyme', '<h3>Isoenzymes (isozymes)</h3><p>Enzymes that <b>differ in amino-acid sequence</b> but <b>catalyse the same reaction</b> (Wikipedia; IUPAC-IUB 1976 recommendation, which notes that many restrict the term to forms under genetic control). Wikipedia: they usually differ in kinetic properties such as K<sub>m</sub> and may be made in different tissues — which is why the <a href="clinical-enzymes.html#h-iso">LDH and CK isoenzymes</a> tell you which organ is damaged. They are separated by <b>electrophoresis</b> (Wikipedia; a 2021 LDH study).</p>'],
+  zym: ['Zymogen', '<h3>Zymogen (proenzyme)</h3><p>An <b>inactive precursor</b> of an enzyme (Wikipedia), named with the suffix <b>-ogen</b>: trypsinogen → trypsin, chymotrypsinogen → chymotrypsin (IUPAC-IUB 1976). It is switched on by cutting off a piece: <a href="#h-reg">Regulation</a>.</p>'],
+  rib: ['Ribozyme', '<h3>Ribozymes: catalytic RNA</h3><p>RNA molecules that catalyse reactions (Wikipedia; a 2015 review; a 2016 review). Found in the early 1980s — 1981 in a 2016 review, 1982 in Wikipedia. Apart from the <b>ribosome</b>, whose ribosomal RNA forms the <b>peptide bond</b>, natural ribozymes cut or join phosphodiester bonds (2016 review; Wikipedia).</p>'],
+  abz: ['Abzyme', '<h3>Abzymes: catalytic antibodies</h3><p>A monoclonal <b>antibody with catalytic activity</b>, raised against a stable <b>transition-state analogue</b>, so it binds and stabilises the transition state as an enzyme does (Wikipedia; a 2023 review). Their activity is weak (Wikipedia; the 2023 review\'s example has low activity). Abzymes occur in autoimmune disease such as lupus (Wikipedia; a 2010 review). Wikipedia says some natural abzymes are found in healthy people; the 2010 review says healthy humans usually have none, or activity at the edge of detection.</p>'],
+};
+
+/* IUBMB classes: [key, EC, name, reaction (IUBMB rules / EC 7 list), example name, example EC, example reaction] */
+const CLS = [
+  ['ox', 1, 'Oxidoreductases', 'catalyse oxidation–reduction: transfer of electrons or hydrogen from a donor to an acceptor', 'L-lactate dehydrogenase', '1.1.1.27', 'lactate + NAD⁺ ⇌ pyruvate + NADH'],
+  ['tr', 2, 'Transferases', 'transfer a group (e.g. methyl, glycosyl) from a donor to an acceptor', 'alanine transaminase (ALT)', '2.6.1.2', 'moves an amino group: alanine + 2-oxoglutarate ⇌ pyruvate + glutamate'],
+  ['hy', 3, 'Hydrolases', 'hydrolytic cleavage of C–O, C–N, C–C and other bonds (water used)', 'acetylcholinesterase', '3.1.1.7', 'acetylcholine + H₂O → choline + acetate'],
+  ['ly', 4, 'Lyases', 'cleave C–C, C–O, C–N and other bonds by elimination, leaving double bonds or rings (or add groups to double bonds) — not by hydrolysis or oxidation', 'fructose-bisphosphate aldolase; carbonic anhydrase', '4.1.2.13; 4.2.1.1', 'fructose 1,6-bisphosphate ⇌ two trioses; H₂CO₃ ⇌ CO₂ + H₂O'],
+  ['is', 5, 'Isomerases', 'geometric or structural changes within one molecule', 'triose-phosphate isomerase', '5.3.1.1', 'glyceraldehyde 3-phosphate ⇌ dihydroxyacetone phosphate'],
+  ['li', 6, 'Ligases', 'join two molecules, coupled with breaking a diphosphate bond in ATP or a similar triphosphate', 'pyruvate carboxylase', '6.4.1.1', 'ATP + pyruvate + HCO₃⁻ → ADP + Pi + oxaloacetate'],
+  ['tl', 7, 'Translocases', 'move ions or molecules across membranes (e.g. hydrons, inorganic cations)', 'Na⁺/K⁺-exchanging ATPase', '7.2.2.13', '3 Na⁺ out, 2 K⁺ in, using ATP'],
+];
+const CLS_INTRO = 'Every enzyme has an EC number: "EC" and four numbers, from the general to the specific; the first gives the class, i.e. the type of reaction (Wikipedia; a 2015 review). The IUBMB list now has <b>seven</b> classes; translocases (EC 7) were added in 2018 (Wikipedia) — older texts give six; before 2018 many translocases were filed as ATPases (Wikipedia). Reaction types as the IUBMB rules word them; each example\'s EC number is from its IUBMB entry.';
+
+/* active-site models: key -> [label, [step labels], [step texts]] */
+const SITE = {
+  lock: ['Lock and key (Fischer 1894)', ['Apart', 'Fits', 'Products'], [
+    '<h3>1. A shape made for one substrate</h3><p>The active site is a small region — fewer than about 10 amino acids take part — whose <b>shape and charge</b> let it bind one kind of substrate (a 2015 review; Wikipedia; StatPearls).</p>',
+    '<h3>2. The key fits the lock</h3><p>Emil Fischer (1894): enzyme and substrate are rigid, complementary shapes that fit with no change, like a key in a lock (a 2015 review; Wikipedia).</p>',
+    '<h3>3. Reaction and release</h3><p>The bound substrate reacts and the products leave; the active-site residues are regenerated, so the site works again (Wikipedia).</p>']],
+  ind: ['Induced fit (Koshland 1958)', ['Apart', 'Binding', 'Fitted', 'Products'], [
+    '<h3>1. A flexible site</h3><p>Enzymes are flexible, not rigid (a 2015 review; Wikipedia).</p>',
+    '<h3>2. Binding reshapes the site</h3><p>Daniel Koshland (1958): the enzyme changes shape slightly as the substrate binds (a 2015 review; Wikipedia).</p>',
+    '<h3>3. A close fit around the substrate</h3><p>The site closes round the substrate until it is completely bound (Wikipedia). Wikipedia adds a third model, conformational selection.</p>',
+    '<h3>4. Products leave, the site relaxes</h3><p>After the reaction the products are released and the enzyme is ready for the next substrate (Wikipedia: the residues are regenerated by the end).</p>']],
+};
+
+/* factors: key -> [label, slider label, text] */
+const FAC = {
+  e: ['Enzyme concentration', 'Enzyme concentration', '<h3>Enzyme concentration</h3><p>With plenty of substrate, rate is proportional to enzyme: 10% more enzyme, 10% faster; double it, twice as fast (a 2015 review).</p>'],
+  s: ['Substrate concentration', 'Substrate concentration', '<h3>Substrate concentration</h3><p>The rate rises steeply at first, then levels off as the enzyme approaches <b>saturation</b> and its maximal rate, V<sub>max</sub> (a 2015 review; Wikipedia). Numbers: <a href="#h-mm">Michaelis–Menten</a>.</p>'],
+  t: ['Temperature', 'Temperature (schematic)', '<h3>Temperature</h3><p>Two effects in opposite directions: warming speeds molecular movement and the reaction, while <b>denaturation</b> inactivates the protein more and more as it gets hotter — so there is an apparent <b>optimum</b> (a 2015 review; Wikipedia). The 2015 review: the optimum means little unless the time at that temperature is stated, because denaturation is time-dependent. Wikipedia: for most biological systems the rate roughly doubles or triples per 10 °C rise (Q<sub>10</sub> ≈ 2–3).</p>'],
+  ph: ['pH', 'pH (schematic)', '<h3>pH</h3><p>Most enzymes have a characteristic <b>optimum pH</b>, with the rate falling above and below it, because pH changes the ionisation of groups in the active site and on the substrate (a 2015 review). Enzymes are sensitive to pH and temperature (Wikipedia). Pepsin and the other gut enzymes: <a href="../../physiology/gi/secretions.html">GI secretions</a>.</p>'],
+};
+
+/* kinetics presets: key -> [label, Vmax, Km] (arbitrary units) */
+const MM = {mid: ['Typical', 60, 5], hi: ['Low Km: high affinity', 60, 1], lo: ['High Km: low affinity', 60, 15]};
+const MM_TEXT = '<p><b>K<sub>m</sub></b> (the Michaelis constant) is the substrate concentration that gives <b>half the maximal rate</b> (a 2015 review; Wikipedia; IUBMB). (The same definition: a 2020 review.) It is an <b>inverse measure of affinity</b>: a <b>low K<sub>m</sub> means high affinity</b> (a 2015 review; Wikipedia — e.g. hexokinase\'s low K<sub>m</sub> for glucose). <b>V<sub>max</sub></b> is the limiting rate at saturating substrate, a theoretical limit never quite reached (a 2015 review; Wikipedia). Well below K<sub>m</sub> the rate is nearly proportional to [S] (first order); far above it the rate hardly depends on [S] (zero order) (Wikipedia). The turnover number k<sub>cat</sub> is the most substrate molecules one active site converts per second (a 2015 review; Wikipedia) — carbonic anhydrase about 600 000 s⁻¹ (the 2015 review).</p><p><b>Lineweaver–Burk</b> (double-reciprocal) plot: 1/v against 1/[S] gives a straight line with <b>y-intercept 1/V<sub>max</sub></b>, <b>x-intercept −1/K<sub>m</sub></b> and slope K<sub>m</sub>/V<sub>max</sub> (Wikipedia; a 2015 review). Its drawback: it gives too much weight to the points at the lowest substrate concentrations (a 2015 review; Wikipedia).</p>';
+
+/* inhibition: key -> [label, effect on Km (factor fn of a = 1 + [I]/Ki), effect on Vmax, bind site, text] */
+const INH = {
+  none: ['No inhibitor'],
+  comp: ['Competitive'],
+  ncomp: ['Non-competitive (pure)'],
+  unc: ['Uncompetitive'],
+  mix: ['Mixed'],
+  irr: ['Irreversible'],
+};
+const INH_TEXT = {
+  none: '<h3>No inhibitor</h3><p>Pick a type to add an inhibitor; the solid curve stays as the reference.</p>',
+  comp: '<h3>Competitive: K<sub>m</sub> rises, V<sub>max</sub> unchanged</h3><p>The inhibitor resembles the substrate and competes for the <b>active site</b>; enough substrate displaces it and restores activity, so V<sub>max</sub> is unchanged while K<sub>m</sub> rises (a 2015 review; Wikipedia; IUBMB 1981). Lineweaver–Burk: the lines meet on the <b>y-axis</b> (same 1/V<sub>max</sub>) (Wikipedia). Example: malonate competing with succinate for succinate dehydrogenase (a 2015 review).</p>',
+  ncomp: '<h3>Non-competitive (pure): V<sub>max</sub> falls, K<sub>m</sub> unchanged</h3><p>The inhibitor binds at a <b>site other than the active site</b>, to enzyme and enzyme–substrate complex alike, so substrate affinity is unchanged and more substrate cannot overcome it (StatPearls; a 2015 review; Wikipedia). Lineweaver–Burk: higher y-intercept, <b>same x-intercept</b> (Wikipedia). IUBMB (1981) calls this <i>pure</i> non-competitive inhibition and discourages the bare term, which is often used loosely for mixed inhibition.</p>',
+  unc: '<h3>Uncompetitive: both fall</h3><p>The inhibitor binds <b>only the enzyme–substrate complex</b> (StatPearls; a 2015 review); it is rare (a 2015 review). Both V<sub>max</sub> and K<sub>m</sub> fall by the same factor, yet the rate with inhibitor is always lower (a 2015 review; Wikipedia). Lineweaver–Burk: <b>parallel lines</b> (Wikipedia).</p>',
+  mix: '<h3>Mixed: V<sub>max</sub> falls, K<sub>m</sub> up or down</h3><p>Competitive and uncompetitive components together (IUBMB 1981). K<sub>m</sub> appears to rise when the inhibitor prefers the free enzyme, to fall when it prefers the enzyme–substrate complex (Wikipedia). Drawn here with the inhibitor binding the free enzyme three times more tightly (K<sub>iu</sub> = 3 × K<sub>ic</sub>, chosen for the picture), so K<sub>m</sub> rises and the lines cross left of the y-axis.</p>',
+  irr: '<h3>Irreversible</h3><p>The inhibition does not reverse when the inhibitor is diluted away (IUBMB 1981); the inhibitor binds permanently, often covalently (a 2015 review; Wikipedia), and many are potent toxins (a 2015 review). Organophosphates inhibit <b>acetylcholinesterase</b> (StatPearls; Wikipedia); DFP, one of them, reacts covalently with a serine in its active site (a 2015 review).</p><p><b>Suicide (mechanism-based) inhibitors</b> are turned by the enzyme itself into a reactive form that locks onto it (Wikipedia); Wikipedia\'s clinical examples are disulfiram (aldehyde dehydrogenase) and aspirin (COX).</p><p>The plots show no inhibited curve here: our sources give no K<sub>m</sub>/V<sub>max</sub> rule for irreversible inhibitors.</p>',
+};
+const INH_TABLE = [
+  ['Competitive', '↑', 'unchanged', 'active site (free enzyme)', 'meet on the y-axis'],
+  ['Non-competitive (pure)', 'unchanged', '↓', 'another site, E and ES alike', 'meet on the x-axis'],
+  ['Uncompetitive', '↓', '↓', 'ES complex only', 'parallel'],
+  ['Mixed', '↑ or ↓', '↓', 'E and ES, unequally', 'both intercepts move'],
+  ['Irreversible', '—', '—', 'often covalent, permanent', '—'],
+];
+/* drug examples: [drug, enzyme, type as the sources give it, source note] */
+const DRUGS = [
+  ['Statins', 'HMG-CoA reductase (cholesterol synthesis)', 'inhibitor; Wikipedia: competitive', 'StatPearls; Wikipedia'],
+  ['Methotrexate', 'dihydrofolate reductase (DHFR)', 'competitive; binds DHFR about 1000 × more tightly than dihydrofolate', 'Wikipedia'],
+  ['Trimethoprim', 'bacterial DHFR', 'inhibitor', 'Wikipedia'],
+  ['Allopurinol', 'xanthine oxidase (uric acid formation)', 'inhibitor; its metabolite oxipurinol also inhibits', 'StatPearls; Wikipedia'],
+  ['Aspirin', 'cyclooxygenase (COX-1, COX-2)', 'irreversible: acetylates an active-site serine; blocks platelet thromboxane for the platelet\'s life', 'Wikipedia'],
+  ['ACE inhibitors', 'angiotensin-converting enzyme', 'StatPearls: competitive', 'StatPearls; Wikipedia'],
+  ['Neostigmine', 'acetylcholinesterase', 'StatPearls: reversible', 'StatPearls; Wikipedia'],
+  ['Organophosphates (poisons)', 'acetylcholinesterase', 'irreversible, covalent', 'a 2015 review; StatPearls; Wikipedia'],
+  ['Clavulanic acid and other β-lactamase inhibitors', 'bacterial β-lactamases', 'inhibitor, given with a β-lactam antibiotic', 'StatPearls; Wikipedia'],
+  ['Penicillin', 'DD-transpeptidase (cell-wall cross-links)', 'inactivates the enzyme', 'Wikipedia'],
+  ['Fluorouracil (5-FU)', 'thymidylate synthase', 'believed to block it', 'Wikipedia'],
+  ['Disulfiram', 'aldehyde dehydrogenase', 'Wikipedia: a suicide inhibitor', 'Wikipedia'],
+  ['Early MAO inhibitors', 'monoamine oxidase', 'irreversible, covalent', 'Wikipedia'],
+];
+
+/* regulation: key -> [label, text] */
+const REG = {
+  allo: ['Allosteric', '<h3>Allosteric enzymes: an S-shaped curve</h3><p>An allosteric effector binds a <b>site other than the active site</b> and changes the enzyme\'s activity (Wikipedia; a 2024 review; StatPearls). Allosteric enzymes are key regulatory enzymes, usually made of several subunits; their rate–substrate curve is <b>sigmoidal</b>, not hyperbolic, because binding is cooperative (a 2015 review; Wikipedia). They move from a low-affinity <b>T (tense)</b> state to a high-affinity <b>R (relaxed)</b> state; molecules that stabilise T are <b>inhibitors</b>, those that favour R are <b>activators</b> (a 2015 review). Move the effector slider.</p>'],
+  fb: ['Feedback inhibition', '<h3>Feedback inhibition</h3><p>A product further down a pathway acts on an earlier enzyme — allostery as a control loop (Wikipedia). Example in both sources: <b>aspartate transcarbamoylase</b>, the regulatory enzyme of the first committed step of pyrimidine synthesis (a 2015 review; Wikipedia). Wikipedia\'s other example: ATP inhibits phosphofructokinase in glycolysis.</p>'],
+  cov: ['Covalent modification', '<h3>Covalent modification: phosphorylation</h3><p>Protein <b>kinases</b> attach a phosphate to a serine, threonine or tyrosine; protein <b>phosphatases</b> remove it, so the change is <b>reversible</b> (a 2021 review; Wikipedia). Wikipedia: phosphorylation is the most common modification after translation and very effective at controlling enzyme activity — e.g. insulin changes the phosphorylation of glycogen synthase and other enzymes.</p>'],
+  zym: ['Zymogen activation', '<h3>Zymogen activation: a one-way switch</h3><p>A zymogen is an <b>inactive precursor</b>; cutting off a piece activates it (Wikipedia; IUPAC-IUB 1976 naming: trypsinogen → trypsin). Examples: trypsinogen, chymotrypsinogen, pepsinogen and most clotting factors (Wikipedia). Wikipedia: the pancreas secretes zymogens partly so that they do not digest the cells that make them; abnormal <b>activation of trypsinogen</b> inside the pancreas is the main mechanism of acute pancreatitis (a 2023 review; Wikipedia).</p>'],
+};
+
+/* therapeutic enzymes */
+const THX = [
+  ['Enzyme replacement therapy (ERT)', 'Replaces a deficient enzyme: recombinant enzyme given intravenously at intervals, for lysosomal storage diseases — Gaucher (the first), Fabry, Pompe, some mucopolysaccharidoses (a 2018 review; Wikipedia). The 2018 review: these enzymes do not reach the brain in useful amounts.', 'a 2018 review; Wikipedia'],
+  ['Alteplase (recombinant tissue plasminogen activator)', 'Thrombolytic, made by recombinant DNA technology; for acute ischaemic stroke, myocardial infarction, pulmonary embolism (StatPearls; Wikipedia).', 'StatPearls; Wikipedia'],
+  ['Streptokinase', 'Thrombolytic that activates plasminogen by a non-enzymatic mechanism — not itself an enzyme (Wikipedia).', 'Wikipedia'],
+  ['L-Asparaginase', 'Breaks down asparagine, which leukaemic cells need; used in acute lymphoblastic leukaemia (Wikipedia).', 'Wikipedia'],
+];
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); IUBMB Enzyme Nomenclature (list, rules and enzyme entries, accessed 2026), NC-IUB <i>Symbolism and Terminology in Enzyme Kinetics</i> (1981) and IUPAC-IUB <i>Nomenclature of Multiple Forms of Enzymes</i> (1976); open-access reviews on enzyme principles (Essays Biochem 2015), enzyme kinetics by calorimetry (2020), allosteric regulation (2024), phosphorylation (2021), ribozymes (2016), catalytic antibodies (2010, 2023), enzyme replacement therapy (2018), acute pancreatitis (2023), LDH isoenzymes (2021) (Europe PMC / NCBI); Wikipedia (wikitext checked for OpenStax citations).';
+const MODELS = '<b>Models used:</b> enzyme and substrate shapes, reaction sketches, the temperature and pH curves and the allosteric curve are schematic, not to scale (no optimum values are given). Kinetics plots compute the Michaelis–Menten equation and its inhibited forms in arbitrary units; slider values are illustrative.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Bioc;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* shapes */
+const enzBody = (x, y, open, extra = '') => `<path class="enz" d="M${x - 90} ${y + 50} Q${x - 100} ${y - 40} ${x - 40} ${y - 50} L${x - 26} ${y - 50} ${open} L${x + 40} ${y - 50} Q${x + 100} ${y - 40} ${x + 90} ${y + 50} Z"${extra}/>`;
+function siteNotch(x, y, w, d) { return `L${x - w} ${y - 50 + d} L${x + w} ${y - 50 + d} L${x + w} ${y - 50}`; }
+const subSq = (x, y, s = 44, cls = 'sub') => `<rect class="${cls}" x="${x - s / 2}" y="${y - s / 2}" width="${s}" height="${s}" rx="5"/>`;
+
+/* ---- concepts ---- */
+function drawCon(k) {
+  let s = Bioc.DEFS;
+  if (k === 'enz') {
+    const X = Bioc.scale(0, 10, 50, 500), Y = v => 230 - v * 18;
+    s += `<path class="axis" d="M50 20 L50 230 L500 230"/>` + T(14, 26, 'energy', 's', 'start') + T(500, 250, 'reaction progress →', 's', 'end');
+    const curve = h => { const pts = []; for (let i = 0; i <= 60; i++) { const t = i / 60, u = Math.min(1, Math.max(0, (t - 0.3) / 0.4)), base = 7 - 4 * u * u * (3 - 2 * u), bump = h * Math.exp(-Math.pow((t - 0.5) / 0.13, 2)); pts.push([X(t * 10), Y(base + bump)]); } return Bioc.path(pts); };
+    s += `<path class="guide" style="stroke-width:2.2;stroke-dasharray:6 4" d="${curve(6)}"/><path class="trace" d="${curve(3.5)}"/>`;
+    s += T(275, Y(11) - 8, 'without enzyme (dashed)', 'l b', 'middle') + T(490, Y(3) + 26, 'solid: with enzyme', 's', 'end');
+    s += T(60, Y(7) - 8, 'substrate', 's', 'start') + T(490, Y(3) - 8, 'products', 's', 'end');
+    s += `<path class="guide" d="M${X(0)} ${Y(7)} L${X(7.5)} ${Y(7)}"/><path class="flow" d="M${X(4.6)} ${Y(7)} L${X(4.6)} ${Y(10.7)}"/><path class="flow" d="M${X(5.4)} ${Y(7)} L${X(5.4)} ${Y(8.3)}"/>` + Bioc.lead(X(2.6) + 4, Y(10.3), X(4.6) - 3, Y(9.4)) + T(X(2.6), Y(10.3) + 4, 'activation energy', 's', 'end') + Bioc.lead(X(5.4) + 4, Y(7.6), X(7) - 4, Y(5.6)) + T(X(7), Y(5.4), 'lower with enzyme', 's', 'start');
+    s += T(20, 272, 'schematic: equilibrium (start and end levels) unchanged', 's', 'start');
+  } else if (k === 'cof' || k === 'apo') {
+    const notch = siteNotch(130, 150, 24, 30);
+    s += enzBody(130, 150, notch) + T(130, 230, k === 'apo' ? 'apoenzyme (inactive)' : 'protein part', 'b', 'middle');
+    s += `<path class="flow" d="M235 150 L285 150"/>` + T(260, 140, '+', 'b', 'middle');
+    s += `<circle class="cof" cx="${k === 'apo' ? 260 : 260}" cy="${k === 'apo' ? 100 : 100}" r="15"/>` + T(260, 72, 'cofactor', 's', 'middle');
+    s += enzBody(400, 150, siteNotch(400, 150, 24, 30)) + `<circle class="cof" cx="400" cy="${150 - 50 + 30 - 14}" r="13"/>` + T(400, 230, k === 'apo' ? 'holoenzyme (active)' : 'active enzyme', 'b', 'middle');
+    if (k === 'cof') s += T(20, 258, 'cofactor: a metal ion (inorganic) or a coenzyme (organic, often from a vitamin)', 's', 'start') + T(20, 274, 'tightly bound coenzyme = prosthetic group (schematic)', 's', 'start');
+    else s += T(20, 270, 'schematic shapes', 's', 'start');
+  } else if (k === 'iso') {
+    const forms = [['form A', 'tissue 1', 0], ['form B', 'tissue 2', 1]];
+    forms.forEach(([n, t, i]) => { const x = 140 + i * 240; s += enzBody(x, 140, siteNotch(x, 140, 22, 28), i ? ' style="fill-opacity:.85"' : '') + T(x, 214, n + ': different sequence', 'b', 'middle') + T(x, 230, t, 's', 'middle'); });
+    s += T(260, 40, 'same reaction: S → P', 'b', 'middle');
+    s += `<path class="flow" d="M230 40 L180 70"/><path class="flow" d="M290 40 L340 70"/>`;
+    s += T(20, 268, 'schematic; LDH and CK isoenzymes: Enzymes in the clinic', 's', 'start');
+  } else if (k === 'zym') {
+    s += `<rect class="enz" x="40" y="100" width="190" height="60" rx="14" style="fill-opacity:.3"/><rect x="190" y="100" width="40" height="60" rx="8" style="fill:var(--muted);fill-opacity:.5"/>` + T(115, 136, 'zymogen (inactive)', 'b', 'middle') + T(210, 180, 'piece cut off', 's', 'middle');
+    s += `<path class="flow" d="M245 130 L300 130"/>` + T(272, 120, 'cleaved', 's', 'middle');
+    s += `<rect class="enz" x="310" y="100" width="150" height="60" rx="14"/>` + T(385, 136, 'active enzyme', 'b', 'middle');
+    s += T(115, 80, 'trypsinogen', 's', 'middle') + T(385, 80, 'trypsin', 's', 'middle') + T(20, 268, 'schematic', 's', 'start');
+  } else if (k === 'rib') {
+    let p = 'M60 140'; for (let i = 0; i < 12; i++) p += ` Q${80 + i * 34} ${i % 2 ? 100 : 180} ${94 + i * 34} 140`;
+    s += `<path d="${p}" style="stroke:var(--ink);stroke-width:4;fill:none"/>` + T(60, 110, 'RNA chain', 'b', 'start');
+    s += `<path d="M300 92 C330 60 380 60 400 92" style="stroke:var(--ink);stroke-width:2;fill:none" marker-end="url(#arr)"/>` + T(350, 52, 'cuts or joins a phosphodiester bond', 's', 'middle');
+    s += T(260, 228, 'in the ribosome, rRNA forms the peptide bond', 'b', 'middle') + T(20, 268, 'schematic', 's', 'start');
+  } else if (k === 'abz') {
+    s += `<path d="M150 230 L150 140 L90 60 M150 140 L210 60" style="stroke:var(--ink);stroke-width:14;fill:none;stroke-linecap:round"/>` + T(150, 252, 'antibody', 'b', 'middle');
+    s += subSq(90, 40, 30) + subSq(210, 40, 30) + T(300, 60, 'raised against a transition-state', 's', 'start') + T(300, 76, 'analogue, it stabilises the', 's', 'start') + T(300, 92, 'transition state: weak catalysis', 's', 'start');
+    s += T(20, 272, 'schematic', 's', 'start');
+  }
+  $('con-svg').innerHTML = s; $('con-find').innerHTML = CON[k][1];
+}
+Bioc.toggles('con-tg', Object.entries(CON).map(([k, v]) => [k, v[0]]), drawCon, 'enz'); drawCon('enz');
+Bioc.key('con-key', [['--enz', 'enzyme protein'], ['--sub', 'substrate'], ['--cofac', 'cofactor / coenzyme']]);
+
+/* ---- classes ---- */
+$('cls-intro').innerHTML = CLS_INTRO;
+function drawCls(k) {
+  const c = CLS.find(r => r[0] === k);
+  const A = (x, y, t, cls = 'sub', w = 46) => `<rect class="${cls}" x="${x - w / 2}" y="${y - 18}" width="${w}" height="36" rx="6"/>` + T(x, y + 5, t, 'b', 'middle');
+  const ar = (x1, x2, y = 110) => `<path class="flow" d="M${x1} ${y} L${x2} ${y}"/>`;
+  let s = Bioc.DEFS + T(20, 28, 'EC ' + c[1] + ' · ' + c[2], 'b', 'start');
+  if (k === 'ox') s += A(70, 110, 'A–H') + A(150, 110, 'B') + ar(190, 300) + T(245, 96, 'H / e⁻ moves', 's', 'middle') + A(350, 110, 'A') + A(430, 110, 'B–H') + T(70, 150, 'donor (oxidised)', 's', 'middle') + T(430, 150, 'acceptor (reduced)', 's', 'middle');
+  else if (k === 'tr') s += A(70, 110, 'A–X', 'sub', 52) + A(150, 110, 'B') + ar(190, 300) + T(245, 96, 'group X moves', 's', 'middle') + A(350, 110, 'A') + A(430, 110, 'B–X', 'sub', 52);
+  else if (k === 'hy') s += A(80, 110, 'A–B', 'sub', 52) + T(150, 115, '+ H₂O', 'b', 'middle') + ar(190, 300) + A(350, 110, 'A–H', 'sub', 52) + A(440, 110, 'B–OH', 'sub', 60);
+  else if (k === 'ly') s += A(100, 110, 'X–A–B–Y', 'sub', 90) + ar(170, 290) + T(230, 96, 'no water, no redox', 's', 'middle') + A(360, 110, 'A=B', 'sub', 52) + A(440, 110, 'X–Y', 'sub', 52) + T(360, 150, 'double bond', 's', 'middle');
+  else if (k === 'is') s += A(110, 110, 'A–B', 'sub', 52) + ar(170, 320) + T(245, 96, 'rearranged, same formula', 's', 'middle') + A(380, 110, 'B–A', 'sub', 52);
+  else if (k === 'li') s += A(60, 110, 'A') + A(120, 110, 'B') + T(180, 115, '+ ATP', 'b', 'middle') + ar(215, 310) + A(370, 110, 'A–B', 'sub', 52) + T(450, 115, '+ ADP + Pi', 's', 'middle');
+  else if (k === 'tl') { s += `<rect x="230" y="40" width="40" height="150" style="fill:var(--muted);fill-opacity:.25"/>` + T(250, 210, 'membrane', 's', 'middle') + A(130, 110, 'X') + `<path class="flow" d="M160 110 L350 110"/>` + A(380, 110, 'X') + T(130, 150, 'side 1', 's', 'middle') + T(380, 150, 'side 2', 's', 'middle') + T(250, 30, 'ATP or redox drives it', 's', 'middle'); }
+  s += T(20, 208, 'schematic', 's', 'start');
+  $('cls-svg').innerHTML = s;
+  $('cls-find').innerHTML = `<h3>EC ${c[1]} ${c[2]}</h3><p>${c[3].charAt(0).toUpperCase() + c[3].slice(1)} (IUBMB; Wikipedia).</p><p><b>Example:</b> ${c[4]} — EC ${c[5]}: ${c[6]} (IUBMB entry).</p>` + (k === 'ox' ? '<p>LDH is EC 1.1.1.27 (StatPearls; a 2015 review).</p>' : k === 'tl' ? '<p>Many were filed as ATPases before 2018 (Wikipedia).</p>' : '');
+}
+Bioc.toggles('cls-tg', CLS.map(c => [c[0], c[1] + ' ' + c[2]]), drawCls, 'ox'); drawCls('ox');
+Bioc.table('cls-table', ['EC', 'Class', 'Reaction type', 'Example (EC)'], CLS.map(c => [c[1], c[2], c[3], c[4] + ' (' + c[5] + ')']));
+
+/* ---- active site ---- */
+const SS = {s: 0}; let siteK = 'lock';
+function drawSite() {
+  const m = SITE[siteK], i = SS.s, last = i === m[1].length - 1;
+  let s = Bioc.DEFS; const x = 260, y = 150;
+  const rigid = siteNotch(x, y, 24, 40);
+  let notch, sx, sy;
+  if (siteK === 'lock') { notch = rigid; sx = i === 0 ? x : x; sy = i === 0 ? 40 : y - 50 + 18; }
+  else {
+    if (i === 0) notch = `L${x - 34} ${y - 50 + 22} L${x + 34} ${y - 50 + 22} L${x + 40} ${y - 50}`;
+    else if (i === 1) notch = `L${x - 30} ${y - 50 + 32} L${x + 30} ${y - 50 + 32} L${x + 34} ${y - 50}`;
+    else notch = `L${x - 24} ${y - 50 + 40} L${x + 24} ${y - 50 + 40} L${x + 26} ${y - 50}`;
+    sy = i === 0 ? 40 : i === 1 ? y - 50 + 6 : y - 50 + 18; sx = x;
+  }
+  if (last) {
+    s += enzBody(x, y, siteK === 'lock' ? rigid : `L${x - 34} ${y - 50 + 22} L${x + 34} ${y - 50 + 22} L${x + 40} ${y - 50}`);
+    s += subSq(x - 110, 50, 30) + subSq(x + 110, 50, 30) + `<path class="flow" d="M${x - 20} 80 L${x - 90} 60"/><path class="flow" d="M${x + 20} 80 L${x + 90} 60"/>` + T(x, 30, 'products leave', 'b', 'middle');
+  } else {
+    s += enzBody(x, y, notch) + subSq(sx, sy, 44);
+    if (i === 0) s += `<path class="flow" d="M${x} 70 L${x} 88"/>`;
+  }
+  s += T(x, y + 76, siteK === 'lock' ? 'rigid site, complementary shape' : (i === 0 ? 'flexible site: wider than the substrate' : i === 1 ? 'site changes shape on binding' : 'closed round the substrate'), 's', 'middle');
+  s += T(x - 120, y + 20, 'enzyme', 'b', 'middle') + T(x + 150, y - 70, 'active site', 's', 'start') + Bioc.lead(x + 146, y - 74, x + 30, y - 40);
+  $('site-svg').innerHTML = s; $('site-find').innerHTML = m[2][i];
+}
+function siteStepper() { SS.s = 0; Bioc.stepper('site-step', SITE[siteK][1], drawSite, SS); }
+Bioc.toggles('site-tg', Object.entries(SITE).map(([k, v]) => [k, v[0]]), k => { siteK = k; siteStepper(); }, 'lock'); siteStepper();
+
+/* ---- factors ---- */
+let facK = 'e', facV = 50; const FS = {};
+function facRate(k, u) { /* u in 0..100 along the slider; returns relative rate 0..1 (schematic shapes) */
+  if (k === 'e') return u / 100;
+  if (k === 's') { const S = u / 100 * 50; return S / (8 + S) / (50 / 58); }
+  if (k === 't') { const rise = Math.pow(2.3, u / 14), den = 1 / (1 + Math.exp((u - 66) / 4.5)); return rise * den / 72; }
+  return Math.exp(-Math.pow((u - 55) / 16, 2));
+}
+function drawFac() {
+  const k = facK, x0 = 50, x1 = 340, y0 = 200, y1 = 24, X = Bioc.scale(0, 100, x0, x1);
+  let mx = 0; for (let u = 0; u <= 100; u++) mx = Math.max(mx, facRate(k, u));
+  const Y = v => y0 - v / mx * (y0 - y1) * 0.92;
+  const pts = []; for (let u = 0; u <= 100; u++) pts.push([X(u), Y(facRate(k, u))]);
+  let s = `<path class="axis" d="M${x0} ${y1} L${x0} ${y0} L${x1} ${y0}"/>` + T(x0 - 6, y1 + 4, 'rate', 's', 'end') + `<path class="ctl" d="${Bioc.path(pts)}"/>`;
+  s += T(x1, y0 + 18, FAC[k][1] + ' →', 's', 'end');
+  if (k === 't') { s += T(X(64), y1 + 4, 'apparent optimum', 's', 'middle') + T(X(80) + 6, Y(facRate(k, 70)) - 2, 'denaturation', 's', 'start'); }
+  if (k === 'ph') s += T(X(55), y1 + 4, 'optimum pH', 's', 'middle');
+  if (k === 's') s += `<path class="guide" d="M${x0} ${Y(1)} L${x1} ${Y(1)}"/>` + T(x1 - 4, Y(1) - 6, 'approaches Vmax', 's', 'end');
+  const r = facRate(k, facV);
+  s += `<circle class="pt" cx="${X(facV).toFixed(1)}" cy="${Y(r).toFixed(1)}" r="6"/>`;
+  s += T(x0, y0 + 34, 'schematic: no units', 's', 'start');
+  $('fac-svg').innerHTML = s;
+  $('fac-find').innerHTML = FAC[k][2] + `<p class="readout">relative rate ${(r / mx * 100).toFixed(0)}% of the curve's peak</p>`;
+}
+FS.sl = null;
+function facSlider() { $('fac-sl').innerHTML = ''; facV = 50; FS.sl = Bioc.slider('fac-sl', {id: 'fac', label: FAC[facK][1], min: 0, max: 100, step: 1, value: 50, fmt: v => v + ' / 100'}, v => { facV = v; drawFac(); }); FS.sl.init(); drawFac(); }
+Bioc.toggles('fac-tg', Object.entries(FAC).map(([k, v]) => [k, v[0]]), k => { facK = k; facSlider(); }, 'e'); facSlider();
+
+/* ---- Michaelis–Menten and Lineweaver–Burk (arbitrary units) ---- */
+const MMS = {V: 60, K: 5, S: 10}; const MSL = {};
+function mmPlot(id, curves, opts = {}) {
+  /* curves: [{V, K, cls}] ; draws v vs [S] for S 0..50 */
+  const x0 = 50, x1 = 340, y0 = 210, y1 = 22, X = Bioc.scale(0, 50, x0, x1), Y = Bioc.scale(0, 110, y0, y1);
+  let s = `<path class="axis" d="M${x0} ${y1} L${x0} ${y0} L${x1} ${y0}"/>`;
+  for (const v of [0, 25, 50, 75, 100]) s += T(x0 - 6, Y(v) + 4, v, 's', 'end');
+  for (const v of [0, 10, 20, 30, 40, 50]) s += T(X(v), y0 + 16, v, 's', 'middle');
+  s += T(x1, y0 + 34, '[S] →', 's', 'end') + T(x0 + 4, y1 - 6, 'rate v', 's', 'start');
+  for (const c of curves) {
+    const pts = []; for (let i = 0; i <= 100; i++) { const S = i / 2; pts.push([X(S), Y(c.V * S / (c.K + S))]); }
+    s += `<path class="${c.cls}" d="${Bioc.path(pts)}"/>`;
+  }
+  if (opts.marks) {
+    const {V, K, S} = opts.marks;
+    s += `<path class="guide" d="M${x0} ${Y(V)} L${x1} ${Y(V)}"/>` + T(x0 + 6, Y(V) - 5, 'Vmax', 's', 'start');
+    s += `<path class="guide" d="M${x0} ${Y(V / 2)} L${X(Math.min(K, 50))} ${Y(V / 2)} L${X(Math.min(K, 50))} ${y0}"/>` + T(x1, Y(V / 2) + 14, '½Vmax', 'l', 'end');
+    if (K <= 50) s += T(Math.max(x0 + 8, X(K)), y0 + 36, 'Km', 'l b', 'middle');
+    const v = V * S / (K + S); s += `<circle class="pt" cx="${X(S).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="6"/>`;
+  }
+  $(id).innerHTML = s;
+}
+function lbPlot(id, curves, opts = {}) {
+  const x0 = 20, x1 = 340, yb = 210, yt = 22, xa = -2.2, xb = 1.5, X = Bioc.scale(xa, xb, x0, x1);
+  let ymax = 0; for (const c of curves) ymax = Math.max(ymax, 1 / c.V + c.K / c.V * xb);
+  ymax = Math.max(ymax * 1.08, 0.05);
+  const Y = Bioc.scale(0, ymax, yb, yt), ax = X(0);
+  let s = `<path class="axis" d="M${x0} ${yb} L${x1} ${yb} M${ax} ${yt} L${ax} ${yb}"/>`;
+  for (const v of [-2, -1, 1]) s += T(X(v), yb + 16, v, 's', 'middle');
+  s += T(x1, yb + 34, '1/[S] →', 's', 'end') + T(ax + 6, yt - 6, '1/v', 's', 'start');
+  s += `<clipPath id="${id}-c"><rect x="${x0}" y="${yt}" width="${x1 - x0}" height="${yb - yt}"/></clipPath>`;
+  for (const c of curves) {
+    const xs = Math.max(xa, -1 / c.K), ya = 1 / c.V + c.K / c.V * xs, yb2 = 1 / c.V + c.K / c.V * xb;
+    s += `<path class="${c.cls}" clip-path="url(#${id}-c)" d="M${X(xs).toFixed(1)} ${Y(ya).toFixed(1)} L${X(xb).toFixed(1)} ${Y(yb2).toFixed(1)}"/>`;
+  }
+  if (opts.marks) {
+    const c = curves[0];
+    if (-1 / c.K >= xa) s += `<circle class="pt" cx="${X(-1 / c.K).toFixed(1)}" cy="${yb}" r="5"/>` + T(X(-1 / c.K), yb + 44, '−1/Km', 'l b', 'middle');
+    s += `<circle class="pt" cx="${ax}" cy="${Y(1 / c.V).toFixed(1)}" r="5"/>` + T(ax - 8, Y(1 / c.V) - 8, '1/Vmax', 'l b', 'end');
+    s += T(X(1.1), Math.max(yt + 12, Y(1 / c.V + c.K / c.V * 1.1) - 10), 'slope Km/Vmax', 'l', 'end');
+  }
+  $(id).innerHTML = s;
+}
+function drawMM() {
+  const {V, K, S} = MMS;
+  mmPlot('mm-svg', [{V, K, cls: 'ctl'}], {marks: {V, K, S}}); lbPlot('lb-svg', [{V, K, cls: 'ctl'}], {marks: true});
+  const v = V * S / (K + S), r = S / K;
+  const order = r < 0.2 ? 'well below Km: rate nearly proportional to [S] (first order)' : r > 5 ? 'far above Km: enzyme near saturation, rate hardly changes with [S] (zero order)' : 'near Km: in between';
+  $('mm-out').innerHTML = `<div class="vals"><p><span class="note">v = Vmax·[S]/(Km + [S])</span> <span class="big">${v.toFixed(1)}</span></p><p class="readout">= ${(v / V * 100).toFixed(0)}% of Vmax</p></div><p>[S] = ${S} is ${r < 0.1 ? r.toFixed(2) : r.toFixed(1)} × Km — ${order}. Lineweaver–Burk intercepts: 1/Vmax = ${(1 / V).toFixed(3)}, −1/Km = ${(-1 / K).toFixed(2)}.</p>`.replace(/-(\d)/g, '−$1');
+}
+let mmPreset = false; const mmMoved = () => { if (!mmPreset) clearChips('mm-tg'); };
+function clearChips(id) { $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); }
+MSL.V = Bioc.slider('mm-sl', {id: 'vmax', label: 'Vmax', min: 20, max: 100, step: 1, value: MMS.V, fmt: v => String(v)}, v => { MMS.V = v; mmMoved(); drawMM(); });
+MSL.K = Bioc.slider('mm-sl', {id: 'km', label: 'Km', min: 0.5, max: 20, step: 0.5, value: MMS.K, fmt: v => v.toFixed(1)}, v => { MMS.K = v; mmMoved(); drawMM(); });
+MSL.S = Bioc.slider('mm-sl', {id: 'sconc', label: '[S]', min: 0.5, max: 50, step: 0.5, value: MMS.S, fmt: v => v.toFixed(1)}, v => { MMS.S = v; mmMoved(); drawMM(); });
+Object.values(MSL).forEach(s => s.init());
+Bioc.toggles('mm-tg', Object.entries(MM).map(([k, v]) => [k, v[0]]), k => { mmPreset = true; MSL.V.set(MM[k][1]); MSL.K.set(MM[k][2]); mmPreset = false; }, 'mid');
+drawMM(); $('mm-text').innerHTML = MM_TEXT;
+
+/* ---- inhibition ---- */
+let inhK = 'comp', inhA = 2; const IV = 80, IK = 5;
+function inhParams(k, a) { /* a = 1 + [I]/Ki */
+  if (k === 'comp') return {V: IV, K: IK * a};
+  if (k === 'ncomp') return {V: IV / a, K: IK};
+  if (k === 'unc') return {V: IV / a, K: IK / a};
+  if (k === 'mix') { const au = 1 + (a - 1) / 3; return {V: IV / au, K: IK * a / au}; }
+  return null;
+}
+function drawInhSite() {
+  const k = inhK, x = 200, y = 130; let s = Bioc.DEFS + enzBody(x, y, siteNotch(x, y, 24, 36));
+  const inh = (cx, cy) => `<circle class="inh" cx="${cx}" cy="${cy}" r="15"/>` + T(cx, cy + 4, 'I', 'b', 'middle');
+  if (k === 'comp') s += inh(x, y - 50 + 22) + subSq(x + 150, 50, 36) + T(x + 150, 90, 'substrate shut out', 's', 'middle');
+  else if (k === 'ncomp' || k === 'mix') s += subSq(x, y - 50 + 18, 36) + inh(x + 86, y + 20) + T(x + 112, y + 24, 'another site', 's', 'start');
+  else if (k === 'unc') s += subSq(x, y - 50 + 18, 36) + inh(x + 40, y - 70) + T(x + 64, y - 66, 'binds only E–S', 's', 'start');
+  else if (k === 'irr') s += `<circle class="inh" cx="${x}" cy="${y - 50 + 22}" r="15"/><path d="M${x} ${y - 13} L${x} ${y + 6}" style="stroke:var(--ink);stroke-width:4"/>` + T(x + 70, y - 30, 'covalent, permanent', 's', 'start');
+  else s += subSq(x, y - 50 + 18, 36);
+  s += T(20, 192, 'schematic', 's', 'start');
+  $('inh-svg').innerHTML = s;
+}
+function drawInh() {
+  drawInhSite(); $('inh-find').innerHTML = INH_TEXT[inhK];
+  const p = inhParams(inhK, inhA), curves = [{V: IV, K: IK, cls: 'ctl'}]; if (p) curves.push({V: p.V, K: p.K, cls: 'inc'});
+  mmPlot('inh-mm', curves); lbPlot('inh-lb', curves);
+  const arrow = (a, b) => Math.abs(a - b) < 1e-9 ? '<span class="same">unchanged</span>' : a > b ? '<span class="up">↑</span>' : '<span class="up">↓</span>';
+  $('inh-vals').innerHTML = p ? `<p><span class="tag">apparent Km</span> <span class="readout">${p.K.toFixed(1)}</span> ${arrow(p.K, IK)} <span class="muted">(was ${IK})</span></p><p><span class="tag">apparent Vmax</span> <span class="readout">${p.V.toFixed(1)}</span> ${arrow(p.V, IV)} <span class="muted">(was ${IV})</span></p>` : '<p class="muted">Reference enzyme: Km 5, Vmax 80 (arbitrary units).</p>';
+}
+Bioc.slider('inh-sl', {id: 'ia', label: 'Inhibitor: 1 + [I]/Ki', min: 1, max: 5, step: 0.1, value: inhA, fmt: v => v.toFixed(1) + '×'}, v => { inhA = v; drawInh(); }).init();
+Bioc.toggles('inh-tg', Object.entries(INH).map(([k, v]) => [k, v[0]]), k => { inhK = k; drawInh(); }, 'comp');
+Bioc.key('inh-key', [['--ink', 'no inhibitor (solid)'], ['--inhib', 'with inhibitor (dashed)'], ['--enz', 'enzyme'], ['--sub', 'substrate']]);
+drawInh();
+Bioc.table('inh-table', ['Type', 'Km', 'Vmax', 'Inhibitor binds', 'Lineweaver–Burk lines'], INH_TABLE);
+Bioc.table('drug-table', ['Drug', 'Enzyme', 'How (as the sources give it)', 'Sources'], DRUGS);
+
+/* ---- regulation ---- */
+let regK = 'allo', eff = 0;
+function drawReg() {
+  let s = Bioc.DEFS;
+  if (regK === 'allo') {
+    const x0 = 50, x1 = 330, y0 = 220, y1 = 24, X = Bioc.scale(0, 40, x0, x1), Y = Bioc.scale(0, 1.05, y0, y1);
+    const K = 10 * Math.pow(2, -eff), n = 2.6, hyp = [], sig = [], sig0 = [];
+    for (let i = 0; i <= 80; i++) { const S = i / 2; hyp.push([X(S), Y(S / (10 + S))]); sig.push([X(S), Y(Math.pow(S, n) / (Math.pow(K, n) + Math.pow(S, n)))]); sig0.push([X(S), Y(Math.pow(S, n) / (Math.pow(10, n) + Math.pow(S, n)))]); }
+    s += `<path class="axis" d="M${x0} ${y1} L${x0} ${y0} L${x1} ${y0}"/>` + T(x1, y0 + 18, '[S] →', 's', 'end') + T(x0 + 4, y1 - 6, 'rate', 's', 'start');
+    s += `<path class="guide" d="${Bioc.path(hyp)}"/><path class="guide" d="${Bioc.path(sig0)}" style="stroke-dasharray:1 3"/><path class="trace" d="${Bioc.path(sig)}"/>`;
+    s += T(350, 120, 'solid: allosteric (sigmoidal)', 's', 'start') + T(350, 136, 'dashed: Michaelis–Menten', 's', 'start') + T(350, 150, '(hyperbolic), same Vmax', 's', 'start');
+    s += T(350, 60, eff > 0 ? 'activator: more R state,' : eff < 0 ? 'inhibitor: more T state,' : 'no effector', 'b', 'start') + T(350, 76, eff > 0 ? 'curve moves left' : eff < 0 ? 'curve moves right' : '', 's', 'start');
+    s += T(350, 210, 'schematic, no units', 's', 'start');
+  } else if (regK === 'fb') {
+    const xs = [60, 170, 280, 390, 480]; const L = ['A', 'B', 'C', 'D', 'P'];
+    xs.forEach((x, i) => { s += `<rect class="sub" x="${x - 22}" y="120" width="44" height="36" rx="6"/>` + T(x, 143, L[i], 'b', 'middle'); if (i < 4) s += `<path class="flow" d="M${x + 24} 138 L${xs[i + 1] - 26} 138"/>` + `<circle class="enz" cx="${(x + xs[i + 1]) / 2}" cy="${176}" r="13"/>` + T((x + xs[i + 1]) / 2, 181, 'E' + (i + 1), 's', 'middle'); });
+    s += `<path d="M480 116 C460 40 140 40 118 110" style="stroke:var(--inhib);stroke-width:2.4;fill:none;stroke-dasharray:6 4" marker-end="url(#arr)"/>` + T(300, 42, 'end product inhibits the first committed step', 'l b', 'middle');
+    s += T(115, 220, 'regulatory (allosteric) enzyme', 's', 'middle') + T(20, 250, 'schematic pathway; e.g. ATCase in pyrimidine synthesis', 's', 'start');
+  } else if (regK === 'cov') {
+    s += `<rect class="enz" x="40" y="100" width="130" height="60" rx="14" style="fill-opacity:.3"/>` + T(105, 136, 'enzyme', 'b', 'middle');
+    s += `<rect class="enz" x="350" y="100" width="130" height="60" rx="14"/>` + `<circle cx="498" cy="100" r="15" style="fill:var(--surface);stroke:var(--ink)"/>` + T(498, 105, 'P', 'b', 'middle') + T(415, 136, 'enzyme–P', 'b', 'middle');
+    s += `<path class="flow" d="M180 115 L340 115"/>` + T(260, 104, 'kinase + ATP', 'l b', 'middle') + `<path class="flow" d="M340 150 L180 150"/>` + T(260, 174, 'phosphatase', 'l b', 'middle');
+    s += T(260, 220, 'reversible; on Ser, Thr or Tyr', 's', 'middle') + T(20, 250, 'schematic: which form is active depends on the enzyme', 's', 'start');
+  } else {
+    s += `<rect class="enz" x="40" y="100" width="190" height="60" rx="14" style="fill-opacity:.3"/><rect x="190" y="100" width="40" height="60" rx="8" style="fill:var(--muted);fill-opacity:.5"/>` + T(115, 136, 'trypsinogen', 'b', 'middle');
+    s += `<path class="flow" d="M245 130 L300 130"/>` + T(272, 120, 'cut', 's', 'middle') + `<rect class="enz" x="310" y="100" width="150" height="60" rx="14"/>` + T(385, 136, 'trypsin', 'b', 'middle');
+    s += T(260, 210, 'one-way: the cut cannot be undone', 's', 'middle') + T(20, 250, 'schematic', 's', 'start');
+  }
+  $('reg-svg').innerHTML = s; $('reg-find').innerHTML = REG[regK][1];
+}
+function regSlider() { $('reg-sl').innerHTML = ''; eff = 0; if (regK !== 'allo') { drawReg(); return; } Bioc.slider('reg-sl', {id: 'eff', label: 'Effector (inhibitor ← → activator)', min: -1, max: 1, step: 0.1, value: 0, fmt: v => v > 0 ? 'activator ' + v.toFixed(1) : v < 0 ? 'inhibitor ' + (-v).toFixed(1) : 'none'}, v => { eff = v; drawReg(); }).init(); drawReg(); }
+Bioc.toggles('reg-tg', Object.entries(REG).map(([k, v]) => [k, v[0]]), k => { regK = k; regSlider(); }, 'allo'); regSlider();
+
+/* ---- therapeutic enzymes ---- */
+Bioc.table('thx-table', ['Agent', 'What it does', 'Sources'], THX);
+Bioc.swipeHints();
+</script>
+</body>
+</html>

@@ -18,11 +18,11 @@ Source notes: BC14.1 is printed without its prefix ("14.1") in the PDF; restored
 
 ### 2. Enzyme
 
-- [ ] **BC2.1** Explain fundamental concepts of enzyme, isoenzyme and coenzyme. Enumerate the main classes of IUBMB nomenclature.
-- [ ] **BC2.2** Describe and explain the basic principles of enzyme activity
-- [ ] **BC2.3** Describe and discuss enzyme Inhibition and role of enzymes or drugs as Inhibitors, and enzymes as therapeutic agents.
-- [ ] **BC2.4** Describe and discuss the clinical utility of various serum enzymes in laboratory and their use as markers of various pathological conditions.
-- [ ] **BC2.5** Interpret laboratory results of enzymes in various disorders.
+- [x] **BC2.1** Explain fundamental concepts of enzyme, isoenzyme and coenzyme. Enumerate the main classes of IUBMB nomenclature. — *concepts, cofactors, isoenzymes, ribozymes and abzymes, seven IUBMB classes: [Enzymes: Concepts, Classes, Kinetics and Inhibition](enzymes/enzymes-kinetics.html)*
+- [x] **BC2.2** Describe and explain the basic principles of enzyme activity — *active-site models, factors, Michaelis–Menten and Lineweaver–Burk sliders: [Enzymes: Concepts, Classes, Kinetics and Inhibition](enzymes/enzymes-kinetics.html)*
+- [x] **BC2.3** Describe and discuss enzyme Inhibition and role of enzymes or drugs as Inhibitors, and enzymes as therapeutic agents. — *inhibition picker on both plots, drug inhibitors, allostery, covalent modification, therapeutic enzymes: [Enzymes: Concepts, Classes, Kinetics and Inhibition](enzymes/enzymes-kinetics.html)*
+- [x] **BC2.4** Describe and discuss the clinical utility of various serum enzymes in laboratory and their use as markers of various pathological conditions. — *enzyme–organ picker, 5′-nucleotidase, cholinesterase, prostate enzymes: [Enzymes in the Clinic: Serum Markers and Isoenzymes](enzymes/clinical-enzymes.html)*
+- [x] **BC2.5** Interpret laboratory results of enzymes in various disorders. — *cardiac-marker time course, 4UDMI 2018 tree with MI types 1–5, LDH/CK/ALP isoenzyme patterns, Atlanta rule: [Enzymes in the Clinic: Serum Markers and Isoenzymes](enzymes/clinical-enzymes.html)*
 
 ### 3. Chemistry and Metabolism of Carbohydrates
 

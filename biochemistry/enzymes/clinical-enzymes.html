@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Enzymes in the Clinic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/bioc.css">
+<style>
+/* page tokens reused with their anatomy/physiology meanings and values: --liver, --panc, --kidney (anatomy/abdomen-pelvis/organs.html,
+   imaging-abdomen.html), --prost (pelvis.html), --heart, --bone (atlas.css), --musc (muscle tissue, phys.css), --rbc (red cells, phys.css).
+   --accent marks only the selected item; --clin marks clinical points only; --mark is the time cursor. */
+:root{--liver:#9b6b5e;--panc:#8f6aa8;--kidney:#b46e48;--prost:#556b2f;--heart:#b8655c;--bone:#e8dfc8;--musc:#c96f68;--rbc:#f20c42}
+:root[data-theme="dark"]{--liver:#a77464;--panc:#9d7ab6;--kidney:#c07a52;--prost:#7f9a4f;--heart:#c98078;--bone:#d9cfb6;--musc:#9c4e48;--rbc:#ff1953}
+svg.sch .org{stroke:var(--muted);stroke-width:1}
+svg.sch .dim{opacity:.28}
+svg.sch .sel{stroke:var(--accent);stroke-width:3;fill:none;stroke-dasharray:7 4}
+svg.sch .bar{fill:var(--muted);fill-opacity:.35}
+svg.sch .barp{fill:var(--muted);fill-opacity:.8}
+svg.sch .cur{stroke:var(--mark);stroke-width:2.4}
+svg.sch .nodeon{fill:var(--surface);stroke:var(--accent);stroke-width:2.6}
+svg.sch .nodeoff{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .edgeon{stroke:var(--accent);stroke-width:2.6;fill:none}
+svg.sch .edgeoff{stroke:var(--line);stroke-width:1.4;fill:none}
+.qrow{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:14px}
+.qrow .q{min-width:15em}
+.res{font:600 16px var(--f-body)}
+.res.clin{color:var(--clin)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Biochemistry</a> <span class="muted">· Module 01: <a href="enzymes-kinetics.html">Concepts, kinetics, inhibition</a> · <span aria-current="page">Enzymes in the clinic</span></span></nav>
+
+<header class="stack">
+  <h1>Enzymes in the Clinic: Serum Markers and Isoenzymes</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-org">Enzyme and organ</a> <a href="#h-mi">Heart attack markers</a> <a href="#h-udmi">Injury or infarction?</a> <a href="#h-iso">Isoenzyme patterns</a> <a href="#h-panc">Pancreatitis</a> <a href="#h-che">Cholinesterase and prostate</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-org">
+  <h2 id="h-org">Which enzyme comes from which organ</h2>
+  <p class="muted" id="org-intro"></p>
+  <div class="qrow"><span class="tag">By enzyme</span><div class="chips" id="enz-tg" aria-label="Enzyme"></div></div>
+  <div class="qrow"><span class="tag">By organ</span><div class="chips" id="org-tg" aria-label="Organ"></div></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="org-svg" viewBox="0 0 440 400" role="img" aria-label="Schematic body with the organs that hold the chosen enzyme outlined"></svg></div>
+    <div class="prose find" id="org-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="org-key"></div>
+  <div class="scroll"><table id="enz-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mi">
+  <h2 id="h-mi">Heart attack markers: when they rise and fall</h2>
+  <div class="sliders" id="mi-sl"></div>
+  <div class="schbox"><svg class="fig sch" id="mi-svg" viewBox="0 0 640 300" role="img" aria-label="Time bars after symptom onset for myoglobin, CK, CK-MB, troponin (two sources) and LDH, on a log time scale, with the chosen time as a vertical line"></svg></div>
+  <div class="prose find" id="mi-find" aria-live="polite"></div>
+  <p class="muted" id="mi-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-udmi">
+  <h2 id="h-udmi">Myocardial injury or infarction? The Fourth Universal Definition (2018)</h2>
+  <p class="muted" id="ud-intro"></p>
+  <div class="stack" id="ud-q"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ud-svg" viewBox="0 0 560 300" role="img" aria-label="Decision tree: troponin above the 99th percentile, then rise and/or fall, then evidence of acute ischaemia; the path for the chosen answers is outlined"></svg></div>
+    <div class="prose find" id="ud-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-iso">
+  <h2 id="h-iso">Isoenzyme patterns: LDH, CK, ALP</h2>
+  <div class="chips" id="iso-tg" aria-label="Enzyme"></div>
+  <div class="chips" id="iso-sub" aria-label="Pattern"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="iso-svg" viewBox="0 0 520 260" role="img" aria-label="Schematic electrophoresis bands or bars for the chosen isoenzyme pattern"></svg></div>
+    <div class="prose find" id="iso-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="iso-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-panc">
+  <h2 id="h-panc">Amylase and lipase: diagnosing acute pancreatitis</h2>
+  <div class="stack" id="pa-q"></div>
+  <div class="prose find" id="pa-find" aria-live="polite"></div>
+  <div class="prose" id="pa-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-che">
+  <h2 id="h-che">Cholinesterases and the prostate enzymes</h2>
+  <div class="chips" id="che-tg" aria-label="Topic"></div>
+  <div class="prose find" id="che-find" aria-live="polite"></div>
+  <div class="prose" id="lft-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BEnzymes%20in%20the%20Clinic%3A%20Serum%20Markers%20and%20Isoenzymes%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fbiochemistry%2Fenzymes%2Fclinical-enzymes.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/bioc.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-b01.md, Part B; biochemistry/DATA-SOURCES.md) =====================
+   Review years: 2017 = cardiac biomarkers from history to hs-troponin (Intern Emerg Med); 2018 = BSG guideline on abnormal liver blood tests;
+   2021 = abnormal liver enzymes for clinicians; 2023 = acute pancreatitis (World J Gastroenterol); 4UDMI summaries 2021 and 2024. */
+const LEDE = 'Pick an enzyme and see the organs it comes from, scrub the hours after a heart attack to see which marker is up, walk the 2018 definition of myocardial infarction, and read LDH and CK isoenzyme patterns. The liver-test pattern picker (hepatocellular, cholestatic, mixed) is on the physiology page: <a href="../../physiology/gi/liver-applied.html#h-lft">Liver function tests</a>. Enzyme basics: <a href="enzymes-kinetics.html">Concepts and kinetics</a>.';
+const ORG_INTRO = 'Enzymes inside cells leak into the blood when the tissue is injured, so a raised serum level points to the damaged organ — the earliest heart-attack markers were serum enzymes (StatPearls; a 2017 review). Reference ranges are statistical and differ between laboratories (StatPearls), so no normal values are given here.';
+
+/* organs: key -> [label, token, schematic shape] */
+const ORG = {
+  brain: ['Brain', '--muted'], heart: ['Heart', '--heart'], liver: ['Liver, bile ducts', '--liver'], panc: ['Pancreas', '--panc'],
+  kid: ['Kidney', '--kidney'], musc: ['Skeletal muscle', '--musc'], bone: ['Bone', '--bone'], prost: ['Prostate', '--prost'], rbc: ['Red cells', '--rbc'],
+};
+/* enzymes: key -> [label, main organs, minor organs, text] */
+const ENZ = {
+  alt: ['ALT', ['liver'], ['kid', 'heart', 'musc'], '<h3>ALT (alanine aminotransferase)</h3><p>Found <b>mainly in the liver</b>, in the hepatocyte cytosol, with lower amounts in kidney, heart and muscle (StatPearls; 2014 and 2021 reviews) — so it is the more <b>specific marker of hepatocellular injury</b> (a 2021 review; StatPearls). A transferase: EC 2.6.1.2 (IUBMB).</p>'],
+  ast: ['AST', ['liver', 'heart', 'musc'], ['kid', 'brain', 'rbc'], '<h3>AST (aspartate aminotransferase)</h3><p>In liver, heart, skeletal muscle and brain (Wikipedia; a 2021 review); Wikipedia adds kidney and red cells. Found in mitochondria and cytoplasm, unlike ALT (cytoplasm only) (a 2021 review). <b>AST:ALT above 2</b> suggests alcohol-related liver disease (a 2021 review; Wikipedia). AST was the first heart-attack marker, but it is not specific for heart muscle (a 2017 review).</p>'],
+  alp: ['ALP', ['liver', 'bone'], [], '<h3>ALP (alkaline phosphatase)</h3><p>Isoenzymes in <b>liver</b> (biliary epithelium, canalicular membrane), <b>bone</b>, intestine and placenta (Wikipedia; 2018 guideline; a 2021 review; StatPearls). Raised in <b>cholestasis</b> (a 2021 review; 2018 guideline) and with active <b>bone formation</b> — normally higher in children and adolescents (a 2021 review; Wikipedia); Wikipedia: Paget disease of bone. Zinc and magnesium are its cofactors (StatPearls).</p>'],
+  ggt: ['GGT', ['liver'], ['kid', 'panc', 'prost'], '<h3>GGT (γ-glutamyltransferase)</h3><p>Abundant in the liver, also in kidney, intestine, prostate and pancreas — <b>but not bone</b>, so a raised GGT shows that a raised ALP comes from the liver (2018 guideline; a 2021 review; Wikipedia). Raised by heavy <b>alcohol</b> intake, but not specific for it (a 2015 review; a 2021 review; Wikipedia).</p>'],
+  amy: ['Amylase', ['panc'], [], '<h3>Amylase</h3><p>Made by the <b>pancreas</b> and the <b>salivary glands</b> (Wikipedia). Raised in acute pancreatitis: the Revised Atlanta threshold is "greater than 3 times" the upper limit (Wikipedia) or "three or more times" (a 2023 review) but less sensitive and specific than lipase (2023 review; Wikipedia). Wikipedia lists other causes of a high amylase, e.g. perforated peptic ulcer. <a href="#h-panc">Pancreatitis</a>.</p>'],
+  lip: ['Lipase', ['panc'], [], '<h3>Lipase</h3><p>Pancreatic lipase digests dietary fat (StatPearls). The <b>preferred test</b> for acute pancreatitis: more sensitive and specific than amylase (a 2023 review; Wikipedia). <a href="#h-panc">Pancreatitis</a>.</p>'],
+  ck: ['CK', ['musc', 'heart', 'brain'], [], '<h3>CK (creatine kinase)</h3><p>Dimers of M and B chains: <b>CK-MM</b> in skeletal muscle, <b>CK-MB</b> in heart, <b>CK-BB</b> in brain (StatPearls; Wikipedia; a 2017 review). High in <b>rhabdomyolysis</b>, muscular dystrophy, myositis and myocardial infarction (Wikipedia), and transiently after exercise (a 2016 review). <a href="#h-iso">CK isoenzymes</a>.</p>'],
+  ldh: ['LDH', ['heart', 'liver', 'musc', 'rbc'], ['kid', 'brain'], '<h3>LDH (lactate dehydrogenase)</h3><p>An oxidoreductase (EC 1.1.1.27) present in <b>all tissues</b> (StatPearls; a 2021 review: non-specific); Wikipedia: a marker of tissue breakdown. Five isoenzymes tell more: <a href="#h-iso">LDH isoenzymes</a>. Abundant in red cells: a marker of <b>haemolysis</b> (Wikipedia; a 2021 LDH study).</p>'],
+  trop: ['Troponin', ['heart'], [], '<h3>Cardiac troponin I and T</h3><p>Not an enzyme: troponin is a protein complex of three parts, TnC, TnI and TnT (Wikipedia). The cardiac-specific forms <b>cTnI and cTnT</b> are now the <b>primary biomarkers</b> of myocardial injury, outperforming CK and CK-MB (StatPearls; a 2017 review; Wikipedia). <a href="#h-mi">Time course</a> and <a href="#h-udmi">the 2018 definition</a>.</p>'],
+  myo: ['Myoglobin', ['heart', 'musc'], [], '<h3>Myoglobin</h3><p>Not an enzyme: an oxygen-binding protein of heart and skeletal muscle (a 2017 review), so not cardiac-specific (StatPearls). StatPearls: it rises within 1–2 h. With high-sensitivity troponin, myoglobin testing is no longer recommended (a 2017 review; Wikipedia).</p>'],
+  acp: ['Acid phosphatase', ['prost', 'bone'], [], '<h3>Acid phosphatases</h3><p><b>Prostatic acid phosphatase</b> is made by the prostate; serum levels are higher in prostate cancer, highest with metastasis, and it was the prostate-cancer marker before PSA (Wikipedia; a 2013 review). Wikipedia: <b>tartrate-resistant acid phosphatase</b> marks osteoclast activity in bone.</p>'],
+  psa: ['PSA', ['prost'], [], '<h3>PSA (prostate-specific antigen)</h3><p>Wikipedia: an enzyme, kallikrein-3, made by the prostate epithelium. Highly sensitive but not specific: benign prostatic hyperplasia and prostatitis raise it too (StatPearls; Wikipedia). No cut-offs here (no dated guideline was used).</p>'],
+  che: ['Cholinesterase', ['liver', 'rbc'], [], '<h3>Cholinesterases</h3><p><b>Butyrylcholinesterase</b> (pseudocholinesterase) is made in the liver and circulates in plasma; <b>acetylcholinesterase</b> sits on red cells and at synapses (Wikipedia; StatPearls; a 2024 review). <a href="#h-che">Succinylcholine apnoea and organophosphates</a>.</p>'],
+};
+const ENZ_TABLE = [
+  ['ALT', 'Liver (hepatocyte cytosol)', 'Hepatocellular injury; the more liver-specific aminotransferase'],
+  ['AST', 'Liver, heart, muscle, brain (Wikipedia adds kidney, red cells)', 'Liver injury; AST:ALT > 2 suggests alcohol'],
+  ['ALP', 'Liver (biliary), bone; intestine, placenta', 'Cholestasis; bone formation (growth, Paget)'],
+  ['GGT', 'Liver, kidney, pancreas, prostate — not bone', 'Confirms a liver source for ALP; alcohol (not specific)'],
+  ['Amylase', 'Pancreas, salivary glands', 'Acute pancreatitis (about 3 × ULN or more); other causes too'],
+  ['Lipase', 'Pancreas', 'Acute pancreatitis: preferred test'],
+  ['CK (MM, MB, BB)', 'Skeletal muscle, heart, brain', 'Rhabdomyolysis, myositis, dystrophy; CK-MB for reinfarction (StatPearls)'],
+  ['LDH (1–5)', 'All tissues', 'Tissue damage, haemolysis; isoenzymes localise'],
+  ['Troponin I, T (protein)', 'Heart', 'Myocardial injury and infarction (4UDMI 2018)'],
+  ['Prostatic acid phosphatase', 'Prostate', 'Prostate cancer, highest with metastasis (historical marker)'],
+  ['PSA (kallikrein-3)', 'Prostate', 'Prostate cancer screening; also BPH, prostatitis'],
+  ['Butyrylcholinesterase', 'Liver → plasma', 'Succinylcholine apnoea when deficient'],
+];
+
+/* heart attack time course (hours after onset). Each row: [label, source, rise [a,b] or null, peak [a,b] or null, back to normal [a,b] or null] */
+const MI = [
+  ['Myoglobin', 'StatPearls', [1, 2], null, null],
+  ['Total CK*', 'StatPearls', [6, 12], null, null],
+  ['CK-MB', 'Wikipedia', [4, 8], null, [48, 72]],
+  ['Troponin', 'a 2017 review', [4, 10], [12, 48], [96, 240]],
+  ['Troponin', 'Wikipedia', [2, 3], [24, 48], null],
+  ['LDH', 'Wikipedia', null, [72, 96], [240, 240]],
+];
+const MI_NOTE = 'Bars are the ranges each source gives (log time scale; light = rising, dark = peak, then the stretch until the end of the raised period the source gives, with the end range dotted); a blank part means that source gives no time. CK-MB returns to normal within 2–3 days (Wikipedia); for troponin the 2017 review gives how long it stays raised (4–10 days). Sources differ for troponin: a rise 4–10 h after onset and a peak at 12–48 h (a 2017 review) against a rise within 2–3 h and a peak within 1–2 days (Wikipedia); StatPearls says only "detectable within a few hours". LDH: Wikipedia gives a peak at 3–4 days and "up to 10 days". *StatPearls times the CK rise from presentation, not from symptom onset, so that bar is only approximately placed. Myoglobin testing is no longer recommended (a 2017 review; Wikipedia: "discouraged"); CK-MB has been largely supplanted by troponin (StatPearls; Wikipedia: "discouraged"), though StatPearls keeps it for suspected reinfarction or where troponin is unavailable. High-sensitivity troponin can also be raised in chronic kidney disease and heart failure (StatPearls; a 2017 review).';
+
+/* 4UDMI 2018 as summarised by open reviews (2021, 2024) */
+const UD_INTRO = 'The Fourth Universal Definition of Myocardial Infarction (2018) is summarised here from four open-access papers (2021, 2021, 2024, 2024); the definition itself was not downloaded. Answer the three questions.';
+const UD_Q = [
+  ['tn', 'Cardiac troponin above the 99th percentile upper reference limit?'],
+  ['rf', 'A rise and/or fall on repeat testing?'],
+  ['isch', 'Clinical evidence of acute myocardial ischaemia (as listed by StatPearls and Wikipedia: symptoms, new ischaemic ECG changes such as ST changes, new LBBB or new Q waves)?'],
+];
+const UD_RES = {
+  none: ['No myocardial injury', 'Troponin within the reference limit: the definition\'s "myocardial injury" needs a value above the 99th percentile URL (2021 and 2024 reviews).'],
+  chronic: ['Chronic myocardial injury', 'Raised but stable troponin, without a rise and/or fall (2021 and 2024 reviews). Kidney disease and heart failure are among the many causes of myocardial injury a 2021 review lists. Another 2021 review: the size of the troponin value alone cannot separate chronic from minor acute injury.'],
+  acute: ['Acute myocardial injury, not infarction', 'Rising and/or falling troponin above the 99th percentile, but no evidence of acute ischaemia: call it "myocardial injury" (2021 reviews; 2024 review) — causes include myocarditis, pulmonary embolism, shock (a 2017 review), sepsis (a 2021 review), anaemia, arrhythmia, heart failure and kidney disease (a 2021 review).'],
+  mi: ['Myocardial infarction', 'Acute myocardial injury in the setting of evidence of acute myocardial ischaemia (2021 and 2024 reviews). <b>Type 1</b>: atherosclerotic plaque rupture or ulceration with thrombus. <b>Type 2</b>: supply–demand mismatch without acute plaque rupture, e.g. coronary vasospasm, embolus or spontaneous dissection (2021 and 2024 reviews). "STEMI" and "NSTEMI" belong to type 1 only (a 2024 review). <b>Types 3–5</b>: cardiac death before troponin results, MI related to PCI, MI related to CABG (2021 and 2024 papers).'],
+};
+const UD_NOTE = 'What counts as a significant change is not fixed: one 2024 review gives a proposal (≥ 50% of the URL, or > 20% of a raised baseline), not used in this tree.';
+
+/* isoenzymes */
+const ISO = {
+  ldh: ['LDH', {mi: 'Myocardial infarction', hae: 'Haemolysis', liv: 'Liver injury'}],
+  ck: ['CK', {heart: 'Heart muscle', musc: 'Skeletal muscle'}],
+  alp: ['ALP', {liv: 'Liver vs bone'}],
+};
+const LDH_TABLE = [
+  ['LDH-1', 'H4 (4 × B)', 'Heart, red cells, brain'], ['LDH-2', 'H3M (3B1A)', 'Reticuloendothelial system'], ['LDH-3', 'H2M2', 'Lungs'],
+  ['LDH-4', 'HM3', 'Kidneys, placenta, pancreas'], ['LDH-5', 'M4 (4 × A)', 'Liver, striated muscle'],
+];
+const CK_TABLE = [
+  ['Heart', '15% (StatPearls)', '25–30% (Wikipedia; a 2017 review)', '85% (StatPearls) / 70% (Wikipedia)'],
+  ['Skeletal muscle', '1–3% (StatPearls)', '1% (Wikipedia; a 2017 review)', '98% (Wikipedia)'],
+];
+
+/* pancreatitis: Revised Atlanta classification (2012), via a 2023 review and Wikipedia */
+const PA_Q = [
+  ['pain', 'Abdominal pain typical of acute pancreatitis'],
+  ['enz', 'Serum lipase or amylase more than 3 × the upper limit of normal'],
+  ['img', 'Characteristic findings on imaging (CT, MRI, ultrasound)'],
+];
+const PA_TEXT = '<p>The Revised Atlanta classification (2012) needs <b>two of these three</b> (Wikipedia; a 2023 review — the classification itself was not downloaded). <b>Lipase</b> is preferred over amylase: more sensitive and specific (2023 review; Wikipedia). The cause behind the enzymes: trypsinogen activated inside the pancreas (2023 review; Wikipedia). A lipase-to-amylase ratio has been suggested to point to alcohol (2023 review: "some authors"; Wikipedia) — no cut-off is used here. A raised amylase can also be <b>macroamylasaemia</b> (about 1% of people), which is easily mistaken for pancreatitis (a 2024 letter).</p>';
+
+/* cholinesterase and prostate */
+const CHE = {
+  bche: ['Succinylcholine apnoea', '<h3>Butyrylcholinesterase (pseudocholinesterase) deficiency</h3><p>Butyrylcholinesterase, made in the liver, <b>hydrolyses succinylcholine</b>, the depolarising muscle relaxant (StatPearls; a 2024 review; Wikipedia). People with low-activity variants are well until given succinylcholine (or mivacurium, which it also hydrolyses: StatPearls; Wikipedia), when <b>paralysis and apnoea are prolonged</b> (a 2024 review; Wikipedia). Wikipedia: plasma butyrylcholinesterase activity has been used as a liver function test.</p>'],
+  op: ['Organophosphate poisoning', '<h3>Organophosphates inhibit acetylcholinesterase</h3><p>Acetylcholine then accumulates: the cholinergic toxidrome (StatPearls; Wikipedia); the inhibition is irreversible and covalent at the active-site serine (a 2015 review on DFP). Wikipedia: field tests measure red-cell AChE and plasma (pseudo)cholinesterase. Inhibition kinetics: <a href="enzymes-kinetics.html#h-inh">Inhibition</a>.</p>'],
+  pros: ['Prostate: PAP and PSA', '<h3>Prostatic acid phosphatase and PSA</h3><p>Serum prostatic acid phosphatase is higher in prostate cancer, especially with bone metastasis (a 2013 review; Wikipedia), and was the marker before PSA (2013 review; Wikipedia). PSA is highly sensitive but not specific, raised also in benign hyperplasia and prostatitis (StatPearls; Wikipedia).</p>'],
+};
+const LFT_TEXT = '<p><b>Liver panel.</b> ALT and AST mark hepatocellular injury, ALP with GGT marks cholestasis, and bilirubin, albumin and PT/INR reflect function — so the American College of Gastroenterology prefers "liver chemistries" (StatPearls). Try the patterns on the <a href="../../physiology/gi/liver-applied.html#h-lft">liver-test picker</a>.</p>';
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); BSG guideline on abnormal liver blood tests (2018); open-access reviews on abnormal liver enzymes (2021), ALT (2014), GGT (2015), creatine kinase (2016), cardiac biomarkers (2017), troponin and the Fourth Universal Definition of MI (2021, 2021, 2024, 2024), LDH isoenzymes (2021, 2022, 2026), acute pancreatitis (2023), macroamylasaemia (2024), butyrylcholinesterase (2024), prostatic acid phosphatase (2013) (Europe PMC / NCBI); IUBMB Enzyme Nomenclature; Wikipedia (wikitext checked for OpenStax citations).';
+const MODELS = '<b>Models used:</b> the body, organs, electrophoresis bands and bars are schematic, not to scale; LDH bands show only which band rises, not real proportions; marker time bars are drawn from each source\'s stated ranges on a log scale.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Bioc;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS; $('org-intro').innerHTML = ORG_INTRO;
+
+/* ---- organ picker ---- */
+const SHAPE = {
+  brain: `<ellipse cx="220" cy="46" rx="34" ry="26"/>`,
+  heart: `<path d="M208 132 C190 110 168 128 182 146 L208 170 L234 146 C248 128 226 110 208 132 Z"/>`,
+  liver: `<path d="M150 178 C160 166 230 164 252 172 C262 180 250 200 226 204 C200 208 160 206 152 198 C146 192 146 184 150 178 Z"/>`,
+  panc: `<path d="M206 222 C222 214 262 214 276 222 C270 230 236 232 210 232 Z"/>`,
+  kid: `<path d="M164 232 C152 232 150 256 164 258 C172 258 172 232 164 232 Z M276 232 C288 232 290 256 276 258 C268 258 268 232 276 232 Z"/>`,
+  prost: `<ellipse cx="220" cy="300" rx="14" ry="10"/>`,
+  musc: `<path d="M108 120 C96 160 92 200 98 240 L118 240 C122 200 126 160 128 124 Z"/>`,
+  bone: `<path d="M241 334 L251 334 L255 386 L245 386 Z M236 332 C236 324 256 324 256 332 C256 338 236 338 236 332 Z"/>`,
+  rbc: `<ellipse cx="370" cy="96" rx="22" ry="9"/><ellipse cx="392" cy="122" rx="22" ry="9"/>`,
+};
+const LAB = {brain: [262, 40, 'brain'], heart: [208, 104, 'heart'], liver: [336, 190, 'liver'], panc: [336, 226, 'pancreas'], kid: [336, 254, 'kidney'], prost: [336, 304, 'prostate'], musc: [112, 262, 'muscle'], bone: [266, 372, 'bone (femur)'], rbc: [346, 152, 'red cells']};
+const LEAD = {liver: [256, 186, 332, 186], panc: [272, 224, 332, 224], kid: [286, 248, 332, 250], prost: [234, 300, 332, 300]};
+let orgMode = 'enz', orgSel = 'alt';
+function drawOrg() {
+  let main = [], minor = [];
+  if (orgMode === 'enz') { main = ENZ[orgSel][1]; minor = ENZ[orgSel][2]; }
+  else main = [orgSel];
+  let s = `<path d="M220 74 C180 74 160 90 150 110 L132 118 C124 160 118 220 120 250 L136 250 C140 210 146 170 152 140 L156 280 C170 320 200 330 220 330 C240 330 270 320 284 280 L288 140 C294 170 300 210 304 250 L320 250 C322 220 316 160 308 118 L290 110 C280 90 260 74 220 74 Z" style="fill:var(--muted);fill-opacity:.1;stroke:var(--line)"/>`;
+  s += `<path d="M196 330 L190 392 M244 330 L250 392" style="stroke:var(--line);stroke-width:16;stroke-linecap:round"/>`;
+  let labs = '';  /* labels drawn after every shape, so no shape covers a label */
+  for (const [k, sh] of Object.entries(SHAPE)) {
+    const on = main.includes(k) || minor.includes(k);
+    s += `<g class="org${on ? '' : ' dim'}" style="fill:var(${ORG[k][1]})">${sh}</g>`;
+    if (main.includes(k)) s += `<g class="sel">${sh}</g>`;
+    const [lx, ly, lt] = LAB[k]; if (LEAD[k]) labs += Bioc.lead(...LEAD[k]); labs += T(lx, ly, lt + (minor.includes(k) ? ' (less)' : ''), on ? 'l b' : 's', k === 'musc' || k === 'heart' ? 'middle' : lx < 220 ? 'end' : 'start');
+  }
+  s += labs + T(10, 394, 'schematic, not to scale', 's', 'start');
+  $('org-svg').innerHTML = s;
+  if (orgMode === 'enz') $('org-find').innerHTML = ENZ[orgSel][3];
+  else {
+    const list = Object.entries(ENZ).filter(([, v]) => v[1].includes(orgSel) || v[2].includes(orgSel));
+    $('org-find').innerHTML = `<h3>${ORG[orgSel][0]}</h3><p>Markers that come from here (main source first):</p><ul>` + list.sort((a, b) => (b[1][1].includes(orgSel) ? 1 : 0) - (a[1][1].includes(orgSel) ? 1 : 0)).map(([k, v]) => `<li><b>${v[0]}</b>${v[1].includes(orgSel) ? '' : ' (smaller amounts)'}</li>`).join('') + '</ul><p class="muted">Pick the enzyme above for the details and sources.</p>';
+  }
+}
+function clearChips(id) { $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); }
+Bioc.toggles('enz-tg', Object.entries(ENZ).map(([k, v]) => [k, v[0]]), k => { orgMode = 'enz'; orgSel = k; clearChips('org-tg'); drawOrg(); }, 'alt');
+Bioc.toggles('org-tg', Object.entries(ORG).map(([k, v]) => [k, v[0]]), k => { orgMode = 'org'; orgSel = k; clearChips('enz-tg'); drawOrg(); }, null);
+drawOrg();
+Bioc.key('org-key', Object.values(ORG).map(v => [v[1], v[0]]).concat([['--accent', 'main source (outlined)']]));
+Bioc.table('enz-table', ['Marker', 'Main tissue', 'Raised in'], ENZ_TABLE);
+
+/* ---- heart attack time course ---- */
+let miH = 24;
+const fmtH = h => h < 48 ? Math.round(h) + ' h' : (h / 24).toFixed(h < 240 ? 1 : 0) + ' days';
+function drawMi() {
+  const x0 = 170, x1 = 620, lo = Math.log(1), hi = Math.log(336), X = h => x0 + (Math.log(h) - lo) / (hi - lo) * (x1 - x0);
+  let s = `<path class="axis" d="M${x0} 262 L${x1} 262"/>`;
+  for (const [h, t] of [[1, '1 h'], [3, '3 h'], [6, '6 h'], [12, '12 h'], [24, '1 d'], [48, '2 d'], [96, '4 d'], [168, '7 d'], [336, '14 d']]) s += `<path class="grid" d="M${X(h)} 24 L${X(h)} 262"/>` + T(X(h), 278, t, 's', 'middle');
+  s += T(x1, 296, 'time after symptom onset (log scale)', 's', 'end');
+  const lines = [];
+  MI.forEach(([n, src, rise, peak, back], i) => {
+    const y = 30 + i * 38;
+    s += T(10, y + 12, n, 'b', 'start') + T(10, y + 26, src, 's', 'start');
+    if (rise) s += `<rect class="bar" x="${X(rise[0])}" y="${y}" width="${Math.max(2, X(rise[1]) - X(rise[0]))}" height="22"/>`;
+    const upStart = rise ? rise[1] : peak ? peak[0] : null, upEnd = back ? back[0] : null;
+    if (upStart && upEnd) s += `<rect class="bar" x="${X(upStart)}" y="${y + 6}" width="${X(upEnd) - X(upStart)}" height="10" style="fill-opacity:.55"/>`;
+    if (rise && !upEnd) s += `<path d="M${X(rise[1])} ${y + 11} L${X(rise[1]) + 30} ${y + 11}" style="stroke:var(--muted);stroke-width:2;stroke-dasharray:3 3"/>`;
+    if (peak) s += `<rect class="barp" x="${X(peak[0])}" y="${y}" width="${Math.max(3, X(peak[1]) - X(peak[0]))}" height="22"/>`;
+    if (back && back[1] > back[0]) s += `<rect class="bar" x="${X(back[0])}" y="${y + 6}" width="${X(back[1]) - X(back[0])}" height="10" style="fill-opacity:.2;stroke:var(--muted);stroke-dasharray:2 2"/>`;
+    if (back) s += `<path d="M${X(back[1])} ${y} L${X(back[1])} ${y + 22}" style="stroke:var(--ink);stroke-width:2"/>`;
+    /* state at miH */
+    let st = 'no time given by this source';
+    if (rise && miH < rise[0]) st = 'not yet expected';
+    else if (rise && miH <= rise[1]) st = 'starting to rise';
+    if (peak && miH >= peak[0] && miH <= peak[1]) st = 'in its peak window';
+    else if (rise && miH > rise[1] && (!peak || miH < peak[0]) && (!back || miH < back[0])) st = back || peak ? 'raised' : 'past its stated rise time; this source gives no peak or end';
+    else if (peak && miH > peak[1] && back && miH < back[0]) st = 'raised, after the peak';
+    if (peak && !back && miH > peak[1]) st = 'after its peak window; this source gives no end time';
+    if (!rise && peak && miH < peak[0]) st = 'rise time not given; peak later';
+    if (back && miH >= back[0] && miH <= back[1] && back[1] > back[0]) st = 'at the end of its stated raised period';
+    if (back && miH > back[1]) st = 'beyond the period the source gives for it';
+    if (back && back[1] === back[0] && miH <= back[0] && miH > (peak ? peak[1] : 0)) st = 'still raised (up to 10 days)';
+    lines.push(`<li><b>${n}</b> (${src}): ${st}</li>`);
+  });
+  s += `<path class="cur" d="M${X(miH)} 20 L${X(miH)} 262"/>`;
+  $('mi-svg').innerHTML = s;
+  $('mi-find').innerHTML = `<h3>${fmtH(miH)} after onset</h3><ul>${lines.join('')}</ul>`;
+}
+const MIS = Bioc.slider('mi-sl', {id: 'hrs', label: 'Time after onset', min: 0, max: 100, step: 1, value: 55, fmt: v => fmtH(Math.exp(v / 100 * Math.log(336)))}, v => { miH = Math.exp(v / 100 * Math.log(336)); drawMi(); });
+MIS.init(); miH = Math.exp(0.55 * Math.log(336)); drawMi(); $('mi-note').innerHTML = MI_NOTE;
+
+/* ---- 4UDMI tree ---- */
+const UD = {tn: true, rf: true, isch: true};
+function yesNo(box, key, label, state, redraw) {
+  const row = document.createElement('div'); row.className = 'qrow';
+  row.innerHTML = `<span class="q">${label}</span><div class="chips" role="group" aria-label="${label.replace(/<[^>]+>/g, '')}"></div>`;
+  box.append(row); const ch = row.querySelector('.chips');
+  for (const [v, t] of [[true, 'Yes'], [false, 'No']]) {
+    const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = t; b.setAttribute('aria-pressed', String(state[key] === v));
+    b.onclick = () => { state[key] = v; ch.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); redraw(); };
+    ch.append(b);
+  }
+}
+function drawUd() {
+  const r = !UD.tn ? 'none' : !UD.rf ? 'chronic' : !UD.isch ? 'acute' : 'mi';
+  const node = (x, y, w, h, t1, t2, on) => `<rect class="${on ? 'nodeon' : 'nodeoff'}" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/>` + T(x + w / 2, y + (t2 ? 18 : 24), t1, 'b', 'middle') + (t2 ? T(x + w / 2, y + 34, t2, 's', 'middle') : '');
+  const edge = (d, on, lab, lx, ly) => `<path class="${on ? 'edgeon' : 'edgeoff'}" d="${d}"/>` + T(lx, ly, lab, 's', 'middle');
+  let s = '';
+  s += node(20, 14, 200, 44, 'cTn > 99th percentile', 'upper reference limit?', true);
+  s += edge('M220 36 L330 36', !UD.tn, 'no', 275, 30) + node(330, 14, 210, 44, 'No myocardial injury', '', r === 'none');
+  s += edge('M120 58 L120 92', UD.tn, 'yes', 136, 80);
+  s += node(20, 92, 200, 44, 'Rise and/or fall?', '', UD.tn);
+  s += edge('M220 114 L330 114', UD.tn && !UD.rf, 'no', 275, 108) + node(330, 92, 210, 44, 'Chronic myocardial injury', '', r === 'chronic');
+  s += edge('M120 136 L120 170', UD.tn && UD.rf, 'yes', 136, 158);
+  s += node(20, 170, 200, 44, 'Acute myocardial ischaemia', 'clinical evidence?', UD.tn && UD.rf);
+  s += edge('M220 192 L330 192', UD.tn && UD.rf && !UD.isch, 'no', 275, 186) + node(330, 170, 210, 44, 'Acute myocardial injury', '(not infarction)', r === 'acute');
+  s += edge('M120 214 L120 244', r === 'mi', 'yes', 136, 234);
+  s += node(20, 244, 200, 44, 'Myocardial infarction', 'type 1 or type 2', r === 'mi');
+  s += T(330, 270, 'schematic summary of 4UDMI (2018)', 's', 'start') + T(330, 286, 'from open reviews', 's', 'start');
+  $('ud-svg').innerHTML = s;
+  $('ud-find').innerHTML = `<p class="res${r === 'mi' ? ' clin' : ''}">${UD_RES[r][0]}</p><p>${UD_RES[r][1]}</p><p class="muted">${UD_NOTE}</p>`;
+}
+$('ud-intro').innerHTML = UD_INTRO;
+UD_Q.forEach(([k, l]) => yesNo($('ud-q'), k, l, UD, drawUd)); drawUd();
+
+/* ---- isoenzymes ---- */
+let isoK = 'ldh', isoP = 'mi';
+function drawIso() {
+  let s = '';
+  if (isoK === 'ldh') {
+    const raise = isoP === 'mi' ? {1: 1.7, 2: 1.25} : isoP === 'hae' ? {1: 1.8} : {5: 1.9};
+    [['reference (schematic)', {}], [ISO.ldh[1][isoP], raise]].forEach(([lab, r], li) => {
+      const x = 110 + li * 220; s += `<rect x="${x - 50}" y="20" width="100" height="200" rx="6" style="fill:var(--bg);stroke:var(--line)"/>` + T(x, 244, lab, 'b', 'middle');
+      for (let i = 1; i <= 5; i++) { const w = 50 * (r[i] || 1), y = 30 + (i - 1) * 38; s += `<rect x="${x - w / 2}" y="${y}" width="${w}" height="14" rx="4" style="fill:var(--ink);fill-opacity:${r[i] ? .85 : .35}"/>`; if (li === 0) s += T(x - 60, y + 11, 'LDH-' + i, 's', 'end'); }
+    });
+        s += T(500, 120, 'wider, darker =', 's', 'end') + T(500, 134, 'raised (schematic)', 's', 'end');
+  } else if (isoK === 'ck') {
+    const rows = isoP === 'heart' ? [['CK-MB', 15, 30], ['CK-MM', 70, 85]] : [['CK-MB', 1, 3], ['CK-MM', 98, 98]];
+    const X = Bioc.scale(0, 100, 120, 480);
+    s += `<path class="axis" d="M120 200 L480 200"/>`; for (const v of [0, 25, 50, 75, 100]) s += T(X(v), 216, v + '%', 's', 'middle');
+    rows.forEach(([n, a, b], i) => { const y = 50 + i * 70; s += T(110, y + 22, n, 'b', 'end') + `<rect class="bar" x="120" y="${y}" width="${X(b) - 120}" height="34"/><rect class="barp" x="120" y="${y}" width="${X(a) - 120}" height="34"/>` + (X(b) > 400 ? T(X(b), y - 6, a === b ? a + '%' : a + '–' + b + '% by source', 's', 'end') : T(X(b) + 6, y + 22, a === b ? a + '%' : a + '–' + b + '% by source', 's', 'start')); });
+    s += T(20, 250, (isoP === 'heart' ? 'heart muscle' : 'skeletal muscle') + ': share of total CK; dark = lowest figure, light = the range between sources', 's', 'start');
+  } else {
+    s += `<rect x="40" y="40" width="190" height="80" rx="10" class="box"/>` + T(135, 70, 'ALP raised', 'b', 'middle') + T(135, 90, 'check GGT', 's', 'middle');
+    s += `<path class="flow" d="M230 70 L300 40"/><path class="flow" d="M230 90 L300 140"/>` + Bioc.DEFS;
+    s += `<rect x="300" y="14" width="200" height="56" rx="10" style="fill:var(--liver);fill-opacity:.35;stroke:var(--line)"/>` + T(400, 38, 'GGT raised too', 'b', 'middle') + T(400, 56, '→ liver / biliary', 's', 'middle');
+    s += `<rect x="300" y="114" width="200" height="56" rx="10" style="fill:var(--bone);stroke:var(--line)"/>` + T(400, 138, 'GGT normal', 'b', 'middle') + T(400, 156, '→ not from the liver: think of bone', 's', 'middle') + T(400, 186, '(or another non-liver source)', 's', 'middle');
+    s += T(20, 220, 'GGT is in the liver but not in bone (2018 guideline; a 2021 review; Wikipedia)', 's', 'start') + T(20, 240, 'schematic', 's', 'start');
+  }
+  $('iso-svg').innerHTML = s;
+  const txt = {
+    ldh: '<h3>LDH: five isoenzymes</h3><p>LDH is a tetramer of H (B) and M (A) subunits — named for heart and muscle — giving five isoenzymes, <b>LDH-1 (H4)</b> to <b>LDH-5 (M4)</b> (Wikipedia; a 2022 review lists the five), separated by electrophoresis (a 2021 study); the two subunit genes keep tissue-biased expression (a 2026 review). ' + (isoP === 'mi' ? 'Wikipedia: <b>LDH-1 higher than LDH-2</b> (a "flipped pattern") suggests myocardial infarction, because heart LDH is rich in LDH-1 — a use now largely replaced by troponin (Wikipedia). A 2017 review names LDH 1 + 2 as the cardiac isoenzymes. Total LDH peaks 3–4 days after an infarction (Wikipedia).' : isoP === 'hae' ? 'Intravascular <b>haemolysis</b> raised LDH-1 in a 2021 study; Wikipedia places LDH-1 in heart and red cells.' : 'Severe <b>liver failure</b> raised LDH-5 in a 2021 study; Wikipedia places LDH-5 in liver and striated muscle.') + '</p>',
+    ck: '<h3>CK: MM, MB, BB</h3><p>Dimers of M and B chains: CK-MM in skeletal muscle, CK-MB in heart, CK-BB in brain (StatPearls; Wikipedia). <b>Sources disagree</b> on how much of heart CK is MB: 15% (StatPearls) or 25–30% (Wikipedia; a 2017 review); all agree skeletal muscle has about 1–3%. CK-MB was the infarction marker before troponin (StatPearls; Wikipedia).</p>',
+    alp: '<h3>ALP: liver or bone?</h3><p>ALP isoenzymes come from liver, bone, intestine and placenta (Wikipedia; a 2021 review); the placental one is the Regan isoenzyme (Wikipedia). Because GGT is in the liver but not in bone, a normal GGT with a high ALP means the ALP is not from the liver: think of bone, or another non-liver source (2018 guideline; a 2021 review; Wikipedia). <b>5′-nucleotidase</b>, like GGT, helps show that a raised ALP is hepatobiliary or cholestatic (StatPearls; a 2021 review).</p>',
+  };
+  $('iso-find').innerHTML = txt[isoK];
+}
+function isoSub() { const subs = ISO[isoK][1]; isoP = Object.keys(subs)[0]; Bioc.toggles('iso-sub', Object.entries(subs), k => { isoP = k; drawIso(); }, isoP); drawIso();
+  if (isoK === 'ldh') Bioc.table('iso-table', ['Isoenzyme', 'Subunits', 'Main tissues (Wikipedia)'], LDH_TABLE);
+  else if (isoK === 'ck') Bioc.table('iso-table', ['Tissue', 'CK-MB (StatPearls)', 'CK-MB (other sources)', 'CK-MM'], CK_TABLE);
+  else Bioc.table('iso-table', ['ALP isoenzyme', 'Note'], [['Liver (biliary)', 'Cholestasis'], ['Bone (osteoblasts)', 'Growth, bone formation'], ['Placental (Regan)', 'Pregnancy (Wikipedia)'], ['Intestinal', '—']]); }
+Bioc.toggles('iso-tg', Object.entries(ISO).map(([k, v]) => [k, v[0]]), k => { isoK = k; isoSub(); }, 'ldh'); isoSub();
+
+/* ---- pancreatitis ---- */
+const PA = {pain: true, enz: true, img: false};
+function drawPa() {
+  const n = PA_Q.filter(q => PA[q[0]]).length;
+  $('pa-find').innerHTML = `<p class="res${n >= 2 ? ' clin' : ''}">${n} of 3 — ${n >= 2 ? 'meets the Revised Atlanta (2012) diagnosis of acute pancreatitis' : 'does not meet the two-of-three rule'}</p>`;
+}
+PA_Q.forEach(([k, l]) => yesNo($('pa-q'), k, l, PA, drawPa)); drawPa(); $('pa-text').innerHTML = PA_TEXT;
+
+/* ---- cholinesterase and prostate ---- */
+Bioc.toggles('che-tg', Object.entries(CHE).map(([k, v]) => [k, v[0]]), k => { $('che-find').innerHTML = CHE[k][1]; }, 'bche');
+$('che-find').innerHTML = CHE.bche[1]; $('lft-text').innerHTML = LFT_TEXT;
+Bioc.swipeHints();
+</script>
+</body>
+</html>

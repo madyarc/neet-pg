@@ -5,7 +5,7 @@ result can open that section), 3D topic names, key terms (bold words in the text
 usage: (git add the new pages first) python3 -I tools/home/search_index.py  ->  search-index.json at the repo root (read by assets/search.js)"""
 import json, os, re, html, glob
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
-SUBJECTS = {'anatomy': 'Anatomy', 'ophthalmology': 'Ophthalmology', 'physiology': 'Physiology'}
+SUBJECTS = {'anatomy': 'Anatomy', 'ophthalmology': 'Ophthalmology', 'physiology': 'Physiology', 'biochemistry': 'Biochemistry', 'pathology': 'Pathology'}
 BONES = set(json.load(open(os.path.join(ROOT, 'anatomy/models/bone-keys.json'))))
 BONE_MODELS = {'skeleton', 'skull', 'skull-detail', 'spine', 'spine-detail', 'thorax', 'thorax-detail', 'upper-limb',
                'upper-limb-detail', 'lower-limb', 'lower-limb-detail'}
@@ -37,6 +37,7 @@ for sub, subname in SUBJECTS.items():
         rel = os.path.relpath(f, ROOT).replace(os.sep, '/')
         if rel.endswith('index.html') or rel not in TRACKED: continue
         src = open(f, encoding='utf-8').read()
+        src = re.sub(r'<!-- feedback -->.*?<!-- /feedback -->', '', src, flags=re.S)   # the site-wide report note is not page content
         h1 = re.search(r'<h1[^>]*>(.*?)</h1>', src, re.S)
         if not h1: continue
         lede = re.search(r'<p class="lede"[^>]*>(.*?)</p>', src, re.S)

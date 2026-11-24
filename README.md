@@ -77,6 +77,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | 04 | [GI Secretions and Hormones: Saliva, Gastric, Pancreatic and Intestinal Juice](physiology/gi/secretions.html), [Digestion, Absorption, GI Movements and the Gut–Brain Axis](physiology/gi/digestion-motility.html), [The Liver, Bile and Applied GI Physiology](physiology/gi/liver-applied.html) | Gastro-intestinal | GI hormone picker on a gut map, parietal-cell stepper with PPI/H2 blocks, gastric-phase slider, pancreatic and gastric function tests; absorption map for 9 nutrients with transporters, MMC and defecation steppers, gut–brain axis; enterohepatic stepper, LFT pattern picker, applied GI |
 | 05 | [Mechanics of Breathing, Lung Volumes and Lung Function Tests](physiology/respiratory/mechanics-volumes.html), [Transport of Oxygen and Carbon Dioxide, and the Control of Breathing](physiology/respiratory/gas-transport-control.html), [Hypoxia, Cyanosis, Abnormal Breathing, High Altitude and Diving](physiology/respiratory/applied-environment.html) | Respiratory | Breathing-cycle pressures, spirogram builder, Laplace pair, dead-space calculator, V/Q zones, flow–volume loops; O₂ dissociation curve with shift sliders and live P50, O₂ content and alveolar gas calculators, chloride shift, chemoreceptor stepper; hypoxia classifier, cyanosis bar, periodic breathing, altitude and diving sliders |
 
+### Biochemistry — [`biochemistry/`](biochemistry/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [Enzymes: Concepts, Classes, Kinetics and Inhibition](biochemistry/enzymes/enzymes-kinetics.html), [Enzymes in the Clinic: Serum Markers and Isoenzymes](biochemistry/enzymes/clinical-enzymes.html) | Enzymes | Cofactor and isoenzyme concepts, seven IUBMB classes, active-site steppers, Michaelis–Menten and Lineweaver–Burk sliders, inhibition picker with drug table, allostery and zymogens; enzyme–organ picker, cardiac-marker time course, 4UDMI 2018 tree, LDH/CK/ALP isoenzymes, Atlanta rule |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and
