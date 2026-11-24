@@ -35,7 +35,9 @@ Last updated: 2026-11-23
   on disk. Restored from git blobs, verified by direct read; fsck clean; commits unaffected. Keep the hash check before
   every commit.
   Status: B01 [x] build (336 quotes; tokens --enz --sub --inhib --cofac) [x] review (no blocking errors; attributions,
-  CK timing, labels, --clin misuse, --inhib vs --ca) [x] fixes (351 quotes) [x] committed 2026-11-24 (b9ac13f). F01 [ ] build (running; pharmacology/general/). G01 [ ] build (running; medicine/cardiology/). M01 [ ] build
+  CK timing, labels, --clin misuse, --inhib vs --ca) [x] fixes (351 quotes) [x] committed 2026-11-24 (b9ac13f). F01 split: first agent ran out of context after setup + ~190 downloads (assets, --ther token, scripts ok).
+  F01a [ ] PK + PD pages + index (running). F01b [ ] principles/ADR/PvPI page (after F01a; downloads ready, NLEM 2022
+  official text missing). Inducer/inhibitor lists: use FDA DDI table (public domain) + Wikipedia/StatPearls. G01 [ ] build (running; medicine/cardiology/). M01 [ ] build
   (running; microbiology/general/). P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [x] review (18: metaplasia
   disagreement, token clash with bioc dark, invisible soaps, dysplasia wording, labels) [x] fixes (326 quotes) [x] committed 2026-11-24.
   Site-wide colour checker now tools/test/colcheck.py (scans every subject; --skip own files).
