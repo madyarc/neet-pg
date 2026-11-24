@@ -36,7 +36,8 @@ Last updated: 2026-11-23
   every commit.
   Status: B01 [x] build (336 quotes; tokens --enz --sub --inhib --cofac) [x] review (no blocking errors; attributions,
   CK timing, labels, --clin misuse, --inhib vs --ca) [x] fixes (351 quotes) [x] committed 2026-11-24 (b9ac13f). F01 split: first agent ran out of context after setup + ~190 downloads (assets, --ther token, scripts ok).
-  F01a [ ] PK + PD pages + index (running). F01b [ ] principles/ADR/PvPI page (after F01a; downloads ready, NLEM 2022
+  F01a [x] PK + PD pages + index (355 quotes; FDA DDI table for inducers/inhibitors). F01b [ ] principles/ADR/PvPI
+  page (running; then one review for the whole module; downloads ready, NLEM 2022
   official text missing). Inducer/inhibitor lists: use FDA DDI table (public domain) + Wikipedia/StatPearls. G01 [x] build (549 quotes; 3 pages; no new tokens; guidelines via open papers) [ ] review (running). M01 [ ] build
   (running; microbiology/general/). P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [x] review (18: metaplasia
   disagreement, token clash with bioc dark, invisible soaps, dysplasia wording, labels) [x] fixes (326 quotes) [x] committed 2026-11-24.
