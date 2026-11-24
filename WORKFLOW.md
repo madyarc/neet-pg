@@ -30,8 +30,12 @@ Last updated: 2026-11-23
     radiology 1: R01 modality choice and image interpretation basics (radiation safety)
     ENT 1: E01 ear anatomy-physiology + hearing tests
     obgyn 4: OG01 physiology of conception+placenta · OG02 antenatal care+maternal changes · OG03 labour · OG04 contraception
+  2026-11-24 integrity: 4 tracked files differed from git with a clean git status (2 bytes each, 4 bytes apart, bit
+  0x40 flipped): thick-skin.jpg + ext_intercostal.bin in page cache only (disk intact), calc_tendon.bin + manubrium.bin
+  on disk. Restored from git blobs, verified by direct read; fsck clean; commits unaffected. Keep the hash check before
+  every commit.
   Status: B01 [x] build (336 quotes; tokens --enz --sub --inhib --cofac) [x] review (no blocking errors; attributions,
-  CK timing, labels, --clin misuse, --inhib vs --ca) [ ] fixes (running). P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [x] review (18: metaplasia
+  CK timing, labels, --clin misuse, --inhib vs --ca) [x] fixes (351 quotes) [x] committed 2026-11-24 (b9ac13f). F01 [ ] build (running; pharmacology/general/). P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [x] review (18: metaplasia
   disagreement, token clash with bioc dark, invisible soaps, dysplasia wording, labels) [ ] fixes (running).
   Site-wide colour checker now tools/test/colcheck.py (scans every subject; --skip own files).
   LATER (site-wide): --mark and --clin are identical in dark (#ff7b6f), ΔE 14 light; anatomy --pigment comment says
