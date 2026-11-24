@@ -8,6 +8,30 @@ Last updated: 2026-11-23
 
 ## Now
 
+- USER 2026-11-24: BREADTH-FIRST ROUNDS. Each round = ~10% of every subject (modules = ceil(NMC topics / 10), min 1;
+  ENT by competencies, ~6–8 per module), all not-started subjects first; anatomy/physiology/ophthalmology wait until the
+  rest catch up. Skill-only competencies skipped. First module of a subject also creates <subject>/index.html,
+  DATA-SOURCES.md, its own small assets (copy the physiology pattern; nothing shared across subjects) and a root card.
+  Clinical subjects: doses/schedules/classifications only from a named, dated official guideline (CLAUDE rule 6).
+  Round 1 (37 modules; order alternates basic and clinical; two agents at a time):
+    biochemistry 2: B01 enzymes · B02 carbohydrate metabolism
+    pathology 4: P01 cell injury+adaptation · P02 inflammation+healing · P03 haemodynamic disorders · P04 neoplasia
+    pharmacology 1: F01 general pharmacology (PK/PD)
+    microbiology 2: M01 general microbiology · M02 basic immunology+immunological disorders
+    forensic 2: FM01 forensic pathology (death, PM changes) · FM02 mechanical injuries and wounds
+    community medicine 2: C01 epidemiology · C02 biostatistics
+    medicine 3: G01 heart failure+IHD · G02 diabetes mellitus · G03 hypertension
+    paediatrics 4: Pd01 growth and development · Pd02 immunization (UIP) · Pd03 newborn care · Pd04 nutrition+breastfeeding
+    psychiatry 2: Ps01 schizophrenia+psychosis · Ps02 depressive+bipolar
+    dermatology 2: D01 papulosquamous (psoriasis, LP) · D02 leprosy
+    surgery 3: S01 shock+metabolic response · S02 burns · S03 thyroid+parathyroid
+    orthopaedics 2: O01 fractures (principles) · O02 peripheral nerve injuries
+    anaesthesia 2: An01 CPR · An02 general anaesthesia+airway
+    radiology 1: R01 modality choice and image interpretation basics (radiation safety)
+    ENT 1: E01 ear anatomy-physiology + hearing tests
+    obgyn 4: OG01 physiology of conception+placenta · OG02 antenatal care+maternal changes · OG03 labour · OG04 contraception
+  Status: [ ] B01 (running) [ ] P01 (running)
+
 - PAUSED 2026-11-23 (user has other work). Resume here:
   - Physiology 01–05 done, reviewed, committed, live (17 pages; PY1, PY2, PY3, PY4.1–4.11, PY5, PY6.1–6.9). Next:
     module 06 (renal, SYLLABUS §7) by the same flow: builder (fill-physio6, physiology/<branch>/) → independent reviewer →
