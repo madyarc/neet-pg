@@ -30,7 +30,7 @@ Last updated: 2026-11-23
     radiology 1: R01 modality choice and image interpretation basics (radiation safety)
     ENT 1: E01 ear anatomy-physiology + hearing tests
     obgyn 4: OG01 physiology of conception+placenta · OG02 antenatal care+maternal changes · OG03 labour · OG04 contraception
-  Status: B01 [x] build (336 quotes; tokens --enz --sub --inhib --cofac) [ ] review (running). P01 [ ] build (running).
+  Status: B01 [x] build (336 quotes; tokens --enz --sub --inhib --cofac) [ ] review (running). P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [ ] review (running).
 
 - PAUSED 2026-11-23 (user has other work). Resume here:
   - Physiology 01–05 done, reviewed, committed, live (17 pages; PY1, PY2, PY3, PY4.1–4.11, PY5, PY6.1–6.9). Next:
