@@ -8,6 +8,18 @@ Last updated: 2026-11-23
 
 ## Now
 
+- PAUSED 2026-11-24 by user (session limit hit; resets 07:10 America/New_York). Resume state for round 1:
+  - Committed and live: B01, P01, G01 (+ physiology 01–05 earlier).
+  - F01 pharmacology: all 3 pages built (630 quotes, 0 bad), NOT reviewed, NOT committed. Next: one independent review
+    of the whole module (pharmacokinetics, pharmacodynamics, principles-safety), fixes, docs, commit.
+  - M01 microbiology: review done; fix agent stopped by the usage limit mid-way ("media, biochem, HGT additions" was
+    next). Resume it (or a new fix agent with the review list in WORKFLOW/M01 notes) — check what is already fixed first.
+  - FM01 forensic: build agent stopped early (downloads in progress in sources-local/modern/fill-fm01/). Restart.
+  - Then continue round 1 order: C01, Pd01, Ps01, D01, S01, O01, An01, R01, E01, OG01, then B02, P02–P04, M02, FM02,
+    C02, G02–G03, Pd02–Pd04, Ps02, D02, S02–S03, O02, An02, OG02–OG04.
+  - Site-wide TODO: --mark and --clin identical in dark (#ff7b6f) in phys.css and the copies in other subjects' assets.
+  - Server and agents stopped at pause.
+
 - USER 2026-11-24: BREADTH-FIRST ROUNDS. Each round = ~10% of every subject (modules = ceil(NMC topics / 10), min 1;
   ENT by competencies, ~6–8 per module), all not-started subjects first; anatomy/physiology/ophthalmology wait until the
   rest catch up. Skill-only competencies skipped. First module of a subject also creates <subject>/index.html,
