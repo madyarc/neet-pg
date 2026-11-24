@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ischaemic Heart Disease</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/med.css">
+<style>
+/* tokens from med.css with their site meanings: --artery (arterial wall and blood), --musc (smooth muscle of the media), --fat (lipid: LDL,
+   lipid core, foam-cell droplets), --cyto (cytoplasm of monocytes/macrophages), --nucleus, --collagen (fibrous cap), --calc (calcification),
+   --clot (thrombus), --heart (myocardium), --clin (a complication; a drug's block point), --mark (the chosen value on the reperfusion bar), --accent (selection). The chosen-day line on the timeline is ink. */
+svg.sch .lumen{fill:var(--artery);fill-opacity:.08}
+svg.sch .intima{fill:var(--surface);stroke:var(--muted);stroke-width:1}
+svg.sch .media{fill:var(--musc);fill-opacity:.35}
+svg.sch .endo{stroke:var(--artery);stroke-width:2.4;fill:none}
+svg.sch .ldl{fill:var(--fat);stroke:var(--ink);stroke-width:.6}
+svg.sch .mono{fill:var(--cyto);stroke:var(--ink);stroke-width:.8}
+svg.sch .nuc{fill:var(--nucleus)}
+svg.sch .smc{fill:var(--musc);stroke:var(--ink);stroke-width:.6}
+svg.sch .cap{fill:var(--collagen);stroke:var(--ink);stroke-width:.8}
+svg.sch .core{fill:var(--fat);fill-opacity:.85;stroke:var(--ink);stroke-width:.8}
+svg.sch .calc{fill:var(--calc);stroke:var(--ink);stroke-width:.6}
+svg.sch .thr{fill:var(--clot);fill-opacity:.85}
+svg.sch .lane{fill:var(--clin);fill-opacity:.22;stroke:var(--clin);stroke-width:1.2}
+svg.sch .laneon{fill:var(--clin);fill-opacity:.55}
+#cx-svg text.cap{font-size:10.5px;fill:var(--muted)}
+svg.sch .blk{stroke:var(--clin);stroke-width:3;stroke-linecap:round}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:640px){.cols{grid-template-columns:minmax(0,1fr)}}
+.cols ul{margin:4px 0 0;padding-left:20px}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← General Medicine</a> <span class="muted">· Module 01: <a href="heart-failure.html">Heart failure</a> · <a href="valves-endocarditis.html">Valves, rheumatic fever, endocarditis</a> · <span aria-current="page">Ischaemic heart disease and ACS</span></span></nav>
+
+<header class="stack">
+  <h1>Ischaemic Heart Disease and Acute Coronary Syndromes</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-risk">Risk factors</a> <a href="#h-lip">Lipid cycle</a> <a href="#h-plq">Plaque evolution</a> <a href="#h-acs">ACS picker</a> <a href="#h-cx">Complications timeline</a> <a href="#h-rx">Drugs</a> <a href="#h-rep">Reperfusion</a> <a href="#h-cabg">CABG and rehabilitation</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-risk">
+  <h2 id="h-risk">Burden and risk factors</h2>
+  <div class="prose" id="risk-text"></div>
+  <div class="cols" id="risk-cols"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lip">
+  <h2 id="h-lip">The lipid cycle, and where lipid-lowering drugs act</h2>
+  <div class="chips" id="lip-tg" aria-label="Show"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="lip-svg" viewBox="0 0 540 350" role="img" aria-label="Schematic lipoprotein cycle: intestine makes chylomicrons, liver makes VLDL which becomes IDL and LDL, LDL is cleared by LDL receptors on the liver or enters the artery wall, HDL returns cholesterol to the liver; the chosen drug's site is marked"></svg></div>
+    <div class="prose find" id="lip-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-plq">
+  <h2 id="h-plq">From fatty streak to thrombus: plaque evolution</h2>
+  <div class="step" id="plq-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="plq-svg" viewBox="0 0 540 300" role="img" aria-label="Schematic longitudinal section of a coronary artery wall: lumen above, endothelium, intima and media below; the plaque grows step by step"></svg></div>
+    <div class="prose find" id="plq-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="plq-key"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-acs">
+  <h2 id="h-acs">Unstable angina, NSTEMI or STEMI? Pick the findings</h2>
+  <div class="two">
+    <div class="ctl">
+      <div class="q"><span class="qt">Chest pain</span><div class="chips" id="acs-pain"></div></div>
+      <div class="q"><span class="qt">ECG</span><div class="chips" id="acs-ecg"></div></div>
+      <div class="q"><span class="qt">High-sensitivity troponin</span><div class="chips" id="acs-trop"></div></div>
+    </div>
+    <div class="stack">
+      <div class="schbox"><svg class="fig sch fit" id="acs-svg" viewBox="0 0 420 150" role="img" aria-label="Schematic coronary artery with the plaque and thrombus for the chosen syndrome: no thrombus, partial occlusion or complete occlusion"></svg></div>
+      <div class="ans prose" id="acs-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="scroll"><table id="st-table"></table></div>
+  <p class="muted" id="acs-note"></p>
+  <div class="scroll"><table id="inv-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cx">
+  <h2 id="h-cx">Complications of MI on a time line</h2>
+  <div class="sliders" id="cx-sl"></div>
+  <div class="schbox"><svg class="fig sch" id="cx-svg" viewBox="0 0 600 346" role="img" aria-label="Schematic timeline from the onset of MI to eight weeks, on a square-root time scale, with a lane for each complication's typical window and the chosen day marked"></svg></div>
+  <div class="prose find" id="cx-find" aria-live="polite"></div>
+  <p class="muted" id="cx-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-rx">
+  <h2 id="h-rx">Drugs in ACS and after MI</h2>
+  <div class="prose" id="rx-init"></div>
+  <div class="scroll"><table id="rx-table"></table></div>
+  <p class="muted" id="rx-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-rep">
+  <h2 id="h-rep">STEMI reperfusion: primary PCI or fibrinolysis?</h2>
+  <div class="two">
+    <div class="ctl">
+      <div class="sliders" id="rep-sl"></div>
+      <div class="q"><span class="qt">Other features</span><div class="chips" id="rep-oth"></div></div>
+    </div>
+    <div class="stack">
+      <div class="schbox"><svg class="fig sch fit" id="rep-svg" viewBox="0 0 420 172" role="img" aria-label="Schematic time bar from first medical contact: door-to-needle 30 minutes, door-to-balloon 90 minutes and the 120-minute threshold, with the expected time to PCI marked"></svg></div>
+      <div class="ans prose" id="rep-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="prose" id="rep-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cabg">
+  <h2 id="h-cabg">CABG and cardiac rehabilitation</h2>
+  <div class="cols" id="cabg-cols"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BIschaemic%20Heart%20Disease%20and%20Acute%20Coronary%20Syndromes%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fmedicine%2Fcardiology%2Fihd-acs.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/med.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources unless attributed: sources-local/facts/fill-g01.md, Part C) ===================== */
+const LEDE = 'Follow LDL from the liver into the artery wall and step a plaque from fatty streak to rupture; pick the ECG and troponin and see which acute coronary syndrome it is; slide through the days after an infarct to see which complication is due; and test a STEMI against the reperfusion time limits. ECG changes and the territories of each artery: <a href="../../physiology/cvs/cardiac-electrophysiology.html#h-mi">physiology: MI on the ECG</a>; troponin timing and the Fourth Universal Definition tree: <a href="../../biochemistry/enzymes/clinical-enzymes.html#h-udmi">biochemistry: 4UDMI</a> and <a href="../../biochemistry/enzymes/clinical-enzymes.html#h-mi">marker curves</a>; coronary anatomy: <a href="../../anatomy/thorax/heart.html#h-cor">The Heart: coronary arteries</a>.';
+
+const RISK_TEXT = '<p>Coronary artery disease is the leading cause of death in the United States (StatPearls) and was the leading cause globally in 2010 (Wikipedia). In India IHD had become the leading cause of death by 2004 (Wikipedia), and CAD prevalence continues to rise (Cardiological Society of India, CSI 2017, citing WHO data). In the <b>INTERHEART</b> study smoking accounted for about <b>36%</b> of the population-attributable risk of acute MI (Lancet 2022).</p>';
+const RISK_COLS = '<div><h3>Modifiable</h3><ul><li>Smoking (incl. second-hand) — the most important (Wikipedia; INTERHEART)</li><li>Dyslipidaemia: raised apoB/apoA ratio (INTERHEART), LDL-containing lipoproteins (Wikipedia)</li><li>Hypertension</li><li>Diabetes</li><li>Abdominal obesity</li><li>Psychosocial stress</li><li>Physical inactivity; diet; alcohol (INTERHEART)</li></ul><p class="note">INTERHEART list (a 2021 review; Lancet 2022); Framingham named smoking, dyslipidaemia, hypertension and diabetes (a 2022 review).</p></div><div><h3>Non-modifiable</h3><ul><li>Advanced age</li><li>Sex (a 2022 review: sex is an important risk factor)</li><li>Family history and genetic abnormalities</li><li>South Asian descent</li></ul><p class="note">List from Wikipedia (Atherosclerosis); sex also from a 2022 review.</p></div>';
+
+/* lipid cycle */
+const LIP = {
+  cyc: ['The cycle', [], '<h3>Lipoproteins carry fat through the blood</h3><p><b>Chylomicrons</b> carry dietary fat from the intestine; in muscle and fat capillaries <b>lipoprotein lipase</b> strips their triglyceride, and the remnants go to the liver (Wikipedia). The <b>liver</b> makes <b>VLDL</b>, which lipoprotein lipase converts to <b>IDL</b> and then <b>LDL</b> (Wikipedia; EAS consensus 2020). LDL is cleared mainly by <b>LDL receptors</b> on liver cells (Wikipedia). LDL that is retained in the arterial intima starts atherosclerosis (below). <b>HDL</b> takes cholesterol from cells — including foam cells in atheroma — back to the liver: <b>reverse cholesterol transport</b> (Wikipedia).</p>'],
+  stat: ['Statin', ['hmg'], '<h3>Statins</h3><p>Inhibit <b>HMG-CoA reductase</b>, the rate-limiting enzyme of cholesterol synthesis (StatPearls; Wikipedia). With less cholesterol inside, liver cells make more <b>LDL receptors</b> and clear more LDL from the blood (Wikipedia). They lower total cholesterol, LDL and triglycerides (StatPearls) and reduce MI and its mortality (Wikipedia). Side effects: muscle pain, a small rise in diabetes risk, raised liver enzymes; rhabdomyolysis is rare (Wikipedia). Doses: not given (GM2.18 — no open guideline text with doses was downloaded).</p>'],
+  eze: ['Ezetimibe', ['gut'], '<h3>Ezetimibe</h3><p>Reduces <b>intestinal absorption of cholesterol</b>, lowering LDL when added to a statin (Wikipedia). After ACS, a 2026 review describes high-intensity statin plus ezetimibe, and newer agents, started during the index admission to reach strict LDL targets.</p>'],
+  pcsk: ['PCSK9 inhibitor', ['pcsk'], '<h3>PCSK9 inhibitors</h3><p><b>PCSK9</b> marks LDL receptors for degradation in lysosomes; blocking it keeps more receptors on the liver cell surface (Wikipedia). PCSK9 inhibitors and bempedoic acid may be started during the ACS admission to reach strict LDL targets (a 2026 review).</p>'],
+};
+
+/* plaque stepper: [label, stage, html] */
+const PLQ = [
+  ['LDL enters', 1, '<h3>1. Endothelial dysfunction and LDL retention</h3><p>Atherosclerosis starts with <b>endothelial dysfunction</b> and <b>retention of LDL</b> in the intima, where it is modified (a 2022 review; EAS consensus 2020). LDL in the wall becomes <b>oxidised</b> (Wikipedia).</p>'],
+  ['Monocytes', 2, '<h3>2. Monocyte recruitment</h3><p>Modified LDL activates the endothelium, which recruits <b>monocytes</b> into the intima by rolling, adhesion and transmigration (a 2022 review), helped by adhesion molecules such as <b>VCAM-1</b> (Wikipedia) and the chemokine <b>MCP-1</b> (a 2022 review).</p>'],
+  ['Foam cells', 3, '<h3>3. Foam cells and the fatty streak</h3><p>Monocytes become <b>macrophages</b> that take up oxidised LDL through <b>scavenger receptors</b> and turn into lipid-filled <b>foam cells</b> (Wikipedia; a 2022 review). Under the microscope the lesion is a <b>fatty streak</b> (Wikipedia); Wikipedia notes aortic fatty streaks in almost all children over 10 in developed countries, and coronary streaks from adolescence.</p>'],
+  ['Fibrous cap', 4, '<h3>4. Smooth muscle and the fibrous cap</h3><p>Foam cells and platelets drive <b>smooth-muscle cells</b> to migrate and proliferate (Wikipedia); collagen forms a <b>fibrous cap</b> over the lesion (Wikipedia), and the plaque develops a cell-free, lipid-rich <b>necrotic core</b> (a 2022 review; EAS consensus 2020).</p>'],
+  ['Calcification', 5, '<h3>5. Calcification</h3><p>Atherosclerosis is an accumulation of lipids, fibrous elements and <b>calcification</b> in large arteries (a 2022 review); calcium forms among the smooth-muscle cells next to the atheroma (Wikipedia).</p>'],
+  ['Rupture', 6, '<h3>6. Rupture (or erosion) and thrombus</h3><p><b>Plaque rupture</b> — fissuring of a <b>thin-cap</b>, lipid-rich, macrophage-rich fibroatheroma that exposes the lipid core — is the commonest substrate of ACS; <b>erosion</b> (loss of endothelium over a proteoglycan-rich plaque without cap rupture) is less common (a 2026 review; Wikipedia). Where the endothelium is lost its antithrombotic action is lost, and a <b>thrombus</b> forms (EAS consensus 2020): this is the type 1 MI of the universal definition (StatPearls). Plaques with thick caps or no lipid core do not rupture but can erode (EAS consensus 2020).</p>'],
+];
+
+/* ACS picker */
+const ACS = {pain: 'rest', ecg: 'st', trop: 'up'};
+const ST_ROWS = [
+  ['V2–V3, men ≥40 years', '≥2 mm'], ['V2–V3, men &lt;40 years', '≥2.5 mm'], ['V2–V3, women', '≥1.5 mm'], ['All other leads', '≥1 mm'],
+];
+const ACS_NOTE = 'STEMI ECG: new ST elevation at the J point in at least two contiguous leads, with the thresholds in the table (Lancet 2022 table; CSI 2017, quoting the universal definition, in the absence of LVH or LBBB); a new or presumed new LBBB may also be a STEMI presentation (CSI 2017; Wikipedia). Troponin above the 99th percentile of a normal population is the cut-off for MI (CSI 2017; a 2017 review). Unstable angina: troponin not raised; NSTEMI: raised troponin without ST elevation; the rise and fall of troponin itself does not tell NSTEMI from STEMI (2023 ESC guideline summary). The absence of ECG changes does not distinguish UA from NSTEMI (Wikipedia). Stable angina (chronic coronary syndrome) comes predictably with exertion or stress and is relieved by rest or nitroglycerin, with no plaque rupture or thrombosis (StatPearls).';
+const INV = [
+  ['ECG', 'At once; repeat; ST elevation, ST depression, T inversion; territories on the physiology ECG page'],
+  ['Troponin (high-sensitivity)', 'Above the 99th percentile with a rise or fall (CSI 2017; 2017 review); timing on the biochemistry marker page'],
+  ['Echocardiography', 'Regional wall-motion abnormality when the ECG is atypical (CSI 2017); LV function; mechanical complications'],
+  ['Stress testing (exercise ECG, imaging)', 'Stable angina: diagnosis supported by exercise stress testing, coronary imaging or functional studies (StatPearls; Wikipedia)'],
+  ['Coronary angiography', 'Defines the stenoses and suitability for PCI or CABG (Wikipedia); Wikipedia calls it the gold standard for obstructive CAD'],
+];
+
+/* complications: [key, label, from day, to day, open-ended?, html] ; days; 0 = onset */
+const CX = [
+  ['arr', 'Arrhythmia, VF, sudden death', 0, 0, 'from onset (no window given)', 'Sudden death from MI is often due to <b>ventricular fibrillation</b> (Wikipedia). More than half of STEMI deaths occur suddenly outside hospital, mostly from VF or pulseless VT (CSI 2017). The mark sits at onset only: no numeric window was found in the open sources.'],
+  ['cs', 'Cardiogenic shock', 0, 1, '74% within 24 h', 'Present in <b>5–8% of ACS</b> with mortality up to 50% (a 2026 review); acute MI is its commonest cause (StatPearls; Wikipedia). Wikipedia cites a registry: 74% developed shock within 24 h (47% within 6 h).'],
+  ['peri', 'Early pericarditis', 0, 7, 'within days (&lt;7 d)', '<b>Early post-MI pericarditis</b> occurs within days, typically after a transmural or late-presenting infarct (a 2025 review); about 3% early (&lt;7 days) (a 2021 review).'],
+  ['fwr', 'Free-wall rupture', 1, 7, 'first week', 'In about 2–4% after acute MI, <b>typically within the first week</b> (a 2025 review); days 1–3 ("blow-out") or 4–7 (subacute) (a 2026 review); 0.5–2% of STEMI (CSI 2017). Blood fills the pericardium → <b>tamponade</b> and collapse (a 2025 review).'],
+  ['vsr', 'Ventricular septal rupture', 1, 5, 'day 1, or days 3–5', 'Typically after the first 24 h, with peaks on day 1 or days 3–5 (a 2025 review); days 3–5 in the PCI era, 7–10 before PCI (a 2026 review). Sign: a new loud (harsh) holosystolic murmur at the left sternal border (Lancet 2022; a 2026 review).'],
+  ['pmr', 'Papillary muscle rupture', 2, 7, 'days 2–7', 'Days 2–7, after infero-posterior MI (a 2026 review, one source; the same review clusters ruptures between days 3 and 7). Incidence: about 1% (CSI 2017) or 0.07–0.26% (StatPearls). Acute severe MR → flash pulmonary oedema, cardiogenic shock (StatPearls; a 2026 review); the murmur is often soft (Lancet 2022).'],
+  ['dr', 'Dressler syndrome', 7, 56, '1–8 weeks', 'Late post-MI pericarditis, probably autoimmune, usually <b>1–8 weeks</b> after infarction (CSI 2017); suspect it when symptoms start more than 2 weeks after MI or cardiac surgery (StatPearls); weeks to months, now grouped under post-cardiac injury syndrome (a 2025 review). Wikipedia: corticosteroids are avoided in the first month (they impair healing and raise the risk of rupture).'],
+  ['lva', 'LV aneurysm', 21, 56, 'late (placement schematic)', 'A late complication: a broad-necked, <b>dyskinetic</b> area of fibrotic scar (a 2025 review); main risks are total LAD occlusion and failure to reopen the artery (StatPearls). No numeric onset in the sources: the bar is placed late, schematically.'],
+];
+const CX_NOTE = 'Time axis: square-root scale from onset to 8 weeks; bars are typical windows as the sources state them, not limits — events occur outside them. Mural (LV) thrombus: about 5–20%, more with large infarcts (CSI 2017, one source; no timing given). Mechanical complications are early (VSR, papillary muscle rupture, free-wall rupture), true aneurysm and pseudoaneurysm later (a 2025 review).';
+
+/* drugs */
+const RX_INIT = '<p><b>First hours (GM2.14, GM2.20):</b> admit to a coronary care unit to watch for complications such as arrhythmias (Wikipedia). Rest, oxygen <b>only if SpO₂ &lt;90%</b>, IV access, an opioid such as morphine and sublingual or IV nitrate (CSI 2017). Nitrates and opioids relieve pain but do not improve outcomes (Wikipedia). Avoid nitrates after a PDE-5 inhibitor such as sildenafil (severe hypotension; Wikipedia) and in severe aortic stenosis (Wikipedia).</p>';
+const RX = [
+  ['Aspirin', 'Antiplatelet (DAPT partner)', 'Yes: ISIS-2, 21% lower mortality in suspected MI (Wikipedia); continue indefinitely after DAPT (Wikipedia)', 'All ACS'],
+  ['P2Y12 inhibitor (clopidogrel, prasugrel, ticagrelor)', 'Blocks the platelet ADP (P2Y12) receptor; clopidogrel irreversibly (Wikipedia)', 'DAPT with aspirin, generally for at least a year after PCI (Wikipedia; CSI 2017). With fibrinolysis clopidogrel is the only partner (CSI 2017)', 'All ACS'],
+  ['Anticoagulant (heparin, LMWH)', 'Blood thinner', 'Part of NSTEMI treatment (Wikipedia); a 2014 review found heparins did not change death before PCI in NSTEMI (Wikipedia)', 'With antiplatelets'],
+  ['GP IIb/IIIa inhibitor (abciximab, eptifibatide, tirofiban)', 'Antiplatelet (glycoprotein IIb/IIIa)', 'Used during PCI; in NSTE-ACS by risk (Wikipedia, one source)', 'Selected'],
+  ['High-intensity statin', 'HMG-CoA reductase', 'Started early (within 14 days reduces further ACS, Wikipedia; intensive in hospital, ESC 2023 via 2024 summary). LDL-C target &lt;55 mg/dL (&lt;1.4 mmol/L) and ≥50% fall for very-high-risk secondary prevention: ESC/EAS 2019 goals, kept in the 2025 ESC/EAS focused update (a 2026 review; the 2024 summary of ESC 2023 also gives &lt;55 mg/dL)', 'All ACS'],
+  ['β-blocker', 'Blocks sympathetic stimulation of the heart', 'Early use cuts reinfarction and arrhythmic death (CSI 2017); a 2026 review suggests: continue if LVEF ≤40%; consider 6–12 months if 40–49%; avoid routine long-term use if ≥50% (the review\'s suggestion, not a guideline)', 'Unless HF/shock/block'],
+  ['ACE inhibitor (or ARB)', 'Renin–angiotensin blockade', 'Within 24 h for anterior STEMI, LV dysfunction or HF with EF &lt;40% (CSI 2017; Wikipedia: within 24 h); ramipril reduced post-MI mortality (Wikipedia)', 'LV dysfunction, HF'],
+  ['MRA (eplerenone)', 'Aldosterone receptor', 'LVEF &lt;40% with HF or diabetes, after ACEi and β-blocker (CSI 2017); EPHESUS −15% mortality (a 2021 review)', 'LVEF &lt;40%'],
+  ['Nitrates, morphine', 'Nitroglycerin dilates veins, cutting the heart\'s work (Wikipedia); morphine is an opioid', 'Pain relief only; no outcome benefit (Wikipedia)', 'Symptoms'],
+  ['Avoid', '—', 'Short-acting dihydropyridine CCBs (may increase mortality) and NSAIDs other than aspirin (reinfarction, HF, rupture) (CSI 2017)', '—'],
+];
+const RX_NOTE = 'Mortality-proven after MI (exam list, from the rows above): aspirin, β-blocker, ACE inhibitor/ARB in LV dysfunction, MRA (LVEF &lt;40% with HF or diabetes), statin. Decades of trials support ACE inhibitors/ARBs and MRAs after MI, especially with LV dysfunction (a 2026 review). No doses are given (no open guideline text with doses was downloaded; the CSI 2017 fibrinolytic doses are from one source).';
+
+/* reperfusion */
+const REP = {onset: 3, fmc: 90, other: []};
+const REP_TEXT = '<h3>Targets and rules, with the body that set them</h3><ul><li><b>Primary PCI is preferred</b> when it can be done promptly by an experienced team; it is superior to fibrinolysis (CSI 2017; Wikipedia: treatment of choice within 90–120 minutes of contact).</li><li><b>120 minutes:</b> if primary PCI cannot be done within 120 min of first medical contact (preferably 90), give fibrinolysis (CSI 2017, citing ESC; Lancet 2022: transfer if PCI ≤120 min, otherwise fibrinolysis; StatPearls: PCI within 120 minutes).</li><li><b>Door-to-balloon ≤90 min</b> (ACC/AHA guidelines as reported by Wikipedia, no year given); first-medical-contact-to-device &lt;60–90 min at a PCI-capable hospital (Lancet 2022). The 2023 ESC summary aims for the catheter laboratory "ideally in under 90 min".</li><li><b>Door-to-needle ≤30 min</b> (ACC guidelines as reported by Wikipedia, no year given); CSI 2017 audits door-to-needle against 30 min and sets a first-contact-to-drug goal of 30 min for the pharmaco-invasive strategy.</li><li><b>Window:</b> reperfusion benefit is time-dependent within 12 h of onset; primary PCI also for 12–24 h with ongoing ischaemia, for contraindications to fibrinolysis, and for cardiogenic shock irrespective of delay (CSI 2017, one source).</li><li><b>Pharmaco-invasive:</b> after fibrinolysis, transfer for angiography within 3–24 h (CSI 2017) or within 24 h (Lancet 2022); <b>rescue PCI</b> if fibrinolysis fails — shock, continuing pain or &lt;50% ST resolution at 90 min (Wikipedia; CSI 2017).</li><li><b>Agents:</b> fibrin-specific (alteplase, reteplase, tenecteplase) preferred to streptokinase (CSI 2017; StatPearls names the three). Main risks: major and intracranial bleeding (Wikipedia).</li><li><b>Absolute contraindications (CSI 2017 table):</b> previous intracranial haemorrhage or stroke of unknown origin at any time; ischaemic stroke in the preceding 6 months; CNS damage, neoplasm or AV malformation; major trauma, surgery or head injury within 3 weeks; GI bleeding within the past month; known bleeding disorder; aortic dissection; non-compressible punctures within 24 h. Wikipedia\'s list (from a 1998 review) agrees on haemorrhagic stroke, intracranial neoplasm, aortic dissection, active bleeding or bleeding disorder and head trauma within 3 weeks, but gives ischaemic stroke within <b>3</b> months, and adds stroke, dementia or CNS damage within 1 year, internal bleeding within 6 weeks and traumatic CPR within 3 weeks (CSI 2017 lists prolonged or traumatic resuscitation as relative).</li><li><b>Relative contraindications</b> in both sources include TIA within 6 months, oral anticoagulants, pregnancy or within 1 week post partum, active peptic ulcer, advanced liver disease and infective endocarditis; uncontrolled hypertension above 180 mmHg systolic, with diastolic &gt;100 (CSI 2017) or &gt;110 mmHg (Wikipedia). Other relative contraindications are not listed here.</li></ul>';
+
+const CABG = '<div><h3>CABG (GM2.16, GM1.23)</h3><ul><li>Better long-term survival than PCI with <b>left main disease</b>, complex lesions or <b>diabetes</b> (Wikipedia); CABG is the standard of care for unprotected left main disease in European and American guidelines (a 2024 review), and its benefit grows with the complexity of CAD (a 2024 review).</li><li>Wikipedia adds reduced LV function and complex triple-vessel disease, and urgent CABG when PCI fails.</li><li>The usual graft: left internal thoracic (mammary) artery to the LAD (Wikipedia).</li></ul></div><div><h3>Cardiac rehabilitation (GM2.17)</h3><ul><li><b>Who:</b> after MI, PCI or CABG, with heart failure, after valve procedures or rhythm devices (Wikipedia; a 2022 review\'s guideline table).</li><li><b>What:</b> supervised exercise training, risk-factor modification and psychosocial support (StatPearls; Wikipedia).</li><li><b>Phases</b> (Wikipedia): I inpatient; II outpatient supervised (globally a median of 24 sessions; 3–6 months in the US and Europe, a 2015 review); III maintenance at home.</li><li><b>Benefit:</b> fewer MIs and admissions, better quality of life (Wikipedia; StatPearls); exercise is safe even after stents or with HF, starting gradually after 1–2 weeks (Wikipedia).</li></ul></div>';
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); Cardiological Society of India position statement on STEMI (2017); open-access papers: acute coronary syndromes (Lancet 2022; 2026 review), what US cardiology can learn from the 2023 ESC ACS guidelines (2024), epidemiology of CAD and ACS (2021), pathophysiology of atherosclerosis (2022), LDL causes ASCVD — EAS consensus (2020), mechanical complications of MI (2025, 2026), post-cardiac injury syndrome (2021, 2025), left main PCI vs CABG (2024), cardiac rehabilitation (2015, 2022), HFrEF pillars (2021), cardiac biomarkers (2017) (Europe PMC / NCBI); Wikipedia (wikitext checked for OpenStax citations).';
+const MODELS = '<b>Models used:</b> the lipid cycle, arterial wall, coronary occlusion, complication timeline and time bar are schematic drawings, not to scale. The ACS picker and the reperfusion helper apply the sourced rules to the choices made; they are learning aids, not clinical tools.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Med;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+$('risk-text').innerHTML = RISK_TEXT; $('risk-cols').innerHTML = RISK_COLS; $('cabg-cols').innerHTML = CABG;
+
+/* ---- lipid cycle ---- */
+const LS = {k: 'cyc'};
+function drawLip() {
+  const blk = new Set(LIP[LS.k][1]);
+  let s = Med.DEFS;
+  const box = (x, y, w, h, lines) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" class="box"/>` + lines.map((l, i) => T(x + w / 2, y + 20 + i * 15, l, i ? 's' : 'b', 'middle')).join('');
+  s += box(20, 30, 130, 56, ['Intestine', 'dietary fat']) + box(20, 220, 150, 80, ['Liver', 'LDL receptors', 'HMG-CoA reductase']);
+  s += box(400, 30, 120, 56, ['Muscle, fat', 'lipoprotein lipase']) + box(400, 220, 120, 80, ['Artery wall', 'retained LDL →', 'atheroma']);
+  const p = (x, y, l) => `<circle cx="${x}" cy="${y}" r="17" class="ldl"/>` + T(x, y + 4, l, 'b', 'middle');
+  s += p(220, 58, 'CM') + `<path class="flow" d="M150 58 L200 58"/><path class="flow" d="M238 58 L396 58"/>` + T(318, 50, 'triglyceride removed', 's', 'middle');
+  s += `<path class="flow" d="M420 86 L420 112 L60 112 L60 214"/>` + T(240, 106, 'chylomicron remnants → liver', 's', 'middle');
+  s += `<path class="flow" d="M170 236 L206 196"/>` + p(224, 180, 'VLDL') + `<path class="flow" d="M242 180 L280 180"/>` + p(298, 180, 'IDL') + `<path class="flow" d="M316 180 L352 180"/>` + p(370, 180, 'LDL');
+  s += `<path class="flow" d="M384 192 L430 216"/>`;
+  s += `<path class="flow" d="M362 196 Q300 252 176 262"/>` + T(260, 278, 'cleared by LDL receptors', 's', 'middle');
+  s += `<path class="flow dash" d="M400 300 L330 316 L176 290"/><circle cx="330" cy="316" r="12" class="ldl" style="fill:var(--surface)"/>` + T(330, 320, 'HDL', 's', 'middle') + T(252, 340, 'HDL: reverse cholesterol transport', 's', 'end');
+  const site = {hmg: [182, 224], gut: [162, 82], pcsk: [196, 258]};
+  for (const k of blk) { const [x, y] = site[k]; s += `<path class="blk" d="M${x - 8} ${y - 8} L${x + 8} ${y + 8} M${x + 8} ${y - 8} L${x - 8} ${y + 8}"/>`; }
+  s += T(20, 18, 'Schematic. CM = chylomicron; ✕ = drug site', 's', 'start');
+  $('lip-svg').innerHTML = s; $('lip-find').innerHTML = LIP[LS.k][2];
+}
+Med.toggles('lip-tg', Object.entries(LIP).map(([k, v]) => [k, v[0]]), k => { LS.k = k; drawLip(); }, 'cyc'); drawLip();
+
+/* ---- plaque stepper ---- */
+const PS = {s: 0};
+function drawPlq() {
+  const st = PLQ[PS.s][1];
+  let s = '';
+  // lumen 0-120, intima 120-205 (grows), media 205-260, adventitia below
+  const bump = st >= 4 ? 52 : st >= 3 ? 22 : 0; // plaque bulges into lumen
+  const endo = x => 120 - bump * Math.exp(-Math.pow((x - 270) / 110, 2));
+  const pts = []; for (let x = 20; x <= 520; x += 5) pts.push([x, endo(x)]);
+  s += `<rect x="20" y="20" width="500" height="240" class="lumen"/>` + T(30, 40, 'lumen (blood)', 's', 'start');
+  s += `<path class="intima" d="${Med.path(pts)} L520 205 L20 205 Z"/>` + `<rect x="20" y="205" width="500" height="55" class="media"/>` + T(510, 238, 'media: smooth muscle', 's', 'end') + T(510, 196, 'intima', 's', 'end');
+  s += `<path class="endo" d="${Med.path(pts)}"/>` + T(30, endo(30) - 6, 'endothelium', 's', 'start');
+  const ldl = (x, y) => `<circle cx="${x}" cy="${y}" r="4" class="ldl"/>`;
+  // step 1: LDL particles crossing and retained
+  for (const [x, y] of [[180, 90], [250, 70], [330, 95], [210, 140], [270, 150], [320, 170], [240, 180]]) if (!(st >= 4 && y > 130)) s += ldl(x, y < endo(x) ? y : Math.max(y, endo(x) + 8));
+  if (st >= 2) for (const [x, y] of [[150, 60], [160, 100]]) s += `<circle cx="${x}" cy="${y}" r="10" class="mono"/><circle cx="${x}" cy="${y}" r="3.5" class="nuc"/>` + (y === 60 ? T(x + 14, y + 4, 'monocyte', 's', 'start') : '');
+  if (st >= 3) for (const [x, y] of (st >= 4 ? [[186, 168], [356, 168]] : [[230, 160], [270, 175], [310, 160]])) { s += `<circle cx="${x}" cy="${y}" r="13" class="mono"/>`; for (const [dx, dy] of [[-5, -4], [4, -5], [-3, 5], [5, 4]]) s += `<circle cx="${x + dx}" cy="${y + dy}" r="2.6" class="ldl"/>`; }
+  if (st === 3) s += T(345, 172, 'foam cells', 's', 'start');
+  if (st >= 4) {
+    s += `<path class="core" d="M200 120 Q270 70 340 120 Q270 170 200 120 Z"/>` + T(270, 136, 'necrotic core', 's', 'middle');
+    const cap = []; for (let x = 190; x <= 350; x += 5) cap.push([x, endo(x) + 2]); for (let x = 350; x >= 190; x -= 5) cap.push([x, endo(x) + (st >= 6 ? 6 : 12)]);
+    s += `<path class="cap" d="${Med.path(cap)} Z"/>` + `<path class="lead" d="M336 ${endo(336) + 6} L392 ${endo(392) - 20}"/>` + T(396, endo(392) - 22, 'fibrous cap', 's', 'start');
+    for (const [x, y] of [[158, 192], [392, 190]]) s += `<ellipse cx="${x}" cy="${y}" rx="11" ry="4" class="smc" transform="rotate(-25 ${x} ${y})"/>`;
+    s += T(142, 196, 'SMC', 's', 'end');
+  }
+  if (st >= 5) for (const [x, y] of [[215, 185], [325, 186], [300, 190]]) s += `<rect x="${x - 5}" y="${y - 3}" width="10" height="6" class="calc"/>`;
+  if (st >= 5) s += T(270, 198, 'calcium', 's', 'middle');
+  if (st >= 6) { s += `<path class="thr" d="M240 ${endo(240)} Q270 ${endo(270) - 46} 310 ${endo(310)} Z"/>` + `<path d="M266 ${endo(266) + 2} L274 ${endo(274) + 14}" style="stroke:var(--ink);stroke-width:2"/>` + T(270, endo(270) - 52, 'thrombus on the ruptured cap', 's', 'middle'); }
+  s += T(20, 290, 'schematic, not to scale; blood flows left to right', 's', 'start');
+  $('plq-svg').innerHTML = s; $('plq-find').innerHTML = PLQ[PS.s][2];
+}
+Med.stepper('plq-step', PLQ.map(r => r[0]), drawPlq, PS);
+Med.key('plq-key', [['--fat', 'lipid (LDL, core, foam-cell droplets)'], ['--cyto', 'monocyte / macrophage'], ['--musc', 'smooth muscle'], ['--collagen', 'fibrous cap'], ['--calc', 'calcification'], ['--clot', 'thrombus']]);
+
+/* ---- ACS picker ---- */
+function drawAcs() {
+  const {pain, ecg, trop} = ACS;
+  let dx, occ, txt;
+  if (ecg === 'st') { dx = 'STEMI'; occ = 2; txt = 'Complete occlusion of a coronary artery (StatPearls; Wikipedia), about 30% of ACS (StatPearls). Do not wait for troponin: go to reperfusion (below).' + (trop === 'no' ? ' Troponin may not yet have risen; the rise and fall does not separate NSTEMI from STEMI (2023 ESC summary).' : ''); }
+  else if (trop === 'up') { dx = 'NSTEMI'; occ = 1; txt = 'Raised troponin (myocardial necrosis) without ST elevation (StatPearls; CSI 2017): partial occlusion (Wikipedia).'; }
+  else if (pain === 'exert') { dx = 'Stable angina (chronic coronary syndrome)'; occ = 0; txt = 'Predictable exertional pain relieved by rest or nitroglycerin, without plaque rupture, thrombosis or necrosis (StatPearls), with no ST elevation and no troponin rise. Not an ACS: investigate with stress testing and coronary imaging.'; }
+  else { dx = 'Unstable angina'; occ = 1; txt = 'Ischaemia without necrosis: high-sensitivity troponin not raised (2023 ESC summary; Wikipedia). Pain at rest, on minimal exertion or crescendo (Wikipedia).'; }
+  if (pain === 'exert' && (ecg === 'st' || trop === 'up')) txt += ' <b>Not stable angina:</b> ST elevation or a troponin rise defines an acute coronary syndrome whatever the pain pattern — treat as ACS.';
+  $('acs-out').innerHTML = `<span class="big">${dx}</span><p>${txt}</p>`;
+  let s = `<path d="M20 40 L400 40 M20 110 L400 110" style="stroke:var(--artery);stroke-width:4"/><rect x="20" y="42" width="380" height="66" class="lumen"/>`;
+  if (occ > 0) s += `<path class="core" d="M150 110 Q210 70 270 110 Z"/>`;
+  else s += `<path class="core" d="M150 110 Q210 84 270 110 Z"/>`;
+  if (occ === 1) s += `<path class="thr" d="M175 96 Q215 64 250 92 Z"/>`;
+  if (occ === 2) s += `<path class="thr" d="M170 100 Q205 30 250 44 L250 96 Z"/><rect x="200" y="42" width="40" height="66" class="thr"/>`;
+  s += T(210, 132, ['no thrombus', 'partial occlusion (thrombus)', 'complete occlusion'][occ], 's', 'middle') + T(20, 28, 'coronary artery (schematic)', 's', 'start') + T(395, 28, 'blood →', 's', 'end');
+  $('acs-svg').innerHTML = s;
+}
+const ACS_CH = {
+  pain: ['acs-pain', [['rest', 'At rest / new / crescendo'], ['exert', 'Predictable on exertion, relieved by rest']]],
+  ecg: ['acs-ecg', [['st', 'ST elevation ≥2 contiguous leads, or new LBBB'], ['nost', 'No ST elevation (normal, ST depression, T inversion)']]],
+  trop: ['acs-trop', [['up', 'Above the 99th percentile, rising/falling'], ['no', 'Not raised']]],
+};
+for (const [k, [id, items]] of Object.entries(ACS_CH)) Med.toggles(id, items, v => { ACS[k] = v; drawAcs(); }, ACS[k]);
+drawAcs();
+Med.table('st-table', ['Leads (new ST elevation at the J point, ≥2 contiguous leads)', 'Threshold'], ST_ROWS);
+$('acs-note').innerHTML = ACS_NOTE;
+Med.table('inv-table', ['Investigation (GM2.13)', 'Use'], INV);
+
+/* ---- complications timeline ---- */
+const CXS = {d: 4};
+const tx = d => 190 + 390 * Math.sqrt(d / 56);
+function drawCx() {
+  let s = `<path class="axis" d="M190 24 L190 ${30 + CX.length * 34} M190 ${30 + CX.length * 34} L580 ${30 + CX.length * 34}"/>`;
+  const yb = 30 + CX.length * 34;
+  for (const [d, l] of [[0, '0'], [1, 'day 1'], [3, '3'], [7, '1 wk'], [14, '2 wk'], [28, '4 wk'], [56, '8 wk']]) s += `<path class="grid" d="M${tx(d)} 24 L${tx(d)} ${yb}"/>` + T(tx(d), yb + 16, l, 's', 'middle');
+  CX.forEach(([k, l, a, b, w], i) => {
+    const y = 30 + i * 34, on = CXS.d >= a && CXS.d <= b;
+    s += T(184, y + 14, l, on ? 'b' : '', 'end') + T(184, y + 27, w, 'cap', 'end');
+    s += `<rect x="${tx(a)}" y="${y + 6}" width="${Math.max(6, tx(b) - tx(a))}" height="18" rx="4" class="lane ${on ? 'laneon' : ''}"/>`;
+  });
+  s += `<path d="M${tx(CXS.d)} 18 L${tx(CXS.d)} ${yb}" style="stroke:var(--ink);stroke-width:2"/>` + T(tx(CXS.d), 14, 'day ' + CXS.d, 'm', CXS.d > 40 ? 'end' : 'middle');
+  s += T(580, yb + 34, 'time since onset (square-root scale; schematic)', 's', 'end');
+  $('cx-svg').innerHTML = s;
+  const due = CX.filter(r => CXS.d >= r[2] && CXS.d <= r[3]);
+  $('cx-find').innerHTML = due.length ? due.map(r => `<h3>${r[1]}</h3><p>${r[5]}</p>`).join('') : '<p>No complication window from the sources covers this day.</p>';
+}
+Med.slider('cx-sl', {id: 'day', label: 'Day after the onset of MI', min: 0, max: 56, step: 1, value: CXS.d, fmt: v => 'day ' + v}, v => { CXS.d = v; drawCx(); }).init();
+$('cx-note').innerHTML = CX_NOTE; drawCx();
+
+/* ---- drugs ---- */
+$('rx-init').innerHTML = RX_INIT;
+Med.table('rx-table', ['Drug', 'Action', 'Evidence and use (source)', 'Who'], RX); $('rx-note').innerHTML = RX_NOTE;
+
+/* ---- reperfusion helper ---- */
+function drawRep() {
+  const o = new Set(REP.other), shock = o.has('shock'), ci = o.has('ci'), isch = o.has('isch');
+  let v, why;
+  if (shock) { v = 'Primary PCI'; why = 'Cardiogenic shock: primary PCI irrespective of the time delay (CSI 2017).'; }
+  else if (REP.onset > 24 && !isch) { v = 'No emergency reperfusion'; why = 'Routine PCI of a totally occluded artery more than 24 h after onset in a stable patient without ischaemia is not recommended (CSI 2017).'; }
+  else if (REP.onset > 24) { v = 'No rule in the sources'; why = 'More than 24 h with ongoing ischaemia: the downloaded sources give no reperfusion rule for this case (CSI 2017 covers 12–24 h with ongoing ischaemia, and stable patients beyond 24 h). Seek specialist advice.'; }
+  else if (REP.onset > 12 && !isch) { v = 'Benefit not established'; why = 'Beyond 12 h, reperfusion benefit has not been established; primary PCI is indicated at 12–24 h only with ongoing ischaemia (CSI 2017). Tick "ongoing ischaemia" if present.'; }
+  else if (REP.onset > 12) { v = 'Primary PCI'; why = '12–24 h with ongoing clinical or ECG ischaemia (CSI 2017).'; }
+  else if (ci) { v = 'Primary PCI'; why = 'Fibrinolysis contraindicated: primary PCI irrespective of the time delay (CSI 2017).'; }
+  else if (REP.fmc <= 120) { v = 'Primary PCI'; why = `Expected first contact → PCI ${REP.fmc} min is within 120 min (CSI 2017 citing ESC; Lancet 2022). Aim for door-to-balloon ≤90 min (ACC/AHA via Wikipedia, no year).`; }
+  else { v = 'Fibrinolysis, then transfer'; why = `PCI expected in ${REP.fmc} min, beyond 120 min: give a fibrin-specific lytic (door-to-needle ≤30 min), then angiography within 24 h (pharmaco-invasive), or rescue PCI if it fails (CSI 2017; Lancet 2022).`; }
+  $('rep-out').innerHTML = `<span class="big">${v}</span><p>${why}</p>`;
+  const X = Med.scale(0, 240, 20, 400);
+  let s = `<path class="axis" d="M20 74 L400 74"/>`;
+  for (const t of [0, 30, 60, 90, 120, 180, 240]) s += `<path class="axis" d="M${X(t)} 70 L${X(t)} 78"/>` + T(X(t), 92, t, 's', 'middle');
+  s += `<rect x="${X(0)}" y="20" width="${X(30) - X(0)}" height="12" style="fill:var(--ink);fill-opacity:.25"/>` + T(X(30) + 6, 30, 'door-to-needle ≤30 (ACC, via Wikipedia)', 's', 'start');
+  s += `<rect x="${X(0)}" y="40" width="${X(90) - X(0)}" height="12" style="fill:var(--ink);fill-opacity:.12"/>` + T(X(90) + 6, 50, 'door-to-balloon ≤90 (ACC/AHA, via Wikipedia)', 's', 'start');
+  s += `<path d="M${X(120)} 58 L${X(120)} 78" style="stroke:var(--ink);stroke-width:1.6;stroke-dasharray:4 3"/>` + T(X(120) + 4, 106, '120-min limit for primary PCI', 's', 'start');
+  const xm = X(Math.min(240, REP.fmc)); s += `<path d="M${xm} 114 L${xm - 7} 128 L${xm + 7} 128 Z" style="fill:var(--mark)"/>` + T(Math.max(100, Math.min(320, xm)), 146, 'expected PCI ' + REP.fmc + ' min', 'm', 'middle');
+  s += T(400, 166, 'minutes from first medical contact (schematic)', 's', 'end');
+  $('rep-svg').innerHTML = s;
+}
+Med.slider('rep-sl', {id: 'onset', label: 'Hours since symptom onset', min: 0, max: 36, step: 1, value: REP.onset, fmt: v => v + ' h'}, v => { REP.onset = v; drawRep(); }).init();
+Med.slider('rep-sl', {id: 'fmc', label: 'Expected first contact → PCI', min: 30, max: 240, step: 5, value: REP.fmc, fmt: v => v + ' min'}, v => { REP.fmc = v; drawRep(); }).init();
+{
+  const box = $('rep-oth');
+  for (const [k, l] of [['ci', 'Fibrinolysis contraindicated'], ['shock', 'Cardiogenic shock'], ['isch', 'Ongoing ischaemia']]) {
+    const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
+    b.onclick = () => { const i = REP.other.indexOf(k); if (i >= 0) REP.other.splice(i, 1); else REP.other.push(k); b.setAttribute('aria-pressed', String(REP.other.includes(k))); drawRep(); };
+    box.append(b);
+  }
+}
+$('rep-text').innerHTML = REP_TEXT; drawRep();
+Med.swipeHints();
+</script>
+</body>
+</html>

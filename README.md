@@ -89,6 +89,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [Cell Injury and Cell Death](pathology/general/cell-injury-death.html), [Cellular Adaptations, Dysplasia, Accumulations, Calcification and Gangrene](pathology/general/adaptations-accumulations.html) | General | Causes and a five-mechanism stepper, reversible→irreversible slider, six necroses with sites, apoptosis vs necrosis, intrinsic and extrinsic apoptosis steppers, telomeres; adaptations, metaplasia, dysplasia→CIS→invasion slider, accumulations and pigments, calcification classifier, gangrene; 3 Commons micrographs |
 
+### General Medicine — [`medicine/`](medicine/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [Heart Failure](medicine/cardiology/heart-failure.html), [Rheumatic Fever, Valve Disease, Endocarditis and Adult CHD](medicine/cardiology/valves-endocarditis.html), [IHD and ACS](medicine/cardiology/ihd-acs.html) | Cardiology | HF classifier (EF band, stage, NYHA), compensation stepper, BNP rule-out slider, drug map; Jones 2015 and Duke classifiers, murmurs on the cycle, shunts and Eisenmenger; lipid map, plaque stepper, ACS picker, complications timeline, reperfusion helper (CSI 2017) |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and

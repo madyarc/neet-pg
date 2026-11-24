@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Valves and Endocarditis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/med.css">
+<style>
+/* tokens from med.css with their site meanings: --heart (myocardium: chamber walls), --valve (heart valves), --artery (arteries by structure:
+   aorta and pulmonary artery), --clin (a clinical finding: the murmur), --accent (selected item only). Shunt direction and oxygen content are
+   shown with ink arrows — solid = oxygenated blood, dashed = deoxygenated blood — and labels, not with the vessel colours. */
+svg.sch .ch{fill:var(--heart);fill-opacity:.22;stroke:var(--heart);stroke-width:1.4}
+svg.sch .vlv{stroke:var(--valve);stroke-width:5;stroke-linecap:round}
+svg.sch .mur{fill:var(--clin);fill-opacity:.28;stroke:var(--clin);stroke-width:1.6}
+svg.sch .snd{stroke:var(--ink);stroke-linecap:round}
+svg.sch .vess{stroke:var(--artery);fill:none;stroke-opacity:.35}
+svg.sch .oxy{stroke:var(--ink);stroke-width:3;fill:none}
+svg.sch .deo{stroke:var(--ink);stroke-width:3;fill:none;stroke-dasharray:6 4}
+.crit{display:flex;flex-direction:column;gap:6px}
+.crit label{display:flex;gap:8px;align-items:flex-start;font-size:14px;cursor:pointer}
+.crit input{margin-top:3px;accent-color:var(--accent)}
+.crit .h{font:600 12px var(--f-mono);color:var(--muted);margin-top:6px}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← General Medicine</a> <span class="muted">· Module 01: <a href="heart-failure.html">Heart failure</a> · <span aria-current="page">Valves, rheumatic fever, endocarditis</span> · <a href="ihd-acs.html">Ischaemic heart disease and ACS</a></span></nav>
+
+<header class="stack">
+  <h1>Rheumatic Fever, Valve Disease, Endocarditis and Adult Congenital Heart Disease</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-rf">Rheumatic fever and Jones 2015</a> <a href="#h-valve">Murmurs and valve lesions</a> <a href="#h-ie">Endocarditis and Duke</a> <a href="#h-chd">Adult congenital heart disease</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-rf">
+  <h2 id="h-rf">Rheumatic fever: apply the revised Jones criteria (AHA 2015)</h2>
+  <div class="prose" id="rf-text"></div>
+  <div class="chips" id="rf-pre" aria-label="Example patients"></div>
+  <div class="two">
+    <div class="ctl crit" id="rf-ctl">
+      <div class="q"><span class="qt">Population risk</span><div class="chips" id="rf-pop"></div></div>
+      <div class="q"><span class="qt">Episode</span><div class="chips" id="rf-ep"></div></div>
+      <div class="q"><span class="qt">Evidence of preceding group A streptococcal infection</span><div class="chips" id="rf-gas"></div></div>
+      <div class="q"><span class="qt">Joints</span><div class="chips" id="rf-joint"></div></div>
+      <div class="q"><span class="qt">Fever</span><div class="chips" id="rf-fev"></div></div>
+      <div class="q"><span class="qt">ESR / CRP</span><div class="chips" id="rf-esr"></div></div>
+      <div class="q"><span class="qt">Other findings</span><div class="chips" id="rf-oth"></div></div>
+    </div>
+    <div class="ans prose" id="rf-out" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="rf-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-valve">
+  <h2 id="h-valve">Murmurs and valve lesions: where each murmur falls in the cycle</h2>
+  <div class="chips" id="vl-tg" aria-label="Valve lesion"></div>
+  <div class="chips" id="vl-sev" aria-label="Severity"></div>
+  <div class="schbox"><svg class="fig sch" id="vl-svg" viewBox="0 0 600 200" role="img" aria-label="Schematic phonocardiogram over one and a half cardiac cycles: first and second heart sounds, systole and diastole, and the chosen lesion's murmur drawn as a shaded shape"></svg></div>
+  <div class="two">
+    <div class="prose find" id="vl-find" aria-live="polite"></div>
+    <div class="scroll"><table id="vl-table"></table></div>
+  </div>
+  <p class="muted" id="vl-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ie">
+  <h2 id="h-ie">Infective endocarditis and the Duke criteria</h2>
+  <div class="scroll"><table id="ie-table"></table></div>
+  <div class="chips" id="ie-pre" aria-label="Example patients"></div>
+  <div class="two">
+    <div class="crit" id="ie-ctl"></div>
+    <div class="ans prose" id="ie-out" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="ie-text"></div>
+  <p class="muted" id="ie-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-chd">
+  <h2 id="h-chd">Adult congenital heart disease: follow the shunt</h2>
+  <div class="chips" id="chd-tg" aria-label="Lesion"></div>
+  <div class="chips" id="chd-eis" aria-label="Pulmonary vascular resistance"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="chd-svg" viewBox="0 0 440 356" role="img" aria-label="Schematic four-chamber heart with aorta and pulmonary artery; the chosen defect and the direction of its shunt are drawn"></svg></div>
+    <div class="prose find" id="chd-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="chd-note"></p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BRheumatic%20Fever%2C%20Valve%20Disease%2C%20Endocarditis%20and%20Adult%20Congenital%20Heart%20Disease%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fmedicine%2Fcardiology%2Fvalves-endocarditis.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/med.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources unless attributed: sources-local/facts/fill-g01.md, Part B) ===================== */
+const LEDE = 'Tick findings and see whether the 2015 Jones criteria are met in a low- or a high-risk population; play each valve lesion\'s murmur against S1 and S2; run the Duke criteria for endocarditis; and follow the shunts of adult congenital heart disease to Eisenmenger reversal. Heart sounds and the cardiac cycle: <a href="../../physiology/cvs/cardiac-cycle-output.html#h-hs">physiology heart sounds</a>; valve anatomy and auscultation areas: <a href="../../anatomy/thorax/heart.html#h-surf">The Heart: surface marking</a>; laminar and turbulent flow (why murmurs happen): <a href="../../physiology/cvs/haemodynamics-bp-regulation.html#h-rey">physiology</a>.';
+
+const RF_TEXT = '<p><b>Acute rheumatic fever</b> is an immune-mediated, non-suppurative complication of <b>group A streptococcal pharyngitis</b> (StatPearls). Sources disagree on skin infection: a 2018 review says it never follows streptococcal skin infection, whereas 2022 and 2025 reviews link superficial infections such as impetigo and pyoderma to rheumatic heart disease and its occurrence. It follows the sore throat by about <b>2–4 weeks</b> (Wikipedia; a 2017 review; 2–3 weeks in a 2018 review, an incubation of 1–5 weeks in a 2025 review), mostly in children aged 5–17 (Wikipedia). Mechanism: <b>molecular mimicry</b> — antibodies against the streptococcal M protein cross-react with cardiac myosin and other host proteins (Wikipedia, which adds a genetic predisposition through HLA class II genes). In rheumatic heart disease the mitral valve alone is involved in 70%, mitral and aortic together in 25% (Wikipedia). <b>Prevention:</b> treating strep throat with antibiotics such as penicillin lowers the risk; after an attack, long-term intramuscular antibiotic (benzathine benzylpenicillin is suggested) is given as <b>secondary prophylaxis</b> (Wikipedia). No dose or duration is given here: no open guideline text with them was downloaded.</p><p>The <b>2015 revision</b> (AHA) added Doppler echocardiography for every suspected case, counted <b>subclinical (echo-only) carditis</b> as major, set separate criteria for <b>low-risk</b> and <b>moderate/high-risk</b> populations, and defined recurrent attacks (2017 and 2018 reviews; Wikipedia). <b>Low risk</b> = acute rheumatic fever incidence ≤2 per 100 000 school-age children per year or all-age rheumatic heart disease prevalence ≤1 per 1000; all others are moderate/high risk (Wikipedia).</p>';
+const RF_NOTE = 'Criteria as tabulated from AHA 2015 in a 2018 review, with Wikipedia and a 2017 review agreeing. Joint findings count once: in a low-risk population only polyarthritis is major (polyarthralgia is minor); in a moderate/high-risk population monoarthritis, polyarthritis or polyarthralgia are major (monoarthralgia is minor). A prolonged PR interval (age-corrected) counts as minor only if carditis is not being counted as major. CRP: "≥3.0 mg/dl" in the 2018 table, ">3.0 mg/dL" in Wikipedia. Wikipedia adds that chorea or indolent carditis alone can indicate rheumatic fever. Learning aid, not a diagnostic tool.';
+const RF_PRE = {
+  a: ['Low-risk, carditis + polyarthritis', {pop: 'low', ep: 'first', gas: 'yes', joint: 'polyarthritis', fev: 'none', esr: 'none', oth: ['carditis']}],
+  b: ['High-risk, monoarthritis + fever 38.2 °C + ESR 40', {pop: 'high', ep: 'first', gas: 'yes', joint: 'monoarthritis', fev: '38', esr: '30', oth: []}],
+  c: ['Same, but low-risk population', {pop: 'low', ep: 'first', gas: 'yes', joint: 'monoarthritis', fev: '38', esr: '30', oth: []}],
+  d: ['Recurrence: polyarthralgia, fever 39 °C, ESR 70', {pop: 'low', ep: 'rec', gas: 'yes', joint: 'polyarthralgia', fev: '385', esr: '60', oth: []}],
+  e: ['No streptococcal evidence', {pop: 'high', ep: 'first', gas: 'no', joint: 'polyarthritis', fev: '385', esr: '60', oth: ['carditis']}],
+};
+
+/* valves: [key, label, phonocardiogram spec, find html, table row] */
+const VL = {
+  ms: ['Mitral stenosis', '<h3>Mitral stenosis</h3><p><b>Loud S1</b> (often the most prominent sign, Wikipedia), an <b>opening snap</b>, then a <b>low-pitched mid-diastolic rumbling murmur with presystolic accentuation</b> (StatPearls; Wikipedia: opening snap). Other signs: irregular pulse (AF), prominent jugular a wave, tapping apex beat, and with pulmonary hypertension a loud P2 and right heart failure (StatPearls; Wikipedia). The left atrium enlarges; AF and heart failure follow (StatPearls). Rheumatic heart disease is the commonest cause, presenting at 20–40 years, about 10–15 years after rheumatic fever (StatPearls).</p>'],
+  mr: ['Mitral regurgitation', '<h3>Mitral regurgitation</h3><p><b>Holosystolic (pansystolic) murmur</b> best heard at the <b>apex, radiating to the left axilla</b> (StatPearls; Wikipedia; a 2024 review). Primary MR comes from the valve itself (degeneration, prolapse, flail leaflet, rheumatic disease, endocarditis, chordal rupture); secondary MR from LV or LA remodelling with normal leaflets (StatPearls). <b>Acute severe MR</b> (e.g. papillary-muscle rupture) causes pulmonary oedema and shock, and the murmur may be soft or absent (StatPearls; Wikipedia; Lancet 2022).</p>'],
+  as: ['Aortic stenosis', '<h3>Aortic stenosis</h3><p><b>Ejection systolic, crescendo–decrescendo murmur</b>, heard in the 2nd right intercostal space and <b>radiating to the carotids</b> (Wikipedia; a 2017 review). In mild AS the murmur peaks early, in severe AS late; A2 softens as AS worsens (Wikipedia). Wikipedia describes <b>pulsus parvus et tardus</b> (small, delayed carotid pulse). Symptoms come after a latent period of 10–20 years: exertional breathlessness, then chest pain, heart failure and syncope; once symptoms start, mortality exceeds 90% within a few years (StatPearls). Causes: age-related calcific disease (commonest), congenital bicuspid valve, and rheumatic disease (StatPearls; Wikipedia: rheumatic &lt;10%).</p>'],
+  ar: ['Aortic regurgitation', '<h3>Aortic regurgitation</h3><p>Blood flows back from the aorta into the left ventricle <b>in diastole</b> (StatPearls), giving progressive LV volume overload in chronic AR (a 2017 review). Wikipedia describes the murmur as <b>early diastolic and decrescendo</b>, best heard at the 3rd left intercostal space along the left sternal border, and in severe AR an <b>Austin Flint</b> mid-diastolic rumble at the apex. Aortic root dilatation is the commonest cause in developed countries (Wikipedia); Corrigan described chronic AR in syphilitic aortic-root disease in 1832 (StatPearls). Chronic AR may be silent for years, then left heart failure appears (a 2017 review); severe acute AR needs surgery (Wikipedia).</p>'],
+};
+const VL_ROWS = [
+  ['Mitral stenosis', 'Mid-diastolic rumble with presystolic accentuation, after an opening snap; loud S1', 'Severe: valve area &lt;1.5 cm² (Wikipedia; normal about 5 cm², MS below 2 cm²)', 'Percutaneous mitral balloon commissurotomy first line for suitable rheumatic valves (StatPearls); surgery if unsuitable; invasive treatment for NYHA III–IV (Wikipedia)'],
+  ['Mitral regurgitation', 'Holosystolic at apex → axilla', 'Severity by echo (vena contracta width, a 2017 review)', 'Surgery for chronic severe MR (Wikipedia); urgent for acute papillary-muscle rupture'],
+  ['Aortic stenosis', 'Ejection systolic, crescendo–decrescendo, 2nd right space → carotids', 'Severe: valve area &lt;1.0 cm² at catheterisation (Wikipedia; normal 2.5–4 cm², a 2017 review); a forward velocity ≥2 m/s distinguishes stenosis from sclerosis (StatPearls)', 'Valve replacement — surgical or transcatheter (TAVR/TAVI) — for symptomatic severe AS (Wikipedia; StatPearls; a 2023 review)'],
+  ['Aortic regurgitation', 'Early diastolic decrescendo, left sternal edge (Wikipedia)', 'Jet width/LVOT ratio: &lt;1/3 mild, 1/3–2/3 moderate, &gt;2/3 severe (a 2017 review)', 'Valve replacement before decompensation; surgery for severe acute AR (Wikipedia)'],
+];
+const VL_NOTE = 'Murmur shapes are schematic, at 75/min, not recordings. GM1.18 severity markers are given as each source states them; most come from one source, which is named. Nitrates can drop the blood pressure dangerously in severe aortic stenosis (Wikipedia). Valvuloplasty and valvotomy (GM1.23): balloon commissurotomy splits the fused mitral commissures and works best in rheumatic mitral stenosis (StatPearls).';
+
+/* infective endocarditis */
+const IE_ROWS = [
+  ['Acute', 'Fulminant over days to weeks (&lt;2 weeks) (Wikipedia)', '<i>Staphylococcus aureus</i>: virulent, often metastatic infection (Wikipedia)', 'Start empirical antibiotics as soon as blood cultures are drawn (Wikipedia)'],
+  ['Subacute', 'Slow over weeks to months (&gt;2 weeks) (Wikipedia)', 'Low-virulence streptococci, mainly viridans (Wikipedia)', 'Wikipedia also times it by duration: acute = days up to 6 weeks, subacute = 6 weeks to 3 months'],
+];
+const IE_MAJ = [
+  ['bc', 'Blood cultures: a typical organism (viridans streptococci, <i>S. bovis/gallolyticus</i>, HACEK, <i>S. aureus</i>, community-acquired enterococci) in ≥2 separate cultures, or persistently positive cultures, or <i>Coxiella</i>'],
+  ['echo', 'Imaging: vegetation (oscillating mass), abscess, new partial dehiscence of a prosthetic valve, or new valvular regurgitation'],
+];
+const IE_MIN = [
+  ['pre', 'Predisposition: known cardiac lesion or injection drug use'],
+  ['fev', 'Fever &gt;38 °C'],
+  ['vas', 'Vascular phenomena: arterial emboli, pulmonary infarcts, Janeway lesions, conjunctival haemorrhage'],
+  ['imm', 'Immunological phenomena: glomerulonephritis, Osler nodes, Roth spots, rheumatoid factor'],
+  ['mic', 'Microbiology: a positive culture that does not meet a major criterion'],
+];
+const IE_PRE = {
+  a: ['Injection drug use, S. aureus in 3 cultures, vegetation on echo', ['bc', 'echo', 'pre', 'fev']],
+  b: ['Fever, prior valve lesion, Janeway lesions, Osler nodes', ['pre', 'fev', 'vas', 'imm']],
+  c: ['Vegetation on TEE, fever, prosthetic valve', ['echo', 'pre', 'fev']],
+  d: ['Culture-positive only, fever', ['bc', 'fev']],
+};
+const IE_TEXT = '<h3>Organisms, signs and tests</h3><ul><li>Organisms (a 2024 review, one source): staphylococci such as <i>S. aureus</i> 35–40%, viridans streptococci about 20%, <i>S. gallolyticus</i> (formerly <i>S. bovis</i>) about 15%, enterococci, HACEK about 5%.</li><li>Splinter and conjunctival haemorrhages, <b>Osler nodes, Janeway lesions</b> (painless haemorrhagic spots on palms and soles) and <b>Roth spots</b> appear in about 5–10% (a 2024 review; Wikipedia).</li><li><b>Blood cultures before antibiotics:</b> three sets (30 minutes apart in a 2024 review). For a major criterion: two separate cultures (drawn 30 min or 12 h apart), or all of 3 or a majority of ≥4 separate cultures with the first and last ≥1 h apart (a 2025 review; Wikipedia, which gives two positive cultures drawn &gt;12 h apart for persistent bacteraemia).</li><li><b>Echocardiography:</b> TTE first; <b>TEE is better</b> at finding and measuring vegetations (a 2024 review). For prosthetic valves TTE sensitivity is about 50% and TEE over 90%; TEE is the preferred first test with a prosthetic valve, <i>Staphylococcus</i> bacteraemia or an intracardiac device (Wikipedia). Right-sided (tricuspid) vegetations are anterior and usually large, so TTE sees them as well as TEE (a 2024 review).</li><li><b>Therapy:</b> high-dose intravenous antibiotics are the cornerstone (Wikipedia; regimens in a 2024 review); surgery in selected cases. No regimens or doses are given here.</li></ul><h3>What changed in 2023 (Duke-ISCVID)</h3><p>The Duke criteria (1994, revised 2000) were updated in 2023 by the International Society for Cardiovascular Infectious Diseases: <b>FDG PET/CT and cardiac CT</b> became major imaging criteria (prosthetic valve and device infection), valve PCR and 16S sequencing count as major when they find organisms such as <i>Coxiella</i>, <i>Bartonella</i> or <i>Tropheryma</i>, <b>intraoperative findings</b> became a major criterion, typical organisms need ≥2 culture sets and rarer ones ≥3, and predispositions were listed in detail (a 2026 review; a 2024 cohort study). In one multicentre study sensitivity rose from 74.9% to 84.2% with similar specificity (a 2026 review).</p>';
+const IE_NOTE = 'The classifier uses the clinical criteria of the modified Duke criteria (1994, revised 2000). Major and minor categories: Wikipedia, a 2024 review and a 2024 study\'s table; "possible" (1 major + 1 minor, or 3 minor): Wikipedia and a 2024 review; "definite" combinations (2 major, 1 major + 3 minor, or 5 minor): Wikipedia only — the 2023 Duke-ISCVID paper itself is not openly downloadable. A pathological diagnosis (organisms in a vegetation or abscess) is definite on its own. Learning aid, not a diagnostic tool.';
+
+/* congenital: [key, label, shunt spec, find] */
+const CHD = {
+  vsd: ['VSD', '<h3>Ventricular septal defect (acyanotic)</h3><p>The <b>commonest congenital cardiac malformation</b>, about 1 in 4 (a 2024 review); the second commonest congenital abnormality in adults after the bicuspid aortic valve (StatPearls). Left-to-right shunt from LV to RV. Wikipedia: a <b>harsh holosystolic murmur at the left lower sternal border</b>. Most are small and close soon after birth; a large unclosed shunt can cause pulmonary hypertension and then reversal — Eisenmenger syndrome (a 2024 review). All VSDs carry a risk of endocarditis (a 2024 review).</p>'],
+  asd: ['ASD', '<h3>Atrial septal defect (acyanotic)</h3><p>The <b>second commonest</b> congenital malformation (a 2024 review). Blood shunts from the higher-pressure left atrium to the right atrium (a 2024 review); most patients become symptomatic before 40 (a 2024 review). Wikipedia: <b>fixed splitting of S2</b>. Risks: AF and flutter, endocarditis, recurrent pneumonia; Eisenmenger reversal in 5–10% of large unrepaired ASDs (a 2024 review). Echocardiography is the imaging of choice (a 2024 review).</p>'],
+  pda: ['PDA', '<h3>Patent ductus arteriosus (acyanotic)</h3><p>A persistent connection between the left pulmonary artery and the descending aorta; flow from aorta to pulmonary artery raises lung flow and overloads the left heart (a 2024 review). Wikipedia: a <b>continuous "machinery" murmur</b> at the left upper sternal border, radiating to the back.</p>'],
+  coa: ['Coarctation', '<h3>Coarctation of the aorta (acyanotic, no shunt)</h3><p>Ranges from asymptomatic <b>hypertension</b> to heart failure in infancy; untreated it leads to hypertension, LV hypertrophy, aortic dissection and intracranial haemorrhage by the 3rd–4th decade (StatPearls). Wikipedia: <b>radio-femoral delay</b> when the narrowing is beyond the left subclavian artery; associations with Turner syndrome and a bicuspid aortic valve.</p>'],
+  tof: ['Tetralogy of Fallot', '<h3>Tetralogy of Fallot (cyanotic)</h3><p>Four features: <b>VSD, right-ventricular outflow obstruction, overriding aorta, right-ventricular hypertrophy</b> (a 2024 review; StatPearls; Wikipedia). Obstruction to RV outflow sends deoxygenated blood across the VSD into the aorta (right-to-left). Adults with repaired tetralogy often need pulmonary valve replacement (a 2024 review).</p>'],
+};
+const CHD_NOTE = '<b>Acyanotic vs cyanotic:</b> a left-to-right shunt (ASD, VSD, PDA) sends oxygenated blood back to the lungs — no cyanosis; a right-to-left shunt sends deoxygenated blood to the body — cyanosis (Wikipedia; StatPearls). <b>Eisenmenger syndrome:</b> a long-standing left-to-right shunt (typically VSD, also ASD, less often PDA) raises pulmonary vascular resistance until the shunt reverses into a cyanotic right-to-left shunt (Wikipedia; StatPearls; a 2024 review); ASD closure is then contraindicated because it can worsen right-heart failure (a 2024 review). Advances in care mean many more people now live into adulthood with congenital heart disease (a 2024 review). Schematic, not to scale; aorta and pulmonary artery are both drawn as arteries (by structure). Shunt arrows: solid = oxygenated blood, dashed = deoxygenated blood.';
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access papers: rheumatic fever new diagnostic criteria (2018), group A streptococcus, ARF and RHD (2017), the ARF–RHD continuum (2022), ARF pathogenesis (2025), the 2023 Duke-ISCVID criteria in practice (2024, 2026 reviews; 2024 cohort; 2024 validation), native infective endocarditis (2024), multimodality imaging in IE (2024, 2025), valvular heart disease and anaesthesia (2017), the global burden of valvular disease (2023), adult congenital heart disease in the emergency department (2024) and its challenges (2024), acute coronary syndromes (Lancet 2022) (Europe PMC / NCBI); Wikipedia (wikitext checked for OpenStax citations).';
+const MODELS = '<b>Models used:</b> the phonocardiogram, heart and shunt diagrams are schematic drawings, not recordings or to scale. The Jones and Duke classifiers apply the published combinations to the boxes ticked; they are learning aids, not diagnostic tools.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Med;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS; $('rf-text').innerHTML = RF_TEXT;
+
+/* ---- Jones ---- */
+const RF = JSON.parse(JSON.stringify(RF_PRE.a[1]));
+function jones(r) {
+  const maj = [], min = [], low = r.pop === 'low';
+  const card = r.oth.includes('carditis');
+  if (card) maj.push('carditis');
+  if (r.joint === 'polyarthritis') maj.push('polyarthritis');
+  else if (r.joint === 'monoarthritis') { if (!low) maj.push('monoarthritis'); }
+  else if (r.joint === 'polyarthralgia') (low ? min : maj).push('polyarthralgia');
+  else if (r.joint === 'monoarthralgia') { if (!low) min.push('monoarthralgia'); }
+  for (const k of ['chorea', 'erythema', 'nodules']) if (r.oth.includes(k)) maj.push({chorea: 'chorea', erythema: 'erythema marginatum', nodules: 'subcutaneous nodules'}[k]);
+  if (r.fev === '385' || (r.fev === '38' && !low)) min.push('fever ' + (low ? '≥38.5 °C' : '≥38 °C'));
+  if (r.esr === '60' || (r.esr === '30' && !low)) min.push(low ? 'ESR ≥60 mm/h or CRP ≥3.0 mg/dL' : 'ESR ≥30 mm/h or CRP ≥3.0 mg/dL');
+  if (r.oth.includes('pr') && !card) min.push('prolonged PR interval');
+  const M = maj.length, m = min.length;
+  let met = M >= 2 || (M >= 1 && m >= 2); if (r.ep === 'rec' && m >= 3) met = true;
+  return {maj, min, met};
+}
+function drawRf() {
+  const j = jones(RF), low = RF.pop === 'low';
+  const ignored = [];
+  if (RF.joint === 'monoarthritis' && low) ignored.push('monoarthritis is neither major nor minor in a low-risk population');
+  if (RF.joint === 'monoarthralgia' && low) ignored.push('monoarthralgia is not a criterion in a low-risk population');
+  if (RF.fev === '38' && low) ignored.push('fever 38.0–38.4 °C is below the low-risk threshold (≥38.5 °C)');
+  if (RF.esr === '30' && low) ignored.push('ESR 30–59 mm/h is below the low-risk threshold (≥60 mm/h)');
+  if (RF.oth.includes('pr') && RF.oth.includes('carditis')) ignored.push('PR prolongation is not counted when carditis is counted as major');
+  let verdict;
+  if (RF.gas !== 'yes') verdict = '<span class="big">Not diagnosable yet</span><p>The criteria need evidence of a preceding group A streptococcal infection (raised or rising ASO or anti-DNase B titre, positive throat culture, recent scarlet fever).</p>' + ((RF.oth.includes('chorea') || RF.oth.includes('carditis')) ? '<p><b>Exception (Wikipedia):</b> chorea, or indolent carditis, by itself can indicate rheumatic fever even without these criteria.</p>' : '');
+  else verdict = j.met ? `<span class="big">Criteria met</span><p>${RF.ep === 'rec' ? 'Recurrent episode: 2 major, 1 major + 2 minor, or 3 minor.' : 'Initial episode: 2 major, or 1 major + 2 minor.'}</p>` : `<span class="big">Criteria not met</span><p>${RF.ep === 'rec' ? 'A recurrence needs 2 major, 1 major + 2 minor, or 3 minor.' : 'An initial attack needs 2 major, or 1 major + 2 minor.'}</p>`;
+  verdict += `<p><b>Major (${j.maj.length}):</b> ${j.maj.join(', ') || 'none'}<br><b>Minor (${j.min.length}):</b> ${j.min.join(', ') || 'none'}</p>`;
+  if (ignored.length) verdict += `<p class="note">Not counted: ${ignored.join('; ')}.</p>`;
+  if (RF.oth.includes('chorea') && RF.gas === 'yes') verdict += '<p class="note">Wikipedia: chorea by itself can indicate rheumatic fever.</p>';
+  $('rf-out').innerHTML = verdict;
+}
+const RF_CH = {
+  pop: ['rf-pop', [['low', 'Low risk'], ['high', 'Moderate / high risk']]],
+  ep: ['rf-ep', [['first', 'Initial attack'], ['rec', 'Recurrence (known ARF/RHD)']]],
+  gas: ['rf-gas', [['yes', 'Yes'], ['no', 'No']]],
+  joint: ['rf-joint', [['none', 'None'], ['polyarthritis', 'Polyarthritis'], ['monoarthritis', 'Monoarthritis'], ['polyarthralgia', 'Polyarthralgia'], ['monoarthralgia', 'Monoarthralgia']]],
+  fev: ['rf-fev', [['none', 'None'], ['38', '38.0–38.4 °C'], ['385', '≥38.5 °C']]],
+  esr: ['rf-esr', [['none', 'Normal'], ['30', 'ESR 30–59 mm/h'], ['60', 'ESR ≥60 mm/h or CRP ≥3.0 mg/dL']]],
+};
+const clearPre = id => $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false'));
+for (const [k, [id, items]] of Object.entries(RF_CH)) Med.toggles(id, items, v => { RF[k] = v; clearPre('rf-pre'); drawRf(); }, RF[k]);
+const OTH = [['carditis', 'Carditis (clinical or echo)'], ['chorea', 'Chorea'], ['erythema', 'Erythema marginatum'], ['nodules', 'Subcutaneous nodules'], ['pr', 'Prolonged PR interval']];
+function buildOth() {
+  const box = $('rf-oth'); box.innerHTML = '';
+  for (const [k, l] of OTH) { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.dataset.k = k; b.setAttribute('aria-pressed', String(RF.oth.includes(k)));
+    b.onclick = () => { const i = RF.oth.indexOf(k); if (i >= 0) RF.oth.splice(i, 1); else RF.oth.push(k); b.setAttribute('aria-pressed', String(RF.oth.includes(k))); clearPre('rf-pre'); drawRf(); }; box.append(b); }
+}
+buildOth();
+const syncRf = () => { for (const [k, [id]] of Object.entries(RF_CH)) $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === RF[k]))); $('rf-oth').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(RF.oth.includes(b.dataset.k)))); };
+Med.toggles('rf-pre', Object.entries(RF_PRE).map(([k, v]) => [k, v[0]]), k => { Object.assign(RF, JSON.parse(JSON.stringify(RF_PRE[k][1]))); syncRf(); drawRf(); }, 'a');
+$('rf-note').textContent = RF_NOTE; drawRf();
+
+/* ---- valves: phonocardiogram ---- */
+const VS = {k: 'ms', sev: 'severe'};
+function drawVl() {
+  const x0 = 40, x1 = 580, cyc = 0.8, X = t => x0 + (x1 - x0) * t / 1.2, base = 130;
+  const S1 = [0, 0.8], S2 = [0.32, 1.12];
+  let s = `<path class="axis" d="M${x0} ${base} L${x1} ${base}"/>`;
+  // systole / diastole bands
+  for (const [a, b, l] of [[0, 0.32, 'systole'], [0.32, 0.8, 'diastole'], [0.8, 1.12, 'systole']]) s += `<rect x="${X(a)}" y="40" width="${X(b) - X(a)}" height="${base - 40}" style="fill:var(--ink);fill-opacity:${l === 'systole' ? .05 : .015}"/>` + T((X(a) + X(b)) / 2, 34, l, 's', 'middle');
+  const k = VS.k;
+  const sound = (t, h, lab) => `<path class="snd" d="M${X(t)} ${base} L${X(t)} ${base - h}" style="stroke-width:${h > 60 ? 4 : 3}"/>` + T(X(t), base + 18, lab, 'b', 'middle');
+  const s1h = k === 'ms' ? 78 : 52, s2h = k === 'as' && VS.sev === 'severe' ? 26 : 48;
+  for (const t of S1) s += sound(t, s1h, 'S1');
+  for (const t of S2) s += sound(t, s2h, 'S2');
+  const shape = (pts) => `<path class="mur" d="M${X(pts[0][0])} ${base} ${pts.map(([t, a]) => 'L' + X(t).toFixed(1) + ' ' + (base - a).toFixed(1)).join(' ')} L${X(pts[pts.length - 1][0])} ${base} Z"/>`;
+  for (const off of [0, 0.8]) {
+    if (k === 'mr' && off + 0.32 <= 1.2) s += shape([[off + 0.02, 34], [off + 0.30, 34]]);
+    if (k === 'as' && off + 0.32 <= 1.2) { const pk = VS.sev === 'severe' ? 0.22 : 0.12; s += shape([[off + 0.05, 2], [off + pk, 44], [off + 0.29, 2]]); }
+    if (k === 'ar' && off === 0) s += shape([[off + 0.33, 36], [off + 0.70, 3]]);
+    if (k === 'ms' && off === 0) { s += `<path class="snd" d="M${X(off + 0.40)} ${base} L${X(off + 0.40)} ${base - 34}" style="stroke-width:2"/>` + T(X(off + 0.40), base + 18, 'OS', 's', 'middle'); s += shape([[off + 0.44, 18], [off + 0.56, 14], [off + 0.66, 10], [off + 0.74, 26], [off + 0.79, 34]]); }
+  }
+  const lab = {ms: 'mid-diastolic rumble, presystolic accentuation', mr: 'holosystolic (pansystolic)', as: VS.sev === 'severe' ? 'ejection systolic, late peak (severe)' : 'ejection systolic, early peak (mild)', ar: 'early diastolic, decrescendo'}[k];
+  s += T(x0, 18, VL[k][0] + ': ' + lab, 'b', 'start') + T(x1, 190, 'schematic phonocardiogram, 75/min', 's', 'end');
+  $('vl-svg').innerHTML = s; $('vl-find').innerHTML = VL[k][1];
+}
+Med.toggles('vl-tg', Object.entries(VL).map(([k, v]) => [k, v[0]]), k => { VS.k = k; drawVl(); }, 'ms');
+Med.toggles('vl-sev', [['mild', 'Aortic stenosis: mild'], ['severe', 'Aortic stenosis: severe']], v => { VS.sev = v; if (VS.k !== 'as') { VS.k = 'as'; $('vl-tg').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === 'as'))); } drawVl(); }, 'severe');
+Med.table('vl-table', ['Lesion', 'Murmur', 'Severity marker (as sourced)', 'Intervention'], VL_ROWS); $('vl-note').textContent = VL_NOTE; drawVl();
+
+/* ---- Duke ---- */
+const IE = new Set(IE_PRE.a[1]);
+Med.table('ie-table', ['Type', 'Course', 'Typical organism', 'Note'], IE_ROWS);
+{
+  const box = $('ie-ctl'); let h = '<span class="h">Major criteria</span>';
+  for (const [k, l] of IE_MAJ) h += `<label><input type="checkbox" data-k="${k}"><span>${l}</span></label>`;
+  h += '<span class="h">Minor criteria</span>';
+  for (const [k, l] of IE_MIN) h += `<label><input type="checkbox" data-k="${k}"><span>${l}</span></label>`;
+  box.innerHTML = h;
+  box.querySelectorAll('input').forEach(i => i.addEventListener('change', () => { if (i.checked) IE.add(i.dataset.k); else IE.delete(i.dataset.k); $('ie-pre').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); drawIe(); }));
+}
+function drawIe() {
+  $('ie-ctl').querySelectorAll('input').forEach(i => { i.checked = IE.has(i.dataset.k); });
+  const M = IE_MAJ.filter(([k]) => IE.has(k)).length, m = IE_MIN.filter(([k]) => IE.has(k)).length;
+  let v, why;
+  if (M >= 2 || (M >= 1 && m >= 3) || m >= 5) { v = 'Definite IE'; why = M >= 2 ? '2 major' : M >= 1 ? '1 major + 3 minor' : '5 minor'; }
+  else if ((M >= 1 && m >= 1) || m >= 3) { v = 'Possible IE'; why = M >= 1 ? '1 major + 1 minor' : '3 minor'; }
+  else { v = 'Rejected (on these clinical criteria)'; why = 'below the "possible" threshold'; }
+  $('ie-out').innerHTML = `<span class="big">${v}</span><p>${M} major, ${m} minor → ${why}.</p><p class="note">Definite = 2 major, 1 major + 3 minor, or 5 minor (Wikipedia). Possible = 1 major + 1 minor, or 3 minor (Wikipedia; a 2024 review).</p>`;
+}
+Med.toggles('ie-pre', Object.entries(IE_PRE).map(([k, v]) => [k, v[0]]), k => { IE.clear(); IE_PRE[k][1].forEach(x => IE.add(x)); drawIe(); }, 'a');
+$('ie-text').innerHTML = IE_TEXT; $('ie-note').textContent = IE_NOTE; drawIe();
+
+/* ---- congenital ---- */
+const CS2 = {k: 'vsd', eis: 'normal'};
+function drawChd() {
+  const k = CS2.k, shunt = ['vsd', 'asd', 'pda'].includes(k), rev = CS2.eis === 'high' && shunt;
+  let s = Med.arrowDef('ao', 'var(--ink)') + Med.arrowDef('av', 'var(--ink)');
+  // chambers viewed from the front (patient's right on the left of the drawing): RA, LA above; RV, LV below — schematic
+  const ch = (x, y, w, h, l) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="16" class="ch"/>` + T(x + w / 2, y + h / 2 + 5, l, 'b', 'middle');
+  s += ch(40, 120, 120, 80, 'RA') + ch(280, 120, 120, 80, 'LA') + ch(40, 220, 172, 90, 'RV') + ch(228, 220, 172, 90, 'LV');
+  s += `<path d="M220 120 L220 310" style="stroke:var(--heart);stroke-width:6"/>`; // septum
+  // great arteries rise between the atria
+  const tof = k === 'tof', aoX = tof ? 222 : 254;
+  s += `<path d="M184 220 L184 60 L120 34" class="vess" style="stroke-width:${tof ? 5 : 10}"/>` + T(116, 26, 'pulmonary artery', 's', 'middle');
+  s += `<path d="M${aoX} 220 L${aoX} 60 L330 34" class="vess" style="stroke-width:10"/>` + T(334, 26, 'aorta', 's', 'middle');
+  if (k === 'coa') s += `<path d="M300 34 L306 52 M312 30 L318 48" style="stroke:var(--ink);stroke-width:3"/>` + T(330, 66, 'coarctation', 'b', 'start');
+  if (tof) s += `<path d="M172 150 L196 150" style="stroke:var(--ink);stroke-width:3"/>` + T(116, 108, 'RVOT obstruction →', 's', 'end');
+  const arrow = (d, oxy) => `<path d="${d}" class="${oxy ? 'oxy' : 'deo'}" marker-end="url(#${oxy ? 'ao' : 'av'})"/>`;
+  if (k === 'asd') { s += `<rect x="212" y="145" width="16" height="30" style="fill:var(--surface)"/>`; s += rev ? arrow('M196 160 L246 160', false) : arrow('M246 160 L196 160', true); }
+  if (k === 'vsd' || tof) s += `<rect x="212" y="240" width="16" height="30" style="fill:var(--surface)"/>`;
+  if (k === 'vsd') s += rev ? arrow('M196 255 L246 255', false) : arrow('M246 255 L196 255', true);
+  if (tof) s += arrow('M150 262 Q200 250 216 226', false) + T(20, 328, 'RV hypertrophy; aorta overrides the VSD', 's', 'start');
+  if (k === 'pda') { s += `<path d="M184 82 L254 82" style="stroke:var(--muted);stroke-width:7;stroke-opacity:.45"/>` + T(219, 74, 'ductus', 's', 'middle'); s += rev ? arrow('M190 94 L248 94', false) : arrow('M248 94 L190 94', true); }
+  const dir = k === 'coa' ? 'no shunt' : (tof || rev) ? 'right-to-left shunt: cyanotic' : 'left-to-right shunt: acyanotic';
+  s += T(430, 346, dir, 'b', 'end') + (k === 'coa' ? '' : T(10, 346, 'arrow: solid = oxygenated, dashed = deoxygenated', 's', 'start'));
+  $('chd-svg').innerHTML = s;
+  let f = CHD[k][1];
+  if (rev) f += '<p><b>Eisenmenger reversal:</b> pulmonary vascular resistance has risen so far that the shunt now runs right to left, with hypoxaemia and cyanosis (StatPearls; Wikipedia). Closing the defect is then contraindicated (a 2024 review, for ASD).</p>';
+  else if (CS2.eis === 'high' && !shunt) f += '<p class="note">Eisenmenger reversal applies to the left-to-right shunts (VSD, ASD, PDA).</p>';
+  $('chd-find').innerHTML = f;
+}
+Med.toggles('chd-tg', Object.entries(CHD).map(([k, v]) => [k, v[0]]), k => { CS2.k = k; drawChd(); }, 'vsd');
+Med.toggles('chd-eis', [['normal', 'Pulmonary resistance normal'], ['high', 'Years later: Eisenmenger']], v => { CS2.eis = v; drawChd(); }, 'normal');
+$('chd-note').innerHTML = CHD_NOTE; drawChd();
+Med.swipeHints();
+</script>
+</body>
+</html>

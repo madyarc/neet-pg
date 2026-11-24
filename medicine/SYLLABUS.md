@@ -14,13 +14,13 @@ Source notes: Coded GM in the 2024 curriculum (IM in the 2019 one). GM9.8, GM14.
 
 ### 1. Heart failure
 
-- [ ] **GM1.1** Describe and discuss the epidemiology, genetic basis,pathogenesis clinical evolution and course of common causes of heart disease including: rheumatic/ valvular, ischemic, hypertrophic inflammatory
-- [ ] **GM1.2** Describe and discuss the aetiology, microbiology, pathogenesis Clinical evolution, criteria, recognition and management of rheumatic fever, and rheumatic valvular heart disease, penicillin prophylaxis and its complications including infective endocarditis
-- [ ] **GM1.3** Define and Stage heart failure
-- [ ] **GM1.4** Describe, discuss, and differentiate the processes involved in Right Vs Left heart failure, systolic vs diastolic failure
-- [ ] **GM1.5** Describe and discuss the compensatory mechanisms involved in heart failure including cardiac remodelling and neurohormonal adaptations
-- [ ] **GM1.6** Enumerate, describe and discuss the factors that exacerbate heart failure including ischemia, arrhythmias, anaemia, thyrotoxicosis, dietary factors drugs etc.
-- [ ] **GM1.7** Describe and discuss the pathogenesis and development of common arrhythmias involved in heart failure particularly atrial fibrillation
+- [~] **GM1.1** Describe and discuss the epidemiology, genetic basis,pathogenesis clinical evolution and course of common causes of heart disease including: rheumatic/ valvular, ischemic, hypertrophic inflammatory — *causes and burden; genetics and cardiomyopathies not covered: [Heart Failure](cardiology/heart-failure.html)*
+- [x] **GM1.2** Describe and discuss the aetiology, microbiology, pathogenesis Clinical evolution, criteria, recognition and management of rheumatic fever, and rheumatic valvular heart disease, penicillin prophylaxis and its complications including infective endocarditis — *Jones 2015 classifier, skin-infection disagreement, prophylaxis principle without dose: [Rheumatic Fever, Valves, Endocarditis](cardiology/valves-endocarditis.html)*
+- [x] **GM1.3** Define and Stage heart failure — *EF classes, ACC/AHA stages, NYHA: [Heart Failure](cardiology/heart-failure.html)*
+- [x] **GM1.4** Describe, discuss, and differentiate the processes involved in Right Vs Left heart failure, systolic vs diastolic failure — *left vs right, systolic vs diastolic: [Heart Failure](cardiology/heart-failure.html)*
+- [x] **GM1.5** Describe and discuss the compensatory mechanisms involved in heart failure including cardiac remodelling and neurohormonal adaptations — *compensation stepper: [Heart Failure](cardiology/heart-failure.html)*
+- [x] **GM1.6** Enumerate, describe and discuss the factors that exacerbate heart failure including ischemia, arrhythmias, anaemia, thyrotoxicosis, dietary factors drugs etc. — *precipitants: [Heart Failure](cardiology/heart-failure.html)*
+- [x] **GM1.7** Describe and discuss the pathogenesis and development of common arrhythmias involved in heart failure particularly atrial fibrillation — *AF–HF circle: [Heart Failure](cardiology/heart-failure.html)*
 - [ ] **GM1.8** Elicit document and present an appropriate history that will establish the diagnosis, cause and severity of heart failure including: presenting complaints, precipitating and exacerbating factors, risk factors exercise tolerance, changes in sleep patterns, features suggestive of infective endocarditis *(skill)*
 - [ ] **GM1.9** Perform and demonstrate a systematic examination based on the history that will help establish the diagnosis and Estimate its severity including: measurement of pulse, blood pressure and respiratory rate, jugular venous pulses, peripheral pulses, conjunctiva and fundus, lung, cardiac examination including palpation and auscultation with identification of heart sounds and murmurs, abdominal distension and splenic palpation *(skill)*
 - [ ] **GM1.10** Demonstrate peripheral pulse, volume, character, quality and variation in various causes of heart failure *(skill)*
@@ -30,25 +30,25 @@ Source notes: Coded GM in the 2024 curriculum (IM in the 2019 one). GM9.8, GM14.
 - [ ] **GM1.14** Generate a differential diagnosis based on the clinical presentation of various heart diseases and prioritise it based on the most likely diagnosis *(skill)*
 - [ ] **GM1.15** Order and interpret diagnostic testing based on the clinical diagnosis including 12 lead ECG, Chest radiograph, blood cultures *(skill)*
 - [ ] **GM1.16** Perform and interpret a 12 lead ECG *(skill)*
-- [ ] **GM1.17** Enumerate the indications for and describe the findings of heart failure with the following investigations including: 2D echocardiography, brain natriuretic peptide, exercise testing, nuclear medicine testing and coronary angiogram
-- [ ] **GM1.18** Discuss the severity of valvular heart disease based on the clinical and laboratory and Imaging features and describe the level of intervention required including surgery
-- [ ] **GM1.19** Describe and discuss and identify the clinical features of acute and sub-acute endocarditis, echocardiographic findings, blood culture and sensitivity and therapy
+- [x] **GM1.17** Enumerate the indications for and describe the findings of heart failure with the following investigations including: 2D echocardiography, brain natriuretic peptide, exercise testing, nuclear medicine testing and coronary angiogram — *natriuretic peptides (ESC 2016), echo, CXR, ECG, CPET, imaging: [Heart Failure](cardiology/heart-failure.html)*
+- [~] **GM1.18** Discuss the severity of valvular heart disease based on the clinical and laboratory and Imaging features and describe the level of intervention required including surgery — *severity markers attributed; no guideline-dated cut-offs open: [Rheumatic Fever, Valves, Endocarditis](cardiology/valves-endocarditis.html)*
+- [x] **GM1.19** Describe and discuss and identify the clinical features of acute and sub-acute endocarditis, echocardiographic findings, blood culture and sensitivity and therapy — *acute vs subacute IE, Duke and Duke-ISCVID 2023 classifier, cultures, echo: [Rheumatic Fever, Valves, Endocarditis](cardiology/valves-endocarditis.html)*
 - [ ] **GM1.20** Assist and demonstrate the proper technique in collecting specimen for blood culture *(skill)*
-- [ ] **GM1.21** Describe, prescribe and communicate non pharmacologic management of heart failure including sodium restriction, physical activity and limitations
-- [ ] **GM1.22** Describe and discuss the pharmacology of drugs including indications, contraindications in the management of heart failure including diuretics, ACE inhibitors, Beta blockers, aldosterone antagonists and cardiac glycosides
-- [ ] **GM1.23** Enumerate the indications for valvuloplasty, valvotomy, coronary revascularization and cardiac transplantation
+- [x] **GM1.21** Describe, prescribe and communicate non pharmacologic management of heart failure including sodium restriction, physical activity and limitations — *salt (disagreement shown), exercise, education: [Heart Failure](cardiology/heart-failure.html)*
+- [x] **GM1.22** Describe and discuss the pharmacology of drugs including indications, contraindications in the management of heart failure including diuretics, ACE inhibitors, Beta blockers, aldosterone antagonists and cardiac glycosides — *drug map, trials, β-blocker and MRA cautions, digoxin toxicity; no doses: [Heart Failure](cardiology/heart-failure.html)*
+- [~] **GM1.23** Enumerate the indications for valvuloplasty, valvotomy, coronary revascularization and cardiac transplantation — *balloon commissurotomy, AVR/TAVR, CABG, transplant: [Rheumatic Fever, Valves, Endocarditis](cardiology/valves-endocarditis.html), [IHD and ACS](cardiology/ihd-acs.html)*
 - [ ] **GM1.24** Develop document and present a management plan for patients with heart failure based on type of failure, underlying aetiology *(skill)*
-- [ ] **GM1.25** Enumerate the causes of adult presentations of congenital heart disease and describe the distinguishing features between cyanotic and acyanotic heart disease
+- [x] **GM1.25** Enumerate the causes of adult presentations of congenital heart disease and describe the distinguishing features between cyanotic and acyanotic heart disease — *shunts and Eisenmenger: [Rheumatic Fever, Valves, Endocarditis](cardiology/valves-endocarditis.html)*
 - [ ] **GM1.26** Elicit document and present an appropriate history, demonstrate correctly general examination, relevant clinical findings and formulate document and present a management plan for an adult patient presenting with a common form of congenital heart disease *(skill)*
 - [ ] **GM1.27** Administer an intramuscular injection with an appropriate communication to the patient *(skill)*
 
 ### 2. Acute Myocardial Infarction / IHD
 
-- [ ] **GM2.1** Discuss and describe the epidemiology, antecedents and risk factors for atherosclerosis and ischemic heart disease
-- [ ] **GM2.2** Discuss the aetiology of risk factors both modifiable and non modifiable of atherosclerosis and IHD
-- [ ] **GM2.3** Discuss and describe the lipid cycle and the role of dyslipidemia in the pathogenesis of atherosclerosis
-- [ ] **GM2.4** Discuss and describe the pathogenesis natural history, evolution and complications of atherosclerosis and IHD
-- [ ] **GM2.5** Define the various acute coronary syndromes and describe their evolution, natural history and outcomes
+- [x] **GM2.1** Discuss and describe the epidemiology, antecedents and risk factors for atherosclerosis and ischemic heart disease — *burden and risk factors: [IHD and ACS](cardiology/ihd-acs.html)*
+- [x] **GM2.2** Discuss the aetiology of risk factors both modifiable and non modifiable of atherosclerosis and IHD — *modifiable and non-modifiable risk factors: [IHD and ACS](cardiology/ihd-acs.html)*
+- [~] **GM2.3** Discuss and describe the lipid cycle and the role of dyslipidemia in the pathogenesis of atherosclerosis — *lipid cycle (brief) with drug sites: [IHD and ACS](cardiology/ihd-acs.html)*
+- [x] **GM2.4** Discuss and describe the pathogenesis natural history, evolution and complications of atherosclerosis and IHD — *plaque stepper: [IHD and ACS](cardiology/ihd-acs.html)*
+- [x] **GM2.5** Define the various acute coronary syndromes and describe their evolution, natural history and outcomes — *ACS picker (ECG and troponin first): [IHD and ACS](cardiology/ihd-acs.html)*
 - [ ] **GM2.6** Elicit document and present an appropriate history that includes onset evolution, presentation risk factors, family history, comorbid conditions, complications, medication, history of atherosclerosis, IHD and coronary syndromes *(skill)*
 - [ ] **GM2.7** Perform, demonstrate and document a physical examination including a vascular and cardiac examination that is appropriate for the clinical presentation *(skill)*
 - [ ] **GM2.8** Generate document and present a differential diagnosis based on the clinical presentation and prioritise based on “cannot miss”, most likely diagnosis and severity *(skill)*
@@ -56,17 +56,17 @@ Source notes: Coded GM in the 2024 curriculum (IM in the 2019 one). GM9.8, GM14.
 - [ ] **GM2.10** Order, perform and interpret an ECG *(skill)*
 - [ ] **GM2.11** Order and interpret a Chest X-ray and markers of acute myocardial Infarction *(skill)*
 - [ ] **GM2.12** Choose and interpret a lipid profile and identify the desirable lipid profile in the clinical context *(skill)*
-- [ ] **GM2.13** Discuss and enumerate the indications for and findings on echocardiogram, stress testing and coronary angiogram
-- [ ] **GM2.14** Discuss and describe the indications for admission to a coronary care unit and supportive therapy for a patient with acute coronary Syndrome
-- [ ] **GM2.15** Discuss and describe the medications used in patients with an acute coronary syndrome based on the clinical presentation
-- [ ] **GM2.16** Discuss and describe the indications for acute thrombolysis, PTCA and CABG
-- [ ] **GM2.17** Discuss and describe the indications and methods of cardiac Rehabilitation
-- [ ] **GM2.18** Discuss and describe the indications, formulations, doses, side effects and monitoring for drugs used in the management of Dyslipidemia
-- [ ] **GM2.19** Discuss and describe the pathogenesis, recognition and management of complications of acute coronary syndromes including arrhythmias, shock, LV dysfunction, papillary muscle rupture and pericarditis
-- [ ] **GM2.20** Discuss and describe the assessment and relief of pain in acute coronary syndromes
+- [x] **GM2.13** Discuss and enumerate the indications for and findings on echocardiogram, stress testing and coronary angiogram — *investigations: [IHD and ACS](cardiology/ihd-acs.html)*
+- [x] **GM2.14** Discuss and describe the indications for admission to a coronary care unit and supportive therapy for a patient with acute coronary Syndrome — *CCU, oxygen, analgesia: [IHD and ACS](cardiology/ihd-acs.html)*
+- [~] **GM2.15** Discuss and describe the medications used in patients with an acute coronary syndrome based on the clinical presentation — *drugs without doses: [IHD and ACS](cardiology/ihd-acs.html)*
+- [x] **GM2.16** Discuss and describe the indications for acute thrombolysis, PTCA and CABG — *reperfusion helper (CSI 2017), contraindication table, CABG: [IHD and ACS](cardiology/ihd-acs.html)*
+- [x] **GM2.17** Discuss and describe the indications and methods of cardiac Rehabilitation — *cardiac rehabilitation: [IHD and ACS](cardiology/ihd-acs.html)*
+- [~] **GM2.18** Discuss and describe the indications, formulations, doses, side effects and monitoring for drugs used in the management of Dyslipidemia — *statin, ezetimibe, PCSK9 mechanisms only: [IHD and ACS](cardiology/ihd-acs.html)*
+- [x] **GM2.19** Discuss and describe the pathogenesis, recognition and management of complications of acute coronary syndromes including arrhythmias, shock, LV dysfunction, papillary muscle rupture and pericarditis — *complications timeline: [IHD and ACS](cardiology/ihd-acs.html)*
+- [x] **GM2.20** Discuss and describe the assessment and relief of pain in acute coronary syndromes — *pain relief: [IHD and ACS](cardiology/ihd-acs.html)*
 - [ ] **GM2.21** Observe and participate in a controlled environment of ACLS Program *(skill)*
 - [ ] **GM2.22** Perform and demonstrate in a mannequin BLS *(skill)*
-- [ ] **GM2.23** Describe and discuss the indications for nitrates, anti-platelet agents, gpIIb IIIa inhibitors, beta blockers, ACE inhibitors etc in the management of coronary syndromes
+- [x] **GM2.23** Describe and discuss the indications for nitrates, anti-platelet agents, gpIIb IIIa inhibitors, beta blockers, ACE inhibitors etc in the management of coronary syndromes — *drug indications table: [IHD and ACS](cardiology/ihd-acs.html)*
 - [ ] **GM2.24** Counsel and communicate to patients with empathy lifestyle changes in atherosclerosis / post coronary syndromes *(skill)*
 
 ### 3. Pneumonia
