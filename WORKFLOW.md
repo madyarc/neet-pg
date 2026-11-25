@@ -20,7 +20,9 @@ Last updated: 2026-11-23
   - FM01 forensic: build agent stopped early (downloads in progress in sources-local/modern/fill-fm01/). Restart.
   - Then continue round 1 order: C01, Pd01, Ps01, D01, S01, O01, An01, R01, E01, OG01, then B02, P02–P04, M02, FM02,
     C02, G02–G03, Pd02–Pd04, Ps02, D02, S02–S03, O02, An02, OG02–OG04.
-  - Site-wide TODO: --mark and --clin identical in dark (#ff7b6f) in phys.css and the copies in other subjects' assets.
+  - Site-wide TODO (dedicated pass, not between modules): --mark and --clin identical in dark (#ff7b6f), ΔE≈10 in light;
+    defined in atlas.css, 36 anatomy pages, ophthalmology pages and every subject's assets. Orange is taken by --ins, so
+    pick new values with tools/test/colcheck.py and retest all pages. Reviewers flag it in every module.
   - Server and agents stopped at pause.
 
 - USER 2026-11-24: BREADTH-FIRST ROUNDS. Each round = ~10% of every subject (modules = ceil(NMC topics / 10), min 1;
