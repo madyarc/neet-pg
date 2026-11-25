@@ -56,7 +56,8 @@ Last updated: 2026-11-23
   official text missing). Inducer/inhibitor lists: use FDA DDI table (public domain) + Wikipedia/StatPearls. G01 [x] build (549 quotes; 3 pages; no new tokens; guidelines via open papers) [x] review (17: ACS picker
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
   colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. C01 [ ] build (running; community-medicine/epidemiology/). Pd01 [ ] build (running; paediatrics/growth-development/).
-  FM01 [ ] build (running; forensic-medicine/thanatology/, FM2.1, 2.3–2.11).
+  FM01 [x] build (397 quotes; THOA/THOT Rules 2014 Form 10, WHO ICD-11 2026 + RGI MCCD 2012; tokens --livor
+  --livor-co --sulfhb) [ ] review (running).
   M01 [x] build (635 quotes; 3 pages; 7 stain/structure tokens;
   Wikipedia Koch's postulates excluded: cites Boundless) [x] review (blood-spill 1:100 vs 1:10 large spills (safety),
   ELISA antibodies drawn upside down, coccidia vs HLD, Koch dates, CDC-derived Wikipedia pairs) [x] fixes (694 quotes) [x] committed 2026-11-25. P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [x] review (18: metaplasia
