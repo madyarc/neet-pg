@@ -22,7 +22,7 @@ Last updated: 2026-11-23
     C02, G02–G03, Pd02–Pd04, Ps02, D02, S02–S03, O02, An02, OG02–OG04.
   - SOURCE AUDIT 2026-11-25: Wikipedia articles citing Boundless/Lumen (only OpenStax was grepped before). Found in
     saved wikitext: Fontanelle (skull.html fixed), Human_fertilization (fill-embryo1, 12 quotes) and Thermoregulation
-    (fill-physio3, 2 quotes): pages to re-source. 574 older WP articles had no saved wikitext: fetching and scanning
+    (fill-physio3, 2 quotes): pages to re-source (agent running). 574 older WP articles had no saved wikitext: fetching and scanning
     (scratchpad wtaudit.sh); act on hits.
   - Site-wide TODO (dedicated pass, not between modules): --mark and --clin identical in dark (#ff7b6f), ΔE≈10 in light;
     defined in atlas.css, 36 anatomy pages, ophthalmology pages and every subject's assets. Orange is taken by --ins, so
