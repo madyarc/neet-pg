@@ -95,6 +95,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [Heart Failure](medicine/cardiology/heart-failure.html), [Rheumatic Fever, Valve Disease, Endocarditis and Adult CHD](medicine/cardiology/valves-endocarditis.html), [IHD and ACS](medicine/cardiology/ihd-acs.html) | Cardiology | HF classifier (EF band, stage, NYHA), compensation stepper, BNP rule-out slider, drug map; Jones 2015 and Duke classifiers, murmurs on the cycle, shunts and Eisenmenger; lipid map, plaque stepper, ACS picker, complications timeline, reperfusion helper (CSI 2017) |
 
+### Microbiology — [`microbiology/`](microbiology/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [History, the Bacterial Cell, Staining and Growth](microbiology/general/bacteria-structure-growth.html), [Bacterial Genetics and Laboratory Diagnosis](microbiology/general/genetics-lab-diagnosis.html), [Sterilisation, Disinfection and the Chain of Infection](microbiology/general/sterilisation-epidemiology.html) | General | Timeline and Koch's postulates, cell-wall picker, Gram/ZN steppers, growth curve; gene-transfer stepper, PCR, media classifier, biochemical tests, ELISA, specimen picker; resistance ladder, Spaulding, heat plot, choose-the-method picker (CDC 2008), chain of infection |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and

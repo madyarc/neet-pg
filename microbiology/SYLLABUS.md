@@ -14,19 +14,19 @@ Source notes: NMC's summary table says 74 competencies; the chapter has 73.
 
 ### 1. General Microbiology, Ethics & Communication
 
-- [ ] **MI1.1** Discuss notable historical events, scientific developments and contributions of key scientists in the evolution of medical microbiology. Discuss the role of microbes in health and disease
-- [ ] **MI1.2** Describe basic morphology, physiology/characteristics, classification and common infections /diseases caused by bacteria, viruses, fungi and parasites.
-- [ ] **MI1.3** Describe the basic principles of molecular biology and the concept and significance of studying molecular genetics. Discuss molecular techniques applied to disease diagnosis in clinical microbiology.
-- [ ] **MI1.4** Describe the laboratory methods used to detect causative agents of infectious diseases.
-- [ ] **MI1.5** Discuss the appropriate method of collecting and transporting samples to detect microbial agents, including instructions to be given to patients before sample collection.
+- [x] **MI1.1** Discuss notable historical events, scientific developments and contributions of key scientists in the evolution of medical microbiology. Discuss the role of microbes in health and disease — *timeline, Koch's postulates stepper: [History, the Bacterial Cell, Staining and Growth](general/bacteria-structure-growth.html)*
+- [~] **MI1.2** Describe basic morphology, physiology/characteristics, classification and common infections /diseases caused by bacteria, viruses, fungi and parasites. — *cell picker (Gram-positive, Gram-negative, acid-fast), endotoxin vs exotoxin, Gram/ZN/India ink/spore stains, spores, growth curve, classification; viruses, fungi and parasites in a table only: [History, the Bacterial Cell, Staining and Growth](general/bacteria-structure-growth.html)*
+- [x] **MI1.3** Describe the basic principles of molecular biology and the concept and significance of studying molecular genetics. Discuss molecular techniques applied to disease diagnosis in clinical microbiology. — *mutation, gene-transfer stepper, R plasmids, lysogenic conversion, PCR: [Bacterial Genetics and Laboratory Diagnosis](general/genetics-lab-diagnosis.html)*
+- [x] **MI1.4** Describe the laboratory methods used to detect causative agents of infectious diseases. — *laboratory pathway, media classifier, biochemical tests (IMViC, TSI, urease), ELISA, MALDI-TOF: [Bacterial Genetics and Laboratory Diagnosis](general/genetics-lab-diagnosis.html)*
+- [x] **MI1.5** Discuss the appropriate method of collecting and transporting samples to detect microbial agents, including instructions to be given to patients before sample collection. — *ICMR 2019 specimen-collection picker, WHO 2020 triple packaging: [Bacterial Genetics and Laboratory Diagnosis](general/genetics-lab-diagnosis.html)*
 - [ ] **MI1.6** Demonstrate the appropriate method of collection and transport of samples for the detection of microbial agents including instructions to be given to patients before sample collection. *(skill)*
 - [ ] **MI1.7** Discuss the attitude & behaviors that portray respect & demonstrate respect for patient samples sent to the laboratory for performance of laboratory tests in the detection of microbial agents causing Infectious diseases *(skill)*
 - [ ] **MI1.8** Discuss and demonstrate effective communication skills with patients, relatives and clinicians during sample collection and pre/posttest counseling *(skill)*
 - [ ] **MI1.9** Discuss & demonstrate confidentiality pertaining to patient identity in laboratory results *(skill)*
 - [ ] **MI1.10** Perform Gram stain, ZN stain, and routine stool examination to identify the different causative agents of infectious diseases from the clinical specimen *(skill)*
-- [ ] **MI1.11** Describe the epidemiological basis of infectious diseases and their application.
-- [ ] **MI1.12** Classify and describe the different methods of sterilization andK disinfection. Discuss the mechanism of action, application and quality control of different methods in the laboratory and in clinical and surgical practices.
-- [ ] **MI1.13** Choose the most appropriate method of sterilization and disinfection to be used in specific situations in the laboratory, in clinical and surgical practice.
+- [x] **MI1.11** Describe the epidemiological basis of infectious diseases and their application. — *chain-of-infection stepper, transmission tree (CDC 2012): [Sterilisation, Disinfection and the Chain of Infection](general/sterilisation-epidemiology.html)*
+- [x] **MI1.12** Classify and describe the different methods of sterilization andK disinfection. Discuss the mechanism of action, application and quality control of different methods in the laboratory and in clinical and surgical practices. — *definitions, resistance ladder, Spaulding, heat plot, agents, indicators (CDC 2008): [Sterilisation, Disinfection and the Chain of Infection](general/sterilisation-epidemiology.html)*
+- [x] **MI1.13** Choose the most appropriate method of sterilization and disinfection to be used in specific situations in the laboratory, in clinical and surgical practice. — *choose-the-method picker (CDC 2008): [Sterilisation, Disinfection and the Chain of Infection](general/sterilisation-epidemiology.html)*
 
 ### 2. Basic Immunology & Immunological disorders
 

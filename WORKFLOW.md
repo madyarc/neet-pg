@@ -57,7 +57,7 @@ Last updated: 2026-11-23
   colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. FM01 [ ] build (running; forensic-medicine/thanatology/, FM2.1, 2.3–2.11).
   M01 [x] build (635 quotes; 3 pages; 7 stain/structure tokens;
   Wikipedia Koch's postulates excluded: cites Boundless) [x] review (blood-spill 1:100 vs 1:10 large spills (safety),
-  ELISA antibodies drawn upside down, coccidia vs HLD, Koch dates, CDC-derived Wikipedia pairs) [ ] fixes (running). P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [x] review (18: metaplasia
+  ELISA antibodies drawn upside down, coccidia vs HLD, Koch dates, CDC-derived Wikipedia pairs) [x] fixes (694 quotes) [x] committed 2026-11-25. P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [x] review (18: metaplasia
   disagreement, token clash with bioc dark, invisible soaps, dysplasia wording, labels) [x] fixes (326 quotes) [x] committed 2026-11-24.
   Site-wide colour checker now tools/test/colcheck.py (scans every subject; --skip own files).
   LATER (site-wide): --mark and --clin are identical in dark (#ff7b6f), ΔE 14 light; anatomy --pigment comment says

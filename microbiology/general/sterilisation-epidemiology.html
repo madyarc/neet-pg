@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sterilisation, Disinfection and the Chain of Infection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/micro.css">
+<style>
+/* tokens from micro.css only: --accent marks the selected item, --mark the selected point on the time–temperature plot, --clin clinical points. */
+svg.sch .zone{stroke:var(--muted);stroke-width:1.2}
+svg.sch .rung{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .kill{fill:var(--ink);fill-opacity:.10;stroke:var(--ink);stroke-width:1.4}
+svg.sch.fitmax{max-width:520px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Microbiology</a> <span class="muted">· Module 01: <a href="bacteria-structure-growth.html">The bacterial cell</a> · <a href="genetics-lab-diagnosis.html">Genetics and diagnosis</a> · <span aria-current="page">Sterilisation and epidemiology</span></span></nav>
+
+<header class="stack">
+  <h1>Sterilisation, Disinfection and the Chain of Infection</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-def">Definitions</a> <a href="#h-lad">Resistance ladder</a> <a href="#h-spa">Spaulding</a> <a href="#h-heat">Heat</a> <a href="#h-oth">Radiation, gas, filtration</a> <a href="#h-chem">Chemical agents</a> <a href="#h-qc">Indicators</a> <a href="#h-pick">Choose the method</a> <a href="#h-chain">Chain of infection</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-def">
+  <h2 id="h-def">Sterilisation, disinfection, antisepsis: what each word means</h2>
+  <div class="scroll"><table id="def-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lad">
+  <h2 id="h-lad">Which microbes does each level kill? The resistance ladder</h2>
+  <div class="chips" id="lad-tg" aria-label="Level of germicide"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="lad-svg" viewBox="0 0 520 380" role="img" aria-label="Ladder of microbes from most resistant (prions, bacterial spores) at the top to least resistant (lipid viruses) at the bottom; the rungs killed by the chosen level are shaded"></svg></div>
+    <div class="prose find" id="lad-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="lad-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-spa">
+  <h2 id="h-spa">Spaulding classification: what the item touches decides the process</h2>
+  <div class="chips" id="spa-tg" aria-label="Item"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="spa-svg" viewBox="0 0 440 340" role="img" aria-label="Three nested zones: intact skin outside (noncritical), mucous membranes or non-intact skin in the middle (semicritical), sterile tissue or the vascular system at the centre (critical); the zone of the chosen item is outlined"></svg></div>
+    <div class="prose find" id="spa-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="spa-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-heat">
+  <h2 id="h-heat">Heat: moist heat (autoclave) and dry heat (hot-air oven)</h2>
+  <div class="chips" id="heat-tg" aria-label="Setting"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="heat-svg" viewBox="0 0 520 330" role="img" aria-label="Plot of holding time against temperature for the sourced steam and dry-heat settings; steam needs minutes at 121 to 134 degrees, dry heat needs one to two and a half hours at 150 to 170 degrees; the chosen setting is marked"></svg></div>
+    <div class="prose find" id="heat-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="heat-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-oth">
+  <h2 id="h-oth">Low-temperature methods: gas, plasma, radiation, filtration</h2>
+  <div class="scroll"><table id="oth-table"></table></div>
+  <p class="muted" id="oth-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-chem">
+  <h2 id="h-chem">Chemical agents</h2>
+  <div class="scroll"><table id="chem-table"></table></div>
+  <p class="muted" id="chem-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-qc">
+  <h2 id="h-qc">Did it work? Mechanical, chemical and biological indicators</h2>
+  <div class="prose" id="qc-text"></div>
+  <div class="scroll"><table id="bi-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pick">
+  <h2 id="h-pick">Choose the method</h2>
+  <div class="chips" id="pick-tg" aria-label="Item or situation"></div>
+  <div class="prose find" id="pick-find" aria-live="polite"></div>
+  <p class="muted" id="pick-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-chain">
+  <h2 id="h-chain">The chain of infection</h2>
+  <div class="step" id="ch-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ch-svg" viewBox="0 0 520 400" role="img" aria-label="Six links in a ring: infectious agent, reservoir, portal of exit, mode of transmission, portal of entry, susceptible host; the current link is outlined"></svg></div>
+    <div class="prose find" id="ch-find" aria-live="polite"></div>
+  </div>
+  <h3>Modes of transmission</h3>
+  <div class="chips" id="mode-tg" aria-label="Mode of transmission"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="mode-svg" viewBox="0 0 520 250" role="img" aria-label="Tree: direct transmission (direct contact, droplet spread) and indirect transmission (airborne, vehicle-borne, vector-borne mechanical or biological); the chosen mode is outlined"></svg></div>
+    <div class="prose find" id="mode-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="occ-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BSterilisation%2C%20Disinfection%20and%20the%20Chain%20of%20Infection%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fmicrobiology%2Fgeneral%2Fsterilisation-epidemiology.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/micro.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-m01.md, Part C; microbiology/DATA-SOURCES.md) ===================== */
+const CDC = 'CDC 2008';
+const LEDE = 'What each word means, which microbes each level of germicide kills, Spaulding\'s three classes of item, the time and temperature for steam and dry heat, the chemical agents, the indicators that prove a cycle worked, and the chain of infection with the ways to break it. Processes for reusable items follow the <b>CDC Guideline for Disinfection and Sterilization in Healthcare Facilities (2008, updated 2024)</b>, called "CDC 2008" below. Spores and the bacterial wall: <a href="bacteria-structure-growth.html#h-spore">The bacterial cell</a>.';
+
+const DEF_TABLE = [
+  ['Sterilisation', 'Destroys or eliminates <b>all forms of microbial life</b>, by physical or chemical methods (CDC 2008; Wikipedia)'],
+  ['Disinfection', 'Eliminates many or all pathogenic microorganisms <b>except bacterial spores</b>, on <b>inanimate objects</b> (CDC 2008; Wikipedia)'],
+  ['High-level disinfection', 'Kills all microorganisms except small numbers of bacterial spores (CDC 2008); <i>Cryptosporidium</i> is not reliably killed (CDC 2008)'],
+  ['Intermediate-level', 'May kill mycobacteria, vegetative bacteria, most viruses and most fungi, but not necessarily spores (CDC 2008)'],
+  ['Low-level', 'Kills vegetative bacteria (not tubercle bacilli), lipid viruses, some non-lipid viruses and some fungi; not spores (CDC 2008)'],
+  ['Antisepsis', 'Germicides applied to <b>living tissue and skin</b>; disinfectants are for inanimate objects only (CDC 2008; StatPearls; Wikipedia)'],
+  ['Cleaning', 'Removal of visible soil with water and detergent or enzymes; must come <b>first</b>, because organic and inorganic material left on an instrument interferes with disinfection and sterilisation (CDC 2008)'],
+  ['Decontamination', 'Removes pathogens so an object is safe to handle, use or discard (CDC 2008)'],
+  ['Pasteurisation', 'Heating a liquid to 65–77 °C for about 30 minutes (CDC 2008 glossary); hot-water pasteurisation of equipment is about 70 °C for 30 minutes (CDC 2008). Spores survive (CDC 2008; Wikipedia)'],
+];
+
+/* resistance ladder, most resistant first. kill[level] = index of the first rung the level kills (rungs at or below are killed) */
+const RUNGS = [
+  ['Prions', 'CJD agent'],
+  ['Bacterial spores', 'Bacillus, Clostridioides'],
+  ['Coccidia', 'Cryptosporidium: not reliably killed'],
+  ['Mycobacteria', 'M. tuberculosis'],
+  ['Non-lipid (small) viruses', 'poliovirus, coxsackievirus'],
+  ['Fungi', 'Aspergillus, Candida'],
+  ['Vegetative bacteria', 'Staphylococcus, Pseudomonas'],
+  ['Lipid (medium) viruses', 'herpes, HIV'],
+];
+const LAD = {
+  ster: ['Sterilisation', 1, '<h3>Sterilisation</h3><p>Destroys all forms of microbial life, spores included (CDC 2008; Wikipedia). <b>Prions</b> are a special case: extremely resistant to sterilisation processes and disinfectants (CDC 2008); a 2016 review: standard decontamination and sterilisation may not completely remove infectivity from prion-contaminated instruments. The ladder leaves them above the line.</p>'],
+  hld: ['High-level', 3, '<h3>High-level disinfection</h3><p>Kills all microorganisms except small numbers of bacterial spores — e.g. 2% glutaraldehyde for 20 minutes; the same chemicals given a longer contact time are chemical sterilants (CDC 2008). <b>Coccidia</b> are the exception the ladder shows: <i>C. parvum</i> is not completely inactivated by most healthcare disinfectants, including glutaraldehyde, OPA, peracetic acid and 5.25% hypochlorite; only 6–7.5% hydrogen peroxide reduced it by more than 3 logs, while steam, EtO and plasma sterilisation inactivate it fully (CDC 2008).</p>'],
+  ild: ['Intermediate-level', 3, '<h3>Intermediate-level disinfection</h3><p>Can kill mycobacteria, vegetative bacteria, most viruses and most fungi, but not necessarily spores (CDC 2008).</p>'],
+  lld: ['Low-level', 6, '<h3>Low-level disinfection</h3><p>Kills vegetative bacteria (except tubercle bacilli), lipid viruses, some non-lipid viruses and some fungi, not spores (CDC 2008). Shown as killing from "vegetative bacteria" down: "some fungi" and "some non-lipid viruses" are only partly covered.</p>'],
+};
+const LAD_NOTE = 'Order of resistance to chemical germicides from CDC 2008: except for prions, bacterial spores are the most resistant, followed by coccidia, mycobacteria, non-lipid or small viruses, fungi, vegetative bacteria and lipid or medium-size viruses (examples on each rung are the guideline\'s own). Each level is drawn by its CDC 2008 definition, except that coccidia are left above the high-level line because CDC 2008 reports <i>C. parvum</i> is not completely inactivated by most disinfectants; schematic.';
+
+/* Spaulding: items [key, label, class, note] */
+const SPA_CLS = {
+  crit: ['Critical', 'Contacts <b>sterile tissue or blood</b>: a high risk of infection if contaminated with any microorganism → <b>sterilisation</b>', 'Contact with sterile body tissues or fluids (CDC 2008), blood or internal tissues (a 2023 review); must be sterilised (a 2024 review)'],
+  semi: ['Semicritical', 'Contacts <b>mucous membranes or non-intact skin</b> → at least <b>high-level disinfection</b>', 'Intact mucous membranes generally resist common bacterial spores but not other organisms (CDC 2008)'],
+  non: ['Noncritical', 'Contacts <b>intact skin</b> only → <b>low-level disinfection</b> or cleaning', 'Intact skin is an effective barrier to most microorganisms (CDC 2008)'],
+};
+const SPA_ITEMS = [
+  ['inst', 'Surgical instruments', 'crit'], ['cath', 'Cardiac and urinary catheters', 'crit'], ['impl', 'Implants', 'crit'], ['usst', 'Ultrasound probe in a sterile cavity', 'crit'],
+  ['resp', 'Respiratory therapy and anaesthesia equipment', 'semi'], ['endo', 'Gastrointestinal endoscope', 'semi'], ['lary', 'Laryngoscope blade', 'semi'], ['vag', 'Vaginal probe (endocavitary)', 'semi'],
+  ['bp', 'Blood-pressure cuff', 'non'], ['bed', 'Bedpan, crutches', 'non'], ['tab', 'Bedside table, bed rails', 'non'],
+];
+const SPA_TABLE = [
+  ['Critical', 'Sterile tissue, blood', 'Surgical instruments, cardiac and urinary catheters, implants, ultrasound probes used in sterile body cavities', 'Sterilisation'],
+  ['Semicritical', 'Mucous membranes, non-intact skin', 'Respiratory therapy and anaesthesia equipment, some endoscopes, laryngoscope blades, oesophageal manometry probes, cystoscopes, anorectal manometry catheters, diaphragm fitting rings', 'High-level disinfection at least'],
+  ['Noncritical', 'Intact skin', 'Bedpans, blood-pressure cuffs, crutches, computers; bedside tables, bed rails', 'Low-level disinfection'],
+];
+
+/* heat: settings [key, label, kind, temp °C, time min, source, text] */
+const HEAT = [
+  ['g121', 'Steam 121 °C, gravity', 'steam', 121, 30, 'CDC 2008', '<h3>Steam, gravity-displacement sterilizer: 121 °C</h3><p>Recognised minimum for <b>wrapped</b> supplies: <b>30 minutes at 121 °C</b> (CDC 2008). Air is removed less completely, so steam takes longer to penetrate porous items (CDC 2008). Wikipedia gives 15–60 minutes at 121 °C, depending on the size, density and contents of the load.</p>'],
+  ['p132', 'Steam 132 °C, prevacuum', 'steam', 132, 4, 'CDC 2008', '<h3>Steam, prevacuum sterilizer: 132 °C</h3><p><b>4 minutes at 132 °C</b> for wrapped supplies (CDC 2008). A vacuum pump removes the air from the chamber and load before steam is let in (CDC 2008; Wikipedia).</p>'],
+  ['r121', 'Steam 121 °C, 15 psi (review)', 'steam', 121, 21, '2026 review', '<h3>Steam 121 °C at 15 psi</h3><p>A 2026 review of autoclaves (Indian Journal of Ophthalmology): typically <b>121 °C at 15 psi for 21 minutes</b>. Times differ between sources because they depend on the sterilizer type and the load (Wikipedia); the guideline\'s minimum for wrapped goods in a gravity sterilizer is 30 minutes.</p>'],
+  ['r134', 'Steam 134 °C, 21 psi (review)', 'steam', 134, 5, '2026 review', '<h3>Steam 132–134 °C at 21 psi</h3><p>The same 2026 review: 132 or 134 °C at 21 psi for 5 minutes.</p>'],
+  ['d170', 'Hot air 170 °C', 'dry', 170, 60, 'CDC 2008', '<h3>Hot-air oven: 170 °C for 60 minutes</h3><p>The commonest dry-heat time–temperature pairs are 170 °C for 60 min, 160 °C for 120 min and 150 °C for 150 min (CDC 2008).</p>'],
+  ['d160', 'Hot air 160 °C', 'dry', 160, 120, 'CDC 2008', '<h3>Hot-air oven: 160 °C for 120 minutes</h3><p>CDC 2008.</p>'],
+  ['d150', 'Hot air 150 °C', 'dry', 150, 150, 'CDC 2008', '<h3>Hot-air oven: 150 °C for 150 minutes</h3><p>CDC 2008.</p>'],
+];
+const HEAT_TEXT = '<p><b>Moist heat</b> kills by irreversible <b>coagulation and denaturation</b> of enzymes and structural proteins (CDC 2008; Wikipedia). Saturated steam under pressure is the most widely used and most dependable method; the four parameters are <b>steam, pressure, temperature and time</b> (CDC 2008), and higher pressure is what lets steam reach 121 °C (a 2026 review; Wikipedia). It is non-toxic, inexpensive, rapidly microbicidal and sporicidal (CDC 2008), and it is the preferred method for critical instruments that heat, steam, pressure and moisture do not damage (CDC 2008). Air trapped in a load slows steam: 10 lb of microbiological waste needs at least 45 minutes at 121 °C (CDC 2008).</p><p><b>Dry heat</b> is for items that tolerate high temperatures but not moisture, such as <b>powders and oils</b> (CDC 2008; Wikipedia). It penetrates materials and does not corrode metal, but heat penetration and killing are slow, so the cycles are long (CDC 2008); moisture is what speeds heat penetration in steam (Wikipedia). Wikipedia: dry heat damages proteins and causes oxidative damage.</p><p><b>Pasteurisation</b> is not sterilisation: most spores survive (CDC 2008; Wikipedia). <b>Tyndallisation</b>, named after John Tyndall, heats at up to 100 °C without pressure on successive days; the heat kills vegetative cells, spores may survive and germinate between heatings; it is obsolete and ineffective against prions (Wikipedia). <b>Inspissation</b> ("thickening") — heating high-protein media such as egg or serum on 3 successive days — is how Löwenstein–Jensen medium is solidified and disinfected (Wikipedia).</p>';
+
+const OTH_TABLE = [
+  ['Ethylene oxide (EtO)', 'Alkylates protein, DNA and RNA (CDC 2008)', 'Heat- and moisture-sensitive equipment (CDC 2008; Wikipedia); long cycle with aeration to remove toxic residue (8–12 h at 50–60 °C, CDC 2008); a known human carcinogen (CDC 2008; a 2015 survey report citing IARC; Wikipedia)'],
+  ['Hydrogen peroxide gas plasma', 'Hydrogen peroxide gas plus free radicals made in the plasma phase (CDC 2008)', 'Heat-sensitive items (CDC 2008; a 2023 review); cannot be used with linens or paper wrapping (CDC 2008)'],
+  ['Ionising radiation', 'Cobalt-60 gamma rays or electron accelerators (CDC 2008; a 2023 review)', 'Industrial, low-temperature: tissue for transplantation, pharmaceuticals, medical devices (CDC 2008)'],
+  ['Ultraviolet', 'Wavelength 210–328 nm (CDC 2008)', 'Effect reduced by organic matter and depends on wavelength, intensity and the microbe (CDC 2008); used to disinfect surfaces, air, water and food (Wikipedia)'],
+  ['Filtration', 'A microfilter, usually 0.22 µm pores, removes microorganisms (Wikipedia)', 'Fluids such as drug solutions that heat, radiation or chemicals would damage (Wikipedia); air filtration is covered by another CDC guideline (CDC 2008)'],
+];
+const OTH_NOTE = 'Heat-sensitive critical items: ethylene oxide or hydrogen peroxide gas plasma, or, if neither suits, liquid chemical sterilants (CDC 2008).';
+
+const CHEM_TABLE = [
+  ['Alcohols (ethyl, isopropyl)', 'Intermediate', 'Denature proteins (CDC 2008; Wikipedia)', 'Rapidly bactericidal, tuberculocidal, fungicidal, virucidal, but <b>not sporicidal</b>; small surfaces (vial stoppers), thermometers, stethoscopes (CDC 2008)'],
+  ['Chlorine (sodium hypochlorite)', 'Intermediate', 'Mainly undissociated hypochlorous acid (CDC 2008)', 'Blood spills: <b>1:100</b> bleach for small spills (drops); <b>1:10</b> for large spills, after cleaning (CDC 2008)'],
+  ['Glutaraldehyde (≥2%)', 'High (sterilant with longer contact)', 'Alkylates sulfhydryl, hydroxyl, carboxyl and amino groups (CDC 2008; Wikipedia)', 'Endoscopes: 20 min at room temperature for high-level disinfection (CDC 2008); irritant: asthma, dermatitis, rhinitis in staff (CDC 2008)'],
+  ['Ortho-phthalaldehyde (OPA, 0.55%)', 'High', '—', 'Replacing glutaraldehyde in many facilities: not known to irritate eyes and nose (CDC 2008)'],
+  ['Hydrogen peroxide', 'High (7.5%) / sterilant', 'Hydroxyl free radicals attack membrane lipids and DNA (CDC 2008)', 'Stabilised 7.5% is listed as a chemical sterilant (CDC 2008); used alone or combined as a high-level disinfectant (Wikipedia)'],
+  ['Peracetic acid', 'High / sterilant', 'Oxidising: denatures proteins, oxidises sulfhydryl bonds (CDC 2008)', 'Automated liquid chemical sterilisation of endoscopes (CDC 2008)'],
+  ['Iodophors (povidone-iodine)', 'Intermediate (as disinfectant)', '"Free" iodine (CDC 2008)', 'Mainly antiseptics on skin; also blood-culture bottles, some equipment (CDC 2008; Wikipedia)'],
+  ['Phenolics', 'Intermediate / low', '—', 'Environmental surfaces (bedside tables, bed rails, laboratory surfaces) and noncritical devices (CDC 2008)'],
+  ['Quaternary ammonium compounds', 'Low', '—', 'Low-level disinfection of noncritical surfaces (CDC 2008)'],
+  ['Formaldehyde', '—', '—', 'Used as a disinfectant and sterilant as liquid and gas; relative humidity is the main factor for gaseous agents (CDC 2008); formaldehyde–alcohol was dropped as a high-level disinfectant because it is irritating and toxic (CDC 2008). WHO 2020: containment laboratories must be able to do gaseous decontamination (fumigation)'],
+];
+const CHEM_NOTE = 'Levels as listed in CDC 2008 Table 1; follow the product label for each dilution and contact time. Isopropyl and ethyl alcohol are not high-level disinfectants because they do not kill spores (CDC 2008).';
+
+const QC_TEXT = '<p>Each load is monitored with <b>mechanical</b> indicators (time, temperature, pressure records) and <b>chemical</b> indicators (heat- or chemical-sensitive inks that change colour), inside and outside the pack (CDC 2008; a 2026 review). A chemical indicator shows the pack went through a cycle, not that it is sterile (a 2026 review). <b>Biological indicators</b> — spores of a resistant organism — are the most definite proof that sterilisation worked (a 2026 review; CDC 2008): steam and low-temperature sterilizers at least <b>weekly</b>, and implantable items should not be used until the spore test is negative, if feasible (CDC 2008). The <b>Bowie–Dick test</b> checks a prevacuum (dynamic-air-removal) steam sterilizer for air leaks and inadequate air removal, daily, in an empty chamber (CDC 2008; a 2026 review). The target is a <b>sterility assurance level</b> of 10⁻⁶: a one-in-a-million chance that one viable organism survives (CDC 2008).</p>';
+const BI_TABLE = [
+  ['Steam (autoclave)', '<i>Geobacillus stearothermophilus</i> (formerly <i>Bacillus stearothermophilus</i>)', 'CDC 2008; a 2026 review; Wikipedia'],
+  ['Hydrogen peroxide gas plasma', '<i>G. stearothermophilus</i>', 'CDC 2008'],
+  ['Liquid peracetic acid', '<i>G. stearothermophilus</i>', 'CDC 2008'],
+  ['Ethylene oxide', '<i>Bacillus atrophaeus</i>', 'CDC 2008 (Wikipedia: used as an indicator for heat- and chemical-based processes)'],
+  ['Dry heat', '<i>B. atrophaeus</i> (more resistant to dry heat than <i>G. stearothermophilus</i>)', 'CDC 2008'],
+  ['Radiation (industrial)', '<i>Bacillus pumilus</i> was used; ISO no longer recognises it for medical-device radiation sterilisation', 'Wikipedia only'],
+];
+
+/* choose the method: [key, label, answer html] */
+const PICK = [
+  ['inst', 'Heat-stable surgical instruments', '<h3>Steam sterilisation (autoclave)</h3><p>Critical item; steam is the preferred method for critical instruments not damaged by heat, steam, pressure or moisture (CDC 2008).</p>'],
+  ['heat', 'Heat-sensitive critical item', '<h3>Low-temperature sterilisation</h3><p>Ethylene oxide or hydrogen peroxide gas plasma; liquid chemical sterilants if those are unsuitable (CDC 2008).</p>'],
+  ['endo', 'Flexible GI endoscope, bronchoscope', '<h3>Cleaning, then high-level disinfection</h3><p>Every heat-sensitive endoscope must be cleaned and, at a minimum, high-level disinfected after each use (CDC 2008) — e.g. ≥2% glutaraldehyde, OPA or an automated peracetic-acid process (CDC 2008).</p>'],
+  ['lap', 'Laparoscope, arthroscope', '<h3>Ideally sterilise</h3><p>They enter sterile tissue, so ideally they are sterilised between patients (CDC 2008).</p>'],
+  ['resp', 'Respiratory therapy, anaesthesia equipment', '<h3>At least high-level disinfection; steam if it tolerates it</h3><p>Semicritical: at a minimum high-level disinfection (CDC 2008); steam sterilisation should be used whenever such equipment is heat- and moisture-resistant (CDC 2008).</p>'],
+  ['bp', 'Blood-pressure cuff, crutches', '<h3>Clean; low-level disinfection</h3><p>Noncritical: can be cleaned with a detergent; low-level disinfectants are listed for noncritical items (CDC 2008).</p>'],
+  ['surf', 'Bedside table, bed rails', '<h3>Low-level disinfection</h3><p>Noncritical environmental surfaces; phenolics and quaternary ammonium compounds are examples (CDC 2008).</p>'],
+  ['blood', 'Blood spill on a surface', '<h3>Small spill: 1:100 bleach; large spill: clean first, then 1:10</h3><p><b>Small spills</b> (drops of blood) on noncritical surfaces: a 1:100 dilution of 5.25–6.15% sodium hypochlorite or an EPA-registered tuberculocidal disinfectant. <b>Large spills</b>: blood inactivates germicides, so the surface is cleaned first and then an EPA-registered disinfectant or a 1:10 (final concentration) household-bleach solution is applied; for large spills (over about 10 ml) or culture spills, a 1:10 dilution is also used as the first application before cleaning, to protect staff (CDC 2008).</p>'],
+  ['pow', 'Powders, oils', '<h3>Dry heat (hot-air oven)</h3><p>For items such as powders and oils that withstand high temperatures, e.g. 170 °C for 60 minutes (CDC 2008).</p>'],
+  ['waste', 'Microbiological waste', '<h3>Autoclave, longer cycle</h3><p>At least 45 minutes at 121 °C for 10 lb of waste, because trapped air slows steam (CDC 2008).</p>'],
+  ['skin', 'Skin before a procedure', '<h3>Antiseptic, not disinfectant</h3><p>Antiseptics are for skin and tissue; disinfectants would injure skin (CDC 2008). Before a blood culture: alcohol, alcoholic chlorhexidine (2%) or tincture of iodine (10%), which give fewer contaminated cultures than povidone-iodine (ICMR 2019).</p>'],
+  ['ind', 'Industry: devices, pharmaceuticals', '<h3>Ionising radiation (or ethylene oxide)</h3><p>Cobalt-60 gamma rays or electron beams sterilise tissue for transplantation, pharmaceuticals and medical devices (CDC 2008); EtO and radiation are the main terminal methods for devices (a 2023 review); EtO is used for disposable plastic syringes (Wikipedia).</p>'],
+  ['liq', 'Heat-sensitive liquid', '<h3>Filtration</h3><p>Fluids such as drug solutions that heat would damage are sterilised by filtration through a 0.22 µm microfilter (Wikipedia).</p>'],
+];
+const PICK_NOTE = 'Answers summarise CDC 2008, with the other sources named where used (ICMR 2019 for skin before a blood culture); always follow the device maker\'s instructions and the product label.';
+
+/* chain of infection: [label, text] */
+const CH = [
+  ['Agent', '<h3>1. Infectious agent</h3><p>Originally an infectious microorganism or pathogen: a virus, bacterium, parasite or other microbe (CDC 2012). Transmission happens when the agent leaves its reservoir through a portal of exit, travels by a mode of transmission and enters a susceptible host through a portal of entry (CDC 2012; StatPearls).</p><p><b>Break it:</b> treat the infection at its source, e.g. antibiotics for a patient, treating an infected carrier (CDC 2012).</p>'],
+  ['Reservoir', '<h3>2. Reservoir</h3><p>The habitat where the agent normally lives, grows and multiplies: <b>humans, animals or the environment</b> (CDC 2012). The reservoir is not always the source: <i>Clostridium botulinum</i> lives in soil, but most botulism comes from badly canned food (CDC 2012).</p><p><b>Humans:</b> smallpox had only a human reservoir, which is why it could be eradicated (CDC 2012). <b>Carriers</b> spread infection without symptoms — incubatory, convalescent, chronic (hepatitis B, <i>S.</i> Typhi; Typhoid Mary), or never ill (CDC 2012; Wikipedia). <b>Animals:</b> a <b>zoonosis</b> passes naturally from vertebrate animals to humans — brucellosis, anthrax, plague, rabies (CDC 2012; Wikipedia). <b>Environment:</b> soil fungi (histoplasmosis), <i>Legionella</i> in cooling towers (CDC 2012).</p>'],
+  ['Portal of exit', '<h3>3. Portal of exit</h3><p>The path by which the agent leaves its host, usually the site where it lives: respiratory tract (influenza, <i>M. tuberculosis</i>), faeces (cholera), urine (schistosomes), skin lesions (scabies), blood through the placenta, needles or blood-sucking arthropods (CDC 2012).</p>'],
+  ['Transmission', '<h3>4. Mode of transmission</h3><p><b>Direct</b> (contact, droplet) or <b>indirect</b> (airborne, vehicles, vectors) — see the tree below (CDC 2012; Wikipedia).</p><p><b>Break it:</b> isolation; decontaminate the vehicle; handwashing for faecal–oral spread; ventilation and air filtration for airborne spread; vector control (CDC 2012).</p>'],
+  ['Portal of entry', '<h3>5. Portal of entry</h3><p>How the agent enters a new host; it must reach tissue where it can multiply. Often the same as the exit: influenza leaves and enters the respiratory tract; gastroenteritis is "faecal–oral". Others: skin (hookworm), mucous membranes (syphilis), blood (hepatitis B, HIV) (CDC 2012).</p><p><b>Break it:</b> bed nets against mosquitoes, a dentist\'s mask and gloves (CDC 2012).</p>'],
+  ['Susceptible host', '<h3>6. Susceptible host</h3><p>Susceptibility depends on genetic factors, <b>specific immunity</b> (antibodies from infection, vaccine, toxoid, the placenta, antitoxin or immune globulin) and <b>non-specific defences</b> — skin, mucous membranes, gastric acid, cilia, the cough reflex. Malnutrition, alcoholism and immunosuppressive disease or therapy raise it (CDC 2012).</p><p><b>Break it:</b> vaccination and the other ways of raising specific immunity (CDC 2012).</p>'],
+];
+
+const MODES = {
+  con: ['Direct contact', 'dir', '<h3>Direct contact</h3><p>Skin-to-skin contact, kissing, sexual intercourse; also contact with soil or vegetation — infectious mononucleosis, gonorrhoea, hookworm (CDC 2012; Wikipedia lists direct physical contact, including sexual contact).</p>'],
+  dro: ['Droplet', 'dir', '<h3>Droplet spread</h3><p>Large, short-range sprays from sneezing, coughing or talking; counted as direct because they travel only a few feet before falling — pertussis, meningococcal infection (CDC 2012). Wikipedia: particles over 5 µm that stay in the air only briefly.</p>'],
+  air: ['Airborne', 'ind', '<h3>Airborne</h3><p>Agents carried by <b>dust or droplet nuclei</b> (dried residue under 5 µm) suspended in air (CDC 2012); small particles stay in the air longer and travel farther (Wikipedia). Measles has spread to children who entered a room after the sick child had left (CDC 2012).</p>'],
+  veh: ['Vehicle-borne', 'ind', '<h3>Vehicle-borne</h3><p>Food, water, biological products (blood) and <b>fomites</b> (inanimate objects such as handkerchiefs, bedding, scalpels); a vehicle may just carry the agent (hepatitis A in food) or let it grow or make toxin (botulinum toxin in canned food) (CDC 2012). A fomite is any inanimate object that, once contaminated, can pass disease to a new host (Wikipedia).</p>'],
+  vec: ['Vector-borne', 'ind', '<h3>Vector-borne</h3><p><b>Mechanical:</b> flies carrying <i>Shigella</i> on their legs, fleas carrying <i>Yersinia pestis</i> in their gut. <b>Biological:</b> the agent matures in an intermediate host first — malaria, guinea worm (CDC 2012). Most vectors are blood-sucking arthropods such as mosquitoes (Wikipedia).</p>'],
+};
+const OCC_TABLE = [
+  ['Sporadic', 'Occurs infrequently and irregularly'],
+  ['Endemic', 'Constant presence or usual prevalence in a population in an area'],
+  ['Hyperendemic', 'Persistent high levels'],
+  ['Epidemic', 'An increase, often sudden, above what is normally expected in that population and area; "outbreak" means the same but usually for a smaller area'],
+  ['Pandemic', 'An epidemic spread over several countries or continents, usually affecting many people'],
+  ['Incubation period', 'From exposure to the onset of symptoms; it has a range even for one disease'],
+];
+
+const BASED = '<b>Based on:</b> CDC/HICPAC Guideline for Disinfection and Sterilization in Healthcare Facilities (Rutala, Weber and HICPAC; 2008, update June 2024; public domain); CDC Principles of Epidemiology in Public Health Practice, 3rd ed., Lesson 1 (2012); ICMR Standard Operating Procedures, Bacteriology (AMRSN), 2nd ed. 2019; StatPearls (NCBI Bookshelf; abstracts); open-access reviews on steam sterilisation (Indian J Ophthalmol 2026), medical-device sterilisation (2023), instrument reprocessing (2024) and EtO and gas-plasma practice (2015); Wikipedia.';
+const MODELS = '<b>Models used:</b> the resistance ladder, Spaulding zones, chain of infection and transmission tree are schematics; the time–temperature plot shows only the sourced settings (not a kill curve).';
+
+/* ===================== CODE ===================== */
+const {$, T} = Micro;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+Micro.table('def-table', ['Term', 'Meaning'], DEF_TABLE);
+
+/* ---- resistance ladder ---- */
+function drawLad(k) {
+  const first = LAD[k][1]; let s = '';
+  const x0 = 40, w = 300, h = 36, y0 = 34;
+  RUNGS.forEach(([n, ex], i) => {
+    const y = y0 + i * (h + 6), killed = i >= first;
+    s += `<rect class="${killed ? 'kill' : 'rung'}" x="${x0}" y="${y}" width="${w}" height="${h}" rx="6"/>` + T(x0 + 12, y + 17, n, 'b', 'start') + T(x0 + 12, y + 32, ex, 's', 'start');
+    if (killed) s += T(x0 + w - 10, y + 24, 'killed', 'm', 'end');
+  });
+  const yl = y0 + first * (h + 6) - 3;
+  s += `<path d="M${x0 - 20} ${yl} L${x0 + w + 20} ${yl}" style="stroke:var(--accent);stroke-width:3"/>` + T(x0 + w + 26, yl + 4, LAD[k][0], 'l b', 'start');
+  s += `<path d="M22 ${y0 + 4} L22 ${y0 + 8 * (h + 6) - 14}" style="stroke:var(--ink);stroke-width:1.4" marker-start="url(#arr)"/>` + T(14, y0 - 14, '↑ more resistant', 's', 'start');
+  s += T(x0 + w + 26, 360, 'schematic', 's', 'start');
+  $('lad-svg').innerHTML = Micro.DEFS + s; $('lad-find').innerHTML = LAD[k][2];
+}
+Micro.toggles('lad-tg', Object.entries(LAD).map(([k, v]) => [k, v[0]]), drawLad, 'hld'); drawLad('hld');
+$('lad-note').innerHTML = LAD_NOTE;
+
+/* ---- Spaulding ---- */
+function drawSpa(key) {
+  const it = SPA_ITEMS.find(r => r[0] === key), cls = it[2];
+  const cx = 220, cy = 175;
+  let s = '';
+  s += `<ellipse class="zone" cx="${cx}" cy="${cy}" rx="210" ry="160" style="fill:var(--bg)"/>` + `<ellipse class="zone" cx="${cx}" cy="${cy}" rx="140" ry="105" style="fill:var(--surface)"/>` + `<ellipse class="zone" cx="${cx}" cy="${cy}" rx="70" ry="52" style="fill:var(--bg)"/>`;
+  s += T(cx, 34, 'NONCRITICAL · intact skin', 'h', 'middle') + T(cx, 92, 'SEMICRITICAL · mucous membrane,', 'h', 'middle') + T(cx, 106, 'non-intact skin', 'h', 'middle') + T(cx, cy - 6, 'CRITICAL', 'h', 'middle') + T(cx, cy + 10, 'sterile tissue,', 's', 'middle') + T(cx, cy + 24, 'blood', 's', 'middle');
+  s += T(cx, 318, 'low-level disinfection', 's', 'middle') + T(cx, 266, 'high-level disinfection', 's', 'middle');
+  const sel = {crit: [cx, cy, 78, 60], semi: [cx, cy, 148, 113], non: [cx, cy, 218, 168]}[cls];
+  s += `<ellipse class="sel" cx="${sel[0]}" cy="${sel[1]}" rx="${sel[2]}" ry="${sel[3]}"/>`;
+  $('spa-svg').innerHTML = s;
+  const c = SPA_CLS[cls];
+  $('spa-find').innerHTML = `<h3>${it[1]}: ${c[0]}</h3><p>${c[1]}.</p><p class="note">${c[2]}.</p>`;
+}
+Micro.toggles('spa-tg', SPA_ITEMS.map(r => [r[0], r[1]]), drawSpa, 'inst'); drawSpa('inst');
+Micro.table('spa-table', ['Class', 'Touches', 'Examples (CDC 2008)', 'Process'], SPA_TABLE);
+
+/* ---- heat plot ---- */
+function drawHeat(key) {
+  const X = Micro.scale(115, 175, 70, 500), Y = Micro.scale(0, 160, 280, 30);
+  let s = `<path class="axis" d="M70 30 L70 280 L500 280"/>`;
+  for (const t of [120, 130, 140, 150, 160, 170]) s += `<path class="grid" d="M${X(t)} 30 L${X(t)} 280"/>` + T(X(t), 298, t, 's', 'middle');
+  for (const m of [0, 30, 60, 90, 120, 150]) s += T(62, Y(m) + 4, m, 's', 'end');
+  s += T(285, 322, 'temperature (°C)', 's', 'middle') + T(20, 13, 'holding time (min) ↑', 's', 'start');
+  s += T(150, 24, 'steam: minutes', 'b', 'start') + T(380, 24, 'dry heat: hours', 'b', 'start');
+  for (const [k, , kind, t, m] of HEAT) {
+    const on = k === key, x = X(t), y = Y(m);
+    s += kind === 'steam' ? `<circle cx="${x}" cy="${y}" r="${on ? 8 : 6}" style="fill:${on ? 'var(--mark)' : 'var(--surface)'};stroke:var(--ink);stroke-width:1.5"/>` : `<rect x="${x - 6}" y="${y - 6}" width="12" height="12" style="fill:${on ? 'var(--mark)' : 'var(--surface)'};stroke:var(--ink);stroke-width:1.5"/>`;
+  }
+  const h = HEAT.find(r => r[0] === key);
+  const dry = h[2] === 'dry'; s += T(X(h[3]) + (dry ? -12 : 12), Y(h[4]) + (dry ? 4 : -12), h[3] + ' °C · ' + h[4] + ' min', 'l b', dry ? 'end' : 'start');
+  s += T(495, 266, '○ steam   □ dry heat', 's', 'end');
+  $('heat-svg').innerHTML = s; $('heat-find').innerHTML = h[6] + `<p class="note">Source: ${h[5]}.</p>`;
+}
+Micro.toggles('heat-tg', HEAT.map(r => [r[0], r[1]]), drawHeat, 'g121'); drawHeat('g121');
+$('heat-text').innerHTML = HEAT_TEXT;
+
+Micro.table('oth-table', ['Method', 'How it kills', 'Use and limits'], OTH_TABLE); $('oth-note').textContent = OTH_NOTE;
+Micro.table('chem-table', ['Agent', 'Level (CDC 2008)', 'Mechanism', 'Uses, notes'], CHEM_TABLE); $('chem-note').textContent = CHEM_NOTE;
+$('qc-text').innerHTML = QC_TEXT;
+Micro.table('bi-table', ['Process', 'Biological indicator (spores)', 'Sources'], BI_TABLE);
+
+/* ---- choose the method ---- */
+Micro.toggles('pick-tg', PICK.map(r => [r[0], r[1]]), k => { $('pick-find').innerHTML = PICK.find(r => r[0] === k)[2]; }, 'inst');
+$('pick-find').innerHTML = PICK[0][2]; $('pick-note').textContent = PICK_NOTE;
+
+/* ---- chain of infection ---- */
+const CS = {s: 0};
+function drawChain() {
+  const cx = 260, cy = 200, R = 140; let s = Micro.DEFS;
+  const pos = CH.map((_, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / 6; return [cx + R * Math.cos(a), cy + R * Math.sin(a)]; });
+  pos.forEach(([x, y], i) => {
+    const [x2, y2] = pos[(i + 1) % 6], dx = x2 - x, dy = y2 - y, L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L;
+    s += `<path class="flow" d="M${(x + ux * 62).toFixed(1)} ${(y + uy * 34).toFixed(1)} L${(x2 - ux * 62).toFixed(1)} ${(y2 - uy * 34).toFixed(1)}"/>`;
+  });
+  pos.forEach(([x, y], i) => {
+    s += `<rect x="${(x - 62).toFixed(1)}" y="${(y - 24).toFixed(1)}" width="124" height="48" rx="24" class="box"/>`;
+    if (i === CS.s) s += `<rect class="sel" x="${(x - 68).toFixed(1)}" y="${(y - 30).toFixed(1)}" width="136" height="60" rx="30"/>`;
+    s += T(x, y - 2, (i + 1) + '. ' + CH[i][0].split(' ')[0], 'b', 'middle') + (CH[i][0].includes(' ') ? T(x, y + 14, CH[i][0].split(' ').slice(1).join(' '), 's', 'middle') : '');
+  });
+  s += T(cx, cy - 4, 'break any link', 's', 'middle') + T(cx, cy + 12, 'to stop spread', 's', 'middle') + T(510, 392, 'schematic', 's', 'end');
+  $('ch-svg').innerHTML = s; $('ch-find').innerHTML = CH[CS.s][1];
+}
+Micro.stepper('ch-step', CH.map(r => r[0]), drawChain, CS);
+
+function drawMode(k) {
+  let s = Micro.DEFS;
+  const box = (x, y, w, t, on) => `<rect x="${x}" y="${y}" width="${w}" height="34" rx="8" class="box"/>` + (on ? `<rect class="sel" x="${x - 5}" y="${y - 5}" width="${w + 10}" height="44" rx="11"/>` : '') + T(x + w / 2, y + 22, t, 'b', 'middle');
+  s += box(185, 10, 150, 'Transmission', false);
+  s += `<path class="flow" d="M240 44 L120 80"/><path class="flow" d="M280 44 L390 80"/>`;
+  s += box(50, 84, 140, 'Direct', MODES[k][1] === 'dir') + box(320, 84, 140, 'Indirect', MODES[k][1] === 'ind');
+  s += `<path class="flow" d="M100 118 L70 160"/><path class="flow" d="M140 118 L165 160"/>`;
+  s += `<path class="flow" d="M360 118 L300 160"/><path class="flow" d="M390 118 L395 160"/><path class="flow" d="M420 118 L478 160"/>`;
+  const leaf = [['con', 10, 110, 'Contact'], ['dro', 125, 100, 'Droplet'], ['air', 245, 100, 'Airborne'], ['veh', 352, 86, 'Vehicle'], ['vec', 446, 70, 'Vector']];
+  for (const [kk, x, w, t] of leaf) s += box(x, 164, w, t, kk === k);
+  s += T(395, 222, 'fomites, food,', 's', 'middle') + T(395, 236, 'water, blood', 's', 'middle') + T(481, 222, 'mechanical', 's', 'middle') + T(481, 236, 'or biological', 's', 'middle');
+  s += T(165, 222, 'large drops,', 's', 'middle') + T(165, 236, 'a few feet', 's', 'middle') + T(295, 222, 'dust, droplet', 's', 'middle') + T(295, 236, 'nuclei', 's', 'middle');
+  $('mode-svg').innerHTML = s; $('mode-find').innerHTML = MODES[k][2];
+}
+Micro.toggles('mode-tg', Object.entries(MODES).map(([k, v]) => [k, v[0]]), drawMode, 'con'); drawMode('con');
+Micro.table('occ-table', ['Term (CDC 2012)', 'Meaning'], OCC_TABLE);
+Micro.swipeHints();
+</script>
+</body>
+</html>

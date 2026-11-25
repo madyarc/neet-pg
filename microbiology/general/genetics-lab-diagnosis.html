@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bacterial Genetics and Laboratory Diagnosis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/micro.css">
+<style>
+/* tokens from micro.css: --dna (bacterial DNA), --donor (DNA moving from donor to recipient), --cyto (cytoplasm); --accent marks only the
+   selected item; --mark the current point on the PCR curve. */
+svg.sch .cellb{stroke:var(--ink);stroke-width:1.4}
+svg.sch .hair{stroke:var(--ink);stroke-width:1.6;fill:none;stroke-linecap:round}
+svg.sch.fitmax{max-width:400px}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.badge{font:600 12px var(--f-mono);border:1px solid var(--line);border-radius:6px;padding:2px 8px;color:var(--muted)}
+.badge.on{border-color:var(--ink);color:var(--ink);background:var(--bg)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Microbiology</a> <span class="muted">· Module 01: <a href="bacteria-structure-growth.html">The bacterial cell</a> · <span aria-current="page">Genetics and diagnosis</span> · <a href="sterilisation-epidemiology.html">Sterilisation and epidemiology</a></span></nav>
+
+<header class="stack">
+  <h1>Bacterial Genetics and Laboratory Diagnosis</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-gen">Genome and mutation</a> <a href="#h-hgt">Gene transfer</a> <a href="#h-path">From specimen to result</a> <a href="#h-media">Culture media</a> <a href="#h-bio">Biochemical tests</a> <a href="#h-imm">ELISA and agglutination</a> <a href="#h-pcr">PCR</a> <a href="#h-maldi">MALDI-TOF</a> <a href="#h-spec">Collecting specimens</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-gen">
+  <h2 id="h-gen">The bacterial genome and mutation</h2>
+  <div class="prose" id="gen-text"></div>
+  <div class="scroll"><table id="mut-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-hgt">
+  <h2 id="h-hgt">How a gene moves between bacteria</h2>
+  <div class="chips" id="hgt-tg" aria-label="Way of transfer"></div>
+  <div class="step" id="hgt-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="hgt-svg" viewBox="0 0 560 260" role="img" aria-label="Donor cell on the left, recipient cell on the right; the current step of the chosen kind of gene transfer is drawn"></svg></div>
+    <div class="prose find" id="hgt-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="hgt-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-path">
+  <h2 id="h-path">From specimen to result: the laboratory methods</h2>
+  <div class="chips" id="path-tg" aria-label="Method"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="path-svg" viewBox="0 0 560 230" role="img" aria-label="Flow: specimen to microscopy, culture, identification and susceptibility testing, with a parallel line for antigen, antibody and nucleic-acid tests that need no culture; the chosen method is outlined"></svg></div>
+    <div class="prose find" id="path-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-media">
+  <h2 id="h-media">Culture media: which type is it?</h2>
+  <div class="chips" id="med-tg" aria-label="Medium"></div>
+  <div class="badges" id="med-badges"></div>
+  <div class="prose find" id="med-find" aria-live="polite"></div>
+  <div class="scroll"><table id="med-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-bio">
+  <h2 id="h-bio">Biochemical tests</h2>
+  <div class="scroll"><table id="bio-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-imm">
+  <h2 id="h-imm">Antigen and antibody tests: ELISA and agglutination</h2>
+  <div class="chips" id="eli-tg" aria-label="Test"></div>
+  <div class="step" id="eli-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="eli-svg" viewBox="0 0 560 230" role="img" aria-label="A well of a plate with the layers added so far in the chosen test"></svg></div>
+    <div class="prose find" id="eli-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pcr">
+  <h2 id="h-pcr">PCR: three steps, repeated</h2>
+  <div class="step" id="pcr-step"></div>
+  <div class="sliders" id="pcr-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pcr-svg" viewBox="0 0 560 250" role="img" aria-label="Left: the DNA strands in the current step of a PCR cycle. Right: copies of the target doubling with each cycle"></svg></div>
+    <div class="prose find" id="pcr-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="pcr-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-maldi">
+  <h2 id="h-maldi">MALDI-TOF mass spectrometry</h2>
+  <div class="prose" id="maldi-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-spec">
+  <h2 id="h-spec">Collecting and sending specimens</h2>
+  <div class="prose" id="spec-text"></div>
+  <div class="chips" id="spec-tg" aria-label="Specimen"></div>
+  <div class="prose find" id="spec-find" aria-live="polite"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="pack-svg" viewBox="0 0 400 260" role="img" aria-label="Triple packaging: a leak-proof primary receptacle wrapped in absorbent material, inside a leak-proof secondary packaging, inside a rigid outer packaging with the itemised list of contents between secondary and outer layers"></svg></div>
+    <div class="prose" id="pack-text"></div>
+  </div>
+  <p class="muted">MI1.6–MI1.10 are skills (collecting samples, respect for samples, communication, confidentiality, performing Gram, ZN and stool examinations) and are not covered as practicals on these pages.</p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BBacterial%20Genetics%20and%20Laboratory%20Diagnosis%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fmicrobiology%2Fgeneral%2Fgenetics-lab-diagnosis.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/micro.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-m01.md, Part B; microbiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'How bacteria change their genes, by mutation or by taking DNA from other cells, then how a specimen becomes a diagnosis: microscopy, culture media, biochemical tests, antigen and antibody tests, PCR, MALDI-TOF, and the rules for collecting and sending specimens (ICMR 2019 and WHO 2020). The Gram and ZN stains: <a href="bacteria-structure-growth.html#h-stain">The bacterial cell</a>; antibodies: <a href="../../physiology/blood/immunity.html#h-ab">Physiology: immunity</a>.';
+
+const GEN_TEXT = '<p><b>Central dogma:</b> "DNA makes RNA, and RNA makes protein" (Wikipedia, which notes this is a simplified statement). Most bacteria carry their genes on a <b>single circular chromosome</b> in the nucleoid (Wikipedia), plus <b>plasmids</b> — small extra DNA circles that replicate on their own and often carry antibiotic-resistance or virulence genes (Wikipedia; a 2016 review).</p><p><b>Mutation</b> is a change in the DNA sequence; it happens spontaneously or is caused by <b>mutagens</b> (StatPearls; Wikipedia). Antibiotic resistance can arise by mutation or by <b>horizontal gene transfer</b> (StatPearls; a 2016 review).</p>';
+const MUT_TABLE = [
+  ['Substitution (point)', 'One nucleotide changed (Wikipedia); single base-pair substitutions are the commonest cause of human genetic disease (StatPearls)', 'Synonymous (same amino acid), missense (a different amino acid) or nonsense (a premature stop codon) (Wikipedia)'],
+  ['Insertion, deletion', 'Nucleotides added or lost (Wikipedia)', 'Not a multiple of three: a frameshift (Wikipedia)'],
+];
+
+/* gene transfer: key -> [label, steps [[label, draw, text]]] ; draw keys used by drawHgt */
+const HGT = {
+  tf: ['Transformation', [
+    ['Donor lyses', 'tf0', '<h3>1. Naked DNA is released</h3><p>When a cell dies, fragments of its DNA are left outside it (Wikipedia; a 2016 review).</p>'],
+    ['Competent cell takes it up', 'tf1', '<h3>2. Uptake by a competent cell</h3><p>Transformation is the <b>uptake, integration and expression of naked extracellular DNA</b> through the cell envelope (a 2016 review; Wikipedia). The recipient must be <b>competent</b>; competence is typically induced by high cell density or nutrient shortage (Wikipedia). Free DNA is destroyed by DNase, so transformation is DNase-sensitive (Wikipedia).</p>'],
+    ['Recombines', 'tf2', '<h3>3. Recombination</h3><p>The new DNA recombines into the chromosome and is expressed (a 2016 review; Wikipedia).</p><p><b>Griffith (1928):</b> heat-killed smooth (capsulated, virulent) pneumococci mixed with live rough (non-capsulated, harmless) ones killed mice, and live smooth bacteria were recovered — a "transforming principle" (Wikipedia). In 1944 Avery, MacLeod and McCarty showed it was DNA (Wikipedia).</p>'],
+  ]],
+  td: ['Transduction', [
+    ['Phage infects donor', 'td0', '<h3>1. A bacteriophage infects the donor</h3><p>Bacteriophages are viruses that infect bacteria (a 2013 review; StatPearls).</p>'],
+    ['Packs bacterial DNA', 'td1', '<h3>2. Bacterial DNA is packed in a phage</h3><p>During phage assembly a piece of the host\'s DNA is packaged instead of (generalised) or with (specialised) phage DNA (Wikipedia). Specialised transduction happens when a <b>lysogenic</b> prophage leaves the chromosome imprecisely (Wikipedia).</p>'],
+    ['Injects into recipient', 'td2', '<h3>3. The phage delivers it to a new cell</h3><p>Through generalised or specialised transduction, phages transfer bacterial DNA from a donor to a recipient cell (a 2016 review; Wikipedia). No contact between the cells is needed, and the DNA, inside the phage, resists DNase (Wikipedia).</p><p><b>Lysogenic conversion:</b> a temperate phage can integrate into the chromosome as a prophage (a 2013 review; StatPearls; Wikipedia); prophages that encode powerful toxins are probably their most important contribution to making bacteria pathogenic (a 2013 review). Example: <i>V. cholerae</i> makes cholera toxin only when it carries the phage CTXφ (Wikipedia; a 2013 review); Wikipedia adds diphtheria toxin, made only when <i>C. diphtheriae</i> carries phage β.</p>'],
+  ]],
+  cj: ['Conjugation', [
+    ['F⁺ donor, F⁻ recipient', 'cj0', '<h3>1. Donor (F⁺) and recipient (F⁻)</h3><p>The <b>F (fertility) factor</b> is a plasmid (Wikipedia; a 2020 review); bacteria that carry it are called F⁺ (Wikipedia) and act as donors; cells without it are F⁻ recipients (Wikipedia).</p>'],
+    ['Sex pilus joins them', 'cj1', '<h3>2. The sex pilus makes contact</h3><p>Conjugation needs <b>direct cell-to-cell contact</b> through a pilus or adhesins (a 2016 review; Wikipedia); the conjugative pilus forms the mating pair (Wikipedia; a 2020 review).</p>'],
+    ['One strand transferred', 'cj2', '<h3>3. One strand passes, both are copied</h3><p>The plasmid is nicked and a <b>single strand</b> passes into the recipient (Wikipedia; a 2020 review describes the same steps for F).</p>'],
+    ['Both now F⁺', 'cj3', '<h3>4. The recipient becomes F⁺</h3><p>The recipient now has the plasmid (Wikipedia). In an <b>Hfr</b> (high-frequency recombination) cell the F factor is integrated in the chromosome, by homologous recombination (Wikipedia) — the F factor is an <b>episome</b>, a plasmid that can integrate (Wikipedia).</p>'],
+  ]],
+  tn: ['Transposons', [
+    ['Transposon in chromosome', 'tn0', '<h3>1. A transposable element</h3><p>A DNA sequence that can change its position within a genome — a "jumping gene", first found in maize by Barbara McClintock (Wikipedia).</p>'],
+    ['Jumps to a plasmid', 'tn1', '<h3>2. It moves</h3><p>Resistance genes are often carried on conjugative elements such as plasmids and transposons, and these move even between unrelated bacteria (a 2016 review); horizontal gene transfer is the main way antibiotic resistance spreads (Wikipedia). Plasmids carrying resistance genes (R plasmids) spread by conjugation (Wikipedia; a 2016 review).</p>'],
+  ]],
+};
+const HGT_TABLE = [
+  ['Transformation', 'Naked DNA from the surroundings', 'No', 'Griffith 1928 (pneumococcus); DNase-sensitive'],
+  ['Transduction', 'A bacteriophage', 'No', 'Generalised or specialised; DNase-resistant'],
+  ['Conjugation', 'Cell-to-cell contact, sex pilus', 'Yes', 'F plasmid; Hfr'],
+  ['Transposition', 'A transposable element', '— (within a genome)', '"Jumping genes"; carry resistance genes'],
+];
+
+/* lab path: key -> [label, node ids, text] */
+const PATH = {
+  mic: ['Microscopy', ['mic'], '<h3>Microscopy</h3><p>A Gram stain is usually the first test on a specimen (StatPearls); acid-fast smears look for <i>M. tuberculosis</i> (StatPearls). Dark-field microscopy suits live, unstained samples (Wikipedia).</p>'],
+  cul: ['Culture', ['cul'], '<h3>Culture</h3><p>Growing the organism on <a href="#h-media">media</a> gives colonies to identify and test; urine culture, for example, remains the gold standard for identifying uropathogens and their susceptibility (StatPearls). Blood cultures are incubated and examined at least daily, by eye or an automated system (ICMR 2019); growth in only one of two sets more likely means skin contamination (Wikipedia).</p>'],
+  id: ['Identification', ['id'], '<h3>Identification</h3><p>Colonies are identified by <a href="#h-bio">biochemical tests</a> or, in minutes, by <a href="#h-maldi">MALDI-TOF</a> (2024 reviews); ICMR 2019 includes both conventional and automated procedures.</p>'],
+  ast: ['Susceptibility', ['ast'], '<h3>Antimicrobial susceptibility testing</h3><p>Disc diffusion and minimum inhibitory concentration (MIC) testing, by hand or automated (ICMR 2019).</p>'],
+  ag: ['Antigen detection', ['ag'], '<h3>Antigen detection</h3><p>Finds the microbe\'s own molecules with antibodies, for example a sandwich ELISA (StatPearls; Wikipedia); ICMR 2019 describes a triple antigen test done directly on CSF for <i>S. pneumoniae</i>, <i>N. meningitidis</i> and <i>H. influenzae</i>.</p>'],
+  ab: ['Serology (antibody)', ['ab'], '<h3>Serology: antibodies in the patient</h3><p>An indirect ELISA detects antibodies — for example after immunisation (Wikipedia); antibodies take time to appear in the blood, which is why nucleic-acid tests can diagnose earlier (Wikipedia). <a href="#h-imm">How ELISA works</a>.</p>'],
+  mol: ['Molecular (PCR, NAAT)', ['mol'], '<h3>Molecular tests</h3><p>Nucleic acid tests such as <a href="#h-pcr">PCR</a> detect the microbe\'s DNA or RNA directly, rather than antigens or antibodies (Wikipedia; StatPearls); a 2024 review: organisms can be detected directly from patient samples in less than an hour. Multiplex PCR panels and NAATs increasingly supplement urine culture (StatPearls).</p>'],
+};
+
+/* media: [key, label, types[], example text] ; types from MTYPES */
+const MTYPES = {enr: 'Enriched', enrich: 'Enrichment (broth)', sel: 'Selective', dif: 'Differential', trans: 'Transport'};
+const MEDIA = [
+  ['ba', 'Blood agar', ['enr', 'dif'], '<h3>Blood agar</h3><p><b>Enriched</b> and <b>differential</b>: used to isolate fastidious organisms and to show haemolysis — β (complete lysis around the colony), α (partial, green or brown) or γ (none) (Wikipedia).</p>'],
+  ['choc', 'Chocolate agar', ['enr'], '<h3>Chocolate agar</h3><p>A non-selective <b>enriched</b> medium: blood agar whose red cells have been lysed by slow heating to 80 °C; grows fastidious respiratory bacteria such as <i>Haemophilus influenzae</i> and <i>Neisseria meningitidis</i> (Wikipedia). ICMR 2019 lists chocolate agar (CHOC) among its routine plates.</p>'],
+  ['mac', 'MacConkey agar', ['sel', 'dif'], '<h3>MacConkey agar</h3><p><b>Selective</b> (crystal violet and bile salts inhibit Gram-positives, so only Gram-negatives grow) and <b>differential</b>: lactose fermenters make acid and form <b>pink</b> colonies; non-fermenters do not change colour (StatPearls; Wikipedia).</p>'],
+  ['msa', 'Mannitol salt agar', ['sel', 'dif'], '<h3>Mannitol salt agar</h3><p><b>Selective</b> by its high salt (7.5–10%), which staphylococci tolerate, and <b>differential</b> by mannitol fermentation, which turns the phenol red <b>yellow</b>: <i>S. aureus</i> gives yellow colonies and zones (Wikipedia).</p>'],
+  ['tcbs', 'TCBS agar', ['sel'], '<h3>TCBS agar</h3><p>Thiosulfate–citrate–bile salts–sucrose agar: highly <b>selective</b> for <i>V. cholerae</i> and other <i>Vibrio</i> species, with sucrose as the sugar they ferment (Wikipedia); when <i>V. cholerae</i> is suspected, ICMR 2019 inoculates TCBS and alkaline peptone water (pH 8.4–8.6).</p>'],
+  ['lj', 'Löwenstein–Jensen', ['sel'], '<h3>Löwenstein–Jensen medium</h3><p>An egg-based medium (coagulated egg, glycerol, malachite green) for <b><i>Mycobacterium</i></b>; low levels of penicillin and nalidixic acid keep other bacteria out (Wikipedia).</p>'],
+  ['tm', 'Thayer–Martin agar', ['sel'], '<h3>Thayer–Martin agar</h3><p>Mueller–Hinton agar with 5% chocolate sheep blood and antibiotics that inhibit most other organisms: <b>selective</b> for pathogenic <i>Neisseria</i>, including <i>N. gonorrhoeae</i> (Wikipedia).</p>'],
+  ['sel', 'Selenite F broth', ['enrich'], '<h3>Selenite F broth</h3><p>An <b>enrichment</b> broth: selenite broth is used to isolate <i>Salmonella</i> (Wikipedia), and ICMR 2019 puts faecal suspension into selenite F broth. Enrichment media favour the growth of one organism over others (Wikipedia).</p>'],
+  ['cb', 'Cary–Blair medium', ['trans'], '<h3>Cary–Blair (and Stuart) transport media</h3><p>Used when faecal specimens are delayed or posted; Cary–Blair keeps <i>Salmonella</i> and <i>Shigella</i> for more than 2 weeks (ICMR 2019). Transport media hold the organisms without letting them multiply: buffers and salt, no carbon or nitrogen sources (Wikipedia).</p>'],
+  ['apw', 'Alkaline peptone water', ['enrich'], '<h3>Alkaline peptone water (APW)</h3><p>An <b>enrichment</b> broth for <i>Vibrio</i> (Wikipedia); ICMR 2019 inoculates APW at pH 8.4–8.6 with TCBS when <i>V. cholerae</i> is suspected.</p>'],
+  ['dca', 'DCA, XLD agar', ['sel'], '<h3>Deoxycholate citrate (DCA) and XLD agar</h3><p>Stool media: XLD is <b>selective</b> for isolating <i>Salmonella</i> and <i>Shigella</i>, with phenol red turning yellow where sugars are fermented (Wikipedia); ICMR 2019 plates stool on DCA and subcultures selenite F broth onto DCA.</p>'],
+  ['tel', 'Tellurite (Tinsdale) agar', ['sel'], '<h3>Tellurite media</h3><p>Tinsdale agar contains potassium tellurite and can isolate <i>Corynebacterium diphtheriae</i>; potassium tellurite is used in selective media (Wikipedia).</p>'],
+  ['sab', 'Sabouraud agar', ['sel'], '<h3>Sabouraud agar</h3><p>For fungi, including dermatophytes: its low pH (5.6) and high glucose make it <b>selective</b>, inhibiting most bacteria (Wikipedia).</p>'],
+];
+const MED_TABLE = [
+  ['Enriched', 'Nutrients added for fastidious organisms', 'Blood agar, chocolate agar'],
+  ['Enrichment', 'Liquid that favours the wanted organism over others in a mixed specimen', 'Selenite F broth (Salmonella), alkaline peptone water (Vibrio)'],
+  ['Selective', 'Lets some organisms grow and inhibits others', 'MacConkey, TCBS, Löwenstein–Jensen, Thayer–Martin, mannitol salt, XLD, Sabouraud'],
+  ['Differential', 'Colonies look different by a property (fermentation, haemolysis)', 'MacConkey (lactose), blood agar (haemolysis), mannitol salt (mannitol)'],
+  ['Transport', 'Keeps organisms without letting them multiply, on the way to the laboratory', 'Cary–Blair, Stuart'],
+];
+
+const BIO_TABLE = [
+  ['Catalase', 'Catalase splits hydrogen peroxide into water and oxygen: bubbles (ICMR 2019; Wikipedia)', '<i>Staphylococcus</i> positive; <i>Streptococcus</i> and <i>Enterococcus</i> negative (ICMR 2019)'],
+  ['Coagulase', 'The enzyme turns fibrinogen into fibrin (Wikipedia)', '<i>S. aureus</i> positive; <i>S. epidermidis</i>, <i>S. saprophyticus</i> negative (Wikipedia)'],
+  ['Oxidase', 'Detects cytochrome c oxidase: the reagent (TMPD) turns dark blue to maroon (Wikipedia)', '<i>Neisseria</i>, <i>Moraxella</i>, <i>Vibrio cholerae</i>, <i>Campylobacter</i>, <i>H. pylori</i> positive; Enterobacteriaceae typically negative (Wikipedia; ICMR 2019 notes <i>Plesiomonas</i> as an oxidase-positive exception)'],
+  ['Indole', 'Can the organism turn tryptophan into indole? Read as a colour change after Kovács reagent (Wikipedia)', 'One of the four IMViC tests (Wikipedia); ICMR 2019 records <i>Salmonella</i> as indole-negative'],
+  ['MR, VP, citrate', 'With indole, the IMViC series for enteric bacteria (Wikipedia); citrate: growth on citrate as the sole carbon source turns the medium from green to blue (Wikipedia)', 'All in the ICMR 2019 Enterobacteriaceae panel'],
+  ['TSI', 'Triple sugar iron slant: fermentation of glucose, lactose and sucrose (phenol red) and H₂S (Wikipedia)', '<i>Salmonella</i> Typhi: alkaline slant, acid butt, H₂S positive, no gas (ICMR 2019)'],
+  ['Urease', 'Urease splits urea (Wikipedia)', '<i>Proteus</i>: rapid, abundant urease, often within 30 minutes to 3 hours (ICMR 2019)'],
+  ['Nitrate reduction', 'Reduction of nitrate (ICMR 2019 panels)', '<i>Campylobacter jejuni</i> positive (ICMR 2019)'],
+];
+
+/* ELISA and agglutination: [key, label, steps [[label, layers[], text]]] */
+const ELI = {
+  sand: ['Sandwich ELISA (antigen)', [
+    ['Capture antibody', ['cap'], '<h3>1. Capture antibody on the plate</h3><p>An antibody against the antigen is fixed to the solid phase (StatPearls; a 2025 review).</p>'],
+    ['Add sample: antigen binds', ['cap', 'ag'], '<h3>2. Sample added</h3><p>Antigen in the sample binds to the capture antibody; the well is washed (StatPearls).</p>'],
+    ['Enzyme-labelled antibody', ['cap', 'ag', 'det'], '<h3>3. Enzyme-labelled antibody</h3><p>A second, enzyme-labelled antibody binds the antigen: a <b>sandwich</b> of antibody–antigen–antibody–enzyme (StatPearls).</p>'],
+    ['Substrate: colour', ['cap', 'ag', 'det', 'col'], '<h3>4. Substrate → colour</h3><p>The enzyme turns its substrate into a coloured product; the more antigen, the more colour (StatPearls; a 2025 review).</p>'],
+  ]],
+  ind: ['Indirect ELISA (antibody)', [
+    ['Antigen on the plate', ['agp'], '<h3>1. Antigen on the plate</h3><p>Antigen is immobilised on the solid support, usually a polystyrene plate (Wikipedia).</p>'],
+    ['Patient serum', ['agp', 'pab'], '<h3>2. Patient serum</h3><p>When the antibody is what you want to measure, e.g. after immunisation, the patient\'s (primary) antibody binds the antigen (Wikipedia).</p>'],
+    ['Enzyme anti-human antibody', ['agp', 'pab', 'sec'], '<h3>3. Labelled secondary antibody</h3><p>An enzyme-linked secondary antibody binds the Fc region of the patient\'s antibody: the "indirect" ELISA (Wikipedia). Terms vary: a 2025 review uses "indirect" for an antigen assay with a secondary antibody.</p>'],
+    ['Substrate: colour', ['agp', 'pab', 'sec', 'col'], '<h3>4. Substrate → colour</h3><p>The enzyme turns its substrate into a coloured product (a 2025 review; StatPearls): colour means antibody is present (Wikipedia).</p>'],
+  ]],
+  agg: ['Agglutination', [
+    ['Particles in suspension', ['lat'], '<h3>1. Particles in suspension</h3><p>Agglutination is the clumping of particles, such as red cells or bacteria, suspended in a liquid, usually in response to a specific antibody (Wikipedia).</p>'],
+    ['Clumping', ['lat', 'clump'], '<h3>2. Visible clumps</h3><p>When the matching antibody (or antigen) is present the particles collect into visible clumps (Wikipedia). Schematic: the source does not describe any one kit.</p>'],
+  ]],
+};
+
+/* PCR steps (temperatures from StatPearls and Wikipedia) */
+const PCR = [
+  ['Denaturation ~94–98 °C', 'den', '<h3>1. Denaturation</h3><p>Heat separates the two DNA strands (StatPearls; Wikipedia); Wikipedia: 94–98 °C for 20–30 seconds.</p>'],
+  ['Annealing ~50–65 °C', 'ann', '<h3>2. Annealing</h3><p>Cooling lets short <b>primers</b>, complementary to the target region, bind the single strands (StatPearls; Wikipedia); Wikipedia: 50–65 °C for 20–40 seconds.</p>'],
+  ['Extension ~72 °C', 'ext', '<h3>3. Extension</h3><p>The heat-stable <b>Taq polymerase</b> builds new strands from the primers (StatPearls; Wikipedia); Wikipedia: 72 °C is commonly used (its optimum is about 75–80 °C).</p>'],
+];
+const PCR_NOTE = 'Repeated cycles amplify the target exponentially (Wikipedia; StatPearls: repeated cycles of denaturation, annealing and extension); the counter shows the ideal doubling, 2ⁿ copies after n cycles (a model, not a measured yield). Real-time PCR measures the product after each cycle, during the reaction rather than at its end (Wikipedia).';
+
+const MALDI_TEXT = '<p><b>Matrix-assisted laser desorption/ionisation – time of flight mass spectrometry</b> identifies a bacterium or fungus from a colony by its <b>protein profile</b>, from the masses of ionised molecules measured by their time of flight (2024 reviews; a 2020 review). It gives an identification in <b>minutes</b> from a pure colony, at very low cost per test, and has cut about 24 hours from the time to diagnosis compared with biochemical systems (2024 reviews; a 2020 review).</p>';
+
+const SPEC_TEXT = '<p><b>General rules (ICMR 2019):</b> collect <b>before antimicrobials</b> are started, for the highest diagnostic yield; use a <b>sterile, leak-proof, screw-capped</b> container; <b>label</b> it with the patient\'s details and the date, time and site of collection; fill in the request form completely; send it to the laboratory <b>as soon as possible</b>. Aspirates or tissue are better than swabs; collect swabs only when tissue or aspirate cannot be obtained (ICMR 2019). WHO 2020: a specimen must arrive with enough information to identify what it is, when and where it was taken, and which tests are wanted. Specimens arriving in a syringe with the needle still attached are rejected (ICMR 2019).</p>';
+const SPEC = [
+  ['blood', 'Blood culture', '<h3>Blood culture</h3><p>Disinfect the skin with alcohol, alcoholic chlorhexidine (2%) or tincture of iodine (10%) — fewer contaminated cultures than with povidone-iodine. Adults: 10–20 ml divided between two cultures from separate venepuncture sites; children 6–10 ml. Suspected endocarditis: three sets within 30 minutes before antimicrobials. If processing is delayed, <b>never refrigerate</b> the bottle (ICMR 2019).</p>'],
+  ['urine', 'Urine', '<h3>Urine</h3><p><b>Midstream clean-catch</b> urine, after thorough cleaning of the genitalia with soap and water, in a sterile wide-mouthed screw-capped bottle; the first morning specimen is recommended, otherwise preferably 4 hours after the last void. From a catheter: disinfect the tubing and aspirate with a sterile needle and syringe — <b>never from the drainage bag</b> (ICMR 2019). Urine culture is the gold standard for identifying uropathogens (StatPearls).</p>'],
+  ['csf', 'CSF', '<h3>CSF</h3><p>Lumbar puncture: cap, face mask, gown and gloves are useful; collect into sterile, labelled, calibrated tubes; take the first sample before antimicrobial therapy; interpret CSF microscopy immediately (ICMR 2019).</p>'],
+  ['sputum', 'Sputum', '<h3>Sputum</h3><p>Early-morning sputum (pooled overnight secretions); the patient brushes the teeth, gargles with water and removes dentures first, then produces a <b>deep-cough</b> specimen into a sterile screw-cap cup; specimens that are only saliva are rejected (ICMR 2019).</p>'],
+  ['stool', 'Stool', '<h3>Stool</h3><p>A small amount of formed stool, or a third of the container if watery, in a sterile screw-capped container; if delayed or posted, use a transport medium: buffered glycerol saline, Stuart\'s or Cary–Blair (ICMR 2019).</p>'],
+  ['pus', 'Pus, wound', '<h3>Pus and wounds</h3><p>Aspirate from the deepest part of the lesion with a syringe and needle; swab only when an aspirate or tissue cannot be obtained, rolling it over the area with pus or inflamed tissue (ICMR 2019).</p>'],
+];
+const PACK_TEXT = '<p><b>Triple packaging</b> (WHO 2020): a watertight, leak-proof, labelled <b>primary receptacle</b>, wrapped in enough <b>absorbent material</b> to soak up its contents; a sealable, leak-proof <b>secondary packaging</b>; and an <b>outer packaging</b> of adequate strength that protects the secondary layer in transit, with an itemised list of contents. Infectious substances are classed for transport as Category A (UN2814 or UN2900), Category B (UN3373, "Biological substance, Category B") or exempt specimens (WHO 2020).</p>';
+
+const BASED = '<b>Based on:</b> ICMR Standard Operating Procedures, Bacteriology (AMRSN), 2nd ed. 2019; WHO Laboratory Biosafety Manual, 4th ed. 2020; StatPearls (NCBI Bookshelf; abstracts); open-access reviews on horizontal gene transfer (2016), F-plasmid conjugation (2020), prophages (2013), MALDI-TOF (2020, 2024 ×2), ELISA (2025); Wikipedia.';
+const MODELS = '<b>Models used:</b> cells, phage, pilus, plasmids, the ELISA well and the PCR strands are schematics, not to scale; the PCR curve is the ideal doubling model.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Micro;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+$('gen-text').innerHTML = GEN_TEXT; Micro.table('mut-table', ['Kind', 'What changes', 'Effect'], MUT_TABLE);
+
+/* ---- gene transfer ---- */
+const HS = {k: 'cj', s: 0};
+const cell = (x, y, label) => `<rect x="${x - 95}" y="${y - 50}" width="190" height="100" rx="50" class="cellb" style="fill:var(--cyto)"/>` + T(x, y + 72, label, 'b', 'middle');
+const chrom = (x, y) => `<path d="M${x - 50} ${y} C${x - 30} ${y - 26} ${x} ${y + 26} ${x + 20} ${y} S${x + 50} ${y - 20} ${x + 40} ${y + 12}" style="fill:none;stroke:var(--dna);stroke-width:2.4"/>`;
+const plas = (x, y, col = '--donor') => `<circle cx="${x}" cy="${y}" r="12" style="fill:none;stroke:var(${col});stroke-width:3"/>`;
+const frag = (x, y, rot = 0) => `<path d="M${x - 14} ${y} q7 -7 14 0 t14 0" transform="rotate(${rot} ${x} ${y})" style="fill:none;stroke:var(--donor);stroke-width:3.2;stroke-linecap:round"/>`;
+function phage(x, y, filled) { return `<polygon points="${x},${y - 18} ${x + 12},${y - 10} ${x + 12},${y + 4} ${x},${y + 12} ${x - 12},${y + 4} ${x - 12},${y - 10}" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.4"/>` + (filled ? frag(x, y - 3) : '') + `<path d="M${x} ${y + 12} L${x} ${y + 34} M${x} ${y + 34} l-10 10 M${x} ${y + 34} l10 10 M${x} ${y + 34} l0 12" class="hair"/>`; }
+function drawHgt() {
+  const d = HGT[HS.k][1][HS.s][1], L = 130, R = 430, Y = 120; let s = '';
+  const donor = !['tn0', 'tn1'].includes(d);
+  if (donor) { s += cell(L, Y, d.startsWith('cj') ? 'donor F⁺' : 'donor') + cell(R, Y, d === 'cj3' ? 'recipient, now F⁺' : d.startsWith('cj') ? 'recipient F⁻' : 'recipient'); s += chrom(L - 10, Y) + chrom(R - 10, Y); }
+  if (d === 'tf0') s += `<rect x="${L - 95}" y="${Y - 50}" width="190" height="100" rx="50" style="fill:none;stroke:var(--surface);stroke-width:3;stroke-dasharray:8 8"/>` + frag(L + 120, Y - 66) + frag(L + 150, Y - 30, 30) + frag(L + 130, Y + 30, -20) + T(L, Y - 62, 'dead cell releases DNA', 's', 'middle');
+  if (d === 'tf1') s += frag(R - 120, Y - 10) + `<path class="flow" d="M${R - 100} ${Y - 10} L${R - 80} ${Y - 10}"/>` + T(R, Y - 64, 'competent cell takes up naked DNA', 's', 'middle');
+  if (d === 'tf2') s += frag(R + 10, Y + 12) + T(R, Y - 64, 'recombined into the chromosome', 's', 'middle');
+  if (d === 'td0') s += phage(L + 40, Y - 92, false) + T(L + 64, Y - 96, 'phage', 's', 'start');
+  if (d === 'td1') s += frag(L + 10, Y - 10) + phage(L + 120, Y - 80, true) + T(L + 140, Y - 92, 'phage carrying host DNA', 's', 'start');
+  if (d === 'td2') s += phage(R - 10, Y - 96, false) + frag(R + 10, Y + 12) + T(R - 30, Y - 92, 'injected, then recombined', 's', 'end');
+  if (d.startsWith('cj')) {
+    s += plas(L + 58, Y - 28);
+    if (d !== 'cj0') s += `<path d="M${L + 95} ${Y} L${R - 95} ${Y}" style="stroke:var(--ink);stroke-width:5;stroke-linecap:round"/>` + T((L + R) / 2, Y - 30, 'sex (F) pilus', 'l b', 'middle');
+    if (d === 'cj2') s += `<path d="M${L + 70} ${Y - 22} C${L + 120} ${Y + 10} ${R - 120} ${Y + 10} ${R - 60} ${Y - 22}" style="fill:none;stroke:var(--donor);stroke-width:2.4;stroke-dasharray:6 4"/>` + T((L + R) / 2, Y + 28, 'single strand passes', 's', 'middle');
+    if (d === 'cj3') s += plas(R + 58, Y - 28);
+  }
+  if (d.startsWith('tn')) {
+    s += cell(280, Y, 'one cell') + chrom(240, Y) + plas(350, Y - 14, '--dna');
+    s += d === 'tn0' ? `<rect x="228" y="${Y - 6}" width="22" height="12" rx="3" style="fill:var(--donor);stroke:var(--ink)"/>` + T(239, Y - 62, 'transposon (in chromosome)', 's', 'middle')
+      : `<rect x="339" y="${Y - 32}" width="22" height="12" rx="3" style="fill:var(--donor);stroke:var(--ink)"/>` + `<path class="flow" d="M250 ${Y} C290 ${Y - 40} 310 ${Y - 40} 336 ${Y - 28}"/>` + T(339, Y - 62, 'now in the plasmid', 's', 'middle');
+  }
+  s += T(550, 254, 'schematic', 's', 'end');
+  $('hgt-svg').innerHTML = Micro.DEFS + s; $('hgt-find').innerHTML = HGT[HS.k][1][HS.s][2];
+}
+function buildHgt(k) { HS.k = k; HS.s = 0; Micro.stepper('hgt-step', HGT[k][1].map(r => r[0]), drawHgt, HS); }
+Micro.toggles('hgt-tg', Object.entries(HGT).map(([k, v]) => [k, v[0]]), buildHgt, 'cj'); buildHgt('cj');
+Micro.table('hgt-table', ['Way', 'Carried by', 'Contact needed?', 'Exam point'], HGT_TABLE);
+
+/* ---- lab path ---- */
+function drawPath(k) {
+  const on = new Set(PATH[k][1]); let s = Micro.DEFS;
+  const box = (id, x, y, w, t, u) => `<rect x="${x}" y="${y}" width="${w}" height="44" rx="10" class="box"/>` + (on.has(id) ? `<rect class="sel" x="${x - 5}" y="${y - 5}" width="${w + 10}" height="54" rx="13"/>` : '') + T(x + w / 2, y + 19, t, 'b', 'middle') + (u ? T(x + w / 2, y + 35, u, 's', 'middle') : '');
+  s += box('sp', 10, 90, 90, 'Specimen', '');
+  s += box('mic', 130, 20, 100, 'Microscopy', 'Gram, ZN') + box('cul', 130, 90, 100, 'Culture', 'media') + box('id', 260, 90, 120, 'Identification', 'biochem, MALDI') + box('ast', 410, 90, 140, 'Susceptibility', 'disc, MIC');
+  s += box('ag', 130, 165, 120, 'Antigen', 'ELISA') + box('ab', 270, 165, 120, 'Antibody', 'serology') + box('mol', 410, 165, 140, 'Nucleic acid', 'PCR, NAAT');
+  s += `<path class="flow" d="M100 104 L126 46"/><path class="flow" d="M100 112 L126 112"/><path class="flow" d="M230 112 L256 112"/><path class="flow" d="M380 112 L406 112"/><path class="flow" d="M100 122 L126 182"/>`;
+  s += T(270, 224, 'no culture needed for the bottom row', 's', 'middle');
+  $('path-svg').innerHTML = s; $('path-find').innerHTML = PATH[k][2];
+}
+Micro.toggles('path-tg', Object.entries(PATH).map(([k, v]) => [k, v[0]]), drawPath, 'cul'); drawPath('cul');
+
+/* ---- media ---- */
+function showMed(k) {
+  const m = MEDIA.find(r => r[0] === k);
+  $('med-badges').innerHTML = Object.entries(MTYPES).map(([t, n]) => `<span class="badge${m[2].includes(t) ? ' on' : ''}">${m[2].includes(t) ? '✓ ' : ''}${n}</span>`).join('');
+  $('med-find').innerHTML = m[3];
+}
+Micro.toggles('med-tg', MEDIA.map(r => [r[0], r[1]]), showMed, 'mac'); showMed('mac');
+Micro.table('med-table', ['Type', 'What it does', 'Classic examples'], MED_TABLE);
+Micro.table('bio-table', ['Test', 'Principle', 'Classic result'], BIO_TABLE);
+
+/* ---- ELISA / agglutination ---- */
+const ES = {k: 'sand', s: 0};
+function drawEli() {
+  const lay = new Set(ELI[ES.k][1][ES.s][1]); let s = '';
+  if (ES.k === 'agg') {
+    const clump = lay.has('clump');
+    for (let i = 0; i < 14; i++) {
+      const x = clump ? 200 + (i % 4) * 24 + (i % 3) * 4 : 60 + (i % 7) * 70, y = clump ? 80 + Math.floor(i / 4) * 24 : 70 + Math.floor(i / 7) * 80 + (i % 2) * 14;
+      s += `<circle cx="${x}" cy="${y}" r="10" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.4"/>` + `<path d="M${x + 10} ${y} l8 -6 M${x + 10} ${y} l8 6" class="hair" style="stroke-width:1.2"/>`;
+    }
+    s += T(280, 214, clump ? 'clumps: positive' : 'even suspension', 's', 'middle');
+  } else {
+    /* antibody: stem (Fc) + two arms (Fab); tip = y of the arm tips; down = arms point down onto what they bind */
+    const ab = (x, tip, down, col = 'var(--ink)') => { const k = down ? -1 : 1, fork = tip + 12 * k, base = fork + 16 * k; return `<path d="M${x - 8} ${tip} L${x} ${fork} L${x + 8} ${tip} M${x} ${fork} L${x} ${base}" style="fill:none;stroke:${col};stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"/>`; };
+    const enz = (x, y) => `<circle cx="${x}" cy="${y}" r="5" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.6"/>`;
+    const ag = (x, y) => `<rect x="${x - 7}" y="${y}" width="14" height="12" style="fill:var(--surface);stroke:var(--ink)"/>`;
+    s += `<path d="M40 40 L40 180 Q40 200 60 200 L280 200 Q300 200 300 180 L300 40" style="fill:var(--bg);stroke:var(--ink);stroke-width:1.6"/>`;
+    if (lay.has('col')) s += `<rect x="43" y="44" width="254" height="40" style="fill:var(--muted);fill-opacity:.28"/>` + T(170, 68, 'coloured product', 'b', 'middle');
+    const labs = [];
+    for (let i = 0; i < 5; i++) {
+      const x = 70 + i * 55;
+      if (lay.has('cap')) s += ab(x, 170, false);                      // capture Ab: stem on the plate, arms up at y 170
+      if (lay.has('ag')) s += ag(x, 158);                               // antigen held in the arms
+      if (lay.has('det')) s += ab(x, 158, true) + enz(x, 125);          // detection Ab: arms down on the antigen, enzyme on its stem
+      if (lay.has('agp')) s += ag(x, 186);                              // antigen coated on the plate
+      if (lay.has('pab')) s += ab(x, 186, true);                         // patient Ab: arms (Fab) on the antigen, stem (Fc) up to y 158
+      if (lay.has('sec')) s += ab(x, 158, true, 'var(--muted)') + enz(x, 125);  // anti-human Ab: arms on the patient Ab's Fc
+    }
+    const L = (y, t) => s += `<path class="lead" d="M304 ${y} L312 ${y}"/>` + T(316, y + 4, t, 's', 'start');
+    if (lay.has('cap')) L(186, 'capture antibody (stem on plate)');
+    if (lay.has('agp')) L(192, 'antigen coated on the plate');
+    if (lay.has('ag')) L(164, 'antigen');
+    if (lay.has('pab')) L(172, 'patient antibody: arms on antigen');
+    if (lay.has('det')) L(142, 'labelled antibody: arms on antigen');
+    if (lay.has('sec')) L(146, 'anti-human antibody on the Fc');
+    if (lay.has('det') || lay.has('sec')) L(125, '○ enzyme on the stem');
+    s += T(316, 214, 'well (solid phase)', 's', 'start');
+  }
+  s += T(550, 226, 'schematic', 's', 'end');
+  $('eli-svg').innerHTML = s; $('eli-find').innerHTML = ELI[ES.k][1][ES.s][2];
+}
+function buildEli(k) { ES.k = k; ES.s = 0; Micro.stepper('eli-step', ELI[k][1].map(r => r[0]), drawEli, ES); }
+Micro.toggles('eli-tg', Object.entries(ELI).map(([k, v]) => [k, v[0]]), buildEli, 'sand'); buildEli('sand');
+
+/* ---- PCR ---- */
+const PS = {s: 0, n: 10};
+function drawPcr() {
+  const st = PCR[PS.s][1]; let s = '';
+  const strand = (y, col, x0 = 30, x1 = 250) => `<path d="M${x0} ${y} L${x1} ${y}" style="stroke:${col};stroke-width:4;stroke-linecap:round"/>`;
+  if (st === 'den') s += strand(80, 'var(--dna)') + strand(140, 'var(--dna)') + T(140, 112, '↕ strands separate', 's', 'middle');
+  else s += strand(80, 'var(--dna)') + strand(140, 'var(--dna)');
+  if (st === 'ann' || st === 'ext') s += strand(92, 'var(--ink)', 200, 236) + strand(128, 'var(--ink)', 44, 80) + T(140, 112, 'primers bind', 's', 'middle');
+  if (st === 'ext') s += `<path d="M200 92 L60 92" style="stroke:var(--ink);stroke-width:2;stroke-dasharray:5 3" marker-end="url(#arr)"/><path d="M80 128 L220 128" style="stroke:var(--ink);stroke-width:2;stroke-dasharray:5 3" marker-end="url(#arr)"/>` + T(140, 172, 'Taq polymerase extends', 's', 'middle');
+  s += T(140, 40, PCR[PS.s][0], 'b', 'middle');
+  // doubling curve
+  const X = Micro.scale(0, 30, 310, 540), Y = Micro.scale(0, 30, 220, 30), lg = n => Math.log2(Math.pow(2, n));
+  s += `<path class="axis" d="M310 30 L310 220 L540 220"/>` + T(425, 242, 'cycle', 's', 'middle') + T(300, 34, '2³⁰', 's', 'end') + T(300, 224, '1', 's', 'end');
+  const pts = []; for (let n = 0; n <= 30; n++) pts.push([X(n), Y(lg(n))]);
+  s += `<path class="trace" d="${Micro.path(pts)}"/>` + `<circle cx="${X(PS.n)}" cy="${Y(PS.n)}" r="6" style="fill:var(--mark);stroke:var(--surface);stroke-width:2"/>` + T(318, 50, 'copies (log scale)', 's', 'start');
+  $('pcr-svg').innerHTML = Micro.DEFS + s; $('pcr-find').innerHTML = PCR[PS.s][2] + `<p><span class="tag">after ${PS.n} cycles</span> <span class="big">${Math.pow(2, PS.n).toLocaleString('en')}</span> copies of one target (ideal)</p>`;
+}
+Micro.stepper('pcr-step', PCR.map(r => r[0]), drawPcr, PS);
+const PSL = Micro.slider('pcr-sl', {id: 'cyc', label: 'Number of cycles', min: 0, max: 30, step: 1, value: 10, fmt: v => v + ' cycles'}, v => { PS.n = v; drawPcr(); }); PSL.init();
+$('pcr-note').innerHTML = PCR_NOTE;
+$('maldi-text').innerHTML = MALDI_TEXT;
+
+/* ---- specimens ---- */
+$('spec-text').innerHTML = SPEC_TEXT;
+Micro.toggles('spec-tg', SPEC.map(r => [r[0], r[1]]), k => { $('spec-find').innerHTML = SPEC.find(r => r[0] === k)[2]; }, 'blood'); $('spec-find').innerHTML = SPEC[0][2];
+(function drawPack() {
+  let s = '';
+  s += `<rect x="20" y="20" width="250" height="220" rx="8" style="fill:var(--surface);stroke:var(--ink);stroke-width:2.4"/>` + `<rect x="50" y="50" width="190" height="160" rx="16" style="fill:var(--bg);stroke:var(--ink);stroke-width:1.6;stroke-dasharray:6 3"/>` + `<rect x="100" y="80" width="90" height="100" rx="24" style="fill:var(--surface);stroke:var(--muted);stroke-width:8;stroke-opacity:.5"/>` + `<rect x="120" y="96" width="50" height="68" rx="8" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.6"/>`;
+  s += T(280, 40, 'outer packaging', 's', 'start') + T(280, 56, '(strong; UN mark)', 's', 'start') + T(280, 84, 'secondary', 's', 'start') + T(280, 100, '(leak-proof)', 's', 'start') + T(280, 130, 'absorbent', 's', 'start') + T(280, 160, 'primary receptacle', 's', 'start') + T(280, 176, '(specimen)', 's', 'start');
+  s += `<path class="lead" d="M276 36 L270 36"/><path class="lead" d="M276 88 L240 88"/><path class="lead" d="M276 126 L190 120"/><path class="lead" d="M276 156 L170 140"/>`;
+  s += T(30, 254, 'schematic (WHO 2020)', 's', 'start');
+  $('pack-svg').innerHTML = s;
+})();
+$('pack-text').innerHTML = PACK_TEXT;
+Micro.swipeHints();
+</script>
+</body>
+</html>
