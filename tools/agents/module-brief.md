@@ -27,6 +27,9 @@ scripts (expand.py pastes quotes from saved search output; shingle/copy checks; 
   open documents, e.g. a WHO guideline saved as mlp_<name>.txt).
 - No OpenStax and no Lumen/Boundless: grep every download (txt, json, xml reference lists, wikitext) for openstax, cnx,
   Betts, lumenlearning, boundless; exclude Wikipedia articles and papers that cite them. No pirated or library books.
+  Fetch the CURRENT wikitext (action=raw, follow redirects) for every Wikipedia article you quote: older saved copies
+  go stale. tools/test/wp_audit.sh checks all quoted articles. Already excluded: see the EXCLUDED notes in the sheets
+  (e.g. Fontanelle, Joint, Connective tissue, Psoriasis, Atypical antipsychotic, Standard anatomical position).
 - Clinical content: drug doses, schedules, cut-offs, staging and classifications only from a named, dated official
   guideline or society statement (say "<body> <year>" on the page); otherwise give the principle without numbers.
   No patient photos. Indian national programme facts from MoHFW/NCDC/ICMR documents, with year.
