@@ -1491,3 +1491,14 @@ tubercles.
   - lower-limb/joints.html and head-neck/muscles.html: no change; every fact still has Gray 1918 plus StatPearls,
     open papers or clean Wikipedia articles (Ankle, Pott's fracture, Intertarsal joints, Interphalangeal joints of
     foot). Facial-nerve supply of stylohyoid, stapedius and posterior digastric now Gray + PMC13298086.
+- 2026-11-25 correction, joints follow-up (general/joints.html; sheet joints-general.md): Wikipedia "Anatomical terms of
+  motion" and "Osteoarthritis" (cite OpenStax) and "Synchondrosis" (links Boundless in a citation-needed tag; treated as
+  citing) are excluded; "Cartilaginous joint", "Synovial joint", "Suture (anatomy)", "Syndesmosis" and "Standard anatomical
+  position" are listed in the sheet as excluded (unused). Page changes: the movement table now says "Definitions follow
+  Gray 1918 unless another source is named"; "It combines flexion, extension, abduction and adduction" cut from
+  circumduction; the palm-facing definition is now "From the anatomical position, pronation turns the palm to face
+  backward (Wikipedia)" from Wikipedia "Pronator teres muscle" (with StatPearls Pronator teres), replacing "palm faces
+  forward in supination and backward in pronation"; wrist radial/ulnar deviation attributed to Wikipedia "Wrist" and a
+  2026 review (PMC12872188); "Wikipedia calls it a permanent synchondrosis; Gray 1918 says all synchondroses are
+  temporary" cut (no other source for "permanent"). Osteoarthritis kept on PMC12522086 and StatPearls. New files in
+  modern/joints/: Wikipedia Wrist and Pronator teres muscle (fetched 2026-11-25, wikitext clean), abs_35593871.
