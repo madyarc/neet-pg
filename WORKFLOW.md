@@ -28,8 +28,13 @@ Last updated: 2026-11-23
     Deltoid_ligament, Epimysium, Facial_muscles, Fibrous_joint, Hinge_joint, Intercalated_disc, Joint, Muscles_of_mastication,
     Plane_joint, Saddle_joint (~77 quotes in muscle-tissue, joints-general, connective-tissue, joints-ankle-foot,
     hn-face-mastication, fill-ll). Sent to the re-sourcing agent (queued after its first two). Pass 2: redirects followed; 1 more (Myocyte → Muscle cell,
-    OpenStax; muscle-tissue 4). The 23 "empty" were short redirects, all targets clean. AUDIT COMPLETE: 16 articles in
-    total, all with the re-sourcing agent. Reusable: tools/test/wp_audit.sh OUTDIR.
+    OpenStax; muscle-tissue 4). The 23 "empty" were short redirects, all targets clean. 16 articles + Luteal phase + Smooth muscle
+    re-sourced and COMMITTED 2026-11-25 (31bdbf9). Follow-up running: Anatomical terms of motion, Osteoarthritis
+    (OpenStax, joints-general F1/J4), Synchondrosis (Boundless in a cn tag: treated as citing). Saved wikitext can be
+    stale (articles add OpenStax later): LIVE re-audit of all ~2685 titles running (scratchpad wplive).
+    USER DECISION: sources-local/modern/fill-embryo1/wp_Spermiogenesis.txt unreadable (kernel: BTRFS zstd decompression
+    failed, inode 1107686, from 17:31; also inode 96460 untraced); rebuilt identical copy in scratchpad; agent's
+    replacement was blocked by permissions, so the user decides. Reusable: tools/test/wp_audit.sh OUTDIR.
   - Site-wide TODO (dedicated pass, not between modules): --mark and --clin identical in dark (#ff7b6f), ΔE≈10 in light;
     defined in atlas.css, 36 anatomy pages, ophthalmology pages and every subject's assets. Orange is taken by --ins, so
     pick new values with tools/test/colcheck.py and retest all pages. Reviewers flag it in every module.
@@ -68,8 +73,8 @@ Last updated: 2026-11-23
   page (running; then one review for the whole module; downloads ready, NLEM 2022
   official text missing). Inducer/inhibitor lists: use FDA DDI table (public domain) + Wikipedia/StatPearls. G01 [x] build (549 quotes; 3 pages; no new tokens; guidelines via open papers) [x] review (17: ACS picker
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
-  colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. Ps01 [x] build (289 quotes; ICD-11 CDDR 2024, mhGAP, NICE, MHCA 2017; Wikipedia Atypical antipsychotic excluded)
-  [ ] review (running). C01 [x] build (328 quotes; CDC 2012, WHO 1968, SRS 2020, NFHS-5, IDSP; no new tokens) [x] review (no wrong formulas; disability limitation level
+  colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. Ps01 [x] build (289 quotes) [x] review (no wrong facts; duration-picker logic, missing arrowheads,
+  mesocortical path, synapse marks, clozapine schedule) [ ] fixes (running). C01 [x] build (328 quotes; CDC 2012, WHO 1968, SRS 2020, NFHS-5, IDSP; no new tokens) [x] review (no wrong formulas; disability limitation level
   one-source, rate/time misattribution, --accent/--clin misuse, gaps: indirect standardisation, field trial) [x] fixes (374 quotes) [x] committed 2026-11-25. Pd01 [x] build (458 quotes; WHO 2006/2007 LMS z-score chart, CDC 2022 milestones via Zubler 2022) [x] review.
   D01 [x] build (407 quotes; NICE CG153; Wikipedia Psoriasis excluded: cites cnx.org) [ ] review (running).
   Pd01 review done (timeline colours overlap, pincer-grasp flag vs CDC, undated cut-offs, gaps: WHZ/BMI, Tanner,
