@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Post-mortem Changes and Time Since Death</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/fmt.css">
+<style>
+/* tokens used with their fmt.css meanings: --livor (usual lividity), --livor-co (cherry-red/pink lividity), --sulfhb (putrefactive green and
+   H2S lividity), --actin/--myosin (filaments), --ca (Ca2+), --mark (the chosen time), --accent (selection), --clin (a medicolegal warning).
+   Stiff muscle in the rigor map is ink, not a colour. Bodies are schematic outlines, never photographs. */
+svg.sch .body{fill:var(--surface);stroke:var(--ink);stroke-width:1.4}
+svg.sch .stiff{fill:var(--ink);fill-opacity:.62;stroke:var(--ink);stroke-width:1.4}
+svg.sch .table{stroke:var(--muted);stroke-width:3}
+svg.sch .pallor{fill:var(--surface)}
+:root[data-theme="dark"] svg.sch .pallor{fill:var(--ink);fill-opacity:.28}
+svg.sch .cur{stroke:var(--mark);stroke-width:1.6}
+svg.sch .seg0{fill:var(--ink);fill-opacity:.1;stroke:var(--ink);stroke-width:.8}
+svg.sch .seg1{fill:var(--ink);fill-opacity:.55}
+svg.sch .seg2{fill:url(#hat);stroke:var(--ink);stroke-width:.8}
+svg.sch .ov{fill:var(--ink);fill-opacity:.06;stroke:var(--ink);stroke-width:1.2;stroke-dasharray:4 3}
+.est{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:760px){.est{grid-template-columns:minmax(0,1fr)}}
+.est fieldset{border:1px solid var(--line);border-radius:8px;padding:6px 10px;margin:0;min-width:0}
+.est legend{font:600 12.5px var(--f-body);padding:0 4px}
+.est label{display:flex;gap:6px;align-items:flex-start;font-size:13.5px;padding:2px 0}
+.est input{accent-color:var(--accent);margin-top:3px}
+.card{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--bg);font-size:13.5px}
+.card b{display:block;margin-bottom:2px}
+#rg-svg,#pu-svg{max-width:340px} #atp-svg{max-width:420px}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Forensic Medicine</a> <span class="muted">· Module 01: <a href="death.html">Death and its certification</a> · <span aria-current="page">Post-mortem changes</span></span></nav>
+
+<header class="stack">
+  <h1>Post-mortem Changes and the Time Since Death</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-signs">Signs of death</a> <a href="#h-algor">Cooling</a> <a href="#h-livor">Lividity</a> <a href="#h-rigor">Rigor mortis</a> <a href="#h-stiff">Spasm, heat and cold</a> <a href="#h-putr">Putrefaction</a> <a href="#h-pres">Mummification, adipocere, maceration</a> <a href="#h-tsd">Time since death</a> <a href="#h-emb">Embalming</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-signs">
+  <h2 id="h-signs">Signs of death, in the order they appear</h2>
+  <div class="step" id="sg-step"></div>
+  <div class="prose find" id="sg-find" aria-live="polite"></div>
+  <div class="prose" id="sg-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-algor">
+  <h2 id="h-algor">Algor mortis: cooling of the body</h2>
+  <div class="sliders" id="al-sl"></div>
+  <div class="vrow" id="al-out" aria-live="polite"></div>
+  <div class="schbox"><svg class="fig sch" id="al-svg" viewBox="0 0 560 250" role="img" aria-label="Approximate rectal temperature against hours since death by two rules of thumb, levelling off at the surrounding temperature, with the chosen hour marked"></svg></div>
+  <p class="note">– – – 2 °C in the first hour, then 1 °C/h (Wikipedia) · · · · about 1 °C/h (a 2025 review's generalisation) · dashed horizontal line: the surroundings</p>
+  <div class="prose" id="al-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-livor">
+  <h2 id="h-livor">Livor mortis (post-mortem lividity, hypostasis)</h2>
+  <div class="sliders" id="lv-sl"></div>
+  <div class="chips" id="lv-pos" aria-label="Position"></div>
+  <div class="chips" id="lv-src" aria-label="Fixation time by source"></div>
+  <div class="chips" id="lv-cause" aria-label="Cause of death"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="lv-svg" viewBox="0 0 420 190" role="img" aria-label="Schematic body lying on a table seen from the side, with lividity in the lowest parts and pale areas where the body presses on the table"></svg></div>
+    <div class="stack">
+      <div class="prose find" id="lv-find" aria-live="polite"></div>
+      <div class="chips"><button class="btn" type="button" id="lv-press">Press on the lividity</button> <button class="btn" type="button" id="lv-turn">Turn the body over</button></div>
+    </div>
+  </div>
+  <div class="prose" id="lv-text"></div>
+  <div class="scroll"><table id="lv-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-rigor">
+  <h2 id="h-rigor">Rigor mortis: which muscles are stiff, hour by hour</h2>
+  <div class="sliders" id="rg-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="rg-svg" viewBox="0 0 300 348" role="img" aria-label="Schematic front view of a body; the regions that are stiff at the chosen hour are filled, following the sequence from eyelids and jaw down to the legs"></svg></div>
+    <div class="prose find" id="rg-find" aria-live="polite"></div>
+  </div>
+  <h3>The timetable differs between sources</h3>
+  <div class="schbox"><svg class="fig sch" id="rg-bars" viewBox="0 0 560 230" role="img" aria-label="Bars comparing the onset, full rigor and passing off of rigor mortis in five sources, with the chosen hour marked"></svg></div>
+  <div class="key" id="rg-key"></div>
+  <h3>Why the muscles lock: ATP</h3>
+  <div class="step" id="atp-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="atp-svg" viewBox="0 0 360 160" role="img" aria-label="Schematic of a thick myosin filament and a thin actin filament with myosin heads attached or detached for the chosen step"></svg></div>
+    <div class="prose find" id="atp-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="rg-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-stiff">
+  <h2 id="h-stiff">Cadaveric spasm, heat stiffening and cold stiffening</h2>
+  <div class="scroll"><table id="cs-table"></table></div>
+  <div class="prose" id="cs-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-putr">
+  <h2 id="h-putr">Putrefaction: the sequence</h2>
+  <div class="step" id="pu-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="pu-svg" viewBox="0 0 300 348" role="img" aria-label="Schematic front view of a body showing the putrefactive change of the chosen stage"></svg></div>
+    <div class="prose find" id="pu-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="pu-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pres">
+  <h2 id="h-pres">Where the body lies decides: mummification, adipocere, maceration</h2>
+  <div class="chips" id="pr-tg" aria-label="Conditions"></div>
+  <div class="prose find" id="pr-find" aria-live="polite"></div>
+  <div class="scroll"><table id="pr-table"></table></div>
+  <h3>Maceration grades in one hospital's series</h3>
+  <div class="scroll"><table id="mac-table"></table></div>
+  <div class="prose" id="pr-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tsd">
+  <h2 id="h-tsd">Time since death: combine the findings</h2>
+  <div class="prose" id="tsd-intro"></div>
+  <div class="est" id="tsd-in"></div>
+  <div class="schbox"><svg class="fig sch" id="tsd-svg" viewBox="0 0 560 300" role="img" aria-label="Bars of the time range each source gives for each chosen finding, on a 0 to 96 hour axis, with the span where every finding is possible in at least one source shaded"></svg></div>
+  <div class="prose find" id="tsd-out" aria-live="polite"></div>
+  <div class="prose" id="tsd-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-emb">
+  <h2 id="h-emb">Embalming, briefly</h2>
+  <div class="prose" id="emb-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BPost-mortem%20Changes%20and%20the%20Time%20Since%20Death%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fforensic-medicine%2Fthanatology%2Fpostmortem-changes.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/fmt.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-fm01.md, Part B; forensic-medicine/DATA-SOURCES.md) ===================== */
+const LEDE = 'Cool a body by the rules of thumb and see why they are criticised; watch lividity settle, blanch and fix, and turn the body over; slide through the hours and watch rigor mortis spread from the eyelids to the legs and pass off; step through putrefaction; and combine the findings into a time-since-death range — with every source\'s numbers shown side by side, because they differ. Types of death and the certificate are on the <a href="death.html">previous page</a>.';
+
+const SIGNS = [
+  ['Immediate', 'Respiratory arrest (no breathing), cardiac arrest (no pulse) and brain death (no neuronal activity) are the first signs Wikipedia lists. These are the signs of somatic death; see the <a href="death.html#h-types">previous page</a>.'],
+  ['Pallor mortis', 'Paleness "which happens in 15–120 minutes after death" (Wikipedia only).'],
+  ['Livor mortis', 'Settling of blood in the lowest parts; visible within about 2 hours (Wikipedia; a 2025 review). <a href="#h-livor">Below.</a>'],
+  ['Algor mortis', 'Cooling towards the surrounding temperature (Wikipedia; StatPearls). <a href="#h-algor">Below.</a>'],
+  ['Rigor mortis', 'Stiffening of the muscles; onset given as 1–2 h (a 2025 review\'s generalisation), 1.5–4 h (2017 case letter), 2–3 h ("Indian textbooks", 2011) or 2–6 h (2025–26 case reports). <a href="#h-rigor">Below.</a>'],
+  ['Putrefaction', 'Bacterial decomposition: greenish discoloration, marbling, bloating (Wikipedia; reviews). <a href="#h-putr">Below.</a>'],
+];
+const SG_TEXT = '<p>"Changes like algor mortis, livor mortis, and rigor mortis occur within hours" (2025 review); forensic pathologists "usually rely on classic signs, such as body temperature, rigor mortis, and livor mortis", which "are notoriously imprecise" (2026 review). Their speed depends on "ambient temperature, season, geographical location …, body fat content, sepsis or injuries, intoxication, and the presence of clothing" (StatPearls). The eyes change too — corneal opacity, pupil size, retinal colour and a fall in intraocular pressure "evolve in a time-dependent manner" (2025 review) — and the potassium of the vitreous humour has "long been considered one of the most reliable biochemical approaches for early PMI estimation" (2025 systematic review). The <b>post-mortem interval (PMI)</b> is "the time that has elapsed since an individual\'s death" (Wikipedia).</p>';
+
+/* --- algor mortis (B2) --- */
+const AL0 = {h: 6, amb: 25, t0: 37};
+const AL_TEXT = '<p><b>Why the body cools.</b> "After death, the body cools down because its metabolism and heat production stop"; it "loses heat through conduction, convection, radiation, and evaporation" (StatPearls). In a hot place it can warm instead, until it matches the surroundings (Wikipedia).</p>'
+  + '<p><b>Two rules of thumb, both criticised.</b> Wikipedia: cooling "can be approximated as a linear process: 2 °C during the first hour and 1 °C per hour until the body nears ambient temperature". A 2025 systematic review quotes the generalisation "approximately 1 °C per hour during the first hours" and notes that recent literature "has increasingly criticized the use of fixed rates … for oversimplifying the dynamic and nonlinear nature of postmortem temperature loss". Real cooling "follows an exponential decay curve", often after a <b>temperature plateau</b> "in which the body does not cool" (Wikipedia). The dashed lines above are those two rules — approximate, not a measurement model.</p>'
+  + '<p><b>Formula.</b> Only one of the sources (Wikipedia) prints a formula — the Glaister equation — so it is not given here. The method the reviews discuss is <b>Henssge\'s nomogram</b>, which adjusts for ambient temperature, body weight and a corrective factor for clothing and surroundings and gives a 95 % interval (2025 systematic review; a 2025 validation study). The validation study found its intervals "tended to underestimate the actual" time in cold-stored bodies and overestimate it in warm-stored ones, and that body surface and fat were not in the equations.</p>'
+  + '<p><b>Factors that change the rate</b>: steady or fluctuating surroundings; clothing and covering; the surface the body lies on; fever or drugs that raised the temperature at death; the plateau (Wikipedia); body build and fat; immersion in water and hypothermia, which make the nomogram unreliable (2025 systematic review; 2025 validation study); humidity and exposure (Wikipedia).</p>';
+
+/* --- livor mortis (B3) --- */
+const LV0 = {h: 3};
+const LV_SRC = { // fixation: [may start, usually complete] hours
+  rev: ['2025 lividity review: fixed 6–12 h', 6, 12],
+  gen: ['2025 PMI review\'s generalisation: fixed within 15–24 h', 15, 24],
+};
+const LV_CAUSE = {
+  nat: ['Natural death', '--livor', 'red-purple'],
+  co: ['CO, cyanide, cold', '--livor-co', 'cherry-red to pink'],
+  h2s: ['Hydrogen sulfide', '--sulfhb', 'green'],
+};
+const LV_TABLE = [
+  ['Usual (natural)', 'Red to purple', 'Normal haemoglobin'],
+  ['Carbon monoxide', 'Cherry-red to pink', 'Carboxyhaemoglobin (Wikipedia and the review: CO causes a red colour)'],
+  ['Cyanide; fluoroacetate', 'Cherry-red to pink', 'Blocked cellular use of oxygen'],
+  ['Hypothermia, refrigeration, immersion in water', 'Cherry-red to pink', 'Cold; mortuary refrigeration can cause it'],
+  ['Hydrogen sulfide', 'Green', 'Sulfhaemoglobin'],
+  ['Sodium nitrite; sodium chlorate; potassium chromate', 'Brown (nitrite: also grey, purple, red-brown; chlorate: slate-grey)', 'Methaemoglobin (nitrite, chlorate)'],
+  ['Aniline', 'Deep blue', 'Methaemoglobin'],
+  ['Phosphorus', 'Yellow-brown', '—'],
+];
+const LV_TEXT = '<p><b>What it is.</b> When the heart stops, "heavy red blood cells sink through the serum by action of gravity" to the dependent parts (Wikipedia); the red-purple colour "is only present on the dependent areas of the body" (2025 review). Where the body presses on a surface the capillaries are compressed and the skin stays pale — <b>contact pallor</b> (Wikipedia; the review: a person lying on the back shows no lividity over the scapulae). Wikipedia adds that the colour\'s intensity "depends upon the amount of reduced haemoglobin in the blood".</p>'
+  + '<p><b>Timing.</b> It can start "as early as 20 minutes" but is typically seen "within two hours" (review; Wikipedia: "within 20–30 minutes, but … not observable … until two hours"). Patches enlarge and become confluent over the next hours (Wikipedia: 3–6 h; review: "after four to six hours"). <b>Fixation — when it no longer blanches — is where sources differ</b>: the review says it is "usually fixed … after eight to 12 hours", "as early as six hours" but sometimes "not until 12 hours"; Wikipedia says fixation "will begin" within the 3–6 h of spreading and lividity is maximal at 8–12 h; a 2025 PMI review quotes the textbook figure "fixed within 15–24 h" and calls such figures "overly simplistic". Pick a source above to see its fixation window.</p>'
+  + '<p><b>Use.</b> Before fixation, pressing blanches it and turning the body moves it: moved "within the first two to three hours, complete shifting of the lividity will occur"; moved "after three to perhaps six hours" while it still blanches, "incomplete shifting of the previously established postmortem hypostasis will occur; some of the initially observed lividity will remain in the former dependent area and new lividity will develop in the new dependent areas" (review). Once fixed, "changing the position of the body will neither alter the pattern of the lividity nor the presentation of the contact pallor". So lividity opposite to the position found means the body was moved (Wikipedia; review). Between appearance and fixation it narrows the interval to "approximately two hours and eight hours" (review). It is "not considered an exact way to measure time of death" (Wikipedia).</p>'
+  + '<p><b>Colour and cause.</b> Carbon monoxide gives cherry-red to pink lividity (Wikipedia; the review: 98 % of 182 accidental CO deaths) — a sign "more common in the dead" than in living patients (Wikipedia). The table is the 2025 review\'s list; apart from CO, each row rests on that review alone — and the colour is not reliable: in a review of cyanide cases it quotes, "cherry-red or pink skin was only described in 11 percent of the decedents".</p>'
+  + '<p><b>Absent or faint lividity.</b> "Individuals who have severe anemia may not demonstrate postmortem hypostasis", nor may a person who dies of extensive haemorrhage (2025 review).</p>'
+  + '<p><b>Lividity or bruise?</b> "A bruise is the most common condition in the clinical differential diagnosis of lividity" (2025 review). In lividity the blood stays in the vessels; in a bruise it has escaped into the tissues: on incision, lividity shows no haemorrhage into the soft tissue. The review\'s table: lividity is purple to red, in dependent parts, with an indistinct border and no swelling; a bruise is purple to blue, anywhere (often over prominences), well-defined and swollen. One source → attributed.</p>'
+  + '<p><b>Tardieu spots</b> are "petechiae and minute hemorrhages that may occur in dependent areas, including those of livor mortis"; they "commonly occur when the cause of death is hanging" and may be confused with petechiae formed before death (2025 review).</p>';
+
+/* --- rigor mortis (B4) --- */
+const RG0 = {h: 8};
+// Nysten order (Wikipedia), grouped for the drawing; heart is first but internal (not drawn)
+const RG_REG = ['Eyelids', 'Neck', 'Jaw and face', 'Upper limbs', 'Trunk', 'Lower limbs'];
+const RG_SCHEME = {start: 2, full: 12, holdEnd: 24, gone: 36}; // "Indian textbooks" as quoted in a 2011 case report
+const RG_BARS = [ // [label, onset [a,b], full from [a,b], passing off from [a,b], gone by [a,b]] in hours; null = not stated
+  ['"Indian textbooks" (quoted, 2011)', [2, 3], [12, 12], [24, 24], [36, 36]],
+  ['2017 case letter', [1.5, 4], [6, 12], [18, 36], [24, 50]], // read as: full until 18–36 h; passing off complete by 24–50 h
+  ['2025 PMI review (generalisation)', [1, 2], [14, 24], [24, 24], [24, 36]],
+  ['Wikipedia', [1, 1], [13, 13], null, [61, 73]],
+  ['2025–26 case reports', [2, 6], null, null, null],
+];
+const ATP_STEPS = [
+  ['Alive', 'ATP binds the myosin head and lets it let go of actin; this is how muscle relaxes: "ATP is required to cause separation of the actin-myosin cross-bridges" (Wikipedia).'],
+  ['Primary relaxation', 'After death the muscles are first relaxed and the limbs can be moved (2011 case report; a 2017 case letter: 3–6 h). Without oxygen, ATP is made for a while from glycogen by glycolysis (Wikipedia).'],
+  ['ATP runs out: rigor', 'When glycogen is used up, ATP falls and the cross-bridges cannot break (Wikipedia; a 2025 review: rigor "arises from … ATP depletion and actin-myosin binding"). Calcium leaking into the cytosol keeps the binding sites open (Wikipedia). A 2017 case letter puts the start at 85 % of normal ATP and maximum rigor at 15 %.'],
+  ['Resolution', 'Enzymes of decomposition degrade the proteins and the muscles relax again (Wikipedia; 2025 review: "until proteolytic enzymes degrade muscle fibers").'],
+];
+const RG_TEXT = '<p><b>Sequence.</b> Rigor "begins from the head down the body" — Nysten\'s rule (1811): heart, upper eyelids, neck, jaw, face, upper limbs, trunk, lower limbs; "the rule does not occur in all cases" (Wikipedia). A 2017 case letter: because "of the small muscle bulk of the head and face, rigidity first appears around the eyes, mouth, jaw, and then fingers". It passes off "in the same order that it first appeared" (the same letter only). The body keeps the position it had when rigor set in (2011 case report). If rigor is broken early, it "can re-establish … if the breaking occurs before the process is complete" (same report; one source).</p>'
+  + '<p><b>Faster</b> when ATP is already low: "exercise or vigorous activity, electrocution, myotonic dystrophy, convulsions, and high fever before death", stimulants such as amphetamines and cocaine, and strychnine (2017 case letter); a 2025 review also names struggle or exercise. <b>Slower and longer</b> in cold: "cold water or weather and frost can delay the formation of body rigor and make it last longer" (2017 case letter; 2025 review: strongly influenced by temperature).</p>'
+  + '<p class="muted">The body map uses only the "Indian textbook" timetable quoted in a 2011 case report (starts at 2–3 h, takes about 12 h to develop, persists about 12 h, takes about 12 h to pass off). Spreading region by region at equal steps is this page\'s simplification — schematic.</p>';
+
+/* --- cadaveric spasm, heat and cold (B5, B6) --- */
+const CS_TABLE = [
+  ['When', 'At the moment of death (Wikipedia; case reports 2025–26)', 'After primary relaxation, over hours', 'During exposure to heat (burns)', 'In cold surroundings'],
+  ['Muscles', 'Usually a group, e.g. hands, forearms (Wikipedia)', 'All, in sequence', 'Exposed muscles contract and shrink; limbs flex (2018 imaging review)', 'Any; one case: the jaw (2018 case report)'],
+  ['Mechanism', '"Similar" biochemical basis to rigor; differs in timing (2026 case report)', 'ATP depletion', 'Denaturation and coagulation of proteins (2017 case letter)', '"False rigor" in extreme cold (2017 case letter)'],
+  ['Meaning', 'Fixes the last act — a weapon, grass held in drowning (Wikipedia); its existence is debated', 'Time since death, position', 'Pugilistic attitude may look like a struggle (2026 series)', 'Must not be taken for rigor; a living hypothermic patient was resuscitated (2018)'],
+];
+const CS_TEXT = '<p><b>Cadaveric spasm (instantaneous rigor)</b> is "a rare form of muscular stiffening that occurs at the moment of death and persists into the period of rigor mortis", stronger than rigor and "usually associated with violent deaths" with intense emotion (Wikipedia). Two recent case reports describe it as immediate rigidity at death or cardiac arrest, trismus making intubation impossible (2025, 2026). <b>It is disputed</b>: Wikipedia\'s "Controversy" section notes "very little to no pathophysiological or scientific basis", and that in one study only 2 of 65 sharp-force suicides still held the weapon. Rigor "can be confused with cold stiffening or cadaveric spasm" (2025 review).</p>'
+  + '<p><b>Heat stiffening.</b> "High temperatures will lead to the denaturation and coagulation of proteins and rigidity of the muscles" (2017 case letter); in fires "exposed muscles … contract and shrink because of the heat, leading to a flexion deformation of the limbs" — the upper limbs in "triple flexion", the <b>pugilistic attitude</b> (2018 imaging review). In a 2026 series of fire deaths it appeared in 16 % and was linked to the degree of burn; it "may create the impression that the individual was involved in a struggle".</p>'
+  + '<p><b>Cold stiffening.</b> "In the extreme cold or heat, the muscles may undergo a false rigor" (2017 case letter). "This pseudo-rigor mortis or cold stiffening must not be mistaken for true rigor mortis" (2018 case report of a resuscitated hypothermic patient); the 2025 review warns the same.</p>';
+
+/* --- putrefaction (B7) --- */
+const PU_STEPS = [
+  ['Fresh', 'Autolysis — the body\'s own enzymes — starts "at the moment of death"; few visible changes, though autolysis may raise skin blisters (Wikipedia).'],
+  ['Green discoloration', 'Gut bacteria turn haemoglobin into <b>sulfhaemoglobin</b>, which is green (Wikipedia; a 2023 case report). Wikipedia: the first external sign in air is "usually a greenish discoloration of the skin over the region of the cecum, which appears in 12–24 hours"; the first internal sign, on the under-surface of the liver. Its day-by-day table, however, puts abdominal discoloration at 2–3 days — the two figures disagree.'],
+  ['Marbling', 'Gas carries sulfhaemoglobin through the vessels, "giving the body an overall marbled appearance" (Wikipedia); bacteria spread quickly in the venous system (2023 case report). Wikipedia\'s table: discolored veins visible at 3–4 days.'],
+  ['Bloating', 'Gas distends the abdomen and limbs — the "bloat" stage, "the first clear visual sign that microbial proliferation is underway" (Wikipedia). Bloating, marbling, skin slippage and blisters are the moist decompositional changes recorded at autopsy (2023 indoor study; 2026 immersion study). Wikipedia\'s table: abdomen swells noticeably, skin blisters at 5–6 days; maximal at about 2 weeks.'],
+  ['Active and advanced decay', 'Green turns dark brown to black (2025 review); fluids purge from the body; by about 3 weeks tissues have softened and by about 4 weeks the soft tissues begin to liquefy (Wikipedia\'s table).'],
+  ['Skeletal remains', 'The last of five stages Wikipedia uses: fresh, bloat, active decay, advanced decay, dry/remains.'],
+];
+const PU_TEXT = '<p><b>Speed.</b> "The rate of putrefaction is greatest in air, followed by water, soil, and earth" and "increases dramatically in tropical climates" (Wikipedia). <b>Casper\'s dictum</b>: putrefaction varies with where the body lies, "the ratio is 1:2:8 depending on whether the body is in air, water, or earth" (2025 review); Wikipedia: "when there is free access of air a body decomposes twice as fast as if immersed in water and eight times faster than if buried in the earth". "transformative processes may occur within a few hours under hot and humid conditions" (2025 review). Temperature, humidity and season decide whether a body skeletonises or mummifies (Wikipedia). All the day counts above are Wikipedia\'s, for a body in air; treat them as approximate.</p>';
+
+/* --- mummification, adipocere, maceration (B8–B10) --- */
+const PR = {
+  air: ['Ordinary air, warm', 'Putrefaction', 'Bacterial decomposition proceeds as in the stepper above.'],
+  dry: ['Hot, dry, ventilated', 'Mummification', '<b>Mummification</b>: total drying of the soft tissues; the skin becomes "leathery, parchment-like", "bright yellow to dark brownish-to-black". The leading factors are "dry air, good ventilation, solar radiation, and high temperature" (2023 case report; a 2023 indoor study: desiccation must start soon after death). It takes "several weeks to 6–12 months" (2023 case report) — "weeks, if not months" (2023 study). Once complete, the body "can be preserved in that state for an extended period"; mummified tissue was found free of microorganisms (2023 study). Value: shape, features and injuries survive.'],
+  wet: ['Warm, moist, airless, with body fat', 'Adipocere', '<b>Adipocere (saponification)</b>: "a wax-like organic substance formed by the anaerobic bacterial hydrolysis of fat" (Wikipedia) — greyish-white, soap-like (2025 case series), mostly saturated fatty acids and their soaps (Wikipedia; 2019 study). Conditions: "adequate adipose tissue, an anaerobic environment, warm temperatures, moisture …, alkaline pH of the soil" and anaerobic bacteria (2025 Indian case series; 2019 study: "anaerobic, moist and oxygen-depleted"). <b>Onset differs</b>: Wikipedia "begins within a month of death"; the Indian case series saw it in "around two days". It lasts centuries (Wikipedia) to thousands of years (2019 study) and preserves features, injuries and tattoos (Wikipedia; case series).'],
+  ut: ['Fetus dead in the uterus', 'Maceration', '<b>Maceration</b>: after intrauterine death the skin "is softened and broken down within a fluid filled cavity" (2016 MRI study) — "enzymatic autolysis … leading to skin discoloration, desquamation with formation of bullae and eventually skin peeling", with oedema and turbid effusions (2018 cohort); the fluid is warm, about 35 °C (2026 autopsy study). The skull bones loosen and overlap after about a week — the Spalding sign on ultrasound (2018 cohort only). Grades estimate the time since intrauterine death (table). Maceration "takes place upon intrauterine fetal death", so a macerated fetus was already dead before delivery; ICD-11 separates "macerated" from "fresh" stillbirth (WHO).'],
+};
+const PR_TABLE = [
+  ['Mummification', 'Dry air, ventilation, heat, sun', 'Leathery, parchment-like, yellow to brown-black', 'Weeks to 6–12 months', '2023 case report; 2023 study'],
+  ['Adipocere', 'Fat, moisture, warmth, no air, bacteria', 'Greyish-white, waxy, soap-like', '2 days (Indian series) to within a month (Wikipedia)', 'Wikipedia; 2025 series; 2019 study'],
+  ['Maceration', 'Fetus retained in the uterus after death', 'Discoloured, blistered, peeling skin; soft tissues', 'Hours to days (grades)', '2016, 2018, 2020, 2026 studies'],
+];
+const MAC_TABLE = [['0', '"Parboiled" skin discoloration', '< 8 hours'], ['I', 'Desquamation of the skin', '≥ 8 hours'], ['II', 'Blood-stained effusions in serous cavities, skin peeling', '2–7 days'], ['III', 'Yellow-brown liver, turbid effusions, mummification', '≥ 8 days']];
+const PR_TEXT = '<p class="muted">Maceration grades: from a 2018 retrospective cohort of 91 intrauterine deaths (Vienna), one source; that cohort found no link between maceration grade and maternal DIC. Other studies grade maceration as none, mild, moderate or severe from skin slippage, discoloration and overlapping skull bones (2016, 2020).</p>';
+
+/* --- time since death estimator (B11): hours; each entry [source, possible from, certain from, certain to, possible to]; Infinity = no upper limit --- */
+const I = Infinity;
+const TSD = {
+  livor: ['Lividity', {
+    none: ['Not yet visible', [['Review 2025', 0, 0, 0.33, 2], ['Wikipedia', 0, 0, 0.33, 2]]],
+    blanch: ['Present, blanches on pressure', [['Review 2025', 0.33, 2, 6, 12], ['PMI review (gives fixation only: 15–24 h)', 0, 0, 15, 24]]],
+    fixed: ['Fixed (does not blanch)', [['Review 2025', 6, 12, I, I], ['PMI review (generalisation)', 15, 24, I, I]]],
+  }],
+  rigor: ['Rigor mortis', {
+    absent: ['Not yet started (body fresh)', [['Indian textbooks', 0, 0, 2, 3], ['Case letter 2017', 0, 0, 1.5, 4], ['PMI review (generalisation)', 0, 0, 1, 2], ['Case reports 2025–26', 0, 0, 2, 6]]],
+    dev: ['Starting or spreading (face, jaw; not yet everywhere)', [['Indian textbooks', 2, 3, 12, 12], ['Case letter 2017', 1.5, 4, 6, 12], ['PMI review (generalisation)', 1, 2, 14, 24]]],
+    full: ['Fully established, whole body', [['Indian textbooks', 12, 12, 24, 24], ['Case letter 2017', 6, 12, 18, 36], ['PMI review (generalisation)', 14, 14, 24, 24]]],
+    off: ['Passing off', [['Indian textbooks', 24, 24, 36, 36], ['Case letter 2017 (see note)', 18, 24, 36, 50], ['PMI review (generalisation)', 24, 24, 24, 36]]],
+  }],
+  putr: ['Putrefaction', {
+    none: ['No discoloration yet', [['Wikipedia (first sign 12–24 h)', 0, 0, 12, 24], ['Wikipedia (day table: 2–3 days)', 0, 0, 48, 72]]],
+    green: ['Greenish discoloration of the abdomen', [['Wikipedia (first sign 12–24 h)', 12, 24, I, I], ['Wikipedia (day table: 2–3 days)', 48, 72, I, I]]],
+    bloat: ['Marbling, bloating, blisters', [['Wikipedia (day table: 3–6 days)', 72, 120, I, I]]],
+  }],
+};
+const TSD_INTRO = '<p>"All the authors agree that there are extremely variable factors, often beyond the control of the examiner", so StatPearls advocates "using multiple systems, both qualitative and quantitative"; Wikipedia: livor, algor and rigor mortis and entomology "are frequently combined". The classic signs help only in the first two or three days (2024 review); later estimates rely on entomology, histology and other methods "across weeks to years" (2025 review). Choose what you find. Each bar is one source\'s range for that finding (dark = the range the source states; light = where its "as early as … / may not until …" extends it). The shaded span is where every chosen finding is possible in at least one source. <b>Approximate</b>: temperature, body build, illness and the surroundings shift all of it.</p>';
+const TSD_TEXT = '<p class="muted">Note: the 2017 case letter says "the full rigor mortis remains 18–36 h and will then collapse within 24–50 h"; this page reads it as full rigor lasting until 18–36 h and passing off complete by 24–50 h, so its "passing off" bar is light from 18 to 50 h and dark from 24 to 36 h.</p><p class="cap warn">Temperature is deliberately left out of the estimator: the sources give no formula that two of them agree on (see <a href="#h-algor">cooling</a>). A real estimate also weighs the scene, clothing, stomach contents and, later, insects (Wikipedia).</p>';
+
+/* --- embalming (B12) --- */
+const EMB_TEXT = '<p><b>Embalming</b> preserves the body with chemicals "to forestall decomposition" (Wikipedia; a 2026 review). Its three goals are "sanitization, presentation, and preservation" (Wikipedia). <b>Formaldehyde</b>, discovered by Butlerov in 1855, became the basis of modern embalming (Wikipedia); "none of these innovations demonstrates complete efficiency to substitute formaldehyde" (2026 review, which also names Thiel\'s method among the alternatives). <b>Methods</b>: <i>arterial</i> injection into the blood vessels, "usually via the right common carotid artery" (Wikipedia; the review describes the femoral and carotid arteries); <i>cavity</i> treatment through a trocar; <i>hypodermic</i> and surface treatment where arterial fluid does not reach (Wikipedia).</p>'
+  + '<p class="cap warn"><b>Medicolegal point.</b> When arsenic was used in embalming, there were legal concerns that a person suspected of arsenic poisoning might blame the poison found in the body on the embalming fluid (Wikipedia). </p>';
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access papers (Europe PMC): reviews of the post-mortem interval (2025 ×2, 2024, 2026), livor mortis (2025), the Henssge method (2025), forensic neuropathology (2026), human embalming (2026); case reports and series on rigor mortis (2011, 2017), instantaneous rigor (2025, 2026), cold stiffening in hypothermia (2018), fire deaths (2018, 2026), adipocere (2019, 2025), mummification (2023 ×2), fetal maceration (2016, 2018, 2020, 2026), immersion decomposition (2026); WHO <i>ICD-11 Reference Guide</i> (2026); Wikipedia.';
+const MODELS = '<b>Models used:</b> bodies are schematic outlines (no photographs); cooling lines are the two quoted rules of thumb, not a physical model; the lividity drawing uses the quoted onset and fixation windows; the rigor map spreads the quoted "Indian textbook" timetable evenly over six regions; the estimator draws each source\'s stated ranges and their overlap. All times approximate.';
+
+/* ===================== CODE ===================== */
+const F = window.Fmt, $ = F.$, T = F.T;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+const DEFS = F.DEFS.replace('</defs>', '<pattern id="hat" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" style="fill:var(--surface)"/><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--ink);stroke-width:1.6;stroke-opacity:.5"/></pattern></defs>');
+const fmtH = v => v < 1 ? Math.round(v * 60) + ' min' : (Number.isInteger(v) ? v : v.toFixed(1)) + ' h';
+
+/* --- signs --- */
+const SG = {s: 0};
+F.stepper('sg-step', SIGNS.map(x => x[0]), () => { const [a, b] = SIGNS[SG.s]; $('sg-find').innerHTML = `<h3>${SG.s + 1}. ${a}</h3><p>${b}</p>`; }, SG);
+$('sg-text').innerHTML = SG_TEXT;
+
+/* --- algor --- */
+const AL = Object.assign({}, AL0);
+function ruleA(h) { return h <= 1 ? AL.t0 - 2 * h : AL.t0 - 2 - (h - 1); } // Wikipedia: 2 °C first hour, then 1 °C/h
+function ruleB(h) { return AL.t0 - h; }                                     // review's generalisation: ~1 °C/h
+const clampAmb = v => AL.amb < AL.t0 ? Math.max(AL.amb, v) : AL.t0;
+function drawAl() {
+  const x0 = 50, x1 = 540, X = F.scale(0, 36, x0, x1), Y = F.scale(0, 50, 220, 20);
+  let s = DEFS;
+  for (const v of [0, 10, 20, 30, 40, 50]) s += `<path class="grid" d="M${x0} ${Y(v)} L${x1} ${Y(v)}"/>` + T(x0 - 6, Y(v) + 4, v + ' °C', 's', 'end');
+  for (const v of [0, 6, 12, 18, 24, 30, 36]) s += T(X(v) + (v === 0 ? 4 : 0), 238, v + ' h', 's', v === 0 ? 'start' : 'middle');
+  s += `<path class="axis" d="M${x0} 220 L${x1} 220"/>`;
+  s += `<path class="axis dash" d="M${x0} ${Y(AL.amb)} L${x1} ${Y(AL.amb)}"/>` + T(x0 + 6, AL.amb < AL.t0 - 4 ? Y(AL.amb) - 6 : Y(AL.amb) + 14, 'surroundings ' + AL.amb + ' °C', 's', 'start');
+  const pA = [], pB = []; for (let h = 0; h <= 36; h += 0.25) { pA.push([X(h), Y(clampAmb(ruleA(h)))]); pB.push([X(h), Y(clampAmb(ruleB(h)))]); }
+  s += `<path class="trace dash" d="${F.path(pA)}"/><path class="trace" style="stroke-dasharray:1.5 4;stroke-width:2.6" d="${F.path(pB)}"/>`;
+  s += `<path class="cur" d="M${X(AL.h)} 20 L${X(AL.h)} 220"/>`;
+  s += `<circle cx="${X(AL.h)}" cy="${Y(clampAmb(ruleA(AL.h)))}" r="4.5" style="fill:var(--mark)"/><circle cx="${X(AL.h)}" cy="${Y(clampAmb(ruleB(AL.h)))}" r="4.5" style="fill:var(--mark)"/>`;
+  s += T(x1, 14, 'approximate rules of thumb, not a cooling model', 's', 'end');
+  $('al-svg').innerHTML = s;
+  const warm = AL.amb >= AL.t0;
+  $('al-out').innerHTML = warm ? '<span class="note">Surroundings as warm as the body or warmer: it does not cool and may warm (Wikipedia). The rules of thumb do not apply.</span>'
+    : `<span><span class="tag">2 °C then 1 °C/h</span> <span class="big">${clampAmb(ruleA(AL.h)).toFixed(1)}</span> °C</span><span><span class="tag">~1 °C/h</span> <span class="big">${clampAmb(ruleB(AL.h)).toFixed(1)}</span> °C</span><span class="note">at ${AL.h} h; both stop at the surrounding temperature</span>`;
+}
+for (const [k, lab, mn, mx, st, f] of [['alh', 'Hours since death', 0, 36, 0.5, v => v + ' h'], ['amb', 'Surrounding temperature', 0, 45, 1, v => v + ' °C'], ['t0', 'Assumed temperature at death', 35, 41, 0.5, v => v.toFixed(1) + ' °C']])
+  F.slider('al-sl', {id: k === 'alh' ? 'alh' : k, label: lab, min: mn, max: mx, step: st, value: AL0[k === 'alh' ? 'h' : k], fmt: f}, v => { AL[k === 'alh' ? 'h' : k] = v; drawAl(); }).init();
+$('al-text').innerHTML = AL_TEXT; drawAl();
+
+/* --- livor --- */
+const LV = Object.assign({}, LV0, {pos: 'sup', src: 'rev', cause: 'nat', press: false, turn: null});
+// turn = null, or {at: hours when turned, kind: 'complete' | 'incomplete' | 'fixed', from: position before the turn}
+function lvState(h = LV.h) {
+  const [, a, b] = LV_SRC[LV.src];
+  if (h < 0.33) return 'none';
+  if (h < a) return 'blanch';
+  if (h < b) return 'maybe';
+  return 'fixed';
+}
+const lvOp = h => h < 0.33 ? 0 : Math.min(1, 0.15 + 0.85 * Math.min(1, (h - 0.33) / 5.67)); // visible from 20 min, confluent by ~6 h (schematic ramp)
+const PALLOR = {sup: [[110, 46], [235, 60]], pro: [[118, 52], [300, 56]]}; // where a supine (shoulder blades, buttocks) or prone (chest, thighs) body presses on the table
+function drawLv() {
+  if (LV.turn && LV.h < LV.turn.at) { LV.pos = LV.turn.from; LV.turn = null; document.querySelectorAll('#lv-pos button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === LV.pos))); }
+  const st = lvState(), col = LV_CAUSE[LV.cause][1], op = lvOp(LV.h), tn = LV.turn;
+  const tableY = 150, bodyTop = 92, bodyBot = 146, bandH = 26;
+  let s = DEFS;
+  s += `<path class="table" d="M20 ${tableY} L400 ${tableY}"/>` + T(24, tableY + 16, 'table', 's', 'start');
+  const outline = `M40 ${bodyTop + 22} C40 ${bodyTop - 4} 84 ${bodyTop - 4} 84 ${bodyTop + 22} L84 ${bodyTop + 10} C120 ${bodyTop} 200 ${bodyTop - 2} 240 ${bodyTop + 8} L380 ${bodyTop + 22} C394 ${bodyTop + 26} 394 ${bodyBot} 380 ${bodyBot} L240 ${bodyBot} C200 ${bodyBot + 2} 120 ${bodyBot + 2} 84 ${bodyBot} L84 ${bodyBot - 8} C84 ${bodyBot + 4} 40 ${bodyBot + 4} 40 ${bodyTop + 22} Z`;
+  s += `<clipPath id="bodyclip"><path d="${outline}"/></clipPath><path class="body" d="${outline}"/>`;
+  const band = (y, o) => o > 0 ? `<rect x="30" y="${y}" width="370" height="${bandH}" style="fill:var(${col});fill-opacity:${o.toFixed(2)}"/>` : '';
+  const gaps = (pos, y) => PALLOR[pos].map(([x, w]) => `<rect class="pallor" x="${x}" y="${y}" width="${w}" height="12"/>`).join('');
+  const downY = bodyTop + 30, upY = bodyTop - 4;
+  const pressK = o => LV.press ? (st === 'blanch' ? 0 : st === 'maybe' ? o * 0.5 : o) : o;
+  let inner = '', downOn = false, upOn = false;
+  if (!tn) { inner += band(downY, pressK(op)); downOn = op > 0; }
+  else if (tn.kind === 'complete') { inner += band(downY, pressK(op)); downOn = op > 0; }
+  else if (tn.kind === 'incomplete') { const o0 = lvOp(tn.at); inner += band(upY, pressK(o0 * 0.5)) + band(downY, pressK(Math.min(op, 0.15 + 0.85 * Math.min(1, (LV.h - tn.at) / 5.67)))); upOn = downOn = true; }
+  else { inner += band(upY, lvOp(tn.at)); upOn = true; }
+  if (downOn) inner += gaps(LV.pos, bodyBot - 9);
+  if (upOn && tn && tn.kind === 'fixed') inner += PALLOR[tn.from].map(([x, w]) => `<rect class="pallor" x="${x}" y="${bodyTop - 4}" width="${w}" height="20"/>`).join('');
+  s += `<g clip-path="url(#bodyclip)">${inner}</g><path d="${outline}" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>`;
+  // face and feet markers: the nose and toes point up when supine, down when prone
+  const up = LV.pos === 'sup';
+  s += up ? `<path d="M58 ${bodyTop - 3} l4 -7 l4 7" class="body"/><path d="M372 ${bodyTop + 22} l6 -12 l6 12" class="body"/>` : `<path d="M58 ${bodyBot + 3} l4 7 l4 -7" class="body"/><path d="M372 ${bodyBot} l6 4 l6 -4" class="body"/>`;
+  if (downOn && op > 0) { const [p1, p2] = PALLOR[LV.pos]; s += F.lead(p1[0] + p1[1] / 2, bodyBot - 3, p1[0] + p1[1] / 2, 176) + T(p1[0] + p1[1] / 2 + 4, 182, 'contact pallor', 's', 'start') + F.lead(p2[0] + p2[1] / 2, bodyBot - 3, p2[0] + p2[1] / 2, 176) + T(p2[0] + p2[1] / 2 + 4, 182, 'contact pallor', 's', 'start'); }
+  s += T(100, 40, up ? 'lying on the back (supine): nose and toes up' : 'lying face down (prone): nose and toes down', 'h', 'start');
+  if (tn && tn.kind === 'fixed') { const [p1] = PALLOR[tn.from]; s += F.lead(p1[0] + p1[1] / 2, bodyTop + 4, p1[0] + p1[1] / 2 + 30, 74) + T(p1[0] + p1[1] / 2 + 34, 76, 'old contact pallor (kept)', 's', 'start'); }
+  if (tn && tn.kind !== 'complete') s += T(390, 58, tn.kind === 'fixed' ? 'fixed lividity and pallor stay where they formed' : 'old lividity partly stays; new forms below', 'c', 'end');
+  $('lv-svg').innerHTML = s;
+  const name = {none: 'Not yet visible', blanch: 'Present, still blanches', maybe: 'Fixing: may or may not blanch', fixed: 'Fixed: does not blanch'}[st];
+  let msg = `<h3>${fmtH(LV.h)}: ${name}</h3><p>Colour: ${LV_CAUSE[LV.cause][2]} (${LV_CAUSE[LV.cause][0]}). Fixation window used: ${LV_SRC[LV.src][0]}.</p>`;
+  if (LV.press) msg += `<p>Pressed: ${st === 'blanch' ? 'the colour blanches — not yet fixed.' : st === 'maybe' ? 'partly — this is the window in which the source says fixation happens.' : st === 'fixed' ? 'no blanching — fixed.' : 'nothing to press yet.'}</p>`;
+  if (tn) msg += `<p>Turned at ${fmtH(tn.at)}: ` + {complete: 'within the first two to three hours, so "complete shifting of the lividity will occur" — it moves to the new lowest side (2025 review).',
+    incomplete: 'after about three hours while it still blanches, so shifting is incomplete: "some of the initially observed lividity will remain in the former dependent area and new lividity will develop in the new dependent areas" (2025 review). Drawn schematically.',
+    fixed: 'after fixation, so "changing the position of the body will neither alter the pattern of the lividity nor the presentation of the contact pallor" (2025 review) — it is now on the side facing up, a sign the body was moved.'}[tn.kind] + '</p>';
+  $('lv-find').innerHTML = msg;
+}
+F.slider('lv-sl', {id: 'lvh', label: 'Hours since death', min: 0, max: 30, step: 0.25, value: LV0.h, fmt: fmtH}, v => { LV.h = v; LV.press = false; drawLv(); }).init();
+F.toggles('lv-pos', [['sup', 'Supine'], ['pro', 'Prone']], k => { LV.pos = k; LV.turn = null; drawLv(); }, 'sup');
+F.toggles('lv-src', Object.entries(LV_SRC).map(([k, v]) => [k, v[0]]), k => { LV.src = k; drawLv(); }, 'rev');
+F.toggles('lv-cause', Object.entries(LV_CAUSE).map(([k, v]) => [k, v[0]]), k => { LV.cause = k; drawLv(); }, 'nat');
+$('lv-press').onclick = () => { LV.press = true; drawLv(); };
+$('lv-turn').onclick = () => {
+  if (LV.turn) { LV.pos = LV.turn.from; LV.turn = null; }
+  else { const st = lvState(); LV.turn = {at: LV.h, from: LV.pos, kind: st === 'fixed' ? 'fixed' : (st === 'none' || LV.h < 3) ? 'complete' : 'incomplete'}; LV.pos = LV.pos === 'sup' ? 'pro' : 'sup'; }
+  document.querySelectorAll('#lv-pos button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === LV.pos)));
+  $('lv-turn').textContent = LV.turn ? 'Turn it back' : 'Turn the body over';
+  LV.press = false; drawLv();
+};
+$('lv-text').innerHTML = LV_TEXT; F.table('lv-table', ['Cause', 'Colour of lividity', 'Mechanism (2025 review)'], LV_TABLE); drawLv();
+
+/* --- rigor body map --- */
+const RG = Object.assign({}, RG0);
+function regionStiff(i, h) {
+  const n = RG_REG.length, S = RG_SCHEME;
+  const on = S.start + i * (S.full - S.start) / (n - 1), off = S.holdEnd + (i + 1) * (S.gone - S.holdEnd) / n;
+  return h >= on && h < off;
+}
+function drawRg() {
+  const h = RG.h, st = RG_REG.map((_, i) => regionStiff(i, h));
+  const c = k => st[k] ? 'stiff' : 'body';
+  let s = DEFS;
+  // front view: legs (5), trunk (4), arms (3), neck (1), head (2 = jaw/face), eyelids (0) drawn on the head
+  s += `<path class="${c(5)}" d="M118 200 L148 200 L146 318 L122 318 Z"/><path class="${c(5)}" d="M152 200 L182 200 L178 318 L154 318 Z"/>`;
+  s += `<path class="${c(4)}" d="M108 86 L192 86 L186 204 L114 204 Z"/>`;
+  s += `<path class="${c(3)}" d="M104 88 L84 96 L70 196 L84 200 L104 120 Z"/><path class="${c(3)}" d="M196 88 L216 96 L230 196 L216 200 L196 120 Z"/>`;
+  s += `<rect class="${c(1)}" x="140" y="62" width="20" height="24"/>`;
+  s += `<ellipse class="${c(2)}" cx="150" cy="38" rx="24" ry="28"/>`;
+  // stiff eyelids: thick ink strokes on a relaxed head, thick light strokes on a stiff (dark) head
+  s += `<path d="M136 32 Q142 28 147 32 M153 32 Q158 28 164 32" style="fill:none;stroke:${st[0] ? (st[2] ? 'var(--surface)' : 'var(--ink)') : 'var(--ink)'};stroke-width:${st[0] ? 4.5 : 1.4};stroke-linecap:round"/>`;
+  s += `<path d="M140 54 L160 54" style="fill:none;stroke:${st[2] ? 'var(--surface)' : 'var(--ink)'};stroke-width:1.4"/>`;
+  // labels: [region, text, label x, label y, anchor, leader to x, y]
+  const lab = [[0, '1. eyelids', 8, 26, 'start', 138, 31], [1, '2. neck', 8, 78, 'start', 140, 74], [2, '3. jaw, face', 8, 54, 'start', 136, 54],
+    [3, '4. upper limbs', 8, 226, 'start', 77, 199], [4, '5. trunk', 150, 150, 'middle', null], [5, '6. lower limbs', 186, 270, 'start', 178, 270]];
+  for (const [i, t, x, y, an, lx, ly] of lab) {
+    if (lx !== null) s += F.lead(an === 'start' && x < 100 ? x + t.length * 6.2 + 4 : x - 4, y - 4, lx, ly);
+    s += T(x, y, t, (st[i] ? 'b' : 's') + ' l', an);
+  }
+  s += T(150, 340, 'schematic; order: Nysten\'s rule', 's', 'middle');
+  $('rg-svg').innerHTML = s;
+  const n = st.filter(Boolean).length, S = RG_SCHEME;
+  // phase read from the regions themselves, so label and drawing always agree
+  const phase = n === 0 ? (h < S.start ? 'primary relaxation — no rigor yet' : 'passed off') : n === RG_REG.length ? 'fully established' : st[0] ? 'developing, from the head downwards' : 'passing off, in the same order';
+  $('rg-find').innerHTML = `<h3>${fmtH(h)}: ${phase}</h3><p>Stiff now: ${n ? RG_REG.filter((_, i) => st[i]).join(', ') : 'none'}.</p><p class="muted">Timetable: "Indian textbooks" as quoted in a 2011 case report, read as hours after death (this page\'s reading): starts at 2 h, all regions stiff by 12 h, holds to 24 h, gone by 36 h. A literal reading ("takes about 12 h to develop" after a 2–3 h start) would put each stage 2–3 h later. Other sources: bars below.</p>`;
+  drawBars();
+}
+function drawBars() {
+  const x0 = 210, x1 = 545, X = F.scale(0, 75, x0, x1);
+  let s = DEFS;
+  for (const v of [0, 12, 24, 36, 48, 60, 72]) s += `<path class="grid" d="M${X(v)} 22 L${X(v)} 200"/>` + T(X(v), 216, v + ' h', 's', 'middle');
+  RG_BARS.forEach(([n, on, full, offFrom, gone], i) => {
+    const y = 40 + i * 34;
+    s += T(x0 - 8, y + 4, n, '', 'end');
+    if (on) s += `<rect class="seg0" x="${X(on[0])}" y="${y - 8}" width="${Math.max(2, X(full ? full[0] : on[1]) - X(on[0]))}" height="16"/>`;
+    if (full) s += `<rect class="seg1" x="${X(full[0])}" y="${y - 8}" width="${Math.max(3, X(offFrom ? offFrom[0] : full[1]) - X(full[0]))}" height="16"/>`;
+    if (gone) { const a = offFrom ? offFrom[0] : gone[0]; s += `<rect class="seg2" x="${X(a)}" y="${y - 8}" width="${Math.max(2, X(gone[1]) - X(a))}" height="16"/>`; }
+    if (n === 'Wikipedia') s += `<path d="M${X(13)} ${y} L${X(61)} ${y}" class="axis dash"/>` + T(X(37), y + 13, 'not stated', 's', 'middle') + T(X(13) + 6, y + 13, 'peak ~13 h', 's', 'start') + T(X(73), y - 12, 'myofilaments decompose 48–60 h after the peak', 's', 'end');
+    if (n.startsWith('2025–26')) s += T(X(6) + 6, y + 4, 'develops 2–6 h', 's', 'start');
+  });
+  s += `<path class="cur" d="M${X(Math.min(75, RG.h))} 22 L${X(Math.min(75, RG.h))} 200"/>`;
+  $('rg-bars').innerHTML = s;
+}
+F.slider('rg-sl', {id: 'rgh', label: 'Hours since death', min: 0, max: 48, step: 0.5, value: RG0.h, fmt: v => v + ' h'}, v => { RG.h = v; drawRg(); }).init();
+F.key('rg-key', [['--line', 'onset to full (faint)', 'background:var(--ink);opacity:.15'], ['--ink', 'fully established (solid)', 'opacity:.6'], ['--surface', 'passing off / gone by (hatched)', 'background:repeating-linear-gradient(45deg,var(--surface) 0 3px,var(--muted) 3px 5px)']]);
+const ATP = {s: 0};
+function drawAtp() {
+  const k = ATP.s, attached = k >= 2 && k < 3, gone = k === 3;
+  let s = DEFS;
+  s += `<rect x="40" y="56" width="280" height="10" rx="3" style="fill:var(--actin)"/>` + T(330, 64, 'actin', 's', 'start');
+  s += `<rect x="70" y="104" width="220" height="14" rx="4" style="fill:var(--myosin);${gone ? 'opacity:.35' : ''}"/>` + T(300, 116, 'myosin', 's', 'start');
+  for (let i = 0; i < 6; i++) {
+    const x = 90 + i * 36;
+    if (gone) { s += `<path d="M${x} 104 l6 -12" style="stroke:var(--myosin);stroke-width:4;opacity:.35"/>`; continue; }
+    s += attached ? `<path d="M${x} 104 L${x + 10} 66" style="stroke:var(--myosin);stroke-width:5;stroke-linecap:round"/>` : `<path d="M${x} 104 L${x + 8} 84" style="stroke:var(--myosin);stroke-width:5;stroke-linecap:round"/>`;
+    if (!attached && k < 2) s += `<circle cx="${x + 9}" cy="${80}" r="4" style="fill:var(--surface);stroke:var(--ink)"/>`;
+  }
+  if (k < 2) s += T(40, 150, '○ = ATP on a myosin head: it can let go of actin', 's', 'start');
+  if (k === 2) { for (const [x, y] of [[60, 36], [120, 30], [200, 38], [280, 32]]) s += `<circle cx="${x}" cy="${y}" r="4.5" style="fill:var(--ca)"/>`; s += T(40, 18, 'Ca²⁺ leaked into the cytosol', 's', 'start') + T(40, 150, 'no ATP: heads stay bound — rigor', 's', 'start'); }
+  if (gone) s += T(40, 150, 'proteins degraded: the muscle relaxes', 's', 'start');
+  $('atp-svg').innerHTML = s;
+  $('atp-find').innerHTML = `<h3>${ATP_STEPS[k][0]}</h3><p>${ATP_STEPS[k][1]}</p>`;
+}
+F.stepper('atp-step', ATP_STEPS.map(x => x[0]), drawAtp, ATP);
+$('rg-text').innerHTML = RG_TEXT; drawRg();
+
+/* --- spasm, heat, cold --- */
+F.table('cs-table', ['', 'Cadaveric spasm', 'Rigor mortis', 'Heat stiffening', 'Cold stiffening'], CS_TABLE); $('cs-text').innerHTML = CS_TEXT;
+
+/* --- putrefaction stepper --- */
+const PU = {s: 0};
+function drawPu() {
+  const k = PU.s;
+  const bloat = k >= 3 && k < 5 ? 1.18 : 1;
+  let s = DEFS;
+  if (k === 5) {
+    s += `<ellipse cx="150" cy="38" rx="20" ry="24" class="body"/>` + `<path d="M150 64 L150 200 M110 100 L190 100 M120 120 L180 120 M124 140 L176 140 M150 200 L130 318 M150 200 L170 318 M110 100 L80 196 M190 100 L220 196" style="stroke:var(--ink);stroke-width:3;fill:none;stroke-linecap:round"/>`;
+  } else {
+    const tw = 84 * bloat, tx = 150 - tw / 2;
+    s += `<path class="body" d="M118 200 L148 200 L146 318 L122 318 Z"/><path class="body" d="M152 200 L182 200 L178 318 L154 318 Z"/>`;
+    s += `<path class="body" d="M104 88 L84 96 L70 196 L84 200 L104 120 Z"/><path class="body" d="M196 88 L216 96 L230 196 L216 200 L196 120 Z"/>`;
+    s += `<rect class="body" x="140" y="62" width="20" height="24"/><ellipse class="body" cx="150" cy="38" rx="${24 * (k >= 3 ? 1.12 : 1)}" ry="28"/>`;
+    s += `<path id="trunk" class="body" d="M${tx} 86 L${tx + tw} 86 C${tx + tw + 8 * (bloat - 1) * 10} 150 ${tx + tw} 190 ${tx + tw - 6} 204 L${tx + 6} 204 C${tx} 190 ${tx - 8 * (bloat - 1) * 10} 150 ${tx} 86 Z"/>`;
+    if (k >= 1 && k < 4) s += `<ellipse cx="128" cy="180" rx="${k >= 2 ? 22 : 14}" ry="${k >= 2 ? 16 : 10}" style="fill:var(--sulfhb);fill-opacity:${k >= 2 ? .6 : .45}"/>` + F.lead(110, 182, 40, 214) + T(4, 226, 'right iliac fossa', 's', 'start') + T(4, 240, '(over the caecum)', 's', 'start');
+    if (k >= 2 && k < 4) for (const d of ['M120 100 C130 130 118 160 128 190', 'M175 100 C168 130 182 160 172 196', 'M96 110 C92 140 86 170 80 194', 'M204 110 C208 140 214 170 220 194', 'M132 210 C134 250 128 290 134 316', 'M166 210 C164 250 170 290 164 316'])
+      s += `<path d="${d}" style="fill:none;stroke:var(--sulfhb);stroke-width:2.2"/>`;
+    if (k === 3) s += `<circle cx="190" cy="150" r="6" class="body"/><circle cx="200" cy="168" r="4" class="body"/>` + F.lead(200, 160, 262, 120) + T(262, 112, 'blisters', 's', 'middle');
+    if (k === 4) s += `<path d="M${tx} 86 L${tx + tw} 86 L${tx + tw - 6} 204 L${tx + 6} 204 Z" style="fill:var(--ink);fill-opacity:.55"/>`;
+  }
+  s += T(150, 340, 'schematic', 's', 'middle');
+  $('pu-svg').innerHTML = s;
+  $('pu-find').innerHTML = `<h3>${k + 1}. ${PU_STEPS[k][0]}</h3><p>${PU_STEPS[k][1]}</p>`;
+}
+F.stepper('pu-step', PU_STEPS.map(x => x[0]), drawPu, PU);
+$('pu-text').innerHTML = PU_TEXT;
+
+/* --- preservation classifier --- */
+F.toggles('pr-tg', Object.entries(PR).map(([k, v]) => [k, v[0]]), k => { const [c, r, t] = PR[k]; $('pr-find').innerHTML = `<h3>${c} → ${r}</h3><p>${t}</p>`; }, 'dry');
+{ const [c, r, t] = PR.dry; $('pr-find').innerHTML = `<h3>${c} → ${r}</h3><p>${t}</p>`; }
+F.table('pr-table', ['Change', 'Conditions', 'Appearance', 'Time', 'Sources'], PR_TABLE);
+F.table('mac-table', ['Grade', 'External findings', 'Time since intrauterine death'], MAC_TABLE);
+$('pr-text').innerHTML = PR_TEXT;
+
+/* --- time since death estimator --- */
+const SEL = {livor: null, rigor: null, putr: null};
+let h2 = '';
+for (const [g, [title, opts]] of Object.entries(TSD)) {
+  h2 += `<fieldset><legend>${title}</legend><label><input type="radio" name="tsd-${g}" value="" checked> Not assessed</label>`;
+  for (const [k, [lab]] of Object.entries(opts)) h2 += `<label><input type="radio" name="tsd-${g}" value="${k}"> ${lab}</label>`;
+  h2 += '</fieldset>';
+}
+$('tsd-in').innerHTML = h2;
+$('tsd-in').querySelectorAll('input').forEach(inp => inp.addEventListener('change', () => { SEL[inp.name.slice(4)] = inp.value || null; drawTsd(); }));
+function drawTsd() {
+  const MAXH = 96, x0 = 220, x1 = 545, X = v => F.scale(0, MAXH, x0, x1)(Math.min(MAXH, v));
+  const rows = [];
+  for (const [g, k] of Object.entries(SEL)) if (k) for (const e of TSD[g][1][k][1]) rows.push([TSD[g][0] + ': ' + TSD[g][1][k][0].toLowerCase(), ...e]);
+  // span where every chosen finding is possible in at least one source
+  let lo = 0, hi = I, any = false;
+  for (const [g, k] of Object.entries(SEL)) {
+    if (!k) continue; any = true;
+    const es = TSD[g][1][k][1];
+    lo = Math.max(lo, Math.min(...es.map(e => e[1]))); hi = Math.min(hi, Math.max(...es.map(e => e[4])));
+  }
+  // layout: a heading line before each finding's group of bars
+  const lay = []; let yy = 20, lastG = '';
+  for (const r of rows) { if (r[0] !== lastG) { yy += 26; lay.push(['h', r[0], yy]); lastG = r[0]; yy += 4; } yy += 22; lay.push(['r', r, yy]); }
+  const H = Math.max(120, yy + 44), yb = yy + 16;
+  $('tsd-svg').setAttribute('viewBox', `0 0 560 ${H}`);
+  let s = DEFS;
+  for (const v of [0, 12, 24, 36, 48, 72, 96]) s += `<path class="grid" d="M${X(v)} 16 L${X(v)} ${yb}"/>` + T(X(v), yb + 16, v + (v === 96 ? '+ h' : ' h'), 's', 'middle');
+  if (any && lo <= hi) s += `<rect class="ov" x="${X(lo)}" y="16" width="${Math.max(3, X(hi) - X(lo))}" height="${yb - 16}"/>`;
+  for (const [kind, r, y] of lay) {
+    if (kind === 'h') { s += T(4, y, r, 'b l', 'start'); continue; }
+    const [, src, a1, b1, c1, d1] = r;
+    s += T(x0 - 6, y + 4, src, 's', 'end');
+    s += `<rect class="seg0" x="${X(a1)}" y="${y - 6}" width="${Math.max(2, X(d1) - X(a1))}" height="12"/>`;
+    s += `<rect class="seg1" x="${X(b1)}" y="${y - 6}" width="${Math.max(2, X(c1) - X(b1))}" height="12"/>`;
+    if (d1 === I) s += `<path d="M${x1 - 2} ${y - 6} l6 6 l-6 6" style="fill:var(--ink)"/>`;
+  }
+  if (!rows.length) s += T(280, 34, 'Choose findings above', 's', 'middle');
+  $('tsd-svg').innerHTML = s;
+  let out;
+  if (!any) out = '<p>No finding chosen.</p>';
+  else if (lo > hi) out = '<p><b>No common span:</b> no time fits every finding in any source — re-check the findings, or the body was in unusual conditions (cold, heat, immersion), which all the sources say change these timings.</p>';
+  else out = `<p><b>Approximately ${fmtH(lo)} to ${hi === I ? 'beyond ' + MAXH + ' h' : fmtH(hi)}</b> — the span where each chosen finding is possible in at least one source. It is not a confidence interval.</p>`;
+  $('tsd-out').innerHTML = out;
+}
+$('tsd-intro').innerHTML = TSD_INTRO; $('tsd-text').innerHTML = TSD_TEXT; drawTsd();
+
+$('emb-text').innerHTML = EMB_TEXT;
+F.swipeHints();
+</script>
+</body>
+</html>

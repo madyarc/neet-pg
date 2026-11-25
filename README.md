@@ -107,6 +107,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [Pharmacokinetics](pharmacology/general/pharmacokinetics.html), [Pharmacodynamics](pharmacology/general/pharmacodynamics.html), [Principles, Drug Names, ADRs and Pharmacovigilance](pharmacology/general/principles-safety.html) | General | Route map, AUC and bioavailability, ion trapping, Vd, CYP inducer/inhibitor table (FDA), repeated-dosing simulator, first- vs zero-order; receptor families, dose–response with antagonists, spare receptors, therapeutic index, isobologram; drug names, bioequivalence, Schedules H/H1/X, essential medicines, ADR types, Naranjo calculator, WHO-UMC, PvPI flow, interactions |
 
+### Forensic Medicine — [`forensic-medicine/`](forensic-medicine/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [Death, Brainstem Death and the Cause-of-Death Certificate](forensic-medicine/thanatology/death.html), [Post-mortem Changes and the Time Since Death](forensic-medicine/thanatology/postmortem-changes.html) | Thanatology | Types of death on a brain schematic, Form 10 brainstem-death checklist and board (THOT Rules 2014), transplant-law features, MCCD chain builder (WHO ICD-11 2026, RGI 2012); lividity simulator, rigor body map, cooling sliders, putrefaction stepper, time-since-death estimator |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and

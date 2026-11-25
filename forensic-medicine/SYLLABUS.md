@@ -26,17 +26,17 @@ Source notes: FM2.12 is not in the PDF (numbering gap in the source).
 
 ### 2. Forensic Pathology
 
-- [ ] **FM2.1** Select appropriate cause of death in a particular scenario by referring ICD 11 code
+- [x] **FM2.1** Select appropriate cause of death in a particular scenario by referring ICD 11 code — *MCCD chain builder (WHO ICD-11 Reference Guide 2026; RGI MCCD manual 2012): [Death: Its Types, Brainstem Death and the Cause-of-Death Certificate](thanatology/death.html)*
 - [ ] **FM2.2** Write a correct Medical Certificate of Cause of Death (MCCD) certificate as per ICD 11 document *(skill)*
-- [ ] **FM2.3** Define, describe and discuss death and its types including somatic/clinical/cellular, molecular and brain-death, Cortical Death and Brainstem Death
-- [ ] **FM2.4** Describe salient features of the Organ Transplantation and The Human Organ Transplant (Amendment) Act 2011 and discuss ethical issues regarding organ donation
-- [ ] **FM2.5** Describe and discuss issues related to sudden natural deaths
-- [ ] **FM2.6** Describe and discuss natural and unnatural deaths
-- [ ] **FM2.7** Discuss moment of death, modes of death – coma, asphyxia and syncope
-- [ ] **FM2.8** Describe and discuss suspended animation
-- [ ] **FM2.9** Describe and discuss post-mortem changes including signs of death, cooling of body, post-mortem lividity, rigor mortis, cadaveric spasm, cold stiffening and heat stiffening
-- [ ] **FM2.10** Describe putrefaction, mummification, adipocere and maceration
-- [ ] **FM2.11** Discuss estimation of time since death conducting post-mortem examination and Embalming techniques
+- [x] **FM2.3** Define, describe and discuss death and its types including somatic/clinical/cellular, molecular and brain-death, Cortical Death and Brainstem Death — *somatic vs cellular death; whole-brain, brainstem and cortical death, vegetative state: [Death: Its Types, Brainstem Death and the Cause-of-Death Certificate](thanatology/death.html)*
+- [x] **FM2.4** Describe salient features of the Organ Transplantation and The Human Organ Transplant (Amendment) Act 2011 and discuss ethical issues regarding organ donation — *THOA 1994/2011 (unofficial consolidated text) and THOT Rules 2014: Form 10 checklist, board, consent, ethics: [Death: Its Types, Brainstem Death and the Cause-of-Death Certificate](thanatology/death.html)*
+- [x] **FM2.5** Describe and discuss issues related to sudden natural deaths — *sudden natural death, definitions disagreement, Indian autopsy series: [Death: Its Types, Brainstem Death and the Cause-of-Death Certificate](thanatology/death.html)*
+- [x] **FM2.6** Describe and discuss natural and unnatural deaths — *natural vs unnatural; cause, mechanism, manner: [Death: Its Types, Brainstem Death and the Cause-of-Death Certificate](thanatology/death.html)*
+- [~] **FM2.7** Discuss moment of death, modes of death – coma, asphyxia and syncope — *moment of death; coma, asphyxia and syncope defined separately (the classical three-mode scheme has no open source): [Death: Its Types, Brainstem Death and the Cause-of-Death Certificate](thanatology/death.html)*
+- [x] **FM2.8** Describe and discuss suspended animation — *suspended animation: [Death: Its Types, Brainstem Death and the Cause-of-Death Certificate](thanatology/death.html)*
+- [x] **FM2.9** Describe and discuss post-mortem changes including signs of death, cooling of body, post-mortem lividity, rigor mortis, cadaveric spasm, cold stiffening and heat stiffening — *signs of death, cooling, lividity simulator, rigor body map, cadaveric spasm: [Post-mortem Changes and the Time Since Death](thanatology/postmortem-changes.html)*
+- [x] **FM2.10** Describe putrefaction, mummification, adipocere and maceration — *putrefaction stepper, mummification, adipocere, maceration: [Post-mortem Changes and the Time Since Death](thanatology/postmortem-changes.html)*
+- [x] **FM2.11** Discuss estimation of time since death conducting post-mortem examination and Embalming techniques — *time-since-death estimator (approximate, per source), embalming in brief: [Post-mortem Changes and the Time Since Death](thanatology/postmortem-changes.html)*
 - [ ] **FM2.13** Describe and discuss autopsy competencies including post-mortem examination, different types of autopsies, aims and objectives of post-mortem examination
 - [ ] **FM2.14** Describe the legal requirements to conduct examination and competencies to conduct medico-legal post- mortem examination
 - [ ] **FM2.15** Describe and discuss obscure autopsy and Virtopsy

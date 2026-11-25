@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Death: Types, Brainstem Death, Certification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/fmt.css">
+<style>
+/* page uses only fmt.css tokens: --accent (selection only), --ok / --flag (a rule met / not met), --clin (a medicolegal warning), --mark (the chosen time). Lost function in
+   the brain schematic is drawn as an ink hatch, not a colour. */
+svg.sch .reg{stroke:var(--ink);stroke-width:1.3}
+svg.sch .alive{fill:var(--surface)}
+svg.sch .lost{fill:url(#dead)}
+svg.sch .bar{fill:var(--ink);fill-opacity:.12;stroke:var(--ink);stroke-width:1}
+svg.sch .cur{stroke:var(--mark);stroke-width:1.6}
+.ck{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:4px 10px;align-items:center;font-size:13.5px}
+.ck .hd{font:600 11.5px var(--f-mono);color:var(--muted)}
+.ck .grp{grid-column:1 / -1;font-weight:600;margin-top:6px}
+.ck input{width:18px;height:18px;accent-color:var(--accent)}
+.status{font:600 14px var(--f-body);padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg)}
+.status.no{border-left:4px solid var(--flag)} .status.ok{border-left:4px solid var(--ok)}
+.board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:600px){.board{grid-template-columns:minmax(0,1fr)}}
+.card{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--bg);font-size:13.5px}
+.card b{display:block;margin-bottom:2px}
+.card.swap{border-color:var(--ink);border-style:dashed}
+.mccd{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 10px;align-items:center;font-size:13.5px}
+.mccd .ln{font:600 12.5px var(--f-mono);color:var(--muted);white-space:nowrap}
+.mccd select{font:500 13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 6px;min-width:0;width:100%}
+.mccd .dur{font:500 12.5px var(--f-mono);color:var(--muted);white-space:nowrap}
+.mccd .due{grid-column:2 / 3;font-size:12px;color:var(--muted);margin:-4px 0 0 4px}
+.mccd .sep{grid-column:1 / -1;border-top:1px solid var(--line);margin:4px 0}
+.mccd .ucod{outline:2px solid var(--ink);outline-offset:1px}
+.cap.src{border-left-color:var(--ink)}
+.rules{display:flex;flex-direction:column;gap:4px;font-size:13.5px}
+.rules .r{padding-left:22px;position:relative}
+.rules .r::before{position:absolute;left:0;top:0;font:600 13px var(--f-mono)}
+.rules .r.ok::before{content:'✓';color:var(--ok)} .rules .r.bad::before{content:'✗';color:var(--flag)} .rules .r.na::before{content:'–';color:var(--muted)} .rules .r.na{color:var(--muted)}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:700px){.three{grid-template-columns:minmax(0,1fr)}}
+.sd{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Forensic Medicine</a> <span class="muted">· Module 01: <span aria-current="page">Death and its certification</span> · <a href="postmortem-changes.html">Post-mortem changes</a></span></nav>
+
+<header class="stack">
+  <h1>Death: Its Types, Brainstem Death and the Cause-of-Death Certificate</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-types">Somatic and cellular death</a> <a href="#h-brain">Brain death</a> <a href="#h-bsd">Brainstem death in India</a> <a href="#h-thoa">THOA and ethics</a> <a href="#h-sud">Sudden natural death</a> <a href="#h-man">Cause, mechanism, manner</a> <a href="#h-mccd">MCCD builder</a> <a href="#h-modes">Modes of death</a> <a href="#h-susp">Suspended animation</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-types">
+  <h2 id="h-types">Somatic (clinical) death and cellular death</h2>
+  <div class="sliders" id="ty-sl"></div>
+  <div class="schbox"><svg class="fig sch" id="ty-svg" viewBox="0 0 560 190" role="img" aria-label="Schematic time line after circulation and breathing stop: somatic death at zero, then the brain and later the muscles reach cellular death, with the chosen time marked"></svg></div>
+  <div class="prose find" id="ty-find" aria-live="polite"></div>
+  <div class="prose" id="ty-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-brain">
+  <h2 id="h-brain">Brain death: whole-brain, brainstem and cortical death</h2>
+  <div class="chips" id="br-tg" aria-label="Concept"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="br-svg" viewBox="0 0 360 230" role="img" aria-label="Schematic side view of the brain: cerebral hemispheres, cerebellum and brainstem, with the parts whose function is lost hatched for the chosen concept"></svg></div>
+    <div class="prose find" id="br-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="br-key"></div>
+  <div class="scroll"><table id="br-table"></table></div>
+  <div class="prose" id="br-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-bsd">
+  <h2 id="h-bsd">Certifying brainstem death in India: the Form 10 checklist</h2>
+  <div class="prose" id="bsd-intro"></div>
+  <div class="two">
+    <div class="ck" id="bsd-ck"></div>
+    <div class="stack">
+      <div class="sliders" id="bsd-sl"></div>
+      <div class="chips" id="bsd-age" aria-label="Age group"></div>
+      <div class="status" id="bsd-status" aria-live="polite"></div>
+      <div class="btnrow chips"><button class="btn" type="button" id="bsd-all">Tick every item</button> <button class="btn" type="button" id="bsd-none">Clear</button></div>
+    </div>
+  </div>
+  <h3>The Board of Medical Experts (THOA 1994 s3(6), as amended in 2011; Form 10)</h3>
+  <div class="chips" id="bsd-nb" aria-label="Neurologist or neurosurgeon"></div>
+  <div class="board" id="bsd-board"></div>
+  <div class="prose" id="bsd-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-thoa">
+  <h2 id="h-thoa">The Transplantation of Human Organs Act: salient features and ethics</h2>
+  <div class="prose" id="thoa-intro"></div>
+  <div class="scroll"><table id="thoa-table"></table></div>
+  <h3>Ethical issues in organ donation</h3>
+  <div class="prose" id="eth-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sud">
+  <h2 id="h-sud">Sudden natural death</h2>
+  <div class="sliders" id="sud-sl"></div>
+  <div class="chips" id="sud-w" aria-label="Witnessed"></div>
+  <div class="sd" id="sud-out" aria-live="polite"></div>
+  <div class="schbox"><svg class="fig sch" id="sud-svg" viewBox="0 0 560 150" role="img" aria-label="Bars of the causes of sudden death in young and older adults in an Indian autopsy series"></svg></div>
+  <div class="prose" id="sud-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-man">
+  <h2 id="h-man">Natural and unnatural death; cause, mechanism and manner</h2>
+  <div class="chips" id="man-tg" aria-label="Example"></div>
+  <div class="three" id="man-out" aria-live="polite"></div>
+  <div class="prose" id="man-text"></div>
+  <div class="scroll"><table id="man-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mccd">
+  <h2 id="h-mccd">Build the cause-of-death chain (MCCD, Frame A)</h2>
+  <div class="prose" id="mccd-intro"></div>
+  <div class="chips" id="mccd-case" aria-label="Case"></div>
+  <div class="chips" id="mccd-form" aria-label="Form"></div>
+  <p class="cap" id="mccd-story"></p>
+  <div class="two">
+    <div class="mccd" id="mccd-grid"></div>
+    <div class="stack">
+      <div class="rules" id="mccd-rules" aria-live="polite"></div>
+      <div class="chips"><button class="btn" type="button" id="mccd-show">Show the source's certificate</button> <button class="btn" type="button" id="mccd-clear">Clear the lines</button></div>
+      <div class="prose" id="mccd-ucod" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="prose" id="mccd-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-modes">
+  <h2 id="h-modes">Moment of death and the modes of death: coma, asphyxia, syncope</h2>
+  <div class="three" id="modes"></div>
+  <div class="prose" id="modes-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-susp">
+  <h2 id="h-susp">Suspended animation (apparent death)</h2>
+  <div class="prose" id="susp-text"></div>
+</section>
+
+<p class="muted" id="skill-note"></p>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BDeath%3A%20Its%20Types%2C%20Brainstem%20Death%20and%20the%20Cause-of-Death%20Certificate%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fforensic-medicine%2Fthanatology%2Fdeath.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/fmt.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-fm01.md, Part A; forensic-medicine/DATA-SOURCES.md) ===================== */
+const LEDE = 'Slide through the minutes after the heart stops and watch somatic death turn into cellular death; compare whole-brain, brainstem and cortical death on a schematic brain; tick through India\'s Form 10 brainstem-death checklist and meet the four-member board; and build a cause-of-death certificate line by line under the WHO and Indian rules. Post-mortem changes are on the <a href="postmortem-changes.html">next page</a>.';
+
+/* --- somatic vs cellular death (A1) --- */
+const TY0 = {t: 3};
+const TY_TEXT = '<p><b>Somatic death</b> is the death of the person as a whole: circulation and breathing stop. Wikipedia calls this <b>clinical death</b> ("cessation of blood circulation and breathing") and notes that cardiac arrest came to be called clinical death "to reflect the possibility of post-arrest resuscitation". An Indian forensic study (2025) describes how, "following somatic death", the lack of oxygen and the build-up of carbon dioxide cause irreversible changes "which lead to cellular death"; Wikipedia\'s article on suspended animation says tissues die at different times after "somatic death". <b>Cellular death</b> (Wikipedia also uses the word "molecular" death) is therefore not one moment: each tissue dies on its own clock.</p>'
+  + '<p>The times on the slider are the ones Wikipedia gives — the brain "begins to die after five minutes without oxygen", muscles "over one to two hours", and full brain recovery after more than 3 minutes of clinical death at normal temperature is rare — and they are approximate. Death is better seen as a process than an event: a 2025 history of the brain-death debates calls the reduction "into a singular moment of death" "an instrument of social functioning", and a 2025 forensic case series says decay "is a process rather than an event".</p>';
+
+/* --- brain death concepts (A2) --- */
+const BR = {
+  whole: ['Whole-brain death', {cer: 1, cbl: 1, bs: 1}, 'All functions of the <b>whole brain</b>, brainstem included, have ceased. This is the formulation the US President\'s Commission adopted in 1981, rejecting the "higher-brain" approach (Wikipedia; a 2014 Indian review). Without the brainstem there is no spontaneous breathing: "only life support equipment would maintain ventilation" (Wikipedia).'],
+  bs: ['Brainstem death', {cer: 0, cbl: 0, bs: 1}, 'The <b>brainstem</b> has permanently and irreversibly stopped working. This is the UK concept, and it is the legal basis in <b>India</b> (Wikipedia; the THOA definition below). The 2014 review notes that "in both whole-brain-death and brain-stem death, the criteria and the tests are similar." The cerebrum is drawn faint, not hatched, because this concept is defined by the brainstem alone.'],
+  cort: ['Cortical (higher-brain) death', {cer: 1, cbl: 0, bs: 0}, 'Only the <b>cerebral cortex</b> — consciousness — is lost; the brainstem still works. Wikipedia: with "a dead cerebrum but a living brainstem, spontaneous breathing may continue unaided". Proposed by Veatch as "irreversible loss of personhood"; its "major problem" is that people in a persistent vegetative state would count as dead, and it "has not been accepted by jurisdictions anywhere" (2014 Indian review; a 2025 history: the neocortical view stayed "outside the mainstream").'],
+  pvs: ['Vegetative state (alive)', {cer: 0, cbl: 0, bs: 0}, 'Not death. The person is alive and "some autonomic functions remain" (Wikipedia). Brain death and brainstem death must be told apart from it (2014 Indian review). The cerebrum is drawn faint, not hatched: the sources describe a loss of awareness, not a permanent loss of all cerebral function.'],
+};
+const BR_TABLE = [
+  ['Whole-brain death', 'Whole brain incl. brainstem', 'No', 'Dead (US formulation)'],
+  ['Brainstem death', 'Brainstem', 'No', 'Dead (UK; India under THOA)'],
+  ['Cortical (higher-brain) death', 'Cerebral cortex only', 'May continue', 'Not accepted anywhere'],
+  ['Vegetative state', 'Nothing is declared permanently lost: awareness is absent, autonomic functions remain', 'Present', 'Alive'],
+];
+
+/* --- brainstem death checklist: THOT Rules 2014, Form 10 (A3) --- */
+const BSD_PRE = [
+  'Illness or accident that led to irreversible brain damage identified (Form 10 B1)',
+];
+const BSD_EXCL = ['Intoxication (alcohol)', 'Depressant drugs', 'Relaxants (neuromuscular blocking agents)', 'Primary hypothermia', 'Hypovolaemic shock', 'Metabolic or endocrine disorders'];
+const BSD_TESTS = ['Coma', 'Cessation of spontaneous breathing', 'Pupillary size', 'Pupillary light reflexes', 'Doll\'s head eye movements', 'Corneal reflexes (both sides)', 'Motor response in any cranial nerve distribution; any response to stimulation of face, limb or trunk', 'Gag reflex', 'Cough (tracheal)', 'Eye movements on caloric testing, bilaterally', 'Apnoea test as specified', 'Were any respiratory movements seen? (none)'];
+const BSD0 = {gap: 6, age: 'adult'};
+const BSD_INTRO = '<p>India\'s <b>Transplantation of Human Organs Act 1994</b> (THOA) defines <b>brain-stem death</b> as "the stage at which all functions of the brain stem have permanently and irreversibly ceased" and is certified under its section 3(6) (Act wording here and below is from an unofficial consolidated text). The form is <b>Form 10</b> of the <b>Transplantation of Human Organs and Tissues Rules 2014</b> (G.S.R. 218(E), 27 March 2014); the older 1995 Rules used Form 8 (2014 Indian review). The board certifies that the person "is dead on account of permanent and irreversible cessation of all functions of the brain-stem". Tick the items below as the official form lists them, for both examinations. The same list appears in a 2014 Indian review of brainstem death, and a 2017 editorial confirms that THOA 1994 with its 2011 amendment and the 2014 Rules form the legal basis.</p>';
+const BSD_TEXT = '<p><b>Board members</b> are named in the Act: (i) the registered medical practitioner (RMP) <b>in charge of the hospital</b> where brainstem death occurred; (ii) an <b>independent RMP, a specialist</b>, nominated by (i) from a panel approved by the Appropriate Authority; (iii) a <b>neurologist or neurosurgeon</b>, nominated the same way; (iv) the <b>RMP treating</b> the person. Since the 2011 amendment, "where a neurologist or a neurosurgeon is not available", the Act allows "a surgeon or a physician and an anaesthetist or intensivist", "not members of the transplantation team"; Form 10 Note I repeats this, but Rule 5(4)(c) of the 2014 Rules names only "an anesthetist or intensivist who is not part of the transplant team". The three texts are not worded alike. Form 10 signs these four as Medical Administrator in charge, authorised specialist, neurologist/neurosurgeon and the medical officer treating the patient; members 2 and 3 come from the panel of experts the Appropriate Authority keeps (Rule 4). The 2014 review lists the same "team of four medical experts".</p>'
+  + '<p><b>Timing.</b> Form 10: the patient is "examined twice after an interval of about six hours"; "the minimum time interval between the first and second testing will be six hours in adults"; for children (6–12 years, 1–5 years, infants) "the time interval shall increase depending on the opinion of the above BSD experts". The 2014 review: repeated "after minimum interval of 6 h, to ensure that there has been no observer error".</p>'
+  + '<p><b>Details given only by the 2014 Indian review</b> (not in Form 10): the diagnosis "is based only on the clinical examination" — imaging or EEG are not legally required, but confirmatory tests may be done if the panel is in doubt; caloric testing uses 50 ml of ice-cold water in each ear for 1 min; its list of Indian criteria asks for apnoea long enough for pCO₂ to "rise above threshold (>50-60 mmHg)"; and its apnoea-test procedure (described after the AAN 1995 practice parameters and their 2010 update) calls the test positive when there are no respiratory movements and the arterial PCO₂ is 60 mmHg or more (or 20 mmHg above baseline), after prerequisites such as a core temperature of at least 36 °C and systolic pressure of at least 100 mmHg.</p>'
+  + '<p class="cap warn">Reversible look-alikes: three snakebite patients "manifested features similar to brain death but were not true brain dead" (letter, Indian J Crit Care Med 2021), and a 2022 case report calls snake envenomation "one of the most toxicology-related cause that can mimic brain death". This is why the form asks for the cause of the brain damage and excludes drugs, relaxants, hypothermia, shock and metabolic causes first.</p>';
+
+/* --- THOA salient features (A5, A6) --- */
+const THOA_INTRO = '<p>The 2011 amendment renamed it the <b>Transplantation of Human Organs and Tissues Act</b> (the MoHFW note on the Bill proposed "changing its name", from the Human Organs Act to the Human Organs &amp; Tissues Act). The Act was passed to provide "for the regulation of removal, storage and transplantation of human organs for therapeutic purposes and for the prevention of commercial dealings in human organs" (THOA 1994); it was enacted "to curb organ trading and promote deceased organ donation", and after a kidney scandal in 2008 an amendment "was proposed in 2009 and passed in 2011" (Wikipedia). The table pairs each feature with its clause. Sources: the Act as amended (an <b>unofficial consolidated text</b> published by the Delhi government; in places it prints the 1994 and 2011 wordings side by side), the THOT Rules 2014 (official Gazette reprint), and the Ministry of Health\'s note on the amendments (MoHFW, on the 2009 Bill). <b>Penalties are left out</b>: in that consolidated text the old and new amounts run together and cannot be read reliably.</p>';
+const THOA_ROWS = [
+  ['Brainstem death recognised', 'Defined in s2(d); a "deceased person" dies "by reason of brain-stem death or in a cardio-pulmonary sense" (s2(e)); certified by the board of four (s3(6))', 'Act (unofficial consolidated text)'],
+  ['Who may give organs', 'The donor while alive. After death: a written authorisation the donor made before two witnesses (one a near relative) (s3(2)); without it, "the person lawfully in possession of the dead body" may authorise if no near relative objects (s3(3)). Rule 5(4)(a) adds that "the consent of near relative or person in lawful possession of the body shall also be required notwithstanding the authorisation been made by deceased donor", and a written revocation by the deceased overrides relatives. Under 18: either parent (s3(7)). India uses opt-in consent (2017 editorial).', 'Act (unofficial consolidated text); Rules 2014; editorial 2017'],
+  ['Living donation', 'Only from a <b>near relative</b> without prior approval; others through an <b>Authorisation Committee</b> (s9; the MoHFW note: near-relative cases are not processed by Authorisation Committees). The Committee may not approve a foreign recipient with an Indian donor unless they are near relatives.', 'Act (unofficial text); MoHFW note'],
+  ['Tissues added', 'The Act now covers "human organs and tissues"; Tissue Banks must register (the MoHFW note: tissues added "with the exception of blood").', '2011 amendment'],
+  ['Near relative widened', 'Spouse, son, daughter, father, mother, brother, sister <b>+ grandfather, grandmother, grandson, granddaughter</b>.', '2011 amendment; MoHFW note'],
+  ['Swap donation', 'A near-relative donor who is "not compatible biologically" may be swapped with another pair (s9(3A)); approved by the Authorisation Committee (Rule 7(4)).', '2011 amendment; Rules 2014'],
+  ['Board when no neurologist', 'The Act and Form 10: a surgeon or physician and an anaesthetist or intensivist; Rule 5(4)(c): an anaesthetist or intensivist; all outside the transplant team. The wordings differ (see the board above).', '2011 amendment; Form 10; Rule 5(4)(c)'],
+  ['Cornea by a technician', 'A trained technician may enucleate a cornea (proviso to s3(4); the qualifications are in Rule 2(f)).', '2011 amendment; MoHFW note'],
+  ['Transplant coordinator', 'Defined in the Act; a hospital must appoint one before registration.', '2011 amendment; Rules 2014'],
+  ['"Required request" in the ICU', 'After certifying brainstem death in an ICU, the doctor (with the coordinator) must ask the relatives about donation and make them aware of the option to authorise or decline; this applies also to ICUs in hospitals not registered under the Act (Rule 5(2)). Recommended by the Delhi High Court review committee (MoHFW note).', 'Rules 2014; MoHFW note'],
+  ['Minors and the mentally challenged', 'No removal from a living minor except as prescribed (s9(1B)); none from a living mentally challenged person (s9(1C)). The MoHFW note cites the WHO Guiding Principle on living minors.', '2011 amendment'],
+  ['Retrieval centres and a national network', 'Human Organ Retrieval Centres; a National Human Organs and Tissues Removal and Storage Network (s13C). NOTTO is the apex body (Wikipedia; 2017 editorial).', '2011 amendment'],
+  ['Medicolegal cases', 'Organs may be retrieved from a brainstem-dead medicolegal case: the hospital asks the police to facilitate retrieval and informs the post-mortem doctor; "the determination of the cause of death is not jeopardised"; the retrieval report goes into the post-mortem notes (Rule 6).', 'Rules 2014'],
+];
+const ETH_TEXT = '<ul><li><b>No commerce.</b> Preventing "commercial dealings in human organs" is in the Act\'s title; the MoHFW note records a perception that the 1994 Act had not curbed commercial transactions "while it has thwarted genuine cases".</li>'
+  + '<li><b>Consent.</b> After death, donation needs the deceased\'s authorisation or the authority of the person lawfully in possession of the body (Act s3(2)–(3)), and the 2014 Rules require the near relative\'s (or that person\'s) consent even when the deceased had authorised it (Rule 5(4)(a)); India is opt-in, and "refusal of donation by the next of kin after brain death diagnosis is often the biggest hindrance" (2017 editorial). The ICU doctor must offer the choice, not decide it (Rule 5).</li>'
+  + '<li><b>Separation of roles.</b> The substitutes on the board must not be "members of the transplantation team for the concerned recipient" (Act s3(6)). Diagnosis of brainstem death is needed "to discontinue artificial ventilation and to ask legal consent for organ donation" (2014 review) — the two decisions are separate.</li>'
+  + '<li><b>The vulnerable.</b> Living minors and mentally challenged persons are protected by s9(1B)–(1C); the MoHFW note cites the WHO principle that no cells, tissues or organs should be removed from a living minor "other than narrow exceptions allowed under national law".</li>'
+  + '<li><b>Equity.</b> Wikipedia reports "a huge gender disparity" in India — women donate disproportionately often and receive disproportionately rarely — and lists reasons surgeons give, such as women lacking independent income and having little bodily autonomy.</li></ul>';
+
+/* --- sudden natural death (A7) --- */
+const SUD0 = {t: 3, w: 'yes'};
+const SUD_BARS = [ // PMC12744565, India 2025: % of sudden deaths with the major system, young (18–45) vs older (46–65)
+  ['Young adults (18–45 y): cardiovascular system', 42.6], ['Older adults (46–65 y): cardiovascular system', 72.1],
+];
+const SUD_TEXT = '<p><b>Definitions differ.</b> The WHO definition, as quoted by the <i>Encyclopedia of Forensic and Legal Medicine</i>, counts "any death occurring within 24 h from the onset of symptoms". An Indian autopsy study (2025) uses death "within one hour of symptom onset in witnessed cases or within 24 h of last being seen alive in unwitnessed cases"; StatPearls uses the same two windows for <b>sudden cardiac death</b>. Move the slider to see which definition a death meets.</p>'
+  + '<p><b>Causes.</b> Cardiovascular disorders are "the leading causes of sudden deaths" (the Encyclopedia chapter); in the Indian series, cardiovascular causes were the commonest group in the young, and in older adults <b>coronary artery disease</b> was "the single most common cause", at 72.1 % (the bars show the whole cardiovascular-system share in each group, Table III of the study). Wikipedia: high-grade coronary stenosis is "the most common finding" at autopsy in sudden cardiac death; StatPearls: sudden death in an older athlete "is typically due to atherosclerotic coronary artery disease". In the Indian series, in the young, pulmonary causes and a negative autopsy came joint second (21.3 % each); in older adults a negative autopsy (sudden unexplained death, 14.1 %) came second; infections (myocarditis, endocarditis, pneumonia, tuberculosis) are listed in the Encyclopedia chapter.</p>'
+  + '<p class="cap warn"><b>Why it is a medicolegal issue.</b> Sudden and unexpected deaths are investigated even when natural: StatPearls lists "all deaths of unnatural (homicide, suicide, accident) manner, suspicious deaths, and unexpected deaths" as needing a legal investigation with autopsy; a 2026 Kerala series notes medicolegal autopsies for "sudden deaths upon hospital arrival".</p>';
+
+/* --- cause, mechanism, manner (A8) --- */
+const MAN_EX = {
+  gsw: ['Gunshot to the chest', 'Gunshot wound to thorax → perforation of the heart → cardiac tamponade', 'Cardiac tamponade (line (a) of the RGI example; the way the body failed, not why)', 'Homicide, suicide or accident — decided by the investigation (manner on the WHO form: assault, self-harm or accident)'],
+  wiki: ['Wikipedia\'s radiation example', 'A malignant neoplasm caused by a dose of ionizing radiation', 'Brain ischaemia (the "proximate cause or mechanism")', 'Homicide, if the radiation was given "with intent to kill or injure"'],
+  mi: ['Heart attack', 'Myocardial infarction due to coronary atherosclerosis (WHO example)', 'Not certified: cardiac arrest is a mode of dying', 'Natural (WHO form: "Disease")'],
+};
+const MAN_TEXT = '<p><b>Cause</b> is "a specific disease or injury"; <b>manner</b> is "a small number of categories like natural, accident, suicide, and homicide", primarily a legal determination; <b>mechanism (mode)</b> "does not explain why the person died" — asphyxiation, arrhythmia, exsanguination (Wikipedia). The Indian manual defines a cause of death as any "disease, abnormality, injury or poisoning that contributed directly or indirectly to death" (RGI 2012), and both the WHO guide and the Indian manual forbid entering only the mode of dying.</p>'
+  + '<p><b>Natural vs unnatural.</b> "An unnatural cause of death results from an external cause, typically including homicides, suicides, accidents" (Wikipedia); StatPearls groups homicide, suicide and accident as the unnatural manners. There is "no single definition" of natural death and "no international standard" for the split (Wikipedia). The manner can be "undetermined". On the WHO international MCCD (Frame B) the certifier ticks one of these:</p>';
+const MAN_TABLE = [['Disease', 'Nontraumatic'], ['Accident', 'Traumatic'], ['Intentional self-harm', 'Traumatic'], ['Assault', 'Traumatic'], ['Legal intervention', 'Traumatic'], ['War', 'Traumatic'], ['Could not be determined', 'Traumatic (national practice may differ)'], ['Pending investigation', 'Do not indicate its origin'], ['Unknown (not selected)', 'Do not indicate its origin']];
+
+/* --- MCCD chain builder (A9, A10): cases are the WHO and RGI manuals' own examples --- */
+const MCCD_CASES = {
+  mi: {name: 'Myocardial infarction (WHO)', src: 'WHO ICD-11 Reference Guide, example 1', story: 'A man with known coronary artery disease collapses with a heart attack and dies. (The WHO guide\'s first example.)',
+    items: [['Myocardial infarction', '', 'BA41.Z'], ['Coronary atherosclerosis', '', 'BA52.Z'], ['Cardiac arrest', '', '', 'mode']],
+    answer: {a: 'Myocardial infarction', b: 'Coronary atherosclerosis'}, part2: []},
+  du: {name: 'Peritonitis (RGI)', src: 'RGI Physicians\' Manual 2012, example 3.1.1', story: 'A patient with a duodenal ulcer for 6 months perforates it, develops peritonitis and dies two days later; he also had carcinoma of the bronchus.',
+    items: [['Peritonitis', '2 days'], ['Perforation of duodenum', '3 days'], ['Duodenal ulcer', '6 months', 'DA63.Z'], ['Carcinoma of bronchus', ''], ['Respiratory failure', '', '', 'mode']],
+    answer: {a: 'Peritonitis', b: 'Perforation of duodenum', c: 'Duodenal ulcer'}, part2: ['Carcinoma of bronchus']},
+  pr: {name: 'Uraemia (RGI)', src: 'RGI Physicians\' Manual 2012, example 3.1.6', story: 'An old man with an enlarged prostate goes into retention of urine and dies of uraemia.',
+    items: [['Uraemia', ''], ['Retention of urine', ''], ['Hypertrophy of prostate', ''], ['Heart failure', '', '', 'mode']],
+    answer: {a: 'Uraemia', b: 'Retention of urine', c: 'Hypertrophy of prostate'}, part2: []},
+  rta: {name: 'Road accident (RGI)', src: 'RGI Physicians\' Manual 2012, example 3.1.8', story: 'A driver\'s car collides with a heavy truck; he dies 15 minutes later of a fractured skull vault.',
+    items: [['Fracture of vault of skull', '15 min'], ['Collision between car he was driving and heavy truck on road', ''], ['Cardiac arrest', '', '', 'mode']],
+    answer: {a: 'Fracture of vault of skull', b: 'Collision between car he was driving and heavy truck on road'}, part2: [], ext: 'Collision between car he was driving and heavy truck on road'},
+  gsw: {name: 'Gunshot (RGI)', src: 'RGI Physicians\' Manual 2012, example 3.1.10', story: 'A gunshot wound to the thorax perforates the heart; tamponade kills him within 15 minutes.',
+    items: [['Cardiac tamponade', '15 min'], ['Perforation of heart', '20 min'], ['Gunshot wound to thorax', ''], ['Respiratory failure', '', '', 'mode']],
+    answer: {a: 'Cardiac tamponade', b: 'Perforation of heart', c: 'Gunshot wound to thorax'}, part2: [], ext: 'Gunshot wound to thorax'},
+};
+const MCCD_INTRO = '<p>Frame A of the medical certificate has two parts. <b>Part 1</b> is the chain "of events leading directly to death": the <b>immediate cause on line (a)</b> — "there must always be an entry on line 1(a)" — then each earlier condition on the next line, read upward as "due to (or as a consequence of)". The condition that started the chain, the <b>underlying cause</b>, goes on the <b>lowest used line</b>. <b>Part 2</b> holds "other significant conditions contributing to death" that are not part of the chain. Beside each line goes the <b>interval from onset to death</b>, which "provides a useful check on the order". Never write only the mode of dying, "such as cardiac arrest, respiratory failure or heart failure" (WHO ICD-11 Reference Guide, the 2016 international form; the Indian manual says the same, and a 2026 Assam audit of certificates warns that vague terms like "cardiac arrest" or "organ failure" offer no public-health value). The underlying cause is "(a) the disease or injury which initiated the train of morbid events leading directly to death, or (b) the circumstances of the accident or violence which produced the fatal injury" — the same words in the WHO guide and the Indian manual.</p>';
+const MCCD_TEXT = '<p><b>Four lines or three?</b> The WHO\'s 2016 international form gives Part 1 <b>four lines (a)–(d)</b>: "Four lines are provided in Part 1 … A certifier may only use as many lines as are required." India\'s Form 4 (institutional deaths) and Form 4A (non-institutional deaths), prescribed under the <b>Registration of Births and Deaths Act 1969</b>, are printed in the 2012 RGI manual with <b>three lines (a)–(c)</b>, but "if the sequence of events comprises more than three stages, extra line (and entries) may be made in part I" (RGI §2.3.3) — the builder\'s India form therefore offers an extra line; the manual says the medical part "conforms to the standard prescribed by the World Health Organisation". Switch the form above to see both. As printed in the RGI manual 2012, the RBD Act keeps the cause confidential: no extract "shall disclose the particulars regarding the cause of death" (s17(1)(b); RGI manual, 2026 Assam audit). The attending doctor issues the certificate "without charging any fee" (s10(3), as printed in the RGI manual 2012). In medico-legal cases "the certificate has to be given by the police authorities" (RGI manual §2.4).</p>'
+  + '<p><b>ICD-11 codes</b> shown next to a few conditions are as printed in the WHO ICD-11 Reference Guide (BA41.Z acute myocardial infarction, unspecified; BA52.Z coronary atherosclerosis; DA63.Z duodenal ulcer, unspecified). The WHO guide makes the certifier responsible for using "clinical judgment to indicate which morbid conditions led directly to death"; selecting the underlying cause for statistics then follows coding rules that "mortality coders must be familiar with". Writing the certificate itself (FM2.2) is a skill, practised on real forms.</p>';
+
+/* --- modes of death (A11) --- */
+const MODES = [
+  ['Coma', '"Profound, unarousable unresponsiveness"; it stems from dysfunction of the ascending reticular activating system in the brainstem tegmentum, the thalamocortical relay, or both cerebral hemispheres, and "a small focal upper brainstem lesion can eliminate arousal" (StatPearls). Its depth is graded on the Glasgow Coma Scale (Wikipedia). StatPearls stresses that brain death is not coma: "coma may imply a limited form of life".'],
+  ['Asphyxia', 'A "deficient supply of oxygen to the body which arises from abnormal breathing", which "causes generalized hypoxia, which affects all the tissues and organs, some more rapidly than others" (Wikipedia). See the <a href="../../physiology/respiratory/applied-environment.html#h-hyp">respiratory physiology module</a> for the types of hypoxia.'],
+  ['Syncope', 'Clinically, a transient loss of consciousness and postural tone from a fall in cerebral blood flow, with spontaneous recovery (StatPearls); vasovagal syncope is the commonest reflex type (StatPearls). When the cause is an arrhythmia it can end in death: "VT causes syncope and can result in sudden death" (Wikipedia).'],
+];
+const MODES_TEXT = '<p>The NMC competency names three modes of death — coma, asphyxia and syncope. <b>The open sources used here do not set out this classical three-way scheme</b>, so the cards give only what they say about each term. What they do agree on is the role of a "mode": it is the mechanism by which life ends, "usually not specific to the cause or manner" (Wikipedia), and the WHO and Indian certificates forbid recording "the mode of dying, such as cardiac arrest, respiratory failure or heart failure" in place of the cause.</p>'
+  + '<p><b>Moment of death.</b> "Death was historically believed to be an event that coincided with the onset of clinical death" (Wikipedia); consciousness is lost within seconds of circulatory arrest, yet "there is no specific duration of clinical death at which the non-functioning brain clearly dies" (Wikipedia). The THOA recognises death "by reason of brain-stem death or in a cardio-pulmonary sense".</p>';
+
+/* --- suspended animation (A12) --- */
+const SUSP_TEXT = '<p><b>Suspended animation</b> is "the pausing of life processes by external or internal means without terminating life itself"; breathing and heartbeat "may still occur, but they can only be detected by artificial means" (Wikipedia). In people this "apparent death" can be reversed only if the brain and other vital organs have not yet undergone cell death. Wikipedia lists successful resuscitation after apparent death from anaesthesia, heat stroke, electrocution, narcotic poisoning, cardiac arrest, shock, in newborn infants, concussion and cholera.</p>'
+  + '<p><b>Cold is the classic case.</b> "Nobody is dead until they are warm and dead" (Wikipedia, emergency-medicine saying); people "can sometimes survive periods of clinical death exceeding one hour at temperatures below 20 °C". A 2018 case report resuscitated a hypothermic patient in cardiac arrest whose jaw was rigid: "muscle rigidity does not rule out the possibility of resuscitation" — cold stiffening is not rigor mortis (see the <a href="postmortem-changes.html#h-stiff">next page</a>). Snakebite paralysis can likewise mimic brain death (letter 2021; case report 2022).</p>'
+  + '<p class="cap warn">For the same reason Form 10 requires primary hypothermia, depressant drugs, relaxants, shock and metabolic disorders to be excluded before the brainstem tests count.</p>';
+
+const SKILL = 'FM2.2 (writing an MCCD) is a skill and is not covered as such; the chain builder above shows the rules it uses. Autopsy (FM2.13 onward) is in a later module.';
+const BASED = '<b>Based on:</b> WHO <i>ICD-11 Reference Guide</i> (version of March 2026: mortality rules and the 2016 international form of the Medical Certificate of Cause of Death); Office of the Registrar General, India, <i>Physicians\' Manual on Medical Certification of Cause of Death</i>, 5th ed. (2012); <i>Transplantation of Human Organs Act 1994</i> as amended in 2011 (unofficial consolidated text, Govt of NCT of Delhi) and the <i>Transplantation of Human Organs and Tissues Rules 2014</i> with Form 10 (Tamil Nadu Government Gazette reprint); MoHFW note on the amendments to THOA (PRS Legislative Research); StatPearls (NCBI Bookshelf; abstracts); open-access papers on brainstem death in India (2014, 2017, 2019, 2020), brain-death history (2025), snakebite mimicking brain death (2021, 2022), sudden death (Encyclopedia of Forensic and Legal Medicine chapter; India 2025; Kerala 2026), MCCD quality (2020, 2026), post-mortem leucocytes (2025), hypothermia (2018) (Europe PMC); Wikipedia.';
+const MODELS = '<b>Models used:</b> the time line uses Wikipedia\'s approximate tissue times; the brain drawing is schematic, not to scale; the checklist reproduces the items of Form 10 and only counts ticks; the MCCD builder checks the WHO/RGI rules (line (a) filled, no mode of dying alone, intervals not shorter on lower lines) and compares with the manual\'s own certificate.';
+
+/* ===================== CODE ===================== */
+const F = window.Fmt, $ = F.$, T = F.T;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS; $('skill-note').innerHTML = SKILL;
+const DEFS = F.DEFS.replace('</defs>', '<pattern id="dead" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" style="fill:var(--surface)"/><line x1="0" y1="0" x2="0" y2="7" style="stroke:var(--ink);stroke-width:2.2;stroke-opacity:.55"/></pattern></defs>');
+
+/* --- somatic/cellular time line --- */
+const TY = Object.assign({}, TY0);
+function drawTy() {
+  // piecewise axis: the first 10 min take 40 % of the width, so the brain's minutes are visible
+  const x0 = 170, x1 = 545, xm = x0 + 0.4 * (x1 - x0), X = v => v <= 10 ? x0 + (xm - x0) * v / 10 : xm + (x1 - xm) * (v - 10) / 140, t = TY.t;
+  let s = DEFS + `<path class="axis" d="M${x0} 150 L${x1} 150"/>`;
+  for (const v of [0, 3, 5, 10, 60, 120, 150]) s += `<path class="grid" d="M${X(v)} 30 L${X(v)} 150"/>` + T(X(v), 166, v, 's', 'middle');
+  s += `<path class="axis dash" d="M${xm} 146 L${xm} 154"/>`;
+  // [name, alive until, dying until (null = no end given), note]
+  const rows = [['Circulation and breathing', 0, 0, 'stopped at 0: somatic (clinical) death'], ['Brain', 3, null, 'recovery rare after ~3 min; begins to die after ~5 min'], ['Muscles', 60, 120, 'die over 1–2 h']];
+  rows.forEach(([n, a, b, note], i) => {
+    const y = 52 + i * 34;
+    s += T(x0 - 8, y + 4, n, '', 'end');
+    if (a > 0) s += `<rect class="bar" x="${X(0)}" y="${y - 9}" width="${X(a) - X(0)}" height="18" style="fill-opacity:.04"/>`;
+    if (b === 0) s += `<rect x="${X(0)}" y="${y - 9}" width="${x1 - X(0)}" height="18" style="fill:var(--ink);fill-opacity:.55"/>`;
+    else {
+      const e = b === null ? 150 : b;
+      s += `<rect x="${X(a)}" y="${y - 9}" width="${X(e) - X(a)}" height="18" style="fill:url(#dead);stroke:var(--ink);stroke-width:1"/>`;
+      if (b !== null) s += `<rect x="${X(b)}" y="${y - 9}" width="${x1 - X(b)}" height="18" style="fill:var(--ink);fill-opacity:.55"/>`;
+    }
+    s += T(x1 - 4, y - 13, note, 's', 'end');
+  });
+  s += `<path class="cur" d="M${X(t)} 26 L${X(t)} 150"/><circle cx="${X(t)}" cy="150" r="4.5" style="fill:var(--mark)"/>`;
+  s += T(x0 - 160, 182, 'minutes (axis stretched below 10 min)', 's', 'start');
+  s += T(x0 - 160, 18, 'schematic, approximate (Wikipedia): light alive · hatched at risk or dying · dark stopped or dead', 's', 'start');
+  $('ty-svg').innerHTML = s;
+  const brain = t < 3 ? 'recovery still possible if circulation returns' : t < 5 ? 'full recovery now rare at normal temperature' : 'brain cells are dying (cellular death)';
+  const musc = t < 60 ? 'muscle cells still alive' : t < 120 ? 'muscle cells dying' : 'muscle cells dead';
+  $('ty-find').innerHTML = `<h3>${t} min after circulation stopped</h3><p>Somatic death: yes, at 0 min. Brain: ${brain}. Muscles: ${musc}. Somatic death comes first; cellular death follows tissue by tissue.</p>`;
+}
+F.slider('ty-sl', {id: 't', label: 'Minutes since circulation and breathing stopped', min: 0, max: 150, step: 1, value: TY0.t, fmt: v => v + ' min'}, v => { TY.t = v; drawTy(); }).init();
+$('ty-text').innerHTML = TY_TEXT; drawTy();
+
+/* --- brain concepts --- */
+let brK = 'bs';
+function drawBr() {
+  const [name, lost, txt] = BR[brK];
+  const cls = k => lost[k] ? 'lost' : 'alive';
+  let s = DEFS;
+  s += `<path class="reg ${cls('cer')}" d="M60 150 C40 110 50 50 120 34 C180 20 260 28 300 70 C328 100 322 140 290 150 C250 160 210 150 190 160 C150 172 90 176 60 150 Z"/>`;
+  s += `<path class="reg ${cls('cbl')}" d="M232 160 C250 150 296 152 304 172 C308 192 278 204 252 198 C232 192 222 174 232 160 Z"/>`;
+  s += `<path class="reg ${cls('bs')}" d="M190 150 C200 150 214 152 218 160 L222 214 L196 214 L190 166 Z"/>`;
+  if (brK === 'bs' || brK === 'pvs') s += `<path d="M60 150 C40 110 50 50 120 34 C180 20 260 28 300 70 C328 100 322 140 290 150 C250 160 210 150 190 160 C150 172 90 176 60 150 Z" style="fill:var(--ink);fill-opacity:.08;stroke:none"/>`;
+  s += T(150, 96, 'cerebral hemispheres', 'l', 'middle') + T(150, 112, '(cortex: consciousness)', 's', 'middle');
+  s += T(300, 214, 'cerebellum', 'l', 'middle');
+  s += F.lead(208, 196, 120, 205) + T(116, 209, 'brainstem', 'l', 'end') + T(116, 224, '(breathing, reflexes)', 's', 'end');
+  if (brK === 'pvs') s += T(150, 132, 'awareness absent, not declared dead', 's', 'middle');
+  s += T(10, 16, name, 'h', 'start');
+  $('br-svg').innerHTML = s;
+  $('br-find').innerHTML = `<h3>${name}</h3><p>${txt}</p>`;
+}
+F.toggles('br-tg', Object.entries(BR).map(([k, v]) => [k, v[0]]), k => { brK = k; drawBr(); }, brK);
+F.key('br-key', [['--surface', 'function lost (hatched)', 'background:repeating-linear-gradient(45deg,var(--surface) 0 3px,var(--muted) 3px 5px)'], ['--surface', 'working'], ['--surface', 'not part of the concept / not lost (faint)', 'background:var(--ink);opacity:.12']]);
+F.table('br-table', ['Concept', 'What has permanently stopped', 'Spontaneous breathing', 'Status'], BR_TABLE);
+$('br-text').innerHTML = '<p>Wikipedia notes the words themselves vary: one dictionary treats "brain death" as cerebral death, MeSH includes the brainstem — "the distinctions are medically significant". The 2014 Indian review adds that cortical function is assessed by EEG and that "absence of cerebral circulation is also indicative of cortical death".</p>';
+drawBr();
+
+/* --- brainstem-death checklist --- */
+const BSD = Object.assign({}, BSD0);
+const ck = $('bsd-ck');
+function ckRow(id, label) { return `<span>${label}</span><input type="checkbox" id="${id}-1" aria-label="${label.replace(/<[^>]+>/g, '')}: first examination"><input type="checkbox" id="${id}-2" aria-label="${label.replace(/<[^>]+>/g, '')}: second examination">`; }
+let h = '<span class="hd">Form 10 item</span><span class="hd">1st</span><span class="hd">2nd</span>';
+h += '<span class="grp">B. Pre-conditions</span>' + BSD_PRE.map((l, i) => ckRow('p' + i, l)).join('');
+h += '<span class="grp">(1) Reversible causes of coma excluded</span>' + BSD_EXCL.map((l, i) => ckRow('e' + i, l)).join('');
+h += '<span class="grp">Tests for absence of brain-stem functions (absent = ticked)</span>' + BSD_TESTS.map((l, i) => ckRow('t' + i, '(' + (i + 2) + ') ' + l)).join('');
+ck.innerHTML = h;
+const boxes = [...ck.querySelectorAll('input')];
+function bsdStatus() {
+  const n = boxes.length / 2, d1 = boxes.filter(b => b.id.endsWith('-1') && b.checked).length, d2 = boxes.filter(b => b.id.endsWith('-2') && b.checked).length;
+  const gapOk = BSD.gap >= 6; // adults: minimum 6 h; children: Form 10 says the interval "shall increase" beyond that, at the board's discretion
+  const st = $('bsd-status');
+  let msg;
+  if (d1 < n) msg = `First examination: ${d1} of ${n} items recorded. Every item must be satisfied.`;
+  else if (d2 < n) msg = `First examination complete. Second examination: ${d2} of ${n}. Interval chosen: ${BSD.gap} h.`;
+  else if (!gapOk) msg = `Both examinations complete, but the interval of ${BSD.gap} h is below six hours: Form 10's minimum in adults${BSD.age === 'adult' ? '' : ', and for children the interval "shall increase" beyond it'}.`;
+  else msg = BSD.age === 'adult' ? `Both examinations complete (${BSD.gap} h apart, ≥ 6 h). The four board members sign Form 10.` : `Both examinations ${BSD.gap} h apart. For children Form 10 says the interval "shall increase" beyond the adult six hours "depending on the opinion" of the board, which sets the actual interval; this page only checks the six-hour floor.`;
+  st.textContent = msg;
+  st.className = 'status ' + ((d1 === n && d2 === n && gapOk) ? 'ok' : 'no');
+}
+boxes.forEach(b => b.addEventListener('change', bsdStatus));
+$('bsd-all').onclick = () => { boxes.forEach(b => { b.checked = true; }); bsdStatus(); };
+$('bsd-none').onclick = () => { boxes.forEach(b => { b.checked = false; }); bsdStatus(); };
+F.slider('bsd-sl', {id: 'gap', label: 'Interval between the two examinations', min: 1, max: 24, step: 1, value: BSD0.gap, fmt: v => v + ' h'}, v => { BSD.gap = v; bsdStatus(); }).init();
+F.toggles('bsd-age', [['adult', 'Adult'], ['child', 'Child 6–12 y'], ['young', 'Child 1–5 y'], ['infant', 'Infant']], k => { BSD.age = k; bsdStatus(); }, 'adult');
+$('bsd-intro').innerHTML = BSD_INTRO; $('bsd-text').innerHTML = BSD_TEXT;
+let noNeuro = false;
+function drawBoard() {
+  const m = [['1. RMP in charge of the hospital', 'Medical Administrator in charge (Form 10); nominates 2 and 3'], ['2. Independent specialist RMP', 'From the panel approved by the Appropriate Authority'],
+    noNeuro ? ['3. When no neurologist or neurosurgeon is available — the texts differ', 'Act s3(6) proviso (2011): "a surgeon or a physician and an anaesthetist or intensivist", not members of the transplant team. Form 10 Note I: "any Surgeon or Physician and Anaesthetist or Intensivist". Rule 5(4)(c) proviso: "an anesthetist or intensivist who is not part of the transplant team". The page does not decide between them.'] : ['3. Neurologist or neurosurgeon', 'From the same approved panel'],
+    ['4. RMP treating the person', 'The medical officer treating the patient']];
+  $('bsd-board').innerHTML = m.map(([a, b], i) => `<div class="card${noNeuro && i === 2 ? ' swap' : ''}"><b>${a}</b>${b}</div>`).join('');
+}
+F.toggles('bsd-nb', [['yes', 'Neurologist/neurosurgeon available'], ['no', 'Not available']], k => { noNeuro = k === 'no'; drawBoard(); }, 'yes');
+drawBoard(); bsdStatus();
+
+/* --- THOA table --- */
+$('thoa-intro').innerHTML = THOA_INTRO; F.table('thoa-table', ['Feature', 'What the text says', 'Where'], THOA_ROWS); $('eth-text').innerHTML = ETH_TEXT;
+
+/* --- sudden death --- */
+const SUD = Object.assign({}, SUD0);
+function drawSud() {
+  const t = SUD.t, w = SUD.w === 'yes';
+  const ind = w ? t <= 1 : t <= 24;
+  const whoTxt = w ? (t <= 24 ? 'sudden' : 'not sudden') : 'cannot be judged';
+  $('sud-out').innerHTML = `<span><span class="tag">WHO, 24 h from onset of symptoms</span> <b>${whoTxt}</b></span><span><span class="tag">1 h witnessed / 24 h unwitnessed</span> <b>${ind ? 'sudden' : 'not sudden'}</b></span>`
+    + (w ? '' : '<span class="note">Unwitnessed: the slider is the time since the person was last seen alive and well. The 1 h / 24 h definition counts from that; WHO\'s counts from the onset of symptoms, which nobody saw, so it cannot be applied directly.</span>');
+  const x0 = 20, x1 = 470, X = F.scale(0, 100, x0, x1);
+  let s = T(x0, 14, '% of sudden deaths in the age group, one Indian autopsy series (2025)', 's', 'start');
+  SUD_BARS.forEach(([n, v], i) => { const y = 46 + i * 42; s += T(x0, y - 14, n, '', 'start') + `<rect class="bar" x="${x0}" y="${y - 8}" width="${X(v) - x0}" height="18"/>` + T(X(v) + 6, y + 6, v + ' %', 'm', 'start'); });
+  s += `<path class="axis" d="M${x0} 128 L${x1} 128"/>` + [0, 50, 100].map(v => T(X(v), 144, v + ' %', 's', 'middle')).join('');
+  $('sud-svg').innerHTML = s;
+}
+F.slider('sud-sl', {id: 'st', label: 'Time from onset of symptoms (or last seen well) to death', min: 0, max: 48, step: 0.5, value: SUD0.t, fmt: v => v < 1 ? Math.round(v * 60) + ' min' : v + ' h'}, v => { SUD.t = v; drawSud(); }).init();
+F.toggles('sud-w', [['yes', 'Witnessed'], ['no', 'Unwitnessed']], k => { SUD.w = k; drawSud(); }, 'yes');
+$('sud-text').innerHTML = SUD_TEXT; drawSud();
+
+/* --- cause/mechanism/manner --- */
+function drawMan(k) { const [, c, m, mn] = MAN_EX[k]; $('man-out').innerHTML = [['Cause', c], ['Mechanism (mode)', m], ['Manner', mn]].map(([a, b]) => `<div class="card"><b>${a}</b>${b}</div>`).join(''); }
+F.toggles('man-tg', Object.entries(MAN_EX).map(([k, v]) => [k, v[0]]), drawMan, 'gsw'); drawMan('gsw');
+$('man-text').innerHTML = MAN_TEXT; F.table('man-table', ['Manner of death (WHO form)', 'Origin indicated for coding'], MAN_TABLE);
+
+/* --- MCCD builder --- */
+let caseK = 'du', form = 'who', shown = false;
+const LINES = () => ['a', 'b', 'c', 'd']; // India: (d) is the "extra line" RGI 2012 §2.3.3 allows
+const sel = {};
+function buildGrid() {
+  const C = MCCD_CASES[caseK];
+  const opts = ['', ...C.items.map(x => x[0])];
+  let h = '';
+  LINES().forEach((l, i) => {
+    h += `<span class="ln">Part 1 (${l})${form === 'ind' && l === 'd' ? ' extra' : ''}</span><select id="mc-${l}" aria-label="Part 1 line ${l}">${opts.map(o => `<option value="${o}">${o || '— empty —'}</option>`).join('')}</select><span class="dur" id="mc-${l}-d"></span>`;
+    if (i < LINES().length - 1) h += `<span></span><span class="due">due to (or as a consequence of)</span><span></span>`;
+  });
+  h += '<span class="sep"></span>';
+  h += `<span class="ln">Part 2</span><select id="mc-p2" aria-label="Part 2">${opts.map(o => `<option value="${o}">${o || '— empty —'}</option>`).join('')}</select><span class="dur" id="mc-p2-d"></span>`;
+  $('mccd-grid').innerHTML = h;
+  for (const l of [...LINES(), 'p2']) { const e = $('mc-' + l); e.value = sel[l] || ''; e.onchange = () => { sel[l] = e.value; shown = false; check(); }; }
+  $('mccd-story').innerHTML = `<b>${C.name}.</b> <i>Illustrative story:</i> ${C.story} <span class="muted">(certificate from ${C.src})</span>`;
+  check();
+}
+function check() {
+  const C = MCCD_CASES[caseK], item = n => C.items.find(x => x[0] === n);
+  const used = LINES().map(l => [l, sel[l] || '']);
+  for (const [l, v] of [...used, ['p2', sel.p2 || '']]) { const it = v && item(v); $('mc-' + l + '-d').textContent = it ? (it[1] || '') + (it[2] ? ' · ' + it[2] : '') : ''; $('mc-' + l).classList.remove('ucod'); }
+  const filled = used.filter(x => x[1]);
+  const R = []; // [state 'ok' | 'bad' | 'na', text]
+  const none = !filled.length && !sel.p2;
+  R.push([sel.a ? 'ok' : (none ? 'na' : 'bad'), 'Line (a) has an entry (the immediate cause): "there must always be an entry on line 1(a)"']);
+  const modes = [...filled, ['p2', sel.p2 || '']].filter(x => x[1] && item(x[1])[3] === 'mode');
+  R.push([none ? 'na' : modes.length ? 'bad' : 'ok', modes.length ? `"${modes[0][1]}" is a mode of dying — do not record it as a cause` : 'No mode of dying (cardiac arrest, respiratory or heart failure) entered']);
+  let gap = false; for (let i = 0; i < used.length - 1; i++) if (!used[i][1] && used.slice(i + 1).some(x => x[1])) gap = true;
+  R.push([none ? 'na' : gap ? 'bad' : 'ok', (gap ? 'A line is left empty above a filled one' : 'Lines filled from (a) down without gaps') + ' <span class="muted">(this page\'s simplification: WHO speaks of the "first used line")</span>']);
+  const vals = filled.map(x => x[1]); const dup = vals.length !== new Set(vals).size || (sel.p2 && vals.includes(sel.p2));
+  R.push([none ? 'na' : dup ? 'bad' : 'ok', dup ? 'The same condition is entered twice' : 'One condition per line']);
+  const toMin = s => { if (!s) return null; const m = s.match(/(\d+)\s*(min|days?|months?)/); if (!m) return null; return +m[1] * ({min: 1, day: 1440, days: 1440, month: 43800, months: 43800}[m[2]]); };
+  const durs = filled.map(x => toMin(item(x[1])[1])).filter(v => v !== null);
+  let ordOk = true; for (let i = 1; i < durs.length; i++) if (durs[i] < durs[i - 1]) ordOk = false;
+  R.push(durs.length < 2 ? ['na', 'Order not checked: fewer than two intervals entered'] : [ordOk ? 'ok' : 'bad', ordOk ? 'Intervals do not get shorter going down' : 'An interval gets shorter going down: the order is likely reversed']);
+  if (C.ext) {
+    const lowv = filled.length ? filled[filled.length - 1][1] : '';
+    R.push([!filled.length ? 'na' : lowv === C.ext ? 'ok' : 'bad', 'Injury death: the lowest line states the circumstances of the accident (underlying cause, definition (b)); for transport accidents the RGI manual asks for the vehicle and whether the deceased was driver or passenger']);
+  }
+  $('mccd-rules').innerHTML = R.map(([st, t]) => `<div class="r ${st}">${t}</div>`).join('');
+  const low = filled.length ? filled[filled.length - 1] : null;
+  if (low) $('mc-' + low[0]).classList.add('ucod');
+  let u = low ? `<p><b>Lowest used line (${low[0]}):</b> ${low[1]} — this is what you are certifying as the underlying cause.</p>` : '<p>Choose conditions for the lines.</p>';
+  if (shown) {
+    const A = C.answer;
+    const lines = Object.entries(A).map(([l, v]) => `(${l}) ${v}`).join('; ');
+    const same = Object.entries(A).every(([l, v]) => (sel[l] || '') === v) && LINES().filter(l => !A[l]).every(l => !sel[l]) && ((C.part2[0] || '') === (sel.p2 || ''));
+    u += `<p class="cap src"><b>The source's certificate:</b> Part 1 ${lines}${C.part2.length ? '; Part 2: ' + C.part2.join(', ') : ''}. Underlying cause: <b>${A[Object.keys(A).pop()]}</b>. ${same ? 'Your lines match it.' : 'Your lines differ from it.'}</p>`;
+  }
+  $('mccd-ucod').innerHTML = u;
+}
+F.toggles('mccd-case', Object.entries(MCCD_CASES).map(([k, v]) => [k, v.name]), k => { caseK = k; shown = false; for (const x in sel) delete sel[x]; buildGrid(); }, caseK);
+F.toggles('mccd-form', [['who', 'WHO 2016 form: lines (a)–(d)'], ['ind', 'India Form 4/4A: lines (a)–(c) + extra line']], k => { form = k; buildGrid(); }, form);
+$('mccd-show').onclick = () => { shown = true; check(); };
+$('mccd-clear').onclick = () => { for (const x in sel) delete sel[x]; shown = false; buildGrid(); $('mccd-clear').focus(); };
+$('mccd-intro').innerHTML = MCCD_INTRO; $('mccd-text').innerHTML = MCCD_TEXT; buildGrid();
+
+/* --- modes, suspended animation --- */
+$('modes').innerHTML = MODES.map(([a, b]) => `<div class="card"><b>${a}</b>${b}</div>`).join('');
+$('modes-text').innerHTML = MODES_TEXT; $('susp-text').innerHTML = SUSP_TEXT;
+F.swipeHints();
+</script>
+</body>
+</html>
