@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Growth and Its Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/paed.css">
+<style>
+/* tokens from paed.css with their site meanings: --accent (the selected chip, age line), --mark (the child's plotted point / the
+   chosen value), --clin (a severe category or warning). Reference curves: ink (median) and muted greys with dashes (±2, ±3 SD). */
+svg.sch .med{stroke:var(--ink);stroke-width:2;fill:none}
+svg.sch .sd2{stroke:var(--muted);stroke-width:1.5;fill:none;stroke-dasharray:6 4}
+svg.sch .sd3{stroke:var(--muted);stroke-width:1.2;fill:none;stroke-dasharray:2 3}
+svg.sch .pt{fill:var(--mark);stroke:var(--surface);stroke-width:2}
+svg.sch .agel{stroke:var(--accent);stroke-width:1.2;stroke-dasharray:3 3}
+svg.sch .ref{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 4;fill:none}
+svg.sch .band{fill:var(--line);opacity:.55}
+svg.sch .sev{fill:var(--clin);opacity:.16}
+svg.sch .bar{fill:var(--line)}
+svg.sch .on{fill:var(--accent)}
+.formula{font:500 13px var(--f-mono);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;overflow-x:auto;white-space:pre;scrollbar-color:var(--line) transparent}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+.ctl{display:flex;flex-direction:column;gap:10px}
+.sev-t{color:var(--clin);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Paediatrics</a> <span class="muted">· Module 01: <span aria-current="page">Growth</span> · <a href="development.html">Development and milestones</a></span></nav>
+
+<header class="stack">
+  <h1>Growth and Its Assessment</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-def">Growth and its factors</a> <a href="#h-gain">Expected gains</a> <a href="#h-meas">Measuring</a> <a href="#h-chart">WHO growth chart and z-score</a> <a href="#h-cls">Stunting, wasting, underweight, MUAC</a> <a href="#h-iap">IAP 2015 charts</a> <a href="#h-ss">Short stature and bone age</a> <a href="#h-ftt">Failure to thrive</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-def">
+  <h2 id="h-def">Growth vs development, and what drives growth</h2>
+  <div class="prose" id="def-text"></div>
+  <div class="chips" id="fac-tg" aria-label="Factor"></div>
+  <div class="prose find" id="fac-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gain">
+  <h2 id="h-gain">Expected gains: when does birth weight double and triple?</h2>
+  <div class="chips" id="gain-sex" aria-label="Sex"></div>
+  <div class="sliders" id="gain-sl"></div>
+  <div class="schbox"><svg class="fig sch" id="gain-svg" viewBox="0 0 640 306" role="img" aria-label="WHO 2006 median weight from birth to 24 months for the chosen sex, with lines at two and three times the median birth weight and the chosen age marked"></svg></div>
+  <div class="vrow" id="gain-out" aria-live="polite"></div>
+  <p class="muted" id="gain-note"></p>
+  <div class="scroll"><table id="rule-table"></table></div>
+  <p class="muted" id="rule-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-meas">
+  <h2 id="h-meas">Measuring a child: weight, length or height, head circumference, MUAC</h2>
+  <div class="scroll"><table id="meas-table"></table></div>
+  <p class="muted" id="meas-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-chart">
+  <h2 id="h-chart">Plot a child on the WHO growth chart and compute the z-score</h2>
+  <div class="chips" id="ch-pre" aria-label="Example children"></div>
+  <div class="q"><span class="qt">Indicator</span><div class="chips" id="ch-ind"></div></div>
+  <div class="q"><span class="qt">Sex</span><div class="chips" id="ch-sex"></div></div>
+  <div class="sliders" id="ch-sl"></div>
+  <div class="schbox"><svg class="fig sch" id="ch-svg" viewBox="0 0 640 400" role="img" aria-label="Growth chart: the WHO median, −2 and +2 SD, −3 and +3 SD curves for the chosen indicator and sex, with the child's measurement plotted at the chosen age"></svg></div>
+  <div class="two">
+    <div class="ans prose" id="ch-out" aria-live="polite"></div>
+    <div class="formula" id="ch-f" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="ch-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-cls">
+  <h2 id="h-cls">Classifying undernutrition: stunting, wasting, underweight, and MUAC</h2>
+  <div class="scroll"><table id="cls-table"></table></div>
+  <p class="muted" id="cls-note"></p>
+  <h3>MUAC classifier (children 6–59 months)</h3>
+  <div class="two">
+    <div class="ctl">
+      <div class="sliders" id="mu-sl"></div>
+      <div class="q"><span class="qt">Bilateral pitting oedema</span><div class="chips" id="mu-oed"></div></div>
+    </div>
+    <div class="stack">
+      <div class="schbox"><svg class="fig sch fit" id="mu-svg" viewBox="0 0 420 110" role="img" aria-label="A MUAC scale from 9 to 17 cm with the 11.5 and 12.5 cm cut-offs and the chosen value marked"></svg></div>
+      <div class="ans prose" id="mu-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <p class="muted" id="mu-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-iap">
+  <h2 id="h-iap">Indian charts: WHO 2006 under five, IAP 2015 for 5–18 years</h2>
+  <div class="prose" id="iap-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ss">
+  <h2 id="h-ss">Short stature: definition, normal variants, pathological causes and bone age</h2>
+  <div class="prose" id="ss-text"></div>
+  <h3>Bone age picker</h3>
+  <div class="q"><span class="qt">Bone age compared with chronological age</span><div class="chips" id="ba-ba"></div></div>
+  <div class="q"><span class="qt">Height velocity</span><div class="chips" id="ba-v"></div></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="ba-svg" viewBox="0 0 420 130" role="img" aria-label="Schematic age axis with the chronological age and the chosen bone age marked"></svg></div>
+    <div class="ans prose" id="ba-out" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="ba-note"></p>
+  <div class="scroll"><table id="ss-table"></table></div>
+  <p class="muted" id="ss-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ftt">
+  <h2 id="h-ftt">Failure to thrive (weight faltering)</h2>
+  <div class="prose" id="ftt-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BGrowth%20and%20Its%20Assessment%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fpaediatrics%2Fgrowth-development%2Fgrowth.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/paed.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources unless attributed: sources-local/facts/fill-pd01.md, Part A) ===================== */
+const LEDE = 'Growth is the increase in size; development is the gain in function. Here you can watch the WHO median weight pass two and three times birth weight, plot a child on the WHO 2006 standards (0–5 years) or the WHO 2007 reference (5–19 years) and see the z-score computed with the LMS formula, classify stunting, wasting, underweight and MUAC, and match a bone-age pattern to the causes of short stature. Milestones and developmental delay are on <a href="development.html">development</a>; the fontanelles on the <a href="../../anatomy/head-neck/skull.html">anatomy skull page</a>.';
+
+/* WHO LMS parameters, extracted from the official WHO tables (WHO Child Growth Standards 2006, monthly, 0–60 months; WHO 2007
+   growth reference height-for-age at 61 months, then every 6 months to 228; weight-for-length 45–110 cm and weight-for-height 65–120 cm
+   at whole centimetres). [month or cm, L, M, S]; M and S to 5 significant digits.
+   Script: sources-local/facts/fill-pd01-scripts/lms_extract.py; hand-check: zcheck.py (full-precision tables). */
+const LMS = {
+  wfa_b: [[0,0.3487,3.3464,0.14602],[1,0.2297,4.4709,0.13395],[2,0.197,5.5675,0.12385],[3,0.1738,6.3762,0.11727],[4,0.1553,7.0023,0.11316],[5,0.1395,7.5105,0.1108],[6,0.1257,7.934,0.10958],[7,0.1134,8.297,0.10902],[8,0.1021,8.6151,0.10882],[9,0.0917,8.9014,0.10881],[10,0.082,9.1649,0.10891],[11,0.073,9.4122,0.10906],[12,0.0644,9.6479,0.10925],[13,0.0563,9.8749,0.10949],[14,0.0487,10.095,0.10976],[15,0.0413,10.311,0.11007],[16,0.0343,10.523,0.11041],[17,0.0275,10.732,0.11079],[18,0.0211,10.938,0.11119],[19,0.0148,11.143,0.11164],[20,0.0087,11.346,0.11211],[21,0.0029,11.549,0.11261],[22,-0.0028,11.75,0.11314],[23,-0.0083,11.951,0.11369],[24,-0.0137,12.152,0.11426],[25,-0.0189,12.35,0.11485],[26,-0.024,12.547,0.11544],[27,-0.0289,12.74,0.11604],[28,-0.0337,12.93,0.11664],[29,-0.0385,13.117,0.11723],[30,-0.0431,13.3,0.11781],[31,-0.0476,13.48,0.11839],[32,-0.052,13.657,0.11896],[33,-0.0564,13.831,0.11953],[34,-0.0606,14.003,0.12008],[35,-0.0648,14.174,0.12062],[36,-0.0689,14.343,0.12116],[37,-0.0729,14.511,0.12168],[38,-0.0769,14.679,0.1222],[39,-0.0808,14.847,0.12271],[40,-0.0846,15.014,0.12322],[41,-0.0883,15.181,0.12373],[42,-0.092,15.349,0.12425],[43,-0.0957,15.516,0.12478],[44,-0.0993,15.683,0.12531],[45,-0.1028,15.85,0.12586],[46,-0.1063,16.016,0.12643],[47,-0.1097,16.183,0.127],[48,-0.1131,16.349,0.12759],[49,-0.1165,16.515,0.12819],[50,-0.1198,16.681,0.1288],[51,-0.123,16.847,0.12943],[52,-0.1262,17.013,0.13005],[53,-0.1294,17.179,0.13069],[54,-0.1325,17.345,0.13133],[55,-0.1356,17.511,0.13197],[56,-0.1387,17.677,0.13261],[57,-0.1417,17.842,0.13325],[58,-0.1447,18.007,0.13389],[59,-0.1477,18.172,0.13453],[60,-0.1506,18.337,0.13517]],
+  lfa_b: [[0,1,49.884,0.03795],[1,1,54.724,0.03557],[2,1,58.425,0.03424],[3,1,61.429,0.03328],[4,1,63.886,0.03257],[5,1,65.903,0.03204],[6,1,67.624,0.03165],[7,1,69.165,0.03139],[8,1,70.599,0.03124],[9,1,71.969,0.03117],[10,1,73.281,0.03118],[11,1,74.539,0.03125],[12,1,75.749,0.03137],[13,1,76.919,0.03154],[14,1,78.05,0.03174],[15,1,79.146,0.03197],[16,1,80.211,0.03222],[17,1,81.249,0.0325],[18,1,82.259,0.03279],[19,1,83.242,0.0331],[20,1,84.2,0.03342],[21,1,85.135,0.03376],[22,1,86.048,0.0341],[23,1,86.941,0.03445],[24,1,87.816,0.03479]],
+  hfa_b: [[24,1,87.116,0.03507],[25,1,87.972,0.03542],[26,1,88.806,0.03576],[27,1,89.62,0.0361],[28,1,90.412,0.03642],[29,1,91.183,0.03674],[30,1,91.933,0.03704],[31,1,92.663,0.03733],[32,1,93.375,0.03761],[33,1,94.071,0.03787],[34,1,94.753,0.03812],[35,1,95.424,0.03836],[36,1,96.084,0.03858],[37,1,96.734,0.03879],[38,1,97.375,0.039],[39,1,98.007,0.03919],[40,1,98.631,0.03937],[41,1,99.246,0.03954],[42,1,99.852,0.03971],[43,1,100.45,0.03986],[44,1,101.04,0.04002],[45,1,101.62,0.04016],[46,1,102.19,0.04031],[47,1,102.76,0.04045],[48,1,103.33,0.04059],[49,1,103.89,0.04073],[50,1,104.45,0.04086],[51,1,105.0,0.041],[52,1,105.56,0.04113],[53,1,106.11,0.04126],[54,1,106.67,0.04139],[55,1,107.22,0.04152],[56,1,107.77,0.04165],[57,1,108.32,0.04177],[58,1,108.87,0.0419],[59,1,109.42,0.04202],[60,1,109.96,0.04214]],
+  hcfa_b: [[0,1,34.462,0.03686],[1,1,37.276,0.03133],[2,1,39.129,0.02997],[3,1,40.514,0.02918],[4,1,41.632,0.02868],[5,1,42.558,0.02837],[6,1,43.331,0.02817],[7,1,43.98,0.02804],[8,1,44.53,0.02796],[9,1,45.0,0.02792],[10,1,45.405,0.0279],[11,1,45.757,0.02789],[12,1,46.066,0.02789],[13,1,46.34,0.02789],[14,1,46.584,0.02791],[15,1,46.806,0.02792],[16,1,47.009,0.02795],[17,1,47.196,0.02797],[18,1,47.371,0.028],[19,1,47.536,0.02803],[20,1,47.692,0.02806],[21,1,47.841,0.0281],[22,1,47.983,0.02813],[23,1,48.12,0.02817],[24,1,48.252,0.02821],[25,1,48.378,0.02825],[26,1,48.499,0.0283],[27,1,48.615,0.02834],[28,1,48.726,0.02838],[29,1,48.833,0.02842],[30,1,48.935,0.02847],[31,1,49.033,0.02851],[32,1,49.126,0.02855],[33,1,49.215,0.02859],[34,1,49.301,0.02863],[35,1,49.383,0.02867],[36,1,49.461,0.02871],[37,1,49.537,0.02875],[38,1,49.609,0.02878],[39,1,49.679,0.02882],[40,1,49.746,0.02886],[41,1,49.812,0.02889],[42,1,49.874,0.02893],[43,1,49.935,0.02896],[44,1,49.994,0.02899],[45,1,50.051,0.02903],[46,1,50.106,0.02906],[47,1,50.16,0.02909],[48,1,50.212,0.02912],[49,1,50.262,0.02915],[50,1,50.31,0.02918],[51,1,50.358,0.02921],[52,1,50.404,0.02924],[53,1,50.449,0.02927],[54,1,50.493,0.02929],[55,1,50.535,0.02932],[56,1,50.577,0.02935],[57,1,50.618,0.02938],[58,1,50.659,0.0294],[59,1,50.698,0.02943],[60,1,50.737,0.02946]],
+  hfa07_b: [[61,1,110.26,0.04164],[66,1,112.91,0.04203],[72,1,115.95,0.04249],[78,1,118.87,0.04295],[84,1,121.73,0.04342],[90,1,124.54,0.0439],[96,1,127.27,0.04438],[102,1,129.93,0.04487],[108,1,132.57,0.04535],[114,1,135.18,0.04582],[120,1,137.78,0.04626],[126,1,140.39,0.04667],[132,1,143.11,0.04703],[138,1,145.99,0.04732],[144,1,149.08,0.04753],[150,1,152.44,0.04763],[156,1,156.04,0.0476],[162,1,159.7,0.04744],[168,1,163.18,0.04714],[174,1,166.31,0.04671],[180,1,168.96,0.04619],[186,1,171.15,0.04559],[192,1,172.9,0.04495],[198,1,174.23,0.04429],[204,1,175.16,0.04364],[210,1,175.77,0.04301],[216,1,176.14,0.04241],[222,1,176.39,0.04185],[228,1,176.54,0.04134]],
+  wfl_b: [[45,-0.3521,2.441,0.09182],[46,-0.3521,2.6077,0.09124],[47,-0.3521,2.7755,0.09065],[48,-0.3521,2.948,0.09007],[49,-0.3521,3.1308,0.08948],[50,-0.3521,3.3278,0.0889],[51,-0.3521,3.5376,0.08831],[52,-0.3521,3.762,0.08771],[53,-0.3521,4.006,0.08711],[54,-0.3521,4.2693,0.08651],[55,-0.3521,4.5467,0.08592],[56,-0.3521,4.8338,0.08535],[57,-0.3521,5.1259,0.08481],[58,-0.3521,5.418,0.0843],[59,-0.3521,5.7074,0.08383],[60,-0.3521,5.9907,0.08342],[61,-0.3521,6.2632,0.08308],[62,-0.3521,6.5251,0.08279],[63,-0.3521,6.7786,0.08255],[64,-0.3521,7.0255,0.08236],[65,-0.3521,7.2666,0.08223],[66,-0.3521,7.5034,0.08215],[67,-0.3521,7.737,0.08212],[68,-0.3521,7.9674,0.08214],[69,-0.3521,8.1955,0.08219],[70,-0.3521,8.4227,0.08229],[71,-0.3521,8.648,0.08241],[72,-0.3521,8.8697,0.08254],[73,-0.3521,9.0865,0.08269],[74,-0.3521,9.2974,0.08283],[75,-0.3521,9.5032,0.08295],[76,-0.3521,9.7033,0.08307],[77,-0.3521,9.8963,0.08314],[78,-0.3521,10.083,0.08318],[79,-0.3521,10.265,0.08316],[80,-0.3521,10.447,0.08308],[81,-0.3521,10.635,0.08293],[82,-0.3521,10.832,0.08273],[83,-0.3521,11.041,0.08246],[84,-0.3521,11.265,0.08215],[85,-0.3521,11.501,0.08181],[86,-0.3521,11.744,0.08145],[87,-0.3521,11.992,0.08111],[88,-0.3521,12.238,0.08082],[89,-0.3521,12.482,0.08058],[90,-0.3521,12.721,0.08041],[91,-0.3521,12.957,0.0803],[92,-0.3521,13.191,0.08025],[93,-0.3521,13.424,0.08026],[94,-0.3521,13.657,0.08034],[95,-0.3521,13.893,0.08047],[96,-0.3521,14.133,0.08067],[97,-0.3521,14.378,0.08092],[98,-0.3521,14.632,0.08122],[99,-0.3521,14.893,0.08157],[100,-0.3521,15.164,0.08198],[101,-0.3521,15.442,0.08243],[102,-0.3521,15.728,0.08292],[103,-0.3521,16.021,0.08343],[104,-0.3521,16.32,0.08397],[105,-0.3521,16.627,0.08453],[106,-0.3521,16.94,0.0851],[107,-0.3521,17.261,0.08568],[108,-0.3521,17.588,0.08629],[109,-0.3521,17.924,0.08691],[110,-0.3521,18.269,0.08755]],
+  wfh_b: [[65,-0.3521,7.4327,0.08217],[66,-0.3521,7.6673,0.08212],[67,-0.3521,7.8986,0.08213],[68,-0.3521,8.1272,0.08217],[69,-0.3521,8.3547,0.08226],[70,-0.3521,8.5808,0.08237],[71,-0.3521,8.8036,0.0825],[72,-0.3521,9.0221,0.08264],[73,-0.3521,9.2347,0.08278],[74,-0.3521,9.442,0.08292],[75,-0.3521,9.644,0.08303],[76,-0.3521,9.8392,0.08312],[77,-0.3521,10.027,0.08317],[78,-0.3521,10.21,0.08317],[79,-0.3521,10.392,0.08311],[80,-0.3521,10.578,0.08298],[81,-0.3521,10.772,0.08279],[82,-0.3521,10.977,0.08255],[83,-0.3521,11.197,0.08225],[84,-0.3521,11.429,0.08191],[85,-0.3521,11.671,0.08156],[86,-0.3521,11.917,0.08121],[87,-0.3521,12.165,0.0809],[88,-0.3521,12.409,0.08064],[89,-0.3521,12.649,0.08045],[90,-0.3521,12.886,0.08032],[91,-0.3521,13.121,0.08025],[92,-0.3521,13.354,0.08025],[93,-0.3521,13.587,0.08031],[94,-0.3521,13.822,0.08043],[95,-0.3521,14.06,0.0806],[96,-0.3521,14.304,0.08083],[97,-0.3521,14.555,0.08112],[98,-0.3521,14.814,0.08146],[99,-0.3521,15.082,0.08185],[100,-0.3521,15.358,0.08229],[101,-0.3521,15.641,0.08277],[102,-0.3521,15.932,0.08328],[103,-0.3521,16.23,0.08381],[104,-0.3521,16.534,0.08436],[105,-0.3521,16.845,0.08493],[106,-0.3521,17.164,0.08551],[107,-0.3521,17.489,0.08611],[108,-0.3521,17.823,0.08673],[109,-0.3521,18.165,0.08736],[110,-0.3521,18.516,0.088],[111,-0.3521,18.876,0.08864],[112,-0.3521,19.244,0.08928],[113,-0.3521,19.619,0.08991],[114,-0.3521,19.999,0.09054],[115,-0.3521,20.385,0.09116],[116,-0.3521,20.774,0.09177],[117,-0.3521,21.167,0.09239],[118,-0.3521,21.561,0.093],[119,-0.3521,21.957,0.09362],[120,-0.3521,22.353,0.09424]],
+  wfa_g: [[0,0.3809,3.2322,0.14171],[1,0.1714,4.1873,0.13724],[2,0.0962,5.1282,0.13],[3,0.0402,5.8458,0.12619],[4,-0.005,6.4237,0.12402],[5,-0.043,6.8985,0.12274],[6,-0.0756,7.297,0.12204],[7,-0.1039,7.6422,0.12178],[8,-0.1288,7.9487,0.12181],[9,-0.1507,8.2254,0.12199],[10,-0.17,8.48,0.12223],[11,-0.1872,8.7192,0.12247],[12,-0.2024,8.9481,0.12268],[13,-0.2158,9.1699,0.12283],[14,-0.2278,9.387,0.12294],[15,-0.2384,9.6008,0.12299],[16,-0.2478,9.8124,0.12303],[17,-0.2562,10.023,0.12306],[18,-0.2637,10.232,0.12309],[19,-0.2703,10.439,0.12315],[20,-0.2762,10.646,0.12323],[21,-0.2815,10.853,0.12335],[22,-0.2862,11.061,0.1235],[23,-0.2903,11.269,0.12369],[24,-0.2941,11.477,0.1239],[25,-0.2975,11.686,0.12414],[26,-0.3005,11.895,0.12441],[27,-0.3032,12.101,0.12472],[28,-0.3057,12.306,0.12506],[29,-0.308,12.507,0.12545],[30,-0.3101,12.706,0.12587],[31,-0.312,12.901,0.12633],[32,-0.3138,13.093,0.12683],[33,-0.3155,13.284,0.12737],[34,-0.3171,13.473,0.12794],[35,-0.3186,13.662,0.12855],[36,-0.3201,13.85,0.12919],[37,-0.3216,14.039,0.12988],[38,-0.323,14.226,0.13059],[39,-0.3243,14.414,0.13135],[40,-0.3257,14.601,0.13213],[41,-0.327,14.787,0.13293],[42,-0.3283,14.973,0.13376],[43,-0.3296,15.157,0.1346],[44,-0.3309,15.341,0.13545],[45,-0.3322,15.524,0.1363],[46,-0.3335,15.706,0.13716],[47,-0.3348,15.888,0.138],[48,-0.3361,16.07,0.13884],[49,-0.3374,16.251,0.13968],[50,-0.3387,16.432,0.14051],[51,-0.34,16.613,0.14132],[52,-0.3414,16.794,0.14213],[53,-0.3427,16.975,0.14293],[54,-0.344,17.155,0.14371],[55,-0.3453,17.335,0.14448],[56,-0.3466,17.514,0.14525],[57,-0.3479,17.692,0.146],[58,-0.3492,17.869,0.14675],[59,-0.3505,18.044,0.14748],[60,-0.3518,18.219,0.14821]],
+  lfa_g: [[0,1,49.148,0.0379],[1,1,53.687,0.0364],[2,1,57.067,0.03568],[3,1,59.803,0.0352],[4,1,62.09,0.03486],[5,1,64.03,0.03463],[6,1,65.731,0.03448],[7,1,67.287,0.03441],[8,1,68.75,0.0344],[9,1,70.144,0.03444],[10,1,71.482,0.03452],[11,1,72.771,0.03464],[12,1,74.015,0.03479],[13,1,75.218,0.03496],[14,1,76.382,0.03514],[15,1,77.51,0.03534],[16,1,78.606,0.03555],[17,1,79.671,0.03576],[18,1,80.708,0.03598],[19,1,81.718,0.0362],[20,1,82.704,0.03643],[21,1,83.665,0.03666],[22,1,84.604,0.03688],[23,1,85.52,0.03711],[24,1,86.415,0.03734]],
+  hfa_g: [[24,1,85.715,0.03764],[25,1,86.59,0.03786],[26,1,87.446,0.03808],[27,1,88.283,0.0383],[28,1,89.1,0.03851],[29,1,89.899,0.03872],[30,1,90.68,0.03893],[31,1,91.443,0.03913],[32,1,92.191,0.03933],[33,1,92.924,0.03952],[34,1,93.644,0.03971],[35,1,94.353,0.03989],[36,1,95.052,0.04006],[37,1,95.74,0.04024],[38,1,96.419,0.04041],[39,1,97.088,0.04057],[40,1,97.749,0.04073],[41,1,98.401,0.04089],[42,1,99.045,0.04105],[43,1,99.68,0.0412],[44,1,100.31,0.04135],[45,1,100.92,0.0415],[46,1,101.53,0.04164],[47,1,102.14,0.04179],[48,1,102.73,0.04193],[49,1,103.32,0.04206],[50,1,103.9,0.0422],[51,1,104.48,0.04233],[52,1,105.05,0.04246],[53,1,105.61,0.04259],[54,1,106.17,0.04272],[55,1,106.73,0.04285],[56,1,107.28,0.04298],[57,1,107.82,0.0431],[58,1,108.36,0.04322],[59,1,108.89,0.04334],[60,1,109.42,0.04347]],
+  hcfa_g: [[0,1,33.879,0.03496],[1,1,36.546,0.0321],[2,1,38.252,0.03168],[3,1,39.533,0.0314],[4,1,40.582,0.03119],[5,1,41.459,0.03102],[6,1,42.2,0.03087],[7,1,42.829,0.03075],[8,1,43.367,0.03063],[9,1,43.83,0.03053],[10,1,44.232,0.03044],[11,1,44.584,0.03035],[12,1,44.897,0.03027],[13,1,45.175,0.03019],[14,1,45.426,0.03012],[15,1,45.655,0.03006],[16,1,45.865,0.02999],[17,1,46.06,0.02993],[18,1,46.242,0.02987],[19,1,46.415,0.02982],[20,1,46.58,0.02977],[21,1,46.738,0.02972],[22,1,46.891,0.02967],[23,1,47.039,0.02962],[24,1,47.182,0.02957],[25,1,47.32,0.02953],[26,1,47.454,0.02949],[27,1,47.582,0.02945],[28,1,47.705,0.02941],[29,1,47.822,0.02937],[30,1,47.934,0.02933],[31,1,48.041,0.02929],[32,1,48.143,0.02926],[33,1,48.241,0.02922],[34,1,48.334,0.02919],[35,1,48.424,0.02915],[36,1,48.51,0.02912],[37,1,48.593,0.02909],[38,1,48.672,0.02906],[39,1,48.749,0.02903],[40,1,48.823,0.029],[41,1,48.894,0.02897],[42,1,48.963,0.02894],[43,1,49.029,0.02891],[44,1,49.094,0.02888],[45,1,49.156,0.02886],[46,1,49.216,0.02883],[47,1,49.275,0.0288],[48,1,49.332,0.02878],[49,1,49.388,0.02875],[50,1,49.442,0.02873],[51,1,49.495,0.0287],[52,1,49.546,0.02868],[53,1,49.597,0.02865],[54,1,49.646,0.02863],[55,1,49.695,0.02861],[56,1,49.742,0.02859],[57,1,49.788,0.02856],[58,1,49.834,0.02854],[59,1,49.879,0.02852],[60,1,49.923,0.0285]],
+  hfa07_g: [[61,1,109.6,0.04355],[66,1,112.18,0.04399],[72,1,115.12,0.04447],[78,1,117.98,0.04489],[84,1,120.81,0.04525],[90,1,123.66,0.04556],[96,1,126.56,0.04581],[102,1,129.5,0.046],[108,1,132.49,0.04612],[114,1,135.54,0.04617],[120,1,138.64,0.04614],[126,1,141.79,0.04603],[132,1,144.99,0.04584],[138,1,148.18,0.04557],[144,1,151.23,0.04523],[150,1,154.0,0.04483],[156,1,156.37,0.04439],[162,1,158.3,0.04392],[168,1,159.79,0.04345],[174,1,160.89,0.04299],[180,1,161.67,0.04255],[186,1,162.19,0.04214],[192,1,162.52,0.04176],[198,1,162.72,0.04141],[204,1,162.85,0.04109],[210,1,162.96,0.0408],[216,1,163.06,0.04053],[222,1,163.13,0.0403],[228,1,163.15,0.04009]],
+  wfl_g: [[45,-0.3833,2.4607,0.09029],[46,-0.3833,2.6306,0.09037],[47,-0.3833,2.8007,0.09044],[48,-0.3833,2.9741,0.09052],[49,-0.3833,3.156,0.0906],[50,-0.3833,3.3518,0.09068],[51,-0.3833,3.5636,0.09076],[52,-0.3833,3.7911,0.09085],[53,-0.3833,4.0332,0.09093],[54,-0.3833,4.2875,0.09102],[55,-0.3833,4.5498,0.0911],[56,-0.3833,4.8162,0.09118],[57,-0.3833,5.0837,0.09125],[58,-0.3833,5.3507,0.0913],[59,-0.3833,5.6151,0.09134],[60,-0.3833,5.8742,0.09136],[61,-0.3833,6.127,0.09137],[62,-0.3833,6.3738,0.09135],[63,-0.3833,6.6144,0.09131],[64,-0.3833,6.8501,0.09126],[65,-0.3833,7.0812,0.09119],[66,-0.3833,7.3076,0.0911],[67,-0.3833,7.5288,0.09101],[68,-0.3833,7.7448,0.0909],[69,-0.3833,7.9559,0.09079],[70,-0.3833,8.163,0.09068],[71,-0.3833,8.3666,0.09056],[72,-0.3833,8.5679,0.09043],[73,-0.3833,8.7661,0.09031],[74,-0.3833,8.9601,0.09018],[75,-0.3833,9.149,0.09005],[76,-0.3833,9.3337,0.08992],[77,-0.3833,9.5166,0.08979],[78,-0.3833,9.7015,0.08965],[79,-0.3833,9.8915,0.08952],[80,-0.3833,10.089,0.0894],[81,-0.3833,10.296,0.08928],[82,-0.3833,10.514,0.08918],[83,-0.3833,10.741,0.0891],[84,-0.3833,10.977,0.08903],[85,-0.3833,11.22,0.08898],[86,-0.3833,11.468,0.08895],[87,-0.3833,11.72,0.08895],[88,-0.3833,11.972,0.08896],[89,-0.3833,12.223,0.089],[90,-0.3833,12.472,0.08906],[91,-0.3833,12.72,0.08913],[92,-0.3833,12.968,0.08923],[93,-0.3833,13.216,0.08934],[94,-0.3833,13.464,0.08948],[95,-0.3833,13.715,0.08963],[96,-0.3833,13.968,0.08981],[97,-0.3833,14.224,0.09],[98,-0.3833,14.485,0.09021],[99,-0.3833,14.752,0.09044],[100,-0.3833,15.027,0.09069],[101,-0.3833,15.311,0.09096],[102,-0.3833,15.605,0.09125],[103,-0.3833,15.909,0.09155],[104,-0.3833,16.223,0.09186],[105,-0.3833,16.547,0.09219],[106,-0.3833,16.881,0.09254],[107,-0.3833,17.227,0.09289],[108,-0.3833,17.584,0.09326],[109,-0.3833,17.953,0.09363],[110,-0.3833,18.332,0.09401]],
+  wfh_g: [[65,-0.3833,7.2402,0.09113],[66,-0.3833,7.463,0.09104],[67,-0.3833,7.6806,0.09094],[68,-0.3833,7.893,0.09083],[69,-0.3833,8.1012,0.09071],[70,-0.3833,8.3058,0.09059],[71,-0.3833,8.5078,0.09047],[72,-0.3833,8.707,0.09035],[73,-0.3833,8.9025,0.09022],[74,-0.3833,9.0928,0.09009],[75,-0.3833,9.2786,0.08996],[76,-0.3833,9.4617,0.08983],[77,-0.3833,9.6456,0.08969],[78,-0.3833,9.8338,0.08956],[79,-0.3833,10.029,0.08943],[80,-0.3833,10.233,0.08932],[81,-0.3833,10.448,0.08921],[82,-0.3833,10.672,0.08912],[83,-0.3833,10.905,0.08905],[84,-0.3833,11.146,0.08899],[85,-0.3833,11.393,0.08896],[86,-0.3833,11.644,0.08895],[87,-0.3833,11.896,0.08896],[88,-0.3833,12.148,0.08899],[89,-0.3833,12.398,0.08904],[90,-0.3833,12.646,0.08911],[91,-0.3833,12.894,0.0892],[92,-0.3833,13.142,0.08931],[93,-0.3833,13.39,0.08944],[94,-0.3833,13.639,0.08959],[95,-0.3833,13.891,0.08975],[96,-0.3833,14.147,0.08994],[97,-0.3833,14.406,0.09015],[98,-0.3833,14.671,0.09037],[99,-0.3833,14.943,0.09062],[100,-0.3833,15.225,0.09088],[101,-0.3833,15.515,0.09116],[102,-0.3833,15.816,0.09146],[103,-0.3833,16.128,0.09177],[104,-0.3833,16.449,0.09209],[105,-0.3833,16.78,0.09243],[106,-0.3833,17.122,0.09278],[107,-0.3833,17.476,0.09315],[108,-0.3833,17.841,0.09352],[109,-0.3833,18.217,0.0939],[110,-0.3833,18.604,0.09428],[111,-0.3833,19.001,0.09467],[112,-0.3833,19.406,0.09507],[113,-0.3833,19.819,0.09546],[114,-0.3833,20.238,0.09586],[115,-0.3833,20.663,0.09626],[116,-0.3833,21.091,0.09666],[117,-0.3833,21.521,0.09707],[118,-0.3833,21.953,0.09747],[119,-0.3833,22.385,0.09788],[120,-0.3833,22.817,0.09828]],
+};
+
+const DEF = '<p><b>Growth</b> is an irreversible increase in size; <b>development</b> is the gain in psychomotor capacity (function) (StatPearls). Both depend on genetic, nutritional and environmental factors (StatPearls; Wikipedia). Growth is fastest in the months after birth, then slows, until a second fast phase near puberty (Wikipedia; StatPearls: the growth rate decelerates from the embryo to the adult except during puberty). Physical growth also runs head to toe (<b>cephalocaudal</b>) and centre to periphery (<b>proximodistal</b>) (Wikipedia).</p>';
+const FAC = [
+  ['gen', 'Genetic', 'Genetic factors play the primary role (StatPearls) and set the growth rate and body proportions (Wikipedia). Genes produce their maximum growth only if the environment is adequate: poor nutrition, injury or disease reduce adult stature, but even the best environment cannot push stature beyond the inherited potential (Wikipedia). Most of the normal variation in children\'s height comes from genes inherited from the parents (StatPearls, Short stature).'],
+  ['fet', 'Fetal and perinatal', 'Fetal health strongly influences later growth; insults in fetal life cause adaptations that last (StatPearls). Some infants born small for gestational age remain short (StatPearls, Short stature; Wikipedia).'],
+  ['nut', 'Nutrition', 'Malnutrition harms growth and development (StatPearls) and is a large problem for children\'s weight and height in developing nations (Wikipedia). Among trace elements, zinc deficiency can cause growth retardation, while iron deficiency affects psychomotor development but not growth (StatPearls, one source).'],
+  ['ses', 'Socioeconomic and environment', 'Children of higher socioeconomic classes are taller than children of the same age and sex in lower classes (StatPearls); stunting is linked with poor socioeconomic conditions, poor maternal health and nutrition, frequent illness and inappropriate infant and young child feeding (WHO fact sheet). Pollutants such as lead (low birth weight) are also named (StatPearls, one source).'],
+  ['ill', 'Illness and hormones', 'Disease reduces adult stature (Wikipedia); chronic systemic disease, hormone deficiency (growth hormone, thyroid) and malnutrition cause pathological short stature (StatPearls; Wikipedia) — see <a href="#h-ss">short stature</a>.'],
+  ['psy', 'Emotional and psychosocial', 'Inadequate emotional support and developmental stimulus can impair growth and development (StatPearls); psychosocial factors are among the pathological causes of short stature (StatPearls, Short stature) and mistreatment is listed by Wikipedia.'],
+];
+
+/* expected gains: textbook rules (each with its sources) */
+const RULES = [
+  ['Weight', 'Doubles in the first 4 months, triples by 1 year, quadruples only by 2 years (Wikipedia). Triples by the end of the first year (2024 eating-skills review; 2022 child-nutrition review).', 'WHO 2006 medians (chart above): about 2× at 4 months (boys 2.09×, girls 1.99×); 2.9× (boys) and 2.8× (girls) at 12 months — the median does not quite triple; 3.63× (boys) and 3.55× (girls) at 24 months, short of the "quadruples by 2 years" in Wikipedia.'],
+  ['Length / height', 'About 25 cm in the first year (2017 growth-and-puberty review; 2017 spine-growth review); birth length doubles by about 5 years (2022 child-nutrition review, one source).', 'WHO 2006 medians: boys 49.9 → 75.7 cm (+25.9), girls 49.1 → 74.0 cm (+24.9) in the first year.'],
+  ['Height velocity after 2 years', '5.5–9 cm/yr at 2–4 y; 5–8.5 cm/yr at 4–6 y; 4–6 cm/yr (boys) or 4.5–6.5 cm/yr (girls) from 6 y to puberty (2020 short-stature review, one source). Below the 5th centile for age (e.g. &lt;5 cm/yr after 5 years) is growth deceleration (2013 growth-screening review, one source).', 'Peak height velocity: girls 11–12 y, boys 13–14 y (2017 growth-and-puberty review, one source).'],
+  ['Head circumference', '2 cm/month at 0–3 months, 1 cm/month at 3–6 months, 0.5 cm/month at 6–12 months: about 12 cm in the first year; then 1 cm every 6 months to 3 years and 1 cm a year from 3 to 5 years (StatPearls). Wikipedia gives about 1.3 cm every 6 months in the second year.', 'Normal at term: 33–36 cm (Wikipedia). Head and chest circumference are equal in the 8–12-month period and the chest is larger in the second year (Wikipedia, one source). WHO 2006 medians: boys 34.5 → 46.1 cm (+11.6), girls 33.9 → 44.9 cm (+11.0) in the first year.'],
+  ['Anterior fontanelle', 'Median closure about 12–18 months (2025 CT study); "average 18 months, but often closes by 12 months" (2018 Ethiopian study); closed in every child by 18 months in a 2015 Iranian study; Wikipedia: begins to close at 8–12 months and is nearly closed at 18 months.', 'Posterior fontanelle: closed in all infants by 2 months (2015 Iranian study, one source). Boys close about a month earlier than girls on average (2025 CT study, one source). Anatomy of the fontanelles: <a href="../../anatomy/head-neck/skull.html">skull page</a>.'],
+  ['Teeth (primary dentition)', 'First teeth, the lower central incisors, erupt at 6–10 months (StatPearls; Wikipedia, Teething); Wikipedia (Human tooth development) gives "usually at eight months". The 20 primary teeth erupt from the first into the third year — the last, the second molars, at 23–33 months (StatPearls; Wikipedia: eruption continues to 25–33 months) — and are shed between 6 and 12 years (StatPearls).', 'Rule of thumb: about four teeth erupt for every six months of life (Wikipedia, one source).'],
+];
+const RULE_NOTE = 'Disagreements shown: the doubling age (4 months in Wikipedia; the WHO median reaches 2× at about 4 months) and tripling (sources say 1 year; the WHO median is 2.8–2.9× at 12 months); the head-circumference gain in the second year (StatPearls 1 cm per 6 months, Wikipedia 1.3 cm); the first tooth (6–10 months vs "usually at eight months"); anterior fontanelle closure: a median of 12–18 months (2025 CT study) vs “average 18 months” (2018 Ethiopian study). The WHO ratios are computed on this page from the official WHO tables, not quoted. Not shown for want of an open source: the textbook "doubles by 5 months" rule.';
+
+const MEAS = [
+  ['Weight', 'Plotted as weight-for-age; with length or height it gives weight-for-length/height (wasting) and BMI-for-age (WHO Child Growth Standards 2006).', 'Low weight-for-age = underweight (WHO fact sheet 2024).'],
+  ['Length (lying) or height (standing)', 'Recumbent length below 24 months, standing height from 24 months (WHO Anthro manual 2011; a 2020 malnutrition review uses length below 85 cm or when the child cannot stand). Lying length is about 0.7 cm more than standing height; WHO adds or subtracts 0.7 cm when the wrong position was used (WHO Anthro manual 2011, one source).', 'Height-for-age: low = stunting.'],
+  ['Head circumference', 'The occipitofrontal circumference (OFC) tracks head growth and neurodevelopment; measure at each visit to 24–36 months, more often in preterm infants and those with meningitis, subdural haematoma or hydrocephalus (StatPearls).', 'More than 2 SD above the mean = macrocephaly (StatPearls; Wikipedia). More than 2 SD below = microcephaly (Wikipedia; some use 3 SD).'],
+  ['Mid-upper arm circumference (MUAC)', 'Measured at the midpoint between the acromion and the olecranon with a non-stretchable tape (Wikipedia).', 'MUAC &lt;115 mm = severe acute malnutrition at 6–59 months (WHO 2013; WHO/UNICEF 2009).'],
+];
+const MEAS_NOTE = 'The core anthropometric measurements are height, weight, head circumference, BMI, circumferences and skinfolds (StatPearls, one source). Whether one height measurement or growth followed over time (velocity) is the better screen is debated (2013 growth-screening review). <b>Puberty</b> is staged with the <b>Tanner stages</b> (sexual maturity rating): separate scales for breasts (girls), genitals (boys) and pubic hair (StatPearls; Wikipedia), each from Tanner I (prepubertal) to Tanner V (Wikipedia). StatPearls dates the scale to 1962, Wikipedia to 1969; adolescence is a later module (PE6).';
+
+/* chart indicators */
+const IND = {
+  wfa: {label: 'Weight-for-age (0–5 y)', unit: 'kg', ref: 'WHO 2006', restricted: true, step: 0.1},
+  lhfa: {label: 'Length/height-for-age (0–5 y)', unit: 'cm', ref: 'WHO 2006', restricted: false, step: 0.5},
+  hcfa: {label: 'Head circumference-for-age (0–5 y)', unit: 'cm', ref: 'WHO 2006', restricted: false, step: 0.1},
+  hfa07: {label: 'Height-for-age (5–19 y)', unit: 'cm', ref: 'WHO 2007 reference', restricted: false, step: 0.5},
+  wfl: {label: 'Weight-for-length (under 2 y)', unit: 'kg', ref: 'WHO 2006', restricted: true, step: 0.1, x: 'length'},
+  wfh: {label: 'Weight-for-height (2–5 y)', unit: 'kg', ref: 'WHO 2006', restricted: true, step: 0.1, x: 'height'},
+};
+/* example children; z-scores hand-checked against the full-precision WHO tables (zcheck.py) */
+const PRE = {
+  uw: ['Boy, 12 mo, 7.5 kg', {ind: 'wfa', sex: 'b', m: 12, y: 7.5}],
+  suw: ['Girl, 18 mo, 7.0 kg', {ind: 'wfa', sex: 'g', m: 18, y: 7.0}],
+  hv: ['Boy, 4 mo, 10.0 kg', {ind: 'wfa', sex: 'b', m: 4, y: 10.0}],
+  st: ['Girl, 3 y, 86 cm', {ind: 'lhfa', sex: 'g', m: 36, y: 86}],
+  med: ['Boy, 9 mo, 72 cm', {ind: 'lhfa', sex: 'b', m: 9, y: 72}],
+  mic: ['Boy, 6 mo, head 40 cm', {ind: 'hcfa', sex: 'b', m: 6, y: 40}],
+  mac: ['Girl, 12 mo, head 48.5 cm', {ind: 'hcfa', sex: 'g', m: 12, y: 48.5}],
+  ss: ['Boy, 10 y, 122 cm', {ind: 'hfa07', sex: 'b', m: 120, y: 122}],
+  sam: ['Boy, length 70 cm, 6.5 kg', {ind: 'wfl', sex: 'b', m: 70, y: 6.5}],
+  wst: ['Boy, height 95 cm, 11.2 kg', {ind: 'wfh', sex: 'b', m: 95, y: 11.2}],
+};
+const CH_NOTE = 'Curves: WHO median and ±2, ±3 SD from the official LMS tables. z = [(y/M)<sup>L</sup> − 1] / (L·S). For weight-based indicators WHO uses a "restricted" LMS: beyond ±3 SD the SD is fixed at the distance between the ±2 and ±3 SD curves (WHO 2006 technical report, one source; the formula on the right then switches). Length is used below 24 months and height from 24 months, so the length/height curves step at 24 months (about 0.7 cm). The percentile is the normal-distribution equivalent of z, shown only between −3 and +3 (WHO Anthro manual). Cut-offs: −2 SD and −3 SD (WHO; see the table below); microcephaly −2 SD (Wikipedia; some use −3 SD); macrocephaly +2 SD (StatPearls; Wikipedia). For 5–19 years the WHO 2007 reference is plotted; a height below −2 SD is short stature. Weight-for-length (lying, under 2 years) and weight-for-height (standing, 2–5 years) are plotted against length or height, not age: below −2 SD is wasting, below −3 SD severe acute malnutrition (WHO 2013).';
+
+const CLS = [
+  ['Stunting', 'Height (length)-for-age, WHO Child Growth Standards 2006', '&lt; −2 SD', '&lt; −3 SD severe', 'Chronic or recurrent undernutrition (WHO fact sheet, 1 March 2024)'],
+  ['Wasting', 'Weight-for-length/height, WHO Child Growth Standards 2006', '&lt; −2 SD (moderate: −3 to −2)', '&lt; −3 SD = severe acute malnutrition (WHO 2013 guideline)', 'Recent, severe weight loss (WHO fact sheet, 1 March 2024)'],
+  ['Underweight', 'Weight-for-age, WHO Child Growth Standards 2006', '&lt; −2 SD', '— (no −3 SD grade in the sources used)', 'May be stunted, wasted or both (WHO fact sheet, 1 March 2024)'],
+  ['Severe acute malnutrition (6–59 months)', 'Weight-for-height &lt; −3 SD, or MUAC &lt; 115 mm, or bilateral pitting oedema', '—', 'Any one is enough', 'WHO 2013 guideline; WHO/UNICEF 2009 joint statement'],
+];
+const CLS_NOTE = 'The cut-offs are SDs of the <b>WHO Child Growth Standards (2006)</b> median. Sources for the cut-offs: stunting below −2 SD (2016 stunting review; Wikipedia), severe below −3 SD (2016 stunting review; 2019 prevalence-thresholds paper); wasting −2 SD (2019 prevalence-thresholds paper; Wikipedia, Failure to thrive), moderate −3 to −2 and SAM below −3 (2020 malnutrition review; WHO 2013 guideline); underweight weight-for-age below −2 (2020 malnutrition review; the WHO fact sheet, 1 March 2024, names it). "Normal" is within 2 SD of the WHO 2006 median (2019 prevalence-thresholds paper). The WHO 2009 statement kept weight-for-height &lt;−3 SD and raised the MUAC cut-off from 110 to 115 mm with the 2006 standards.';
+const MU = {sam: 11.5, mam: 12.5};
+const MU_NOTE = 'WHO 2013 guideline and WHO/UNICEF 2009: MUAC &lt;115 mm (11.5 cm) or bilateral pitting oedema at 6–59 months = severe acute malnutrition; children with MUAC &lt;115 mm have a much higher risk of death. Moderate acute malnutrition, MUAC 115 to &lt;125 mm, is from a 2020 malnutrition review\'s table (Wikipedia: &lt;125 mm = global acute malnutrition). WHO 2013 discharge: MUAC ≥125 mm and no oedema for at least 2 weeks. Weight-for-height &lt;−3 SD is an independent criterion; this slider shows only MUAC and oedema.';
+
+const IAP = '<p>Government of India and the Indian Academy of Pediatrics (IAP) adopted the <b>WHO 2006 Child Growth Standards for children under five</b> (2015 IAP paper). For <b>5–18 years</b> the IAP Growth Chart Committee published revised charts in January 2015 (<b>IAP 2015</b>), replacing the earlier IAP charts and the 2007 IAP growth-monitoring guidelines\' references; they give height, weight and BMI centiles (3rd to 97th), made by the LMS method, and the IAP recommends them for 5–18-year-old Indian children (2015 IAP paper, one source, published by the chart\'s authors).</p><p>The IAP 2015 <b>BMI</b> charts carry <b>23 and 27 adult-equivalent</b> lines for overweight and obesity (instead of the IOTF 25 and 30) because Asian Indians have more cardiometabolic risk at a lower BMI. On the 2015 charts Indian children\'s heights are almost level with China and Saudi Arabia but below the CDC and WHO references, and their upper weight centiles are below CDC (same paper). The IAP 2015 centile tables are not open as data, so this page plots the WHO 2007 reference for 5–19 years.</p>';
+
+const SS = '<p><b>Short stature</b>: height more than <b>2 SD below the mean</b> for age, sex and population — about the 2.3rd centile, though many texts use the 3rd centile (StatPearls; Wikipedia; 2020 short-stature review). The same review adds height &gt;2 SD below the target height, or a fall in height SDS. The commonest causes are the two <b>normal variants</b>, <b>familial short stature</b> and <b>constitutional delay of growth and puberty</b> (StatPearls; Wikipedia; 2020 short-stature review). <b>Idiopathic short stature</b> is height &gt;2 SD below the mean with no cause found (2009 ISS review; StatPearls); some authorities include FSS and CDGP in it (StatPearls).</p><p><b>Target (mid-parental) height</b>: boys (father + mother + 13 cm)/2, girls (father + mother − 13 cm)/2 (2013 growth-screening review; Wikipedia). A child whose height lies outside the parental target range is more likely to have a growth disorder (2013 growth-screening review). Height velocity needs serial measurements over 6–12 months (2020 short-stature review; 2026 short-stature systematic review).</p><p><b>Body proportions</b>: measure sitting height, arm span and head circumference (2021 growth-failure review; 2026 short-stature systematic review); the arm span-to-height and upper-to-lower segment ratios document <b>disproportionate</b> short stature (ACMG 2009 guideline; Wikipedia), though these ratios change with secular trend and good references are lacking (2009 ISS review). The normal values of the ratios at each age are not given in the open sources used, so none are shown.</p><p><b>First investigations</b>: a hand–wrist bone-age radiograph with a look for skeletal dysplasia in every referred short child; laboratory screening with full blood count, ESR, IGF-1, FT4 and TSH, a coeliac test, electrolytes, renal and liver function, calcium, phosphate and alkaline phosphatase (2021 growth-failure review, one source; the 2008 ISS consensus listed thyroid function, IGF-1, IGFBP-3 and a karyotype in girls). This is <b>disputed</b>: one 2013 study found routine screening of healthy short children not cost-effective, and a growth-society guideline says tests should be guided by clinical features (same review); in primary care, thyroid and coeliac screening are applied inconsistently (2026 systematic review).</p>';
+/* bone age picker: [ba key, velocity key] -> answer */
+const BA = {
+  'del|n': '<h3>Delayed bone age, normal velocity</h3><p>Typical of <b>constitutional delay of growth and puberty</b>: bone age delayed (by about 2 SD or more), short stature, puberty and the attainment of adult height delayed compared with peers (2021 bone-age review; 2020 short-stature review; Wikipedia, Growth chart). A positive family history of delayed puberty supports it (2021 growth-failure review). Growth slows at some point in childhood and then resumes at a normal rate (Wikipedia). In delayed normal variants the bone age tends to match the height age (2021 bone-age review, one source).</p>',
+  'del|s': '<h3>Delayed bone age, slow velocity</h3><p>Think of a <b>pathological</b> cause. Untreated <b>hypothyroidism</b>: slow velocity, bone age delayed (2013 growth-screening review; 2021 bone-age review). <b>Growth hormone deficiency</b>: growth at about half the usual velocity, bone age and puberty delayed (Wikipedia; 2020 short-stature review). <b>Glucocorticoid excess</b>: slow velocity, delayed bone age, weight gain, raised blood pressure (2013 growth-screening review). <b>Chronic systemic disease and malnutrition</b> (coeliac disease, inflammatory bowel disease, cystic fibrosis) also delay bone age (2021 bone-age review; 2020 short-stature review); in some nutritional deficiencies (anorexia nervosa, poorly controlled type 1 diabetes) weight falls more than height (2013 growth-screening review, one source), whereas an endocrine cause slows height while weight is kept or gained (Wikipedia, Growth chart; 2013 growth-screening review).</p>',
+  'eq|n': '<h3>Bone age equal to chronological age, normal velocity</h3><p>Typical of <b>familial short stature</b>: short parent(s), bone age appropriate for chronological age, normal growth rate and normal onset of puberty; adult height is consistent with the target height (2020 short-stature review; Wikipedia, Growth chart; StatPearls). Young girls with <b>Turner syndrome</b> may also have a normal bone age (2020 short-stature review, one source); some girls with Turner syndrome look entirely normal (2013 growth-screening review).</p>',
+  'eq|s': '<h3>Bone age equal to chronological age, slow velocity</h3><p>Not described as a pattern in the sources used. A velocity below the 5th centile for age, or height falling across two or more centile lines, is growth deceleration and needs evaluation (2013 growth-screening review; 2020 short-stature review).</p>',
+  'eq|f': '<h3>Bone age equal to chronological age, fast velocity</h3><p>This combination is not described in the sources used.</p>',
+  'del|f': '<h3>Delayed bone age, fast velocity</h3><p>This combination is not described in the sources used.</p>',
+  'adv|f': '<h3>Advanced bone age, fast velocity</h3><p>A bone age older than the chronological age is found in a child growing faster than normal (Wikipedia). It is seen with <b>precocious puberty</b>, <b>hyperthyroidism</b>, excess sex steroids (for example congenital adrenal hyperplasia) and <b>obesity</b> (2021 bone-age review; 2020 short-stature review); in obesity, early rapid weight gain often comes with a faster height velocity and an advanced bone age (2017 growth-and-puberty review). Early fast growth with early fusion of the epiphyses can end in a short adult (2013 growth-screening review; Wikipedia, Short stature).</p>',
+  'adv|n': '<h3>Advanced bone age, normal velocity</h3><p>This combination is not described in the sources used.</p>',
+  'adv|s': '<h3>Advanced bone age, slow velocity</h3><p>This combination is not described in the sources used.</p>',
+};
+const BA_NOTE = 'Bone age is read from a radiograph of the <b>left hand and wrist</b> (Greulich–Pyle atlas, Tanner–Whitehouse methods) (2015 bone-age review; StatPearls; Wikipedia); delayed or advanced means 2 SD or more from the mean (2020 short-stature review; the 2021 bone-age review defines CDGP by a delay of at least 2 SD). The axis is schematic.';
+const SSC = [
+  ['Normal variants', 'Familial short stature; constitutional delay of growth and puberty', 'Normal velocity; BA = CA (FSS) or delayed (CDGP)'],
+  ['Endocrine', 'Growth hormone deficiency, hypothyroidism, Cushing syndrome / glucocorticoid therapy, consequences of precocious puberty', 'Slow velocity; weight preserved or gained'],
+  ['Chronic systemic disease and nutrition', 'Malnutrition, coeliac disease, inflammatory bowel disease, chronic kidney disease, cystic fibrosis', 'Weight affected; BA delayed'],
+  ['Genetic and syndromic', 'Turner syndrome, Noonan syndrome, Prader–Willi syndrome, Down syndrome, Russell–Silver syndrome; SHOX deficiency', 'Dysmorphic features may prompt evaluation; some Turner girls look normal (2013 growth-screening review)'],
+  ['Skeletal dysplasia', 'Achondroplasia and other osteochondrodysplasias', 'Disproportionate (short limbs)'],
+  ['Small for gestational age, psychosocial', 'Small for gestational age (a subset stay short); psychosocial factors', '—'],
+];
+const SS_NOTE = 'Causes as listed by StatPearls (systemic illness, nutrition, psychosocial, hormonal, genetic, musculoskeletal), Wikipedia (GH or thyroid deficiency, malnutrition, organ disease, mistreatment, drugs, Turner, Noonan, CKD, SGA, Prader–Willi; skeletal dysplasias disproportionate) and two reviews (2013 growth-screening review: GHD, Cushing, hypothyroidism, precocious puberty; limbs shorter than spine in achondroplasia; Turner and Down syndrome; 2021 bone-age review: trisomy 21, Turner and Russell–Silver with delayed bone age). Worldwide the most frequent causes are FSS, CDGP and GHD (2020 short-stature review).';
+
+const FTT = '<p><b>Failure to thrive</b> (FTT) — now often called <b>weight faltering</b> — means inadequate weight gain; it is a sign, not a disease (StatPearls; Wikipedia). There is no single agreed definition (StatPearls; Wikipedia). Definitions in use: <b>weight-for-age below the 5th centile</b>, a <b>fall of more than two major centile lines</b>, or weight-for-length below 80% of the median (StatPearls; Wikipedia gives the first two, and also "below the 2nd centile, or falling one or more centile spaces on a WHO chart"). Correct for gestational age in preterm infants for the first 2 years (StatPearls). A falling centile is more worrying than a child who has always tracked a low centile (StatPearls).</p><p>FTT is a risk factor for malnutrition; untreated it can lead to <b>stunting</b> and is associated with <b>developmental delay</b>, lower IQ and behavioural and learning problems, worse when malnutrition starts before 2 years (StatPearls). Wikipedia adds: assess a baby who loses more than 10% of birth weight; most babies regain birth weight by 3 weeks. A child below −2 SD weight-for-height is wasted, below −2 SD height-for-age stunted (Wikipedia). Management: optimise nutrition and treat any underlying cause (StatPearls).</p><p><b>Causes</b> (Wikipedia, one source): traditionally divided into endogenous and exogenous causes, and grouped as <b>inadequate caloric intake</b> (lack of food, difficulty eating, psychosocial reasons — the commonest cause everywhere), <b>malabsorption or caloric retention defects</b> (coeliac disease, cystic fibrosis, Crohn\'s disease, diarrhoea, liver disease) and <b>increased metabolic demand</b>. As many as 90% of cases are non-organic; poverty is the greatest risk factor worldwide. First blood tests named there: full blood count, metabolic panel, thyroid function, and if indicated anti-tTG IgA for coeliac disease and a sweat chloride test for cystic fibrosis.</p>';
+
+const BASED = '<b>Based on:</b> WHO Child Growth Standards (2006) tables and technical report, WHO 2007 growth reference tables, WHO Anthro manual (2011), WHO/UNICEF joint statement on SAM (2009), WHO guideline on SAM (2013), WHO malnutrition fact sheet (1 March 2024); IAP 2015 growth-chart paper (Indian J Endocrinol Metab 2015); ACMG practice guideline on short stature (2009); StatPearls (NCBI Bookshelf; abstracts); open-access papers: stunting review (2016), prevalence-thresholds paper (2019), acute-malnutrition review (2020), growth-screening review (2013), short-stature review (2020), growth-failure review (2021), short-stature systematic review (2026), idiopathic short stature review (2009), bone-age reviews (2015, 2021), anterior fontanelle studies (Iran 2015, Ethiopia 2018, CT study 2025), growth-and-puberty review (2017), spine-growth review (2017), child-nutrition review (2022), eating-skills review (2024) (Europe PMC / NCBI); Wikipedia (wikitext checked for OpenStax citations).';
+const MODELS = '<b>Models used:</b> growth curves are computed from the WHO LMS parameters (rounded to 5 significant digits; z-scores agree with the full tables to 0.01); the bone-age axis and MUAC scale are schematic. The classifiers apply the WHO cut-offs; they are not diagnostic tools.';
+
+/* ===================== CODE ===================== */
+const P = Paed, $ = P.$;
+$('lede').innerHTML = LEDE; $('def-text').innerHTML = DEF; $('iap-text').innerHTML = IAP; $('ss-text').innerHTML = SS; $('ftt-text').innerHTML = FTT;
+$('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+$('rule-note').innerHTML = RULE_NOTE; $('meas-note').innerHTML = MEAS_NOTE; $('ch-note').innerHTML = CH_NOTE; $('cls-note').innerHTML = CLS_NOTE;
+$('mu-note').innerHTML = MU_NOTE; $('ba-note').innerHTML = BA_NOTE; $('ss-note').innerHTML = SS_NOTE;
+P.toggles('fac-tg', FAC.map(f => [f[0], f[1]]), k => { const f = FAC.find(x => x[0] === k); $('fac-find').innerHTML = `<h3>${f[1]}</h3><p>${f[2]}</p>`; }, 'gen');
+$('fac-find').innerHTML = `<h3>${FAC[0][1]}</h3><p>${FAC[0][2]}</p>`;
+P.table('rule-table', ['Measure', 'Rule in the sources', 'Check against WHO 2006 / notes'], RULES);
+P.table('meas-table', ['Measurement', 'How', 'Use'], MEAS);
+P.table('cls-table', ['Condition', 'Indicator', 'Moderate', 'Severe', 'Meaning'], CLS);
+P.table('ss-table', ['Group', 'Examples', 'Clue'], SSC);
+
+/* LMS helpers */
+const row = (tab, m) => tab.find(r => r[0] === m);
+const val = (z, L, M, S) => Math.abs(L) < 1e-9 ? M * Math.exp(S * z) : M * Math.pow(1 + L * S * z, 1 / L);
+function zscore(y, L, M, S, restricted) {
+  const zi = Math.abs(L) < 1e-9 ? Math.log(y / M) / S : (Math.pow(y / M, L) - 1) / (S * L);
+  const res = {zi, z: zi, mode: 'plain'};
+  if (restricted && zi > 3) { const s3 = val(3, L, M, S), s2 = val(2, L, M, S); res.z = 3 + (y - s3) / (s3 - s2); res.mode = 'pos'; res.s3 = s3; res.s23 = s3 - s2; }
+  if (restricted && zi < -3) { const s3 = val(-3, L, M, S), s2 = val(-2, L, M, S); res.z = -3 + (y - s3) / (s2 - s3); res.mode = 'neg'; res.s3 = s3; res.s23 = s2 - s3; }
+  return res;
+}
+const phi = z => { const t = 1 / (1 + 0.2316419 * Math.abs(z)), d = 0.3989423 * Math.exp(-z * z / 2);
+  const p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return z > 0 ? 1 - p : p; };
+const f = (v, n = 1) => P.mn((+v).toFixed(n));
+const ageTxt = m => m < 24 ? `${m} mo` : (m % 12 ? `${Math.floor(m / 12)} y ${m % 12} mo` : `${m / 12} y`);
+
+/* ---------- expected gains ---------- */
+const G = {sex: 'b', m: 4};
+P.toggles('gain-sex', [['b', 'Boys'], ['g', 'Girls']], k => { G.sex = k; drawGain(); }, 'b');
+const gsl = P.slider('gain-sl', {id: 'gm', label: 'Age', min: 0, max: 24, step: 1, value: 4, fmt: v => v + ' months'}, v => { G.m = v; drawGain(); });
+function drawGain() {
+  const W = LMS['wfa_' + G.sex].filter(r => r[0] <= 24), b0 = W[0][2];
+  const x = P.scale(0, 24, 50, 620), y = P.scale(0, 14, 268, 20);
+  let h = P.DEFS;
+  for (let k = 0; k <= 14; k += 2) h += `<path class="grid" d="M50 ${y(k)} L620 ${y(k)}"/>` + P.T(44, y(k) + 4, k, 's', 'end');
+  for (let m = 0; m <= 24; m += 3) h += P.T(x(m), 286, m, 's', 'middle');
+  h += P.T(335, 300, 'age (months)', 's', 'middle') + P.T(54, 11, 'kg', 's');
+  for (const [k, lab] of [[2, '2× birth median'], [3, '3× birth median']]) h += `<path class="ref" d="M50 ${y(k * b0)} L620 ${y(k * b0)}"/>` + (k === 3 ? P.T(56, y(k * b0) - 5, `${lab} (${f(k * b0)} kg)`, 's') : P.T(616, y(k * b0) + 14, `${lab} (${f(k * b0)} kg)`, 's', 'end'));
+  h += `<path class="med" d="${P.path(W.map(r => [x(r[0]), y(r[2])]))}"/>`;
+  const r = row(W, G.m);
+  h += `<path class="agel" d="M${x(G.m)} 20 L${x(G.m)} 268"/><circle class="pt" cx="${x(G.m)}" cy="${y(r[2])}" r="5.5"/>`;
+  h += `<path class="axis" d="M50 20 L50 268 L620 268"/>`;
+  $('gain-svg').innerHTML = h;
+  const L0 = LMS['lfa_' + G.sex][0][2], H0 = LMS['hcfa_' + G.sex][0][2];
+  const lr = G.m < 24 ? row(LMS['lfa_' + G.sex], G.m) : row(LMS['hfa_' + G.sex], 24), hr = row(LMS['hcfa_' + G.sex], G.m);
+  $('gain-out').innerHTML = `<span><span class="tag">Median weight</span> <span class="readout">${f(r[2], 2)} kg = ${f(r[2] / b0, 2)}× birth</span></span>`
+    + `<span><span class="tag">Median ${G.m < 24 ? 'length' : 'height'}</span> <span class="readout">${f(lr[2])} cm (+${f(lr[2] - L0)})</span></span>`
+    + `<span><span class="tag">Median head circ.</span> <span class="readout">${f(hr[2])} cm (+${f(hr[2] - H0)})</span></span>`;
+  $('gain-note').innerHTML = `WHO 2006 median (50th centile) for ${G.sex === 'b' ? 'boys' : 'girls'}; birth median ${f(b0, 2)} kg, ${f(L0)} cm, head ${f(H0)} cm. Ratios and gains are computed here from the WHO tables. At 24 months the length/height readout uses standing height (WHO median height at 24 months).`;
+}
+gsl.init(); drawGain();
+
+/* ---------- growth chart ---------- */
+const C = {ind: 'wfa', sex: 'b', m: 12, y: 7.5};
+function tabs(ind, sex) { return ind === 'lhfa' ? [LMS['lfa_' + sex], LMS['hfa_' + sex]] : [LMS[ind + '_' + sex]]; }
+function ages(ind, sex) { return ind === 'lhfa' ? LMS['lfa_' + sex].filter(r => r[0] < 24).map(r => r[0]).concat(LMS['hfa_' + sex].map(r => r[0])) : LMS[ind + '_' + sex].map(r => r[0]); }
+function lmsFor(ind, sex, m) { if (ind === 'lhfa') return m < 24 ? row(LMS['lfa_' + sex], m) : row(LMS['hfa_' + sex], m); return row(LMS[ind + '_' + sex], m); }
+function yRange(ind, sex) {
+  let lo = 1e9, hi = -1e9;
+  for (const t of tabs(ind, sex)) for (const r of t) { lo = Math.min(lo, val(-3, r[1], r[2], r[3])); hi = Math.max(hi, val(3, r[1], r[2], r[3])); }
+  const pad = (hi - lo) * 0.06; let l0 = Math.floor(lo - pad);
+  if (IND[ind].unit === 'kg') l0 = Math.max(1, l0);   /* a weight of 0 would give z = −Infinity */
+  return [l0, Math.ceil(hi + pad)];
+}
+const xTxt = (ind, v) => IND[ind].x ? `${v} cm` : ageTxt(v);
+let ageSl, ySl;
+function buildSliders() {
+  const A = ages(C.ind, C.sex); let i = A.indexOf(C.m); if (i < 0) { i = 0; C.m = A[0]; }
+  const [lo, hi] = yRange(C.ind, C.sex); C.y = Math.min(hi, Math.max(lo, C.y));
+  $('ch-sl').innerHTML = '';
+  ageSl = P.slider('ch-sl', {id: 'ca', label: IND[C.ind].x === 'length' ? 'Length' : IND[C.ind].x === 'height' ? 'Height' : 'Age', min: 0, max: A.length - 1, step: 1, value: i, fmt: v => xTxt(C.ind, A[v])}, v => { C.m = A[v]; drawChart(); });
+  ySl = P.slider('ch-sl', {id: 'cy', label: 'Measurement', min: lo, max: hi, step: IND[C.ind].step, value: C.y, fmt: v => `${f(v)} ${IND[C.ind].unit}`}, v => { C.y = v; drawChart(); });
+  ageSl.init(); ySl.init();
+}
+function drawChart() {
+  const I = IND[C.ind], [lo, hi] = yRange(C.ind, C.sex), A = ages(C.ind, C.sex), a0 = A[0], a1 = A[A.length - 1];
+  const x = P.scale(a0, a1, 64, 560), y = P.scale(lo, hi, 362, 20);
+  let h = P.DEFS;
+  const yStep = (hi - lo) > 80 ? 20 : (hi - lo) > 30 ? 10 : (hi - lo) > 12 ? 2 : 1;
+  for (let k = Math.ceil(lo / yStep) * yStep; k <= hi; k += yStep) h += `<path class="grid" d="M64 ${y(k)} L560 ${y(k)}"/>` + P.T(56, y(k) + 4, k, 's', 'end');
+  const yrs = !I.x && a1 > 100, xs = I.x ? 5 : yrs ? 24 : 6;
+  for (let m = Math.ceil(a0 / xs) * xs; m <= a1; m += xs) h += P.T(x(m), 380, yrs ? m / 12 : m, 's', 'middle');
+  h += P.T(312, 396, I.x ? I.x + ' (cm)' : yrs ? 'age (years)' : 'age (months)', 's', 'middle') + `<text x="16" y="191" class="s" text-anchor="middle" transform="rotate(-90 16 191)">${I.unit === 'kg' ? 'weight (kg)' : C.ind === 'hcfa' ? 'head circumference (cm)' : 'length/height (cm)'}</text>`;
+  for (const t of tabs(C.ind, C.sex)) {
+    for (const [zz, cls] of [[-3, 'sd3'], [-2, 'sd2'], [0, 'med'], [2, 'sd2'], [3, 'sd3']]) h += `<path class="${cls}" d="${P.path(t.map(r => [x(r[0]), y(val(zz, r[1], r[2], r[3]))]))}"/>`;
+  }
+  const last = tabs(C.ind, C.sex).slice(-1)[0].slice(-1)[0];
+  const labs = [[3, '+3'], [2, '+2'], [0, '0 (median)'], [-2, '−2'], [-3, '−3']].map(([zz, l]) => [y(val(zz, last[1], last[2], last[3])), l]);
+  for (let i = 1; i < labs.length; i++) if (labs[i][0] - labs[i - 1][0] < 12) labs[i][0] = labs[i - 1][0] + 12;
+  for (const [yy, l] of labs) h += P.T(566, yy + 4, l, 's');
+  h += `<path class="axis" d="M64 20 L64 362 L560 362"/>`;
+  const r = lmsFor(C.ind, C.sex, C.m), Z = zscore(C.y, r[1], r[2], r[3], I.restricted);
+  const py = Math.max(20, Math.min(362, y(C.y)));
+  h += `<path class="agel" d="M${x(C.m)} 20 L${x(C.m)} 362"/><circle class="pt" cx="${x(C.m)}" cy="${py}" r="6"/>`;
+  $('ch-svg').innerHTML = h;
+  /* classification */
+  const z = Z.z; let cls = 'Within ±2 SD of the median', sev = false;
+  if (C.ind === 'wfa') { if (z < -2) cls = z < -3 ? 'Underweight (below −2 SD; here even below −3 SD)' : 'Underweight (below −2 SD)'; else if (z > 2) cls = 'Above +2 SD for weight-for-age'; }
+  if (C.ind === 'lhfa') { if (z < -3) { cls = 'Severely stunted (below −3 SD)'; sev = true; } else if (z < -2) cls = 'Stunted (below −2 SD)'; else if (z > 2) cls = 'Above +2 SD (tall for age)'; }
+  if (C.ind === 'hcfa') { if (z < -3) { cls = 'Below −3 SD: microcephaly by either definition'; sev = true; } else if (z < -2) cls = 'Below −2 SD: microcephaly by the usual definition (some use −3 SD)'; else if (z > 2) cls = 'Above +2 SD: macrocephaly'; }
+  if (C.ind === 'hfa07') { if (z < -2) cls = 'Below −2 SD: short stature'; else if (z > 2) cls = 'Above +2 SD (tall for age)'; }
+  if (I.x) { if (z < -3) { cls = 'Severe wasting (below −3 SD): severe acute malnutrition (WHO 2013, children 6–59 months)'; sev = true; } else if (z < -2) cls = 'Wasted (below −2 SD; moderate: −3 to −2)'; else if (z > 2) cls = 'Above +2 SD for weight-for-' + I.x; }
+  const pc = Math.abs(z) <= 3 ? `percentile ≈ ${f(phi(z) * 100, phi(z) < 0.1 || phi(z) > 0.9 ? 1 : 0)}` : 'percentile not shown beyond ±3 SD';
+  $('ch-out').innerHTML = `<span class="big">z = ${f(z, 2)}</span><p class="${sev ? 'sev-t' : ''}">${cls}</p><p class="muted">${I.label}, ${C.sex === 'b' ? 'boy' : 'girl'}, ${I.x ? I.x + ' ' : ''}${xTxt(C.ind, C.m)}: ${f(C.y)} ${I.unit}; ${pc}. ${I.ref}${C.ind === 'lhfa' ? (C.m < 24 ? ' (length, lying)' : ' (height, standing)') : ''}.</p>`;
+  let fx = `L = ${f(r[1], 4)}   M = ${f(r[2], 3)}   S = ${f(r[3], 5)}\n`;
+  fx += Math.abs(r[1] - 1) < 1e-9 ? `L = 1, so z = (y − M) / (M·S)\n  = (${f(C.y)} − ${f(r[2], 3)}) / (${f(r[2], 3)} × ${f(r[3], 5)})\n` : `z = [(y/M)^L − 1] / (L·S)\n  = [(${f(C.y)}/${f(r[2], 3)})^${f(r[1], 4)} − 1] / (${f(r[1], 4)} × ${f(r[3], 5)})\n`;
+  fx += `  = ${f(Z.zi, 2)}`;
+  if (Z.mode === 'pos') fx += `  > 3: restricted method\nSD3pos = ${f(Z.s3, 2)}, SD23pos = ${f(Z.s23, 2)}\nz* = 3 + (y − SD3pos)/SD23pos = ${f(Z.z, 2)}`;
+  if (Z.mode === 'neg') fx += `  < −3: restricted method\nSD3neg = ${f(Z.s3, 2)}, SD23neg = ${f(Z.s23, 2)}\nz* = −3 + (y − SD3neg)/SD23neg = ${f(Z.z, 2)}`;
+  $('ch-f').textContent = P.mn(fx);
+}
+function setInd(k) { const was = IND[C.ind].x; C.ind = k; if (IND[k].x) C.m = k === 'wfl' ? 70 : 95; else { if (was) C.m = 12; if (k === 'hfa07' && C.m < 61) C.m = 120; if (k !== 'hfa07' && C.m > 60) C.m = 12; } const r = lmsFor(C.ind, C.sex, ages(C.ind, C.sex).includes(C.m) ? C.m : ages(C.ind, C.sex)[0]); C.y = +r[2].toFixed(1); buildSliders(); drawChart(); }
+function pressed(id, k) { $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === k))); }
+P.toggles('ch-ind', Object.entries(IND).map(([k, v]) => [k, v.label]), k => { setInd(k); pressed('ch-pre', ''); }, C.ind);
+P.toggles('ch-sex', [['b', 'Boy'], ['g', 'Girl']], k => { C.sex = k; buildSliders(); drawChart(); pressed('ch-pre', ''); }, C.sex);
+P.toggles('ch-pre', Object.entries(PRE).map(([k, v]) => [k, v[0]]), k => { Object.assign(C, PRE[k][1]); pressed('ch-ind', C.ind); pressed('ch-sex', C.sex); buildSliders(); drawChart(); }, 'uw');
+buildSliders(); drawChart();
+
+/* ---------- MUAC ---------- */
+const MUs = {v: 12.0, oed: 'no'};
+P.slider('mu-sl', {id: 'mu', label: 'MUAC', min: 9, max: 17, step: 0.1, value: 12.0, fmt: v => `${f(v)} cm (${Math.round(v * 10)} mm)`}, v => { MUs.v = v; drawMu(); }).init();
+P.toggles('mu-oed', [['no', 'Absent'], ['yes', 'Present']], k => { MUs.oed = k; drawMu(); }, 'no');
+function drawMu() {
+  const x = P.scale(9, 17, 20, 400); let h = P.DEFS;
+  h += `<rect class="sev" x="20" y="34" width="${x(MU.sam) - 20}" height="26"/><rect class="band" x="${x(MU.sam)}" y="34" width="${x(MU.mam) - x(MU.sam)}" height="26"/>`;
+  h += `<rect x="20" y="34" width="380" height="26" style="fill:none;stroke:var(--muted)"/>`;
+  for (let k = 9; k <= 17; k++) h += `<path class="axis" d="M${x(k)} 60 L${x(k)} 65"/>` + P.T(x(k), 78, k, 's', 'middle');
+  h += P.T((20 + x(MU.sam)) / 2, 26, 'SAM', 's', 'middle') + P.T((x(MU.sam) + x(MU.mam)) / 2, 26, 'MAM', 's', 'middle') + P.T((x(MU.mam) + 400) / 2, 26, 'not acutely malnourished by MUAC', 's', 'middle');
+  h += P.T(210, 98, 'MUAC (cm)', 's', 'middle') + `<path d="M${x(MUs.v)} 30 L${x(MUs.v)} 64" style="stroke:var(--mark);stroke-width:3"/>`;
+  $('mu-svg').innerHTML = h;
+  let out;
+  if (MUs.oed === 'yes') out = '<span class="big sev-t">SAM</span><p>Bilateral pitting oedema means severe acute malnutrition whatever the MUAC (WHO 2013; WHO/UNICEF 2009). Refer for full assessment at a treatment centre.</p>';
+  else if (MUs.v < MU.sam) out = '<span class="big sev-t">SAM</span><p>MUAC below 115 mm at 6–59 months: severe acute malnutrition (WHO 2013; WHO/UNICEF 2009). Refer for full assessment.</p>';
+  else if (MUs.v < MU.mam) out = '<span class="big">MAM</span><p>MUAC 115 to under 125 mm: moderate acute malnutrition (2020 malnutrition review\'s table; Wikipedia: under 125 mm = global acute malnutrition).</p>';
+  else out = '<span class="big">≥ 12.5 cm</span><p>Not acutely malnourished by MUAC; weight-for-height is checked separately.</p>';
+  $('mu-out').innerHTML = out;
+}
+drawMu();
+
+/* ---------- bone age picker ---------- */
+const BS = {ba: 'del', v: 'n'};
+P.toggles('ba-ba', [['del', 'Delayed'], ['eq', 'About equal'], ['adv', 'Advanced']], k => { BS.ba = k; drawBa(); }, 'del');
+P.toggles('ba-v', [['s', 'Slow'], ['n', 'Normal'], ['f', 'Fast']], k => { BS.v = k; drawBa(); }, 'n');
+function drawBa() {
+  const x = P.scale(0, 14, 24, 396); let h = P.DEFS;
+  h += `<path class="axis" d="M24 70 L396 70"/>`;
+  for (let k = 0; k <= 14; k += 2) h += `<path class="axis" d="M${x(k)} 70 L${x(k)} 75"/>` + P.T(x(k), 88, k, 's', 'middle');
+  h += P.T(210, 104, 'age (years), schematic', 's', 'middle');
+  const ca = 8, ba = BS.ba === 'del' ? 6 : BS.ba === 'adv' ? 10 : 8;
+  h += `<path d="M${x(ca)} 40 L${x(ca)} 70" style="stroke:var(--ink);stroke-width:2.5"/>` + P.T(x(ca), 34, 'CA', 'b', 'middle');
+  if (BS.ba !== 'eq') h += `<path d="M${x(ba)} 52 L${x(ba)} 70" style="stroke:var(--mark);stroke-width:3"/>` + P.T(x(ba), 48, 'BA', 'b', 'middle') + `<path class="flow" d="M${x(ca)} 60 L${x(ba) + (ba < ca ? 6 : -6)} 60"/>`;
+  else h += P.T(x(ca) + 10, 58, 'BA ≈ CA', 'b');
+  if (BS.ba === 'del' && BS.v === 'n') h += `<path d="M${x(ba)} 122 L${x(ba)} 112" style="stroke:var(--muted);stroke-width:2"/>` + P.T(x(ba) + 6, 124, 'height age ≈ BA (2021 bone-age review)', 's');
+  $('ba-svg').innerHTML = h;
+  $('ba-out').innerHTML = BA[BS.ba + '|' + BS.v];
+}
+drawBa();
+P.swipeHints();
+</script>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Development and Milestones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/paed.css">
+<style>
+/* tokens from paed.css with their site meanings: --accent (the chosen age: slider and age line), --mark (a source's milestone age on
+   the timeline; not used on the timeline, which draws the CDC age as an ink diamond), --clin (a red-flag age, a triangle). WHO windows are drawn in a neutral grey band; domains are told apart by column, not colour. */
+svg.sch .win{fill:var(--line);stroke:var(--muted);stroke-width:1}
+svg.sch .cdc{fill:var(--ink);stroke:var(--surface);stroke-width:1.2}
+svg.sch .wpk{fill:var(--surface);stroke:var(--ink);stroke-width:1.6}
+svg.sch .rf{fill:var(--clin)}
+svg.sch .rfl{stroke:var(--clin);stroke-width:3;stroke-linecap:round}
+.lg{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--muted)}
+.lg span{display:inline-flex;align-items:center;gap:6px}
+.lg svg{width:16px;height:14px;flex:none}
+svg.sch .agel{stroke:var(--accent);stroke-width:1.6}
+svg.sch .rowl{stroke:var(--line);stroke-width:1}
+.dom{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.dom{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.dom{grid-template-columns:minmax(0,1fr)}}
+.dom .col{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--bg);min-width:0}
+.dom h3{font-size:13.5px;margin:0 0 6px}
+.dom ul{margin:0;padding-left:16px;font-size:13.5px}
+.dom li{margin:0 0 4px}
+.dom .new{font:500 10.5px var(--f-mono);color:var(--muted)}
+.dom .none{font-size:13px;color:var(--muted)}
+.sev-t{color:var(--clin);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Paediatrics</a> <span class="muted">· Module 01: <a href="growth.html">Growth</a> · <span aria-current="page">Development and milestones</span></span></nav>
+
+<header class="stack">
+  <h1>Development and Milestones</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-def">Domains and principles</a> <a href="#h-ms">Milestones by age</a> <a href="#h-key">Key milestones and their ranges</a> <a href="#h-rf">Red flags</a> <a href="#h-tools">Assessment tools</a> <a href="#h-fac">Factors</a> <a href="#h-dd">Developmental delay</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-def">
+  <h2 id="h-def">What development is: domains and principles</h2>
+  <div class="prose" id="def-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ms">
+  <h2 id="h-ms">What most children do by each age (CDC 2022)</h2>
+  <div class="step" id="ms-step"></div>
+  <div class="dom" id="ms-dom" aria-live="polite"></div>
+  <p class="muted" id="ms-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-key">
+  <h2 id="h-key">Key exam milestones: the range in each source and the red-flag age</h2>
+  <div class="sliders" id="key-sl"></div>
+  <div class="lg" id="key-key"></div>
+  <div class="schbox"><svg class="fig sch" id="key-svg" viewBox="0 0 660 430" role="img" aria-label="Timeline from birth to 24 months: for each key milestone, the WHO window of achievement as a grey bar where it exists, the CDC 2022 age as a filled diamond, the Wikipedia age or range as open dots, the red-flag age as a triangle above the row, and a vertical line at the chosen age"></svg></div>
+  <div class="prose find" id="key-out" aria-live="polite"></div>
+  <div class="scroll"><table id="key-table"></table></div>
+  <p class="muted" id="key-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-rf">
+  <h2 id="h-rf">Red flags</h2>
+  <div class="prose" id="rf-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tools">
+  <h2 id="h-tools">Developmental assessment: surveillance, screening, evaluation</h2>
+  <div class="prose" id="tools-text"></div>
+  <div class="scroll"><table id="tools-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fac">
+  <h2 id="h-fac">Factors affecting development</h2>
+  <div class="chips" id="fac-tg" aria-label="Factor"></div>
+  <div class="prose find" id="fac-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-dd">
+  <h2 id="h-dd">Developmental delay: isolated, multiple, global</h2>
+  <div class="prose" id="dd-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BDevelopment%20and%20Milestones%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fpaediatrics%2Fgrowth-development%2Fdevelopment.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/paed.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources unless attributed: sources-local/facts/fill-pd01.md, Part B) ===================== */
+const LEDE = 'Step through the CDC 2022 milestone lists age by age, compare the age ranges that different sources give for the milestones the exam asks about, and see where the red flags fall. Growth, short stature and failure to thrive are on <a href="growth.html">growth</a>; brain development in the embryo on <a href="../../anatomy/embryology/head-neck-cns.html#h-brain">anatomy: embryology of the CNS</a>; the adult cerebrum on <a href="../../anatomy/neuro/cerebrum.html">anatomy: cerebrum</a>.';
+
+const DEF = '<p><b>Development</b> is the gain in psychomotor capacity, as growth is the gain in size (StatPearls). Its lines progress in sequence and interact (StatPearls). Sources group milestones into <b>domains</b>: StatPearls uses five (gross motor, fine motor, language, cognitive, social-emotional and behavioural); the CDC 2022 checklists use four (social-emotional, language/communication, cognitive, movement/physical); the Denver tests use four (personal-social, fine motor-adaptive, language, gross motor) (Wikipedia). Milestones are the skills that mark these steps (Wikipedia; StatPearls).</p><p><b>Principles.</b> Motor development runs <b>head to foot (cephalocaudal)</b> and <b>centre to periphery (proximodistal)</b>: head control comes first, then trunk, then standing and walking (Wikipedia, Child development and Gross motor skill). In the WHO study about 90% of children reached five gross motor milestones in a fixed order — sitting without support, standing with assistance, walking with assistance, standing alone, walking alone — while hands-and-knees crawling varied in place and 4.3% showed no hands-and-knees crawling (WHO 2006). The pace of motor development is fast in early life and slows later (Wikipedia). Ages differ between sources (CDC 2022 paper), so learn ranges and upper limits, not single ages.</p>';
+
+/* CDC 2022 milestones (Zubler et al., Pediatrics 2022, Tables 2–5; age = when ≥75% of children achieve it). [domain, months, text, CDC|New]
+   gm/fm: CDC's single motor domain split into gross and fine by this page (cdc_js.py). Generated by
+   sources-local/facts/fill-pd01-scripts/cdc_ms.py + cdc_js.py from the BioC text of PMC9680195. */
+const CDC = [["so", 2, "Calms down when spoken to or picked up", "New"],
+  ["so", 2, "Looks at your face", "CDC"],
+  ["so", 2, "Seems happy to see you when you walk up to her", "New"],
+  ["so", 2, "Smiles when you talk to or smile at her", "CDC"],
+  ["so", 4, "Smiles on his own to get your attention", "CDC"],
+  ["so", 4, "Chuckles (not yet a full laugh) when you try to make her laugh", "New"],
+  ["so", 4, "Looks at you, moves, or makes sounds to get or keep your attention", "New"],
+  ["so", 6, "Knows familiar people", "CDC"],
+  ["so", 6, "Likes to look at himself in the mirror", "CDC"],
+  ["so", 6, "Laughs", "New"],
+  ["so", 9, "Is shy, clingy, or fearful around strangers", "CDC"],
+  ["so", 9, "Shows several facial expressions, like happy, sad, angry, and surprised", "New"],
+  ["so", 9, "Looks when you call his name", "CDC"],
+  ["so", 9, "Reacts when you leave (looks, reaches for you, or cries)", "CDC"],
+  ["so", 9, "Smiles or laughs when you play peek-a-boo", "CDC"],
+  ["so", 12, "Plays games with you, like pat-a-cake", "CDC"],
+  ["so", 15, "Copies other children while playing, like taking toys out of a container when another child does", "CDC"],
+  ["so", 15, "Shows you an object that he likes", "New"],
+  ["so", 15, "Claps when excited", "New"],
+  ["so", 15, "Hugs stuffed doll or other toy", "New"],
+  ["so", 15, "Shows you affection (hugs, cuddles, or kisses you)", "CDC"],
+  ["so", 18, "Moves away from you, but looks to make sure you are close by", "CDC"],
+  ["so", 18, "Points to show you something interesting", "CDC"],
+  ["so", 18, "Puts hands out for you to wash them", "New"],
+  ["so", 18, "Looks at a few pages in a book with you", "New"],
+  ["so", 18, "Helps you dress him by pushing arm through sleeve or lifting up foot", "CDC"],
+  ["so", 24, "Notices when others are hurt or upset, like pausing or looking sad when someone is crying", "New"],
+  ["so", 24, "Looks at your face to see how to react in a new situation", "New"],
+  ["so", 30, "Plays next to other children and sometimes plays with them", "CDC"],
+  ["so", 30, "Shows you what she can do by saying, “Look at me!”", "New"],
+  ["so", 30, "Follows simple routines when told, like helping to pick up toys when you say, “It’s clean-up time.”", "New"],
+  ["so", 36, "Calms down within 10 min after you leave her, like at child care drop off", "CDC"],
+  ["so", 36, "Notices other children and joins them to play", "New"],
+  ["so", 48, "Pretends to be something else during play (teacher, superhero, dog)", "CDC"],
+  ["so", 48, "Asks to go play with children if none are around, like “Can I play with Alex?”", "CDC"],
+  ["so", 48, "Comforts others who are hurt or sad, like hugging a crying friend", "CDC"],
+  ["so", 48, "Avoids danger, like not jumping from tall heights at the playground", "New"],
+  ["so", 48, "Likes to be a “helper”", "New"],
+  ["so", 48, "Changes behavior on the basis of where she is (place of worship, library, playground)", "New"],
+  ["so", 60, "Follows rules or takes turns when playing games with other children", "CDC"],
+  ["so", 60, "Sings, dances, or acts for you", "CDC"],
+  ["so", 60, "Does simple chores at home, like matching socks or clearing the table after eating", "New"],
+  ["la", 2, "Makes sounds other than crying", "CDC"],
+  ["la", 2, "Reacts to loud sounds", "New"],
+  ["la", 4, "Makes sounds like “oooo” and “aahh” (cooing)", "CDC"],
+  ["la", 4, "Makes sounds back when you talk to him", "New"],
+  ["la", 4, "Turns head toward the sound of your voice", "CDC"],
+  ["la", 6, "Takes turns making sounds with you", "CDC"],
+  ["la", 6, "Blows “raspberries” (sticks tongue out and blows)", "New"],
+  ["la", 6, "Makes squealing noises", "New"],
+  ["la", 9, "Makes different sounds like “mamamama” and “babababa”", "CDC"],
+  ["la", 9, "Lifts arms up to be picked up", "New"],
+  ["la", 12, "Waves “bye-bye”", "CDC"],
+  ["la", 12, "Calls a parent “mama” or “dada” or another special name", "CDC"],
+  ["la", 12, "Understands “no” (pauses briefly or stops when you say it)", "CDC"],
+  ["la", 15, "Tries to say 1 or 2 words besides mama or dada, like “ba” for ball or “da” for dog", "New"],
+  ["la", 15, "Looks at a familiar object when you name it", "CDC"],
+  ["la", 15, "Follows directions given with both a gesture and words. For example, he gives you a toy when you hold out your hand and say, “Give me the toy.”", "New"],
+  ["la", 15, "Points to ask for something or to get help", "CDC"],
+  ["la", 18, "Tries to say ≥3 words besides mama or dada", "CDC"],
+  ["la", 18, "Follows 1-step directions without any gestures, like giving you the toy when you say, “Give it to me.”", "CDC"],
+  ["la", 24, "Points to things in a book when you ask, for example, “Where is the bear?”", "CDC"],
+  ["la", 24, "Says at least 2 words together, like “More milk.”", "CDC"],
+  ["la", 24, "Points to at least 2 body parts when you ask him to show you", "CDC"],
+  ["la", 24, "Uses more gestures than just waving and pointing, like blowing a kiss or nodding yes", "New"],
+  ["la", 30, "Says ~50 words", "New"],
+  ["la", 30, "Says ≥2 words, with 1 action word, like “Doggie run.”", "New"],
+  ["la", 30, "Names things in a book when you point and ask, “What is this?”", "New"],
+  ["la", 30, "Says words like I, me, or we", "CDC"],
+  ["la", 36, "Talks with you in conversation using at least 2 back-and-forth exchanges", "CDC"],
+  ["la", 36, "Asks who, what, where, or why questions, like “Where is mommy/daddy?”", "New"],
+  ["la", 36, "Says what action is happening in a picture when asked, like running, eating, or playing", "New"],
+  ["la", 36, "Says first name when asked", "CDC"],
+  ["la", 36, "Talks well enough for others to understand, most of the time", "CDC"],
+  ["la", 48, "Says sentences with ≥4 words", "New"],
+  ["la", 48, "Says some words from a song, story, or nursery rhyme", "CDC"],
+  ["la", 48, "Talks about at least 1 thing that happened during his day, like “I played soccer.”", "New"],
+  ["la", 48, "Answers simple questions, like “What is a coat for,” or “What is a crayon for?”", "New"],
+  ["la", 60, "Tells a story she heard or made up with at least 2 events, like a cat stuck in a tree and a firefighter saving it", "CDC"],
+  ["la", 60, "Answers simple questions about a book or story after you read or tell it to him", "New"],
+  ["la", 60, "Keeps a conversation going with >3 back-and-forth exchange", "New"],
+  ["la", 60, "Uses or recognizes simple rhymes (bat-cat, ball-tall)", "New"],
+  ["co", 2, "Watches you as you move", "CDC"],
+  ["co", 2, "Looks at a toy for several seconds", "New"],
+  ["co", 4, "If hungry opens mouth when she sees breast or bottle", "New"],
+  ["co", 4, "Looks at his hands with interest", "New"],
+  ["co", 6, "Puts things in her mouth to explore them", "CDC"],
+  ["co", 6, "Reaches to grab a toy he wants", "CDC"],
+  ["co", 6, "Closes lips to show she does not want more food", "New"],
+  ["co", 9, "Looks for objects when dropped out of sight (like his spoon or toy)", "New"],
+  ["co", 9, "Bangs 2 things together", "CDC"],
+  ["co", 12, "Puts something in a container, like a block in a cup", "CDC"],
+  ["co", 12, "Looks for things he sees you hide, like a toy under a blanket", "CDC"],
+  ["co", 15, "Tries to use things the right way, like a phone, cup, or book", "CDC"],
+  ["co", 15, "Stacks at least 2 small objects, like blocks", "New"],
+  ["co", 18, "Copies you doing chores, like sweeping with a broom", "CDC"],
+  ["co", 18, "Plays with toys in a simple way, like pushing a toy car", "CDC"],
+  ["co", 24, "Holds something in 1 hand while using the other hand, for example, holding a container and taking the lid off", "New"],
+  ["co", 24, "Tries to use switches, knobs, or buttons on a toy", "CDC"],
+  ["co", 24, "Plays with >1 toy at the same time, like putting toy food on a toy plate", "New"],
+  ["co", 30, "Uses things to pretend, like feeding a block to a doll as if it were food", "New"],
+  ["co", 30, "Shows simple problem-solving skills, like standing on a small stool to reach something", "New"],
+  ["co", 30, "Follows 2-step instructions, for example, “Put the toy down and close the door.”", "CDC"],
+  ["co", 30, "Shows that he knows at least 1 color, like pointing to a red crayon when you ask, “Which one is red?”", "New"],
+  ["co", 36, "Draws a circle when you show him how", "CDC"],
+  ["co", 36, "Avoids touching hot objects, like a stove, when you warn her", "New"],
+  ["co", 48, "Names a few colors of items", "CDC"],
+  ["co", 48, "Tells what comes next in a well-known story", "CDC"],
+  ["co", 48, "Draws a person with ≥3 body parts", "CDC"],
+  ["co", 60, "Counts to 10", "CDC"],
+  ["co", 60, "Names some numbers between 1 and 5 when you point to them", "CDC"],
+  ["co", 60, "Uses words about time, like yesterday, tomorrow, morning, or night", "CDC"],
+  ["co", 60, "Pays attention for 5–10 min during activities, for example, during story time or making arts and crafts (screen time does not count)", "New"],
+  ["co", 60, "Writes some letters in her name", "CDC"],
+  ["co", 60, "Names some letters when you point to them", "New"],
+  ["gm", 2, "Holds head up when on tummy", "CDC"],
+  ["gm", 2, "Moves both arms and both legs", "New"],
+  ["fm", 2, "Opens hands briefly", "New"],
+  ["gm", 4, "Holds head steady without support when you are holding her", "CDC"],
+  ["fm", 4, "Holds a toy when you put it in his hand", "CDC"],
+  ["fm", 4, "Uses her arm to swing at toys", "CDC"],
+  ["fm", 4, "Brings hands to mouth", "CDC"],
+  ["gm", 4, "Pushes up onto elbows/forearms when on tummy", "CDC"],
+  ["gm", 6, "Rolls from tummy to back", "CDC"],
+  ["gm", 6, "Pushes up with straight arms when on tummy", "CDC"],
+  ["gm", 6, "Leans on hands to support himself when sitting", "CDC"],
+  ["gm", 9, "Gets to a sitting position by herself", "CDC"],
+  ["gm", 9, "Sits without support", "CDC"],
+  ["fm", 9, "Uses fingers to “rake” food toward himself", "New"],
+  ["fm", 9, "Moves things from 1 hand to her other hand", "CDC"],
+  ["gm", 12, "Pulls up to stand", "CDC"],
+  ["gm", 12, "Walks, holding onto furniture", "CDC"],
+  ["fm", 12, "Drinks from a cup without a lid, as you hold it", "New"],
+  ["fm", 12, "Picks things up between thumb and pointer finger, like small bits of food", "CDC"],
+  ["gm", 15, "Takes a few steps on his own", "CDC"],
+  ["fm", 15, "Uses fingers to feed herself some food", "New"],
+  ["gm", 18, "Walks without holding onto anyone or anything", "CDC"],
+  ["fm", 18, "Scribbles", "CDC"],
+  ["fm", 18, "Drinks from a cup without a lid and may spill sometimes", "CDC"],
+  ["fm", 18, "Feeds herself with her fingers", "New"],
+  ["fm", 18, "Tries to use a spoon", "New"],
+  ["gm", 18, "Climbs on and off a couch or chair without help", "CDC"],
+  ["gm", 24, "Kicks a ball", "CDC"],
+  ["gm", 24, "Runs", "CDC"],
+  ["gm", 24, "Walks (not climbs) up a few stairs with or without help", "CDC"],
+  ["fm", 24, "Eats with a spoon", "CDC"],
+  ["fm", 30, "Uses hands to twist things, like turning doorknobs or unscrewing lids", "CDC"],
+  ["fm", 30, "Takes some clothes off by himself, like loose pants or an open jacket", "CDC"],
+  ["gm", 30, "Jumps off the ground with both feet", "New"],
+  ["fm", 30, "Turns book pages, 1 at a time, when you read to her", "CDC"],
+  ["fm", 36, "Strings items together, like large beads or macaroni", "New"],
+  ["fm", 36, "Puts on some clothes by himself, like loose pants or a jacket", "CDC"],
+  ["fm", 36, "Uses a fork", "CDC"],
+  ["gm", 48, "Catches a large ball most of the time", "CDC"],
+  ["fm", 48, "Serves himself food or pours water, with adult supervision", "CDC"],
+  ["fm", 48, "Unbuttons some buttons", "New"],
+  ["fm", 48, "Holds crayon or pencil between fingers and thumb (not in a fist)", "New"],
+  ["fm", 60, "Buttons some buttons", "New"],
+  ["gm", 60, "Hops on 1 foot", "CDC"]];
+const DOMS = [['gm', 'Gross motor'], ['fm', 'Fine motor (and self-help)'], ['la', 'Language / communication'], ['so', 'Social-emotional'], ['co', 'Cognitive']];
+const MS_NOTE = 'CDC 2022 (Zubler et al., Pediatrics 2022, the CDC "Learn the Signs. Act Early." revision with the AAP): each milestone is one that <b>at least 75% of children</b> reach by that age, so a child missing one needs closer surveillance and consideration of a screening test, not a diagnosis. The revision dropped the separate "warning signs" for this reason, added 15- and 30-month lists, and moved a third of the retained milestones to new ages (two-thirds of them older). "new" marks milestones added in 2022. CDC has one motor domain; the gross/fine split here is this page\'s grouping. Social-emotional and cognitive milestones have the least normative data (same paper).';
+
+/* key milestones: [label, domain, WHO window [lo, hi] or null, CDC 2022 age, Wikipedia age(s) [lo, hi] with text, red-flag age, notes] */
+const KEY = [
+  ['Social smile', 'Social', null, 2, [1, 3], 3, 'CDC 2 mo: "smiles when you talk to or smile at her"; by 4 mo smiles on her own to get attention. Wikipedia: starts to smile at parents at 1–1.5 months; "develops a social smile" in its three-month section. Red flag: no social smile by 3 months (2026 warning-signs review).'],
+  ['Head holding', 'Gross motor', null, 4, [3, 5], 4, 'CDC: holds head up on tummy at 2 mo; holds head steady without support when held at 4 mo. Wikipedia: head held up for long periods prone at 3 months; holds head steady at 5 months. Red flag: cannot hold head up by 4 months (2026 warning-signs review); poor head control after 4 months is an early sign of cerebral palsy (same review).'],
+  ['Sits without support', 'Gross motor', [3.8, 9.2], 9, [6, 10], 9, 'WHO window 3.8–9.2 months (1st–99th centile). CDC 9 mo. Wikipedia: 6 or 7 months (Gross motor skill); "sits unsupported" at 9–10 months (milestone table). Red flag: not sitting by 9 months (2026 warning-signs review).'],
+  ['Stands with support', 'Gross motor', [4.8, 11.4], 12, [8, 12], null, 'WHO window, standing with assistance: 4.8–11.4 months. CDC: pulls up to stand at 12 mo. Wikipedia: pulls up and holds a chair at about 8 months; stands holding furniture at 1 year.'],
+  ['Stands alone', 'Gross motor', [6.9, 16.9], null, [10, 12], null, 'WHO window 6.9–16.9 months. Wikipedia: stands alone by about 10–12 months. Not a CDC 2022 milestone.'],
+  ['Walks alone', 'Gross motor', [8.2, 17.6], 18, [12, 18], 18, 'WHO window 8.2–17.6 months. CDC: takes a few steps on his own at 15 mo, walks without holding on at 18 mo. Wikipedia: usually around the first birthday; "can walk alone" at 18 months in its table. Red flag: not walking independently by 18 months (2026 warning-signs review; it is also the CDC 75% age).'],
+  ['Pincer grasp', 'Fine motor', null, 12, [9, 10], [12, 15], 'CDC 12 mo: picks things up between thumb and pointer finger. Wikipedia: usually by 9–10 months (Grasp; milestone table "picks up objects with pincer grasp" at 9–10 months); fine motor skills including the pincer grip develop at 7–12 months. Red flag (plotted): persistent problems with pincer grasp after 12–15 months (2026 warning-signs review, from the Bayley scale). <b>Conflict:</b> the same review also lists "absence of pincer grasp 10 m", which comes before the CDC 75% age of 12 months — so a 10-month-old without a pincer grasp is not yet behind three-quarters of peers by the CDC list.'],
+  ['Babbling (mama, baba)', 'Language', null, 9, [6, 10], 12, 'CDC 9 mo: "mamamama", "babababa". Wikipedia: babbling stage around 6 months; by 10 months babies babble. Red flag: no babbling by 9–12 months (2026 warning-signs review).'],
+  ['First words', 'Language', null, 12, [10, 12], 16, 'CDC: calls a parent "mama" or "dada" at 12 mo; 1–2 other words at 15 mo; 3 or more at 18 mo. Wikipedia: verbal communication begins at about 10–12 months; expressive language begins at about a year. Red flag: no words by 15–18 months (2026 warning-signs review; single words absent by 16 months is a red flag for autism in the same review).'],
+  ['Two-word phrases', 'Language', null, 24, [24, 24], 24, 'CDC 24 mo: says at least 2 words together. Wikipedia: joins 2–3 words in sentences at 2 years. Red flag: no two-word combinations at 24 months (2026 warning-signs review).'],
+  ['Stranger anxiety', 'Social', null, 9, [6, 12], null, 'CDC 9 mo: shy, clingy or fearful around strangers. Wikipedia: appears around 6 months and peaks at 6–12 months.'],
+];
+const KEY_NOTE = 'Sources: WHO Motor Development Study 2006 (windows of achievement, 1st–99th centile, healthy children in five countries; six gross motor milestones only); CDC 2022 (age by which ≥75% achieve); Wikipedia (Child development stages and its milestone table, Gross motor skill, Grasp, Language development, Stranger anxiety; one source); red-flag ages from a 2026 systematic review of warning signs (one source except where the CDC age agrees). Where a Wikipedia age is a single month the dot is drawn there; ranges are drawn from their first to their last month. Hop on one foot: CDC 5 years.';
+
+const RF = '<ul><li><b>By age:</b> no social smile by 3 months; head not held up by 4 months; not sitting without support by 9 months; no babbling by 12 months; not walking independently by 18 months; no meaningful words after 24 months — the early signs of global developmental delay listed by a 2026 systematic review. The same review\'s motor list: sitting ≥9 months, no independent walking at 18 months, no pincer grasp at 10 months, asymmetric movement at 12 months; language: no babbling at 9–12 months, no words by 15–18 months, no two-word combinations at 24 months.</li><li><b>Any age:</b> <span class="sev-t">loss of skills (regression)</span> needs immediate attention; regression of acquired skills is a warning sign that is easily missed (2026 warning-signs review, one source).</li><li><b>Missing a CDC milestone</b> means the child is behind at least three-quarters of peers: do a fuller developmental history and examination and consider a validated screening test (CDC 2022).</li><li><b>Primitive reflexes</b> are present at birth and are inhibited by the maturing cortex between 4 and 6 months (StatPearls); persisting beyond 4–6 months, or delayed walking, may point to developmental delay or conditions such as cerebral palsy or Down syndrome (Wikipedia; StatPearls: persistence beyond the expected age signals neurological dysfunction). <b>Moro</b>: begins to disappear by 12 weeks and is gone by 6 months (StatPearls); integrates by 3–4 months, at most 6 (Wikipedia). Rooting disappears around 4 months, the palmar grasp at 5–6 months, and an asymmetric tonic neck reflex past 6 months suggests an upper motor neuron disorder (Wikipedia, one source).</li><li><b>Autism:</b> no response to name at 9–12 months, no pointing or "bye-bye" gesture at 12–18 months, no single words by 16 months, no spontaneous two-word phrases by 24 months (2026 warning-signs review, one source); the AAP recommends autism screening at 18 and 24 months (Wikipedia; 2026 warning-signs review: M-CHAT-R/F at 18 and 24 months).</li></ul>';
+
+const TOOLS = '<p><b>Surveillance</b> is the ongoing process at every visit: eliciting concerns, a milestone history, observation and examination. <b>Screening</b> uses a validated tool at set ages or when surveillance raises a concern; <b>diagnostic evaluation</b> by a specialist follows a positive screen (CDC 2022 paper). Milestone lists guide surveillance but are not validated tests (same paper). The AAP recommends developmental screening at 9, 18 and 30 months (Wikipedia, one source).</p>';
+const TOOLT = [
+  ['Denver Developmental Screening Test (DDST, 1967); Denver II (1992)', 'Screening, birth to 6 years', 'Four domains: personal-social, fine motor-adaptive, language, gross motor; the examiner tests the child directly and compares with the age ranges at which normal children pass each item (Wikipedia). Used as the reference standard when the TDSC was validated (2024 scales review).'],
+  ['Trivandrum Developmental Screening Chart (TDSC, 0–6 years)', 'Screening, India', 'Developed and validated by Nair et al.; checked against the DDST; failing one item = "TDSC delay"; sensitivity 84.6%, specificity 90.8%; simple and usable by any health worker without special training (2024 scales review; 2023 TDSC study).'],
+  ['Ages and Stages Questionnaire (ASQ)', 'Screening, parent report', 'Depends on parent report, unlike the Denver (Wikipedia); PEDS and the ASQ are named as validated in Indian children (2024 scales review).'],
+  ['Bayley Scales of Infant and Toddler Development', 'Diagnostic assessment', 'Developed by Nancy Bayley (first scale 1969); play tasks over 45–60 minutes; cognitive, language and motor scales; gives a developmental quotient (DQ), not an IQ (Wikipedia; 2024 scales review: thorough, standardised, released 1969).'],
+  ['Developmental Assessment Scale for Indian Infants (DASII)', 'Diagnostic assessment, India', 'The tool most used in India to validate new screening tests (2024 scales review, one source).'],
+];
+
+const FAC = [
+  ['gen', 'Genetic', 'Genetic factors are implicated in developmental disabilities (Wikipedia); Down syndrome (the commonest genetic cause of intellectual disability) and fragile X syndrome cause delay (Wikipedia, two articles; StatPearls lists genetic and environmental factors).'],
+  ['pre', 'Prenatal and perinatal', 'Fetal health shapes later development (StatPearls). Alcohol and other toxic substances in pregnancy can cause delay, as in fetal alcohol syndrome (Wikipedia, two articles). Preterm birth predicts later developmental disability (Wikipedia); prematurity, hypoxic-ischaemic encephalopathy and perinatal stroke raise the risk of cerebral palsy (2026 warning-signs review).'],
+  ['nut', 'Nutrition and illness', 'An inadequate diet impairs general development (Wikipedia). Iron deficiency affects psychomotor development; zinc deficiency can cause developmental delay (StatPearls, one source). Failure to thrive is associated with developmental delay and lower IQ, most of all before 2 years (StatPearls). Childhood meningitis or encephalitis can cause permanent delay (Wikipedia).'],
+  ['env', 'Stimulation and care', 'Food and nutrition, parental responsiveness, love, daily experiences and physical activity influence early brain development (Wikipedia). Profound neglect impairs development; children adopted after 6 months have more cognitive and behavioural problems than those adopted earlier (StatPearls, one source).'],
+  ['mat', 'Maternal and social', 'Risk factors include malnutrition, maternal depression and maternal substance use (Wikipedia); maternal depression is an isolated risk factor for global delay, and low parental education and poor socioeconomic conditions were associated with it in a Turkish study (2026 warning-signs review).'],
+];
+
+const DD = '<p><b>Developmental delay</b> means a child does not reach milestones compared with peers of the same population; it is a descriptive term, not a diagnosis (StatPearls). By the number of domains (StatPearls): <b>isolated</b> (one domain), <b>multiple</b> (two or more) and <b>global</b>. <b>Global developmental delay</b> (GDD): a significant delay in two or more domains (Wikipedia; 2026 warning-signs review: "multiple domains — cognitive, linguistic, motor and social"; StatPearls: "most domains"). The DSM-5-TR keeps GDD for children <b>under 5 years</b> who cannot yet be tested for intellectual functioning (Wikipedia, one source). Global delay affects about 1–3% of children (2026 warning-signs review, one source). <b>Developmental quotient</b>: DQ = developmental age ÷ chronological age × 100 (Wikipedia, one source; the Bayley scales report a DQ). No DQ cut-off for delay is given in the open sources used, so none is shown. <b>Specific</b> developmental disorders affect one area only, and development there is delayed but not otherwise abnormal (Wikipedia, one source).</p><p><b>Causes</b> (Wikipedia, Global developmental delay and Developmental disability; 2026 warning-signs review for cerebral palsy risks): cerebral palsy, chromosomal and genetic disorders (Down syndrome, fragile X), infections (meningitis, encephalitis), metabolic disorders, fetal alcohol and other toxic exposures, prematurity; often no cause is found. <b>Intellectual disability</b>: limited intellectual functioning and adaptive behaviour (StatPearls; Wikipedia) with onset in the developmental period; Wikipedia gives IQ below 70 and onset before 18 years; StatPearls (Developmental delay) uses performance 2 SD or more below the mean on standardised testing. Cerebral palsy arises from non-progressive disturbances of the developing brain and affects movement, balance and posture (StatPearls; Wikipedia). The approach to a child with delay (PE3) and autism and ADHD (PE4) are later modules.</p>';
+
+const BASED = '<b>Based on:</b> CDC 2022 developmental milestones (Zubler et al., Pediatrics 2022, open via PMC); WHO Motor Development Study, windows of achievement (WHO 2006); StatPearls (NCBI Bookshelf; abstracts); open-access papers: warning signs for neurodevelopmental disorders (systematic review 2026), developmental scales in paediatric practice (2024), TDSC in congenital heart disease (2023) (Europe PMC / NCBI); Wikipedia (wikitext checked for OpenStax citations).';
+const MODELS = '<b>Models used:</b> the milestone timeline is a schematic chart of the ages each source states (not a probability curve). The gross/fine motor split of the CDC motor list is this page\'s grouping.';
+
+/* ===================== CODE ===================== */
+const P = Paed, $ = P.$;
+$('lede').innerHTML = LEDE; $('def-text').innerHTML = DEF; $('ms-note').innerHTML = MS_NOTE; $('key-note').innerHTML = KEY_NOTE;
+$('rf-text').innerHTML = RF; $('tools-text').innerHTML = TOOLS; $('dd-text').innerHTML = DD; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+P.table('tools-table', ['Tool', 'Type', 'Key facts'], TOOLT);
+P.toggles('fac-tg', FAC.map(f => [f[0], f[1]]), k => { const f = FAC.find(x => x[0] === k); $('fac-find').innerHTML = `<h3>${f[1]}</h3><p>${f[2]}</p>`; }, 'gen');
+$('fac-find').innerHTML = `<h3>${FAC[0][1]}</h3><p>${FAC[0][2]}</p>`;
+const ageTxt = m => m < 24 ? `${m} months` : (m % 12 ? `${m / 12} years`.replace('2.5', '2½') : `${m / 12} years`);
+
+/* milestones by age (stepper) */
+const AGES = [...new Set(CDC.map(r => r[1]))].sort((a, b) => a - b);
+const MS = {s: AGES.indexOf(12)};
+function drawMs() {
+  const m = AGES[MS.s];
+  $('ms-dom').innerHTML = DOMS.map(([k, lab]) => {
+    const it = CDC.filter(r => r[0] === k && r[1] === m);
+    return `<div class="col"><h3>${lab}</h3>${it.length ? '<ul>' + it.map(r => `<li>${r[2]}${r[3] === 'New' ? ' <span class="new">new</span>' : ''}</li>`).join('') + '</ul>' : '<p class="none">No CDC milestone in this domain at this age.</p>'}</div>`;
+  }).join('');
+}
+P.stepper('ms-step', AGES.map(a => a < 24 ? a + ' mo' : (a % 12 ? '2½ y' : a / 12 + ' y')), drawMs, MS);
+
+/* key milestones timeline */
+const K = {m: 9};
+$('key-key').innerHTML = [['<rect x="1" y="3" width="14" height="8" rx="2" class="win"/>', 'WHO 2006 window (1st–99th centile)'], ['<path d="M8 1 L14 7 L8 13 L2 7 Z" class="cdc"/>', 'CDC 2022 (≥75% by this age)'], ['<circle cx="8" cy="7" r="4" class="wpk"/>', 'Wikipedia age or range'], ['<path d="M2 2 L14 2 L8 12 Z" class="rf"/>', 'Red-flag age (2026 warning-signs review)']].map(([g, t]) => `<span><svg class="sch" viewBox="0 0 16 14" aria-hidden="true">${g}</svg>${t}</span>`).join('');
+const ksl = P.slider('key-sl', {id: 'km', label: 'Child\'s age', min: 0, max: 24, step: 1, value: 9, fmt: v => v + ' months'}, v => { K.m = v; drawKey(); });
+function drawKey() {
+  const x = P.scale(0, 24, 190, 640), rh = 34, y0 = 30;
+  let h = P.DEFS;
+  for (let m = 0; m <= 24; m += 3) h += `<path class="grid" d="M${x(m)} 18 L${x(m)} ${y0 + KEY.length * rh}"/>` + P.T(x(m), 12, m, 's', 'middle');
+  h += P.T(415, y0 + KEY.length * rh + 18, 'age (months)', 's', 'middle');
+  KEY.forEach((k, i) => {
+    const yc = y0 + i * rh + rh / 2;
+    h += `<path class="rowl" d="M10 ${y0 + (i + 1) * rh} L640 ${y0 + (i + 1) * rh}"/>` + P.T(10, yc + 4, k[0], '') ;
+    /* three lanes per row: red flag (top), WHO window + CDC (middle), Wikipedia (bottom) */
+    if (k[2]) h += `<rect class="win" x="${x(k[2][0])}" y="${yc - 4}" width="${x(k[2][1]) - x(k[2][0])}" height="8" rx="2"/>`;
+    if (k[3] != null) h += `<path class="cdc" d="M${x(k[3])} ${yc - 5.5} L${x(k[3]) + 5.5} ${yc} L${x(k[3])} ${yc + 5.5} L${x(k[3]) - 5.5} ${yc} Z"/>`;
+    if (k[4]) { if (k[4][1] > k[4][0]) h += `<path d="M${x(k[4][0])} ${yc + 10} L${x(k[4][1])} ${yc + 10}" style="stroke:var(--ink);stroke-width:1.4"/>`; h += `<circle class="wpk" cx="${x(k[4][0])}" cy="${yc + 10}" r="3.4"/>` + (k[4][1] > k[4][0] ? `<circle class="wpk" cx="${x(k[4][1])}" cy="${yc + 10}" r="3.4"/>` : ''); }
+    if (k[5] != null) { const r0 = Array.isArray(k[5]) ? k[5][0] : k[5], r1 = Array.isArray(k[5]) ? k[5][1] : k[5];
+      if (r1 > r0) h += `<path class="rfl" d="M${x(r0)} ${yc - 12} L${x(r1)} ${yc - 12}"/>`;
+      h += `<path class="rf" d="M${x(r0) - 5} ${yc - 16} L${x(r0) + 5} ${yc - 16} L${x(r0)} ${yc - 8} Z"/>`; }
+  });
+  h += `<path class="agel" d="M${x(K.m)} 18 L${x(K.m)} ${y0 + KEY.length * rh}"/>`;
+  $('key-svg').innerHTML = h;
+  const by = KEY.filter(k => k[3] != null && k[3] <= K.m).map(k => k[0]);
+  const rf0 = k => Array.isArray(k[5]) ? k[5][0] : k[5];
+  const flag = KEY.filter(k => k[5] != null && rf0(k) <= K.m).map(k => k[0]);
+  const win = KEY.filter(k => k[2] && K.m >= k[2][0] && K.m <= k[2][1]).map(k => k[0]);
+  $('key-out').innerHTML = `<h3>At ${K.m} months</h3><p><b>Expected by now (CDC 2022, ≥75%):</b> ${by.length ? by.join(', ') : 'none of these yet'}.</p>`
+    + `<p><b>Inside its WHO window (may or may not be present yet):</b> ${win.length ? win.join(', ') : 'none'}.</p>`
+    + `<p><b>${flag.length ? '<span class="sev-t">Red flag if still absent:</span>' : 'Red flag if absent:'}</b> ${flag.length ? flag.join(', ') : 'none of these at this age'}.</p>`;
+}
+ksl.init(); drawKey();
+P.table('key-table', ['Milestone', 'Domain', 'WHO window (mo)', 'CDC 2022', 'Wikipedia', 'Red flag', 'Notes'], KEY.map(k => [k[0], k[1], k[2] ? `${k[2][0]}–${k[2][1]}` : '—', k[3] != null ? k[3] + ' mo' : '—', k[4] ? (k[4][1] > k[4][0] ? `${k[4][0]}–${k[4][1]} mo` : k[4][0] + ' mo') : '—', k[5] != null ? (Array.isArray(k[5]) ? `${k[5][0]}–${k[5][1]} mo` : k[5] + ' mo') : '—', k[6]]));
+P.swipeHints();
+</script>
+</body>
+</html>

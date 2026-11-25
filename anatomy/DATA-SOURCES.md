@@ -1459,3 +1459,6 @@ tubercles.
 - 2026-11-25 correction (skull.html): Wikipedia "Fontanelle" cites a Boundless text and is excluded; its closure
   figures (posterior 6–8 weeks, sphenoidal ~6 months, mastoid 6–18 months, anterior palpable to 18 months) were removed.
   Fontanelle closure now rests on Gray 1918 and StatPearls.
+- 2026-11-25 (skull.html, skull-bones.html): the "StatPearls 13–24 months" anterior-fontanelle range had no quote in
+  any sheet and could not be verified (full text behind a captcha); replaced by Wikipedia Bregma's 18–36 months
+  (quoted in cranial-a.md; wikitext checked, no OpenStax/Boundless), beside Gray's "about a year and a half".

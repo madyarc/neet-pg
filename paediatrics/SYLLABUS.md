@@ -14,15 +14,15 @@ Source notes: NMC's summary table says 35 topics / 406 competencies, but the cha
 
 ### 1. Normal Growth and Development
 
-- [ ] **PE1.1** Define the terminologies Growth and development and describe the factors affecting normal growth.
-- [ ] **PE1.2** Describe the methods of assessment of growth including use of WHO and Indian national standards. Enumerate the parameters used for assessment of physical growth in infants, children and adolescents and Perform Anthropometric measurements, document in growth- charts and interpret.
-- [ ] **PE1.3** Define development and Describe the normal developmental milestones with respect to motor, behaviour, social, adaptive and language.
+- [x] **PE1.1** Define the terminologies Growth and development and describe the factors affecting normal growth. — *definitions, factors affecting growth: [Growth and Its Assessment](growth-development/growth.html)*
+- [x] **PE1.2** Describe the methods of assessment of growth including use of WHO and Indian national standards. Enumerate the parameters used for assessment of physical growth in infants, children and adolescents and Perform Anthropometric measurements, document in growth- charts and interpret. — *WHO 2006/2007 charts (age, length/height, head, weight-for-length/height) with LMS z-score, gains, teeth, measurement, Tanner, stunting/wasting/underweight, MUAC (WHO 2013), IAP 2015: [Growth and Its Assessment](growth-development/growth.html)*
+- [x] **PE1.3** Define development and Describe the normal developmental milestones with respect to motor, behaviour, social, adaptive and language. — *CDC 2022 milestones by age, key milestones with WHO windows and red flags, primitive reflexes: [Development and Milestones](growth-development/development.html)*
 
 ### 2. Common problems related to Growth
 
-- [ ] **PE2.1** Discuss the factors affecting development and describe the assessment methods of development. Discusstheetio-pathogenesis, clinical features, assessment and management of a child who fails to thrive
+- [~] **PE2.1** Discuss the factors affecting development and describe the assessment methods of development. Discusstheetio-pathogenesis, clinical features, assessment and management of a child who fails to thrive — *factors, DDST/TDSC/ASQ/Bayley, DQ, failure to thrive (definitions, causes, first tests); no stepwise management: [Development and Milestones](growth-development/development.html)*
 - [ ] **PE2.2** Counselling the parent of a child with failure to thrive. *(skill)*
-- [ ] **PE2.3** Discuss the etio-pathogenesis, clinical features and managementof a child with short stature. Assessmentofachildwithshortstature.
+- [x] **PE2.3** Discuss the etio-pathogenesis, clinical features and managementof a child with short stature. Assessmentofachildwithshortstature. — *short stature, causes, target height, proportions, bone-age patterns, first investigations (disputed): [Growth and Its Assessment](growth-development/growth.html)*
 
 ### 3. Common problems related to Development-1
 

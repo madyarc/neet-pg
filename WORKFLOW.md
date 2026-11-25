@@ -66,7 +66,7 @@ Last updated: 2026-11-23
   one-source, rate/time misattribution, --accent/--clin misuse, gaps: indirect standardisation, field trial) [x] fixes (374 quotes) [x] committed 2026-11-25. Pd01 [x] build (458 quotes; WHO 2006/2007 LMS z-score chart, CDC 2022 milestones via Zubler 2022) [x] review.
   D01 [ ] build (running; dermatology/papulosquamous/).
   Pd01 review done (timeline colours overlap, pincer-grasp flag vs CDC, undated cut-offs, gaps: WHZ/BMI, Tanner,
-  dentition) [ ] fixes (running). Anatomy skull.html: Wikipedia Fontanelle (cites Boundless) removed 2026-11-25.
+  dentition) [x] fixes (506 quotes) [x] committed 2026-11-25. Anatomy skull.html: Wikipedia Fontanelle (cites Boundless) removed 2026-11-25.
   FM01 [x] build (397 quotes; THOA/THOT Rules 2014 Form 10, WHO ICD-11 2026 + RGI MCCD 2012; tokens --livor
   --livor-co --sulfhb) [x] review (livor shifting rule, children's Form 10 interval, consent
   under Rule 5(4)(a), VS overstated, IPC→BNS 2023, --accent misuse; Delhi THOA text unofficial/garbled) [x] fixes (430 quotes) [x] committed 2026-11-25.

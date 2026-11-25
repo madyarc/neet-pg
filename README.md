@@ -119,6 +119,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [Concepts, Sources of Data and Measures](community-medicine/epidemiology/concepts-measures.html), [Study Designs, Association, Bias and Causation](community-medicine/epidemiology/study-designs.html), [Transmission, Prevention, Outbreaks and Screening](community-medicine/epidemiology/transmission-outbreak-screening.html) | Epidemiology | Indian data sources timeline, incidence–prevalence bathtub, indicator and standardisation calculators, SMR; design picker on a time line, 2×2 calculator, bias, Bradford Hill; prevention levels, CDC outbreak stepper, epidemic curves, herd immunity, screening calculator with prevalence slider |
 
+### Paediatrics — [`paediatrics/`](paediatrics/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [Growth and Its Assessment](paediatrics/growth-development/growth.html), [Development and Milestones](paediatrics/growth-development/development.html) | Growth and development | WHO growth charts (age, length/height, head, weight-for-length/height) with the LMS z-score worked out, gains, MUAC classifier, short stature and bone-age picker, Tanner, teeth; CDC 2022 milestone stepper, key-milestone timeline with WHO windows and red flags, assessment tools |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and
