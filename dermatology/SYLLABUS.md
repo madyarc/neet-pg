@@ -21,13 +21,13 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 3. Papulosquamous disorders
 
-- [ ] **DR3.1** Identify and distinguish psoriatic lesions from other causes
-- [ ] **DR3.2** Demonstrate the Grattage test *(skill)*
-- [ ] **DR3.3** Devise a treatment plan for a patient with psoriasis and counsel the patient regarding various treatment options and chronicity of disease
+- [x] **DR3.1** Identify and distinguish psoriatic lesions from other causes — *pathogenesis stepper with HLA-Cw6, histology, clinical types, nails, PsA patterns: [Psoriasis](papulosquamous/psoriasis.html); differential picker: [Lichen Planus and Other Papulosquamous Disorders](papulosquamous/lichen-planus.html)*
+- [~] **DR3.2** Demonstrate the Grattage test *(skill)* — *knowledge only: grattage sequence (candle wax → last membrane → Auspitz); skill not covered: [Psoriasis](papulosquamous/psoriasis.html)*
+- [x] **DR3.3** Devise a treatment plan for a patient with psoriasis and counsel the patient regarding various treatment options and chronicity of disease — *PASI/BSA calculator, NICE CG153 (2012; recommendations as published 2025) ladder (classes and mechanisms, no doses), counselling, drugs that worsen psoriasis: [Psoriasis](papulosquamous/psoriasis.html)*
 
 ### 4. Lichen Planus
 
-- [ ] **DR4.1** Identify and manage a case of lichen planus
+- [x] **DR4.1** Identify and manage a case of lichen planus — *6 Ps, Wickham striae, sites, histology, variants, HCV meta-analyses, Grinspan syndrome, lichenoid drug eruptions, course and treatment: [Lichen Planus and Other Papulosquamous Disorders](papulosquamous/lichen-planus.html)*
 
 ### 5. Scabies
 

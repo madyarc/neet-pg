@@ -131,6 +131,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [Schizophrenia and Other Psychotic Disorders](psychiatry/psychosis-mood/schizophrenia-psychosis.html), [Depression and Bipolar Disorder](psychiatry/psychosis-mood/mood-disorders.html) | Psychosis and mood | ICD-11/DSM-5 criteria checker, psychosis duration picker, first-rank symptoms, dopamine pathways, EPS time line, clozapine monitoring; depressive-episode counter, mhGAP suicide-risk stepper, antidepressant synapse, bipolar course charts, lithium window, MHCA 2017 |
 
+### Dermatology — [`dermatology/`](dermatology/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [Psoriasis](dermatology/papulosquamous/psoriasis.html), [Lichen Planus and Other Papulosquamous Disorders](dermatology/papulosquamous/lichen-planus.html) | Papulosquamous | IL-23/Th17 stepper, normal vs psoriatic histology, clinical-type body maps, nail signs, grattage stepper, PASI/BSA calculator, NICE CG153 ladder; 6 Ps, LP histology picker, variants, HCV meta-analyses, lichenoid drug eruptions, differential picker |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and

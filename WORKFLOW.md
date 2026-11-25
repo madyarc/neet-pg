@@ -77,7 +77,7 @@ Last updated: 2026-11-23
   mesocortical path, synapse marks, clozapine schedule) [x] fixes (322 quotes) [x] committed 2026-11-25. C01 [x] build (328 quotes; CDC 2012, WHO 1968, SRS 2020, NFHS-5, IDSP; no new tokens) [x] review (no wrong formulas; disability limitation level
   one-source, rate/time misattribution, --accent/--clin misuse, gaps: indirect standardisation, field trial) [x] fixes (374 quotes) [x] committed 2026-11-25. Pd01 [x] build (458 quotes; WHO 2006/2007 LMS z-score chart, CDC 2022 milestones via Zubler 2022) [x] review.
   D01 [x] build (407 quotes; NICE CG153; Wikipedia Psoriasis excluded: cites cnx.org) [x] review (LP histology: Max-Joseph
-  space inside epidermis, infiltrate below ridges; NICE CG153 date; copied erythroderma source) [ ] fixes (running).
+  space inside epidermis, infiltrate below ridges; NICE CG153 date; copied erythroderma source) [x] fixes (431 quotes) [x] committed 2026-11-25.
   Pd01 review done (timeline colours overlap, pincer-grasp flag vs CDC, undated cut-offs, gaps: WHZ/BMI, Tanner,
   dentition) [x] fixes (506 quotes) [x] committed 2026-11-25. Anatomy skull.html: Wikipedia Fontanelle (cites Boundless) removed 2026-11-25.
   FM01 [x] build (397 quotes; THOA/THOT Rules 2014 Form 10, WHO ICD-11 2026 + RGI MCCD 2012; tokens --livor

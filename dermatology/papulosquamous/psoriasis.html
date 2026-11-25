@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Psoriasis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/derm.css">
+<style>
+/* tokens from derm.css with their site meanings: --kerat/--sg/--ss/--sb (skin layers: keratin, granular, spinous, basal), --collagen (dermis),
+   --cyto + --nucleus (cells and their nuclei), --artery (dermal capillaries), --rbc (pinpoint bleeding), --fat (subcutis), --clin (a lesion,
+   a warning), --accent (the selected feature only), --mark (the chosen value on a scale). No new tokens. */
+svg.sch .corn{fill:var(--kerat)} svg.sch .gran{fill:var(--sg)} svg.sch .spin{fill:var(--ss)} svg.sch .bas{fill:none;stroke:var(--sb);stroke-width:5;stroke-linejoin:round}
+svg.sch .derm{fill:var(--collagen);fill-opacity:.4} svg.sch .cap{fill:none;stroke:var(--artery);stroke-width:2.4;stroke-linecap:round}
+svg.sch .cell{fill:var(--cyto);stroke:var(--ink);stroke-width:.8} svg.sch .nuc{fill:var(--nucleus)}
+svg.sch .les{fill:var(--clin);fill-opacity:.55;stroke:var(--clin);stroke-width:.8} svg.sch .body{fill:var(--surface);stroke:var(--muted);stroke-width:1.2}
+svg.sch .sel{fill:none;stroke:var(--accent);stroke-width:2.4;stroke-dasharray:5 3}
+svg.sch .dim{opacity:.22} svg.sch .bl{fill:var(--rbc)}
+svg.sch .nail{fill:var(--kerat);fill-opacity:.55;stroke:var(--ink);stroke-width:1} svg.sch .bone{fill:var(--surface);stroke:var(--muted);stroke-width:1.2}
+svg.sch .fl{stroke:var(--ink);stroke-width:1.6;fill:none;marker-end:url(#arr)}
+.pasi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:700px){.pasi{grid-template-columns:minmax(0,1fr)}}
+.reg{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--bg);display:flex;flex-direction:column;gap:4px}
+.reg h3{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.reg h3 span{font:500 12.5px var(--f-mono);color:var(--muted)}
+.reg .sliders{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+.rung{display:grid;grid-template-columns:minmax(0,1fr);gap:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Dermatology</a> <span class="muted">· Module 01: <span aria-current="page">Psoriasis</span> · <a href="lichen-planus.html">Lichen planus and other papulosquamous disorders</a></span></nav>
+
+<header class="stack">
+  <h1>Psoriasis: Pathogenesis, Types, Signs, Severity and Treatment</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-path">Pathogenesis</a> <a href="#h-histo">Histology</a> <a href="#h-types">Clinical types</a> <a href="#h-nail">Nails and joints</a> <a href="#h-signs">Signs and the grattage test</a> <a href="#h-sev">PASI and BSA</a> <a href="#h-tx">Treatment ladder</a> <a href="#h-drug">Drugs that worsen it</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-path">
+  <h2 id="h-path">Pathogenesis, step by step: the IL-23/Th17 axis</h2>
+  <p class="cap key" id="path-cap"></p>
+  <div class="step" id="path-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="path-svg" viewBox="0 0 640 380" role="img" aria-label="Schematic skin section with epidermis above and dermis below, showing dendritic cells, a Th17 cell, a neutrophil and the cytokine arrows of the current step"></svg></div>
+    <div class="prose find" id="path-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="path-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-histo">
+  <h2 id="h-histo">Normal vs psoriatic epidermis (schematic)</h2>
+  <div class="chips" id="histo-mode" aria-label="Skin shown"></div>
+  <div class="chips" id="histo-feat" aria-label="Feature to show"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="histo-svg" viewBox="0 0 640 330" role="img" aria-label="Schematic section of the epidermis and upper dermis, normal or psoriatic, with the chosen histological feature outlined"></svg></div>
+    <div class="prose find" id="histo-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="histo-key"></div>
+  <p class="muted" id="histo-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-types">
+  <h2 id="h-types">Clinical types: where the lesions are</h2>
+  <div class="chips" id="type-tg" aria-label="Clinical type"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="type-svg" viewBox="0 0 520 380" role="img" aria-label="Schematic front and back body outlines with the usual sites of the chosen type of psoriasis shaded"></svg></div>
+    <div class="prose find" id="type-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="type-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-nail">
+  <h2 id="h-nail">Nail psoriasis and psoriatic arthritis</h2>
+  <div class="chips" id="nail-tg" aria-label="Nail change"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="nail-svg" viewBox="0 0 560 300" role="img" aria-label="Schematic side view of a fingertip with the nail matrix, nail plate, nail bed and distal interphalangeal joint; the chosen nail change is drawn and outlined"></svg></div>
+    <div class="prose find" id="nail-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="psa"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-signs">
+  <h2 id="h-signs">Bedside signs: the grattage test, Koebner phenomenon, Woronoff ring</h2>
+  <p class="cap key" id="grat-cap"></p>
+  <div class="step" id="grat-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="grat-svg" viewBox="0 0 560 314" role="img" aria-label="Schematic cross-section of a psoriatic plaque being scraped: silvery scale, a thin membrane, and pinpoint bleeding from capillaries at the tips of the dermal papillae"></svg></div>
+    <div class="prose find" id="grat-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="signs-more"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sev">
+  <h2 id="h-sev">Severity: a PASI and BSA calculator</h2>
+  <p class="cap key" id="sev-cap"></p>
+  <div class="chips" id="sev-pre" aria-label="Example patients"></div>
+  <div class="pasi" id="sev-regs"></div>
+  <div class="stack">
+    <div class="schbox"><svg class="fig sch" id="sev-svg" viewBox="0 0 560 110" role="img" aria-label="A PASI scale from 0 to 72 with the calculated score marked"></svg></div>
+    <div class="ans prose" id="sev-out" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="sev-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-tx">
+  <h2 id="h-tx">Treatment ladder: classes and where they act</h2>
+  <p class="cap key" id="tx-cap"></p>
+  <div class="chips" id="tx-tg" aria-label="Rung of the ladder"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="tx-svg" viewBox="0 0 600 344" role="img" aria-label="Schematic of the psoriasis pathway, dendritic cell to IL-23 to Th17 cell to IL-17 to keratinocyte, with the targets of the chosen treatment class marked"></svg></div>
+    <div class="prose find" id="tx-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="tx-counsel"></div>
+  <p class="muted" id="tx-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-drug">
+  <h2 id="h-drug">Drugs that worsen or provoke psoriasis</h2>
+  <div class="chips" id="drug-tg" aria-label="Drug"></div>
+  <div class="prose find" id="drug-find" aria-live="polite"></div>
+  <p class="muted" id="drug-note"></p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BPsoriasis%3A%20Pathogenesis%2C%20Types%2C%20Signs%2C%20Severity%20and%20Treatment%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fdermatology%2Fpapulosquamous%2Fpsoriasis.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/derm.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources unless attributed: sources-local/facts/fill-d01.md, Part A) ===================== */
+const LEDE = 'Psoriasis is a chronic, immune-mediated inflammatory skin disease with well-demarcated red plaques and silvery-white scale (StatPearls; a 2017 review); plaque psoriasis (psoriasis vulgaris) is the commonest form, about 80–90% of cases (StatPearls; about 90% in a 2025 review). Step through the IL-23/Th17 cascade, compare normal and psoriatic epidermis, pick a clinical type or a nail change, scrape a plaque, score PASI, climb the treatment ladder and check which drugs make it worse. Normal skin histology is on <a href="../../anatomy/histology/lymphoid-bone-skin.html#h-skin">anatomy: skin and its appendages</a>.';
+
+const PATH_CAP = 'The hallmark is sustained inflammation that drives uncontrolled keratinocyte proliferation and abnormal differentiation (a 2019 review); dendritic cells, T cells and macrophages in the plaque drive that proliferation (a 2017 review). Current evidence puts the <b>IL-23/IL-17 axis</b> at the centre (a 2025 review; the 2019 review calls plaque psoriasis a disease with a dominant IL-23/Th17 axis).';
+/* steps: [chip, title, text, active element keys] */
+const PATH = [
+  ['Trigger', 'A trigger and the first alarm', 'Injury, infection, drugs or stress start or worsen the disease (a 2017 review of drug-related psoriasis; StatPearls lists infections, stress, medications and trauma as flare triggers). Damaged keratinocytes release the antimicrobial peptide <b>LL37</b>, which binds self-DNA; the complex stimulates toll-like receptor 9 in <b>plasmacytoid dendritic cells</b>, which make <b>type I interferon (IFN-α)</b> (a 2019 review; a 2025 review: pDCs in lesions secrete IFN-α, which drives T-cell expansion).', ['trig', 'll37', 'pdc', 'a1']],
+  ['Dendritic cells', 'Myeloid dendritic cells mature', 'Type I interferon helps <b>myeloid dendritic cells</b> mature. Activated myeloid DCs secrete <b>TNF-α, IL-23 and IL-12</b>; IL-23 drives the Th17 subset and IL-12 the Th1 subset (a 2019 review). IL-23 is a dimer of a specific <b>p19</b> subunit and a <b>p40</b> subunit shared with IL-12 (a 2019 review; Wikipedia).', ['pdc', 'mdc', 'a2']],
+  ['IL-23 → Th17', 'IL-23 keeps Th17 cells going', '<b>IL-23</b> is the upstream regulatory cytokine: it maintains and expands <b>Th17 cells</b>, which make the downstream effector cytokines IL-17A and IL-17F (a 2017 review; Wikipedia: IL-23 is key for Th17 maintenance and expansion). IL-17A and IL-17F inductions were abolished in IL-23p19 knock-out mice (the 2017 review).', ['mdc', 'th17', 'a3']],
+  ['IL-17 → keratinocytes', 'Th17 cytokines hit the keratinocytes', 'Th17 cytokines <b>IL-17, IL-21 and IL-22</b> activate keratinocyte proliferation in the epidermis (a 2019 review); IL-17 induces IL-17-receptor-dependent proliferation of keratinocytes (a 2017 review). The clinically relevant signalling is mostly IL-17A and IL-17F, through the same receptor; IL-17A is the stronger (the 2019 review).', ['th17', 'a4', 'epi']],
+  ['Feed-forward', 'Keratinocytes join in: a self-amplifying loop', 'Activated keratinocytes secrete <b>IL-1, IL-6 and TNF-α</b>, chemokines and antimicrobial peptides (a 2019 review; the 2017 review: IL-1β, IL-6, TNF, β-defensin). The chemokines recruit <b>neutrophils</b> (Wikipedia, IL-17), and IL-17A-expressing neutrophils gather in the epidermis as <b>Munro microabscesses</b> (the 2017 review). A 2025 review calls it a self-amplifying cascade of IL-17 and IL-23.', ['epi', 'a5', 'neut', 'a6']],
+  ['Plaque', 'The result: a thick, fast-turning-over epidermis', 'The plaque shows <b>acanthosis</b> (epidermal hyperplasia) and <b>parakeratosis</b> over a dermal infiltrate of dendritic cells, macrophages, T cells and neutrophils (a 2019 review). Turnover speeds up: normal epithelial turnover is 28 days, but in psoriatic plaques it falls to <b>3–7 days</b> (a 2020 review); transit through differentiation is 5–7 times faster than in normal skin (a 2021 review).', ['epi', 'para', 'neut', 'turn']],
+];
+const PATH_NOTE = 'Genetics: <b>HLA-Cw6 (HLA-C*06:02)</b> is the major susceptibility allele — present in more than 60% of patients and raising the risk 9–23-fold, linked to early-onset psoriasis (a 2019 review); a 2025 review: HLA-C*06:02 presents the melanocyte autoantigen ADAMTSL5 to CD8+ T cells. It is a major risk factor for psoriasis but not for psoriatic arthritis (a 2019 review of PsA). Schematic: cell positions, sizes and the order of steps are a teaching sequence (the 2019 review describes antigen presentation in draining lymph nodes, drawn here in the dermis). γδ T cells can make IL-17A without IL-23 (the 2019 review). In pustular psoriasis the innate IL-36–neutrophil axis is more prominent, while IL-23/IL-17 dominates plaque psoriasis (StatPearls; a 2022 review of generalized pustular psoriasis).';
+
+/* histology features: [key, label, text, modes where it is drawn] */
+const HISTO = [
+  ['para', 'Parakeratosis', '<b>Parakeratosis</b>: keratinisation with retained nuclei in the stratum corneum (a 2013 histopathology study; Wikipedia). It goes with thinning or loss of the granular layer and with diseases of increased cell turnover; it is seen in psoriatic plaques and in dandruff (Wikipedia). In normal mucous membranes parakeratosis is normal (Wikipedia).'],
+  ['munro', 'Munro microabscess', '<b>Munro microabscesses</b>: collections of neutrophils in the stratum corneum (a 2013 study; Wikipedia), a cardinal sign of psoriasis in the parakeratotic areas (Wikipedia). A 2016 study of scalp biopsies found Munro microabscesses and spongiform pustules of value in diagnosing psoriasis vulgaris.'],
+  ['kogoj', 'Spongiform pustule of Kogoj', '<b>Spongiform pustules of Kogoj</b>: collections of neutrophils in the stratum spinosum (a 2013 study). They were significantly more frequent in psoriasis than in seborrhoeic dermatitis (a 2016 study); a 2025 review calls Kogoj micropustules pathognomonic of pustular psoriasis.'],
+  ['gran', 'Thin or absent granular layer', 'The <b>granular layer is thinned or lost</b> where there is parakeratosis (Wikipedia); a 2023 review of guttate psoriasis lists hypogranulosis among its features. Over the dermal papillae the granular layer is thinnest: <b>suprapapillary thinning</b> (a 2013 study defines it as thinning of the granular layer at the tips of the papillae).'],
+  ['acan', 'Acanthosis, regular elongated rete ridges', '<b>Psoriasiform hyperplasia</b>: thickening (<b>acanthosis</b>) with elongated rete ridges (a 2013 study; a 2019 review). Clubbed and evenly elongated rete ridges were significantly more common in psoriasis than in seborrhoeic dermatitis (a 2016 study).'],
+  ['supra', 'Suprapapillary thinning', '<b>Suprapapillary thinning</b>: a 2013 study defines it as thinning of the <b>granular layer</b> at the tips of the papillae. Wikipedia (Auspitz sign) describes thinning of the <b>epidermal layer</b> over the tips of the dermal papillae, which with the dilated papillary vessels beneath explains the pinpoint bleeding of the Auspitz sign.'],
+  ['caps', 'Dilated, tortuous capillaries', 'Capillaries at the tips of the dermal papillae are <b>dilated and proliferated</b> (a 2013 study grades capillary proliferation and dilatation); the vessels in the papillae are dilated and tortuous (Wikipedia, Auspitz sign; a 2016 study: more prominent tortuosity in psoriasis).'],
+];
+const HISTO_NOTE = 'Schematic, not to scale; layers and cells are simplified. The normal layers (corneum, granulosum, spinosum, basale) are drawn as on <a href="../../anatomy/histology/lymphoid-bone-skin.html#h-skin">anatomy: skin</a>. Choose “Normal” to see the same features absent.';
+
+/* clinical types: [key, label, html, sites (region keys)] */
+const TYPES = {
+  plaque: ['Plaque (vulgaris)', '<h3>Chronic plaque psoriasis (psoriasis vulgaris)</h3><p>The commonest type, about 80–90% of cases (StatPearls; about 90%, a 2025 review). Well-demarcated, erythematous plaques with silvery-white scales (StatPearls; the 2025 review: thick silvery-white scale, symmetrical, often itchy). Most often on the <b>extensor surfaces of the elbows and knees, the scalp, the trunk and the lumbosacral region</b> (StatPearls). Typically a lifelong relapsing–remitting condition, flaring with infections, stress, medications or trauma (StatPearls).</p>'],
+  guttate: ['Guttate', '<h3>Guttate psoriasis</h3><p>Numerous small, scattered, <b>drop-like</b> (tear-drop-shaped) scaly papules on the trunk and limbs, of abrupt onset (a 2023 review; Wikipedia: over the upper trunk and proximal limbs). Sources differ on lesion size: <b>0.5–1.5 cm</b> (Wikipedia), <b>2–6 mm</b> (the 2023 review), <b>0.3–0.5 cm</b> (a 2025 review). Guttate psoriasis is strongly associated with <b>HLA-Cw6</b> (the 2023 review). <b>Classically triggered by streptococcal infection</b> — pharyngitis or perianal (StatPearls; Wikipedia: beta-haemolytic streptococci; tonsillopharyngitis is the commonest, the 2023 review). More common in children and adolescents than adults (StatPearls; the 2023 review). It typically develops <b>2–4 weeks</b> after the streptococcal infection (the 2023 review).</p><p>Responds well to topical treatment and phototherapy (StatPearls); ultraviolet phototherapy is first-line for moderate-to-severe guttate psoriasis (the 2023 review). Antibiotics: a 2024 systematic review found no consistent benefit of rifampicin in patients with or without streptococcal infection.</p>'],
+  inverse: ['Inverse (flexural)', '<h3>Inverse (flexural) psoriasis</h3><p>Involves the <b>folds and flexures</b>: axillae, groin, inframammary folds, umbilicus, perianal area and behind the ears (Wikipedia; a 2025 review: buttocks, groin and armpits). In contrast to plaque psoriasis the surface is wet, smooth and shiny, and scale is minor or absent (Wikipedia). It must be told from candidiasis and other fungal infections (the 2025 review). NICE CG153 (2012; recommendations as published 2025) warns that the flexures are vulnerable to steroid atrophy: short-term mild or moderate potency corticosteroids only.</p>'],
+  pustular: ['Pustular', '<h3>Pustular psoriasis</h3><p>Eruptions of <b>sterile pustules</b> on an erythematous base, often tender (StatPearls; Wikipedia: red, tender skin covered with pustules). <b>Generalized</b> (GPP; acute von Zumbusch type; in pregnancy called impetigo herpetiformis, Wikipedia) or <b>localized</b> to the hands and feet (palmoplantar pustulosis, acrodermatitis continua of Hallopeau) (StatPearls; Wikipedia). The innate IL-36–neutrophil axis is more active than in plaque psoriasis (StatPearls; a 2022 review). GPP flares can be provoked by <b>rapid withdrawal of systemic corticosteroids</b>, infections, pregnancy and menstruation (a 2023 review; the 2022 review names discontinuation of medications among the risk factors).</p>'],
+  eryth: ['Erythrodermic', '<h3>Erythrodermic psoriasis</h3><p>Generalized inflammatory erythema over <b>at least 75%</b> of the body surface — some authors require <b>90%</b> (a 2016 review). Severe and potentially life-threatening, about 1–2% of psoriasis (a 2025 review). It brings temperature irregularities and laboratory abnormalities (the 2016 review). Triggers include sunburn, drugs and <b>rapid withdrawal of medication — the rebound phenomenon</b>, with topical and oral steroids among the common culprits (the 2016 review; a 2017 review of drug-related psoriasis also describes this rebound effect).</p>'],
+};
+/* lesion drawing per type, on the schematic body: [view, shape, x, y, r] (view 0 front, 1 back) */
+const TYPE_NOTE = 'Schematic body outlines; shaded areas show the usual sites named by the sources, not a patient. Wikipedia’s main “Psoriasis” article cites Rice University’s Connexions (cnx.org) and is not used on this page; the type articles (Guttate, Inverse, Pustular psoriasis, Psoriatic erythroderma) are used.';
+
+/* nail changes: [key, label, zone, html] (zones: matrix / bed) */
+const NAIL = [
+  ['pit', 'Pitting', 'matrix', '<b>Pits</b>: small, sharply delimited depressions in the nail surface, from involvement of the apical (proximal) matrix (a 2017 nail review; a 2014 review). The 2017 review calls them the most characteristic and most frequent sign; 10 pits in one nail or more than 50 on all nails count as proof of psoriasis (the 2017 review). Disagreement: the 2014 review notes an Italian study in which onycholysis was the commonest sign. Pitting also occurs in alopecia areata, eczema, sarcoidosis and other diseases (the 2014 review).'],
+  ['leuk', 'Leukonychia', 'matrix', '<b>Leukonychia</b>: white areas in the plate when the mid-matrix is involved and parakeratotic cells are built into the plate (a 2017 review; a 2014 review lists it among matrix signs).'],
+  ['crumb', 'Crumbling', 'matrix', '<b>Crumbling</b> of the plate: total matrix involvement destroys the nail (a 2017 review; a 2014 review lists crumbling among matrix signs).'],
+  ['oil', 'Oil drop / salmon patch', 'bed', '<b>Oil-drop (salmon) patch</b>: a yellowish-brown spot with a red margin shining through the plate, like paper with a drop of oil on it — psoriasis of the distal matrix and nail bed (a 2017 review; a 2014 review; StatPearls lists oil drops; Wikipedia: translucent discolouration of the nail bed like a drop of oil).'],
+  ['ony', 'Onycholysis', 'bed', '<b>Onycholysis</b>: separation of the distal plate from the nail bed (StatPearls; a 2014 review), usually with a reddish or erythematous border, which helps tell it from onychomycosis (a 2017 review; the 2014 review).'],
+  ['shk', 'Subungual hyperkeratosis', 'bed', '<b>Subungual hyperkeratosis</b>: thickening under the plate from nail-bed psoriasis (StatPearls; a 2017 review; a 2014 review).'],
+  ['spl', 'Splinter haemorrhages', 'bed', '<b>Splinter haemorrhages</b>: very narrow, a few millimetres long, reddish-dark brown streaks from nail-bed involvement (a 2017 review; a 2014 review: focal bleeding in the bed).'],
+];
+const NAIL_CAP = 'Matrix lesions change the nail plate; nail-bed lesions are seen under the plate (a 2017 review; a 2014 review). About half of patients with psoriasis have nail involvement and 80–90% will at some point (a 2014 review; the 2017 review: up to 90% over a lifetime; a 2025 review: 40.9% of patients with plaque psoriasis). About 5% of nail psoriasis is isolated (the 2017 review: ~5%; the 2014 review: 1–5%).';
+const PSA = '<h3>Psoriatic arthritis</h3><ul><li><b>20–30%</b> of patients with psoriasis develop psoriatic arthritis (Wikipedia; a 2019 review); 10–30% of patients with PsA have no psoriasis at diagnosis (Wikipedia).</li><li>Moll and Wright described five patterns: classical DIP-predominant, asymmetric oligoarticular, symmetric polyarticular, arthritis mutilans and spondylitic (a 2016 review). Severe disease may progress to <b>arthritis mutilans</b> (Wikipedia; the 2016 review: progressive osteolysis of phalangeal and metacarpal bones), which gives a <b>“pencil-in-cup”</b> appearance on X-ray (Wikipedia).</li><li>Classic features: <b>enthesitis, synovitis and dactylitis</b> (“sausage” fingers) (Wikipedia; StatPearls lists enthesitis, dactylitis, peripheral and axial disease).</li><li><b>Distal interphalangeal joint</b> involvement is characteristic (Wikipedia); nail involvement predicts joint disease, most prominently at the DIP joint (StatPearls).</li><li>Nail lesions occur in over 80% of patients with PsA vs about 40% of those with psoriasis alone (a 2019 review; a 2014 review: up to 80.5%).</li><li>Usually seronegative, though some patients are positive for rheumatoid factor or anti-CCP (StatPearls). Classification uses the <b>CASPAR</b> criteria (a 2019 review).</li><li>NICE CG153 (2012; recommendations as published 2025): offer annual assessment for psoriatic arthritis to people with any type of psoriasis, using a validated tool such as PEST, and refer to a rheumatologist as soon as it is suspected.</li></ul>';
+
+const GRAT_CAP = 'The <b>grattage test</b> is how the Auspitz sign is elicited (a 2012 review of eponymous signs). Scraping a plaque gives a fixed sequence (a 2016 review; a 2025 review uses the names “wax-drop phenomenon”, “thin-film phenomenon” and Auspitz sign):';
+const GRAT = [
+  ['Intact plaque', 'An intact plaque', 'A well-demarcated plaque with silvery-white scale over the thick epidermis; the dermal papillae with their dilated capillaries come close to the surface (schematic).'],
+  ['1 · Candle grease', 'Silvery scale comes off like candle wax', 'Scraped with a blunt scalpel, the scales fall off as layers of white lamellae, much like <b>candle wax</b> (a 2016 review); a 2025 review calls this lamellar scaling the <b>“wax-drop phenomenon”</b>.'],
+  ['2 · Thin membrane', 'A thin, glistening membrane', 'Scraping further reveals a wet layer adhering to the lesion — the <b>“last membrane phenomenon”</b> (a 2016 review); a 2025 review describes a reddish, glossy, translucent film: the <b>thin-film phenomenon</b>.'],
+  ['3 · Auspitz sign', 'Pinpoint bleeding: the Auspitz sign', 'Removing the film gives <b>punctate bleeding spots</b> — the <b>Auspitz sign</b> (Wikipedia; a 2025 review; a 2012 review). The bleeding comes from thinning of the epidermis over the tips of the dermal papillae, whose vessels are dilated and tortuous (Wikipedia). It is not specific: it also occurs in Darier’s disease and actinic keratosis (Wikipedia; the 2012 review), and Wikipedia notes that only a minority of scales (under 18%) show it.'],
+];
+const SIGNS_MORE = '<h3>Koebner phenomenon (isomorphic response)</h3><p>New lesions on previously unaffected skin at sites of <b>trauma</b>, clinically and histologically identical to the patient’s disease (StatPearls; Wikipedia: new lesions along lines of trauma). StatPearls dates Koebner’s description to 1876. It shows dynamic behaviour: a patient may be Koebner-negative at one time and Koebner-positive later (StatPearls). After injury, new psoriatic lesions appear in about <b>25–30%</b> of patients (a 2019 review). It also occurs in <b>lichen planus</b> and <b>vitiligo</b> (a 2019 review; Wikipedia), among others; warts and molluscum contagiosum spread along scratches by inoculation of virus rather than by a true Koebner reaction (Wikipedia).</p><h3>Woronoff ring</h3><p>A <b>pale (hypopigmented) ring</b> around healing or regressing psoriatic plaques (a 2016 review; a 2020 paper on the Woronoff ring). It has been seen after phototherapy and topical or systemic treatment (the 2020 paper).</p>';
+
+/* PASI: region weights (Fredriksson & Pettersson 1978, as given by a 2023 review and Wikipedia) */
+const REGIONS = [['h', 'Head', 0.1], ['u', 'Upper limbs', 0.2], ['t', 'Trunk', 0.3], ['l', 'Lower limbs', 0.4]];
+/* area grade: [upper % (exclusive, except 100), grade] — Wikipedia: 0 = 0%; 1 < 10%; 2 10–29%; 3 30–49%; 4 50–69%; 5 70–89%; 6 90–100% */
+const AREA_BANDS = [[0, 0], [9, 1], [29, 2], [49, 3], [69, 4], [89, 5], [100, 6]];
+const SEV_CAP = '<b>PASI</b> (Psoriasis Area and Severity Index; Fredriksson and Pettersson, 1978): for each of four regions, score <b>erythema, induration and desquamation</b> 0–4, add them, multiply by the <b>area grade</b> 0–6 and by the region weight — <b>head 0.1, upper limbs 0.2, trunk 0.3, lower limbs 0.4</b>. Range 0–72 (a 2023 review; Wikipedia; a 2021 study).';
+/* presets: region -> [E, I, D, area %] */
+const SEV_PRE = {
+  scalp: ['Scalp and elbows', {h: [2, 2, 3, 20], u: [2, 2, 2, 5], t: [0, 0, 0, 0], l: [1, 1, 1, 3]}],
+  trunk: ['Widespread plaques', {h: [2, 2, 2, 30], u: [3, 2, 2, 40], t: [3, 3, 2, 35], l: [3, 3, 3, 45]}],
+  eryth: ['Near-erythrodermic', {h: [4, 3, 3, 95], u: [4, 3, 4, 92], t: [4, 3, 4, 95], l: [4, 3, 4, 90]}],
+};
+const SEV_NOTE = 'Hand-checked presets: <b>scalp and elbows</b> = 0.1×7×2 + 0.2×6×1 + 0 + 0.4×3×1 = 1.4 + 1.2 + 1.2 = <b>3.8</b>; <b>widespread</b> = 0.1×6×3 + 0.2×7×3 + 0.3×8×3 + 0.4×9×3 = 1.8 + 4.2 + 7.2 + 10.8 = <b>24.0</b>; <b>near-erythrodermic</b> = 0.1×10×6 + 0.2×11×6 + 0.3×11×6 + 0.4×11×6 = 6 + 13.2 + 19.8 + 26.4 = <b>65.4</b>. BSA here is approximate: each region’s % × the share of skin PASI gives it (head 10%, arms 20%, trunk 30%, legs 40%; Wikipedia). At the bedside one hand print is about 1% BSA (a 2023 review). PASI is not validated in children and may underestimate erythema in darker skin (NICE CG153). A learning aid, not a clinical tool.';
+
+/* treatment ladder: [key, chip, html, markers on the pathway drawing] */
+const TX_CAP = 'NICE CG153 (Psoriasis: assessment and management, 2012; recommendations as published 2025): <b>topical treatment first-line</b>; then second- or third-line options — <b>phototherapy, conventional systemic treatments and targeted (biological or small-molecule) treatments</b>. The joint <b>AAD–NPF guidelines</b> (J Am Acad Dermatol) cover biologics (2019), comorbidities (2019), phototherapy (2019), systemic non-biological agents (2020), paediatric psoriasis (2020) and topical therapy with severity measures (2021); their full texts could not be downloaded (the journal site blocks automated access), so only NICE is quoted for the order. Classes and mechanisms only; no doses.';
+const TX = {
+  top: ['1 · Topical', '<h3>Topical treatment (first line, NICE CG153)</h3><ul><li><b>Corticosteroids</b>: NICE offers a potent corticosteroid plus vitamin D or an analogue for trunk and limbs; long-term use can cause atrophy, telangiectasia and fragility (Wikipedia). Face, flexures and genitals: only short-term mild or moderate potency (NICE).</li><li><b>Vitamin D analogues</b> (calcipotriol): a synthetic derivative of calcitriol acting on the vitamin D receptor (Wikipedia); regulates keratinocyte proliferation and is comparable to most topical steroids in mild plaque psoriasis (a 2025 review).</li><li><b>Coal tar</b>: an option for trunk, limbs and scalp (NICE); used for psoriasis, with a cancer risk from long-term use (Wikipedia).</li><li><b>Dithranol</b> (anthralin): short-contact for treatment-resistant trunk or limb psoriasis (NICE); slower onset than steroids and stains skin and fabrics (Wikipedia).</li></ul>', ['kc']],
+  photo: ['2 · Phototherapy', '<h3>Phototherapy (second line)</h3><ul><li><b>Narrowband UVB (311 nm)</b>: NICE offers it for plaque or guttate psoriasis not controlled by topicals; it replaced broadband UVB because it is more effective (a 2018 review; StatPearls gives 311–313 nm lamps).</li><li><b>PUVA</b> = a <b>psoralen</b> photosensitizer + <b>UVA</b> (Wikipedia; a 2018 review). Mechanism: psoralen photoadducts cross-link DNA and inhibit replication, deplete Langerhans cells and suppress T cells (StatPearls). Skin cancer risk rises with the number of PUVA treatments (NICE: lifetime surveillance after more than 150 treatments).</li></ul>', ['uv']],
+  sys: ['3 · Systemic', '<h3>Conventional systemic (non-biological) agents</h3><ul><li><b>Methotrexate</b>: inhibits dihydrofolate reductase (a 2019 review; Wikipedia); NICE warns of transaminase rises and liver fibrosis with long-term use.</li><li><b>Ciclosporin</b>: a calcineurin inhibitor that reduces IL-2 and T-cell activity (a 2019 review; Wikipedia).</li><li><b>Acitretin</b>: an oral retinoid that normalises keratinocyte proliferation and differentiation (a 2019 review; Wikipedia: second-generation retinoid for severe psoriasis); highly teratogenic (Wikipedia; NICE points to pregnancy prevention for oral retinoids).</li><li><b>Apremilast</b>: an oral phosphodiesterase-4 inhibitor that raises cAMP and damps inflammatory cytokines (a 2019 review; Wikipedia; StatPearls).</li></ul>', ['tc', 'kc2', 'pde']],
+  bio: ['4 · Biologic', '<h3>Biologics (targeted)</h3><ul><li><b>TNF-α inhibitors</b>: infliximab and adalimumab (monoclonal antibodies) and etanercept (a fusion protein mimicking the TNF receptor) (a 2019 review; Wikipedia).</li><li><b>IL-12/IL-23 p40</b>: <b>ustekinumab</b> binds the p40 subunit shared by IL-12 and IL-23 (a 2019 review; Wikipedia; a 2021 review).</li><li><b>IL-23 p19</b>: guselkumab, tildrakizumab and risankizumab (a 2021 review of IL-23 inhibitors); antibodies to both p40 and p19 are highly effective (a 2019 review).</li><li><b>IL-17A</b>: <b>secukinumab</b> (Wikipedia; StatPearls); a 2025 review also lists IL-17A blockade among approved options.</li></ul>', ['tnf', 'p40', 'p19', 'il17']],
+};
+const TX_COUNSEL = '<h3>Counselling: chronicity and what to expect (DR3.3)</h3><ul><li>Psoriasis is a <b>chronic</b>, inflammatory, multisystem disease (AAD–NPF 2019 comorbidity guideline abstract); typically lifelong and relapsing–remitting (StatPearls).</li><li>After topical treatment, <b>relapse occurs in most people once it is stopped</b>; topicals can then be used when needed (NICE CG153).</li><li>Comorbidities: psoriatic arthritis, metabolic syndrome, cardiovascular disease and depression (StatPearls); metabolic syndrome in 14.3–50% of patients and a heightened cardiovascular risk (a 2022 review). NICE CG153 offers adults with severe psoriasis a cardiovascular risk assessment, and annual screening for psoriatic arthritis.</li><li>Triggers to avoid: trauma (Koebner), infections, stress and certain drugs (StatPearls; a 2017 review) — see the drug list below.</li></ul>';
+const TX_NOTE = 'Schematic pathway, not to scale; markers show where each class acts according to the sources named. Corticosteroid mechanism (suppressing Th17 inflammation and dendritic- and T-cell activity) is from one 2025 review and is not drawn.';
+
+/* drugs: [key, chip, html] */
+const DRUGS = [
+  ['li', 'Lithium', '<b>Lithium</b> (for bipolar disorder) is traditionally strongly associated with induction and exacerbation of psoriasis, with a direct drug effect suspected and a latency of up to 12 months (a 2017 review of drug-related psoriasis). Lithium is also among the drugs reported to trigger erythrodermic psoriasis (a 2016 review).'],
+  ['bb', 'β-blockers', '<b>Beta-blockers</b> are traditionally strongly associated with induction and exacerbation (a 2017 review); they can exacerbate pre-existing psoriasis and cause it de novo (a 2020 review of mechanisms). Latency can be long, up to 12 months (the 2017 review); oral beta-blockers have been implicated in erythrodermic and palmoplantar pustular psoriasis, and topical (glaucoma) beta-blockers in nail changes (the 2017 review).'],
+  ['am', 'Antimalarials', '<b>Chloroquine and hydroxychloroquine</b> are associated with exacerbation of plaque psoriasis, rarely with its induction, and with pustular and erythrodermic variants (a 2017 review). A 2020 systematic review of 18 hydroxychloroquine cases found de novo psoriasis, exacerbation or relapse; Wikipedia: hydroxychloroquine can worsen existing psoriasis.'],
+  ['st', 'Steroid withdrawal', '<b>Rapid withdrawal of systemic corticosteroids or potent topical corticosteroids</b> may elicit a flare — the rebound effect (a 2017 review). Rapid withdrawal of systemic corticosteroids is a trigger of <b>generalized pustular psoriasis</b> flares (a 2023 review; a 2022 review names discontinuation of medications), and topical and oral steroids are common causes of the rebound into <b>erythrodermic psoriasis</b> (a 2016 review).'],
+  ['ifn', 'Interferons', '<b>Interferons</b> (α, β) are traditionally associated with psoriasis induction and exacerbation (a 2017 review).'],
+  ['imq', 'Imiquimod', '<b>Imiquimod</b> is traditionally associated with psoriasis, with a direct drug effect suspected (a 2017 review); in mice, the imiquimod response needs IL-23 and IL-17R (a 2019 review).'],
+  ['terb', 'Terbinafine', '<b>Terbinafine</b> is associated with psoriasis, typically with a short latency (a 2017 review).'],
+  ['tnf', 'TNF-α inhibitors', '<b>Anti-TNF-α</b> drugs, though used to treat psoriasis, can induce psoriasis (association studied in large cohorts); most cases are managed with topical corticosteroids, or by switching to another biologic target (a 2017 review).'],
+];
+const DRUG_NOTE = 'First step in drug-related psoriasis: stop and replace the culprit drug when clinically possible; lesions may persist after withdrawal, and drug-induced psoriasis cannot be told from ordinary psoriasis by its morphology or, in most cases, its histology (a 2017 review). Most of the traditional associations (lithium, antimalarials) date from the 1970s and 1980s (the 2017 review). NSAIDs, ACE inhibitors and calcium-channel blockers appear in single sources here and are not listed.';
+
+const BASED = '<b>Based on:</b> NICE CG153, Psoriasis: assessment and management (2012; recommendations as published 2025); joint AAD–NPF guidelines of care for psoriasis (J Am Acad Dermatol 2019–2021; abstracts only); StatPearls (NCBI Bookshelf; abstracts of the psoriasis, plaque, guttate, pustular, nail psoriasis, psoriatic arthritis, Koebner phenomenon, phototherapy and drug chapters); open-access papers: psoriasis pathogenesis and treatment (2019), the IL-23/Th17 axis (2017), advances in psoriasis research (2025), update on psoriasis (2020), skin barrier in psoriasis (2021), histopathological features (2013), psoriasis vs seborrhoeic dermatitis histopathology (2016), clinical types (2016), eponymous signs (2012), the Woronoff ring (2020), Koebner phenomenon (2019), nail psoriasis (2014, 2017), psoriatic arthritis (2019), childhood guttate psoriasis (2023), guttate management (2024), generalized pustular psoriasis (2022, 2023), erythrodermic psoriasis (2016), disease assessment (2023), PASI and stigmatisation (2021), phototherapy (2018), IL-23 inhibitors (2021), drug-induced psoriasis (2017), beta-blockers (2020), hydroxychloroquine (2020), epidemiology and comorbidities (2022) (Europe PMC / NCBI); Wikipedia (articles on the psoriasis types, signs, PASI and drugs; wikitext checked for OpenStax and Connexions citations).';
+const MODELS = '<b>Models used:</b> the skin sections, body outlines, fingertip, scraping sequence, PASI scale and pathway are schematic drawings, not to scale. The PASI calculator applies the published formula to the values set; it is not a clinical tool.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Derm;
+$('lede').innerHTML = LEDE;
+
+/* ---------- pathogenesis ---------- */
+$('path-cap').innerHTML = PATH_CAP; $('path-note').innerHTML = PATH_NOTE;
+const PS = {s: 0};
+function drawPath() {
+  const st = PATH[PS.s], on = new Set(st[3]), cls = k => on.has(k) ? '' : ' dim';
+  const thick = PS.s >= 3, eb = thick ? 175 : 140, cb = thick ? 66 : 56;
+  let s = Derm.DEFS;
+  /* epidermis + dermis */
+  s += `<rect x="20" y="40" width="600" height="${cb - 40}" class="corn"/>`;
+  s += `<rect x="20" y="${cb}" width="600" height="6" class="gran${thick ? ' dim' : ''}"/>`;
+  let junc = `M20 ${eb}`; for (let x = 20; x < 620; x += 60) junc += thick ? ` L${x + 20} ${eb} L${x + 26} ${eb + 34} L${x + 34} ${eb + 34} L${x + 40} ${eb} L${x + 60} ${eb}` : ` L${x + 18} ${eb} q 12 14 24 0 L${x + 60} ${eb}`;
+  s += `<rect x="20" y="${cb + 6}" width="600" height="${eb + 40 - cb - 6}" class="spin"/>`;
+  s += `<path d="${junc} L620 ${eb} L620 370 L20 370 Z" style="fill:var(--surface)"/><path d="${junc} L620 ${eb} L620 370 L20 370 Z" class="derm"/>`;
+  s += `<path d="${junc} L620 ${eb}" class="bas"/>`;
+  s += `<path d="M20 352 C120 340 220 362 320 350 S520 340 620 352" class="cap"/>`;
+  /* keratinocytes */
+  for (let x = 40; x < 610; x += 34) for (let y = cb + 20; y < eb - 6; y += 24) s += `<rect x="${x}" y="${y}" width="22" height="14" rx="4" class="cell${cls('epi')}" style="fill-opacity:.55"/>`;
+  /* parakeratosis: nuclei kept in the corneum */
+  if (on.has('para')) for (let x = 112; x < 610; x += 26) s += `<ellipse cx="${x}" cy="${48 + (x % 3) * 4}" rx="5" ry="1.8" class="nuc"/>`;
+  /* trigger */
+  s += `<g class="${cls('trig')}"><path d="M262 20 L276 36 L268 38 L282 56" class="fl" style="stroke:var(--clin)"/>${T(290, 30, 'injury, infection, drugs', 's c')}</g>`;
+  /* LL37 */
+  s += `<g class="${cls('ll37')}">${[0, 1, 2, 3].map(i => `<circle cx="${112 + i * 9}" cy="${eb + 22 + (i % 2) * 6}" r="3" class="nuc"/>`).join('')}${T(150, eb + 30, 'LL37 + self-DNA', 's')}</g>`;
+  /* cells in the dermis */
+  const cell = (k, x, y, lab, sub, lobed) => `<g class="${cls(k)}"><circle cx="${x}" cy="${y}" r="17" class="cell"/>${lobed ? [-6, 0, 6].map(d => `<circle cx="${x + d}" cy="${y + (d ? 2 : -3)}" r="3.6" class="nuc"/>`).join('') : `<circle cx="${x}" cy="${y}" r="7" class="nuc"/>`}${T(x, y + 32, lab, 'b', 'middle')}${sub ? T(x, y + 46, sub, 's', 'middle') : ''}</g>`;
+  s += cell('pdc', 90, 280, 'pDC', 'plasmacytoid DC');
+  s += cell('mdc', 230, 280, 'mDC', 'myeloid DC');
+  s += cell('th17', 380, 280, 'Th17', 'T helper 17 cell');
+  s += cell('neut', 540, 280, 'Neutrophil', '', true);
+  /* arrows with cytokine labels */
+  const arr = (k, d, lx, ly, lab, anc = 'middle') => `<g class="${cls(k)}"><path d="${d}" class="fl"/>${T(lx, ly, lab, 'm', anc)}</g>`;
+  s += arr('a1', `M122 ${eb + 34} L100 260`, 60, eb + 52, 'TLR9', 'middle');
+  s += arr('a2', 'M108 276 L210 276', 160, 268, 'IFN-α');
+  s += arr('a3', 'M248 276 L360 276', 304, 268, 'IL-23');
+  s += `<g class="${cls('mdc')}">${T(230, 240, 'TNF-α, IL-12', 's', 'middle')}</g>`;
+  s += arr('a4', `M380 262 L380 ${eb + 8}`, 388, eb + 76, 'IL-17A/F, IL-22', 'start');
+  s += arr('a5', `M470 ${eb + 6} L530 262`, 498, eb + 30, 'chemokines', 'start');
+  s += `<g class="${cls('a6')}"><path d="M556 266 C600 200 600 120 560 ${cb - 4}" class="fl dash"/>${[0, 1, 2].map(i => `<circle cx="${548 + i * 8}" cy="${cb - 10}" r="3.6" class="nuc"/>`).join('')}${T(612, 30, 'Munro microabscess', 's', 'end')}</g>`;
+  if (on.has('turn')) s += T(330, 14, 'turnover ≈ 28 days → 3–7 days', 'b', 'middle');
+  s += T(26, cb - 4, 'epidermis', 'h') + T(614, 336, 'dermis', 'h', 'end');
+  s += T(26, 366, 'capillary', 's');
+  $('path-svg').innerHTML = s;
+  $('path-find').innerHTML = `<h3>${PS.s + 1}. ${st[1]}</h3><p>${st[2]}</p>`;
+}
+Derm.stepper('path-step', PATH.map(p => p[0]), drawPath, PS);
+
+/* ---------- histology ---------- */
+$('histo-note').innerHTML = HISTO_NOTE;
+const HS = {mode: 'pso', f: 'para'};
+function drawHisto() {
+  const pso = HS.mode === 'pso', f = HS.f;
+  let s = Derm.DEFS;
+  const top = 30, cb = pso ? 78 : 50, gt = pso ? 3 : 10; /* corneum bottom, granular thickness */
+  /* rete: x of ridge centres */
+  const ridges = [70, 150, 230, 310, 390, 470, 550];
+  const base = pso ? 120 : 140, tip = pso ? 250 : 162; /* junction at papilla tops / ridge tips */
+  let junc = 'M20 ' + base;
+  for (const rx of ridges) junc += pso ? ` L${rx - 9} ${base} L${rx - 9} ${tip - 30} C${rx - 20} ${tip - 20} ${rx - 18} ${tip + 12} ${rx} ${tip + 12} C${rx + 18} ${tip + 12} ${rx + 20} ${tip - 20} ${rx + 9} ${tip - 30} L${rx + 9} ${base}` : ` L${rx - 22} ${base} Q${rx} ${tip + 12} ${rx + 22} ${base}`;
+  junc += ' L620 ' + base;
+  s += `<rect x="20" y="${top}" width="600" height="${cb - top}" class="corn"/>`;
+  s += `<rect x="20" y="${cb}" width="600" height="${gt}" class="gran"/>`;
+  s += `<path d="M20 ${cb + gt} L620 ${cb + gt} L620 320 L20 320 Z" class="spin"/>`;
+  s += `<path d="${junc} L620 320 L20 320 Z" style="fill:var(--surface)"/><path d="${junc} L620 320 L20 320 Z" class="derm"/>`;
+  s += `<path d="${junc}" class="bas"/>`;
+  /* papillary capillaries (between ridges) */
+  const pap = [110, 190, 270, 350, 430, 510];
+  for (const px of pap) s += pso ? `<path d="M${px - 6} 300 C${px - 14} 220 ${px - 10} 150 ${px - 4} ${base + 10} C${px} ${base + 2} ${px + 6} ${base + 6} ${px + 5} ${base + 16} C${px + 12} 170 ${px + 4} 230 ${px + 8} 300" class="cap"/>` : `<path d="M${px - 4} 300 C${px - 6} 240 ${px - 4} 180 ${px} ${base + 30} C${px + 4} 180 ${px + 6} 240 ${px + 4} 300" class="cap" style="stroke-width:1.6"/>`;
+  if (pso) {
+    for (let x = 30; x < 612; x += 22) s += `<ellipse cx="${x}" cy="${top + 10 + (x % 4) * 6}" rx="5" ry="1.8" class="nuc"/>`;
+    for (const mx of [150, 420]) s += [0, 1, 2, 3].map(i => `<circle cx="${mx + (i % 2) * 8}" cy="${top + 22 + Math.floor(i / 2) * 7}" r="3.4" class="nuc"/>`).join('');
+    s += [0, 1, 2, 3, 4].map(i => `<circle cx="${296 + (i % 3) * 8}" cy="${cb + 14 + Math.floor(i / 3) * 8}" r="3.2" class="nuc"/>`).join('');
+  }
+  /* selection outline */
+  const SEL = pso ? {para: [20, top, 600, cb - top], munro: [138, top + 12, 34, 24], kogoj: [286, cb + 4, 36, 28], gran: [20, cb - 3, 600, gt + 6], acan: [206, base - 4, 48, tip - base + 22], supra: [180, cb, 20, base - cb + 4], caps: [182, base, 18, 120]}
+    : {gran: [20, cb - 3, 600, gt + 6], acan: [208, base - 6, 44, tip - base + 20], supra: [180, cb, 20, base - cb + 4], caps: [184, base + 20, 14, 100]};
+  const r = SEL[f];
+  if (r) s += `<rect x="${r[0]}" y="${r[1]}" width="${r[2]}" height="${r[3]}" rx="4" class="sel"/>`;
+  s += T(24, 22, pso ? 'Psoriatic plaque (schematic)' : 'Normal skin (schematic)', 'h');
+  $('histo-svg').innerHTML = s;
+  const h = HISTO.find(x => x[0] === f);
+  $('histo-find').innerHTML = `<h3>${h[1]}</h3><p>${h[2]}</p>` + (!pso ? '<p class="muted">Normal skin: no parakeratosis or neutrophil collections; a distinct granular layer; short, gently undulating rete ridges (schematic).</p>' : '');
+}
+Derm.toggles('histo-mode', [['pso', 'Psoriasis'], ['norm', 'Normal']], k => { HS.mode = k; drawHisto(); }, 'pso');
+Derm.toggles('histo-feat', HISTO.map(h => [h[0], h[1]]), k => { HS.f = k; drawHisto(); }, 'para');
+Derm.key('histo-key', [['--kerat', 'Stratum corneum (keratin)'], ['--sg', 'Granular layer'], ['--ss', 'Spinous layer'], ['--sb', 'Basal layer'], ['--collagen', 'Dermis'], ['--artery', 'Capillary'], ['--nucleus', 'Nuclei (retained nuclei, neutrophils)']]);
+drawHisto();
+
+/* ---------- clinical types ---------- */
+$('type-note').innerHTML = TYPE_NOTE;
+const TS = {k: 'plaque'};
+/* body outline: front at x0=130, back at x0=390 */
+const bodyPath = x0 => `M${x0} 18 a20 22 0 1 0 0.1 0 Z M${x0 - 34} 78 Q${x0} 66 ${x0 + 34} 78 L${x0 + 40} 200 L${x0 - 40} 200 Z M${x0 - 36} 82 L${x0 - 66} 190 L${x0 - 54} 194 L${x0 - 28} 110 Z M${x0 + 36} 82 L${x0 + 66} 190 L${x0 + 54} 194 L${x0 + 28} 110 Z M${x0 - 38} 200 L${x0 - 40} 350 L${x0 - 14} 350 L${x0 - 4} 210 L${x0 + 4} 210 L${x0 + 14} 350 L${x0 + 40} 350 L${x0 + 38} 200 Z`;
+const SITES = {
+  plaque: [[1, 'e', 390 - 52, 140, 9], [1, 'e', 390 + 52, 140, 9], [0, 'e', 130 - 26, 290, 10], [0, 'e', 130 + 26, 290, 10], [1, 'e', 390, 30, 16], [1, 'e', 390, 188, 14], [0, 'e', 130 - 10, 140, 8]],
+  guttate: 'drops',
+  inverse: [[0, 'e', 130 - 36, 92, 6], [0, 'e', 130 + 36, 92, 6], [0, 'e', 130 - 18, 202, 7], [0, 'e', 130 + 18, 202, 7], [0, 'e', 130 - 18, 118, 9], [0, 'e', 130 + 18, 118, 9], [0, 'e', 130, 160, 4], [1, 'e', 390, 206, 6], [1, 'e', 390 - 20, 30, 4], [1, 'e', 390 + 20, 30, 4]],
+  pustular: 'pust',
+  eryth: 'all',
+};
+function drawTypes() {
+  let s = '';
+  s += `<path d="${bodyPath(130)}" class="body"/><path d="${bodyPath(390)}" class="body"/>`;
+  const k = TS.k, sites = SITES[k];
+  if (sites === 'all') s += `<path d="${bodyPath(130)}" class="les" style="fill-opacity:.4"/><path d="${bodyPath(390)}" class="les" style="fill-opacity:.4"/>`;
+  else if (sites === 'drops') { let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280; for (const x0 of [130, 390]) for (let i = 0; i < 34; i++) { const x = x0 - 32 + rnd() * 64, y = 84 + rnd() * 112; s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.6" class="les"/>`; } for (const x0 of [130, 390]) for (const sd of [-1, 1]) for (let i = 0; i < 6; i++) { s += `<circle cx="${(x0 + sd * (40 + i * 3)).toFixed(1)}" cy="${(96 + i * 9).toFixed(1)}" r="2.2" class="les"/>`; s += `<circle cx="${(x0 + sd * 24).toFixed(1)}" cy="${(214 + i * 10).toFixed(1)}" r="2.2" class="les"/>`; } }
+  else if (sites === 'pust') { for (const x0 of [130, 390]) { s += `<path d="${bodyPath(x0)}" class="les" style="fill-opacity:.18"/>`; } for (const [x, y] of [[130 - 60, 192], [130 + 60, 192], [130 - 27, 352], [130 + 27, 352]]) s += `<ellipse cx="${x}" cy="${y}" rx="9" ry="6" class="les" style="fill-opacity:.8"/>`; let seed = 3; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280; for (let i = 0; i < 30; i++) { const x = 390 - 30 + rnd() * 60, y = 86 + rnd() * 110; s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.8" style="fill:var(--surface);stroke:var(--clin);stroke-width:1"/>`; } }
+  else for (const [, , x, y, r] of sites) s += `<circle cx="${x}" cy="${y}" r="${r}" class="les"/>`;
+  s += T(130, 372, 'front', 'h', 'middle') + T(390, 372, 'back', 'h', 'middle');
+  const lab = {plaque: [['scalp', 440, 18], ['elbows', 456, 120], ['lumbosacral', 438, 214], ['knees', 186, 290]], guttate: [['trunk and proximal limbs', 260, 72]], inverse: [['axillae', 70, 76], ['inframammary', 176, 112], ['groin', 172, 222], ['perianal / buttocks', 412, 222], ['behind ears', 420, 60]], pustular: [['palms', 32, 214], ['soles', 186, 366], ['generalized', 436, 262]], eryth: [['≥ 75–90% of body surface', 260, 200]]}[k];
+  for (const [t, x, y] of lab) s += T(x, y, t, 's', x > 255 && x < 265 ? 'middle' : 'start');
+  $('type-svg').innerHTML = s;
+  $('type-find').innerHTML = TYPES[k][1];
+}
+Derm.toggles('type-tg', Object.entries(TYPES).map(([k, v]) => [k, v[0]]), k => { TS.k = k; drawTypes(); }, 'plaque');
+drawTypes();
+
+/* ---------- nails ---------- */
+const NS = {k: 'pit'};
+function drawNail() {
+  const it = NAIL.find(n => n[0] === NS.k), zone = it[2];
+  let s = Derm.DEFS;
+  /* finger (neutral fill): middle phalanx longer than the shorter distal phalanx; DIP joint; nail plate on the dorsum of the distal phalanx */
+  s += `<path d="M20 150 Q20 110 60 108 L380 108 Q480 104 506 160 Q520 220 450 236 L60 236 Q20 236 20 200 Z" style="fill:var(--bg);stroke:var(--muted);stroke-width:1.2"/>`;
+  s += `<rect x="44" y="150" width="226" height="52" rx="18" class="bone"/><rect x="284" y="154" width="150" height="44" rx="16" class="bone"/>`;
+  s += T(157, 181, 'middle phalanx', 's', 'middle') + T(359, 181, 'distal phalanx', 's', 'middle') + T(277, 224, 'DIP joint', 's', 'middle');
+  s += `<path d="M277 150 L277 206" style="stroke:var(--muted);stroke-dasharray:3 3"/>`;
+  /* nail plate */
+  s += `<path d="M320 100 L480 100 Q500 102 504 116 L494 118 Q488 110 476 110 L320 110 Z" class="nail"/>`;
+  /* proximal fold, matrix, bed */
+  s += `<path d="M286 100 Q304 86 330 96" style="fill:none;stroke:var(--muted);stroke-width:1.4"/>`;
+  const mz = zone === 'matrix', bz = zone === 'bed';
+  s += `<rect x="298" y="110" width="44" height="12" rx="3" style="fill:var(--sb);fill-opacity:${mz ? .9 : .35}"/>`;
+  s += `<rect x="346" y="110" width="128" height="8" rx="2" style="fill:var(--collagen);fill-opacity:${bz ? .9 : .35}"/>`;
+  s += T(290, 70, 'proximal nail fold', 's', 'middle') + T(306, 140, 'matrix', 'b', 'end') + T(410, 156, 'nail bed', 'b', 'middle') + T(410, 88, 'nail plate', 's', 'middle') + T(552, 92, 'hyponychium', 's', 'end');
+  /* feature drawing */
+  const k = NS.k;
+  if (k === 'pit') for (let x = 340; x < 476; x += 26) s += `<ellipse cx="${x}" cy="100.5" rx="5" ry="2.6" style="fill:var(--surface);stroke:var(--ink);stroke-width:.8"/>`;
+  if (k === 'leuk') s += `<rect x="372" y="101" width="24" height="8" style="fill:var(--surface);stroke:var(--ink);stroke-width:.6"/>`;
+  if (k === 'crumb') s += `<path d="M420 100 L430 94 L438 102 L448 92 L456 100 L468 96 L476 104" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>`;
+  if (k === 'oil') s += `<ellipse cx="410" cy="114" rx="22" ry="5" style="fill:var(--surface);stroke:var(--clin);stroke-width:1.6"/>`;
+  if (k === 'ony') s += `<path d="M450 111 L494 117 L494 126 L450 118 Z" style="fill:var(--surface);stroke:var(--clin);stroke-width:1.2"/>`;
+  if (k === 'shk') s += `<path d="M440 118 L490 118 L496 136 L440 124 Z" style="fill:var(--kerat);stroke:var(--ink);stroke-width:.8"/>`;
+  if (k === 'spl') for (const x of [366, 396, 426]) s += `<path d="M${x} 112 L${x + 16} 116" style="stroke:var(--rbc);stroke-width:2.2;stroke-linecap:round"/>`;
+  const sel = mz ? [292, 92, 56, 36] : [342, 104, 164, 36];
+  s += `<rect x="${sel[0]}" y="${sel[1]}" width="${sel[2]}" height="${sel[3]}" rx="5" class="sel"/>`;
+  s += T(40, 270, mz ? 'Matrix sign: changes the nail plate' : 'Nail-bed sign: seen under the nail plate', 'b');
+  $('nail-svg').innerHTML = s;
+  $('nail-find').innerHTML = `<p class="muted">${NAIL_CAP}</p><h3>${it[1]} <span class="tag">${zone === 'matrix' ? 'nail matrix' : 'nail bed'}</span></h3><p>${it[3]}</p>`;
+}
+Derm.toggles('nail-tg', NAIL.map(n => [n[0], n[1]]), k => { NS.k = k; drawNail(); }, 'pit');
+drawNail();
+$('psa').innerHTML = PSA;
+
+/* ---------- grattage ---------- */
+$('grat-cap').innerHTML = GRAT_CAP; $('signs-more').innerHTML = SIGNS_MORE;
+const GS = {s: 0};
+function drawGrat() {
+  const st = GS.s;
+  let s = Derm.DEFS;
+  const base = 150; /* junction at papillae tops */
+  const scaleTop = st >= 1 ? 70 : 40;
+  /* epidermis + papillae */
+  let junc = 'M20 ' + base;
+  for (const rx of [80, 170, 260, 350, 440, 530]) junc += ` L${rx - 14} ${base} L${rx - 8} 250 Q${rx} 260 ${rx + 8} 250 L${rx + 14} ${base}`;
+  junc += ' L540 ' + base;
+  s += `<path d="M20 96 L540 96 L540 290 L20 290 Z" class="spin"/>`;
+  s += `<path d="${junc} L540 290 L20 290 Z" style="fill:var(--surface)"/><path d="${junc} L540 290 L20 290 Z" class="derm"/><path d="${junc}" class="bas"/>`;
+  for (const px of [125, 215, 305, 395, 485]) s += `<path d="M${px - 6} 290 C${px - 12} 220 ${px - 8} 170 ${px - 3} ${base + 6} C${px} ${base} ${px + 5} ${base + 3} ${px + 4} ${base + 12} C${px + 10} 190 ${px + 4} 240 ${px + 7} 290" class="cap"/>`;
+  /* scale lamellae */
+  if (st === 0) for (let i = 0; i < 5; i++) s += `<rect x="20" y="${40 + i * 11}" width="520" height="10" rx="3" class="corn" style="stroke:var(--surface);stroke-width:1"/>`;
+  if (st === 1) { for (let i = 0; i < 3; i++) s += `<rect x="20" y="${62 + i * 11}" width="${520 - i * 20}" height="10" rx="3" class="corn" style="stroke:var(--surface);stroke-width:1"/>`; for (let i = 0; i < 5; i++) s += `<rect x="${300 + i * 30}" y="${18 + (i % 2) * 10}" width="26" height="7" rx="2" class="corn" transform="rotate(${-12 + i * 6} ${313 + i * 30} 22)"/>`; }
+  if (st >= 2) s += `<rect x="20" y="88" width="520" height="8" rx="3" style="fill:var(--kerat);fill-opacity:.35;stroke:var(--ink);stroke-width:.8"/>`;
+  if (st === 3) for (const px of [125, 215, 305, 395, 485]) s += `<circle cx="${px}" cy="90" r="5" class="bl"/>`;
+  /* scalpel */
+  if (st >= 1) s += `<path d="M150 ${st === 1 ? 56 : 80} L250 ${st === 1 ? 36 : 60} L262 ${st === 1 ? 44 : 68} L160 ${st === 1 ? 66 : 90} Z" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.2"/>` + T(268, st === 1 ? 46 : 70, 'blunt scalpel', 's');
+  const lab = [['silvery scale (lamellae)', 0], ['scale flakes off like candle wax', 1], ['thin glistening membrane', 2], ['pinpoint bleeding (Auspitz)', 3]][st][0];
+  s += T(24, 20, lab, 'b');
+  s += T(24, 306, 'dermal papillae with dilated capillaries (schematic)', 's');
+  $('grat-svg').innerHTML = s;
+  $('grat-find').innerHTML = `<h3>${GRAT[st][1]}</h3><p>${GRAT[st][2]}</p>`;
+}
+Derm.stepper('grat-step', GRAT.map(g => g[0]), drawGrat, GS);
+
+/* ---------- PASI ---------- */
+$('sev-cap').innerHTML = SEV_CAP; $('sev-note').innerHTML = SEV_NOTE;
+const SV = {h: [0, 0, 0, 0], u: [0, 0, 0, 0], t: [0, 0, 0, 0], l: [0, 0, 0, 0]};
+Object.assign(SV, JSON.parse(JSON.stringify(SEV_PRE.scalp[1])));
+const areaGrade = p => { for (const [u, g] of AREA_BANDS) if (p <= u) return g; return 6; };
+const SL = {};
+for (const [r, name, w] of REGIONS) {
+  const d = document.createElement('div'); d.className = 'reg';
+  d.innerHTML = `<h3>${name} <span>weight ${w}</span></h3><div class="sliders" id="sl-${r}"></div><div class="muted" id="ro-${r}"></div>`;
+  $('sev-regs').append(d);
+  SL[r] = [];
+  ['Erythema', 'Induration', 'Desquamation'].forEach((lab, i) => SL[r].push(Derm.slider('sl-' + r, {id: r + i, label: lab, min: 0, max: 4, step: 1, value: SV[r][i], fmt: v => String(v)}, v => { SV[r][i] = v; clearPre(); drawSev(); })));
+  SL[r].push(Derm.slider('sl-' + r, {id: r + 'a', label: 'Area involved', min: 0, max: 100, step: 1, value: SV[r][3], fmt: v => v + '% → grade ' + areaGrade(v)}, v => { SV[r][3] = v; clearPre(); drawSev(); }));
+  SL[r].forEach(x => x.init());
+}
+let preOn = 'scalp';
+function clearPre() { preOn = null; $('sev-pre').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); }
+function pasi() {
+  let tot = 0, bsa = 0; const parts = {};
+  for (const [r, , w] of REGIONS) { const [e, i, d, a] = SV[r]; const v = w * (e + i + d) * areaGrade(a); parts[r] = v; tot += v; bsa += a * w; }
+  return {tot, parts, bsa};
+}
+function drawSev() {
+  const {tot, parts, bsa} = pasi();
+  for (const [r, , w] of REGIONS) { const [e, i, d, a] = SV[r]; $('ro-' + r).textContent = `${w} × (${e}+${i}+${d}) × ${areaGrade(a)} = ${parts[r].toFixed(1)}`; }
+  const X = Derm.scale(0, 72, 30, 530);
+  let s = `<line x1="30" y1="50" x2="530" y2="50" class="axis"/>`;
+  for (const v of [0, 10, 20, 30, 40, 50, 60, 72]) s += `<line x1="${X(v)}" y1="46" x2="${X(v)}" y2="54" class="axis"/>` + T(X(v), 72, v, 's', 'middle');
+  s += `<line x1="${X(10)}" y1="30" x2="${X(10)}" y2="58" style="stroke:var(--clin);stroke-width:1.4;stroke-dasharray:4 3"/>` + T(X(10) + 4, 26, 'PASI 10', 's c', 'start');
+  s += `<circle cx="${X(tot)}" cy="50" r="7" style="fill:var(--mark)"/>` + T(Math.min(Math.max(X(tot), 60), 500), 98, 'PASI ' + tot.toFixed(1), 'b', 'middle');
+  $('sev-svg').innerHTML = s;
+  const band = tot < 10 ? 'below 10 — “mild” in the bands of a 2021 study' : tot <= 50 ? '10–50 — “moderate to severe” in the bands of a 2021 study' : 'above 50 — “severe” in the bands of a 2021 study';
+  $('sev-out').innerHTML = `<span class="big">PASI ${tot.toFixed(1)}</span><div class="vrow"><span>Score ${band}.</span><span>Approximate BSA involved: <b>${bsa.toFixed(0)}%</b>${bsa > 10 ? ' — more than 10%: “extensive” in NICE CG153’s examples (topicals alone unlikely to be enough; consider specialist referral)' : ''}.</span></div><p class="muted">NICE CG153 (2012; recommendations as published 2025) refers to targeted treatments in NICE technology appraisals, among other criteria, when PASI is 10 or more with a DLQI above 10 and conventional systemic treatment and phototherapy have failed or cannot be used.</p>`;
+}
+Derm.toggles('sev-pre', Object.entries(SEV_PRE).map(([k, v]) => [k, v[0]]), k => {
+  preOn = k; const p = SEV_PRE[k][1];
+  for (const [r] of REGIONS) { SV[r] = p[r].slice(); SL[r].forEach((x, i) => { x.el.value = SV[r][i]; x.init(); }); }
+  drawSev();
+}, 'scalp');
+drawSev();
+
+/* ---------- treatment ---------- */
+$('tx-cap').innerHTML = TX_CAP; $('tx-counsel').innerHTML = TX_COUNSEL; $('tx-note').innerHTML = TX_NOTE;
+const XS = {k: 'top'};
+function drawTx() {
+  const marks = new Set(TX[XS.k][2]);
+  let s = Derm.DEFS;
+  /* skin strip at top: epidermis with keratinocytes */
+  s += `<rect x="20" y="30" width="560" height="14" class="corn"/><rect x="20" y="44" width="560" height="56" class="spin"/><path d="M20 100 L580 100" class="bas"/>`;
+  for (let x = 34; x < 572; x += 36) s += `<rect x="${x}" y="56" width="24" height="14" rx="4" class="cell" style="fill-opacity:.55"/>`;
+  s += T(26, 24, 'epidermis: keratinocytes', 'h');
+  /* pathway nodes */
+  const node = (x, y, lab, sub) => `<circle cx="${x}" cy="${y}" r="20" class="cell"/><circle cx="${x}" cy="${y}" r="8" class="nuc"/>` + T(x, y + 36, lab, 'b', 'middle') + (sub ? T(x, y + 50, sub, 's', 'middle') : '');
+  s += node(110, 240, 'Dendritic cell', '');
+  s += node(420, 240, 'Th17 cell', '');
+  s += `<path d="M132 240 L396 240" class="fl"/>` + T(264, 232, 'IL-23 (p19 + p40)', 'm', 'middle');
+  s += `<path d="M420 218 L420 106" class="fl"/>` + T(428, 200, 'IL-17A', 'm', 'start');
+  s += `<path d="M124 222 C150 180 180 140 196 106" class="fl"/>` + T(136, 176, 'TNF-α', 'm', 'end');
+  s += `<path d="M110 218 L110 192 L24 192" style="stroke:var(--muted);stroke-width:1;fill:none"/>` + T(24, 184, 'IL-12 (p40)', 's');
+  /* markers: only the chosen rung's markers are drawn */
+  const badge = (k, x, y, txt) => marks.has(k) ? `<rect x="${x - 5}" y="${y - 13}" width="${(txt.length * 7.3 + 10).toFixed(0)}" height="18" rx="9" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.6"/>` + T(x, y, txt, 'm') : '';
+  if (marks.has('uv')) for (const x of [210, 250, 290, 330]) s += `<path d="M${x} 2 L${x - 8} 26" class="fl" style="stroke:var(--ink)"/>`;
+  s += badge('uv', 360, 18, 'UVB 311 nm / PUVA');
+  s += badge('kc', 300, 92, 'steroid · vit D · tar · dithranol');
+  s += badge('kc2', 446, 124, 'acitretin');
+  s += badge('tc', 340, 306, 'ciclosporin, methotrexate');
+  s += badge('pde', 24, 330, 'apremilast (PDE4, immune cells)');
+  s += badge('tnf', 208, 156, 'TNF-α inhibitors');
+  s += badge('p40', 150, 302, 'ustekinumab: p40');
+  s += badge('p19', 150, 330, 'anti-p19: gusel-, tildra-, risankizumab');
+  s += badge('il17', 446, 160, 'secukinumab: IL-17A');
+  $('tx-svg').innerHTML = s;
+  $('tx-find').innerHTML = TX[XS.k][1];
+}
+Derm.toggles('tx-tg', Object.entries(TX).map(([k, v]) => [k, v[0]]), k => { XS.k = k; drawTx(); }, 'top');
+drawTx();
+
+/* ---------- drugs ---------- */
+$('drug-note').innerHTML = DRUG_NOTE;
+const DS = {k: 'li'};
+const drawDrug = () => { $('drug-find').innerHTML = '<p>' + DRUGS.find(d => d[0] === DS.k)[2] + '</p>'; };
+Derm.toggles('drug-tg', DRUGS.map(d => [d[0], d[1]]), k => { DS.k = k; drawDrug(); }, 'li');
+drawDrug();
+
+$('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+Derm.swipeHints();
+</script>
+</body>
+</html>
