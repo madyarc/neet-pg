@@ -1462,3 +1462,32 @@ tubercles.
 - 2026-11-25 (skull.html, skull-bones.html): the "StatPearls 13–24 months" anterior-fontanelle range had no quote in
   any sheet and could not be verified (full text behind a captcha); replaced by Wikipedia Bregma's 18–36 months
   (quoted in cranial-a.md; wikitext checked, no OpenStax/Boundless), beside Gray's "about a year and a half".
+- 2026-11-25 correction (early-development.html, membranes-placenta.html): Wikipedia "Human fertilization" and
+  "Luteal phase" cite Boundless texts and are excluded (sheet fill-embryo1.md, marked EXCLUDED). Fertilisation steps
+  now rest on Gray 1918, the open reviews (PMC6078053, PMC12883011, PMC6028574) and clean Wikipedia articles (Sperm,
+  Acrosome reaction, Zona pellucida, Cortical reaction, Oocyte, Meiosis; wikitext checked). Page changes: ZP3 binding
+  now "shown in the mouse"; "Wikipedia: polyspermy is lethal for the human zygote" removed (Gray's "develops
+  abnormally" stays); the corpus luteum's "8–12 weeks (Wikipedia)" removed from the placental-hormone text and chart
+  (the switch after about week 10 rests on StatPearls). Spiral-artery regrowth is now sourced to Wikipedia "Menstrual cycle".
+- 2026-11-25 correction, audit batch (OpenStax/Boundless citations found in older Wikipedia sources). Excluded and
+  marked EXCLUDED in their sheets: "Anatomical terms of muscle" (also cites Boundless), "Epimysium", "Intercalated
+  disc", "Myocyte" (redirect to "Muscle cell") and "Smooth muscle" (muscle-tissue.md); "Connective tissue"
+  (connective-tissue.md); "Joint", "Fibrous joint", "Hinge joint", "Plane joint", "Saddle joint", "Condyloid joint"
+  (joints-general.md, joints-ankle-foot.md, fill-ll.md); "Deltoid ligament" (joints-ankle-foot.md); "Facial muscles"
+  and "Muscles of mastication" (hn-face-mastication.md).
+  - general/muscle.html: origin/insertion now Gray 1918 only ("more fixed or central" attachment; most muscles act
+    from either end) — "usually proximal/distal" and the chin-up example cut; "Some sources merge synergists and
+    fixators" cut; iris smooth muscle attributed to Gray 1918; "no troponin" in smooth muscle attributed to a 2026
+    review (PMC13102872). Other facts kept on Gray, StatPearls and the open reviews.
+  - general/connective-tissue.html: the adipose/reticular note now gives StatPearls (specialised connective tissue)
+    and Wikipedia "Loose connective tissue" (no longer subsets of loose tissue); the rest kept on Gray, StatPearls and
+    open papers.
+  - general/joints.html: sutures "only in the skull", the edge-shape grouping, syndesmosis "no joint cavity" and the
+    plane-joint carpal/tarsal examples attributed to Gray 1918; "Gray 1918 and Wikipedia" became "Gray 1918" for
+    syndesmoses as amphiarthroses and the MCP/atlanto-occipital ellipsoid examples; cut: "Textbooks disagree on the
+    names of the groups…", "Wikipedia calls them non-axial in one article and multiaxial in another", "Wikipedia
+    treats condyloid, condylar and ellipsoid as names for the same type". New quotes: Gray 1918 p.69, PMC12484912,
+    PMC5454844, Wikipedia "Carpometacarpal joint" (wikitext checked).
+  - lower-limb/joints.html and head-neck/muscles.html: no change; every fact still has Gray 1918 plus StatPearls,
+    open papers or clean Wikipedia articles (Ankle, Pott's fracture, Intertarsal joints, Interphalangeal joints of
+    foot). Facial-nerve supply of stylohyoid, stapedius and posterior digastric now Gray + PMC13298086.

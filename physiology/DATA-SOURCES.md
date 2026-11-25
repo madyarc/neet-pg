@@ -145,3 +145,7 @@ where only one source has it, the page names that source.
 - Independent review 2026-11-23, fixed: DLCO shunt direction, hypoxaemia wording, A–a causes, HAPE disagreement,
   years, FRC/TLC spirometry, dated O₂ targets, rounding note, classifier clipping, 13 attributions, Laplace labels,
   preset chips, small layout fixes.
+- 2026-11-25 correction (cvs/haemodynamics-bp-regulation.html, skin circulation): Wikipedia "Thermoregulation" cites
+  Boundless texts and is excluded (sheet fill-physio3.md C13, marked EXCLUDED). Heat → skin vasodilation now rests on
+  Wikipedia "Human skin" (wikitext checked) and PMC2590178; cold → skin vasoconstriction on Wikipedia "Human skin" and
+  StatPearls "Hypothermia" (PMID 31424823); the page now says "(Wikipedia; StatPearls)" for the cold response.
