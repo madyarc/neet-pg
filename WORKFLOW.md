@@ -8,6 +8,8 @@ Last updated: 2026-11-23
 
 ## Now
 
+- RESUMED 2026-11-25 (cap re-set to 10G on the new tab; server up): M01 fix agent resumed, F01 review running, FM01
+  build restarted.
 - PAUSED 2026-11-24 by user (session limit hit; resets 07:10 America/New_York). Resume state for round 1:
   - Committed and live: B01, P01, G01 (+ physiology 01–05 earlier).
   - F01 pharmacology: all 3 pages built (630 quotes, 0 bad), NOT reviewed, NOT committed. Next: one independent review
