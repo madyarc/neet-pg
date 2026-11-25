@@ -1455,3 +1455,7 @@ tubercles.
   labels; pectoralis minor orientation and depth; OA alt text; 3D level notes and disc naming; web-space, dorsal
   ectoderm and ossification drawings; about 20 unsourced or single-source sentences; colour meanings (`--clin`, `--musc`,
   `--mamm`); label clipping and faint 3D labels.
+
+- 2026-11-25 correction (skull.html): Wikipedia "Fontanelle" cites a Boundless text and is excluded; its closure
+  figures (posterior 6–8 weeks, sphenoidal ~6 months, mastoid 6–18 months, anterior palpable to 18 months) were removed.
+  Fontanelle closure now rests on Gray 1918 and StatPearls.

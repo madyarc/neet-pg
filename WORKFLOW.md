@@ -59,8 +59,10 @@ Last updated: 2026-11-23
   official text missing). Inducer/inhibitor lists: use FDA DDI table (public domain) + Wikipedia/StatPearls. G01 [x] build (549 quotes; 3 pages; no new tokens; guidelines via open papers) [x] review (17: ACS picker
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
   colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. Ps01 [ ] build (running; psychiatry/psychosis-mood/). C01 [x] build (328 quotes; CDC 2012, WHO 1968, SRS 2020, NFHS-5, IDSP; no new tokens) [x] review (no wrong formulas; disability limitation level
-  one-source, rate/time misattribution, --accent/--clin misuse, gaps: indirect standardisation, field trial) [x] fixes (374 quotes) [x] committed 2026-11-25. Pd01 [x] build (458 quotes; WHO 2006/2007 LMS z-score chart, CDC 2022 milestones via Zubler 2022) [ ] review (running).
+  one-source, rate/time misattribution, --accent/--clin misuse, gaps: indirect standardisation, field trial) [x] fixes (374 quotes) [x] committed 2026-11-25. Pd01 [x] build (458 quotes; WHO 2006/2007 LMS z-score chart, CDC 2022 milestones via Zubler 2022) [x] review.
   D01 [ ] build (running; dermatology/papulosquamous/).
+  Pd01 review done (timeline colours overlap, pincer-grasp flag vs CDC, undated cut-offs, gaps: WHZ/BMI, Tanner,
+  dentition) [ ] fixes (running). Anatomy skull.html: Wikipedia Fontanelle (cites Boundless) removed 2026-11-25.
   FM01 [x] build (397 quotes; THOA/THOT Rules 2014 Form 10, WHO ICD-11 2026 + RGI MCCD 2012; tokens --livor
   --livor-co --sulfhb) [x] review (livor shifting rule, children's Form 10 interval, consent
   under Rule 5(4)(a), VS overstated, IPC→BNS 2023, --accent misuse; Delhi THOA text unofficial/garbled) [x] fixes (430 quotes) [x] committed 2026-11-25.
