@@ -57,7 +57,8 @@ Last updated: 2026-11-23
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
   colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. C01 [x] build (328 quotes; CDC 2012, WHO 1968, SRS 2020, NFHS-5, IDSP; no new tokens) [ ] review (running). Pd01 [ ] build (running; paediatrics/growth-development/).
   FM01 [x] build (397 quotes; THOA/THOT Rules 2014 Form 10, WHO ICD-11 2026 + RGI MCCD 2012; tokens --livor
-  --livor-co --sulfhb) [ ] review (running).
+  --livor-co --sulfhb) [x] review (livor shifting rule, children's Form 10 interval, consent
+  under Rule 5(4)(a), VS overstated, IPC→BNS 2023, --accent misuse; Delhi THOA text unofficial/garbled) [ ] fixes (running).
   M01 [x] build (635 quotes; 3 pages; 7 stain/structure tokens;
   Wikipedia Koch's postulates excluded: cites Boundless) [x] review (blood-spill 1:100 vs 1:10 large spills (safety),
   ELISA antibodies drawn upside down, coccidia vs HLD, Koch dates, CDC-derived Wikipedia pairs) [x] fixes (694 quotes) [x] committed 2026-11-25. P01 [x] build (314 quotes; 3 Commons images; tokens --lipofuscin --haemosid --bili) [x] review (18: metaplasia
