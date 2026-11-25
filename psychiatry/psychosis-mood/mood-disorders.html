@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mood Disorders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/psy.css">
+<style>
+/* tokens from psy.css: --accent (the chosen item only: drug, step, band), --mark (the chosen point), --clin (a drug's block point, a toxicity
+   or red-flag warning). Mood zones, synapse and bars are ink, muted ink and lines. */
+svg.sch .zone{fill:var(--bg);stroke:var(--line);stroke-width:1}
+svg.sch .mood{stroke:var(--ink);stroke-width:2.4;fill:none;stroke-linejoin:round;stroke-linecap:round}
+svg.sch .term{fill:var(--surface);stroke:var(--ink);stroke-width:1.4}
+svg.sch .mito{fill:var(--bg);stroke:var(--muted);stroke-width:1.2}
+svg.sch .crista{fill:none;stroke:var(--muted);stroke-width:1}
+svg.sch .ves{fill:var(--bg);stroke:var(--muted);stroke-width:1}
+svg.sch .nt{fill:var(--ink)}
+svg.sch .tp{fill:var(--surface);stroke:var(--muted);stroke-width:1.4}
+svg.sch .tp.on{stroke:var(--accent);stroke-width:2.6}
+svg.sch .blk{stroke:var(--clin);stroke-width:3;stroke-linecap:round}
+svg.sch .rng{fill:var(--line);stroke:var(--muted)}
+svg.sch .rng.on{fill:var(--accent);fill-opacity:.25;stroke:var(--accent);stroke-width:2}
+svg.sch text.ac{fill:var(--accent);font-weight:600}
+svg.sch text.cl{fill:var(--clin);font-weight:600}
+.ctl{display:flex;flex-direction:column;gap:10px}
+.ans .big{font-size:22px}
+.steps{display:flex;flex-direction:column;gap:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Psychiatry</a> <span class="muted">· Module 01: <a href="schizophrenia-psychosis.html">Schizophrenia and psychosis</a> · <span aria-current="page">Mood disorders</span></span></nav>
+
+<header class="stack">
+  <h1>Depression and Bipolar Disorder: Criteria, Suicide Risk, Antidepressants and Lithium</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-dep">Depressive episode</a> <a href="#h-bip">Mania and bipolar</a> <a href="#h-sui">Suicide risk</a> <a href="#h-ad">Antidepressants</a> <a href="#h-ssnms">Serotonin syndrome vs NMS</a> <a href="#h-li">Lithium</a> <a href="#h-ms">Other mood stabilisers</a> <a href="#h-ect">ECT</a> <a href="#h-mhca">MHCA 2017</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-dep">
+  <h2 id="h-dep">Depressive episode: count the symptoms</h2>
+  <p class="muted">Choose the classification, tick the symptoms present most of the day, nearly every day. <span class="badge">Learning tool, not for diagnosis</span></p>
+  <div class="chips" id="dep-cls" aria-label="Classification"></div>
+  <div class="two">
+    <div class="ctl">
+      <div class="ck" id="dep-ck"></div>
+      <div class="q"><span class="qt">For how long?</span><div class="chips" id="dep-dur"></div></div>
+    </div>
+    <div class="ans prose" id="dep-out" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="dep-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-bip">
+  <h2 id="h-bip">Mania, hypomania and the course of each mood disorder</h2>
+  <div class="chips" id="bip-tg" aria-label="Disorder"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="bip-svg" viewBox="0 0 560 250" role="img" aria-label="Schematic mood chart over time with bands for mania, hypomania, normal mood and depression; the line shows a typical course of the chosen disorder"></svg></div>
+    <div class="prose find" id="bip-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="mh-table"></table></div>
+  <p class="muted" id="mh-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-sui">
+  <h2 id="h-sui">Red flags: assessing the risk of self-harm and suicide (WHO mhGAP 2016)</h2>
+  <p class="muted">The assessment sequence of the WHO mhGAP Intervention Guide 2.0 (2016), module "Self-harm/suicide". Step through it with the buttons or the arrow keys.</p>
+  <div class="step" id="sui-step"></div>
+  <div class="prose find" id="sui-find" aria-live="polite"></div>
+  <h3>Risk factors</h3>
+  <div class="scroll"><table id="rf-table"></table></div>
+  <p class="muted" id="sui-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ad">
+  <h2 id="h-ad">The monoamine hypothesis and where each antidepressant acts</h2>
+  <div class="chips" id="ad-tg" aria-label="Antidepressant class"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="ad-svg" viewBox="0 0 440 338" role="img" aria-label="Schematic monoamine synapse: presynaptic terminal with vesicles, monoamine oxidase and the serotonin and noradrenaline reuptake transporters, the cleft and the postsynaptic membrane; the chosen drug's block points are crossed"></svg></div>
+    <div class="prose find" id="ad-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="ad-note"></p>
+  <div class="prose" id="ad-safe"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ssnms">
+  <h2 id="h-ssnms">Serotonin syndrome vs neuroleptic malignant syndrome</h2>
+  <div class="scroll"><table id="ss-table"></table></div>
+  <p class="muted" id="ss-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-li">
+  <h2 id="h-li">Lithium: a narrow therapeutic window</h2>
+  <div class="chips" id="li-tg" aria-label="NICE target"></div>
+  <div class="schbox"><svg class="fig sch" id="li-svg" viewBox="0 0 520 158" role="img" aria-label="Schematic plasma lithium scale with the NICE CG185 target ranges; levels above the window bring toxicity"></svg></div>
+  <div class="prose" id="li-text"></div>
+  <div class="scroll"><table id="li-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ms">
+  <h2 id="h-ms">Other mood stabilisers</h2>
+  <div class="scroll"><table id="ms-table"></table></div>
+  <p class="muted" id="ms-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ect">
+  <h2 id="h-ect">Electroconvulsive therapy: indications</h2>
+  <div class="prose" id="ect-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mhca">
+  <h2 id="h-mhca">India: the Mental Healthcare Act, 2017</h2>
+  <div class="prose" id="mhca-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BDepression%20and%20Bipolar%20Disorder%3A%20Criteria%2C%20Suicide%20Risk%2C%20Antidepressants%20and%20Lithium%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fpsychiatry%2Fpsychosis-mood%2Fmood-disorders.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/psy.js"></script>
+<script>
+"use strict";
+const $ = Psy.$, T = Psy.T;
+/* ===================== DATA (checked in two sources unless attributed: sources-local/facts/fill-ps01.md, Part B) ===================== */
+const LEDE = 'Count depressive symptoms against ICD-11 or DSM-5, compare the course of bipolar I, bipolar II, cyclothymia and dysthymia, step through the WHO mhGAP suicide-risk assessment, cross out the transporter or enzyme each antidepressant blocks, and see how narrow the lithium window is. Therapeutic index in general: <a href="../../pharmacology/general/pharmacodynamics.html#h-ti">pharmacology: therapeutic index and window</a>. Psychosis and antipsychotics: <a href="schizophrenia-psychosis.html">the schizophrenia page</a>.';
+
+/* depressive episode: [key, label, cluster/core flag] */
+const ICD = [
+  ['Affective cluster (at least 1 needed)', [['mood', 'Depressed mood (reported or observed; in children may be irritability)', 1], ['int', 'Markedly diminished interest or pleasure', 1]]],
+  ['Cognitive-behavioural cluster', [['conc', 'Reduced concentration or marked indecisiveness', 0], ['worth', 'Low self-worth or excessive, inappropriate guilt', 0], ['hope', 'Hopelessness about the future', 0], ['death', 'Recurrent thoughts of death or suicidal ideation, or a suicide attempt', 0]]],
+  ['Neurovegetative cluster', [['sleep', 'Disrupted sleep or excessive sleep', 0], ['app', 'Change in appetite or weight', 0], ['psy', 'Psychomotor agitation or retardation (observable by others)', 0], ['en', 'Reduced energy or fatigue', 0]]],
+];
+const DSM = [
+  ['Core (at least 1 needed)', [['mood', 'Depressed mood', 1], ['int', 'Loss of interest or pleasure in almost all activities', 1]]],
+  ['Other symptoms', [['app', 'Weight loss or gain (more than 5% in a month) or appetite change', 0], ['sleep', 'Insomnia or hypersomnia', 0], ['psy', 'Psychomotor agitation or retardation, observable by others', 0], ['en', 'Tiredness, fatigue or low energy', 0], ['worth', 'Worthlessness or excessive, inappropriate or delusional guilt', 0], ['conc', 'Impaired ability to think, concentrate or decide', 0], ['death', 'Recurrent thoughts of death, suicidal ideation or attempts', 0]]],
+];
+const DEP_NOTE = 'ICD-11 (CDDR, WHO 2024): at least 5 of these 10 symptoms, at least one from the affective cluster, most of the day, nearly every day, for at least 2 weeks; the symptoms must cause significant impairment, must not be better accounted for by bereavement, and must not be due to another medical condition or a substance. NICE NG222 (2022) lists the same ICD-11 symptoms and gives DSM-5\'s 9 symptoms (5 or more in the same 2 weeks, at least one depressed mood or loss of interest); StatPearls gives the same DSM-5 rule. <b>Hopelessness</b> is in the ICD-11 list but not among DSM-5\'s nine. If someone ticks the death/suicide item, see the <a href="#h-sui">assessment section</a>.';
+
+/* mood course drawings: y levels: mania 1, hypo 2, normal 3, dep 4 */
+const BIP = [
+  ['bp1', 'Bipolar I', [[0, 3], [40, 3], [60, 1], [120, 1], [140, 3], [200, 3], [220, 4], [290, 4], [310, 3], [520, 3]], '<h3>Bipolar I disorder</h3><p>At least one <b>manic or mixed episode</b> is required; a single one is enough (ICD-11 CDDR; Wikipedia). The typical course is recurrent depressive and manic or mixed episodes (CDDR). In severe mania there may be psychotic symptoms such as grandiose or paranoid delusions (Wikipedia).</p>'],
+  ['bp2', 'Bipolar II', [[0, 3], [40, 3], [56, 2], [96, 2], [110, 3], [180, 3], [200, 4], [280, 4], [300, 3], [380, 3], [394, 2], [430, 2], [444, 3], [520, 3]], '<h3>Bipolar II disorder</h3><p>At least one <b>hypomanic</b> and at least one <b>depressive</b> episode, and <b>never</b> a manic or mixed episode (ICD-11 CDDR; Wikipedia). The typical course is recurrent depressive and hypomanic episodes (CDDR).</p>'],
+  ['cyc', 'Cyclothymia', [[0, 3], [30, 2.45], [70, 3.55], [110, 2.45], [150, 3.55], [190, 2.45], [230, 3.55], [270, 2.45], [310, 3.55], [350, 2.45], [390, 3.55], [430, 2.45], [470, 3.55], [520, 3]], '<h3>Cyclothymic disorder</h3><p>Mood instability for <b>2 years or more</b>, with numerous hypomanic and depressive periods (ICD-11 CDDR; Wikipedia: sub-threshold symptoms alternate for at least two years in adults). No manic or mixed episode, and in the first 2 years never a 2-week period meeting a depressive episode (CDDR).</p>'],
+  ['dys', 'Dysthymia', [[0, 3], [30, 3.5], [500, 3.5], [520, 3.5]], '<h3>Dysthymic disorder (DSM-5: persistent depressive disorder)</h3><p>Persistently depressed mood for <b>2 years or more</b>, most of the day, more days than not, with other depressive symptoms that may be milder (ICD-11 CDDR); Wikipedia: depressed for the majority of days for at least two years. In the first 2 years never a 2-week period meeting a depressive episode (CDDR). DSM-5 (StatPearls): at least 2 years, or 1 year in children and adolescents.</p>'],
+];
+const MH = [
+  ['Duration', 'At least <b>1 week</b> (shorter if treatment cuts it short) (ICD-11 CDDR; StatPearls)', 'ICD-11: "at least <b>several days</b>"; DSM-5: at least <b>4 days</b> (2020 review; StatPearls; Wikipedia)'],
+  ['Functioning', 'Significant impairment (Wikipedia, DSM-5; StatPearls); needing hospitalisation makes it mania whatever the duration (StatPearls)', 'No marked impairment of work or social life (ICD-11 CDDR; StatPearls; Wikipedia)'],
+  ['Psychotic symptoms', 'May occur (e.g. grandiose delusions) (CDDR; Wikipedia)', 'Absent: no delusions or hallucinations (CDDR; Wikipedia)'],
+  ['Shared symptoms', 'Raised, irritable or expansive mood with increased activity or energy, plus several of: pressured speech, flight of ideas or racing thoughts, grandiosity, decreased need for sleep, distractibility, impulsive reckless behaviour, increased sexual drive or goal-directed activity (ICD-11 CDDR)', 'The same list (CDDR)'],
+];
+const MH_NOTE = 'Decreased need for sleep differs from insomnia, in which a person wants to sleep but cannot (CDDR). ICD-11 also has a <b>mixed episode</b>: prominent manic and depressive symptoms together or alternating very rapidly for at least 2 weeks (CDDR). Wikipedia notes that hypomanic episodes may simply look like productive periods, which makes bipolar II harder to recognise.';
+
+/* suicide assessment steps (WHO mhGAP-IG 2.0, 2016) */
+const SUI = [
+  ['Who to ask', '<h3>Ask everyone at risk</h3><p>Anyone over 10 years with a priority mental, neurological or substance-use condition, chronic pain or acute emotional distress should be asked about <b>thoughts or plans of self-harm in the last month</b> and <b>acts of self-harm in the last year</b> (WHO mhGAP 2016). <b>Asking about self-harm does NOT provoke it</b> (mhGAP 2016); Wikipedia: asking about suicidality does not appear to increase the risk.</p>'],
+  ['1 Medically serious act?', '<h3>Step 1: has there been a medically serious act of self-harm?</h3><p>Look for signs of poisoning or intoxication, bleeding from a self-inflicted wound, loss of consciousness or extreme lethargy. If present, treat the medical emergency first (mhGAP 2016).</p>'],
+  ['2 Imminent risk?', '<h3>Step 2: is there an imminent risk?</h3><p>Ask the person and carers about <b>current thoughts or plans</b> of self-harm or suicide, or a history of thoughts or plans in the past month or an act in the past year in a person who is now extremely agitated, violent, distressed or not communicating. Red flags that prompt the assessment include <b>extreme hopelessness and despair</b> (mhGAP 2016).</p>'],
+  ['If imminent', '<h3>If the risk is imminent</h3><p><b>Remove the means</b> of self-harm, place the person in a <b>secure and supportive environment</b> at a health facility, <b>do not leave the person alone</b>, treat any injury or poisoning, and offer and activate psychosocial support (mhGAP 2016).</p>'],
+  ['If not imminent', '<h3>If there is no imminent risk</h3><p>If there is a history of thoughts or plans of self-harm in the past month or an act in the past year, imminent risk is unlikely <b>but a risk may still persist</b>: mhGAP\'s protocol 3 applies, then step 3. With no such history, risk of self-harm or suicide is unlikely (mhGAP 2016).</p>'],
+  ['3 Other conditions?', '<h3>Step 3: concurrent conditions</h3><p>Look for depression, disorders due to substance use, psychoses, epilepsy and child and adolescent mental and behavioural disorders, and manage them (mhGAP 2016).</p>'],
+  ['4 Chronic pain?', '<h3>Step 4: chronic pain</h3><p>Ask about chronic pain; manage it and treat the medical conditions behind it (mhGAP 2016).</p>'],
+];
+const RF = [
+  ['Previous suicide attempt', 'Wikipedia; 2022 meta-analysis of psychological autopsy studies'],
+  ['Mental disorders (and substance use)', 'Wikipedia; 2022 meta-analysis'],
+  ['Family history of suicide or mental disorder', 'Wikipedia; 2022 meta-analysis'],
+  ['Ready access to means', 'Wikipedia (one source); WHO mhGAP: remove the means'],
+];
+const SUI_NOTE = 'This is clinical assessment information for health workers, not a screening tool. The 2022 meta-analysis concludes that prevention should combine public-health approaches with care for high-risk groups, including people with mental disorders, a history of self-harm and recent adverse life events.';
+
+/* antidepressants: key, label, blocks, text */
+const AD = [
+  ['ssri', 'SSRI', ['sert'], '<h3>SSRIs</h3><p>Block reuptake of serotonin through the <b>serotonin transporter</b> (Wikipedia; StatPearls). Often first-line for depression for their safety, efficacy and tolerability (StatPearls); WHO mhGAP 2023 notes TCAs are less well tolerated than SSRIs. Adverse effects: <b>sexual dysfunction</b> (StatPearls: anorgasmia; Wikipedia), gastric irritation, sedation or stimulation, and hyponatraemia (StatPearls).</p>'],
+  ['snri', 'SNRI', ['sert', 'net'], '<h3>SNRIs (e.g. venlafaxine)</h3><p>Inhibit reuptake of <b>serotonin and noradrenaline</b> (Wikipedia; StatPearls: venlafaxine is an SNRI). Side effects include nausea, dry mouth, sweating and <b>raised blood pressure</b>, so pre-existing hypertension should be controlled (Wikipedia).</p>'],
+  ['tca', 'TCA', ['sert', 'net'], '<h3>Tricyclic antidepressants</h3><p>Inhibit reuptake of serotonin and noradrenaline (StatPearls; Wikipedia). More adverse effects than SSRIs: <b>anticholinergic</b> effects, orthostatic hypotension, sedation and <b>cardiotoxicity, especially in overdose</b> (StatPearls; WHO mhGAP 2023: less well tolerated and less safe). Used when SSRIs or SNRIs fail or cannot be used (StatPearls).</p>'],
+  ['maoi', 'MAOI', ['mao'], '<h3>Monoamine oxidase inhibitors</h3><p>Inhibit <b>monoamine oxidase</b> A and/or B, the enzymes that break down monoamines (Wikipedia; StatPearls). With <b>tyramine-rich foods (e.g. cheese)</b> they can cause a <b>hypertensive crisis</b>, especially the irreversible, non-selective drugs such as phenelzine and tranylcypromine (StatPearls; Wikipedia). Reversible MAO-A inhibitors (RIMAs) are safer in overdose (Wikipedia).</p>'],
+];
+const AD_SAFE = '<h3>Two safety points</h3><ul><li><b>Young people and suicidal thoughts:</b> NICE NG222 (2022) asks for a review 1 week after starting an antidepressant in people aged 18 to 25 or at particular risk of suicide; WHO mhGAP 2023 does not recommend antidepressants for depression in children aged 12 and below, noting that SSRI use is associated with an increased risk of suicide and suicide attempts.</li><li><b>Bipolar disorder:</b> WHO mhGAP 2016 says never to prescribe antidepressants alone, without a mood stabiliser such as lithium, carbamazepine or valproate, because they can lead to mania; Wikipedia notes studies finding a risk of switching to hypomania or worsening of rapid cycling.</li></ul>';
+const AD_NOTE = 'The <b>monoamine hypothesis</b>: depression is caused by depletion of the monoamine neurotransmitters, mainly noradrenaline and serotonin (a 2023 review; Wikipedia: antidepressants acutely raise synaptic monoamines). Wikipedia notes a problem: antidepressants raise monoamine levels at once but take weeks to work. Schematic synapse, not to scale; MAO is drawn on the outer membrane of a mitochondrion, where Wikipedia places it. No doses are given.';
+
+const SS = [
+  ['Cause', 'Serotonergic drugs', 'Dopamine antagonists (antipsychotics) or dopamine withdrawal'],
+  ['Onset', '<b>Sudden, within 24 h</b>', '<b>Slower: days to weeks</b> (up to 2 weeks after a start or change)'],
+  ['Neuromuscular', '<b>Hyperactivity</b>: tremor, myoclonus, hyperreflexia, <b>clonus</b>', '<b>Hypoactivity</b>: <b>lead-pipe rigidity</b>, bradykinesia'],
+  ['Shared', 'Hyperthermia, tachycardia, hypertension, altered mental state (agitation, delirium)', 'Hyperthermia, tachycardia, hypertension, altered mental state'],
+  ['Pupils, bowel (2019 review\'s table)', 'Mydriasis; hyperactive bowel sounds', 'Normal or mydriasis; hypoactive bowel sounds'],
+  ['Resolution', 'Most within 24 h of stopping the drug', 'Up to 10 days with treatment (2019 review)'],
+  ['Specific drug', 'Cyproheptadine (serotonin antagonist; recommended initial therapy per Wikipedia, no controlled trials)', '—'],
+];
+const SS_NOTE = 'Sources: a 2019 review\'s comparison table, a 2024 review (onset), Wikipedia (hyperkinesia and clonus vs lead-pipe rigidity and bradykinesia), ICD-11 CDDR (serotonin syndrome shows tremor, hyperreflexia with clonus and nystagmus). WHO mhGAP 2016 and 2023 also list muscle rigidity among serotonin-syndrome features, so rigidity alone does not rule it out.';
+
+/* lithium */
+const LI_T = {first: ['first', 'First prescription: 0.6–0.8', [0.6, 0.8]], trial: ['trial', 'Trial in selected people: 0.8–1.0', [0.8, 1.0]]};
+const LI_TEXT = '<p>Lithium has a <b>narrow therapeutic index</b> (window) beyond which it is toxic (StatPearls; WHO mhGAP 2023; Wikipedia); it is eliminated only by the kidneys (StatPearls). <b>NICE CG185 (2014, updated 2025)</b>: measure levels 1 week after starting and 1 week after every dose change, and weekly until stable; aim for <b>0.6–0.8 mmol/L</b> when first prescribed, and consider 0.8–1.0 mmol/L for a trial of at least 6 months in some people (Wikipedia gives 0.6–0.8 mmol/L for maintenance from the ISBD and ISGL guidelines). Levels are taken <b>12 hours after the last dose</b> (Wikipedia; Indian Psychiatric Society 2025). Monitor renal and thyroid function and calcium in long-term use (NICE CG185).</p><p>Lithium also lowers the risk of suicide (StatPearls; Wikipedia). Pregnancy: first-trimester exposure is associated with cardiac malformations including <b>Ebstein anomaly</b> (a downward displacement of the tricuspid valve leaflets into the right ventricle) (2018 review; Wikipedia; StatPearls for the anomaly); the absolute risk is small, 0.05–0.1% of live births (Indian Psychiatric Society 2025).</p>';
+const LI_TABLE = [
+  ['Early / mild toxicity', 'Worsening, <b>coarse</b> irregular tremor, weakness, mild <b>ataxia</b>, poor concentration, diarrhoea (2016 review); <b>vomiting</b> with toxicity, alongside ataxia and gross tremor (2016 review); Wikipedia: vomiting and diarrhoea mainly in acute toxicity', '2016 review; Wikipedia'],
+  ['Severe toxicity', '<b>Seizures, delirium, coma, death</b>', 'WHO mhGAP 2016 (one source)'],
+  ['Acute vs chronic', 'Acute: mainly gastrointestinal; chronic: mainly neurological (nystagmus, tremor, hyperreflexia, ataxia, confusion)', 'Wikipedia (one source)'],
+  ['What raises the level', 'Dehydration; NSAIDs, ACE inhibitors, thiazide diuretics, metronidazole, tetracycline', 'WHO mhGAP 2016 (one source)'],
+  ['Treatment of severe toxicity', 'Stop lithium, supportive care, <b>haemodialysis</b> in severe cases (the two sources give different thresholds, so none is shown)', 'Indian Psychiatric Society 2017; 2016 review'],
+  ['Long-term side effects', '<b>Polyuria and polydipsia</b> (Wikipedia: lithium inhibits the aquaporin-2 water channel), <b>hypothyroidism</b>, slow decline of kidney function', '2016 review; Wikipedia'],
+];
+
+const MS = [
+  ['Valproate', '<b>Teratogenic</b> (an important side effect, WHO mhGAP 2023; birth defects, Wikipedia), including <b>neural tube defects</b> (WHO mhGAP 2016: avoid in pregnancy when possible; Wikipedia; Indian Psychiatric Society 2025, which gives a high risk of major malformations): NICE CG185 allows it in women and girls able to have children only under strict conditions; Wikipedia adds liver failure and pancreatitis'],
+  ['Carbamazepine', 'Used for acute manic and mixed episodes (StatPearls); rare but serious <b>Stevens–Johnson syndrome / toxic epidermal necrolysis</b> (WHO mhGAP 2023; Wikipedia); Wikipedia adds bone-marrow suppression (aplastic anaemia, agranulocytosis) and hyponatraemia'],
+  ['Lamotrigine', 'Serious <b>skin reactions incl. Stevens–Johnson syndrome</b>; slow dose titration lowers the risk (StatPearls; Indian Psychiatric Society 2025; Wikipedia)'],
+];
+const MS_NOTE = 'WHO mhGAP 2023: lithium, valproate and carbamazepine all need regular blood monitoring. No doses are given.';
+
+const ECT = '<p>ECT is the controlled electrical induction of a generalised seizure under <b>general anaesthesia with a muscle relaxant</b> ("modified" ECT) (StatPearls; Wikipedia; Indian Psychiatric Society ECT guideline 2023). Indications:</p><ul><li><b>Severe or treatment-resistant depression</b>: the primary indication (StatPearls; IPS 2023; Wikipedia).</li><li><b>Mania</b>, especially severe or treatment-resistant, and <b>catatonia</b> (StatPearls; Wikipedia; IPS 2023 lists malignant catatonia with risk of imminent death); also neuroleptic malignant syndrome (StatPearls). In catatonia, <b>benzodiazepines (lorazepam) come first</b> and ECT is used when catatonia does not respond (Wikipedia: benzodiazepines and ECT are the main options; IPS 2023 and IPS 2026: ECT for catatonia resistant to benzodiazepines/lorazepam, and for malignant catatonia).</li><li><b>Schizophrenia, including clozapine-resistant schizophrenia</b> (IPS 2023).</li><li>In depression, the IPS 2023 table lists poor oral intake, high suicide risk, distress needing rapid remission, psychotic or melancholic features, peripartum depression and treatment resistance.</li></ul><p>The commonest early adverse effects are confusion and transient memory loss (Wikipedia). The Mental Healthcare Act 2017 (s.95) prohibits ECT without muscle relaxants and anaesthesia, and ECT for minors unless the psychiatrist thinks it necessary and the guardian consents and the Board permits (the Act; IPS 2023).</p>';
+
+const MHCA = '<p><b>Section 115</b> of the <b>Mental Healthcare Act, 2017</b> (Act No. 10 of 2017): notwithstanding section 309 of the Indian Penal Code, a person who attempts suicide is <b>presumed, unless proved otherwise, to have severe stress</b> and shall not be tried and punished under the Code; the government has a <b>duty to provide care, treatment and rehabilitation</b> to reduce the risk of another attempt (the Act; a 2019 Indian Journal of Psychiatry article). In effect the Act decriminalised attempted suicide (Wikipedia). Wikipedia adds that the IPC has been replaced by the Bharatiya Nyaya Sanhita, 2023, which it says does not treat an attempt to commit suicide as punishable unless it is meant to compel or restrain a public servant. How the BNS change affects the wording of s.115 is not covered here.</p>';
+
+const BASED = '<b>Based on:</b> WHO, Clinical descriptions and diagnostic requirements for ICD-11 mental, behavioural and neurodevelopmental disorders (CDDR, 2024); WHO mhGAP Intervention Guide 2.0 (2016) and mhGAP guideline (2023); NICE NG222 Depression in adults (2022) and CG185 Bipolar disorder (2014, updated 2025); The Mental Healthcare Act, 2017 (India Code); Indian Psychiatric Society clinical practice guidelines (bipolar 2017 and 2025 update; ECT 2023); StatPearls (NCBI Bookshelf; abstracts); open-access papers: bipolar disorders in ICD-11 (2020), risk factors for suicide (2022 meta-analysis), the monoamine hypothesis and inflammation (2023), serotonin syndrome (2019, 2024), lithium side effects (2016), lithium in pregnancy (2018), Mental Healthcare Act 2017 (2019) (Europe PMC / NCBI); Wikipedia. DSM-5 criteria only as reported by these open sources.';
+const MODELS = '<b>Models used:</b> the mood chart, synapse and lithium scale are schematic drawings, not to scale; mood courses are illustrative. The symptom counter applies the stated rules to the boxes ticked; it is a learning tool, not a diagnostic tool.';
+
+/* ===================== CODE ===================== */
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* depressive checklist */
+const DS = {cls: 'icd', on: new Set(), dur: 'lt'};
+function buildDep() {
+  const L = DS.cls === 'icd' ? ICD : DSM;
+  $('dep-ck').innerHTML = L.map(([g, items]) => `<span class="grp">${g}</span>` + items.map(([k, l]) => `<label><input type="checkbox" data-k="${k}"${DS.on.has(k) ? ' checked' : ''}>${l}</label>`).join('')).join('');
+  $('dep-ck').querySelectorAll('input').forEach(i => i.onchange = () => { i.checked ? DS.on.add(i.dataset.k) : DS.on.delete(i.dataset.k); drawDep(); });
+  drawDep();
+}
+function drawDep() {
+  const L = DS.cls === 'icd' ? ICD : DSM, items = L.flatMap(g => g[1]);
+  const on = items.filter(r => DS.on.has(r[0])), n = on.length, core = on.filter(r => r[2]).length, tot = items.length;
+  const sym = n >= 5 && core >= 1, dur = DS.dur === 'ge';
+  const name = DS.cls === 'icd' ? 'ICD-11 (CDDR, WHO 2024)' : 'DSM-5 (as reported by NICE NG222 and StatPearls)';
+  let v;
+  if (!sym) v = `Symptom rule <b>not met</b>: needs at least 5, with at least one ${DS.cls === 'icd' ? 'from the affective cluster' : 'of depressed mood or loss of interest'}.`;
+  else if (!dur) v = 'Symptom rule met, but the <b>2-week</b> duration is not.';
+  else v = '<b>Symptom count and 2-week duration met.</b> The episode also needs significant impairment and no better explanation (another medical condition, a substance' + (DS.cls === 'icd' ? ', bereavement' : '') + ').';
+  const flag = DS.on.has('death') ? '<p class="cap warn">Thoughts of death or suicide ticked: this calls for a suicide-risk assessment (see below).</p>' : '';
+  $('dep-out').innerHTML = `<h3>${name}</h3><span class="big">${n} / ${tot}</span><p>symptoms ticked · ${core} core</p><p>${v}</p>${flag}`;
+}
+Psy.toggles('dep-cls', [['icd', 'ICD-11 (10 symptoms)'], ['dsm', 'DSM-5 (9 symptoms)']], k => { DS.cls = k; if (k === 'dsm') DS.on.delete('hope'); buildDep(); }, 'icd');
+Psy.toggles('dep-dur', [['lt', 'Under 2 weeks'], ['ge', '2 weeks or more']], k => { DS.dur = k; drawDep(); }, 'lt');
+buildDep(); $('dep-note').innerHTML = DEP_NOTE;
+
+/* mood course chart */
+const BS = {k: 'bp1'};
+function drawBip() {
+  const b = BIP.find(r => r[0] === BS.k), yv = v => 30 + (v - 1) * 52;
+  let s = '';
+  [['Mania', 1], ['Hypomania', 2], ['Normal mood', 3], ['Depression', 4]].forEach(([l, v]) => { const y = yv(v) - 26; s += `<rect class="zone" x="110" y="${y}" width="440" height="52"/>` + T(102, yv(v) + 4, l, 's', 'end'); });
+  s += `<path class="mood" d="${Psy.path(b[2].map(([x, v]) => [110 + x * 440 / 520, yv(v)]))}"/>`;
+  if (BS.k === 'cyc' || BS.k === 'dys') { const x2 = 110 + 440 * (BS.k === 'cyc' ? 470 : 500) / 520; s += `<path class="axis" d="M110 238 L${x2.toFixed(1)} 238"/>` + T((110 + x2) / 2, 234, '2 years or more', 'b', 'middle'); }
+  else s += T(330, 244, 'time →', 's', 'middle');
+  s += T(110, 14, 'Schematic, illustrative course', 's', 'start');
+  $('bip-svg').innerHTML = s; $('bip-find').innerHTML = b[3];
+}
+Psy.toggles('bip-tg', BIP.map(r => [r[0], r[1]]), k => { BS.k = k; drawBip(); }, 'bp1'); drawBip();
+Psy.table('mh-table', ['', 'Manic episode', 'Hypomanic episode'], MH); $('mh-note').innerHTML = MH_NOTE;
+
+/* suicide stepper */
+const SUS = {s: 0};
+Psy.stepper('sui-step', SUI.map(r => r[0]), () => { $('sui-find').innerHTML = SUI[SUS.s][1]; }, SUS);
+Psy.table('rf-table', ['Risk factor', 'Sources'], RF); $('sui-note').innerHTML = SUI_NOTE;
+
+/* synapse: serotonergic and noradrenergic terminals drawn as one (schematic) */
+const AS = {k: 'ssri'};
+function drawAd() {
+  const d = AD.find(r => r[0] === AS.k), bl = new Set(d[2]);
+  let s = Psy.DEFS;
+  s += `<path class="term" d="M30 20 L410 20 L410 150 Q 220 190 30 150 Z"/>` + T(44, 40, 'Presynaptic terminal', 'h', 'start');
+  [[220, 92], [262, 118], [300, 88], [338, 116], [372, 84]].forEach(([x, y]) => { s += `<circle class="ves" cx="${x}" cy="${y}" r="14"/>` + [[-5, -4], [5, -3], [0, 6]].map(([dx, dy]) => `<circle class="nt" cx="${x + dx}" cy="${y + dy}" r="2.3"/>`).join(''); });
+  s += T(296, 58, 'vesicles (5-HT, NA)', 's', 'middle');
+  s += `<ellipse class="mito" cx="138" cy="116" rx="40" ry="20"/><path class="crista" d="M110 116 q6 -10 12 0 t12 0 t12 0 t12 0 t12 0"/>` + T(138, 148, 'mitochondrion', 's', 'middle');
+  s += `<rect class="tp ${bl.has('mao') ? 'on' : ''}" x="124" y="88" width="28" height="16" rx="4"/>` + T(138, 80, 'MAO', 'b', 'middle');
+  s += `<rect class="tp ${bl.has('net') ? 'on' : ''}" x="125" y="162" width="36" height="24" rx="6"/>` + T(120, 178, 'NET', 'b', 'end');
+  s += `<rect class="tp ${bl.has('sert') ? 'on' : ''}" x="317" y="162" width="36" height="24" rx="6"/>` + T(358, 178, 'SERT', 'b', 'start');
+  for (let i = 0; i < 8; i++) s += `<circle class="nt" cx="${172 + i * 19}" cy="${206 + (i % 3) * 9}" r="2.5"/>`;
+  s += `<path class="flow" d="M290 206 C 318 204, 334 200, 335 190"/><path class="flow" d="M180 206 C 156 204, 144 200, 143 190"/>`;
+  s += `<path class="term" d="M30 296 L410 296 L410 258 Q 220 234 30 258 Z"/>` + T(220, 288, 'Postsynaptic neuron (receptors)', 'h', 'middle');
+  const X = (x, y) => `<path class="blk" d="M${x - 9} ${y - 9} L${x + 9} ${y + 9} M${x + 9} ${y - 9} L${x - 9} ${y + 9}"/>`;
+  if (bl.has('sert')) s += X(335, 174); if (bl.has('net')) s += X(143, 174); if (bl.has('mao')) s += X(138, 96);
+  s += T(10, 316, 'Schematic: serotonergic and noradrenergic terminals combined · ✕ = blocked', 's', 'start') + T(10, 330, 'SERT, NET: 5-HT, NA transporters · MAO: mitochondrial outer membrane', 's', 'start');
+  $('ad-svg').innerHTML = s; $('ad-find').innerHTML = d[3];
+}
+Psy.toggles('ad-tg', AD.map(r => [r[0], r[1]]), k => { AS.k = k; drawAd(); }, 'ssri'); drawAd();
+$('ad-note').innerHTML = AD_NOTE; $('ad-safe').innerHTML = AD_SAFE;
+
+Psy.table('ss-table', ['', 'Serotonin syndrome', 'Neuroleptic malignant syndrome'], SS); $('ss-note').innerHTML = SS_NOTE;
+
+/* lithium scale */
+const LS = {k: 'first'};
+function drawLi() {
+  const x = Psy.scale(0, 1.4, 30, 490);
+  let s = Psy.DEFS + Psy.arrowDef('arrC', 'var(--clin)');
+  s += `<path class="axis" d="M30 80 L490 80"/>`;
+  [0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4].forEach(v => { s += `<path class="axis" d="M${x(v)} 76 L${x(v)} 84"/>` + T(x(v), 98, v.toFixed(1), 's', 'middle'); });
+  Object.values(LI_T).forEach(([k, l, [a, b]]) => { s += `<rect class="rng ${LS.k === k ? 'on' : ''}" x="${x(a)}" y="${k === 'first' ? 46 : 22}" width="${x(b) - x(a)}" height="20" rx="3"/>`; });
+  s += T(x(0.7), 40, '0.6–0.8', LS.k === 'first' ? 'ac' : 's', 'middle') + T(x(0.9), 16, '0.8–1.0', LS.k === 'trial' ? 'ac' : 's', 'middle');
+  s += `<path style="stroke:var(--clin);stroke-width:1.6;fill:none" marker-end="url(#arrC)" d="M${x(1.0)} 60 L${x(1.38)} 60"/>` + T(x(1.02), 54, 'higher: toxicity', 'cl', 'start');
+  s += T(30, 118, 'Plasma lithium, mmol/L · target ranges: NICE CG185 (2014, updated 2025)', 's', 'start') + T(30, 134, 'Sample 12 h after the last dose: Wikipedia; Indian Psychiatric Society 2025', 's', 'start') + T(30, 150, 'Schematic; no toxicity threshold is drawn', 's', 'start');
+  $('li-svg').innerHTML = s;
+}
+Psy.toggles('li-tg', Object.values(LI_T).map(r => [r[0], r[1]]), k => { LS.k = k; drawLi(); }, 'first'); drawLi();
+$('li-text').innerHTML = LI_TEXT; Psy.table('li-table', ['', 'Features', 'Sources'], LI_TABLE);
+Psy.table('ms-table', ['Drug', 'Key points'], MS); $('ms-note').innerHTML = MS_NOTE;
+$('ect-text').innerHTML = ECT; $('mhca-text').innerHTML = MHCA;
+Psy.swipeHints();
+</script>
+</body>
+</html>

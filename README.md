@@ -125,6 +125,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [Growth and Its Assessment](paediatrics/growth-development/growth.html), [Development and Milestones](paediatrics/growth-development/development.html) | Growth and development | WHO growth charts (age, length/height, head, weight-for-length/height) with the LMS z-score worked out, gains, MUAC classifier, short stature and bone-age picker, Tanner, teeth; CDC 2022 milestone stepper, key-milestone timeline with WHO windows and red flags, assessment tools |
 
+### Psychiatry — [`psychiatry/`](psychiatry/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [Schizophrenia and Other Psychotic Disorders](psychiatry/psychosis-mood/schizophrenia-psychosis.html), [Depression and Bipolar Disorder](psychiatry/psychosis-mood/mood-disorders.html) | Psychosis and mood | ICD-11/DSM-5 criteria checker, psychosis duration picker, first-rank symptoms, dopamine pathways, EPS time line, clozapine monitoring; depressive-episode counter, mhGAP suicide-risk stepper, antidepressant synapse, bipolar course charts, lithium window, MHCA 2017 |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and

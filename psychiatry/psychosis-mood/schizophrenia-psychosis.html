@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Schizophrenia and Psychosis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/psy.css">
+<style>
+/* tokens from psy.css: --accent (the chosen pathway, symptom or bar only), --mark (the chosen duration on the scale), --clin (an adverse
+   effect or warning). Pathways, minds and bars are otherwise ink and muted ink. */
+svg.sch .brain{fill:var(--bg);stroke:var(--muted);stroke-width:1.4}
+svg.sch .path{stroke:var(--muted);stroke-width:2.4;fill:none;stroke-linecap:round;opacity:.55}
+svg.sch .path.on{stroke:var(--accent);stroke-width:4;opacity:1}
+svg.sch .nuc{fill:var(--surface);stroke:var(--ink);stroke-width:1.2}
+svg.sch .nuc.on{stroke:var(--accent);stroke-width:2.4}
+svg.sch .mind{fill:var(--bg);stroke:var(--ink);stroke-width:1.6}
+svg.sch .act{stroke:var(--accent);stroke-width:2.2;fill:none;marker-end:url(#arrA)}
+svg.sch .bar{fill:var(--line);stroke:var(--muted);stroke-width:1}
+svg.sch .bar.on{fill:var(--accent);fill-opacity:.25;stroke:var(--accent);stroke-width:2}
+svg.sch .bar.need{fill-opacity:.08;stroke-dasharray:5 3}
+.chip[disabled]{opacity:.45;cursor:default}
+svg.sch .mk{stroke:var(--mark);stroke-width:2.4}
+svg.sch .tick{stroke:var(--ink);stroke-width:1.2}
+svg.sch .mkd{fill:var(--mark)}
+svg.sch .c{fill:var(--clin)}
+svg.sch text.ac{fill:var(--accent);font-weight:600}
+.ctl{display:flex;flex-direction:column;gap:10px}
+.ctl .lab{font:600 12px var(--f-mono);color:var(--muted)}
+.res{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+@media (max-width:600px){.res{grid-template-columns:minmax(0,1fr)}}
+.res .ans h3{font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Psychiatry</a> <span class="muted">· Module 01: <span aria-current="page">Schizophrenia and psychosis</span> · <a href="mood-disorders.html">Mood disorders</a></span></nav>
+
+<header class="stack">
+  <h1>Schizophrenia and Other Psychotic Disorders: Criteria, Dopamine and Antipsychotics</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-sym">Symptoms</a> <a href="#h-crit">Criteria</a> <a href="#h-frs">First-rank symptoms</a> <a href="#h-sub">Subtypes</a> <a href="#h-spec">Duration picker</a> <a href="#h-da">Dopamine pathways</a> <a href="#h-drug">Antipsychotics</a> <a href="#h-eps">EPS and NMS</a> <a href="#h-cloz">Clozapine</a> <a href="#h-prog">Prognosis</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-sym">
+  <h2 id="h-sym">Three groups of symptoms</h2>
+  <div class="chips" id="sym-tg" aria-label="Symptom group"></div>
+  <div class="prose find" id="sym-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-crit">
+  <h2 id="h-crit">Diagnostic requirements: ICD-11 (WHO 2024) and DSM-5</h2>
+  <p class="muted">Tick what is present. <span class="badge">Learning tool, not for diagnosis</span></p>
+  <div class="two">
+    <div class="ctl">
+      <div class="ck" id="crit-ck"></div>
+      <div class="q"><span class="qt">How long have the symptoms been present most of the time?</span><div class="chips" id="crit-dur"></div></div>
+    </div>
+    <div class="stack">
+      <div class="ans prose" id="crit-out" aria-live="polite"></div>
+      <div class="scroll"><table id="crit-table"></table></div>
+    </div>
+  </div>
+  <p class="muted" id="crit-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-frs">
+  <h2 id="h-frs">Schneider's first-rank symptoms</h2>
+  <div class="chips" id="frs-tg" aria-label="First-rank symptom"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="frs-svg" viewBox="0 0 420 260" role="img" aria-label="Schematic: the person's mind as a circle with its boundary; arrows show the chosen first-rank symptom, such as a thought being put in, taken out or broadcast"></svg></div>
+    <div class="prose find" id="frs-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="frs-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-sub">
+  <h2 id="h-sub">Subtypes: dropped, replaced by symptom domains</h2>
+  <div class="prose" id="sub-text"></div>
+  <div class="scroll"><table id="sub-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-spec">
+  <h2 id="h-spec">The psychosis spectrum by duration</h2>
+  <p class="muted">Set how long the psychotic symptoms have lasted and their pattern; both classifications answer side by side. <span class="badge">Learning tool, not for diagnosis</span></p>
+  <div class="chips" id="spec-pre" aria-label="Example presentations"></div>
+  <div class="two">
+    <div class="ctl">
+      <div class="sliders" id="spec-sl"></div>
+      <div class="q"><span class="qt">Pattern of symptoms</span><div class="chips" id="spec-pat"></div></div>
+      <div class="q"><span class="qt">A full mood episode (depressive, manic or mixed) at the same time?</span><div class="chips" id="spec-mood"></div><span class="note" id="spec-mood-note"></span></div>
+      <div class="q" id="spec-pure-q"><span class="qt">Has the psychosis also run for 2 weeks or more without prominent mood symptoms? (DSM-5 question; asked when a mood episode is present)</span><div class="chips" id="spec-pure"></div></div>
+    </div>
+    <div class="stack">
+      <div class="schbox"><svg class="fig sch" id="spec-svg" viewBox="0 0 440 210" role="img" aria-label="A logarithmic time scale from 1 day to 2 years with the DSM-5 and ICD-11 duration bands, including delusional and schizoaffective disorder, and the chosen duration marked"></svg></div>
+    </div>
+  </div>
+  <div class="res"><div class="ans prose" id="spec-icd" aria-live="polite"></div><div class="ans prose" id="spec-dsm" aria-live="polite"></div></div>
+  <p class="muted" id="spec-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-da">
+  <h2 id="h-da">Four dopamine pathways, and what D2 blockade does in each</h2>
+  <div class="chips" id="da-tg" aria-label="Dopamine pathway"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="da-svg" viewBox="0 0 560 350" role="img" aria-label="Schematic midline view of the brain, front on the left, with the mesolimbic, mesocortical, nigrostriatal and tuberoinfundibular dopamine pathways; the chosen pathway is highlighted"></svg></div>
+    <div class="prose find" id="da-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="da-table"></table></div>
+  <p class="muted" id="da-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-drug">
+  <h2 id="h-drug">Antipsychotics: typical vs atypical</h2>
+  <div class="scroll"><table id="drug-table"></table></div>
+  <p class="muted" id="drug-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-eps">
+  <h2 id="h-eps">Extrapyramidal effects on a time line, and neuroleptic malignant syndrome</h2>
+  <div class="chips" id="eps-tg" aria-label="Movement disorder"></div>
+  <div class="schbox"><svg class="fig sch" id="eps-svg" viewBox="0 0 600 220" role="img" aria-label="Time line on a logarithmic scale from 1 hour to 10 years after starting or raising an antipsychotic, with bars for acute dystonia, parkinsonism and tardive dyskinesia; akathisia is listed as acute without a time band"></svg></div>
+  <div class="prose find" id="eps-find" aria-live="polite"></div>
+  <h3>Neuroleptic malignant syndrome (NMS)</h3>
+  <div class="prose" id="nms-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cloz">
+  <h2 id="h-cloz">Clozapine: treatment-resistant schizophrenia and blood monitoring</h2>
+  <div class="schbox"><svg class="fig sch" id="cloz-svg" viewBox="0 0 600 180" role="img" aria-label="Two schematic time lines of clozapine blood monitoring: the Indian Psychiatric Society 2026 schedule (weekly for 18 weeks, monthly for the next 2 years, then annually) and the 2025 European task force schedule (monthly after 18 weeks, quarterly after 1 year, annually after 2 years)"></svg></div>
+  <div class="prose" id="cloz-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-prog">
+  <h2 id="h-prog">Prognostic factors</h2>
+  <div class="scroll"><table id="prog-table"></table></div>
+  <p class="muted" id="prog-note"></p>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BSchizophrenia%20and%20Other%20Psychotic%20Disorders%3A%20Criteria%2C%20Dopamine%20and%20Antipsychotics%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fpsychiatry%2Fpsychosis-mood%2Fschizophrenia-psychosis.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/psy.js"></script>
+<script>
+"use strict";
+const $ = Psy.$, T = Psy.T;
+/* ===================== DATA (checked in two sources unless attributed: sources-local/facts/fill-ps01.md, Part A) ===================== */
+const LEDE = 'Tick symptoms against the ICD-11 requirements, see each of Schneider\'s first-rank symptoms drawn as an arrow between the mind and the outside, slide the duration to move between brief psychotic disorder, schizophreniform disorder and schizophrenia, pick a dopamine pathway to see what D2 blockade does there, and place each extrapyramidal effect on a time line. Receptors, agonists and antagonists in general: <a href="../../pharmacology/general/pharmacodynamics.html#h-ago">pharmacology: agonists and antagonists</a>.';
+
+const SYM = [
+  ['pos', 'Positive', '<h3>Positive symptoms</h3><p>Experiences not normally present: <b>delusions, hallucinations, disorganised speech and disorganised or catatonic behaviour</b> (StatPearls; Wikipedia). They are the same in any psychosis and generally respond well to medication; they tend to diminish over time (ICD-11 CDDR, WHO 2024; Wikipedia).</p>'],
+  ['neg', 'Negative', '<h3>Negative symptoms</h3><p>Deficits of normal emotional responses and drive: <b>blunted (flat) affect, alogia (poverty of speech), anhedonia, asociality and avolition</b> (Wikipedia\'s five domains; the ICD-11 list is affective flattening, alogia or paucity of speech, avolition, asociality and anhedonia). StatPearls sums them up as reduced motivation and expressiveness. They often persist and are tied to a <b>poorer prognosis</b> (ICD-11 CDDR; Wikipedia).</p>'],
+  ['cog', 'Cognitive', '<h3>Cognitive symptoms</h3><p>Impairments of <b>executive function, memory and processing speed</b> (StatPearls). Wikipedia estimates that about 70% of people with schizophrenia have cognitive deficits. The ICD-11 CDDR notes that cognitive symptoms tend to persist and go with ongoing functional impairment.</p>'],
+];
+
+/* ICD-11 6A20 symptom list a)-g) (CDDR 2024, official text) */
+const CRIT = [
+  ['a', 'a) Persistent delusions (e.g. grandiose, reference, persecutory)', true],
+  ['b', 'b) Persistent hallucinations (most often auditory)', true],
+  ['c', 'c) Disorganised thinking (formal thought disorder), e.g. loose associations, neologisms', true],
+  ['d', 'd) Experiences of influence, passivity or control (thoughts put in, taken out or broadcast)', true],
+  ['e', 'e) Negative symptoms (affective flattening, alogia, avolition, asociality, anhedonia)', false],
+  ['f', 'f) Grossly disorganised behaviour', false],
+  ['g', 'g) Psychomotor disturbances (catatonic agitation, posturing, waxy flexibility, negativism, mutism, stupor)', false],
+];
+const CRIT_DUR = [['lt1', 'Under 1 month'], ['1to6', '1 to 6 months'], ['ge6', '6 months or more']];
+const CRIT_TABLE = [
+  ['Symptom rule', 'At least 2 of the 7 groups a)–g), at least 1 of them from a)–d)', 'Two diagnostic criteria over one month (Wikipedia); the symptom groups are delusions, hallucinations, disorganised speech, disorganised or catatonic behaviour and negative symptoms (StatPearls)'],
+  ['Duration', '<b>1 month or more</b>, most of the time', '<b>6 months</b> of disturbance in all, including the month of active symptoms'],
+  ['Exclusion', 'Not due to another medical condition (e.g. a brain tumour) or to a substance or medication (e.g. corticosteroids), including withdrawal', '—'],
+  ['Source', 'ICD-11 CDDR (WHO 2024), official text; 1 month also in Wikipedia', 'DSM-5, as reported by Wikipedia (DSM-5 is not open)'],
+];
+const CRIT_NOTE = 'ICD-11 asks for one month; DSM-5 for six months (Wikipedia: "at least six months (according to the DSM-5) or one month (according to the ICD-11)"). DSM-5-TR (the text revision) is not quoted here because its text is not open.';
+
+/* first-rank symptoms: key, chip, title, text, drawing kind */
+const FRS = [
+  ['echo', 'Audible thoughts', 'Audible thoughts (thought echo)', 'Voices speak the person\'s thoughts aloud (2020 study\'s definition); Wikipedia: "a voice or voices repeating the subject\'s thoughts out loud".', 'voiceIn'],
+  ['argue', 'Voices arguing', 'Voices arguing or discussing, in the third person', 'Two or more voices talk to each other, about the person, referring to them in the third person (Wikipedia; 2020 study).', 'voices2'],
+  ['comment', 'Running commentary', 'Voices commenting on actions', 'Voices describe the person\'s activities as they occur (2020 study); "a commentary on the subject\'s thoughts or behavior" (Wikipedia).', 'voiceIn'],
+  ['ins', 'Thought insertion', 'Thought insertion', 'Unusual thoughts are experienced as put into the mind by an outside agency (Wikipedia; listed by a 2021 review).', 'in'],
+  ['wd', 'Thought withdrawal', 'Thought withdrawal', 'Thoughts are experienced as removed from the mind by an external force (2020 study; Wikipedia).', 'out'],
+  ['bc', 'Thought broadcasting', 'Thought broadcasting', 'Thoughts escape into the outside world and are experienced by others (2020 study); "shared by or accessible to other people" (Wikipedia).', 'bc'],
+  ['pass', 'Passivity', 'Passivity (made) experiences, including somatic passivity', 'Actions, sensations, movements, emotions or thoughts are felt to be generated by an outside agency that takes over the will (Wikipedia); somatic passivity = bodily sensations imposed by an external agency (2020 study). ICD-11 keeps "experiences of influence, passivity or control" as one of its core items a)–d).', 'pass'],
+  ['dp', 'Delusional perception', 'Delusional perception', 'A normal perception suddenly takes on a private, illogical meaning that becomes an unshakable delusional conviction (2020 study; Wikipedia).', 'dp'],
+];
+const FRS_NOTE = 'Sources: Wikipedia (Kurt Schneider), a 2020 study of first-rank symptoms in first-episode psychosis and a 2021 review of schizophrenia diagnostics. Year: Wikipedia says Schneider published "First Rank Symptoms" in 1939; the 2020 study says he proposed the concept in 1959. Their value for diagnosis "has since been questioned" (Wikipedia); DSM-5 gives special weight only to delusions, hallucinations and disorganised speech (2021 review).';
+
+const SUB_TEXT = '<p>The classic subtypes — <b>paranoid, disorganised, catatonic, undifferentiated and residual</b> — were hard to tell apart and are no longer recognised as separate conditions by <b>DSM-5 (2013) or ICD-11</b> (Wikipedia). Instead, ICD-11 (CDDR, WHO 2024) records <b>symptom specifiers (6A25)</b>: each domain that contributes to the current picture is rated none, mild, moderate or severe over the past week.</p>';
+const SUB_TABLE = [['6A25.0', 'Positive symptoms'], ['6A25.1', 'Negative symptoms'], ['6A25.2', 'Depressive mood symptoms'], ['6A25.3', 'Manic mood symptoms'], ['6A25.4', 'Psychomotor symptoms'], ['6A25.5', 'Cognitive symptoms']];
+
+/* spectrum picker. Duration in days, picked from DAYS by the slider (1 month counted as 30 days, so 30, 90 and 180 days are exact stops).
+   pattern: sz (schizophrenia-like), del (delusions only), atp (acute, rapidly changing, no negative symptoms) */
+const DAYS = [1, 2, 3, 5, 7, 10, 13, 14, 15, 21, 28, 29, 30, 31, 42, 60, 75, 89, 90, 91, 120, 150, 179, 180, 181, 240, 300, 365, 545, 730];
+const SPEC_PRE = {
+  a: ['Sudden, changing psychosis for 10 days', {d: 10, pat: 'atp', mood: 'no', pure: 'yes'}],
+  b: ['Hallucinations and delusions for 3 weeks', {d: 21, pat: 'sz', mood: 'no', pure: 'yes'}],
+  c: ['Same picture for 3 months', {d: 90, pat: 'sz', mood: 'no', pure: 'yes'}],
+  d: ['Same picture for 8 months', {d: 240, pat: 'sz', mood: 'no', pure: 'yes'}],
+  e: ['A single fixed jealous delusion for 5 months', {d: 150, pat: 'del', mood: 'no', pure: 'yes'}],
+  f: ['Psychosis with a manic episode, 6 weeks', {d: 42, pat: 'sz', mood: 'yes', pure: 'yes'}],
+};
+const SPEC_PAT = [['sz', 'Schizophrenia-like (2+ symptom groups)'], ['atp', 'Sudden onset, rapidly changing, no negative symptoms'], ['del', 'Delusions only, behaviour otherwise intact']];
+const SPEC_NOTE = 'ICD-11 from the CDDR (WHO 2024, official text): acute and transient psychotic disorder = acute onset without a prodrome, psychotic within 2 weeks, rapidly changing symptoms, no negative symptoms, not over 3 months (most often a few days to 1 month); schizophrenia-like cases that have lasted less than 1 month, with no earlier schizophrenia, are coded "other specified primary psychotic disorder" (CDDR); schizoaffective = full schizophrenia requirements together with a moderate or severe depressive, a manic or a mixed episode, onsets within a few days, both at least 1 month; delusional disorder = delusions typically for at least 3 months, in the absence of a depressive, manic or mixed episode, with no persistent hallucinations, thought disorder, passivity or negative symptoms. DSM-5 as reported: brief psychotic disorder 1 day to 1 month with full return (Wikipedia; StatPearls "less than 1 month"); schizophreniform at least 1 month but under 6 (Wikipedia); schizophrenia 6 months (Wikipedia); schizoaffective needs psychosis for at least 2 weeks without prominent mood symptoms, and psychosis only during mood episodes is a mood disorder with psychotic features (Wikipedia); delusional disorder 1 month or more (StatPearls). The two disagree on schizophrenia (1 vs 6 months) and delusional disorder (3 months vs 1 month). Months are counted as 30 days here; a dashed bar marks the threshold not yet reached.';
+
+/* dopamine pathways: key, name, from, to, role, in schizophrenia, D2 blockade */
+const DA = [
+  ['ml', 'Mesolimbic', 'Ventral tegmental area (midbrain)', 'Ventral striatum (nucleus accumbens)', 'The "reward pathway"', 'Overactivity is suggested to contribute to <b>positive symptoms</b> (dopamine hypothesis)', 'Not given pathway by pathway in our sources: both generations of antipsychotic block D2 receptors, and positive symptoms generally respond well to medication (Wikipedia; StatPearls)'],
+  ['mc', 'Mesocortical', 'Ventral tegmental area', 'Prefrontal cortex', 'Cognitive control, motivation, emotional response', 'Evidence that it may be <b>under</b>active (hypostimulation of D1 receptors), linked to negative and cognitive symptoms', 'Not given in our sources'],
+  ['ns', 'Nigrostriatal', 'Substantia nigra pars compacta', 'Dorsal striatum (caudate, putamen)', 'Its loss is linked to parkinsonian tremor, rigidity and postural imbalance (Wikipedia)', '—', '<b class="clin">Extrapyramidal effects</b>: dystonia, akathisia, parkinsonism, tardive dyskinesia'],
+  ['ti', 'Tuberoinfundibular', 'Arcuate nucleus (hypothalamus)', 'Median eminence → anterior pituitary', 'Dopamine inhibits prolactin release from lactotrophs (D2)', '—', '<b class="clin">Hyperprolactinaemia</b>: galactorrhoea, menstrual disruption, infertility'],
+];
+const DA_NOTE = 'Pathway ends and roles from Wikipedia (one source for the anatomy). The mesolimbic and mesocortical links to symptoms are a hypothesis ("some researchers have suggested", "growing evidence", Wikipedia). D2 blockade in the nigrostriatal pathway as the main mechanism of extrapyramidal effects: a 2023 meta-analysis and Wikipedia (Dystonia); typical antipsychotics also block D2 in the mesocortical, tuberoinfundibular and nigrostriatal pathways (Wikipedia). No source here states what blockade does in the mesolimbic or mesocortical pathway, so the page does not say; dopamine inhibiting prolactin via D2, and antipsychotics as the main non-tumour cause of hyperprolactinaemia: Wikipedia and a 2025 review.';
+
+const DRUGS = [
+  ['Typical (first-generation)', 'Dopamine (D2) receptor antagonists (StatPearls; Wikipedia)', 'Higher risk of extrapyramidal effects and tardive dyskinesia (Wikipedia); NMS is more often reported with typicals such as haloperidol and fluphenazine (StatPearls)', 'Chlorpromazine, haloperidol (Wikipedia); haloperidol, fluphenazine (StatPearls)'],
+  ['Atypical (second-generation)', 'Serotonin–dopamine antagonists: block serotonin (5-HT2A) as well as dopamine receptors, with less affinity for striatal D2 (StatPearls; Wikipedia; a 2014 review). Aripiprazole is a <b>partial D2 agonist</b> (Wikipedia; a 2023 meta-analysis)', 'Fewer extrapyramidal effects, but some cause considerable <b>weight gain, diabetes and metabolic syndrome</b> (Wikipedia). <b>Olanzapine</b>, like clozapine, gives more weight gain and higher glucose and cholesterol than most other atypicals (Wikipedia); WHO mhGAP 2023 lists olanzapine among drugs with significantly more weight gain than placebo', 'Clozapine, risperidone, olanzapine (Wikipedia); aripiprazole, olanzapine, quetiapine, risperidone (NICE NG222)'],
+];
+const DRUG_NOTE = 'A 2014 review: first-generation drugs work at 60–80% D2 occupancy, while 75–80% gives acute EPS, so the two overlap. NICE CG178 (2014) asks for weight to be checked weekly for the first 6 weeks of an antipsychotic. No doses are given.';
+
+/* EPS: key, name, [start, end] in hours (null = no band), text */
+const H = 1, D = 24, W = 168, M = 730, Y = 8766;
+const EPS = [
+  ['dys', 'Acute dystonia', [1 * H, 5 * D], 'Sustained muscle spasms and abnormal postures, especially of the head and neck (2014 review). Begins <b>within hours to a few days</b> of starting or raising the drug (Wikipedia; "within first few days", 2014 review). Reversed or prevented by <b>anticholinergics</b> (e.g. biperiden), which can be given by injection (2014 review; Wikipedia).'],
+  ['aka', 'Akathisia', null, 'An inner restlessness with an inability to sit still, usually in the legs (StatPearls; Wikipedia). Counted among the <b>acute</b> effects (StatPearls; Wikipedia), about half of all EPS (2014 review); our sources give no time window, so no bar is drawn. It does <b>not</b> respond to anticholinergics; dose reduction, β-blockers (propranolol) and benzodiazepines help (2014 review; Wikipedia).'],
+  ['park', 'Parkinsonism', [3 * D, 6 * M], 'Tremor, rigidity and bradykinesia, shuffling gait (2014 review; 2018 review). Occurs from a few days up to several months after starting (2014 review; "hours–days–weeks", 2018 review). Older age and female sex are risk factors (2014 review).'],
+  ['td', 'Tardive dyskinesia', [2 * M, 10 * Y], 'Involuntary, repetitive, purposeless movements, most often of the face, lips and tongue, also trunk and limbs (Wikipedia). Appears <b>after months or years</b> (2014 review; 2018 review; Wikipedia) and may persist after the drug is stopped, sometimes permanently (Wikipedia). <b>VMAT2 inhibitors</b> (valbenazine, deutetrabenazine) have the strongest evidence (2022 review; Wikipedia: FDA-approved 2017).'],
+];
+const NMS = '<p>A rare but <b>life-threatening</b> reaction to antipsychotics (dopamine-receptor antagonists) (WHO mhGAP 2016 and 2023; StatPearls, which adds rapid withdrawal of dopaminergic drugs). Features: <b>fever, muscular rigidity ("lead-pipe"), altered mental state (delirium, confusion) and autonomic instability</b> (raised or variable blood pressure, sweating, fast heart rate) (WHO mhGAP; Wikipedia). It comes on more slowly than serotonin syndrome, over <b>days to weeks</b> (a 2019 review; a 2024 review). <b>Management principles:</b> the single most critical step is to <b>stop the suspected drug</b> at once (a 2015 review), with supportive care such as intravenous fluids (a 2017 review); bromocriptine (a dopamine agonist) and dantrolene (a muscle relaxant) are the empirical drugs most used for refractory NMS (StatPearls; the 2015 review). No doses are given. Comparison with serotonin syndrome: <a href="mood-disorders.html#h-ssnms">mood disorders page</a>.</p>';
+
+const CLOZ = '<p>Clozapine is the atypical antipsychotic for <b>treatment-resistant schizophrenia</b> (StatPearls; Wikipedia; WHO mhGAP guideline 2023: "under mental health specialist supervision"). It is not first line because of its adverse effects; its advantages include fewer relapses and lower risks of suicide and tardive dyskinesia (StatPearls). The key danger is <b class="clin">agranulocytosis</b> (severe neutropenia): WHO mhGAP-IG 2016 says to use it only under a specialist and only where routine laboratory monitoring is available. The risk is highest in the first 18 weeks (2022 review), so the absolute neutrophil count is checked <b>weekly for the first 18 weeks</b> (Indian Psychiatric Society 2026 guideline; the 2025 European clozapine task force statement keeps weekly ANC to 18 weeks, as quoted in the IPS 2025 update). <b>After 18 weeks the two differ</b>: IPS 2026 tabulates monthly tests for the next 2 years, then annually; the European task force (January 2025) relaxed this to monthly after 18 weeks, quarterly after one year and annually after two years in people without earlier neutropenia, because agranulocytosis is uncommon after the first year (as quoted in the IPS 2025 update). Other effects Wikipedia lists: weight gain, sedation, hypersalivation, seizures, myocarditis and cardiomyopathy, thromboembolism; it may cause more metabolic effects than other atypicals.</p>';
+
+const PROG = [
+  ['Negative symptoms', 'Poorer', 'ICD-11 CDDR; Wikipedia'],
+  ['Early onset', 'Poorer (later onset: affective and social functioning more often preserved)', 'ICD-11 CDDR; IPS 2026'],
+  ['Long duration of untreated psychosis', 'Poorer, short and long term', 'Wikipedia; IPS 2026 ("early treatment" predicts a good outcome)'],
+  ['Male sex', 'Worse outcome', 'Wikipedia (one source)'],
+  ['Good premorbid functioning, fast response, no substance use', 'Better', 'IPS 2026 (one source)'],
+];
+const PROG_NOTE = 'In a first episode, about 70% reach symptom remission in the first 2 years of treatment (Indian Psychiatric Society 2026). Acute onset is listed by the CDDR as a favourable sign only for acute and transient psychotic disorder, so it is not listed here.';
+
+const BASED = '<b>Based on:</b> WHO, Clinical descriptions and diagnostic requirements for ICD-11 mental, behavioural and neurodevelopmental disorders (CDDR, 2024); WHO mhGAP Intervention Guide 2.0 (2016) and mhGAP guideline (2023); NICE CG178 (2014); Indian Psychiatric Society clinical practice guidelines (schizophrenia 2026; bipolar update 2025); StatPearls (NCBI Bookshelf; abstracts); open-access papers: first-rank symptoms in first-episode psychosis (2020), schizophrenia diagnostics from Kraepelin to ICD-11 (2021), second-generation antipsychotics and EPS (2014), drug-induced parkinsonism vs tardive dyskinesia (2018), tardive dyskinesia (2022), clozapine haematological monitoring (2022), antipsychotics and prolactin (2025), serotonin syndrome (2019, 2024) (Europe PMC / NCBI); Wikipedia (wikitext checked for OpenStax and Boundless citations). DSM-5 criteria only as reported by these open sources.';
+const MODELS = '<b>Models used:</b> the brain, the mind boundary, the time lines and the duration scale are schematic drawings, not to scale (time axes are logarithmic). The checklist and the duration picker apply the stated requirements to the answers given; they are learning tools, not diagnostic tools.';
+
+/* ===================== CODE ===================== */
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* symptoms */
+Psy.toggles('sym-tg', SYM.map(r => [r[0], r[1]]), k => { $('sym-find').innerHTML = SYM.find(r => r[0] === k)[2]; }, 'pos');
+$('sym-find').innerHTML = SYM[0][2];
+
+/* criteria checklist */
+const CS = {on: new Set(), dur: 'lt1'};
+$('crit-ck').innerHTML = '<span class="grp">ICD-11 6A20 symptom groups (core items a–d)</span>' + CRIT.map(([k, l]) => `<label><input type="checkbox" data-k="${k}">${l}</label>`).join('');
+$('crit-ck').querySelectorAll('input').forEach(i => i.onchange = () => { i.checked ? CS.on.add(i.dataset.k) : CS.on.delete(i.dataset.k); drawCrit(); });
+Psy.toggles('crit-dur', CRIT_DUR, k => { CS.dur = k; drawCrit(); }, 'lt1');
+function drawCrit() {
+  const n = CS.on.size, core = CRIT.filter(r => r[2] && CS.on.has(r[0])).length;
+  const sym = n >= 2 && core >= 1;
+  let icd, dsm;
+  if (!sym) icd = `<b>Symptom rule not met</b>: ${n} group${n === 1 ? '' : 's'} ticked, ${core} from a)–d). ICD-11 needs at least 2, with at least 1 from a)–d).`;
+  else if (CS.dur === 'lt1') icd = '<b>Symptom rule met, duration not</b>: ICD-11 needs 1 month or more. A schizophrenia-like picture shorter than this is "other specified primary psychotic disorder" (CDDR).';
+  else icd = '<b>Symptom and duration requirements of ICD-11 schizophrenia met</b> (1 month or more), provided another medical condition and substances are excluded.';
+  dsm = 'Duration only (DSM-5\'s symptom rule is not checked here: its text is not open, and the ICD-11 ticks above are not the DSM-5 criteria). ' + {lt1: 'Under 1 month: the brief psychotic disorder range (1 day to 1 month, full return to baseline).', '1to6': '1 to 6 months: the <b>schizophreniform disorder</b> range; schizophrenia needs 6 months.', ge6: '6 months or more: the schizophrenia duration is reached.'}[CS.dur] + ' (Wikipedia; StatPearls)';
+  $('crit-out').innerHTML = `<h3>ICD-11 (CDDR, WHO 2024)</h3><p>${icd}</p><h3>DSM-5</h3><p>${dsm}</p>`;
+}
+drawCrit();
+Psy.table('crit-table', ['', 'ICD-11 (WHO 2024)', 'DSM-5 (as reported)'], CRIT_TABLE); $('crit-note').innerHTML = CRIT_NOTE;
+
+/* first-rank symptoms drawing */
+const FS = {k: 'echo'};
+function drawFrs() {
+  const f = FRS.find(r => r[0] === FS.k), kind = f[4];
+  let s = Psy.DEFS + Psy.arrowDef('arrA', 'var(--accent)');
+  const cx = 150, cy = 130, r = 72;
+  s += `<circle class="mind" cx="${cx}" cy="${cy}" r="${r}"/>` + T(cx, cy - r - 10, 'The person\'s mind', 's', 'middle') + (kind === 'pass' ? '' : T(cx, cy - 30, 'own thoughts', 's', 'middle'));
+  const ext = (x, y, l) => `<rect x="${x - 46}" y="${y - 16}" width="92" height="32" rx="6" class="box"/>` + T(x, y + 4, l, 's', 'middle');
+  if (kind === 'in') s += ext(340, 70, 'outside agency') + `<path class="act" d="M294 74 C 250 80, 220 100, 196 118"/>` + T(268, 44, 'thought put in', 'ac', 'middle');
+  if (kind === 'out') s += ext(340, 70, 'outside force') + `<path class="act" d="M190 116 C 220 96, 250 80, 290 74"/>` + T(268, 44, 'thought taken out', 'ac', 'middle');
+  if (kind === 'bc') { [[300, 40], [360, 130], [300, 220]].forEach(([x, y], i) => { s += `<path class="act" d="M${cx + 60} ${cy + (y - cy) * 0.35} L${x - 30} ${y}"/>` + T(x + 6, y + 4, 'others', 's', 'start'); }); s += T(250, 22, 'thoughts escape to others', 'ac', 'middle'); }
+  if (kind === 'voiceIn') s += ext(340, 130, 'a voice') + `<path class="act" d="M294 130 L226 130"/>` + T(232, 108, FS.k === 'echo' ? 'speaks own thoughts aloud' : 'describes actions', 'ac', 'start');
+  if (kind === 'voices2') s += ext(340, 60, 'voice 1') + ext(340, 200, 'voice 2') + `<path class="act" d="M340 78 L340 182"/><path class="act" d="M352 182 L352 78"/>` + T(395, 134, '“he…”', 'ac', 'middle') + T(250, 240, 'they talk about the person', 's', 'middle');
+  if (kind === 'pass') { s += ext(340, 60, 'outside agency'); [[296, 70, 196, 96], [298, 80, 214, 132], [300, 90, 200, 170]].forEach(([x1, y1, x2, y2]) => { s += `<path class="act" d="M${x1} ${y1} L${x2} ${y2}"/>`; }); s += T(250, 245, 'actions, feelings, body sensations “made”', 'ac', 'middle'); }
+  if (kind === 'dp') s += ext(340, 60, 'normal percept') + T(340, 34, '(an everyday sight)', 's', 'middle') + `<path class="act" d="M300 80 L210 112"/>` + `<rect x="${cx - 60}" y="${cy + 8}" width="120" height="28" rx="6" class="box" style="stroke:var(--accent)"/>` + T(cx, cy + 27, 'delusional meaning', 'ac', 'middle') + T(cx, cy + 56, 'arises suddenly', 's', 'middle');
+  s += T(10, 252, 'Schematic', 's', 'start');
+  $('frs-svg').innerHTML = s;
+  $('frs-find').innerHTML = `<h3>${f[2]}</h3><p>${f[3]}</p>`;
+}
+Psy.toggles('frs-tg', FRS.map(r => [r[0], r[1]]), k => { FS.k = k; drawFrs(); }, 'echo'); drawFrs();
+$('frs-note').innerHTML = FRS_NOTE;
+
+/* subtypes */
+$('sub-text').innerHTML = SUB_TEXT; Psy.table('sub-table', ['ICD-11 code', 'Symptom domain (rated none, mild, moderate or severe)'], SUB_TABLE);
+
+/* spectrum picker */
+const SP = {d: 21, pat: 'sz', mood: 'no', pure: 'yes'};
+const CUT = {30: '1 month', 90: '3 months', 180: '6 months', 365: '1 year', 730: '2 years'};
+const fmtD = d => d + (d === 1 ? ' day' : ' days') + (CUT[d] ? ' (' + CUT[d] + ')' : [30, 90, 180].some(c => Math.abs(d - c) <= 3) ? '' : d === 42 ? ' (6 weeks)' : d >= 60 ? ' (≈' + (d / 30).toFixed(1).replace('.0', '') + ' months)' : '');
+const spSl = Psy.slider('spec-sl', {id: 'spd', label: 'Duration of psychotic symptoms', min: 0, max: DAYS.length - 1, step: 1, value: DAYS.indexOf(SP.d), fmt: v => fmtD(DAYS[v])}, v => { SP.d = DAYS[v]; drawSpec(); });
+/* each verdict: [title, text, band id, need (threshold not yet reached: dashed)] */
+function classify() {
+  const d = SP.d, p = SP.pat, m = p === 'sz' && SP.mood === 'yes';
+  let icd, dsm;
+  const dsmDur = () => d < 30 ? ['Brief psychotic disorder', '1 day to 1 month, with full return to baseline (Wikipedia; StatPearls).', 'd_bpd'] : d < 180 ? ['Schizophreniform disorder', 'At least 1 month but under 6 months (Wikipedia), if the symptom criteria are met.', 'd_sfm'] : ['Schizophrenia duration reached', '6 months of disturbance (Wikipedia), if the symptom criteria are met.', 'd_sz'];
+  if (p === 'del') {
+    icd = d >= 90 ? ['Delusional disorder', 'A delusion or set of related delusions typically persisting for at least 3 months, in the absence of a mood episode; no persistent hallucinations, thought disorder, passivity or negative symptoms.', 'i_del'] : ['Under the usual 3 months', 'The CDDR describes the delusions of delusional disorder as typically persisting for at least 3 months.', 'i_del', 1];
+    dsm = d >= 30 ? ['Delusional disorder', 'One or more non-bizarre delusions for 1 month or more (StatPearls).', 'd_del'] : ['Under 1 month', 'Below the 1-month delusional-disorder duration (StatPearls).', 'd_del', 1];
+  } else if (p === 'atp') {
+    icd = d <= 90 ? ['Acute and transient psychotic disorder', 'Onset within 2 weeks without a prodrome, rapidly changing symptoms, no negative symptoms, lasting no more than 3 months.', 'i_atp'] : ['Beyond acute and transient psychotic disorder', 'Its duration does not exceed 3 months (CDDR).', 'i_atp', 1];
+    dsm = dsmDur();
+  } else if (m) {
+    icd = d >= 30 ? ['Schizoaffective disorder', 'All requirements for schizophrenia met at the same time as a moderate or severe depressive, a manic or a mixed episode; onsets within a few days; both at least 1 month.', 'i_sz'] : ['Under 1 month', 'Schizoaffective disorder needs at least 1 month of both psychotic and mood symptoms (CDDR).', 'i_sz', 1];
+    if (SP.pure === 'no') dsm = ['Mood disorder with psychotic features', 'Psychotic symptoms only during a mood episode: DSM-5 diagnoses a mood disorder with psychotic features, not schizophrenia or schizoaffective disorder (Wikipedia).', 'd_mood'];
+    else dsm = d >= 14 ? ['Schizoaffective disorder possible', 'Psychosis has also run for at least 2 weeks without prominent mood symptoms, the condition DSM-5 sets for schizoaffective disorder (Wikipedia).', 'd_sad'] : ['Under 2 weeks', 'DSM-5 schizoaffective disorder needs psychosis for at least 2 weeks without prominent mood symptoms (Wikipedia).', 'd_sad', 1];
+  } else {
+    icd = d >= 30 ? ['Schizophrenia', 'At least 2 symptom groups (1 from a–d) most of the time for 1 month or more.', 'i_sz'] : ['Other specified primary psychotic disorder', 'Meets schizophrenia requirements except the 1-month duration, with no earlier schizophrenia (CDDR coding).', 'i_os'];
+    dsm = dsmDur();
+  }
+  return {icd, dsm};
+}
+function drawSpec() {
+  const c = classify(), x = Psy.scale(0, Math.log10(730), 30, 420), lx = d => x(Math.log10(d));
+  const hit = new Set([c.icd[2], c.dsm[2]]), need = new Set([c.icd[3] ? c.icd[2] : '', c.dsm[3] ? c.dsm[2] : '']);
+  let s = '';
+  const band = (id, y, a, b, l) => `<rect class="bar ${hit.has(id) ? 'on' : ''}${need.has(id) ? ' need' : ''}" x="${lx(a).toFixed(1)}" y="${y}" width="${(lx(b) - lx(a)).toFixed(1)}" height="17" rx="3"/>` + T((lx(a) + lx(b)) / 2, y + 12.5, l, 's', 'middle');
+  s += T(30, 13, 'DSM-5 (as reported)', 'h', 'start');
+  s += band('d_bpd', 18, 1, 30, 'brief') + band('d_sfm', 18, 30, 180, 'schizophreniform') + band('d_sz', 18, 180, 730, 'schizophrenia');
+  s += band('d_del', 38, 30, 730, 'delusional disorder (≥1 month)') + band('d_sad', 58, 14, 730, 'schizoaffective (psychosis ≥2 wk alone)');
+  s += band('d_mood', 78, 1, 730, 'mood disorder with psychotic features (psychosis only in mood episodes)');
+  s += T(30, 111, 'ICD-11 (WHO 2024)', 'h', 'start');
+  s += band('i_os', 116, 1, 30, 'other specified') + band('i_sz', 116, 30, 730, 'schizophrenia, schizoaffective');
+  s += band('i_atp', 136, 1, 90, 'acute & transient (≤3 months)') + band('i_del', 156, 90, 730, 'delusional (≥3 months)');
+  s += `<path class="axis" d="M30 186 L420 186"/>`;
+  [[1, '1 d'], [7, '1 wk'], [30, '1 mo'], [90, '3 mo'], [180, '6 mo'], [365, '1 y'], [730, '2 y']].forEach(([d, l]) => { s += `<path class="axis" d="M${lx(d).toFixed(1)} 183 L${lx(d).toFixed(1)} 189"/>` + T(lx(d), 202, l, 's', 'middle'); });
+  const X = lx(SP.d); s += `<path class="mk" d="M${X.toFixed(1)} 178 L${X.toFixed(1)} 190"/><circle class="mkd" cx="${X.toFixed(1)}" cy="186" r="4.5"/>`;
+  $('spec-svg').innerHTML = s;
+  $('spec-icd').innerHTML = `<h3>ICD-11 (CDDR, WHO 2024)</h3><p><b>${c.icd[0]}</b>. ${c.icd[1]}</p>`;
+  $('spec-dsm').innerHTML = `<h3>DSM-5 (as reported by open sources)</h3><p><b>${c.dsm[0]}</b>. ${c.dsm[1]}</p>`;
+  const sz = SP.pat === 'sz';
+  $('spec-mood').querySelectorAll('button').forEach(b => { b.disabled = !sz; });
+  $('spec-pure').querySelectorAll('button').forEach(b => { b.disabled = !(sz && SP.mood === 'yes'); });
+  $('spec-mood-note').textContent = sz ? '' : (SP.pat === 'del' ? 'Not asked for this pattern: ICD-11 delusional disorder requires the absence of a depressive, manic or mixed episode (CDDR).' : 'Not asked for this pattern.');
+}
+const setPress = (id, k) => $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === k)));
+Psy.toggles('spec-pat', SPEC_PAT, k => { SP.pat = k; if (k !== 'sz') { SP.mood = 'no'; setPress('spec-mood', 'no'); } drawSpec(); }, SP.pat);
+Psy.toggles('spec-mood', [['no', 'No'], ['yes', 'Yes']], k => { SP.mood = k; drawSpec(); }, SP.mood);
+Psy.toggles('spec-pure', [['yes', 'Yes'], ['no', 'No: only during mood episodes']], k => { SP.pure = k; drawSpec(); }, SP.pure);
+Psy.toggles('spec-pre', Object.entries(SPEC_PRE).map(([k, v]) => [k, v[0]]), k => { const p = SPEC_PRE[k][1]; Object.assign(SP, p); spSl.set(DAYS.indexOf(p.d)); setPress('spec-pat', p.pat); setPress('spec-mood', p.mood); setPress('spec-pure', p.pure); drawSpec(); }, 'b');
+spSl.init(); drawSpec(); $('spec-note').innerHTML = SPEC_NOTE;
+
+/* dopamine pathways */
+const DS = {k: 'ml'};
+function drawDa() {
+  let s = Psy.DEFS;
+  s += `<path class="brain" d="M70 210 C 40 120, 130 40, 280 38 C 420 36, 520 100, 520 190 C 520 245, 480 270, 430 262 C 410 258, 390 262, 378 266 L 400 342 L 344 342 L 330 266 C 300 262, 285 262, 270 262 C 200 262, 110 268, 70 210 Z"/>`;
+  s += `<path class="brain" d="M248 262 L244 288"/><ellipse class="brain" cx="242" cy="300" rx="14" ry="11"/>`;
+  const P = {
+    ml: ['M340 254 Q 280 262 218 206'], mc: ['M336 252 C 300 180, 180 150, 112 128'], ns: ['M364 248 Q 340 170 262 148'], ti: ['M262 250 L246 272 L243 290'],
+  };
+  for (const [k, ds] of Object.entries(P)) s += `<path class="path ${DS.k === k ? 'on' : ''}" d="${ds[0]}"/>`;
+  const nuc = (x, y, r, keys) => `<circle class="nuc ${keys.includes(DS.k) ? 'on' : ''}" cx="${x}" cy="${y}" r="${r}"/>`;
+  s += nuc(340, 254, 7, ['ml', 'mc']) + nuc(364, 248, 7, ['ns']) + nuc(218, 206, 9, ['ml']) + nuc(112, 128, 10, ['mc']) + nuc(262, 148, 12, ['ns']) + nuc(262, 250, 6, ['ti']);
+  const lab = (x, y, tx, ty, l, a) => Psy.lead(x, y, tx, ty) + T(tx + (a === 'end' ? -3 : 3), ty + 4, l, 'l', a);
+  s += lab(342, 261, 420, 300, 'VTA (midbrain)', 'start') + lab(370, 243, 440, 222, 'substantia nigra', 'start');
+  s += lab(212, 213, 160, 246, 'nucleus accumbens', 'end') + lab(112, 118, 120, 68, 'prefrontal cortex', 'start');
+  s += lab(270, 140, 320, 100, 'dorsal striatum', 'start') + lab(257, 254, 196, 290, 'arcuate nucleus', 'end') + lab(254, 304, 280, 326, 'pituitary', 'start');
+  s += T(20, 22, 'Schematic midline view · front of head on the left · not to scale', 's', 'start');
+  $('da-svg').innerHTML = s;
+  const d = DA.find(r => r[0] === DS.k);
+  $('da-find').innerHTML = `<h3>${d[1]} pathway</h3><p><b>From</b> ${d[2]} <b>to</b> ${d[3]}.</p><p><b>Normal role:</b> ${d[4]}.</p>${d[5] === '—' ? '' : `<p><b>In schizophrenia:</b> ${d[5]}.</p>`}<p><b>D2 blockade:</b> ${d[6]}.</p>`;
+}
+Psy.toggles('da-tg', DA.map(r => [r[0], r[1]]), k => { DS.k = k; drawDa(); }, 'ml'); drawDa();
+Psy.table('da-table', ['Pathway', 'From → to', 'D2 blockade'], DA.map(r => [r[1], r[2] + ' → ' + r[3], r[6]])); $('da-note').innerHTML = DA_NOTE;
+
+/* drugs */
+Psy.table('drug-table', ['Class', 'Mechanism', 'Key adverse-effect profile', 'Examples'], DRUGS); $('drug-note').innerHTML = DRUG_NOTE;
+
+/* EPS timeline */
+const ES = {k: 'dys'};
+function drawEps() {
+  const x = Psy.scale(0, Math.log10(10 * Y), 140, 585), lx = h => x(Math.log10(h));
+  let s = '';
+  EPS.forEach((e, i) => {
+    const y = 26 + i * 36, on = ES.k === e[0];
+    s += T(132, y + 14, e[1], on ? 'b' : '', 'end');
+    if (e[2]) s += `<rect class="bar ${on ? 'on' : ''}" x="${lx(e[2][0]).toFixed(1)}" y="${y}" width="${(lx(e[2][1]) - lx(e[2][0])).toFixed(1)}" height="20" rx="4"/>`;
+    else s += T(lx(1), y + 14, 'acute (no time window given in our sources)', 's', 'start');
+  });
+  s += `<path class="axis" d="M140 176 L585 176"/>`;
+  [[1, '1 h'], [D, '1 d'], [W, '1 wk'], [M, '1 mo'], [6 * M, '6 mo'], [Y, '1 y'], [10 * Y, '10 y']].forEach(([h, l]) => { s += `<path class="axis" d="M${lx(h).toFixed(1)} 172 L${lx(h).toFixed(1)} 180"/>` + T(lx(h), 194, l, 's', 'middle'); });
+  s += T(140, 214, 'Time after starting or raising the antipsychotic (log scale; bar ends approximate)', 's', 'start');
+  $('eps-svg').innerHTML = s;
+  const e = EPS.find(r => r[0] === ES.k); $('eps-find').innerHTML = `<h3>${e[1]}</h3><p>${e[3]}</p>`;
+}
+Psy.toggles('eps-tg', EPS.map(r => [r[0], r[1]]), k => { ES.k = k; drawEps(); }, 'dys'); drawEps();
+$('nms-text').innerHTML = NMS;
+
+/* clozapine ANC monitoring: two schedules on one piecewise week axis (0-18 wk, 18-122 wk, after) */
+function drawCloz() {
+  const xw = w => w <= 18 ? 40 + w * 10 : w <= 122 ? 220 + (w - 18) * 2.5 : 480 + (w - 122) * 0.8;
+  let s = '';
+  const row = (y, title, ticks, labels) => { s += T(40, y - 36, title, 'h', 'start') + `<path class="axis" d="M40 ${y} L592 ${y}"/>`; ticks.forEach(w => { s += `<path class="tick" d="M${xw(w).toFixed(1)} ${y - 12} L${xw(w).toFixed(1)} ${y}"/>`; }); labels.forEach(([a, b, l]) => { s += T((xw(a) + xw(b)) / 2, y - 15, l, 's', 'middle'); }); };
+  const rng = (a, b, st) => { const r = []; for (let w = a; w <= b + 0.01; w += st) r.push(w); return r; };
+  row(56, 'Indian Psychiatric Society 2026', [...rng(0, 18, 1), ...rng(18 + 4.33, 122, 4.33), 174, 226], [[126, 230, 'annually']]);
+  s += T(xw(9), 40, 'weekly to 18 wk', 's', 'middle') + T(xw(70), 40, 'monthly for the next 2 years', 's', 'middle');
+  row(132, 'European clozapine task force 2025 (as quoted by IPS 2025)', [...rng(0, 18, 1), ...rng(18 + 4.33, 52, 4.33), ...rng(52 + 13, 104, 13), 156, 208], []);
+  s += T(xw(9), 116, 'weekly to 18 wk', 's', 'middle') + T(xw(35), 116, 'monthly', 's', 'middle') + T(xw(78), 116, 'quarterly after 1 y', 's', 'middle') + T(xw(170), 116, 'annually after 2 y', 's', 'middle');
+  [[0, '0'], [18, '18 wk'], [52, '1 y'], [104, '2 y'], [122, '18 wk + 2 y']].forEach(([w, l]) => { s += `<path class="axis" d="M${xw(w).toFixed(1)} 132 L${xw(w).toFixed(1)} 138"/>` + T(xw(w), 150, l, 's', w === 104 ? 'end' : w === 122 ? 'start' : 'middle'); });
+  s += T(40, 172, 'Schematic, not to scale · absolute neutrophil count / blood count · each tick = one test', 's', 'start');
+  $('cloz-svg').innerHTML = s;
+}
+drawCloz(); $('cloz-text').innerHTML = CLOZ;
+
+/* prognosis */
+Psy.table('prog-table', ['Factor', 'Outcome', 'Source'], PROG); $('prog-note').innerHTML = PROG_NOTE;
+Psy.swipeHints();
+</script>
+</body>
+</html>

@@ -26,16 +26,16 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 4. Schizophrenia and other Psychotic disorders
 
-- [ ] **PS4.1** Diagnose and manage a case of Schizophrenia at primary care level
+- [x] **PS4.1** Diagnose and manage a case of Schizophrenia at primary care level — *ICD-11/DSM-5 criteria, first-rank symptoms, duration spectrum picker, dopamine pathways, antipsychotics, EPS/NMS, clozapine, catatonia, prognosis: [Schizophrenia and Other Psychotic Disorders](psychosis-mood/schizophrenia-psychosis.html)*
 
 ### 5. Depressive disorders
 
-- [ ] **PS5.1** Diagnose and manage case of depression at primary care level *(skill)*
-- [ ] **PS5.2** Identify red flag signs of depression and refer to a specialist *(skill)*
+- [x] **PS5.1** Diagnose and manage case of depression at primary care level *(skill)* — *depressive episode ICD-11/DSM-5 counter, antidepressants and their safety, monoamine hypothesis: [Depression and Bipolar Disorder](psychosis-mood/mood-disorders.html)*
+- [x] **PS5.2** Identify red flag signs of depression and refer to a specialist *(skill)* — *red flags and suicide-risk assessment (WHO mhGAP 2016), MHCA 2017 s.115: [Depression and Bipolar Disorder](psychosis-mood/mood-disorders.html)*
 
 ### 6. Bipolar disorders
 
-- [ ] **PS6.1** Diagnose and manage an episode of Mania at primary care level *(skill)*
+- [x] **PS6.1** Diagnose and manage an episode of Mania at primary care level *(skill)* — *mania/hypomania, bipolar I/II, cyclothymia, lithium (NICE CG185 levels) and mood stabilisers: [Depression and Bipolar Disorder](psychosis-mood/mood-disorders.html)*
 
 ### 7. Anxiety Disorders (including OCD)
 
@@ -64,7 +64,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 13. Therapeutics
 
-- [ ] **PS13.1** Describe the process of modified ECT and identify misconceptions associated with ECT
+- [~] **PS13.1** Describe the process of modified ECT and identify misconceptions associated with ECT — *ECT indications, modified ECT, MHCA s.95; procedure and misconceptions not yet covered: [Depression and Bipolar Disorder](psychosis-mood/mood-disorders.html)*
 
 ## Existing material: Revision Hub
 
