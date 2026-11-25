@@ -24,6 +24,10 @@ Last updated: 2026-11-23
     saved wikitext: Fontanelle (skull.html fixed), Human_fertilization (fill-embryo1, 12 quotes) and Thermoregulation
     (fill-physio3, 2 quotes): pages to re-source (agent running). 574 older WP articles had no saved wikitext: fetching and scanning
     (scratchpad wtaudit.sh); act on hits.
+    Audit pass 1 (567 fetched): 13 more cite OpenStax: Anatomical_terms_of_muscle, Condyloid_joint, Connective_tissue,
+    Deltoid_ligament, Epimysium, Facial_muscles, Fibrous_joint, Hinge_joint, Intercalated_disc, Joint, Muscles_of_mastication,
+    Plane_joint, Saddle_joint (~77 quotes in muscle-tissue, joints-general, connective-tissue, joints-ankle-foot,
+    hn-face-mastication, fill-ll). Re-source when a slot frees. Pass 2 (56 redirects, 23 empty) running.
   - Site-wide TODO (dedicated pass, not between modules): --mark and --clin identical in dark (#ff7b6f), ΔE≈10 in light;
     defined in atlas.css, 36 anatomy pages, ophthalmology pages and every subject's assets. Orange is taken by --ins, so
     pick new values with tools/test/colcheck.py and retest all pages. Reviewers flag it in every module.
