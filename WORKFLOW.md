@@ -55,7 +55,7 @@ Last updated: 2026-11-23
   page (running; then one review for the whole module; downloads ready, NLEM 2022
   official text missing). Inducer/inhibitor lists: use FDA DDI table (public domain) + Wikipedia/StatPearls. G01 [x] build (549 quotes; 3 pages; no new tokens; guidelines via open papers) [x] review (17: ACS picker
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
-  colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. C01 [ ] build (running; community-medicine/epidemiology/). Pd01 [ ] build (running; paediatrics/growth-development/).
+  colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. C01 [x] build (328 quotes; CDC 2012, WHO 1968, SRS 2020, NFHS-5, IDSP; no new tokens) [ ] review (running). Pd01 [ ] build (running; paediatrics/growth-development/).
   FM01 [x] build (397 quotes; THOA/THOT Rules 2014 Form 10, WHO ICD-11 2026 + RGI MCCD 2012; tokens --livor
   --livor-co --sulfhb) [ ] review (running).
   M01 [x] build (635 quotes; 3 pages; 7 stain/structure tokens;
