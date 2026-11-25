@@ -27,7 +27,9 @@ Last updated: 2026-11-23
     Audit pass 1 (567 fetched): 13 more cite OpenStax: Anatomical_terms_of_muscle, Condyloid_joint, Connective_tissue,
     Deltoid_ligament, Epimysium, Facial_muscles, Fibrous_joint, Hinge_joint, Intercalated_disc, Joint, Muscles_of_mastication,
     Plane_joint, Saddle_joint (~77 quotes in muscle-tissue, joints-general, connective-tissue, joints-ankle-foot,
-    hn-face-mastication, fill-ll). Sent to the re-sourcing agent (queued after its first two). Pass 2 (56 redirects, 23 empty) running.
+    hn-face-mastication, fill-ll). Sent to the re-sourcing agent (queued after its first two). Pass 2: redirects followed; 1 more (Myocyte → Muscle cell,
+    OpenStax; muscle-tissue 4). The 23 "empty" were short redirects, all targets clean. AUDIT COMPLETE: 16 articles in
+    total, all with the re-sourcing agent. Reusable: tools/test/wp_audit.sh OUTDIR.
   - Site-wide TODO (dedicated pass, not between modules): --mark and --clin identical in dark (#ff7b6f), ΔE≈10 in light;
     defined in atlas.css, 36 anatomy pages, ophthalmology pages and every subject's assets. Orange is taken by --ins, so
     pick new values with tools/test/colcheck.py and retest all pages. Reviewers flag it in every module.
