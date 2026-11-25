@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Transmission, Prevention, Outbreaks and Screening</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/cm.css">
+<style>
+/* tokens from cm.css only: --accent = the selected item (UI: the chosen prevention level's band) only, --mark = the selected point on a graph
+   (PPV curve); --clin is for clinical points only and is not used here. Arrows, thresholds, exposures and screening rounds are ink (weight, dashes, markers).
+   Cases and test-positive people with the disease are filled ink; people without it are outlines or hatched; no new colours. */
+svg.sch .bar{fill:var(--ink);fill-opacity:.55}
+svg.sch .barl{fill:var(--ink);fill-opacity:.2}
+svg.sch .hat{fill:url(#hatch);stroke:var(--ink);stroke-width:1}
+svg.sch .cas{fill:var(--ink);fill-opacity:.65;stroke:var(--ink);stroke-width:1}
+svg.sch .grp{fill:var(--surface);stroke:var(--ink);stroke-width:1.2}
+svg.sch .band{fill:var(--accent);fill-opacity:.14;stroke:var(--accent);stroke-width:1.5}
+svg.sch .win{fill:var(--ink);fill-opacity:.08;stroke:var(--ink);stroke-dasharray:4 3}
+.crit{counter-reset:c;list-style:none;padding:0;margin:0}
+.crit li{counter-increment:c;padding:5px 0 5px 30px;position:relative;border-bottom:1px solid var(--line);font-size:14px}
+.crit li::before{content:counter(c);position:absolute;left:0;font:600 13px var(--f-mono);color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Community Medicine</a> <span class="muted">· Module 01: <a href="concepts-measures.html">Concepts and measures</a> · <a href="study-designs.html">Study designs</a> · <span aria-current="page">Transmission, outbreaks, screening</span></span></nav>
+
+<header class="stack">
+  <h1>Transmission, Prevention, Outbreak Investigation and Screening</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-tr">Transmission</a> <a href="#h-prev">Levels of prevention</a> <a href="#h-time">Incubation and serial interval</a> <a href="#h-herd">Herd immunity</a> <a href="#h-curve">Epidemic curves</a> <a href="#h-out">Outbreak investigation</a> <a href="#h-scr">Screening</a> <a href="#h-lead">Lead-time and length bias</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-tr">
+  <h2 id="h-tr">Modes of transmission</h2>
+  <div class="prose" id="tr-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-prev">
+  <h2 id="h-prev">Levels of prevention on the natural history of disease</h2>
+  <div class="chips" id="prev-tg" aria-label="Level of prevention"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="prev-svg" viewBox="0 0 520 220" role="img" aria-label="Natural history of disease as a bar: before risk factors, susceptible, subclinical disease, clinical disease, outcome; the stage targeted by the chosen level of prevention is shaded"></svg></div>
+    <div class="prose find" id="prev-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="prev-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-time">
+  <h2 id="h-time">Incubation period and serial interval</h2>
+  <div class="sliders" id="time-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="time-svg" viewBox="0 0 520 200" role="img" aria-label="Two people on a time line in days: A is infected, falls ill after A's incubation period and infects B; B falls ill after B's incubation period; the serial interval runs from A's onset to B's onset"></svg></div>
+    <div class="prose find" id="time-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-herd">
+  <h2 id="h-herd">Herd immunity threshold: 1 − 1/R<sub>0</sub></h2>
+  <div class="sliders" id="herd-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="herd-svg" viewBox="0 0 430 270" role="img" aria-label="One hundred people as dots; the immune ones are filled; a line marks the herd immunity threshold"></svg></div>
+    <div class="prose find" id="herd-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-curve">
+  <h2 id="h-curve">Epidemic curves: read the pattern</h2>
+  <div class="chips" id="curve-tg" aria-label="Epidemic pattern"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="curve-svg" viewBox="0 0 520 260" role="img" aria-label="Histogram of cases by day of onset for the chosen epidemic pattern; exposures are marked as triangles on the time axis"></svg></div>
+    <div class="prose find" id="curve-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-out">
+  <h2 id="h-out">Investigating an outbreak: the 13 steps (CDC 2012)</h2>
+  <div class="step" id="out-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="out-svg" viewBox="0 0 520 190" role="img" aria-label="Thirteen numbered steps in two rows; the current step is outlined"></svg></div>
+    <div class="prose find" id="out-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="out-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-scr">
+  <h2 id="h-scr">Screening: Wilson and Jungner (WHO 1968) and the predictive-value calculator</h2>
+  <div class="two">
+    <div class="prose" id="scr-text"></div>
+    <ol class="crit" id="wj-list"></ol>
+  </div>
+  <div class="chips" id="scr-tg" aria-label="Example"></div>
+  <div class="sliders" id="scr-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="scr-svg" viewBox="0 0 520 300" role="img" aria-label="Out of 10,000 people screened: the test-positive bar split into true and false positives, the test-negative bar into true and false negatives"></svg></div>
+    <div class="res" id="scr-res" aria-live="polite"></div>
+  </div>
+  <div class="schbox"><svg class="fig sch" id="ppv-svg" viewBox="0 0 520 230" role="img" aria-label="Positive predictive value against prevalence on a log scale, for the chosen sensitivity and specificity; the current prevalence is marked"></svg></div>
+  <p class="muted" id="scr-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-lead">
+  <h2 id="h-lead">Lead-time bias and length bias</h2>
+  <div class="chips" id="lead-tg" aria-label="Bias"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="lead-svg" viewBox="0 0 520 240" role="img" aria-label="Schematic time lines explaining the chosen screening bias"></svg></div>
+    <div class="prose find" id="lead-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BTransmission%2C%20Prevention%2C%20Outbreak%20Investigation%20and%20Screening%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fcommunity-medicine%2Fepidemiology%2Ftransmission-outbreak-screening.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/cm.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources, or attributed: sources-local/facts/fill-c01.md, Part C) ===================== */
+const LEDE = 'How infection travels, where each level of prevention acts on the natural history of disease, the timing of incubation and serial interval, the herd immunity threshold from R<sub>0</sub>, five epidemic curves, the CDC\'s 13 steps for an outbreak, and screening — Wilson and Jungner\'s principles and a calculator that shows the positive predictive value falling as prevalence falls.';
+
+const TR_TEXT = '<p>Transmission is <b>direct</b> (direct contact, droplet spread) or <b>indirect</b> (airborne, vehicle-borne, vector-borne — mechanical or biological) (CDC 2012); the common routes include faecal–oral, food, sexual contact, insect bites, fomites, droplets and skin contact (StatPearls).</p>'
+  + '<p><b>Control measures on people:</b> <b>isolation</b> separates ill (infected) persons; <b>quarantine</b> separates or restricts the movement of persons who are well but may have been exposed (CDC 2012). Quarantine of household contacts reduced spread in a 2023 study of mild COVID-19.</p><p>The chain of infection (agent → reservoir → portal of exit → mode of transmission → portal of entry → susceptible host), the transmission tree and how to break each link are on the microbiology page: <a href="../../microbiology/general/sterilisation-epidemiology.html#h-chain">Sterilisation, Disinfection and the Chain of Infection</a>.</p>';
+
+/* natural history stages (CDC 2012) and levels: key -> [chip, [stage from, stage to], finding] */
+const STAGES = [['before risk', 'factors'], ['susceptible', '(risk present)'], ['subclinical', 'disease'], ['clinical', 'disease'], ['recovery, disability,', 'death']];
+const PREV = {
+  prim0: ['Primordial', [0, 0], '<h3>Primordial prevention</h3><p>Prevents the <b>risk factors</b> from developing at all — early in life, even before conception (Wikipedia) — by changing social and environmental conditions for a whole population (a 2022 letter). Primary prevention modifies risk factors once they have appeared; primordial prevention keeps them from appearing (a 2026 viewpoint).</p>'],
+  prim: ['Primary', [1, 1], '<h3>Primary prevention</h3><p>Acts <b>before disease</b> starts. Modes of intervention: <b>health promotion</b> and <b>specific protection</b> (Wikipedia). Example: turning down a home water-heater to prevent scalds in children (Wikipedia).</p>'],
+  sec: ['Secondary', [2, 2], '<h3>Secondary prevention</h3><p>Stops <b>asymptomatic</b> disease from progressing (Wikipedia; a 2022 letter: early identification). Mode: <b>early diagnosis and prompt treatment</b> (Wikipedia; a 2024 review). <b>Disability limitation</b>: Wikipedia puts it here; a 2024 review puts it under tertiary prevention. <b>Screening</b> belongs here: it aims at the subclinical phase, when intervention works better (CDC 2012) — for example annual chlamydia screening (CDC 2012).</p>'],
+  ter: ['Tertiary', [3, 4], '<h3>Tertiary prevention</h3><p>Reduces the damage of <b>established, symptomatic</b> disease and its sequelae (Wikipedia; a 2022 letter). Mode: <b>rehabilitation</b> (Wikipedia; a 2024 review); a 2024 review also puts <b>disability limitation</b> here (Wikipedia: secondary).</p>'],
+};
+const PREV_NOTE = 'Natural history stages from CDC 2012 (onset of symptoms marks subclinical → clinical; most diagnoses are made in the clinical stage; the process ends in recovery, disability or death). Wikipedia adds quaternary prevention: avoiding unnecessary medical interventions. The five modes of intervention — health promotion, specific protection, early diagnosis and prompt treatment, disability limitation, rehabilitation — are listed in a 2023 article; sources differ on whether disability limitation is secondary (Wikipedia) or tertiary (a 2024 review).';
+
+/* epidemic curves: key -> [chip, daily counts (schematic), exposure days, finding] */
+const CURVE = {
+  point: ['Point source', [0,0,3,9,14,12,9,6,4,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], [0], '<h3>Point source</h3><p>Everyone exposed over a brief period, so all fall ill within <b>one incubation period</b>; the curve rises steeply and falls more gradually (CDC 2012).</p><p><b>Finding the exposure (CDC 2012):</b> from the peak (or the median case) count back one <b>average</b> incubation period; from the first case count back the <b>minimum</b> incubation period. Shaded: that window for a made-up disease with a 2-day minimum and 4-day average incubation.</p>'],
+  cont: ['Continuous common source', [0,0,1,3,5,6,7,7,6,7,7,6,7,6,7,7,6,7,6,5,3,2,1,0,0,0,0,0,0,0], [0,2,4,6,8,10,12,14,16,18], '<h3>Continuous common source</h3><p>Exposure to the same source is <b>prolonged</b>, so the curve has a <b>plateau</b> instead of a peak; the range of exposures and incubation periods flattens and widens it (CDC 2012).</p>'],
+  inter: ['Intermittent common source', [0,0,2,5,7,4,2,0,0,0,0,0,3,6,4,1,0,0,0,0,0,1,4,6,3,1,0,0,0,0], [0,10,19], '<h3>Intermittent common source</h3><p>The curve reflects the <b>intermittent</b> exposures: irregular peaks (CDC 2012).</p>'],
+  prop: ['Propagated', [1,0,0,0,0,3,1,0,0,0,2,6,4,1,0,1,5,9,7,3,1,2,6,10,9,5,2,1,0,0], [0], '<h3>Propagated</h3><p>Spread <b>from person to person</b>, so cases occur over <b>more than one incubation period</b> (CDC 2012); drawn here as successive waves (spacing schematic).</p>'],
+  mixed: ['Mixed', [0,0,3,8,12,9,5,2,1,0,1,3,4,2,1,0,1,3,2,1,0,0,1,1,0,0,0,0,0,0], [0], '<h3>Mixed</h3><p>Features of both: a common-source outbreak followed by person-to-person spread (CDC 2012).</p>'],
+};
+
+/* outbreak steps (CDC 2012, Table 6.2): [short label, finding] */
+const OUT = [
+  ['Prepare for field work', 'Step 1.'],
+  ['Establish the existence of an outbreak', 'An outbreak is more cases than expected in a given area or group over a particular period (CDC 2012).'],
+  ['Verify the diagnosis', 'Closely linked to step 2; without the clinical background, bring a qualified clinician (CDC 2012).'],
+  ['Construct a working case definition', 'Early on a "loose", sensitive definition — confirmed, probable and possible cases — shows the extent of the problem (CDC 2012).'],
+  ['Find cases systematically and record information', 'Cases go into a line listing or a database (CDC 2012).'],
+  ['Perform descriptive epidemiology', 'Time (the epidemic curve, below), place and person (CDC 2012).'],
+  ['Develop hypotheses', 'About the causes of the observed patterns and the factors that increase risk (CDC 2012).'],
+  ['Evaluate hypotheses epidemiologically', 'A cohort study suits a well-defined group such as wedding guests: attack rates compared with a risk ratio; a case-control study gives an odds ratio (CDC 2012).'],
+  ['As necessary, reconsider, refine and re-evaluate hypotheses', 'Step 9.'],
+  ['Compare and reconcile with laboratory and/or environmental studies', 'Step 10.'],
+  ['Implement control and prevention measures', 'Listed as step 11, but control of the outbreak is the primary goal and usually starts early (CDC 2012).'],
+  ['Initiate or maintain surveillance', 'Step 12.'],
+  ['Communicate findings', 'Step 13.'],
+];
+const OUT_NOTE = 'The 13 steps are listed "in conceptual order": in practice several run at the same time or in a different order (CDC 2012). A 1998 review lists the same components in a shorter list (case definition, confirm cases, background rate, find cases …). In India, a rising trend reported to IDSP is investigated by Rapid Response Teams (MoHFW IDSP, page updated 2026).';
+
+const SCR_TEXT = '<p><b>Screening</b>: "the presumptive identification of unrecognized disease or defect by the application of tests, examinations or other procedures which can be applied rapidly" (CCI 1951, as quoted by WHO 1968). A screening test is <b>not diagnostic</b> (WHO 1968); it is done on people without symptoms (StatPearls).</p><p>Wilson and Jungner\'s ten principles (WHO 1968):</p>';
+const WJ = ['The condition sought should be an important health problem.', 'There should be an accepted treatment for patients with recognized disease.', 'Facilities for diagnosis and treatment should be available.', 'There should be a recognizable latent or early symptomatic stage.', 'There should be a suitable test or examination.', 'The test should be acceptable to the population.', 'The natural history of the condition, including development from latent to declared disease, should be adequately understood.', 'There should be an agreed policy on whom to treat as patients.', 'The cost of case-finding should be economically balanced in relation to possible expenditure on medical care as a whole.', 'Case-finding should be a continuing process and not a "once and for all" project.'];
+
+/* screening presets: [key, label, sensitivity %, specificity %, prevalence %] (made-up test) */
+const SCR_PRE = [['low', 'Rare disease: prevalence 1%', 90, 95, 1], ['mid', 'Higher-risk group: prevalence 10%', 90, 95, 10], ['high', 'Symptomatic clinic: prevalence 40%', 90, 95, 40]];
+const SCR_NOTE = 'Sensitivity = TP/(TP+FN), specificity = TN/(TN+FP), PPV = TP/(TP+FP), NPV = TN/(TN+FN) (a 2021 review; a 2017 review; Wikipedia). Sensitivity and specificity are properties of the test and do not depend on prevalence; PPV and NPV do — PPV rises with prevalence (Wikipedia; a 2021 review). The curve uses PPV = Se·P / [Se·P + (1 − Sp)(1 − P)] (Wikipedia). Example test values are made up.';
+
+const BASED = '<b>Based on:</b> CDC, <i>Principles of Epidemiology in Public Health Practice</i>, 3rd ed. (2012; public domain); Wilson and Jungner, <i>Principles and practice of screening for disease</i> (WHO, 1968); MoHFW, IDSP "About IDSP"; StatPearls (NCBI Bookshelf; abstracts); open-access papers on herd immunity (2020, 2022, 2026), incubation and serial interval (2024), levels and primordial prevention (2022, 2026), outbreak investigation (1998), diagnostic accuracy (2017, 2021) and lead-time bias (2021, 2022) (Europe PMC); Wikipedia (articles that cite CDC were not counted as a second source for CDC facts).';
+const MODELS = '<b>Models used:</b> all drawings are schematics; the epidemic curves, incubation periods, screening-test values and survival times are invented for illustration, not data for a real disease.';
+
+/* ===================== CODE ===================== */
+const {$, T} = CM;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS; $('tr-text').innerHTML = TR_TEXT;
+
+/* ---- levels of prevention ---- */
+function drawPrev(k) {
+  let s = CM.DEFS; const x0 = 10, w = 100, y = 70;
+  const [a, b] = PREV[k][1];
+  s += `<rect class="band" x="${x0 + a * w + 2}" y="${y - 30}" width="${(b - a + 1) * w - 4}" height="104" rx="8"/>` + T(x0 + (a + b + 1) * w / 2, y - 38, PREV[k][0] + ' acts here', 'l b', 'middle');
+  STAGES.forEach((st, i) => {
+    const x = x0 + i * w;
+    s += `<rect class="${i >= 2 && i <= 3 ? 'cas' : 'grp'}" x="${x + 6}" y="${y}" width="${w - 12}" height="34" rx="6" style="${i === 2 ? 'fill-opacity:.25' : ''}"/>`;
+    const [l1, l2] = st;
+    s += T(x + w / 2, y + 56, l1, 's', 'middle') + (l2 ? T(x + w / 2, y + 70, l2, 's', 'middle') : '');
+  });
+  s += `<path class="flow" d="M10 160 L510 160"/>` + T(210, 178, 'exposure', 's', 'middle') + T(310, 178, 'symptoms begin', 's', 'middle');
+  s += `<path class="lead" d="M210 104 L210 166"/><path class="lead" d="M310 104 L310 166"/>`;
+  s += T(510, 210, 'schematic; stages: CDC 2012', 's', 'end');
+  $('prev-svg').innerHTML = s; $('prev-find').innerHTML = PREV[k][2];
+}
+CM.toggles('prev-tg', Object.entries(PREV).map(([k, v]) => [k, v[0]]), drawPrev, 'prim0'); drawPrev('prim0');
+$('prev-note').textContent = PREV_NOTE;
+
+/* ---- incubation and serial interval ---- */
+const TS = {IA: 4, TA: 1, IB: 4};
+function drawTime() {
+  const X = CM.scale(0, 24, 30, 500); let s = CM.DEFS;
+  const aOn = TS.IA, bInf = TS.IA + TS.TA, bOn = bInf + TS.IB;
+  s += `<path class="axis" d="M30 170 L500 170"/>`; for (let d = 0; d <= 24; d += 4) s += `<path class="grid" d="M${X(d)} 166 L${X(d)} 174"/>` + T(X(d), 188, d, 's', 'middle');
+  s += T(500, 160, 'days', 's', 'end');
+  const seg = (x1, x2, y, lab, cls) => `<rect class="${cls}" x="${X(x1)}" y="${y}" width="${Math.max(2, X(x2) - X(x1)).toFixed(1)}" height="16" rx="3"/>` + T((X(x1) + X(x2)) / 2, y - 5, lab, 'l s', 'middle');
+  s += T(26, 52, 'A', 'b', 'end') + seg(0, aOn, 40, 'incubation A', 'grp') + `<rect class="cas" x="${X(aOn)}" y="40" width="${(X(aOn + 3) - X(aOn)).toFixed(1)}" height="16" rx="3"/>`;
+  s += T(26, 112, 'B', 'b', 'end') + seg(bInf, bOn, 100, 'incubation B', 'grp') + `<rect class="cas" x="${X(bOn)}" y="100" width="${(X(bOn + 3) - X(bOn)).toFixed(1)}" height="16" rx="3"/>`;
+  s += `<path class="flow" d="M${X(bInf)} 58 L${X(bInf)} 96"/>` + T(X(bInf) + 4, 80, 'A infects B' + (TS.TA < 0 ? ' (before A is ill)' : ''), 'l s', 'start');
+  s += `<path d="M${X(aOn)} 140 L${X(bOn)} 140" style="stroke:var(--ink);stroke-width:3" marker-end="url(#arr)"/>` + T((X(aOn) + X(bOn)) / 2, 158, 'serial interval ' + (TS.TA + TS.IB) + ' d', 'l b', 'middle');
+  s += `<path class="lead dash" d="M${X(aOn)} 56 L${X(aOn)} 146"/><path class="lead dash" d="M${X(bOn)} 116 L${X(bOn)} 146"/>`;
+  s += T(500, 14, 'filled = ill (symptoms); schematic', 's', 'end');
+  $('time-svg').innerHTML = s;
+  $('time-find').innerHTML = `<h3>Serial interval = ${CM.mn(TS.TA)} + ${TS.IB} = ${TS.TA + TS.IB} days</h3><p><b>Incubation period:</b> exposure (infection) to onset of symptoms; it has a range even for one disease (CDC 2012; a 2024 study).</p><p><b>Serial interval:</b> the time between successive cases in a chain — onset to onset (Wikipedia; a 2024 study). It equals the time from A\'s onset to infecting B plus B\'s incubation period (Wikipedia).</p>` + (TS.TA < 0 ? '<p><b>Serial interval shorter than the incubation period:</b> B was infected before A had symptoms — pre-symptomatic transmission, as reported for SARS-CoV-2 (a 2023 meta-analysis) and for mpox in 2022 (a 2022 study; a 2024 study).</p>' : '');
+}
+for (const [k, lab, mn, mx] of [['IA', 'Incubation period of A', 3, 10], ['TA', 'From A\'s onset to infecting B (negative = before A\'s symptoms)', -2, 5], ['IB', 'Incubation period of B', 3, 10]]) CM.slider('time-sl', {id: 't' + k, label: lab, min: mn, max: mx, step: 1, value: TS[k], fmt: v => v + ' d'}, v => { TS[k] = v; drawTime(); }).init();
+drawTime();
+
+/* ---- herd immunity ---- */
+const HS = {R0: 4, cov: 60};
+function drawHerd() {
+  const hit = 1 - 1 / HS.R0; let s = '';
+  for (let i = 0; i < 100; i++) { const r = Math.floor(i / 10), c = i % 10, x = 30 + c * 24, y = 30 + r * 22; s += `<circle cx="${x}" cy="${y}" r="8" class="${i < HS.cov ? 'cas' : 'grp'}"/>`; }
+  /* threshold drawn after its dot */
+  const th = Math.min(99, Math.ceil(hit * 100 - 1e-9)), r = Math.floor(th / 10), c = th % 10;
+  s += T(276, 40, 'filled = immune', 's', 'start') + T(276, 58, 'outline = susceptible', 's', 'start');
+  s += T(276, 100, 'threshold ' + (hit * 100).toFixed(0) + '%', 'b', 'start') + T(276, 118, 'coverage ' + HS.cov + '%', 'b', 'start') + T(276, 136, 'bar = threshold', 's', 'start');
+  s += `<path d="M${(18 + c * 24).toFixed(0)} ${18 + r * 22} L${(18 + c * 24).toFixed(0)} ${40 + r * 22}" style="stroke:var(--ink);stroke-width:4"/>`;
+  s += T(276, 250, 'schematic', 's', 'start');
+  $('herd-svg').innerHTML = s;
+  $('herd-find').innerHTML = `<h3>HIT = 1 − 1/${HS.R0} = ${(hit * 100).toFixed(1)}%</h3>`
+    + `<p>${HS.cov >= hit * 100 - 1e-9 ? 'Coverage is <b>at or above</b> the theoretical threshold.' : 'Coverage is <b>below</b> the theoretical threshold.'}</p>`
+    + '<p><b>R<sub>0</sub></b> is the expected number of cases directly generated by one case in a fully susceptible population (Wikipedia; a 2026 primer). Herd immunity: when enough people are immune, the few susceptible are protected (CDC 2012); the threshold is about <b>1 − 1/R<sub>0</sub> in simple models</b> (a 2026 primer; Wikipedia) — R<sub>0</sub> 2 → 50%, R<sub>0</sub> 10 → 90% (Wikipedia).</p>'
+    + '<p class="note">A theoretical value: measles and rubella outbreaks have occurred with 85–90% immunization (CDC 2012), and the threshold needs constant revision as transmission changes (a 2022 paper).</p>';
+}
+CM.slider('herd-sl', {id: 'r0', label: 'Basic reproduction number R₀', min: 1.1, max: 20, step: 0.1, value: HS.R0, fmt: v => v.toFixed(1)}, v => { HS.R0 = v; drawHerd(); }).init();
+CM.slider('herd-sl', {id: 'cov', label: 'Proportion immune', min: 0, max: 100, step: 1, value: HS.cov, fmt: v => v + '%'}, v => { HS.cov = v; drawHerd(); }).init();
+drawHerd();
+
+/* ---- epidemic curves ---- */
+function drawCurve(k) {
+  const [, data, expo] = CURVE[k]; const X = CM.scale(0, 30, 50, 500), Y = CM.scale(0, 15, 210, 40), bw = X(1) - X(0);
+  let s = `<path class="axis" d="M50 40 L50 210 L500 210"/>`;
+  for (const t of [0, 5, 10, 15]) s += `<path class="grid" d="M46 ${Y(t)} L500 ${Y(t)}"/>` + T(42, Y(t) + 4, t, 's', 'end');
+  for (let d = 0; d <= 30; d += 5) s += T(X(d), 226, d, 's', 'middle');
+  s += T(275, 246, 'day of onset', 's', 'middle') + T(8, 26, 'cases', 's', 'start');
+  if (k === 'point') { /* CDC method: peak (day 4) − average 4 → day 0; first case (day 2) − minimum 2 → day 0 */
+    s += `<rect class="win" x="${X(0)}" y="40" width="${(X(1) - X(0)).toFixed(1)}" height="170"/>` + T(X(1) + 2, 34, 'likely exposure: day 0', 'l s', 'start');
+  }
+  data.forEach((n, d) => { if (n) s += `<rect class="bar" x="${(X(d) + 1).toFixed(1)}" y="${Y(n).toFixed(1)}" width="${(bw - 2).toFixed(1)}" height="${(210 - Y(n)).toFixed(1)}"/>`; });
+  for (const e of expo) s += `<path d="M${X(e) + bw / 2} 212 l-5 9 h10 z" style="fill:var(--ink)"/>`;
+  s += T(500, 34, '▲ exposure · schematic', 's', 'end');
+  $('curve-svg').innerHTML = s; $('curve-find').innerHTML = CURVE[k][3] + '<p class="note">An epidemic curve plots the number of cases (y-axis) against the date of onset (x-axis); its shape suggests the pattern of spread (CDC 2012). Named types also used in a 2023 outbreak-teaching paper.</p>';
+}
+CM.toggles('curve-tg', Object.entries(CURVE).map(([k, v]) => [k, v[0]]), drawCurve, 'point'); drawCurve('point');
+
+/* ---- outbreak stepper ---- */
+const OS = {s: 0};
+function drawOut() {
+  let s = '';
+  OUT.forEach((r, i) => {
+    const row = i < 7 ? 0 : 1, col = row ? i - 7 : i, x = 14 + col * 72 + (row ? 36 : 0), y = 30 + row * 90;
+    s += `<circle cx="${x + 26}" cy="${y + 20}" r="18" class="${i === 10 ? 'cas' : 'grp'}" style="${i === 10 ? 'fill-opacity:.25' : ''}"/>` + T(x + 26, y + 25, i + 1, 'b', 'middle');
+    if (i === OS.s) s += `<circle class="sel" cx="${x + 26}" cy="${y + 20}" r="24"/>`;
+  });
+  s += T(14, 176, 'Step 11 (shaded): control usually starts early (CDC 2012). Schematic.', 's', 'start');
+  $('out-svg').innerHTML = s; $('out-find').innerHTML = `<h3>${OS.s + 1}. ${OUT[OS.s][0]}</h3><p>${OUT[OS.s][1]}</p>`;
+}
+CM.stepper('out-step', OUT.map((r, i) => String(i + 1)), drawOut, OS);
+$('out-note').textContent = OUT_NOTE;
+
+/* ---- screening ---- */
+$('scr-text').innerHTML = SCR_TEXT; $('wj-list').innerHTML = WJ.map(x => `<li>${x}</li>`).join('');
+const SS = {se: 90, sp: 95, pr: 1};
+const sl = {};
+function drawScr() {
+  const N = 10000, D = N * SS.pr / 100, H = N - D, TP = D * SS.se / 100, FN = D - TP, FP = H * (1 - SS.sp / 100), TN = H - FP;
+  const ppv = TP / (TP + FP), npv = TN / (TN + FN);
+  /* bars: positives and negatives, length proportional to count on a common scale */
+  const sc = 440 / N; let s = '';
+  const bar = (y, lab, a, aCls, aLab, b, bCls, bLab) => {
+    const wa = a * sc, wb = b * sc;
+    return T(40, y - 8, lab, 'b', 'start') + `<rect class="${aCls}" x="40" y="${y}" width="${Math.max(wa, 0).toFixed(1)}" height="30"/>` + `<rect class="${bCls}" x="${(40 + wa).toFixed(1)}" y="${y}" width="${Math.max(wb, 0).toFixed(1)}" height="30"/>`
+      + T(40, y + 48, aLab + ' ' + Math.round(a).toLocaleString('en-IN'), 'l s', 'start') + T(480, y + 48, bLab + ' ' + Math.round(b).toLocaleString('en-IN'), 'l s', 'end');
+  };
+  s += bar(40, 'Test positive: ' + Math.round(TP + FP).toLocaleString('en-IN'), TP, 'cas', 'true positives (have it)', FP, 'hat', 'false positives');
+  s += bar(150, 'Test negative: ' + Math.round(TN + FN).toLocaleString('en-IN'), FN, 'cas', 'false negatives', TN, 'grp', 'true negatives');
+  s += T(40, 260, 'filled = has the disease; out of 10,000 screened; bar length = number of people', 's', 'start') + T(480, 290, 'schematic', 's', 'end');
+  $('scr-svg').innerHTML = s;
+  const r = (l, v, f) => `<span>${l}</span><span class="v">${v}</span><span class="f">${f}</span>`;
+  $('scr-res').innerHTML = r('Positive predictive value', (ppv * 100).toFixed(1) + '%', `TP/(TP+FP) = ${Math.round(TP)}/${Math.round(TP + FP)}`) + r('Negative predictive value', (npv * 100).toFixed(2) + '%', `TN/(TN+FN) = ${Math.round(TN)}/${Math.round(TN + FN)}`)
+    + r('Sensitivity', SS.se + '%', 'TP/(TP+FN): unchanged by prevalence') + r('Specificity', SS.sp + '%', 'TN/(TN+FP): unchanged by prevalence');
+  /* PPV curve, log prevalence 0.1–50% */
+  const X = p => 50 + (Math.log10(p) + 1) / (Math.log10(50) + 1) * 440, Y = CM.scale(0, 1, 190, 20);
+  let c = `<path class="axis" d="M50 20 L50 190 L490 190"/>`;
+  for (const p of [0.1, 1, 10, 50]) c += `<path class="grid" d="M${X(p).toFixed(1)} 20 L${X(p).toFixed(1)} 190"/>` + T(X(p), 206, p + '%', 's', 'middle');
+  for (const v of [0.5, 1]) c += T(44, Y(v) + 4, (v * 100) + '%', 's', 'end');
+  const pts = []; for (let i = 0; i <= 80; i++) { const p = Math.pow(10, -1 + i / 80 * (Math.log10(50) + 1)), P = p / 100, v = SS.se / 100 * P / (SS.se / 100 * P + (1 - SS.sp / 100) * (1 - P)); pts.push([X(p), Y(v)]); }
+  c += `<path class="trace" d="${CM.path(pts)}"/>`;
+  c += `<circle cx="${X(SS.pr).toFixed(1)}" cy="${Y(ppv).toFixed(1)}" r="6" style="fill:var(--mark);stroke:var(--ink)"/>` + T(X(SS.pr) + (SS.pr > 15 ? -14 : 12), Y(ppv) + (Y(ppv) < 34 ? 4 : SS.pr > 15 ? -10 : 16), 'PPV ' + (ppv * 100).toFixed(1) + '%', 'l b', SS.pr > 15 ? 'end' : 'start');
+  c += T(270, 224, 'prevalence (log scale)', 's', 'middle') + T(56, 14, 'positive predictive value', 's', 'start');
+  $('ppv-svg').innerHTML = c;
+}
+sl.se = CM.slider('scr-sl', {id: 'se', label: 'Sensitivity', min: 50, max: 99, step: 1, value: SS.se, fmt: v => v + '%'}, v => { SS.se = v; drawScr(); });
+sl.sp = CM.slider('scr-sl', {id: 'sp', label: 'Specificity', min: 50, max: 99, step: 1, value: SS.sp, fmt: v => v + '%'}, v => { SS.sp = v; drawScr(); });
+sl.pr = CM.slider('scr-sl', {id: 'pr', label: 'Prevalence', min: 0.1, max: 50, step: 0.1, value: SS.pr, fmt: v => v.toFixed(1) + '%'}, v => { SS.pr = v; drawScr(); });
+Object.values(sl).forEach(x => x.init());
+CM.toggles('scr-tg', SCR_PRE.map(r => [r[0], r[1]]), k => { const r = SCR_PRE.find(x => x[0] === k); [SS.se, SS.sp, SS.pr] = [r[2], r[3], r[4]]; sl.se.el.value = r[2]; sl.sp.el.value = r[3]; sl.pr.el.value = r[4]; Object.values(sl).forEach(x => x.init()); drawScr(); }, 'low');
+drawScr(); $('scr-note').textContent = SCR_NOTE;
+
+/* ---- lead-time and length bias ---- */
+const LEAD = {
+  lead: ['Lead-time bias', '<h3>Lead-time bias</h3><p><b>Lead time</b> is the time from detection by screening to when the disease would have been diagnosed from symptoms (Wikipedia; a 2022 study). Survival counted from diagnosis looks longer after screening even if death comes no later (Wikipedia); studies of mortality after diagnosis are subject to lead-time bias (a 2021 study). Comparing <b>disease mortality</b> between screened and unscreened populations avoids it (Wikipedia).</p>'],
+  len: ['Length bias', '<h3>Length (length-time) bias</h3><p>Screening at intervals catches more of the <b>slow-growing</b> cases, which have a long symptom-free phase; fast-growing ones show up between screens. Survival is overestimated (Wikipedia, two articles).</p>'],
+};
+function drawLead(k) {
+  let s = CM.DEFS; const X = CM.scale(0, 12, 40, 490);
+  if (k === 'lead') {
+    s += `<path class="axis" d="M40 200 L490 200"/>` + T(490, 216, 'years (made-up)', 's', 'end');
+    const ev = [[0, 'disease begins'], [3, 'found by screening'], [6, 'symptoms → diagnosis'], [10, 'death']];
+    ev.forEach(([t, l], i) => { s += `<path class="lead" d="M${X(t)} 54 L${X(t)} 200"/>` + T(X(t), i % 2 ? 46 : 28, l, 'l s', i === 0 ? 'start' : i === 3 ? 'end' : 'middle'); });
+    s += `<rect class="grp" x="${X(6)}" y="70" width="${X(10) - X(6)}" height="26" rx="4"/>` + T(X(8), 88, 'no screening: 4 y', 'b', 'middle');
+    s += `<rect class="cas" x="${X(3)}" y="130" width="${X(10) - X(3)}" height="26" rx="4" style="fill-opacity:.3"/>` + T(X(6.5), 148, 'screened: 7 y — same death', 'b', 'middle');
+    s += `<path d="M${X(3)} 176 L${X(6)} 176" style="stroke:var(--ink);stroke-width:4"/>` + T(X(4.5), 192, 'lead time', 'l b', 'middle');
+  } else {
+    const xs = X(6); s += `<path class="now" d="M${xs} 30 L${xs} 200" style="stroke:var(--ink);stroke-width:2.4;stroke-dasharray:6 4"/>` + T(xs, 24, 'screening round', 'l b', 'middle');
+    const cases = [[1, 4, 'slow'], [2.5, 9, 'slow'], [4, 10, 'slow'], [5.2, 6.6, 'fast'], [6.5, 7.6, 'fast'], [3.6, 5.0, 'fast'], [7, 8.2, 'fast'], [0.5, 7, 'slow']];
+    cases.forEach(([a, b, t], i) => { const y = 44 + i * 18, hit = a <= 6 && b >= 6; s += `<rect class="${hit ? 'cas' : 'grp'}" x="${X(a)}" y="${y}" width="${X(b) - X(a)}" height="12" rx="3"/>` + T(X(b) + 6, y + 10, t + (hit ? ' — caught' : ''), 's', 'start'); });
+    s += T(40, 214, 'bar = symptom-free (detectable) phase of one case; filled = found at the screen', 's', 'start');
+  }
+  s += T(490, 236, 'schematic', 's', 'end');
+  $('lead-svg').innerHTML = s; $('lead-find').innerHTML = LEAD[k][1];
+}
+CM.toggles('lead-tg', Object.entries(LEAD).map(([k, v]) => [k, v[0]]), drawLead, 'lead'); drawLead('lead');
+CM.swipeHints();
+</script>
+</body>
+</html>

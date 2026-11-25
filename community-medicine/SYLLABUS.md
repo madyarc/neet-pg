@@ -85,14 +85,14 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 7. Epidemiology
 
-- [ ] **CM7.1** Define Epidemiology and describe and enumerate the principles, concepts and uses
-- [ ] **CM7.2** Enumerate, describe and discuss the modes of transmission and measures for prevention and control of communicable and non- communicable diseases
-- [ ] **CM7.3** Enumerate, describe and discuss the sources of epidemiological data
-- [ ] **CM7.4** Define, calculate and interpret morbidity andmortality indicators based on given set of data *(skill)*
-- [ ] **CM7.5** Enumerate, define, describe anddiscuss epidemiologicalstudy designs
-- [ ] **CM7.6** Enumerate and evaluate the need ofscreening tests *(skill)*
-- [ ] **CM7.7** Describe and demonstrate the steps in the Investigation of an epidemic of communicable diseaseand describethe principles of control measures *(skill)*
-- [ ] **CM7.8** Describe the principles ofassociation, causation and biases in epidemiological studies
+- [x] **CM7.1** Define Epidemiology and describe and enumerate the principles, concepts and uses — *definition, uses, triad, iceberg: [Epidemiology: Concepts, Sources of Data and Measures of Disease](epidemiology/concepts-measures.html)*
+- [x] **CM7.2** Enumerate, describe and discuss the modes of transmission and measures for prevention and control of communicable and non- communicable diseases — *modes of transmission (linked to microbiology), levels and modes of prevention, isolation and quarantine: [Transmission, Prevention, Outbreak Investigation and Screening](epidemiology/transmission-outbreak-screening.html)*
+- [x] **CM7.3** Enumerate, describe and discuss the sources of epidemiological data — *census, RBD Act 1969, SRS, NFHS-5, IDSP, registries: [Epidemiology: Concepts, Sources of Data and Measures of Disease](epidemiology/concepts-measures.html)*
+- [x] **CM7.4** Define, calculate and interpret morbidity andmortality indicators based on given set of data *(skill)* — *indicator calculator, direct standardisation, SMR, person-time: [Epidemiology: Concepts, Sources of Data and Measures of Disease](epidemiology/concepts-measures.html)*
+- [~] **CM7.5** Enumerate, define, describe anddiscuss epidemiologicalstudy designs — *design picker on a time line; field trial from one source only: [Study Designs, Measures of Association, Bias and Causation](epidemiology/study-designs.html)*
+- [x] **CM7.6** Enumerate and evaluate the need ofscreening tests *(skill)* — *Wilson and Jungner 1968, screening calculator with prevalence slider, lead-time and length bias: [Transmission, Prevention, Outbreak Investigation and Screening](epidemiology/transmission-outbreak-screening.html)*
+- [x] **CM7.7** Describe and demonstrate the steps in the Investigation of an epidemic of communicable diseaseand describethe principles of control measures *(skill)* — *CDC 13-step outbreak stepper, epidemic curves, incubation and serial interval, herd immunity: [Transmission, Prevention, Outbreak Investigation and Screening](epidemiology/transmission-outbreak-screening.html)*
+- [x] **CM7.8** Describe the principles ofassociation, causation and biases in epidemiological studies — *2×2 calculator, bias, matching, Bradford Hill, blinding, trial phases: [Study Designs, Measures of Association, Bias and Causation](epidemiology/study-designs.html)*
 - [ ] **CM7.9** Describe and demonstrate the application of computers in epidemiology *(skill)*
 - [ ] **CM7.10** Able to demonstrate development of research proposal *(skill)*
 - [ ] **CM7.11** Able to demonstrate the skills for critically appraise the research articles or research data *(skill)*

@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Epidemiological Study Designs, Association and Bias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/cm.css">
+<style>
+/* tokens from cm.css only: --accent = the selected item (UI) only; the direction-of-enquiry arrow is thick ink. Exposed groups are hatched (#hatch), cases are filled ink; no new colours. */
+svg.sch .now{stroke:var(--ink);stroke-width:1.4;stroke-dasharray:4 4}
+svg.sch .grp{fill:var(--surface);stroke:var(--ink);stroke-width:1.4}
+svg.sch .exp{fill:url(#hatch);stroke:var(--ink);stroke-width:1.4}
+svg.sch .cas{fill:var(--ink);fill-opacity:.65;stroke:var(--ink);stroke-width:1.4}
+svg.sch .enq{stroke:var(--ink);stroke-width:3.2;fill:none}
+.hill label{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.hill input{margin-top:3px;accent-color:var(--accent)}
+table.t2 td{font-family:var(--f-mono);text-align:center}
+table.t2 td:first-child{font-family:var(--f-body);text-align:left}
+.cell{width:80px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Community Medicine</a> <span class="muted">· Module 01: <a href="concepts-measures.html">Concepts and measures</a> · <span aria-current="page">Study designs</span> · <a href="transmission-outbreak-screening.html">Transmission, outbreaks, screening</a></span></nav>
+
+<header class="stack">
+  <h1>Study Designs, Measures of Association, Bias and Causation</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-pick">Design picker</a> <a href="#h-2x2">2×2 calculator</a> <a href="#h-bias">Bias and confounding</a> <a href="#h-hill">Bradford Hill</a> <a href="#h-trial">Randomisation, blinding, phases</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-pick">
+  <h2 id="h-pick">Pick a design: which way does the study look in time?</h2>
+  <div class="chips" id="pick-tg" aria-label="Study design"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pick-svg" viewBox="0 0 520 260" role="img" aria-label="Time line from past to future with the present marked; boxes show the groups the design starts from, and a thick arrow shows the direction of enquiry"></svg></div>
+    <div class="prose find" id="pick-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="pick-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-2x2">
+  <h2 id="h-2x2">The 2×2 table: RR, OR, attributable risk, NNT</h2>
+  <div class="chips" id="t2-tg" aria-label="Example"></div>
+  <div class="two">
+    <div class="stack">
+      <div class="scroll"><table class="t t2" id="t2-table">
+        <tr><th></th><th>Outcome yes (ill)</th><th>Outcome no (well)</th><th>Total</th></tr>
+        <tr><td>Exposed</td><td><label>a <input class="cell" type="number" min="0" id="c-a"></label></td><td><label>b <input class="cell" type="number" min="0" id="c-b"></label></td><td id="c-e"></td></tr>
+        <tr><td>Unexposed</td><td><label>c <input class="cell" type="number" min="0" id="c-c"></label></td><td><label>d <input class="cell" type="number" min="0" id="c-d"></label></td><td id="c-u"></td></tr>
+        <tr><td>Total</td><td id="c-1"></td><td id="c-0"></td><td id="c-n"></td></tr>
+      </table></div>
+      <div class="chips" id="t2-kind" aria-label="How the table was collected"></div>
+    </div>
+    <div class="res" id="t2-res" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="t2-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-bias">
+  <h2 id="h-bias">Bias and confounding</h2>
+  <div class="chips" id="bias-tg" aria-label="Kind of error"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="bias-svg" viewBox="0 0 520 240" role="img" aria-label="Diagram of the chosen error: for confounding, a third factor linked to both exposure and outcome"></svg></div>
+    <div class="prose find" id="bias-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-hill">
+  <h2 id="h-hill">From association to causation: Bradford Hill (1965) as a checklist</h2>
+  <div class="two">
+    <div class="hill" id="hill-list"></div>
+    <div class="prose find" id="hill-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="hill-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-trial">
+  <h2 id="h-trial">Trials: randomisation, blinding and phases</h2>
+  <div class="chips" id="bl-tg" aria-label="Blinding"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="bl-svg" viewBox="0 0 520 270" role="img" aria-label="Eligible people are randomised into an intervention arm and a control arm; masks show who is blinded: participants, investigators, and the data analyst"></svg></div>
+    <div class="prose find" id="bl-find" aria-live="polite"></div>
+  </div>
+  <h3>Phases of a drug trial</h3>
+  <div class="step" id="ph-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ph-svg" viewBox="0 0 520 170" role="img" aria-label="Phases 0 to 4 as steps of rising size; the current phase is outlined"></svg></div>
+    <div class="prose find" id="ph-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BStudy%20Designs%2C%20Measures%20of%20Association%2C%20Bias%20and%20Causation%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fcommunity-medicine%2Fepidemiology%2Fstudy-designs.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/cm.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources, or attributed: sources-local/facts/fill-c01.md, Part B) ===================== */
+const LEDE = 'Each design drawn on a time line — where it starts, which way it looks and what it measures — then a 2×2 table that computes the relative risk, odds ratio, attributable risk and number needed to treat, the three ways a study can mislead (selection bias, information bias, confounding), Bradford Hill\'s nine viewpoints, and how trials randomise, blind and move through phases.';
+
+/* designs: key -> [chip, family, finding html] ; drawn by drawPick */
+const DES = {
+  desc: ['Descriptive', 'Descriptive', '<h3>Descriptive epidemiology</h3><p>Describes the distribution of disease by <b>time, place and person</b> — what, who, where, when (CDC 2012). Description leads to hypotheses, which analytic studies then test (CDC 2012).</p>'],
+  eco: ['Ecological', 'Observational, group level', '<h3>Ecological study</h3><p>The unit is a <b>population or group</b>, not a person: exposure and disease are aggregates of individual data, used when individual data are lacking or for large-scale comparisons (StatPearls). Results apply only at population level; inferring individual risk from group data is the <b>ecological fallacy</b> (StatPearls; Wikipedia).</p><p><b>Measure:</b> group-level (aggregate) measures; no individual 2×2 table.</p>'],
+  cross: ['Cross-sectional', 'Analytical, observational', '<h3>Cross-sectional study</h3><p>Exposure and outcome measured in a sample <b>at the same time</b> — a snapshot (CDC 2012; StatPearls). It gives <b>prevalence</b> (StatPearls; a 2016 review; Wikipedia), but it cannot separate cause from effect, so it is the weakest analytic design (CDC 2012; StatPearls).</p><p><b>Strengths:</b> no follow-up, simple (StatPearls); used for population-based surveys, and its prevalence data help design a cohort study (a 2016 review). <b>Weaknesses:</b> no temporality; a one-off survey may miss seasonal trends, rare diseases or rapidly fatal diseases (CDC 2012).</p><p><b>Measure:</b> prevalence; prevalence ratio or odds ratio (Wikipedia).</p>'],
+  cc: ['Case-control', 'Analytical, observational', '<h3>Case-control study</h3><p>Starts from <b>disease</b>: people with it (cases) and comparable people without it (controls), then looks <b>back</b> for exposure (CDC 2012; StatPearls). Choosing a comparable control group is the key step (CDC 2012).</p><p><b>Strengths:</b> rare diseases and long latent periods; quicker and cheaper than a cohort (StatPearls; a 2016 review). <b>Weaknesses:</b> poor for rare exposures; <b>recall bias</b> and <b>selection bias</b> (StatPearls; a 2016 review); incidence cannot be measured.</p><p><b>Measure:</b> the <b>odds ratio</b> — a risk ratio cannot be calculated (CDC 2012); for a rare disease the OR approximates the relative risk (CDC 2012; Wikipedia; a 2016 review).</p>'],
+  coh: ['Cohort (prospective)', 'Analytical, observational', '<h3>Prospective cohort study</h3><p>Starts from <b>exposure</b>: exposed and unexposed people, all free of the outcome, followed <b>forward</b> to count new cases (CDC 2012; StatPearls; a 2016 review). Also called follow-up or prospective (CDC 2012) or longitudinal studies (a 2016 review).</p><p><b>Strengths:</b> gives <b>incidence</b> (cumulative incidence and incidence rate) in each group (a 2016 review). <b>Weaknesses:</b> slower and dearer than a retrospective cohort; <b>loss to follow-up</b> matters, especially if related to exposure or outcome (a 2016 review).</p><p><b>Measure:</b> <b>relative risk</b> (risk ratio) and attributable risk (CDC 2012; StatPearls).</p>'],
+  rcoh: ['Cohort (retrospective)', 'Analytical, observational', '<h3>Retrospective (historical) cohort</h3><p>Still starts from exposure, but both exposure and outcome have already happened: the investigator reconstructs them from records, for example workers in a factory or guests at a wedding (CDC 2012). Faster and cheaper than a prospective cohort (a 2016 review).</p><p><b>Measure:</b> relative risk, as in any cohort (CDC 2012).</p>'],
+  rct: ['Randomised controlled trial', 'Experimental', '<h3>Randomised controlled trial (clinical trial)</h3><p>The investigator <b>assigns</b> the exposure — that is what makes it experimental (CDC 2012); subjects are randomised to an intervention or a comparison group and followed for outcomes (CDC 2012). RCTs are considered the gold standard of design (StatPearls; Wikipedia).</p><p><b>Measure:</b> the risk in each arm, put into the 2×2 formulas below: relative risk, absolute risk reduction, NNT.</p>'],
+  comm: ['Community trial', 'Experimental', '<h3>Community trial</h3><p>Like a clinical trial, but the exposure is assigned to whole <b>communities</b> rather than individuals (CDC 2012, text and glossary). <b>Field trials</b> evaluate new interventions before they are used in disease-control programmes (Smith, Morrow and Ross, <i>Field Trials of Health Interventions</i>, 3rd ed., 2015; one source).</p>'],
+};
+const DES_TABLE = [ /* last column: main weakness named by the sources */
+  ['Ecological', 'Groups, aggregate data', 'Group-level (aggregate) measures', 'Ecological fallacy'],
+  ['Cross-sectional', 'Exposure and outcome at one time', 'Prevalence', 'No temporality'],
+  ['Case-control', 'Disease → look back for exposure', 'Odds ratio', 'Recall and selection bias'],
+  ['Cohort', 'Exposure → follow forward for disease', 'Relative risk, attributable risk', 'Loss to follow-up'],
+  ['Randomised controlled trial', 'Investigator assigns exposure at random', 'Relative risk, ARR, NNT', '— (gold standard)'],
+];
+
+/* 2x2 presets: [key, label, a, b, c, d, kind] */
+const T2_PRE = [['trial', 'Trial (made-up): 10/100 vs 20/100', 10, 90, 20, 80, 'coh'], ['cc', 'Case-control (CDC 2012): OR 12', 32, 20, 8, 60, 'cc'], ['coh', 'Cohort (made-up): 30/200 vs 10/400', 30, 170, 10, 390, 'coh']];
+const T2_NOTE = 'Formulas: risk in exposed Ie = a/(a+b), unexposed Iu = c/(c+d); RR = Ie/Iu; OR = (a/c)/(b/d) = ad/bc; attributable risk (risk difference) = Ie − Iu; attributable risk percent = (Ie − Iu)/Ie; population attributable risk percent = (Ip − Iu)/Ip with Ip = (a+c)/N; NNT = 1/ARR (CDC 2012; Wikipedia; StatPearls; a 2025 guide). NNH = 1/absolute risk increase (Wikipedia). PAR% here describes the whole study population in the table (CDC 2012).';
+
+/* bias: key -> [chip, finding] */
+const BIAS = {
+  sel: ['Selection bias', '<h3>Selection bias</h3><p>Bias is a <b>systematic</b> error, unlike random error (StatPearls). Selection bias arises when the people studied are chosen so that the exposure–outcome association differs from the truth (Wikipedia) — for example when the criteria to recruit the compared groups differ (a 2010 review), or when cases and controls are not drawn alike from the same base (a 2016 review). Prospective studies, especially RCTs, are less prone (a 2010 review).</p><p><b>Example:</b> <i>channelling bias</i> — sicker patients steered to the new drug, common in trials comparing old and new drugs (a 2010 review).</p>'],
+  inf: ['Information bias (recall, interviewer)', '<h3>Information bias</h3><p>Misclassification of exposure, outcome or covariates (Wikipedia); subtypes include <b>interviewer bias</b>, <b>recall bias</b>, loss to follow-up and misclassification (a 2010 review).</p><p><b>Recall bias:</b> people with the outcome remember and report past exposures more completely than controls — a classic problem of case-control studies (StatPearls; Wikipedia; a 2010 review). <b>Interviewer bias:</b> more likely when the interviewer knows the disease status (a 2010 review); blinding reduces it.</p>'],
+  conf: ['Confounding', '<h3>Confounding</h3><p>A third factor, associated with both the exposure and the outcome, distorts the association between them (CDC 2012; a 2010 review; Wikipedia).</p><p><b>Example (Wikipedia):</b> smoking and a health outcome, with alcohol or diet influencing both.</p><p><b>Control:</b> randomisation (spreads known and unknown factors evenly between arms: a 2019 review; Wikipedia), restriction at the design stage, <b>matching</b> of cases and controls on characteristics such as age and sex (a 2016 review; Wikipedia), and stratification in the analysis (a 2012 review).</p>'],
+  other: ['Berkson, Neyman, Hawthorne', '<h3>Three named biases</h3><p><b>Berkson\'s bias</b> (Berkson\'s paradox): different diseases have different chances of hospital admission, which distorts how often they occur together in hospital patients — a selection bias of hospital-based studies (Wikipedia; a 1979 paper).</p><p><b>Neyman bias</b> (prevalence–incidence bias): a selection bias when early deaths are missed, so a study of prevalent cases holds only the survivors (a 2025 study).</p><p><b>Hawthorne effect:</b> people change their behaviour because they know they are being observed (Wikipedia; a 2023 study of colonoscopy quality).</p>'],
+};
+
+/* Bradford Hill: [name, line (paraphrase of Wikipedia + Fedak 2015)] */
+const HILL = [
+  ['Strength', 'The larger the association, the more likely it is causal (a small one can still be causal).'],
+  ['Consistency', 'Found again by different people, places, populations and methods.'],
+  ['Specificity', 'One exposure linked to one disease makes causation more likely.'],
+  ['Temporality', 'The effect must come after the cause.'],
+  ['Biological gradient', 'Dose–response: more exposure, more disease.'],
+  ['Plausibility', 'A plausible mechanism helps (limited by current knowledge).'],
+  ['Coherence', 'Fits with laboratory and other knowledge of the disease.'],
+  ['Experiment', 'Removing or reducing the exposure lowers the risk.'],
+  ['Analogy', 'A similar agent is known to cause a similar disease.'],
+];
+const HILL_NOTE = 'Hill published nine "viewpoints" in 1965 (a 2015 review; Wikipedia); lines are short paraphrases of Wikipedia and that 2015 review. They are aids to judgement, not a score: the count below is only a reading aid.';
+
+/* blinding: key -> [chip, who is blinded [participant, investigator, analyst], finding] */
+const BLIND = {
+  open: ['Open (none)', [0, 0, 0], '<h3>Open label</h3><p>Everyone knows the allocation. Randomisation still removes selection bias in assignment (a 2019 review), and blinding is what curbs assessment bias of subjective outcomes (a 2011 review).</p>'],
+  single: ['Single blind', [1, 0, 0], '<h3>Single blind</h3><p>Only the <b>participant</b> does not know the allocation (a 2011 review; Wikipedia).</p>'],
+  double: ['Double blind', [1, 1, 0], '<h3>Double blind</h3><p>Participant <b>and investigator</b> are blinded (a 2011 review; Wikipedia). Most phase III drug trials are randomised, double-blind and placebo-controlled (Wikipedia).</p>'],
+  triple: ['Triple blind', [1, 1, 1], '<h3>Triple blind</h3><p>A third party is blinded as well — the <b>data analyst</b> (a 2011 review) or "some other third party" (Wikipedia). Blinding curbs information bias (a 2011 review).</p>'],
+};
+const RAND_TEXT = 'Random allocation spreads all factors, known or unknown, evenly between the arms, and removes selection bias in assignment (a 2019 review; Wikipedia). Methods: simple, block, stratified and adaptive randomisation (a 2019 review).';
+
+/* phases: [chip, size label, finding] (US FDA "Step 3: Clinical Research"; Wikipedia) */
+const PH = [
+  ['Phase 0', 'microdose', '<h3>Phase 0 (optional)</h3><p>Exploratory "human microdosing" studies before phase 1 (Wikipedia only).</p>'],
+  ['Phase 1', '20–100', '<h3>Phase 1: safety and dosage</h3><p><b>20 to 100 healthy volunteers</b> or people with the condition (US FDA 2018; Wikipedia 20–100 healthy volunteers).</p>'],
+  ['Phase 2', 'several hundred', '<h3>Phase 2: efficacy and side effects</h3><p><b>Up to several hundred</b> people with the condition (US FDA 2018; Wikipedia gives 50–300).</p>'],
+  ['Phase 3', '300–3,000', '<h3>Phase 3: efficacy and adverse reactions</h3><p><b>300 to 3,000</b> volunteers with the condition (US FDA 2018; Wikipedia: randomised multicentre trials on large groups); the pivotal trials before approval.</p>'],
+  ['Phase 4', 'after approval', '<h3>Phase 4: post-marketing surveillance</h3><p>Carried out once the drug is approved: safety monitoring in everyday use (US FDA 2018; Wikipedia, "pharmacovigilance").</p>'],
+];
+
+const BASED = '<b>Based on:</b> CDC, <i>Principles of Epidemiology in Public Health Practice</i>, 3rd ed. (2012; public domain); US FDA, The Drug Development Process, Step 3: Clinical Research (2018); StatPearls (NCBI Bookshelf; abstracts); open-access reviews on study designs (2016 methodology series), bias (2010), confounding (2012), randomisation (2019), clinical trials (2011), the Bradford Hill criteria (2015) and NNT (2025) (Europe PMC); Wikipedia.';
+const MODELS = '<b>Models used:</b> time lines, the bias diagrams, the blinding drawing and the phase steps are schematics, not to scale; 2×2 examples marked "made-up" are invented numbers.';
+
+/* ===================== CODE ===================== */
+const {$, T} = CM;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* ---- design picker ---- */
+function drawPick(k) {
+  let s = CM.DEFS;
+  const X0 = 30, X1 = 500, xp = 300, ya = 222;
+  s += `<path class="axis" d="M${X0} ${ya} L${X1} ${ya}"/>` + `<path class="flow" d="M${X1 - 30} ${ya} L${X1} ${ya}"/>`;
+  s += T(X0, ya + 16, 'past', 's', 'start') + T(X1, ya + 16, 'future', 's', 'end') + `<path class="now" d="M${xp} 20 L${xp} ${ya}"/>` + T(xp, ya + 16, 'present: study starts', 's', 'middle');
+  const g = (x, y, w, t, cls, sub) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="30" rx="6"/>` + T(x + w / 2, y + 19, t, 'l b', 'middle') + (sub ? T(x + w / 2, y + 44, sub, 's', 'middle') : '');
+  const enq = (x1, x2, y, lab) => `<path class="enq" d="M${x1} ${y} L${x2} ${y}" marker-end="url(#arr)"/>` + T((x1 + x2) / 2, y - 8, lab, 'l s', 'middle');
+  if (k === 'desc') { s += g(210, 60, 180, 'cases', 'cas', 'by time · place · person'); s += T(300, 150, 'what · who · where · when', 's', 'middle'); }
+  if (k === 'eco') { s += g(200, 50, 200, 'group A: rates', 'grp') + g(200, 110, 200, 'group B: rates', 'grp'); s += T(300, 180, 'exposure and disease per population', 's', 'middle'); }
+  if (k === 'cross') { s += g(240, 70, 120, 'sample', 'grp', 'exposure + outcome'); s += T(300, 160, 'measured once, at the same time', 'b', 'middle'); }
+  if (k === 'cc') { s += g(320, 50, 120, 'cases', 'cas') + g(320, 120, 120, 'controls', 'grp'); s += enq(316, 110, 100, 'look back for exposure'); s += g(40, 60, 90, 'exposed?', 'exp'); }
+  if (k === 'coh') { s += g(320, 50, 120, 'exposed', 'exp') + g(320, 120, 120, 'unexposed', 'grp'); s += T(380, 172, 'all free of the disease', 's', 'middle'); s += enq(444, 496, 100, '').replace('<text', '<text style="display:none"'); s += T(470, 40, 'follow', 's', 'middle') + T(470, 135, 'new cases?', 's', 'middle'); }
+  if (k === 'rcoh') { s += g(60, 50, 120, 'exposed', 'exp') + g(60, 120, 120, 'unexposed', 'grp'); s += enq(184, 296, 100, 'records forward'); s += T(240, 172, 'both already happened', 's', 'middle'); s += T(380, 100, 'investigator', 'b', 'middle') + T(380, 116, 'works now', 's', 'middle'); }
+  if (k === 'rct' || k === 'comm') { const u = k === 'rct' ? 'people' : 'communities';
+    s += g(196, 85, 96, 'eligible', 'grp', u); s += `<path class="flow" d="M292 100 L320 70"/><path class="flow" d="M292 100 L320 130"/>`;
+    s += g(324, 50, 120, 'intervention', 'exp') + g(324, 115, 120, 'control', 'grp'); s += T(300, 28, 'random allocation', 'l s', 'middle'); s += enq(448, 498, 100, '').replace('<text', '<text style="display:none"'); s += T(472, 160, 'outcomes', 's', 'middle'); }
+  s += T(X1, 252, 'schematic', 's', 'end');
+  $('pick-svg').innerHTML = s; $('pick-find').innerHTML = `<p class="tag">${DES[k][1]}</p>` + DES[k][2];
+}
+CM.toggles('pick-tg', Object.entries(DES).map(([k, v]) => [k, v[0]]), drawPick, 'cc'); drawPick('cc');
+CM.table('pick-table', ['Design', 'Starts from', 'Measure', 'Main weakness'], DES_TABLE);
+
+/* ---- 2x2 calculator ---- */
+let KIND = 'coh';
+const f3 = x => isFinite(x) ? x.toFixed(3).replace(/\.?0+$/, '') : '—';
+const pc = x => isFinite(x) ? (x * 100).toFixed(1) + '%' : '—';
+function calc2() {
+  const a = +$('c-a').value, b = +$('c-b').value, c = +$('c-c').value, d = +$('c-d').value, N = a + b + c + d;
+  $('c-e').textContent = a + b; $('c-u').textContent = c + d; $('c-1').textContent = a + c; $('c-0').textContent = b + d; $('c-n').textContent = N;
+  const Ie = a / (a + b), Iu = c / (c + d), Ip = (a + c) / N, RR = Ie / Iu, OR = (a * d) / (b * c), AR = Ie - Iu;
+  const row = (l, v, f) => `<span>${l}</span><span class="v">${v}</span><span class="f">${f}</span>`;
+  let h = row('Odds ratio (OR)', f3(OR), `ad/bc = ${a}×${d} ÷ ${b}×${c}`);
+  if (KIND === 'cc') {
+    h += '<span class="f" style="grid-column:1/-1">Case-control table: groups were chosen by disease, so a/(a+b) is not a risk; only the odds ratio is valid (CDC 2012). With a rare disease it approximates the relative risk.</span>';
+  } else {
+    h += row('Risk in exposed (Ie)', pc(Ie), `a/(a+b) = ${a}/${a + b}`) + row('Risk in unexposed (Iu)', pc(Iu), `c/(c+d) = ${c}/${c + d}`);
+    h += row('Relative risk (RR)', f3(RR), 'Ie ÷ Iu');
+    h += row('Attributable risk (risk difference)', CM.mn(pc(AR)), 'Ie − Iu');
+    if (AR > 0) {
+      h += row('Attributable risk percent', pc(AR / Ie), '(Ie − Iu) ÷ Ie');
+      h += row('Population attributable risk percent', pc((Ip - Iu) / Ip), `(Ip − Iu) ÷ Ip, Ip = (a+c)/N = ${pc(Ip)}`);
+      h += row('Number needed to harm', isFinite(1 / AR) ? (1 / AR).toFixed(1) : '—', '1 ÷ absolute risk increase (Wikipedia)');
+    } else if (AR < 0) {
+      h += row('Absolute risk reduction (ARR)', pc(-AR), 'Iu − Ie (exposure = treatment)');
+      h += row('Number needed to treat (NNT)', (1 / -AR).toFixed(1), '1 ÷ ARR');
+    } else h += Ie === 0 ? '<span class="w">No cases in either row: the relative risk and odds ratio cannot be computed.</span>' : '<span class="f" style="grid-column:1/-1">No difference in risk: RR = 1, no NNT.</span>';
+  }
+  if (['a', 'b', 'c', 'd'].some(x => $('c-' + x).value.trim() === '') || [a, b, c, d].some(x => !(x >= 0)) || a + b === 0 || c + d === 0) h = '<span class="w">Enter counts of 0 or more in every cell, with at least one person in each row.</span>';
+  $('t2-res').innerHTML = h;
+}
+['a', 'b', 'c', 'd'].forEach(x => { $('c-' + x).oninput = () => { document.querySelectorAll('#t2-tg button').forEach(b => b.setAttribute('aria-pressed', 'false')); calc2(); }; });
+function loadT2(k) { const r = T2_PRE.find(x => x[0] === k); ['a', 'b', 'c', 'd'].forEach((x, i) => { $('c-' + x).value = r[2 + i]; }); KIND = r[6]; document.querySelectorAll('#t2-kind button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === KIND))); calc2(); }
+CM.toggles('t2-kind', [['coh', 'Cohort or trial (rows chosen by exposure)'], ['cc', 'Case-control (columns chosen by disease)']], k => { KIND = k; calc2(); }, 'coh');
+CM.toggles('t2-tg', T2_PRE.map(r => [r[0], r[1]]), loadT2, 'trial'); loadT2('trial');
+$('t2-note').textContent = T2_NOTE;
+
+/* ---- bias ---- */
+function drawBias(k) {
+  let s = CM.DEFS;
+  const node = (x, y, w, t, cls) => `<rect class="${cls || 'grp'}" x="${x}" y="${y}" width="${w}" height="34" rx="8"/>` + T(x + w / 2, y + 22, t, 'l b', 'middle');
+  if (k === 'conf') {
+    s += node(30, 170, 140, 'Exposure') + node(350, 170, 140, 'Outcome') + node(190, 30, 140, 'Confounder', 'exp');
+    s += `<path class="flow" d="M230 64 L130 166"/><path class="flow" d="M290 64 L390 166"/><path class="flow dash" d="M170 187 L346 187"/>`;
+    s += T(260, 178, 'apparent link', 'l s', 'middle') + T(150, 110, 'associated', 'l s', 'end') + T(370, 110, 'associated', 'l s', 'start');
+  } else if (k === 'sel') {
+    s += node(170, 20, 180, 'Source population') + `<path class="flow" d="M220 54 L120 120"/><path class="flow" d="M300 54 L400 120"/>`;
+    s += node(40, 124, 160, 'cases: route 1', 'cas') + node(320, 124, 160, 'controls: route 2');
+    s += T(260, 200, 'different ways in → groups not comparable', 'b', 'middle');
+  } else if (k === 'other') {
+    s += node(20, 40, 150, 'Berkson', 'grp') + T(95, 100, 'hospital admission', 's', 'middle') + T(95, 116, 'differs by disease', 's', 'middle');
+    s += node(185, 40, 150, 'Neyman', 'grp') + T(260, 100, 'early deaths missed:', 's', 'middle') + T(260, 116, 'survivors only', 's', 'middle');
+    s += node(350, 40, 150, 'Hawthorne', 'grp') + T(425, 100, 'being watched', 's', 'middle') + T(425, 116, 'changes behaviour', 's', 'middle');
+    s += T(260, 180, 'selection · selection · observation', 'b', 'middle');
+  } else {
+    s += node(40, 40, 160, 'case: "I did eat it"', 'cas') + node(320, 40, 160, 'control: "not sure"');
+    s += T(120, 110, 'remembers exposure', 's', 'middle') + T(400, 110, 'under-reports', 's', 'middle');
+    s += T(260, 160, 'same true exposure, different report', 'b', 'middle') + T(260, 180, '→ misclassification', 's', 'middle');
+  }
+  s += T(512, 234, 'schematic', 's', 'end');
+  $('bias-svg').innerHTML = s; $('bias-find').innerHTML = BIAS[k][1];
+}
+CM.toggles('bias-tg', Object.entries(BIAS).map(([k, v]) => [k, v[0]]), drawBias, 'conf'); drawBias('conf');
+
+/* ---- Bradford Hill checklist ---- */
+$('hill-list').innerHTML = HILL.map(([n, l], i) => `<label><input type="checkbox" id="hl-${i}"><span><b>${i + 1}. ${n}</b> — ${l}</span></label>`).join('');
+function hillUpd() {
+  const on = HILL.map((_, i) => $('hl-' + i).checked), n = on.filter(Boolean).length;
+  $('hill-find').innerHTML = `<p class="big">${n} / 9</p><p>viewpoints ticked for the association you have in mind.</p>`
+    + (on[3] ? '<p><b>Temporality</b> ticked: cause before effect.</p>' : '<p class="w"><b>Temporality not ticked.</b> It is "perhaps the only criterion which epidemiologists universally agree is essential" (a 2015 review).</p>');
+}
+HILL.forEach((_, i) => { $('hl-' + i).onchange = hillUpd; }); hillUpd();
+$('hill-note').textContent = HILL_NOTE;
+
+/* ---- blinding ---- */
+function drawBl(k) {
+  let s = CM.DEFS; const who = BLIND[k][1];
+  s += `<rect class="grp" x="20" y="95" width="110" height="34" rx="8"/>` + T(75, 117, 'eligible', 'l b', 'middle');
+  s += `<path class="flow" d="M130 112 L176 112"/>` + `<circle cx="196" cy="112" r="18" class="grp"/>` + T(196, 117, 'R', 'b', 'middle') + T(196, 148, 'randomise', 's', 'middle');
+  s += `<path class="flow" d="M214 106 L262 66"/><path class="flow" d="M214 118 L262 158"/>`;
+  s += `<rect class="exp" x="266" y="46" width="120" height="34" rx="8"/>` + T(326, 68, 'intervention', 'l b', 'middle') + `<rect class="grp" x="266" y="144" width="120" height="34" rx="8"/>` + T(326, 166, 'control', 'l b', 'middle');
+  const roles = [['participant', 95, 222], ['investigator', 260, 222], ['analyst', 425, 222]];
+  roles.forEach(([r, x, y], i) => {
+    const bl = who[i];
+    s += `<rect x="${x - 78}" y="${y - 16}" width="156" height="26" rx="13" style="fill:${bl ? 'var(--ink)' : 'var(--surface)'};stroke:var(--ink)"/>` + T(x, y + 2, (bl ? 'masked: ' : '') + r, 'b', 'middle').replace('class="b"', bl ? 'class="b" style="fill:var(--surface)"' : 'class="b"');
+  });
+  s += T(20, 196, 'who knows the allocation? filled = blinded (does not know)', 's', 'start') + T(512, 264, 'schematic', 's', 'end');
+  $('bl-svg').innerHTML = s; $('bl-find').innerHTML = BLIND[k][2] + `<p class="note">${RAND_TEXT}</p>`;
+}
+CM.toggles('bl-tg', Object.entries(BLIND).map(([k, v]) => [k, v[0]]), drawBl, 'double'); drawBl('double');
+
+/* ---- phases ---- */
+const PS = {s: 1};
+function drawPh() {
+  let s = '';
+  PH.forEach(([n, sz], i) => {
+    const x = 14 + i * 100, h = 24 + i * 22, y = 140 - h;
+    s += `<rect x="${x}" y="${y}" width="92" height="${h}" rx="5" style="fill:var(--ink);fill-opacity:${i === PS.s ? .55 : .15};stroke:var(--ink)"/>`;
+    if (i === PS.s) s += `<rect class="sel" x="${x - 4}" y="${y - 4}" width="100" height="${h + 8}" rx="7"/>`;
+    s += T(x + 46, 156, n, 'b', 'middle') + T(x + 46, y - 10, sz, 'l s', 'middle');
+  });
+  $('ph-svg').innerHTML = s; $('ph-find').innerHTML = PH[PS.s][2];
+}
+CM.stepper('ph-step', PH.map(r => r[0]), drawPh, PS);
+CM.swipeHints();
+</script>
+</body>
+</html>

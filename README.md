@@ -113,6 +113,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [Death, Brainstem Death and the Cause-of-Death Certificate](forensic-medicine/thanatology/death.html), [Post-mortem Changes and the Time Since Death](forensic-medicine/thanatology/postmortem-changes.html) | Thanatology | Types of death on a brain schematic, Form 10 brainstem-death checklist and board (THOT Rules 2014), transplant-law features, MCCD chain builder (WHO ICD-11 2026, RGI 2012); lividity simulator, rigor body map, cooling sliders, putrefaction stepper, time-since-death estimator |
 
+### Community Medicine — [`community-medicine/`](community-medicine/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [Concepts, Sources of Data and Measures](community-medicine/epidemiology/concepts-measures.html), [Study Designs, Association, Bias and Causation](community-medicine/epidemiology/study-designs.html), [Transmission, Prevention, Outbreaks and Screening](community-medicine/epidemiology/transmission-outbreak-screening.html) | Epidemiology | Indian data sources timeline, incidence–prevalence bathtub, indicator and standardisation calculators, SMR; design picker on a time line, 2×2 calculator, bias, Bradford Hill; prevention levels, CDC outbreak stepper, epidemic curves, herd immunity, screening calculator with prevalence slider |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and

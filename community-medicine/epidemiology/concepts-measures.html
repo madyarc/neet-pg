@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Epidemiology: Concepts, Data Sources and Measures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/cm.css">
+<style>
+/* tokens from cm.css only: --accent = the selected item (UI), --mark = the selected point on the timeline. Cases are ink (filled),
+   people without the disease are outlines; nothing depends on colour. */
+svg.sch .water{fill:var(--ink);fill-opacity:.22;stroke:none}
+svg.sch .tub{fill:none;stroke:var(--ink);stroke-width:2.4;stroke-linejoin:round}
+svg.sch .pipe{stroke:var(--ink);stroke-width:1.6;fill:none}
+svg.sch .warn{font-weight:700}
+svg.sch .fillc{fill:var(--ink);fill-opacity:.7}
+svg.sch .ring{fill:none;stroke:var(--ink);stroke-width:1.6}
+.vtag{font:600 12px var(--f-mono);color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Community Medicine</a> <span class="muted">· Module 01: <span aria-current="page">Concepts and measures</span> · <a href="study-designs.html">Study designs</a> · <a href="transmission-outbreak-screening.html">Transmission, outbreaks, screening</a></span></nav>
+
+<header class="stack">
+  <h1>Epidemiology: Concepts, Sources of Data and Measures of Disease</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-def">Definition and uses</a> <a href="#h-tri">Triad and iceberg</a> <a href="#h-src">Sources of data in India</a> <a href="#h-rpr">Ratio, proportion, rate</a> <a href="#h-ip">Incidence and prevalence</a> <a href="#h-ind">Indicator calculator</a> <a href="#h-std">Standardisation</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-def">
+  <h2 id="h-def">What epidemiology is, and what it is used for</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="def-svg" viewBox="0 0 520 250" role="img" aria-label="The definition split in two: distribution, answered by descriptive epidemiology (time, place, person), and determinants, answered by analytic epidemiology (why and how); both lead to control of health problems"></svg></div>
+    <div class="prose" id="def-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tri">
+  <h2 id="h-tri">Two models: the epidemiological triad and the iceberg</h2>
+  <div class="chips" id="tri-tg" aria-label="Model"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="tri-svg" viewBox="0 0 400 260" role="img" aria-label="The chosen model: a triangle of agent, host and environment, or an iceberg whose visible tip is the diagnosed cases"></svg></div>
+    <div class="prose find" id="tri-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-src">
+  <h2 id="h-src">Sources of epidemiological data in India</h2>
+  <div class="chips" id="src-tg" aria-label="Source of data"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="src-svg" viewBox="0 0 520 210" role="img" aria-label="Timeline of Indian data sources from 1948 to 2021 with the dates of the chosen source marked"></svg></div>
+    <div class="prose find" id="src-find" aria-live="polite"></div>
+  </div>
+  <h3>The SRS dual record system</h3>
+  <div class="schbox"><svg class="fig sch" id="srs-svg" viewBox="0 0 520 200" role="img" aria-label="Two independent records of births and deaths in each sample unit: continuous enumeration by a resident part-time enumerator, and a six-monthly retrospective survey by a full-time supervisor; the two lists are matched, and unmatched events are re-verified in the field"></svg></div>
+  <p class="muted" id="src-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-rpr">
+  <h2 id="h-rpr">Ratio, proportion and rate</h2>
+  <div class="chips" id="rpr-tg" aria-label="Kind of fraction"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="rpr-svg" viewBox="0 0 400 200" role="img" aria-label="Numerator and denominator drawn as sets: separate for a ratio, the numerator inside the denominator for a proportion, and inside with a time axis for a rate"></svg></div>
+    <div class="prose find" id="rpr-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ip">
+  <h2 id="h-ip">Incidence and prevalence: the bathtub</h2>
+  <div class="chips" id="ip-tg" aria-label="Scenario"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ip-svg" viewBox="0 0 520 330" role="img" aria-label="Bathtub: a tap of new cases (incidence) fills it, the water is the prevalent cases, and two drains let cases out by recovery or death; the water level is incidence times duration"></svg></div>
+    <div class="stack">
+      <div class="sliders" id="ip-sl"></div>
+      <div class="prose find" id="ip-find" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="prose" id="ip-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ind">
+  <h2 id="h-ind">Morbidity and mortality indicators: calculator</h2>
+  <div class="chips" id="ind-tg" aria-label="Indicator"></div>
+  <div class="two">
+    <div class="stack">
+      <div class="calc" id="ind-in"></div>
+      <div class="step"><button class="btn" type="button" id="ind-pre">Load the worked example</button></div>
+      <div class="res" id="ind-res" aria-live="polite"></div>
+    </div>
+    <div class="prose find" id="ind-find"></div>
+  </div>
+  <div class="scroll"><table id="ind-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-std">
+  <h2 id="h-std">Standardisation: why crude rates mislead (direct method)</h2>
+  <div class="chips" id="std-tg" aria-label="Town B age-specific rates"></div>
+  <div class="sliders" id="std-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="std-svg" viewBox="0 0 520 260" role="img" aria-label="Bars of crude and age-adjusted death rates for Town A and Town B"></svg></div>
+    <div class="prose find" id="std-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="std-table"></table></div>
+  <p class="muted" id="std-note"></p>
+  <h3>Indirect standardisation: the standardised mortality ratio (SMR)</h3>
+  <div class="two">
+    <div class="stack"><div class="calc"><label>Observed deaths in the study group<input type="number" min="0" step="1" id="smr-o" value="30"></label><label>Expected deaths (standard rates applied to the group)<input type="number" min="0" step="0.1" id="smr-e" value="20"></label></div><div class="res" id="smr-res" aria-live="polite"></div></div>
+    <div class="prose" id="smr-text"></div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BEpidemiology%3A%20Concepts%2C%20Sources%20of%20Data%20and%20Measures%20of%20Disease%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fcommunity-medicine%2Fepidemiology%2Fconcepts-measures.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/cm.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources, or attributed: sources-local/facts/fill-c01.md, Part A) ===================== */
+const LEDE = 'What epidemiology is and what it is for, where India\'s health data come from, the difference between a ratio, a proportion and a rate, incidence and prevalence as a bathtub you can fill and drain, a calculator for the indicators with the right denominators, and age standardisation by the direct method. Definitions follow the <b>CDC <i>Principles of Epidemiology</i>, 3rd edition (2012)</b> unless another source is named.';
+
+const DEF_TEXT = '<p><b>Epidemiology</b> is "the study of the distribution and determinants of health-related states or events in specified populations, and the application of this study to the control of health problems" (CDC 2012). StatPearls describes the same core: incidence, distribution and the factors behind disease in a population.</p>'
+  + '<p><b>Distribution</b> is answered by <b>descriptive</b> epidemiology — time, place and person; <b>determinants</b> (causes and risk factors) by <b>analytic</b> epidemiology — the why and how (CDC 2012).</p>'
+  + '<h3>Uses (as CDC 2012 lists them)</h3><ul><li>Assessing the community\'s health</li><li>Making individual decisions</li><li>Completing the clinical picture (natural history of disease)</li><li>Searching for causes</li></ul>';
+
+const TRI = {
+  tri: ['Epidemiological triad', '<h3>Epidemiological triad</h3><p>The traditional model for infectious disease: an external <b>agent</b>, a susceptible <b>host</b> and an <b>environment</b> that brings them together (CDC 2012); a 2025 one-health commentary uses the same agent–host–environment model. It fits many diseases but not those with many contributing causes and no single necessary one, such as cardiovascular disease and cancer (CDC 2012).</p>'],
+  ice: ['Iceberg of disease', '<h3>The iceberg</h3><p>Because the spectrum of disease includes asymptomatic and mild cases, the cases diagnosed by clinicians are often only the <b>tip of the iceberg</b> (CDC 2012); reported melioidosis (a 2022 review) and TB infection (a 2024 study) are described the same way.</p>'],
+};
+/* sources of data: key -> [chip, years on the timeline [[year, label]], finding html] */
+const SRC = {
+  cen: ['Census', [[1948, 'Census Act', '1948'], [2011, 'last census', '2011']], '<h3>Census</h3><p>Decennial: India has held 15 censuses, the last in 2011; the 2021 round was postponed by the COVID-19 pandemic. Since 1951 censuses run under the <b>Census Act, 1948</b>, conducted by the <b>Registrar General and Census Commissioner of India</b> (Ministry of Home Affairs). The series began in 1872 (all Wikipedia).</p>'],
+  reg: ['Registration of births and deaths', [[1969, 'RBD Act', '1969']], '<h3>Civil registration of vital events</h3><p>The <b>Registration of Births &amp; Deaths Act, 1969</b> unified civil registration; registration is compulsory, but its level has stayed "far from satisfactory" in several states (SRS 2020, Office of the Registrar General). Health facilities act as registrars or informants under the Act (a 2026 study).</p>'],
+  srs: ['Sample Registration System', [[1964.5, 'SRS pilot', '1964-65'], [1969.5, 'SRS full scale', '1969-70']], '<h3>Sample Registration System (SRS)</h3><p>Run by the <b>Office of the Registrar General, India</b>: pilot in <b>1964-65</b>, full scale from <b>1969-70</b>. It is a <b>dual record system</b> (drawing below) and gives yearly birth rate, death rate, IMR and other fertility and mortality indicators. India\'s IMR fell from 129 per 1,000 live births in 1971 to 28 in 2020 (all SRS Statistical Report 2020).</p>'],
+  nfhs: ['NFHS-5', [[2019.5, 'NFHS-5', '2019-21']], '<h3>National Family Health Survey (NFHS-5, 2019-21)</h3><p>A household survey of population, health and nutrition, with district-level estimates. The <b>Ministry of Health and Family Welfare</b> designated the <b>International Institute for Population Sciences (IIPS), Mumbai</b> as nodal agency; NFHS-5 fieldwork ran in two phases from 17 June 2019 to 30 April 2021 (NFHS-5 India Fact Sheet, MoHFW/IIPS). NFHS-1 was 1992-93 (Wikipedia).</p>'],
+  idsp: ['IDSP', [[2004.9, 'IDSP', 'November 2004']], '<h3>Integrated Disease Surveillance Programme (IDSP)</h3><p>Launched in <b>November 2004</b> as a project, continued as a programme under the National Health Mission. Surveillance units at the centre, every state and every district; weekly data on epidemic-prone diseases on three forms: <b>S</b> (suspected cases, health workers), <b>P</b> (presumptive, clinicians), <b>L</b> (laboratory-confirmed). A rising trend is investigated by <b>Rapid Response Teams</b> (all MoHFW IDSP, page updated 2026). Wikipedia calls the S form "syndromic" and gives November 2019 for the IHIP digital platform.</p>'],
+  regi: ['Disease registries', [], '<h3>Disease registries</h3><p>Cancer registries are <b>population-based</b> (all new cases in a defined area) or <b>hospital-based</b> (Wikipedia); many population-based cancer registries run across India (a 2024 paper on the Ratnagiri registry).</p>'],
+  hosp: ['Hospital and programme records', [], '<h3>Hospital and programme records</h3><p>Besides notifiable-disease reports, surveillance uses reports of cases and clusters, programme data such as immunization records, and other health-care data (CDC 2012).</p>'],
+};
+const SRC_NOTE = 'Dates and bodies as the official documents give them: SRS Statistical Report 2020 (Office of the Registrar General, India), NFHS-5 India Fact Sheet (MoHFW, IIPS), MoHFW IDSP "About IDSP" (page updated 2026). Census history is from Wikipedia only.';
+
+/* ratio / proportion / rate */
+const RPR = {
+  ratio: ['Ratio', '<h3>Ratio</h3><p>The relative size of two quantities; numerator and denominator need not be related. Example: the <b>death-to-case ratio</b> (deaths from a disease in a period ÷ new cases in that period) — many who died fell ill in earlier years and are not among the new cases, so it is a ratio but not a proportion (CDC 2012). It measures severity: close to 1 for rabies (CDC 2012).</p>'],
+  prop: ['Proportion', '<h3>Proportion</h3><p>A part compared with the whole: a ratio whose <b>numerator is included in the denominator</b> (CDC 2012). Examples: the case fatality rate, the attack rate, proportionate mortality — usually given as a percentage.</p>'],
+  rate: ['Rate', '<h3>Rate</h3><p>How often an event occurs in a defined population over a <b>specified period of time</b> (CDC 2012); incidence, for example, is new cases per unit time in the population at risk (StatPearls).</p><p>Several "rates" are not true rates: the attack rate is an incidence proportion, and the IMR\'s denominator is live births, not the mid-year number of infants (CDC 2012).</p>'],
+};
+
+/* bathtub presets: [label, incidence per 1,000 per year, duration years] */
+const IP_PRE = [['chron', 'Chronic: low incidence, long duration', 4, 15], ['acute', 'Acute: high incidence, short duration', 40, 0.1], ['cure', 'Faster cure (duration 0.5 years)', null, 0.5], ['live', 'Life prolonged without cure (duration 10 years)', null, 10]];
+const IP_TEXT = '<p><b>Incidence</b> counts <b>new</b> cases in a population over a period (risk of getting the disease); <b>prevalence</b> is the proportion who <b>have</b> it — new and old cases — at a point in time (point prevalence) or at any time during a period (period prevalence) (CDC 2012; Wikipedia; StatPearls).</p>'
+  + '<p>Prevalence depends on both incidence and duration: high prevalence can mean high incidence or long survival without cure; low prevalence can mean low incidence, rapid death or rapid recovery (CDC 2012; Wikipedia). Prevalence is proportional to incidence × average duration; Wikipedia gives the shortcut <b>P = I × D</b> only when <b>prevalence is low</b> and <b>duration is constant</b>.</p>';
+
+/* indicator calculator: key -> {chip, inputs [[id, label, preset]], mult, unit, f(v) -> [num, den], formula, find html, example note} */
+const IND = {
+  cdr: {chip: 'Crude death rate', inputs: [['d', 'Deaths in the year', 2419921], ['p', 'Mid-year population', 290809777]], mult: 1000, unit: 'per 1,000 population', nd: v => [v.d, v.p],
+    formula: 'deaths ÷ mid-year population × 1,000', find: '<h3>Crude death rate</h3><p>Deaths from all causes in a period ÷ <b>mid-year (mid-interval) population</b> × 1,000 (CDC 2012; SRS 2020). "Crude" because it ignores the age structure — see standardisation below.</p>',
+    ex: 'Worked example: United States 2003, 2,419,921 deaths in 290,809,777 people = 832.1 per 100,000 (CDC 2012), i.e. 8.32 per 1,000.'},
+  asdr: {chip: 'Age-specific death rate', inputs: [['d', 'Deaths aged 60+', 30], ['p', 'Mid-year population aged 60+', 6000]], mult: 1000, unit: 'per 1,000 aged 60+', nd: v => [v.d, v.p],
+    formula: 'deaths in the age group ÷ mid-year population of the same age group × 1,000', find: '<h3>Specific rates</h3><p>Age-, sex- or cause-specific: the numerator and the denominator are restricted to the same group (CDC 2012); SRS 2020 uses the mid-year population of the same age group, × 1,000.</p>',
+    ex: 'Made-up numbers: 30 deaths among 6,000 people aged 60+ = 5.0 per 1,000.'},
+  imr: {chip: 'Infant mortality rate', inputs: [['d', 'Deaths under 1 year', 56], ['b', 'Live births in the same year', 2000]], mult: 1000, unit: 'per 1,000 live births', nd: v => [v.d, v.b],
+    formula: 'deaths under 1 year ÷ live births × 1,000', find: '<h3>Infant mortality rate (IMR)</h3><p>Deaths of children <b>under 1 year</b> in a period ÷ <b>live births</b> in the same period × 1,000 (CDC 2012; SRS 2020; Wikipedia). The denominator is live births, not the number of infants alive, so strictly it is a ratio (CDC 2012). India 2020: <b>28</b> per 1,000 live births (SRS 2020).</p>',
+    ex: 'Made-up numbers: 56 infant deaths and 2,000 live births = 28 per 1,000.'},
+  nmr: {chip: 'Neonatal mortality rate', inputs: [['d', 'Neonatal deaths', 40], ['b', 'Live births in the same year', 2000]], mult: 1000, unit: 'per 1,000 live births', nd: v => [v.d, v.b],
+    formula: 'neonatal deaths ÷ live births × 1,000', find: '<h3>Neonatal and post-neonatal mortality</h3><p>Same live-birth denominator as the IMR. <b>Sources differ on the cut-off:</b> CDC 2012 counts deaths from birth up to but not including <b>28 days</b> (post-neonatal 28 days to under 1 year); SRS 2020 counts deaths <b>under 29 days</b> (post-neonatal from 29 days). IMR = neonatal + post-neonatal (SRS 2020).</p>',
+    ex: 'Made-up numbers: 40 neonatal deaths and 2,000 live births = 20 per 1,000.'},
+  mmr: {chip: 'Maternal mortality ratio', inputs: [['d', 'Maternal deaths', 3], ['b', 'Live births in the same period', 2000]], mult: 100000, unit: 'per 100,000 live births', nd: v => [v.d, v.b],
+    formula: 'maternal deaths ÷ live births × 100,000', find: '<h3>Maternal mortality ratio (MMR)</h3><p>Deaths from pregnancy-related causes ÷ <b>live births</b> in the same period × <b>100,000</b> (CDC 2012; Wikipedia, "maternal mortality ratio"). CDC calls it a "rate" but notes it is really a <b>ratio</b>.</p>',
+    ex: 'Made-up numbers: 3 maternal deaths and 2,000 live births = 150 per 100,000.'},
+  cfr: {chip: 'Case fatality rate', inputs: [['d', 'Deaths from the disease among the cases', 10], ['c', 'Cases of the disease', 200]], mult: 100, unit: '%', nd: v => [v.d, v.c],
+    formula: 'deaths among the cases ÷ cases × 100', find: '<h3>Case fatality rate (CFR)</h3><p>The proportion of people with a condition who die of it: a <b>proportion</b>, so the deaths must be among the cases counted in the denominator (CDC 2012; Wikipedia, which notes it is not a true rate). It measures severity (CDC 2012); the denominator is <b>cases</b>, not the population.</p>',
+    ex: 'Made-up numbers: 10 deaths among 200 cases = 5%.'},
+  ar: {chip: 'Attack rate', inputs: [['n', 'New cases during the outbreak', 18], ['p', 'Population at risk at the start', 1000]], mult: 100, unit: '%', nd: v => [v.n, v.p],
+    formula: 'new cases ÷ population at risk at the start × 100', find: '<h3>Attack rate</h3><p>The incidence proportion during an outbreak: new cases ÷ population at the start of the period × 100 (CDC 2012).</p>',
+    ex: 'Worked example (CDC 2012, shigellosis): 18 cases in a community of 1,000 = 1.8%.'},
+  sar: {chip: 'Secondary attack rate', inputs: [['s', 'New (secondary) cases among contacts', 17], ['h', 'People in the affected households', 86], ['pr', 'Primary cases in those households', 18]], mult: 100, unit: '%', nd: v => [v.s, v.h - v.pr],
+    formula: 'secondary cases ÷ (household members − primary cases) × 100', find: '<h3>Secondary attack rate (SAR)</h3><p>New cases among contacts ÷ total contacts × 100 (CDC 2012); in the CDC worked example the primary cases are subtracted from the household members to give the contacts. A 2023 study counted secondary cases within one incubation period of exposure to the index case. It separates household spread from community spread (CDC 2012).</p>',
+    ex: 'Worked example (CDC 2012): 17 secondary cases; 86 people in the 18 households, 18 of them primary cases: 17 ÷ (86 − 18) = 25.0%.'},
+  pmr: {chip: 'Perinatal mortality rate', inputs: [['s', 'Still births', 20], ['e', 'Infant deaths under 7 days', 30], ['b', 'Live births', 2000]], mult: 1000, unit: 'per 1,000 live + still births', nd: v => [v.s + v.e, v.b + v.s],
+    formula: '(still births + deaths under 7 days) ÷ (live births + still births) × 1,000', find: '<h3>Perinatal mortality rate (PMR)</h3><p>Still births plus infant deaths under 7 days ÷ live births <b>plus still births</b> × 1,000 (SRS 2020 definition).</p>',
+    ex: 'Made-up numbers: (20 + 30) ÷ (2,000 + 20) × 1,000 = 24.8.'},
+  sbr: {chip: 'Still birth rate', inputs: [['s', 'Still births', 20], ['b', 'Live births', 2000]], mult: 1000, unit: 'per 1,000 live + still births', nd: v => [v.s, v.b + v.s],
+    formula: 'still births ÷ (live births + still births) × 1,000', find: '<h3>Still birth rate (SBR)</h3><p>Still births ÷ live births <b>plus still births</b> × 1,000 (SRS 2020 definition).</p><p>The <b>under-five mortality rate</b> is different in kind: the probability that a child dies before age five at current age-specific rates, per 1,000 live births (SRS 2020; Wikipedia) — a life-table figure, not a simple fraction, so it has no calculator here.</p>',
+    ex: 'Made-up numbers: 20 ÷ 2,020 × 1,000 = 9.9.'},
+  pt: {chip: 'Incidence rate (person-time)', inputs: [['n', 'New cases', 795000], ['t', 'Person-years at risk', 324000000]], mult: 1000, unit: 'per 1,000 person-years', nd: v => [v.n, v.t],
+    formula: 'new cases ÷ person-years at risk × 1,000', find: '<h3>Person-time incidence rate</h3><p>Puts time directly into the denominator: new cases ÷ the person-time at risk (CDC 2012; StatPearls; Wikipedia). Each person counts only for the time they were followed and free of the disease (Wikipedia worked example).</p>',
+    ex: 'Worked example (StatPearls): 795,000 strokes in 324 million people over one year = 2.5 per 1,000 person-years.'},
+  pm: {chip: 'Proportionate mortality', inputs: [['d', 'Deaths from the cause', 150], ['t', 'Deaths from all causes', 1000]], mult: 100, unit: '% of all deaths', nd: v => [v.d, v.t],
+    formula: 'deaths from the cause ÷ all deaths × 100', find: '<h3>Proportionate mortality</h3><p>The share of all deaths in a population and period due to one cause (CDC 2012). The denominator is all deaths, not the population.</p>',
+    ex: 'Made-up numbers: 150 of 1,000 deaths = 15%.'},
+};
+const IND_TABLE = [
+  ['Crude death rate', 'Deaths in the period', 'Mid-year population', '× 1,000', 'CDC 2012; SRS 2020'],
+  ['Infant mortality rate', 'Deaths under 1 year', 'Live births', '× 1,000', 'CDC 2012; SRS 2020; Wikipedia'],
+  ['Neonatal mortality rate', 'Deaths under 28 days (CDC) / 29 days (SRS)', 'Live births', '× 1,000', 'CDC 2012; SRS 2020'],
+  ['Maternal mortality ratio', 'Maternal (pregnancy-related) deaths', 'Live births', '× 100,000', 'CDC 2012; Wikipedia'],
+  ['Case fatality rate', 'Deaths among the cases', 'Cases', '× 100', 'CDC 2012; Wikipedia'],
+  ['Attack rate', 'New cases in the outbreak', 'Population at risk at the start', '× 100', 'CDC 2012'],
+  ['Secondary attack rate', 'New cases among contacts', 'Contacts (primary cases excluded)', '× 100', 'CDC 2012'],
+  ['Perinatal mortality rate', 'Still births + deaths under 7 days', 'Live births + still births', '× 1,000', 'SRS 2020'],
+  ['Still birth rate', 'Still births', 'Live births + still births', '× 1,000', 'SRS 2020'],
+  ['Under-five mortality rate', 'Probability of dying before age 5 (life table)', 'per 1,000 live births', '—', 'SRS 2020; Wikipedia'],
+  ['Incidence rate (person-time)', 'New cases', 'Person-time at risk', '× 1,000 (or 100,000)', 'CDC 2012; StatPearls'],
+  ['Proportionate mortality', 'Deaths from one cause', 'All deaths', '× 100', 'CDC 2012'],
+];
+
+/* direct standardisation, made-up numbers: age groups, rates per 1,000 (Town A), Town A population, standard population */
+const STD = {groups: ['0–29', '30–59', '60+'], rateA: [2, 6, 40], popA: [5000, 4000, 1000], std: [4000, 4000, 2000], totB: 10000, rateBhigh: [2, 6, 60]};
+const STD_NOTE = 'Made-up, round numbers, so every cell can be checked by hand. Direct standardisation gives a weighted average of the age-specific rates, the weights being a standard population (WHO 2001; CDC 2012); real comparisons use a published standard such as the WHO world standard population (Wikipedia).';
+
+const SMR_TEXT = '<p><b>SMR</b> = observed deaths in the study group ÷ the deaths <b>expected</b> if it had the reference population\'s rates (Wikipedia; a 2025 study). It is an <b>indirect</b> form of standardisation, unlike the direct method above (Wikipedia; WHO 2001 names both methods). SMR 1 = as expected; above 1 = more deaths than expected (Wikipedia).</p><p class="note">Made-up example: 30 observed, 20 expected → SMR 1.5.</p>';
+const BASED = '<b>Based on:</b> CDC, <i>Principles of Epidemiology in Public Health Practice</i>, 3rd ed. (2012; public domain); Office of the Registrar General, India, SRS Statistical Report 2020; MoHFW and IIPS, NFHS-5 India Fact Sheet (2019-21); MoHFW, IDSP "About IDSP"; WHO, <i>Age standardization of rates: a new WHO standard</i> (2001); StatPearls (NCBI Bookshelf; abstracts); open-access papers (Europe PMC); Wikipedia (articles that cite CDC were not counted as a second source for CDC facts).';
+const MODELS = '<b>Models used:</b> the definition diagram, the timeline, the SRS diagram, the set drawings and the bathtub are schematics, not to scale; calculator examples marked "made-up" are invented round numbers.';
+
+/* ===================== CODE ===================== */
+const {$, T} = CM;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* ---- definition diagram ---- */
+(function () {
+  let s = CM.DEFS;
+  const box = (x, y, w, h, t1, t2, t3) => `<rect class="box" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/>` + T(x + w / 2, y + 20, t1, 'b', 'middle') + (t2 ? T(x + w / 2, y + 38, t2, 's', 'middle') : '') + (t3 ? T(x + w / 2, y + 53, t3, 's', 'middle') : '');
+  s += box(170, 8, 180, 34, 'Epidemiology');
+  s += `<path class="flow" d="M220 42 L120 78"/><path class="flow" d="M300 42 L400 78"/>`;
+  s += box(20, 82, 200, 64, 'Distribution', 'descriptive epidemiology', 'time · place · person');
+  s += box(300, 82, 200, 64, 'Determinants', 'analytic epidemiology', 'why · how');
+  s += `<path class="flow" d="M120 146 L230 196"/><path class="flow" d="M400 146 L290 196"/>`;
+  s += box(160, 200, 200, 40, 'Control of health problems');
+  s += T(512, 30, 'schematic', 's', 'end');
+  $('def-svg').innerHTML = s;
+})();
+$('def-text').innerHTML = DEF_TEXT;
+
+/* ---- triad and iceberg ---- */
+function drawTri(k) {
+  let s = '';
+  if (k === 'tri') {
+    s += `<path d="M200 40 L60 210 L340 210 Z" style="fill:none;stroke:var(--ink);stroke-width:2"/>`;
+    s += `<circle cx="200" cy="40" r="7" class="fillc"/><circle cx="60" cy="210" r="7" class="fillc"/><circle cx="340" cy="210" r="7" class="fillc"/>`;
+    s += T(200, 24, 'Agent', 'b', 'middle') + T(60, 236, 'Host', 'b', 'middle') + T(340, 236, 'Environment', 'b', 'middle');
+    s += T(200, 150, 'disease where', 's', 'middle') + T(200, 166, 'they meet', 's', 'middle');
+  } else {
+    s += `<path d="M20 110 L380 110" style="stroke:var(--ink);stroke-width:1.4;stroke-dasharray:6 4"/>` + T(380, 102, 'waterline', 's', 'end');
+    s += `<path d="M200 50 L240 110 L150 110 Z" style="fill:var(--ink);fill-opacity:.7"/>`;
+    s += `<path d="M150 110 L240 110 L320 200 L250 245 L120 245 L70 190 Z" style="fill:var(--ink);fill-opacity:.15;stroke:var(--ink)"/>`;
+    s += T(236, 62, 'diagnosed,', 'l b', 'start') + T(236, 78, 'reported cases', 'l b', 'start') + T(195, 165, 'mild and', 's', 'middle') + T(195, 181, 'asymptomatic cases', 's', 'middle');
+  }
+  s += T(396, 256, 'schematic', 's', 'end');
+  $('tri-svg').innerHTML = s; $('tri-find').innerHTML = TRI[k][1];
+}
+CM.toggles('tri-tg', Object.entries(TRI).map(([k, v]) => [k, v[0]]), drawTri, 'tri'); drawTri('tri');
+
+/* ---- sources timeline ---- */
+const ALLY = [[1948, 'Census Act'], [1964.5, 'SRS pilot'], [1969, 'RBD Act'], [1969.5, 'SRS full scale'], [2004.9, 'IDSP'], [2011, 'last census'], [2019.5, 'NFHS-5']];
+function drawSrc(k) {
+  const X = CM.scale(1945, 2024, 30, 500); let s = '';
+  s += `<path class="axis" d="M30 120 L500 120"/>`;
+  for (const y of [1950, 1970, 1990, 2010]) s += `<path class="grid" d="M${X(y)} 114 L${X(y)} 126"/>` + T(X(y), 142, y, 's', 'middle');
+  const on = SRC[k][1].map(r => r[0]);
+  /* labels alternate above (odd rows) to avoid collisions */
+  const lay = {1948: [0, 'start'], 1964.5: [1, 'middle'], 1969: [0, 'middle'], 1969.5: [2, 'start'], 2004.9: [0, 'middle'], 2011: [1, 'middle'], 2019.5: [2, 'end']};
+  for (const [y, lab] of ALLY) {
+    const sel = on.includes(y), x = X(y), row = lay[y][0], ly = 100 - row * 26;
+    s += `<path class="lead" d="M${x} ${ly + 4} L${x} 116"/>`;
+    s += `<circle cx="${x.toFixed(1)}" cy="120" r="${sel ? 7 : 4.5}" style="fill:${sel ? 'var(--mark)' : 'var(--surface)'};stroke:var(--ink);stroke-width:1.5"/>`;
+    s += T(x, ly, lab, sel ? 'l b' : 'l s', lay[y][1]);
+  }
+  if (!on.length) s += T(265, 180, 'no single founding year in our sources', 's', 'middle');
+  else s += T(265, 180, 'selected: ' + SRC[k][1].map(r => r[1] + ' ' + r[2]).join(', '), 's', 'middle');
+  s += T(500, 204, 'schematic timeline', 's', 'end');
+  $('src-svg').innerHTML = s; $('src-find').innerHTML = SRC[k][2];
+}
+CM.toggles('src-tg', Object.entries(SRC).map(([k, v]) => [k, v[0]]), drawSrc, 'srs'); drawSrc('srs');
+$('src-note').textContent = SRC_NOTE;
+(function () {
+  let s = CM.DEFS;
+  const box = (x, y, w, t1, t2) => `<rect class="box" x="${x}" y="${y}" width="${w}" height="46" rx="8"/>` + T(x + w / 2, y + 19, t1, 'b', 'middle') + T(x + w / 2, y + 36, t2, 's', 'middle');
+  s += box(10, 10, 230, 'Continuous enumeration', 'resident part-time enumerator');
+  s += box(10, 120, 230, 'Six-monthly survey', 'full-time supervisor, retrospective');
+  s += `<path class="flow" d="M240 33 L300 75"/><path class="flow" d="M240 143 L300 101"/>`;
+  s += box(304, 65, 96, 'Matching', 'two lists');
+  s += `<path class="flow" d="M400 88 L420 88"/>`;
+  s += `<rect class="box" x="424" y="58" width="90" height="62" rx="8"/>` + T(469, 78, 'Re-verify', 'b', 'middle') + T(469, 95, 'unmatched', 's', 'middle') + T(469, 109, 'in the field', 's', 'middle');
+  s += T(10, 180, 'Same sample villages and urban blocks; each record is', 's', 'start') + T(10, 195, 'checked against the other (SRS 2020). Schematic.', 's', 'start');
+  $('srs-svg').innerHTML = s;
+})();
+
+/* ---- ratio / proportion / rate ---- */
+function drawRpr(k) {
+  let s = CM.DEFS;
+  if (k === 'ratio') {
+    s += `<circle class="ring" cx="120" cy="95" r="52"/><circle class="ring" cx="285" cy="95" r="70"/>`;
+    s += T(120, 92, 'deaths', 'b', 'middle') + T(120, 108, 'numerator', 's', 'middle') + T(285, 92, 'new cases', 'b', 'middle') + T(285, 108, 'denominator', 's', 'middle') + T(200, 99, ':', 'b', 'middle');
+    s += T(200, 190, 'separate groups: A ÷ B', 's', 'middle');
+  } else {
+    s += `<circle class="ring" cx="200" cy="95" r="80"/><circle cx="170" cy="105" r="36" class="fillc"/>`;
+    s += T(170, 109, 'part', 'b', 'middle').replace('class="b"', 'class="b" style="fill:var(--surface)"') + T(286, 30, 'whole', 'b', 'start') + T(286, 46, 'denominator', 's', 'start');
+    s += T(200, 190, k === 'prop' ? 'numerator inside the denominator: part ÷ whole' : 'part ÷ whole, per unit of time', 's', 'middle');
+    if (k === 'rate') s += `<path class="flow" d="M300 150 L385 150"/>` + T(342, 142, 'time', 's', 'middle');
+  }
+  s += T(396, 14, 'schematic', 's', 'end');
+  $('rpr-svg').innerHTML = s; $('rpr-find').innerHTML = RPR[k][1];
+}
+CM.toggles('rpr-tg', Object.entries(RPR).map(([k, v]) => [k, v[0]]), drawRpr, 'prop'); drawRpr('prop');
+
+/* ---- bathtub ---- */
+const IPS = {I: 10, D: 5};
+let slI, slD;
+function drawIp() {
+  const P = IPS.I * IPS.D / 1000, Pc = Math.min(P, 1);   /* proportion (shortcut) */
+  const x0 = 120, x1 = 400, yb = 270, yt = 90, lev = yb - (yb - yt) * Pc;
+  let s = CM.DEFS;
+  /* tap */
+  const tw = 2 + IPS.I / 50 * 14;
+  s += `<path class="pipe" d="M60 40 L200 40 L200 58"/><path d="M200 60 L200 ${lev.toFixed(1)}" style="stroke:var(--ink);stroke-width:${tw.toFixed(1)};stroke-opacity:.5"/>`;
+  s += T(60, 30, 'tap = incidence (new cases)', 'b', 'start') + T(218, 70, IPS.I + ' per 1,000 per year', 'l s', 'start');
+  /* tub */
+  s += `<rect class="water" x="${x0}" y="${lev.toFixed(1)}" width="${x1 - x0}" height="${(yb - lev).toFixed(1)}"/>`;
+  s += `<path class="tub" d="M${x0} ${yt} L${x0} ${yb} L${x1} ${yb} L${x1} ${yt}"/>`;
+  s += T(x1 + 8, Math.max(lev, yt + 12) + 4, 'prevalence', 'b', 'start') + T(x1 + 8, Math.max(lev, yt + 12) + 20, (P * 100).toFixed(1) + '%', 'l m', 'start');
+  /* drains: width shrinks as duration rises */
+  const dw = 2 + 14 / (1 + IPS.D);
+  s += `<path d="M180 ${yb} L180 ${yb + 30}" style="stroke:var(--ink);stroke-width:${dw.toFixed(1)};stroke-opacity:.5"/><path d="M340 ${yb} L340 ${yb + 30}" style="stroke:var(--ink);stroke-width:${dw.toFixed(1)};stroke-opacity:.5"/>`;
+  s += T(180, yb + 46, 'drain: recovery', 's', 'middle') + T(340, yb + 46, 'drain: death', 's', 'middle');
+  s += T(x1, yt - 6, 'full tub = 100% of the population', 's', 'end');
+  if (P > 0.1) s += T(260, 122, P >= 1 ? 'shortcut breaks: I × D ≥ 100%' : 'prevalence not low: shortcut unreliable', 'l b warn', 'middle');
+  s += T(512, 324, 'schematic', 's', 'end');
+  $('ip-svg').innerHTML = s;
+  const d = IPS.D < 1 ? IPS.D.toFixed(1) : IPS.D.toFixed(1);
+  $('ip-find').innerHTML = `<h3>P ≈ I × D</h3><p class="readout">${IPS.I} per 1,000 per year × ${d} years = ${(IPS.I * IPS.D).toFixed(0)} per 1,000 (${(P * 100).toFixed(1)}%)</p>`
+    + (P > 0.1 ? '<p><b>Condition not met:</b> prevalence is not low, so the shortcut is not valid (Wikipedia gives it only for low prevalence and constant duration). The 10% line for this warning is our own choice, not a sourced cut-off.</p>' : '<p>Low prevalence and a fixed duration: the conditions for the shortcut hold (Wikipedia).</p>')
+    + '<p class="note">Shorter duration (faster recovery or death) widens the drains; longer survival without cure narrows them (CDC 2012).</p>';
+}
+const ipBox = $('ip-sl');
+const ipClear = () => document.querySelectorAll('#ip-tg button').forEach(b => b.setAttribute('aria-pressed', 'false'));
+slI = CM.slider(ipBox, {id: 'ipi', label: 'Incidence (new cases per 1,000 per year)', min: 1, max: 50, step: 1, value: IPS.I, fmt: v => v + ' per 1,000/yr'}, v => { IPS.I = v; ipClear(); drawIp(); });
+slD = CM.slider(ipBox, {id: 'ipd', label: 'Average duration of the disease', min: 0.1, max: 20, step: 0.1, value: IPS.D, fmt: v => v.toFixed(1) + ' years'}, v => { IPS.D = v; ipClear(); drawIp(); });
+slI.init(); slD.init();
+CM.toggles('ip-tg', IP_PRE.map(r => [r[0], r[1]]), k => {
+  const r = IP_PRE.find(x => x[0] === k);
+  if (r[2] !== null) { IPS.I = r[2]; slI.el.value = r[2]; slI.init(); }
+  IPS.D = r[3]; slD.el.value = IPS.D; slD.init(); drawIp();
+}, '');
+drawIp(); $('ip-text').innerHTML = IP_TEXT;
+
+/* ---- indicator calculator ---- */
+let IK = 'imr';
+const fmtN = x => isFinite(x) ? x.toFixed(1) : '—';   /* one decimal for every indicator */
+function buildInd(k) {
+  IK = k; const it = IND[k];
+  $('ind-in').innerHTML = it.inputs.map(([id, lab, v]) => `<label>${lab}<input type="number" min="0" step="1" id="in-${id}" value="${v}"></label>`).join('');
+  it.inputs.forEach(([id]) => { $('in-' + id).oninput = calcInd; });
+  $('ind-find').innerHTML = it.find + `<p class="note">${it.ex}</p>`;
+  calcInd();
+}
+function calcInd() {
+  const it = IND[IK], v = {}; let bad = '';
+  it.inputs.forEach(([id, lab]) => { const s = $('in-' + id).value.trim(), x = +s; if (s === '' || !isFinite(x)) bad = bad || 'Fill in every box.'; else if (x < 0) bad = bad || 'Counts cannot be negative.'; v[id] = x; });
+  const [n, d] = it.nd(v); let out = '—', warn = bad;
+  if (!bad && !(d > 0)) warn = 'The denominator must be more than zero.';
+  if (!warn) { out = fmtN(n / d * it.mult) + ' ' + it.unit; if (n > d) warn = 'Numerator larger than denominator: check the numbers (the deaths or cases should come from the group in the denominator).'; }
+  $('ind-res').innerHTML = `<span>${it.chip}</span><span class="v">${out}</span><span class="f">= ${it.formula}${!bad && d > 0 ? ' = ' + n.toLocaleString('en-IN') + ' ÷ ' + d.toLocaleString('en-IN') + ' × ' + it.mult.toLocaleString('en-IN') : ''}</span>` + (warn ? `<span class="w">${warn}</span>` : '');
+}
+$('ind-pre').onclick = () => { IND[IK].inputs.forEach(([id, , v]) => { $('in-' + id).value = v; }); calcInd(); };
+CM.toggles('ind-tg', Object.entries(IND).map(([k, v]) => [k, v.chip]), buildInd, 'imr'); buildInd('imr');
+CM.table('ind-table', ['Indicator', 'Numerator', 'Denominator', 'Multiplier', 'Sources'], IND_TABLE);
+
+/* ---- standardisation ---- */
+const SS = {old: 25, high: false};
+function popB() {
+  const o = Math.round(STD.totB * SS.old / 100), rest = STD.totB - o, a = Math.round(rest * 5 / 9);
+  return [a, rest - a, o];
+}
+function drawStd() {
+  const pA = STD.popA, pB = popB(), rA = STD.rateA, rB = SS.high ? STD.rateBhigh : STD.rateA;
+  const dA = pA.map((p, i) => p * rA[i] / 1000), dB = pB.map((p, i) => p * rB[i] / 1000);
+  const sum = a => a.reduce((x, y) => x + y, 0);
+  const crA = sum(dA) / sum(pA) * 1000, crB = sum(dB) / sum(pB) * 1000;
+  const eA = STD.std.map((p, i) => p * rA[i] / 1000), eB = STD.std.map((p, i) => p * rB[i] / 1000);
+  const adA = sum(eA) / sum(STD.std) * 1000, adB = sum(eB) / sum(STD.std) * 1000;
+  /* bars */
+  const Y = CM.scale(0, 30, 220, 30); let s = '';
+  s += `<path class="axis" d="M50 30 L50 220 L510 220"/>`;
+  for (const t of [0, 5, 10, 15, 20, 25, 30]) s += `<path class="grid" d="M46 ${Y(t)} L510 ${Y(t)}"/>` + T(42, Y(t) + 4, t, 's', 'end');
+  s += T(8, 16, 'deaths per 1,000', 's', 'start');
+  const bars = [['crude', 'A', crA, 70], ['crude', 'B', crB, 150], ['adjusted', 'A', adA, 300], ['adjusted', 'B', adB, 380]];
+  for (const [kind, town, v, x] of bars) {
+    const y = Y(Math.min(v, 30));
+    s += `<rect x="${x}" y="${y.toFixed(1)}" width="60" height="${(220 - y).toFixed(1)}" style="fill:var(--ink);fill-opacity:${kind === 'crude' ? .25 : .6};stroke:var(--ink)"/>`;
+    s += T(x + 30, y - 6, v.toFixed(1), 'l m', 'middle') + T(x + 30, 236, 'Town ' + town, 's', 'middle');
+  }
+  s += T(130, 254, 'crude rates', 'b', 'middle') + T(360, 254, 'age-adjusted (direct)', 'b', 'middle');
+  $('std-svg').innerHTML = s;
+  $('std-find').innerHTML = `<h3>${Math.abs(adA - adB) < 0.05 ? 'Same risk at every age, different crude rates' : 'Town B really has higher death rates'}</h3>`
+    + `<p>Town B has ${SS.old}% of its people aged 60+ (Town A 10%). Crude: A ${crA.toFixed(1)}, B ${crB.toFixed(1)} per 1,000. Adjusted to the same standard population: A ${adA.toFixed(1)}, B ${adB.toFixed(1)} per 1,000.</p>`
+    + '<p>An age-adjusted rate is statistically modified to remove the effect of different age distributions (CDC 2012).</p>';
+  const rows = STD.groups.map((g, i) => [g, rA[i] + ' / ' + rB[i], pA[i].toLocaleString('en-IN') + ' / ' + pB[i].toLocaleString('en-IN'), STD.std[i].toLocaleString('en-IN'), eA[i].toFixed(0) + ' / ' + eB[i].toFixed(0)]);
+  rows.push(['Total', '', sum(pA).toLocaleString('en-IN') + ' / ' + sum(pB).toLocaleString('en-IN'), sum(STD.std).toLocaleString('en-IN'), sum(eA).toFixed(0) + ' / ' + sum(eB).toFixed(0)]);
+  rows.push(['Rate', 'crude: ' + crA.toFixed(1) + ' / ' + crB.toFixed(1), '', 'adjusted = expected deaths ÷ standard total × 1,000', adA.toFixed(1) + ' / ' + adB.toFixed(1)]);
+  CM.table('std-table', ['Age', 'Rate per 1,000 (A / B)', 'Population (A / B)', 'Standard population', 'Expected deaths in the standard (A / B)'], rows);
+}
+const slO = CM.slider('std-sl', {id: 'old', label: 'Town B: share of people aged 60+', min: 5, max: 40, step: 1, value: SS.old, fmt: v => v + '%'}, v => { SS.old = v; drawStd(); }); slO.init();
+CM.toggles('std-tg', [['same', 'Town B: same age-specific rates as A'], ['high', 'Town B: higher rate at 60+ (60 per 1,000)']], k => { SS.high = k === 'high'; drawStd(); }, 'same');
+drawStd(); $('std-note').textContent = STD_NOTE;
+$('smr-text').innerHTML = SMR_TEXT;
+function calcSmr() {
+  const so = $('smr-o').value.trim(), se = $('smr-e').value.trim(), o = +so, e = +se;
+  let h;
+  if (so === '' || se === '' || !isFinite(o) || !isFinite(e)) h = '<span class="w">Fill in both boxes.</span>';
+  else if (o < 0 || e < 0) h = '<span class="w">Counts cannot be negative.</span>';
+  else if (!(e > 0)) h = '<span class="w">Expected deaths must be more than zero.</span>';
+  else h = `<span>SMR</span><span class="v">${(o / e).toFixed(2)}</span><span class="f">= observed ÷ expected = ${o} ÷ ${e}</span>`;
+  $('smr-res').innerHTML = h;
+}
+$('smr-o').oninput = calcSmr; $('smr-e').oninput = calcSmr; calcSmr();
+CM.swipeHints();
+</script>
+</body>
+</html>
