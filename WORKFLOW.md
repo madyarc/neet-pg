@@ -29,7 +29,7 @@ Last updated: 2026-11-23
     Plane_joint, Saddle_joint (~77 quotes in muscle-tissue, joints-general, connective-tissue, joints-ankle-foot,
     hn-face-mastication, fill-ll). Sent to the re-sourcing agent (queued after its first two). Pass 2: redirects followed; 1 more (Myocyte → Muscle cell,
     OpenStax; muscle-tissue 4). The 23 "empty" were short redirects, all targets clean. 16 articles + Luteal phase + Smooth muscle
-    re-sourced and COMMITTED 2026-11-25 (31bdbf9). Follow-up running: Anatomical terms of motion, Osteoarthritis
+    re-sourced and COMMITTED 2026-11-25 (31bdbf9). Follow-up DONE and committed (93d2a73): Anatomical terms of motion, Osteoarthritis
     (OpenStax, joints-general F1/J4), Synchondrosis (Boundless in a cn tag: treated as citing). Saved wikitext can be
     stale (articles add OpenStax later): LIVE re-audit of all ~2685 titles running (scratchpad wplive).
     USER DECISION: sources-local/modern/fill-embryo1/wp_Spermiogenesis.txt unreadable (kernel: BTRFS zstd decompression
@@ -73,7 +73,7 @@ Last updated: 2026-11-23
   page (running; then one review for the whole module; downloads ready, NLEM 2022
   official text missing). Inducer/inhibitor lists: use FDA DDI table (public domain) + Wikipedia/StatPearls. G01 [x] build (549 quotes; 3 pages; no new tokens; guidelines via open papers) [x] review (17: ACS picker
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
-  colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. Ps01 [x] build (289 quotes) [x] review (no wrong facts; duration-picker logic, missing arrowheads,
+  colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. S01 [ ] build (running; surgery/general/). Ps01 [x] build (289 quotes) [x] review (no wrong facts; duration-picker logic, missing arrowheads,
   mesocortical path, synapse marks, clozapine schedule) [ ] fixes (running). C01 [x] build (328 quotes; CDC 2012, WHO 1968, SRS 2020, NFHS-5, IDSP; no new tokens) [x] review (no wrong formulas; disability limitation level
   one-source, rate/time misattribution, --accent/--clin misuse, gaps: indirect standardisation, field trial) [x] fixes (374 quotes) [x] committed 2026-11-25. Pd01 [x] build (458 quotes; WHO 2006/2007 LMS z-score chart, CDC 2022 milestones via Zubler 2022) [x] review.
   D01 [x] build (407 quotes; NICE CG153; Wikipedia Psoriasis excluded: cites cnx.org) [ ] review (running).
