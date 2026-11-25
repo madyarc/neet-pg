@@ -59,7 +59,7 @@ Last updated: 2026-11-23
     dermatology 2: D01 papulosquamous (psoriasis, LP) · D02 leprosy
     surgery 3: S01 shock+metabolic response · S02 burns · S03 thyroid+parathyroid
     orthopaedics 2: O01 trauma and fracture principles (OR1.1, 1.3, 2.14, 2.15) · O02 peripheral nerve injuries
-    anaesthesia 2: An01 CPR · An02 general anaesthesia+airway
+    anaesthesia 2: An01 CPR + oxygen + airway (AS2, AS11) · An02 general and regional anaesthesia (AS4, AS5)
     radiology 1: R01 modality choice and image interpretation basics (radiation safety)
     ENT 1: E01 ear anatomy-physiology + hearing tests
     obgyn 4: OG01 physiology of conception+placenta · OG02 antenatal care+maternal changes · OG03 labour · OG04 contraception
@@ -73,7 +73,8 @@ Last updated: 2026-11-23
   page (running; then one review for the whole module; downloads ready, NLEM 2022
   official text missing). Inducer/inhibitor lists: use FDA DDI table (public domain) + Wikipedia/StatPearls. G01 [x] build (549 quotes; 3 pages; no new tokens; guidelines via open papers) [x] review (17: ACS picker
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
-  colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. S01 [ ] build (running; surgery/general/). O01 [ ] build (running; orthopaedics/trauma/). Ps01 [x] build (289 quotes) [x] review (no wrong facts; duration-picker logic, missing arrowheads,
+  colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. S01 [ ] build (running; surgery/general/). O01 [ ] build (running; orthopaedics/trauma/). An01 [ ] build (running; anaesthesia/resuscitation-airway/,
+  AS2 + AS11). Ps01 [x] build (289 quotes) [x] review (no wrong facts; duration-picker logic, missing arrowheads,
   mesocortical path, synapse marks, clozapine schedule) [x] fixes (322 quotes) [x] committed 2026-11-25. C01 [x] build (328 quotes; CDC 2012, WHO 1968, SRS 2020, NFHS-5, IDSP; no new tokens) [x] review (no wrong formulas; disability limitation level
   one-source, rate/time misattribution, --accent/--clin misuse, gaps: indirect standardisation, field trial) [x] fixes (374 quotes) [x] committed 2026-11-25. Pd01 [x] build (458 quotes; WHO 2006/2007 LMS z-score chart, CDC 2022 milestones via Zubler 2022) [x] review.
   D01 [x] build (407 quotes; NICE CG153; Wikipedia Psoriasis excluded: cites cnx.org) [x] review (LP histology: Max-Joseph
