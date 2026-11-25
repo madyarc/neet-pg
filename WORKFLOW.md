@@ -39,7 +39,8 @@ Last updated: 2026-11-23
     community medicine 2: C01 epidemiology · C02 biostatistics
     medicine 3: G01 heart failure+IHD · G02 diabetes mellitus · G03 hypertension
     paediatrics 4: Pd01 growth and development · Pd02 immunization (UIP) · Pd03 newborn care · Pd04 nutrition+breastfeeding
-    psychiatry 2: Ps01 schizophrenia+psychosis · Ps02 depressive+bipolar
+    psychiatry 2: Ps01 psychosis + mood (topics 4–6 together; NMC lists only 1 competency each) · Ps02 anxiety/stress +
+      substance use
     dermatology 2: D01 papulosquamous (psoriasis, LP) · D02 leprosy
     surgery 3: S01 shock+metabolic response · S02 burns · S03 thyroid+parathyroid
     orthopaedics 2: O01 fractures (principles) · O02 peripheral nerve injuries
@@ -57,7 +58,7 @@ Last updated: 2026-11-23
   page (running; then one review for the whole module; downloads ready, NLEM 2022
   official text missing). Inducer/inhibitor lists: use FDA DDI table (public domain) + Wikipedia/StatPearls. G01 [x] build (549 quotes; 3 pages; no new tokens; guidelines via open papers) [x] review (17: ACS picker
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
-  colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. C01 [x] build (328 quotes; CDC 2012, WHO 1968, SRS 2020, NFHS-5, IDSP; no new tokens) [x] review (no wrong formulas; disability limitation level
+  colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. Ps01 [ ] build (running; psychiatry/psychosis-mood/). C01 [x] build (328 quotes; CDC 2012, WHO 1968, SRS 2020, NFHS-5, IDSP; no new tokens) [x] review (no wrong formulas; disability limitation level
   one-source, rate/time misattribution, --accent/--clin misuse, gaps: indirect standardisation, field trial) [ ] fixes (running). Pd01 [ ] build (running; paediatrics/growth-development/).
   FM01 [x] build (397 quotes; THOA/THOT Rules 2014 Form 10, WHO ICD-11 2026 + RGI MCCD 2012; tokens --livor
   --livor-co --sulfhb) [x] review (livor shifting rule, children's Form 10 interval, consent
