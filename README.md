@@ -101,6 +101,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [History, the Bacterial Cell, Staining and Growth](microbiology/general/bacteria-structure-growth.html), [Bacterial Genetics and Laboratory Diagnosis](microbiology/general/genetics-lab-diagnosis.html), [Sterilisation, Disinfection and the Chain of Infection](microbiology/general/sterilisation-epidemiology.html) | General | Timeline and Koch's postulates, cell-wall picker, Gram/ZN steppers, growth curve; gene-transfer stepper, PCR, media classifier, biochemical tests, ELISA, specimen picker; resistance ladder, Spaulding, heat plot, choose-the-method picker (CDC 2008), chain of infection |
 
+### Pharmacology — [`pharmacology/`](pharmacology/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [Pharmacokinetics](pharmacology/general/pharmacokinetics.html), [Pharmacodynamics](pharmacology/general/pharmacodynamics.html), [Principles, Drug Names, ADRs and Pharmacovigilance](pharmacology/general/principles-safety.html) | General | Route map, AUC and bioavailability, ion trapping, Vd, CYP inducer/inhibitor table (FDA), repeated-dosing simulator, first- vs zero-order; receptor families, dose–response with antagonists, spare receptors, therapeutic index, isobologram; drug names, bioequivalence, Schedules H/H1/X, essential medicines, ADR types, Naranjo calculator, WHO-UMC, PvPI flow, interactions |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and

@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Principles, ADRs and Pharmacovigilance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/pharm.css">
+<style>
+/* tokens from pharm.css with their one meaning: --accent (UI selection only: the chosen box, level, step or answer), --mark (the current score
+   on the Naranjo line), --ther (the therapeutic range band), --clin (an adverse reaction, a toxic level), --fluid (plasma), --enz (an enzyme:
+   CYP in the liver), --rcpt (a receptor). Everything else is ink and grey. Label colours required by the Drugs and Cosmetics Rules (red) are
+   written as words on the label drawing, not drawn in a meaning colour. No new tokens. */
+svg.sch .node{fill:var(--surface);stroke:var(--ink);stroke-width:1.3}
+svg.sch .node.on{stroke:var(--accent);stroke-width:2.6}
+svg.sch text.on{fill:var(--accent);font-weight:700}
+svg.sch .plasma{fill:var(--fluid);stroke:var(--ink);stroke-width:1.2}
+svg.sch .enzb{fill:var(--enz);fill-opacity:.25;stroke:var(--enz);stroke-width:1.4}
+svg.sch .rc{fill:var(--rcpt);fill-opacity:.25;stroke:var(--rcpt);stroke-width:1.4}
+svg.sch .thb{fill:var(--ther);fill-opacity:.55;stroke:var(--ther);stroke-width:1}
+svg.sch .belim{fill:url(#behatch);stroke:var(--muted);stroke-width:1;stroke-dasharray:4 3}
+svg.sch .toxl{stroke:var(--clin);stroke-width:1.2;stroke-dasharray:3 3}
+svg.sch .adr{fill:var(--clin);fill-opacity:.25;stroke:var(--clin);stroke-width:1.6}
+svg.sch .drugbar{fill:var(--ink);fill-opacity:.12;stroke:var(--ink);stroke-width:1}
+svg.sch .pt{fill:var(--mark)}
+svg.sch .band{fill:var(--ink);fill-opacity:.08;stroke:var(--muted);stroke-width:1}
+svg.sch .band.on{fill:var(--accent);fill-opacity:.18;stroke:var(--accent);stroke-width:1.6}
+svg.sch .lab{fill:var(--surface);stroke:var(--ink);stroke-width:1.6}
+svg.sch .lab2{fill:none;stroke:var(--ink);stroke-width:3}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.card{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;background:var(--surface)}
+.card h3{margin:0 0 4px}
+.stats{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13.5px}
+.stats b{font-family:var(--f-mono);font-weight:600}
+.nq{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.nq .chips{justify-content:flex-end}
+.nq .w{font:500 11.5px var(--f-mono);color:var(--muted)}
+@media (max-width:600px){.nq{grid-template-columns:minmax(0,1fr)}.nq .chips{justify-content:flex-start}}
+.verd{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:2px 12px;font-size:14px}
+.verd b{font-family:var(--f-mono)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Pharmacology</a> <span class="muted">· Module 01: <a href="pharmacokinetics.html">Pharmacokinetics</a> · <a href="pharmacodynamics.html">Pharmacodynamics</a> · <span aria-current="page">Principles and safety</span></span></nav>
+
+<header class="stack">
+  <h1>Principles, Drug Names, ADRs and Pharmacovigilance</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-terms">Terms</a> <a href="#h-names">Generic and brand names</a> <a href="#h-sched">Schedules H, H1, X</a> <a href="#h-ebm">Evidence-based medicine</a> <a href="#h-rat">Rational use</a> <a href="#h-eml">Essential medicines</a> <a href="#h-form">Formulations</a> <a href="#h-adr">ADR types</a> <a href="#h-nar">Naranjo calculator</a> <a href="#h-umc">WHO-UMC causality</a> <a href="#h-pv">Pharmacovigilance and PvPI</a> <a href="#h-ddi">Drug interactions</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-terms">
+  <h2 id="h-terms">Pharmacology and its terms</h2>
+  <div class="prose" id="terms-text"></div>
+  <div id="terms-chips" aria-label="Term"></div>
+  <div class="two">
+    <div class="schbox"><svg class="sch" id="terms-svg" viewBox="0 0 540 250" role="img" aria-label="Drug and body, with the branches of pharmacology, schematic"></svg></div>
+    <div class="find" id="terms-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-names">
+  <h2 id="h-names">Chemical, generic (INN) and brand names</h2>
+  <div class="prose" id="names-text"></div>
+  <div id="names-chips" aria-label="Example drug"></div>
+  <div class="schbox"><svg class="sch" id="names-svg" viewBox="0 0 560 210" role="img" aria-label="The three kinds of drug name for the chosen example"></svg></div>
+  <div class="find" id="names-find" aria-live="polite"></div>
+  <h3>Is the generic bioequivalent? The 80–125 % rule</h3>
+  <div class="prose" id="be-text"></div>
+  <div class="step"><span class="muted">Try:</span><div id="be-pre"></div></div>
+  <div class="sliders" id="be-sl"></div>
+  <div class="schbox"><svg class="sch" id="be-svg" viewBox="0 0 560 120" role="img" aria-label="90 % confidence interval of the generic-to-brand ratio against the 80–125 % limits"></svg></div>
+  <p class="readout" id="be-out" aria-live="polite"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-sched">
+  <h2 id="h-sched">Scheduled drugs: H, H1 and X (Drugs and Cosmetics Rules, 1945)</h2>
+  <div class="prose" id="sched-text"></div>
+  <div id="sched-chips" aria-label="Schedule"></div>
+  <div class="two">
+    <div class="schbox"><svg class="sch" id="sched-svg" viewBox="0 0 420 254" role="img" aria-label="Label drawing for the chosen schedule, schematic"></svg></div>
+    <div class="find" id="sched-find" aria-live="polite"></div>
+  </div>
+  <table id="sched-tab"></table>
+</section>
+
+<section class="block panel" aria-labelledby="h-ebm">
+  <h2 id="h-ebm">Evidence-based medicine and the levels of evidence</h2>
+  <div class="prose" id="ebm-text"></div>
+  <div class="step" id="ebm-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="sch" id="ebm-svg" viewBox="0 0 560 280" role="img" aria-label="Evidence pyramid, selected CEBM levels for treatment studies"></svg></div>
+    <div class="find" id="ebm-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-rat">
+  <h2 id="h-rat">Rational use of medicines (WHO)</h2>
+  <div class="prose" id="rat-text"></div>
+  <div class="schbox"><svg class="sch" id="rat-svg" viewBox="0 0 560 150" role="img" aria-label="The four parts of the WHO definition of rational use"></svg></div>
+  <div class="step"><span class="muted">WHO's examples of irrational use:</span><div id="rat-chips"></div></div>
+  <div class="find" id="rat-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-eml">
+  <h2 id="h-eml">Essential medicines: WHO Model List 2025 and India's NLEM 2022</h2>
+  <div class="prose" id="eml-text"></div>
+  <div class="step" id="eml-step"></div>
+  <div class="schbox"><svg class="sch" id="eml-svg" viewBox="0 0 580 170" role="img" aria-label="Timeline of the WHO Model List and India's National List of Essential Medicines"></svg></div>
+  <div class="find" id="eml-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-form">
+  <h2 id="h-form">Formulations and drug-delivery systems</h2>
+  <div class="prose" id="form-text"></div>
+  <div id="form-chips" aria-label="Formulation"></div>
+  <div class="schbox"><svg class="sch" id="form-svg" viewBox="0 0 560 230" role="img" aria-label="Plasma concentration over time for the chosen formulation, schematic"></svg></div>
+  <div class="find" id="form-find" aria-live="polite"></div>
+  <div class="cards" id="form-cards"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-adr">
+  <h2 id="h-adr">Adverse drug reactions: definition and types A–F</h2>
+  <div class="prose" id="adr-text"></div>
+  <div id="adr-chips" aria-label="ADR type"></div>
+  <div class="two">
+    <div class="schbox"><svg class="sch" id="adr-svg" viewBox="0 0 420 210" role="img" aria-label="When the chosen type of reaction appears relative to the course of the drug, schematic"></svg></div>
+    <div class="find" id="adr-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-nar">
+  <h2 id="h-nar">Naranjo calculator: ten questions, a score and a category</h2>
+  <div class="prose" id="nar-text"></div>
+  <div class="step"><span class="muted">Answer sets:</span><div id="nar-pre"></div></div>
+  <div id="nar-q"></div>
+  <div class="stats" aria-live="polite"><span>Score <b class="big" id="nar-score">0</b></span><span class="muted" id="nar-range"></span></div>
+  <div class="schbox"><svg class="sch" id="nar-svg" viewBox="0 0 600 190" role="img" aria-label="The score on the −4 to +13 line, with each source's category bands"></svg></div>
+  <div class="verd" id="nar-verd" aria-live="polite"></div>
+  <p class="cap warn" id="nar-warn"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-umc">
+  <h2 id="h-umc">WHO-UMC causality categories</h2>
+  <div class="prose" id="umc-text"></div>
+  <div class="step" id="umc-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="sch" id="umc-svg" viewBox="0 0 440 290" role="img" aria-label="The four WHO-UMC evidence categories as a ladder, with the two unclassified categories set apart"></svg></div>
+    <div class="find" id="umc-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pv">
+  <h2 id="h-pv">Pharmacovigilance and the PvPI reporting flow</h2>
+  <div class="prose" id="pv-text"></div>
+  <div class="step" id="pv-step"></div>
+  <div class="schbox"><svg class="sch" id="pv-svg" viewBox="0 0 600 260" role="img" aria-label="How an ADR report travels in the Pharmacovigilance Programme of India"></svg></div>
+  <div class="find" id="pv-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ddi">
+  <h2 id="h-ddi">Drug interactions: pharmacokinetic and pharmacodynamic</h2>
+  <div class="prose" id="ddi-text"></div>
+  <div class="step"><span class="muted">Pharmacokinetic:</span><div id="ddi-pk"></div></div>
+  <div class="step"><span class="muted">Pharmacodynamic:</span><div id="ddi-pd"></div></div>
+  <div class="schbox"><svg class="sch" id="ddi-svg" viewBox="0 0 600 200" role="img" aria-label="Where the chosen interaction happens on the way from gut to target, schematic"></svg></div>
+  <div class="find" id="ddi-find" aria-live="polite"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BPrinciples%2C%20Drug%20Names%2C%20ADRs%20and%20Pharmacovigilance%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fpharmacology%2Fgeneral%2Fprinciples-safety.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+<script src="../assets/pharm.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources, or the one source is named: sources-local/facts/fill-f01.md, Part C; pharmacology/DATA-SOURCES.md) ===================== */
+const LEDE = 'See one drug wear its three names and test whether a generic passes the 80–125 % bioequivalence rule; open each label the Drugs and Cosmetics Rules require for Schedules H, H1 and X; climb the evidence pyramid; place six types of adverse reaction on the course of a drug; score a suspected reaction with the Naranjo questions and see where three sources disagree on the cut-offs; step through the WHO-UMC categories and the path of an ADR report in India; and find where each drug interaction happens.';
+
+const TERMS_TEXT = '<p><b>Pharmacology</b> is the science of drugs and their interactions with living systems; its two central branches are <b>pharmacokinetics</b> and <b>pharmacodynamics</b> (StatPearls; Wikipedia). Pick a term.</p>';
+/* key: [chip label, svg node id, text] */
+const TERMS = {
+  pk: ['Pharmacokinetics', 'pk', '<h3>Pharmacokinetics</h3><p>What the body does to the drug: <b>absorption, distribution, metabolism and elimination (ADME)</b> (StatPearls; Wikipedia). Worked through on the <a href="pharmacokinetics.html">pharmacokinetics page</a>.</p>'],
+  pd: ['Pharmacodynamics', 'pd', '<h3>Pharmacodynamics</h3><p>What the drug does to the body: its effects on biological systems (Wikipedia; StatPearls). Receptors and dose–response are on the <a href="pharmacodynamics.html">pharmacodynamics page</a>.</p>'],
+  drug: ['Drug', 'drug', '<h3>Drug</h3><p>Any chemical substance, other than a nutrient or essential dietary ingredient, that produces a biological effect in a living organism; a <b>pharmaceutical drug</b> (medicine) is one used to treat, cure, prevent or diagnose a disease (Wikipedia).</p>'],
+  ther: ['Pharmacotherapy', 'ther', '<h3>Pharmacotherapy (pharmacotherapeutics)</h3><p>Medical treatment with one or more drugs, for symptom relief, for the underlying condition, or for prevention (Wikipedia).</p>'],
+  pgx: ['Pharmacogenomics', 'pgx', '<h3>Pharmacogenomics</h3><p>The role of the genome in drug response: how a patient\'s genetic makeup affects their response to drugs (Wikipedia). StatPearls dates the term <b>pharmacogenetics</b> to Friedrich Vogel, 1959.</p><p><b>Examples.</b> <b>Slow acetylators</b> (N-acetyltransferase 2, NAT2) are more prone to dose-dependent toxicity, and NAT2 genotyping identifies slow acetylators of <b>isoniazid</b> (StatPearls; Wikipedia). Carbamazepine SJS/TEN is more common with the <b>HLA-B*1502</b> allele, and warfarin response depends on <b>VKORC1</b> (Wikipedia).</p>'],
+  epi: ['Pharmacoepidemiology', 'epi', '<h3>Pharmacoepidemiology</h3><p>The study of the uses and effects of drugs in well-defined populations (Wikipedia).</p>'],
+  pv: ['Pharmacovigilance', 'pv', '<h3>Pharmacovigilance</h3><p>The science and activities relating to the detection, assessment, understanding and prevention of adverse effects or any other drug-related problem (WHO definition, quoted in Clin Med 2016 and Prakash 2021). See <a href="#h-pv">below</a>.</p>'],
+};
+
+const NAMES_TEXT = '<p>A drug has three kinds of name: a <b>chemical name</b> from its structure, a <b>nonproprietary (generic) name</b> — the <b>international nonproprietary name (INN)</b>, a system the WHO began in 1953 — and <b>trade (brand) names</b>. Chemical names are long and impractical; generic names are shorter than chemical names and more standard than trade names, give each active ingredient one unique name to avoid prescribing errors, and carry a <b>stem</b> that shows the drug class (all Wikipedia).</p>';
+/* key: [chip, chemical, INN (with the stem marked |stem|), brands, note] */
+const NAMES = {
+  prop: ['Propranolol', '1-(isopropylamino)-3-(1-naphthyloxy) propan-2-ol', 'propran|olol|', '—', '<p>The stem <b>-olol</b> marks a β-blocker: propranolol and atenolol share it (Wikipedia). Other stems: <b>-azepam</b> (benzodiazepines: lorazepam, diazepam), <b>-ase</b> (enzymes: alteplase) (Wikipedia).</p>'],
+  cit: ['Citalopram', '—', 'citalopram', 'Celexa · Celapram · Citrol', '<p>One INN, many brands: Celexa, Celapram and Citrol all contain citalopram (Wikipedia). The generic name is how a prescriber recognises that two brands are the same drug.</p>'],
+  cot: ['Co-trimoxazole', '—', 'trimethoprim + sulfamethoxazole', 'Bactrim · Septran', '<p>A combination: co-trimoxazole, Bactrim and Septran all contain two active ingredients recognisable by their INNs, <b>trimethoprim</b> and <b>sulfamethoxazole</b> (Wikipedia).</p>'],
+};
+const BE_TEXT = '<p>A <b>generic drug</b> has the same active ingredient as the original brand but may differ in excipients, colour or packaging (Wikipedia); it must be shown <b>bioequivalent</b> — a similar rate and extent of absorption after the same dose (a 2022 review; Wikipedia). The conventional rule: the <b>90 % confidence interval</b> of the generic-to-brand ratio for <b>AUC</b> and <b>Cmax</b> must lie within <b>80–125 %</b> (Wikipedia, describing the US FDA; a 2026 review); some regulators narrow it for narrow-therapeutic-index drugs (2026 review). Generics are far cheaper, and their use is a main cost-containment measure (Wikipedia; 2022 review); studies show therapeutic equivalence, though experts have raised concerns about substitution for narrow-therapeutic-index drugs (2022 review). Move the ratio and the width of its interval.</p>';
+const BE0 = {gmr: 100, w: 10};   /* geometric mean ratio %, half-width of the 90 % CI (% on a log scale): hypothetical */
+const BE_PRE = {ok: ['Passes', 100, 10], wide: ['Mean 100 %, interval too wide', 100, 30], low: ['Mean 85 %, interval below 80', 85, 10]};
+
+const SCHED_TEXT = '<p>The <b>Drugs and Cosmetics Rules, 1945</b> classify drugs into schedules and set rules for their storage, sale, display and prescription (Wikipedia). What follows is what the Rules themselves say (Rules 65, 97 and 105A, in the CDSCO text as amended to 31 December 2016). Schedule H drugs are prescription drugs (the Rules; Wikipedia); <b>Schedule H1</b> was inserted on <b>30 August 2013</b> (G.S.R. 588(E)). Wikipedia notes that enforcement of Schedule H is lax compared with the more restrictive Schedule X, which needs a documentation trail. Pick a schedule.</p>';
+/* key: [chip, symbol, red symbol?, box words (lines), red border?, find html] */
+const SCHED = {
+  h: ['Schedule H', 'Rx', false, ['Schedule H drug – Warning: To be sold by', 'retail on the prescription of a', 'Registered Medical Practitioner only'], false,
+    '<h3>Schedule H (prescription drugs)</h3><p>Label: the symbol <b>Rx</b> on the <b>left top corner</b>, with the warning words shown. Example from the schedule\'s list: abacavir; Wikipedia counts 536 drugs, abacavir to zuclopenthixol, in the 2006 schedule.</p>'],
+  hn: ['Schedule H + NDPS Act', 'NRx', true, ['Schedule H drug – Warning: To be sold by', 'retail on the prescription of a', 'Registered Medical Practitioner only'], false,
+    '<h3>Schedule H drug that also falls under the NDPS Act, 1985</h3><p>Label: the symbol <b>NRx</b>, <b>in red</b>, on the left top corner, with the same Schedule H warning words.</p>'],
+  h1: ['Schedule H1', 'Rx', true, ['SCHEDULE H1 DRUG – WARNING.', '– It is dangerous to take this preparation', '  except in accordance with the medical advice.', '– Not to be sold by retail without the', '  prescription of a Registered Medical Practitioner.'], true,
+    '<h3>Schedule H1 (inserted 30 Aug 2013)</h3><p>Label: <b>Rx in red</b> on the left top corner and the warning in a <b>box with a red border</b>. Each supply goes into a <b>separate register</b>: prescriber\'s name and address, patient\'s name, drug and quantity; kept <b>three years</b>, open to inspection. Examples from the schedule\'s list: alprazolam, diazepam, midazolam, zolpidem; buprenorphine, codeine, tramadol; ceftriaxone, levofloxacin, moxifloxacin, meropenem; isoniazid, rifampicin, ethambutol.</p>'],
+  x: ['Schedule X', 'XRx', true, ['Schedule X drug – Warning: To be sold by', 'retail on the prescription of a', 'Registered Medical Practitioner only'], false,
+    '<h3>Schedule X</h3><p>Label: <b>XRx in red</b> on the left top corner. The prescription is written <b>in duplicate</b>; the seller keeps one copy for <b>two years</b>. Each supply is entered in a <b>bound, serially page-numbered register</b> with a separate page for each drug (date, quantity, manufacturer, batch, patient\'s or purchaser\'s name and address, prescription reference, among other items). Stored <b>under lock and key</b> (or in a separate part of the premises open only to responsible persons). Packs no larger than <b>100 unit doses</b> (tablets, capsules), <b>300 ml</b> (oral liquids) or <b>5 ml</b> (injections), hospital packs excepted. Examples from the list: amphetamine, methylphenidate, ketamine, amobarbital, pentobarbital, secobarbital, meprobamate, phencyclidine.</p>'],
+};
+const SCHED_HEAD = ['Requirement (Rule)', 'H', 'H1', 'X'];
+const SCHED_ROWS = [
+  ['Sale (65(9))', 'only on a Registered Medical Practitioner\'s prescription', 'same', 'same; prescription in duplicate, one copy kept 2 years'],
+  ['Prescription (65(10))', 'written, signed and dated; patient\'s name and address; total amount and dose', 'same', 'same'],
+  ['Dispensing (65(11))', 'not more than once unless the prescriber says so', 'same', 'same'],
+  ['Records (65(3), 65(21))', 'prescription register, with manufacturer, batch number and expiry', 'same, plus a separate H1 register (65(3)(1)(h)), kept 3 years', 'bound, page-numbered register, one page per drug'],
+  ['Storage (65(12))', '—', '—', 'under lock and key, or a separate area for responsible persons only'],
+  ['Pack size (105A)', '—', '—', '≤ 100 unit doses · ≤ 300 ml oral liquid · ≤ 5 ml injection'],
+];
+
+const EBM_TEXT = '<p><b>Evidence-based medicine</b> uses the best current evidence, together with <b>clinical expertise</b> and <b>patient values and preferences</b>, to guide the care of individual patients — "the conscientious, explicit and judicious use of current best evidence" (StatPearls; Wikipedia). Its cornerstone is a <b>hierarchy of evidence</b>, which ranks studies by their probability of bias: <b>randomised controlled trials</b> at the top among single studies, <b>case series and expert opinion</b> at the bottom (a review by Burns et al.; Wikipedia, whose pyramid puts systematic reviews above all). Step down the pyramid: the levels shown are selected CEBM levels for treatment studies, as given in that review.</p>';
+/* [chip, level, label on pyramid, text] (top to bottom) */
+const EBM = [
+  ['1A', '1A', 'Systematic review of RCTs', '<h3>Level 1A: systematic review (with homogeneity) of RCTs</h3><p>The top of the CEBM levels for treatment (Burns et al.); Wikipedia: the strongest evidence for a treatment is a systematic review of randomised, well-blinded, placebo-controlled trials.</p>'],
+  ['1B', '1B', 'Individual RCT', '<h3>Level 1B: individual randomised controlled trial</h3><p>RCTs rank highest among single studies because randomisation also spreads the confounding factors that could bias results (Burns et al.); USPSTF level I is "at least one properly designed RCT" (Wikipedia). Not every RCT is done well: readers should not assume level 1 is always the best (Burns et al.).</p>'],
+  ['2B', '2B', 'Cohort study', '<h3>Level 2B: individual cohort study</h3><p>Includes a poor-quality RCT (for example under 80 % follow-up) (CEBM, Burns et al.). USPSTF level II-2 groups well-designed cohort and case-control studies (Wikipedia).</p>'],
+  ['3B', '3B', 'Case-control study', '<h3>Level 3B: individual case-control study</h3><p>(CEBM, Burns et al.; with cohort studies at USPSTF II-2, Wikipedia.)</p>'],
+  ['4', '4', 'Case series', '<h3>Level 4: case series</h3><p>Also poor-quality cohort and case-control studies (CEBM, Burns et al.). A case series has no control of confounding factors (Burns et al.).</p>'],
+  ['5', '5', 'Expert opinion', '<h3>Level 5: expert opinion</h3><p>Expert opinion without explicit critical appraisal, or based on physiology, bench research or "first principles" (CEBM, Burns et al.); USPSTF level III: opinions of respected authorities (Wikipedia). Expert opinion is often biased by the author\'s experience (Burns et al.).</p>'],
+];
+
+const RAT_TEXT = '<p>WHO: rational use requires that <b>"patients receive medications appropriate to their clinical needs, in doses that meet their own individual requirements, for an adequate period of time, and at the lowest cost to them and their community"</b>. WHO estimates that <b>more than half</b> of all medicines are prescribed, dispensed or sold inappropriately and that <b>half of all patients</b> fail to take them correctly; overuse, underuse and misuse waste resources and cause widespread hazards. Among WHO\'s 12 interventions are a <b>national essential medicines list</b> and <b>drug and therapeutics committees</b> in districts and hospitals. India\'s NLEM aims to promote rational use through cost, safety and efficacy (PIB, 2022).</p>';
+const RAT_PARTS = ['appropriate to their clinical needs', 'doses that meet individual requirements', 'for an adequate period of time', 'at the lowest cost to them and their community'];
+const RAT = {
+  poly: ['Poly-pharmacy', '<p><b>Too many medicines per patient</b> ("poly-pharmacy") (WHO).</p>'],
+  amr: ['Antimicrobials misused', '<p>Inappropriate use of <b>antimicrobials</b>, often in inadequate dosage, for <b>non-bacterial infections</b> (WHO).</p>'],
+  inj: ['Injections over-used', '<p>Over-use of <b>injections</b> when oral formulations would be more appropriate (WHO).</p>'],
+  gl: ['Guidelines ignored', '<p>Failure to prescribe in accordance with <b>clinical guidelines</b> (WHO).</p>'],
+  self: ['Self-medication', '<p>Inappropriate <b>self-medication</b>, often of prescription-only medicines (WHO).</p>'],
+  adh: ['Non-adherence', '<p><b>Non-adherence</b> to dosing regimes (WHO).</p>'],
+};
+
+const EML_TEXT = '<p><b>Essential medicines</b> satisfy the <b>priority health-care needs</b> of a population (WHO; Wikipedia). The WHO Model List began in <b>1977</b> with 208 medicines and is updated <b>every two years</b> (WHO; Wikipedia). It has a <b>core list</b> — minimum needs for a basic health system, the most efficacious, safe and cost-effective medicines for priority conditions — and a <b>complementary list</b> for priority diseases that need specialised diagnosis, monitoring or care, or cost more (Wikipedia, two articles). Step through the timeline.</p>';
+/* [chip, year, row (0 WHO, 1 India), text] */
+const EML = [
+  ['1977', 1977, 0, '<h3>1977: first WHO Model List</h3><p>208 medicines (WHO; Wikipedia).</p>'],
+  ['1996', 1996, 1, '<h3>1996: India\'s first National List of Essential Medicines</h3><p>(PIB 2022; Wikipedia.) Revised in 2003, 2011 and 2015 (PIB 2022).</p>'],
+  ['2007', 2007, 0, '<h3>2007: first WHO list for children (EMLc)</h3><p>(WHO; Wikipedia.)</p>'],
+  ['NLEM 2022', 2022, 1, '<h3>NLEM 2022 (released 13 Sept 2022)</h3><p><b>384</b> medicines in <b>27 therapeutic categories</b>; <b>34 added</b> and <b>26 dropped</b> from NLEM 2015 (PIB release, 13 Sept 2022; the official NLEM 2022 document itself could not be checked). Its revision drew on the WHO EML 2021 (PIB).</p>'],
+  ['EML 2025', 2025, 0, '<h3>September 2025: 24th WHO EML, 10th EMLc</h3><p>(WHO; Wikipedia.) The lists now hold <b>523</b> medicines for adults and <b>374</b> for children; <b>20</b> new medicines were added to the EML and 15 to the EMLc (WHO news, 5 Sept 2025). The lists are adopted in over 150 countries (WHO).</p>'],
+];
+
+const FORM_TEXT = '<p>A <b>dosage form</b> combines the active ingredient with inactive <b>excipients</b> in a particular configuration — tablets, capsules, solutions, suspensions, syrups and others (Wikipedia). <b>Modified-release</b> forms release the drug after a delay or over a long time: extended release is either <b>sustained</b> (prolonged, not at a constant rate) or <b>controlled</b> (nearly constant rate), so fewer doses are needed (Wikipedia). Pick a form and watch its plasma curve.</p>';
+/* [chip, text] */
+const FORM = {
+  ir: ['Immediate release, repeated', '<h3>Conventional (immediate-release) tablet, taken repeatedly</h3><p>Each dose gives a peak and a trough. Example from Wikipedia: extended-release morphine needs fewer doses a day than standard tablets.</p>'],
+  del: ['Delayed release (enteric-coated)', '<h3>Delayed release (enteric coating)</h3><p>Release starts after a delay; special coatings make a tablet resist stomach acid so that it disintegrates only in the intestine (Wikipedia).</p>'],
+  sr: ['Sustained release', '<h3>Sustained release (SR)</h3><p>Release over a sustained period, but <b>not at a constant rate</b> (Wikipedia).</p>'],
+  cr: ['Controlled release', '<h3>Controlled release (CR)</h3><p>Release at a <b>nearly constant rate</b>, which tries to keep levels within the therapeutic window and avoid hazardous peaks (Wikipedia). A drug with a narrow therapeutic index is unfit for sustained release because of the risk of <b>dose dumping</b> (Wikipedia).</p>'],
+  td: ['Transdermal patch', '<h3>Transdermal patch</h3><p>Delivery through the skin <b>bypasses the gut and first-pass metabolism</b> (StatPearls), with sustained or controlled release (StatPearls; Wikipedia). The skin is a strong barrier, so only small molecules can be delivered (Wikipedia). Examples: nicotine patches; fentanyl and buprenorphine patches for severe pain (Wikipedia).</p>'],
+};
+const FORM_CARDS = [
+  ['Inhalers', 'Metered-dose inhalers, dry-powder inhalers, soft-mist inhalers and nebulisers deliver drug straight to the lungs. A <b>metered-dose inhaler</b> needs the puff and the breath to be coordinated; a <b>spacer</b> helps; a <b>dry-powder inhaler</b> needs less coordination (Wikipedia).'],
+  ['Targeted and carrier systems', 'Nanoparticles, liposomes, microneedles and hydrogels; <b>targeted delivery</b> takes a drug to its site without affecting other tissues (Wikipedia).'],
+  ['Other routes and forms', 'Routes and their absorption are on the <a href="pharmacokinetics.html#h-route">pharmacokinetics page</a>.'],
+];
+
+const ADR_TEXT = '<p>An <b>adverse drug reaction (ADR)</b>: "a response to a drug which is noxious and unintended, and which occurs at doses normally used for prophylaxis, diagnosis, or therapy of disease or the modification of physiologic function" (the ICH definition — WHO and the US FDA are ICH members — StatPearls; similar wording in Belhekar 2014). Edwards et al.\'s wording: an <b>appreciably harmful or unpleasant reaction</b> to a medicinal product that predicts hazard from future use (StatPearls; Clin Med 2016). An adverse <i>event</i> is not an ADR until causality is assessed (Prakash 2021). Types A and B date from the 1970s; C–F were added later (Wikipedia). Pick a type.</p>';
+/* [chip, text] */
+const ADR = {
+  A: ['A · Augmented', '<h3>Type A: augmented</h3><p><b>Dose-dependent</b> and <b>predictable</b> from the drug\'s pharmacology (Clin Med 2016; Wikipedia), usually mild but can be fatal — e.g. bleeding, even intracranial, with warfarin (Wikipedia). About 80 % of ADRs (Wikipedia).</p>'],
+  B: ['B · Bizarre', '<h3>Type B: bizarre</h3><p><b>Not dose-dependent</b>, <b>not predictable</b>: idiosyncratic (Clin Med 2016; Wikipedia). Clin Med 2016\'s example of an unpredictable reaction: anaphylaxis after one earlier uneventful course of a penicillin.</p>'],
+  C: ['C · Chronic', '<h3>Type C: chronic</h3><p>Chronic reactions (Wikipedia). Clin Med 2016, which does not use the letters, gives as an example of a chronic reaction from cumulative exposure, one that types A and B do not fit: <b>osteoporosis with long-term corticosteroids</b>.</p>'],
+  D: ['D · Delayed', '<h3>Type D: delayed</h3><p>Delayed reactions (Wikipedia).</p>'],
+  E: ['E · End of use', '<h3>Type E: withdrawal (end of use)</h3><p>Withdrawal reactions (Wikipedia). Clin Med 2016\'s example of a withdrawal reaction: <b>rebound hypertension</b> when a centrally acting antihypertensive is stopped.</p>'],
+  F: ['F · Failure', '<h3>Type F: failure of therapy</h3><p>Failure of therapy counted as an ADR (Wikipedia).</p>'],
+};
+const ADR_NOTE = 'Another scheme, <b>DoTS</b>, classifies by Dose, Time course and Susceptibility (Clin Med 2016; Wikipedia).';
+
+const NAR_TEXT = '<p>The <b>Naranjo algorithm</b> (Naranjo et al., 1981) asks <b>ten questions</b>, each answered yes, no or "don\'t know"; "don\'t know" scores 0, and the total runs from <b>−4 to +13</b> (Seger 2013). The weights are as in Naranjo 1981, reproduced in Lung India 2011 and Seger 2013; the question wording is condensed from their tables. <b>The sources disagree on the cut-offs</b>: Lung India 2011 and Seger 2013 say > 9 is "definite", which leaves a score of exactly 9 in no band, while Wikipedia gives a ≥ 9 variant; and only Seger 2013 says what a negative score means (< 1 = doubtful). Answer the questions or pick an answer set.</p>';
+/* question, weights [yes, no, don't know] */
+const NAR_Q = [
+  ['Are there previous conclusive reports on this reaction?', [1, 0, 0]],
+  ['Did the adverse event appear after the suspected drug was given?', [2, -1, 0]],
+  ['Did the adverse reaction improve when the drug was discontinued or a specific antagonist was given?', [1, 0, 0]],
+  ['Did the adverse reaction appear when the drug was re-administered?', [2, -1, 0]],
+  ['Are there alternative causes that could have caused the reaction?', [-1, 2, 0]],
+  ['Did the reaction reappear when a placebo was given?', [-1, 1, 0]],
+  ['Was the drug detected in any body fluid in toxic concentrations?', [1, 0, 0]],
+  ['Was the reaction more severe when the dose was increased, or less severe when it was decreased?', [1, 0, 0]],
+  ['Did the patient have a similar reaction to the same or similar drugs in any previous exposure?', [1, 0, 0]],
+  ['Was the adverse event confirmed by any objective evidence?', [1, 0, 0]],
+];
+/* answer sets: 0 yes, 1 no, 2 don't know */
+const NAR_PRE = {
+  dk: ['All "don\'t know" (0)', [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]],
+  q2: ['Only "appeared after the drug" (+2)', [2, 0, 2, 2, 2, 2, 2, 2, 2, 2]],
+  prob: ['Typical probable (+6)', [0, 0, 0, 2, 1, 2, 2, 2, 2, 2]],
+  nine: ['Exactly 9: sources disagree', [0, 0, 0, 0, 1, 2, 2, 2, 2, 0]],
+  max: ['Every answer for the drug (+13)', [0, 0, 0, 0, 1, 1, 0, 0, 0, 0]],
+  min: ['Every answer against (−4)', [1, 1, 1, 1, 0, 0, 1, 1, 1, 1]],
+};
+/* category bands per source: [label, lo, hi] (inclusive integers); null = not stated */
+const NAR_SRC = [
+  ['Wikipedia', [['doubtful', 0, 0], ['possible', 1, 4], ['probable', 5, 8], ['definite', 9, 13]]],
+  ['Lung India 2011', [['doubtful', 0, 0], ['possible', 1, 4], ['probable', 5, 8], ['definite', 10, 13]]],
+  ['Seger 2013', [['doubtful', -4, 0], ['possible', 1, 4], ['probable', 5, 8], ['definite', 10, 13]]],
+];
+const NAR_WARN = 'Not for overdose: Naranjo et al. excluded poisoning from the definition of an ADR, yet the scale is still misapplied to overdose patients (Seger 2013). An Indian study of 913 ADRs found poor agreement between Naranjo and WHO-UMC (κ 0.143), with WHO-UMC quicker; "possible" was the commonest category in both (Belhekar 2014).';
+
+const UMC_TEXT = '<p>The <b>WHO-UMC system</b> (Uppsala Monitoring Centre, document of 2018; the same criteria are reproduced in Lung India 2011) weighs the clinical-pharmacological aspects of the case and the quality of the documentation. All points of a category should be reasonably met. In practice few reactions are "certain" or "unlikely"; most are "possible" or "probable" — so start from one of those and move a step up if the report seems stronger, down if weaker (WHO-UMC). The system can also assess a drug–drug interaction through the "actor" drug (WHO-UMC). Step through the ladder.</p>';
+/* [chip, criteria list] */
+const UMC = [
+  ['Certain', ['Event or laboratory abnormality with a <b>plausible</b> time relationship to drug intake', '<b>Cannot</b> be explained by disease or other drugs', 'Response to withdrawal plausible (pharmacologically, pathologically)', 'Event <b>definitive</b> pharmacologically or phenomenologically — an objective, specific disorder or recognised phenomenon (WHO-UMC examples: grey baby syndrome with chloramphenicol; penicillin anaphylaxis)', '<b>Rechallenge</b> satisfactory, if necessary']],
+  ['Probable / likely', ['Event or laboratory abnormality with a <b>reasonable</b> time relationship', '<b>Unlikely</b> to be attributed to disease or other drugs', 'Response to withdrawal clinically reasonable', 'Rechallenge <b>not required</b>']],
+  ['Possible', ['Event or laboratory abnormality with a reasonable time relationship', '<b>Could also</b> be explained by disease or other drugs', 'Information on drug withdrawal may be lacking or unclear']],
+  ['Unlikely', ['Event or laboratory abnormality with a time to drug intake that makes a relationship <b>improbable (but not impossible)</b>', 'Disease or other drugs provide plausible explanations']],
+  ['Conditional / unclassified', ['Event or laboratory abnormality', '<b>More data</b> for proper assessment needed, or additional data under examination']],
+  ['Unassessable / unclassifiable', ['Report suggesting an adverse reaction', 'Cannot be judged: information <b>insufficient or contradictory</b>', 'Data cannot be supplemented or verified']],
+];
+
+const PV_TEXT = '<p><b>Pharmacovigilance</b> is the science and activities relating to the detection, assessment, understanding and prevention of adverse effects or any other drug-related problem (WHO definition, quoted in Clin Med 2016 and Prakash 2021). The <b>Pharmacovigilance Programme of India (PvPI)</b> was started by CDSCO under the Ministry of Health and Family Welfare in <b>July 2010</b>, with AIIMS New Delhi as the National Coordination Centre (NCC); the NCC moved to the <b>Indian Pharmacopoeia Commission (IPC), Ghaziabad</b> in April 2011 (IPC; Wikipedia; Prakash 2021). Its data flagged a problem with <b>carbamazepine</b> (SJS / TEN) in Indian patients (Wikipedia; Prakash 2021). Safety decisions weigh <b>benefit against risk</b>: pharmacovigilance aims to keep a positive risk–benefit (benefit-to-harm) balance through a medicine\'s life (Wikipedia; Clin Med 2016), and the IPC notes that safety decisions may need comparative benefit/risk evaluations between products. Step through a report.</p>';
+/* [chip, box key, text] */
+const PV = [
+  ['Notice', 'pat', '<h3>1 · A suspected ADR is noticed</h3><p>Reports come spontaneously from health-care professionals, patients, relatives or consumers (Prakash 2021).</p>'],
+  ['Report', 'rep', '<h3>2 · Report it</h3><p>Health-care professionals use the <b>suspected ADR reporting form</b> (Prakash 2021); consumers can use the "Medicines Side Effect Reporting Form for Consumers" (blue form, Kalaiselvan 2016). Anyone can call the toll-free <b>PvPI helpline 1800-180-3024</b> (IPC; Kalaiselvan 2016; Prakash 2021); there is also an "ADR PvPI" mobile app (Prakash 2021).</p>'],
+  ['AMC', 'amc', '<h3>3 · ADR Monitoring Centre (AMC)</h3><p>Medical colleges and hospitals enrolled as AMCs report to the NCC (IPC); a PV associate receives the report and a team of clinicians and pharmacologists validates it and assesses <b>causality</b> (Prakash 2021).</p>'],
+  ['VigiFlow → NCC', 'ncc', '<h3>4 · To the NCC through VigiFlow</h3><p>The AMC sends each report as an <b>individual case safety report (ICSR)</b> through <b>VigiFlow</b>, the WHO-UMC software, to the NCC at IPC Ghaziabad (IPC; Kalaiselvan 2016; Prakash 2021). The NCC checks quality; incomplete or invalid reports go back to the AMC to be corrected (IPC).</p>'],
+  ['UMC Sweden', 'umc', '<h3>5 · To the WHO-UMC, Sweden</h3><p>Valid ICSRs go on to the <b>Uppsala Monitoring Centre</b> in Sweden (IPC; Prakash 2021) and into <b>VigiBase</b>, the worldwide ICSR repository (Prakash 2021).</p>'],
+  ['Action', 'cdsco', '<h3>6 · Regulatory action</h3><p>PvPI issues <b>alerts</b>, recommends <b>label changes</b> and identifies <b>signals</b>, supporting the national regulator (Prakash 2021); CDSCO seeks the NCC\'s input before regulatory decisions (Kalaiselvan 2016), and NCC data go to CDSCO as required (IPC).</p>'],
+];
+
+const DDI_TEXT = '<p>A drug interaction occurs when a drug\'s action is changed by another drug, a food or a drink (Wikipedia); the risk rises with the number of drugs taken (Wikipedia; Palleria 2013). Interactions are <b>pharmacokinetic</b> — absorption, distribution, metabolism or excretion — or <b>pharmacodynamic</b> (Palleria 2013; Wikipedia), and their result can be <b>additive</b>, <b>synergistic</b> (more than expected from the individual potencies) or <b>antagonistic</b> (Wikipedia; Tallarida 2011). Palleria 2013 splits pharmacodynamic interactions into effects at the receptor, interference with a physiological control process, and additive or opposed effects. The full list of CYP inducers and inhibitors is in the <a href="pharmacokinetics.html#h-cyp">inducer and inhibitor table on the pharmacokinetics page</a>. <b>Managing interactions</b> (one source each): some resources advise a <b>gap of two to four hours</b> between an antacid and a drug whose absorption it changes (Wikipedia); Palleria 2013 recommends <b>therapeutic drug monitoring</b> to reduce interactions in elderly patients taking several drugs. Pick an interaction.</p>';
+/* [chip, stage (gut | plasma | liver | kidney | target), text] */
+const DDI_PK = {
+  chel: ['Chelation in the gut', 'gut', '<h3>Absorption: chelation</h3><p><b>Tetracyclines</b> and <b>fluoroquinolones</b> bind metal ions (calcium, magnesium, aluminium, iron) into poorly absorbed complexes — with antacids, iron or dairy products (Palleria 2013; Wikipedia).</p>'],
+  disp: ['Protein-binding displacement', 'plasma', '<h3>Distribution: displacement from plasma proteins</h3><p>A drug with higher affinity can displace a highly bound drug from albumin and raise its free fraction (Palleria 2013; Wikipedia). Palleria 2013 says it matters when the displaced drug is > 90 % bound, has a small volume of distribution and a narrow therapeutic index; Wikipedia warns that its clinical importance is usually overestimated, warfarin being the example commonly misused.</p>'],
+  cyp: ['Enzyme induction / inhibition', 'liver', '<h3>Metabolism: CYP induction and inhibition</h3><p>Many interactions come from <b>inhibition or induction of CYP enzymes</b> (Palleria 2013). Induction speeds metabolism and lowers the unchanged drug; inhibition happens when two drugs compete for the same enzyme (2000 review). Common inducers: rifampicin, phenobarbital, phenytoin, carbamazepine (Palleria 2013). A CYP3A4 inhibitor with some statins greatly raises the risk of <b>rhabdomyolysis</b> (2000 review). Full lists: <a href="pharmacokinetics.html#h-cyp">pharmacokinetics page</a>.</p>'],
+  gf: ['Grapefruit juice', 'liver', '<h3>Metabolism: grapefruit juice</h3><p>Furanocoumarins in grapefruit inhibit <b>CYP3A4</b> in the liver and intestine (Wikipedia; it adds that small amounts inhibit only the intestinal enzyme); it raises ciclosporin levels, but too unpredictably to be used to cut the dose (2000 review). Simvastatin, lovastatin and atorvastatin are affected (Wikipedia).</p>'],
+  prob: ['Probenecid + penicillin', 'kidney', '<h3>Excretion: competition for tubular secretion</h3><p><b>Probenecid</b> delays the renal excretion of <b>penicillin</b> and prolongs its effect (Wikipedia; Palleria 2013: penicillins and cephalosporins, by competitive inhibition of an organic anion transporter). <b>NSAIDs</b> can block the renal excretion of <b>methotrexate</b> and cause its toxicity (Palleria 2013).</p>'],
+};
+const DDI_PD = {
+  nal: ['Naloxone vs an opioid', 'target', '<h3>Antagonism at the receptor</h3><p><b>Naloxone</b>, a competitive μ-opioid antagonist, reverses the central nervous system and respiratory depression caused by opioids (Wikipedia; StatPearls).</p>'],
+  zol: ['Zolpidem + alcohol', 'target', '<h3>Same receptor, effects added</h3><p>Zolpidem and alcohol both act on <b>GABA-A receptors</b>; taken together they overstimulate the receptor and can cause loss of consciousness (Wikipedia).</p>'],
+  syn: ['Additive vs synergistic', 'target', '<h3>Additive or synergistic</h3><p><b>Additive</b>: the combined effect matches the individual potencies; <b>synergistic</b>: greater than predicted, which allows lower doses (Tallarida 2011; Wikipedia). The isobologram is on the <a href="pharmacodynamics.html#h-comb">pharmacodynamics page</a>.</p>'],
+};
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews and studies (Clin Med 2016, adverse drug reactions; Lung India 2011, causality scales; Seger 2013, the Naranjo scale in toxicology; Belhekar 2014, Naranjo vs WHO-UMC; Kalaiselvan 2016 and Prakash 2021, PvPI; Burns, Rohrich and Chung, levels of evidence; Gozzo 2022, generics; Pharmaceutics 2026, narrow-index drugs; Palleria 2013 (J Res Med Sci) and Proc Bayl Univ Med Cent 2000, drug interactions; Tallarida 2011 (Genes Cancer), synergism); Drugs and Cosmetics Rules, 1945 (CDSCO text as amended to 31 Dec 2016); WHO (pharmacovigilance page, fetched 25 Nov 2026; rational use of medicines; Essential Medicines Lists, Sept 2025; WHO news 5 Sept 2025); WHO-UMC causality assessment (2018); Indian Pharmacopoeia Commission, PvPI pages; PIB release on NLEM 2022 (13 Sept 2022); Wikipedia.';
+const MODELS = '<b>Models used:</b> the term map, label drawings, pyramid, timeline, ADR timeline, PvPI flow and interaction map are schematic, not to scale; the bioequivalence interval and the formulation curves use hypothetical numbers and shapes, not data.';
+
+/* ===================== CODE ===================== */
+const P = window.Pharm, $ = P.$, T = P.T;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+Object.entries({terms: TERMS_TEXT, names: NAMES_TEXT, be: BE_TEXT, sched: SCHED_TEXT, ebm: EBM_TEXT, rat: RAT_TEXT, eml: EML_TEXT, form: FORM_TEXT, adr: ADR_TEXT, nar: NAR_TEXT, umc: UMC_TEXT, pv: PV_TEXT, ddi: DDI_TEXT}).forEach(([k, v]) => { $(k + '-text').innerHTML = v; });
+const box = (x, y, w, h, cls, rx = 6) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}"/>`;
+/* on a phone a wide schematic scrolls sideways: bring the selected part into view */
+const showX = (id, x) => { const svg = $(id), b = svg.parentElement; if (b.scrollWidth > b.clientWidth + 1) b.scrollLeft = Math.max(0, x / svg.viewBox.baseVal.width * b.scrollWidth - b.clientWidth / 2); };
+const arrow = (x1, y1, x2, y2) => `<path class="flow" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+
+/* ---------- terms ---------- */
+function drawTerms(k) {
+  const on = n => TERMS[k][1] === n ? ' on' : '';
+  let s = P.DEFS;
+  s += box(30, 60, 130, 70, 'node' + on('drug'), 35) + T(95, 100, 'Drug', 'b' + (on('drug') ? ' on' : ''), 'middle');
+  s += box(380, 60, 130, 70, 'node', 35) + T(445, 100, 'Body', 'b', 'middle');
+  s += arrow(160, 80, 378, 80) + T(270, 70, 'pharmacodynamics: drug → body', 's' + (on('pd') ? ' on' : ''), 'middle');
+  s += arrow(380, 112, 162, 112) + T(270, 130, 'pharmacokinetics: body → drug (ADME)', 's' + (on('pk') ? ' on' : ''), 'middle');
+  [['ther', 'therapy', 'treating a patient'], ['pgx', 'genomics', 'genes and response'], ['epi', 'epidemiology', 'populations'], ['pv', 'vigilance', 'safety']].forEach(([n, l, m], i) => {
+    const x = 30 + i * 125; s += box(x, 160, 112, 62, 'node' + on(n)) + T(x + 56, 177, 'Pharmaco-', 's', 'middle') + T(x + 56, 194, l, 'b' + (on(n) ? ' on' : ''), 'middle') + T(x + 56, 212, m, 's', 'middle');
+  });
+  s += T(30, 244, 'schematic', 'h');
+  $('terms-svg').innerHTML = s; $('terms-find').innerHTML = TERMS[k][2];
+}
+P.toggles('terms-chips', Object.entries(TERMS).map(([k, v]) => [k, v[0]]), drawTerms, 'pk'); drawTerms('pk');
+
+/* ---------- names ---------- */
+function drawNames(k) {
+  const d = NAMES[k]; let s = '';
+  const rows = [['CHEMICAL NAME', d[1]], ['NONPROPRIETARY (GENERIC) NAME · INN', d[2]], ['TRADE (BRAND) NAMES', d[3]]];
+  rows.forEach(([h, v], i) => {
+    const y = 14 + i * 66; s += box(10, y, 540, 54, 'node') + T(22, y + 18, h, 'h');
+    if (v.includes('|')) { const [a, st] = v.split('|'); s += `<text x="22" y="${y + 42}" class="b" style="font-size:16px">${a}<tspan style="text-decoration:underline">${st}</tspan></text>` + T(22 + (a.length + st.length) * 9.4 + 14, y + 42, '← stem', 's'); }
+    else s += `<text x="22" y="${y + 42}" class="${i === 1 ? 'b' : ''}" style="font-size:${i === 0 && v.length > 40 ? 13 : 15}px">${v}</text>`;
+  });
+  $('names-svg').innerHTML = s; $('names-find').innerHTML = d[4];
+}
+P.toggles('names-chips', Object.entries(NAMES).map(([k, v]) => [k, v[0]]), drawNames, 'prop'); drawNames('prop');
+
+/* ---------- bioequivalence ---------- */
+const be = {...BE0};
+function drawBe() {
+  const sx = P.scale(55, 170, 30, 540), lo = be.gmr / (1 + be.w / 100), hi = be.gmr * (1 + be.w / 100), ok = lo >= 80 && hi <= 125;
+  /* the 80-125 % limits: a neutral hatch (not the therapeutic-range colour) */
+  let s = '<defs><pattern id="behatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--ink);stroke-width:1.2;stroke-opacity:.3"/></pattern></defs>'
+    + `<rect class="belim" x="${sx(80)}" y="20" width="${sx(125) - sx(80)}" height="56"/>` + `<path class="axis" d="M30 76 L540 76"/>`;
+  for (let v = 60; v <= 170; v += 10) s += `<path class="axis" d="M${sx(v)} 76 L${sx(v)} 81"/>` + T(sx(v), 95, v, 's', 'middle');
+  s += T(sx(80), 14, '80 %', 'm', 'middle') + T(sx(125), 14, '125 %', 'm', 'middle') + T(sx(100), 112, 'generic ÷ brand, % (AUC or Cmax)', 's', 'middle');
+  s += `<path class="trace" d="M${sx(lo)} 48 L${sx(hi)} 48"/><path class="trace" d="M${sx(lo)} 40 L${sx(lo)} 56 M${sx(hi)} 40 L${sx(hi)} 56"/><circle class="pt" cx="${sx(be.gmr)}" cy="48" r="5"/>`;
+  $('be-svg').innerHTML = s;
+  $('be-out').innerHTML = `90 % CI ${lo.toFixed(1)}–${hi.toFixed(1)} % → ${ok ? 'inside 80–125 %: bioequivalent by the conventional rule' : 'outside 80–125 %: not shown bioequivalent'}`;
+}
+const clearBePre = () => $('be-pre').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false'));
+const beG = P.slider('be-sl', {id: 'gmr', label: 'Mean ratio (generic ÷ brand)', min: 75, max: 125, step: 1, value: be.gmr, fmt: v => v + ' %'}, v => { be.gmr = v; clearBePre(); drawBe(); });
+const beW = P.slider('be-sl', {id: 'w', label: 'Width of the 90 % interval (±)', min: 2, max: 30, step: 1, value: be.w, fmt: v => '± ' + v + ' %'}, v => { be.w = v; clearBePre(); drawBe(); });
+beG.init(); beW.init();
+P.toggles('be-pre', Object.entries(BE_PRE).map(([k, v]) => [k, v[0]]), k => { const p = BE_PRE[k]; be.gmr = p[1]; be.w = p[2]; beG.el.value = p[1]; beW.el.value = p[2]; beG.init(); beW.init(); drawBe(); }, 'ok');
+drawBe();
+
+/* ---------- schedules ---------- */
+function drawSched(k) {
+  const d = SCHED[k]; let s = box(14, 14, 392, 212, 'lab', 4);
+  s += T(30, 56, d[1], 'b', 'start', ' style="font-size:30px"') + (d[2] ? T(30, 82, '(in red)', 's') : '');
+  s += T(30, 100, 'left top corner of the label', 's');
+  s += T(250, 46, 'name of the medicine', 's', 'middle') + T(250, 64, 'strength · batch · expiry', 's', 'middle');
+  const y0 = 118, h = d[3].length * 17 + 14;
+  s += d[4] ? box(26, y0, 368, h, 'lab2', 2) + T(394, y0 - 6, 'box with a red border', 's', 'end') : '';
+  d[3].forEach((l, i) => { s += T(36, y0 + 20 + i * 17, l, i === 0 && d[4] ? 'b' : '', 'start', ' style="font-size:12px"'); });
+  s += T(14, 246, 'schematic label: wording as in Rule 97', 'h');
+  $('sched-svg').innerHTML = s; $('sched-find').innerHTML = d[5];
+  $('sched-tab').querySelectorAll('tr').forEach(tr => [...tr.children].forEach((c, i) => { c.style.background = (i === {h: 1, hn: 1, h1: 2, x: 3}[k]) ? 'var(--bg)' : ''; }));
+}
+P.table('sched-tab', SCHED_HEAD, SCHED_ROWS);
+P.toggles('sched-chips', Object.entries(SCHED).map(([k, v]) => [k, v[0]]), drawSched, 'h'); drawSched('h');
+
+/* ---------- EBM pyramid ---------- */
+const ebm = {s: 1};
+function drawEbm() {
+  let s = ''; const n = EBM.length, top = 14, hh = 38, cx = 300;
+  EBM.forEach((l, i) => {
+    const y = top + i * hh, w0 = 180 + i * 54, w1 = 180 + (i + 1) * 54;
+    s += `<path class="band${i === ebm.s ? ' on' : ''}" d="M${cx - w0 / 2} ${y} L${cx + w0 / 2} ${y} L${cx + w1 / 2} ${y + hh - 3} L${cx - w1 / 2} ${y + hh - 3} Z"/>`;
+    s += T(cx, y + 24, l[1] + ' · ' + l[2], i === ebm.s ? 'l on' : 'l', 'middle');
+  });
+  s += T(4, 22, 'least bias', 's') + T(4, top + n * hh + 14, 'most bias', 's') + `<path class="flow" d="M24 30 L24 ${top + n * hh - 18}"/>`;
+  s += T(cx, 268, 'schematic: selected CEBM levels for treatment (Burns et al.)', 'h', 'middle');
+  $('ebm-svg').innerHTML = s; $('ebm-find').innerHTML = EBM[ebm.s][3]; showX('ebm-svg', 300);
+}
+P.stepper('ebm-step', EBM.map(l => l[0]), drawEbm, ebm);
+
+/* ---------- rational use ---------- */
+(function () {
+  let s = T(10, 18, 'RATIONAL USE (WHO): PATIENTS RECEIVE MEDICATIONS…', 'h');
+  RAT_PARTS.forEach((p, i) => { const x = 10 + i * 137; s += box(x, 32, 128, 82, 'node') + T(x + 10, 54, (i + 1) + '', 'b'); const w = p.split(' '); let line = '', ln = 0; for (const t of w) { if ((line + ' ' + t).length > 17) { s += T(x + 10, 74 + ln * 15, line.trim(), 's'); line = ''; ln++; } line += ' ' + t; } s += T(x + 10, 74 + ln * 15, line.trim(), 's'); });
+  s += T(10, 140, 'schematic: the four parts of one WHO sentence', 'h');
+  $('rat-svg').innerHTML = s;
+})();
+P.toggles('rat-chips', Object.entries(RAT).map(([k, v]) => [k, v[0]]), k => { $('rat-find').innerHTML = RAT[k][1]; }, 'poly'); $('rat-find').innerHTML = RAT.poly[1];
+
+/* ---------- essential medicines timeline ---------- */
+const eml = {s: 4};
+function drawEml() {
+  const sx = P.scale(1975, 2027, 70, 565); let s = '';
+  s += T(10, 50, 'WHO', 'h') + T(10, 116, 'INDIA', 'h') + `<path class="axis" d="M70 46 L565 46 M70 112 L565 112"/>`;
+  for (let y = 1980; y <= 2025; y += 5) s += T(sx(y), 160, y, 's', 'middle') + `<path class="grid" d="M${sx(y)} 30 L${sx(y)} 146"/>`;
+  [2003, 2011, 2015].forEach(y => { s += `<circle cx="${sx(y)}" cy="112" r="4" style="fill:var(--muted)"/>`; });
+  s += T(sx(2009), 136, 'revisions 2003 · 2011 · 2015', 's', 'middle');
+  EML.forEach((e, i) => { const y = e[2] ? 112 : 46, on = i === eml.s; s += `<circle cx="${sx(e[1])}" cy="${y}" r="${on ? 9 : 6}" style="fill:${on ? 'var(--accent)' : 'var(--surface)'};stroke:var(--ink);stroke-width:1.4"/>` + T(sx(e[1]), y - 14, e[0], on ? 'l on' : 'l', i === 4 ? 'end' : 'middle'); });
+  $('eml-svg').innerHTML = s; $('eml-find').innerHTML = EML[eml.s][3];
+}
+P.stepper('eml-step', EML.map(e => e[0]), drawEml, eml);
+
+/* ---------- formulations ---------- */
+const FT = 24; /* hours shown */
+function formCurve(k, t) {
+  const ka = 1.2, ke = 0.35, one = tt => tt <= 0 ? 0 : 3.6 * (Math.exp(-ke * tt) - Math.exp(-ka * tt));
+  if (k === 'ir') { let c = 0; for (let d = 0; d < FT; d += 6) c += one(t - d); return c; }
+  if (k === 'del') return one(t - 3);
+  if (k === 'sr') { let c = 0; for (let d = 0; d < 10; d += 0.5) c += 0.11 * Math.exp(-0.18 * d) * one(t - d) * 1.6; return c; }
+  if (k === 'cr') { return 1.25 * (1 - Math.exp(-0.6 * t)) * (t < 20 ? 1 : Math.exp(-0.35 * (t - 20))); }
+  if (k === 'td') { return 1.15 * (1 - Math.exp(-0.18 * t)); }
+}
+function drawForm(k) {
+  const x0 = 60, x1 = 540, y0 = 190, y1 = 20, sx = P.scale(0, FT, x0, x1), sy = P.scale(0, 2.2, y0, y1);
+  const pts = []; for (let t = 0; t <= FT; t += 0.1) pts.push([sx(t), sy(Math.min(2.15, formCurve(k, t)))]);
+  /* the band is named in a key under the axis: no curve shape can run through it */
+  let s = `<rect class="thb" x="${x0}" y="${sy(1.6)}" width="${x1 - x0}" height="${sy(0.8) - sy(1.6)}"/>` + `<rect class="thb" x="${x1 - 118}" y="214" width="14" height="12"/>` + T(x1 - 98, 224, 'therapeutic range', 's');
+  s += `<path class="toxl" d="M${x0} ${sy(1.9)} L${x1} ${sy(1.9)}"/>` + T(x1 - 4, sy(1.9) - 4, 'toxic level', 'c', 'end', ' style="font-size:11px"');
+  s += `<path class="axis" d="M${x0} ${y1} L${x0} ${y0} L${x1} ${y0}"/>` + T(x0, y1 - 6, 'plasma concentration', 's') + T(x1, y0 + 18, 'time (h) →', 's', 'end');
+  s += `<path class="trace" d="${P.path(pts)}"/>`;
+  if (k === 'ir') for (let d = 0; d < FT; d += 6) s += `<path class="axis" d="M${sx(d)} ${y0} L${sx(d)} ${y0 + 6}"/>` + T(sx(d), y0 + 18, 'dose', 's', 'middle');
+  s += T(x0, 224, 'schematic shapes, hypothetical drug', 'h');
+  $('form-svg').innerHTML = s; $('form-find').innerHTML = FORM[k][1];
+}
+$('form-cards').innerHTML = FORM_CARDS.map(([h, t]) => `<div class="card"><h3>${h}</h3><p>${t}</p></div>`).join('');
+P.toggles('form-chips', Object.entries(FORM).map(([k, v]) => [k, v[0]]), drawForm, 'ir'); drawForm('ir');
+
+/* ---------- ADR types ---------- */
+function drawAdr(k) {
+  const x0 = 14, x1 = 410, sx = P.scale(0, 10, x0, x1); let s = '';
+  s += `<rect class="drugbar" x="${sx(1)}" y="120" width="${sx(7) - sx(1)}" height="22"/>` + T((sx(1) + sx(7)) / 2, 136, 'drug taken', 's', 'middle');
+  s += `<path class="flow" d="M${x0} 160 L${x1} 160"/>` + T(x1, 178, 'time →', 's', 'end') + T(sx(1), 178, 'start', 's', 'middle') + T(sx(7), 178, 'stop', 's', 'middle');
+  /* D: drawn across and after "stop" (delayed; timing schematic) */
+  const R = {A: [1.5, 6.8, 'dose-related, predictable'], B: [2.2, 3.2, 'not dose-related'], C: [5, 6.9, 'long, cumulative use'], D: [6.2, 9.6, 'delayed (timing schematic)'], E: [7.1, 8.6, 'after stopping'], F: [1.5, 6.8, 'the expected benefit fails']};
+  const r = R[k];
+  if (k === 'F') s += `<rect x="${sx(r[0])}" y="62" width="${sx(r[1]) - sx(r[0])}" height="40" rx="6" style="fill:none;stroke:var(--clin);stroke-width:1.6;stroke-dasharray:5 4"/>`;
+  else if (k === 'A') s += `<path class="adr" d="M${sx(r[0])} 102 L${sx(r[1])} 52 L${sx(r[1])} 102 Z"/>`;
+  else s += `<rect class="adr" x="${sx(r[0])}" y="62" width="${sx(r[1]) - sx(r[0])}" height="40" rx="6"/>`;
+  s += T(Math.max(x0 + 125, Math.min(x1 - 125, (sx(r[0]) + sx(r[1])) / 2)), 40, 'Type ' + k + ': ' + r[2], 'b', 'middle');
+  s += T(x0, 204, 'schematic', 'h');
+  $('adr-svg').innerHTML = s; $('adr-find').innerHTML = ADR[k][1] + '<p class="note">' + ADR_NOTE + '</p>';
+}
+P.toggles('adr-chips', Object.entries(ADR).map(([k, v]) => [k, v[0]]), drawAdr, 'A'); drawAdr('A');
+
+/* ---------- Naranjo calculator ---------- */
+const nar = {a: NAR_PRE.dk[1].slice()};
+const narScore = a => a.reduce((t, x, i) => t + NAR_Q[i][1][x], 0);
+const narCat = (bands, v) => { for (const [l, lo, hi] of bands) if (v >= lo && v <= hi) return l; return null; };
+function buildNarQ() {
+  $('nar-q').innerHTML = NAR_Q.map((q, i) => `<div class="nq"><div>${i + 1}. ${q[0]} <span class="w">(yes ${P.mn(q[1][0] > 0 ? '+' + q[1][0] : q[1][0])} · no ${P.mn(q[1][1] > 0 ? '+' + q[1][1] : q[1][1])} · don't know 0)</span></div><div class="chips" id="nq${i}" role="group" aria-label="Question ${i + 1}"></div></div>`).join('');
+  NAR_Q.forEach((q, i) => {
+    const g = $('nq' + i);
+    /* a manual answer leaves any preset: clear the preset chip */
+    ['Yes', 'No', "Don't know"].forEach((l, j) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = l; b.dataset.k = j; b.onclick = () => { nar.a[i] = j; $('nar-pre').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', 'false')); drawNar(); }; g.append(b); });
+  });
+}
+function drawNar() {
+  NAR_Q.forEach((q, i) => $('nq' + i).querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', String(j === nar.a[i]))));
+  const v = narScore(nar.a); $('nar-score').textContent = P.mn(v > 0 ? '+' + v : v);
+  $('nar-range').textContent = 'possible range ' + P.mn('-4') + ' to +13';
+  const x0 = 150, x1 = 590, sx = P.scale(-4.5, 13.5, x0, x1); let s = '';
+  for (let t = -4; t <= 13; t++) s += `<path class="grid" d="M${sx(t)} 20 L${sx(t)} 150"/>` + T(sx(t), 168, t, 's', 'middle');
+  NAR_SRC.forEach(([name, bands], r) => {
+    const y = 26 + r * 42; s += T(x0 - 8, y + 20, name, 's', 'end');
+    bands.forEach(([l, lo, hi]) => { const on = v >= lo && v <= hi; s += `<rect class="band${on ? ' on' : ''}" x="${sx(lo - 0.5) + 1}" y="${y}" width="${sx(hi + 0.5) - sx(lo - 0.5) - 2}" height="30" rx="3"/>`; const w = sx(hi + 0.5) - sx(lo - 0.5); s += T((sx(lo - 0.5) + sx(hi + 0.5)) / 2, y + 19, w < 40 ? l[0] : l, on ? 'on' : 's', 'middle', ' style="font-size:11px"'); });
+  });
+  /* the score line runs in the gaps between the source rows only, so it never crosses a band label; the band it falls in is highlighted */
+  s += [[14, 26], [56, 68], [98, 110], [140, 154]].map(([a, b]) => `<path d="M${sx(v)} ${a} L${sx(v)} ${b}" style="stroke:var(--mark);stroke-width:2.4"/>`).join('') + `<circle class="pt" cx="${sx(v)}" cy="12" r="6"/>`;
+  s += T(x0, 184, 'score · d = doubtful', 'h');
+  $('nar-svg').innerHTML = s; showX('nar-svg', sx(v));
+  $('nar-verd').innerHTML = NAR_SRC.map(([name, bands]) => { const c = narCat(bands, v); return `<span>${name}</span><b>${c || (v < 0 ? 'not stated' : 'no band (9 falls between 5–8 and > 9)')}</b>`; }).join('');
+}
+buildNarQ();
+P.toggles('nar-pre', Object.entries(NAR_PRE).map(([k, v]) => [k, v[0]]), k => { nar.a = NAR_PRE[k][1].slice(); drawNar(); }, 'dk');
+$('nar-warn').innerHTML = NAR_WARN;
+drawNar();
+
+/* ---------- WHO-UMC ladder ---------- */
+const umc = {s: 2};
+function drawUmc() {
+  let s = '';
+  /* the first four form the evidence ladder; conditional and unassessable are not steps on it, so they sit apart */
+  UMC.forEach((c, i) => {
+    const sep = i >= 4, y = sep ? 196 + (i - 4) * 36 : 12 + i * 36, x = sep ? 40 : 40 + i * 16, on = i === umc.s;
+    s += `<rect class="band${on ? ' on' : ''}" x="${x}" y="${y}" width="260" height="30" rx="4"${sep ? ' style="stroke-dasharray:4 3"' : ''}/>` + T(x + 12, y + 20, c[0], on ? 'on' : '', 'start');
+  });
+  s += `<path class="flow" d="M22 146 L22 20"/>` + T(14, 166, '↑ stronger evidence', 's');
+  s += T(345, 86, '← most reports', 's') + T(345, 102, 'are possible', 's') + T(345, 118, 'or probable', 's');
+  s += `<path class="grid dash" d="M14 176 L426 176"/>` + T(40, 190, 'not on the scale: more data needed, or cannot be judged', 's');
+  s += T(250, 284, 'schematic', 'h');
+  $('umc-svg').innerHTML = s;
+  $('umc-find').innerHTML = `<h3>${UMC[umc.s][0]}</h3><ul>${UMC[umc.s][1].map(x => '<li>' + x + '</li>').join('')}</ul>`;
+}
+P.stepper('umc-step', UMC.map(c => c[0].split(' /')[0]), drawUmc, umc);
+
+/* ---------- PvPI flow ---------- */
+const pv = {s: 0};
+const PV_BOX = {pat: [10, 30, 'Patient / HCP', 'notices an ADR'], rep: [160, 30, 'Report', 'form · helpline · app'], amc: [310, 30, 'AMC', 'causality'], ncc: [460, 30, 'NCC, IPC', 'Ghaziabad'], umc: [460, 170, 'WHO-UMC', 'Sweden · VigiBase'], cdsco: [160, 170, 'CDSCO', 'alerts · labels · signals']};
+function drawPv() {
+  const cur = PV[pv.s][1]; let s = P.DEFS;
+  for (const [k, [x, y, a, b]] of Object.entries(PV_BOX)) s += box(x, y, 130, 56, 'node' + (k === cur ? ' on' : '')) + T(x + 65, y + 24, a, 'b' + (k === cur ? ' on' : ''), 'middle') + T(x + 65, y + 42, b, 's', 'middle');
+  s += arrow(140, 58, 158, 58) + arrow(290, 58, 308, 58) + arrow(440, 58, 458, 58) + T(450, 22, 'VigiFlow', 's', 'middle');
+  s += arrow(525, 86, 525, 168) + T(532, 132, 'valid ICSRs', 's');
+  s += `<path class="flow dash" d="M480 86 C460 120 400 120 380 88"/>` + T(420, 128, 'incomplete: back', 's', 'middle');
+  s += `<path class="flow" d="M500 86 C490 200 340 200 292 200"/>` + T(372, 216, 'data, as required (IPC)', 's', 'middle');
+  s += T(10, 254, 'schematic', 'h');
+  $('pv-svg').innerHTML = s; $('pv-find').innerHTML = PV[pv.s][2]; showX('pv-svg', PV_BOX[cur][0] + 65);
+}
+P.stepper('pv-step', PV.map(p => p[0]), drawPv, pv);
+
+/* ---------- drug interactions ---------- */
+const DDI_ST = [['gut', 'Gut', 'absorption'], ['plasma', 'Plasma', 'distribution'], ['liver', 'Liver (CYP)', 'metabolism'], ['kidney', 'Kidney', 'excretion'], ['target', 'Receptor', 'effect (PD)']];
+function drawDdi(k) {
+  const d = DDI_PK[k] || DDI_PD[k]; let s = P.DEFS;
+  DDI_ST.forEach(([key, a, b], i) => {
+    const x = 8 + i * 118, on = key === d[1];
+    const cls = key === 'plasma' ? 'plasma' : key === 'liver' ? 'enzb' : key === 'target' ? 'rc' : 'node';
+    s += box(x, 50, 104, 70, cls) + (on ? box(x - 3, 47, 110, 76, 'node on', 8).replace('class="node on"', 'class="node on" style="fill:none"') : '');
+    s += T(x + 52, 80, a, 'b' + (on ? ' on' : ''), 'middle') + T(x + 52, 98, b, 's', 'middle');
+    if (i < 4) s += arrow(x + 104, 85, x + 116, 85);
+  });
+  s += T(8 + 1.5 * 118, 30, 'pharmacokinetic', 'h', 'middle') + `<path class="axis" d="M8 36 L${8 + 4 * 118 - 10} 36"/>` + T(8 + 4 * 118 + 52, 30, 'pharmacodynamic', 'h', 'middle');
+  s += T(300, 150, (DDI_PK[k] ? 'pharmacokinetic' : 'pharmacodynamic') + ': ' + d[0], 'l', 'middle');
+  s += T(8, 192, 'schematic', 'h');
+  $('ddi-svg').innerHTML = s; $('ddi-find').innerHTML = d[2]; showX('ddi-svg', 8 + DDI_ST.findIndex(x => x[0] === d[1]) * 118 + 52);
+  for (const id of ['ddi-pk', 'ddi-pd']) $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === k)));
+}
+P.toggles('ddi-pk', Object.entries(DDI_PK).map(([k, v]) => [k, v[0]]), drawDdi, 'chel');
+P.toggles('ddi-pd', Object.entries(DDI_PD).map(([k, v]) => [k, v[0]]), drawDdi, null);
+drawDdi('chel');
+P.swipeHints();
+</script>
+</body>
+</html>

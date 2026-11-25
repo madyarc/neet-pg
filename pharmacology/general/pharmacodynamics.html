@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pharmacodynamics: Receptors and Dose–Response</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/pharm.css">
+<style>
+/* tokens from pharm.css with their one meaning: --rcpt (a receptor protein), --enz (an enzyme: the receptor's kinase domain), --inhib (an
+   antagonist and a curve measured with it present), --clin (toxic or lethal effect), --mark (the selected point), --accent (UI selection only).
+   Control curves are ink. No new tokens. */
+svg.sch .rc{fill:var(--rcpt);fill-opacity:.3;stroke:var(--rcpt);stroke-width:1.6}
+svg.sch .ez{fill:var(--enz);fill-opacity:.3;stroke:var(--enz);stroke-width:1.6}
+svg.sch .mem{fill:var(--bg);stroke:var(--muted);stroke-width:1}
+svg.sch .lig{fill:var(--ink)}
+svg.sch .ant{stroke:var(--inhib);stroke-width:2.4;fill:none;stroke-linejoin:round}
+svg.sch .tox{stroke:var(--clin);stroke-width:2.4;fill:none}
+svg.sch .ref{stroke:var(--muted);stroke-width:2;fill:none;stroke-dasharray:6 4}
+svg.sch .pt{fill:var(--mark)}
+svg.sch .zone{fill:var(--ink);fill-opacity:.06}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.card{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;background:var(--surface)}
+.card h3{margin:0 0 4px}
+.stats{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13.5px}
+.stats b{font-family:var(--f-mono);font-weight:600}
+.formula{font:500 14px var(--f-mono);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 10px;display:inline-block}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Pharmacology</a> <span class="muted">· Module 01: <a href="pharmacokinetics.html">Pharmacokinetics</a> · <span aria-current="page">Pharmacodynamics</span> · <a href="principles-safety.html">Principles and safety</a></span></nav>
+
+<header class="stack">
+  <h1>Pharmacodynamics: Receptors, Agonists, Antagonists and Dose–Response</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-rec">Receptor superfamilies</a> <a href="#h-ago">Agonists and inverse agonists</a> <a href="#h-drc">Dose–response and antagonists</a> <a href="#h-ti">Therapeutic index</a> <a href="#h-comb">Combinations</a> <a href="#h-tol">Tolerance and tachyphylaxis</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-rec">
+  <h2 id="h-rec">The four receptor superfamilies</h2>
+  <div class="prose" id="rec-text"></div>
+  <div id="rec-chips" aria-label="Receptor family"></div>
+  <div class="two">
+    <div class="schbox"><svg class="sch" id="rec-svg" viewBox="0 0 520 260" role="img" aria-label="Receptor family schematic"></svg></div>
+    <div class="find" id="rec-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ago">
+  <h2 id="h-ago">Full, partial and inverse agonists, and neutral antagonists</h2>
+  <div class="prose" id="ago-text"></div>
+  <div id="ago-chips" aria-label="Ligand"></div>
+  <div class="two">
+    <div class="schbox"><svg class="sch" id="ago-svg" viewBox="0 0 520 260" role="img" aria-label="Receptor activity against log concentration"></svg></div>
+    <div class="find" id="ago-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-drc">
+  <h2 id="h-drc">Log dose–response curve: potency, efficacy and antagonists</h2>
+  <div class="prose" id="drc-text"></div>
+  <div class="step"><span class="muted">Antagonist:</span><div id="drc-ant"></div></div>
+  <div class="step"><span class="muted">Compare with:</span><div id="drc-ref"></div></div>
+  <div class="sliders" id="drc-sl"></div>
+  <div class="schbox"><svg class="sch" id="drc-svg" viewBox="0 0 580 342" role="img" aria-label="Log dose–response curves"></svg></div>
+  <div class="stats" id="drc-stats" aria-live="polite"></div>
+  <div class="find" id="drc-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ti">
+  <h2 id="h-ti">ED50, LD50, therapeutic index and window</h2>
+  <div class="prose" id="ti-text"></div>
+  <p class="formula">TI = LD50 ÷ ED50 (animals) &nbsp;·&nbsp; clinically TD50 ÷ ED50</p>
+  <div class="sliders" id="ti-sl"></div>
+  <div class="schbox"><svg class="sch" id="ti-svg" viewBox="0 0 580 306" role="img" aria-label="Quantal dose–response curves for effect and death"></svg></div>
+  <div class="stats" id="ti-stats" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-comb">
+  <h2 id="h-comb">Drug combinations: additive, synergistic, antagonistic, potentiation</h2>
+  <div class="prose" id="comb-text"></div>
+  <div id="comb-chips" aria-label="Interaction"></div>
+  <div class="two">
+    <div class="schbox"><svg class="sch" id="comb-svg" viewBox="0 0 440 300" role="img" aria-label="Isobologram, schematic"></svg></div>
+    <div class="find" id="comb-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tol">
+  <h2 id="h-tol">Tolerance and tachyphylaxis</h2>
+  <div class="prose" id="tol-text"></div>
+  <div class="step" id="tol-step"></div>
+  <div class="schbox"><svg class="sch" id="tol-svg" viewBox="0 0 560 230" role="img" aria-label="Response to repeated doses, schematic"></svg></div>
+  <div class="find" id="tol-find" aria-live="polite"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BPharmacodynamics%3A%20Receptors%2C%20Agonists%2C%20Antagonists%20and%20Dose%E2%80%93Response%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fpharmacology%2Fgeneral%2Fpharmacodynamics.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+<script src="../assets/pharm.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-f01.md, Part B; pharmacology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Open each receptor family and see where the signal goes; slide an agonist\'s potency and efficacy on a log dose–response curve; add a competitive antagonist and watch the curve move right, or a non-competitive one and watch the top come down; pull the lethal curve towards the effective one and see the therapeutic index shrink.';
+const REC_TEXT = '<p>Pharmacodynamics is how a drug affects the body (Wikipedia); chemical signalling through ligands and receptors controls biological function (a 2006 review). Cell-surface receptors are <b>ligand-gated ion channels</b>, <b>G protein-coupled receptors</b> and <b>enzyme-linked receptors</b>; intracellular ones include <b>nuclear receptors</b> (Wikipedia). These families (with kinases) are the main drug targets: a 2017 map of drug targets found them behind 70 % of small-molecule drugs.</p><p><b>Not every target is a receptor.</b> Wikipedia names four principal protein targets: <b>enzymes</b> (neostigmine on acetylcholinesterase), <b>membrane carriers</b> (tricyclic antidepressants on catecholamine uptake), <b>ion channels</b> (nimodipine on voltage-gated Ca²⁺ channels) and receptors; the 2017 map also counts ion channels and transporters among drug targets and finds most of the remaining targets to be enzymes.</p>';
+const REC = {
+  lgic: ['Ligand-gated ion channel', '<h3>Ligand-gated ion channel (ionotropic)</h3><p>Binding opens a channel and ions move across the membrane; targets of <b>fast</b> neurotransmitters (Wikipedia). Examples: the <b>nicotinic acetylcholine receptor</b>, the prototype (Wikipedia), and the <b>GABA-A</b> receptor, a ligand-gated chloride channel (StatPearls; Wikipedia).</p>'],
+  gpcr: ['G protein-coupled', '<h3>G protein-coupled receptor (metabotropic)</h3><p>The <b>largest family</b> (Wikipedia; nearly 800 human GPCRs, StatPearls): <b>seven transmembrane helices</b> (StatPearls; Wikipedia) — one chain crossing the membrane seven times, amino (N) terminus outside and carboxy (C) terminus inside (StatPearls) — coupled to a G protein (α, β, γ subunits); the main pathways are <b>cAMP</b> and <b>phosphatidylinositol</b> (Wikipedia). Examples: <b>adrenergic and muscarinic</b> receptors (Wikipedia); <b>opioid receptors</b> (class A GPCRs; a 2014 review).</p>'],
+  enz: ['Enzyme-linked', '<h3>Enzyme-linked (catalytic) receptor</h3><p>One protein with an outside <b>ligand-binding domain</b>, a <b>single transmembrane helix</b> and an inside <b>enzyme domain</b> (Wikipedia). <b>Receptor tyrosine kinases</b> — receptors for many growth factors and hormones — are activated by <b>dimerisation</b>; the <b>insulin receptor</b> is one (Wikipedia; kinases are a main drug-target family, a 2017 review).</p>'],
+  nuc: ['Nuclear', '<h3>Nuclear receptor (intracellular)</h3><p>Senses <b>steroids, thyroid hormones</b> and vitamins; binds <b>DNA directly</b> and switches genes up or down — a transcription factor (Wikipedia). Nuclear hormone receptors are a main drug-target family (a 2017 review).</p>'],
+};
+const AGO_TEXT = '<p>An <b>agonist</b> activates a receptor; a <b>full agonist</b> gives the maximal response, a <b>partial agonist</b> only a submaximal one even when it occupies every receptor (Wikipedia; a 2018 review). Some receptors are active with no ligand (<b>constitutive activity</b>): an <b>inverse agonist</b> lowers this below the basal level — the opposite of an agonist — while a <b>neutral antagonist</b> does nothing alone but blocks both (Wikipedia; a 2018 review). Efficacy scale: full agonist 100 %, neutral antagonist 0 %, inverse agonist below 0 (Wikipedia).</p>';
+/* ligand: [label, intrinsic activity (schematic), text] */
+const AGO = {
+  full: ['Full agonist', 1, '<h3>Full agonist</h3><p>Maximal response (Wikipedia; a 2018 review). Example: isoproterenol at β-adrenoceptors (Wikipedia).</p>'],
+  part: ['Partial agonist', 0.45, '<h3>Partial agonist</h3><p>Submaximal response at full occupancy. With a full agonist present it <b>competes</b> and acts as an antagonist (Wikipedia; a 2018 review). <b>Buprenorphine</b>: a long-acting partial μ-opioid agonist (StatPearls; Wikipedia), with a "ceiling" effect (Wikipedia). <b>Pindolol</b>: a β-blocker with intrinsic sympathomimetic activity, a partial agonist (Wikipedia). Others listed by Wikipedia: buspirone, aripiprazole.</p>'],
+  neut: ['Neutral antagonist', 0, '<h3>Neutral antagonist</h3><p>Binds without changing activity; it blocks agonists and inverse agonists alike (Wikipedia; a 2018 review).</p>'],
+  inv: ['Inverse agonist', -1, '<h3>Inverse agonist</h3><p>Needs a receptor with <b>constitutive (basal) activity</b>; it lowers activity below basal — an effect opposite to an agonist\'s (Wikipedia; a 2018 review). Inverse agonists are known at GABA-A, histamine, β-adrenergic and other receptors (Wikipedia).</p>'],
+};
+const BASAL = 20;   /* constitutive activity, % of maximum: schematic */
+const DRC_TEXT = '<p>Plotted against the <b>log</b> of the dose, the curve is <b>sigmoid</b> (Wikipedia). <b>Potency</b> is read along the dose axis: the lower the <b>EC50</b> (concentration for 50 % of the maximum), the more potent (Wikipedia). <b>Efficacy</b> is the height: the maximal response, Emax (Wikipedia). They are different properties: efficacy is a drug\'s ability to activate receptors, separate from its affinity (a 2006 review), and a change in potency can reflect either or both (a 2006 review). A <b>competitive</b> antagonist shifts the curve <b>to the right in parallel, with the same maximum</b> (Wikipedia; a 2006 review); a <b>non-competitive or irreversible</b> antagonist <b>lowers the maximum</b> (Wikipedia; a 2006 review).</p><p><b>Spare receptors (receptor reserve)</b>: in some tissues an agonist gives the maximal response while occupying only part of the receptor population (Wikipedia; a 2018 review). Inactivating receptors irreversibly then first shifts the curve to the right, and the maximum falls only once the reserve is used up (Wikipedia; a 2006 review).</p>';
+const DRC_ANT = {
+  none: ['None', '<p>Agonist alone.</p>'],
+  comp: ['Competitive', '<h3>Competitive (reversible, surmountable)</h3><p>Binds the same site; more agonist overcomes it. Parallel <b>rightward shift</b>, <b>same maximum</b> (Wikipedia; a 2006 review). The shift is the <b>dose ratio r = 1 + [B]/K<sub>B</sub></b> (Schild equation; Wikipedia). Examples: <b>naloxone</b> at opioid receptors and <b>atropine</b> at muscarinic receptors (StatPearls; Wikipedia).</p>'],
+  nonc: ['Non-competitive / irreversible', '<h3>Non-competitive or irreversible (insurmountable)</h3><p>No amount of agonist restores the <b>maximum</b>: the top of the curve falls, sometimes with a rightward shift too (Wikipedia); irreversibly bound antagonists inactivate receptors (a 2006 review). Example: <b>phenoxybenzamine</b>, which binds α-receptors covalently, used to prepare patients with phaeochromocytoma for surgery (Wikipedia). This model blocks a fraction of receptors with no receptor reserve, so the curve only drops.</p>'],
+};
+const DRC_REF = {
+  none: ['Nothing'],
+  pot: ['Drug B: more potent, same efficacy', -1, 0],
+  eff: ['Drug B: less potent, higher efficacy', 1, 30],
+};   /* [label, shift of log EC50, Emax added to the agonist's]; with "higher efficacy" the agonist's Emax is capped at EFF_CAP so that B stays higher */
+const EFF_CAP = 70;
+const DRC0 = {ec: 0, em: 70, b: 9, f: 50};   /* log10 EC50 (arbitrary units), Emax %, [B]/KB, % receptors blocked */
+const TI_TEXT = '<p><b>ED50</b>: the minimum effective dose for 50 % of the population (Wikipedia; Tallarida 2011 uses ED50 for the dose giving 50 % of the maximal effect); <b>LD50</b>: the dose that kills half (Wikipedia). The <b>therapeutic index</b> measures relative safety: classically, in animals, <b>LD50 ÷ ED50</b>; for a drug in clinical use, the dose toxic in half (TD50) ÷ ED50 (Wikipedia), or the minimum toxic ÷ minimum therapeutic concentration (a 2016 study). A 2026 review calls a therapeutic ratio narrow when LD50 is less than twice ED50. The <b>therapeutic window</b> is the range between efficacy and toxicity (Wikipedia; 2026 review). Narrow-index drugs need monitoring: <b>warfarin</b> (StatPearls), <b>lithium</b> (StatPearls; Wikipedia), <b>digoxin</b> (2004 and 2018 reviews), <b>phenytoin</b> (StatPearls; 2016 review), <b>aminoglycosides</b> (2004 review).</p>';
+const TI0 = {ed: 10, ld: 100};   /* mg/kg, hypothetical */
+const COMB_TEXT = '<p>When two drugs with similar effects are combined, the result can be <b>additive</b> (the expected sum of their effects), <b>synergistic</b> (more than expected from their individual potencies) or <b>antagonistic</b> (less) (Wikipedia; Tallarida 2011). An <b>isobologram</b> shows it: the straight line joining the two drugs\' ED50 doses is the additive line; a combination that reaches the same effect with doses below the line is synergistic, above it subadditive (Tallarida 2011).</p>';
+const COMB = {
+  add: ['Additive', 0, '<h3>Additive</h3><p>The combination point sits on the line: the effect is what the individual potencies predict (Tallarida 2011; Wikipedia).</p>'],
+  syn: ['Synergistic', -1, '<h3>Synergistic (superadditive)</h3><p>The same effect with smaller doses — the point lies below the line (Tallarida 2011). Synergy can allow lower doses of each drug and fewer adverse effects (Tallarida 2011).</p>'],
+  ant: ['Antagonistic', 1, '<h3>Antagonistic (subadditive)</h3><p>Larger doses are needed than predicted — the point lies above the line (Wikipedia; Tallarida 2011 calls this subadditivity).</p>'],
+  pot: ['Potentiation', null, '<h3>Potentiation</h3><p>A <b>potentiator</b> intensifies the effect of another drug (Wikipedia). Tallarida 2011 treats the case where one of the two drugs <b>lacks efficacy of its own</b> as a special case: its isobole is a horizontal line through the active drug\'s ED50 (glucosamine, itself not analgesic, was synergistic with ibuprofen in mice).</p>'],
+};
+const TOL_TEXT = '<p><b>Tolerance</b> is a reduced response to a drug after repeated use; it develops <b>gradually</b>, a higher dose may restore the effect, and it is reversible, e.g. by a drug holiday (Wikipedia). Chronic opioid use leads to tolerance (a 2014 review); nitrate tolerance develops with continued use (a 2003 review). <b>Tachyphylaxis</b> is an <b>acute, sudden</b> fall in response after an initial dose or a series of small doses (Wikipedia): with H2-receptor antagonists it is evident by the <b>second day or second dose</b> (a 2014 review).</p><p><b>Up- and down-regulation</b>: cells can increase or decrease the number of their receptors and so change their sensitivity (Wikipedia); the number of active receptors at the cell surface is set by internalisation (endocytosis) and by the arrival of newly made receptors (a 2014 review, opioid receptors). Examples (Wikipedia): nasal decongestants used for more than three days cause tachyphylaxis and rebound congestion through α-adrenergic receptor downregulation; after phenoxybenzamine, new receptors are made.</p>';
+const TOL_STEPS = ['Dose 1', 'Dose 2', 'Dose 3', 'Dose 4', 'Dose 5', 'Dose 6'];
+const TOL_R = {tol: [100, 92, 82, 72, 63, 55], tach: [100, 45, 38, 35, 33, 32]};   /* schematic % of the first response */
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews (Br J Pharmacol 2006, the receptor concept; Int J Neuropsychopharmacol 2018, inverse agonism; Nat Rev Drug Discov 2017, drug-target map; Front Pharmacol 2014, opioid desensitisation; Tallarida 2011, quantitative methods for drug synergism; Pharmaceutics 2026, narrow-index drugs; Ther Drug Monit 2016; Clin J Am Soc Nephrol 2018; Br J Clin Pharmacol 2004 and 2003; Ment Health Clin 2016; World J Gastrointest Pharmacol Ther 2014); Wikipedia.';
+const MODELS = '<b>Models used:</b> receptor drawings are schematic, not to scale. All curves are hypothetical: Hill slope 1; constitutive activity 20 % of maximum; partial agonist intrinsic activity 0.45; the non-competitive model blocks receptors without receptor reserve; quantal curves use a fixed spread; the tolerance and tachyphylaxis bars are illustrative shapes, not data.';
+
+/* ===================== CODE ===================== */
+const P = window.Pharm, $ = P.$, T = P.T;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+$('rec-text').innerHTML = REC_TEXT; $('ago-text').innerHTML = AGO_TEXT; $('drc-text').innerHTML = DRC_TEXT; $('ti-text').innerHTML = TI_TEXT;
+$('comb-text').innerHTML = COMB_TEXT; $('tol-text').innerHTML = TOL_TEXT;
+const f1 = (v, d = 1) => P.mn((+v).toFixed(d));
+const legend = (x, y, items) => items.map(([cls, lab], i) => `<path class="${cls}" d="M${x} ${y + i * 16} L${x + 26} ${y + i * 16}"/>` + T(x + 32, y + i * 16 + 4, lab, 's')).join('');
+
+/* ---------- receptor families ---------- */
+function drawRec(k) {
+  let s = P.DEFS + `<rect class="mem" x="10" y="90" width="500" height="34"/>` + T(14, 84, 'outside', 's') + T(14, 140, 'inside the cell', 's') + T(506, 112, 'membrane', 's', 'end');
+  const lig = (x, y) => `<circle class="lig" cx="${x}" cy="${y}" r="7"/>` + T(x + 12, y + 4, 'ligand', 's');
+  if (k === 'lgic') {
+    /* ligand bound on one subunit; the ion path runs separately, down the pore between the subunits */
+    s += `<rect class="rc" x="200" y="70" width="34" height="74" rx="6"/><rect class="rc" x="266" y="70" width="34" height="74" rx="6"/>`;
+    s += `<circle class="lig" cx="217" cy="63" r="7"/>` + T(204, 60, 'ligand', 's', 'end') + `<path class="flow" d="M250 36 L250 162"/>` + T(258, 42, 'ions', 's') + T(258, 180, 'ions flow through the pore', 's');
+  } else if (k === 'gpcr') {
+    /* one chain crossing the membrane seven times: N-terminus outside, C-terminus inside beside the G protein */
+    const hx = i => 146 + i * 24, top = 84, bot = 130;
+    let d = `M104 62 Q${hx(0)} 60 ${hx(0)} ${top}`;
+    for (let i = 0; i < 7; i++) {
+      const down = i % 2 === 0;
+      d += ` L${hx(i)} ${down ? bot : top}`;
+      if (i < 6) d += down ? ` Q${hx(i) + 12} ${bot + 22} ${hx(i + 1)} ${bot}` : ` Q${hx(i) + 12} ${top - 22} ${hx(i + 1)} ${top}`;
+    }
+    d += ` Q${hx(6)} 156 304 154`;
+    s += `<path d="${d}" style="fill:none;stroke:var(--rcpt);stroke-width:2"/>`;
+    for (let i = 0; i < 7; i++) s += `<rect class="rc" x="${hx(i) - 6}" y="${top + 2}" width="12" height="${bot - top - 4}" rx="5"/>`;
+    s += T(98, 66, 'N', 'b', 'end') + T(296, 172, 'C', 'b') + T(140, 30, '7 transmembrane helices, one chain', 's');
+    s += `<circle class="lig" cx="206" cy="70" r="7"/>` + T(206, 52, 'ligand', 's', 'middle');
+    s += `<ellipse class="rc" cx="330" cy="160" rx="22" ry="14" style="fill-opacity:.12"/>` + T(330, 164, 'α', 'b', 'middle') + `<ellipse class="rc" cx="372" cy="160" rx="16" ry="12" style="fill-opacity:.12"/>` + T(372, 164, 'βγ', 's', 'middle');
+    s += T(300, 190, 'G protein', 's') + `<path class="flow" d="M352 176 L400 215"/>` + T(405, 226, 'cAMP or PI pathway', 's');
+  } else if (k === 'enz') {
+    for (const x of [200, 270]) s += `<rect class="rc" x="${x}" y="40" width="44" height="46" rx="10"/><rect class="rc" x="${x + 17}" y="86" width="10" height="42"/><rect class="ez" x="${x}" y="128" width="44" height="40" rx="8"/>`;
+    s += lig(257, 26) + T(320, 62, 'binding domain', 's') + T(320, 112, 'one helix each', 's') + T(320, 152, 'kinase (enzyme) domain', 's') + T(200, 190, 'ligand brings two receptors together (dimer)', 's');
+  } else {
+    s += lig(120, 50) + `<path class="flow" d="M120 60 L120 170"/>` + T(130, 156, 'lipid-soluble ligand crosses', 's');
+    s += `<ellipse cx="350" cy="200" rx="140" ry="42" style="fill:var(--surface);stroke:var(--ink);stroke-dasharray:4 3"/>` + T(350, 182, 'nucleus', 's', 'middle');
+    /* the receptor sits on the DNA line: it binds DNA directly */
+    s += `<rect class="rc" x="300" y="196" width="60" height="25" rx="8"/>` + T(330, 213, 'receptor', 's', 'middle') + `<path d="M270 222 L415 222" style="stroke:var(--ink);stroke-width:3"/>` + T(421, 226, 'DNA', 's');
+    s += `<path class="flow" d="M128 176 L296 206"/>`;
+  }
+  $('rec-svg').innerHTML = s; $('rec-find').innerHTML = REC[k][1];
+}
+P.toggles('rec-chips', Object.entries(REC).map(([k, v]) => [k, v[0]]), drawRec, 'gpcr'); drawRec('gpcr');
+
+/* ---------- agonist types ---------- */
+function drawAgo(k) {
+  const x0 = 56, x1 = 500, y0 = 220, y1 = 22, sx = P.scale(-3, 3, x0, x1), sy = P.scale(0, 100, y0, y1);
+  let s = `<path class="axis" d="M${x0} ${y1} L${x0} ${y0} L${x1} ${y0}"/>` + T(x1, y0 + 34, 'log concentration (arbitrary units)', 's', 'end') + T(x0, y1 - 8, 'receptor activity, % of maximum', 's');
+  for (let v = 0; v <= 100; v += 25) s += T(x0 - 6, sy(v) + 4, v, 's', 'end');
+  s += `<path class="grid dash" d="M${x0} ${sy(BASAL)} L${x1} ${sy(BASAL)}"/>` + T(x1, sy(BASAL) - 6, 'basal (constitutive) activity', 's', 'end');
+  const curve = ia => { const top = ia >= 0 ? BASAL + ia * (100 - BASAL) : BASAL * (1 + ia); const pts = []; for (let l = -3; l <= 3.001; l += 0.05) { const c = Math.pow(10, l); pts.push([sx(l), sy(BASAL + (top - BASAL) * c / (c + 1))]); } return pts; };
+  for (const [kk, v] of Object.entries(AGO)) if (kk !== k) s += `<path class="grid" style="stroke:var(--muted);stroke-width:1.2" d="${P.path(curve(v[1]))}"/>`;
+  s += `<path class="trace" d="${P.path(curve(AGO[k][1]))}"/>`;
+  const ends = Object.entries(AGO).map(([kk, v]) => { const top = v[1] >= 0 ? BASAL + v[1] * (100 - BASAL) : BASAL * (1 + v[1]); return [kk, v[0], top]; });
+  for (const [kk, lab, top] of ends) if (kk !== 'neut') s += T(x1 - 4, sy(top) + (top > 95 ? 14 : -6), lab, kk === k ? 'b' : 's', 'end');
+  $('ago-svg').innerHTML = s; $('ago-find').innerHTML = AGO[k][2];
+}
+P.toggles('ago-chips', Object.entries(AGO).map(([k, v]) => [k, v[0]]), drawAgo, 'part'); drawAgo('part');
+
+/* ---------- log dose–response ---------- */
+const drc = Object.assign({ant: 'none', ref: 'none'}, DRC0);
+function drawDrc() {
+  const x0 = 56, x1 = 565, y0 = 240, y1 = 22, lmin = -3, lmax = 4, sx = P.scale(lmin, lmax, x0, x1), sy = P.scale(0, 100, y0, y1);
+  let s = `<path class="axis" d="M${x0} ${y1} L${x0} ${y0} L${x1} ${y0}"/>`;
+  for (let l = lmin; l <= lmax; l++) s += `<path class="axis" d="M${sx(l)} ${y0} L${sx(l)} ${y0 + 4}"/>` + (l > lmin ? T(sx(l), y0 + 16, '10' + (l < 0 ? '⁻' : '') + '⁰¹²³⁴'[Math.abs(l)], 's', 'middle') : '');
+  for (let v = 0; v <= 100; v += 25) s += T(x0 - 6, sy(v) + 4, v, 's', 'end');
+  s += T(x1, y0 + 34, 'agonist concentration (log scale, arbitrary units)', 's', 'end') + T(x0, y1 - 8, 'response, % of system maximum', 's');
+  const curve = (lec, em) => { const pts = []; for (let l = lmin; l <= lmax + 1e-9; l += 0.04) { const c = Math.pow(10, l - lec); pts.push([sx(l), sy(em * c / (1 + c))]); } return pts; };
+  if (drc.ref !== 'none') { const [, dl, de] = DRC_REF[drc.ref]; s += `<path class="ref" d="${P.path(curve(drc.ec + dl, Math.min(100, drc.em + de)))}"/>`; }
+  s += `<path class="trace" d="${P.path(curve(drc.ec, drc.em))}"/>`;
+  let lec2 = drc.ec, em2 = drc.em, r = 1;
+  if (drc.ant === 'comp') { r = 1 + drc.b; lec2 = drc.ec + Math.log10(r); }
+  if (drc.ant === 'nonc') em2 = drc.em * (1 - drc.f / 100);
+  if (drc.ant !== 'none') s += `<path class="ant" d="${P.path(curve(lec2, em2))}"/>`;
+  /* EC50 marks */
+  s += `<circle class="pt" cx="${sx(drc.ec)}" cy="${sy(drc.em / 2)}" r="4.5"/>` + `<path class="grid dash" d="M${sx(drc.ec)} ${sy(drc.em / 2)} L${sx(drc.ec)} ${y0}"/>`;
+  if (drc.ant !== 'none') s += `<circle cx="${sx(lec2)}" cy="${sy(em2 / 2)}" r="4.5" style="fill:var(--inhib)"/>`;
+  const items = [['trace', 'agonist alone']];
+  if (drc.ant !== 'none') items.push(['ant', '+ ' + DRC_ANT[drc.ant][0].toLowerCase() + ' antagonist']);
+  if (drc.ref !== 'none') items.push(['ref', DRC_REF[drc.ref][0]]);
+  /* legend under the axis title, where no curve can run */
+  s += `<g class="lg">${legend(x0 + 14, y0 + 56, items)}</g>`;
+  $('drc-svg').innerHTML = s;
+  const ec = Math.pow(10, drc.ec);
+  $('drc-stats').innerHTML = `<span>EC50 <b>${f1(ec, ec < 1 ? 3 : 1)}</b></span><span>Emax <b>${drc.em} %</b></span>`
+    + (drc.ref !== 'none' ? `<span>Drug B: EC50 <b>${f1(Math.pow(10, drc.ec + DRC_REF[drc.ref][1]), drc.ec + DRC_REF[drc.ref][1] < 0 ? 3 : 1)}</b>, Emax <b>${Math.min(100, drc.em + DRC_REF[drc.ref][2])} %</b></span>` : '')
+    + (drc.ref === 'eff' ? `<span class="muted">The agonist's Emax is capped at ${EFF_CAP} % while this comparison is on, so drug B (Emax + 30) stays higher.</span>` : '')
+    + (drc.ant === 'comp' ? `<span>dose ratio r = 1 + [B]/K<sub>B</sub> = <b>${f1(r, 0)}</b>: EC50 with antagonist <b>${f1(ec * r, ec * r < 1 ? 3 : 1)}</b>, Emax unchanged</span>` : '')
+    + (drc.ant === 'nonc' ? `<span>Emax with antagonist <b>${f1(em2, 0)} %</b> (${drc.f} % of receptors blocked); EC50 unchanged in this model</span>` : '');
+  $('drc-find').innerHTML = DRC_ANT[drc.ant][1];
+}
+P.toggles('drc-ant', Object.entries(DRC_ANT).map(([k, v]) => [k, v[0]]), k => { drc.ant = k; drawDrc(); }, 'none');
+P.toggles('drc-ref', Object.entries(DRC_REF).map(([k, v]) => [k, v[0]]), k => { drc.ref = k; if (k === 'eff' && drc.em > EFF_CAP) drcS[1].set(EFF_CAP); else drawDrc(); }, 'none');
+const drcS = [
+  P.slider('drc-sl', {id: 'ec', label: 'Agonist potency: log EC50', min: -2, max: 2, step: 0.1, value: drc.ec, fmt: v => v.toFixed(1)}, v => { drc.ec = v; drawDrc(); }),
+  P.slider('drc-sl', {id: 'em', label: 'Agonist efficacy: Emax (%)', min: 10, max: 100, step: 5, value: drc.em}, v => { if (drc.ref === 'eff' && v > EFF_CAP) { drcS[1].set(EFF_CAP); return; } drc.em = v; drawDrc(); }),
+  P.slider('drc-sl', {id: 'b', label: 'Competitive antagonist [B]/K<sub>B</sub>', min: 0, max: 99, step: 1, value: drc.b}, v => { drc.b = v; drawDrc(); }),
+  P.slider('drc-sl', {id: 'f', label: 'Non-competitive: receptors blocked (%)', min: 0, max: 90, step: 5, value: drc.f}, v => { drc.f = v; drawDrc(); }),
+];
+drcS.forEach(s => s.init()); drawDrc();
+
+/* ---------- therapeutic index ---------- */
+const ti = Object.assign({}, TI0);
+function drawTi() {
+  const x0 = 56, x1 = 565, y0 = 220, y1 = 22, lmin = -0.5, lmax = 3.5, sx = P.scale(lmin, lmax, x0, x1), sy = P.scale(0, 100, y0, y1);
+  let s = `<path class="axis" d="M${x0} ${y1} L${x0} ${y0} L${x1} ${y0}"/>`;
+  for (const v of [1, 10, 100, 1000]) s += `<path class="axis" d="M${sx(Math.log10(v))} ${y0} L${sx(Math.log10(v))} ${y0 + 4}"/>` + T(sx(Math.log10(v)), y0 + 16, v, 's', 'middle');
+  for (let v = 0; v <= 100; v += 25) s += T(x0 - 6, sy(v) + 4, v, 's', 'end');
+  s += T(x1, y0 + 34, 'dose, mg/kg (log scale; hypothetical)', 's', 'end') + T(x0, y1 - 8, '% of subjects responding', 's');
+  const q = d50 => { const pts = []; for (let l = lmin; l <= lmax + 1e-9; l += 0.02) { const c = Math.pow(10, (l - Math.log10(d50)) * 3); pts.push([sx(l), sy(100 * c / (1 + c))]); } return pts; };
+  s += `<rect class="zone" x="${sx(Math.log10(ti.ed))}" y="${y1}" width="${Math.max(0, sx(Math.log10(ti.ld)) - sx(Math.log10(ti.ed)))}" height="${y0 - y1}"/>`;
+  s += `<path class="trace" d="${P.path(q(ti.ed))}"/><path class="tox" d="${P.path(q(ti.ld))}"/>`;
+  s += `<path class="grid dash" d="M${x0} ${sy(50)} L${x1} ${sy(50)}"/>`;
+  s += `<circle cx="${sx(Math.log10(ti.ed))}" cy="${sy(50)}" r="4.5" style="fill:var(--ink)"/><circle cx="${sx(Math.log10(ti.ld))}" cy="${sy(50)}" r="4.5" style="fill:var(--clin)"/>`;
+  /* legend under the axis title, where no curve can run */
+  s += `<g class="lg">${legend(x0 + 14, y0 + 56, [['trace', 'therapeutic effect (ED50)'], ['tox', 'death (LD50)']])}</g>`;
+  $('ti-svg').innerHTML = s;
+  const r = ti.ld / ti.ed;
+  $('ti-stats').innerHTML = `<span>ED50 <b>${ti.ed} mg/kg</b></span><span>LD50 <b>${ti.ld} mg/kg</b></span><span>TI = LD50 ÷ ED50 = <b>${f1(r, r < 10 ? 2 : 1)}</b></span>` + (r < 2 ? `<span style="color:var(--clin)"><b>Narrow</b>: LD50 is less than twice ED50 (the 2026 review's threshold)</span>` : '') + `<span class="muted">Grey band: doses between ED50 and LD50.</span>`;
+}
+const tiS = [
+  P.slider('ti-sl', {id: 'ed', label: 'ED50 (mg/kg)', min: 1, max: 200, step: 1, value: ti.ed}, v => { ti.ed = v; if (ti.ld < v) tiS[1].set(v); else drawTi(); }),
+  P.slider('ti-sl', {id: 'ld', label: 'LD50 (mg/kg)', min: 1, max: 2000, step: 1, value: ti.ld}, v => { if (v < ti.ed) { tiS[1].set(ti.ed); return; } ti.ld = v; drawTi(); }),   /* LD50 below ED50: the slider itself moves to ED50 */
+];
+tiS.forEach(s => s.init()); drawTi();
+
+/* ---------- combinations: isobologram ---------- */
+function drawComb(k) {
+  const x0 = 60, x1 = 410, y0 = 250, y1 = 30, sx = P.scale(0, 12, x0, x1), sy = P.scale(0, 12, y0, y1), A = 10, B = 10;
+  let s = P.DEFS + `<path class="axis" d="M${x0} ${y1} L${x0} ${y0} L${x1} ${y0}"/>` + T(x1, y0 + 34, 'dose of drug A', 's', 'end') + T(x0, y1 - 10, 'dose of drug B', 's');
+  const v = COMB[k][1];
+  if (v !== null) s += T(sx(A), y0 + 16, 'ED50 of A', 's', 'middle');   /* potentiation: drug A has no ED50 of its own */
+  if (v === null) {
+    s += `<path class="trace" d="M${sx(0)} ${sy(B)} L${sx(12)} ${sy(B)}"/>` + T(x0 - 6, sy(B) + 4, 'ED50 of B', 's', 'end') + T(sx(12), sy(B) - 8, 'drug A has no effect alone', 's', 'end');
+    s += `<circle class="pt" cx="${sx(6)}" cy="${sy(4)}" r="6"/>` + T(sx(6) + 10, sy(4) + 4, 'combination', 's');
+  } else {
+    s += T(x0 - 6, sy(B) + 4, 'ED50 of B', 's', 'end');
+    s += `<path class="trace" d="M${sx(A)} ${sy(0)} L${sx(0)} ${sy(B)}"/>` + T(sx(7.2) + 8, sy(3.2) + 4, 'additive line', 's');
+    const pt = v === 0 ? [5, 5] : v < 0 ? [2.5, 2.5] : [8, 8];
+    s += `<circle class="pt" cx="${sx(pt[0])}" cy="${sy(pt[1])}" r="6"/>` + (v < 0 ? T(sx(pt[0]) + 10, sy(pt[1]) + 18, 'combination giving 50 %', 's') : T(sx(pt[0]) - 10, sy(pt[1]) + 18, 'combination giving 50 %', 's', 'end'));
+  }
+  s += T(x0, 296, 'schematic', 'h');
+  $('comb-svg').innerHTML = s; $('comb-find').innerHTML = COMB[k][2];
+}
+P.toggles('comb-chips', Object.entries(COMB).map(([k, v]) => [k, v[0]]), drawComb, 'add'); drawComb('add');
+
+/* ---------- tolerance and tachyphylaxis ---------- */
+const tol = {s: 0};
+function drawTol() {
+  const x0 = 60, y0 = 190, y1 = 24, sy = P.scale(0, 100, y0, y1), bw = 26;
+  let s = `<path class="axis" d="M${x0} ${y1} L${x0} ${y0} L540 ${y0}"/>` + T(x0, y1 - 8, 'response, % of the first dose', 's');
+  for (let v = 0; v <= 100; v += 50) s += T(x0 - 6, sy(v) + 4, v, 's', 'end');
+  for (let i = 0; i <= tol.s; i++) {
+    const x = x0 + 30 + i * 78;
+    s += `<rect x="${x}" y="${sy(TOL_R.tol[i])}" width="${bw}" height="${y0 - sy(TOL_R.tol[i])}" style="fill:var(--ink);fill-opacity:.55"/>`;
+    s += `<rect x="${x + bw + 4}" y="${sy(TOL_R.tach[i])}" width="${bw}" height="${y0 - sy(TOL_R.tach[i])}" style="fill:var(--ink);fill-opacity:.18;stroke:var(--ink)"/>`;
+    s += T(x + bw + 2, y0 + 16, 'dose ' + (i + 1), 's', 'middle');
+  }
+  s += `<rect x="370" y="20" width="14" height="12" style="fill:var(--ink);fill-opacity:.55"/>` + T(390, 30, 'tolerance (gradual)', 's') + `<rect x="370" y="40" width="14" height="12" style="fill:var(--ink);fill-opacity:.18;stroke:var(--ink)"/>` + T(390, 50, 'tachyphylaxis (rapid)', 's');
+  s += T(x0, 222, 'illustrative shapes, not data', 'h');
+  $('tol-svg').innerHTML = s;
+  $('tol-find').innerHTML = tol.s === 0 ? '<p>First dose: the full response.</p>' : tol.s === 1 ? '<p><b>Tachyphylaxis</b> is already obvious at the second dose (H2-receptor antagonists: by the second day or dose, a 2014 review); <b>tolerance</b> has hardly started.</p>' : '<p>With continued use, <b>tolerance</b> keeps building gradually (Wikipedia); a higher dose may restore the effect, and a drug holiday can reverse it (Wikipedia).</p>';
+}
+P.stepper('tol-step', TOL_STEPS, drawTol, tol);
+P.swipeHints();
+</script>
+</body>
+</html>

@@ -12,19 +12,19 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 1. General Pharmacology (GP)
 
-- [ ] **PH1.1** Describe the principles of pharmacology, pharmacotherapeutics and define various terms in pharmacology.
-- [ ] **PH1.2** Describe evidence based medicine and rational use of drugs & discuss why these are relevant to therapeutics.
-- [ ] **PH1.3** Describe nomenclature of drugs i.e., generic, branded drugs and scheduled drugs, explaining the utility of the nomenclature, cost effectiveness and use.
-- [ ] **PH1.4** Identify the common drug formulations and drug delivery systems, demonstrate their use and describe their advantages and disadvantages.
-- [ ] **PH1.5** Describe various routes of drug administration, their advantages and disadvantages and demonstrate administration of, e.g., SC, IV, IM, SL, rectal, spinal, sublingual, intranasal sprays and inhalers
-- [ ] **PH1.6** Describe salient features of absorption, distribution, metabolism and excretion of drugs with emphasis on various routes of drug administration
-- [ ] **PH1.7** Describe various principles of mechanism of action of drugs
-- [ ] **PH1.8** Demonstrate the mechanism of action & effects of common prototype drugs on human body using computer assisted learning
-- [ ] **PH1.9** Select pharmacokinetics/pharmacodynamic (PK/PD) parameters with emphasis on synergism, antagonism, ‘therapeutic efficacy’, risk benefit ratio
-- [ ] **PH1.10** Describe changes in pharmacology of drugs in geriatric, pediatric and special situations such as Pregnancy, lactation, hepatic and renal disorders and adjust the drug treatment accordingly.
-- [ ] **PH1.11** Define Adverse Drug Reactions (ADRs) & their types. Identify the ADRs in the given case scenario and assess causality.
-- [ ] **PH1.12** Define Pharmacovigilance its principles and demonstrate ADR reporting
-- [ ] **PH1.13** Identify and describe the management of drug interactions
+- [x] **PH1.1** Describe the principles of pharmacology, pharmacotherapeutics and define various terms in pharmacology. — *branches and terms, pharmacogenetic examples (NAT2, HLA-B*1502, VKORC1): [Principles and safety](general/principles-safety.html)*
+- [x] **PH1.2** Describe evidence based medicine and rational use of drugs & discuss why these are relevant to therapeutics. — *selected CEBM levels, WHO rational use, NLEM: [Principles and safety](general/principles-safety.html)*
+- [x] **PH1.3** Describe nomenclature of drugs i.e., generic, branded drugs and scheduled drugs, explaining the utility of the nomenclature, cost effectiveness and use. — *chemical, INN and brand names, bioequivalence 80–125 %, Schedules H, H1, X (D&C Rules 1945, as amended): [Principles and safety](general/principles-safety.html)*
+- [~] **PH1.4** Identify the common drug formulations and drug delivery systems, demonstrate their use and describe their advantages and disadvantages. — *dosage forms, modified release, transdermal, inhalers; demonstration is hands-on: [Principles and safety](general/principles-safety.html)*
+- [~] **PH1.5** Describe various routes of drug administration, their advantages and disadvantages and demonstrate administration of, e.g., SC, IV, IM, SL, rectal, spinal, sublingual, intranasal sprays and inhalers — *route map with first-pass and bioavailability; intranasal and per-route disadvantages not covered: [Pharmacokinetics](general/pharmacokinetics.html)*
+- [~] **PH1.6** Describe salient features of absorption, distribution, metabolism and excretion of drugs with emphasis on various routes of drug administration — *ADME, ion trapping, Vd, CYP inducer/inhibitor table (FDA), renal handling, half-life, kinetics orders; enterohepatic circulation not covered: [Pharmacokinetics](general/pharmacokinetics.html)*
+- [x] **PH1.7** Describe various principles of mechanism of action of drugs — *receptor families, non-receptor targets, agonists and antagonists, spare receptors, receptor regulation: [Pharmacodynamics](general/pharmacodynamics.html)*
+- [~] **PH1.8** Demonstrate the mechanism of action & effects of common prototype drugs on human body using computer assisted learning — *prototype mechanisms as examples; computer-assisted demonstration is hands-on: [Pharmacodynamics](general/pharmacodynamics.html)*
+- [x] **PH1.9** Select pharmacokinetics/pharmacodynamic (PK/PD) parameters with emphasis on synergism, antagonism, ‘therapeutic efficacy’, risk benefit ratio — *dose–response, potency vs efficacy, antagonism, TI, synergism: [Pharmacodynamics](general/pharmacodynamics.html); risk–benefit: [Principles and safety](general/principles-safety.html)*
+- [~] **PH1.10** Describe changes in pharmacology of drugs in geriatric, pediatric and special situations such as Pregnancy, lactation, hepatic and renal disorders and adjust the drug treatment accordingly. — *elderly, children, pregnancy (FDA PLLR 2015), lactation, renal and hepatic disease; no dose rules: [Pharmacokinetics](general/pharmacokinetics.html)*
+- [x] **PH1.11** Define Adverse Drug Reactions (ADRs) & their types. Identify the ADRs in the given case scenario and assess causality. — *ADR definitions and types, Naranjo calculator with the cut-off disagreement, WHO-UMC 2018: [Principles and safety](general/principles-safety.html)*
+- [~] **PH1.12** Define Pharmacovigilance its principles and demonstrate ADR reporting — *WHO definition, PvPI flow, form, helpline; reporting is hands-on: [Principles and safety](general/principles-safety.html)*
+- [x] **PH1.13** Identify and describe the management of drug interactions — *PK and PD interactions, management, CYP table: [Principles and safety](general/principles-safety.html), [Pharmacokinetics](general/pharmacokinetics.html)*
 
 ### 2. Autonomic & Peripheral Nervous system, Autacoids
 

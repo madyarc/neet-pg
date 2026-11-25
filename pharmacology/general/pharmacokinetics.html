@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pharmacokinetics: Routes, ADME and Dosing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/pharm.css">
+<style>
+/* tokens from pharm.css with their one meaning: --fluid (plasma, gut contents, urine, milk), --enz (an enzyme: CYP / phase I and II), --inhib
+   (an enzyme inhibitor), --ther (the therapeutic range band), --clin (toxic level, clinical warning), --mark (the selected point), --accent (UI
+   selection: the chosen route's path). Traces are ink. No new tokens. */
+svg.sch .route{stroke:var(--line);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .route.on{stroke:var(--accent);stroke-width:4}
+svg.sch .organ{fill:var(--surface);stroke:var(--ink);stroke-width:1.3}
+svg.sch .organ.on{stroke:var(--accent);stroke-width:2.2}
+svg.sch .plasma{fill:var(--fluid);stroke:var(--ink);stroke-width:1.2}
+svg.sch .enzb{fill:var(--enz);fill-opacity:.25;stroke:var(--enz);stroke-width:1.4}
+svg.sch .thb{fill:var(--ther);fill-opacity:.55;stroke:var(--ther);stroke-width:1}
+svg.sch .ivc{stroke:var(--muted);stroke-width:2;fill:none;stroke-dasharray:6 4}
+svg.sch .auc{fill:var(--ink);fill-opacity:.07}
+svg.sch .toxl{stroke:var(--clin);stroke-width:1.2;stroke-dasharray:3 3}
+svg.sch .dose{stroke:var(--muted);stroke-width:1}
+svg.sch .inh{stroke:var(--inhib);stroke-width:2.2;fill:none}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.card{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;background:var(--surface)}
+.card h3{margin:0 0 4px}
+.stats{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13.5px}
+.stats b{font-family:var(--f-mono);font-weight:600}
+.formula{font:500 14px var(--f-mono);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 10px;display:inline-block}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Pharmacology</a> <span class="muted">· Module 01: <span aria-current="page">Pharmacokinetics</span> · <a href="pharmacodynamics.html">Pharmacodynamics</a> · <a href="principles-safety.html">Principles and safety</a></span></nav>
+
+<header class="stack">
+  <h1>Pharmacokinetics: Routes, ADME, Half-life and Dosing</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-route">Routes and bioavailability</a> <a href="#h-abs">Absorption and ion trapping</a> <a href="#h-dist">Distribution</a> <a href="#h-met">Metabolism</a> <a href="#h-cyp">Inducers and inhibitors</a> <a href="#h-exc">Clearance and half-life</a> <a href="#h-sim">Dosing simulator</a> <a href="#h-order">First vs zero order</a> <a href="#h-spec">Special populations</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-route">
+  <h2 id="h-route">Routes of administration and bioavailability</h2>
+  <div class="prose" id="route-text"></div>
+  <div id="route-chips" aria-label="Route"></div>
+  <div class="two">
+    <div class="schbox"><svg class="sch" id="route-svg" viewBox="0 0 460 355" role="img" aria-label="Schematic of drug routes into the circulation"></svg></div>
+    <div class="find" id="route-find" aria-live="polite"></div>
+  </div>
+  <h3>Bioavailability from the area under the curve</h3>
+  <div class="sliders" id="f-sl"></div>
+  <div class="schbox"><svg class="sch" id="f-svg" viewBox="0 0 560 250" role="img" aria-label="IV and oral concentration–time curves"></svg></div>
+  <div class="stats" id="f-stats" aria-live="polite"></div>
+  <p class="note" id="f-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-abs">
+  <h2 id="h-abs">Absorption: pH, pKa and ion trapping</h2>
+  <div class="prose" id="abs-text"></div>
+  <div class="step"><span class="muted">Drug:</span><div id="ion-drug"></div></div>
+  <div class="step"><span class="muted">Fluid beside plasma:</span><div id="ion-comp"></div></div>
+  <div class="sliders" id="ion-sl"></div>
+  <div class="schbox"><svg class="sch" id="ion-svg" viewBox="0 0 560 225" role="img" aria-label="Ion trapping across a membrane"></svg></div>
+  <div class="find" id="ion-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-dist">
+  <h2 id="h-dist">Distribution: volume of distribution, protein binding, barriers</h2>
+  <div class="prose" id="vd-text"></div>
+  <p class="formula">Vd = amount of drug in the body ÷ plasma concentration</p>
+  <div class="sliders" id="vd-sl"></div>
+  <div class="schbox"><svg class="sch" id="vd-svg" viewBox="0 0 560 105" role="img" aria-label="Volume of distribution on a log scale"></svg></div>
+  <div class="stats" id="vd-stats" aria-live="polite"></div>
+  <div class="cards" id="dist-cards"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-met">
+  <h2 id="h-met">Metabolism: phase I and II, CYP, first-pass, prodrugs</h2>
+  <div class="prose" id="met-text"></div>
+  <div class="step" id="met-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="sch" id="met-svg" viewBox="0 0 520 200" role="img" aria-label="Phase I and phase II metabolism, schematic"></svg></div>
+    <div class="find" id="met-find" aria-live="polite"></div>
+  </div>
+  <div class="cards" id="met-cards"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cyp">
+  <h2 id="h-cyp">Enzyme inducers and inhibitors</h2>
+  <div class="prose" id="cyp-text"></div>
+  <div id="cyp-chips" aria-label="Drug"></div>
+  <div class="two">
+    <div class="schbox"><svg class="sch" id="cyp-svg" viewBox="0 0 520 220" role="img" aria-label="Effect of an inducer or inhibitor on a substrate's level, schematic"></svg></div>
+    <div class="find" id="cyp-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="cyp-table"></table></div>
+  <p class="note" id="cyp-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-exc">
+  <h2 id="h-exc">Excretion, clearance and half-life</h2>
+  <div class="prose" id="exc-text"></div>
+  <p><span class="formula">CL = rate of elimination ÷ plasma concentration</span> <span class="formula">t½ = 0.693 × Vd ÷ CL</span></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-sim">
+  <h2 id="h-sim">Repeated dosing simulator: steady state, loading and maintenance doses</h2>
+  <div class="prose" id="sim-text"></div>
+  <div class="step"><span class="muted">Route:</span><div id="sim-route"></div></div>
+  <div class="step"><span class="muted">Start:</span><div id="sim-load"></div></div>
+  <div class="sliders" id="sim-sl"></div>
+  <div class="step"><button class="btn" type="button" id="sim-calc">Set the maintenance dose from CL × target × τ ÷ F</button><span class="note" id="sim-calc-note" aria-live="polite"></span></div>
+  <div class="schbox"><svg class="sch" id="sim-svg" viewBox="0 0 600 290" role="img" aria-label="Plasma concentration against time with repeated doses"></svg></div>
+  <div class="stats" id="sim-stats" aria-live="polite"></div>
+  <p class="note" id="sim-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-order">
+  <h2 id="h-order">First-order and zero-order elimination</h2>
+  <div class="prose" id="order-text"></div>
+  <div class="step"><span class="muted">Y axis:</span><div id="order-scale"></div></div>
+  <div class="sliders" id="order-sl"></div>
+  <div class="schbox"><svg class="sch" id="order-svg" viewBox="0 0 560 260" role="img" aria-label="First-order and zero-order decline"></svg></div>
+  <div class="scroll"><table id="order-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-spec">
+  <h2 id="h-spec">Special populations</h2>
+  <div id="spec-chips" aria-label="Population"></div>
+  <div class="find" id="spec-find" aria-live="polite"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BPharmacokinetics%3A%20Routes%2C%20ADME%2C%20Half-life%20and%20Dosing%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fpharmacology%2Fgeneral%2Fpharmacokinetics.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+<script src="../assets/pharm.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-f01.md, Part A; pharmacology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Pick a route and follow the drug to the circulation; slide bioavailability and watch the oral area under the curve shrink; move a weak acid or base across a membrane and see where it is trapped; then dose a hypothetical drug again and again until it reaches steady state, with and without a loading dose.';
+const ROUTE_TEXT = '<p>Pharmacokinetics is what the body does to a drug: <b>absorption, distribution, metabolism and excretion (ADME)</b> (StatPearls). <b>Bioavailability (F)</b> is the fraction of a dose that reaches the systemic circulation: <b>100 % for IV by definition</b>, lower by other routes because of incomplete absorption and <b>first-pass metabolism</b> (Wikipedia; 2015 and 2018 reviews). Enteral routes go through the gut (oral, rectal); parenteral routes are all the others (Wikipedia).</p>';
+/* routes: key -> [label, path ids to light, text]. Path ids: iv, im, sc, sl, oral, portal, rect, td, inh, it */
+const ROUTES = {
+  iv: ['IV', ['iv'], '<h3>Intravenous</h3><p>Straight into the circulation: <b>F = 100 %</b> (Wikipedia; a 2015 review); the <b>fastest</b> route and the usual route in emergencies and intensive care (Wikipedia).</p>'],
+  oral: ['Oral', ['oral', 'portal'], '<h3>Oral</h3><p>Absorbed by the gut wall, then carried by the <b>portal vein to the liver</b> before it reaches the rest of the body: the <b>first-pass effect</b> can greatly reduce bioavailability (StatPearls; Wikipedia). If first-pass is prominent another route may be needed (StatPearls).</p>'],
+  sl: ['Sublingual', ['sl'], '<h3>Sublingual / buccal</h3><p>Under the tongue the mucosa is highly permeable over a dense capillary network, so absorption is rapid; the drug enters the circulation without passing through the liver first (Wikipedia).</p>'],
+  rect: ['Rectal', ['rect', 'rectp'], '<h3>Rectal</h3><p>About <b>two-thirds</b> of rectal venous drainage is systemic (middle and inferior rectal veins) and one-third portal (superior rectal vein), so about two-thirds of first-pass metabolism is bypassed (Wikipedia).</p>'],
+  im: ['IM', ['im'], '<h3>Intramuscular</h3><p>Large muscles have a rich blood supply: the drug reaches the circulation rapidly and <b>bypasses first-pass metabolism</b>. Common IM drugs include penicillin G, benzathine penicillin, streptomycin and vaccines (StatPearls; Wikipedia).</p>'],
+  sc: ['SC', ['sc'], '<h3>Subcutaneous</h3><p>Injection under the skin, for example insulin (Wikipedia).</p>'],
+  td: ['Transdermal', ['td'], '<h3>Transdermal</h3><p>Through the skin, <b>avoiding the gut and first-pass metabolism</b>; patches, creams and gels give sustained release (StatPearls).</p>'],
+  inh: ['Inhaled', ['inh'], '<h3>Inhaled</h3><p>Delivered to the lungs, where the disease is (asthma, COPD), with fewer side effects than oral drugs; inhaled drugs can be absorbed quickly and act both locally and systemically (Wikipedia).</p>'],
+  it: ['Intrathecal', ['it'], '<h3>Intrathecal</h3><p>Into the spinal canal (spinal anaesthesia, chemotherapy), to get past the <b>blood–brain barrier</b> (Wikipedia). <b>Epidural</b> injection goes into the epidural space instead, as in epidural anaesthesia (StatPearls; Wikipedia).</p>'],
+};
+/* AUC demo: hypothetical drug (schematic) */
+const FDEMO = {D: 100, V: 20, th: 4, tabs: 0.5};
+const F_NOTE = 'F = dose-corrected AUC(oral) ÷ AUC(IV) (Wikipedia; a 2018 review). Hypothetical drug: dose 100 mg, Vd 20 L, t½ 4 h, absorption half-time 0.5 h (schematic); AUC summed to 48 h plus the exponential tail.';
+const ABS_TEXT = '<p>Membranes let <b>lipid-soluble, un-ionised</b> molecules through; ionised molecules cannot cross easily (Wikipedia; a 2015 review). A <b>weak acid</b> (aspirin) is mostly un-ionised in the acid stomach; a <b>weak base</b> (caffeine) is un-ionised in the more basic intestine (Wikipedia; a 2015 review). <b>Ion trapping</b>: the drug accumulates on the side where it is more ionised — bases in acidic fluids, acids in basic fluids (Wikipedia). The ratio comes from the Henderson–Hasselbalch equation (Wikipedia); the physiology page works the same equation for blood bicarbonate: <a href="../../physiology/general/cell-transport-fluids.html#h-ph">buffer calculator on the physiology page</a>.</p>';
+/* ion trapping: illustrative pKa and pH values; the model holds un-ionised concentration equal on both sides (Wikipedia) */
+const ION_DRUG = {acid: ['Weak acid', 3.5], base: ['Weak base', 9.0]};
+const ION_COMP = {
+  stom: ['Stomach (acid)', 2, 'Stomach: illustrative pH 2.'],
+  milk: ['Breast milk', 7.2, 'Milk pH 7.2 vs plasma 7.4: weak bases such as codeine and oxycodone become ionised and trapped in milk (a 2015 review).'],
+  urac: ['Acid urine', 5, 'Urine pH changes how much of a drug is reabsorbed in the tubule (Palleria 2013; a 2018 review).'],
+  urbk: ['Alkaline urine', 8, '<b>Alkalinising the urine traps salicylate</b> (a weak acid) in the tubule in its ionised form so it is excreted (Wikipedia); urine pH changes tubular reabsorption and is used in poisoning (Palleria 2013; a 2018 review).'],
+};
+const VD_TEXT = '<p><b>Vd</b> relates the amount of drug in the body to its plasma concentration; it is an <b>apparent</b> volume, not a real one (StatPearls; Wikipedia). A <b>high Vd</b> means the drug leaves the plasma for the tissues (lipid-soluble, little ionised, little protein-bound) and a larger dose is needed for a given plasma level; a <b>low Vd</b> drug stays in the plasma (StatPearls; Wikipedia; a 2016 review). Vd sets the <b>loading dose</b>.</p>';
+const VD_PRE = [['Warfarin', 0.14, 'very low (StatPearls)'], ['Chloroquine', 235, 'very high: 235 L/kg (StatPearls), ≈250 L/kg (Wikipedia)']];
+const DIST_CARDS = [
+  ['Protein binding', 'Only the <b>unbound (free)</b> drug acts; the bound fraction is a <b>reservoir</b> released as free drug is removed (Wikipedia; StatPearls); only unbound drug crosses the placenta (2019 review). Acidic drugs bind mainly <b>albumin</b>, basic drugs <b>α1-acid glycoprotein</b> (Wikipedia).'],
+  ['Displacement', 'Displacement matters only for highly bound drugs: among antiseizure drugs, only those <b>≥ 90 % bound</b> give clinically relevant interactions (a 2016 review of antiseizure drugs); Palleria 2013 names <b>> 90 % binding</b>, a small Vd and a narrow therapeutic index. <b>Phenytoin</b> can displace warfarin at once (INR rises); <b>diclofenac</b> displaces warfarin from albumin (a 2016 review; Palleria 2013).'],
+  ['Blood–brain barrier', 'Capillary endothelium joined by <b>tight junctions</b>, with pericytes, astrocytes and basal lamina (StatPearls); hydrophobic molecules diffuse, large or hydrophilic ones are kept out (Wikipedia).'],
+  ['Placenta', 'Protein binding, ionisation, lipid solubility and molecular weight govern transfer: <b>small, lipid-soluble, poorly bound</b> drugs cross easily (a 2015 review); placental transporters also move drugs (a 2019 review).'],
+];
+const MET_TEXT = '<p>Biotransformation happens mainly in the <b>liver</b> and helps excretion; its products can be <b>inactive, active or toxic</b> (StatPearls). The <b>CYP</b> family carries most drug metabolism, CYP3A4 the largest share — but the figures differ: <b>80–90 % of enzymatic drug metabolism</b> by CYPs (StatPearls) versus CYPs for <b>about 60 % of prescribed drugs</b>, CYP3A4 for about half of that (Wikipedia).</p>';
+const MET_STEPS = ['Drug', 'Phase I', 'Phase II', 'Excretion'];
+const MET_FIND = [
+  '<h3>Lipid-soluble drug</h3><p>Lipid-soluble drugs are absorbed well (Wikipedia). Biotransformation, mainly in the liver, changes their structure to help their excretion (StatPearls; Wikipedia).</p>',
+  '<h3>Phase I: oxidation, reduction, hydrolysis</h3><p>Introduces or unmasks <b>polar or reactive groups</b>; oxidations are done mainly by <b>cytochrome P450 (CYP)</b> enzymes (a 2015 review; Wikipedia).</p>',
+  '<h3>Phase II: conjugation</h3><p>A polar molecule is attached — <b>glucuronidation, sulfation, acetylation</b> (a 2014 review; Wikipedia), or glutathione (Wikipedia). Slow acetylators are more prone to dose-dependent toxicity (Wikipedia).</p>',
+  '<h3>Excretion</h3><p>Transport proteins eliminate the conjugate; Wikipedia calls this step "phase III". The kidneys and liver do most of the clearing of drugs from plasma (StatPearls).</p>',
+];
+const MET_CARDS = [
+  ['First-pass metabolism', 'Metabolism before the drug reaches the systemic circulation, mainly in the <b>liver</b>, also gut wall and lungs; it lowers bioavailability (StatPearls; Wikipedia). <b>Propranolol</b> is a high first-pass drug (2004 and 2016 reviews; others in Wikipedia\'s list). Not the same thing as phase I (Wikipedia).'],
+  ['Prodrugs', 'Inactive (or weakly active) compounds <b>converted in the body to the active drug</b> (Wikipedia; 2015 and 2017 reviews), often to improve poor oral bioavailability (Wikipedia). Blocking the activating enzyme <b>lowers</b> their effect (a 2000 review; Wikipedia). Examples (Wikipedia): aspirin → salicylic acid, codeine, dabigatran etexilate, antiviral nucleoside analogues.'],
+];
+const CYP_TEXT = '<p><b>Inducers</b> speed up metabolism: substrate levels and effect fall (more toxicity if the metabolite is the active or toxic one; a 2000 review). <b>Inhibitors</b> slow it: levels rise and toxicity follows (a 2000 review; Wikipedia), but a <b>prodrug</b> loses effect. Inhibition starts with the first dose; induction takes time — within 24 h for rifampicin, about a week for phenobarbital (Palleria 2013).</p>';
+/* inducer / inhibitor table. FDA = "For Healthcare Professionals | FDA's Examples of Drugs that Interact with CYP Enzymes and Transporter Systems"
+   (fetched 2026-11-24). Second source: 2016 review of antiseizure-drug PK (PMC6009244) unless named. Wikipedia's CYP3A4 lists repeat the FDA
+   categories, so they are not counted as independent here. kind: ind / inh */
+const CYP = [
+  ['rif', 'Rifampicin', 'ind', 'Strong inducer (3A, 2C19)', 'Inducer (2016 review)', 'Oral contraceptive failure; a higher warfarin dose is needed (Wikipedia).'],
+  ['cbz', 'Carbamazepine', 'ind', 'Strong inducer (3A, 2B6)', 'Potent broad-spectrum inducer (2016 review)', 'Induces its own metabolism (autoinduction from about day 3, complete within a month; 2016 review): its half-life shortens from 35–40 h to 12–17 h on repeated dosing (Wikipedia). Hormonal contraceptive failure with inducing antiseizure drugs (2016 review).'],
+  ['pht', 'Phenytoin', 'ind', 'Strong inducer (3A)', 'Potent broad-spectrum inducer (2016 review)', 'With warfarin: first displaces it (INR rises), later lowers its effect by induction (2016 review).'],
+  ['pb', 'Phenobarbital', 'ind', 'Moderate inducer (3A)', 'Potent broad-spectrum inducer (2016 review)', 'Sources differ on strength (FDA moderate; review potent). Induction takes about a week (Palleria 2013).'],
+  ['sjw', 'St John\'s wort', 'ind', 'Strong inducer (3A); preparation dependent', 'Inducer (2016 review; Wikipedia)', 'Lowers levels of CYP3A substrates.'],
+  ['keto', 'Ketoconazole, itraconazole', 'inh', 'Strong inhibitors (3A)', 'Azoles inhibit CYP3A (Palleria 2013; 2016 review)', 'Raise levels of CYP3A4 substrates; ketoconazole lowers the ciclosporin dose needed (a 2000 review).'],
+  ['clari', 'Clarithromycin', 'inh', 'Strong inhibitor (3A)', 'Macrolides are inhibitors (2016 review)', 'Raises CYP3A substrate levels.'],
+  ['ery', 'Erythromycin', 'inh', 'Moderate inhibitor (3A)', 'Macrolides are inhibitors (2016 review)', 'Wikipedia lists it with the strong inhibitors but notes FDA calls it moderate; FDA followed here.'],
+  ['rtv', 'Ritonavir', 'inh', 'Strong inhibitor (3A)', '— (Wikipedia list only, which follows FDA)', 'One independent source: FDA.'],
+  ['ccb', 'Diltiazem, verapamil', 'inh', 'Moderate inhibitors (3A)', 'Non-dihydropyridine calcium-channel blockers are inhibitors (2016 review)', 'Diltiazem has been used to lower ciclosporin dose needs (a 2000 review).'],
+  ['gfj', 'Grapefruit juice', 'inh', 'Moderate inhibitor (3A)', 'Inhibitor (2016 review); "potent" (Wikipedia)', 'Inhibits CYP3A4 in the gut wall and liver: raises levels (e.g. carbamazepine; Wikipedia).'],
+  ['cim', 'Cimetidine', 'inh', 'Weak inhibitor (3A, 1A2, 2D6)', 'Inhibitor (2016 review)', 'Weak by the FDA scale.'],
+  ['flu', 'Fluconazole', 'inh', 'Strong (2C19), moderate (3A, 2C9) inhibitor', '— (FDA only)', 'FDA table.'],
+  ['ssri', 'Fluoxetine, paroxetine', 'inh', 'Strong 2D6 inhibitors (fluoxetine also 2C19)', '— (FDA only)', 'FDA table.'],
+];
+const CYP_NOTE = 'FDA categories (FDA table, content current as of 29 May 2026): a <b>strong inhibitor</b> raises the AUC of a sensitive substrate ≥5-fold, moderate 2–5-fold, weak 1.25–2-fold; a <b>strong inducer</b> lowers it by ≥80 %, moderate 50–80 %. FDA calls its list examples and a guide, not complete.';
+const EXC_TEXT = '<p><b>Clearance</b> is the volume of plasma cleared of drug per unit time — elimination rate divided by plasma concentration (StatPearls; Wikipedia); the kidneys and liver do most of it, and total clearance is their sum plus other tissues (StatPearls). The kidney handles a drug by <b>glomerular filtration</b>, <b>active tubular secretion</b> and <b>tubular reabsorption</b> (Wikipedia; 2014 and 2015 reviews): filtration removes only <b>unbound</b> drug (Wikipedia), and reabsorption is passive, so <b>lipophilic</b> drug diffuses back into the blood (Wikipedia; a 2014 review). <b>Half-life</b> is the time for the concentration to halve; it depends on <b>both Vd and CL</b>, rising when Vd rises or CL falls (StatPearls; Wikipedia; 2004 and 2018 reviews). In first-order kinetics the half-life stays the same whatever the dose (StatPearls).</p>';
+const SIM_TEXT = '<p>Each dose adds to what is left of the earlier ones until <b>steady state</b>, when intake equals elimination: about <b>4–5 half-lives</b> after starting, changing or stopping a regimen (≈97 % at 5 half-lives) (Wikipedia; a 2016 review; Wikipedia\'s pharmacokinetics article says 3–5). A <b>loading dose</b> = <b>Vd × target Cp ÷ F</b> reaches the target at once, most useful for long half-life drugs (StatPearls; Wikipedia; 2014 and 2021 reviews). The <b>maintenance dose rate</b> = <b>CL × target Cp ÷ F</b>, the elimination rate at steady state (Wikipedia; set by clearance: 2004 and 2014 reviews); per dose, × the interval τ.</p><p><b>Therapeutic drug monitoring (TDM)</b> measures drug levels in the blood (Wikipedia) and readjusts the dose in response (Wikipedia); it suits drugs whose concentration tracks efficacy or toxicity and whose kinetics vary widely between patients (Wikipedia), and it remains a main way of controlling exposure to narrow-therapeutic-index drugs (a 2026 review). Palleria 2013 recommends it to cut interactions in elderly patients taking several drugs.</p>';
+/* simulator: hypothetical drug; absorption half-time for the oral route fixed at 0.5 h (schematic) */
+const SIM0 = {D: 500, tau: 8, th: 8, V: 50, F: 1, tgt: 15, lo: 10, hi: 20, tabs: 0.5};
+const SIM_NOTE = 'Hypothetical drug and doses, one-compartment model with first-order elimination (k = 0.693 ÷ t½, CL = k × Vd); oral absorption half-time fixed at 0.5 h (schematic). The shaded band is a range you set, not a real drug\'s therapeutic range. Salt factor S = 1 in the loading-dose formula.';
+const ORDER_TEXT = '<p><b>First-order</b>: a constant <b>fraction</b> is eliminated per unit time, so the fall is exponential and the half-life is constant — most drugs (StatPearls; Wikipedia). <b>Zero-order</b>: a constant <b>amount</b> per unit time, when the enzymes or pathways are saturated (StatPearls; Wikipedia). Examples: <b>ethanol</b> (alcohol dehydrogenase saturated even at moderate levels; StatPearls; Wikipedia); <b>phenytoin</b> (first-order at low and zero-order at high concentrations: a small dose rise can give a large rise in level; Wikipedia; 2016 and 2026 reviews); <b>salicylates at high doses</b> (StatPearls; Wikipedia).</p>';
+const ORD0 = {c0: 80, th: 4, rate: 10};
+const SPEC = {
+  old: ['Elderly', '<h3>Elderly</h3><p>A 2004 review: <b>renal and hepatic clearance fall</b>, the <b>Vd of lipid-soluble drugs rises</b> (so the half-life lengthens), and sensitivity to several drug classes usually <b>increases</b> — diazepam sedates at lower doses and levels. GFR falls with age <b>without a rise in plasma creatinine</b>, because muscle mass falls. Narrow-index drugs (aminoglycosides, digoxin, lithium) cause harm if they accumulate even a little. StatPearls: weigh benefits and harms carefully before prescribing in older people.</p>'],
+  child: ['Children', '<h3>Children</h3><p>Children are not small adults (Aust Prescr 2016): gastric pH and emptying, low plasma proteins and higher body water change absorption and distribution, and each factor matures at its own rate (2014 review). Doses are based on <b>age or weight</b> and should not usually exceed the adult dose (Aust Prescr 2016). Neonates clear chloramphenicol poorly because glucuronidation is immature (2014 review).</p>'],
+  preg: ['Pregnancy', '<h3>Pregnancy</h3><p>A 2015 review: gastric pH rises, cardiac output rises from early pregnancy, and enzyme activity changes (UGT glucuronidation up). Warfarin is a known teratogen (StatPearls).</p><p><b>Labelling:</b> the US FDA <b>Pregnancy and Lactation Labeling Rule (PLLR)</b>, final rule December 2014, <b>removed the letter categories A, B, C, D and X</b>; labelling changes began on <b>30 June 2015</b> (FDA; Wikipedia). In their place come descriptive subsections on pregnancy, lactation and reproductive potential (Wikipedia).</p>'],
+  lact: ['Lactation', '<h3>Lactation</h3><p>A 2015 review: most commonly used drugs are relatively safe for breastfed babies. Less drug enters milk if it is <b>highly protein-bound</b> or has a <b>high Vd</b> (e.g. sertraline); most drug molecules are small enough to enter; <b>weak bases are trapped</b> in milk (pH 7.2 vs plasma 7.4: codeine, oxycodone).</p>'],
+  renal: ['Renal disease', '<h3>Renal impairment</h3><p>Renally cleared drugs accumulate: adjust the dose to the predicted fall in clearance, considering the drug\'s excretion route and therapeutic index (StatPearls) — a <b>lower maintenance dose or a longer interval</b> (2018 review). <b>Digoxin</b> and <b>lithium</b> (narrow index; lithium is cleared only by the kidney) accumulate (StatPearls; 2018 review). Vd may rise with fluid retention (Wikipedia).</p>'],
+  liver: ['Hepatic disease', '<h3>Hepatic disease</h3><p>Liver disease lowers metabolism (a 2000 review); liver failure raises Vd (altered body fluid and protein binding) and changes albumin levels (Wikipedia). No dose rules are given here: no dated guideline was used.</p>'],
+};
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews (Br J Clin Pharmacol 2004 on ageing; Clin J Am Soc Nephrol 2018 on kidney disease; Semin Perinatol 2015 on pregnancy; J Pediatr Pharmacol Ther 2014 and Aust Prescr 2016 on children; Aust Prescr 2015 on breastfeeding; J Clin Pharmacol 2019 on the placenta; Ment Health Clin 2016 on antiseizure drugs; Palleria 2013 (J Res Med Sci) and Proc Bayl Univ Med Cent 2000 on drug interactions; Molecules 2015 and Nat Rev Drug Discov 2017 on prodrugs; BMC Pharmacol Toxicol 2021; Pharmaceutics 2026); US FDA: Pregnancy and Lactation Labeling Rule page and "FDA\'s Examples of Drugs that Interact with CYP Enzymes and Transporter Systems" (2026); Wikipedia.';
+const MODELS = '<b>Models used:</b> the route map, membrane, metabolism and inducer/inhibitor drawings are schematic, not to scale. The AUC demo, ion-trapping ratios (illustrative pKa 3.5 and 9.0; stomach pH 2 and urine pH 5 and 8 illustrative) and the dosing and elimination plots use hypothetical drugs and a one-compartment model.';
+
+/* ===================== CODE ===================== */
+const P = window.Pharm, $ = P.$, T = P.T;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+$('route-text').innerHTML = ROUTE_TEXT; $('abs-text').innerHTML = ABS_TEXT; $('vd-text').innerHTML = VD_TEXT; $('met-text').innerHTML = MET_TEXT;
+$('cyp-text').innerHTML = CYP_TEXT; $('exc-text').innerHTML = EXC_TEXT; $('sim-text').innerHTML = SIM_TEXT; $('order-text').innerHTML = ORDER_TEXT;
+$('f-note').textContent = F_NOTE; $('sim-note').textContent = SIM_NOTE; $('cyp-note').innerHTML = CYP_NOTE;
+const f1 = (v, d = 1) => P.mn((+v).toFixed(d));
+const legend = (x, y, items) => items.map(([cls, lab], i) => `<path class="${cls}" d="M${x} ${y + i * 16} L${x + 26} ${y + i * 16}"/>` + T(x + 32, y + i * 16 + 4, lab, 's')).join('');
+const sig = v => v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(1) : v >= 1 ? v.toFixed(2) : v.toPrecision(2);
+
+/* ---------- routes ---------- */
+const RP = {   /* schematic lanes into the systemic circulation (box x 300-440, y 20-235) */
+  sl: 'M40 35 L300 35', iv: 'M40 70 L300 70', im: 'M40 105 L300 105', sc: 'M40 140 L300 140', td: 'M40 175 L300 175',
+  inh: 'M40 212 L160 212 M230 212 L300 212', oral: 'M40 265 L150 265', portal: 'M230 265 L300 265 M330 250 L330 238',
+  rect: 'M40 305 L410 305 L410 238', rectp: 'M330 305 L330 282', it: 'M40 340 L150 340',
+};
+function routeSvg(k) {
+  const on = new Set(ROUTES[k][1]);
+  let s = P.DEFS;
+  for (const [id, d] of Object.entries(RP)) s += `<path class="route${on.has(id) ? ' on' : ''}" d="${d}"/>`;
+  s += `<rect class="plasma" x="300" y="20" width="140" height="215" rx="8"/>` + T(370, 122, 'Systemic', 'b', 'middle') + T(370, 138, 'circulation', '', 'middle');
+  const box = (x, y, w, lab, id) => `<rect class="organ${on.has(id) ? ' on' : ''}" x="${x}" y="${y}" width="${w}" height="30" rx="6"/>` + T(x + w / 2, y + 20, lab, '', 'middle');
+  s += box(160, 197, 70, 'Lungs', 'inh') + box(150, 250, 80, 'Gut wall', 'oral') + box(300, 250, 60, 'Liver', 'portal') + box(150, 325, 80, 'CSF', 'it');
+  s += `<path d="M330 250 L330 240" class="flow"/>`;
+  [['sublingual', 35], ['IV', 70], ['IM', 105], ['SC', 140], ['transdermal', 175], ['inhaled', 212], ['oral', 265], ['rectal: ⅔ systemic', 305], ['intrathecal', 340]].forEach(([l, y]) => { s += T(44, y - 6, l, 's'); });
+  s += T(236, 259, 'portal vein', 's') + T(336, 298, '⅓ portal', 's');
+  $('route-svg').innerHTML = s;
+  $('route-find').innerHTML = ROUTES[k][2];
+}
+P.toggles('route-chips', Object.entries(ROUTES).map(([k, v]) => [k, v[0]]), routeSvg, 'oral'); routeSvg('oral');
+
+/* ---------- AUC and F ---------- */
+const fst = {F: 0.6};
+function conc1(t, D, V, k, F, ka) { if (t < 0) return 0; if (!ka) return D / V * Math.exp(-k * t); return F * D * ka / (V * (ka - k)) * (Math.exp(-k * t) - Math.exp(-ka * t)); }
+function drawF() {
+  const {D, V, th, tabs} = FDEMO, k = Math.LN2 / th, ka = Math.LN2 / tabs, W = 560, H = 250, x0 = 50, x1 = 540, y0 = 210, y1 = 20, tm = 24;
+  const sx = P.scale(0, tm, x0, x1), cmax = D / V, sy = P.scale(0, cmax * 1.05, y0, y1);
+  let s = P.DEFS + `<path class="axis" d="M${x0} ${y1} L${x0} ${y0} L${x1} ${y0}"/>`;
+  for (let t = 0; t <= tm; t += 4) s += `<path class="grid" d="M${sx(t)} ${y0} L${sx(t)} ${y0 + 4}"/>` + T(sx(t), y0 + 16, t, 's', 'middle');
+  for (let c = 0; c <= cmax; c += 1) s += T(x0 - 6, sy(c) + 4, c, 's', 'end');
+  s += T(x1, y0 + 32, 'time (h)', 's', 'end') + T(x0, y1 - 6, 'mg/L', 's');
+  const iv = [], po = [];
+  for (let t = 0; t <= tm + 1e-9; t += 0.1) { iv.push([sx(t), sy(conc1(t, D, V, k))]); po.push([sx(t), sy(conc1(t, D, V, k, fst.F, ka))]); }
+  s += `<path class="auc" d="${P.path(po)} L${sx(tm)} ${y0} L${x0} ${y0} Z"/>`;
+  s += `<path class="ivc" d="${P.path(iv)}"/><path class="trace" d="${P.path(po)}"/>`;
+  s += legend(400, 40, [['ivc', 'IV bolus'], ['trace', 'oral (shaded: its AUC)']]);
+  $('f-svg').innerHTML = s;
+  /* numerical AUCs (trapezoid to 48 h + tail C/k) */
+  const auc = f => { let a = 0, dt = 0.01, p = f(0); for (let t = dt; t <= 48 + 1e-9; t += dt) { const c = f(t); a += (p + c) / 2 * dt; p = c; } return a + p / k; };
+  const aiv = auc(t => conc1(t, D, V, k)), apo = auc(t => conc1(t, D, V, k, fst.F, ka));
+  $('f-stats').innerHTML = `<span>AUC IV <b>${f1(aiv, 1)}</b> mg·h/L</span><span>AUC oral <b>${f1(apo, 1)}</b> mg·h/L</span><span>F = AUC oral ÷ AUC IV = <b>${f1(apo / aiv, 2)}</b></span>`;
+}
+const fsl = P.slider('f-sl', {id: 'F', label: 'Oral bioavailability F', min: 0.1, max: 1, step: 0.05, value: fst.F, fmt: v => (v * 100).toFixed(0) + ' %'}, v => { fst.F = v; drawF(); });
+fsl.init(); drawF();
+
+/* ---------- ion trapping ---------- */
+const ion = {d: 'base', c: 'stom', pka: ION_DRUG.base[1]};
+function ionFrac(type, pH, pKa) { /* returns total/unionised */ return type === 'acid' ? 1 + Math.pow(10, pH - pKa) : 1 + Math.pow(10, pKa - pH); }
+function drawIon() {
+  const pHp = 7.4, pHc = ION_COMP[ion.c][1], tp = ionFrac(ion.d, pHp, ion.pka), tc = ionFrac(ion.d, pHc, ion.pka);
+  const ratio = tc / tp, ui = x => 100 / x;   /* % un-ionised */
+  let s = P.DEFS;
+  s += `<rect class="plasma" x="20" y="40" width="230" height="150" rx="8"/><rect class="plasma" x="310" y="40" width="230" height="150" rx="8"/>`;
+  s += `<rect class="memb" x="262" y="30" width="36" height="170"/>` + T(280, 218, 'membrane', 's', 'middle');
+  s += T(135, 30, 'Plasma, pH 7.4', 'b', 'middle') + T(425, 30, ION_COMP[ion.c][0] + ', pH ' + pHc, 'b', 'middle');
+  const lg = v => Math.max(0, Math.log10(v)), hmax = Math.max(lg(tp), lg(tc), 1);
+  const bar = (x, tot) => { const h = 110 * lg(tot) / hmax; return (h > 0.5 ? `<rect x="${x}" y="${160 - h}" width="40" height="${h}" style="fill:var(--ink);fill-opacity:.25;stroke:var(--ink)"/>` : '') + `<rect x="${x}" y="160" width="40" height="20" style="fill:var(--surface);stroke:var(--ink)"/>`; };
+  s += bar(60, tp) + bar(350, tc);
+  s += T(108, 174, 'un-ionised', 's') + T(398, 174, 'un-ionised', 's') + (lg(tp) / hmax > 0.15 ? T(108, 150, 'ionised', 's') : '') + (lg(tc) / hmax > 0.15 ? T(398, 150, 'ionised', 's') : '');
+  s += `<path class="flow" d="M236 166 L326 166"/><path class="flow" d="M324 176 L238 176"/>`;
+  s += T(135, 206, 'un-ionised ' + sig(ui(tp)) + ' %', 'm', 'middle') + T(425, 206, 'un-ionised ' + sig(ui(tc)) + ' %', 'm', 'middle');
+  $('ion-svg').innerHTML = s;
+  const side = ratio > 1 ? ION_COMP[ion.c][0].toLowerCase() : 'plasma';
+  $('ion-find').innerHTML = `<p class="readout">Total drug, ${ION_COMP[ion.c][0].toLowerCase()} : plasma = ${sig(ratio)} : 1</p><p>A ${ION_DRUG[ion.d][0].toLowerCase()} with pKa ${ion.pka.toFixed(1)} collects in the <b>${side}</b>, the side where it is more ionised. The grey bar (ionised drug) is on a log scale; the small open box is the un-ionised form, which crosses the membrane and is at the same concentration on both sides (Wikipedia). Protein binding is ignored.</p><p class="note">${ION_COMP[ion.c][2]}</p>`;
+}
+P.toggles('ion-drug', Object.entries(ION_DRUG).map(([k, v]) => [k, v[0]]), k => { ion.d = k; ionSl.set(ION_DRUG[k][1]); }, ion.d);
+P.toggles('ion-comp', Object.entries(ION_COMP).map(([k, v]) => [k, v[0]]), k => { ion.c = k; drawIon(); }, ion.c);
+const ionSl = P.slider('ion-sl', {id: 'pka', label: 'pKa (illustrative)', min: 1, max: 12, step: 0.5, value: ion.pka, fmt: v => v.toFixed(1)}, v => { ion.pka = v; drawIon(); });
+ionSl.init(); drawIon();
+
+/* ---------- Vd ---------- */
+const vd = {dose: 500, cp: 10, wt: 70};
+function drawVd() {
+  const VL = vd.dose / vd.cp, Vkg = VL / vd.wt, x0 = 40, x1 = 530, y = 40;
+  const sx = v => x0 + (Math.log10(v) + 2) / 5 * (x1 - x0);   /* 0.01 .. 1000 L/kg */
+  let s = `<path class="axis" d="M${x0} ${y} L${x1} ${y}"/>`;
+  for (const v of [0.01, 0.1, 1, 10, 100, 1000]) s += `<path class="axis" d="M${sx(v)} ${y} L${sx(v)} ${y + 5}"/>` + T(sx(v), y + 18, v, 's', 'middle');
+  s += T(x1, y + 36, 'Vd, L/kg (log scale)', 's', 'end');
+  VD_PRE.forEach(([n, v], i) => { s += `<circle cx="${sx(v)}" cy="${y}" r="5" style="fill:var(--muted)"/>` + T(sx(v), y - 12, n, 's', 'middle'); });
+  /* off the 0.01-1000 L/kg axis: pin the marker to the end, point outwards and say so; label anchored so it stays inside */
+  const off = Vkg < 0.01 ? -1 : Vkg > 1000 ? 1 : 0, xm = sx(Math.min(1000, Math.max(0.01, Vkg)));
+  const anc = xm < x0 + 100 ? 'start' : xm > x1 - 100 ? 'end' : 'middle', lx = anc === 'start' ? Math.max(4, xm - 10) : anc === 'end' ? Math.min(556, xm + 10) : xm;
+  s += `<circle cx="${xm}" cy="${y}" r="7" style="fill:var(--mark)"/>` + (off ? `<path d="M${xm + off * 18} ${y} L${xm + off * 9} ${y - 6} L${xm + off * 9} ${y + 6} Z" style="fill:var(--mark)"/>` : '')
+    + T(lx, y + 52, 'this drug ' + sig(Vkg) + ' L/kg' + (off < 0 ? ' (below the scale)' : off > 0 ? ' (above the scale)' : ''), 'm', anc);
+  $('vd-svg').innerHTML = s;
+  $('vd-stats').innerHTML = `<span>Vd = ${vd.dose} mg ÷ ${vd.cp} mg/L = <b>${sig(VL)} L</b></span><span>÷ ${vd.wt} kg = <b>${sig(Vkg)} L/kg</b></span><span class="muted">Warfarin 0.14 L/kg (StatPearls); chloroquine 235 L/kg (StatPearls), ≈250 L/kg (Wikipedia)</span>`;
+}
+const vdS = [
+  P.slider('vd-sl', {id: 'vdd', label: 'Amount in the body (mg)', min: 50, max: 2000, step: 50, value: vd.dose}, v => { vd.dose = v; drawVd(); }),
+  P.slider('vd-sl', {id: 'vdc', label: 'Plasma concentration (mg/L)', min: 0.05, max: 50, step: 0.05, value: vd.cp, fmt: v => v.toFixed(2)}, v => { vd.cp = v; drawVd(); }),
+  P.slider('vd-sl', {id: 'vdw', label: 'Body weight (kg)', min: 3, max: 120, step: 1, value: vd.wt}, v => { vd.wt = v; drawVd(); }),
+];
+vdS.forEach(s => s.init()); drawVd();
+$('dist-cards').innerHTML = DIST_CARDS.map(([h, t]) => `<div class="card"><h3>${h}</h3><p>${t}</p></div>`).join('');
+
+/* ---------- metabolism stepper ---------- */
+const met = {s: 0};
+function drawMet() {
+  const i = met.s; let s = P.DEFS;
+  const mol = (x, lab, pol, conj) => `<rect x="${x - 34}" y="70" width="68" height="44" rx="10" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.4"/>` + T(x, 96, lab, 'b', 'middle')
+    + (pol ? `<rect x="${x + 16}" y="50" width="36" height="20" rx="10" style="fill:var(--surface);stroke:var(--ink)"/>` + T(x + 34, 64, '−OH', 's', 'middle') : '')
+    + (conj ? `<rect x="${x + 54}" y="49" width="44" height="22" rx="5" style="fill:var(--bg);stroke:var(--ink)"/>` + T(x + 76, 64, 'conj.', 's', 'middle') : '');
+  const xs = [60, 190, 320, 460];
+  s += mol(xs[0], 'drug', 0, 0);
+  if (i >= 1) s += mol(xs[1], 'drug', 1, 0) + `<rect class="enzb" x="${xs[0] + 40}" y="130" width="80" height="26" rx="6"/>` + T(xs[0] + 80, 148, 'CYP', 'b', 'middle') + `<path class="flow" d="M${xs[0] + 36} 92 L${xs[1] - 38} 92"/>`;
+  if (i >= 2) s += mol(xs[2], 'drug', 1, 1) + `<rect class="enzb" x="${xs[1] + 50}" y="130" width="80" height="26" rx="6"/>` + T(xs[1] + 90, 148, 'transferase', 's', 'middle') + `<path class="flow" d="M${xs[1] + 46} 92 L${xs[2] - 38} 92"/>`;
+  if (i >= 3) s += `<rect class="plasma" x="${xs[3] - 40}" y="60" width="80" height="64" rx="8"/>` + T(xs[3], 96, 'excreted', 's', 'middle') + `<path class="flow" d="M${xs[2] + 36} 92 L${xs[3] - 42} 92"/>`;
+  s += T(xs[0], 40, 'lipid-soluble', 's', 'middle') + (i >= 1 ? T(xs[1], 40, 'more polar', 's', 'middle') : '') + (i >= 2 ? T(xs[2] + 20, 40, 'polar conjugate', 's', 'middle') : '');
+  s += T(10, 190, 'schematic', 'h');
+  $('met-svg').innerHTML = s; $('met-find').innerHTML = MET_FIND[i];
+}
+P.stepper('met-step', MET_STEPS, drawMet, met);
+$('met-cards').innerHTML = MET_CARDS.map(([h, t]) => `<div class="card"><h3>${h}</h3><p>${t}</p></div>`).join('');
+
+/* ---------- inducers / inhibitors ---------- */
+function drawCyp(key) {
+  const r = CYP.find(x => x[0] === key), ind = r[2] === 'ind';
+  const x0 = 50, x1 = 500, y0 = 180, y1 = 30, sx = P.scale(0, 24, x0, x1), sy = P.scale(0, 12, y0, y1), k = Math.LN2 / 6;
+  let s = `<path class="axis" d="M${x0} ${y1} L${x0} ${y0} L${x1} ${y0}"/>` + T(x1, y0 + 18, 'time', 's', 'end') + T(x0 + 4, y1 - 8, 'substrate level', 's');
+  const base = [], alt = [], k2 = ind ? k * 2.5 : k / 2.5;
+  for (let t = 0; t <= 24; t += 0.2) { base.push([sx(t), sy(10 * Math.exp(-k * t))]); alt.push([sx(t), sy(10 * Math.exp(-k2 * t))]); }
+  s += `<path class="trace" d="${P.path(base)}"/>` + `<path class="${ind ? 'trace dash' : 'inh'}" d="${P.path(alt)}"/>`;
+  s += legend(300, 40, [['trace', 'substrate alone'], [ind ? 'trace dash' : 'inh', ind ? '+ inducer: faster fall' : '+ inhibitor: slower fall']]);
+  s += T(x0, 210, 'schematic, one dose', 'h');
+  $('cyp-svg').innerHTML = s;
+  $('cyp-find').innerHTML = `<h3>${r[1]} — ${ind ? 'inducer' : 'inhibitor'}</h3><p><b>FDA:</b> ${r[3]}.</p><p><b>Second source:</b> ${r[4]}.</p><p>${r[5]}</p>`;
+}
+P.toggles('cyp-chips', CYP.map(r => [r[0], r[1]]), drawCyp, 'rif'); drawCyp('rif');
+P.table('cyp-table', ['Drug', 'Type', 'FDA table (content of 29 May 2026)', 'Second source', 'Clinical point'], CYP.map(r => [r[1], r[2] === 'ind' ? 'Inducer' : 'Inhibitor', r[3], r[4], r[5]]));
+
+/* ---------- simulator ---------- */
+const sim = Object.assign({route: 'iv', load: 'no'}, SIM0);
+function simConc(t, doses, k, ka) { let c = 0; for (const [td, d] of doses) if (t >= td) c += conc1(t - td, d, sim.V, k, sim.route === 'iv' ? 1 : sim.F, sim.route === 'iv' ? 0 : ka); return c; }
+function drawSim() {
+  $('sim-calc-note').textContent = '';   /* the note belongs to the last button press only */
+  const k = Math.LN2 / sim.th, ka = Math.LN2 / sim.tabs, CL = k * sim.V, F = sim.route === 'iv' ? 1 : sim.F;
+  const tm = Math.min(240, Math.max(6 * sim.th, 5 * sim.tau, 24));
+  const LD = sim.V * sim.tgt / F, MD = CL * sim.tgt * sim.tau / F;
+  const doses = [];
+  for (let t = 0, i = 0; t < tm - 1e-9; t += sim.tau, i++) doses.push([t, i === 0 && sim.load === 'yes' ? LD : sim.D]);
+  const pts = [], n = 600; let cmax = 0;
+  for (let i = 0; i <= n; i++) { const t = tm * i / n, c = simConc(t, doses, k, ka); pts.push([t, c]); cmax = Math.max(cmax, c); }
+  /* include the dose-time peaks for IV (exact values just after each dose) */
+  if (sim.route === 'iv') for (const [td] of doses) { const c = simConc(td, doses, k, ka); pts.push([td, c]); cmax = Math.max(cmax, c); }
+  pts.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const ytop = Math.max(cmax, sim.hi) * 1.1, x0 = 56, x1 = 585, y0 = 240, y1 = 22;
+  const sx = P.scale(0, tm, x0, x1), sy = P.scale(0, ytop, y0, y1);
+  let s = P.DEFS + `<rect class="thb" x="${x0}" y="${sy(sim.hi)}" width="${x1 - x0}" height="${sy(sim.lo) - sy(sim.hi)}"/>`;
+  s += `<path class="axis" d="M${x0} ${y1} L${x0} ${y0} L${x1} ${y0}"/>`;
+  const tstep = tm <= 48 ? 8 : tm <= 120 ? 24 : 48;
+  for (let t = 0; t <= tm + 1e-9; t += tstep) s += `<path class="axis" d="M${sx(t)} ${y0} L${sx(t)} ${y0 + 4}"/>` + T(sx(t), y0 + 16, t, 's', 'middle');
+  /* nice step: 1, 2 or 5 × 10^n, about five labels whatever the scale */
+  const ystep = (r => { const p = Math.pow(10, Math.floor(Math.log10(r))), m = r / p; return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p; })(ytop / 5);
+  const ydec = Math.max(0, -Math.floor(Math.log10(ystep) + 1e-9));
+  for (let j = 0; j * ystep <= ytop + 1e-9; j++) { const c = j * ystep; s += T(x0 - 6, sy(c) + 4, c.toFixed(ydec), 's', 'end') + (j ? `<path class="grid" d="M${x0} ${sy(c)} L${x1} ${sy(c)}"/>` : ''); }
+  s += T(x1, y0 + 34, 'time (h)', 's', 'end') + T(x0, y1 - 8, 'plasma concentration (mg/L)', 's');
+  for (const [td] of doses) s += `<path class="dose" d="M${sx(td)} ${y0} L${sx(td)} ${y0 - 7}"/>`;
+  /* half-life marks */
+  const thpx = sx(sim.th) - sx(0);
+  for (let j = 1; j * sim.th <= tm && j <= 5; j++) s += `<path class="grid dash" d="M${sx(j * sim.th)} ${y1} L${sx(j * sim.th)} ${y0}"/>` + (thpx >= 34 || j === 5 ? T(sx(j * sim.th), y1 + 10, j + ' t½', 's', 'middle') : '');
+  const css = F * sim.D / (CL * sim.tau);
+  s += `<path class="grid dash" d="M${x0} ${sy(css)} L${x1} ${sy(css)}" style="stroke:var(--ink);stroke-opacity:.5"/>`;
+  s += `<path class="trace" d="${P.path(pts.map(([t, c]) => [sx(t), sy(c)]))}"/>`;
+  $('sim-svg').innerHTML = s;
+  const ivmax = sim.D / sim.V / (1 - Math.exp(-k * sim.tau)), ivmin = ivmax * Math.exp(-k * sim.tau);
+  $('sim-stats').innerHTML = `<span>k = 0.693 ÷ ${sim.th} h = <b>${f1(k, 3)} /h</b></span><span>CL = k × Vd = <b>${f1(CL, 2)} L/h</b></span>`
+    + `<span>Css (average) = F × dose ÷ (CL × τ) = <b>${f1(css, 1)} mg/L</b></span>`
+    + (sim.route === 'iv' ? `<span>IV steady-state peak / trough <b>${f1(ivmax, 1)} / ${f1(ivmin, 1)} mg/L</b></span>` : '')
+    + `<span>Steady state ≈97 % after 5 t½ = <b>${f1(5 * sim.th, 0)} h</b></span>`
+    + `<span>Loading dose for ${sim.tgt} mg/L = Vd × Cp ÷ F = <b>${f1(LD, 0)} mg</b></span><span>Maintenance per dose = CL × Cp × τ ÷ F = <b>${f1(MD, 0)} mg</b></span>`;
+}
+P.toggles('sim-route', [['iv', 'IV bolus'], ['oral', 'Oral']], k => { sim.route = k; drawSim(); }, 'iv');
+P.toggles('sim-load', [['no', 'No loading dose'], ['yes', 'Loading dose first']], k => { sim.load = k; drawSim(); }, 'no');
+const simS = {
+  D: P.slider('sim-sl', {id: 'sd', label: 'Maintenance dose (mg)', min: 25, max: 2000, step: 25, value: sim.D}, v => { sim.D = v; drawSim(); }),
+  tau: P.slider('sim-sl', {id: 'stau', label: 'Dosing interval τ (h)', min: 2, max: 24, step: 1, value: sim.tau}, v => { sim.tau = v; drawSim(); }),
+  th: P.slider('sim-sl', {id: 'sth', label: 'Half-life t½ (h)', min: 1, max: 48, step: 1, value: sim.th}, v => { sim.th = v; drawSim(); }),
+  V: P.slider('sim-sl', {id: 'sv', label: 'Volume of distribution (L)', min: 5, max: 500, step: 5, value: sim.V}, v => { sim.V = v; drawSim(); }),
+  F: P.slider('sim-sl', {id: 'sf', label: 'Oral bioavailability F', min: 0.1, max: 1, step: 0.05, value: sim.F, fmt: v => (v * 100).toFixed(0) + ' % (oral only)'}, v => { sim.F = v; drawSim(); }),
+  tgt: P.slider('sim-sl', {id: 'stg', label: 'Target Cp for the dose formulas (mg/L)', min: 1, max: 50, step: 1, value: sim.tgt}, v => { sim.tgt = v; drawSim(); }),
+  /* an edge pushed past the other edge stops there, and the slider shows where it stopped */
+  lo: P.slider('sim-sl', {id: 'slo', label: 'Band: lower edge (mg/L)', min: 0, max: 50, step: 1, value: sim.lo}, v => { if (v > sim.hi) { simS.lo.set(sim.hi); return; } sim.lo = v; drawSim(); }),
+  hi: P.slider('sim-sl', {id: 'shi', label: 'Band: upper edge (mg/L)', min: 1, max: 100, step: 1, value: sim.hi}, v => { if (v < sim.lo) { simS.hi.set(sim.lo); return; } sim.hi = v; drawSim(); }),
+};
+Object.values(simS).forEach(s => s.init());
+$('sim-calc').onclick = () => {
+  const k = Math.LN2 / sim.th, F = sim.route === 'iv' ? 1 : sim.F, raw = k * sim.V * sim.tgt * sim.tau / F, md = Math.round(raw / 25) * 25, set = Math.max(25, Math.min(2000, md));
+  simS.D.set(set);
+  $('sim-calc-note').innerHTML = set !== md ? `<b>Clamped:</b> the formula gives ${f1(raw, 0)} mg, but the slider runs from 25 to 2000 mg, so the dose is set to ${set} mg and the curve will not settle on the target.` : `Formula: ${f1(raw, 0)} mg, rounded to ${set} mg (25 mg steps).`;
+};
+drawSim();
+
+/* ---------- first vs zero order ---------- */
+const ord = Object.assign({log: 'lin'}, ORD0);
+function drawOrd() {
+  const k = Math.LN2 / ord.th, x0 = 56, x1 = 545, y0 = 220, y1 = 22, tm = 16;
+  const sx = P.scale(0, tm, x0, x1), lg = ord.log === 'log';
+  const sy = lg ? (c => { const v = Math.max(c, 0.5); return y0 - (Math.log10(v) - Math.log10(0.5)) / (Math.log10(ord.c0 * 1.2) - Math.log10(0.5)) * (y0 - y1); }) : P.scale(0, ord.c0 * 1.1, y0, y1);
+  let s = `<path class="axis" d="M${x0} ${y1} L${x0} ${y0} L${x1} ${y0}"/>`;
+  for (let t = 0; t <= tm; t += 4) s += `<path class="axis" d="M${sx(t)} ${y0} L${sx(t)} ${y0 + 4}"/>` + T(sx(t), y0 + 16, t, 's', 'middle');
+  const ticks = lg ? [1, 2, 5, 10, 20, 50, 100].filter(v => v <= ord.c0 * 1.2) : [0, 20, 40, 60, 80, 100].filter(v => v <= ord.c0 * 1.1);
+  for (const c of ticks) s += T(x0 - 6, sy(c) + 4, c, 's', 'end');
+  s += T(x1, y0 + 34, 'time (h)', 's', 'end') + T(x0, y1 - 8, 'concentration (mg/L)' + (lg ? ', log scale' : ''), 's');
+  const a = [], b = [];
+  for (let t = 0; t <= tm + 1e-9; t += 0.1) { a.push([sx(t), sy(ord.c0 * Math.exp(-k * t))]); const z = ord.c0 - ord.rate * t; if (z > (lg ? 0.5 : 0)) b.push([sx(t), sy(z)]); }
+  s += `<path class="trace" d="${P.path(a)}"/><path class="trace dash" d="${P.path(b)}"/>`;
+  /* legend below the plot, where no curve runs */
+  s += `<path class="trace" d="M${x0} 250 L${x0 + 26} 250"/>` + T(x0 + 32, 254, 'first-order', 's') + `<path class="trace dash" d="M${x0 + 120} 250 L${x0 + 146} 250"/>` + T(x0 + 152, 254, 'zero-order', 's');
+  $('order-svg').innerHTML = s;
+  const rows = [];
+  for (let t = 0; t <= 12; t += ord.th >= 3 ? ord.th : 3) {
+    const c1 = ord.c0 * Math.exp(-k * t), c2 = Math.max(0, ord.c0 - ord.rate * t);
+    rows.push([t + ' h', f1(c1, 1), f1(c2, 1)]);
+  }
+  P.table('order-table', ['Time', 'First-order (mg/L): halves every t½', 'Zero-order (mg/L): falls ' + ord.rate + ' mg/L each hour'], rows);
+}
+P.toggles('order-scale', [['lin', 'Linear'], ['log', 'Log']], k => { ord.log = k; drawOrd(); }, 'lin');
+const ordS = [
+  P.slider('order-sl', {id: 'oc', label: 'Starting concentration (mg/L)', min: 10, max: 100, step: 5, value: ord.c0}, v => { ord.c0 = v; drawOrd(); }),
+  P.slider('order-sl', {id: 'ot', label: 'First-order half-life (h)', min: 1, max: 8, step: 1, value: ord.th}, v => { ord.th = v; drawOrd(); }),
+  P.slider('order-sl', {id: 'or', label: 'Zero-order rate (mg/L per h)', min: 1, max: 20, step: 1, value: ord.rate}, v => { ord.rate = v; drawOrd(); }),
+];
+ordS.forEach(s => s.init()); drawOrd();
+
+/* ---------- special populations ---------- */
+P.toggles('spec-chips', Object.entries(SPEC).map(([k, v]) => [k, v[0]]), k => { $('spec-find').innerHTML = SPEC[k][1]; }, 'old');
+$('spec-find').innerHTML = SPEC.old[1];
+P.swipeHints();
+</script>
+</body>
+</html>
