@@ -84,7 +84,8 @@ Last updated: 2026-11-23
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
   colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. S01 [x] build (243 quotes; EU trauma 2023 / ATLS 10th, Sepsis-3, SSC 2021, ERAS; Wikipedia Homeostasis excluded)
   [x] review (ERAS carbohydrate loading misattributed, TBI/spinal exception missing at the instruction (safety),
-  ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,
+  ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. ROUND 1 SECOND MODULES started: B02 [ ] build (running; biochemistry/carbohydrates/, BC3.1–3.6).
+  R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,
   NICE head-injury adult rule, 10-day rule year, radiograph densities unsourced, PET geometry) [ ] fixes (running).
   TOOLING FIX 2026-11-26: tools/capped passed args through systemd-run env expansion (${X} in --js was mangled);
   now --expand-environment=no. Inline --js tests before this date that used ${...} may have been wrong. E01 [x] build (388 quotes; WHO 2021 grades, ASHA 1990; Wikipedia Rinne/Weber excluded; ABC/Schwabach cut)
