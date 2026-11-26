@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Healing and Repair</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/path.css">
+<style>
+/* Page tokens reused from other subjects with the same values and meanings (no new colours): --skin (skin; orthopaedics/assets/ortho.css),
+   --clot (a clot, fibrin; physiology/assets/phys.css). path.css tokens with their meanings: --cyto (cells), --nucleus, --collagen (fibrous
+   tissue: dermis, granulation matrix, scar), --fat (subcutaneous fat), --rbc (red cells). New capillaries are drawn as ink-outlined tubes, not in an artery colour. Cell types
+   are told apart by shape and label; the selected item gets a thicker ink outline. */
+:root{--skin:#f1d3bf;--clot:#541244}
+:root[data-theme="dark"]{--skin:#7a5a48;--clot:#bd2898}
+svg.sch .node{fill:var(--surface);stroke:var(--muted);stroke-width:1.2}
+svg.sch .nodeon{fill:var(--surface);stroke:var(--ink);stroke-width:2.6}
+svg.sch .wbc{fill:var(--surface);stroke:var(--ink);stroke-width:1.2}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Pathology</a> <span class="muted">· Module 02: <a href="inflammation.html">Inflammation</a> · <span aria-current="page">Healing and repair</span></span></nav>
+
+<header class="stack">
+  <h1>Healing and Repair: Regeneration, Wound Healing, Granulation Tissue and Scars</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-regen">Regeneration vs repair</a> <a href="#h-heal">First and second intention</a> <a href="#h-gran">Granulation tissue and growth factors</a> <a href="#h-fac">Factors</a> <a href="#h-comp">Keloid, hypertrophic scar, complications</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-regen">
+  <h2 id="h-regen">Regeneration or repair: it depends on the cells</h2>
+  <div class="prose" id="regen-text"></div>
+  <div class="chips" id="cell-tg" aria-label="Tissue"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="cell-svg" viewBox="0 0 540 224" role="img" aria-label="Three columns: labile cells that keep dividing, stable cells resting in G0 that divide when stimulated, permanent cells that cannot divide; the chosen tissue is outlined"></svg></div>
+    <div class="prose find" id="cell-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-heal">
+  <h2 id="h-heal">Healing by first and second intention: drag through the days</h2>
+  <div class="chips" id="int-tg" aria-label="Type of healing"></div>
+  <div class="sliders" id="day-sl"></div>
+  <div class="vrow" id="day-out" aria-live="polite"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="wound-svg" viewBox="0 0 560 270" role="img" aria-label="Schematic skin wound in section, healing over time: clot, inflammatory cells, granulation tissue, new epithelium, contraction and scar"></svg></div>
+    <div class="prose find" id="day-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="wound-key"></div>
+  <div class="scroll"><table id="int-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gran">
+  <h2 id="h-gran">Granulation tissue, growth factors and collagen</h2>
+  <div class="prose" id="gran-text"></div>
+  <div class="chips" id="gf-tg" aria-label="Growth factor"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="gran-svg" viewBox="0 0 540 264" role="img" aria-label="Schematic granulation tissue: new capillaries, fibroblasts, myofibroblasts, macrophages and loose matrix under a wound surface; the chosen growth factor's source and target are outlined"></svg></div>
+    <div class="prose find" id="gf-find" aria-live="polite"></div>
+  </div>
+  <div class="two" id="gran-micro"></div>
+  <div class="schbox"><svg class="fig sch" id="col-svg" viewBox="0 0 540 162" role="img" aria-label="Bar chart: collagen type I and type III in normal skin and in granulation tissue"></svg></div>
+  <div class="prose" id="col-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fac">
+  <h2 id="h-fac">Factors that affect healing</h2>
+  <div class="scroll"><table id="fac-table"></table></div>
+  <div class="prose" id="fac-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-comp">
+  <h2 id="h-comp">Keloid, hypertrophic scar, contracture, dehiscence</h2>
+  <div class="chips" id="scar-tg" aria-label="Scar type"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="scar-svg" viewBox="0 0 540 200" role="img" aria-label="Schematic skin with the original wound outline dashed: a hypertrophic scar stays within it, a keloid grows beyond it"></svg></div>
+    <div class="prose find" id="scar-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="scar-table"></table></div>
+  <div class="prose" id="comp-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BHealing%20and%20Repair%3A%20Regeneration%2C%20Wound%20Healing%2C%20Granulation%20Tissue%20and%20Scars%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fpathology%2Fgeneral%2Fhealing-repair.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/path.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-p02.md, Part B; pathology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Sort tissues into labile, stable and permanent, drag a wound through its days and switch between first and second intention, pick a growth factor to see who makes it and what it does, then set a keloid beside a hypertrophic scar. Inflammation itself is on the <a href="inflammation.html">previous page</a>; bone healing on the <a href="../../orthopaedics/trauma/fracture-principles.html#h-heal">orthopaedics page</a>.';
+const REGEN_TEXT = '<p><b>Regeneration</b> replaces lost tissue with an exact copy, restoring form and function; <b>repair</b> re-establishes continuity without an exact copy (Wikipedia) — a <b>scar</b> of collagen, after large tissue loss or damage to tissue that cannot regenerate (Wikipedia). Whether a tissue can regenerate depends on the regenerative capacity of its cells (a 2020 review): cardiomyocytes, for example, are permanent and are replaced by fibroblasts, leaving a scar (a 2025 review). Wikipedia\'s example of complete regeneration is the endometrium after menstruation.</p>';
+/* tissues: key -> [chip, class (lab|sta|per), html] — classes and examples as listed in a 2020 review (PMC7443169) */
+const CELLS = {
+  epi: ['Epithelia', 'lab', '<h3>Epithelial cells — labile</h3><p>Keep proliferating throughout life (a 2020 review). Wikipedia: uninjured skin is continually replaced, always with complete regeneration.</p>'],
+  hem: ['Haematopoietic cells', 'lab', '<h3>Haematopoietic cells — labile</h3><p>Keep proliferating throughout life (a 2020 review).</p>'],
+  lym: ['Lymphoid cells', 'lab', '<h3>Lymphoid cells — labile</h3><p>Keep proliferating throughout life (a 2020 review).</p>'],
+  endo: ['Endothelium', 'sta', '<h3>Vascular endothelial cells — stable</h3><p>Able to divide, but only when suitably stimulated (a 2020 review). In general, quiescent cells rest in a reversible G0 and can re-enter the cell cycle when stimulated (Wikipedia).</p>'],
+  fib: ['Fibroblasts', 'sta', '<h3>Fibroblasts — stable</h3><p>Divide when stimulated (a 2020 review) — the cells that make granulation tissue and scar.</p>'],
+  smc: ['Smooth muscle', 'sta', '<h3>Smooth muscle cells — stable</h3><p>Divide when stimulated (a 2020 review).</p>'],
+  chon: ['Chondrocytes, osteoblasts', 'sta', '<h3>Chondrocytes and osteoblasts — stable</h3><p>Divide when stimulated (a 2020 review). Bone healing: <a href="../../orthopaedics/trauma/fracture-principles.html#h-heal">orthopaedics</a>.</p>'],
+  neu: ['Neurons', 'per', '<h3>Nerve cells — permanent</h3><p>Cannot divide (a 2020 review): most adult neurons are terminally differentiated, in a permanent G0 (Wikipedia).</p>'],
+  car: ['Cardiac muscle', 'per', '<h3>Cardiac muscle — permanent</h3><p>Cannot divide (a 2020 review); after injury, cardiomyocytes are replaced by fibroblasts and a <b>scar</b> forms (a 2025 review).</p>'],
+  skm: ['Skeletal muscle', 'per', '<h3>Skeletal muscle — permanent</h3><p>Listed as permanent (static) by a 2020 review.</p>'],
+};
+const CELLS_NOTE = '<p class="note">The three classes and their examples follow one 2020 review (graft–tissue interfaces), the only one of our sources that names all three; the principle — regeneration only where labile or stable cells exist, scar elsewhere — is also in a 2025 review and Wikipedia. The liver regenerates by hepatocyte proliferation, restoring volume but not shape (Wikipedia).</p>';
+/* healing timeline: day stops; [day, label, phase, html] */
+const DAYS = [
+  [0, 'Day 0', 'Haemostasis', '<h3>Day 0 — haemostasis</h3><p>Immediately: <b>vasoconstriction</b>, platelet aggregation and a <b>fibrin clot</b> (a 2010 review; StatPearls). The fibrin(–fibronectin) plug is the wound\'s scaffold until collagen is laid down (Wikipedia; Wilkinson 2020). Platelets and the clot release growth factors — PDGF, TGF-β, FGF, EGF (the 2010 review; a 2020 report).</p>'],
+  [1, 'Day 1', 'Inflammation', '<h3>Day 1 — neutrophils</h3><p><b>Neutrophils</b> are the first cells in (2022 reviews; Wikipedia: within an hour, predominant for the first two days). Epithelial cells change within hours and start to <b>migrate</b> on day 1 or 2 (Wikipedia).</p>'],
+  [2, 'Day 2', 'Inflammation', '<h3>Day 2 — macrophages take over</h3><p>Neutrophils decline within a few days (Wilkinson 2020). Wikipedia: <b>macrophages</b> replace them as the main cells by two days; they clear debris and, especially on days 3–4, secrete growth factors. A 2021 review: by days 5–7 most wound macrophages are the M2 (repair) type.</p>'],
+  [3, 'Day 3', 'Proliferation', '<h3>Day 3 — proliferation begins</h3><p>The proliferative phase runs from about three days to two weeks (a 2020 report): <b>granulation tissue</b>, new vessels and re-epithelialisation (StatPearls; Wilkinson 2020). Wikipedia: fibroblasts enter from day 2–5; granulation tissue appears from day 2–5; <b>type III collagen</b> and fibronectin begin to be made from about 10 hours to 3 days.</p>'],
+  [7, 'Day 7', 'Proliferation', '<h3>Day 7 — fibroblasts</h3><p>By the end of the first week <b>fibroblasts</b> are the main cells (Wikipedia). In an open wound, <b>contraction</b> begins at about a week, when fibroblasts become <b>myofibroblasts</b> (Wikipedia; myofibroblasts cause contraction: a 2010 review; Wilkinson 2020).</p>'],
+  [14, 'Day 14', 'Proliferation → remodelling', '<h3>Day 14 — the end of proliferation</h3><p>The proliferative phase ends at about two weeks (a 2020 report); Wikipedia: fibroplasia ends at 2–4 weeks, collagen deposition peaks at 1–3 weeks.</p>'],
+  [21, 'Week 3', 'Remodelling', '<h3>Week 3 — remodelling</h3><p>Maturation starts when collagen production and breakdown balance (Wikipedia). Wikipedia: the scar has about <b>20%</b> of its tensile strength at three weeks.</p>'],
+  [90, 'Month 3', 'Remodelling', '<h3>Months — collagen III → I</h3><p><b>Type III collagen is replaced by type I</b>, increasing the tensile strength (Wilkinson 2020; a 2020 report; Wikipedia). Unneeded vessels regress and cells are removed by apoptosis; collagen realigns along tension lines (Wilkinson 2020; Wikipedia).</p>'],
+  [365, '1 year', 'Remodelling', '<h3>A year or more</h3><p>Remodelling lasts a year or longer (Wikipedia) — a mature type-I-rich scar forms years later (Wilkinson 2020; StatPearls: healing may take years). Wikipedia: about <b>80%</b> of the original strength at 12 months.</p>'],
+];
+const INT = {
+  first: ['First intention', 'Clean incision, edges brought together'],
+  second: ['Second intention', 'Tissue loss, edges apart'],
+};
+const INT_TABLE = [
+  ['Wound', 'Clean, without tissue loss; edges approximated — a surgical incision is the best example (StatPearls; Wikipedia)', 'Edges not approximated: tissue loss, or healing disrupted by infection, dehiscence, hypoxia or immune dysfunction (StatPearls; Wikipedia)'],
+  ['Granulation tissue', 'Little (Wikipedia)', 'Fills the wound from its base (StatPearls; Wikipedia)'],
+  ['Contraction', '—', 'Myofibroblasts pull the edges together (Wikipedia; a 2010 review; Wilkinson 2020)'],
+  ['Result', 'Faster, less scarring (Wikipedia)', 'More infections, poorer appearance, less strength (StatPearls)'],
+];
+const INT_NOTE = 'Tertiary intention (delayed primary closure): the wound is cleaned, debrided and observed, typically for 4 or 5 days, then closed (Wikipedia).';
+const GRAN_TEXT = '<p><b>Granulation tissue</b> is new connective tissue and small blood vessels that form on the surface of a wound (Wikipedia): proliferating <b>fibroblasts</b>, thin-walled new <b>capillaries</b>, inflammatory cells (macrophages, neutrophils) and myofibroblasts in a loose provisional matrix (Wikipedia; a 2010 review; Wilkinson 2020). The new capillaries give it its granular look (a 2020 review). An excess is called hypergranulation, "proud flesh" (Wikipedia; a 2010 review). Not to be confused with a <a href="inflammation.html#h-chr">granuloma</a>: Wikipedia notes that a pyogenic granuloma is in fact granulation tissue.</p>';
+/* growth factors: key -> [chip, html, source part, target part] */
+const GF = {
+  pdgf: ['PDGF', '<h3>PDGF (platelet-derived growth factor)</h3><p>Stored in platelet α-granules, also made by macrophages and endothelium (Wikipedia). A mitogen and chemoattractant for <b>fibroblasts</b> and smooth muscle (Wikipedia); it drives fibroblast migration and new vessels in granulation tissue (a 2020 report) and the repair of the injured vessel wall (Wilkinson 2020).</p>', 'plt', 'fib'],
+  vegf: ['VEGF', '<h3>VEGF (vascular endothelial growth factor)</h3><p>Made by cells short of oxygen, through HIF (Wikipedia; a 2010 review lists it among the cytokines made in hypoxia; a 2020 review: released by different cell types in hypoxic, slightly acidic tissue); it acts on <b>endothelial cells</b> to drive <b>angiogenesis</b> (Wikipedia; a 2020 review; a 2025 review) and increases permeability (Wikipedia).</p>', null, 'cap'],
+  fgf: ['FGF', '<h3>FGF (fibroblast growth factor)</h3><p>Released by inflammatory cells (a 2020 report, with PDGF). FGF-1 and FGF-2 stimulate <b>angiogenesis</b> and are important in wound healing (Wikipedia; 2020 and 2025 reviews). A 2010 review: an FGF made by skin T cells (FGF-7, keratinocyte growth factor) supports keratinocytes.</p>', 'mac', 'cap'],
+  tgfb: ['TGF-β', '<h3>TGF-β (transforming growth factor β)</h3><p>Makes fibroblasts proliferate and lay down collagen and turns them into contractile <b>myofibroblasts</b> (α-SMA) (a 2025 review; a 2023 review). Unregulated TGF-β signalling can lead to <b>fibrosis</b> (Wikipedia); the 2025 review counts TGF-β among the fibrosis-associated genes.</p>', 'mac', 'myo'],
+  egf: ['EGF', '<h3>EGF (epidermal growth factor)</h3><p>Released by platelets and the wound clot (a 2010 review; a 2020 report). Its target cells are not described by our sources.</p>', 'plt', null],
+};
+/* micrograph (Wikimedia Commons, CC0); labels from the uploader's description, placed with marks.py */
+const IMG_GT = {id: 'gt', file: 'img/granulation-tissue.jpg', w: 720, h: 492, title: 'Granulation tissue (oedematous)',
+  alt: 'H&E micrograph: pale, loose connective tissue with scattered round inflammatory cells and red cells; at left, a small blood vessel full of red cells surrounded by pink fibrous tissue and a cluster of dark round inflammatory cells',
+  cap: 'Oedematous granulation tissue after excision of a skin cancer (H&E). Sparse, loose connective tissue with an <b>inflammatory infiltrate</b> and <b>blood vessels</b> at left (uploader\'s description).',
+  labels: [[0.27, 0.42, 'blood vessel (red cells)'], [0.10, 0.78, 'inflammatory cells'], [0.75, 0.55, 'loose, oedematous connective tissue']],
+  credit: {file: 'Histopathology of edematous granulation tissue, high magnification.jpg', author: 'Mikael Häggström', lic: 'CC0', licUrl: 'http://creativecommons.org/publicdomain/zero/1.0/', done: 'resized; labels added (approximate)'}};
+const COL_TEXT = '<p><b>Collagen III → I.</b> Granulation tissue is first a network of weaker <b>type III</b> collagen, later replaced by stronger <b>type I</b>, as in scar tissue (Wikipedia; Wilkinson 2020; a 2020 report). The proportions in the bars are from one source (Wilkinson 2020). Collagen synthesis needs <b>vitamin C</b> for the hydroxylation of proline and lysine (a 2010 review; StatPearls).</p>';
+const FAC_TABLE = [
+  ['Local', 'Infection; oxygenation and ischaemia; foreign body; venous insufficiency (a 2010 review); moisture and mechanical factors (Wikipedia)'],
+  ['Systemic', 'Age; stress; diabetes; obesity; medication; alcohol; smoking; nutrition (a 2010 review; a 2025 review); sex hormones, and glucocorticoids, NSAIDs and chemotherapy among medications (a 2010 review); immunosuppression (Wikipedia)'],
+];
+const FAC_TEXT = '<ul><li><b>Glucocorticoids</b>: wounds heal with incomplete granulation tissue and less contraction (a 2010 review); delayed wound healing is a listed side effect (Wikipedia).</li><li><b>Vitamin C</b> deficiency: less collagen synthesis and fibroblast proliferation, less angiogenesis, fragile capillaries, more infection (a 2010 review); <b>scurvy</b> produces weak connective tissue and poor wound healing (StatPearls).</li><li><b>NSAIDs</b>: the 2010 review finds little evidence that short-term use harms healing; whether long-term use does is open. <b>Chemotherapy</b> delays cell migration into the wound, lowers collagen production, impairs fibroblasts and inhibits contraction (the 2010 review).</li><li><b>Zinc</b>: a cofactor of RNA and DNA polymerase; deficiency significantly impairs healing (a 2010 review).</li><li><b>Smoking</b> delays healing (a 2010 review; a 2025 review), with more infection, wound rupture and lower tensile strength (the 2010 review).</li><li><b>Age</b>: Wikipedia names age over 60 as a risk factor.</li></ul>';
+/* scars: key -> [chip, html] */
+const SCAR = {
+  hyp: ['Hypertrophic scar', '<h3>Hypertrophic scar</h3><p>Raised, firm, excess collagen (StatPearls; Wikipedia) — but <b>confined to the original wound</b> (StatPearls; Wikipedia; a 2021 review). It may <b>regress</b> over time (StatPearls; Wikipedia: fades over one to two years). Typically after burns or injury reaching the deep dermis (Wikipedia; a 2017 review on burns); mechanical tension is a cause (Wikipedia; the 2021 review). Only hypertrophic scars are associated with <b>contracture</b> (the 2021 review; Wikipedia: may restrict movement near a joint).</p>'],
+  kel: ['Keloid', '<h3>Keloid</h3><p>Raised, firm, excess collagen that <b>extends beyond the borders</b> of the original wound and <b>does not regress</b> (StatPearls; the 2021 review). Genetic and environmental factors (StatPearls; a 2017 review); commoner in darker-skinned people — of African, Asian and Hispanic descent (StatPearls; Wikipedia). Histology: thick, hyalinised, eosinophilic <b>"keloidal collagen"</b> bundles (StatPearls; the 2017 review; the 2021 review).</p>'],
+};
+const SCAR_TABLE = [
+  ['Extent', 'Within the original wound', 'Beyond the wound margins'],
+  ['Course', 'May regress (fades over 1–2 years, Wikipedia)', 'Does not regress'],
+  ['Contracture', 'Associated (2021 review)', 'Not associated (2021 review)'],
+  ['Collagen', 'Wavy, regular pattern (StatPearls)', 'Keloidal collagen: thick hyalinised bundles; no distinct pattern (StatPearls; 2017 review)'],
+  ['Who', 'After burns, deep dermal injury; tension (Wikipedia; 2017, 2021 reviews)', 'Genetic factors (StatPearls; 2017 review); darker skin (StatPearls; Wikipedia)'],
+];
+const COMP_TEXT = '<p>Both scars arise from chronic inflammation in the reticular dermis (a 2017 review) after injuries such as trauma, burns, surgery, piercing and acne (the 2017 review; Wikipedia).</p><p><b>Sources differ at the edges.</b> Wikipedia warns that the within/beyond-the-wound distinction can cause confusion, and a 2021 review cites the proposal that hypertrophic scars and keloids may be successive stages of one process. On contracture, the 2021 review says it is not seen with keloids, while Wikipedia\'s keloid article says a keloid over a joint can limit mobility.</p><p><b>Contracture.</b> Where repair is incomplete, the scar contracts, with deformity and loss of flexibility (Wikipedia); contractures reduce joint mobility (a 2021 review), and skin grafts, which do not expand, tend to cause them (a 2017 review).</p><p><b>Dehiscence</b> is the partial or complete separation of wound edges that had been brought together (StatPearls); Wikipedia: rupture of the wound from inadequate granulation tissue. StatPearls: its causes are those of poor healing — ischaemia, infection, raised abdominal pressure, diabetes, malnutrition, smoking and obesity — and complete abdominal dehiscence can lead to <b>evisceration</b>.</p>';
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts: wound-healing phases, physiology of wound healing, granulation tissue, keloid, hypertrophic scarring and keloids, wound dehiscence, collagen synthesis, vitamin C); open-access reviews (NCBI PMC): factors affecting wound healing (Guo and DiPietro 2010), wound healing — cellular mechanisms and outcomes (Wilkinson and Hardman 2020), graft–tissue interfaces (2020), closed-incision negative-pressure therapy (a 2020 report), dental pulp stem cells in tissue repair (2025), wound macrophages (2021, 2022), the inflammatory wound microenvironment (2022), myofibroblasts (2021), prostaglandins and cytokines (2023), hypertrophic scars and keloids (2017, 2021); Wikipedia.';
+const MODELS = '<b>Models used:</b> every drawing is schematic, not to scale. In the wound drawing the timing of the changes follows the captions only roughly (for example, how fast the epithelium covers each wound is illustrative); the day stops are a selection; micrograph: Wikimedia Commons, credited under the image; sutures are drawn only in the first week (when they are removed is not from our sources).';
+
+/* ===================== CODE ===================== */
+const {$} = Patho;
+const T = (x, y, t, cls, a, extra) => Patho.T(x, y, String(t).replace(/-(?=\d)/g, '‑'), cls, a, extra);
+const f1 = v => (+v).toFixed(1);
+const clamp = v => Math.max(0, Math.min(1, v));
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+function labs(items) { let s = ''; for (const [t, x, y, tx, ty, a] of items) { if (tx != null) s += `<path class="lead" d="M${a === 'end' ? x + 3 : a === 'middle' ? x : x - 3} ${y - 4} L${tx} ${ty}"/>`; s += T(x, y, t, 'l', a || 'start'); } return s; }
+const neut = (x, y, r = 6) => `<circle cx="${f1(x)}" cy="${f1(y)}" r="${r}" class="wbc"/>` + [[-0.35, -0.1], [0, 0.2], [0.35, -0.1]].map(([dx, dy]) => `<circle cx="${f1(x + dx * r)}" cy="${f1(y + dy * r)}" r="${f1(r * 0.27)}" style="fill:var(--nucleus)"/>`).join('');
+const mac = (x, y, r = 8) => `<path d="M${f1(x - r)} ${f1(y)} q${f1(r * 0.3)} ${f1(-r)} ${f1(r)} ${f1(-r * 0.9)} q${f1(r)} ${f1(-0.1 * r)} ${f1(r)} ${f1(r * 0.9)} q${f1(-r * 0.2)} ${f1(r)} ${f1(-r)} ${f1(r * 0.9)} q${f1(-r)} ${f1(-0.1 * r)} ${f1(-r)} ${f1(-r * 0.9)} z" style="fill:var(--cyto);stroke:var(--ink);stroke-width:.9"/><ellipse cx="${f1(x - r * 0.1)}" cy="${f1(y)}" rx="${f1(r * 0.4)}" ry="${f1(r * 0.3)}" style="fill:var(--nucleus)"/>`;
+const fib = (x, y, a = 0, on = false) => `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(a)})"><path d="M-14 0 Q0 -5 14 0 Q0 5 -14 0 Z" style="fill:var(--cyto);stroke:var(--ink);stroke-width:${on ? 2.2 : .8}"/><ellipse rx="5" ry="1.8" style="fill:var(--nucleus)"/></g>`;
+
+/* ---- regeneration: three classes ---- */
+$('regen-text').innerHTML = REGEN_TEXT;
+function drawCells(k) {
+  const cls = CELLS[k][1], COL = {lab: [90, 'Labile', 'keep dividing'], sta: [270, 'Stable', 'divide when stimulated'], per: [450, 'Permanent', 'cannot divide']};
+  let s = Patho.arrowDef('ai', 'var(--ink)');
+  for (const [kk, [x, name, sub]] of Object.entries(COL)) {
+    const on = kk === cls;
+    s += `<rect x="${x - 84}" y="8" width="168" height="194" rx="8" class="${on ? 'nodeon' : 'node'}"/>` + T(x, 30, name, on ? 'b' : '', 'middle') + T(x, 46, sub, 's', 'middle');
+    if (kk === 'lab') { s += `<circle cx="${x}" cy="84" r="16" style="fill:var(--cyto);stroke:var(--ink)"/><circle cx="${x}" cy="84" r="6" style="fill:var(--nucleus)"/><path d="M${x - 8} 102 L${x - 26} 124 M${x + 8} 102 L${x + 26} 124" style="stroke:var(--ink);stroke-width:1.4" marker-end="url(#ai)"/>` + [x - 32, x + 32].map(cx => `<circle cx="${cx}" cy="140" r="13" style="fill:var(--cyto);stroke:var(--ink)"/><circle cx="${cx}" cy="140" r="5" style="fill:var(--nucleus)"/>`).join(''); }
+    if (kk === 'sta') { s += `<circle cx="${x}" cy="100" r="16" style="fill:var(--cyto);stroke:var(--ink)"/><circle cx="${x}" cy="100" r="6" style="fill:var(--nucleus)"/>` + T(x, 74, 'resting in G0', 's', 'middle') + `<path d="M${x + 20} 100 L${x + 50} 100" style="stroke:var(--ink);stroke-width:1.4;stroke-dasharray:4 3" marker-end="url(#ai)"/>` + T(x, 140, 'stimulus → divides', 's', 'middle'); }
+    if (kk === 'per') { s += `<circle cx="${x}" cy="100" r="16" style="fill:var(--cyto);stroke:var(--ink)"/><circle cx="${x}" cy="100" r="6" style="fill:var(--nucleus)"/><path d="M${x + 16} 94 L${x + 50} 76 M${x + 16} 106 L${x + 48} 126 M${x - 16} 100 L${x - 50} 100" style="stroke:var(--ink);stroke-width:1.6"/>` + `<path d="M${x - 10} 140 l20 20 m0 -20 l-20 20" style="stroke:var(--ink);stroke-width:2.4"/>` + T(x, 180, 'lost cells → scar', 's', 'middle'); }
+    if (kk === 'lab') s += T(x, 180, 'injury → regeneration', 's', 'middle');
+    if (kk === 'sta') s += T(x, 180, 'regeneration possible', 's', 'middle');
+  }
+  s += T(536, 220, 'schematic', 's', 'end');
+  $('cell-svg').innerHTML = s; $('cell-find').innerHTML = CELLS[k][2] + CELLS_NOTE;
+}
+Patho.toggles('cell-tg', Object.entries(CELLS).map(([k, v]) => [k, v[0]]), drawCells, 'epi'); drawCells('epi');
+
+/* ---- wound healing: first vs second intention ---- */
+const W = {i: 0, mode: 'first'};
+function drawWound() {
+  const [day, , phase] = DAYS[W.i], second = W.mode === 'second';
+  const t = d => clamp(d);
+  const contr = second ? clamp((day - 5) / 30) : 0;         /* contraction from ~1 week (open wounds) */
+  const half = second ? 120 * (1 - 0.45 * contr) : 8;       /* half-width of the defect */
+  const cx = 280, top = 50, epiH = 16, derm = 120, depth = second ? 110 : 96;
+  let s = '';
+  // tissue layers
+  s += `<rect x="10" y="${top}" width="540" height="${epiH}" style="fill:var(--skin);stroke:var(--ink);stroke-width:.8"/>`;
+  s += `<rect x="10" y="${top + epiH}" width="540" height="${derm}" style="fill:var(--collagen);fill-opacity:.35"/>`;
+  s += `<rect x="10" y="${top + epiH + derm}" width="540" height="${270 - top - epiH - derm - 14}" style="fill:var(--fat);fill-opacity:.7"/>`;
+  // the defect
+  const x0 = cx - half, x1 = cx + half, yb = top + depth;
+  const hole = `M${f1(x0)} ${top} L${f1(x0 + (second ? 26 : 2))} ${yb} L${f1(x1 - (second ? 26 : 2))} ${yb} L${f1(x1)} ${top} Z`;
+  s += `<path d="${hole}" style="fill:var(--surface);stroke:var(--ink);stroke-width:1"/>`;
+  const wallL = y => x0 + (second ? 26 : 2) * (y - top) / depth + 2, wallR = y => x1 - (second ? 26 : 2) * (y - top) / depth - 2;
+  // fill: clot (early) -> granulation (from day 3) -> scar (from week 3)
+  const clotA = day <= 2 ? 1 : day <= 7 ? 0.5 : 0, granA = day >= 3 && day < 90 ? (day >= 21 ? 0.5 : 1) : 0, scarA = day >= 21 ? (day >= 90 ? 1 : 0.6) : 0;
+  const granTop = second ? yb - (yb - top - 6) * clamp((day - 2) / 12) : top + 4;
+  if (clotA) s += `<path d="${hole}" style="fill:var(--clot);fill-opacity:${(0.75 * clotA).toFixed(2)}"/>`;
+  if (granA) { s += `<path d="M${f1(wallL(granTop))} ${f1(granTop)} L${f1(wallL(yb - 1))} ${yb - 1} L${f1(wallR(yb - 1))} ${yb - 1} L${f1(wallR(granTop))} ${f1(granTop)} Z" style="fill:var(--collagen);fill-opacity:${(0.6 * granA).toFixed(2)}"/>`;
+    if (second) for (let x = wallL(yb) + 10; x < wallR(yb) - 22; x += 44) { const d = `M${f1(x)} ${yb} Q${f1(x + 6)} ${f1(Math.max(granTop + 6, top + 10))} ${f1(x + 12)} ${yb}`; s += `<path d="${d}" style="fill:none;stroke:var(--ink);stroke-width:3.4"/><path d="${d}" style="fill:none;stroke:var(--surface);stroke-width:1.6"/>`; } }
+  if (scarA) s += `<path d="M${f1(x0 + 3)} ${top + 2} L${f1(x0 + (second ? 27 : 3))} ${yb - 1} L${f1(x1 - (second ? 27 : 3))} ${yb - 1} L${f1(x1 - 3)} ${top + 2} Z" style="fill:var(--collagen);fill-opacity:${(0.85 * scarA).toFixed(2)};stroke:var(--ink);stroke-width:.6;stroke-dasharray:3 2"/>`;
+  // cells: neutrophils day 1, macrophages day 2-7, fibroblasts day 3+
+  const pts = n => Array.from({length: n}, (_, i) => { const y = top + 22 + ((i * 23) % Math.max(10, depth - 34)), x = x0 + 10 + ((i * 37) % Math.max(10, 2 * half - 20)); return [Math.min(Math.max(x, wallL(y) + 10), wallR(y) - 10), y]; });
+  if (day === 1) for (const [x, y] of pts(second ? 10 : 3)) s += neut(Math.min(Math.max(x, x0 + 8), x1 - 8), y, second ? 6 : 4);
+  if (day >= 2 && day <= 7) for (const [x, y] of pts(second ? 6 : 2)) s += mac(Math.min(Math.max(x, x0 + 10), x1 - 10), y, second ? 8 : 5);
+  if (day >= 3 && day <= 21 && second) for (const [x, y] of pts(day >= 7 ? 9 : 4).map(([x, y]) => [x + 9, y + 9])) s += fib(Math.min(x, wallR(y) - 16), Math.min(y, yb - 8), (x * 7) % 40 - 20);
+  if (day >= 3 && day <= 21 && !second) s += fib(cx, top + 50, 90) ;
+  // epithelium: migrates from the edges from day 1 (coverage illustrative)
+  const cover = second ? clamp((day - 1) / 20) : clamp((day - 1) / 4);
+  if (day >= 1) for (const sd of [-1, 1]) { const ex = sd < 0 ? x0 : x1, len = half * cover; s += `<path d="M${f1(ex)} ${top + 3} L${f1(ex - sd * len)} ${top + 3}" style="stroke:var(--skin);stroke-width:6;stroke-linecap:round"/><path d="M${f1(ex)} ${top + 6} L${f1(ex - sd * len)} ${top + 6}" style="stroke:var(--ink);stroke-width:.8;fill:none"/>`; }
+  // sutures (first intention)
+  if (!second && day <= 7) for (const x of [cx - 60, cx, cx + 60]) s += `<path d="M${x - 14} ${top - 2} C${x - 14} ${top + 30} ${x + 14} ${top + 30} ${x + 14} ${top - 2} C${x + 10} ${top - 14} ${x - 10} ${top - 14} ${x - 14} ${top - 2}" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>`;
+  // contraction arrows
+  if (second && contr > 0 && day <= 21) for (const sd of [-1, 1]) s += `<path d="M${f1(cx + sd * (half + 70))} 30 L${f1(cx + sd * (half + 22))} 30" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#ai)"/>`;
+  s = Patho.arrowDef('ai', 'var(--ink)') + s;
+  // labels
+  const L = [['epidermis', 14, 44, null, null, 'start'], ['dermis', 14, top + epiH + 18, null, null, 'start'], ['fat', 14, 250, null, null, 'start']];
+  if (clotA === 1) L.push(['fibrin clot', 548, 44, cx + Math.min(half, 40), top + 20, 'end']);
+  if (day === 1) L.push(['neutrophils', 548, 150, cx + Math.min(half - 10, 30), top + 40, 'end']);
+  if (day >= 2 && day <= 7) L.push(['macrophages', 548, 150, cx + Math.min(half - 12, 20), top + 46, 'end']);
+  if (granA === 1 && second) L.push(['granulation tissue', 14, 150, wallL(Math.max(granTop + 12, top + 14)) + 20, Math.max(granTop + 12, top + 14), 'start']);
+  if (day >= 3 && day <= 21) L.push(['fibroblasts', 548, 172, second ? cx + 30 : cx + 12, second ? yb - 20 : top + 52, 'end']);
+  if (scarA) L.push(['scar (collagen)', 548, 44, cx + Math.min(half, 40) - 6, top + 30, 'end']);
+  if (day >= 1 && cover < 1) L.push(['new epithelium', 300, 20, x0 + half * cover * 0.5, top, 'start']);
+  if (!second && day <= 7) L.push(['sutures', 150, 20, cx - 60, top - 10, 'end']);
+  if (second && contr > 0 && day <= 21) L.push(['contraction', cx, 42, null, null, 'middle']);
+  s += labs(L) + T(552, 266, 'schematic', 's', 'end');
+  $('wound-svg').innerHTML = s;
+  $('day-out').innerHTML = `<span><span class="tag">Time</span> <span class="readout">${DAYS[W.i][1]}</span></span><span><span class="tag">Phase</span> <span class="readout">${phase}</span></span>`;
+  $('day-find').innerHTML = DAYS[W.i][3] + (second && day >= 3 && day < 21 ? '<p><b>Second intention:</b> granulation tissue fills the defect from its base and the epithelium grows over it (StatPearls; Wikipedia).</p>' : '');
+}
+Patho.toggles('int-tg', Object.entries(INT).map(([k, v]) => [k, `${v[0]}: ${v[1]}`]), k => { W.mode = k; drawWound(); }, 'first');
+Patho.slider('day-sl', {id: 'day', label: 'Time since wounding (day stops)', min: 0, max: DAYS.length - 1, step: 1, value: 0, fmt: v => DAYS[v][1]}, v => { W.i = v; drawWound(); }).init();
+Patho.key('wound-key', [['--skin', 'epidermis'], ['--collagen', 'dermis, granulation tissue, scar'], ['--clot', 'fibrin clot'], ['--surface', 'new capillaries (ink outline)', 'border:1.6px solid var(--ink)'], ['--fat', 'subcutaneous fat']]);
+Patho.table('int-table', ['', 'First (primary) intention', 'Second (secondary) intention'], INT_TABLE);
+$('int-table').insertAdjacentHTML('afterend', `<p class="note">${INT_NOTE}</p>`);
+drawWound();
+
+/* ---- granulation tissue and growth factors ---- */
+$('gran-text').innerHTML = GRAN_TEXT;
+function drawGran(k) {
+  const [, , src, tgt] = GF[k];
+  let s = Patho.arrowDef('ai', 'var(--ink)');
+  s += `<rect x="10" y="40" width="520" height="190" style="fill:var(--collagen);fill-opacity:.25"/>`;
+  s += `<path d="M10 40 L530 40" style="stroke:var(--ink);stroke-width:1;stroke-dasharray:5 3"/>` + T(14, 32, 'wound surface', 's', 'start');
+  // capillary loops
+  for (const x of [70, 190, 310, 430]) { const on = tgt === 'cap', d = `M${x} 230 L${x} 80 Q${x + 18} 54 ${x + 36} 80 L${x + 36} 230`; s += `<path d="${d}" style="fill:none;stroke:var(--ink);stroke-width:${on ? 9 : 7}"/><path d="${d}" style="fill:none;stroke:var(--surface);stroke-width:${on ? 5 : 4.6}"/>`; for (const y of [120, 170, 210]) s += `<ellipse cx="${x}" cy="${y}" rx="1.8" ry="3" style="fill:var(--rbc)"/><ellipse cx="${x + 36}" cy="${y - 20}" rx="1.8" ry="3" style="fill:var(--rbc)"/>`; }
+  // fibroblasts, myofibroblasts, macrophages, platelets (in the clot remnant at the surface)
+  [[140, 120, 20], [260, 160, -15], [380, 110, 10], [500, 170, -30], [140, 200, 5]].forEach(([x, y, a]) => { s += fib(x, y, a, tgt === 'fib'); });
+  [[250, 100, 0], [370, 200, 15]].forEach(([x, y, a]) => { s += `<g transform="translate(${x} ${y}) rotate(${a})"><path d="M-16 0 Q0 -7 16 0 Q0 7 -16 0 Z" style="fill:var(--cyto);stroke:var(--ink);stroke-width:${tgt === 'myo' ? 2.4 : .9}"/><path d="M-12 -1 L12 -1 M-12 1.5 L12 1.5" style="stroke:var(--ink);stroke-width:.6"/><ellipse rx="5" ry="1.8" style="fill:var(--nucleus)"/></g>`; });
+  for (const [x, y] of [[480, 100], [120, 160], [470, 220]]) { s += mac(x, y, 10); if (src === 'mac') s += `<circle cx="${x}" cy="${y}" r="16" style="fill:none;stroke:var(--ink);stroke-width:2.2"/>`; }
+  for (const [x, y] of [[300, 52], [320, 58], [340, 50]]) s += `<circle cx="${x}" cy="${y}" r="3.5" style="fill:var(--surface);stroke:var(--ink);stroke-width:${src === 'plt' ? 2 : .8}"/>`;
+  const L = [['new capillaries', 14, 254, 70, 232, 'start'], ['fibroblasts', 196, 254, 140, 210, 'start'], ['myofibroblast', 330, 254, 370, 210, 'start'], ['macrophage', 526, 254, 482, 238, 'end'], ['platelets (clot remnant)', 150, 22, 300, 48, 'start']];
+  s += labs(L) + T(526, 32, 'schematic', 's', 'end');
+  $('gran-svg').innerHTML = s; $('gf-find').innerHTML = GF[k][1];
+}
+Patho.toggles('gf-tg', Object.entries(GF).map(([k, v]) => [k, v[0]]), drawGran, 'pdgf'); drawGran('pdgf');
+/* collagen bars (Wilkinson 2020, PMC7536089: skin ~80% I : 10% III; granulation ~30% III, 10% I) */
+(function () {
+  const R = [['Normal adult skin', 80, 10], ['Granulation tissue', 10, 30]], X = Patho.scale(0, 100, 170, 520);
+  let s = '';
+  R.forEach(([n, i1, i3], r) => { const y = 34 + r * 54; s += T(10, y + 16, n, 'b', 'start'); s += `<rect x="170" y="${y}" width="${f1(X(i1) - 170)}" height="18" style="fill:var(--collagen)"/>` + (i1 > 50 ? T(X(i1) - 6, y + 14, `type I ≈ ${i1}%`, 'm l', 'end') : T(X(i1) + 6, y + 14, `type I ≈ ${i1}%`, 'm', 'start')); s += `<rect x="170" y="${y + 22}" width="${f1(X(i3) - 170)}" height="12" style="fill:var(--collagen);fill-opacity:.45;stroke:var(--ink);stroke-width:.6"/>` + T(X(i3) + 6, y + 33, `type III ≈ ${i3}%`, 'm', 'start'); });
+  s += `<path class="axis" d="M170 140 L520 140"/>` + T(170, 156, '0', 's', 'middle') + T(520, 156, '100% of collagen', 's', 'end');
+  $('col-svg').innerHTML = s;
+})();
+$('col-text').innerHTML = COL_TEXT;
+Patho.micro('gran-micro', Object.assign({}, IMG_GT, {credit: Patho.credit(IMG_GT.credit)}));
+
+/* ---- factors ---- */
+Patho.table('fac-table', ['', 'Factors'], FAC_TABLE); $('fac-text').innerHTML = FAC_TEXT;
+
+/* ---- scars ---- */
+function drawScar(k) {
+  let s = '';
+  s += `<rect x="10" y="80" width="520" height="22" style="fill:var(--skin);stroke:var(--ink);stroke-width:.8"/><rect x="10" y="102" width="520" height="90" style="fill:var(--collagen);fill-opacity:.3"/>`;
+  const w = k === 'kel' ? 190 : 70, h = k === 'kel' ? 58 : 34, cx = 270;
+  s += `<path d="M${cx - w} 80 C${cx - w * 0.7} ${80 - h} ${cx + w * 0.7} ${80 - h} ${cx + w} 80 L${cx + w} 140 L${cx - w} 140 Z" style="fill:var(--collagen);stroke:var(--ink);stroke-width:1.2"/>`;
+  if (k === 'kel') for (let i = 0; i < 8; i++) s += `<path d="M${cx - w + 30 + i * 42} ${96 + (i % 3) * 12} q16 10 30 -2" style="fill:none;stroke:var(--ink);stroke-width:3;stroke-opacity:.5"/>`;
+  else for (let i = 0; i < 6; i++) s += `<path d="M${cx - 60} ${60 + i * 13} q30 -6 60 0 q30 6 60 0" style="fill:none;stroke:var(--ink);stroke-width:1;stroke-opacity:.6"/>`;
+  s += `<path d="M${cx - 70} 74 L${cx - 70} 150 M${cx + 70} 74 L${cx + 70} 150" style="stroke:var(--ink);stroke-width:1.6;stroke-dasharray:5 4"/>`;
+  s += labs([['original wound margins', cx, 168, null, null, 'middle'], [k === 'kel' ? 'keloid: beyond the margins' : 'hypertrophic scar: within the margins', cx, 20, null, null, 'middle'], [k === 'kel' ? 'thick hyalinised bundles' : 'wavy, regular collagen', 526, 184, cx + (k === 'kel' ? 110 : 50), k === 'kel' ? 110 : 90, 'end']]);
+  s += T(526, 14, 'schematic', 's', 'end');
+  $('scar-svg').innerHTML = s; $('scar-find').innerHTML = SCAR[k][1];
+}
+Patho.toggles('scar-tg', Object.entries(SCAR).map(([k, v]) => [k, v[0]]), drawScar, 'hyp'); drawScar('hyp');
+Patho.table('scar-table', ['', 'Hypertrophic scar', 'Keloid'], SCAR_TABLE); $('comp-text').innerHTML = COMP_TEXT;
+Patho.swipeHints();
+</script>
+</body>
+</html>

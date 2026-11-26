@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Inflammation: Acute and Chronic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/path.css">
+<style>
+/* Page tokens reused from other subjects with the same values and meanings (no new colours): --skin (skin; orthopaedics/assets/ortho.css),
+   --clot (fibrin, a clot; physiology/assets/phys.css), --pus (pus, an abscess; anatomy/abdomen-pelvis/organs.html). path.css tokens with their meanings: --cyto, --nucleus, --fluid (exudate / oedema fluid), --eosin (caseous debris, eosinophil granules), --collagen
+   (fibrous tissue, scar, serous membranes), --rbc (red cells), --artery (arteriolar wall). Molecules, enzymes and drugs are ink glyphs with labels; the
+   selected step or item gets a thicker ink outline, not a colour. */
+:root{--skin:#f1d3bf;--clot:#541244;--pus:#cfd08a}
+:root[data-theme="dark"]{--skin:#7a5a48;--clot:#bd2898;--pus:#7a7b3c}
+svg.sch .node{fill:var(--surface);stroke:var(--muted);stroke-width:1.2}
+svg.sch .nodeon{fill:var(--surface);stroke:var(--ink);stroke-width:2.6}
+svg.sch .dim{opacity:.35}
+svg.sch .wbc{fill:var(--surface);stroke:var(--ink);stroke-width:1.4}
+svg.sch .endo{fill:var(--cyto);stroke:var(--ink);stroke-width:.8}
+table.t tr.sel td{background:var(--bg)}
+table.t tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+td.ok{text-align:center;font-weight:600}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+@media (max-width:600px){#med-table td:empty{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Pathology</a> <span class="muted">· Module 02: <span aria-current="page">Inflammation</span> · <a href="healing-repair.html">Healing and repair</a></span></nav>
+
+<header class="stack">
+  <h1>Inflammation: Signs, Vascular and Cellular Events, Mediators, Chronic and Granulomatous Inflammation</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-signs">Cardinal signs</a> <a href="#h-vasc">Vascular events</a> <a href="#h-cell">Leucocyte extravasation</a> <a href="#h-med">Mediators</a> <a href="#h-out">Outcomes</a> <a href="#h-chr">Chronic and granulomatous</a> <a href="#h-pat">Patterns</a> <a href="#h-sys">Systemic effects</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-def">
+  <h2 id="h-def">Acute and chronic inflammation</h2>
+  <div class="scroll"><table id="def-table"></table></div>
+  <div class="prose" id="def-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-signs">
+  <h2 id="h-signs">The cardinal signs</h2>
+  <div class="chips" id="sign-tg" aria-label="Cardinal sign"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="sign-svg" viewBox="0 0 540 230" role="img" aria-label="Schematic section of inflamed skin: a dilated vessel, fluid leaking into the tissue and a nerve ending; the chosen sign is outlined"></svg></div>
+    <div class="prose find" id="sign-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="sign-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-vasc">
+  <h2 id="h-vasc">Vascular events, step by step</h2>
+  <div class="step" id="vasc-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="vasc-svg" viewBox="0 0 600 250" role="img" aria-label="Schematic microcirculation: an arteriole, capillaries and a postcapillary venule in tissue, changing step by step"></svg></div>
+    <div class="prose find" id="vasc-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="vasc-key"></div>
+  <div class="scroll"><table id="ex-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cell">
+  <h2 id="h-cell">Leucocyte extravasation, step by step</h2>
+  <div class="step" id="cell-step"></div>
+  <div class="chips" id="def-tg" aria-label="Inherited defect"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="cell-svg" viewBox="0 0 600 280" role="img" aria-label="Schematic venule: a neutrophil marginates, rolls on selectins, adheres by integrins, crosses the endothelium, follows a chemical gradient and eats a bacterium"></svg></div>
+    <div class="prose find" id="cell-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="defect-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-med">
+  <h2 id="h-med">Chemical mediators: pick one</h2>
+  <div class="chips" id="med-tg" aria-label="Mediator"></div>
+  <div class="chips" id="drug-tg" aria-label="Drug"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="med-svg" viewBox="0 0 600 300" role="img" aria-label="Schematic arachidonic-acid pathways: phospholipase A2, the cyclooxygenase products and the lipoxygenase products, with the drugs that block each step"></svg></div>
+    <div class="prose find" id="med-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="med-table"></table></div>
+  <div class="prose" id="med-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-out">
+  <h2 id="h-out">Outcomes of acute inflammation</h2>
+  <div class="chips" id="out-tg" aria-label="Outcome"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="out-svg" viewBox="0 0 540 190" role="img" aria-label="Schematic flow from acute inflammation to its four outcomes"></svg></div>
+    <div class="prose find" id="out-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-chr">
+  <h2 id="h-chr">Chronic inflammation and the granuloma</h2>
+  <div class="prose" id="chr-text"></div>
+  <div class="chips" id="gr-tg" aria-label="Granuloma type"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="gr-svg" viewBox="0 0 520 284" role="img" aria-label="Schematic granuloma: epithelioid macrophages, giant cells and a rim of lymphocytes around a caseous, non-caseous or foreign-body centre"></svg></div>
+    <div class="prose find" id="gr-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="gr-table"></table></div>
+  <div class="two" id="gr-micro"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pat">
+  <h2 id="h-pat">Morphological patterns</h2>
+  <div class="chips" id="pat-tg" aria-label="Pattern"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pat-svg" viewBox="0 0 520 236" role="img" aria-label="Schematic of the chosen pattern of acute inflammation"></svg></div>
+    <div class="prose find" id="pat-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sys">
+  <h2 id="h-sys">Systemic effects: fever, acute-phase proteins, the white count</h2>
+  <div class="step" id="fev-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="fev-svg" viewBox="0 0 600 170" role="img" aria-label="Schematic fever pathway: pyrogen, cytokines, prostaglandin E2 in the brain, raised hypothalamic set point; NSAIDs block prostaglandin synthesis"></svg></div>
+    <div class="prose find" id="fev-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="apr-text"></div>
+  <div class="chips" id="wbc-tg" aria-label="White-count pattern"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="wbc-svg" viewBox="0 0 520 150" role="img" aria-label="Schematic band and segmented neutrophils; the chosen white-count pattern"></svg></div>
+    <div class="prose find" id="wbc-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<p class="muted" id="skill-note"></p>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BInflammation%3A%20Signs%2C%20Vascular%20and%20Cellular%20Events%2C%20Mediators%2C%20Chronic%20and%20Granulomatous%20Inflammation%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fpathology%2Fgeneral%2Finflammation.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/path.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-p02.md, Part A; pathology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Point at each cardinal sign on inflamed tissue, step through the vascular changes and a neutrophil\'s journey out of a venule (and see where leucocyte adhesion deficiency and Chédiak–Higashi syndrome break it), pick a mediator to see what it does and which drug blocks its pathway, then build a granuloma and follow a pyrogen to a fever. Necrosis, including caseous necrosis, is in <a href="cell-injury-death.html#h-nec">Module 01</a>; complement and innate immunity in <a href="../../physiology/blood/immunity.html#h-comp">physiology</a>; healing on the <a href="healing-repair.html">next page</a>.';
+const DEF_TABLE = [
+  ['Onset and course', 'Within minutes or hours; lasts days; begins to cease once the stimulus is removed (Wikipedia; StatPearls)', 'Months to years (StatPearls)'],
+  ['Main cells', 'Neutrophils (granulocytes) (Wikipedia)', 'Macrophages, lymphocytes, plasma cells (StatPearls, as cited by Wikipedia)'],
+  ['Examples', 'Cellulitis, acute pneumonia (StatPearls)', 'Tuberculosis, sarcoidosis, leprosy — the granulomas below'],
+];
+const DEF_TEXT = '<p>Inflammation began as a clinical term for its signs, and is now understood as a set of changing responses to tissue injury — toxic chemicals, trauma, infection (StatPearls). <b>Acute</b> inflammation follows trauma, microbial invasion or noxious compounds and is quick and short; <b>chronic</b> inflammation is slow and long-term (StatPearls; Wikipedia). StatPearls calls the 2–6 weeks between them <b>subacute</b>.</p>';
+/* cardinal signs: key -> [chip, html, highlighted part] */
+const SIGN = {
+  rubor: ['Rubor (redness)', '<h3>Rubor — redness</h3><p><b>Vasodilation</b> and the increased blood flow it brings cause the redness (Wikipedia; a 2022 review: rubor from vasodilation). PGE2 adds to arterial dilatation (a 2011 review).</p>', 'vessel'],
+  calor: ['Calor (heat)', '<h3>Calor — heat</h3><p>The same increased blood flow causes the heat (Wikipedia); the 2022 review puts calor down to hyperaemia.</p>', 'heat'],
+  tumor: ['Tumor (swelling)', '<h3>Tumor — swelling</h3><p>Leaky vessels let <b>plasma proteins and fluid</b> out into the tissue: oedema, felt as swelling (Wikipedia; the 2022 review: tumor from exudation). PGE2 increases microvascular permeability (a 2011 review).</p>', 'fluid'],
+  dolor: ['Dolor (pain)', '<h3>Dolor — pain</h3><p>Mediators such as <b>bradykinin</b>, histamine and <b>PGE2</b> act on sensory nerve endings and make them more sensitive (hyperalgesia) (Wikipedia; a 2011 review on PGE2; the 2022 review adds local tension).</p>', 'nerve'],
+  functio: ['Functio laesa (loss of function)', '<h3>Functio laesa — loss of function</h3><p>The fifth sign. Wikipedia: probably a neurological reflex in response to pain; the 2022 review: from loss of mobility or fibroplasia. The 2022 review also notes that all five signs are rarely present together.</p>', 'func'],
+};
+const SIGN_TEXT = '<p><b>Who named them.</b> The four classical signs — <i>rubor et tumor cum calore et dolore</i> — come from the Roman encyclopedist <b>Celsus</b> in the first century (Wikipedia; 2012, 2021, 2022 and 2023 reviews). <b>The fifth sign is disputed:</b> two reviews (2012, 2022) credit <b>Virchow</b> in the 19th century; another (2021) credits Galen; Wikipedia says Galen, Thomas Sydenham or Virchow; a history review (2021) says Sydenham or Virchow, and that it is wrongly attributed to Galen.</p>';
+/* vascular steps: [chip, html] */
+const VASC = [
+  ['Normal', '<h3>Normal microcirculation</h3><p>Blood runs from an arteriole through capillaries into a postcapillary venule. Step on to inflame the tissue.</p>'],
+  ['Vasoconstriction (wounds)', '<h3>1. Vasoconstriction</h3><p>Our sources describe the first vascular response in a <b>wound</b>: vasoconstriction with platelet aggregation, to stop bleeding (StatPearls; a 2010 review on wound healing). Wikipedia (wound healing): the vasoconstriction lasts five to ten minutes and is followed by vasodilation peaking at about 20 minutes.</p>'],
+  ['Vasodilation', '<h3>2. Vasodilation</h3><p>Acute inflammation brings marked vascular changes: vasodilation, more blood flow and increased permeability, driven by mediators (Wikipedia). Wikipedia: dilation starts at the <b>arterioles</b>, then the capillaries — more blood in the area, hence <b>redness and heat</b>. Histamine, NO and PGE2 are vasodilators (see <a href="#h-med">mediators</a>).</p>'],
+  ['Increased permeability', '<h3>3. Increased permeability</h3><p>The leak is from <b>postcapillary venules</b>, not capillaries (Majno; a 2008 review). Histamine makes venular endothelial cells <b>contract and pull apart</b>, opening gaps between them (Wikipedia; the 2008 review). Protein-rich <b>exudate</b> leaves the vessel: oedema (Wikipedia; the 2008 review).</p><p><b>Time course</b> (2008 review): after a single exposure to histamine, serotonin, PAF or VEGF-A the leak is <b>immediate but self-limited</b>, complete by about 20–30 minutes; persistent exposure gives chronic hyperpermeability.</p>'],
+  ['Slowing and margination', '<h3>4. Slowing of flow, margination</h3><p>As the vessels dilate the flow slows, and leucocytes come close to the endothelium (Wikipedia, on histamine) — <b>margination</b>, the start of the <a href="#h-cell">cellular events</a> (a 2009 review).</p>'],
+];
+const EX_TABLE = [
+  ['Cause', 'Inflammation: leaky venules (Wikipedia; 2008 review)', 'Not inflammation: altered hydrostatic or colloid osmotic pressure (Wikipedia)'],
+  ['Protein', 'Rich in plasma proteins, close to plasma (2008 review)', 'Less than 2 g/100 mL (Wikipedia)'],
+  ['Specific gravity', '—', 'Usually below 1.012 (Wikipedia)'],
+  ['Clotting', 'Can clot and lay down fibrin (2008 review)', '—'],
+];
+/* leucocyte steps: [chip, html] */
+const CELL = [
+  ['Margination', '<h3>1. Margination</h3><p>Leucocytes flow close to the endothelial surface rather than in the central stream; it depends on the interaction of red and white cells and is enhanced in small postcapillary venules, the main site of leucocyte recruitment (a 2009 review). The review calls it a rather passive step.</p>'],
+  ['Rolling: selectins', '<h3>2. Rolling — selectins</h3><p>Carbohydrate ligands on the leucocyte (<b>sialyl-Lewis X</b>, on <b>PSGL-1</b>) bind <b>selectins</b> with low affinity; the bonds form and break, so the cell rolls (Wikipedia; a 2009 review).</p><ul><li><b>P-selectin</b> is stored ready-made in endothelial <b>Weibel–Palade bodies</b> (and platelet α-granules) and reaches the surface within minutes of histamine or thrombin (Wikipedia).</li><li><b>E-selectin</b> is made on demand after <b>IL-1 and TNF</b>: about 2 hours, peak at 6–12 hours (Wikipedia).</li><li><b>L-selectin</b> is on the leucocytes themselves (Wikipedia; the 2009 review).</li></ul>'],
+  ['Adhesion: integrins', '<h3>3. Activation and firm adhesion — integrins</h3><p>Chemokines on the endothelium act on G-protein-coupled receptors and switch the leucocyte\'s <b>integrins</b> to high affinity: the cell <b>arrests</b> (a 2009 review; Wikipedia).</p><ul><li><b>LFA-1 and Mac-1</b> (β2 integrins, CD11/CD18) bind <b>ICAM-1</b> (2009 review; Wikipedia).</li><li>VLA-4 binds VCAM-1 (Wikipedia).</li><li>IL-1 and TNF induce ICAM-1 and VCAM-1 on the endothelium (Wikipedia).</li></ul>'],
+  ['Transmigration: PECAM-1', '<h3>4. Transmigration (diapedesis) — PECAM-1</h3><p>The leucocyte crosses the endothelium between cells (paracellular) or through a cell (transcellular) (2009 and 2015 reviews); a 2015 review: about 90% of crossings in vivo are paracellular. <b>PECAM-1 (CD31)</b>, on leucocytes and at the endothelial junctions, binds itself (homophilic) and pulls the cell through (2009 review; Wikipedia). Then it must get through the <b>basement membrane</b> (2015 review; Wikipedia).</p>'],
+  ['Chemotaxis', '<h3>5. Chemotaxis</h3><p>In the tissue the cell moves <b>up a concentration gradient</b> of chemoattractants, sensed by G-protein-coupled receptors (Wikipedia; a 2015 review):</p><ul><li><b>Bacterial N-formyl peptides</b> (fMLP) (a 2019 study; Wikipedia; a 2011 review)</li><li><b>C5a</b> (Wikipedia; 2011, 2015 and 2022 reviews)</li><li><b>LTB4</b> (Wikipedia; 2015 review)</li><li><b>IL-8 (CXCL8)</b> (Wikipedia; a 2021 myofibroblast review; Wikipedia calls it the primary cytokine for recruiting neutrophils)</li></ul>'],
+  ['Phagocytosis and killing', '<h3>6. Phagocytosis and killing</h3><p><b>Recognition</b>: pattern-recognition receptors, and receptors for <b>opsonins</b> — Fc receptors for IgG and complement receptors for <b>C3b</b> (Wikipedia; a 2022 review on wound macrophages). <b>Engulfment</b>: pseudopodia close round the particle into a <b>phagosome</b>, which meets lysosomes (StatPearls; Wikipedia).</p><p><b>Oxygen-dependent killing</b>: the respiratory burst — <b>NADPH oxidase</b> makes superoxide (Wikipedia; StatPearls), which becomes H₂O₂; <b>myeloperoxidase</b> turns it and chloride into <b>hypochlorous acid</b> (a 2011 review; Wikipedia).</p><p><b>Oxygen-independent killing</b>: granule contents released into the phagosome — lysozyme, defensins, lactoferrin, proteases (Wikipedia; a 2012 review on neutrophils and <i>S. aureus</i>).</p>'],
+];
+/* inherited defects: key -> [chip, step index broken, html] */
+const DEFECT = {
+  none: ['No defect', -1, ''],
+  lad1: ['LAD-1', 2, '<h3>Leucocyte adhesion deficiency type 1</h3><p>Lack of the <b>β2-integrin subunit CD18</b> (gene ITGB2) (Wikipedia; StatPearls; a 2011 review): no firm adhesion, so neutrophils cannot leave the blood.</p>'],
+  lad2: ['LAD-2', 1, '<h3>Leucocyte adhesion deficiency type 2</h3><p>A defect of <b>fucose</b> metabolism (a 2020 review): the <b>selectin ligands</b> are missing (a 2011 review), so rolling fails.</p>'],
+  lad3: ['LAD-3', 2, '<h3>Leucocyte adhesion deficiency type 3</h3><p>Mutations in <b>kindlin-3 (FERMT3)</b> (a 2011 review): integrins are expressed normally (2011 review) but their inside-out activation is defective (a 2020 review), with <b>platelet dysfunction</b> — a Glanzmann-like bleeding tendency (Wikipedia; the 2011 review).</p>'],
+  chs: ['Chédiak–Higashi', 5, '<h3>Chédiak–Higashi syndrome</h3><p>Autosomal recessive (StatPearls; Wikipedia; a 2015 case series). <b>LYST</b> (lysosomal trafficking regulator) is mutated (Wikipedia; 2011 and 2025 reviews): neutrophils carry <b>giant granules</b> (Wikipedia; the 2015 series); the lysosomes do not empty into the phagosomes, so engulfed bacteria survive (Wikipedia). Wikipedia adds that chemotaxis is impaired.</p><p><b>Partial oculocutaneous albinism</b> (silvery hair), recurrent pyogenic infections and bleeding (StatPearls; the 2015 series; Wikipedia); peripheral neuropathy (the 2015 series) — StatPearls describes neurological symptoms that progress even after stem-cell transplant. Bleeding: platelets lack their serotonin- and adenosine-phosphate-containing granules (Wikipedia). Wikipedia: neutropenia is the commonest finding, and most children reach an <b>accelerated (lymphoma-like) phase</b>.</p>'],
+  cgd: ['Chronic granulomatous disease', 5, '<h3>Chronic granulomatous disease</h3><p>Defective <b>phagocyte NADPH oxidase</b>: phagocytes engulf microbes but cannot make the reactive oxygen species that kill them (StatPearls; Wikipedia).</p>'],
+};
+const DEFECT_TABLE = [
+  ['LAD-1', 'β2-integrin CD18 (ITGB2) (Wikipedia; StatPearls; 2011 review)', 'Firm adhesion', 'Recurrent bacterial infections, <b>no pus</b>, marked neutrophilia (2020 review; StatPearls; Wikipedia); delayed separation of the umbilical cord (Wikipedia); severe periodontitis (2020 review). The commonest type (Wikipedia).'],
+  ['LAD-2', 'Fucose metabolism → selectin ligands absent (2020 and 2011 reviews)', 'Rolling', 'Immunodeficiency: neutrophils cannot leave the blood (2011 review)'],
+  ['LAD-3', 'Kindlin-3 (FERMT3): integrin activation (2011 and 2020 reviews)', 'Firm adhesion', 'Milder LAD with platelet dysfunction, bleeding (2011 review; Wikipedia)'],
+  ['Chronic granulomatous disease', 'Phagocyte NADPH oxidase: no superoxide (StatPearls; Wikipedia)', 'Killing (respiratory burst)', 'Recurrent, life-threatening infections (StatPearls)'],
+  ['Chédiak–Higashi', 'LYST: lysosomal trafficking (Wikipedia; 2011, 2025 reviews)', 'Killing in the phagosome', 'Giant granules, partial albinism, infections, bleeding (StatPearls; 2015 series; Wikipedia); peripheral neuropathy (2015 series); progressive neurological decline (StatPearls)'],
+];
+const DEFECT_NOTE = 'All LAD types are autosomal recessive (table in a 2020 review).';
+/* mediators: key -> [chip, html, highlighted pathway nodes] */
+const MED = {
+  his: ['Histamine', '<h3>Histamine</h3><p>Stored ready-made in the granules of <b>mast cells</b> and basophils (StatPearls; Wikipedia; a 2013 review), so released at once — during early inflammation (a 2020 review). It <b>dilates</b> vessels, makes <b>postcapillary venules leak</b> by contracting their endothelium, and lowers blood pressure (Wikipedia; a 2021 history review; StatPearls). With bradykinin, it stimulates nerve endings (pain) (Wikipedia).</p>', []],
+  ser: ['Serotonin', '<h3>Serotonin (5-HT)</h3><p>A vasoactive amine (Wikipedia) carried in <b>platelets</b>, which take it up from plasma (Wikipedia; StatPearls: most is in gut enterochromaffin cells, some in platelets). Like histamine it increases venular permeability (a 2008 review).</p>', []],
+  pge2: ['PGE2', '<h3>Prostaglandin E2</h3><p>A COX product behind three of the classic signs: <b>redness (vasodilation), swelling (oedema) and pain</b> — hyperalgesia via sensory neurons (a 2011 review; a 2023 review; Wikipedia). In the brain it raises the temperature set point: <b>fever</b> (Wikipedia; a 2015 review; see <a href="#h-sys">systemic effects</a>).</p>', ['pla2', 'aa', 'cox', 'pgh2', 'pge2']],
+  pgi2: ['PGI2 (prostacyclin)', '<h3>Prostacyclin (PGI2)</h3><p>A <b>vasodilator</b> and a potent <b>inhibitor of platelet aggregation</b> (StatPearls; a 2011 review), made by endothelium (Wikipedia). The 2011 review also names it a mediator of the oedema and pain of acute inflammation.</p>', ['pla2', 'aa', 'cox', 'pgh2', 'pgi2']],
+  txa2: ['TXA2 (thromboxane)', '<h3>Thromboxane A2</h3><p>Made by <b>platelets</b>; it activates and <b>aggregates platelets</b> (a 2023 review; Wikipedia) and constricts vessels (Wikipedia).</p>', ['pla2', 'aa', 'cox', 'pgh2', 'txa2']],
+  ltb4: ['LTB4', '<h3>Leukotriene B4</h3><p>A 5-lipoxygenase product and a potent <b>chemotactic factor</b> for neutrophils (Wikipedia; a 2015 review).</p>', ['pla2', 'aa', 'lox', 'lta4', 'ltb4']],
+  cyslt: ['LTC4, LTD4, LTE4', '<h3>Cysteinyl leukotrienes (LTC4, LTD4, LTE4)</h3><p>Potent <b>bronchoconstrictors</b>; they <b>increase venular permeability</b> and mucus secretion (Wikipedia; a 2021 anaphylaxis review on LTC4), acting on the CysLT1 receptor (Wikipedia).</p>', ['pla2', 'aa', 'lox', 'lta4', 'cyslt', 'rec']],
+  lx: ['Lipoxins', '<h3>Lipoxins</h3><p>Made from arachidonic acid through 5-LOX with 12- or 15-LOX (a 2025 review on eicosanoids; a 2025 review on lipoxins). <b>Anti-inflammatory</b>, pro-resolving "stop signals": they inhibit LTB4-driven neutrophil chemotaxis (Wikipedia; the 2025 lipoxin review).</p>', ['pla2', 'aa', 'lox', 'lta4', 'lx']],
+  bk: ['Bradykinin', '<h3>Bradykinin</h3><p>The kinin system: <b>kallikrein</b> (activated by factor XIIa) cuts bradykinin from high-molecular-weight kininogen (Wikipedia; a 2021 anaphylaxis review). A potent <b>vasodilator</b> (StatPearls; a 2022 bradykinin review) that <b>increases permeability</b> (the anaphylaxis review; Wikipedia) and causes <b>pain</b> — it sensitises nociceptors (Wikipedia; the bradykinin review). The bradykinin review calls it short-lived.</p>', []],
+  comp: ['C3a, C5a (complement)', '<h3>Complement: C3a and C5a</h3><p>The anaphylatoxins make mast cells release histamine, dilate vessels and increase permeability (Wikipedia). <b>C5a is chemotactic</b> (Wikipedia; 2011 and 2015 reviews); <b>C3b</b> is the main opsonin (Wikipedia; a 2022 review on wound macrophages). Pathways: <a href="../../physiology/blood/immunity.html#h-comp">physiology</a>.</p>', []],
+  paf: ['PAF', '<h3>Platelet-activating factor</h3><p>A phospholipid mediator that <b>aggregates platelets</b> (StatPearls; Wikipedia), <b>dilates vessels</b> (StatPearls; a 2021 anaphylaxis review: it releases nitric oxide) and <b>increases permeability</b> (a 2008 permeability review; the anaphylaxis review). A 2015 review lists it among the chemoattractants for neutrophils.</p>', []],
+  no: ['Nitric oxide', '<h3>Nitric oxide</h3><p>Made by the <b>endothelium</b>, it relaxes vascular smooth muscle: <b>vasodilation</b> (Wikipedia); histamine and PAF trigger its release (a 2021 anaphylaxis review). Macrophages also make NO to <b>kill microbes</b> (Wikipedia).</p>', []],
+  cyt: ['IL-1, TNF', '<h3>Cytokines: IL-1 and TNF</h3><p>Released by macrophages, they make the endothelium express E-selectin and ICAM-1 (Wikipedia); with IL-6 they raise the hypothalamic set point — <b>fever</b> (Wikipedia; a 2015 review) — and induce acute-phase proteins (StatPearls).</p>', []],
+  il8: ['IL-8 (CXCL8)', '<h3>IL-8 (CXCL8)</h3><p>A chemoattractant for <b>neutrophils</b> (Wikipedia; a 2021 myofibroblast review) — Wikipedia calls it the primary cytokine for their recruitment; it also makes them up-regulate LFA-1 for binding ICAM-1 (Wikipedia).</p>', []],
+};
+/* effects matrix: [mediator, vasodilation, permeability, chemotaxis, pain, fever, other]; '✓' two sources, '(✓)' one source (named in the card) */
+const MED_TABLE = [
+  ['Histamine', '✓', '✓', '', '(✓)', '', 'Stored in mast cells'],
+  ['Serotonin', '', '(✓)', '', '', '', 'Platelets; vasoconstriction in clotting (Wikipedia)'],
+  ['PGE2', '✓', '✓', '', '✓', '✓', ''],
+  ['PGI2', '✓', '(✓)', '', '(✓)', '', 'Inhibits platelet aggregation'],
+  ['TXA2', '', '', '', '', '', 'Platelet aggregation; vasoconstriction (Wikipedia)'],
+  ['LTB4', '', '', '✓', '', '', ''],
+  ['LTC4/D4/E4', '', '✓', '', '', '', 'Bronchoconstriction'],
+  ['Lipoxins', '', '', '', '', '', 'Anti-inflammatory: inhibit chemotaxis'],
+  ['Bradykinin', '✓', '✓', '', '✓', '', ''],
+  ['C3a, C5a', '(✓)', '(✓)', '✓ (C5a)', '', '', 'C3b opsonin'],
+  ['PAF', '✓', '✓', '(✓)', '', '', 'Platelet aggregation'],
+  ['Nitric oxide', '✓', '', '', '', '', 'Microbial killing (Wikipedia)'],
+  ['IL-1, TNF', '', '', '', '', '✓', 'Endothelial activation; acute-phase proteins'],
+  ['IL-8', '', '', '✓', '', '', ''],
+];
+/* main source of each mediator (same order as MED_TABLE); — where our sources do not name one */
+const MED_SRC = ['Mast cells, basophils: stored', 'Platelets: stored', '—', 'Vascular endothelium', 'Platelets', 'Leucocytes, mast cells: made on demand', 'Mast cells, leucocytes: made on demand', '—', 'Plasma: from kininogen', 'Plasma: liver-made proteins', 'Platelets, endothelium, leucocytes', 'Endothelium', 'Macrophages, monocytes', 'Macrophages, epithelial and endothelial cells'];
+const MED_KEYS = ['his', 'ser', 'pge2', 'pgi2', 'txa2', 'ltb4', 'cyslt', 'lx', 'bk', 'comp', 'paf', 'no', 'cyt', 'il8'];
+/* drugs: key -> [chip, html, blocked node] */
+const DRUG = {
+  gc: ['Glucocorticoids', '<h3>Glucocorticoids</h3><p>Their main anti-inflammatory mechanism is making <b>lipocortin-1 (annexin A1)</b>, which inhibits <b>phospholipase A2</b> (Wikipedia; a 2025 review calls annexin A1 glucocorticoid-regulated) — so less arachidonic acid for both pathways. They also turn down COX-2 and mPGES-1 (a 2011 review).</p>', 'pla2'],
+  nsaid: ['NSAIDs', '<h3>NSAIDs</h3><p>Inhibit <b>cyclooxygenase</b>, so prostaglandins and thromboxane are not made (Wikipedia; a 2011 review). COX-1 is constitutive (stomach protection, platelets); COX-2 is induced in inflammation (2011 review). Coxibs inhibit only COX-2 (Wikipedia). The lipoxygenase pathway is untouched.</p>', 'cox'],
+  asa: ['Aspirin', '<h3>Aspirin</h3><p>Inhibits COX <b>irreversibly</b> by acetylating it; ibuprofen\'s inhibition is reversible (Wikipedia; a 2023 review). Low doses block platelet TXA2 for the platelet\'s life (Wikipedia). Aspirin-acetylated COX-2 makes aspirin-triggered lipoxins (Wikipedia; a 2025 review).</p>', 'cox'],
+  zil: ['Zileuton', '<h3>Zileuton</h3><p>Inhibits <b>5-lipoxygenase</b>, so no leukotrienes are formed (StatPearls; Wikipedia); used in asthma.</p>', 'lox'],
+  mon: ['Montelukast', '<h3>Montelukast (and zafirlukast)</h3><p>Block the <b>cysteinyl-leukotriene receptor</b> (CysLT1), not leukotriene synthesis (StatPearls; Wikipedia); used in asthma.</p>', 'rec'],
+};
+const MED_TEXT = '<p><b>Arachidonic acid</b> is released from membrane phospholipids by <b>phospholipase A2</b> (Wikipedia; a 2011 review). <b>Cyclooxygenase</b> (COX-1, COX-2) turns it into PGG2 and then PGH2, the common substrate for PGE2, PGI2, PGD2, PGF2α and TXA2 (2011 and 2025 reviews; Wikipedia). <b>5-Lipoxygenase</b> makes 5-HPETE and then LTA4, which becomes LTB4 or LTC4 → LTD4 → LTE4 (a 2025 review; Wikipedia). A tick in brackets in the table means one source only (named in the card).</p><p><b>Stored or made on demand.</b> Mast cells release <b>preformed</b> mediators from their granules — histamine, serotonin, proteases — and also <b>newly synthesise</b> lipid mediators (leukotrienes, prostaglandins, PAF) and cytokines (Wikipedia; a 2013 mast-cell review: the granules are filled with preformed histamine, serotonin and proteases, and mast cells produce and secrete lipid mediators). <b>Cell- or plasma-derived.</b> Besides these cell-derived mediators, cascades of plasma proteins act too (Wikipedia): the <b>complement</b> proteins, made in the liver and circulating in plasma (StatPearls; Wikipedia), and the <b>kinins</b>, cut by plasma kallikrein from kininogen, a plasma protein (Wikipedia; a 2021 anaphylaxis review).</p>';
+/* outcomes: key -> [chip, html] */
+const OUT = {
+  res: ['Resolution', '<h3>Resolution</h3><p>The usual outcome: the inflammation resolves and the tissue is restored (a 2011 review; a 2018 review). Wikipedia: the response must be actively turned off; acute inflammation begins to cease once the stimulus has gone. Lipoxins are among the "stop signals" (a 2025 review).</p>'],
+  scar: ['Healing by scar', '<h3>Healing by scarring (fibrosis)</h3><p>After much tissue destruction, or damage to tissue that cannot regenerate, the defect is filled by a <b>collagen scar</b> (Wikipedia); a persisting response can lead to scarring and loss of organ function (a 2011 review). See <a href="healing-repair.html">healing and repair</a>.</p>'],
+  abs: ['Abscess', '<h3>Abscess</h3><p>A collection of <b>pus</b> in the tissue, usually from bacteria, walled off by a capsule of adjacent cells (Wikipedia). See <a href="#h-pat">suppurative inflammation</a>.</p>'],
+  chr: ['Chronic inflammation', '<h3>Progression to chronic inflammation</h3><p>If the injurious agent persists, chronic inflammation follows (Wikipedia; a 2018 review: the response must be suppressed to prevent it). Failure to resolve may predispose to autoimmunity and excess tissue damage (a 2011 review).</p>'],
+};
+const CHR_TEXT = '<p><b>Chronic inflammation</b> lasts months to years (StatPearls). If the injurious agent persists it follows acute inflammation (Wikipedia); its extent depends on the cause and on the body\'s ability to repair (StatPearls). Wikipedia: <b>macrophages dominate</b> (citing StatPearls, it adds lymphocytes and plasma cells), and there is <b>destruction and healing at the same time</b>; chronic inflammation activates fibroblasts and leads to <b>fibrosis</b> (a 2019 review; Wikipedia).</p><p><b>Causes</b> our sources name: <b>persistent infection</b> — chronic infections (a 2015 extravasation review), tuberculosis and leprosy as chronic granulomatous infections (StatPearls; Wikipedia); <b>foreign material</b> — the foreign-body reaction is a chronic inflammation (Wikipedia; a 2022 giant-cell review); <b>autoimmunity</b> — a 2015 review: autoantigens trigger chronic tissue inflammation when immune tolerance breaks down.</p><p><b>Granulomatous inflammation</b> is a special form: a <b>granuloma</b> is a compact aggregate of macrophages formed in response to a persistent stimulus (StatPearls; a 2019 review); a 2024 review lists infectious agents, foreign bodies (talc, starch, sutures) and unknown antigens as the stimuli.</p>';
+/* granuloma types: key -> [chip, html] */
+const GR = {
+  tb: ['Caseating (tuberculosis)', '<h3>Caseating granuloma — tuberculosis</h3><p>A necrotic, acellular <b>caseous</b> (cheese-like) core, surrounded by <b>epithelioid macrophages</b> and an outer <b>cuff of lymphocytes</b> (B and T cells) (a 2024 review; Wikipedia). Epithelioid cells resemble epithelial cells; Wikipedia: their elongated nuclei look like the sole of a slipper. They fuse into <b>Langhans giant cells</b> (Wikipedia; a 2012 review on the sarcoid granuloma), whose nuclei lie in a <b>horseshoe or ring along the cell border</b> — usually fewer than 20 (Wikipedia; a 2022 giant-cell review). CD4⁺ T cells making IFN-γ, and TNF, are needed to form it (2024 review). Caseous necrosis: <a href="cell-injury-death.html#h-nec">Module 01</a>.</p>'],
+  sarc: ['Non-caseating (sarcoidosis)', '<h3>Non-caseating granuloma — sarcoidosis</h3><p>Sarcoidosis is a multisystem granulomatous disorder of unknown cause (StatPearls) with <b>non-necrotising (non-caseating) epithelioid granulomas</b>, mostly in lungs and chest lymph nodes (Wikipedia; a 2019 review). Wikipedia: usually ringed by concentric fibrosis. The 2012 sarcoid-granuloma review: its epithelioid cells fuse into Langhans giant cells — giant cells are not specific for tuberculosis (Wikipedia).</p>'],
+  fb: ['Foreign body', '<h3>Foreign-body granuloma</h3><p>Around foreign material too large for phagocytosis (implants, biomaterials), macrophages fuse into <b>foreign-body giant cells</b> (Wikipedia; a 2020 review on graft–tissue interfaces; the 2022 giant-cell review): the largest giant cells, up to 1 mm (the giant-cell review), with up to 200 nuclei (Wikipedia). Our sources do not describe how the nuclei are arranged; the drawing places them schematically.</p>'],
+};
+/* micrograph (Wikimedia Commons; licence in the caption, the footer and pathology/DATA-SOURCES.md); labels from the uploader's description, placed with marks.py */
+const IMG_TB = {id: 'tb', file: 'img/tb-granuloma.jpg', w: 720, h: 540, title: 'Caseating granuloma: tuberculous lymph node',
+  alt: 'H&E micrograph of a tuberculous lymph node: pale pink granular caseous necrosis at upper right, a zone of epithelioid cells with elongated nuclei across the middle, two multinucleated giant cells at lower left and small dark lymphocytes at the left edge',
+  cap: 'Tuberculous lymph node (H&E, 40×). Amorphous, granular, eosinophilic <b>caseous necrosis</b> (right), bordered by <b>epithelioid cells</b>, <b>Langhans giant cells</b> and <b>lymphocytes</b> (uploader\'s description).',
+  labels: [[0.80, 0.25, 'caseous necrosis'], [0.46, 0.46, 'epithelioid cells'], [0.215, 0.89, 'Langhans giant cell'], [0.05, 0.60, 'lymphocytes']],
+  credit: {file: 'Tuberculous lymph node with caseating granuloma 40X.jpg', author: 'Department of Pathology, Calicut Medical College', lic: 'CC BY-SA 4.0', licUrl: 'https://creativecommons.org/licenses/by-sa/4.0', done: 'thin frame trimmed, resized; labels added (approximate)'}};
+const GR_TABLE = [
+  ['Infections', 'Tuberculosis (caseating), leprosy — a chronic granulomatous infection (StatPearls; Wikipedia); Wikipedia adds histoplasmosis, cryptococcosis, coccidioidomycosis, blastomycosis, cat-scratch disease'],
+  ['Not infections', 'Sarcoidosis (non-caseating) (StatPearls; Wikipedia); Wikipedia adds Crohn\'s disease, berylliosis, granulomatosis with polyangiitis, foreign material such as aspirated food'],
+];
+/* patterns: key -> [chip, html] */
+const PAT = {
+  ser: ['Serous', '<h3>Serous inflammation</h3><p>A copious, thin, <b>low-protein</b> fluid, often from the mesothelium of serous cavities (Wikipedia). Seen in mild inflammation (Wikipedia).</p>'],
+  fib: ['Fibrinous', '<h3>Fibrinous inflammation</h3><p>An exudate mostly of <b>fibrinogen and fibrin</b> (Wikipedia), typical of serous cavities, where it can turn into a <b>scar between the membranes</b> (Wikipedia). StatPearls: in <b>fibrinous pericarditis</b> the pericardium is rough and granular with fibrous adhesions; causes include acute myocardial infarction, uraemia, trauma and surgery.</p>'],
+  sup: ['Suppurative (purulent)', '<h3>Suppurative (purulent) inflammation</h3><p><b>Pus</b>: plasma with live and dead neutrophils and necrotic cells (Wikipedia). A localised collection of pus is an <b>abscess</b>, usually bacterial, walled off by a capsule (Wikipedia).</p>'],
+  ulc: ['Ulcer', '<h3>Ulcer</h3><p>A local excavation of the <b>epithelial surface</b> (Wikipedia); in skin it can take the whole epidermis and part of the dermis or deeper (Wikipedia).</p>'],
+};
+/* fever steps: [chip, html, highlighted node] */
+const FEV = [
+  ['Pyrogen', '<h3>1. Exogenous pyrogen</h3><p>The commonest are <b>endotoxins</b>: lipopolysaccharide of Gram-negative bacteria (Wikipedia; a 2015 review uses LPS-induced fever).</p>', 'exo'],
+  ['IL-1, IL-6, TNF', '<h3>2. Endogenous pyrogens</h3><p>Cytokines from monocytes and macrophages: <b>IL-1</b> and <b>IL-6</b> (major) and <b>TNF</b> (Wikipedia; a 2015 review, which lists IL-8 and interferons too).</p>', 'endo'],
+  ['PGE2 in the brain', '<h3>3. PGE2 in the brain</h3><p>COX-2 and prostaglandin E synthase make <b>PGE2</b> (Wikipedia). A 2015 review: IL-1β raises PGE2 in the hypothalamus, particularly in the OVLT, which lacks a blood–brain barrier; brain endothelial cells make PGE2; mice that made it only in blood cells had raised plasma PGE2 but no fever.</p>', 'pge2'],
+  ['Set point raised', '<h3>4. The set point rises</h3><p>PGE2 changes the firing of the hypothalamic thermoregulatory neurons (Wikipedia): the body temperature is held above a raised <b>set point</b> (StatPearls; Wikipedia).</p>', 'hyp'],
+  ['NSAIDs', '<h3>Antipyretics</h3><p>NSAIDs lower fever by blocking prostaglandin synthesis (a 2015 review; Wikipedia).</p>', 'drug'],
+];
+const APR_TEXT = '<p><b>Acute-phase proteins</b> (detail on the <a href="../../surgery/general/metabolic-response.html#h-med">surgery page</a>): <b>CRP</b> is made by the liver mainly in response to <b>IL-6</b> (StatPearls); IL-1, TNF and IFN-γ also induce acute-phase reactants (StatPearls). StatPearls lists the positive reactants as procalcitonin, CRP, ferritin, fibrinogen, hepcidin and serum amyloid A, and the negative ones as albumin, prealbumin, transferrin, retinol-binding protein and antithrombin. The <b>ESR</b> rises mainly because fibrinogen makes red cells stack into rouleaux (Wikipedia); CRP changes faster and reflects the acute-phase response more closely than the ESR (StatPearls; Wikipedia).</p>';
+/* white count: key -> [chip, html] */
+const WBC = {
+  neut: ['Bacterial: neutrophilia', '<h3>Neutrophilia with a left shift</h3><p>Leucocytosis is common in inflammation and infection (StatPearls; Wikipedia); bacterial infection usually raises the <b>neutrophils</b> (Wikipedia). During infection the marrow releases neutrophils <b>and band forms</b> faster (a 2011 review): a <b>left shift</b>, an increase of immature cells, mostly bands (Wikipedia). Wikipedia: IL-1 and TNF are believed to speed release from the marrow reserve. Normal counts: <a href="../../physiology/blood/blood-cells.html#h-wbc">physiology</a>.</p>'],
+  eos: ['Allergy, parasites: eosinophilia', '<h3>Eosinophilia</h3><p>Suggests allergic or parasitic conditions (StatPearls; Wikipedia: asthma, hay fever, parasites).</p>'],
+  lym: ['Viral: lymphocytosis', '<h3>Lymphocytosis</h3><p>Often seen in viral infections (StatPearls); also autoimmune disease and hyperthyroidism (StatPearls).</p>'],
+  low: ['Some infections: leucopenia', '<h3>Leucopenia</h3><p>Wikipedia: some infections lower the count — viral and rickettsial infections, some protozoa, tuberculosis — and some cancers.</p>'],
+};
+const SKILL = 'PA3.4 (identifying acute and chronic inflammation in gross and microscopic specimens) is a practical skill: the drawings here help, but are not a substitute for the specimens.';
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts: pathology of inflammation, chronic inflammation, histamine, bradykinin, serotonin, prostacyclin, leukotriene receptor antagonists, zileuton, platelet-activating factor, complement, phagocytosis, chronic granulomatous disease, leucocyte adhesion deficiency, Chédiak–Higashi syndrome, granuloma, sarcoidosis, leprosy, fibrinous pericarditis, fever, acute-phase reactants, CRP, leucocytosis); open-access reviews (NCBI PMC): prostaglandins and inflammation (2011), vascular permeability (2008), leucocyte–endothelial interactions (2009), leucocyte extravasation (2015), neutrophil disorders (2011), leucocyte adhesion defects (2020), the history and definition of inflammation (2012, 2021, 2021, 2022), prostaglandins and cytokines (2023), eicosanoids in skin (2025), lipoxins (2025), mast cells (2013), anaphylaxis mediators (2021), bradykinin (2022), myofibroblasts (2021), wound macrophages (2022), febrile mediators (2015), Chédiak–Higashi (2015 case series; 2025 review), granulomas in tuberculosis (2024), sarcoid granuloma (2012), macrophages in granulomatous disease (2019), multinucleated giant cells (2022), graft–tissue interfaces (2020), inflammatory responses in organs (2018), wound healing (2010, 2020); a study of formyl-peptide receptors (2019); Wikipedia.';
+const MODELS = '<b>Models used:</b> every drawing is schematic, not to scale: the microcirculation, the neutrophil and its molecules (drawn as labelled glyphs), the pathway map (enzymes and products as boxes), the granulomas, patterns and fever flow. Micrograph: Wikimedia Commons, credited under the image.';
+
+/* ===================== CODE ===================== */
+const {$} = Patho;
+/* hyphens before digits stay hyphens (IL-1, COX-2, LAD-1), as non-breaking hyphens */
+const T = (x, y, t, cls, a, extra) => Patho.T(x, y, String(t).replace(/-(?=\d)/g, '‑'), cls, a, extra);
+const f1 = v => (+v).toFixed(1);
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS; $('skill-note').innerHTML = SKILL;
+Patho.table('def-table', ['', 'Acute', 'Chronic'], DEF_TABLE); $('def-text').innerHTML = DEF_TEXT;
+const rbc = (x, y, r = 5) => `<ellipse cx="${f1(x)}" cy="${f1(y)}" rx="${r}" ry="${f1(r * 0.62)}" style="fill:var(--rbc);fill-opacity:.85"/>`;
+/* a neutrophil: lobed nucleus; flat = squashed onto the wall */
+function neut(x, y, r = 16, o = {}) {
+  const rx = o.rx || r, ry = o.ry || r;
+  let s = `<ellipse cx="${f1(x)}" cy="${f1(y)}" rx="${f1(rx)}" ry="${f1(ry)}" class="wbc"${o.dash ? ' style="stroke-dasharray:3 3;opacity:.5"' : ''}/>`;
+  if (!o.dash) for (const [dx, dy] of [[-0.35, -0.1], [0, 0.18], [0.35, -0.08]]) s += `<circle cx="${f1(x + dx * rx)}" cy="${f1(y + dy * ry)}" r="${f1(Math.min(rx, ry) * 0.26)}" style="fill:var(--nucleus)"/>`;
+  return s;
+}
+/* side labels with leader lines: [text, x, y, tx, ty, anchor] */
+function labs(items) { let s = ''; for (const [t, x, y, tx, ty, a] of items) { if (tx != null) s += `<path class="lead" d="M${a === 'end' ? x + 3 : a === 'middle' ? x : x - 3} ${y - 4} L${tx} ${ty}"/>`; s += T(x, y, t, 'l', a || 'start'); } return s; }
+
+/* ---- cardinal signs ---- */
+function drawSign(k) {
+  const hl = SIGN[k][2];
+  let s = Patho.arrowDef('ai', 'var(--ink)');
+  const bulge = 'M0 40 C150 40 190 22 270 22 C350 22 390 40 540 40';
+  s += `<path d="${bulge} L540 60 C390 60 350 42 270 42 C190 42 150 60 0 60 Z" style="fill:var(--skin);stroke:var(--ink);stroke-width:${hl === 'heat' ? 1 : .8}"/>`;
+  s += T(14, 34, 'skin', 's', 'start');
+  // oedema fluid around the vessel
+  s += `<ellipse cx="270" cy="128" rx="190" ry="62" style="fill:var(--fluid);fill-opacity:.8;stroke:${hl === 'fluid' ? 'var(--ink)' : 'none'};stroke-width:2.6"/>`;
+  for (let i = 0; i < 26; i++) { const a = i * 2.4, r = 110 + (i * 23) % 70; s += `<circle cx="${f1(270 + r * Math.cos(a))}" cy="${f1(128 + r * 0.42 * Math.sin(a))}" r="2" style="fill:var(--ink);fill-opacity:.45"/>`; }
+  // dilated vessel
+  s += `<rect x="60" y="108" width="420" height="40" rx="20" style="fill:var(--surface);stroke:var(--ink);stroke-width:${hl === 'vessel' ? 3 : 1.2}"/>`;
+  for (let i = 0; i < 18; i++) s += rbc(80 + i * 22.5, 128 + ((i % 3) - 1) * 9, 6);
+  // heat
+  if (hl === 'heat') for (const x of [190, 250, 310, 370]) s += `<path d="M${x} 16 q6 -6 0 -12 q-6 -6 0 -12" style="fill:none;stroke:var(--ink);stroke-width:1.8"/>`;
+  // nerve ending with mediator dots
+  const nw = hl === 'nerve' ? 2.8 : 1.4;
+  s += `<path d="M528 214 C500 200 470 196 452 178 M452 178 l-12 -10 M452 178 l-4 -14 M452 178 l-14 -2" style="fill:none;stroke:var(--ink);stroke-width:${nw}"/>`;
+  if (hl === 'nerve') for (const [x, y] of [[430, 160], [440, 150], [424, 176], [450, 158]]) s += `<circle cx="${x}" cy="${y}" r="3" style="fill:var(--ink)"/>`;
+  const L = [['vessel dilated, full of red cells', 60, 92, 120, 108, 'start'], ['exudate: fluid and protein (dots)', 14, 214, 120, 176, 'start'], ['sensory nerve ending', 526, 224, 500, 208, 'end']];
+  if (hl === 'heat') L.push(['heat', 400, 14, null, null, 'start']);
+  if (hl === 'nerve') L.push(['bradykinin, PGE2', 420, 204, null, null, 'end']);
+  if (hl === 'func') L.push(['pain and swelling limit use', 150, 14, null, null, 'start']);
+  s += labs(L) + T(536, 14, 'schematic', 's', 'end');
+  $('sign-svg').innerHTML = s; $('sign-find').innerHTML = SIGN[k][1];
+}
+Patho.toggles('sign-tg', Object.entries(SIGN).map(([k, v]) => [k, v[0]]), drawSign, 'rubor'); drawSign('rubor');
+$('sign-text').innerHTML = SIGN_TEXT;
+
+/* ---- vascular events ---- */
+const VS = {s: 0};
+function drawVasc() {
+  const k = VS.s, con = k === 1, dil = k >= 2, leak = k >= 3, slow = k >= 4;
+  const ra = con ? 6 : dil ? 20 : 12, rc = dil ? 7 : 4, rv = dil ? 30 : 24, cy = 120;
+  let s = Patho.arrowDef('ai', 'var(--ink)');
+  // exudate in the tissue round the venule
+  if (leak) { s += `<ellipse cx="470" cy="${cy}" rx="120" ry="${dil ? 92 : 80}" style="fill:var(--fluid);fill-opacity:.85"/>`; for (let i = 0; i < 30; i++) { const a = i * 2.39, r = 0.55 + 0.4 * ((i * 37) % 10) / 10; s += `<circle cx="${f1(470 + 112 * r * Math.cos(a))}" cy="${f1(cy + 86 * r * Math.sin(a))}" r="2" style="fill:var(--ink);fill-opacity:.5"/>`; } }
+  // arteriole (muscular wall)
+  s += `<rect x="14" y="${cy - ra - 5}" width="150" height="${2 * ra + 10}" rx="${ra + 5}" style="fill:var(--artery);fill-opacity:.5;stroke:var(--ink);stroke-width:1"/><rect x="14" y="${cy - ra}" width="150" height="${2 * ra}" rx="${ra}" style="fill:var(--surface);stroke:var(--ink);stroke-width:.8"/>`;
+  // capillaries
+  for (const y of [cy - 60, cy, cy + 60]) {
+    s += `<path d="M160 ${cy} C200 ${cy} 200 ${y} 240 ${y} L330 ${y} C370 ${y} 370 ${cy} 400 ${cy}" style="fill:none;stroke:var(--ink);stroke-width:${2 * rc + 2};stroke-linecap:round"/><path d="M160 ${cy} C200 ${cy} 200 ${y} 240 ${y} L330 ${y} C370 ${y} 370 ${cy} 400 ${cy}" style="fill:none;stroke:var(--surface);stroke-width:${2 * rc};stroke-linecap:round"/>`;
+    const n = dil ? 4 : 2; for (let i = 0; i < n; i++) s += rbc(250 + i * (70 / n), y, Math.max(2.5, rc - 1));
+  }
+  // venule with endothelial cells (gaps when leaking)
+  const vx0 = 380, vx1 = 586;
+  s += `<rect x="${vx0}" y="${cy - rv}" width="${vx1 - vx0}" height="${2 * rv}" rx="6" style="fill:var(--surface);stroke:none"/>`;
+  const cw = 26, gap = leak ? 6 : 0;
+  for (let x = vx0; x < vx1 - 4; x += cw + gap) for (const side of [-1, 1]) {
+    const y = side < 0 ? cy - rv : cy + rv - 6, w = Math.min(cw, vx1 - x);
+    s += `<rect x="${x}" y="${y}" width="${w}" height="6" rx="2" class="endo"/>`;
+  }
+  // red cells (packed when slow)
+  const nr = slow ? 22 : dil ? 12 : 7;
+  for (let i = 0; i < nr; i++) s += rbc(vx0 + 14 + (i * (vx1 - vx0 - 28) / nr), cy + (slow ? ((i % 3) - 1) * 8 : ((i % 2) ? 5 : -5)), 6);
+  if (slow) for (const x of [410, 470, 530]) s += neut(x, cy - rv + 16, 9);
+  if (leak) for (const x of [436, 500]) s += `<path d="M${x} ${cy + rv - 2} L${x} ${cy + rv + 26}" style="stroke:var(--ink);stroke-width:1.4" marker-end="url(#ai)"/>`;
+  // flow arrow
+  s += `<path d="M30 22 L${slow ? 120 : 200} 22" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#ai)"/>` + T(30, 14, slow ? 'flow slows' : 'blood flow', 's', 'start');
+  const L = [['arteriole', 30, 236, 70, cy + ra + 4, 'start'], ['capillaries', 290, 236, 290, cy + 66, 'middle'], ['postcapillary venule', 586, 236, 560, cy + rv, 'end']];
+  if (con) L.push(['constricted', 30, 82, 80, cy - ra - 5, 'start']);
+  if (k === 2) L.push(['dilated: more blood', 30, 82, 80, cy - ra - 5, 'start']);
+  if (leak) L.push(['gaps between endothelial cells', 586, 22, 520, cy - rv, 'end'], ['exudate (oedema)', 440, 236, 470, cy + rv + 30, 'end']);
+  if (slow) L.push(['leucocytes at the wall', 586, 44, 530, cy - rv + 8, 'end']);
+  s += labs(L);
+  $('vasc-svg').innerHTML = s; $('vasc-find').innerHTML = VASC[k][1];
+}
+Patho.stepper('vasc-step', VASC.map(v => v[0]), drawVasc, VS);
+Patho.key('vasc-key', [['--artery', 'arteriolar wall'], ['--cyto', 'endothelial cell'], ['--rbc', 'red cell'], ['--fluid', 'exudate (dots: protein)']]);
+Patho.table('ex-table', ['', 'Exudate', 'Transudate'], EX_TABLE);
+
+/* ---- leucocyte extravasation ---- */
+const CS = {s: 0, d: 'none'};
+const WALL = 160; /* top of the endothelium */
+const sel = (x, on) => `<path d="M${x} ${WALL} L${x} ${WALL - 10}" style="stroke:var(--ink);stroke-width:${on ? 2.2 : 1.2}"/><circle cx="${x}" cy="${WALL - 13}" r="3.2" style="fill:var(--surface);stroke:var(--ink);stroke-width:${on ? 2.2 : 1.2}"/>`;
+const icam = (x, on) => `<path d="M${x} ${WALL} L${x} ${WALL - 12}" style="stroke:var(--ink);stroke-width:${on ? 2.2 : 1.2}"/>` + [0, 4, 8].map(d => `<rect x="${x - 2.5}" y="${WALL - 4 - d}" width="5" height="3" style="fill:var(--ink)"/>`).join('');
+function drawCell() {
+  const k = CS.s, d = DEFECT[CS.d], brk = d[1];
+  let s = Patho.arrowDef('ai', 'var(--ink)');
+  // lumen, endothelium, basement membrane, tissue
+  s += `<rect x="0" y="16" width="600" height="${WALL - 16}" style="fill:var(--surface)"/>`;
+  for (let i = 0; i < 9; i++) { const x = 6 + i * 66; s += `<rect x="${x}" y="${WALL}" width="62" height="12" rx="5" class="endo"/><ellipse cx="${x + 31}" cy="${WALL + 6}" rx="10" ry="3.2" style="fill:var(--nucleus)"/>`; }
+  s += `<path d="M0 ${WALL + 16} L600 ${WALL + 16}" style="stroke:var(--ink);stroke-width:1.6;stroke-dasharray:6 3"/>`;
+  for (let i = 0; i < 10; i++) s += rbc(40 + i * 56, 54 + (i % 2) * 18, 7);
+  s += `<path d="M20 30 L120 30" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#ai)"/>` + T(20, 24, 'blood flow', 's', 'start');
+  // chemoattractant gradient + bacteria in the tissue
+  for (let i = 0; i < 40; i++) { const x = 300 + (i * 53) % 290, y = WALL + 26 + (i * 31) % 80; if (x / 600 > (i % 7) / 7) s += `<circle cx="${x}" cy="${y}" r="1.6" style="fill:var(--ink);fill-opacity:.55"/>`; }
+  for (const [x, y] of [[560, 236], [574, 248], [548, 254]]) s += `<rect x="${x - 7}" y="${y - 3}" width="14" height="6" rx="3" style="fill:var(--ink)"/>`;
+  // molecules on the endothelium
+  for (const x of [150, 175, 200, 225, 250]) s += sel(x, k === 1);
+  for (const x of [275, 300, 325]) s += icam(x, k === 2);
+  s += `<rect x="${6 + 5 * 66 + 60}" y="${WALL}" width="6" height="12" style="fill:var(--ink);fill-opacity:${k === 3 ? .9 : .4}"/>`;
+  // the neutrophil at each step (earlier positions faint)
+  const POS = [[90, 132, {}], [200, 133, {}], [300, 140, {rx: 24, ry: 12}], [400, WALL + 6, {rx: 12, ry: 20}], [440, 214, {}], [528, 236, {rx: 22, ry: 18}]];
+  const stop = brk >= 0 && brk <= k ? brk : k;
+  for (let i = 0; i < stop; i++) s += neut(POS[i][0], POS[i][1], 16, Object.assign({dash: true}, POS[i][2]));
+  const [nx, ny, no] = POS[stop]; s += neut(nx, ny, 16, no);
+  if (stop === 5) s += `<path d="M512 226 q-8 18 10 26 M546 226 q10 18 -6 28" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>`;
+  if (stop === 1) s += `<path d="M184 110 a18 18 0 1 1 28 4" style="fill:none;stroke:var(--ink);stroke-width:1.4" marker-end="url(#ai)"/>`;
+  if (stop === 4) s += `<path d="M462 214 L500 226" style="stroke:var(--ink);stroke-width:1.6" marker-end="url(#ai)"/>`;
+  // defect marker
+  if (brk >= 0 && brk <= k) { const [bx, by] = POS[brk]; const left = bx > 400; s += `<path d="M${bx + 20} ${by - 30} l16 16 m0 -16 l-16 16" style="stroke:var(--ink);stroke-width:3.2"/>` + T(left ? bx + 16 : bx + 40, left ? by - 36 : by - 26, d[0] + ': blocked here', 'l b', left ? 'end' : 'start'); }
+  const LB = {
+    0: [['leucocyte near the wall', 140, 112, 102, 122, 'start']],
+    1: [['selectins on endothelium', 8, 112, 150, WALL - 16, 'start'], ['ligand: sialyl-Lewis X (PSGL-1)', 250, 110, 214, 124, 'start']],
+    2: [['integrins (LFA-1, Mac-1) bind ICAM-1', 360, 110, 300, WALL - 12, 'start']],
+    3: [['PECAM-1 at the junction', 430, 128, 404, WALL + 2, 'start'], ['basement membrane', 140, WALL + 34, 120, WALL + 17, 'start']],
+    4: [['gradient: C5a, LTB4, IL-8, bacterial peptides', 300, 268, 380, 238, 'end']],
+    5: [['phagosome: NADPH oxidase, myeloperoxidase', 300, 268, 510, 244, 'end']],
+  };
+  if (!(brk >= 0 && brk <= k)) s += labs(LB[k]);
+  s += labs([['endothelium', 8, WALL + 32, 40, WALL + 10, 'start'], ['tissue', 8, 214, null, null, 'start']]);
+  $('cell-svg').innerHTML = s;
+  $('cell-find').innerHTML = (brk >= 0 && brk <= k ? d[2] : '') + CELL[k][1];
+}
+const cellGo = Patho.stepper('cell-step', CELL.map(c => c[0]), drawCell, CS);
+Patho.toggles('def-tg', Object.entries(DEFECT).map(([k, v]) => [k, v[0]]), k => { CS.d = k; drawCell(); }, 'none');
+$('def-tg').onkeydown = e => { if (e.key === 'ArrowRight') { cellGo(CS.s + 1); e.preventDefault(); } if (e.key === 'ArrowLeft') { cellGo(CS.s - 1); e.preventDefault(); } };  /* arrows step the neutrophil from the defect chips too */
+Patho.table('defect-table', ['Disorder', 'Defect', 'Step that fails', 'Clinical'], DEFECT_TABLE);
+$('defect-table').insertAdjacentHTML('afterend', `<p class="note">${DEFECT_NOTE}</p>`);
+
+/* ---- mediators and the arachidonic-acid pathway ---- */
+const NODE = {  /* key: [x, y, w, label] */
+  mem: [300, 24, 190, 'Membrane phospholipids'], aa: [300, 84, 150, 'Arachidonic acid'],
+  cox: [150, 138, 130, 'COX-1, COX-2'], pgh2: [150, 186, 130, 'PGG2 → PGH2'],
+  pge2: [36, 246, 56, 'PGE2'], pgi2: [104, 246, 56, 'PGI2'], txa2: [172, 246, 56, 'TXA2'], pgd2: [252, 246, 84, 'PGD2, PGF2α'],
+  lox: [450, 138, 130, '5-lipoxygenase'], lta4: [450, 186, 130, '5-HPETE → LTA4'],
+  lx: [340, 246, 76, 'lipoxins'], ltb4: [424, 246, 56, 'LTB4'], cyslt: [528, 246, 116, 'LTC4 → D4 → E4'],
+  rec: [528, 288, 116, 'CysLT1 receptor'],
+};
+const MS = {m: 'pge2', drug: null};
+function drawMed() {
+  const hl = new Set(MS.m ? MED[MS.m][2] : []), blk = MS.drug ? DRUG[MS.drug][2] : null;
+  const box = k => { const [x, y, w, t] = NODE[k]; const on = hl.has(k) || (k === 'pla2'); return `<rect x="${x - w / 2}" y="${y - 13}" width="${w}" height="24" rx="5" class="${hl.has(k) ? 'nodeon' : 'node'}"/>` + T(x, y + 4, t, hl.has(k) ? 'b' : '', 'middle'); };
+  const ar = (k1, k2) => { const a = NODE[k1], b = NODE[k2]; return `<path d="M${a[0]} ${a[1] + 12} L${b[0]} ${b[1] - 14}" style="stroke:var(--ink);stroke-width:${hl.has(k1) && hl.has(k2) ? 2.2 : 1.1}" marker-end="url(#ai)"/>`; };
+  let s = Patho.arrowDef('ai', 'var(--ink)');
+  s += ar('mem', 'aa') + ar('aa', 'cox') + ar('aa', 'lox') + ar('cox', 'pgh2') + ar('lox', 'lta4');
+  for (const p of ['pge2', 'pgi2', 'txa2', 'pgd2']) s += ar('pgh2', p);
+  for (const p of ['lx', 'ltb4', 'cyslt']) s += ar('lta4', p);
+  s += ar('cyslt', 'rec');
+  for (const k of Object.keys(NODE)) s += box(k);
+  s += T(284, 50, 'phospholipase A2', hl.has('pla2') ? 's b' : 's', 'end') + T(386, 206, '12-/15-LOX', 's', 'end');
+  /* drug blocks: a bar across the middle of the arrow the drug blocks (perpendicular to it), label beside */
+  const BLK = {pla2: ['mem', 'aa', 'glucocorticoids', 'start', 4], cox: ['aa', 'cox', 'NSAIDs, aspirin', 'end', -8], lox: ['aa', 'lox', 'zileuton', 'start', -4], rec: ['cyslt', 'rec', 'montelukast', 'end', 4]};
+  for (const [kk, [k1, k2, lab, an, dy]] of Object.entries(BLK)) {
+    const on = blk === kk, a = NODE[k1], b = NODE[k2], x1 = a[0], y1 = a[1] + 12, x2 = b[0], y2 = b[1] - 14, mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const L = Math.hypot(x2 - x1, y2 - y1), px = -(y2 - y1) / L * 11, py = (x2 - x1) / L * 11;
+    s += `<path d="M${f1(mx - px)} ${f1(my - py)} L${f1(mx + px)} ${f1(my + py)}" style="stroke:var(--ink);stroke-width:${on ? 4.5 : 2.6}"/>` + T(mx + (an === 'start' ? 16 : -24), my + dy, lab, on ? 'b' : 's', an);
+  }
+  s += T(4, 296, 'schematic', 's', 'start');
+  $('med-svg').innerHTML = s;
+  $('med-find').innerHTML = MS.drug ? DRUG[MS.drug][1] : MED[MS.m][1];
+  document.querySelectorAll('#med-table tr').forEach((tr, i) => tr.classList.toggle('sel', i > 0 && !MS.drug && MED_KEYS[i - 1] === MS.m));
+}
+const medBtn = () => document.querySelectorAll('#med-tg button'), drugBtn = () => document.querySelectorAll('#drug-tg button');
+Patho.toggles('med-tg', Object.entries(MED).map(([k, v]) => [k, v[0]]), k => { MS.m = k; MS.drug = null; drugBtn().forEach(b => b.setAttribute('aria-pressed', 'false')); drawMed(); }, 'pge2');
+Patho.toggles('drug-tg', Object.entries(DRUG).map(([k, v]) => [k, v[0]]), k => { MS.drug = k; MS.m = null; medBtn().forEach(b => b.setAttribute('aria-pressed', 'false')); drawMed(); }, null);
+$('drug-tg').insertAdjacentHTML('afterbegin', '<span class="tag" style="align-self:center">Drugs</span>');
+Patho.table('med-table', ['Mediator', 'Made by', 'Vasodilation', 'Permeability', 'Chemotaxis', 'Pain', 'Fever', 'Other'], MED_TABLE.map((r, i) => [r[0], MED_SRC[i]].concat(r.slice(1))));
+document.querySelectorAll('#med-table td').forEach(td => { if (/✓/.test(td.textContent) && td.textContent.length < 9) td.classList.add('ok'); });
+$('med-text').innerHTML = MED_TEXT; drawMed();
+
+/* ---- outcomes ---- */
+function drawOut(k) {
+  const Y = {res: 30, scar: 76, abs: 122, chr: 168};
+  let s = Patho.arrowDef('ai', 'var(--ink)');
+  s += `<rect x="10" y="80" width="150" height="30" rx="6" class="nodeon"/>` + T(85, 100, 'Acute inflammation', 'b', 'middle');
+  for (const [kk, y] of Object.entries(Y)) { const on = kk === k; s += `<path d="M160 95 L${330} ${y}" style="stroke:var(--ink);stroke-width:${on ? 2.4 : 1.1}" marker-end="url(#ai)"/><rect x="334" y="${y - 15}" width="196" height="28" rx="6" class="${on ? 'nodeon' : 'node'}"/>` + T(432, y + 4, OUT[kk][0], on ? 'b' : '', 'middle'); }
+  s += T(250, 186, 'schematic', 's', 'middle');
+  $('out-svg').innerHTML = s; $('out-find').innerHTML = OUT[k][1];
+}
+Patho.toggles('out-tg', Object.entries(OUT).map(([k, v]) => [k, v[0]]), drawOut, 'res'); drawOut('res');
+
+/* ---- granuloma ---- */
+$('chr-text').innerHTML = CHR_TEXT;
+function drawGr(k) {
+  const cx = 250, cy = 130;
+  let s = '';
+  if (k === 'sarc') s += `<ellipse cx="${cx}" cy="${cy}" rx="150" ry="112" style="fill:none;stroke:var(--collagen);stroke-width:12"/>`;
+  // lymphocyte cuff
+  const nl = k === 'sarc' ? 40 : 70;
+  const gx = k === 'fb' ? cx + 2 : cx + 64, gy = k === 'fb' ? cy + 44 : cy - 66, far = (x, y, d) => Math.hypot(x - gx, (y - gy) * 1.3) > d;
+  for (let i = 0; i < nl; i++) { const a = i * 2.4, r = 120 + (i % 3) * 7; if (!far(cx + r * Math.cos(a), cy + r * 0.8 * Math.sin(a), 44)) continue; s += `<circle cx="${f1(cx + r * Math.cos(a))}" cy="${f1(cy + r * 0.8 * Math.sin(a))}" r="3.6" style="fill:var(--nucleus)"/>`; }
+  // epithelioid macrophages (pale, elongated nuclei)
+  for (let i = 0; i < 20; i++) { const a = i / 20 * 2 * Math.PI, r = 84, x = cx + r * Math.cos(a), y = cy + r * 0.8 * Math.sin(a); if (!far(x, y, 46)) continue; s += `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(a * 57.3 + 90)})"><ellipse rx="16" ry="8" style="fill:var(--cyto);fill-opacity:.85;stroke:var(--ink);stroke-width:.7"/><ellipse rx="7" ry="2.4" style="fill:var(--nucleus);fill-opacity:.7"/></g>`; }
+  // centre
+  if (k === 'tb') { s += `<ellipse cx="${cx}" cy="${cy}" rx="60" ry="46" style="fill:var(--eosin);stroke:var(--ink);stroke-width:.8"/>`; for (let i = 0; i < 40; i++) { const a = i * 2.4, r = (i * 13) % 52; s += `<circle cx="${f1(cx + r * Math.cos(a))}" cy="${f1(cy + r * 0.75 * Math.sin(a))}" r="1.3" style="fill:var(--ink);fill-opacity:.5"/>`; } }
+  else if (k === 'sarc') { for (let i = 0; i < 12; i++) { const a = i / 12 * 2 * Math.PI, r = 40; s += `<g transform="translate(${f1(cx + r * Math.cos(a))} ${f1(cy + r * 0.8 * Math.sin(a))}) rotate(${f1(a * 57.3)})"><ellipse rx="14" ry="7" style="fill:var(--cyto);fill-opacity:.85;stroke:var(--ink);stroke-width:.7"/><ellipse rx="6" ry="2.2" style="fill:var(--nucleus);fill-opacity:.7"/></g>`; } }
+  else { s += `<path d="M${cx - 40} ${cy - 6} L${cx + 36} ${cy - 18} L${cx + 42} ${cy + 4} L${cx - 34} ${cy + 16} Z" style="fill:var(--surface);stroke:var(--ink);stroke-width:2;stroke-dasharray:5 3"/>`; }
+  // giant cell (among the epithelioid cells)
+  s += `<ellipse cx="${gx}" cy="${gy}" rx="34" ry="24" style="fill:var(--cyto);stroke:var(--ink);stroke-width:1.2"/>`;
+  if (k === 'fb') for (let i = 0; i < 12; i++) { const a = i * 2.4, r = (i * 7) % 20; s += `<circle cx="${f1(gx + r * Math.cos(a))}" cy="${f1(gy + r * 0.6 * Math.sin(a))}" r="3" style="fill:var(--nucleus)"/>`; }
+  else for (let i = 0; i < 11; i++) { const a = Math.PI * (0.12 + i * 0.076) + Math.PI / 2; s += `<circle cx="${f1(gx + 25 * Math.cos(a))}" cy="${f1(gy + 16 * Math.sin(a))}" r="3" style="fill:var(--nucleus)"/>`; }
+  const L = [['epithelioid macrophages', 10, 258, cx - 66, cy + 52, 'start'], ['lymphocytes', 512, 258, cx + 104, cy + 70, 'end']];
+  if (k === 'tb') L.push(['caseous necrosis', 10, 20, cx - 30, cy - 24, 'start'], ['Langhans giant cell', 512, 20, gx + 20, gy - 16, 'end']);
+  if (k === 'sarc') L.push(['no necrosis', 10, 20, cx - 16, cy - 10, 'start'], ['giant cell', 512, 20, gx + 20, gy - 16, 'end'], ['fibrosis', 512, 132, cx + 150, cy, 'end']);
+  if (k === 'fb') L.push(['foreign material', 10, 20, cx - 30, cy - 4, 'start'], ['foreign-body giant cell', 512, 20, gx + 24, gy - 14, 'end']);
+  s += labs(L) + T(260, 278, 'schematic', 's', 'middle');
+  $('gr-svg').innerHTML = s; $('gr-find').innerHTML = GR[k][1];
+}
+Patho.toggles('gr-tg', Object.entries(GR).map(([k, v]) => [k, v[0]]), drawGr, 'tb'); drawGr('tb');
+Patho.table('gr-table', ['Group', 'Examples'], GR_TABLE);
+Patho.micro('gr-micro', Object.assign({}, IMG_TB, {credit: Patho.credit(IMG_TB.credit)}));
+
+/* ---- morphological patterns ---- */
+function drawPat(k) {
+  let s = '';
+  if (k === 'ser' || k === 'fib') {
+    // two serous membranes (parietal above, visceral below) with a cavity
+    s += `<path d="M10 40 L510 40" style="stroke:var(--ink);stroke-width:2"/><path d="M10 180 L510 180" style="stroke:var(--ink);stroke-width:2"/>`;
+    s += `<rect x="10" y="10" width="500" height="30" style="fill:var(--collagen);fill-opacity:.35"/><rect x="10" y="180" width="500" height="30" style="fill:var(--collagen);fill-opacity:.35"/>`;
+    if (k === 'ser') { s += `<rect x="10" y="42" width="500" height="136" style="fill:var(--fluid);fill-opacity:.9"/>`; for (let i = 0; i < 10; i++) s += `<circle cx="${30 + i * 50}" cy="${80 + (i % 3) * 30}" r="1.8" style="fill:var(--ink);fill-opacity:.4"/>`; s += labs([['thin, low-protein fluid in the cavity', 260, 118, null, null, 'middle']]); }
+    else { s += `<rect x="10" y="42" width="500" height="136" style="fill:var(--fluid);fill-opacity:.5"/>`; for (let i = 0; i < 22; i++) { const x = 20 + i * 22.5; s += `<path d="M${x} 42 q8 ${20 + (i % 3) * 8} 0 ${46 + (i % 4) * 6} M${x + 6} 178 q-8 -24 2 -${40 + (i % 3) * 8}" style="fill:none;stroke:var(--clot);stroke-width:3"/>`; } s += labs([['fibrin strands on both membranes', 260, 118, null, null, 'middle']]); }
+    s += T(16, 30, 'serous membrane', 's', 'start') + T(16, 200, 'serous membrane', 's', 'start');
+  } else if (k === 'sup') {
+    s += `<rect x="10" y="10" width="500" height="200" style="fill:var(--cyto);fill-opacity:.25"/>`;
+    s += `<ellipse cx="260" cy="110" rx="160" ry="78" style="fill:var(--collagen);fill-opacity:.55;stroke:var(--ink);stroke-width:1"/><ellipse cx="260" cy="110" rx="140" ry="62" style="fill:var(--pus)"/>`;
+    for (let i = 0; i < 28; i++) { const a = i * 2.39, r = 0.2 + 0.7 * ((i * 37) % 10) / 10, x = 260 + 130 * r * Math.cos(a), y = 110 + 56 * r * Math.sin(a); if (Math.abs(y - 112) < 14 && Math.abs(x - 260) < 90) continue; s += neut(x, y, 6); }
+    s += labs([['pus: neutrophils, necrotic debris', 260, 116, null, null, 'middle'], ['wall (capsule)', 500, 204, 400, 156, 'end']]);
+  } else {
+    s += `<path d="M10 40 L160 40 C190 40 196 110 230 120 L290 120 C324 110 330 40 360 40 L510 40 L510 60 L360 60 C340 60 330 130 296 140 L224 140 C190 130 180 60 160 60 L10 60 Z" style="fill:var(--cyto);stroke:var(--ink);stroke-width:1"/>`;
+    s += `<path d="M10 60 L160 60 C180 60 190 130 224 140 L296 140 C330 130 340 60 360 60 L510 60 L510 210 L10 210 Z" style="fill:var(--collagen);fill-opacity:.4"/>`;
+    for (let i = 0; i < 18; i++) s += neut(196 + (i % 6) * 26, 150 + Math.floor(i / 6) * 18, 6);
+    s += labs([['epithelium', 14, 30, null, null, 'start'], ['the surface is lost: an ulcer', 260, 102, null, null, 'middle'], ['inflamed base', 500, 200, 340, 170, 'end']]);
+  }
+  s += T(510, 230, 'schematic', 's', 'end');
+  $('pat-svg').innerHTML = s; $('pat-find').innerHTML = PAT[k][1];
+}
+Patho.toggles('pat-tg', Object.entries(PAT).map(([k, v]) => [k, v[0]]), drawPat, 'ser'); drawPat('ser');
+
+/* ---- fever ---- */
+const FS = {s: 0};
+function drawFev() {
+  const on = FEV[FS.s][2];
+  const N = [['exo', 62, 'LPS (pyrogen)'], ['endo', 184, 'IL-1, IL-6, TNF'], ['pge2', 312, 'COX-2 → PGE2'], ['hyp', 440, 'set point ↑'], ['fev', 548, 'fever']];
+  let s = Patho.arrowDef('ai', 'var(--ink)');
+  N.forEach(([kk, x, t], i) => { const w = i === 4 ? 80 : 112; s += `<rect x="${x - w / 2}" y="60" width="${w}" height="30" rx="6" class="${kk === on ? 'nodeon' : 'node'}"/>` + T(x, 80, t, kk === on ? 'b' : '', 'middle'); if (i) { const px = N[i - 1][1] + (i === 1 ? 56 : 56); s += `<path d="M${px} 75 L${x - w / 2 - 2} 75" style="stroke:var(--ink);stroke-width:1.4" marker-end="url(#ai)"/>`; } });
+  s += T(62, 50, 'Gram-negative bacteria', 's', 'middle') + T(184, 108, 'monocytes', 's', 'middle') + T(312, 50, 'brain endothelium', 's', 'middle') + T(440, 108, 'hypothalamus', 's', 'middle');
+  s += `<path d="M300 112 L324 112" style="stroke:var(--ink);stroke-width:${on === 'drug' ? 4 : 2}"/><path d="M312 92 L312 110" style="stroke:var(--ink);stroke-width:1"/>` + T(312, 132, 'NSAIDs block', on === 'drug' ? 'b' : 's', 'middle');
+  s += T(596, 164, 'schematic', 's', 'end');
+  $('fev-svg').innerHTML = s; $('fev-find').innerHTML = FEV[FS.s][1];
+}
+Patho.stepper('fev-step', FEV.map(f => f[0]), drawFev, FS);
+$('apr-text').innerHTML = APR_TEXT;
+
+/* ---- white count ---- */
+function drawWbc(k) {
+  let s = '';
+  const band = (x, y) => `<circle cx="${x}" cy="${y}" r="20" class="wbc"/><path d="M${x - 10} ${y - 8} C${x - 14} ${y + 12} ${x + 14} ${y + 12} ${x + 10} ${y - 8}" style="fill:none;stroke:var(--nucleus);stroke-width:6;stroke-linecap:round"/>`;
+  const seg = (x, y) => neut(x, y, 20);
+  const lym = (x, y) => `<circle cx="${x}" cy="${y}" r="14" class="wbc"/><circle cx="${x}" cy="${y}" r="11" style="fill:var(--nucleus)"/>`;
+  const eos = (x, y) => neut(x, y, 20).replace('class="wbc"', 'style="fill:var(--eosin);stroke:var(--ink);stroke-width:1.4"');
+  let cells = [];
+  if (k === 'neut') cells = [band, band, band, seg, seg, seg, seg];
+  else if (k === 'eos') cells = [eos, eos, eos, seg, seg, lym];
+  else if (k === 'lym') cells = [lym, lym, lym, lym, seg, seg];
+  else cells = [seg, lym];
+  cells.forEach((f, i) => { s += f(50 + i * 68, 64); });
+  const L = {neut: [['band forms (left shift)', 120, 120, 118, 86, 'middle'], ['segmented neutrophils', 360, 120, 362, 86, 'middle']], eos: [['eosinophils', 120, 120, 118, 86, 'middle']], lym: [['lymphocytes', 152, 120, 152, 80, 'middle']], low: [['fewer cells', 84, 120, null, null, 'middle']]}[k];
+  s += labs(L) + T(516, 146, 'schematic', 's', 'end');
+  $('wbc-svg').innerHTML = s; $('wbc-find').innerHTML = WBC[k][1];
+}
+Patho.toggles('wbc-tg', Object.entries(WBC).map(([k, v]) => [k, v[0]]), drawWbc, 'neut'); drawWbc('neut');
+Patho.swipeHints();
+</script>
+</body>
+</html>

@@ -89,6 +89,7 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | # | Module | Branch | What it does |
 |---|---|---|---|
 | 01 | [Cell Injury and Cell Death](pathology/general/cell-injury-death.html), [Cellular Adaptations, Dysplasia, Accumulations, Calcification and Gangrene](pathology/general/adaptations-accumulations.html) | General | Causes and a five-mechanism stepper, reversible→irreversible slider, six necroses with sites, apoptosis vs necrosis, intrinsic and extrinsic apoptosis steppers, telomeres; adaptations, metaplasia, dysplasia→CIS→invasion slider, accumulations and pigments, calcification classifier, gangrene; 3 Commons micrographs |
+| 02 | [Inflammation](pathology/general/inflammation.html), [Healing and Repair](pathology/general/healing-repair.html) | General | Cardinal signs, vascular and extravasation steppers with LAD/CHS/CGD defects, mediator picker on the arachidonic-acid map with drug blocks, granulomas with micrograph, morphological patterns; labile/stable/permanent cells, wound-healing day slider, granulation tissue, collagen III→I, keloid vs hypertrophic scar |
 
 ### General Medicine — [`medicine/`](medicine/index.html)
 

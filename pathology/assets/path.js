@@ -34,7 +34,9 @@
     const go = i => {
       state.s = Math.max(0, Math.min(labels.length - 1, i));
       row.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', String(j === state.s)));
-      prev.disabled = state.s === 0; next.disabled = state.s === labels.length - 1; onStep();
+      prev.disabled = state.s === 0; next.disabled = state.s === labels.length - 1;
+      if (document.activeElement && document.activeElement.disabled) row.children[state.s].focus();   // keep keyboard focus at the ends
+      onStep();
     };
     labels.forEach((l, i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.onclick = () => go(i); row.append(b); });
     prev.onclick = () => go(state.s - 1); next.onclick = () => go(state.s + 1);

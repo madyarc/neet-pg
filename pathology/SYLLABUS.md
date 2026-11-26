@@ -31,14 +31,14 @@ Source notes: PA29.1 is printed "PA.29.1" in the PDF; restored here.
 
 ### 3. Inflammation
 
-- [ ] **PA3.1** Define and describe the general features of acute and chronic inflammation including stimuli, vascular and cellular events
-- [ ] **PA3.2** Enumerate and describe the mediators of acute inflammation
-- [ ] **PA3.3** Define and describe chronic inflammation including causes, types non- specific and granulomatous and enumerate examples of each
-- [ ] **PA3.4** Identify and describe acute and chronic inflammation in gross and microscopic specimens *(skill)*
+- [x] **PA3.1** Define and describe the general features of acute and chronic inflammation including stimuli, vascular and cellular events — *cardinal signs, vascular and leucocyte-extravasation steppers, LAD, Chédiak–Higashi and CGD: [Inflammation](general/inflammation.html)*
+- [x] **PA3.2** Enumerate and describe the mediators of acute inflammation — *mediator picker on the arachidonic-acid pathways with blocking drugs, source cells, preformed vs synthesised, effects matrix: [Inflammation](general/inflammation.html)*
+- [x] **PA3.3** Define and describe chronic inflammation including causes, types non- specific and granulomatous and enumerate examples of each — *chronic inflammation and its causes, caseating/non-caseating/foreign-body granulomas with micrograph: [Inflammation](general/inflammation.html)*
+- [~] **PA3.4** Identify and describe acute and chronic inflammation in gross and microscopic specimens *(skill)* — *labelled granuloma micrograph only (skill): [Inflammation](general/inflammation.html)*
 
 ### 4. Healing and repair
 
-- [ ] **PA4.1** Define and describe the process of repair and regeneration including wound healing and its types
+- [x] **PA4.1** Define and describe the process of repair and regeneration including wound healing and its types — *labile/stable/permanent cells, first vs second intention day slider, granulation tissue, growth factors, collagen III→I, keloid vs hypertrophic scar: [Healing and Repair](general/healing-repair.html)*
 
 ### 5. Hemodynamic disorders
 

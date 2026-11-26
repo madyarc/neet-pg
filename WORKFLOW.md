@@ -86,7 +86,7 @@ Last updated: 2026-11-23
   [x] review (ERAS carbohydrate loading misattributed, TBI/spinal exception missing at the instruction (safety),
   ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. ROUND 1 SECOND MODULES started: B02 [x] build (552 quotes) [x] review (Wikipedia misread Katz&Tayek 1998 Cori %, WHO joint criteria,
   ADA discordant wording, colours) [x] fixes (602 quotes) [x] committed 2026-11-26. P02 [x] build (427 quotes) [x] review (no wrong facts; one-source pairs, transmigration drawn transcellular,
-  drug blocks off-arrow, path.js stepper focus) [ ] fixes (running).
+  drug blocks off-arrow, path.js stepper focus) [x] fixes (472 quotes) [x] committed 2026-11-26.
   (bioc.js has the stepper-end focus fix in another form: verified; only path.js lacked it, P02 fix adds it.) M02 [x] build (474 quotes; MoHFW 2017, CDC 2024; Wikipedia Humoral immunity, Type II hypersensitivity excluded)
   [ ] review (running). G02 [ ] build (running; medicine/endocrine/,
   GM11.1–11.24).

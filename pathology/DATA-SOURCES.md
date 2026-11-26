@@ -26,3 +26,25 @@ Open sources only: StatPearls abstracts (one source), open-access papers via NCB
   fibrinoid contrast, dysplasia wording, classifier summary, Russell-body attribution, unquoted labels, glycolysis
   leader, injury-slider threshold, `--clin` misuse, two micrograph labels, apoptosis drawing, ageing citations, airway
   drawing note.
+
+## 02 Inflammation and healing — `general/inflammation.html`, `general/healing-repair.html`
+
+- Fact sheet `sources-local/facts/fill-p02.md` (472 quotes, script-checked against `sources-local/modern/fill-p02/`,
+  downloads 2026-11-26; current Wikipedia revisions via curl).
+- Excluded: Wikipedia Eicosanoid (cites a LibreTexts copy of Boundless A&P); PMC7122703 (publisher chapter, not openly
+  licensed). Not independent: Wikipedia Wound healing's factors section copies Guo & DiPietro 2010 (PMC2903966);
+  Wikipedia Inflammation's chronic-duration and chronic-cell sentences and Wikipedia Granuloma's definition cite
+  StatPearls (one source each).
+- Reviews: PMC3081099 (prostaglandins 2011), PMC2480489 (permeability 2008), PMC2861890, PMC4629053, PMC3197933,
+  PMC3271231, PMC7063431 (LAD 2020), PMC11663721 (TB granuloma 2024), PMC6797840 (2019), PMC9035892 (giant cells 2022),
+  PMC2903966 (Guo 2010), PMC7536089 (Wilkinson 2020), PMC7443169, PMC5372622, PMC7818137; StatPearls; Wikipedia.
+- Contested, shown: the fifth cardinal sign; loss of function; keloid/hypertrophic boundary; contracture in keloids.
+- Not covered (no two open sources): exudate specific gravity and protein values; pseudomembranous and catarrhal
+  patterns; wound strength at suture removal; toxic exposure as a cause of chronic inflammation.
+- Images (Commons, licences read 2026-11-26; labels checked with marks.py): tuberculous node granuloma (Calicut Medical
+  College, CC BY-SA 4.0, frame trimmed); oedematous granulation tissue (M. Häggström, CC0).
+- No new colour tokens. path.js: stepper keeps keyboard focus at the ends (all pathology pages).
+- Independent review 2026-11-26, fixed: one-source attributions; transmigration drawn at the junction; drug blocks on
+  the arachidonic map; vasoconstriction timing; Celsus citation; VEGF source; missing quotes; wording; CGD row;
+  capillary colour; SVG collisions; added causes of chronic inflammation, mediator source cells, preformed vs
+  synthesised and oxygen-independent killing.
