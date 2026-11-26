@@ -84,8 +84,10 @@ Last updated: 2026-11-23
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
   colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. S01 [x] build (243 quotes; EU trauma 2023 / ATLS 10th, Sepsis-3, SSC 2021, ERAS; Wikipedia Homeostasis excluded)
   [x] review (ERAS carbohydrate loading misattributed, TBI/spinal exception missing at the instruction (safety),
-  ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. R01 [x] build (346 quotes; IAEA 2014, AERB, NICE, ACR 2024, HPA/RCR, PC-PNDT; Wikipedia Ultrasound excluded)
-  [ ] review (running). E01 [x] build (388 quotes; WHO 2021 grades, ASHA 1990; Wikipedia Rinne/Weber excluded; ABC/Schwabach cut)
+  ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,
+  NICE head-injury adult rule, 10-day rule year, radiograph densities unsourced, PET geometry) [ ] fixes (running).
+  TOOLING FIX 2026-11-26: tools/capped passed args through systemd-run env expansion (${X} in --js was mangled);
+  now --expand-environment=no. Inline --js tests before this date that used ${...} may have been wrong. E01 [x] build (388 quotes; WHO 2021 grades, ASHA 1990; Wikipedia Rinne/Weber excluded; ABC/Schwabach cut)
   [x] review (audiogram symbol text reversed, ET angle reference planes mixed, bone>air nonsense, ear
   colours outside the audiogram) [ ] fixes (running). OG01 [x] build (422 quotes; PMC10964813 excluded for copying PMC4928162) [ ] review (running). O01 [x] build (313 quotes; BOAST 2017, ATLS 11th 2025, WHO 2005/2018) [x] review (SALTER mnemonic orientation reversed,
   START missing airway-reposition RED branch, ATLS 11th C-spine wording + edition-switch bug) [x] fixes (341 quotes) [x] committed 2026-11-26. An01 [x] build (312 quotes; AHA 2020 (archived), ILCOR 2020, KACPR 2025, SRFAC 2026, BTS 2017, TSANZ 2022,
