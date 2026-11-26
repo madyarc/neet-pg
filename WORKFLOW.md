@@ -94,7 +94,8 @@ Last updated: 2026-11-23
   quote its text, which does not cite OpenStax). Text citations of OpenStax/Boundless/Lumen still exclude. Ask user. G02 [x] build (413 quotes; ADA 2026, 2024 crises consensus vs 2009, KDIGO 2022/2024) [x] review (CRIT_NOTE garbled; 2024 pH 7.25 severity;
   picker cost/TZD conflicts; metformin eGFR 45; adult-only doses; UACR 300; hypo 70 alert) [x] fixes (454 quotes) [x] committed 2026-11-26.
   At G02 commit: include biochemistry/carbohydrates/minor-pathways-glucose.html line 245 (planned → Medicine 02). C02 [x] build (360 quotes; 6 Wikipedia stats articles excluded for OpenStax/CNX/Boundless) [x] review (curved r≠0; copied
-  sources (Pune 2013 copies Bangalore 2009; Ali&Bhaskar~Nahm); ogive median; duplicate id; small text fixes) [ ] fixes (running).
+  sources (Pune 2013 copies Bangalore 2009; Ali&Bhaskar~Nahm); ogive median; duplicate id; small text fixes) [ ] fixes (STOPPED: monthly spend limit, 2026-11-26;
+  resume the C02 builder via SendMessage once the limit resets — its work so far is saved, uncommitted).
   P03 [ ] build (running; pathology/general/, PA5.1–5.6).
   FM02 [ ] build (running; forensic-medicine/injuries/, FM5.1–5.6; BNS 2023 official text).
   R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,
