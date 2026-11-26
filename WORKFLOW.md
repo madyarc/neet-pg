@@ -84,7 +84,8 @@ Last updated: 2026-11-23
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
   colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. S01 [x] build (243 quotes; EU trauma 2023 / ATLS 10th, Sepsis-3, SSC 2021, ERAS; Wikipedia Homeostasis excluded)
   [x] review (ERAS carbohydrate loading misattributed, TBI/spinal exception missing at the instruction (safety),
-  ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. R01 [ ] build (running; radiology/basics/, RD1–RD3). O01 [x] build (313 quotes; BOAST 2017, ATLS 11th 2025, WHO 2005/2018) [ ] review (running). An01 [x] build (312 quotes; AHA 2020 (archived), ILCOR 2020, KACPR 2025, SRFAC 2026, BTS 2017, TSANZ 2022,
+  ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. R01 [ ] build (running; radiology/basics/, RD1–RD3). O01 [x] build (313 quotes; BOAST 2017, ATLS 11th 2025, WHO 2005/2018) [x] review (SALTER mnemonic orientation reversed,
+  START missing airway-reposition RED branch, ATLS 11th C-spine wording + edition-switch bug) [ ] fixes (running). An01 [x] build (312 quotes; AHA 2020 (archived), ILCOR 2020, KACPR 2025, SRFAC 2026, BTS 2017, TSANZ 2022,
   DAS 2015; ERC only as reported (403)) [ ] review (running). Ps01 [x] build (289 quotes) [x] review (no wrong facts; duration-picker logic, missing arrowheads,
   mesocortical path, synapse marks, clozapine schedule) [x] fixes (322 quotes) [x] committed 2026-11-25. C01 [x] build (328 quotes; CDC 2012, WHO 1968, SRS 2020, NFHS-5, IDSP; no new tokens) [x] review (no wrong formulas; disability limitation level
   one-source, rate/time misattribution, --accent/--clin misuse, gaps: indirect standardisation, field trial) [x] fixes (374 quotes) [x] committed 2026-11-25. Pd01 [x] build (458 quotes; WHO 2006/2007 LMS z-score chart, CDC 2022 milestones via Zubler 2022) [x] review.
