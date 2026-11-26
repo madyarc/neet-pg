@@ -41,7 +41,8 @@
     };
     labels.forEach((l, i) => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.onclick = () => go(i); row.append(b); });
     prev.onclick = () => go(state.s - 1); next.onclick = () => go(state.s + 1);
-    box.onkeydown = e => { if (e.key === 'ArrowRight') { go(state.s + 1); e.preventDefault(); } if (e.key === 'ArrowLeft') { go(state.s - 1); e.preventDefault(); } }; // property, not addEventListener: a rebuilt stepper replaces the old handler
+    // arrow keys step, and focus follows to the chip that is now active (so the reader keeps the keyboard on the control they just used)
+    box.onkeydown = e => { if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return; go(state.s + (e.key === 'ArrowRight' ? 1 : -1)); row.children[state.s].focus(); e.preventDefault(); }; // property, not addEventListener: a rebuilt stepper replaces the old handler
     box.append(prev, row, next); go(state.s);
     return go;
   };

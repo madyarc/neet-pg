@@ -102,6 +102,7 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | # | Module | Branch | What it does |
 |---|---|---|---|
 | 01 | [History, the Bacterial Cell, Staining and Growth](microbiology/general/bacteria-structure-growth.html), [Bacterial Genetics and Laboratory Diagnosis](microbiology/general/genetics-lab-diagnosis.html), [Sterilisation, Disinfection and the Chain of Infection](microbiology/general/sterilisation-epidemiology.html) | General | Timeline and Koch's postulates, cell-wall picker, Gram/ZN steppers, growth curve; gene-transfer stepper, PCR, media classifier, biochemical tests, ELISA, specimen picker; resistance ladder, Spaulding, heat plot, choose-the-method picker (CDC 2008), chain of infection |
+| 02 | [Antigens, Complement and the Response to Each Pathogen](microbiology/immunology/immune-response-infection.html), [Antigen–Antibody Tests, Vaccines and the Cold Chain](microbiology/immunology/serology-prophylaxis.html), [Hypersensitivity, Autoimmunity, Immunodeficiency and Transplantation](microbiology/immunology/immune-disorders.html) | Immunology | Antigens, haptens, superantigens, complement stepper, pathogen-defence picker; prozone slider, serological tests, vaccine types, herd-immunity calculator, cold chain and open vial policy; hypersensitivity I–IV, Coombs, tolerance, immunodeficiency picker, rejection timeline, GVHD, immunoediting |
 
 ### Pharmacology — [`pharmacology/`](pharmacology/index.html)
 

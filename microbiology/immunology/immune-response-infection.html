@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Antigens, Complement and the Response to Each Pathogen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/micro.css">
+<style>
+/* No new colour tokens: cells use --cyto (cytoplasm, as in physiology), the selected item is outlined with --accent (.sel),
+   the current step is marked with --mark, clinical points use --clin. Antibodies, complement proteins and microbes are drawn
+   in ink with different shapes, never with a meaning colour of another page. */
+svg.sch .ab{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+svg.sch .mic{fill:var(--surface);stroke:var(--ink);stroke-width:1.6}
+svg.sch .pale{fill:var(--bg);stroke:var(--muted);stroke-width:1.2}
+svg.sch.fitmid{max-width:620px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Microbiology</a> <span class="muted">· Module 02: <span aria-current="page">Antigens, complement and responses</span> · <a href="serology-prophylaxis.html">Serology and prophylaxis</a> · <a href="immune-disorders.html">Immunological disorders</a></span></nav>
+
+<header class="stack">
+  <h1>Antigens, Complement and the Response to Each Pathogen</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-ag">Kinds of antigen</a> <a href="#h-mat">Class switching</a> <a href="#h-comp">Complement pathways</a> <a href="#h-cdef">Complement deficiencies</a> <a href="#h-arms">Humoral vs cell-mediated</a> <a href="#h-path">Response by pathogen</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-ag">
+  <h2 id="h-ag">Kinds of antigen: pick one</h2>
+  <div class="chips" id="ag-tg" aria-label="Kind of antigen"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ag-svg" viewBox="0 0 560 250" role="img" aria-label="Schematic of the chosen kind of antigen: epitopes bound by antibodies, a hapten with and without its carrier, a superantigen bridging MHC class II and the T-cell receptor, a protein antigen with T-cell help, or a polysaccharide with and without conjugation"></svg></div>
+    <div class="prose find" id="ag-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mat">
+  <h2 id="h-mat">What the B cell does next: class switching and affinity maturation</h2>
+  <div class="prose" id="mat-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-comp">
+  <h2 id="h-comp">Complement: three ways in, one road out</h2>
+  <div class="chips" id="comp-tg" aria-label="Pathway"></div>
+  <div class="step" id="comp-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="comp-svg" viewBox="0 0 640 300" role="img" aria-label="Schematic: the classical, lectin and alternative pathways on the left all reach a C3 convertase, which splits C3 into C3a and C3b; C3b makes C5 convertase, which splits C5 into C5a and C5b; C5b with C6 to C9 forms the membrane attack complex, a pore in the microbial membrane"></svg></div>
+    <div class="prose find" id="comp-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="comp-key"></div>
+  <div class="prose" id="comp-fn"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cdef">
+  <h2 id="h-cdef">When complement is missing</h2>
+  <div class="scroll"><table id="cdef-table"></table></div>
+  <div class="prose" id="cdef-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-arms">
+  <h2 id="h-arms">Humoral and cell-mediated immunity</h2>
+  <div class="scroll"><table id="arms-table"></table></div>
+  <div class="prose" id="arms-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-path">
+  <h2 id="h-path">Which defences matter against which pathogen</h2>
+  <div class="chips" id="path-tg" aria-label="Pathogen group"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="path-svg" viewBox="0 0 560 280" role="img" aria-label="Schematic: the pathogen in the middle with the immune effectors around it; the effectors that matter for the chosen pathogen group are outlined and the rest are faint"></svg></div>
+    <div class="prose find" id="path-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BAntigens%2C%20Complement%20and%20the%20Response%20to%20Each%20Pathogen%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fmicrobiology%2Fimmunology%2Fimmune-response-infection.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/micro.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two independent open sources: sources-local/facts/fill-m02.md, Part A; microbiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'The microbiology half of immunology: what makes a molecule an antigen, why a hapten needs a carrier and a superantigen needs neither, how the three complement pathways meet at C3, which infection each complement defect lets through, and which defences actually clear a bacterium, a mycobacterium, a virus, a fungus or a worm. The groundwork — innate vs adaptive, MHC with CD4 and CD8, the five antibody classes, primary and secondary responses — is on <a href="../../physiology/blood/immunity.html">Immunity (physiology)</a>.';
+
+/* antigen kinds: key -> [label, text] ; the drawing is chosen by key in drawAg() */
+const AG = {
+  epi: ['Antigen, immunogen, epitope', '<h3>Antigen, immunogen, epitope</h3><p>An <b>antigen</b> is a molecule bound by an antibody or a T-cell receptor; an <b>immunogen</b> is an antigen that can actually induce a response. Wikipedia puts it neatly: all immunogens are antigens, but not all antigens are immunogens — a purified vaccine antigen may need an <b>adjuvant</b> before it provokes anything.</p><p>The part that is really bound is the <b>epitope</b> (antigenic determinant). One antigen carries several epitopes, so several different antibodies can bind it at once (Wikipedia). Antibodies can bind linear or <b>conformational</b> epitopes; a T cell only ever sees a <b>linear</b> peptide, because the antigen-presenting cell has already unfolded and cut the protein (Wikipedia). <a href="../../physiology/blood/immunity.html#h-adapt">How that peptide reaches the T cell</a>.</p>'],
+  hap: ['Hapten', '<h3>Hapten: too small to be seen alone</h3><p>A <b>hapten</b> is a small molecule that induces a response <b>only when attached to a large carrier</b> such as a protein (Wikipedia; StatPearls treats haptens as the low-molecular-weight antigens measured by competitive ELISA). Free hapten can still <b>bind</b> the antibody, but it does not start a response — and by occupying the antibody it can block the reaction, which Wikipedia calls <b>hapten inhibition</b>.</p><p>Clinically: haptens painted on skin cause <b>contact hypersensitivity</b>, a type IV reaction; <b>nickel</b> allergy is the stock example (Wikipedia). <a href="immune-disorders.html#h-hyp">Type IV hypersensitivity</a>.</p>'],
+  sag: ['Superantigen', '<h3>Superantigen: skips the specificity</h3><p>A <b>superantigen</b> bridges <b>MHC class II</b> on the antigen-presenting cell to the <b>variable chain of the T-cell receptor</b>, outside the peptide groove. The T cell is activated <b>whatever its specificity</b> — polyclonal activation with a massive cytokine release (Wikipedia, a 2019 review). The 2019 review puts the share of T cells activated at <b>5–30 %</b> — against the tiny fraction that any one ordinary peptide antigen can call up.</p><p>The classic superantigens are staphylococcal <b>TSST-1</b> and the enterotoxins, and the streptococcal <b>pyrogenic exotoxins</b> (a 2019 review); Wikipedia lists toxic shock syndrome, scarlet fever and Kawasaki disease among the associated diseases. <span class="muted">Note the exam contrast: a superantigen needs <i>no</i> processing and <i>no</i> matching peptide; a hapten needs a carrier.</span></p>'],
+  td: ['T-dependent antigen', '<h3>T-dependent antigen (protein)</h3><p>A protein antigen is processed and presented on MHC, so the B cell gets <b>T-cell help</b> through CD40 and cytokines. That help buys <b>class switching</b>, <b>affinity maturation</b> and <b>memory</b> (Wikipedia, a 2024 review, a 2021 Nature Reviews Immunology guide to vaccinology).</p>'],
+  ti: ['T-independent antigen', '<h3>T-independent antigen (polysaccharide)</h3><p>A bacterial <b>polysaccharide</b> activates B cells without T cells, because MHC molecules can only hold peptides (Wikipedia). The result is a <b>weak, short-lived, mostly IgM</b> response with <b>no affinity maturation and no memory B cells</b> (Wikipedia, the 2021 vaccinology guide) — and young children respond especially badly (Wikipedia).</p><p>The fix is the <b>conjugate vaccine</b>: attach the polysaccharide to a carrier protein (tetanus or diphtheria toxoid) and B cells that recognise the sugar can borrow help from T cells that recognise the carrier peptide — higher, longer-lasting antibody with memory (Wikipedia, the 2021 guide, a 2014 review). <a href="serology-prophylaxis.html#h-vax">Conjugate vaccines</a>.</p>'],
+};
+
+const MAT_TEXT = '<p><b>Class switching</b> (isotype switching, class-switch recombination) swaps the <b>heavy-chain constant region</b> — so the class, and with it the effector function, changes while the <b>variable region, and therefore the antigen specificity, stays the same</b> (Wikipedia, a 2024 review). It needs <b>CD40</b> and T-cell cytokines (Wikipedia), which is why a polysaccharide alone cannot buy it.</p><p><b>Affinity maturation</b> comes from <b>somatic hypermutation</b> of the variable region in the <b>germinal centre</b> (StatPearls, a 2019 study of pneumococcal vaccines, a 2026 review), where follicular dendritic cells present antigen and the B-cell progeny with the <b>highest affinity</b> are positively selected, so that over several rounds the secreted antibody has <b>higher affinity</b> for the antigen (Wikipedia, a 2021 review). The long-lived plasma cells and memory B cells come out of the same reaction (a 2026 review). Together they explain why the <b>secondary response</b> is not just bigger but better. <a href="../../physiology/blood/immunity.html#h-resp">The primary and secondary response curves</a>, and <a href="../../physiology/blood/immunity.html#h-ab">the five antibody classes</a>.</p>';
+
+/* complement: pathway key -> [label, trigger text] */
+const CP = {
+  cl: ['Classical', '<h3>Classical pathway</h3><p>Triggered when <b>C1</b> binds, through its C1q subunits, to the <b>Fc of IgG or IgM already bound to antigen</b> — so this pathway needs an antibody (Wikipedia; StatPearls, on <a href="../../physiology/blood/immunity.html#h-comp">the physiology page</a>). Wikipedia adds that C1q also triggers <b>clearance of immune complexes and apoptotic cells</b>.</p>'],
+  le: ['Lectin', '<h3>Lectin (MBL) pathway</h3><p>Triggered when <b>mannose-binding lectin</b> or a <b>ficolin</b> binds <b>carbohydrate</b> — terminal sugars such as mannose on yeasts, bacteria, parasites and viruses. <b>No antibody is needed</b> (Wikipedia, a 2011 review, a 2014 review).</p>'],
+  al: ['Alternative', '<h3>Alternative pathway</h3><p>Runs <b>continuously at a low level</b> from spontaneous hydrolysis of C3, and is amplified on a microbial surface; <b>properdin</b> stabilises the convertase (Wikipedia). The 2014 review calls it the <b>amplification loop</b>: it multiplies the C3b that the other two pathways deposit.</p>'],
+};
+/* steps shared by all three pathways */
+const CS = [
+  ['Trigger', ''],
+  ['C3 convertase', '<h3>2 · A C3 convertase forms</h3><p>Each pathway builds its own version of the same enzyme: <b>C4b2b</b> after the classical and lectin pathways, <b>C3bBb</b> in the alternative pathway (Wikipedia). This is where the three roads meet.</p>'],
+  ['C3 → C3a + C3b', '<h3>3 · C3 is split — the central step</h3><p>All three pathways <b>converge on C3</b>, the most abundant complement protein in blood (a 2011 review, a 2014 review, Wikipedia). C3 convertase cuts it into <b>C3a</b> (an anaphylatoxin) and <b>C3b</b>, which coats the microbe. Wikipedia: <b>C3b has the most important opsonising activity</b>, and phagocytes take up what it coats.</p>'],
+  ['C5 convertase', '<h3>4 · C3b makes a C5 convertase</h3><p>Adding C3b to the C3 convertase gives <b>C5 convertase</b> (C4b2b3b classically, (C3b)₂BbP in the alternative pathway), which splits C5 into <b>C5a</b> and <b>C5b</b> (Wikipedia). <b>C5a</b> is a powerful <b>chemotactic</b> factor and, with C3a, an <b>anaphylatoxin</b>: mast-cell degranulation, more vascular permeability (Wikipedia).</p>'],
+  ['Membrane attack complex', '<h3>5 · C5b-9: the membrane attack complex</h3><p>C5b recruits <b>C6, C7, C8</b> and then <b>C9</b> — Wikipedia says 10–16 molecules of C9 polymerise — to form the <b>MAC (C5b-9)</b>, a <b>pore</b> that lyses the cell (Wikipedia, a 2011 review). Past C5 the cascade is the same whichever pathway started it.</p>'],
+];
+const COMP_FN = '<p><b>What complement achieves:</b> <b>opsonisation</b> (C3b, for phagocytosis via complement and Fc receptors), <b>inflammation</b> (C3a and C5a: mast-cell degranulation, permeability, and C5a as a chemoattractant for neutrophils and macrophages) and <b>lysis</b> (the MAC) — Wikipedia, StatPearls. The same C3a/C5a step is what makes immune-complex (type III) disease destructive (StatPearls); complement and the other mediators of acute inflammation: <a href="../../pathology/general/inflammation.html">Inflammation (pathology)</a>. <a href="../../physiology/blood/immunity.html#h-comp">Complement on the physiology page</a>; complement-mediated lysis in an incompatible transfusion: <a href="../../physiology/blood/haemostasis-blood-groups.html#h-tx">Transfusion</a>.</p>';
+
+const CDEF = [['Missing', 'What goes wrong', 'Sources'], [
+  ['C5, C6, C7, C8, C9 <span class="tag"><span class="u">terminal / MAC</span></span>', 'Not a general susceptibility to infection — specifically <b class="x">Neisseria</b> infection (meningococcal disease), because without the MAC serum cannot kill the organism directly', 'Wikipedia; 2011 and 2014 reviews'],
+  ['C3', 'Early-onset, severe, recurrent infection with <b>encapsulated bacteria</b> (poor opsonisation); lupus is rarely reported', 'A 2022 review; a 2011 review'],
+  ['C1q, C1r, C1s, C2, C4 <span class="tag"><span class="u">early classical</span></span>', '<b>SLE-like disease</b> — apoptotic cells and immune complexes are not cleared — and infection with encapsulated organisms including <i>Haemophilus influenzae</i>', '2011 and 2015 reviews'],
+  ['C1 inhibitor (C1-INH)', 'Not infection at all: <b class="x">hereditary angioedema</b> — see below', 'StatPearls; Wikipedia'],
+]];
+const CDEF_TEXT = '<p><b>Hereditary angioedema</b> is <b>autosomal dominant</b> C1-inhibitor deficiency: C1-INH is reduced in quantity and function (type 1) or dysfunctional (type 2) (StatPearls, Wikipedia). The swelling is <b>bradykinin-mediated, not histamine-mediated</b>, so <b>urticaria is typically absent</b> and antihistamines do not work (Wikipedia; a 2024 review groups hereditary, acquired and ACE-inhibitor angioedema together as bradykinin-induced). Wikipedia adds the laboratory pattern: <b>low C4 with a normal C1 level</b>.</p><p class="muted">Because the terminal defect lets <i>Neisseria</i> through, Wikipedia notes that vaccination against encapsulated organisms, <i>N. meningitidis</i> among them, is advised in complement deficiency.</p>';
+
+const ARMS = [['', 'Humoral (antibody-mediated)', 'Cell-mediated'], [
+  ['Effector', 'B cells → plasma cells → antibody, with complement', 'activated phagocytes (macrophages), CD8 cytotoxic T cells, cytokines; no antibody'],
+  ['Reaches', 'microbes and toxins in <b>extracellular</b> fluid', 'what is <b>inside</b> cells: viruses, intracellular bacteria, tumour cells'],
+  ['Does', 'neutralisation, complement activation, opsonisation', 'kills the infected cell by apoptosis; arms the macrophage to kill what it has swallowed'],
+  ['Fails in', 'antibody defects (e.g. Bruton\'s) → encapsulated bacteria', 'T-cell defects (e.g. SCID, HIV) → viruses, fungi, mycobacteria'],
+]];
+const ARMS_TEXT = '<p>Two sources agree on the split (StatPearls "Physiology, Immune Response" and "Complement Deficiency"; a 2018 review; Wikipedia "Cell-mediated immunity"): antibody deals with what is outside cells, cells with what is inside. CD4 helper T cells sit across both — their cytokines steer the B cell and boost the CD8 cell (StatPearls). The failure line is the clinical use of the distinction: <a href="immune-disorders.html#h-idef">which infections each immunodeficiency lets through</a>.</p>';
+
+/* pathogen groups: key -> [label, set of effector keys that matter, text] */
+const EFF = [
+  ['ab', 'Antibody', 110, 46], ['th17', 'Th17', 280, 30], ['comp', 'Complement', 450, 46],
+  ['ifn', 'Type I interferon', 80, 130], ['neu', 'Neutrophils', 480, 130],
+  ['cd8', 'CD8 T cell', 100, 196], ['mac', 'Macrophage + IFN-γ', 452, 196],
+  ['eos', 'IgE + eosinophils', 180, 250], ['gran', 'Granuloma', 372, 250],
+];
+const PATH = {
+  bact: ['Extracellular bacteria', ['ab', 'comp', 'neu', 'th17'], '<h3>Extracellular (pyogenic) bacteria</h3><p>Antibody and complement <b>opsonise</b>, and <b>neutrophils</b> eat; <b>Th17</b> cells recruit those neutrophils and guard the mucosal surfaces and skin (Wikipedia, a 2022 review, a 2013 review, a 2024 review). When opsonisation fails — a complement defect — the clinical picture is <b>severe, recurrent pyogenic infection</b> (a 2022 review).</p>'],
+  myco: ['Mycobacteria', ['mac', 'gran', 'cd8'], '<h3>Mycobacteria</h3><p>The organism lives <b>inside the macrophage</b> and <b>blocks phagosome–lysosome fusion</b> (Wikipedia, a 2025 review). Control needs <b>Th1 CD4 cells and IFN-γ</b> to activate the macrophage, which then kills with reactive oxygen and nitrogen intermediates (Wikipedia, a 2015 review); TNF-α and IFN-γ drive the <b>granuloma</b>, an organised collection of macrophages (epithelioid histiocytes) that walls the lesion off (Wikipedia, a 2024 review). <b>CD8 cytotoxic T cells</b> help too, secreting perforin, granzyme and granulysin (a 2025 review; Wikipedia counts cells carrying intracellular bacteria among cytotoxic-T-cell targets). Lose CD4 cells and IFN-γ — as in advanced HIV — and tuberculosis disseminates (a 2024 review). The <b>tuberculin test</b> is this same type IV reaction: <a href="immune-disorders.html#h-lab">skin test and IGRA</a>.</p>'],
+  vir: ['Viruses', ['ifn', 'cd8', 'ab'], '<h3>Viruses</h3><p>Innate receptors (Toll-like and RIG-I-like) sense <b>viral nucleic acid</b> and the cell makes <b>type I interferon</b>, which puts still-uninfected cells into an antiviral state (a 2011 review, a 2019 review, a 2018 review). Then <b>antibody neutralises free virus</b> while <b>CD8 cytotoxic T cells kill the infected cell</b> (a 2025 review, Wikipedia).</p>'],
+  fung: ['Fungi', ['neu', 'th17', 'mac'], '<h3>Fungi</h3><p>C-type lectin receptors — <b>Dectin-1</b> signalling through <b>CARD9</b> — recognise <b>β-glucans</b> in the fungal wall (a 2015 review). <b>Phagocytes do the killing</b>, and <b>Th1 with Th17</b> responses clear the infection (a 2015 review, a 2013 review, a 2022 review). Hence the clinical rule: <b class="x">phagocyte defects invite fungal disease</b> — a 2024 review states that phagocytic defects lead to fungal and bacterial infection, and a 2018 review describes severe bacterial and fungal infection as the typical picture of a phagocyte disorder (chronic granulomatous disease is the example: <a href="immune-disorders.html#h-idef">phagocyte defects</a>).</p>'],
+  par: ['Parasites', ['eos', 'ab'], '<h3>Parasites</h3><p>A large worm cannot be phagocytosed, so the response is <b>type 2</b>: IL-4, IL-5 and IL-13, <b>IgE</b>, <b>eosinophils</b> and mast cells, with mucus and gut changes that expel it (Wikipedia, a 2019 review). Immunity comes slowly because parasites evade it: protozoa by <b>antigenic variation</b>, helminths by <b>inducing regulatory responses</b> that damp the specific response down (a 2010 review).</p>'],
+};
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts: Physiology, Immune Response · Physiology, Antibody · Biochemistry, Complement · Physiology, Complement Cascade · Complement Deficiency · Hereditary Angioedema · ELISA · Type I–IV Hypersensitivity); open-access reviews via PubMed Central: an introduction to immunology and immunopathology (Allergy Asthma Clin Immunol 2018), the complement system (Cell Tissue Res 2011), meningococcal disease and the complement system (Virulence 2014), inherited defects in the complement system (Pediatr Allergy Immunol 2022), complement system part II (Front Immunol 2015), a guide to vaccinology (Nat Rev Immunol 2021), immunoglobulin class-switch recombination (MedComm 2024), staphylococcal superantigens (Toxins 2019), pattern recognition receptors and the innate immune response to viral infection (Viruses 2011), macrophage defence against intracellular bacteria (Immunol Rev 2015), host immune response to <i>M. tuberculosis</i> (J Inflamm Res 2025), granuloma formation in sarcoidosis and tuberculosis (J Clin Invest 2024), pattern recognition receptors in antifungal immunity (Semin Immunopathol 2015), Th17 cells in infection (Pathogens 2022, Clin Dev Immunol 2013), ILC2 and helminth immunity (Int J Mol Sci 2019), why immunity to parasites takes so long (Nat Rev Immunol 2010), understanding autoimmunity (Int J Mol Sci 2024), angioedema (Allergy Asthma Clin Immunol 2024); Wikipedia (CC BY-SA; every article checked in its current wikitext — "Humoral immunity" and "Type II hypersensitivity" were <b>excluded</b> for citing Boundless and OpenStax).';
+const MODELS = '<b>Models used:</b> every drawing is a schematic, not to scale: antibodies are drawn as plain Y shapes (no domains), the complement cascade shows order and convergence only, and the pathogen panel is a layout of effectors, not an anatomical picture.';
+
+/* ===================== CODE ===================== */
+const {$, T, DEFS} = Micro;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+$('mat-text').innerHTML = MAT_TEXT; $('comp-fn').innerHTML = COMP_FN;
+Micro.table('cdef-table', CDEF[0], CDEF[1]); $('cdef-text').innerHTML = CDEF_TEXT;
+Micro.table('arms-table', ARMS[0], ARMS[1]); $('arms-text').innerHTML = ARMS_TEXT;
+document.querySelectorAll('.x').forEach(e => e.style.color = 'var(--clin)');
+
+/* ---- antigen kinds ---- */
+const AS = {k: 'epi'};
+/* antibody as a Y: tips at (x±9, tip), fork, stem to base. down=true -> arms point down */
+function abY(x, tip, down, w) {
+  const k = down ? -1 : 1, fork = tip + 13 * k, base = fork + 18 * k;
+  return `<path d="M${x - 9} ${tip} L${x} ${fork} L${x + 9} ${tip} M${x} ${fork} L${x} ${base}" class="ab" style="stroke-width:${w || 2.2}"/>`;
+}
+function drawAg() {
+  let s = DEFS;
+  if (AS.k === 'epi') {
+    /* one antigen (rounded block) with three epitopes on its top edge; two of them are bound by antibodies */
+    s += `<path d="M150 160 L390 160 L390 206 Q390 216 380 216 L160 216 Q150 216 150 206 Z" class="mic"/>` + T(270, 238, 'one antigen molecule', 'b', 'middle');
+    s += `<rect x="186" y="148" width="16" height="12" class="pale"/>` + `<circle cx="270" cy="152" r="8" class="pale"/>` + `<rect x="340" y="148" width="16" height="12" class="pale"/>`;
+    s += abY(194, 146, true) + abY(348, 146, true);
+    s += Micro.lead(270, 142, 270, 80) + T(270, 72, 'a third epitope: no antibody for it here', 's', 'middle');
+    s += T(194, 104, 'antibody 1', 's', 'middle') + T(348, 104, 'antibody 2', 's', 'middle');
+    s += T(136, 154, 'epitopes', 's', 'end') + Micro.lead(140, 154, 182, 154);
+  } else if (AS.k === 'hap') {
+    s += T(140, 30, 'hapten alone', 'b', 'middle') + T(410, 30, 'hapten on a carrier', 'b', 'middle');
+    s += `<rect x="132" y="96" width="16" height="12" class="pale"/>` + T(140, 128, 'small molecule', 's', 'middle');
+    s += abY(140, 94, true) + T(140, 170, 'binds, but starts no response', 's', 'middle');
+    s += `<path d="M330 150 Q410 118 490 150 L490 200 L330 200 Z" class="mic"/>` + T(410, 220, 'carrier protein', 's', 'middle');
+    s += `<rect x="402" y="124" width="16" height="12" class="pale"/>` + abY(410, 122, true);
+    s += T(410, 78, 'response made', 'b', 'middle');
+    s += `<path d="M196 130 L310 130" style="fill:none;stroke:var(--ink);stroke-width:1.6" marker-end="url(#arr)"/>` + T(253, 120, 'attach', 's', 'middle');
+  } else if (AS.k === 'sag') {
+    /* APC with MHC class II (a cleft holding a peptide); the superantigen clamps the OUTSIDE of MHC II and of the
+       TCR variable chain, so the peptide in the groove is irrelevant. Ink only: no meaning colour on the clamp. */
+    s += `<rect x="16" y="150" width="130" height="66" rx="10" style="fill:var(--cyto);stroke:var(--muted);stroke-width:1"/>` + T(81, 234, 'antigen-presenting cell', 's', 'middle');
+    s += `<path d="M106 152 L106 114 L140 114 L140 152" style="fill:none;stroke:var(--ink);stroke-width:2.4"/>`;
+    s += `<rect x="110" y="118" width="26" height="9" rx="2" class="pale"/>`;
+    s += T(123, 104, 'MHC II', 's', 'middle');
+    s += T(14, 92, 'peptide in', 's', 'start') + T(14, 108, 'the groove', 's', 'start') + Micro.lead(76, 104, 108, 120);
+    s += `<rect x="146" y="110" width="138" height="28" rx="8" style="fill:var(--surface);stroke:var(--ink);stroke-width:2.6"/>`;
+    s += T(215, 128, 'superantigen', 'b', 'middle') + T(215, 162, 'clamped on the outside —', 's', 'middle') + T(215, 178, 'any peptide will do', 's', 'middle');
+    s += `<path d="M290 152 L290 114 L306 114" style="fill:none;stroke:var(--ink);stroke-width:2.4"/>`;
+    s += `<path d="M306 114 L306 90" style="fill:none;stroke:var(--ink);stroke-width:2.4"/>` + T(318, 150, 'TCR Vβ chain', 's', 'start');
+    for (let i = 0; i < 3; i++) {
+      const cx = 306 + i * 74;
+      s += `<circle cx="${cx}" cy="58" r="26" style="fill:var(--cyto);stroke:var(--muted);stroke-width:1"/>`;
+    }
+    s += T(380, 20, 'T cells of every specificity', 's', 'middle');
+    s += `<path d="M470 76 L506 100" style="fill:none;stroke:var(--ink);stroke-width:1.6" marker-end="url(#arr)"/>`;
+    s += T(556, 128, 'cytokine storm', 'b', 'end') + T(556, 148, '5–30 % of T cells', 's', 'end') + T(556, 164, '(a 2019 review)', 's', 'end');
+  } else if (AS.k === 'td') {
+    s += `<path d="M40 140 Q80 112 120 140 L120 184 L40 184 Z" class="mic"/>` + T(80, 204, 'protein antigen', 's', 'middle');
+    s += `<circle cx="210" cy="150" r="30" style="fill:var(--cyto);stroke:var(--muted);stroke-width:1"/>` + T(210, 196, 'B cell', 'b', 'middle');
+    s += `<circle cx="210" cy="56" r="26" style="fill:var(--cyto);stroke:var(--muted);stroke-width:1"/>` + T(210, 26, 'CD4 helper T cell', 's', 'middle');
+    s += `<path d="M210 84 L210 116" style="fill:none;stroke:var(--ink);stroke-width:1.8" marker-end="url(#arr)"/>` + T(222, 104, 'CD40 + cytokines', 's', 'start');
+    s += `<path d="M126 150 L176 150" style="fill:none;stroke:var(--ink);stroke-width:1.6" marker-end="url(#arr)"/>`;
+    s += `<path d="M244 150 L300 150" style="fill:none;stroke:var(--ink);stroke-width:1.8" marker-end="url(#arr)"/>`;
+    s += `<circle cx="340" cy="150" r="30" style="fill:var(--cyto);stroke:var(--muted);stroke-width:1"/>` + T(340, 196, 'plasma cell', 'b', 'middle');
+    s += abY(420, 120, false) + abY(460, 120, false) + abY(500, 120, false);
+    s += T(460, 96, 'IgG, high affinity', 'b', 'middle') + T(250, 234, 'class switching · affinity maturation · memory', 's', 'middle');
+  } else {
+    s += `<circle cx="56" cy="72" r="7" class="pale"/><circle cx="72" cy="86" r="7" class="pale"/><circle cx="88" cy="72" r="7" class="pale"/><circle cx="104" cy="86" r="7" class="pale"/>`;
+    s += T(80, 46, 'polysaccharide alone', 's', 'middle');
+    s += `<circle cx="186" cy="80" r="24" style="fill:var(--cyto);stroke:var(--muted);stroke-width:1"/>` + T(186, 120, 'B cell, no T help', 's', 'middle');
+    s += `<path d="M120 80 L156 80" style="fill:none;stroke:var(--ink);stroke-width:1.6" marker-end="url(#arr)"/>`;
+    s += abY(286, 66, false) + T(286, 46, 'IgM only', 'b', 'middle');
+    s += T(336, 76, 'no class switch, no affinity', 's', 'start') + T(336, 92, 'maturation, no memory', 's', 'start');
+    s += `<path d="M20 140 L540 140" style="stroke:var(--line);stroke-width:1"/>`;
+    s += `<circle cx="56" cy="186" r="7" class="pale"/><circle cx="72" cy="200" r="7" class="pale"/><circle cx="88" cy="186" r="7" class="pale"/>`;
+    s += `<path d="M98 198 Q124 182 150 198 L150 224 L98 224 Z" class="mic"/>` + T(124, 240, 'carrier protein', 's', 'middle');
+    s += T(80, 164, 'conjugate', 'b', 'middle');
+    s += `<path d="M162 196 L200 196" style="fill:none;stroke:var(--ink);stroke-width:1.6" marker-end="url(#arr)"/>`;
+    s += `<circle cx="232" cy="196" r="24" style="fill:var(--cyto);stroke:var(--muted);stroke-width:1"/>` + T(232, 236, 'B cell + T help', 's', 'middle');
+    s += abY(316, 182, false) + T(316, 162, 'IgG', 'b', 'middle');
+    s += T(360, 190, 'memory: the', 's', 'start') + T(360, 206, 'conjugate-vaccine trick', 's', 'start');
+  }
+  s += T(556, 246, 'schematic', 's', 'end');
+  $('ag-svg').innerHTML = s; $('ag-find').innerHTML = AG[AS.k][1];
+}
+Micro.toggles('ag-tg', Object.entries(AG).map(([k, v]) => [k, v[0]]), k => { AS.k = k; drawAg(); }, 'epi');
+drawAg();
+
+/* ---- complement ---- */
+const CMS = {k: 'cl', s: 0};
+function drawComp() {
+  const st = CMS.s; let s = DEFS;
+  const box = (x, y, w, h, on) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" style="fill:var(--surface);stroke:${on ? 'var(--mark)' : 'var(--line)'};stroke-width:${on ? 2.6 : 1.3}"/>`;
+  const arms = [['cl', 20, 'Classical', 'C1q binds IgG/IgM on antigen'], ['le', 100, 'Lectin', 'MBL/ficolin binds sugars'], ['al', 180, 'Alternative', 'spontaneous C3 hydrolysis']];
+  for (const [k, y, lab, sub] of arms) {
+    const chosen = CMS.k === k, dim = chosen ? '' : ' opacity="0.35"';
+    s += `<g${dim}>` + box(14, y, 176, 56, chosen && st === 0) + T(24, y + 22, lab, 'b') + T(24, y + 40, sub, 's') + `</g>`;
+    s += `<path d="M192 ${y + 28} H 214 V 132 H 234" style="fill:none;stroke:var(--ink);stroke-width:${chosen ? 2 : 1};opacity:${chosen ? 1 : 0.3}" marker-end="url(#arr)"/>`;
+  }
+  s += box(240, 104, 118, 56, st === 1) + T(299, 126, 'C3 convertase', 'b', 'middle') + T(299, 146, CMS.k === 'al' ? 'C3bBb' : 'C4b2b', 'm', 'middle');
+  s += `<path d="M360 132 L404 132" style="fill:none;stroke:var(--ink);stroke-width:${st >= 2 ? 2 : 1};opacity:${st >= 2 ? 1 : 0.3}" marker-end="url(#arr)"/>`;
+  s += box(406, 104, 86, 56, st === 2) + T(449, 126, 'C3', 'b', 'middle') + T(449, 146, 'split', 's', 'middle');
+  if (st >= 2) {
+    s += `<path d="M449 100 L449 68" style="fill:none;stroke:var(--ink);stroke-width:1.6" marker-end="url(#arr)"/>` + T(449, 58, 'C3a → inflammation', 's', 'middle');
+    s += `<path d="M449 164 L449 198" style="fill:none;stroke:var(--ink);stroke-width:1.6" marker-end="url(#arr)"/>` + T(398, 214, 'C3b → opsonisation', 's', 'middle');
+  }
+  s += `<path d="M494 132 L524 132" style="fill:none;stroke:var(--ink);stroke-width:${st >= 3 ? 2 : 1};opacity:${st >= 3 ? 1 : 0.3}" marker-end="url(#arr)"/>`;
+  s += box(526, 104, 100, 56, st === 3) + T(576, 126, 'C5 convertase', 'b', 'middle') + T(576, 146, '→ C5a + C5b', 's', 'middle');
+  if (st >= 3) s += T(576, 92, 'C5a: chemotaxis', 's', 'middle');
+  if (st >= 4) {
+    /* MAC pore in a membrane, drawn below the cascade */
+    /* bilayer broken at the pore: the MAC is a hole through both leaflets */
+    s += `<path d="M300 258 L466 258 M496 258 L620 258 M300 274 L466 274 M496 274 L620 274" style="stroke:var(--muted);stroke-width:2"/>`;
+    s += `<path d="M466 246 L466 286 M496 246 L496 286" style="stroke:var(--ink);stroke-width:3"/>`;
+    s += T(300, 292, 'microbial membrane', 's', 'start') + T(458, 244, 'MAC (C5b-9) pore → lysis', 'b', 'end');
+    s += `<path d="M570 166 L494 236" style="fill:none;stroke:var(--ink);stroke-width:1.8" marker-end="url(#arr)"/>`;
+  }
+  s += T(636, 294, 'schematic', 's', 'end');
+  $('comp-svg').innerHTML = s;
+  $('comp-find').innerHTML = (st === 0 ? CP[CMS.k][1] : CS[st][1]);
+}
+Micro.toggles('comp-tg', Object.entries(CP).map(([k, v]) => [k, v[0]]), k => { CMS.k = k; drawComp(); }, 'cl');
+Micro.stepper('comp-step', CS.map(r => r[0]), drawComp, CMS);
+Micro.key('comp-key', [['--mark', 'the step you are on']]);
+
+/* ---- pathogen groups ---- */
+const PS = {k: 'bact'};
+function drawPath() {
+  const on = new Set(PATH[PS.k][1]); let s = DEFS;
+  s += `<circle cx="280" cy="140" r="44" class="mic" style="stroke-width:2.4"/>` + T(280, 136, PATH[PS.k][0].split(' ')[0], 'b', 'middle') + T(280, 154, PATH[PS.k][0].split(' ').slice(1).join(' '), 's', 'middle');
+  for (const [k, lab, x, y] of EFF) {
+    const act = on.has(k);
+    s += `<rect x="${x - 70}" y="${y - 15}" width="140" height="30" rx="15" style="fill:var(--surface);stroke:var(--ink);stroke-width:${act ? 2.6 : 1.1};opacity:${act ? 1 : 0.4}"/>`;
+    s += T(x, y + 5, lab, act ? 'b' : 's', 'middle', act ? '' : ' opacity="0.5"');
+    if (act) {
+      const dx = 280 - x, dy = 140 - y, d = Math.hypot(dx, dy), ux = dx / d, uy = dy / d;
+      /* leave the pill at its own border (half-width 70, half-height 15), not from inside it */
+      const tEdge = Math.min(Math.abs(ux) > 1e-6 ? 74 / Math.abs(ux) : 1e9, Math.abs(uy) > 1e-6 ? 19 / Math.abs(uy) : 1e9);
+      s += `<path d="M${(x + ux * tEdge).toFixed(1)} ${(y + uy * tEdge).toFixed(1)} L${(280 - ux * 50).toFixed(1)} ${(140 - uy * 50).toFixed(1)}" style="fill:none;stroke:var(--ink);stroke-width:1.6" marker-end="url(#arr)"/>`;
+    }
+  }
+  s += T(556, 272, 'schematic', 's', 'end');
+  $('path-svg').innerHTML = s; $('path-find').innerHTML = PATH[PS.k][2];
+}
+Micro.toggles('path-tg', Object.entries(PATH).map(([k, v]) => [k, v[0]]), k => { PS.k = k; drawPath(); }, 'bact');
+drawPath();
+Micro.swipeHints();
+</script>
+</body>
+</html>

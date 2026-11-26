@@ -89,7 +89,7 @@ Last updated: 2026-11-23
   drug blocks off-arrow, path.js stepper focus) [x] fixes (472 quotes) [x] committed 2026-11-26.
   (bioc.js has the stepper-end focus fix in another form: verified; only path.js lacked it, P02 fix adds it.) M02 [x] build (474 quotes; MoHFW 2017, CDC 2024; Wikipedia Humoral immunity, Type II hypersensitivity excluded)
   [x] review (pemphigus Dsg quote is paraneoplastic, crossmatch quote is transfusion, open-vial lists (safety),
-  several drawings mechanically wrong, colour misuse) [ ] fixes (running).
+  several drawings mechanically wrong, colour misuse) [x] fixes (526 quotes) [x] committed 2026-11-26.
   POLICY (default, 2026-11-26): a Wikipedia article whose only OpenStax link is an infobox IMAGE is not excluded (we
   quote its text, which does not cite OpenStax). Text citations of OpenStax/Boundless/Lumen still exclude. Ask user. G02 [x] build (413 quotes; ADA 2026, 2024 crises consensus vs 2009, KDIGO 2022/2024) [ ] review (running). C02 [ ] build (running; community-medicine/biostatistics/, CM6.1–6.4).
   R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,

@@ -30,14 +30,14 @@ Source notes: NMC's summary table says 74 competencies; the chapter has 73.
 
 ### 2. Basic Immunology & Immunological disorders
 
-- [ ] **MI2.1** Explain the role of immunological mechanisms in health and disease (innate and acquired immunity).
-- [ ] **MI2.2** Describe the structure and functions of immune system and its components (antigens, antibodies and complement systems).
-- [ ] **MI2.3** Describe the host immune responses in Microbial infections (humoral and cellular immune response).
-- [ ] **MI2.4** Explain the immune response in different types of infections (bacterial, mycobacterial, viral, fungal and parasitic infections)
-- [ ] **MI2.5** Discuss the principles and applications of laboratory tests used in diagnostic microbiology based on the host's immune response.
-- [ ] **MI2.6** Discuss the immunological basis of disease prevention through active and passive immune prophylaxis. Discuss the importance of herd immunity in prevention and control of infectious disease in community.
-- [ ] **MI2.7** Describe the immunological mechanisms in immunological disorders (hypersensitivity, autoimmune disorders and immunodeficiency states) and discuss the laboratory methods used in their detection.
-- [ ] **MI2.8** Describe the immunological mechanisms involved in transplantation, tumour immunity and their applications in disease management.
+- [x] **MI2.1** Explain the role of immunological mechanisms in health and disease (innate and acquired immunity). — *innate and adaptive immunity linked to physiology; antigens, haptens, superantigens, complement: [Antigens, Complement and the Response to Each Pathogen](immunology/immune-response-infection.html)*
+- [x] **MI2.2** Describe the structure and functions of immune system and its components (antigens, antibodies and complement systems). — *antigen, immunogen, epitope; T-dependent vs T-independent; class switching and affinity maturation; complement stepper (antibody structure on the physiology page): [Antigens, Complement and the Response to Each Pathogen](immunology/immune-response-infection.html)*
+- [x] **MI2.3** Describe the host immune responses in Microbial infections (humoral and cellular immune response). — *humoral vs cell-mediated immunity: [Antigens, Complement and the Response to Each Pathogen](immunology/immune-response-infection.html)*
+- [x] **MI2.4** Explain the immune response in different types of infections (bacterial, mycobacterial, viral, fungal and parasitic infections) — *defences against bacteria, mycobacteria, viruses, fungi and parasites: [Antigens, Complement and the Response to Each Pathogen](immunology/immune-response-infection.html)*
+- [x] **MI2.5** Discuss the principles and applications of laboratory tests used in diagnostic microbiology based on the host's immune response. — *prozone slider, precipitation, agglutination and Widal, CFT, ELISA, immunofluorescence, Western blot: [Antigen–Antibody Tests, Vaccines and the Cold Chain](immunology/serology-prophylaxis.html)*
+- [x] **MI2.6** Discuss the immunological basis of disease prevention through active and passive immune prophylaxis. Discuss the importance of herd immunity in prevention and control of infectious disease in community. — *vaccine types, active vs passive, herd-immunity calculator, cold chain and open vial policy (MoHFW 2017): [Antigen–Antibody Tests, Vaccines and the Cold Chain](immunology/serology-prophylaxis.html)*
+- [x] **MI2.7** Describe the immunological mechanisms in immunological disorders (hypersensitivity, autoimmune disorders and immunodeficiency states) and discuss the laboratory methods used in their detection. — *hypersensitivity I–IV with timing, tolerance and autoantibodies, primary immunodeficiencies (incl. ADA-SCID, Wiskott–Aldrich, CVID, hyper-IgM as one source) and secondary, Coombs and tuberculin tests: [Hypersensitivity, Autoimmunity, Immunodeficiency and Transplantation](immunology/immune-disorders.html)*
+- [x] **MI2.8** Describe the immunological mechanisms involved in transplantation, tumour immunity and their applications in disease management. — *rejection timing, HLA and cross-matching, GVHD, tumour antigens and immunoediting: [Hypersensitivity, Autoimmunity, Immunodeficiency and Transplantation](immunology/immune-disorders.html)*
 
 ### 3. CVS and Blood
 

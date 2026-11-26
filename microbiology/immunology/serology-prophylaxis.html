@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Antigen–Antibody Tests, Vaccines and the Cold Chain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/micro.css">
+<style>
+/* Tokens from micro.css only. --mark = the point you have chosen on the curve (as elsewhere on the site),
+   --accent = the selected item, --clin = a clinical warning, --cyto = a cell. The haemolysed tube in the complement-fixation
+   drawing is shaded with --muted, not with a meaning colour: no new colour is introduced anywhere on this page. */
+svg.sch .ab{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+svg.sch .gel{fill:var(--bg);stroke:var(--muted);stroke-width:1.2}
+svg.sch .well{fill:var(--surface);stroke:var(--ink);stroke-width:1.4}
+svg.sch .band{fill:var(--ink)}
+.zoneout{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Microbiology</a> <span class="muted">· Module 02: <a href="immune-response-infection.html">Antigens, complement and responses</a> · <span aria-current="page">Serology and prophylaxis</span> · <a href="immune-disorders.html">Immunological disorders</a></span></nav>
+
+<header class="stack">
+  <h1>Antigen–Antibody Tests, Vaccines and the Cold Chain</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-zone">Equivalence and prozone</a> <a href="#h-tests">The tests</a> <a href="#h-vax">Vaccine types</a> <a href="#h-proph">Active and passive</a> <a href="#h-herd">Herd immunity</a> <a href="#h-cold">Cold chain</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-zone">
+  <h2 id="h-zone">Why a serological test can read negative: add antigen to a fixed amount of serum</h2>
+  <div class="sliders" id="zone-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="zone-svg" viewBox="0 0 560 250" role="img" aria-label="Schematic curve of how much antigen-antibody complex forms as antigen is added to a fixed amount of antiserum: little while antibody is in excess (prozone), a peak at equivalence, little again in antigen excess (postzone); the chosen point is marked"></svg></div>
+    <div class="prose find" id="zone-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="zone-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tests">
+  <h2 id="h-tests">Antigen–antibody reactions: pick a test</h2>
+  <div class="chips" id="test-tg" aria-label="Test"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="test-svg" viewBox="0 0 560 240" role="img" aria-label="Schematic of the chosen test: gel diffusion plate, radial immunodiffusion ring, agglutination, the two tubes of a complement fixation test, an ELISA well, immunofluorescence, or a blot membrane with bands"></svg></div>
+    <div class="prose find" id="test-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-vax">
+  <h2 id="h-vax">Vaccine types</h2>
+  <div class="chips" id="vax-tg" aria-label="Vaccine type"></div>
+  <div class="prose find" id="vax-find" aria-live="polite"></div>
+  <div class="scroll"><table id="vax-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-proph">
+  <h2 id="h-proph">Active and passive prophylaxis</h2>
+  <div class="scroll"><table id="proph-table"></table></div>
+  <div class="prose" id="proph-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-herd">
+  <h2 id="h-herd">Herd immunity: how much of the population has to be immune?</h2>
+  <div class="sliders" id="herd-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="herd-svg" viewBox="0 0 420 220" role="img" aria-label="A grid of 100 people; the share that must be immune for the chosen basic reproduction number is drawn filled with a solid outline, the rest with a dashed outline"></svg></div>
+    <div class="prose find" id="herd-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="herd-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cold">
+  <h2 id="h-cold">The cold chain (MoHFW 2017)</h2>
+  <div class="step" id="cold-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="cold-svg" viewBox="0 0 620 200" role="img" aria-label="The cold chain from manufacturer through the state and district stores to the primary health centre and the session site, with the temperature kept at each stage"></svg></div>
+    <div class="prose find" id="cold-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="cold-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BAntigen%E2%80%93Antibody%20Tests%2C%20Vaccines%20and%20the%20Cold%20Chain%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fmicrobiology%2Fimmunology%2Fserology-prophylaxis.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/micro.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two independent open sources: sources-local/facts/fill-m02.md, Part B; microbiology/DATA-SOURCES.md) ===================== */
+const LEDE = 'Serology is one idea — antigen meets antibody — read in different ways. Slide antigen into a fixed amount of serum to see why a strongly positive serum can read negative, step through each test\'s principle and its classic example, then the prophylaxis side: the types of vaccine with their examples, active against passive protection, how much of a population must be immune, and how the vaccine is kept cold on the way to the child.';
+
+/* ---- zone of equivalence ---- */
+const ZONE_TEXT = '<p><b>The experiment:</b> varying amounts of soluble antigen are added to a fixed amount of serum containing antibody (Wikipedia). <b>The rule:</b> complexes (the lattice) form best when antigen and antibody are in balance — the <b>zone of equivalence</b>. In <b>antibody excess</b> (<b>prozone</b>) or <b>antigen excess</b> (<b>postzone</b>) each antigen or antibody site is occupied singly, no lattice forms, and the test reads <b class="x">falsely negative</b> (Wikipedia; CDC 2024; a 2022 case report). <b>Diluting the serum</b> moves it into the equivalence zone and the reaction appears (CDC 2024; a 2022 case report).</p><p><b>Where it bites in the exam:</b> the <b>prozone</b> in <b>non-treponemal (RPR/VDRL) tests in syphilis</b>. CDC 2024: a prozone occurred at all stages but was commonest in primary and secondary syphilis (4.7 % and 1.8 %), and false-negative RPR from a prozone was rare overall (&lt;0.85 %); CDC therefore does <b>not</b> recommend routinely diluting every non-reactive sample, but says a clinician should <b>ask for a prozone rule-out</b> when the patient has signs or symptoms of syphilis and the undiluted test is non-reactive. The same effect is demonstrated in <b>malaria rapid diagnostic tests</b> (a 2009 study).</p>';
+
+/* ---- tests ---- */
+const TESTS = {
+  prec: ['Precipitation in gel', '<h3>Precipitation: soluble antigen</h3><p><b>Principle:</b> soluble antigen and antibody form a lattice that becomes a <b>visible precipitate</b>. In <b>Ouchterlony double immunodiffusion</b> both diffuse through agar from their own wells and meet as a white <b>precipitin line</b>; the pattern of lines between two antigens shows <b>identity</b> (a continuous arc), <b>partial identity</b> (an arc with a spur) or <b>non-identity</b> (crossing lines) — Wikipedia, a 2021 teaching paper. Ouchterlony described it in <b>1948</b> (Wikipedia).</p><p>The band sits where the two are at equivalence, so the same prozone/postzone logic applies: Wikipedia calls the antibody-excess side of the plate the prozone.</p>'],
+  rid: ['Radial immunodiffusion', '<h3>Radial (single) immunodiffusion — the Mancini method</h3><p><b>Principle:</b> antibody is mixed into the gel and antigen diffuses out of a well, forming a <b>precipitin ring</b>. The <b>diameter of the ring measures the amount of antigen</b>, read against rings from known standards (Wikipedia). It is the quantitative member of the precipitation family — immunoglobulin levels were measured this way.</p>'],
+  agg: ['Agglutination', '<h3>Agglutination: particulate antigen</h3><p><b>Principle:</b> when the antigen is <b>on a particle</b> — red cells, bacteria, or latex beads — antibody cross-links the particles into visible <b>clumps</b> (Wikipedia, a 2014 open chapter). Latex beads can be coated either way: with <b>antibody</b> to catch antigen, or with <b>antigen</b> to catch antibody (passive latex agglutination).</p><p><b>Classic example — the Widal test:</b> the patient\'s serum is mixed with <i>Salmonella</i> <b>O</b> and <b>H</b> antigens; Widal put the reaction to use in <b>1896</b> and it was the first serum diagnosis (Wikipedia ×2). But it is a weak test: across studies in a 2025 review the sensitivity ran from <b>34.7 % to 94.4 %</b> (mean about 63 %), with cross-reactivity and repeated exposure in endemic areas confusing titres — <b class="x">blood culture remains the standard</b> (about 70–75 % accurate in the first week, same review). Slide agglutination for identifying an isolate is in <a href="../general/genetics-lab-diagnosis.html#h-imm">module 01</a>.</p>'],
+  cft: ['Complement fixation', '<h3>Complement fixation test (CFT)</h3><p><b>Principle</b> (Wikipedia, the whole panel): the patient\'s serum is <b>heated</b> to destroy its own complement (complement is far more heat-labile than antibody), a <b>standard complement</b> is added (often guinea-pig serum), then the <b>antigen</b>. Finally the <b>indicator system</b> — sheep red cells already coated with anti-sheep antibody.</p><ul><li><b>Patient has antibody</b> → antigen–antibody complexes <b>consume (fix) the complement</b> → nothing is left to lyse the indicator cells → <b>no haemolysis = POSITIVE</b>.</li><li><b>No antibody</b> → complement is free → it lyses the sheep cells → the tube <b>turns pink = NEGATIVE</b>.</li></ul><p>Titre = the highest serum dilution still positive. It works with a wide range of viral antigens but has largely been <b>replaced by ELISA and PCR</b> (Wikipedia, a 2014 open chapter). <span class="muted">The reading is inverted — that is what the examiner is testing.</span></p>'],
+  eli: ['ELISA', '<h3>ELISA</h3><p><b>Principle:</b> an <b>enzyme-labelled antibody</b> and a substrate that gives a visible coloured product (StatPearls, Wikipedia). Formats: <b>sandwich</b> ELISA (capture antibody on the plate) measures <b>antigen</b>; <b>indirect</b> ELISA (antigen on the plate, patient antibody, then a labelled anti-human antibody) measures <b>antibody</b> — StatPearls: the usual format for antiviral antibodies; <b>competitive</b> ELISA measures small antigens and <b>haptens</b> (StatPearls). Wikipedia: ELISA was the <b>first screening test widely used for HIV</b>, because of its sensitivity.</p><p><b>The layer-by-layer drawing is on <a href="../general/genetics-lab-diagnosis.html#h-imm">module 01</a></b> — build the well there. <span class="muted">Terminology warning: Wikipedia itself notes that "direct" and "indirect" ELISA are used inconsistently in the literature.</span></p>'],
+  ifa: ['Immunofluorescence', '<h3>Immunofluorescence</h3><p><b>Principle:</b> a <b>fluorochrome-labelled</b> (usually FITC) antibody, read under a fluorescence microscope; there are two classes, <b>direct</b> and <b>indirect</b> (Wikipedia).</p><ul><li><b>Direct (one step):</b> shows antibody <b>already bound in the patient\'s tissue</b> — the test done on a skin biopsy in the bullous diseases. In pemphigus a 2017 review describes <b>IgG staining in the intercellular space</b> (the "fish-net" or "chicken-wire" pattern), seen in <b>all types of pemphigus except IgA pemphigus</b>.</li><li><b>Indirect (two steps):</b> patient\'s <b>serum</b> on a substrate, then a labelled anti-human antibody — how <b>circulating autoantibodies</b> are found, e.g. <b>antinuclear antibodies on HEp-2 cells</b> (Wikipedia, a 2017 review).</li></ul>'],
+  wb: ['Western blot', '<h3>Western blot (immunoblot)</h3><p><b>Principle:</b> three steps — <b>separate</b> the proteins by size by gel electrophoresis, <b>transfer</b> them to a membrane, then <b>detect</b> the one you want with a primary antibody and a labelled secondary antibody (StatPearls, Wikipedia, a 2025 guide). Because separation is by size, the answer is a <b>band at a known molecular weight</b>.</p><p>Its clinical use is <b>confirmatory</b>: Wikipedia notes the HIV confirmatory test <b>formerly</b> used a Western blot, and that some Lyme disease testing still does.</p>'],
+};
+
+/* ---- vaccines ---- */
+const VAX = {
+  live: ['Live attenuated', '<h3>Live attenuated (LAV)</h3><p>Derived from the disease-causing organism, <b>weakened</b> in the laboratory; it <b>replicates in a vaccinated individual</b>, but because it is weak it causes <b>no disease or only a mild form</b> of it (MoHFW 2017).</p><p><b>Examples (MoHFW 2017, UIP):</b> BCG, measles/MR, rotavirus, JE, oral polio vaccine. Wikipedia adds mumps, rubella, yellow fever and varicella. <b class="x">Contraindicated in severe immunodeficiency</b>: a 2018 review states that live vaccines (MMR/varicella, BCG, infant rotavirus, OPV) are contraindicated in SCID, where they can cause severe, disseminated, fatal infection.</p>'],
+  inact: ['Inactivated (killed)', '<h3>Inactivated (killed)</h3><p>Organisms <b>inactivated with heat or chemicals</b>; they cannot grow, so they cannot cause the disease (MoHFW 2017). The response is weaker, so these vaccines usually need <b>multiple doses, boosters and adjuvants</b> (MoHFW 2017, Wikipedia) — but, unlike live vaccines, they are <b>not contraindicated in immunocompromised people</b> (Wikipedia).</p><p><b>Examples (the MoHFW 2017 list):</b> <b>whole-cell pertussis</b>, the <b>fractional polysaccharide-based conjugate</b> vaccine against <i>Haemophilus influenzae</i> type b (<b>Hib</b>) and <b>IPV</b> — note that the handbook files the Hib <b>conjugate</b> under inactivated vaccines, so "conjugate" is a way of presenting a non-live antigen rather than a separate live/killed category. Wikipedia adds hepatitis A, rabies and most influenza vaccines.</p>'],
+  sub: ['Subunit / recombinant', '<h3>Subunit or recombinant</h3><p>Only part of the organism is used. MoHFW 2017: genetic material from the pathogen is inserted into a harmless cell, which makes the protein; the purified protein is the vaccine.</p><p><b>Examples:</b> <b>hepatitis B</b> — the viral <b>surface antigen</b>, and the handbook example of the subunit/recombinant class (MoHFW 2017, Wikipedia; Wikipedia adds that it was the first subunit vaccine certified by clinical trials in humans). <b>HPV</b> vaccines are recombinant subunit vaccines built as <b>virus-like particles</b> (Wikipedia).</p>'],
+  tox: ['Toxoid', '<h3>Toxoid</h3><p>Made from a <b>toxin rendered harmless</b> that still provokes an immune response against the toxin (MoHFW 2017). MoHFW 2017 again: toxoids are safe because they <b>cannot cause the disease they prevent</b> and there is <b>no possibility of reversion to virulence</b>; the antigen does not multiply and does not spread to unimmunised people.</p><p><b>Examples:</b> <b>tetanus toxoid</b> and <b>diphtheria toxoid</b> (MoHFW 2017; StatPearls on tetanus toxoid). The antibody neutralises the <b>toxin</b>, not the organism.</p>'],
+  conj: ['Conjugate', '<h3>Conjugate</h3><p>A <b>polysaccharide</b> (a T-independent antigen: weak, short-lived, no memory) chemically <b>attached to a carrier protein</b>, so the response recruits <b>T-cell help</b> and acquires memory (Wikipedia, a 2021 vaccinology guide, a 2014 review). Carriers used include <b>tetanus toxoid and diphtheria toxoid</b> (Wikipedia).</p><p><b>Examples:</b> <b>Hib</b>, <b>pneumococcal</b> (PCV, in the Indian UIP — MoHFW 2017) and <b>meningococcal</b> conjugate vaccines (Wikipedia). <a href="immune-response-infection.html#h-ag">Why the sugar needs the protein</a>.</p>'],
+  mrna: ['mRNA', '<h3>mRNA</h3><p>The vaccine delivers <b>antigen-encoding mRNA</b> into cells, which use it as the blueprint to make the pathogen\'s protein; the mRNA is carried in <b>lipid nanoparticles</b> that protect it and get it into the cell (Wikipedia ×2 articles). Not a MoHFW 2017 category — the handbook predates it — so it is named here from the vaccinology literature.</p>'],
+};
+const VAX_TABLE = [['Type', 'What is in it', 'Examples'], [
+  ['Live attenuated', 'weakened whole organism that replicates', 'BCG, measles/MR, rotavirus, JE, OPV (MoHFW 2017)'],
+  ['Inactivated', 'killed or non-living antigen; adjuvant and boosters', 'whole-cell pertussis, Hib conjugate, IPV (MoHFW 2017)'],
+  ['Subunit / recombinant', 'a purified protein of the organism', 'hepatitis B surface antigen; HPV virus-like particles'],
+  ['Toxoid', 'detoxified toxin', 'tetanus toxoid, diphtheria toxoid (MoHFW 2017)'],
+  ['Conjugate', 'polysaccharide + carrier protein', 'Hib, pneumococcal (PCV), meningococcal'],
+  ['mRNA', 'mRNA for the antigen, in lipid nanoparticles', 'the COVID-19 mRNA vaccines (Wikipedia)'],
+]];
+
+const PROPH = [['', 'Active', 'Passive'], [
+  ['How', 'the person\'s own response — infection or vaccine', 'ready-made antibody transferred in'],
+  ['Onset', 'takes days to weeks (the primary response)', '<b>immediate</b>'],
+  ['Memory', 'yes', '<b>none</b>'],
+  ['Lasts', 'long, often years', 'weeks to months (Wikipedia)'],
+  ['Examples', 'all the vaccines above', 'placental IgG, breast-milk IgA, immunoglobulin or antiserum'],
+]];
+const PROPH_TEXT = '<p>StatPearls and Wikipedia agree on the split, and it is drawn in full on <a href="../../physiology/blood/immunity.html#h-resp">the physiology page</a>. The practical point: after a risky exposure you may need <b>both</b> — Wikipedia: preventing rabies still requires <b>vaccine and immunoglobulin together</b>, the immunoglobulin covering the gap until the active response arrives.</p>';
+
+/* ---- herd immunity ---- */
+const HERD_TEXT = '<p>MoHFW 2017: "A population with a high number of members with immunity … may give protection from that infection to the small number of its non-immune members … because there are too few susceptible persons in the herd for the infection to circulate." Wikipedia calls it indirect protection, applying <b>only to contagious diseases</b>, and names the share that must be immune the <b>herd immunity threshold</b>.</p><p>The threshold rises with <b>R₀</b>, the basic reproduction number, as <b>1 − 1/R₀</b> (Wikipedia). The Wikipedia example of a high threshold is <b>measles, with a herd immunity threshold exceeding 95 %</b>, and it notes that where herd immunity is lost, outbreaks among the unvaccinated are likely. At <b>R₀ ≤ 1</b> the formula gives nothing to achieve: each case infects at most one other and the infection cannot spread in a sustained way. The calculation is schematic: it assumes a vaccine that gives solid immunity and a population that is <b>"homogeneous, or well-mixed"</b> — everyone equally likely to meet everyone else — which real social networks are not (Wikipedia). R₀ values, effective reproduction numbers and outbreak measures: <a href="../../community-medicine/epidemiology/transmission-outbreak-screening.html">Transmission, outbreaks and screening</a>.</p>';
+
+/* ---- cold chain (MoHFW 2017) ---- */
+const COLD = [
+  ['Manufacturer', 'Manufacturer', '', '<h3>1 · Manufacturer → primary store</h3><p>The <b>cold chain</b> is "a system of storing and transporting vaccines at recommended temperatures from the point of manufacture to the point of use" (MoHFW 2017). Its three key elements are <b>personnel</b> (a vaccine and cold-chain handler at every cold-chain point), <b>equipment</b> and <b>procedures</b>.</p>'],
+  ['State store', 'State store', 'WIC +2 to +8 °C · WIF −15 to −25 °C', '<h3>2 · Primary and state stores</h3><p>Walk-in coolers (WIC) hold <b>+2 to +8 °C</b> and walk-in freezers (WIF) <b>−15 to −25 °C</b> (MoHFW 2017). Transport between stores is by refrigerated or insulated van at the same temperatures.</p>'],
+  ['District store', 'District vaccine store', 'ILR +2 to +8 °C · DF −15 to −25 °C', '<h3>3 · District vaccine store</h3><p>An <b>ice-lined refrigerator (ILR)</b> keeps the cabinet between <b>+2 °C and +8 °C</b>; the <b>deep freezer (DF)</b> runs at <b>−15 to −25 °C</b> (MoHFW 2017). A top-opening ILR loses less cold air and can keep vaccine safe on as little as <b>8 hours of electricity in 24</b>.</p>'],
+  ['PHC', 'Primary health centre', 'ILR +2 to +8 °C · (all vaccines)', '<h3>4 · Primary health centre (the ILR point)</h3><p>All UIP vaccines sit in the <b>ILR at +2 to +8 °C</b>. At PHC level the deep freezer is used <b>only to make ice packs</b> — no vaccine is kept in it (MoHFW 2017). In the ILR basket, <b>freeze-sensitive vaccines go on top</b> and <b>heat-sensitive ones at the bottom</b>.</p>'],
+  ['Session site', 'Session site', 'Vaccine carrier · +2 to +8 °C', '<h3>5 · Vaccine carrier to the session site</h3><p>A vaccine carrier holds <b>+2 to +8 °C</b> with <b>four conditioned ice packs</b> (MoHFW 2017). <b>Conditioning</b> — leaving the −20 °C ice packs out until liquid water appears and the ice moves inside — <b>prevents freezing of freeze-sensitive vaccines</b> such as hepatitis B and the T series.</p>'],
+];
+const COLD_TEXT = '<p><b>Which way each vaccine fails (MoHFW 2017):</b> vaccines lose potency from <b>heat (above +8 °C), cold (below +2 °C) and light</b>. Reconstituted <b>BCG, measles/MR and JE</b> are the most heat- and light-sensitive and must be used <b>within 4 hours</b> — they contain no preservative, and contamination with <i>Staphylococcus aureus</i> can cause toxic shock syndrome. <b>DPT, TT, IPV, hepatitis B and pentavalent</b> lose potency <b class="x">if frozen</b>.</p><p><b>Checking a vial (MoHFW 2017):</b> the <b>vaccine vial monitor (VVM)</b> is a heat-sensitive label whose inner square darkens <b>gradually and irreversibly</b> with cumulative heat — if it has reached the end point, <b>discard</b>. There are four types (VVM 30, 14, 7 and 2). For suspected freezing do the <b>shake test</b> against a deliberately frozen control vial of the <b>same antigen, manufacturer and batch</b>: if sedimentation in the test vial is <b>similar to or faster than</b> the frozen control, the vaccine is damaged — do not use (the shake test does <b>not</b> apply to IPV). Under the <b>open vial policy</b> an opened vial returned from the field may be used for <b>28 days</b> (4 weeks) if the VVM is usable, the vaccine was never frozen and it is within expiry. <b class="x">The policy applies only to DPT, TT, hepatitis B, OPV, PCV, Hib-containing pentavalent and IPV</b>; it does <b class="x">not</b> apply to <b class="x">measles/MR, rotavirus, BCG and JE</b> — MoHFW 2017 says to segregate those opened vials in a plastic box marked "NOT TO BE USED" in the ILR (and the reconstituted ones must go within 4 hours anyway).</p>';
+
+const BASED = '<b>Based on:</b> <b>Immunization Handbook for Medical Officers, MoHFW, Government of India, 2017</b> (cold chain, vaccine types and the Indian UIP examples); CDC <i>Laboratory Recommendations for Syphilis Testing, United States, 2024</i> (MMWR Recomm Rep); StatPearls (NCBI Bookshelf; abstracts: ELISA · Western Blot · Tetanus Toxoid · Physiology, Active Immunity); open-access papers via PubMed Central: a guide to vaccinology (Nat Rev Immunol 2021), meningococcal disease and the complement system (Virulence 2014), vaccines through centuries (Front Public Health 2015), an Ouchterlony teaching exercise (J Microbiol Biol Educ 2021), immunological detection and characterization (Viral Infections of Humans, 2014), utility of immunofluorescence in dermatology (Indian Dermatol Online J 2017), a brief guide to western blot assays (Mol Cells 2025), alternatives to the Widal test (J Public Health Afr 2025), the prozone effect in malaria rapid tests (Malar J 2009), prozone in secondary syphilis (Indian J Sex Transm Dis AIDS 2022); Wikipedia (CC BY-SA; current wikitext of every article checked).';
+const MODELS = '<b>Models used:</b> the equivalence curve shows <b>shape only</b> — no titres, no concentrations; the gel, tube, well, slide and blot drawings are schematics, not to scale; the herd-immunity grid rounds the threshold to whole people out of 100.';
+
+/* ===================== CODE ===================== */
+const {$, T, DEFS} = Micro;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+$('zone-text').innerHTML = ZONE_TEXT; $('proph-text').innerHTML = PROPH_TEXT; $('herd-text').innerHTML = HERD_TEXT; $('cold-text').innerHTML = COLD_TEXT;
+Micro.table('vax-table', VAX_TABLE[0], VAX_TABLE[1]);
+Micro.table('proph-table', PROPH[0], PROPH[1]);
+document.querySelectorAll('.x').forEach(e => e.style.color = 'var(--clin)');
+
+/* ---- zone of equivalence: r = log10(antibody/antigen), -3 .. +3 ---- */
+const ZS = {r: 0};
+function lattice(r) { return Math.exp(-(r * r) / 0.75); }   /* schematic bell: peak at equivalence */
+function drawZone() {
+  const x0 = 56, x1 = 540, y0 = 24, y1 = 190, X = Micro.scale(-3, 3, x0, x1), Y = v => y1 - (y1 - y0) * v;
+  let s = DEFS;
+  s += `<path class="axis" d="M${x0} ${y0} L${x0} ${y1} L${x1} ${y1}"/>`;
+  s += T(x0 + 2, y0 - 8, 'complexes formed', 's', 'start') + T(x1, y1 + 34, 'much antigen', 's', 'end') + T(x0, y1 + 34, 'little antigen', 's', 'start');
+  /* zone bands */
+  /* the three bands use exactly the cut-offs the readout uses: ±0.9 */
+  const band = (a, b, lab) => `<path d="M${X(a)} ${y1} L${X(b)} ${y1}" style="stroke:var(--line);stroke-width:6"/>` + T((X(a) + X(b)) / 2, y1 + 18, lab, 's', 'middle');
+  s += band(-3, -0.9, 'prozone (antibody excess)') + band(-0.9, 0.9, 'equivalence') + band(0.9, 3, 'postzone (antigen excess)');
+  const pts = []; for (let r = -3; r <= 3.001; r += 0.05) pts.push([X(r), Y(lattice(r))]);
+  s += `<path class="trace" d="${Micro.path(pts)}"/>`;
+  s += `<path class="grid dash" d="M${X(-0.9)} ${y0} L${X(-0.9)} ${y1} M${X(0.9)} ${y0} L${X(0.9)} ${y1}"/>`;
+  const cx = X(ZS.r), cy = Y(lattice(ZS.r));
+  s += `<path class="grid" d="M${cx} ${cy} L${cx} ${y1}"/>` + `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="7" style="fill:var(--mark);stroke:var(--surface);stroke-width:2"/>`;
+  s += T(300, 240, 'schematic (shape only)', 's', 'middle');
+  $('zone-svg').innerHTML = s;
+  const z = ZS.r <= -0.9 ? 'pro' : (ZS.r >= 0.9 ? 'post' : 'eq');   /* the same cut-offs the bands are drawn with */
+  const txt = {
+    pro: '<h3>Antibody excess — the <b>prozone</b></h3><p>Too much antibody: every antigen site is capped by a single antibody, no lattice grows, and the tube or card looks <b class="x">negative although the serum is strongly positive</b>. <b>Dilute the serum</b> and the reaction appears (CDC 2024).</p>',
+    eq: '<h3>Zone of equivalence</h3><p>Antigen and antibody in balance: the lattice is largest and the precipitate or agglutination is <b>maximal</b> — this is where every precipitation and agglutination test is designed to sit (Wikipedia, CDC 2024).</p>',
+    post: '<h3>Antigen excess — the <b>postzone</b></h3><p>Too much antigen: each antibody is saturated, again no lattice, again a <b class="x">false negative</b> — the other half of what Wikipedia calls the <b>hook effect</b> (prozone + postzone).</p>',
+  }[z];
+  $('zone-find').innerHTML = txt;
+}
+const ZSL = Micro.slider('zone-sl', {id: 'ratio', label: 'Antigen added to a fixed amount of serum →', min: -3, max: 3, step: 0.1, value: 0,
+  fmt: v => v <= -0.9 ? 'antibody excess (prozone)' : (v >= 0.9 ? 'antigen excess (postzone)' : 'about equal (equivalence)')}, v => { ZS.r = v; drawZone(); });
+ZSL.init(); drawZone();
+
+/* ---- tests ---- */
+const TS = {k: 'prec'};
+function drawTest() {
+  const k = TS.k; let s = DEFS;
+  const ab = (x, tip, down) => { const d = down ? -1 : 1, f = tip + 13 * d, b = f + 18 * d; return `<path d="M${x - 9} ${tip} L${x} ${f} L${x + 9} ${tip} M${x} ${f} L${x} ${b}" class="ab"/>`; };
+  if (k === 'prec') {
+    /* one NAMED pattern: identity — the two arcs fuse into one continuous precipitin line */
+    s += `<rect x="30" y="26" width="290" height="188" rx="10" class="gel"/>`;
+    s += `<circle cx="90" cy="70" r="18" class="well"/>` + T(90, 42, 'antigen A', 's', 'middle');
+    s += `<circle cx="90" cy="170" r="18" class="well"/>` + T(90, 204, 'antigen A again', 's', 'middle');
+    s += `<circle cx="250" cy="120" r="18" class="well"/>` + T(250, 92, 'antiserum', 's', 'middle');
+    s += `<path d="M150 62 Q198 120 150 178" style="fill:none;stroke:var(--ink);stroke-width:2.6"/>`;
+    s += T(344, 112, 'the two arcs FUSE', 'b', 'start') + T(344, 132, 'into one line:', 's', 'start') + T(344, 150, 'identity', 'b', 'start');
+    s += Micro.lead(340, 164, 184, 152);
+    s += T(344, 180, 'a spur = partial identity', 's', 'start') + T(344, 198, 'crossing lines = non-identity', 's', 'start');
+    s += T(175, 232, 'agar gel plate (Ouchterlony double immunodiffusion)', 's', 'middle');
+  } else if (k === 'rid') {
+    s += `<rect x="40" y="30" width="290" height="180" rx="10" class="gel"/>` + T(185, 232, 'gel containing antibody (radial immunodiffusion)', 's', 'middle');
+    [[100, 24], [185, 36], [270, 48]].forEach(([x, r]) => {
+      s += `<circle cx="${x}" cy="120" r="${r}" style="fill:none;stroke:var(--ink);stroke-width:2"/><circle cx="${x}" cy="120" r="7" class="well"/>`;
+    });
+    s += `<path d="M222 120 L318 120" style="stroke:var(--ink);stroke-width:1.6"/>` + `<path d="M222 113 L222 127 M318 113 L318 127" style="stroke:var(--ink);stroke-width:1.6"/>`;
+    s += T(270, 188, 'diameter', 's', 'middle');
+    s += T(348, 104, 'the bigger the ring,', 'b', 'start') + T(348, 124, 'the more antigen', 's', 'start') + T(348, 142, 'was in the well', 's', 'start') + T(348, 168, '(read against standards)', 's', 'start');
+  } else if (k === 'agg') {
+    s += T(140, 34, 'no antibody: even suspension', 's', 'middle') + T(420, 34, 'antibody present: clumps', 's', 'middle');
+    for (let i = 0; i < 8; i++) { const x = 60 + (i % 4) * 54, y = 76 + Math.floor(i / 4) * 52; s += `<circle cx="${x}" cy="${y}" r="11" class="well"/>`; }
+    /* clumped side: each neighbouring pair is bridged by an antibody — two Fab arms, one onto each particle */
+    const P = [];
+    for (let i = 0; i < 9; i++) { const x = 372 + (i % 3) * 62, y = 76 + Math.floor(i / 3) * 52; P.push([x, y]); }
+    const bridge = (a, b) => {
+      const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, dx = b[0] - a[0], dy = b[1] - a[1], d = Math.hypot(dx, dy), ux = dx / d, uy = dy / d;
+      const ax = mx - ux * 15, ay = my - uy * 15, bx = mx + ux * 15, by = my + uy * 15;
+      const sx = mx - uy * 12, sy = my + ux * 12;
+      return `<path d="M${ax.toFixed(1)} ${ay.toFixed(1)} L${mx.toFixed(1)} ${my.toFixed(1)} L${bx.toFixed(1)} ${by.toFixed(1)} M${mx.toFixed(1)} ${my.toFixed(1)} L${sx.toFixed(1)} ${sy.toFixed(1)}" class="ab" style="stroke-width:1.8"/>`;
+    };
+    for (let i = 0; i < P.length; i++) if (i % 3 < 2) s += bridge(P[i], P[i + 1]);
+    for (let i = 0; i < 6; i++) s += bridge(P[i], P[i + 3]);
+    P.forEach(([x, y]) => { s += `<circle cx="${x}" cy="${y}" r="11" class="well"/>`; });
+    s += ab(140, 182, false) + T(140, 170, 'free antibody: nothing to link', 's', 'middle');
+    s += T(140, 228, 'particles: cells, bacteria, latex beads', 's', 'middle') + T(400, 210, 'antibody bridges them: clumping = positive', 's', 'middle');
+  } else if (k === 'cft') {
+    const tube = (x, lysed, lab, res) => {
+      let g = `<path d="M${x - 26} 60 L${x - 26} 150 Q${x - 26} 172 ${x} 172 Q${x + 26} 172 ${x + 26} 150 L${x + 26} 60 Z" style="fill:${lysed ? 'var(--muted)' : 'var(--surface)'};fill-opacity:${lysed ? 0.3 : 1};stroke:var(--ink);stroke-width:1.6"/>`;
+      if (!lysed) for (let i = 0; i < 7; i++) g += `<circle cx="${x - 14 + (i % 3) * 14}" cy="${146 - Math.floor(i / 3) * 12}" r="5" class="well"/>`;
+      g += T(x, 44, lab, 'b', 'middle') + T(x, 194, res, 's', 'middle');
+      return g;
+    };
+    s += tube(130, false, 'Patient HAS antibody', 'complement used up → cells intact') + T(130, 212, 'NO haemolysis = POSITIVE', 'b', 'middle');
+    s += tube(410, true, 'Patient has NO antibody', 'complement free → cells lysed, solution pink') + T(410, 212, 'haemolysis = NEGATIVE', 'b', 'middle');
+    s += T(270, 110, 'indicator:', 's', 'middle') + T(270, 126, 'sheep red cells', 's', 'middle') + T(270, 142, '+ anti-sheep antibody', 's', 'middle');
+  } else if (k === 'eli') {
+    /* sandwich ELISA inside the well: capture antibody standing on the floor, antigen held in its Fab fork,
+       enzyme-labelled detection antibody with its arms down on the antigen */
+    s += `<path d="M150 36 L150 156 Q150 176 170 176 L350 176 Q370 176 370 156 L370 36" style="fill:var(--bg);stroke:var(--ink);stroke-width:1.6"/>`;
+    s += `<rect x="153" y="40" width="214" height="26" style="fill:var(--muted);fill-opacity:.28"/>` + T(260, 58, 'coloured product', 'b', 'middle');
+    for (let i = 0; i < 4; i++) {
+      const x = 180 + i * 50;
+      s += ab(x, 145, false);
+      s += `<rect x="${x - 8}" y="137" width="16" height="11" class="well"/>`;
+      s += ab(x, 132, true);
+      s += `<circle cx="${x}" cy="97" r="5" class="well"/>`;
+    }
+    s += T(260, 198, 'capture antibody · antigen · enzyme-labelled antibody', 's', 'middle') + T(260, 216, 'enzyme + substrate = colour', 's', 'middle');
+    s += T(400, 100, 'sandwich → antigen', 's', 'start') + T(400, 122, 'indirect → antibody', 's', 'start') + T(400, 144, 'competitive → haptens', 's', 'start');
+    s += T(400, 78, 'formats:', 'b', 'start');
+  } else if (k === 'ifa') {
+    s += T(140, 18, 'DIRECT: on the patient\'s tissue', 'b', 'middle') + T(400, 18, 'INDIRECT: patient\'s serum', 'b', 'middle');
+    s += `<circle cx="140" cy="146" r="42" style="fill:var(--cyto);stroke:var(--muted);stroke-width:1"/>` + T(140, 150, 'tissue', 's', 'middle');
+    s += ab(112, 108, true) + ab(168, 108, true);
+    s += `<circle cx="112" cy="79" r="5" class="well"/><circle cx="168" cy="79" r="5" class="well"/>`;
+    s += T(140, 206, 'one step: the labelled antibody', 's', 'middle') + T(140, 224, 'binds what is already there', 's', 'middle');
+    s += `<circle cx="400" cy="146" r="42" style="fill:var(--cyto);stroke:var(--muted);stroke-width:1"/>` + T(400, 150, 'substrate', 's', 'middle');
+    s += ab(400, 108, true) + ab(400, 70, true) + `<circle cx="400" cy="41" r="5" class="well"/>`;
+    s += T(552, 100, 'patient antibody', 's', 'end') + Micro.lead(412, 96, 452, 96) + T(552, 62, 'labelled anti-human', 's', 'end') + Micro.lead(412, 58, 436, 58);
+    s += T(400, 206, 'two steps: serum first,', 's', 'middle') + T(400, 224, 'then the labelled antibody', 's', 'middle');
+    s += T(16, 44, '○ = fluorochrome', 's', 'start');
+  } else {
+    s += `<rect x="60" y="30" width="180" height="180" rx="4" class="gel"/>` + T(150, 226, 'membrane after transfer', 's', 'middle');
+    const bands = [[52, 150], [86, 120], [124, 170], [168, 100]];
+    bands.forEach(([y, w], i) => { s += `<rect x="${150 - w / 2}" y="${y}" width="${w}" height="9" class="band" opacity="${i === 2 ? 1 : 0.45}"/>`; });
+    s += T(258, 132, 'the band of interest', 'b', 'start') + Micro.lead(254, 128, 206, 128);
+    s += T(258, 154, 'found by primary +', 's', 'start') + T(258, 172, 'labelled secondary antibody', 's', 'start');
+    s += T(44, 40, 'large', 's', 'end') + T(44, 206, 'small', 's', 'end') + `<path class="axis" d="M50 36 L50 206"/>` + T(30, 124, 'size', 's', 'middle');
+  }
+  s += T(556, 234, 'schematic', 's', 'end');
+  $('test-svg').innerHTML = s; $('test-find').innerHTML = TESTS[TS.k][1];
+}
+Micro.toggles('test-tg', Object.entries(TESTS).map(([k, v]) => [k, v[0]]), k => { TS.k = k; drawTest(); }, 'prec');
+drawTest();
+
+/* ---- vaccines ---- */
+Micro.toggles('vax-tg', Object.entries(VAX).map(([k, v]) => [k, v[0]]), k => { $('vax-find').innerHTML = VAX[k][1]; document.querySelectorAll('#vax-find .x').forEach(e => e.style.color = 'var(--clin)'); }, 'live');
+$('vax-find').innerHTML = VAX.live[1]; document.querySelectorAll('#vax-find .x').forEach(e => e.style.color = 'var(--clin)');
+
+/* ---- herd immunity ---- */
+const HS = {r0: 6};
+function drawHerd() {
+  const hit = 1 - 1 / HS.r0, n = Math.round(hit * 100); let s = '';
+  for (let i = 0; i < 100; i++) {
+    const x = 24 + (i % 10) * 38, y = 24 + Math.floor(i / 10) * 18, im = i < n;
+    s += `<circle cx="${x}" cy="${y}" r="6.5" style="fill:${im ? 'var(--cyto)' : 'var(--surface)'};stroke:var(--ink);stroke-width:${im ? 1.6 : 1};stroke-dasharray:${im ? 'none' : '2 2'}"/>`;
+  }
+  s += T(24, 212, n + ' of every 100 immune (filled)', 'b', 'start') + T(396, 212, 'schematic', 's', 'end');
+  $('herd-svg').innerHTML = s;
+  $('herd-find').innerHTML = '<p><span class="tag">threshold = 1 − 1/R₀</span></p><p><span class="big">' + (hit * 100).toFixed(0) + ' %</span> of the population must be immune when <b>R₀ = ' + HS.r0 + '</b> (Wikipedia).</p>' +
+    (HS.r0 >= 12 ? '<p>At this transmissibility — measles territory — the threshold passes <b>90 %</b>; Wikipedia gives measles a herd immunity threshold <b>above 95 %</b>.</p>' : '<p>Raise R₀ and the threshold climbs: a disease that spreads readily leaves almost no room for unvaccinated people.</p>');
+}
+const HSL = Micro.slider('herd-sl', {id: 'r0', label: 'Basic reproduction number R₀', min: 2, max: 18, step: 1, value: 6, fmt: v => 'R₀ = ' + v}, v => { HS.r0 = v; drawHerd(); });
+HSL.init(); drawHerd();
+
+/* ---- cold chain ---- */
+const CS = {s: 0};
+function drawCold() {
+  let s = DEFS;
+  const w = 104, gap = 14;
+  COLD.forEach(([short, lab, temp], i) => {
+    const x = 14 + i * (w + gap), on = i === CS.s;
+    s += `<rect x="${x}" y="50" width="${w}" height="70" rx="8" style="fill:var(--surface);stroke:${on ? 'var(--mark)' : 'var(--line)'};stroke-width:${on ? 2.6 : 1.3}"/>`;
+    lab.split(' ').reduce((acc, word) => acc, 0);
+    const words = lab.split(' '); const l1 = words.slice(0, 2).join(' '), l2 = words.slice(2).join(' ');
+    s += T(x + w / 2, l2 ? 78 : 86, l1, 'b', 'middle') + (l2 ? T(x + w / 2, 94, l2, 'b', 'middle') : '');
+    if (temp) { const t = temp.split(' · '); s += T(x + w / 2, 136, t[0], 's', 'middle') + (t[1] ? T(x + w / 2, 152, t[1], 's', 'middle') : ''); }
+    if (i < COLD.length - 1) s += `<path d="M${x + w + 2} 85 L${x + w + gap - 4} 85" style="fill:none;stroke:var(--ink);stroke-width:1.6" marker-end="url(#arr)"/>`;
+  });
+  s += T(14, 34, 'from manufacture to the child — MoHFW 2017', 's', 'start') + T(612, 186, 'schematic', 's', 'end');
+  $('cold-svg').innerHTML = s; $('cold-find').innerHTML = COLD[CS.s][3];
+}
+Micro.stepper('cold-step', COLD.map(r => r[0]), drawCold, CS);
+Micro.swipeHints();
+</script>
+</body>
+</html>
