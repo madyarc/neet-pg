@@ -84,7 +84,7 @@ Last updated: 2026-11-23
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
   colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. S01 [x] build (243 quotes; EU trauma 2023 / ATLS 10th, Sepsis-3, SSC 2021, ERAS; Wikipedia Homeostasis excluded)
   [x] review (ERAS carbohydrate loading misattributed, TBI/spinal exception missing at the instruction (safety),
-  ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. ROUND 1 SECOND MODULES started: B02 [ ] build (running; biochemistry/carbohydrates/, BC3.1–3.6). P02 [ ] build (running;
+  ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. ROUND 1 SECOND MODULES started: B02 [x] build (552 quotes; ADA 2026, WHO 2006/2011, GeneReviews) [ ] review (running). P02 [ ] build (running;
   pathology/general/ inflammation + healing). M02 [ ] build (running; microbiology/immunology/, MI2.1–2.8).
   R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,
   NICE head-injury adult rule, 10-day rule year, radiograph densities unsourced, PET geometry) [x] fixes (364 quotes) [x] committed 2026-11-26.
