@@ -14,9 +14,9 @@ Source notes: OR2.9 is not in the PDF (numbering gap in the source).
 
 ### 1. Skeletal Trauma, Poly trauma
 
-- [ ] **OR1.1** Describe and discuss the Principles of pre-hospital care and Emergency room managementofatraumavictimincludingprinciplesof triage and advance trauma life support.
-- [ ] **OR1.2** Describe and discuss the etiopathogenesis, clinical features, investigations, and principles of management of shock
-- [ ] **OR1.3** Describe and discuss the etiopathogeneses, clinical features, investigations, and principles of management of soft tissue injuries
+- [x] **OR1.1** Describe and discuss the Principles of pre-hospital care and Emergency room managementofatraumavictimincludingprinciplesof triage and advance trauma life support. — *WHO 2005 pre-hospital care, START (Wikipedia's version), ATLS 11th ed. (2025) xABCDE, golden hour: [Trauma Care, Soft-Tissue Injuries and Open Fractures](trauma/trauma-open-fractures.html)*
+- [x] **OR1.2** Describe and discuss the etiopathogenesis, clinical features, investigations, and principles of management of shock — *shock: [General Surgery Shock](../surgery/general/shock.html) (linked from O01)*
+- [x] **OR1.3** Describe and discuss the etiopathogeneses, clinical features, investigations, and principles of management of soft tissue injuries — *sprain grades and management, strain, contusion, crush injury and syndrome: [Trauma Care, Soft-Tissue Injuries and Open Fractures](trauma/trauma-open-fractures.html)*
 - [ ] **OR1.4** Describe and discuss the etiopathogenesis, clinical features, investigations, and principles of management of dislocation of common joints, shoulder, knee, hip and fingers.
 - [ ] **OR1.5** Participate as a member in the team for closed reduction of shoulder dislocation / hip dislocation / knee dislocation and dislocation of finger joints
 - [ ] **OR1.6** Discuss the recent advances in the management of various orthopaedic conditions like trauma, sports injuries, arthroplasty and spine pathologies.
@@ -35,8 +35,8 @@ Source notes: OR2.9 is not in the PDF (numbering gap in the source).
 - [ ] **OR2.11** Describe and discuss the aetiopathogenesis, clinical features, investigations and principles of management of Fracture shaft of femur in all age groups and the recognition and management of fat embolism as a complication
 - [ ] **OR2.12** Describe and discuss the aetiopathogenesis, clinical features, Investigation and principles of management of: (a) Fracture both bones leg (b) Calcaneus (c) Small bones of foot (d) Lisfranc fracture dislocation
 - [ ] **OR2.13** Describe and discuss the aetiopathogenesis, clinical features, Investigation and principles of management of ankle fractures
-- [ ] **OR2.14** Plan and interpret the investigations to diagnose complicationsof fractures like malunion, non-union and infection.
-- [ ] **OR2.15** Describeand discuss the mechanism of injury, clinical features, investigations and principles of management of open fractures with focus on secondary infection prevention and management.
+- [~] **OR2.14** Plan and interpret the investigations to diagnose complicationsof fractures like malunion, non-union and infection. — *malunion, delayed and non-union types, fracture-related infection criteria, radiographs: [Fracture Principles](trauma/fracture-principles.html)*
+- [x] **OR2.15** Describeand discuss the mechanism of injury, clinical features, investigations and principles of management of open fractures with focus on secondary infection prevention and management. — *Gustilo–Anderson classifier, BOAST 2017 timings, limb-salvage decision: [Trauma Care, Soft-Tissue Injuries and Open Fractures](trauma/trauma-open-fractures.html)*
 - [ ] **OR2.16** Describe and discuss the mechanism of injury, clinical features, investigationsandprinciplesofmanagementof following orthopaedic injuries in children: a) Fracture supracondylar humerus with emphasis on neurovascular injury and compartment syndrome. b) Forearm and distal end radius fractures, pulled elbow. c) Epiphyseal injuries d) Fracture shaft femur, tibia/ both bones of the leg e) Non-accidental injuries / child abuse
 
 ### 3. Musculoskeletal Infection

@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fracture Principles: Description, Salter–Harris, Healing, Complications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/ortho.css">
+<style>
+/* Tokens from ortho.css with their site-wide meanings: --bone, --fat (yellow marrow), --cart (cartilage: articular cartilage, soft callus),
+   --plate (growth plate), --centre (epiphysis = secondary ossification centre), --clot (fracture haematoma), --collagen (granulation /
+   fibrous tissue), --skin, --musc, --fascia (deep fascia of a compartment), --clin (clinical point), --mark (selected point), --accent (UI). No new tokens. */
+svg.sch .bone{fill:var(--bone);stroke:var(--ink);stroke-width:1.3}
+svg.sch .marrow{fill:var(--fat)}
+svg.sch .frl{stroke:var(--ink);stroke-width:2;fill:none;stroke-linejoin:round}
+svg.sch .ref{stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 3;fill:none}
+svg.sch .cur{stroke:var(--mark);stroke-width:1.6}
+svg.sch .tl{fill:var(--ink);fill-opacity:.06;stroke:var(--line)}
+svg.sch .tlon{fill:var(--accent);fill-opacity:.85}
+svg.sch .tlhit{cursor:pointer}
+svg.sch.fitmax{max-width:460px}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+.desc{font-size:15px;font-weight:500}
+.flag{color:var(--clin);font-weight:600}
+.disabled{opacity:.45}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Orthopaedics</a> <span class="muted">· Module 01: <span aria-current="page">Fracture principles</span> · <a href="trauma-open-fractures.html">Trauma care and open fractures</a></span></nav>
+
+<header class="stack">
+  <h1>Fracture Principles: Description, Salter–Harris, Healing and Complications</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-desc">Describing a fracture</a> <a href="#h-child">Greenstick and torus</a> <a href="#h-sh">Salter–Harris</a> <a href="#h-heal">Healing</a> <a href="#h-mgmt">Management</a> <a href="#h-comp">Complications</a> <a href="#h-cs">Compartment syndrome</a> <a href="#h-nu">Union problems</a> <a href="#h-avn">Avascular necrosis</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-desc">
+  <h2 id="h-desc">Describing a fracture: build one</h2>
+  <div class="prose" id="desc-intro"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="fx-svg" viewBox="0 0 360 430" role="img" aria-label="Schematic long bone with the chosen fracture pattern, displacement, skin and joint involvement"></svg></div>
+    <div class="stack">
+      <div><span class="tag">Pattern</span><div id="fx-pat" aria-label="Fracture pattern"></div></div>
+      <div><span class="tag">Skin</span><div id="fx-skin" aria-label="Closed or open"></div></div>
+      <div><span class="tag">Site</span><div id="fx-site" aria-label="Site"></div></div>
+      <div class="sliders" id="fx-sl"></div>
+      <p class="desc" id="fx-out" aria-live="polite"></p>
+      <p class="note" id="fx-note"></p>
+    </div>
+  </div>
+  <div class="key" id="fx-key"></div>
+  <div class="scroll"><table id="fx-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-child">
+  <h2 id="h-child">Children's incomplete fractures: greenstick and torus (buckle)</h2>
+  <div class="prose" id="child-text"></div>
+  <div class="scroll"><table id="child-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sh">
+  <h2 id="h-sh">Salter–Harris: fractures through the growth plate</h2>
+  <div class="prose" id="sh-intro"></div>
+  <div id="sh-pick" aria-label="Salter–Harris type"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="sh-svg" viewBox="0 0 400 300" role="img" aria-label="Schematic end of a child's long bone: epiphysis, growth plate and metaphysis, with the fracture line of the chosen Salter–Harris type"></svg></div>
+    <div class="prose find" id="sh-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="sh-key"></div>
+  <div class="scroll"><table id="sh-table"></table></div>
+  <div class="prose" id="sh-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-heal">
+  <h2 id="h-heal">How a fracture heals: drag through time</h2>
+  <div class="prose" id="heal-intro"></div>
+  <div class="sliders" id="heal-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="heal-svg" viewBox="0 0 440 300" role="img" aria-label="Schematic fracture gap filling with haematoma, granulation tissue, soft callus, hard callus and then remodelled bone, for the chosen time"></svg></div>
+    <div class="prose find" id="heal-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="heal-key"></div>
+  <div class="schbox"><svg class="fig sch" id="heal-tl" viewBox="0 0 620 126" role="img" aria-label="Timeline of the healing stages on a logarithmic time axis, with the chosen time marked"></svg></div>
+  <h3>Primary (direct) and secondary (indirect) healing</h3>
+  <div class="scroll"><table id="heal-table"></table></div>
+  <div class="prose" id="heal-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mgmt">
+  <h2 id="h-mgmt">Principles of management</h2>
+  <div class="step" id="mg-step"></div>
+  <div class="prose find" id="mg-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-comp">
+  <h2 id="h-comp">Complications: early and late</h2>
+  <div class="prose" id="comp-intro"></div>
+  <div id="comp-pick" aria-label="Complication"></div>
+  <div class="schbox"><svg class="fig sch" id="comp-svg" viewBox="0 0 620 300" role="img" aria-label="Schematic timeline of fracture complications from hours to years after injury, with the chosen one highlighted"></svg></div>
+  <div class="prose find" id="comp-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cs">
+  <h2 id="h-cs">Acute compartment syndrome: signs and the pressure difference</h2>
+  <div class="prose" id="cs-text"></div>
+  <div class="chips" id="cs-pre" aria-label="Preset"></div>
+  <div class="sliders" id="cs-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="cs-svg" viewBox="0 0 400 256" role="img" aria-label="Schematic cross-section of a leg compartment: muscle inside deep fascia, with the pressure and the diastolic pressure compared on a bar"></svg></div>
+    <div class="prose" id="cs-out" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="cs-table"></table></div>
+  <div class="prose" id="cs-note"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-nu">
+  <h2 id="h-nu">Delayed union, nonunion and malunion</h2>
+  <div class="prose" id="nu-text"></div>
+  <div id="nu-pick" aria-label="Nonunion type"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="nu-svg" viewBox="0 0 360 260" role="img" aria-label="Schematic of the chosen kind of nonunion: callus and blood supply at the fracture ends"></svg></div>
+    <div class="prose find" id="nu-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-avn">
+  <h2 id="h-avn">Avascular necrosis after fractures: the classic sites</h2>
+  <div class="prose" id="avn-text"></div>
+  <div class="scroll"><table id="avn-table"></table></div>
+</section>
+
+<p class="muted" id="skill-note"></p>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BFracture%20Principles%3A%20Description%2C%20Salter%E2%80%93Harris%2C%20Healing%20and%20Complications%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Forthopaedics%2Ftrauma%2Ffracture-principles.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/ortho.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-o01.md, Part A; orthopaedics/DATA-SOURCES.md) ===================== */
+const LEDE = 'Build a fracture and read off its description; pick a Salter–Harris type on a growth plate; drag a fracture through healing from the first hours to remodelling; and place each complication on a timeline, with a calculator for the compartment-syndrome pressure difference. Bone structure and ossification are on the anatomy page <a href="../../anatomy/general/terminology-bone.html">Terminology and bone</a>; trauma care and open fractures are on the <a href="trauma-open-fractures.html">next page</a>.';
+
+const DESC_INTRO = '<p>A fracture is "a disruption in the structural continuity of the bone cortex" (StatPearls). Describe it by <b>skin</b> (closed: the overlying skin is intact; <b>open</b>: a wound communicates with the fracture or its haematoma), <b>pattern</b>, <b>displacement</b> and whether it enters a <b>joint</b> (Wikipedia; StatPearls). Choose below; the sentence describes what is drawn.</p>';
+
+/* pattern: [label, one-line definition shown, sources] */
+const PAT = {
+  trans: ['Transverse', 'at a right angle to the long axis of the bone (Wikipedia).'],
+  obl: ['Oblique', 'diagonal to the long axis (Wikipedia: "more than 30°").'],
+  spir: ['Spiral', 'from twisting: torque applied along the axis of the bone (Wikipedia).'],
+  comm: ['Comminuted', 'broken into several pieces (Wikipedia).'],
+  green: ['Greenstick (child)', 'one cortex breaks on the tension side, the other only bends (StatPearls; a 2026 review; Wikipedia).'],
+  buckle: ['Torus / buckle (child)', 'axial compression: the cortex bulges without disruption of the opposite cortex (StatPearls; a 2009 study).'],
+};
+const PAT_NOTE = 'Transverse, oblique, spiral and comminuted are the shaft patterns named in a 2012 review of hand fractures; their one-line definitions are from Wikipedia.';
+const FX_TABLE = [
+  ['Translation', 'sideways shift of the fragments ("ad latus")', 'Wikipedia; a 2026 review of acceptable deformity'],
+  ['Angulation', 'the fragments meet at an angle', 'Wikipedia; 2022 and 2026 reviews'],
+  ['Rotation', 'the fragments rotated relative to each other about the long axis', 'Wikipedia; 2022 and 2026 reviews'],
+  ['Shortening', 'overall length reduced as the fragments overlap', 'Wikipedia; 2022 and 2026 reviews'],
+  ['Pathological', 'through bone weakened by an underlying disease, e.g. a tumour or cyst; a malignant cause must be investigated before treatment', 'Wikipedia; a 2026 review'],
+  ['Intra-articular', 'the fracture enters the joint surface: surgery is commonly advised to restore it accurately (open reduction and internal fixation)', 'Wikipedia; a 2017 review'],
+];
+
+const CHILD_TEXT = '<p>Children\'s bones bend before they break. A <b>greenstick</b> fracture bends and partly breaks: the cortex fails on the <b>tension</b> side and only bends on the other (StatPearls; Wikipedia; a 2026 review); it most commonly affects the forearm (Wikipedia). A <b>torus (buckle)</b> fracture is a compression failure: the cortex bulges without disruption of the cortex on the other side (StatPearls; a 2009 study). It is the commonest fracture of childhood (Wikipedia; the 2026 review: the distal radial buckle fracture) and is stable (StatPearls; the 2026 review). In the UK FORCE trial a soft bandage was as good as rigid immobilisation for wrist torus fractures, which heal in three to four weeks (the 2026 review). Pick either pattern in the builder above to see it drawn.</p>';
+const CHILD_TABLE = [
+  ['Greenstick', 'Bending; cortex broken on the tension side, intact (bent) on the other', 'Partly broken; forearm commonest (Wikipedia)'],
+  ['Torus (buckle)', 'Axial compression; cortex bulges, opposite cortex intact', 'Stable; commonest childhood fracture'],
+];
+
+/* Salter–Harris: [name, line, prognosis/treatment] */
+const SH = {
+  1: ['Type I', 'Through the growth plate itself (the hypertrophic layer), separating the epiphysis from the metaphysis (Wikipedia; a 2021 review).', 'Prognosis generally excellent (the 2021 review). Types I and II: closed manipulation, reduction and immobilisation; low risk of growth arrest (the 2021 review; a 2026 review).'],
+  2: ['Type II', 'Through the growth plate and out through the <b>metaphysis</b>, sparing the epiphysis: the fracture takes a piece of metaphysis (Wikipedia; the 2021 review). The <b>commonest</b> type (Wikipedia, about 75%; a 2022 registry study).', 'Prognosis good (the 2021 review). Closed reduction and immobilisation (the 2021 and 2026 reviews).'],
+  3: ['Type III', 'Through the growth plate and out through the <b>epiphysis</b> into the joint, sparing the metaphysis (Wikipedia; the 2021 review).', 'Intra-articular: poor unless reduced anatomically (the 2021 review). Types III and IV need anatomical reduction with a congruent joint (the 2021 review); with type V they carry the highest risk of premature physeal closure (the 2026 review).'],
+  4: ['Type IV', 'Through all three: metaphysis, growth plate and epiphysis, into the joint (Wikipedia; the 2021 review).', 'Intra-articular: anatomical, often operative, reduction (the 2021 and 2026 reviews); high risk of premature physeal closure (the 2026 review).'],
+  5: ['Type V', 'A compression (crush) of the growth plate; hard to diagnose at first (Wikipedia; the 2021 review).', 'With types III and IV, the highest risk of premature physeal closure (the 2026 review).'],
+};
+const SH_INTRO = '<p>Salter and Harris published their classification in 1963 (Wikipedia; StatPearls; a 2026 review). It grades fractures by their involvement of the physis, metaphysis and epiphysis, which bears on prognosis and treatment (StatPearls). About 15–20% of children\'s fractures involve the physis (StatPearls 15–18%; the 2026 review 15–20%). The physis is weaker than the ligaments and periosteum in children, so it tends to give way first (StatPearls). The growth plate itself is on the anatomy page: <a href="../../anatomy/general/terminology-bone.html#h-oss">ossification of a long bone</a>.</p>';
+const SH_TEXT = '<p><b>SALTER</b> (the sources differ on the last letters): <b>S</b> = straight across / slip (I), <b>A</b> = above (II), <b>L</b> = lower (III), <b>T</b> = through / <b>TE</b> = through everything (IV), and for V either <b>R</b> = rammed (crushed) (Wikipedia) or <b>ER</b> = erasure of the growth plate, "crush" (a 2021 review). The mnemonic imagines the long bone "with the epiphyses at the base" (Wikipedia), so the drawing puts the joint and epiphysis at the bottom: "above" the physis is the metaphysis (II), "lower" is the epiphysis (III). Wikipedia also gives an alternative reading with E (V) and R = ring (VI).</p><p>Complications include bony bridge (bar) formation with growth arrest, shortening or angular deformity, and growth acceleration (Wikipedia; the 2021 review). Prognosis also depends on the child\'s age and the site (the 2021 review). Follow-up: at least a year (Wikipedia, citing the American Academy of Orthopaedic Surgeons) or 6–12 months, up to two years for high-risk physes (the 2026 review). Rarer types VI–IX (Rang, Ogden) were added later (Wikipedia; the 2021 review).</p>';
+const SH_TABLE = [
+  ['I', 'Physis only', '"S" straight across', 'Excellent'],
+  ['II', 'Physis + metaphysis (commonest)', '"A" above', 'Good'],
+  ['III', 'Physis + epiphysis (into joint)', '"L" lower', 'Poor unless anatomically reduced'],
+  ['IV', 'Metaphysis + physis + epiphysis', '"T(E)" through (everything)', 'Anatomical reduction; high arrest risk'],
+  ['V', 'Crush of the physis', '"R" rammed / "ER" erasure', 'High arrest risk'],
+];
+
+/* healing stages: [key, name, start day, end day, text] — log time axis; animal-model timings labelled */
+const HEAL = [
+  ['haem', 'Haematoma', 0, 2, 'Bleeding from torn vessels clots between and around the bone ends; the haematoma is a template for the callus (StatPearls; a 2011 review). It forms within a few hours (Wikipedia).'],
+  ['infl', 'Inflammation', 0.04, 7, 'An acute inflammatory response, with cytokines and recruitment of mesenchymal stem cells. It peaks within the first 24 h and is complete after about 7 days (a 2011 review; Wikipedia repeats it).'],
+  ['gran', 'Granulation tissue', 3, 14, 'Inflammatory cells and fibroblasts form a fibrin-rich granulation tissue, a soft scaffold (StatPearls; the 2011 review). Wikipedia: within 7–14 days.'],
+  ['soft', 'Soft callus', 5, 21, 'Cartilage forms a soft callus that gives the fracture a stable structure (the 2011 review; a 2017 review: "cartilage form"). Peak at 7–9 days <b>in animal models</b> (rat, rabbit, mouse; the 2011 review).'],
+  ['hard', 'Hard callus', 10, 60, 'The cartilage callus mineralises and is replaced by woven bone; the bridging hard callus is semi-rigid and allows weight bearing (the 2011 review; StatPearls; the 2017 review: "woven bone"). Peak about day 14 <b>in animal models</b> (the 2011 review).'],
+  ['remo', 'Remodelling', 21, 1095, 'Osteoclasts resorb the hard callus and osteoblasts lay down lamellar bone; the medullary cavity is re-formed (the 2011 review; StatPearls). It begins as early as 3–4 weeks (the 2011 review). How long it lasts: <b>sources differ</b> — "years" (the 2011 review), "3 to 5 years" (Wikipedia), "several months" (the 2017 review).'],
+];
+const HEAL_INTRO = '<p>Most fractures heal by <b>secondary</b> healing, through a series of overlapping stages (StatPearls; a 2017 review: inflammation, soft callus, hard callus, remodelling). Drag the slider: the drawing and timeline show which stages are active. Timings are from a 2011 review; the callus peaks come from animal studies.</p>';
+const HEAL_TABLE = [
+  ['Needs', 'Anatomical reduction, rigid (absolute) stability, fragments compressed — usually open reduction and internal fixation, e.g. compression plating', 'Some motion at the fracture site (relative stability): casts, intramedullary nails, external fixators'],
+  ['Callus', 'None: lamellar bone and Haversian systems regenerate directly, "without any remodeling steps necessary" (2011 review); Wikipedia describes it as needing only remodelling of lamellar bone', 'Callus, by endochondral and intramembranous ossification'],
+  ['How common', 'Less common', 'The commonest form'],
+];
+const HEAL_TEXT = '<p>Primary (direct) and secondary (indirect) healing: a 2011 review; a 2017 review; StatPearls (absolute stability such as compression plating → primary healing; relative stability such as external fixation → secondary); Wikipedia. Factors that slow healing, such as smoking, are listed by Wikipedia.</p>';
+
+/* management stepper */
+const MG = [
+  ['1 Restore the position', 'If the fragments are displaced, restore them to their natural positions: <b>reduction</b>, closed (manipulation) or open (Wikipedia, two articles; a 2021 review: closed manipulation and reduction for Salter–Harris I and II). Intra-articular fractures commonly need an accurate (anatomical) reduction, often by surgery (Wikipedia; a 2017 review).'],
+  ['2 Hold it while the bone heals', 'Maintain the position until the bone heals: cast, splint, or fixation — internal (plates, nails) or external fixators, which immobilise the fracture while sparing the soft tissue (Wikipedia; StatPearls). The choice also sets the kind of healing: absolute stability → primary, relative → secondary (StatPearls).'],
+  ['3 Rehabilitate', 'After healing, physical therapy restores mobility and strength; the aim is the best possible function of the injured part (Wikipedia).'],
+];
+
+/* complications: [key, name, timeline band [from day, to day], early/late, text] */
+const COMP = {
+  cs: ['Compartment syndrome', [0.05, 3], 'early', 'Raised pressure in a closed osteofascial compartment → ischaemia → necrosis of muscle and nerve; a surgical emergency (StatPearls). Commonest after a fracture, usually of the tibia (Wikipedia; a 2019 review). See <a href="#h-cs">the calculator below</a>.'],
+  fes: ['Fat embolism syndrome', [0.5, 3], 'early', 'After long-bone (femur) and pelvic fractures (Wikipedia; 2009 and 2021 reviews). Triad: <b>respiratory distress, neurological signs and a petechial rash</b> (Wikipedia; "lungs, brain and skin", a 2009 review). Onset: <b>sources differ</b> — 12 h to 3 days (Wikipedia), 24–72 h (2009 review), 24–48 h (2021 review). The rash (chest, axilla, conjunctiva, neck; 2009 review) appears in about half (a 2013 review; Wikipedia repeats it) or 20–50% (2009 review). Treatment is supportive (Wikipedia; 2009 review); early fixation of long-bone fractures lowers the risk (2009 and 2021 reviews). <b>Gurd and Wilson criteria</b>, the most used (Wikipedia; 2021 review): major — petechial rash, respiratory insufficiency, cerebral involvement (2009 review; Wikipedia); minor — tachycardia, fever, retinal changes, jaundice, renal signs, thrombocytopenia, anaemia, high ESR, fat macroglobulinaemia; diagnosis needs at least one major and four minor (2009 review). None of the criteria is clinically validated (2021 review).'],
+  dvt: ['Deep vein thrombosis', [1, 42], 'early', 'Trauma, hip and long-bone fractures and immobility are risk factors (Wikipedia); the hypercoagulable state after trauma is a rationale for early thromboprophylaxis (a 2026 review). Drugs and doses are not given here.'],
+  inf: ['Infection', [2, 365], 'early and late', 'Open fractures carry a higher risk of infection than closed ones (Wikipedia; a 2008 review); Wikipedia gives 1–2% after internal fixation of closed fractures and up to 30% in open fractures. Low-grade infection can underlie an atrophic nonunion (a 2019 review). Open fractures: <a href="trauma-open-fractures.html#h-open">next page</a>.'],
+  du: ['Delayed union', [90, 270], 'late', 'Union that is late but does come; definitions vary — Wikipedia calls it a nonunion "which does go on to heal"; a cut-off of about 6 months is used in studies (StatPearls; a 2025 study).'],
+  nu: ['Nonunion', [180, 1095], 'late', 'US FDA definition: at least 9 months since injury and no signs of healing for 3 months (StatPearls; a 2019 review; Wikipedia); others use 6 months for long bones (2019 review). <a href="#h-nu">Hypertrophic vs atrophic below</a>.'],
+  mu: ['Malunion', [42, 1095], 'late', 'Healed in a clinically unacceptable position — angulation, rotation, shortening or lengthening (a 2022 review; Wikipedia); diagnosed on X-ray (Wikipedia; radiological criteria in the 2022 review).'],
+  avn: ['Avascular necrosis', [30, 1095], 'late', 'Death of bone after its blood supply is cut; fractures and dislocations are causes (Wikipedia; StatPearls). <a href="#h-avn">Classic sites below</a>.'],
+  vic: ['Volkmann ischaemic contracture', [30, 1095], 'late', 'The late result of prolonged ischaemia from compartment syndrome in the forearm (a 2024 review): a permanent flexion contracture, a claw-like hand (Wikipedia; StatPearls). The deep flexor compartment — flexor digitorum profundus and flexor pollicis longus — is the most vulnerable (the 2024 review). Prompt fasciotomy for compartment syndrome has made it rarer (the 2024 review).'],
+  crps: ['Complex regional pain syndrome', [14, 1095], 'late', 'Pain out of proportion to the injury, with sensory, vasomotor, sudomotor/oedema and motor/trophic changes; often after trauma, fracture or surgery (StatPearls; Wikipedia; a 2021 review). Diagnosis by the <b>Budapest criteria</b> (consensus meeting 2003; the 2021 review; Wikipedia). Type I without a confirmed nerve injury, type II with one (the 2021 review; Wikipedia).'],
+};
+const COMP_INTRO = '<p>Pick a complication. The bars are <b>schematic placement</b>, timed only where the text gives a time (fat embolism, delayed union, nonunion); no source has a single early-vs-late table.</p>';
+
+/* compartment syndrome */
+const CS_TEXT = '<p>Early: <b>pain out of proportion</b> to the injury and <b>pain on passive stretch</b> of the muscles of the compartment, with paraesthesia (StatPearls: the earliest features; Wikipedia; a 2015 review). Pain on passive stretch is the most sensitive clinical sign (a 2019 review), though in one series it had a sensitivity of only 19% (specificity 97%) (the 2019 review). Late: pallor, pulse deficit and paralysis (StatPearls); pulselessness means it is too late for a good outcome, and complete paralysis means irreversible damage (the 2015 review). Together these are the <b>5 Ps</b>: pain, pallor, paraesthesia, paralysis, pulselessness (Wikipedia; 2015 and 2019 reviews). It is a clinical diagnosis (StatPearls); pressure helps. Treatment: emergency <b>fasciotomy</b> (StatPearls; Wikipedia).</p>';
+const CS_PRE = {
+  a: ['Normal BP, low pressure', {dbp: 70, icp: 15}],
+  b: ['Normal BP, raised pressure', {dbp: 70, icp: 45}],
+  c: ['Hypotensive, moderate pressure', {dbp: 45, icp: 25}],
+};
+const CS_TABLE = [
+  ['ΔP = diastolic BP − compartment pressure ≤ 30 mmHg', 'The commonest threshold used by clinicians (a 2019 review); McQueen and Court-Brown, via a 2015 review', 'Strict use would operate on some patients without compartment syndrome (2019 review; a 2019 review in Medicine)'],
+  ['Compartment pressure > 30 mmHg', 'StatPearls ("can help guide diagnosis"); Mubarak and Gelberman via the 2015 review', 'Absolute thresholds differ'],
+  ['Compartment pressure 45 mmHg', 'Matsen, via the 2015 review', '30–50 mmHg proposed (a 2019 review in Medicine)'],
+];
+const CS_NOTE = 'The calculator only does the subtraction. The decision is clinical; thresholds are as the dated reviews state them.';
+
+/* nonunion types */
+const NU = {
+  hyper: ['Hypertrophic', 'Good blood supply and abundant fracture haematoma, but an <b>unstable</b> mechanical environment (a 2019 review; Wikipedia). X-rays show abundant callus that fails to bridge (Wikipedia). Treatment: more stability, with surgical implants (Wikipedia).'],
+  atro: ['Atrophic', 'Impaired <b>blood supply</b> with local strain concentration (a 2019 review); X-rays show little to no callus (Wikipedia). Treatment: stimulate blood flow and healing, e.g. freshened bone ends and bone grafts (Wikipedia). In previously undetected atrophic nonunions, low-grade infection may be the cause (the 2019 review).'],
+  oligo: ['Oligotrophic', 'Some attempt to heal, between the two (Wikipedia).'],
+};
+const NU_TEXT = '<p><b>Nonunion</b>: by the US FDA definition, a fracture at least 9 months old with no signs of healing for 3 months (StatPearls; a 2019 review; Wikipedia); others use 6 months for long bones, and clinicians disagree on timing (the 2019 review). <b>Delayed union</b>: late but not failed; definitions vary (about 6 months in studies: StatPearls; a 2025 study). <b>Malunion</b>: healed in a clinically unacceptable position (a 2022 review; Wikipedia), seen on X-ray (Wikipedia). Investigations for these complications: radiographs for healing and position (Wikipedia; the 2019 and 2022 reviews).</p><p><b>Fracture-related infection</b>: a 2020 consensus review separates <b>confirmatory</b> criteria — a sinus communicating with the fracture, organisms on culture, histological signs of infection — from <b>suggestive</b> ones that should prompt further tests; clinical signs, serum inflammatory markers, imaging, microbiology and histology all contribute. For bone infection, culture and histopathology of bone obtained aseptically are the most direct evidence (StatPearls; Wikipedia: definitive by biopsy and culture), with inflammatory markers and imaging (MRI preferred: StatPearls). Open fractures: <a href="trauma-open-fractures.html#h-open">next page</a>.</p>';
+
+const AVN_TEXT = '<p>Avascular necrosis is death of bone from loss of its blood supply; fractures and dislocations are among the causes (Wikipedia; StatPearls). It typically affects the epiphyses at weight-bearing joints (StatPearls). The tissue-level picture of necrosis is on the pathology page <a href="../../pathology/general/cell-injury-death.html#h-nec">Types of necrosis</a>.</p>';
+const AVN_TABLE = [
+  ['Femoral head', 'A ring of circumflex femoral arteries round the neck supplies the head (StatPearls); neck fractures can interrupt the supply to the head', 'StatPearls; Wikipedia: about 20% of intracapsular hip fractures'],
+  ['Scaphoid (proximal pole)', 'Blood enters distally and runs proximally (retrograde), so the part proximal to the fracture suffers', 'Wikipedia (about 30% in proximal-third fractures); a 2014 review: proximal site and AVN are risks for nonunion'],
+  ['Talus', 'Supply is mainly from outside the bone (extensive cartilage cover), easily cut by displaced fractures or dislocation', 'StatPearls; a 2026 review'],
+];
+
+const SKILL = 'Named fractures (clavicle, humerus, forearm, hip, ankle and the rest) belong to later orthopaedics modules. Shock (OR1.2) is on the surgery page <a href="../../surgery/general/shock.html">Shock</a>, with the ATLS classes of haemorrhage; note that the ATLS 11th edition (2025) changed resuscitation principles — permissive hypotension, limited crystalloids, early transfusion (a 2026 review of the updates).';
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews on fracture healing (2011, 2015, 2017, 2019), physeal fractures (2021, 2022), conservative treatment of children\'s fractures (2026), buckle and greenstick fractures (2009), acute compartment syndrome (2015, 2019, 2019), fat embolism (2009, 2013, 2021), nonunion (2019), tibial malunion (2022), scaphoid nonunion (2014), Volkmann contracture (2024), complex regional pain syndrome (2021), haemostatic resuscitation (2026), hand fractures (2012), open fractures (2008, 2025) (Europe PMC); Wikipedia (articles that cite OpenStax or Lumen/Boundless were not used).';
+const MODELS = '<b>Models used:</b> every drawing is schematic, not to scale: a generic long bone, a generic growth-plate end, a generic fracture gap and compartment. Healing stage spans are approximate, from the sourced timings (callus peaks from animal studies). The complication timeline is schematic. The compartment calculator is a subtraction.';
+
+/* ===================== CODE ===================== */
+const O = window.Ortho, $ = O.$, T = O.T;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS; $('skill-note').innerHTML = SKILL;
+$('desc-intro').innerHTML = DESC_INTRO;
+
+/* ---- fracture builder ---- */
+const FX = {pat: 'trans', skin: 'closed', site: 'shaft', tr: 0, ang: 0, rot: 0, sh: 0};
+const X0 = 150, X1 = 210, XC = 180;            // shaft edges and centre
+function fxLine(pat, y) {                        // fracture line across the shaft at height y (left → right)
+  if (pat === 'trans') return [[X0 - 2, y], [X1 + 2, y]];
+  if (pat === 'obl') return [[X0 - 2, y - 26], [X1 + 2, y + 26]];
+  if (pat === 'spir') return [[X0 - 2, y - 30], [XC - 14, y - 22], [XC, y - 4], [XC + 14, y + 16], [X1 + 2, y + 30]];
+  return [[X0 - 2, y], [X1 + 2, y]];
+}
+function bonePath() {                            // long bone outline: flared ends, shaft 150–210
+  return 'M120 40 Q180 6 240 40 L238 70 Q214 84 210 110 L210 330 Q214 356 238 370 L240 400 Q180 430 120 400 L122 370 Q146 356 150 330 L150 110 Q146 84 122 70 Z';
+}
+function drawFx() {
+  const s = FX, kid = s.pat === 'green' || s.pat === 'buckle', y = s.site === 'shaft' ? 220 : 300;
+  const a = kid ? (s.pat === 'green' ? Math.min(s.ang, 10) : 0) : s.ang, tr = kid ? 0 : s.tr, sh = kid ? 0 : s.sh, rot = kid ? 0 : s.rot;
+  let h = O.DEFS + `<defs>`;
+  const L = fxLine(s.pat, y);
+  const top = 'M0 0 L360 0 L360 ' + L[L.length - 1][1] + ' ' + L.slice().reverse().map(p => 'L' + p[0] + ' ' + p[1]).join(' ') + ' L0 ' + L[0][1] + ' Z';
+  const bot = 'M0 430 L360 430 L360 ' + L[L.length - 1][1] + ' ' + L.slice().reverse().map(p => 'L' + p[0] + ' ' + p[1]).join(' ') + ' L0 ' + L[0][1] + ' Z';
+  h += `<clipPath id="cpT"><path d="${top}"/></clipPath><clipPath id="cpB"><path d="${bot}"/></clipPath></defs>`;
+  const bone = `<path class="bone" d="${bonePath()}"/><rect class="marrow" x="${X0 + 12}" y="110" width="${X1 - X0 - 24}" height="220" rx="8"/>` +
+    `<path d="M124 46 Q180 14 236 46" style="fill:none;stroke:var(--cart);stroke-width:5"/><path d="M124 394 Q180 424 236 394" style="fill:none;stroke:var(--cart);stroke-width:5"/>`;
+  /* skin envelope (behind) */
+  const open = s.skin === 'open';
+  h += `<rect x="96" y="90" width="168" height="270" rx="40" style="fill:var(--skin);fill-opacity:.35;stroke:var(--skin);stroke-width:5"/><rect x="93.5" y="87.5" width="173" height="275" rx="42" style="fill:none;stroke:var(--muted);stroke-width:1"/>`;
+  if (open) h += `<path d="M88 ${y - 20} L112 ${y - 20} L${X0} ${y - 6} L${X0} ${y + 6} L112 ${y + 20} L88 ${y + 20} Z" style="fill:var(--surface);stroke:var(--muted);stroke-width:1"/>`;
+  if (s.pat === 'buckle') {
+    h += bone + `<path d="M150 290 q-9 10 0 20 M210 290 q9 10 0 20" style="fill:none;stroke:var(--ink);stroke-width:2.2"/>`;
+    h += T(268, 300, 'cortex bulges', 'l', 'start') + O.lead(214, 300, 264, 297) + T(96, 300, 'both cortices', 'l', 'end') + T(96, 314, 'unbroken', 'l', 'end');
+  } else if (s.pat === 'green') {
+    const g = `rotate(${-a} 210 ${y})`;           // bend about the intact (right, compression) cortex
+    h += `<g clip-path="url(#cpT)">${bone}</g><g transform="${g}"><g clip-path="url(#cpB)">${bone}</g></g>`;
+    h += `<path class="frl" d="M${X0 - 2} ${y} L${XC + 10} ${y}"/>` + T(96, y - 4, 'broken', 'l', 'end') + T(96, y + 10, '(tension side)', 'l', 'end') + T(268, y + 4, 'bent, intact', 'l', 'start');
+  } else {
+    const piv = s.site === 'shaft' ? [XC, y] : [XC, y];
+    const g = `translate(${tr} ${-sh}) rotate(${-a} ${piv[0]} ${piv[1]})`;
+    h += `<g clip-path="url(#cpT)">${bone}</g>`;
+    if (s.pat === 'comm') {                       // a wedge (butterfly) fragment between the two main pieces
+      h += `<g transform="${g}"><g clip-path="url(#cpB)">${bone}</g></g>` + `<path class="frl" d="M${X0 - 2} ${y} L${X1 + 2} ${y}"/>`;
+      h += `<g transform="translate(${tr / 2 + 14} ${-sh / 2})"><path class="bone" style="stroke-width:2" d="M${X1 - 4} ${y - 20} L${XC + 2} ${y} L${X1 - 4} ${y + 20} Z"/></g>` + T(272, y + 34, 'wedge', 'l', 'start') + T(272, y + 48, 'fragment', 'l', 'start');
+    } else h += `<g transform="${g}"><g clip-path="url(#cpB)">${bone}</g></g>` + `<path class="frl" d="${O.path(L)}"/>`;
+    if (s.pat === 'spir') h += `<path class="ref" d="M${XC - 14} ${y - 22} Q${X0 + 2} ${y + 6} ${X0 - 2} ${y + 30}"/>`;
+    if (s.site === 'joint') {                     // a split from the fracture into the joint surface
+      h += `<g transform="${g}"><path class="frl" d="M${XC} ${y + 2} L${XC + 6} 402"/></g>` + T(268, 404, 'into the joint', 'l', 'start') + O.lead(XC + 10, 402, 264, 401);
+    }
+    if (rot) {                                    // rotation marker: a line drawn on each fragment, offset by the rotation
+      const off = 26 * Math.sin(rot * Math.PI / 180);
+      h += `<path class="ref" d="M${XC} 120 L${XC} ${y - 34}"/><g transform="${g}"><path d="M${XC + off} ${y + 34} L${XC + off} 330" style="stroke:var(--ink);stroke-width:2.2;fill:none"/></g>`;
+      h += T(90, 108, 'rotation:', 's', 'end') + T(90, 122, 'dashed vs', 's', 'end') + T(90, 136, 'solid line', 's', 'end');
+    }
+  }
+  if (open) h += T(84, y - 46, 'wound reaches', 's', 'end') + T(84, y - 32, 'the fracture', 's', 'end');
+  h += T(6, 424, 'schematic', 's', 'start');
+  $('fx-svg').innerHTML = h;
+  /* description */
+  const parts = [];
+  parts.push(open ? 'Open' : 'Closed');
+  parts.push(PAT[s.pat][0].replace(/ \(child\)/, '').toLowerCase());
+  let d = parts.join(', ') + ' fracture' + (s.site === 'joint' ? ', extending into the joint (intra-articular)' : ' of the shaft');
+  if (kid) d += s.pat === 'green' && a ? `, angulated ${a}° (incomplete: the other cortex only bends)` : ' (incomplete)';
+  else {
+    const dd = [];
+    if (tr) dd.push(`translated ${Math.round(Math.abs(tr) / 60 * 100)}% of the shaft width`);
+    if (a) dd.push(`angulated ${Math.abs(a)}°`);
+    if (rot) dd.push(`rotated ${Math.abs(rot)}°`);
+    if (sh) dd.push(`shortened (fragments overlap) by ${sh} units`);
+    d += dd.length ? ', displaced: ' + dd.join(', ') : ', undisplaced';
+  }
+  $('fx-out').textContent = d + '.';
+  $('fx-note').innerHTML = '<b>' + PAT[s.pat][0] + ':</b> ' + PAT[s.pat][1] + (kid ? ' Translation, rotation and shortening are switched off for this pattern' + (s.pat === 'buckle' ? ', and angulation too.' : '; the drawing bends it by at most 10°.') : '') + ' ' + (s.pat === 'trans' || s.pat === 'obl' || s.pat === 'spir' || s.pat === 'comm' ? PAT_NOTE : '');
+  document.querySelectorAll('#fx-sl .sl').forEach((el, i) => el.classList.toggle('disabled', kid && !(s.pat === 'green' && i === 1)));
+}
+O.toggles('fx-pat', Object.entries(PAT).map(([k, v]) => [k, v[0]]), k => { FX.pat = k; if (k === 'green' || k === 'buckle') { FX.site = 'shaft'; document.querySelectorAll('#fx-site button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === 'shaft'))); } drawFx(); }, 'trans');
+O.toggles('fx-skin', [['closed', 'Closed'], ['open', 'Open']], k => { FX.skin = k; drawFx(); }, 'closed');
+O.toggles('fx-site', [['shaft', 'Shaft'], ['joint', 'Near a joint, into it']], k => { if ((FX.pat === 'green' || FX.pat === 'buckle') && k === 'joint') { FX.pat = 'trans'; document.querySelectorAll('#fx-pat button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === 'trans'))); } FX.site = k; drawFx(); }, 'shaft');
+for (const [k, lab, mn, mx, st, f] of [['tr', 'Translation', 0, 36, 2, v => Math.round(v / 60 * 100) + '% width'], ['ang', 'Angulation', 0, 20, 1, v => v + '°'], ['rot', 'Rotation', 0, 60, 5, v => v + '°'], ['sh', 'Shortening (overlap)', 0, 24, 2, v => v + ' units']])
+  O.slider('fx-sl', {id: 'fx' + k, label: lab, min: mn, max: mx, step: st, value: FX[k], fmt: f}, v => { FX[k] = v; drawFx(); }).init();
+O.key('fx-key', [['--bone', 'bone'], ['--fat', 'marrow'], ['--cart', 'articular cartilage'], ['--skin', 'skin and soft tissue']]);
+O.table('fx-table', ['Term', 'Meaning', 'Sources'], FX_TABLE);
+drawFx();
+
+$('child-text').innerHTML = CHILD_TEXT;
+O.table('child-table', ['Pattern', 'Mechanism', 'Note'], CHILD_TABLE);
+
+/* ---- Salter–Harris ---- */
+$('sh-intro').innerHTML = SH_INTRO; $('sh-text').innerHTML = SH_TEXT;
+function drawSH(t) {
+  const PY = 170;                                 // physis band centre; metaphysis above, epiphysis and joint BELOW (as the mnemonic assumes)
+  let h = '';
+  h += `<path d="M98 20 L262 20 L276 110 L290 ${PY - 8} L70 ${PY - 8} L84 110 Z" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.2"/>`;   // metaphysis
+  h += `<rect x="70" y="${PY - 8}" width="220" height="16" style="fill:var(--plate)"/>`;                                                     // physis
+  h += `<path d="M70 ${PY + 8} L290 ${PY + 8} L290 262 Q180 292 70 262 Z" style="fill:var(--cart);stroke:var(--ink);stroke-width:1.2"/>`;     // epiphysis (cartilage)
+  h += `<ellipse cx="180" cy="222" rx="66" ry="26" style="fill:var(--centre);stroke:var(--ink);stroke-width:1"/>`;                           // ossification centre
+  h += `<path d="M70 262 Q180 292 290 262" style="fill:none;stroke:var(--ink);stroke-width:3"/>`;                                            // joint surface
+  let f = '';
+  if (t === 1) f = `M64 ${PY} L296 ${PY}`;
+  if (t === 2) f = `M64 ${PY} L200 ${PY} L262 95`;
+  if (t === 3) f = `M64 ${PY} L150 ${PY} L150 284`;
+  if (t === 4) f = `M140 90 L150 ${PY} L162 287`;
+  if (t && t !== 5) h += `<path class="frl" style="stroke-width:3" d="${f}"/>`;
+  if (t === 5) h += `<path d="M110 ${PY - 8} l12 16 l12 -16 l12 16 l12 -16 l12 16 l12 -16 l12 16 l12 -16 l12 16" style="fill:none;stroke:var(--ink);stroke-width:2.5"/>` + T(300, PY + 18, '(crushed)', 's', 'start');
+  h += T(300, 80, 'metaphysis', 'l', 'start') + T(300, PY + 4, 'growth plate', 'l', 'start') + T(300, 215, 'epiphysis', 'l', 'start') + T(300, 284, 'joint', 'l', 'start') + T(6, 14, 'schematic; epiphysis at the base', 's', 'start');
+  $('sh-svg').innerHTML = h;
+  $('sh-find').innerHTML = `<h3>${SH[t][0]}</h3><p>${SH[t][1]}</p><p>${SH[t][2]}</p>`;
+}
+O.toggles('sh-pick', [1, 2, 3, 4, 5].map(k => [k, 'Type ' + ['I', 'II', 'III', 'IV', 'V'][k - 1]]), drawSH, 2);
+O.key('sh-key', [['--bone', 'metaphysis'], ['--plate', 'growth plate (physis)'], ['--cart', 'epiphysis (cartilage)'], ['--centre', 'secondary ossification centre']]);
+O.table('sh-table', ['Type', 'Through', 'SALTER', 'Prognosis'], SH_TABLE);
+drawSH(2);
+
+/* ---- healing ---- */
+$('heal-intro').innerHTML = HEAL_INTRO; $('heal-text').innerHTML = HEAL_TEXT;
+const HL = {i: 20};                                // slider index on a log scale
+const DAYS = i => Math.pow(10, -1.4 + i * (4.43 / 100)); // 0 → ~1 h, 100 → ~1100 days
+const fmtT = d => d < 1 ? Math.max(1, Math.round(d * 24)) + ' h' : d < 14 ? Math.round(d) + ' days' : d < 60 ? Math.round(d / 7) + ' weeks' : d < 730 ? Math.round(d / 30.4) + ' months' : (d / 365).toFixed(1) + ' years';
+function drawHeal() {
+  const d = DAYS(HL.i), act = HEAL.filter(s => d >= s[2] && d <= s[3]);
+  const on = k => act.some(s => s[0] === k);
+  const late = d > 21, mid = d > 10;
+  let h = '';
+  /* two bone ends with the gap; callus outside */
+  const gapY = 150, gapH = mid ? 16 : 22;
+  if (on('soft') || on('hard')) h += `<ellipse cx="180" cy="${gapY}" rx="${on('hard') ? 70 : 64}" ry="${on('hard') ? 46 : 40}" style="fill:var(--${on('hard') ? 'bone' : 'cart'});stroke:var(--ink);stroke-width:1;${on('hard') ? 'stroke-dasharray:3 3' : ''}"/>`;
+  if (on('soft') && on('hard')) h += `<ellipse cx="180" cy="${gapY}" rx="50" ry="26" style="fill:var(--cart);stroke:var(--ink);stroke-width:1"/>`;
+  if (late && !on('soft') && !on('hard')) h += `<ellipse cx="180" cy="${gapY}" rx="${Math.max(30, 70 - (Math.log10(d) - 1.3) * 25)}" ry="${Math.max(0, 40 - (Math.log10(d) - 1.3) * 25)}" style="fill:var(--bone);stroke:var(--ink);stroke-width:1;stroke-dasharray:3 3"/>`;
+  h += `<rect x="150" y="20" width="60" height="${gapY - gapH / 2 - 20}" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.2"/><rect x="150" y="${gapY + gapH / 2}" width="60" height="${280 - gapY - gapH / 2}" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.2"/>`;
+  h += `<rect x="162" y="20" width="36" height="${gapY - gapH / 2 - 26}" class="marrow"/><rect x="162" y="${gapY + gapH / 2 + 6}" width="36" height="${274 - gapY - gapH / 2 - 6}" class="marrow"/>`;
+  const gapFill = on('hard') ? 'bone' : on('soft') ? 'cart' : on('gran') ? 'collagen' : on('haem') || on('infl') ? 'clot' : 'bone';
+  h += `<rect x="150" y="${gapY - gapH / 2}" width="60" height="${gapH}" style="fill:var(--${gapFill})"/>`;
+  if (on('haem') || (on('infl') && d < 3)) h += `<ellipse cx="180" cy="${gapY}" rx="48" ry="20" style="fill:var(--clot);fill-opacity:.8"/>`;
+  if (on('remo') && !on('hard')) h += `<rect x="150" y="${gapY - gapH / 2}" width="60" height="${gapH}" style="fill:var(--bone)"/>`;
+  const lab = [];
+  if (on('haem') || (on('infl') && d < 3)) lab.push(['haematoma', 'clot']);
+  if (on('gran')) lab.push(['granulation tissue', 'collagen']);
+  if (on('soft')) lab.push(['soft callus (cartilage)', 'cart']);
+  if (on('hard')) lab.push(['hard callus (woven bone)', 'bone']);
+  if (on('remo')) lab.push(['remodelling to lamellar bone', 'bone']);
+  lab.forEach((l, i) => { h += T(258, 110 + i * 18, l[0], 'l', 'start'); });
+  h += T(6, 292, 'schematic', 's', 'start') + T(6, 16, fmtT(d) + ' after the fracture', 'b', 'start');
+  $('heal-svg').innerHTML = h;
+  $('heal-find').innerHTML = act.length ? act.map(s => `<h3>${s[1]}</h3><p>${s[4]}</p>`).join('') : '<p>Between stages.</p>';
+  /* timeline */
+  const x0 = 120, x1 = 610, X = v => x0 + (Math.log10(Math.max(v, 0.04)) + 1.4) / 4.44 * (x1 - x0);
+  let g = '';
+  HEAL.forEach((s, i) => { const y = 8 + i * 13; g += `<rect x="${X(s[2]).toFixed(1)}" y="${y}" width="${(X(s[3]) - X(s[2])).toFixed(1)}" height="10" rx="3" class="${act.includes(s) ? 'tlon' : 'tl'}"/>` + T(x0 - 6, y + 9, s[1], 's', 'end'); });
+  for (const [v, l] of [[1 / 24, '1 h'], [1, '1 day'], [7, '1 wk'], [30, '1 mo'], [365, '1 yr'], [1095, '3 yr']]) g += `<path class="grid" d="M${X(v).toFixed(1)} 6 L${X(v).toFixed(1)} 90"/>` + T(X(v), 104, l, 's', v > 1000 ? 'end' : 'middle');
+  g += `<path class="cur" d="M${X(d).toFixed(1)} 4 L${X(d).toFixed(1)} 92"/>` + T(x1, 120, 'log time axis; spans approximate', 's', 'end');
+  $('heal-tl').innerHTML = g;
+}
+O.slider('heal-sl', {id: 'ht', label: 'Time after the fracture', min: 0, max: 100, step: 1, value: HL.i, fmt: v => fmtT(DAYS(v))}, v => { HL.i = v; drawHeal(); }).init();
+O.key('heal-key', [['--clot', 'haematoma'], ['--collagen', 'granulation tissue'], ['--cart', 'cartilage (soft callus)'], ['--bone', 'bone (dashed: callus)'], ['--fat', 'marrow'], ['--accent', 'active stage (timeline)']]);
+O.table('heal-table', ['', 'Primary (direct)', 'Secondary (indirect)'], HEAL_TABLE);
+drawHeal();
+
+/* ---- management ---- */
+const MGS = {s: 0};
+O.stepper('mg-step', MG.map(r => r[0]), () => { $('mg-find').innerHTML = MG[MGS.s][1]; }, MGS);
+
+/* ---- complications timeline ---- */
+$('comp-intro').innerHTML = COMP_INTRO;
+let CK = 'cs';
+function drawComp(k) {
+  CK = k;
+  const x0 = 210, x1 = 610, X = v => x0 + (Math.log10(Math.max(v, 0.04)) + 1.4) / 4.44 * (x1 - x0);
+  let g = '';
+  Object.entries(COMP).forEach(([kk, c], i) => {
+    const y = 12 + i * 25;
+    g += `<rect x="${X(c[1][0]).toFixed(1)}" y="${y}" width="${(X(c[1][1]) - X(c[1][0])).toFixed(1)}" height="14" rx="4" class="${kk === k ? 'tlon' : 'tl'}"/>` + T(x0 - 8, y + 11, c[0], kk === k ? 'b' : '', 'end');
+  });
+  for (const [v, l] of [[1 / 24, '1 h'], [1, '1 day'], [7, '1 wk'], [30, '1 mo'], [365, '1 yr'], [1095, '3 yr']]) g += `<path class="grid" d="M${X(v).toFixed(1)} 8 L${X(v).toFixed(1)} 262"/>` + T(X(v), 278, l, 's', v > 1000 ? 'end' : 'middle');
+  g += T(x1, 294, 'time after injury (log axis; schematic)', 's', 'end');
+  $('comp-svg').innerHTML = g;
+  const c = COMP[k];
+  $('comp-find').innerHTML = `<h3>${c[0]} <span class="tag">${c[2]}</span></h3><p>${c[3]}</p>`;
+}
+O.toggles('comp-pick', Object.entries(COMP).map(([k, v]) => [k, v[0]]), drawComp, 'cs');
+drawComp('cs');
+
+/* ---- compartment syndrome ---- */
+$('cs-text').innerHTML = CS_TEXT; $('cs-note').textContent = CS_NOTE;
+const CS = {dbp: 70, icp: 15}, CSS = {};
+function drawCs() {
+  const dp = CS.dbp - CS.icp, low = dp <= 30;
+  $('cs-out').innerHTML = `<p><span class="tag">ΔP = diastolic − compartment</span><br><span class="big">${O.mn(dp)}</span> mmHg</p><p>${low ? '<span class="flag">ΔP ≤ 30 mmHg: the threshold most used for acute compartment syndrome (2019 review).</span>' : 'ΔP above 30 mmHg.'} ${CS.icp > 30 ? 'Compartment pressure above 30 mmHg (StatPearls).' : ''}</p><p class="note">Clinical findings decide; see the table for the other thresholds.</p>`;
+  const sw = 6 + CS.icp / 80 * 26;               // fascia drawn tighter as the pressure rises (schematic)
+  let h = `<ellipse cx="120" cy="125" rx="${90 + sw / 3}" ry="${80 + sw / 3}" style="fill:var(--skin);fill-opacity:.35;stroke:var(--skin);stroke-width:4"/>`;
+  h += `<ellipse cx="120" cy="125" rx="78" ry="68" style="fill:var(--musc);stroke:var(--fascia);stroke-width:${(2 + CS.icp / 20).toFixed(1)}"/>`;
+  h += T(120, 125, 'muscle', 'l', 'middle') + T(120, 141, 'in its compartment', 's', 'middle') + T(120, 242, 'deep fascia (blue ring)', 's', 'middle');
+  const Y = O.scale(0, 120, 230, 30);
+  h += `<path class="axis" d="M250 30 L250 230 L340 230"/>`;
+  for (const v of [0, 30, 60, 90, 120]) h += T(246, Y(v) + 4, v, 's', 'end');
+  h += `<rect x="262" y="${Y(CS.dbp)}" width="28" height="${230 - Y(CS.dbp)}" style="fill:var(--ink);fill-opacity:.15"/><rect x="300" y="${Y(CS.icp)}" width="28" height="${230 - Y(CS.icp)}" style="fill:var(--muted)"/>`;
+  h += T(276, 244, 'DBP', 's', 'middle') + T(314, 244, 'ICP', 's', 'middle') + T(250, 20, 'mmHg', 's', 'middle') + T(6, 18, 'schematic', 's', 'start');
+  h += `<path d="M258 ${Y(CS.dbp - 30)} L334 ${Y(CS.dbp - 30)}" style="stroke:var(--ink);stroke-width:1.4;stroke-dasharray:5 3"/>` + T(338, Y(CS.dbp - 30) + 4, 'ΔP = 30', 's', 'start');
+  $('cs-svg').innerHTML = h;
+}
+for (const [k, lab, mn, mx] of [['dbp', 'Diastolic blood pressure', 30, 110], ['icp', 'Compartment pressure', 0, 80]]) CSS[k] = O.slider('cs-sl', {id: 'cs' + k, label: lab, min: mn, max: mx, step: 1, value: CS[k], fmt: v => v + ' mmHg'}, v => { CS[k] = v; drawCs(); });
+Object.values(CSS).forEach(s => s.init());
+O.toggles('cs-pre', Object.entries(CS_PRE).map(([k, v]) => [k, v[0]]), k => { for (const kk in CSS) CSS[kk].set(CS_PRE[k][1][kk]); }, 'a');
+O.table('cs-table', ['Threshold', 'Source', 'Caveat'], CS_TABLE);
+drawCs();
+
+/* ---- nonunion ---- */
+$('nu-text').innerHTML = NU_TEXT;
+function drawNu(k) {
+  let h = '';
+  const end = (y0, y1) => `<rect x="150" y="${y0}" width="60" height="${y1 - y0}" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.2"/>`;
+  if (k === 'hyper') h += `<path d="M120 100 Q180 60 240 100 L240 120 L120 120 Z M120 140 L240 140 L240 160 Q180 200 120 160 Z" style="fill:var(--bone);stroke:var(--ink);stroke-width:1;stroke-dasharray:3 3"/>`;
+  if (k === 'oligo') h += `<path d="M126 104 Q180 88 234 104 L234 122 L126 122 Z M126 138 L234 138 L234 156 Q180 172 126 156 Z" style="fill:var(--bone);stroke:var(--ink);stroke-width:1;stroke-dasharray:3 3"/>`;
+  h += end(10, k === 'atro' ? 116 : 122) + end(k === 'atro' ? 144 : 138, 250);
+  h += `<rect x="150" y="${k === 'atro' ? 116 : 122}" width="60" height="${k === 'atro' ? 28 : 16}" style="fill:var(--collagen)"/>`;
+  if (k === 'atro') h += `<path d="M150 116 Q180 108 210 116 M150 144 Q180 152 210 144" style="fill:none;stroke:var(--ink);stroke-width:1.5"/>`;
+  h += T(250, 130, 'gap: fibrous tissue', 'l', 'start') + O.lead(214, 130, 246, 128);
+  if (k === 'hyper') h += T(250, 80, 'abundant callus', 'l', 'start') + T(250, 96, 'that does not bridge', 's', 'start');
+  if (k === 'atro') h += T(250, 80, 'little or no callus', 'l', 'start');
+  if (k === 'oligo') h += T(250, 80, 'some callus', 'l', 'start');
+  h += T(6, 254, 'schematic', 's', 'start');
+  $('nu-svg').innerHTML = h;
+  $('nu-find').innerHTML = `<h3>${NU[k][0]} nonunion</h3><p>${NU[k][1]}</p>`;
+}
+O.toggles('nu-pick', Object.entries(NU).map(([k, v]) => [k, v[0]]), drawNu, 'hyper');
+drawNu('hyper');
+
+$('avn-text').innerHTML = AVN_TEXT;
+O.table('avn-table', ['Site', 'Why', 'Sources'], AVN_TABLE);
+O.swipeHints();
+</script>
+</body>
+</html>

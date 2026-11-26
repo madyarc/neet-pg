@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trauma Care, Soft-Tissue Injuries and Open Fractures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/ortho.css">
+<style>
+/* Tokens from ortho.css with their site-wide meanings: --lig (ligament), --musc, --skin, --bone, --artery, --clin (clinical point),
+   --mark (selected point on a timeline), --accent (UI). Triage colours are written as words on outlined tags, not as fills, because red,
+   yellow and green already mean artery, nerve and lymph on this site. No new tokens. */
+svg.sch .cur{stroke:var(--mark);stroke-width:1.6}
+svg.sch .tick{fill:var(--ink)}
+svg.sch .tl{fill:var(--ink);fill-opacity:.06;stroke:var(--line)}
+svg.sch.fitmax{max-width:460px}
+.ttag{display:inline-block;font:700 13px var(--f-mono);border:2px solid var(--ink);border-radius:6px;padding:2px 10px;letter-spacing:.04em}
+.qrow{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:14px}
+.qrow .q{min-width:0;flex:1 1 240px}
+.flag{color:var(--clin);font-weight:600}
+.grade{font:700 30px var(--f-mono)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Orthopaedics</a> <span class="muted">· Module 01: <a href="fracture-principles.html">Fracture principles</a> · <span aria-current="page">Trauma care and open fractures</span></span></nav>
+
+<header class="stack">
+  <h1>Trauma Care, Soft-Tissue Injuries and Open Fractures</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-pre">Pre-hospital care</a> <a href="#h-tri">Triage (START)</a> <a href="#h-atls">ATLS primary survey</a> <a href="#h-gold">Golden hour</a> <a href="#h-soft">Sprains, strains, contusions</a> <a href="#h-crush">Crush injury</a> <a href="#h-open">Open fractures: Gustilo–Anderson</a> <a href="#h-boast">BOAST 2017 timeline</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-pre">
+  <h2 id="h-pre">Pre-hospital care: the first minutes</h2>
+  <div class="prose" id="pre-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tri">
+  <h2 id="h-tri">Triage at a mass-casualty incident: START, step by step</h2>
+  <div class="prose" id="tri-intro"></div>
+  <div class="chips" id="tri-pre" aria-label="Casualty"></div>
+  <div class="stack" id="tri-q"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="tri-svg" viewBox="0 0 380 300" role="img" aria-label="START decision path: walking, breathing after the airway is opened, breathing rate, pulse or capillary refill, following commands, with the path for the chosen answers highlighted"></svg></div>
+    <div class="prose find" id="tri-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-atls">
+  <h2 id="h-atls">ATLS: the primary survey, letter by letter</h2>
+  <div class="prose" id="atls-intro"></div>
+  <div class="chips" id="atls-ed" aria-label="Edition"></div>
+  <div class="step" id="atls-step"></div>
+  <div class="prose find" id="atls-find" aria-live="polite"></div>
+  <div class="prose" id="atls-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gold">
+  <h2 id="h-gold">The "golden hour"</h2>
+  <div class="prose" id="gold-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-soft">
+  <h2 id="h-soft">Soft-tissue injuries: sprains, strains, contusions</h2>
+  <div class="prose" id="soft-intro"></div>
+  <div class="sliders" id="sp-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="sp-svg" viewBox="0 0 380 210" role="img" aria-label="Schematic ligament between two bones, intact, stretched, partly torn or completely torn according to the chosen sprain grade"></svg></div>
+    <div class="prose find" id="sp-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="sp-key"></div>
+  <div class="scroll"><table id="soft-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-crush">
+  <h2 id="h-crush">Crush injury and crush syndrome</h2>
+  <div class="step" id="cr-step"></div>
+  <div class="prose find" id="cr-find" aria-live="polite"></div>
+  <div class="prose" id="cr-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-open">
+  <h2 id="h-open">Open fractures: grade one with Gustilo–Anderson</h2>
+  <div class="prose" id="open-intro"></div>
+  <div class="chips" id="gu-pre" aria-label="Example"></div>
+  <div class="sliders" id="gu-sl"></div>
+  <div class="stack" id="gu-q"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="gu-svg" viewBox="0 0 380 220" role="img" aria-label="Schematic limb in cross-section: skin wound of the chosen length over a fractured bone, with soft-tissue loss and an injured artery shown when chosen"></svg></div>
+    <div class="prose find" id="gu-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="gu-key"></div>
+  <div class="scroll"><table id="gu-table"></table></div>
+  <div class="prose" id="gu-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-boast">
+  <h2 id="h-boast">Managing an open fracture: the BOAST 2017 clock</h2>
+  <div class="prose" id="bo-intro"></div>
+  <div class="chips" id="bo-pick" aria-label="Kind of open fracture"></div>
+  <div class="schbox"><svg class="fig sch" id="bo-svg" viewBox="0 0 620 210" role="img" aria-label="Timeline from injury to 72 hours with the BOAST 2017 targets for antibiotics, debridement and soft-tissue cover for the chosen kind of open fracture"></svg></div>
+  <div class="prose" id="bo-text"></div>
+</section>
+
+<p class="muted" id="skill-note"></p>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BTrauma%20Care%2C%20Soft-Tissue%20Injuries%20and%20Open%20Fractures%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Forthopaedics%2Ftrauma%2Ftrauma-open-fractures.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/ortho.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-o01.md, Part B; orthopaedics/DATA-SOURCES.md) ===================== */
+const LEDE = 'Sort casualties with START, step through the ATLS primary survey (now xABCDE in the 2025 edition), tear a ligament grade by grade, follow crush injury into crush syndrome, grade an open fracture with Gustilo–Anderson and set the BOAST 2017 clock. Shock (OR1.2) is covered on the surgery page <a href="../../surgery/general/shock.html">Shock</a>; fracture healing and complications are on <a href="fracture-principles.html">Fracture principles</a>.';
+
+const PRE_TEXT = '<p>Most deaths in the first hours after injury come from <b>airway compromise, respiratory failure or uncontrolled haemorrhage</b> (WHO <i>Prehospital trauma care systems</i>, 2005; StatPearls adds brain injury). The first minutes are a window for simple life-saving measures: opening an obstructed airway, assisting breathing and pressing on a wound to stop external bleeding; wound care and adequate <b>immobilisation of fractures</b> also prevent deaths (WHO 2005). With suspected trauma, keep the cervical spine immobilised and open the airway with a jaw thrust (WHO/ICRC <i>Basic Emergency Care</i>, 2018).</p>';
+
+const TRI_INTRO = '<p><b>Triage</b> sets the order of treatment when there are more casualties than carers or supplies — a mass-casualty incident (Wikipedia; StatPearls). <b>START</b> (Simple Triage and Rapid Treatment) is one of the field systems, with SALT and JumpSTART for children (StatPearls). It checks the ability to <b>walk</b>, <b>breathing</b> and its rate, <b>pulse or capillary refill</b>, and whether the casualty <b>follows simple commands</b> (Wikipedia; a 2025 study), sorting everyone into four categories (Wikipedia; 2022 and 2025 studies). The exact cut-offs (breathing rate over 30/min, capillary refill over 2 s) and its 1983 origin (Hoag Hospital and Newport Beach Fire Department, California) are as Wikipedia gives them. The decision path follows Wikipedia\'s description of START: we found no second open source for the full algorithm (the US HHS CHEMM START page was unavailable), so details may differ from other published versions. Answer the questions or pick a casualty.</p>';
+const TRI_Q = [
+  ['walk', 'Can the casualty walk?'],
+  ['breath', 'Breathing (after one attempt to open the airway if not)?'],
+  ['rr', 'Breathing rate over 30 per minute?'],
+  ['circ', 'Radial pulse absent, or capillary refill over 2 seconds?'],
+  ['cmd', 'Unable to follow simple commands?'],
+];
+const TRI_PRE = {
+  a: ['Walking, cut hand', {walk: true, breath: true, rr: false, circ: false, cmd: false}],
+  b: ['Not breathing after airway opened', {walk: false, breath: false, rr: false, circ: false, cmd: false}],
+  c: ['Breathing 36/min', {walk: false, breath: true, rr: true, circ: false, cmd: false}],
+  d: ['Capillary refill 4 s', {walk: false, breath: true, rr: false, circ: true, cmd: false}],
+  e: ['Femur fracture, alert, normal signs', {walk: false, breath: true, rr: false, circ: false, cmd: false}],
+};
+const TAG = {
+  green: ['GREEN', 'Walking wounded / minor', 'Those who can walk are sent to one area first (Wikipedia).'],
+  black: ['BLACK', 'Deceased / expectant', 'Not breathing after one attempt to open the airway; no further treatment until all others have been treated (Wikipedia).'],
+  red: ['RED', 'Immediate', 'Breathing, but with any of: rate over 30/min, absent radial pulse or capillary refill over 2 s, unable to follow simple commands (Wikipedia).'],
+  yellow: ['YELLOW', 'Delayed', 'All other casualties who cannot walk (Wikipedia).'],
+};
+
+const ATLS_INTRO = '<p><b>ATLS</b> (Advanced Trauma Life Support) is the American College of Surgeons\' training programme for trauma care; the first course ran in 1978 (Wikipedia; a 2008 review). The <b>primary survey</b> finds and treats life-threatening injuries quickly, in the order that kills first (StatPearls; a 2007 review); a head-to-toe <b>secondary survey</b> follows (StatPearls; Wikipedia). The <b>ATLS 11th edition (American College of Surgeons, 2025)</b> puts control of <b>exsanguinating haemorrhage</b> before the airway: <b>xABCDE</b> (a 2026 review of the updates; a 2026 study; StatPearls 2026). Choose the edition, then step through.</p>';
+const ATLS = {
+  x: ['x Exsanguinating haemorrhage', 'Control catastrophic, exsanguinating bleeding first (ATLS 11th edition, 2025: a 2026 review of updates; a 2026 study; StatPearls). Military BATLS already used "c" for catastrophic bleeding (Wikipedia).'],
+  a11: ['A Airway', '<b>Airway</b>, with spine motion restriction: its operational principles were modified in the 11th edition (a 2026 review of the updates; details not in our open sources). A patient who talks probably has a clear airway; a chin lift or jaw thrust opens it, adjuncts or a tube may be needed (Wikipedia).'],
+  a: ['A Airway + C-spine', '<b>Airway with cervical-spine protection</b> (a 2007 review; a 2008 review; Wikipedia). A patient who talks probably has a clear airway; a chin lift or jaw thrust opens it, adjuncts or a tube may be needed (Wikipedia). With trauma, keep the C-spine immobilised and use a jaw thrust (WHO/ICRC 2018).'],
+  b: ['B Breathing', '<b>Breathing and ventilation</b>: examine the chest — inspection, palpation, percussion, auscultation; tension pneumothorax and haemothorax are found here (Wikipedia).'],
+  c: ['C Circulation', '<b>Circulation with haemorrhage control</b>: haemorrhage is the predominant cause of preventable deaths after injury (Wikipedia); bleeding may be into the chest, abdomen, pelvis or from long bones (Wikipedia). Shock itself: <a href="../../surgery/general/shock.html">surgery module, Shock</a>.'],
+  d: ['D Disability', '<b>Disability</b>: a basic neurological assessment, AVPU (alert, voice, pain, unresponsive), with the Glasgow Coma Scale (Wikipedia; the 2007 review: neurological status as the fourth priority).'],
+  e: ['E Exposure', '<b>Exposure and environment</b>: undress the patient completely, and prevent hypothermia (Wikipedia; the 2007 review: hypothermia, burns, chemical and radioactive exposure as the fifth priority).'],
+};
+const ATLS_TEXT = '<p>Earlier editions taught <b>ABCDE</b> with the airway and C-spine first (a 2007 and a 2008 review; Wikipedia). The 2025 change: a 2026 review describes the eleventh edition, "released in 2025", moving from ABCDE to x-ABCDE; a 2026 study notes the newest version "emphasizes the importance of addressing exsanguinating hemorrhage prior to other interventions". The same review lists other changes — permissive hypotension, limited crystalloids, early transfusion — which belong to shock: the surgery page <a href="../../surgery/general/shock.html">Shock</a> has the ATLS classes of haemorrhage.</p>';
+
+const GOLD_TEXT = '<p>The <b>golden hour</b> is the idea that the seriously injured should reach definitive care within about 60 minutes of injury, after which mortality rises (a 2020 study; Wikipedia). It is a concept: Wikipedia notes that research casts doubt on its scientific basis, and the 2020 study found few patients reached definitive care that fast. Delays in definitive care are still undesirable (Wikipedia).</p>';
+
+const SOFT_INTRO = '<p>A <b>sprain</b> is an injury of a <b>ligament</b> of a joint (Wikipedia). Ankle sprains range from stretching through partial tearing to complete rupture (StatPearls); most involve the lateral ligaments, especially the anterior talofibular ligament (StatPearls). The grades below are as Wikipedia gives them. <b>Treatment</b>: most sprains are mild and treated conservatively (Wikipedia: RICE — rest, ice, compression, elevation); early functional rehabilitation is preferred over prolonged immobilisation (StatPearls); severe tears may need surgical repair (Wikipedia). Drag the grade.</p>';
+const SP = {
+  1: ['Grade I (mild)', 'Minor stretching and structural damage of the ligament; no instability of the joint (Wikipedia).'],
+  2: ['Grade II (moderate)', 'Partial tear: the ligament is stretched until it becomes loose (Wikipedia).'],
+  3: ['Grade III (severe)', 'Complete rupture or tear (drawn in mid-substance); it sometimes avulses a piece of bone instead; the joint is unstable (Wikipedia).'],
+};
+const SOFT_TABLE = [
+  ['Sprain', 'Ligament', 'Stretch → partial tear → complete rupture (StatPearls; Wikipedia)'],
+  ['Strain', 'Muscle (or tendon)', 'Overstretching beyond what the muscle or tendon can withstand (Wikipedia); most structural sports muscle injuries are indirect, stretch-induced (Munich consensus 2013). The term "strain" has no clear agreed definition (Munich consensus 2013).'],
+  ['Contusion (bruise)', 'Muscle, skin, soft tissue', 'Direct blow from an external force (Munich consensus 2013); a bruise is a haematoma of tissue from capillaries damaged by trauma (Wikipedia).'],
+  ['Crush injury', 'Any tissue compressed', 'Local injury from compression; see below (Wikipedia; 2011 and 2023 reviews).'],
+];
+
+const CR = [
+  ['1 Compression', 'A <b>crush injury</b> is injury by an object compressing the body (Wikipedia); the term refers to the tissue injury itself (a 2023 review; a 2011 review).'],
+  ['2 Muscle ischaemia', 'Prolonged ischaemia makes muscle cell membranes leaky; cells release <b>potassium, enzymes and myoglobin</b> (the 2023 review): traumatic <b>rhabdomyolysis</b> (Wikipedia; the 2011 review). Local findings: pain, pressure, paraesthesia, paresis, pallor, pulselessness — "six Ps" (the 2011 review). Compartment syndrome is a common complication (Wikipedia).'],
+  ['3 Crush syndrome', '<b>Crush syndrome</b> = crush injury with <b>systemic</b> effects (the 2011 and 2023 reviews): hypovolaemic shock, hyperkalaemia, metabolic acidosis, DIC (the 2023 review) and <b>acute kidney injury</b> from myoglobin (Wikipedia; the 2023 review).'],
+  ['4 Treatment', 'Early, energetic <b>fluid resuscitation</b> to protect the kidneys (the 2011 review; Wikipedia: it also lessens hyperkalaemia). Volumes and drugs are not given here.'],
+];
+
+const OPEN_INTRO = '<p>An <b>open fracture</b> is one where the fractured bone or its haematoma is exposed to the outside through a breach of the soft tissue (StatPearls; Wikipedia). It can threaten life or limb through deep infection or bleeding (Wikipedia). The <b>Gustilo–Anderson</b> classification (Gustilo and Anderson 1976; type III subdivided into A, B, C in 1984) grades by wound size, contamination, soft-tissue damage and vascular injury (a 2008 review; a 2018 review; Wikipedia). The true grade is set in the operating theatre, at debridement (Wikipedia). Choose the findings.</p>';
+const GU_Q = [
+  ['clean', 'Is the wound clean?'],
+  ['ext', 'Extensive soft-tissue damage, flaps or avulsion?'],
+  ['he', 'High-energy (gunshot), farm injury, segmental fracture, or open more than 8 h before treatment?'],
+  ['loss', 'Soft-tissue loss with periosteal stripping, so the bone will need a flap to cover it?'],
+  ['art', 'Arterial injury that needs repair?'],
+];
+const GU_PRE = {
+  i: ['Small clean wound', {cm: 0.5, clean: true, ext: false, he: false, loss: false, art: false}],
+  ii: ['4 cm, little damage', {cm: 4, clean: true, ext: false, he: false, loss: false, art: false}],
+  iiia: ['Farm injury, bone covered', {cm: 3, clean: false, ext: true, he: true, loss: false, art: false}],
+  iiib: ['Bone exposed, needs flap', {cm: 12, clean: false, ext: true, he: true, loss: true, art: false}],
+  iiic: ['Pulseless foot, artery torn', {cm: 6, clean: false, ext: true, he: true, loss: false, art: true}],
+};
+const GU = {
+  I: 'Open fracture, clean wound, wound under 1 cm (a 2008 review; a 2018 review).',
+  II: 'Wound over 1 cm without extensive soft-tissue damage, flaps or avulsions (2008 and 2018 reviews). Wikipedia adds an upper limit of 10 cm; the two reviews give none.',
+  IIIA: 'Extensive soft-tissue laceration or flaps, or high-energy trauma (gunshot, farm injuries; the 2008 review adds segmental fractures), but <b>adequate soft-tissue (periosteal) coverage</b> of the bone (the 2008 review; Wikipedia, which copies its table), whatever the size of the wound (Wikipedia). In the 2008 table, farm injuries and fractures open for 8 h before treatment are type III generally; the subtype then depends on bone cover and the artery.',
+  IIIB: 'Extensive soft-tissue loss with <b>periosteal stripping</b> and bone damage; usually massive contamination; will often need a <b>flap</b> to cover the bone (the 2008 review; Wikipedia copies it). The 2018 review: type III subtypes are stratified by the need for coverage and neurovascular compromise.',
+  IIIC: 'Open fracture with an <b>arterial injury requiring repair</b>, whatever the soft-tissue injury (2008 and 2018 reviews): the most severe subtype (2018 review). Whether to salvage the limb or perform a delayed primary amputation is a multidisciplinary decision — orthopaedic and plastic surgeons, a rehabilitation specialist, the patient and family — and an amputation, when indicated, is done within 72 h (BOAST 2017). Scores such as the MESS (Mangled Extremity Severity Score) were designed to help decide amputation vs salvage (2008 review; named by the 2018 review and Wikipedia); its items are not given here.',
+};
+const GU_TABLE = [
+  ['I', '< 1 cm, clean', '0–2%', '1.4%'],
+  ['II', '> 1 cm, no extensive damage', '2–10%', '3.6%'],
+  ['IIIA', 'Extensive damage or high energy; bone covered', '10–50% (all type III)', '22.7%'],
+  ['IIIB', 'Soft-tissue loss, periosteal stripping; flap needed', '', '10–50% (IIIB and IIIC)'],
+  ['IIIC', 'Arterial injury needing repair', '', ''],
+];
+const GU_TEXT = '<p>Infection risk rises with the grade (a 2008 review; Wikipedia); their figures differ and both are shown. Agreement between observers is poor to moderate, about 60% (Wikipedia).</p>';
+
+const BO_INTRO = '<p>Timings and steps from the named guideline: <b>BOAST "Open Fractures" (British Orthopaedic Association and BAPRAS, December 2017)</b>, for open fractures of long bones, hind foot and midfoot. No antibiotic names or doses are given here: BOAST asks each network for its own antibiotic guideline.</p>';
+const BO = {
+  dirty: ['Highly contaminated (farm, water, sewage)', 0, 'immediately'],
+  vasc: ['With vascular compromise (compartment syndrome, arterial injury)', 0, 'immediately'],
+  he: ['Other solitary high-energy', 12, 'within 12 h'],
+  le: ['Low-energy', 24, 'within 24 h'],
+};
+const BO_TEXT = '<ul><li><b>Antibiotics</b>: intravenous prophylactic antibiotics as soon as possible, <b>ideally within 1 hour</b> of injury (BOAST 2017; Wikipedia). Older reviews said within 3 hours (2008 review; 2018 review, citing the earlier BAPRAS guidance), and delay beyond 3 h raises infection (a 2014 review). Tetanus prophylaxis (Wikipedia; a 2026 review).</li>'
+  + '<li><b>The limb</b>: assess and document vascular and neurological status, and repeat it after reduction or splinting; re-align and splint (BOAST 2017; a 2018 review; Wikipedia). Suspected compartment syndrome follows its own BOAST.</li>'
+  + '<li><b>The wound before theatre</b>: handle only to remove gross contamination and to photograph it; saline-soaked gauze under an occlusive film; no "mini-washouts" outside theatre (BOAST 2017). Photographs spare repeated painful examinations (Wikipedia).</li>'
+  + '<li><b>Where and who</b>: open fractures of long bones, hind foot or midfoot go directly, or are transferred, to a specialist centre providing orthoplastic care; orthopaedic and plastic surgery consultants plan fixation, cover and the first debridement together (BOAST 2017).</li>'
+  + '<li><b>Debridement</b>: the timing depends on the injury (chips above) (BOAST 2017). The old "6-hour rule" (2008 review) has been challenged (2018 review).</li>'
+  + '<li><b>Fixation</b>: definitive internal fixation only when definitive soft-tissue cover can follow at once (BOAST 2017).</li>'
+  + '<li><b>Cover</b>: definitive soft-tissue closure or cover within <b>72 hours</b> if not done at debridement (BOAST 2017; the 2018 review); delay raises infection (2018 review). A delayed primary amputation, when indicated, also within 72 h (BOAST 2017).</li></ul>';
+
+const SKILL = 'Shock (OR1.2) is taught in surgery: <a href="../../surgery/general/shock.html">Shock</a>. Dislocations (OR1.4), named fractures (OR2.1–2.13) and the children\'s injuries of OR2.16 belong to later orthopaedics modules.';
+const BASED = '<b>Based on:</b> BOA/BAPRAS BOAST Open Fractures (December 2017); WHO <i>Prehospital trauma care systems</i> (2005); WHO/ICRC <i>Basic Emergency Care</i> (2018); StatPearls (NCBI Bookshelf; abstracts); a 2026 review of the ATLS 11th edition (abstract); open-access papers on ATLS (2007, 2008, 2026), haemostatic resuscitation (2026), START triage (2022, 2025), the golden hour (2020), muscle injuries (Munich consensus, 2013), crush syndrome (2011, 2023), open fractures (2008, 2014, 2018, 2026) (Europe PMC); Wikipedia (articles that cite OpenStax or Lumen/Boundless were not used).';
+const MODELS = '<b>Models used:</b> the START and Gustilo classifiers apply the sourced criteria to your answers; the ligament, limb and timeline drawings are schematic, not to scale.';
+
+/* ===================== CODE ===================== */
+const O = window.Ortho, $ = O.$, T = O.T;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS; $('skill-note').innerHTML = SKILL;
+$('pre-text').innerHTML = PRE_TEXT; $('tri-intro').innerHTML = TRI_INTRO;
+
+/* yes/no question rows; st holds booleans; returns a setter */
+function qrows(boxId, qs, st, redraw) {
+  const box = $(boxId); box.innerHTML = '';
+  for (const [k, q] of qs) {
+    const row = document.createElement('div'); row.className = 'qrow';
+    row.innerHTML = `<span class="q">${q}</span><span class="chips" id="${boxId}-${k}"></span>`; box.append(row);
+    O.toggles(`${boxId}-${k}`, [['y', 'Yes'], ['n', 'No']], v => { st[k] = v === 'y'; redraw(); }, st[k] ? 'y' : 'n');
+  }
+  return () => { for (const [k] of qs) document.querySelectorAll(`#${boxId}-${k} button`).forEach(b => b.setAttribute('aria-pressed', String((b.dataset.k === 'y') === !!st[k]))); };
+}
+
+/* ---- START ---- */
+const TS = Object.assign({}, TRI_PRE.e[1]);
+function triage() {
+  if (TS.walk) return ['green', 1];
+  if (!TS.breath) return ['black', 2];
+  if (TS.rr) return ['red', 3];
+  if (TS.circ) return ['red', 4];
+  if (TS.cmd) return ['red', 5];
+  return ['yellow', 5];
+}
+function drawTri() {
+  const [tag, depth] = triage();
+  const ys = [30, 80, 130, 180, 230], names = ['Walks?', 'Breathing?', 'Rate > 30?', 'Pulse / refill bad?', 'No commands?'];
+  const exit = [['GREEN', 'yes'], ['BLACK', 'no'], ['RED', 'yes'], ['RED', 'yes'], ['RED', 'yes']];
+  let h = O.DEFS;
+  for (let i = 0; i < 5; i++) {
+    const on = i < depth;
+    h += `<rect x="20" y="${ys[i] - 16}" width="150" height="28" rx="6" style="fill:var(--surface);stroke:var(--${on ? 'ink' : 'line'});stroke-width:${on ? 2 : 1.2}"/>` + T(95, ys[i] + 3, names[i], on ? 'b' : '', 'middle');
+    const taken = on && i === depth - 1 && tag !== 'yellow';
+    h += `<path class="flow" style="${taken ? 'stroke-width:2.6' : 'opacity:.45'}" d="M170 ${ys[i] - 2} L240 ${ys[i] - 2}"/>` + T(205, ys[i] - 8, exit[i][1], 's', 'middle');
+    h += `<rect x="244" y="${ys[i] - 16}" width="110" height="28" rx="6" style="fill:none;stroke:var(--ink);stroke-width:${taken ? 2.6 : 1};${taken ? '' : 'opacity:.45'}"/>` + T(299, ys[i] + 3, exit[i][0], taken ? 'b' : 's', 'middle');
+    if (i < 4) h += `<path class="flow" style="${i < depth - 1 ? 'stroke-width:2.2' : 'opacity:.45'}" d="M95 ${ys[i] + 12} L95 ${ys[i + 1] - 18}"/>`;
+  }
+  const yOn = tag === 'yellow';
+  h += `<path class="flow" style="${yOn ? 'stroke-width:2.6' : 'opacity:.45'}" d="M95 ${ys[4] + 12} L95 266"/>` + `<rect x="40" y="268" width="110" height="26" rx="6" style="fill:none;stroke:var(--ink);stroke-width:${yOn ? 2.6 : 1};${yOn ? '' : 'opacity:.45'}"/>` + T(95, 286, 'YELLOW', yOn ? 'b' : 's', 'middle') + T(104, 258, 'all no', 's', 'start');
+  $('tri-svg').innerHTML = h;
+  const t = TAG[tag];
+  $('tri-find').innerHTML = `<p><span class="ttag">${t[0]}</span> <b>${t[1]}</b></p><p>${t[2]}</p>`;
+}
+const triSync = qrows('tri-q', TRI_Q, TS, drawTri);
+O.toggles('tri-pre', Object.entries(TRI_PRE).map(([k, v]) => [k, v[0]]), k => { Object.assign(TS, TRI_PRE[k][1]); triSync(); drawTri(); }, 'e');
+drawTri();
+
+/* ---- ATLS ---- */
+$('atls-intro').innerHTML = ATLS_INTRO; $('atls-text').innerHTML = ATLS_TEXT;
+let ED = '11', AK = 'x';
+const AS = {s: 0};
+function atlsBuild() {
+  const keys = ED === '11' ? ['x', 'a11', 'b', 'c', 'd', 'e'] : ['a', 'b', 'c', 'd', 'e'];
+  const base = k => k.replace('11', '');
+  let i = keys.findIndex(k => base(k) === base(AK)); if (i < 0) i = keys.findIndex(k => base(k) === 'a');
+  AS.s = i;
+  O.stepper('atls-step', keys.map(k => ATLS[k][0]), () => { AK = keys[AS.s]; $('atls-find').innerHTML = ATLS[keys[AS.s]][1]; }, AS);
+}
+O.toggles('atls-ed', [['11', '11th edition (2025): xABCDE'], ['old', 'Earlier editions: ABCDE']], k => { ED = k; atlsBuild(); }, '11');
+atlsBuild();
+
+$('gold-text').innerHTML = GOLD_TEXT;
+
+/* ---- sprain ---- */
+$('soft-intro').innerHTML = SOFT_INTRO;
+function drawSp(g) {
+  let h = `<rect x="20" y="70" width="120" height="60" rx="10" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.2"/><rect x="240" y="70" width="120" height="60" rx="10" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.2"/>`;
+  const fib = 9, intact = g === 1 ? fib : g === 2 ? 5 : 0;
+  for (let i = 0; i < fib; i++) {
+    const y = 78 + i * 5.5;
+    if (i < intact || g === 1) h += `<path d="M140 ${y} C170 ${y + (g === 1 ? 4 : 2)} 210 ${y + (g === 1 ? 4 : 2)} 240 ${y}" style="fill:none;stroke:var(--lig);stroke-width:3"/>`;
+    else h += `<path d="M140 ${y} L${180 - (i % 3) * 4} ${y + 3}" style="fill:none;stroke:var(--lig);stroke-width:3"/><path d="M${198 + (i % 2) * 5} ${y + 3} L240 ${y}" style="fill:none;stroke:var(--lig);stroke-width:3"/>`;
+  }
+  if (g === 3) h += T(190, 40, 'complete mid-substance tear (schematic)', 's', 'middle');
+  h += T(80, 160, 'bone', 'l', 'middle') + T(300, 160, 'bone', 'l', 'middle') + T(190, 186, 'ligament', 'l', 'middle') + T(6, 196, 'schematic', 's', 'start');
+  $('sp-svg').innerHTML = h;
+  $('sp-find').innerHTML = `<h3>${SP[g][0]}</h3><p>${SP[g][1]}</p>`;
+}
+O.slider('sp-sl', {id: 'spg', label: 'Sprain grade', min: 1, max: 3, step: 1, value: 2, fmt: v => ['I', 'II', 'III'][v - 1]}, drawSp).init();
+O.key('sp-key', [['--lig', 'ligament fibres'], ['--bone', 'bone']]);
+O.table('soft-table', ['Injury', 'Tissue', 'What happens'], SOFT_TABLE);
+drawSp(2);
+
+/* ---- crush ---- */
+const CRS = {s: 0};
+O.stepper('cr-step', CR.map(r => r[0]), () => { $('cr-find').innerHTML = CR[CRS.s][1]; }, CRS);
+$('cr-text').innerHTML = '<p>The muscle-breakdown cascade is the same rhabdomyolysis that causes dark urine from myoglobinuria (StatPearls).</p>';
+
+/* ---- Gustilo ---- */
+$('open-intro').innerHTML = OPEN_INTRO; $('gu-text').innerHTML = GU_TEXT;
+const GS = Object.assign({}, GU_PRE.ii[1]);
+function grade() {
+  if (GS.art) return 'IIIC';
+  if (GS.loss) return 'IIIB';
+  if (GS.ext || GS.he) return 'IIIA';
+  if (GS.cm > 1) return 'II';
+  return GS.clean ? 'I' : 'I?';
+}
+let cmSl;
+function drawGu() {
+  const g = grade();
+  const ws = Math.min(GS.cm, 15) / 15 * 160;      // wound length drawn along the skin
+  let h = `<ellipse cx="190" cy="110" rx="150" ry="82" style="fill:var(--musc);fill-opacity:.55;stroke:var(--skin);stroke-width:7"/>`;
+  if (GS.loss) h += `<path d="M120 30 Q190 64 260 30 L250 78 Q190 96 130 78 Z" style="fill:var(--surface)"/>`;
+  h += `<ellipse cx="190" cy="${GS.loss ? 90 : 110}" rx="34" ry="30" style="fill:var(--bone);stroke:var(--ink);stroke-width:1.4"/><path class="frl" d="M168 ${GS.loss ? 70 : 90} L212 ${GS.loss ? 110 : 130}" style="stroke:var(--ink);stroke-width:2"/>`;
+  h += `<path d="M${190 - ws / 2} 30 L${190 + ws / 2} 30" style="stroke:var(--surface);stroke-width:${GS.ext ? 12 : 7}"/>`;
+  h += `<circle cx="250" cy="150" r="9" style="fill:var(--artery)"/>` + (GS.art ? `<path d="M240 140 l20 20 M260 140 l-20 20" style="stroke:var(--ink);stroke-width:2.4"/>` : '');
+  h += T(190, 16, `wound ${GS.cm} cm`, 'l', 'middle') + T(272, 172, GS.art ? 'artery torn' : 'artery', 'l', 'start') + T(190, 205, 'schematic cross-section', 's', 'middle');
+  if (GS.loss) h += T(6, 38, 'tissue lost,', 's', 'start') + T(6, 54, 'bone exposed', 's', 'start');
+  $('gu-svg').innerHTML = h;
+  const txt = g === 'I?' ? 'A wound under 1 cm meets type I only if it is clean; a contaminated small wound is graded at debridement in theatre (Wikipedia: the true grade is set in theatre).' : GU[g];
+  $('gu-find').innerHTML = `<p><span class="tag">Gustilo–Anderson</span><br><span class="grade">${g === 'I?' ? '?' : 'Type ' + g}</span></p><p>${txt}</p>`;
+}
+const guSync = qrows('gu-q', GU_Q, GS, drawGu);
+cmSl = O.slider('gu-sl', {id: 'gucm', label: 'Wound length', min: 0.5, max: 15, step: 0.5, value: GS.cm, fmt: v => v + ' cm'}, v => { GS.cm = v; drawGu(); }); cmSl.init();
+O.toggles('gu-pre', Object.entries(GU_PRE).map(([k, v]) => [k, v[0]]), k => { Object.assign(GS, GU_PRE[k][1]); guSync(); cmSl.set(GS.cm); }, 'ii');
+O.key('gu-key', [['--skin', 'skin'], ['--musc', 'muscle'], ['--bone', 'bone'], ['--artery', 'artery']]);
+O.table('gu-table', ['Type', 'Key feature', 'Infection (2008 review)', 'Infection (Wikipedia)'], GU_TABLE);
+drawGu();
+
+/* ---- BOAST clock ---- */
+$('bo-intro').innerHTML = BO_INTRO; $('bo-text').innerHTML = BO_TEXT;
+function drawBo(k) {
+  const x0 = 40, x1 = 600, X = O.scale(0, 72, x0, x1), b = BO[k];
+  let h = `<path class="axis" d="M${x0} 170 L${x1} 170"/>`;
+  for (const v of [0, 12, 24, 48, 72]) h += `<path class="grid" d="M${X(v)} 20 L${X(v)} 170"/>` + T(X(v), 186, v === 0 ? 'injury' : v + ' h', 's', v === 0 ? 'start' : v === 72 ? 'end' : 'middle');
+  h += T(x1, 204, 'hours after injury (schematic)', 's', 'end');
+  const row = (y, at, lab, sub) => `<circle class="tick" cx="${X(at)}" cy="${y}" r="6"/>` + T(X(at) + (at > 60 ? -10 : 10), y + 4, lab, 'l', at > 60 ? 'end' : 'start') + (sub ? T(X(at) + (at > 60 ? -10 : 10), y + 18, sub, 's', at > 60 ? 'end' : 'start') : '');
+  h += row(36, 1, 'IV antibiotics: ideally within 1 h', '');
+  h += row(84, b[1], 'Debridement: ' + b[2], '');
+  h += row(132, 72, 'Definitive soft-tissue cover: within 72 h', '');
+  $('bo-svg').innerHTML = h;
+}
+O.toggles('bo-pick', Object.entries(BO).map(([k, v]) => [k, v[0]]), drawBo, 'he');
+drawBo('he');
+O.swipeHints();
+</script>
+</body>
+</html>
