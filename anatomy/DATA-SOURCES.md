@@ -1502,3 +1502,15 @@ tubercles.
   2026 review (PMC12872188); "Wikipedia calls it a permanent synchondrosis; Gray 1918 says all synchondroses are
   temporary" cut (no other source for "permanent"). Osteoarthritis kept on PMC12522086 and StatPearls. New files in
   modern/joints/: Wikipedia Wrist and Pronator teres muscle (fetched 2026-11-25, wikitext clean), abs_35593871.
+- 2026-11-26 correction, live re-audit: Wikipedia "Sarcomere" and "Skeletal muscle" (muscle-tissue.md), "Tendon sheath"
+  (connective-tissue.md), "Anatomical terms of motion" (joints-ankle-foot.md) and "Osteoarthritis" (joints-hip-knee.md)
+  cite OpenStax in their current wikitext and are excluded (sections marked EXCLUDED 2026-11-26).
+  - general/muscle.html: "thick filaments … cross-linked at the M line" → "with the M line at their centre" (cross-linking
+    had no other source); I band "isotropic" and A band "anisotropic" attributed to Gray 1918; human "IIB = IIX" attributed
+    to a 2023 review (PMC11212792). Fibre types I/II and type I red/oxidative now rest on PMC11212792 and Wikipedia
+    "Muscle tissue" (new quotes); sarcomere bands, sliding filaments and SR on PMC12130008, PMC5642817, PMC13102872 and
+    PMC4748971; convergent and circular muscles on Gray, Wikipedia "Muscle architecture"/"Sphincter", StatPearls, PMCs.
+  - lower-limb/joints.html: the inversion/eversion definitions (sole turned medially/laterally) are now attributed to
+    Gray 1918; site of the movements unchanged (Gray, StatPearls, PMC12585092). Knee osteoarthritis unchanged
+    (StatPearls + Wikipedia "Knee").
+  - general/connective-tissue.html: no change (tendon sheaths rest on Gray 1918 and StatPearls).
