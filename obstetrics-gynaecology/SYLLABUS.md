@@ -24,11 +24,11 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 3. Physiology of conception
 
-- [ ] **OG3.1** Describe the physiology of ovulation,menstruation,fertilization,impla- ntation and gametogenesis.
+- [x] **OG3.1** Describe the physiology of ovulation,menstruation,fertilization,impla- ntation and gametogenesis. — *cycle by length and day, LH surge, implantation, hCG, corpus luteum; gametogenesis and fertilisation linked to anatomy embryology: [The Menstrual Cycle, Ovulation and Conception](obstetrics/menstrual-cycle-conception.html)*
 
 ### 4. Development of the fetus and the placenta
 
-- [ ] **OG4.1** Describe and discuss the basic embryology of fetus, factors influencing fetal growth and development, anatomy and physiology of placenta
+- [x] **OG4.1** Describe and discuss the basic embryology of fetus, factors influencing fetal growth and development, anatomy and physiology of placenta — *placental functions and hormones, fetal growth and FGR, teratogen periods; placental structure and fetal circulation linked to anatomy; placental weight not given: [The Placenta, Fetal Growth and Maternal Changes](obstetrics/placenta-maternal-changes.html)*
 
 ### 5. Preconception counselling
 
@@ -41,7 +41,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 7. Maternal Changes in pregnancy
 
-- [ ] **OG7.1** Describe and discuss the changes in the genital tract, breast, cardiovascular system, respiratory, haematology, renal and gastro intestinal system in pregnancy
+- [x] **OG7.1** Describe and discuss the changes in the genital tract, breast, cardiovascular system, respiratory, haematology, renal and gastro intestinal system in pregnancy — *body map by system and week, supine hypotension, postpartum cardiac output, reference values; uterine size, weight gain and iron indices not given: [The Placenta, Fetal Growth and Maternal Changes](obstetrics/placenta-maternal-changes.html)*
 
 ### 8. Antenatal Care
 

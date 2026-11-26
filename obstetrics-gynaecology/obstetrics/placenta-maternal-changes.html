@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Placenta, Fetal Growth and Maternal Changes in Pregnancy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/obg.css">
+<style>
+/* page styles only; colour tokens are in ../assets/obg.css (no new tokens). hCG and hPL are ink lines with direct labels. */
+svg.sch .cur{stroke:var(--mark);stroke-width:1.6}
+svg.sch .hcurve{fill:none;stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
+svg.sch .rng{stroke:var(--muted);stroke-width:6;stroke-linecap:butt}
+svg.sch .rngon{stroke:var(--accent);stroke-width:6;stroke-linecap:butt}
+svg.sch .organ{stroke:var(--ink);stroke-width:1;cursor:pointer}
+svg.sch .organ.on{stroke:var(--accent);stroke-width:3}
+svg.sch .organ:focus{outline:none}
+svg.sch .organ:focus-visible{stroke:var(--accent);stroke-width:3;stroke-dasharray:4 2}
+svg.sch .body{fill:var(--skin);fill-opacity:.45;stroke:var(--ink);stroke-width:1.2}
+svg.sch .body.on{stroke:var(--accent);stroke-width:3}
+svg.sch .pt{fill:var(--ink)}
+#body-svg{max-width:300px}
+.now{list-style:none;padding:0;margin:4px 0 8px}
+.now li{padding:4px 0 4px 10px;border-left:3px solid var(--accent);margin-bottom:6px;font-size:14px}
+.now li.off{border-left-color:var(--line);color:var(--muted)}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;font-size:14px}
+.exam li{margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Obstetrics and Gynaecology</a> <span class="muted">· Module 01: <a href="menstrual-cycle-conception.html">Menstrual cycle and conception</a> · <span aria-current="page">Placenta and maternal changes</span></span></nav>
+
+<header class="stack">
+  <h1>The Placenta, Fetal Growth and Maternal Changes in Pregnancy</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-plac">Placental functions</a> <a href="#h-horm">Placental hormones</a> <a href="#h-grow">Fetal growth and teratogens</a> <a href="#h-mat">Maternal changes</a> <a href="#h-sup">Supine hypotension</a> <a href="#h-ref">Reference values</a> <a href="#h-exam">Exam points</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-plac">
+  <h2 id="h-plac">What the placenta does</h2>
+  <div class="scroll"><table id="plac-table"></table></div>
+  <div class="prose" id="plac-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-horm">
+  <h2 id="h-horm">Placental hormones across pregnancy</h2>
+  <div class="chips" id="horm-tg" aria-label="Hormone"></div>
+  <div class="sliders" id="horm-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="horm-svg" viewBox="0 0 560 330" role="img" aria-label="Schematic levels of hCG, hPL, progesterone and oestriol across 40 weeks of pregnancy, the chosen hormone emphasised, with the source ranges for its peak or switch"></svg></div>
+    <div class="prose find" id="horm-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic shapes, each scaled to its own maximum (not comparable between hormones, not measured values). Weeks from the last menstrual period.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-grow">
+  <h2 id="h-grow">Fetal growth, growth restriction and the critical periods for teratogens</h2>
+  <div class="chips" id="grow-tg" aria-label="Pattern of growth"></div>
+  <div class="sliders" id="grow-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="grow-svg" viewBox="0 0 560 360" role="img" aria-label="Schematic fetus outlines comparing normal growth with symmetric and asymmetric growth restriction, and a bar of pregnancy weeks marking the pre-embryonic, embryonic and fetal periods and the early- and late-onset growth restriction split"></svg></div>
+    <div class="prose find" id="grow-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic outlines, not to scale. Upper weeks: from the last menstrual period; lower weeks: from fertilisation (two weeks less).</p>
+  <div class="prose" id="grow-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mat">
+  <h2 id="h-mat">Maternal changes, system by system</h2>
+  <div class="chips" id="mat-tg" aria-label="Body system"></div>
+  <div class="sliders" id="mat-sl"></div>
+  <div class="two">
+    <div class="stack">
+      <div class="schbox"><svg class="fig sch fit" id="body-svg" viewBox="0 0 300 484" role="group" aria-label="Body map. Schematic front view of a pregnant woman with the thyroid, heart, lungs, breasts, liver and gut, kidneys, uterus, blood and skin; tap a part, or use the arrow keys and Enter, to choose its system. The uterus grows with the chosen week"></svg></div>
+      <div class="schbox"><svg class="fig sch" id="mat-svg" viewBox="0 0 560 250" role="img" aria-label="Chart for the chosen system across pregnancy or across its measures, with the chosen week marked"></svg></div>
+    </div>
+    <div class="prose find" id="mat-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Body drawing and uterus size are schematic, not to scale. Tap a part or a chip. Highlighted items apply at the chosen week; greyed items belong to other weeks.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-sup">
+  <h2 id="h-sup">Supine hypotension syndrome (aortocaval compression)</h2>
+  <div class="chips" id="sup-tg" aria-label="Position"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="sup-svg" viewBox="0 0 520 340" role="img" aria-label="Schematic transverse section of the lower abdomen in late pregnancy, seen from below: the gravid uterus, the aorta and inferior vena cava in front of the vertebra, in the chosen position"></svg></div>
+    <div class="prose find" id="sup-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic transverse section seen from the feet, not to scale. Supine: the woman's right is on the left of the drawing; left lateral: the same section turned so that her left side is down.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ref">
+  <h2 id="h-ref">Reference values: non-pregnant and pregnant</h2>
+  <p class="muted">Only rows for which two sources give pregnancy values; each value carries its source. Laboratories and guidelines set their own ranges.</p>
+  <div class="scroll"><table id="ref-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-exam">
+  <h2 id="h-exam">Exam points</h2>
+  <div class="prose"><ul class="exam" id="exam-list"></ul></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BThe%20Placenta%2C%20Fetal%20Growth%20and%20Maternal%20Changes%20in%20Pregnancy%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fobstetrics-gynaecology%2Fobstetrics%2Fplacenta-maternal-changes.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/obg.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (each fact checked in two sources: sources-local/facts/fill-og01.md, Part B; one-source facts are attributed in the text) ===================== */
+const LEDE = 'What the placenta exchanges and secretes, when each of its hormones peaks, what governs fetal growth and when teratogens matter most; then a body map: pick a system and a week of pregnancy and see what has changed, with each number from its source. The placenta\'s structure, circulation and barrier are on <a href="../../anatomy/embryology/membranes-placenta.html">Fetal Membranes and Placenta</a>; the fetal circulation on <a href="../../anatomy/embryology/heart-vessels.html#h-fetal">Development of the Heart: fetal circulation</a>. The "2016 review" below is Soma-Pillay et al., Cardiovasc J Afr 2016.';
+
+const PLAC = [
+  ['Exchange', 'Passive diffusion or active transport from maternal to fetal blood (StatPearls); glucose by <b>facilitated diffusion</b> through GLUT1 in the syncytiotrophoblast (Wikipedia; a 2023 review). Transport of glucose, amino acids and fatty acids rises through mid–late gestation with placental size and blood supply (the 2023 review).'],
+  ['Endocrine', 'hCG, hPL, progesterone, oestrogens: <a href="#h-horm">below</a>.'],
+  ['Immune and barrier', 'The placenta has endocrine, immune and physiological functions (StatPearls). IgG transfer and which microbes cross: <a href="../../anatomy/embryology/membranes-placenta.html#h-plac">Fetal Membranes and Placenta</a>.'],
+  ['Size', 'Formed over the first three months, then grows with the uterus (StatPearls); at term a disc about <b>20–22 cm</b> across and <b>2–3 cm</b> thick (StatPearls 20 × 3 cm; Wikipedia 22 × 2–2.5 cm).'],
+];
+const PLAC_TEXT = '<p><b>Fetal circulation</b>: oxygenated blood comes from the placenta in the <b>umbilical vein</b> (the cord has two arteries and one vein); the <b>ductus venosus</b> lets it bypass the liver, the <b>foramen ovale</b> carries it from the right to the left atrium, and the <b>ductus arteriosus</b> shunts blood from the pulmonary artery to the aorta, past the lungs (StatPearls; Wikipedia). The whole route and the changes at birth are drawn step by step on <a href="../../anatomy/embryology/heart-vessels.html#h-fetal">the embryology page</a>.</p>';
+
+/* hormone curves (schematic, each scaled 0..1 to its own maximum), weeks from LMP */
+const HORM = {
+  hcg: {lab: 'hCG', cls: 'trace', style: '', f: w => w < 3.3 ? 0 : w <= 9.5 ? Math.exp((w - 9.5) * 0.85) : Math.max(0.2, 1 - (w - 9.5) * 0.12),
+    ranges: [[8, 11, 'peak 8–11 wk (Wikipedia)'], [9, 10, 'peak 9–10 wk (Generation R 2015)'], [10, 10, 'peak 10 wk (2010 review)'], [8, 10, 'peak 8–10 wk (2025 review)'], [12, 14, '12–14 wk (2026 review: outlier)']],
+    text: '<h3>hCG (human chorionic gonadotropin)</h3><p>Made by the <b>syncytiotrophoblast</b> (Wikipedia; a 2010 review). Rises exponentially, doubling in about 1.5–2 days early on (a 2017 review), <b>peaks at about 8–10 weeks</b> (Wikipedia 8–11; Generation R 9–10; a 2010 review 10; a 2025 review 8–10; one 2026 review says 12–14), then falls and stays lower in the second trimester (Wikipedia; Generation R). It <b>rescues the corpus luteum</b> (<a href="menstrual-cycle-conception.html#h-cl">previous page</a>) and, sharing an α subunit with TSH, stimulates the thyroid (<a href="#h-mat">endocrine</a>). The nausea of early pregnancy is linked to it (a 2016 review).</p>'},
+  hpl: {lab: 'hPL', cls: 'trace', style: 'stroke-dasharray:7 4', f: w => w < 5 ? 0 : Math.min(1, Math.pow((w - 5) / 35, 1.3)),
+    ranges: [],
+    text: '<h3>hPL (human placental lactogen, chorionic somatomammotropin)</h3><p>Secreted by the <b>syncytiotrophoblast</b> (Wikipedia); its level <b>rises with the growth of the fetus and placenta</b> (Wikipedia), progressively through mid–late gestation (a 2023 review). It has <b>anti-insulin</b> effects and drives <b>lipolysis</b>: the mother burns fatty acids so that more glucose is left for the fetus (Wikipedia; a 2016 review lists hPL among the diabetogenic hormones). A 2023 review gives placental growth hormone the main role in maternal insulin resistance, "possibly" with hPL. hPL is a potent agonist of the prolactin receptor (Wikipedia). No source here gives its peak week: the curve simply keeps rising.</p>'},
+  prog: {lab: 'progesterone', cls: 'hcurve', style: 'stroke:var(--h-prog)', f: w => w < 2 ? 0.02 : w < 7 ? 0.1 + (w - 2) * 0.015 : Math.min(1, 0.175 + (w - 7) * 0.025),
+    ranges: [[7, 9, 'shift 7–9 wk (Wikipedia)'], [10, 10, 'after 10 wk (StatPearls)'], [12, 12, '12 wk (2021 review)']],
+    text: '<h3>Progesterone</h3><p>First from the <b>corpus luteum</b>, rescued by hCG; then from the <b>placenta</b>: the <b>luteal–placental shift</b> at 7–9 weeks (Wikipedia), after week 10 (StatPearls) or by 12 weeks (a 2021 review). After the shift it keeps rising, to <b>100–200 ng/mL at term</b> (Wikipedia). Its part in keeping the uterus quiet and in parturition: <a href="../../anatomy/embryology/membranes-placenta.html#h-horm">Fetal Membranes and Placenta</a>. It relaxes smooth muscle: the gut, ureters and lower oesophageal sphincter (<a href="#h-mat">below</a>). Its role in the cycle: <a href="menstrual-cycle-conception.html#h-cyc">previous page</a>.</p>'},
+  oes: {lab: 'oestriol', cls: 'hcurve', style: 'stroke:var(--h-oes)', f: w => w < 6 ? 0 : Math.min(1, Math.pow((w - 6) / 34, 1.6)),
+    ranges: [],
+    text: '<h3>Oestrogens and oestriol</h3><p>The placenta\'s <b>aromatase</b> turns androgens into oestrogens (a 2025 study; Wikipedia), and the androgen precursors come largely from the <b>fetal adrenal</b> (Wikipedia). For <b>oestriol</b>, fetal-adrenal DHEA-S is first 16α-hydroxylated in the <b>fetal liver</b>, then aromatised in the placenta; oestriol rises about <b>1000-fold</b> in pregnancy and can be measured as a marker of <b>fetal well-being</b>; it is low (with high hCG and inhibin A, low AFP) in second-trimester screening for Down syndrome (all Wikipedia; the quad-test analytes also in a 2017 review). Oestrogen also raises TBG (<a href="#h-mat">endocrine</a>), clotting factors (a 2014 review; Wikipedia) and the liver\'s angiotensinogen (2016 and 2026 reviews). No source here gives a peak week: the curve rises to term.</p>'},
+};
+
+/* fetal growth */
+const GROW = {
+  norm: ['Normal growth', '<h3>What governs fetal growth</h3><p>The fetus grows to its <b>genetic potential</b> unless something maternal, placental or fetal holds it back (StatPearls; Wikipedia). Of the hormones, <b>insulin and the IGFs</b> are the most important; fetal insulin rises from mid-gestation in step with weight and fat gain, and IGFs drive linear growth (a 2023 review). On the maternal side, a growth-hormone-driven rise in IGF-1 helps nutrient delivery and, with oestrogen, uterine growth and blood flow (the 2023 review).</p>'],
+  asym: ['Asymmetric restriction', '<h3>Asymmetric (head-sparing) growth restriction</h3><p>About <b>70–80%</b> of cases: a fall in oxygen or nutrient supply in the <b>third trimester</b> from placental insufficiency; blood is diverted to the brain, so the <b>head circumference stays relatively normal</b> while the <b>abdominal circumference is decreased</b>; catch-up growth after birth is usually better (Wikipedia).</p>'],
+  sym: ['Symmetric restriction', '<h3>Symmetric (global) growth restriction</h3><p>The fetus has grown slowly <b>throughout</b> pregnancy, from an early cause (Wikipedia lists infections such as cytomegalovirus, rubella and toxoplasmosis, and chromosomal abnormalities); the head is <b>in proportion</b> to the small body, and these infants may stay small (Wikipedia).</p>'],
+};
+const GROW_TEXT = `<p><b>Definition</b>: fetal growth restriction (FGR) is failure to reach the genetically determined growth potential, mainly from <b>placental dysfunction</b> (StatPearls). Classically it is an estimated fetal weight or abdominal circumference <b>below the 10th percentile</b> for gestational age (ACOG, as given by StatPearls; Wikipedia uses the same cut-off for small for gestational age). The <b>ISUOG 2016 consensus</b> (as summarised by StatPearls) separates <b>early-onset (&lt; 32 weeks)</b>, usually more severe and often with pre-eclampsia, from <b>late-onset (≥ 32 weeks)</b>, more common and harder to detect.</p>
+<p><b>Causes</b> are maternal, placental or fetal (StatPearls; Wikipedia). Wikipedia lists maternal pre-pregnancy weight and nutrition, poor weight gain, malnutrition, anaemia, smoking, alcohol and other drugs, and chronic hypertension; fetal infections and chromosomal abnormalities; and placental causes. <b>Teratogens</b>: the gestational age at exposure decides the defect, and the <b>first trimester</b>, when organs form, is the most susceptible time (StatPearls; Wikipedia: the embryonic period, "from the second to eighth week" after fertilisation). Exposure in the first two weeks tends to stop implantation or cause a miscarriage (Wikipedia). Susceptibility also depends on the embryo's genotype and the dose (Wilson's principles, Wikipedia). The agents (thalidomide, alcohol, TORCH): <a href="../../anatomy/embryology/early-development.html#h-tera">Early Development: teratogens</a>.</p>`;
+
+/* maternal changes: systems. items: [fromWeek, toWeek, html] */
+const SYS = {
+  cvs: {lab: 'Heart and circulation', tok: '--heart', items: [
+    [6, 40, '<b>Systemic vascular resistance down</b> by week 6 (a 2016 review): by 25–30% (that review) or 21%, lowest at <b>20–24 weeks</b> (a 2014 review); the same 2016 review elsewhere says 40%.'],
+    [8, 13, '<b>Cardiac output already up about 20% by 8 weeks</b> (a 2016 review).'],
+    [4, 27, '<b>Blood pressure below non-pregnant levels</b> in the first and second trimesters (a 2016 review; a 2026 review: "well into the second trimester"). Sources differ on the timing: Wikipedia has a 10–15 mmHg fall in the first trimester and a return to baseline in the second half.'],
+    [20, 28, '<b>Cardiac output highest at about 20–28 weeks</b> (a 2016 review); the 2014 review has stroke volume maximal at 20 weeks.'],
+    [28, 40, 'Wikipedia puts the <b>cardiac output peak in the third trimester</b> (sources differ). Blood pressure is <b>back to non-pregnant levels</b> in the third trimester (a 2016 review; Wikipedia: from the second half). Heart rate approaches 90–100/min at rest (a 2014 review).'],
+    [20, 40, 'Lying <b>supine</b>, the uterus can compress the IVC: <a href="#h-sup">supine hypotension</a>.'],
+    [40, 40, '<b>Immediately after delivery</b> cardiac output rises further — by 60–80% (2016 review) or 50% (2021 review) — as the uterus contracts and returns its blood (auto-transfusion) and the IVC is freed (2016, 2014 and 2021 reviews); the 2016 review has it back to pre-labour values within about an hour and nearly normal two weeks after delivery.'],
+  ], facts: '<p><b>Cardiac output +30–50%</b> (Wikipedia; a 2014 review: about 4 → 6 L/min), about 40% (a 2016 review), 35–50% (a 2026 review), 20–40% (a 2025 review): mostly <b>stroke volume</b>, partly <b>heart rate</b>, which rises by <b>10–20 beats/min</b> (2016 review) or about 15% (a 2014 haemodynamics review), generally not above 100 (Wikipedia). <b>CVP and wedge pressure do not rise</b> (2016 and 2014 reviews); colloid osmotic pressure falls 10–15% (2016 review; 14%, 2014 review), and the 2016 review notes a 30% smaller gap between it and the wedge pressure, so pregnant women get pulmonary oedema more easily. An <b>ejection systolic murmur</b> is normal (over 90%, 2016 review; functional murmurs, a 2021 review); S1 may be loud and an S3 heard (2016 review). Physiology of cardiac output: <a href="../../physiology/cvs/cardiac-cycle-output.html#h-co">Cardiac cycle and output</a>.</p>'},
+  blood: {lab: 'Blood', tok: '--rbc', items: [
+    [6, 32, '<b>Blood volume expanding</b> from 6–8 weeks to a peak at 32 weeks, 40–50% above non-pregnant (a 2014 review; 40–50%, Wikipedia).'],
+    [0, 40, '<b>Hypercoagulable</b> from the first trimester to at least 12 weeks after delivery (a 2016 review).'],
+    [30, 40, 'Platelets drift down; in 5–10% of women they reach 100–150 × 10⁹/L by term without disease (a 2016 review; gestational thrombocytopenia).'],
+  ], facts: '<p><b>Plasma volume rises more than red-cell mass</b> → haemodilution, the <b>physiological anaemia</b> of pregnancy (six sources). Sizes differ: plasma +40–50% (Wikipedia), ~45% (a 2014 review; a 2021 review), most of a ~50% increase by 34 weeks (a 2016 review, which elsewhere gives 30–40%, and more than 50–60% by the late third trimester), +1250 mL (a 2024 review); red cells +20–30% (Wikipedia; a 2026 review), 33% (2021 review), 15–20% (Wikipedia, Anemia). MCV and MCHC do not change (2016 review). Anaemia cut-offs (WHO 2024: Hb &lt; 11.0 g/dL in the first and third trimesters, &lt; 10.5 in the second): <a href="../../physiology/blood/haemoglobin-anaemia.html#h-anaem">Haemoglobin and anaemia</a>.</p><p><b>White cells rise</b> (neutrophils; 2014 review; a 2022 study); <b>platelets fall slightly</b> (2016 review; 2022 study). <b>Clotting</b>: factors VII, VIII, IX and X and von Willebrand factor up; <b>fibrinogen up to +50%</b>; protein S and antithrombin down, protein C unchanged; <b>fibrinolysis reduced</b> (PAI-1 and PAI-2 up) — 2016, 2014 and 2021 reviews, a 2026 study, Wikipedia. Thought to limit blood loss at delivery (Wikipedia; 2014 review). PT and APTT: normal (2016 review) or slightly shortened (a 2026 study).</p>'},
+  resp: {lab: 'Lungs and blood gases', tok: '--airway', items: [
+    [4, 13, '<b>Minute ventilation rises from the first trimester</b> (up to 48%, a 2015 review; 40%, Wikipedia), through a bigger tidal volume.'],
+    [20, 40, '<b>FRC falling</b>, lowest in the third trimester (a 2024 review), as the diaphragm rises 4–5 cm (2014 and 2015 reviews).'],
+    [0, 40, '<b>Breathlessness</b> without hypoxia is common and physiological (2016 review; 70% of women, a 2015 review).'],
+  ], facts: '<p><b>Tidal volume +30–50%</b>, <b>minute ventilation +30–50%</b> (40–50%), <b>respiratory rate unchanged</b> (2014, 2015 reviews; Wikipedia; a 2021 review gives +15%). Progesterone drives it (Wikipedia), by making the respiratory centre more sensitive to CO₂ (2015 review). O₂ consumption +20% (to 40%, Wikipedia; up to 21%, 2015 review). <b>FRC −20%</b> with lower ERV and RV; <b>vital capacity unchanged</b>; FEV₁ and PEF unchanged (2016, 2014, 2015, 2021 reviews). Result: a <b>compensated respiratory alkalosis</b> — PaCO₂ about 30 mmHg, bicarbonate 18–22, pH about 7.44: <a href="#h-ref">reference values</a>. The 2014 review adds that the alkalosis shifts the O₂ dissociation curve right, helping O₂ cross to the fetus.</p>'},
+  renal: {lab: 'Kidneys and fluid', tok: '--kidney', items: [
+    [0, 40, '<b>Kidneys 1–1.5 cm longer</b>, (2016 review; a 2026 review), the right more (2026 review), maximal by mid-pregnancy (2016 review).'],
+    [24, 30, 'In a 2023 cohort eGFR was highest at about <b>24 weeks</b> and creatinine lowest at 24–27 weeks; a 2026 review puts the eGFR peak in the third trimester.'],
+    [20, 40, '<b>Physiological hydronephrosis and hydroureter</b> later in pregnancy (Wikipedia), in over 80% (2016 review), <b>right more than left</b>: compression and progesterone (2016, 2026 reviews; Wikipedia) → urinary stasis, a route to pyelonephritis (2016 review).'],
+  ], facts: '<p><b>GFR up about 50%</b> (Wikipedia; a 2025 review), 50–85% (2016 review), eGFR +20–50% (2026 review); <b>renal plasma flow +40–65%</b> (2016 review; renal blood flow +50%, 2014 review). So <b>creatinine and urea fall</b>: means of 44.2 μmol/L and 3.2 mmol/L (2016 review), creatinine 0.4–0.8 vs 0.5–1.1 mg/dL (2026 review), BUN and creatinine down 40–50% (a 2021 review). <b>Glycosuria</b> without high blood glucose: the renal threshold falls (2025 review); about 90% excrete 1–10 g/day (2016 review), and some 50% show glucose on a dipstick at some point (Wikipedia). Protein excretion rises but stays under <b>300 mg/day</b> (2016, 2026 reviews); uric acid excretion rises (2016 review). <b>Plasma osmolality falls by about 10 mOsm/kg</b> (2016 review; 270–280 vs 275–295, 2026 review): a hypervolaemic, hypo-osmolar state with the thirst and ADH thresholds reset lower and placental vasopressinase rising four-fold (2016 review).</p>'},
+  gi: {lab: 'Gut and liver', tok: '--gut', items: [
+    [5, 20, '<b>Nausea and vomiting</b> (50–90%, 2016 review): peak at 8–12 weeks (StatPearls) or 10–16 weeks (Wikipedia); usually settles by about 20 weeks (2016 review; Wikipedia).'],
+    [20, 40, '<b>Reflux and heartburn</b> grow as the uterus pushes the stomach up and progesterone relaxes the lower oesophageal sphincter (Wikipedia; 2016, 2014, 2021 reviews): up to 80% at term (2021 review).'],
+    [28, 40, '<b>Alkaline phosphatase 2–4 times higher</b> in the third trimester — placental (2026 review; 2014 review).'],
+  ], facts: '<p>Progesterone relaxes smooth muscle: <b>slower gastric emptying and gut transit</b> (Wikipedia; 2014 review: by about 30–50%), <b>constipation</b> (Wikipedia; 2014 review), and <b>inhibited gallbladder contraction</b> with slower bile flow, so more gallstones (Wikipedia; a 2026 review). <b>Albumin falls</b> (haemodilution; 2026 review; 2014 review). Bilirubin: sources differ — it falls (2026 review) or is not affected (2014 review); total calcium falls with albumin while ionised calcium is unchanged (Wikipedia; 2016 review). Gums swell and bleed easily (Wikipedia).</p>'},
+  endo: {lab: 'Endocrine and metabolism', tok: '--thyroid', items: [
+    [6, 13, '<b>TSH slightly lower in the first trimester</b>: hCG, which shares an α subunit with TSH, stimulates the thyroid (2016 review; a 2016 thyroid review).'],
+    [14, 40, '<b>Insulin resistance</b> from the second trimester (2016 review; Wikipedia), peaking in the third (2016 review): hPL, placental GH, progesterone, cortisol, prolactin (sources differ on which matters most). It vanishes after delivery (2016 review).'],
+    [14, 40, '<b>Free T4 slightly lower</b> in the second and third trimesters (2016 review; a 2025 review; Wikipedia: "remain normal").'],
+  ], facts: '<p><b>Thyroid</b>: oestrogen raises <b>TBG</b> (2–3-fold, a 2016 thyroid review), so <b>total T4 and T3 rise</b> (2016 review; Wikipedia; 2025 review). Gland size: <b>sources differ</b> — unchanged if iodine intake is adequate (2016 review) vs enlarges (Wikipedia; a 2025 review). <b>Pancreas and fuel</b>: fasting glucose is lower (fetal uptake, glycogen storage, less hepatic output; 2016 and 2021 reviews), insulin higher (2016 review), lipids rise (2016 review). <b>Pituitary</b>: prolactin rises progressively (Wikipedia), 10-fold by term, with lactotroph enlargement of the gland (2016 review); FSH and LH undetectable (2016 review). <b>Adrenal</b>: total and free cortisol rise, about 3 times by the end of pregnancy (2016 review; Wikipedia); aldosterone rises about 3-fold in the first trimester and 10-fold in the third (2016 review).</p>'},
+  skin: {lab: 'Skin', tok: '--skin', items: [
+    [4, 40, '<b>Hyperpigmentation</b> from the first trimester, of already pigmented areas: nipples, areolae, genitalia (a 2014 skin review; MSH, oestrogen, progesterone).'],
+    [14, 40, '<b>Linea nigra</b>: the second trimester (2014 skin review) or around the middle of pregnancy (Wikipedia); placental MSH (Wikipedia).'],
+    [24, 40, '<b>Striae gravidarum</b>: the sixth and seventh months (2014 skin review; up to 90%) or the last trimester (Wikipedia).'],
+  ], facts: '<p>Skin changes in more than 90% of women (2014 skin review). <b>Melasma</b> (chloasma, the "mask of pregnancy"; Wikipedia; 2014 skin review) in 45–75% (2014 skin review). <b>Spider naevi and palmar erythema</b> without liver disease (2014 skin review; a 2021 review).</p>'},
+  gen: {lab: 'Uterus and genital tract', tok: '--uter', items: [
+    [4, 40, '<b>Cervix softens</b> through pregnancy in preparation for labour (a 2024 study; a 2022 review; Wikipedia: oestrogen); a <b>mucus plug</b> (operculum) forms in the canal (Wikipedia).'],
+    [14, 40, '<b>Braxton Hicks contractions</b>: sporadic, may start around 6 weeks but usually not felt until the second or third trimester (Wikipedia).'],
+  ], facts: '<p><b>Uterine blood flow rises about 10-fold</b>, to about 17% of cardiac output from 2% before pregnancy (a 2014 review). The growing uterus pushes up the diaphragm and stomach and compresses the IVC (<a href="#h-sup">below</a>). Ligaments loosen: lumbar lordosis, laxity, wider and more mobile sacroiliac joints and symphysis (2016 review; 2021 review; relaxin, Wikipedia). Signs used to diagnose pregnancy belong to a later module (OG6).</p>'},
+  breast: {lab: 'Breasts', tok: '--skin', items: [
+    [4, 40, '<b>Larger, tender breasts</b>; darker, larger nipples and areolae; more prominent <b>Montgomery\'s tubercles</b> (areolar sebaceous glands) (Wikipedia; 2014 skin review).'],
+    [28, 40, '<b>Colostrum</b> is made from about 28 weeks and can be expressed from about 36 (Wikipedia).'],
+  ], facts: '<p>Prolactin enlarges the glands and prepares milk production; <b>progesterone holds back lactation</b> until it falls after delivery (Wikipedia). Milk "comes in" in quantity 2–4 days after birth (StatPearls).</p>'},
+};
+const ORDER = ['cvs', 'blood', 'resp', 'renal', 'gi', 'endo', 'skin', 'gen', 'breast'];
+
+/* plasma volume, 2019 meta-analysis: [week (midpoint of its window), mean %, CI low, CI high] */
+const PV = [[13, 6, 3, 9], [17, 18, 12, 24], [24, 29, 21, 36], [31, 42, 38, 46], [36.5, 48, 44, 51]];
+/* serum creatinine, 2023 cohort (μmol/L): [week midpoint, mean]; non-pregnant cohort means 60.9 (< 35 y) and 64.5 (≥ 35 y) */
+const CR = [[5.5, 55.1], [8.5, 52.7], [11, 51.1], [25.5, 47.1], [29, 49.3]];
+/* respiratory changes, % (ranges as the sources give) */
+const RESP = [['Tidal volume', 30, 50], ['Minute ventilation', 30, 50], ['O₂ consumption', 20, 40], ['Respiratory rate', 0, 15], ['Vital capacity', 0, 0], ['FRC', -20, -20], ['Residual volume', -22, -7]];
+
+const SUP = {
+  sup: ['Supine', '<h3>Supine: the uterus lies on the IVC and aorta</h3><p>In the second and third trimesters the gravid uterus compresses the <b>inferior vena cava</b> (and the aorta) when the woman lies on her back (StatPearls; a 2016 review; a 2024 review). Less <b>venous return</b> → lower <b>stroke volume and cardiac output</b> → maternal <b>hypotension</b> and less <b>placental blood flow</b> (StatPearls; 2016 review). Turning from the side onto the back may cut cardiac output by <b>25%</b> (2016 review). The 2024 review defines the syndrome as a fall in systolic pressure of <b>15–30 mmHg</b> or a heart-rate rise of <b>20/min</b> on lying supine; Wikipedia lists dizziness, syncope, nausea and other symptoms.</p>'],
+  lat: ['Left lateral', '<h3>On the side: the uterus falls off the IVC</h3><p>Turning onto the side lets the uterus drop off the IVC, restoring venous return, cardiac output and uteroplacental flow; the 2016 review advises nursing pregnant women in the <b>left or right lateral</b> position and, if she must lie on her back, rotating the pelvis so the uterus drops to the side. Stroke volume is highest in the <b>left lateral</b> position, and the benefit over supine shows on cardiac MRI from <b>20 weeks</b> (a 2024 review). StatPearls: corrective manoeuvres should start at once when the syndrome is suspected.</p>'],
+};
+
+const REF = [
+  ['Arterial pH', '7.35–7.45 (2016 review)', '7.40–7.47 (2016 review; 2015 review); 7.44 (2016 review; Wikipedia)'],
+  ['PaCO₂ (mmHg)', '35–40 (2016 review)', '≤ 30 (2016 review); 28–31 (2014 review); about 32 (2015 review)'],
+  ['PaO₂ (mmHg)', '90–100 (2016 review)', '100–104 (2016 review); 101–105 (2014 review)'],
+  ['Bicarbonate (mmol/L)', '20–28 (2016 review); 22–26 (2026 review)', '18–22 (2016 review); 18–21 (2014 review); 18–26 (2026 review)'],
+  ['Serum creatinine', '0.5–1.1 mg/dL (2026 review); cohort means 61–64 μmol/L (2023 study)', '0.4–0.8 mg/dL (2026 review); mean 44.2 μmol/L (2016 review); about 47 μmol/L at 24–27 weeks (2023 study)'],
+  ['Urea / BUN', 'BUN 10–20 mg/dL (2026 review)', 'BUN 3–13 mg/dL (2026 review); urea mean 3.2 mmol/L (2016 review); BUN −40–50% (2021 review)'],
+  ['GFR', 'eGFR &gt; 90 mL/min/1.73 m² (2026 review)', 'eGFR 120–150 (2026 review); +50% (Wikipedia; 2025 review); +50–85% (2016 review)'],
+  ['Plasma osmolality (mOsm/kg)', '275–295 (2026 review)', '270–280 (2026 review); about 10 lower (2016 review)'],
+  ['Urine protein (mg/day)', '&lt; 150 (2026 review)', '&lt; 300 (2026 review); up to 300 (2016 review)'],
+  ['Cardiac output', 'about 4 L/min (2014 review)', 'about 6 L/min (2014 review); +30–50% (Wikipedia; 2014 review), about +40% (2016 review)'],
+  ['Heart rate', '—', '+10–20 beats/min (2016 review); +15% (2014 haemodynamics review); not usually above 100 (Wikipedia)'],
+  ['Haemoglobin: anaemia below', '12.0 g/dL, non-pregnant women (WHO, physiology page)', '11.0 g/dL; 10.5 in the second trimester (WHO 2024; Wikipedia; a 2024 review: 11)'],
+  ['Fibrinogen', '—', 'up to +50% (2016 review; 2026 liver review)'],
+  ['Alkaline phosphatase', '—', '2–4 times, third trimester, placental (2026 review; 2014 review)'],
+];
+
+const EXAM = [
+  '<b>hCG peaks at about 8–10 weeks</b> (Wikipedia 8–11; Generation R 9–10; 2010 review 10; 2025 review 8–10); <b>doubling time about 1.5–2 days</b> early (a 2017 review, single source).',
+  '<b>hPL</b>: from the syncytiotrophoblast, rises with placental mass, anti-insulin and lipolytic (Wikipedia; 2016 and 2023 reviews) → <b>insulin resistance</b> from the second trimester (2016 review; Wikipedia), peaking in the third (2016 review).',
+  '<b>Cardiac output +30–50%</b> (Wikipedia; 2014 review); <b>peak 20–28 weeks</b> (2016 review) or in the third trimester (Wikipedia) — sources differ; it rises further <b>immediately after delivery</b> (60–80%, 2016 review; 50%, 2021 review; also the 2014 review).',
+  '<b>Plasma volume (+40–50%) rises more than red-cell mass (+20–30%)</b> → haemodilution, <b>physiological anaemia</b> (Wikipedia; 2014, 2016 reviews).',
+  '<b>FRC −20%</b>, vital capacity unchanged (Wikipedia; 2016, 2021 reviews); <b>compensated respiratory alkalosis</b>, PaCO₂ about 30 mmHg (≤ 30, 2016 review; 28–31, 2014 review), bicarbonate 18–22 (2016 review; 18–21, 2014 review).',
+  '<b>GFR up about 50%</b> (Wikipedia; 2025 review; 50–85%, 2016 review) → creatinine and urea fall (2016, 2021, 2026 reviews).',
+  '<b>Supine hypotension syndrome</b>: the uterus compresses the IVC (and aorta) in the 2nd–3rd trimesters → less venous return and cardiac output (StatPearls; 2016 review; 2024 review); turn the woman to the side (2016 review; 2024 review).',
+  '<b>Hypercoagulable state</b>: factors VII, VIII, IX, X up, fibrinogen up to 50%, protein S down, fibrinolysis reduced (2016 review; 2014 review; 2026 study; Wikipedia).',
+];
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf: Physiology, Placenta; Embryology, Placenta; Fetal Growth Restriction; Teratogenic Medications; Supine Hypotensive Syndrome; Hyperemesis Gravidarum; Breast Milk; Lactation); open-access papers — Soma-Pillay et al. 2016 (Cardiovasc J Afr), Costantine 2014 (Front Pharmacol), a 2021 review (Indian J Crit Care Med), LoMauro and Aliverti 2015 (Breathe), a 2019 plasma-volume meta-analysis, kidney reviews of 2025 and 2026, a 2023 creatinine cohort, a 2024 review of posture, a 2014 haemodynamics review, a 2026 coagulation study, a 2022 haematology study, a 2024 haematology review, a 2026 liver review, thyroid reviews of 2016 and 2025, a 2014 skin review, a 2023 review of fetal growth hormones, a 2025 placental steroid study, cervical-remodelling papers of 2022 and 2024, hCG papers (2010, 2015, 2017); Wikipedia (Physiological changes in pregnancy, Placenta, Human placental lactogen, Estriol, Estradiol, Progesterone, Prolactin, Intrauterine growth restriction, Teratology, Prenatal development, Anemia in pregnancy, Gestational diabetes, Aortocaval compression syndrome, Linea nigra, Melasma, Stretch marks, Colostrum, Pregnancy, Morning sickness). WHO 2024 anaemia cut-offs as on the physiology page; ACOG and ISUOG 2016 FGR criteria as given by StatPearls.';
+const MODELS = '<b>Models used:</b> hormone curves, fetal outlines, the body drawing, uterus size, the cardiac-output, blood-pressure and SVR curves and the transverse section are schematic, drawn for this page. Plotted points (plasma volume, creatinine) are the published means.';
+
+/* ===================== DRAWING ===================== */
+const {$, T} = Obg;
+const st = {horm: 'hcg', hw: 10, grow: 'asym', gw: 30, sys: 'cvs', mw: 24, sup: 'sup'};
+
+/* ---- placenta table ---- */
+Obg.table('plac-table', ['Function', 'What the sources say'], PLAC);
+$('plac-text').innerHTML = PLAC_TEXT;
+
+/* ---- hormones ---- */
+function drawHorm() {
+  const X0 = 50, X1 = 540, X = w => X0 + w * (X1 - X0) / 40, top = 30, h = 170, base = top + h;
+  let s = Obg.DEFS;
+  s += `<path class="axis" d="M${X0} ${base} H${X1}"/>`;
+  for (let w = 0; w <= 40; w += 4) s += `<path class="axis" d="M${X(w)} ${base} v5"/>` + T(X(w), base + 18, w, 's', 'middle');
+  s += T(X1, base + 34, 'weeks from the last menstrual period', 's', 'end');
+  for (const k of ['hpl', 'oes', 'prog', 'hcg']) {
+    const H = HORM[k], on = k === st.horm, p = [];
+    for (let w = 0; w <= 40; w += 0.25) p.push([X(w), base - h * H.f(w)]);
+    s += `<path class="${H.cls === 'trace' ? 'trace' : 'hcurve'}" d="${Obg.path(p)}" style="${H.style};${on ? 'stroke-width:3.6' : 'opacity:.45'}"/>`;
+  }
+  s += T(X(9.5) + 8, top + 4, 'hCG', st.horm === 'hcg' ? 'b' : 's', 'start') + T(X(21), base - h * HORM.hpl.f(21) - 6, 'hPL', st.horm === 'hpl' ? 'b' : 's', 'end');
+  s += T(X(33), base - h * HORM.prog.f(33) - 8, 'progesterone', st.horm === 'prog' ? 'b' : 's', 'end') + T(X(37), base - h * HORM.oes.f(37) + 18, 'oestriol', st.horm === 'oes' ? 'b' : 's', 'start');
+  let y = base + 52;
+  for (const [a, b, lab] of HORM[st.horm].ranges) { s += a === b ? `<circle cx="${X(a)}" cy="${y}" r="4.5" style="fill:var(--accent)"/>` : `<path class="rngon" d="M${X(a)} ${y} H${X(b)}"/>`; s += T(X(b) + 8, y + 4, lab, 's', 'start'); y += 15; }
+  s += `<path class="cur" d="M${X(st.hw)} ${top - 10} V${base}"/><circle cx="${X(st.hw)}" cy="${base}" r="4" style="fill:var(--mark)"/>`;
+  $('horm-svg').innerHTML = s;
+  const H = HORM[st.horm];
+  $('horm-find').innerHTML = H.text + `<p class="note">At ${st.hw} weeks this schematic curve is at about ${Math.round(100 * H.f(st.hw))}% of its own maximum.</p>`;
+}
+Obg.toggles('horm-tg', Object.keys(HORM).map(k => [k, HORM[k].lab === 'hPL' || HORM[k].lab === 'hCG' ? HORM[k].lab : HORM[k].lab[0].toUpperCase() + HORM[k].lab.slice(1)]), k => { st.horm = k; drawHorm(); }, 'hcg');
+const slH = Obg.slider('horm-sl', {id: 'hw', label: 'Week of pregnancy', min: 0, max: 40, step: 1, value: 10, fmt: v => v + ' wk'}, v => { st.hw = v; drawHorm(); });
+
+/* ---- fetal growth and teratogen periods ---- */
+function fetus(cx, base, k, abd, lab) {
+  /* schematic fetus: head circle and body ellipse; k scales overall size, abd scales the abdomen only */
+  const hr = 26 * k, bw = 30 * k * abd, bh = 44 * k;
+  return `<ellipse cx="${cx}" cy="${base - bh}" rx="${bw}" ry="${bh}" style="fill:var(--skin);stroke:var(--ink);stroke-width:1.2"/>`
+    + `<circle cx="${cx}" cy="${base - 2 * bh - hr + 6}" r="${hr}" style="fill:var(--skin);stroke:var(--ink);stroke-width:1.2"/>` + T(cx, base + 18, lab, 's', 'middle');
+}
+function drawGrow() {
+  let s = Obg.DEFS;
+  s += fetus(110, 190, 1, 1, 'normal');
+  const g = st.grow;
+  if (g === 'asym') s += fetus(300, 190, 1, 0.62, 'head spared, abdomen small');
+  else if (g === 'sym') s += fetus(300, 190, 0.72, 0.85, 'head and body small');
+  else s += fetus(300, 190, 1, 1, 'normal');
+  s += `<path class="grid dash" d="M30 190 H400"/>`;
+  /* weeks bar */
+  const X0 = 30, X1 = 540, X = w => X0 + w * (X1 - X0) / 40, y = 250;
+  s += `<defs><pattern id="tera-h" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--ink);stroke-width:1.6"/></pattern></defs>`;
+  s += `<rect x="${X(2)}" y="${y}" width="${X(4) - X(2)}" height="22" style="fill:var(--line)"/>` + T(X(2), y + 44, 'first 2 wk after fertilisation', 's', 'start');
+  s += `<rect x="${X(4)}" y="${y}" width="${X(10) - X(4)}" height="22" style="fill:url(#tera-h);stroke:var(--ink)"/>` + T((X(4) + X(10)) / 2, y - 6, 'embryonic: most sensitive', 's', 'middle');
+  s += `<rect x="${X(10)}" y="${y}" width="${X(40) - X(10)}" height="22" style="fill:var(--line);fill-opacity:.55"/>` + T((X(10) + X(40)) / 2, y + 15, 'fetal period', 's', 'middle');
+  s += `<path class="grid dash" d="M${X(32)} ${y - 12} V${y + 34}"/>` + T(X(32) - 4, y - 16, 'early-onset FGR < 32 wk | late ≥ 32 wk', 's', 'end');
+  for (let w = 0; w <= 40; w += 4) s += T(X(w), y + 62, w, 's', 'middle') + (w >= 2 ? T(X(w), y + 78, w - 2, 's', 'middle') : '');
+  s += T(X1, y + 94, 'upper: weeks from LMP; lower: weeks from fertilisation', 's', 'end');
+  s += `<path class="cur" d="M${X(st.gw)} ${y - 6} V${y + 26}"/><circle cx="${X(st.gw)}" cy="${y + 26}" r="4" style="fill:var(--mark)"/>`;
+  $('grow-svg').innerHTML = s;
+  const w = st.gw, f = w - 2;
+  const per = w < 2 ? 'Before fertilisation (the weeks are counted from the last period).' : f <= 2 ? '<b>First two weeks after fertilisation</b>: exposure tends to stop implantation or cause a miscarriage (Wikipedia).' : f <= 8 ? '<b>Embryonic period</b> (weeks 3–8 after fertilisation, i.e. up to the end of week 10 from the last period; Wikipedia): organs are forming, the <b>most sensitive</b> time for teratogens (StatPearls: the first trimester; Wikipedia).' : '<b>Fetal period</b>: growth and maturation; teratogens can still act, but the most sensitive time has passed (Wikipedia).';
+  const onset = w >= 20 ? (w < 32 ? ' Growth restriction diagnosed now would be <b>early-onset</b> (&lt; 32 weeks; ISUOG 2016 via StatPearls).' : ' Growth restriction diagnosed now would be <b>late-onset</b> (≥ 32 weeks; ISUOG 2016 via StatPearls).') : '';
+  $('grow-find').innerHTML = GROW[g][1] + `<p><b>Week ${w}</b> (${Math.max(0, f)} from fertilisation): ${per}${onset}</p>`;
+}
+Obg.toggles('grow-tg', Object.keys(GROW).map(k => [k, GROW[k][0]]), k => { st.grow = k; drawGrow(); }, 'asym');
+const slG = Obg.slider('grow-sl', {id: 'gw', label: 'Week of pregnancy', min: 0, max: 40, step: 1, value: 30, fmt: v => v + ' wk'}, v => { st.gw = v; drawGrow(); });
+$('grow-text').innerHTML = GROW_TEXT;
+
+/* ---- maternal changes: body map ---- */
+function organ(key, shape) { return shape.replace('/>', ` class="organ${st.sys === key ? ' on' : ''}" data-k="${key}" role="button" aria-label="${SYS[key].lab}" aria-pressed="${st.sys === key}"/>`); }
+function drawBody() {
+  const w = st.mw, k = Math.max(0, Math.min(1, (w - 10) / 30));
+  let s = '';
+  /* body outline = skin */
+  s += `<path class="body${st.sys === 'skin' ? ' on' : ''}" data-k="skin" role="button" aria-label="${SYS.skin.lab}" aria-pressed="${st.sys === 'skin'}" style="cursor:pointer" d="M124 48 a26 30 0 1 1 52 0 a26 30 0 1 1 -52 0 Z M124 78 Q150 92 176 78 L214 96 Q226 102 226 118 L232 230 L216 232 L206 140 L204 250 Q${206 + 30 * k} ${300 - 10 * k} 202 330 L196 456 L162 456 L152 340 L148 340 L138 456 L104 456 L98 330 Q${94 - 4 * k} 300 96 250 L94 140 L84 232 L68 230 L74 118 Q74 102 86 96 Z"/>`;
+  /* thyroid */
+  s += organ('endo', `<path d="M140 84 q10 8 20 0 q-2 8 -10 9 q-8 -1 -10 -9 Z" style="fill:var(--thyroid)"/>`);
+  /* lungs */
+  s += organ('resp', `<path d="M108 108 q20 -12 34 4 l0 70 q-20 6 -38 -4 Z M192 108 q-20 -12 -34 4 l0 70 q20 6 38 -4 Z" style="fill:var(--airway);fill-opacity:.8"/>`);
+  /* breasts (over the lungs) */
+  s += organ('breast', `<path d="M104 150 a17 15 0 1 0 34 0 Z M162 150 a17 15 0 1 0 34 0 Z" style="fill:var(--skin)"/>`);
+  /* heart */
+  s += organ('cvs', `<path d="M146 138 q12 -8 22 2 q6 14 -14 30 q-16 -10 -12 -24 Z" style="fill:var(--heart)"/>`);
+  /* liver and stomach (gut) — pushed up a little as the uterus grows */
+  const up = 18 * k;
+  s += organ('gi', `<path d="M100 ${196 - up} q30 -10 52 0 l0 20 q-26 10 -52 0 Z M156 ${194 - up} q22 -6 34 6 q0 16 -16 18 q-12 -4 -18 -10 Z" style="fill:var(--gut)"/>`);
+  /* kidneys */
+  s += organ('renal', `<path d="M110 ${232 - up} a10 18 0 1 0 0.1 0 Z M190 ${232 - up} a10 18 0 1 0 0.1 0 Z" style="fill:var(--kidney)"/>`);
+  /* blood: a vessel down the right arm (drawn as a line target) */
+  s += organ('blood', `<path d="M216 120 L224 222 L230 222 L222 120 Z" style="fill:var(--rbc)"/>`);
+  /* uterus: grows with the week (schematic) */
+  const ur = 10 + 46 * k, uy = 300 - 40 * k;
+  s += organ('gen', `<ellipse cx="150" cy="${uy}" rx="${ur * 0.9}" ry="${ur}" style="fill:var(--uter);fill-opacity:.85"/>`);
+  s += T(150, 476, w + ' weeks (uterus size schematic)', 's', 'middle');
+  $('body-svg').innerHTML = s;
+  /* roving focus: only the chosen system's part is in the tab order; arrow keys move between parts, Enter or Space chooses */
+  const parts = [...$('body-svg').querySelectorAll('[data-k]')];
+  parts.forEach((el, i) => {
+    el.setAttribute('tabindex', el.dataset.k === st.sys ? '0' : '-1');
+    el.onclick = () => pickSys(el.dataset.k, true);
+    el.onkeydown = e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickSys(el.dataset.k, true); return; }
+      const step = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+      if (!step) return;
+      e.preventDefault();
+      const nx = parts[(i + step + parts.length) % parts.length];
+      parts.forEach(p => p.setAttribute('tabindex', '-1')); nx.setAttribute('tabindex', '0'); nx.focus();
+    };
+  });
+}
+function drawMatChart() {
+  const S = st.sys, w = st.mw;
+  const X0 = 50, X1 = 540, X = q => X0 + q * (X1 - X0) / 40, top = 24, h = 150, base = top + h;
+  let s = Obg.DEFS;
+  const axisW = () => { let o = `<path class="axis" d="M${X0} ${base} H${X1}"/><path class="axis" d="M${X0} ${top} V${base}"/>`; for (let q = 0; q <= 40; q += 4) o += `<path class="axis" d="M${X(q)} ${base} v4"/>` + T(X(q), base + 16, q, 's', 'middle'); o += T(X1, base + 30, 'weeks of pregnancy', 's', 'end'); return o; };
+  const cur = () => `<path class="cur" d="M${X(w)} ${top} V${base}"/><circle cx="${X(w)}" cy="${base}" r="4" style="fill:var(--mark)"/>`;
+  if (S === 'cvs') {
+    const Y = v => base - (v + 40) * h / 100;  /* −40%..+60% */
+    s += axisW();
+    for (const v of [-40, -20, 0, 20, 40, 60]) s += `<path class="grid" d="M${X0} ${Y(v)} H${X1}"/>` + T(X0 - 6, Y(v) + 4, (v > 0 ? '+' : '') + v + '%', 's', 'end');
+    s += `<rect x="${X(20)}" y="${Y(50)}" width="${X(40) - X(20)}" height="${Y(30) - Y(50)}" style="fill:var(--heart);fill-opacity:.15"/>`;
+    const co = q => q < 8 ? q * 2.5 : q < 24 ? 20 + (q - 8) * 1.25 : 40;
+    const svr = q => q < 22 ? -q * 1.2 : -26.4 + (q - 22) * 0.4;
+    const bp = q => q < 4 ? -q : q < 14 ? -4 - (q - 4) * 0.4 : q < 28 ? -8 + (q - 14) * (8 / 14) : 0;
+    const line = (f, cls, sty) => { const p = []; for (let q = 0; q <= 40; q += 0.5) p.push([X(q), Y(f(q))]); return `<path class="${cls}" d="${Obg.path(p)}" style="${sty}"/>`; };
+    s += T(X0 + 4, top - 10, 'schematic shapes; % change from non-pregnant; shaded: CO +30–50% (sources)', 's', 'start');
+    s += line(co, 'hcurve', 'stroke:var(--heart)') + line(svr, 'trace', 'stroke-dasharray:6 4') + line(bp, 'trace', 'stroke-width:1.6');
+    s += T(X(30), Y(40) - 8, 'cardiac output', 's', 'middle') + T(X(30), Y(svr(30)) + 16, 'SVR (lowest 20–24 wk)', 's', 'middle') + T(X(6), Y(bp(6)) + 16, 'blood pressure (lowest point not given)', 's', 'start');
+    s += `<path class="rng" d="M${X(20)} ${base + 40} H${X(28)}"/>` + T(X(20) - 6, base + 44, 'CO peak 20–28 wk (2016 review)', 's', 'end');
+    s += `<path class="rng" d="M${X(28)} ${base + 56} H${X(40)}"/>` + T(X(28) - 6, base + 60, 'CO peak in the 3rd trimester (Wikipedia)', 's', 'end');
+    s += cur();
+  } else if (S === 'blood') {
+    const Y = v => base - v * h / 60;
+    s += axisW();
+    for (const v of [0, 20, 40, 60]) s += `<path class="grid" d="M${X0} ${Y(v)} H${X1}"/>` + T(X0 - 6, Y(v) + 4, '+' + v + '%', 's', 'end');
+    for (const [q, m, lo, hi] of PV) s += `<path class="axis" d="M${X(q)} ${Y(lo)} V${Y(hi)}"/><circle class="pt" cx="${X(q)}" cy="${Y(m)}" r="4.5" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.6"/>`;
+    s += T(X0 + 8, top + 2, 'circles: plasma volume (2019 meta-analysis, mean, 95% CI)', 's', 'start');
+    s += `<rect x="${X(38)}" y="${Y(33)}" width="${X(40) - X(38)}" height="${Y(15) - Y(33)}" style="fill:var(--rbc);fill-opacity:.35;stroke:var(--rbc)"/>` + T(X0 + 8, top + 18, 'red bar at 38–40 wk: red-cell mass by term, +15–33% (sources)', 's', 'start');
+    s += cur();
+  } else if (S === 'renal') {
+    const Y = v => base - (v - 40) * h / 30;   /* 40..70 μmol/L */
+    s += axisW();
+    for (const v of [40, 50, 60, 70]) s += `<path class="grid" d="M${X0} ${Y(v)} H${X1}"/>` + T(X0 - 6, Y(v) + 4, v, 's', 'end');
+    s += `<path class="grid dash" d="M${X0} ${Y(60.9)} H${X1}"/>` + T(X1, Y(60.9) - 5, 'non-pregnant cohort mean (< 35 y)', 's', 'end');
+    for (const [q, m] of CR) s += `<circle class="pt" cx="${X(q)}" cy="${Y(m)}" r="4.5" style="fill:var(--kidney)"/>`;
+    s += T(X0 + 8, top + 4, 'serum creatinine, μmol/L (2023 cohort means)', 's', 'start');
+    s += cur();
+  } else if (S === 'resp') {
+    const Xp = v => 300 + v * 4, rowh = 26;
+    s += `<path class="axis" d="M${Xp(0)} 10 V${10 + RESP.length * rowh}"/>`;
+    for (const v of [-20, 0, 20, 40, 50]) s += T(Xp(v), 16 + RESP.length * rowh, (v > 0 ? '+' : '') + v + '%', 's', 'middle');
+    RESP.forEach(([lab, a, b], i) => {
+      const y = 20 + i * rowh;
+      s += T(Xp(0) - (a < 0 ? 100 : 8), y + 4, lab, 's', 'end');
+      if (a === b) s += a === 0 ? T(Xp(0) + 8, y + 4, 'unchanged', 's', 'start') : `<rect x="${Xp(a)}" y="${y - 6}" width="${Xp(0) - Xp(a)}" height="12" style="fill:var(--airway)"/>`;
+      else s += `<rect x="${Xp(Math.min(a, b))}" y="${y - 6}" width="${Math.abs(Xp(b) - Xp(a))}" height="12" style="fill:var(--airway);fill-opacity:.55;stroke:var(--airway)"/>` + (a >= 0 ? `<rect x="${Xp(0)}" y="${y - 2}" width="${Xp(a) - Xp(0)}" height="4" style="fill:var(--airway)"/>` : '');
+    });
+    s += T(20, 222, 'change from non-pregnant; bars span the sources\' ranges', 's', 'start') + T(20, 238, 'respiratory rate: unchanged in three sources, +15% in one', 's', 'start');
+  } else {
+    s += axisW();
+    SYS[S].items.forEach(([a, b], i) => { const y = top + 16 + i * 22, on = w >= a && w <= b; s += `<path class="${on ? 'rngon' : 'rng'}" d="M${X(a)} ${y} H${X(b)}"/>` + T(X(a) - 4, y + 4, String(i + 1), 's', 'end'); });
+    s += T(X0 + 4, base - 8, 'numbered bars = the items listed, by week', 's', 'start');
+    s += cur();
+  }
+  $('mat-svg').innerHTML = s;
+}
+function drawMat() {
+  const S = SYS[st.sys], w = st.mw;
+  drawBody(); drawMatChart();
+  const items = S.items.map(([a, b, t], i) => `<li class="${w >= a && w <= b ? '' : 'off'}">${['cvs', 'blood', 'renal', 'resp'].includes(st.sys) ? '' : (i + 1) + '. '}${t}</li>`).join('');
+  $('mat-find').innerHTML = `<h3>${S.lab} at ${w} weeks</h3><ul class="now">${items}</ul>${S.facts}`;
+}
+function pickSys(k, fromMap) {
+  st.sys = k;
+  $('mat-tg').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === k)));
+  drawMat();
+  if (fromMap) { const el = $('body-svg').querySelector(`[data-k="${k}"]`); if (el) el.focus(); }
+}
+Obg.toggles('mat-tg', ORDER.map(k => [k, SYS[k].lab]), k => pickSys(k, false), 'cvs');
+const slM = Obg.slider('mat-sl', {id: 'mw', label: 'Week of pregnancy', min: 0, max: 40, step: 1, value: 24, fmt: v => v + ' wk'}, v => { st.mw = v; drawMat(); });
+
+/* ---- supine hypotension: transverse section seen from below (woman's right on the left of the drawing) ---- */
+function drawSup() {
+  const sup = st.sup === 'sup';
+  /* drawn in the body's own frame (front up, the woman's right on the left), then, for the left lateral position, turned so that her left side is down */
+  const C = [260, 175], sc = sup ? 1 : 0.8, ang = sup ? 0 : 90;
+  const tf = (x, y) => { const dx = (x - C[0]) * sc, dy = (y - C[1]) * sc, a = ang * Math.PI / 180; return [C[0] + dx * Math.cos(a) - dy * Math.sin(a), C[1] + dx * Math.sin(a) + dy * Math.cos(a)]; };
+  let g = '';
+  g += `<ellipse cx="260" cy="175" rx="190" ry="125" class="body"/>`;
+  g += `<rect x="232" y="246" width="56" height="40" rx="10" style="fill:var(--surface);stroke:var(--ink)"/>`;
+  const ivc = [212, 230], aor = [298, 233];
+  const ut = sup ? [260, 140] : [296, 136];
+  g += `<ellipse cx="${ut[0]}" cy="${ut[1]}" rx="${sup ? 125 : 118}" ry="${sup ? 88 : 78}" style="fill:var(--uter);fill-opacity:.8;stroke:var(--ink)"/>`;
+  g += `<ellipse cx="${ivc[0]}" cy="${ivc[1]}" rx="${sup ? 19 : 14}" ry="${sup ? 5 : 13}" style="fill:var(--vein);stroke:var(--ink)"/>`;
+  g += `<circle cx="${aor[0]}" cy="${aor[1]}" r="${sup ? 10 : 12}" style="fill:var(--artery);stroke:var(--ink)"/>`;
+  let s = Obg.DEFS + `<g transform="translate(${C[0]} ${C[1]}) rotate(${ang}) scale(${sc}) translate(${-C[0]} ${-C[1]})">${g}</g>`;
+  const L = (p, t, cls, a) => { const q = tf(p[0], p[1]); return T(q[0], q[1], t, cls, a); };
+  s += L(ut, 'gravid uterus', 'b', 'middle') + L([260, 270], 'vertebra', 's', 'middle');
+  if (sup) {
+    s += T(188, 254, 'IVC (flattened)', 's', 'end') + T(314, 238, 'aorta', 's', 'start');
+    s += `<path class="flow" d="M260 22 V54"/>` + T(268, 30, 'weight of the uterus', 's', 'start');
+    s += T(20, 322, 'lying on her back (supine)', 's', 'start') + T(20, 30, "woman's right", 's', 'start') + T(500, 30, "woman's left", 's', 'end');
+  } else {
+    const iv = tf(ivc[0], ivc[1]), ao = tf(aor[0], aor[1]);
+    s += T(iv[0] - 14, iv[1] - 10, 'IVC (open)', 's', 'end') + T(ao[0] - 14, ao[1] + 4, 'aorta', 's', 'end');
+    s += T(20, 16, 'lying on her left side: left side down, front of the body to the right', 's', 'start');
+  }
+  $('sup-svg').innerHTML = s;
+  $('sup-find').innerHTML = SUP[st.sup][1];
+}
+Obg.toggles('sup-tg', Object.keys(SUP).map(k => [k, SUP[k][0]]), k => { st.sup = k; drawSup(); }, 'sup');
+
+/* ---- reference table, exam points, text ---- */
+Obg.table('ref-table', ['Measure', 'Non-pregnant', 'Pregnant'], REF);
+$('exam-list').innerHTML = EXAM.map(e => '<li>' + e + '</li>').join('');
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+slH.init(); slG.init(); slM.init();
+drawHorm(); drawGrow(); drawMat(); drawSup();
+Obg.swipeHints();
+</script>
+</body>
+</html>

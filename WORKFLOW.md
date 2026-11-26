@@ -92,7 +92,8 @@ Last updated: 2026-11-23
   now --expand-environment=no. Inline --js tests before this date that used ${...} may have been wrong. E01 [x] build (388 quotes; WHO 2021 grades, ASHA 1990; Wikipedia Rinne/Weber excluded; ABC/Schwabach cut)
   [x] review (audiogram symbol text reversed, ET angle reference planes mixed, bone>air nonsense, ear
   colours outside the audiogram) [x] fixes (418 quotes) [x] committed 2026-11-26. OG01 [x] build (422 quotes; PMC10964813 excluded for copying PMC4928162) [x] review (body-map head off-canvas,
-  cycle chart fixed to 28 d, bilirubin/BP disagreements hidden, colour misuse) [ ] fixes (running). O01 [x] build (313 quotes; BOAST 2017, ATLS 11th 2025, WHO 2005/2018) [x] review (SALTER mnemonic orientation reversed,
+  cycle chart fixed to 28 d, bilirubin/BP disagreements hidden, colour misuse) [x] fixes (433 quotes) [x] committed 2026-11-26.
+  ALL 16 SUBJECTS NOW HAVE MODULE 01 LIVE (round 1 first modules complete). O01 [x] build (313 quotes; BOAST 2017, ATLS 11th 2025, WHO 2005/2018) [x] review (SALTER mnemonic orientation reversed,
   START missing airway-reposition RED branch, ATLS 11th C-spine wording + edition-switch bug) [x] fixes (341 quotes) [x] committed 2026-11-26. An01 [x] build (312 quotes; AHA 2020 (archived), ILCOR 2020, KACPR 2025, SRFAC 2026, BTS 2017, TSANZ 2022,
   DAS 2015; ERC only as reported (403)) [x] review (LMA/ETT drawn through the tongue, PC volume
   unbounded, quiz-sourced quotes, 4Hs4Ts open source found, depth scale) [x] fixes (341 quotes) [x] committed 2026-11-26. Ps01 [x] build (289 quotes) [x] review (no wrong facts; duration-picker logic, missing arrowheads,

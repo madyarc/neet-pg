@@ -167,6 +167,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [Imaging Modalities](radiology/basics/modalities.html), [Radiation Safety and the PC-PNDT Act](radiology/basics/radiation-safety.html) | Basics | Modality picker (X-ray densities, CT window/level, ultrasound, Doppler angle, MRI T1/T2, bone scan, PET), dose tables, NICE first-line scenarios, contrast and pregnancy checks; radiation types, deterministic vs stochastic plot, units converter, IAEA vs AERB limits, inverse-square calculator, dosimeters, PC-PNDT walkthrough |
 
+### Obstetrics and Gynaecology — [`obstetrics-gynaecology/`](obstetrics-gynaecology/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [The Menstrual Cycle, Ovulation and Conception](obstetrics-gynaecology/obstetrics/menstrual-cycle-conception.html), [The Placenta, Fetal Growth and Maternal Changes](obstetrics-gynaecology/obstetrics/placenta-maternal-changes.html) | Obstetrics | Cycle day and length sliders with hormone curves and endometrium, LH-surge stepper, conception timeline, corpus luteum and hCG; placental hormones, FGR, teratogen periods, maternal body map by week, supine hypotension, reference values |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and

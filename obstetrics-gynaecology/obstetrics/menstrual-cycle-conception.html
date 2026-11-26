@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Menstrual Cycle, Ovulation and Conception</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/obg.css">
+<style>
+/* page styles only; colour tokens are in ../assets/obg.css (no new tokens). Inhibin A and B are ink lines with direct labels. */
+svg.sch .cur{stroke:var(--mark);stroke-width:1.6}
+svg.sch.wide{max-width:860px}
+svg.sch .hcurve{fill:none;stroke-width:2.6;stroke-linejoin:round;stroke-linecap:round}
+svg.sch .inh{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round}
+svg.sch .band{fill:var(--ink);fill-opacity:.05}
+svg.sch .bandon{fill:var(--accent);fill-opacity:.16}
+svg.sch .rng{stroke:var(--muted);stroke-width:6;stroke-linecap:butt}
+svg.sch .rngon{stroke:var(--accent);stroke-width:6;stroke-linecap:butt}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;font-size:14px}
+.sw{display:inline-block;width:18px;height:0;border-top:2.6px solid;vertical-align:4px;margin-right:6px}
+.exam li{margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Obstetrics and Gynaecology</a> <span class="muted">· Module 01: <span aria-current="page">Menstrual cycle and conception</span> · <a href="placenta-maternal-changes.html">Placenta and maternal changes</a></span></nav>
+
+<header class="stack">
+  <h1>The Menstrual Cycle, Ovulation and Conception</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-cyc">The cycle day by day</a> <a href="#h-lh">LH surge and ovulation</a> <a href="#h-conc">Ovulation to a positive test</a> <a href="#h-cl">Corpus luteum and hCG</a> <a href="#h-exam">Exam points</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-cyc">
+  <h2 id="h-cyc">The cycle day by day: hormones, follicle, endometrium, mucus and temperature</h2>
+  <div class="sliders" id="cyc-sl"></div>
+  <div class="vrow" aria-live="polite" id="cyc-out"></div>
+  <div class="stack">
+    <div class="schbox"><svg class="fig sch wide" id="cyc-svg" viewBox="0 0 680 520" role="img" aria-label="Schematic menstrual cycle for the chosen length: FSH and LH, oestradiol, progesterone, inhibin B and inhibin A, the ovarian follicle and corpus luteum, the endometrium, cervical mucus with the fertile window, and basal body temperature, with a line at the chosen day"></svg></div>
+    <div class="prose find" id="cyc-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="cyc-key"></div>
+  <p class="muted">Schematic: curve shapes are relative, not measured values; inhibin B is the dashed ink line, inhibin A the solid one. The follicular part stretches or shrinks with the cycle length; the luteal part is kept at 14 days, as the sources describe.</p>
+  <div class="prose" id="cyc-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lh">
+  <h2 id="h-lh">The LH surge and the timing of ovulation, in hours</h2>
+  <div class="step" id="lh-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="lh-svg" viewBox="0 0 680 300" role="img" aria-label="Schematic LH surge on a time axis from 48 hours before to 48 hours after ovulation, with the source ranges for surge onset, LH peak and the life of the oocyte"></svg></div>
+    <div class="prose find" id="lh-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic curve. Bars are the time windows the sources give; the highlighted bar belongs to the chosen step.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-conc">
+  <h2 id="h-conc">From ovulation to a positive pregnancy test</h2>
+  <div class="sliders" id="conc-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="conc-svg" viewBox="0 0 680 342" role="img" aria-label="Schematic uterine tube and uterus with the conceptus at its position on the chosen day after ovulation, and a bar showing when hCG is made and becomes detectable"></svg></div>
+    <div class="prose find" id="conc-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, not to scale; the tube is drawn straightened. Cleavage, the blastocyst and the layers of implantation are drawn step by step on <a href="../../anatomy/embryology/early-development.html#h-wk1">Early Development, week 1</a>.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-cl">
+  <h2 id="h-cl">The corpus luteum, its rescue by hCG and the luteal–placental shift</h2>
+  <div class="chips" id="cl-tg" aria-label="Outcome of the cycle"></div>
+  <div class="sliders" id="cl-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="cl-svg" viewBox="0 0 680 430" role="img" aria-label="Schematic chart in weeks from the last menstrual period: progesterone from the corpus luteum and from the placenta, and hCG, with the source ranges for the luteal–placental shift and the hCG peak"></svg></div>
+    <div class="prose find" id="cl-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic shapes, not measured values. Weeks are counted from the last menstrual period (ovulation at about week 2).</p>
+  <div class="prose" id="cl-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-exam">
+  <h2 id="h-exam">Exam points</h2>
+  <div class="prose"><ul class="exam" id="exam-list"></ul></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BThe%20Menstrual%20Cycle%2C%20Ovulation%20and%20Conception%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fobstetrics-gynaecology%2Fobstetrics%2Fmenstrual-cycle-conception.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/obg.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (each fact checked in two sources: sources-local/facts/fill-og01.md, Part A; one-source facts are attributed in the text) ===================== */
+const LEDE = 'Change the cycle length and scrub through the days: see FSH, LH, oestradiol, progesterone and inhibin move, the follicle grow and become a corpus luteum, the endometrium build and shed, the mucus thin and the temperature rise. Then zoom in on the hours around the LH surge, follow the conceptus from the tube to implantation, and watch hCG rescue the corpus luteum until the placenta takes over. Gametogenesis and the steps of fertilisation are on <a href="../../anatomy/embryology/early-development.html#h-gam">Early Development</a>; follicle histology on <a href="../../anatomy/histology/urinary-reproductive.html#h-fem">Histology: female reproductive organs</a>.';
+
+/* relative levels for an idealised 28-day cycle, index 0 = day 1 (schematic shapes; FSH, LH, oestradiol and progesterone as on anatomy/embryology/early-development.html).
+   Inhibin B: peaks in the early-to-mid follicular phase and again at ovulation; inhibin A: peak in the mid-luteal phase (Wikipedia). */
+const CYC = {
+  fsh: [.5,.55,.6,.6,.55,.5,.45,.4,.37,.35,.35,.4,.62,.7,.45,.3,.27,.25,.24,.23,.23,.24,.25,.27,.3,.35,.4,.45],
+  lh:  [.15,.15,.15,.15,.15,.15,.15,.16,.17,.18,.2,.3,.75,1,.5,.22,.18,.17,.16,.16,.15,.15,.15,.15,.14,.14,.14,.15],
+  oes: [.15,.15,.16,.18,.2,.24,.3,.38,.48,.6,.72,.85,.92,.6,.45,.42,.46,.52,.57,.6,.6,.58,.52,.45,.36,.27,.2,.15],
+  prog:[.05,.05,.05,.05,.05,.05,.05,.05,.05,.05,.05,.05,.06,.08,.15,.3,.45,.6,.72,.8,.85,.83,.75,.62,.45,.28,.15,.08],
+  inhB:[.35,.45,.6,.75,.8,.75,.62,.52,.46,.43,.45,.55,.7,.75,.45,.25,.2,.18,.17,.16,.16,.16,.17,.18,.2,.22,.26,.3],
+  inhA:[.1,.1,.1,.1,.1,.1,.1,.1,.12,.14,.18,.22,.28,.32,.35,.45,.6,.72,.82,.88,.9,.86,.75,.6,.45,.3,.18,.12],
+};
+const LUTEAL = 14;   /* luteal phase fairly constant: 10–16 days, average 14 (Wikipedia); ovulation about 14 days before menstruation (StatPearls) */
+const LEN = {min: 21, max: 38, wp: [21, 35], figo: [24, 38]};   /* Wikipedia 21–35 (median 28); FIGO 24–38 (StatPearls) */
+
+const PH = {
+  men: '<h3>Menstrual phase (early follicular)</h3><p><b>Day 1 = the first day of menstrual flow</b> (StatPearls). The corpus luteum of the last cycle has stopped, <b>oestrogen and progesterone have fallen</b>, the arteries to the functional layer constrict and it is <b>shed</b>; the <b>basal layer</b> is never shed and regrows it (Wikipedia; StatPearls). FSH recruits a group of follicles to grow (StatPearls; Wikipedia). Normal bleeding lasts up to 8 days (FIGO, via StatPearls).</p>',
+  fol: '<h3>Follicular phase = proliferative phase</h3><p><b>FSH</b> makes the recruited follicles grow; the one with the <b>most FSH receptors</b> stays sensitive as FSH falls and becomes <b>dominant</b>, the others undergo atresia (Wikipedia; a 2017 review). Two cells make oestradiol: <b>theca cells</b> (LH) make androgens, <b>granulosa cells</b> (FSH) aromatise them (StatPearls; Wikipedia). <b>Inhibin B</b> from the small antral follicles helps lower FSH. <b>Oestrogen</b> makes the functional layer of the endometrium <b>proliferate</b>, and the cervical mucus gets thinner. This is the part of the cycle whose length varies.</p>',
+  late: '<h3>Late follicular: oestradiol switches to positive feedback</h3><p>Oestradiol from the dominant follicle first holds LH down; once it passes a threshold it turns to <b>positive feedback</b> on the hypothalamus and pituitary and sets off the <b>LH surge</b>, with a smaller FSH surge (StatPearls; Wikipedia; a 2017 review, which puts the threshold at more than 200 pg/ml for about 50 hours). The mucus is now <b>thin, clear and stretchy</b>: the fertile window is open.</p>',
+  ovu: '<h3>Ovulation</h3><p>The surge activates proteolytic enzymes that rupture the follicle (StatPearls), and the oocyte completes meiosis I just before release (Wikipedia). Ovulation follows the <b>LH peak by 10–12 hours</b> (Wikipedia; a 2017 review); hour by hour in <a href="#h-lh">the next section</a>. It falls about <b>14 days before the next period</b>, because the luteal phase is fairly constant (StatPearls; Wikipedia). Fertilisation, if it happens, is in the <b>ampulla</b> of the tube.</p>',
+  elut: '<h3>Early luteal phase = secretory phase</h3><p>The ruptured follicle becomes the <b>corpus luteum</b> (luteinised granulosa and theca cells): mainly <b>progesterone</b>, also oestradiol and <b>inhibin A</b> (StatPearls; Wikipedia). Progesterone turns the endometrium <b>secretory</b> and begins decidualisation (a 2022 review; Wikipedia), makes the mucus <b>thick</b> and a barrier to sperm, and raises the <b>basal body temperature</b> (thermogenic; a 2017 review; Wikipedia).</p>',
+  mlut: '<h3>Mid-luteal phase</h3><p>Progesterone and inhibin A are highest (inhibin A peak in the mid-luteal phase: Wikipedia). Uterine receptivity is best about <b>6–10 days after ovulation</b> (days 20–24 of a 28-day cycle, Wikipedia); an embryo implants about <b>8–10 days after ovulation</b> (Wikipedia; a 2017 review). If it implants, its <b>hCG</b> keeps the corpus luteum going: <a href="#h-cl">below</a>.</p>',
+  llut: '<h3>Late luteal phase</h3><p>Without hCG the corpus luteum stops: hormone secretion ends <b>within 14 days of ovulation</b> (StatPearls) or after <b>about 10 days</b> (Wikipedia), and it shrinks to a scar, the <b>corpus albicans</b>. <b>Progesterone falls</b>, the temperature drops back, and the spiral arteries constrict: the next <b>menstruation</b> starts (Wikipedia; a 2022 review).</p>',
+};
+const CYC_TEXT = `<p><b>Two cycles in step</b>: the ovarian <b>follicular phase</b> matches the uterine <b>menstrual + proliferative</b> phases, and the <b>luteal phase</b> matches the <b>secretory phase</b> (StatPearls; Wikipedia). Cycle length: median <b>28 days</b>; normal <b>21–35 days</b> (Wikipedia) or <b>24–38 days</b> (FIGO, via StatPearls).</p>
+<p><b>Follicle stages</b> (names in StatPearls and Wikipedia; the details are Wikipedia's): <b>primordial</b> (an oocyte in one layer of flat follicular cells; each ovary holds 1–2 million, StatPearls) → <b>primary</b> (cuboidal granulosa cells, zona pellucida begins) → <b>secondary</b> (several layers, theca interna and externa) → <b>antral (tertiary)</b>, with a fluid-filled antrum → <b>preovulatory (Graafian)</b>: the dominant follicle grows about 1.5 mm a day to about 20 mm.</p>
+<p><b>Cervical mucus</b>: oestrogen makes it gradually thinner, least viscous at ovulation — copious, clear, "egg-white", stretchy (<i>Spinnbarkeit</i>) and ferning when dried (Wikipedia); progesterone makes it thick and acidic, a barrier to sperm (Wikipedia; a 2017 review: the most fertile mucus lies within about a day of ovulation). <b>Basal body temperature</b>: low before ovulation, higher after it while progesterone lasts (a <b>biphasic</b> pattern). The rise is "at least 0.2 °C" (Wikipedia, Basal body temperature), "one-quarter to one-half degree Celsius" (Wikipedia, Ovulation) or 0.5–1.0 °F (a 2017 review). Charting it shows afterwards whether ovulation <b>has occurred</b> (StatPearls).</p>`;
+
+/* LH surge, hours relative to ovulation (0) */
+const LH_STEPS = [
+  ['Oestradiol threshold', null, '<h3>Before the surge: the oestradiol trigger</h3><p>The dominant follicle\'s oestradiol rises and, past a threshold, switches to positive feedback (StatPearls; Wikipedia). A 2017 review gives the threshold as more than 200 pg/ml held for about 50 hours. Cervical mucus and saliva change as oestrogen rises (the review).</p>'],
+  ['Surge begins', [[-44, -35, 'onset 35–44 h before (serum, 2017 review)'], [-32, -28, '30 ± 2 h before: LH first in urine (Wikipedia)']], '<h3>Onset of the LH surge</h3><p>Sources differ on how far ahead the onset lies: the <b>onset of the surge precedes ovulation by 35–44 hours</b> (a 2017 review, serum LH), while Wikipedia gives ovulation <b>30 ± 2 hours after LH is first detectable in urine</b>, and "one to two days" in another article. The surge itself typically lasts about 48 hours (Wikipedia). A positive urine LH test predicts ovulation <b>within 48 hours</b> (laboratory guidelines quoted in the 2017 review).</p>'],
+  ['LH peak', [[-12, -10, 'peak 10–12 h before (both sources)']], '<h3>The LH peak</h3><p>The <b>peak of the LH surge precedes ovulation by 10–12 hours</b> (a 2017 review; Wikipedia). This is the figure both sources agree on. The surge completes meiosis I in the oocyte and luteinises the granulosa cells (Wikipedia; StatPearls).</p>'],
+  ['Ovulation', [[0, 0, 'ovulation']], '<h3>Ovulation</h3><p>The follicle ruptures (proteolytic enzymes, StatPearls); the secondary oocyte, arrested in metaphase II (Wikipedia), is taken up by the fimbriae (StatPearls). The corpus luteum forms from what is left.</p>'],
+  ['Life of the oocyte', [[12, 24, 'oocyte degenerates 12–24 h after (Wikipedia)'], [24, 48, 'oocyte lifespan 1–2 days (2017 review)']], '<h3>The fertile window</h3><p>An unfertilised oocyte degenerates <b>12–24 hours</b> after ovulation (Wikipedia), or lives <b>1–2 days</b> (a 2017 review). Sperm live <b>3–5 days</b> (the review) or up to a week (Wikipedia), so the <b>fertile window</b> runs from about <b>5 days before to 1–2 days after</b> ovulation (the review).</p>'],
+];
+
+/* days after ovulation (fertilisation is within the oocyte's 12–24 h / 1–2 days) */
+const CONC = [
+  [0, 1, 'amp', '<h3>Day 0–1: ovulation and fertilisation</h3><p>The oocyte is taken into the tube; fertilisation usually happens in the <b>ampulla</b> (Wikipedia; StatPearls), within the oocyte\'s life of 12–24 hours (Wikipedia) or 1–2 days (a 2017 review). The steps: <a href="../../anatomy/embryology/early-development.html#h-fert">fertilisation</a>.</p>'],
+  [2, 3, 'tube', '<h3>Days 2–3: cleavage in the tube</h3><p>The zygote divides (cleavage) in the tube; the morula <b>enters the uterus after three or four days</b> (Wikipedia).</p>'],
+  [4, 5, 'cav', '<h3>Days 4–5: blastocyst in the uterine cavity</h3><p>A cavity forms in the morula to make the <b>blastocyst</b>, which reaches the uterus about the fifth day (Wikipedia) and <b>hatches</b> from the zona pellucida about four to five days after fertilisation, before implantation begins (Wikipedia). Days per source: <a href="../../anatomy/embryology/early-development.html#h-wk1">table on Early Development</a>.</p>'],
+  [6, 7, 'att', '<h3>Days 6–7: attaching</h3><p>The blastocyst lies against the secretory, decidualising endometrium (progesterone from the corpus luteum). Implantation normally takes place in the receptive window of the cycle (about 6–10 days after ovulation: days 20–24 of a 28-day cycle, Wikipedia).</p>'],
+  [8, 10, 'imp', '<h3>Days 8–10: implantation and the first hCG</h3><p>In most successful pregnancies the embryo <b>implants 8–10 days after ovulation</b> (Wikipedia; a 2017 review); normal pregnancies range widely, 3–16 days after the LH peak in one study (a 2010 review). The <b>syncytiotrophoblast</b> secretes <b>hCG</b> — by day 9 after fertilisation (Wikipedia) — and hCG can be found in <b>maternal blood about 10 days after ovulation</b> (a 2022 review).</p>'],
+  [11, 13, 'hcg', '<h3>Days 11–13: hCG rising</h3><p>Blood tests and the most sensitive urine tests usually detect hCG <b>6–12 days after ovulation</b> (Wikipedia). hCG keeps the corpus luteum making progesterone, so the endometrium is not shed (Wikipedia; a 2010 review).</p>'],
+  [14, 16, 'miss', '<h3>Day 14 on: the missed period</h3><p>Without a pregnancy the next period would come about <b>14 days after ovulation</b>, the length of the luteal phase (StatPearls; Wikipedia). With hCG it does not come. Clinical diagnosis of pregnancy is a later module (OG6); first-trimester tests are outlined on <a href="../../anatomy/embryology/early-development.html#h-tera">Early Development</a>.</p>'],
+];
+
+/* corpus luteum chart: weeks from LMP; ovulation at week 2 (gestational age = fertilisation age + 2 weeks, Wikipedia) */
+const CL_SHIFT = [[7, 9, '7–9 wk (Wikipedia)'], [8, 8, 'after 8 wk (Wikipedia)'], [10, 10, 'after 10 wk (StatPearls)'], [12, 12, '12 wk (2021 review)']];
+const HCG_PEAK = [[8, 11, '8–11 (Wikipedia)'], [9, 10, '9–10 (Generation R, 2015)'], [10, 10, '10 (2010 review)'], [8, 10, '8–10 (2025 review)'], [12, 14, '12–14 (2026 review: outlier)']];
+const CL_TEXT = `<p><b>hCG and LH</b> share an <b>α subunit</b> (also with FSH and TSH); the <b>β subunit is specific</b> to hCG (Wikipedia; StatPearls; a 2010 review). hCG acts on the <b>same LH/hCG receptor</b> as LH (Wikipedia; the 2010 review), which is how it can keep the corpus luteum alive; its TSH-like action on the thyroid is on <a href="placenta-maternal-changes.html#h-mat">the maternal-changes page</a>. During pregnancy FSH and LH are undetectable, held down by oestrogen, progesterone and inhibin (a 2016 review).</p>
+<p><b>Doubling time</b>: in a viable early pregnancy serum hCG rises exponentially, <b>doubling within about 1.5–2 days</b> (a 2017 review). The slowest rise still seen in viable intrauterine pregnancies over 48 hours is much less than doubling — <b>66%, 53% or 35%</b> in successive studies (a 2019 review; the 2017 review gives 24% at one day and 53% at two). How these are used for ectopic pregnancy belongs to a later module.</p>`;
+
+const EXAM = [
+  '<b>LH peak → ovulation 10–12 h</b> (Wikipedia; a 2017 review). Onset of the surge: 35–44 h before (the review) or 30 ± 2 h after LH first appears in urine (Wikipedia).',
+  '<b>Ovulation ≈ 14 days before the next period</b>: the luteal phase is fairly constant (10–16 days, average 14), the follicular phase varies (StatPearls; Wikipedia).',
+  '<b>Corpus luteum life span ≈ 10–14 days</b> without hCG: secretion stops within 14 days of ovulation (StatPearls) or after about 10 (Wikipedia); then the corpus albicans.',
+  '<b>Oestradiol positive feedback</b> triggers the surge (StatPearls; Wikipedia; the 2017 review); <b>progesterone</b> makes the mucus thick and raises the basal body temperature (Wikipedia; the review).',
+  '<b>hCG</b>: from the <b>syncytiotrophoblast</b> (Wikipedia; a 2010 review); in blood ~10 days after ovulation (2022 review) or 6–12 days (Wikipedia); <b>doubles every ~1.5–2 days</b> early (a 2017 review); <b>peaks at about 8–10 weeks</b> (Wikipedia 8–11; Generation R 9–10; 2010 review 10; 2025 review 8–10), then falls.',
+  '<b>Luteal–placental shift</b>: 7–9 weeks (Wikipedia) to after 10 weeks (StatPearls); a 2021 review says the ovary makes the hormones for the first 12 weeks.',
+  '<b>Implantation 8–10 days after ovulation</b> (Wikipedia; a 2017 review); fertilisation in the <b>ampulla</b> (Wikipedia; StatPearls).',
+];
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf: Physiology, Menstrual Cycle; Ovulation; Ovulation and Basal Body Temperature; Corpus Luteum; Progesterone; Luteinizing Hormone; Human Chorionic Gonadotropin; Uterus); open-access reviews — Su et al. 2017 (detection of ovulation), Cole 2010 (functions of hCG), a 2017 review of hCG (Int J Mol Sci), a 2022 review of hCG and early embryogenesis, a 2022 review of endometrial physiology (Nat Rev Endocrinol), the Generation R hCG reference ranges (2015), a 2019 review of pregnancy of unknown location, Soma-Pillay et al. 2016 (physiological changes in pregnancy), a 2021 review (Indian J Crit Care Med), a 2025 review of thyroid disorders in pregnancy, a 2026 review of the liver in pregnancy; Wikipedia (Menstrual cycle, Ovulation, Follicular phase, Folliculogenesis, Ovarian follicle, Activin and inhibin, FSH, LH, Estradiol, Progesterone, Corpus luteum, Endometrium, Cervix, Basal body temperature, Implantation, Prenatal development, hCG). FIGO cycle definitions as given by StatPearls.';
+const MODELS = '<b>Models used:</b> hormone curves, the follicle, endometrium, mucus and temperature rows, the LH surge, the tube and the hCG and progesterone curves are schematic shapes drawn for this page, not measured values.';
+
+/* ===================== DRAWING ===================== */
+const {$, T} = Obg;
+const lerp = (arr, t) => { const i = Math.max(0, Math.min(arr.length - 1, t - 1)), a = Math.floor(i), b = Math.min(arr.length - 1, a + 1), f = i - a; return arr[a] * (1 - f) + arr[b] * f; };
+const st = {len: 28, day: 14, lh: {s: 2}, conc: 9, cl: 'preg', wk: 9};
+
+/* menstruation kept at about 5 days; only the proliferative (late follicular) part stretches or shrinks with the cycle length */
+function tOf(d, L) { const O = L - LUTEAL; return d <= 5 ? d : d <= O ? 5 + (d - 5) * 9 / (O - 5) : 14 + (d - O); }
+function phaseOf(t) { return t <= 5.5 ? 'men' : t < 12 ? 'fol' : t < 13.6 ? 'late' : t < 14.5 ? 'ovu' : t < 19.5 ? 'elut' : t < 24.5 ? 'mlut' : 'llut'; }
+
+function drawCycle() {
+  const L = st.len, O = L - LUTEAL, d = Math.min(st.day, L);
+  const X0 = 96, X1 = 666, x = day => X0 + (day - 1) * (X1 - X0) / (L - 1);
+  const days = []; for (let i = 1; i <= L; i++) days.push(i);
+  const curve = (key, top, h, cls, style) => `<polyline class="${cls}" points="${days.map(i => x(i).toFixed(1) + ',' + (top + h - lerp(CYC[key], tOf(i, L)) * h).toFixed(1)).join(' ')}" style="${style}"/>`;
+  let s = Obg.DEFS;
+  /* day axis */
+  s += T(6, 14, 'DAY', 'h');
+  for (const i of days) if (i === 1 || i % 7 === 0 || i === O || i === L) s += T(x(i), 14, i, 's', 'middle');
+  /* fertile window band (about 5 days before to 1–2 days after ovulation), behind everything */
+  s += `<rect x="${x(Math.max(1, O - 5))}" y="22" width="${x(Math.min(L, O + 1)) - x(Math.max(1, O - 5))}" height="488" class="band"/>`;
+  s += `<path class="grid dash" d="M${x(O)} 22 V510"/><path class="cur" d="M${x(d)} 20 V512"/>`;
+  s += T((x(Math.max(1, O - 5)) + x(Math.min(L, O + 1))) / 2, 440, 'fertile window', 's', 'middle');
+  /* pituitary */
+  s += T(6, 40, 'PITUITARY', 'h');
+  s += `<path class="grid" d="M${X0} 92 H${X1}"/>`;
+  s += curve('fsh', 28, 62, 'hcurve', 'stroke:var(--h-fsh)') + curve('lh', 28, 62, 'hcurve', 'stroke:var(--h-lh)');
+  s += T(x(O) + 10, 36, 'LH', 's', 'start') + T(x(3), 50, 'FSH', 's', 'middle');
+  /* ovarian steroids + inhibins */
+  s += T(6, 114, 'OVARY:', 'h') + T(6, 129, 'STEROIDS', 'h');
+  s += `<path class="grid" d="M${X0} 172 H${X1}"/>`;
+  s += curve('oes', 106, 64, 'hcurve', 'stroke:var(--h-oes)') + curve('prog', 106, 64, 'hcurve', 'stroke:var(--h-prog)');
+  s += T(x(O) - 34, 104, 'oestradiol', 's', 'end') + T(x(O + 7), 106, 'progesterone', 's', 'middle');
+  s += T(6, 192, 'INHIBINS', 'h');
+  s += `<path class="grid" d="M${X0} 232 H${X1}"/>`;
+  s += curve('inhB', 184, 46, 'inh', 'stroke-dasharray:5 3') + curve('inhA', 184, 46, 'inh', '');
+  s += T(x(4), 182, 'inhibin B', 's', 'middle') + T(x(O + 7), 182, 'inhibin A', 's', 'middle');
+  /* follicle row y 250..300 */
+  s += T(6, 270, 'FOLLICLE', 'h');
+  const fy = 268, ft = tOf(d, L), right = x(d) < X1 - 200;
+  const cap = (t, r) => T(right ? x(d) + r + 10 : x(d) - r - 10, fy + 4, t, 's', right ? 'start' : 'end');
+  let fol = '';
+  if (ft <= 5.5) { for (const [dx, r] of [[-26, 7], [0, 9], [24, 7]]) fol += `<circle cx="${x(d) + dx}" cy="${fy}" r="${r}" style="fill:var(--fluid);stroke:var(--ink);stroke-width:1"/><circle cx="${x(d) + dx + r * .35}" cy="${fy - r * .25}" r="2.4" style="fill:var(--ink)"/>`; fol += cap('a cohort grows (FSH)', 34); }
+  else if (ft < 14) { const r = 8 + (ft - 5.5) * 1.6; fol += `<circle cx="${x(d)}" cy="${fy}" r="${r}" style="fill:var(--fluid);stroke:var(--ink);stroke-width:1.2"/><circle cx="${x(d) + r * .45}" cy="${fy - r * .3}" r="3" style="fill:var(--ink)"/><circle cx="${x(d) - r - 9}" cy="${fy + 4}" r="${Math.max(2, 6 - (ft - 5.5) * .5)}" style="fill:var(--line);stroke:var(--muted)"/>`; fol += cap(ft < 8 ? 'one becomes dominant' : 'dominant follicle, antral', r); }
+  else if (ft < 14.5) { fol += `<circle cx="${x(d)}" cy="${fy}" r="19" style="fill:var(--fluid);stroke:var(--ink);stroke-width:1.2;stroke-dasharray:4 3"/><circle cx="${x(d) + 24}" cy="${fy - 14}" r="3.4" style="fill:var(--ink)"/><path class="flow" d="M${x(d) + 8} ${fy - 6} L${x(d) + 20} ${fy - 12}"/>`; fol += cap('rupture: ovulation', 28); }
+  else if (ft < 25) { const r = 12 + Math.min(4, (ft - 14.5) * .6); fol += `<circle cx="${x(d)}" cy="${fy}" r="${r}" style="fill:var(--line);stroke:var(--ink);stroke-width:1.2"/><path d="M${x(d) - r * .6} ${fy} q${r * .3} -${r * .5} ${r * .6} 0 t${r * .6} 0" style="fill:none;stroke:var(--ink);stroke-width:.8"/>`; fol += cap('corpus luteum', r); }
+  else { const r = Math.max(5, 14 - (ft - 25) * 2.5); fol += `<circle cx="${x(d)}" cy="${fy}" r="${r}" style="fill:var(--surface);stroke:var(--muted);stroke-width:1.2"/>`; fol += cap('regressing → corpus albicans', r); }
+  s += fol;
+  /* endometrium y 312..360 */
+  s += T(6, 328, 'ENDO-', 'h') + T(6, 343, 'METRIUM', 'h');
+  const th = t => t <= 5 ? 22 - t * 3.6 : t <= 14 ? 4 + (t - 5) * 2.8 : t <= 26 ? 29 + (t - 14) * .7 : 37 - (t - 26) * 10;
+  const base = 362;
+  s += `<rect x="${X0}" y="${base - 4}" width="${X1 - X0}" height="6" style="fill:var(--endom);fill-opacity:.9"/>`;
+  s += `<polygon points="${days.map(i => x(i).toFixed(1) + ',' + (base - 4 - th(tOf(i, L))).toFixed(1)).join(' ')} ${x(L)},${base - 4} ${X0},${base - 4}" style="fill:var(--endom);fill-opacity:.45;stroke:var(--endom)"/>`;
+  const ph = [[1, 5, 'menstrual'], [6, O, 'proliferative'], [O + 1, L, 'secretory']];
+  for (const [a, b, lab] of ph) s += T((x(a) + x(b)) / 2, base + 16, lab, 's', 'middle');
+  /* mucus y 388..410 */
+  s += T(6, 402, 'MUCUS', 'h');
+  const mlab = t => t <= 5.5 ? '' : t < 12 ? 'thinning (oestrogen)' : t < 14.5 ? 'thin, clear, stretchy: fertile' : t < 25 ? 'thick, acidic (progesterone)' : 'thick';
+  const mseg = [[1, 5], [6, O - 3], [Math.max(6, O - 2), O], [O + 1, L]];
+  const mop = [0, .35, .9, .15];
+  mseg.forEach(([a, b], k) => { if (b >= a) s += `<rect x="${x(a)}" y="392" width="${Math.max(2, x(b) - x(a))}" height="14" style="fill:var(--fluid);fill-opacity:${mop[k]};stroke:var(--line)"/>`; });
+  s += T(right ? x(d) + 8 : x(d) - 8, 424, mlab(ft) || 'menstrual flow', 's', right ? 'start' : 'end');
+  /* BBT y 440..500 */
+  s += T(6, 460, 'BASAL', 'h') + T(6, 475, 'TEMP.', 'h');
+  const bt = t => t <= 14 ? 0 : t <= 15.5 ? (t - 14) / 1.5 : t <= 27 ? 1 : 1 - (t - 27);
+  s += `<polyline class="trace" points="${days.map(i => x(i).toFixed(1) + ',' + (490 - 26 * Math.max(0, bt(tOf(i, L)))).toFixed(1)).join(' ')}"/>`;
+  s += T(x(O + 7), 452, 'higher after ovulation (progesterone)', 's', 'middle') + T(x(4), 482, 'lower', 's', 'middle');
+  /* ovulation marker and cursor */
+  s += `<circle cx="${x(d)}" cy="512" r="4" style="fill:var(--mark)"/>`;
+  $('cyc-svg').innerHTML = s;
+  const p = phaseOf(ft);
+  $('cyc-find').innerHTML = PH[p];
+  const inW = L >= LEN.wp[0] && L <= LEN.wp[1], inF = L >= LEN.figo[0] && L <= LEN.figo[1];
+  $('cyc-out').innerHTML = `<span>Day <b class="readout">${d}</b> of ${L}</span><span>Ovulation ≈ day <b class="readout">${O}</b> (${L} − 14)</span><span class="muted">${inW && inF ? 'normal by both Wikipedia (21–35) and FIGO (24–38)' : inW ? 'normal by Wikipedia (21–35); shorter than FIGO\'s 24–38' : inF ? 'normal by FIGO (24–38); longer than Wikipedia\'s 21–35' : 'outside both normal ranges'}</span>`;
+}
+const slLen = Obg.slider('cyc-sl', {id: 'len', label: 'Cycle length', min: LEN.min, max: LEN.max, step: 1, value: 28, fmt: v => v + ' days'}, v => { st.len = v; if (st.day > v) slDay.set(v); else drawCycle(); slDay.el.max = v; });
+const slDay = Obg.slider('cyc-sl', {id: 'day', label: 'Day of the cycle', min: 1, max: 28, step: 1, value: 14, fmt: v => 'day ' + v}, v => { st.day = v; drawCycle(); });
+Obg.key('cyc-key', [['--h-fsh', 'FSH'], ['--h-lh', 'LH'], ['--h-oes', 'Oestradiol'], ['--h-prog', 'Progesterone'], ['--endom', 'Endometrium'], ['--fluid', 'Follicular fluid, cervical mucus'], ['--mark', 'Chosen day']]);
+$('cyc-text').innerHTML = CYC_TEXT;
+
+/* ---- LH surge in hours ---- */
+function drawLh() {
+  const X0 = 60, X1 = 664, X = h => X0 + (h + 48) * (X1 - X0) / 96, k = st.lh.s;
+  let s = Obg.DEFS;
+  s += `<path class="axis" d="M${X0} 150 H${X1}"/>`;
+  for (const h of [-48, -36, -24, -12, 0, 12, 24, 36, 48]) s += `<path class="axis" d="M${X(h)} 150 v5"/>` + T(X(h), 168, (h > 0 ? '+' : '') + h + ' h', 's', 'middle');
+  s += T(X0, 186, 'hours from ovulation', 's', 'start');
+  /* schematic LH surge: baseline, rise from about −40 h, peak at −11 h, back near baseline by about +10 h */
+  const lh = h => 0.08 + 0.92 * Math.exp(-Math.pow((h + 11) / (h < -11 ? 18 : 9), 2));
+  const pts = []; for (let h = -48; h <= 48; h += 1) pts.push([X(h), 146 - 110 * lh(h)]);
+  s += `<path class="hcurve" d="${Obg.path(pts)}" style="stroke:var(--h-lh)"/>` + T(X(-11) - 6, 30, 'LH (schematic)', 's', 'end');
+  s += `<path class="grid dash" d="M${X(0)} 26 V150"/>` + T(X(0) + 4, 30, 'ovulation', 's', 'start');
+  const all = LH_STEPS.map((q, i) => [i, q[1]]).filter(q => q[1]);
+  let y = 206;
+  for (const [i, bars] of all) for (const [a, b, lab] of bars) {
+    if (a === b) { s += `<circle cx="${X(a)}" cy="150" r="5" style="fill:${i === k ? 'var(--accent)' : 'var(--muted)'}"/>`; continue; }
+    const on = i === k;
+    s += `<path class="${on ? 'rngon' : 'rng'}" d="M${X(a)} ${y} H${X(b)}"/>` + T(a < 0 ? X(b) + 6 : X(a) - 6, y + 4, lab, on ? 'b' : 's', a < 0 ? 'start' : 'end');
+    y += 18;
+  }
+  $('lh-svg').innerHTML = s;
+  $('lh-find').innerHTML = LH_STEPS[k][2];
+}
+Obg.stepper('lh-step', LH_STEPS.map(q => q[0]), drawLh, st.lh);
+
+/* ---- ovulation to a positive test ---- */
+function drawConc() {
+  const d = st.conc, row = CONC.find(q => d >= q[0] && d <= q[1]);
+  let s = Obg.DEFS;
+  /* ovary, tube (straightened), uterus */
+  s += `<ellipse cx="44" cy="120" rx="26" ry="18" style="fill:var(--gonad);stroke:var(--ink);stroke-width:1"/>` + T(44, 152, 'ovary', 's', 'middle');
+  s += `<path d="M80 96 q-10 24 0 48" style="fill:none;stroke:var(--uter);stroke-width:6"/>`;
+  s += `<path d="M82 100 L360 112 M82 140 L360 128" style="stroke:var(--uter);stroke-width:5;fill:none"/>`;
+  s += T(130, 88, 'ampulla', 's', 'middle') + T(300, 98, 'isthmus', 's', 'middle') + T(60, 88, 'fimbriae', 's', 'middle');
+  /* uterus: myometrium wall with endometrium lining, cavity */
+  s += `<path d="M360 60 L620 60 Q650 60 650 90 L650 150 Q650 180 620 180 L360 180 Z" style="fill:var(--uter);fill-opacity:.55;stroke:var(--uter)"/>`;
+  s += `<path d="M372 78 L612 78 Q634 78 634 98 L634 142 Q634 162 612 162 L372 162 Z" style="fill:var(--endom);fill-opacity:.55"/>`;
+  s += `<path d="M380 104 L600 104 Q614 104 614 116 L614 124 Q614 136 600 136 L380 136 Z" style="fill:var(--surface)"/>`;
+  s += T(620, 52, 'uterus (cavity, endometrium, myometrium)', 's', 'end') + T(500, 200, 'endometrium (secretory)', 's', 'middle');
+  /* conceptus position */
+  const pos = d <= 1 ? [130 + d * 30, 120] : d <= 3 ? [200 + (d - 2) * 90, 120] : d <= 5 ? [420 + (d - 4) * 50, 120] : d <= 7 ? [500 + (d - 6) * 10, 108] : [520, 94];
+  const r = d <= 1 ? 7 : d <= 3 ? 8 : 9;
+  if (d >= 8) s += `<circle cx="${pos[0]}" cy="${d >= 10 ? 92 : 98}" r="10" style="fill:var(--surface);stroke:var(--tropho);stroke-width:2.4"/><circle cx="${pos[0] + 3}" cy="${d >= 10 ? 97 : 103}" r="3.4" style="fill:var(--tropho)"/>` + T(pos[0], 126, d >= 10 ? 'embedded in the endometrium' : 'implanting', 's', 'middle');
+  else s += `<circle cx="${pos[0]}" cy="${pos[1]}" r="${r}" style="fill:${d >= 4 ? 'var(--surface)' : 'var(--cyto)'};stroke:var(--tropho);stroke-width:${d >= 4 ? 2.4 : 1.2}"/>` + (d >= 4 ? `<circle cx="${pos[0] + 3}" cy="${pos[1] - 3}" r="3.4" style="fill:var(--tropho)"/>` : '') + T(pos[0], pos[1] + (d <= 3 ? 40 : 26), d <= 1 ? 'zygote' : d <= 3 ? 'morula' : 'blastocyst', 's', 'middle');
+  /* day axis and hCG row */
+  const X0 = 60, X1 = 664, X = q => X0 + q * (X1 - X0) / 16;
+  s += `<path class="axis" d="M${X0} 300 H${X1}"/>`;
+  for (let q = 0; q <= 16; q += 2) s += `<path class="axis" d="M${X(q)} 300 v5"/>` + T(X(q), 318, q, 's', 'middle');
+  s += T(X1, 336, 'days after ovulation', 's', 'end');
+  s += T(6, 236, 'hCG', 'h');
+  s += `<path class="rng" d="M${X(6)} 246 H${X(12)}"/>` + T(X(6) - 6, 250, 'sensitive tests 6–12 d (Wikipedia)', 's', 'end');
+  s += `<circle cx="${X(10)}" cy="266" r="5" style="fill:var(--muted)"/>` + T(X(10) + 8, 270, 'blood ~10 d (2022 review)', 's', 'start');
+  s += `<path class="rng" d="M${X(8)} 228 H${X(10)}"/>` + T(X(8) - 6, 232, 'implantation 8–10 d', 's', 'end');
+  s += `<circle cx="${X(14)}" cy="282" r="4" style="fill:var(--ink)"/>` + T(X(14) - 6, 286, 'period due', 's', 'end');
+  s += `<path class="cur" d="M${X(d)} 220 V302"/><circle cx="${X(d)}" cy="300" r="4" style="fill:var(--mark)"/>`;
+  $('conc-svg').innerHTML = s;
+  $('conc-find').innerHTML = row[3];
+}
+const slConc = Obg.slider('conc-sl', {id: 'conc', label: 'Days after ovulation', min: 0, max: 16, step: 1, value: 9, fmt: v => 'day ' + v}, v => { st.conc = v; drawConc(); });
+
+/* ---- corpus luteum and hCG ---- */
+function drawCl() {
+  const preg = st.cl === 'preg', w = st.wk;
+  const X0 = 60, X1 = 664, X = q => X0 + q * (X1 - X0) / 16;
+  let s = Obg.DEFS;
+  const top = 40, h = 150, base = top + h;
+  s += `<path class="axis" d="M${X0} ${base} H${X1}"/>`;
+  for (let q = 0; q <= 16; q += 2) s += `<path class="axis" d="M${X(q)} ${base} v5"/>` + T(X(q), base + 18, q, 's', 'middle');
+  s += T(X1, base + 34, 'weeks from the last menstrual period', 's', 'end');
+  /* curves (schematic, relative) */
+  const pts = f => { const p = []; for (let q = 0; q <= 16; q += 0.1) p.push([X(q), base - h * f(q)]); return Obg.path(p); };
+  const clP = q => q < 2 ? 0.05 : q < 3 ? 0.05 + (q - 2) * 0.5 : preg ? (q < 7 ? 0.55 : q < 12 ? 0.55 - (q - 7) * 0.09 : 0.1) : (q < 3.5 ? 0.55 : q < 4 ? 0.55 - (q - 3.5) * 1.0 : 0.05);
+  const plP = q => preg && q > 6 ? Math.min(0.95, (q - 6) * 0.11) : 0;
+  const hcg = q => preg && q > 3.3 ? Math.min(1, Math.exp((q - 9.5) * 0.9)) * (q > 9.5 ? Math.max(0.45, 1 - (q - 9.5) * 0.12) : 1) : 0;
+  s += `<path class="hcurve" d="${pts(clP)}" style="stroke:var(--h-prog)"/>`;
+  if (preg) s += `<path class="hcurve" d="${pts(plP)}" style="stroke:var(--h-prog);stroke-dasharray:7 4"/><path class="trace" d="${pts(hcg)}"/>`;
+  s += T(X(3.2), base - h * 0.58 - 6, 'progesterone: corpus luteum', 's', 'start');
+  if (preg) s += T(X(15.8), base - h * plP(15) - 8, 'progesterone: placenta', 's', 'end') + T(X(9.5) + 6, top - 4, 'hCG', 'b', 'start');
+  else s += T(X(4) + 6, base - 12, 'no hCG: corpus luteum stops → menstruation', 's', 'start');
+  /* source ranges */
+  let y = base + 54;
+  if (preg) {
+    s += T(6, y - 14, 'LUTEAL–PLACENTAL SHIFT', 'h');
+    for (const [a, b, lab] of CL_SHIFT) { if (a === b) s += `<circle cx="${X(a)}" cy="${y}" r="4.5" style="fill:var(--muted)"/>`; else s += `<path class="rng" d="M${X(a)} ${y} H${X(b)}"/>`; s += T(X(b) + 8, y + 4, lab, 's', 'start'); y += 15; }
+    y += 14; s += T(6, y - 14, 'hCG PEAK', 'h');
+    for (const [a, b, lab] of HCG_PEAK) { s += a === b ? `<circle cx="${X(a)}" cy="${y}" r="4.5" style="fill:var(--muted)"/>` : `<path class="rng" d="M${X(a)} ${y} H${X(b)}"/>`; s += X(b) > 520 ? T(X(a) - 8, y + 4, lab, 's', 'end') : T(X(b) + 8, y + 4, lab, 's', 'start'); y += 15; }
+  } else {
+    s += T(6, y - 14, 'CORPUS LUTEUM LIFE SPAN', 'h');
+    const o = 2; s += `<path class="rng" d="M${X(o + 10 / 7)} ${y} H${X(o + 2)}"/>` + T(X(o + 2) + 8, y + 4, 'stops ~10 days (Wikipedia) to within 14 days (StatPearls) after ovulation', 's', 'start');
+  }
+  s += `<path class="grid dash" d="M${X(2)} ${top} V${base}"/>` + T(X(2) + 4, top + 10, 'ovulation', 's', 'start');
+  s += `<path class="cur" d="M${X(w)} ${top - 14} V${base}"/><circle cx="${X(w)}" cy="${base}" r="4" style="fill:var(--mark)"/>`;
+  $('cl-svg').innerHTML = s;
+  let f;
+  if (!preg) f = w < 2 ? '<h3>Before ovulation</h3><p>The follicle, not yet a corpus luteum, makes oestradiol.</p>' : w < 4 ? '<h3>Luteal phase, no pregnancy</h3><p>The corpus luteum makes progesterone, oestradiol and inhibin A for about <b>10–14 days</b>: secretion stops within 14 days of ovulation (StatPearls) or after about 10 days (Wikipedia; the luteal phase is 10–16 days, average 14). No hCG arrives to rescue it.</p>' : '<h3>Regression</h3><p>The corpus luteum regresses to the <b>corpus albicans</b> (StatPearls; Wikipedia); progesterone falls and menstruation begins (the next cycle).</p>';
+  else f = w < 3.3 ? '<h3>Luteal phase</h3><p>The corpus luteum makes progesterone, keeping the endometrium secretory, while the conceptus travels and implants (8–10 days after ovulation).</p>'
+    : w < 7 ? '<h3>Rescue of the corpus luteum</h3><p><b>hCG</b> from the syncytiotrophoblast acts on the corpus luteum\'s LH/hCG receptors and keeps it secreting <b>progesterone</b> (and oestrogen), preventing luteolysis and menstruation (Wikipedia; a 2010 review). hCG rises exponentially, <b>doubling in about 1.5–2 days</b> early on (a 2017 review).</p>'
+    : w <= 12 ? '<h3>Luteal–placental shift</h3><p>The <b>placenta takes over progesterone</b> from the corpus luteum: between <b>7 and 9 weeks</b> (Wikipedia), <b>after week 10</b> (StatPearls), or the ovary until 12 weeks (a 2021 review). <b>hCG peaks</b> in this window, at about <b>8–10 weeks</b> (Wikipedia 8–11; Generation R 9–10; 2010 review 10; 2025 review 8–10; one 2026 review says 12–14).</p>'
+    : '<h3>After the shift</h3><p>Progesterone now comes from the placenta and keeps rising towards term (Wikipedia: 100–200 ng/mL at term; <a href="placenta-maternal-changes.html#h-horm">placental hormones</a>). hCG declines after its peak (Generation R 2015) and stays lower in the second trimester (Wikipedia).</p>';
+  $('cl-find').innerHTML = f;
+}
+Obg.toggles('cl-tg', [['none', 'No pregnancy'], ['preg', 'Pregnancy']], k => { st.cl = k; drawCl(); }, 'preg');
+const slWk = Obg.slider('cl-sl', {id: 'wk', label: 'Weeks from the last period', min: 0, max: 16, step: 0.5, value: 9, fmt: v => v + ' wk'}, v => { st.wk = v; drawCl(); });
+$('cl-text').innerHTML = CL_TEXT;
+
+$('exam-list').innerHTML = EXAM.map(e => '<li>' + e + '</li>').join('');
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+slLen.init(); slDay.init(); slConc.init(); slWk.init(); drawCycle(); drawConc(); drawCl();
+Obg.swipeHints();
+</script>
+</body>
+</html>
