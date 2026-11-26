@@ -87,7 +87,7 @@ Last updated: 2026-11-23
   ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. ROUND 1 SECOND MODULES started: B02 [x] build (552 quotes) [x] review (Wikipedia misread Katz&Tayek 1998 Cori %, WHO joint criteria,
   ADA discordant wording, colours) [ ] fixes (running). P02 [x] build (427 quotes) [x] review (no wrong facts; one-source pairs, transmigration drawn transcellular,
   drug blocks off-arrow, path.js stepper focus) [ ] fixes (running).
-  CHECK after B02 fixes: bioc.js lacks the activeElement.disabled focus line (B01 said fixed differently; verify). M02 [ ] build (running; microbiology/immunology/, MI2.1–2.8).
+  (bioc.js has the stepper-end focus fix in another form: verified; only path.js lacked it, P02 fix adds it.) M02 [ ] build (running; microbiology/immunology/, MI2.1–2.8).
   R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,
   NICE head-injury adult rule, 10-day rule year, radiograph densities unsourced, PET geometry) [x] fixes (364 quotes) [x] committed 2026-11-26.
   TOOLING FIX 2026-11-26: tools/capped passed args through systemd-run env expansion (${X} in --js was mangled);
