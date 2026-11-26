@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diabetes Treatment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/med.css">
+<style>
+/* tokens from med.css with their site meanings: --accent (selection: the chosen drug's sites and arrows), --clin (a warning or adverse effect),
+   --fat (adipose tissue), --musc (muscle tissue), --heart unused; organs otherwise neutral boxes. Insulin bars are muted with the chosen one in accent. */
+svg.sch .org{fill:var(--surface);stroke:var(--line);stroke-width:1.4}
+svg.sch .orgon{fill:var(--surface);stroke:var(--accent);stroke-width:3}
+svg.sch .fatc{fill:var(--fat);stroke:var(--ink);stroke-width:.6}
+svg.sch .muscc{fill:var(--musc);fill-opacity:.55;stroke:var(--ink);stroke-width:.6}
+svg.sch .act{stroke:var(--accent);stroke-width:2.2;fill:none;marker-end:url(#arra)}
+svg.sch .ib{fill:var(--muted);fill-opacity:.35}
+svg.sch .ibon{fill:var(--accent);fill-opacity:.35;stroke:var(--accent);stroke-width:1.2}
+svg.sch .pk{fill:var(--ink);fill-opacity:.55}
+svg.sch .pkon{fill:var(--accent)}
+svg.sch .wh{stroke:var(--muted);stroke-width:1.4;stroke-dasharray:3 3}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:640px){.cols{grid-template-columns:minmax(0,1fr)}}
+.cols ul,.prose ul{margin:4px 0 0;padding-left:20px}
+.chips.multi .chip[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← General Medicine</a> <span class="muted">· Module 02: <a href="diabetes-types-pathogenesis.html">Types and pathogenesis</a> · <a href="complications-emergencies.html">Complications and emergencies</a> · <span aria-current="page">Treatment</span></span></nav>
+
+<header class="stack">
+  <h1>Diabetes Treatment: Drugs, Insulin and the ADA 2026 Approach</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-map">Where drugs act</a> <a href="#h-cmp">Drug comparison</a> <a href="#h-ins">Insulin time action</a> <a href="#h-dec">Choosing a drug</a> <a href="#h-life">Lifestyle</a> <a href="#h-self">Monitoring and injection</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-map">
+  <h2 id="h-map">Where each drug class acts (GM11.16)</h2>
+  <div class="chips" id="map-tg" aria-label="Drug class"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="map-svg" viewBox="0 0 540 330" role="img" aria-label="Schematic of the organs where glucose-lowering drugs act: brain, stomach and gut, pancreas, liver, muscle, adipose tissue and kidney; the chosen class's sites are outlined with arrows"></svg></div>
+    <div class="prose find" id="map-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cmp">
+  <h2 id="h-cmp">Side by side: efficacy, hypoglycaemia, weight, heart and kidney (ADA 2026 Table 9.2)</h2>
+  <div class="scroll"><table id="cmp-table"></table></div>
+  <p class="muted" id="cmp-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ins">
+  <h2 id="h-ins">Insulin types by onset and duration</h2>
+  <div class="chips" id="ins-tg" aria-label="Insulin type"></div>
+  <div class="schbox"><svg class="fig sch" id="ins-svg" viewBox="0 0 600 280" role="img" aria-label="Schematic time chart, square-root time axis from injection to 42 hours, one bar per insulin from onset to end of action, with the peak window marked"></svg></div>
+  <div class="prose find" id="ins-find" aria-live="polite"></div>
+  <p class="muted" id="ins-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-dec">
+  <h2 id="h-dec">Choosing a drug in type 2 diabetes: tick what applies (GM11.17, GM11.21)</h2>
+  <div class="chips multi" id="dec-tg" aria-label="Patient features (choose any)"></div>
+  <div class="ans prose" id="dec-out" aria-live="polite"></div>
+  <p class="muted" id="dec-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-life">
+  <h2 id="h-life">Lifestyle (ADA 2026)</h2>
+  <div class="cols" id="life-cols"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-self">
+  <h2 id="h-self">Self-monitoring and insulin technique (GM11.12, GM11.19, GM11.20)</h2>
+  <div class="cols" id="self-cols"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BDiabetes%20Treatment%3A%20Drugs%2C%20Insulin%20and%20the%20ADA%202026%20Approach%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fmedicine%2Fendocrine%2Fdiabetes-treatment.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/med.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources unless attributed: sources-local/facts/fill-g02.md, Part C) ===================== */
+const LEDE = 'See where each glucose-lowering class acts, compare their hypoglycaemia risk, weight effect and heart and kidney effects as ADA 2026 tabulates them, line up the insulins on a time chart, and tick a patient\'s comorbidities to see which classes ADA 2026 puts first. Principles only: no doses. Pharmacokinetics and pharmacodynamics in general: <a href="../../pharmacology/general/pharmacokinetics.html">pharmacokinetics</a>, <a href="../../pharmacology/general/pharmacodynamics.html">pharmacodynamics</a>.';
+
+/* organ boxes: key: [x, y, w, h, label] */
+const ORG = {brain: [20, 30, 150, 54, 'Brain (appetite)'], stom: [20, 130, 150, 54, 'Stomach, gut'], alpha: [195, 30, 150, 54, 'Pancreas: α cells'], panc: [195, 130, 150, 54, 'Pancreas: β cells'], liver: [370, 30, 150, 54, 'Liver'], musc: [370, 130, 150, 54, 'Muscle'], fat: [370, 230, 150, 54, 'Adipose tissue'], kid: [195, 230, 150, 54, 'Kidney']};
+/* drugs: key: [label, [[organ, arrow text]], html] */
+const DRUG = {
+  met: ['Metformin', [['liver', 'gluconeogenesis ↓']], '<h3>Metformin (biguanide)</h3><p>Lowers <b>hepatic gluconeogenesis</b> (Wikipedia; StatPearls, which adds insulin sensitisation). High efficacy, <b>no hypoglycaemia</b>, weight neutral (ADA 2026). <b>Adverse:</b> GI upset — bloating, discomfort, diarrhoea (ADA 2026; KDIGO 2022: up to 25% with the immediate-release form); <b>vitamin B12 deficiency</b> with long-term use, so check B12 (ADA 2026; a 2024 review); <b>lactic acidosis</b> is rare (StatPearls: MALA = pH &lt;7.35 and lactate &gt;5 mmol/L; its predecessor phenformin was withdrawn for fatal lactic acidosis). <b>Kidney:</b> contraindicated at eGFR &lt;30; do not start below 45; reassess continuing when eGFR falls below 45 (ADA 2026, citing FDA guidance); KDIGO 2022: adjust the dose below 45 (and for some at 45–59).</p>'],
+  su: ['Sulfonylurea', [['panc', 'K-ATP closes → insulin ↑']], '<h3>Sulfonylureas</h3><p>Bind and <b>close ATP-sensitive K⁺ (K-ATP) channels</b> on β cells, releasing insulin (Wikipedia). High efficacy but <b>hypoglycaemia</b> — more often than with other treatments (Wikipedia; ADA 2026: "Yes") — and <b>weight gain</b> (Wikipedia; ADA 2026). Use with caution if at risk of hypoglycaemia, especially with insulin; glyburide (glibenclamide) generally not recommended in CKD (ADA 2026). Low cost (ADA 2026). First line in HNF1A/HNF4A-MODY (types page).</p>'],
+  dpp: ['DPP-4 inhibitor', [['stom', 'incretins ↑'], ['panc', 'insulin ↑'], ['alpha', 'glucagon ↓']], '<h3>DPP-4 inhibitors (gliptins)</h3><p>Raise the incretins <b>GLP-1 and GIP</b>, which inhibit glucagon release and increase insulin secretion (Wikipedia). Intermediate efficacy, <b>no hypoglycaemia, weight neutral</b> (ADA 2026). Pancreatitis reported (causality not established); joint pain and bullous pemphigoid; heart-failure caution with <b>saxagliptin</b> and alogliptin (ADA 2026, FDA). Not combined with a GLP-1 RA (ADA 2026).</p>'],
+  glp: ['GLP-1 RA', [['panc', 'insulin ↑'], ['alpha', 'glucagon ↓'], ['stom', 'gastric emptying ↓'], ['brain', 'satiety ↑']], '<h3>GLP-1 receptor agonists</h3><p>Slow gastric emptying, inhibit glucagon and stimulate insulin; stimulate satiety, so weight falls (Wikipedia). High to very high efficacy, <b>no hypoglycaemia</b>, <b>weight loss</b>; cardiovascular benefit with dulaglutide, liraglutide, semaglutide (ADA 2026). <b>Warnings:</b> thyroid C-cell tumours in rodents, human relevance not determined (ADA 2026; Wikipedia); KDIGO 2022: contraindicated with a history of <b>medullary thyroid cancer or MEN 2</b>; <b>pancreatitis</b> reported, causality not established — avoid with a history of pancreatitis (ADA 2026); GI side effects, dose-dependent (ADA 2026; KDIGO 2022); gallbladder disease; early worsening of retinopathy; give guidance on stopping before surgery because of the risk of <b>pulmonary aspiration</b> under anaesthesia or deep sedation (ADA 2026; Wikipedia: higher aspiration risk from delayed gastric emptying, case reports). <b>Interaction:</b> absorption of oral drugs, including oral contraceptives, may be impaired during dose titration (ADA 2026).</p>'],
+  sglt: ['SGLT2 inhibitor', [['kid', 'SGLT2 blocked: glycosuria']], '<h3>SGLT2 inhibitors (gliflozins)</h3><p>Block the sodium–glucose cotransporter in the first part of the <b>proximal tubule</b>, so glucose is lost in the urine (Wikipedia; ADA 2026). <b>No hypoglycaemia</b> alone, <b>weight loss</b>; benefit in <b>heart failure</b> and <b>CKD</b> (ADA 2026). <b>Adverse:</b> <b>genital mycotic infections</b> (the commonest, Wikipedia; ADA 2026), urosepsis and pyelonephritis, rare Fournier gangrene, volume depletion, and <b>DKA, including euglycaemic DKA</b> — stop before surgery, in critical illness or prolonged fasting (ADA 2026; Wikipedia: FDA warning 2015; StatPearls: euglycaemic DKA has grown with these drugs).</p>'],
+  tzd: ['TZD (pioglitazone)', [['fat', 'PPAR-γ'], ['musc', 'gene effects'], ['liver', 'gene effects']], '<h3>Thiazolidinediones</h3><p>Activate <b>PPAR-γ</b> nuclear receptors (Wikipedia); gene effects in muscle, adipose tissue and liver (Wikipedia, pioglitazone article). High efficacy, no hypoglycaemia (ADA 2026), <b>weight gain</b> (ADA 2026). <b>Fluid retention, oedema → heart failure: do not use in heart failure</b> (ADA 2026; Wikipedia); <b>fractures</b>; <b>bladder cancer</b> caution (ADA 2026; Wikipedia). Generally not recommended in kidney impairment because of fluid retention (ADA 2026). Wikipedia also lists low blood sugar among serious effects; ADA 2026 rates the risk "No" (alone). <b>Interaction</b> (Wikipedia, one source): pioglitazone reduces the effect of ethinyl estradiol–norethindrone oral contraceptives.</p>'],
+  aga: ['α-glucosidase inhibitor', [['stom', 'slower carb absorption']], '<h3>Alpha-glucosidase inhibitors (acarbose)</h3><p>Block the intestinal alpha-glucosidases that turn carbohydrates into absorbable sugars (Wikipedia). If hypoglycaemia occurs on acarbose, treat with <b>pure glucose</b>, because sucrose breakdown is blocked (ADA 2026).</p>'],
+  ins: ['Insulin', [['liver', 'glucose output ↓'], ['musc', 'uptake ↑'], ['fat', 'uptake ↑']], '<h3>Insulin</h3><p>High to very high efficacy; <b>hypoglycaemia</b> and <b>weight gain</b> (ADA 2026; Wikipedia, which also lists hypokalaemia). Analogue insulins cause less hypoglycaemia and weight gain than human insulin in type 1 (ADA 2026). Actions on liver, muscle and fat: <a href="../../biochemistry/carbohydrates/minor-pathways-glucose.html#h-hor">insulin vs glucagon</a>.</p>'],
+};
+
+const CMP = [
+  ['Metformin', 'High', 'No', 'Neutral (possible modest loss)', 'Potential benefit', 'Neutral', 'Neutral', 'GI effects; B12 deficiency; contraindicated eGFR &lt;30, not started &lt;45 (ADA 2026); dose adjusted &lt;45 (KDIGO 2022)'],
+  ['SGLT2 inhibitor', 'Intermediate–high', 'No', 'Loss', 'Benefit (canagliflozin, empagliflozin)', 'Benefit', 'Benefit', 'Genital mycotic infection, UTI/urosepsis, Fournier gangrene, volume depletion, DKA'],
+  ['GLP-1 RA', 'High–very high', 'No', 'Loss (intermediate–very high)', 'Benefit (dulaglutide, liraglutide, semaglutide)', 'Benefit: semaglutide (SQ)', 'Benefit (semaglutide SQ shown for CKD progression)', 'GI effects; rodent C-cell tumours; pancreatitis reported'],
+  ['Tirzepatide (dual GIP/GLP-1 RA)', 'Very high', 'No', 'Loss (very high)', 'Under investigation', 'Benefit', 'Potential benefit', 'Monitor kidney function if severe GI reactions with kidney impairment; not with a DPP-4 inhibitor (ADA 2026)'],
+  ['DPP-4 inhibitor', 'Intermediate', 'No', 'Neutral', 'Neutral', 'Neutral (potential risk: saxagliptin)', 'Neutral', 'Pancreatitis reported; joint pain; bullous pemphigoid'],
+  ['Pioglitazone', 'High', 'No', 'Gain', 'Potential benefit', '<span style="color:var(--clin)">Increased risk</span>', 'Neutral', 'Fluid retention, HF; fractures; bladder cancer; generally not recommended in kidney impairment'],
+  ['Sulfonylurea', 'High', '<span style="color:var(--clin)">Yes</span>', 'Gain', 'Neutral', 'Neutral', 'Neutral', 'Hypoglycaemia; glyburide not in CKD'],
+  ['Insulin (human)', 'High–very high', '<span style="color:var(--clin)">Yes</span>', 'Gain', 'Neutral', 'Neutral', 'Neutral', 'Injection-site reactions; more hypoglycaemia with NPH or premixed than analogues'],
+];
+const CMP_NOTE = 'Columns as in ADA 2026 Table 9.2 (one body): glucose-lowering efficacy, hypoglycaemia risk, weight, effect on MACE, heart failure, progression of CKD. Mechanisms and adverse effects are also given by Wikipedia, StatPearls and KDIGO 2022 (see each class above).';
+
+/* insulin: key: [label, onsetLo, onsetHi, peakLo, peakHi, end, endMax, html] (hours; null = no peak given) */
+const INS = {
+  rapid: ['Rapid-acting analogue', 5 / 60, 15 / 60, null, null, 4, 5, '<h3>Rapid-acting analogues (lispro, aspart, glulisine)</h3><p>Start within <b>5–15 minutes</b>, active <b>3–4 hours</b> (Wikipedia, insulin and insulin-analogue articles); the insulin lispro article says onset within 30 minutes and about 5 hours (dashed). Given with meals. No peak time is given in the sources.</p>'],
+  reg: ['Short-acting (regular)', 0.5, 0.5, 1, 2, 8, 8, '<h3>Short-acting: regular (soluble) human insulin</h3><p>Starts within about <b>30 minutes</b>, active about <b>5–8 hours</b> (Wikipedia); peak at <b>1–2 h</b>, duration about <b>6–8 h</b> after subcutaneous injection (a 2022 review). Given IV for DKA (emergencies page).</p>'],
+  nph: ['Intermediate (NPH)', 1, 3, 4, 8, 24, 24, '<h3>Intermediate-acting: NPH (isophane)</h3><p>Starts in <b>1–3 hours</b>, active <b>16–24 hours</b> (Wikipedia). Peak: <b>6–8 h</b> (Wikipedia, NPH article) or <b>about 4–6 h</b> (ADA 2026): the bar shows 4–8 h. Cloudy (Wikipedia).</p>'],
+  long: ['Long-acting analogue', 0.5, 1.5, null, null, 24, 24, '<h3>Long-acting analogues (glargine, detemir)</h3><p>Continuous basal cover for <b>up to about 24 hours</b> (Wikipedia; glargine microcrystals release insulin for about 24 h). The ideal basal profile has <b>no significant peak</b> (a 2011 review). Onset 30–90 minutes (Wikipedia, degludec article, "similar to glargine and detemir").</p>'],
+  deg: ['Ultra-long (degludec)', 0.5, 1.5, null, null, 42, 42, '<h3>Ultra-long-acting: degludec</h3><p>Duration of action <b>up to 42 hours</b> (Wikipedia; a 2024 review), versus 18–26 h for glargine and detemir (Wikipedia). Once daily, at any time as long as 8 h have passed since the last dose (Wikipedia).</p>'],
+};
+const INS_NOTE = '<b>Morning highs</b> (Wikipedia, one source): the <b>dawn phenomenon</b> is an early-morning rise in glucose, often between 2 and 8 a.m., from waning insulin and a growth-hormone surge, without nocturnal hypoglycaemia; the <b>Somogyi effect</b> is a rebound high after low glucose — Wikipedia calls it a <i>contested</i> explanation. ADA 2026: long-acting analogues may not cover a strong dawn phenomenon as well as a pump. ' + 'Times are the ranges the sources state, and they disagree between articles; the chart is schematic (square-root time axis). Analogues: less hypoglycaemia and weight gain than human insulin in type 1 (ADA 2026).';
+
+/* decision picker (ADA 2026 Section 9) */
+const DEC = [
+  ['init', 'New diagnosis, far from goal', 'Consider <b>combination therapy</b> from the start to reach the individual goal sooner (ADA 2026, rec. 9.6).'],
+  ['ascvd', 'Established ASCVD or high risk', 'Include a <b>GLP-1 RA and/or SGLT2 inhibitor with proven cardiovascular benefit</b>, irrespective of HbA1c (ADA 2026, rec. 9.7).'],
+  ['hf', 'Heart failure (reduced or preserved EF)', 'An <b>SGLT2 inhibitor</b> for glycaemia and to prevent HF hospitalisation (ADA 2026, rec. 9.8). Pioglitazone: increased HF risk, do not use in HF (ADA 2026 Table 9.2); caution with saxagliptin.'],
+  ['ob', 'Obesity with symptomatic HFpEF', 'A <b>dual GIP/GLP-1 RA (tirzepatide)</b> or a <b>GLP-1 RA</b> with HF benefit (ADA 2026, recs. 9.9a–b).'],
+  ['ckd', 'CKD (eGFR 20–60 and/or albuminuria)', ''],
+  ['g30', 'Advanced CKD (eGFR <30)', 'A <b>GLP-1 RA is preferred</b> for glycaemia: lower hypoglycaemia risk and fewer cardiovascular events (ADA 2026, rec. 9.11). Metformin is contraindicated below 30 (ADA 2026).'],
+  ['masld', 'MASLD with overweight or obesity', 'Consider a <b>GLP-1 RA</b> with benefit in MASH or <b>tirzepatide</b> (potential MASH benefit), alongside weight loss (ADA 2026, rec. 9.12).'],
+  ['hi', 'Glucose ≥300 mg/dL, HbA1c >10%, symptoms or weight loss', 'Consider <b>insulin</b> — common practice when glucose is ≥300 mg/dL or HbA1c &gt;10%, or with symptoms or catabolism (ADA 2026).'],
+  ['cost', 'Cost is a barrier', ''],
+];
+/* text that depends on other ticks (kidney and heart-failure conflicts) */
+function decText(k, S) {
+  const kid = S.has('ckd') || S.has('g30');
+  if (k === 'ckd') return 'An <b>SGLT2 inhibitor or a GLP-1 RA</b> with proven benefit, to slow CKD and cut CV events (ADA 2026, rec. 9.10); their glycaemic benefit is reduced below eGFR 45 (SGLT2i, ADA 2026). '
+    + (S.has('g30') ? 'With eGFR &lt;30, metformin is contraindicated (ADA 2026).' : 'KDIGO 2022: SGLT2 inhibitor and metformin first, a GLP-1 RA if more is needed. Metformin: not started below eGFR 45, reassessed below 45 and contraindicated below 30 (ADA 2026); dose adjusted below 45 (KDIGO 2022).');
+  if (k === 'cost') {
+    const avoid = [], ok = [];
+    if (S.has('g30')) avoid.push('metformin (contraindicated, eGFR &lt;30)'); else ok.push('metformin' + (kid ? ' (not started below eGFR 45)' : ''));
+    if (kid) avoid.push('glyburide (generally not recommended in CKD)'); ok.push(kid ? 'sulfonylureas other than glyburide (glipizide, glimepiride: start conservatively)' : 'sulfonylureas');
+    if (S.has('hf') || S.has('ob')) avoid.push('pioglitazone (increased HF risk; do not use in HF)');
+    else if (kid) avoid.push('pioglitazone (generally not recommended in kidney impairment: fluid retention)');
+    else ok.push('thiazolidinediones');
+    ok.push('human insulin');
+    return 'Lower-cost drugs (ADA 2026, rec. 9.30: metformin, sulfonylureas, thiazolidinediones and human insulin, "within the context of their risks for hypoglycemia, weight gain, cardiovascular and kidney events, and other adverse effects"). For the boxes ticked: <b>' + ok.join(', ') + '</b>.' + (avoid.length ? ' Not here: ' + avoid.join('; ') + ' (ADA 2026 Table 9.2).' : '');
+  }
+  return DEC.find(r => r[0] === k)[2];
+}
+const DEC_NONE = 'No comorbidity ticked: ADA 2026 says <b>metformin</b> is commonly used when glucose lowering is the only consideration; compared with sulfonylureas it is weight neutral, causes no hypoglycaemia and lowers cardiovascular mortality (ADA 2026).';
+const DEC_NOTE = 'ADA 2026 recommends a holistic, person-centred choice weighing cardiovascular, kidney and weight effects, hypoglycaemia risk, cost, side effects and the person\'s preferences (GM11.21). Principles only, no doses; these are the guideline\'s own recommendation numbers.';
+
+const LIFE = '<div><h3>Activity</h3><ul><li><b>≥150 min/week</b> of moderate-to-vigorous aerobic activity (ADA 2026)</li><li><b>2–3 sessions/week of resistance</b> exercise on non-consecutive days (ADA 2026)</li><li>Severe NPDR or PDR: vigorous exercise may be contraindicated (ADA 2026)</li></ul></div>'
+  + '<div><h3>Diet, tobacco, prevention</h3><ul><li>Individualised <b>medical nutrition therapy</b> from a registered dietitian (ADA 2026)</li><li>Avoid all tobacco and vaping (ADA 2026)</li><li>India: the Indian Diabetes Prevention Programme showed lifestyle change and metformin both prevent type 2 diabetes in impaired glucose tolerance (ADA 2026)</li></ul></div>';
+const SELF = '<div><h3>Capillary blood glucose / self-monitoring (GM11.12, GM11.20)</h3><ul><li>People on insulin check glucose at times set by their insulin regimen (ADA 2026)</li><li>Use only <b>unopened, unexpired</b> test strips for accuracy (ADA 2026)</li><li>CGM readings are confirmed by a finger-prick meter when they do not match symptoms (ADA 2026)</li><li>Targets: preprandial 80–130 and peak postprandial &lt;180 mg/dL (ADA 2026; types page)</li><li>Urine ketone strips: <a href="complications-emergencies.html#h-dka">emergencies page</a></li></ul></div>'
+  + '<div><h3>Insulin injection (GM11.19)</h3><ul><li><b>Rotate sites</b> to avoid <b>lipohypertrophy</b> — soft raised fatty areas from repeated injection that cause erratic absorption, glucose swings and unexplained hypoglycaemia (ADA 2026); Wikipedia: rotate among upper outer arms, outer thighs, abdomen and buttocks</li><li>Intramuscular injection is more likely in young lean people, in limbs rather than abdomen or buttocks, and with longer needles (ADA 2026)</li><li>Choice of syringe, pen or pump depends on preference, cost, regimen and self-management skills (ADA 2026)</li><li>Prescribe glucagon to everyone on insulin and teach family to use it (ADA 2026; emergencies page)</li></ul></div>';
+
+const BASED = '<b>Based on:</b> American Diabetes Association, <i>Standards of Care in Diabetes—2026</i>, Sections 3, 4, 5, 6, 7, 9, 10, 11, 16 (Diabetes Care 2026, open access); KDIGO 2022 Clinical Practice Guideline for Diabetes Management in CKD (open access); StatPearls (abstracts); open-access reviews on metformin and vitamin B12 (2024), insulin formulations (2022, 2024) and insulin analogue profiles (2011) (NCBI); Wikipedia (current wikitext checked for OpenStax/Lumen/Boundless citations).';
+const MODELS = '<b>Models used:</b> the organ map and insulin chart are schematic (sites as the sources name them — the TZD organ sites and GLP-1 RA satiety in the brain are from Wikipedia only; time axis square-root, bars from the sources\' ranges). The decision helper lists the ADA 2026 recommendations for the boxes ticked; it is a learning aid, not a prescribing tool.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Med;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+$('cmp-note').innerHTML = CMP_NOTE; $('ins-note').innerHTML = INS_NOTE; $('dec-note').innerHTML = DEC_NOTE; $('life-cols').innerHTML = LIFE; $('self-cols').innerHTML = SELF;
+
+/* ---- mechanism map ---- */
+const MS = {k: 'met'};
+function drawMap() {
+  const [, sites] = DRUG[MS.k], on = new Map(sites);
+  let s = '<defs>' + Med.arrowDef('arra', 'var(--accent)') + '</defs>';
+  for (const [k, [x, y, w, h, l]] of Object.entries(ORG)) {
+    const o = on.has(k);
+    s += `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" class="${o ? 'orgon' : 'org'}"/>`;
+    if (k === 'fat') s += `<circle cx="${x + 14}" cy="${y + 20}" r="6" class="fatc"/>`;
+    if (k === 'musc') s += `<rect x="${x + 8}" y="${y + 13}" width="12" height="14" rx="3" class="muscc"/>`;
+    s += T(x + w / 2 + (k === 'fat' || k === 'musc' ? 8 : 0), y + 22, l, o ? 'b' : '', 'middle');
+    if (o) s += T(x + w / 2, y + 42, on.get(k), 's', 'middle');
+  }
+  s += T(20, 316, DRUG[MS.k][0] + ': outlined boxes = where it acts', 'b', 'start');
+  s += T(530, 326, 'schematic', 's', 'end');
+  $('map-svg').innerHTML = s; $('map-find').innerHTML = DRUG[MS.k][2];
+}
+Med.toggles('map-tg', Object.entries(DRUG).map(([k, v]) => [k, v[0]]), k => { MS.k = k; drawMap(); }, 'met'); drawMap();
+
+Med.table('cmp-table', ['Class', 'Efficacy', 'Hypoglycaemia', 'Weight', 'MACE', 'Heart failure', 'CKD progression', 'Key adverse effects'], CMP);
+
+/* ---- insulin chart ---- */
+const IS = {k: 'nph'};
+const tx = h => 150 + 430 * Math.sqrt(h / 42);
+function drawIns() {
+  let s = '';
+  const keys = Object.keys(INS);
+  const yb = 30 + keys.length * 40;
+  for (const h of [0, 0.25, 1, 2, 4, 8, 12, 24, 42]) s += `<path class="grid" d="M${tx(h)} 20 L${tx(h)} ${yb}"/>` + T(tx(h), yb + 16, h === 0.25 ? '15 min' : h + (h === 0 ? '' : ' h'), 's', 'middle');
+  keys.forEach((k, i) => {
+    const [l, o1, o2, p1, p2, e, emax] = INS[k], on = k === IS.k, y = 30 + i * 40;
+    s += T(144, y + 18, l, on ? 'b' : '', 'end');
+    s += `<rect x="${tx(o1)}" y="${y + 6}" width="${tx(e) - tx(o1)}" height="18" rx="4" class="${on ? 'ibon' : 'ib'}"/>`;
+    if (o2 > o1) s += `<path class="wh" d="M${tx(o1)} ${y + 15} L${tx(o2)} ${y + 15}"/>`;
+    if (emax > e) s += `<path class="wh" d="M${tx(e)} ${y + 15} L${tx(emax)} ${y + 15}"/>`;
+    if (p1 !== null) s += `<rect x="${tx(p1)}" y="${y + 4}" width="${tx(p2) - tx(p1)}" height="22" rx="3" class="${on ? 'pkon' : 'pk'}"/>`;
+  });
+  s += T(150, 14, 'bar = onset to end of action; dark block = peak; dashed = range or an article\'s other figure', 's', 'start');
+  s += T(580, yb + 34, 'hours after subcutaneous injection (square-root scale; schematic)', 's', 'end');
+  $('ins-svg').innerHTML = s; $('ins-find').innerHTML = INS[IS.k][7];
+}
+Med.toggles('ins-tg', Object.entries(INS).map(([k, v]) => [k, v[0]]), k => { IS.k = k; drawIns(); }, 'nph'); drawIns();
+
+/* ---- decision picker (multi-select) ---- */
+const DS = new Set();
+function drawDec() {
+  const box = $('dec-tg');
+  if (!box.children.length) {
+    box.classList.add('chips');
+    for (const [k, l] of DEC) {
+      const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = l; b.setAttribute('aria-pressed', 'false');
+      b.onclick = () => { DS.has(k) ? DS.delete(k) : DS.add(k); b.setAttribute('aria-pressed', String(DS.has(k))); drawDec(); };
+      box.append(b);
+    }
+  }
+  const sel = DEC.filter(r => DS.has(r[0]));
+  window.decLast = sel.map(r => decText(r[0], DS)).join(' | ');
+  $('dec-out').innerHTML = sel.length ? '<span class="big">ADA 2026 says</span><ul>' + sel.map(r => `<li><b>${r[1]}:</b> ${decText(r[0], DS)}</li>`).join('') + '</ul>' : `<span class="big">ADA 2026 says</span><p>${DEC_NONE}</p>`;
+}
+drawDec();
+Med.swipeHints();
+</script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diabetes: Types and Pathogenesis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/med.css">
+<style>
+/* tokens from med.css with their site meanings: --accent (selection), --mark (the chosen value on a scale), --clin (a disease state or warning),
+   --cyto / --nucleus (cells: β cells, T cells), --fat (lipid / adipose tissue), --musc (muscle tissue), --heart unused. Bars are ink/muted. */
+svg.sch .beta{fill:var(--cyto);stroke:var(--ink);stroke-width:.7}
+svg.sch .betad{fill:var(--surface);stroke:var(--muted);stroke-width:.8;stroke-dasharray:2 2}
+svg.sch .tc{fill:var(--nucleus)}
+svg.sch .bar{fill:var(--muted);fill-opacity:.55}
+svg.sch .barneed{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-dasharray:5 3}
+svg.sch .gap{fill:var(--clin);fill-opacity:.25}
+svg.sch .org{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .orgr{fill:var(--surface);stroke:var(--clin);stroke-width:2}
+svg.sch .fatc{fill:var(--fat);stroke:var(--ink);stroke-width:.6}
+svg.sch .muscc{fill:var(--musc);fill-opacity:.55;stroke:var(--ink);stroke-width:.6}
+svg.sch .zone{stroke:var(--line);stroke-width:1}
+svg.sch .zoneon{fill:var(--accent);fill-opacity:.16;stroke:var(--accent);stroke-width:1.6}
+svg.sch .mk{stroke:var(--mark);stroke-width:2.4}
+.cmp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:560px){.cmp{grid-template-columns:minmax(0,1fr)}}
+.cmp .ans h3{margin-bottom:2px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:640px){.cols{grid-template-columns:minmax(0,1fr)}}
+.cols ul,.prose ul{margin:4px 0 0;padding-left:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← General Medicine</a> <span class="muted">· Module 02: <span aria-current="page">Types and pathogenesis</span> · <a href="complications-emergencies.html">Complications and emergencies</a> · <a href="diabetes-treatment.html">Treatment</a></span></nav>
+
+<header class="stack">
+  <h1>Diabetes Mellitus: Types, Pathogenesis and Laboratory Tests</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-cls">Classification</a> <a href="#h-cmp">Type 1 vs type 2</a> <a href="#h-path">Pathogenesis</a> <a href="#h-gen">Genes and environment</a> <a href="#h-oth">MODY and other types</a> <a href="#h-lab">Laboratory tests</a> <a href="#h-hx">History and examination</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-cls">
+  <h2 id="h-cls">Classification (ADA 2026)</h2>
+  <div class="chips" id="cls-tg" aria-label="Category"></div>
+  <div class="prose find" id="cls-find" aria-live="polite"></div>
+  <p class="muted" id="cls-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-cmp">
+  <h2 id="h-cmp">Type 1 or type 2? Pick a feature</h2>
+  <div class="chips" id="cmp-tg" aria-label="Feature"></div>
+  <div class="cmp" id="cmp-out" aria-live="polite"></div>
+  <div class="scroll"><table id="cmp-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-path">
+  <h2 id="h-path">Pathogenesis, step by step</h2>
+  <div class="chips" id="path-tg" aria-label="Type"></div>
+  <div class="step" id="path-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="path-svg" viewBox="0 0 540 300" role="img" aria-label="Schematic: left, an islet with β cells; right, bars of insulin needed and insulin secreted, with the gap that becomes hyperglycaemia"></svg></div>
+    <div class="prose find" id="path-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="path-key"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gen">
+  <h2 id="h-gen">Genes and environment</h2>
+  <div class="cols" id="gen-cols"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-oth">
+  <h2 id="h-oth">MODY and the other specific types</h2>
+  <div class="scroll"><table id="mody-table"></table></div>
+  <div class="cols" id="oth-cols"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-lab">
+  <h2 id="h-lab">Laboratory tests (GM11.11)</h2>
+  <div class="prose" id="lab-intro"></div>
+  <div class="two">
+    <div class="stack">
+      <h3>C-peptide: is the person still making insulin?</h3>
+      <div class="sliders" id="cp-sl"></div>
+      <div class="schbox"><svg class="fig sch fit" id="cp-svg" viewBox="0 0 420 96" role="img" aria-label="C-peptide scale in pmol/L with the sourced bands and the chosen value marked"></svg></div>
+      <div class="ans prose" id="cp-out" aria-live="polite"></div>
+    </div>
+    <div class="stack">
+      <h3>Urine albumin-to-creatinine ratio (KDIGO 2024)</h3>
+      <div class="sliders" id="ua-sl"></div>
+      <div class="schbox"><svg class="fig sch fit" id="ua-svg" viewBox="0 0 420 96" role="img" aria-label="UACR scale in mg/g with KDIGO categories A1, A2 and A3 and the chosen value marked"></svg></div>
+      <div class="ans prose" id="ua-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="scroll"><table id="goal-table"></table></div>
+  <p class="muted" id="lab-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-hx">
+  <h2 id="h-hx">History and examination: what to look for (GM11.7, GM11.8, GM11.10)</h2>
+  <div class="cols" id="hx-cols"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BDiabetes%20Mellitus%3A%20Types%2C%20Pathogenesis%20and%20Laboratory%20Tests%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fmedicine%2Fendocrine%2Fdiabetes-types-pathogenesis.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/med.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources unless attributed: sources-local/facts/fill-g02.md, Part A) ===================== */
+const LEDE = 'Sort diabetes into the ADA 2026 categories, compare type 1 with type 2 feature by feature, step through autoimmune β-cell loss and through insulin resistance with β-cell failure, and read a C-peptide or a urine albumin result on its scale. The diagnostic cut-offs (fasting glucose, OGTT, HbA1c) and glucose homeostasis are on the biochemistry page: <a href="../../biochemistry/carbohydrates/minor-pathways-glucose.html#h-lab">normal, prediabetes or diabetes?</a>';
+
+const CLS = {
+  t1: ['Type 1', '<h3>Type 1 diabetes</h3><p>Due to <b>autoimmune β-cell destruction</b>, usually leading to <b>absolute insulin deficiency</b>; it includes latent autoimmune diabetes in adults (LADA) (ADA 2026). StatPearls: immune-mediated destruction of the insulin-producing β cells. About <b>5–10%</b> of all diabetes (ADA 2026; Wikipedia). All forms of autoimmune β-cell destruction count as type 1, whatever the age of onset (ADA 2026).</p>'],
+  t2: ['Type 2', '<h3>Type 2 diabetes</h3><p>Due to a <b>non-autoimmune, progressive loss of adequate β-cell insulin secretion</b>, frequently on a background of <b>insulin resistance</b> (ADA 2026); Wikipedia: high blood sugar, insulin resistance and a <i>relative</i> lack of insulin. About <b>90–95%</b> of all diabetes (ADA 2026; StatPearls).</p>'],
+  sp: ['Specific types', '<h3>Specific types due to other causes</h3><p><b>Monogenic</b> diabetes (MODY, neonatal diabetes), diseases of the <b>exocrine pancreas</b>, and <b>drug- or chemical-induced</b> diabetes (ADA 2026). See <a href="#h-oth">MODY and other types</a>.</p>'],
+  gdm: ['Gestational', '<h3>Gestational diabetes (GDM)</h3><p>Diabetes <b>diagnosed in the second or third trimester</b> that was not clearly overt diabetes before pregnancy (ADA 2026). Screening at <b>24–28 weeks</b> in those not already known to have diabetes (ADA 2026; Wikipedia). The diagnostic OGTT values are for the obstetrics module.</p>'],
+};
+const CLS_NOTE = 'ADA 2026 is the American Diabetes Association\'s <i>Standards of Care in Diabetes—2026</i>, Section 2. Features overlap: no single clinical feature confirms type 1 on its own (ADA 2026).';
+
+/* comparison: [key, chip label, type 1, type 2] */
+const CMP = [
+  ['share', 'How common', 'About <b>5–10%</b> of diabetes (ADA 2026; Wikipedia); the commonest type diagnosed under 20 years (Wikipedia).', 'About <b>90–95%</b> of diabetes (ADA 2026; StatPearls).'],
+  ['mech', 'Mechanism', '<b>Autoimmune destruction</b> of β cells → usually <b>absolute</b> insulin deficiency (ADA 2026; StatPearls).', '<b>Relative</b> insulin deficiency with insulin resistance; diabetes appears when β-cell secretion can no longer compensate (ADA 2026; Wikipedia).'],
+  ['ab', 'Autoantibodies', 'Against <b>GAD (GAD65)</b>, <b>insulin</b>, <b>IA-2</b> and <b>ZnT8</b> (ADA 2026; Wikipedia). Test GAD first (ADA 2026). 5–10% of people with type 1 have none (ADA 2026).', 'Absent (absence of autoimmunity is part of the type 2 picture, ADA 2026).'],
+  ['cp', 'C-peptide', '<b>Low or undetectable</b> once insulin secretion is lost (ADA 2026; Wikipedia); below 200 pmol/L points to type 1 (a 2017 review; a 2025 review). See the <a href="#h-lab">slider</a>.', 'Preserved; Wikipedia: people with insulin resistance or type 2 are more likely to have high C-peptide.'],
+  ['ket', 'Ketosis, DKA', 'Prone to <b>DKA</b>, which may be the first presentation (see the emergencies page).', 'DKA <b>seldom occurs spontaneously</b>, but can with the stress of another illness; "ketosis-prone" type 2 exists (ADA 2026; Wikipedia). Absence of ketoacidosis is a type 2 feature (ADA 2026).'],
+  ['hla', 'HLA', '<b>DR3-DQ2</b> and <b>DR4-DQ8</b> predispose (ADA 2026; Wikipedia; a 2026 review); DR3/DR4 heterozygotes carry the highest risk (Wikipedia). DQB1*0602 is protective (ADA 2026).', 'No HLA association is given in the sources; genetic predisposition shows as risk in first-degree relatives (StatPearls).'],
+  ['body', 'Body weight', 'Classic onset with <b>weight loss</b>, polyuria and polydipsia (StatPearls).', '<b>Overweight/obesity</b> (BMI ≥25), no weight loss, less marked hyperglycaemia (ADA 2026 list of type 2 features); risk rises with age, obesity, ethnicity, inactivity and family history (StatPearls).'],
+  ['age', 'Age at onset', 'Any age: ADA counts autoimmune diabetes as type 1 whatever the age; LADA is its slow adult form (ADA 2026). Adults usually present like children but may progress more slowly (StatPearls).', 'ADA 2026: type 2 should be strongly considered in older individuals; screening of youth with overweight starts at puberty or 10 years.'],
+  ['course', 'Course after diagnosis', 'Many have a <b>"honeymoon"</b> (partial remission) after insulin starts (Wikipedia; ADA 2026); other autoimmune disease is common: thyroid, coeliac, Addison, pernicious anaemia (ADA 2026).', 'Progressive loss of β-cell secretion (ADA 2026): most need treatment intensified over time.'],
+];
+
+/* pathogenesis stepper: [label, need, secreted, betaAlive(0-8), tcells, html] */
+const PATH = {
+  t1: [
+    ['Genetic risk', 100, 100, 8, 0, '<h3>1. Genetic risk</h3><p>HLA class II haplotypes <b>DR3-DQ2</b> and <b>DR4-DQ8</b> give the highest risk, but more than 60 loci are linked and genes alone do not explain the disease (a 2026 review; ADA 2026; Wikipedia).</p>'],
+    ['Trigger, autoimmunity', 100, 100, 8, 3, '<h3>2. Trigger and autoimmunity</h3><p>Viruses, especially <b>enteroviruses (Coxsackie B)</b>, are associated with type 1 (ADA 2026; Wikipedia). A <b>T cell-mediated</b> attack on β cells begins (Wikipedia). Autoantibodies to insulin or GAD65 usually appear first, then IA-2 and ZnT8 (Wikipedia).</p>'],
+    ['Stage 1', 100, 100, 6, 5, '<h3>3. Stage 1: autoimmunity, normal glucose</h3><p><b>Two or more islet autoantibodies</b> with normoglycaemia; presymptomatic (ADA 2026; a 2026 review). ADA 2026: about 44% develop symptomatic diabetes within 5 years.</p>'],
+    ['Stage 2', 100, 72, 4, 5, '<h3>4. Stage 2: dysglycaemia</h3><p>Autoantibodies with <b>dysglycaemia</b> as β-cell destruction progresses; still presymptomatic (ADA 2026; a 2023 review). ADA 2026: about 60% reach stage 3 within 2 years. ADA 2026 (rec. 3.17): discuss <b>teplizumab</b> (an anti-CD3 antibody infusion) with selected people aged ≥8 years in stage 2 to delay stage 3; in its trial the median time to stage 3 was 48.4 vs 24.4 months.</p>'],
+    ['Stage 3', 100, 25, 1, 4, '<h3>5. Stage 3: symptomatic diabetes</h3><p><b>Overt hyperglycaemia</b> with symptoms (ADA 2026): polyuria, polydipsia and weight loss (StatPearls), sometimes DKA. Later there is little or no insulin secretion, shown by low or undetectable C-peptide (ADA 2026).</p>'],
+  ],
+  t2: [
+    ['Insulin resistance', 140, 140, 8, 0, '<h3>1. Insulin resistance</h3><p>Liver, skeletal muscle and adipose tissue respond less to insulin (StatPearls; a 2026 review). It is mainly acquired with <b>excess body fat</b>, especially visceral fat (StatPearls; ADA 2026). Glucose stays normal while the β cells keep up.</p>'],
+    ['β-cell compensation', 140, 140, 8, 0, '<h3>2. Compensation: hyperinsulinaemia</h3><p>β cells secrete more insulin and their mass expands (StatPearls; Wikipedia). Not everyone with insulin resistance gets diabetes: a defect in insulin secretion is also needed (Wikipedia).</p>'],
+    ['β-cell failure', 140, 105, 5, 0, '<h3>3. β-cell dysfunction</h3><p>Deficient β-cell secretion, often in the setting of insulin resistance, is the common denominator (ADA 2026). A 2026 review adds deposition of islet amyloid (IAPP), linked to loss of β-cell mass.</p>'],
+    ['Hyperglycaemia', 140, 85, 4, 0, '<h3>4. Hyperglycaemia</h3><p>The liver keeps making glucose: hepatic insulin resistance is the failure of insulin to suppress <b>gluconeogenesis</b>, which drives fasting hyperglycaemia (a 2026 review); Wikipedia: gluconeogenesis runs at about three times normal in type 2. Muscle takes up less glucose (StatPearls).</p>'],
+  ],
+};
+
+const GEN = '<div><h3>Type 1</h3><ul><li>HLA: DR3-DQ2 and DR4-DQ8 predispose; DQB1*0602 protects (ADA 2026; Wikipedia)</li><li>Identical twin of a person with type 1: risk 30–70% (Wikipedia, type 1 article; the Diabetes article says about 50%) — genes are not enough</li><li>Environment: enteroviruses, Coxsackie B (ADA 2026; Wikipedia)</li><li>Screen relatives (family history) for autoantibodies (ADA 2026)</li></ul></div>'
+  + '<div><h3>Type 2</h3><ul><li>Risk factors: age, obesity, race/ethnicity, sedentary lifestyle, family history in first-degree relatives (StatPearls; ADA 2026 screening list)</li><li>Excess body fat underlies about 30% of cases in Chinese and Japanese people and 60–80% in people of European and African descent (Wikipedia)</li><li>In the Indian Diabetes Prevention Programme, lifestyle change and metformin both reduced progression from IGT (ADA 2026; treatment page)</li><li>Signs of insulin resistance: acanthosis nigricans (velvety dark skin in body folds), hypertension, dyslipidaemia, PCOS (ADA 2026; Wikipedia describes the skin lesion)</li></ul></div>';
+
+const MODY_ROWS = [
+  ['GCK-MODY (MODY2)', 'Higher glucose set point for insulin secretion: stable, non-progressive, mildly raised fasting glucose', 'Usually <b>no treatment</b> outside pregnancy', 'ADA 2026; a 2025 review'],
+  ['HNF1A-MODY (MODY3)', 'Progressive secretory defect, presenting in adolescence or early adulthood; low renal threshold for glycosuria', '<b>Sulfonylurea</b>-sensitive (first line)', 'ADA 2026; Wikipedia; a 2025 review'],
+  ['HNF4A-MODY (MODY1)', 'One of the three commonest forms', '<b>Sulfonylurea</b> first line', 'ADA 2026; a 2025 review'],
+];
+const OTH = '<div><h3>MODY: when to think of it</h3><p>The commonest monogenic diabetes, <b>autosomal dominant</b> (StatPearls; Wikipedia). Test when diabetes is atypical for type 1 or 2 and runs through successive generations (ADA 2026). Islet autoantibodies rule MODY out, and C-peptide below 200 pmol/L is very rare in it (a 2025 review).</p>'
+  + '<h3>LADA</h3><p>Slowly progressive autoimmune diabetes in adults with features of both types ("type 1.5", StatPearls); ADA 2026 classifies it as type 1.</p></div>'
+  + '<div><h3>Pancreatic (type 3c) diabetes</h3><p>ADA 2026: pancreatitis (even a single acute attack), trauma or pancreatectomy, neoplasia, cystic fibrosis, haemochromatosis, fibrocalculous pancreatopathy.</p>'
+  + '<h3>Drug-induced</h3><p><b>Glucocorticoids</b> raise glucose by insulin resistance (ADA 2026; Wikipedia: "steroid diabetes"); ADA 2026 advises checking post-meal or random glucose, not fasting. Immune checkpoint inhibitors can cause autoimmune diabetes (ADA 2026).</p></div>';
+
+const LAB_INTRO = '<p><b>Diagnosis</b> (fasting glucose, 2-h OGTT, HbA1c, random glucose with symptoms; ADA 2026 and WHO): use the classifier on the <a href="../../biochemistry/carbohydrates/minor-pathways-glucose.html#h-lab">biochemistry page</a>. HbA1c reflects about the last <b>2–3 months</b> (StatPearls; biochemistry page). <b>Autoantibodies</b> (GAD first, then IA-2 and/or ZnT8) support type 1 (ADA 2026). ECG, electrolytes, ABG, ketones and kidney function in emergencies: <a href="complications-emergencies.html#h-dka">DKA and HHS</a>; lipids: <a href="complications-emergencies.html#h-macro">macrovascular risk</a>.</p>';
+
+/* C-peptide bands (pmol/L): [from, to, label, html] */
+const CP_BANDS = [
+  [0, 200, '<200', '<b>Severe insulin deficiency</b>: below 0.2 nmol/L (200 pmol/L) is associated with type 1 diabetes (a 2017 review); a 2025 review: very rare in MODY.'],
+  [200, 600, '200–600', 'ADA 2026: <b>usually consistent with type 1 or MODY</b>, but may occur in insulin-treated type 2, especially with normal or low BMI or long duration.'],
+  [600, 1500, '>600', 'The sources downloaded give no text cut-off above 600 pmol/L (ADA shows one only in a figure): no interpretation is given here.'],
+];
+const CP_RULES = 'ADA 2026: test C-peptide only in people treated with insulin; not within 2 weeks of a hyperglycaemic emergency; a random sample with a glucose, within 5 h of eating, can replace a stimulation test. C-peptide is cut from proinsulin and released in equal (equimolar) amounts with insulin, but is not in injected insulin, so it measures the person\'s own secretion (StatPearls; a 2017 review; Wikipedia).';
+
+/* UACR (mg/g): KDIGO 2024 */
+const UA_BANDS = [
+  [0, 30, 'A1 <30', '<b>A1, normal to mildly increased</b> (KDIGO 2024: &lt;30 mg/g, &lt;3 mg/mmol).'],
+  [30, 300, 'A2 30–300', '<b>A2, moderately increased</b> (KDIGO 2024: 30–300 mg/g, 3–30 mg/mmol) — the old "microalbuminuria", 30–300 mg/24 h (StatPearls; Wikipedia: the term was replaced by KDIGO). ADA 2026 writes 30–299 mg/g.'],
+  [300, 600, 'A3 >300', '<b>A3, severely increased</b> (KDIGO 2024: &gt;300 mg/g, &gt;30 mg/mmol; ADA 2026: ≥300).'],
+];
+const UA_RULES = 'Confirm: two of three specimens over 3–6 months must be abnormal; exercise within 24 h, infection, fever, heart failure, marked hyperglycaemia, menstruation and marked hypertension can raise UACR on their own (ADA 2026). Screen yearly with UACR and eGFR (complications page).';
+
+const GOALS = [
+  ['HbA1c', '<7% (53 mmol/mol) for many non-pregnant adults; up to 8% where health is complex or life expectancy limited'],
+  ['Preprandial capillary glucose', '80–130 mg/dL (4.4–7.2 mmol/L)'],
+  ['Peak postprandial capillary glucose', '<180 mg/dL (10.0 mmol/L)'],
+  ['CGM: time in range 70–180 mg/dL', '>70% for most adults (about equal to HbA1c 7%)'],
+  ['CGM: time below 70 mg/dL / below 54 mg/dL', '<4% / <1%'],
+];
+const LAB_NOTE = 'Glycaemic goals: ADA 2026 Section 6 (one body; goals are individualised, more or less stringent as health allows). UACR categories: KDIGO 2024 CKD guideline.';
+
+const HX = '<div><h3>History (GM11.7)</h3><ul><li>Symptoms: polyuria, polydipsia, weight loss (StatPearls; ADA 2026)</li><li>Age, family history over generations (MODY), autoimmune disease (type 1) (ADA 2026)</li><li>Medications: glucocorticoids, checkpoint inhibitors; pancreatitis (ADA 2026)</li><li>Previous DKA or HHS, hypoglycaemia (ADA 2026: review at every visit)</li><li>Lifestyle, diet, activity, tobacco (treatment page)</li></ul></div>'
+  + '<div><h3>Examination (GM11.8), as ADA 2026 lists it</h3><ul><li>BMI; signs of insulin resistance such as acanthosis nigricans</li><li>Skin (Wikipedia, one source each): <b>diabetic dermopathy</b> — dull-red papules becoming small round atrophic pigmented patches, usually on the shins, the commonest diabetic skin lesion (up to 30%); <b>necrobiosis lipoidica</b> — a rare chronic lesion linked to diabetes (the article says both "a strong correlation with diabetes" and "about a quarter of cases")</li><li>Blood pressure at every routine visit</li><li>Dilated fundus examination: type 1, 5 years after onset; type 2, at diagnosis</li><li>Foot, at least yearly: skin, deformities, 10-g monofilament plus one other test (pinprick, temperature, ankle reflexes or vibration), lower-limb pulses</li></ul><p class="note">Details and findings: <a href="complications-emergencies.html">complications page</a>.</p></div>';
+
+const BASED = '<b>Based on:</b> American Diabetes Association, <i>Standards of Care in Diabetes—2026</i>, Sections 2, 3, 4, 6, 11, 12 (Diabetes Care 2026, open access); KDIGO 2024 Clinical Practice Guideline for CKD (open access); the 2024 ADA/EASD/JBDS/AACE/DTS consensus on hyperglycaemic crises; StatPearls (NCBI Bookshelf; abstracts); open-access reviews on C-peptide testing (2017), MODY (2025), the stages of type 1 diabetes (2026), islet autoantibodies (2023) and insulin resistance in type 2 diabetes (2026) (NCBI); Wikipedia (current wikitext checked for OpenStax/Lumen/Boundless citations).';
+const MODELS = '<b>Models used:</b> the islet and the insulin bars are schematic, not to scale: bar heights show direction (need vs secretion), not measured values. The C-peptide and UACR scales apply the sourced bands to the number you set; they are learning aids, not diagnostic tools.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Med;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+$('cls-note').innerHTML = CLS_NOTE; $('gen-cols').innerHTML = GEN; $('oth-cols').innerHTML = OTH; $('hx-cols').innerHTML = HX;
+$('lab-intro').innerHTML = LAB_INTRO; $('lab-note').innerHTML = LAB_NOTE;
+
+Med.toggles('cls-tg', Object.entries(CLS).map(([k, v]) => [k, v[0]]), k => { $('cls-find').innerHTML = CLS[k][1]; }, 't1');
+$('cls-find').innerHTML = CLS.t1[1];
+
+/* comparison */
+const showCmp = k => { const r = CMP.find(x => x[0] === k); $('cmp-out').innerHTML = `<div class="ans"><h3>Type 1</h3><p>${r[2]}</p></div><div class="ans"><h3>Type 2</h3><p>${r[3]}</p></div>`; };
+Med.toggles('cmp-tg', CMP.map(r => [r[0], r[1]]), showCmp, 'ab'); showCmp('ab');
+Med.table('cmp-table', ['Feature', 'Type 1', 'Type 2'], CMP.map(r => [r[1], r[2], r[3]]));
+
+/* pathogenesis */
+const PS = {type: 't1', s: 0};
+function drawPath() {
+  const st = PATH[PS.type][PS.s], [, need, sec, alive, tc] = st;
+  let s = '';
+  // islet (left)
+  s += `<circle cx="140" cy="140" r="92" class="org"/>` + T(140, 30, 'islet (schematic)', 's', 'middle');
+  const pos = [[140, 95], [180, 115], [188, 160], [160, 192], [118, 192], [92, 160], [100, 115], [140, 145]];
+  pos.forEach(([x, y], i) => { s += `<circle cx="${x}" cy="${y}" r="15" class="${i < alive ? 'beta' : 'betad'}"/>`; });
+  const tpos = [[75, 95], [208, 92], [205, 195], [78, 192], [140, 226]];
+  for (let i = 0; i < tc; i++) s += `<circle cx="${tpos[i][0]}" cy="${tpos[i][1]}" r="6" class="tc"/>`;
+  if (PS.type === 't2') {
+    s += `<rect x="20" y="246" width="70" height="26" rx="6" class="${PS.s >= 0 ? 'orgr' : 'org'}"/>` + T(55, 263, 'liver', 's', 'middle');
+    s += `<rect x="105" y="246" width="70" height="26" rx="6" class="orgr"/><rect x="111" y="252" width="14" height="14" rx="3" class="muscc"/>` + T(150, 263, 'muscle', 's', 'middle');
+    s += `<rect x="190" y="246" width="70" height="26" rx="6" class="orgr"/><circle cx="203" cy="259" r="6" class="fatc"/>` + T(232, 263, 'fat', 's', 'middle');
+    s += T(140, 290, 'insulin-resistant tissues (red outline)', 's', 'middle');
+  }
+  // bars (right)
+  const base = 250, sc = 1.2, x1 = 330, x2 = 420;
+  s += `<path class="axis" d="M300 ${base} L520 ${base}"/>`;
+  s += `<rect x="${x1}" y="${base - need * sc}" width="60" height="${need * sc}" class="barneed"/>` + T(x1 + 30, base + 16, 'insulin', 's', 'middle') + T(x1 + 30, base + 29, 'needed', 's', 'middle');
+  s += `<rect x="${x2}" y="${base - sec * sc}" width="60" height="${sec * sc}" class="bar"/>` + T(x2 + 30, base + 16, 'insulin', 's', 'middle') + T(x2 + 30, base + 29, 'secreted', 's', 'middle');
+  if (need > sec) { s += `<rect x="${x2}" y="${base - need * sc}" width="60" height="${(need - sec) * sc}" class="gap"/>` + T(x2 + 30, base - need * sc - 6, 'shortfall', 'c', 'middle'); }
+  s += T(410, 34, need > sec ? 'blood glucose rises' : 'blood glucose normal', need > sec ? 'c' : 's', 'middle');
+  $('path-svg').innerHTML = s; $('path-find').innerHTML = st[5];
+}
+const pathStep = () => Med.stepper('path-step', PATH[PS.type].map(r => r[0]), drawPath, PS);
+Med.toggles('path-tg', [['t1', 'Type 1: autoimmune'], ['t2', 'Type 2: resistance + β-cell failure']], k => { PS.type = k; PS.s = 0; pathStep(); }, 't1');
+pathStep();
+Med.key('path-key', [['--cyto', 'β cell (dashed: lost)'], ['--nucleus', 'T cell'], ['--clin', 'shortfall / insulin-resistant tissue']]);
+
+/* MODY table */
+Med.table('mody-table', ['Form', 'Defect and picture', 'Treatment', 'Sources'], MODY_ROWS);
+
+/* scales */
+function scaleSvg(id, bands, max, v, unit, pick) {
+  const x = val => 20 + 380 * Math.min(val, max) / max;
+  let s = '';
+  bands.forEach(([a, b, l], i) => { const on = pick ? pick(v) === i : v >= a && (v < b || (i === bands.length - 1)); s += `<rect x="${x(a)}" y="22" width="${x(b) - x(a)}" height="18" class="zone ${on ? 'zoneon' : ''}" style="${on ? '' : 'fill:var(--bg)'}"/>` + T((x(a) + x(b)) / 2, 56, l, on ? 'b' : 's', 'middle'); });
+  bands.forEach(([a]) => { s += T(x(a), 72, String(a), 's', 'middle'); });
+  s += T(400, 72, String(max) + '+', 's', 'end');
+  s += `<path d="M${x(v) - 6} 8 L${x(v) + 6} 8 L${x(v)} 18 Z" style="fill:var(--mark)"/>` + T(20, 90, unit, 's', 'start');
+  $(id).innerHTML = s;
+}
+const CP = {v: 120};
+function drawCp() {
+  scaleSvg('cp-svg', CP_BANDS, 1500, CP.v, 'C-peptide, pmol/L (scale ends at 1500; schematic)');
+  const b = CP_BANDS.find((r, i) => CP.v >= r[0] && (CP.v < r[1] || i === CP_BANDS.length - 1));
+  $('cp-out').innerHTML = `<span class="big">${CP.v} pmol/L</span><p>${b[3]}</p><p class="note">${CP_RULES}</p>`;
+}
+Med.slider('cp-sl', {id: 'cp', label: 'C-peptide (pmol/L)', min: 0, max: 1500, step: 10, value: CP.v, fmt: v => v + ' pmol/L'}, v => { CP.v = v; drawCp(); }).init(); drawCp();
+const UA = {v: 120};
+function drawUa() {
+  const uaPick = v => v < 30 ? 0 : v <= 300 ? 1 : 2; // KDIGO 2024: A2 30–300 (300 included), A3 >300
+  scaleSvg('ua-svg', UA_BANDS, 600, UA.v, 'UACR, mg/g creatinine (scale ends at 600; schematic)', uaPick);
+  const b = UA_BANDS[uaPick(UA.v)];
+  $('ua-out').innerHTML = `<span class="big">${UA.v} mg/g</span><p>${b[3]}${UA.v === 300 ? ' <b>At exactly 300:</b> KDIGO 2024 says A2 (30–300); ADA 2026 counts ≥300 as severely increased.' : ''}</p><p class="note">${UA_RULES}</p>`;
+}
+Med.slider('ua-sl', {id: 'ua', label: 'UACR (mg/g)', min: 0, max: 600, step: 5, value: UA.v, fmt: v => v + ' mg/g'}, v => { UA.v = v; drawUa(); }).init(); drawUa();
+Med.table('goal-table', ['Glycaemic goal (ADA 2026)', 'Value'], GOALS);
+Med.swipeHints();
+</script>
+</body>
+</html>

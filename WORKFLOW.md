@@ -92,7 +92,7 @@ Last updated: 2026-11-23
   several drawings mechanically wrong, colour misuse) [x] fixes (526 quotes) [x] committed 2026-11-26.
   POLICY (default, 2026-11-26): a Wikipedia article whose only OpenStax link is an infobox IMAGE is not excluded (we
   quote its text, which does not cite OpenStax). Text citations of OpenStax/Boundless/Lumen still exclude. Ask user. G02 [x] build (413 quotes; ADA 2026, 2024 crises consensus vs 2009, KDIGO 2022/2024) [x] review (CRIT_NOTE garbled; 2024 pH 7.25 severity;
-  picker cost/TZD conflicts; metformin eGFR 45; adult-only doses; UACR 300; hypo 70 alert) [ ] fixes (running).
+  picker cost/TZD conflicts; metformin eGFR 45; adult-only doses; UACR 300; hypo 70 alert) [x] fixes (454 quotes) [x] committed 2026-11-26.
   At G02 commit: include biochemistry/carbohydrates/minor-pathways-glucose.html line 245 (planned → Medicine 02). C02 [x] build (360 quotes; 6 Wikipedia stats articles excluded for OpenStax/CNX/Boundless) [ ] review (running).
   P03 [ ] build (running; pathology/general/, PA5.1–5.6).
   R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,

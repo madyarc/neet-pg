@@ -96,6 +96,7 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | # | Module | Branch | What it does |
 |---|---|---|---|
 | 01 | [Heart Failure](medicine/cardiology/heart-failure.html), [Rheumatic Fever, Valve Disease, Endocarditis and Adult CHD](medicine/cardiology/valves-endocarditis.html), [IHD and ACS](medicine/cardiology/ihd-acs.html) | Cardiology | HF classifier (EF band, stage, NYHA), compensation stepper, BNP rule-out slider, drug map; Jones 2015 and Duke classifiers, murmurs on the cycle, shunts and Eisenmenger; lipid map, plaque stepper, ACS picker, complications timeline, reperfusion helper (CSI 2017) |
+| 02 | [Diabetes Mellitus: Types, Pathogenesis and Laboratory Tests](medicine/endocrine/diabetes-types-pathogenesis.html), [Diabetes: Complications, DKA, HHS and Hypoglycaemia](medicine/endocrine/complications-emergencies.html), [Diabetes Treatment: Drugs, Insulin and the ADA 2026 Approach](medicine/endocrine/diabetes-treatment.html) | Endocrine | ADA 2026 classification, type 1 vs 2, MODY/LADA, C-peptide and UACR; complications map, retinopathy, KDIGO grid, DKA/HHS classifier (2009 vs 2024) with anion-gap and osmolality calculators, hypoglycaemia; drug mechanism map, ADA Table 9.2, insulin profiles, comorbidity picker |
 
 ### Microbiology — [`microbiology/`](microbiology/index.html)
 

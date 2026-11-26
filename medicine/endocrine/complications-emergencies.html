@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diabetes Complications and Emergencies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/med.css">
+<style>
+/* tokens from med.css with their site meanings: --artery / --vein (retinal vessels), --rbc (blood: haemorrhages, microaneurysms), --fluid (body
+   fluid: oedema), --accent (selection), --mark (the chosen value), --clin (a disease state, a value past a cut-off, a warning), --nucleus unused. */
+svg.sch .fund{fill:var(--bg);stroke:var(--muted);stroke-width:1.2}
+svg.sch .disc{fill:var(--surface);stroke:var(--muted);stroke-width:1}
+svg.sch .art{stroke:var(--artery);stroke-width:2;fill:none;stroke-linecap:round}
+svg.sch .ven{stroke:var(--vein);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .nv{stroke:var(--artery);stroke-width:1;fill:none}
+svg.sch .ma{fill:var(--rbc);stroke:var(--ink);stroke-width:.4}
+svg.sch .hem{fill:var(--rbc);fill-opacity:.75}
+svg.sch .cws{fill:var(--surface);stroke:var(--muted);stroke-width:.8}
+svg.sch .hex{fill:var(--muted)}
+svg.sch .oed{fill:var(--fluid);fill-opacity:.8;stroke:var(--muted);stroke-width:.6}
+svg.sch .node{fill:var(--surface);stroke:var(--line);stroke-width:1.4}
+svg.sch .nodeon{fill:var(--surface);stroke:var(--accent);stroke-width:3}
+svg.sch .body{fill:var(--bg);stroke:var(--muted);stroke-width:1.2}
+svg.sch .cell{fill:var(--surface);stroke:var(--line);stroke-width:1}
+svg.sch .cellon{fill:var(--accent);fill-opacity:.2;stroke:var(--accent);stroke-width:2.2}
+svg.sch .zone{stroke:var(--line);stroke-width:1}
+svg.sch .zoneon{fill:var(--accent);fill-opacity:.16;stroke:var(--accent);stroke-width:1.6}
+svg.sch .mk{stroke:var(--mark);stroke-width:2.4}
+svg.sch .fbox{fill:var(--surface);stroke:var(--line);stroke-width:1.2}
+svg.sch .fboxon{fill:var(--surface);stroke:var(--accent);stroke-width:2.6}
+svg.sch .fdim{opacity:.35}
+svg.sch .hbar{fill:var(--muted);fill-opacity:.6}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:640px){.cols{grid-template-columns:minmax(0,1fr)}}
+.cols ul,.prose ul{margin:4px 0 0;padding-left:20px}
+.res{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (max-width:520px){.res{grid-template-columns:minmax(0,1fr)}}
+.res .ans .big{font-size:22px}
+.over{color:var(--clin);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← General Medicine</a> <span class="muted">· Module 02: <a href="diabetes-types-pathogenesis.html">Types and pathogenesis</a> · <span aria-current="page">Complications and emergencies</span> · <a href="diabetes-treatment.html">Treatment</a></span></nav>
+
+<header class="stack">
+  <h1>Diabetes: Complications, DKA, HHS and Hypoglycaemia</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-map">Complications map</a> <a href="#h-ret">Retinopathy</a> <a href="#h-neph">Nephropathy</a> <a href="#h-neuro">Neuropathy and foot</a> <a href="#h-macro">Macrovascular</a> <a href="#h-dka">DKA vs HHS</a> <a href="#h-dkap">DKA pathophysiology</a> <a href="#h-mx">Management</a> <a href="#h-hypo">Hypoglycaemia</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-map">
+  <h2 id="h-map">Where diabetes does damage (GM11.5)</h2>
+  <div class="chips" id="map-tg" aria-label="Complication"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="map-svg" viewBox="0 0 340 330" role="img" aria-label="Schematic figure with the eye, brain, heart, kidney, peripheral nerves, leg arteries and foot marked; the chosen site is outlined"></svg></div>
+    <div class="prose find" id="map-find" aria-live="polite"></div>
+  </div>
+  <h3>Why high glucose damages tissue</h3>
+  <div class="chips" id="mech-tg" aria-label="Pathway"></div>
+  <div class="prose" id="mech-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ret">
+  <h2 id="h-ret">Diabetic retinopathy: the stages</h2>
+  <div class="step" id="ret-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="ret-svg" viewBox="0 0 470 300" role="img" aria-label="Schematic fundus: optic disc, arteries and veins, with the lesions of the chosen stage"></svg></div>
+    <div class="prose find" id="ret-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="ret-key"></div>
+  <p class="muted" id="ret-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-neph">
+  <h2 id="h-neph">Diabetic kidney disease: place a patient on the KDIGO grid</h2>
+  <div class="sliders" id="neph-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="neph-svg" viewBox="0 0 360 260" role="img" aria-label="Grid of KDIGO GFR categories G1 to G5 against albuminuria categories A1 to A3, with the chosen cell outlined"></svg></div>
+    <div class="ans prose" id="neph-out" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="neph-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-neuro">
+  <h2 id="h-neuro">Neuropathy and the diabetic foot</h2>
+  <div class="scroll"><table id="neuro-table"></table></div>
+  <div class="cols" id="foot-cols"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-macro">
+  <h2 id="h-macro">Macrovascular disease and protecting organs (GM11.18)</h2>
+  <div class="scroll"><table id="macro-table"></table></div>
+  <p class="muted" id="macro-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-dka">
+  <h2 id="h-dka">DKA or HHS? Enter the results</h2>
+  <div class="prose" id="dka-intro"></div>
+  <div class="q"><span class="qt">Criteria edition</span><div class="chips" id="dka-ed"></div></div>
+  <div class="q"><span class="qt">Example</span><div class="chips" id="dka-pre"></div></div>
+  <div class="sliders" id="dka-sl"></div>
+  <div class="q"><span class="qt" id="ket-q">Ketones</span><div class="chips" id="dka-ket"></div></div>
+  <div class="q" id="kd-q"><span class="qt">Known diabetes?</span><div class="chips" id="dka-kd"></div></div>
+  <div class="res" id="dka-calc" aria-live="polite"></div>
+  <div class="ans prose" id="dka-out" aria-live="polite"></div>
+  <div class="scroll"><table id="crit-table"></table></div>
+  <p class="muted" id="crit-note"></p>
+  <div class="cols" id="dka-clin"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-dkap">
+  <h2 id="h-dkap">DKA pathophysiology, step by step</h2>
+  <div class="step" id="dkap-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="dkap-svg" viewBox="0 0 540 330" role="img" aria-label="Schematic flow: insulin deficiency and counter-regulatory hormones lead to liver glucose output and lipolysis; fatty acids become ketones and acidosis; glucose causes osmotic diuresis and dehydration"></svg></div>
+    <div class="prose find" id="dkap-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-mx">
+  <h2 id="h-mx">Management in the guideline's order</h2>
+  <div class="step" id="mx-step"></div>
+  <div class="prose find" id="mx-find" aria-live="polite"></div>
+  <h3>Potassium before insulin</h3>
+  <div class="sliders" id="k-sl"></div>
+  <div class="res" id="k-out" aria-live="polite"></div>
+  <p class="muted" id="mx-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-hypo">
+  <h2 id="h-hypo">Hypoglycaemia</h2>
+  <div class="sliders" id="hypo-sl"></div>
+  <div class="schbox"><svg class="fig sch fit" id="hypo-svg" viewBox="0 0 420 96" role="img" aria-label="Glucose scale in mg/dL with ADA levels 1 and 2 and the chosen value marked"></svg></div>
+  <div class="ans prose" id="hypo-out" aria-live="polite"></div>
+  <h3>Counter-regulation as glucose falls</h3>
+  <div class="step" id="cr-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="cr-svg" viewBox="0 0 360 200" role="img" aria-label="Schematic bars of the counter-regulatory responses in the order Wikipedia gives: insulin falls, glucagon, adrenaline, then cortisol and growth hormone"></svg></div>
+    <div class="prose find" id="cr-find" aria-live="polite"></div>
+  </div>
+  <div class="cols" id="hypo-cols"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BDiabetes%3A%20Complications%2C%20DKA%2C%20HHS%20and%20Hypoglycaemia%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fmedicine%2Fendocrine%2Fcomplications-emergencies.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/med.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources unless attributed: sources-local/facts/fill-g02.md, Part B) ===================== */
+const LEDE = 'Pick a complication on the body, step a fundus from microaneurysms to new vessels, place a patient on the KDIGO kidney grid, then enter blood results to see DKA or HHS under the 2009 and the 2024 criteria, with the anion gap and effective osmolality worked out. Types and laboratory tests: <a href="diabetes-types-pathogenesis.html">types and pathogenesis</a>; drugs: <a href="diabetes-treatment.html">treatment</a>; coronary disease: <a href="../cardiology/ihd-acs.html">IHD and ACS</a>.';
+
+/* complications map: key: [label, x, y, html] */
+const MAP = {
+  eye: ['Eye', 150, 46, '<h3>Retinopathy (microvascular)</h3><p>A microvascular complication of long-term diabetes (StatPearls; ADA 2026). Chronic hyperglycaemia is the best-established risk factor for microvascular complications (ADA 2026). See the <a href="#h-ret">stages</a>.</p>'],
+  kid: ['Kidney', 182, 162, '<h3>Nephropathy (microvascular)</h3><p>The leading cause of end-stage kidney disease in many developed countries (StatPearls). See the <a href="#h-neph">KDIGO grid</a>.</p>'],
+  nerve: ['Nerves', 112, 214, '<h3>Neuropathy (microvascular)</h3><p>Distal symmetric polyneuropathy and autonomic neuropathy are the commonest forms (ADA 2017 position statement; Wikipedia). See <a href="#h-neuro">neuropathy</a>.</p>'],
+  brain: ['Brain', 150, 22, '<h3>Stroke (macrovascular)</h3><p>Macrovascular complications are coronary artery disease, cerebrovascular disease (stroke) and peripheral artery disease (StatPearls; ADA 2026).</p>'],
+  heart: ['Heart', 160, 112, '<h3>Coronary heart disease (macrovascular)</h3><p>Poor long-term control raises the risk of both microvascular and macrovascular (CAD, stroke) complications (StatPearls). ACS: <a href="../cardiology/ihd-acs.html">IHD and ACS page</a>; risk management <a href="#h-macro">below</a>.</p>'],
+  pad: ['Leg arteries', 188, 250, '<h3>Peripheral artery disease (macrovascular)</h3><p>Screen with lower-limb pulses, capillary refill, rubor on dependency, pallor on elevation, venous filling time; refer for ankle-brachial index if symptoms or absent pulses (ADA 2026).</p>'],
+  foot: ['Foot', 120, 312, '<h3>Diabetic foot</h3><p>Up to a third develop foot ulcers, the leading cause of non-traumatic lower-limb amputation (StatPearls). Ulcers come from neuropathy, PAD and impaired healing together (StatPearls); loss of protective sensation is the single commonest component cause (ADA 2026).</p>'],
+};
+const MECH = {
+  age: ['AGEs', '<b>Advanced glycation end products</b>: binding to their receptor (RAGE) raises reactive oxygen species and switches on PKC, NF-κB, TGF-β and VEGF (Wikipedia, diabetic nephropathy); one of four oxidative pathways in retinopathy (a 2026 review).'],
+  pkc: ['PKC', '<b>Protein kinase C activation</b>: one of the four pathways (a 2026 review); Wikipedia: persistent glucose activates PKC and MAPK, contributing to pericyte death in the retina.'],
+  pol: ['Polyol (sorbitol)', '<b>Polyol pathway</b>: glucose → sorbitol → fructose; implicated in damage to the retina, kidney and nerves (Wikipedia; a 2026 review). Biochemistry: <a href="../../biochemistry/carbohydrates/minor-pathways-glucose.html#h-pol">polyol pathway</a>.'],
+  hex: ['Hexosamine', '<b>Hexosamine pathway</b>: upregulated when reactive oxygen species inhibit glycolysis (a 2026 review; one source).'],
+};
+
+/* retinopathy stages: [label, level, html] */
+const RET = [
+  ['None', 0, '<h3>No apparent retinopathy</h3><p>A healthy retinal exam (Wikipedia; ICDR scale, a 2026 review). Screening (ADA 2026): type 1, first dilated exam 5 years after onset; type 2, at diagnosis; then yearly, or every 1–2 years after normal exams with good control.</p>'],
+  ['Mild NPDR', 1, '<h3>Mild non-proliferative (NPDR)</h3><p><b>Microaneurysms only</b> — the first visible change (Wikipedia; a 2026 review table).</p>'],
+  ['Moderate NPDR', 2, '<h3>Moderate NPDR</h3><p>More than mild but short of severe (Wikipedia): microaneurysms, dot-blot haemorrhages, hard exudates or cotton-wool spots (a 2026 review table). ADA 2026: refer moderate or worse NPDR to an ophthalmologist.</p>'],
+  ['Severe NPDR', 3, '<h3>Severe NPDR: the 4-2-1 rule</h3><p><b>≥20 intraretinal haemorrhages in all 4 quadrants</b>, or <b>venous beading in ≥2 quadrants</b>, or <b>IRMA in ≥1 quadrant</b> (a 2026 review table; Wikipedia). Panretinal photocoagulation may be used in some (ADA 2026).</p>'],
+  ['PDR', 4, '<h3>Proliferative (PDR)</h3><p>Ischaemia drives <b>neovascularisation</b> (ADA 2026; Wikipedia), with vitreous or preretinal haemorrhage (Wikipedia). <b>Panretinal photocoagulation</b> for high-risk PDR: severe vision loss fell from 15.9% to 6.4% in the DRS (ADA 2026); intravitreal <b>anti-VEGF</b> is an alternative (ADA 2026; a 2026 review).</p>'],
+  ['Macular oedema', 5, '<h3>Diabetic macular oedema (any stage)</h3><p>Graded separately (Wikipedia); the commonest cause of vision loss in diabetic retinopathy (Wikipedia). <b>Anti-VEGF</b> is first line for centre-involving oedema that impairs vision (ADA 2026; a 2026 review).</p>'],
+];
+const RET_NOTE = 'Stages: the International Clinical DR (ICDR) severity scale, five stages condensed from the 14 ETDRS levels (a 2026 review), as the American Academy of Ophthalmology uses it (Wikipedia). Rapid HbA1c falls (for example on a GLP-1 RA) can cause early worsening in existing retinopathy (ADA 2026; a 2026 review). Pregnancy: eye exam before and in the first trimester (ADA 2026).';
+
+/* KDIGO 2024 grid */
+const G_CAT = [['G1', 90, 999, 'Normal or high', '≥90'], ['G2', 60, 90, 'Mildly decreased', '60–89'], ['G3a', 45, 60, 'Mildly to moderately decreased', '45–59'], ['G3b', 30, 45, 'Moderately to severely decreased', '30–44'], ['G4', 15, 30, 'Severely decreased', '15–29'], ['G5', 0, 15, 'Kidney failure', '<15']];
+const A_CAT = [['A1', 0, 30, 'Normal to mildly increased', '<30'], ['A2', 30, 300, 'Moderately increased', '30–300'], ['A3', 300, 99999, 'Severely increased', '>300']];
+const NEPH_TEXT = '<p><b>CKD</b> in diabetes: persistently raised albuminuria and/or eGFR &lt;60 (ADA 2026). Screen with <b>UACR and eGFR at least yearly</b>: type 1 from 5 years\' duration, all type 2 (ADA 2026). Staging by cause, GFR (G) and albuminuria (A) category — "CGA" (KDIGO 2024). <b>Protecting the kidney (ADA 2026):</b> ACE inhibitor or ARB for UACR 30–299 mg/g with hypertension, strongly for ≥300 and/or eGFR &lt;60; an <b>SGLT2 inhibitor</b> from eGFR ≥20, continued until kidney failure; finerenone, a non-steroidal MRA (the only one, ADA 2026). Microalbuminuria (old term): 30–300 mg/24 h (StatPearls; Wikipedia).</p>';
+
+const NEURO = [
+  ['Distal symmetric polyneuropathy', 'The commonest form (ADA 2017; Wikipedia: about 30% of people with diabetes); mixed small- and large-fibre most common (ADA 2017)', 'Screen at diagnosis of type 2 and 5 years after type 1: 10-g monofilament plus one other test — pinprick, temperature, ankle reflexes or 128-Hz vibration (ADA 2026)'],
+  ['Autonomic', 'Resting tachycardia, orthostatic hypotension, gastroparesis, constipation, diarrhoea, erectile and bladder dysfunction (ADA 2026)', 'Ask about dizziness on standing, syncope; look for orthostatic hypotension (ADA 2026)'],
+  ['Mononeuropathy', 'Single nerves, including cranial nerve III, IV or VI palsy (Wikipedia)', 'Third-nerve palsy: abrupt, with pain around the eye, then double vision (Wikipedia)'],
+  ['Radiculoplexus (diabetic amyotrophy)', 'Lumbosacral radiculoplexus neuropathy (StatPearls; ADA 2017: an atypical form)', '—'],
+  ['Painful neuropathy: drugs', 'Gabapentinoids, SNRIs, tricyclic antidepressants or sodium-channel blockers as initial drugs (ADA 2026, citing the AAN)', 'No doses on this page'],
+];
+const FOOT = '<div><h3>Why feet ulcerate</h3><ul><li>Neuropathy (loss of protective sensation, the commonest single cause; ADA 2026) + peripheral artery disease + impaired wound healing (StatPearls)</li><li>Deformities: bunions, hammertoes, <b>Charcot joint</b> — a progressive neuropathic osteoarthropathy (ADA 2026; StatPearls)</li><li>Poor outcome with infection, PAD, neuropathy, CKD (StatPearls)</li></ul></div>'
+  + '<div><h3>Examine the foot (GM11.8; ADA 2026)</h3><ul><li>At least yearly, more often if high risk</li><li>History: prior ulcer, amputation, Charcot foot, vascular surgery, smoking, retinopathy, kidney disease</li><li>Skin inspection, deformities, monofilament plus one more test, pulses</li></ul></div>';
+
+const MACRO = [
+  ['Blood pressure', 'Measure at every routine visit; goal <130/80 mmHg if safely reached; ACE inhibitor/ARB with albuminuria', 'ADA 2026'],
+  ['Statin', 'Aged 40–75 without ASCVD: moderate intensity. Aged 40–75 at higher risk: high intensity, LDL ≥50% lower and LDL goal &lt;70 mg/dL (1.8 mmol/L). With ASCVD: high intensity, ≥50% lower and LDL goal &lt;55 mg/dL (1.4 mmol/L); add ezetimibe or a PCSK9 inhibitor if not reached', 'ADA 2026'],
+  ['Aspirin', '75–162 mg/day for secondary prevention (history of ASCVD)', 'ADA 2026 (its stated dose)'],
+  ['Glucose-lowering drugs with CV benefit', 'ASCVD, high risk or CKD: a GLP-1 RA with proven CV benefit and/or an SGLT2 inhibitor (see the treatment page)', 'ADA 2026'],
+];
+const MACRO_NOTE = 'One body (ADA 2026, Section 10) sets these figures: they are attributed, not double-checked against a second guideline. Lifestyle: treatment page.';
+
+/* DKA/HHS */
+const DKA_INTRO = '<p>Sliders: plasma glucose, arterial or venous pH, bicarbonate, sodium and chloride. The page computes the <b>anion gap = Na − (Cl + HCO₃)</b> (2024 consensus; Wikipedia) and the <b>effective osmolality = 2 × Na + glucose (mg/dL) ÷ 18</b> (2009 consensus; in mmol/L 2 × Na + glucose, ADA 2026 table).</p>';
+const PRE = {
+  dka: ['Typical DKA', {glu: 450, ph: 7.15, hco: 12, na: 134, cl: 100, ket: 'hi', kd: 'yes'}],
+  hhs: ['Typical HHS', {glu: 900, ph: 7.35, hco: 22, na: 148, cl: 110, ket: 'lo', kd: 'yes'}],
+  eu: ['Euglycaemic DKA', {glu: 180, ph: 7.20, hco: 13, na: 136, cl: 104, ket: 'hi', kd: 'yes'}],
+  mix: ['Mixed DKA–HHS', {glu: 700, ph: 7.20, hco: 14, na: 142, cl: 104, ket: 'hi', kd: 'yes'}],
+};
+const CRIT = [
+  ['Glucose (mg/dL)', '>250', '≥200 <i>or</i> known diabetes', '>600', '≥600'],
+  ['pH', '≤7.30 (mild 7.25–7.30)', '<7.3', '>7.30', '≥7.3'],
+  ['Bicarbonate (mmol/L)', '≤18 (mild 15–18)', '<18 (pH and/or HCO₃)', '>18 in the table (>15 in the text)', '≥15'],
+  ['Ketones', 'Positive (nitroprusside)', 'β-hydroxybutyrate ≥3.0 mmol/L or urine ≥2+', 'Small', 'BHB <3.0 or urine <2+'],
+  ['Effective osmolality (mOsm/kg)', 'Variable', '—', '>320', '>300 (total >320)'],
+  ['Anion gap', '>10 mild, >12 moderate/severe', 'not a first-line criterion (>12 supports DKA)', 'Variable', '—'],
+];
+const CRIT_NOTE = '2009 = ADA consensus (Kitabchi et al., Diabetes Care 2009), also used by Wikipedia and a 2025 review; 2024 = ADA/EASD/JBDS/AACE/DTS consensus (Diabetes Care and Diabetologia 2024), reproduced in ADA 2026 Table 16.1 (the 2024 HHS numbers are from that table). Severity 2024 (Table 2): mild pH &gt;7.25 to &lt;7.30 or HCO₃ 15–18; moderate pH 7.0–7.25 or HCO₃ 10–&lt;15; severe pH &lt;7.0 or HCO₃ &lt;10 (BHB &gt;6.0). Severity 2009: mild pH 7.25–7.30, HCO₃ 15–18; moderate pH 7.00–&lt;7.24, HCO₃ 10–&lt;15; severe pH &lt;7.00, HCO₃ &lt;10. The 2009 table leaves pH 7.24 (between &lt;7.24 and 7.25) unassigned: this page counts it as moderate. pH 7.25 is mild in 2009 but moderate in 2024. <b>What changed:</b> glucose &gt;250 → ≥200 or known diabetes (so euglycaemic DKA, about 10% of DKA, now counts); ketones by blood β-hydroxybutyrate; HHS effective osmolality &gt;300 instead of &gt;320. JBDS 2023 for HHS: osmolality ≥320 (with urea), glucose ≥30 mmol/L, BHB ≤3.0, pH &gt;7.3, HCO₃ ≥15.';
+const DKA_CLIN = '<div><h3>Recognise DKA (GM11.9, GM11.23)</h3><ul><li>Develops over hours to a few days (2024 consensus)</li><li><b>Kussmaul breathing</b> with a <b>fruity (acetone) breath</b> (2024 consensus; Wikipedia)</li><li>Nausea, vomiting, <b>abdominal pain</b> in &gt;50% (uncommon in HHS) (2024 consensus; Wikipedia)</li><li>Dehydration: dry mouth, poor skin turgor, tachycardia, hypotension (Wikipedia)</li><li>Precipitants: <b>infection</b> (commonest; urinary tract and pneumonia), insulin omission, new diabetes, illness, SGLT2 inhibitors (2024 consensus; Wikipedia)</li></ul></div>'
+  + '<div><h3>Recognise HHS (GM11.24)</h3><ul><li>Develops over days to weeks (2024 consensus); typically <b>type 2</b> and <b>older</b> people (ADA 2026; StatPearls; Wikipedia)</li><li>Marked dehydration, altered consciousness, seizures (Wikipedia); change in cognition common in severe DKA and HHS (2024 consensus)</li><li>Mortality 5–10 times that of DKA (2024 consensus)</li><li>One third of crises are mixed DKA–HHS (ADA 2026)</li></ul><h3>Ketone dipstick (GM11.13)</h3><p>The urine (nitroprusside) test detects <b>acetoacetate, not β-hydroxybutyrate</b>, the main ketoacid: it can underestimate early and overestimate late; captopril and valproate give false positives. Blood β-hydroxybutyrate is preferred (2024 consensus; a 2025 review).</p></div>';
+
+/* DKA pathophysiology stepper: [label, set of box ids lit, html] */
+const DKAP = [
+  ['Trigger', ['ins', 'cr'], '<h3>1. Insulin deficiency + counter-regulatory hormones</h3><p>Severe insulin deficiency with a rise in <b>glucagon, cortisol, adrenaline and growth hormone</b> (2024 consensus; Wikipedia), often set off by infection or missed insulin.</p>'],
+  ['Hyperglycaemia', ['ins', 'cr', 'liv', 'glu'], '<h3>2. Hyperglycaemia</h3><p>The low insulin/glucagon ratio increases <b>gluconeogenesis</b> and <b>glycogenolysis</b> and impairs peripheral glucose use (2024 consensus).</p>'],
+  ['Lipolysis', ['ins', 'cr', 'fat', 'ffa'], '<h3>3. Lipolysis</h3><p>Free fatty acids are released from adipose tissue (2024 consensus; Wikipedia).</p>'],
+  ['Ketogenesis', ['ffa', 'ket'], '<h3>4. Ketogenesis</h3><p>Unrestrained hepatic fatty-acid oxidation produces excess <b>ketone bodies</b> (2024 consensus); Wikipedia: via acetyl-CoA, to acetoacetate and β-hydroxybutyrate.</p>'],
+  ['Acidosis', ['ket', 'acid'], '<h3>5. Metabolic acidosis</h3><p>Ketone bodies have a low pKa and make the blood acidic (Wikipedia): a <b>high anion gap</b> acidosis (2024 consensus); breathing deepens (<b>Kussmaul</b>) to compensate.</p>'],
+  ['Osmotic diuresis', ['glu', 'diu'], '<h3>6. Osmotic diuresis and dehydration</h3><p>Glucose spills into the urine, taking water, sodium and potassium (Wikipedia) → volume depletion (2024 consensus): polyuria and thirst. Total-body potassium falls by 3–6 mmol/kg even when the serum level is normal or high (2024 consensus).</p>'],
+  ['HHS differs', ['glu', 'diu'], '<h3>In HHS</h3><p>Less severe insulin deficiency: <b>enough insulin to prevent ketogenesis</b> but not hyperglycaemia (2024 consensus; Wikipedia: some insulin inhibits fat breakdown). Osmotic diuresis without enough fluid intake → hyperosmolality, kidney impairment and falling cognition (2024 consensus).</p>'],
+];
+
+/* management stepper */
+const MX = [
+  ['Fluids', '<h3>1. Fluids first (adults)</h3><p>Adult doses (2024 and 2009 consensus); children follow paediatric guidance, not covered here. <b>2024 consensus:</b> isotonic saline or a balanced crystalloid at <b>500–1,000 mL/h for the first 2–4 h</b> (no renal or cardiac compromise); replace the deficit over 24–48 h; smaller boluses in older people, heart failure or dialysis. Once glucose is <b>&lt;250 mg/dL</b>, add <b>5–10% dextrose</b> so insulin can continue. <b>2009 consensus:</b> 0.9% saline 15–20 mL/kg/h or 1–1.5 L in the first hour. HHS (2024): glucose should fall no faster than 90–120 mg/dL/h, sodium no more than 10 mmol/L in 24 h, osmolality 3–8 mOsm/kg/h.</p>'],
+  ['Insulin', '<h3>2. Insulin</h3><p><b>2024 consensus:</b> short-acting insulin by <b>fixed-rate IV infusion at 0.1 units/kg/h</b> (or a nurse-driven variable protocol); reduce to <b>0.05 units/kg/h</b> when glucose &lt;250 mg/dL and keep glucose near 200 until ketoacidosis resolves. Mild or moderate DKA may be treated with subcutaneous rapid-acting analogues. HHS without significant ketonaemia: 0.05 units/kg/h. <b>But first check potassium</b> (next step).</p>'],
+  ['Potassium', '<h3>3. Potassium</h3><p>Body potassium is depleted though serum K is often normal or high; insulin, correcting acidosis and fluids lower it (2024 consensus; Wikipedia). <b>2024:</b> start replacement once K &lt;5.0 mmol/L, aiming for 4–5, usually 20–30 mmol per litre of fluid; if K &lt;3.5, give potassium at 10 mmol/h and <b>delay insulin until K &gt;3.5</b>. <b>2009:</b> delay insulin until K &gt;3.3 (also Wikipedia). Try the slider below.</p>'],
+  ['Bicarbonate', '<h3>4. Bicarbonate: not routine</h3><p>Fluids and insulin usually correct the acidosis; bicarbonate offers no proven benefit and risks hypokalaemia and cerebral oedema (2024 consensus; Wikipedia). <b>2024:</b> consider if <b>pH &lt;7.0</b>. <b>2009:</b> if pH &lt;6.9.</p>'],
+  ['Resolution', '<h3>5. Resolution and switch to subcutaneous insulin</h3><p><b>2024:</b> ketones &lt;0.6 mmol/L and venous pH ≥7.3 or HCO₃ ≥18 (ideally glucose &lt;200); do not use the anion gap or urine ketones. <b>2009:</b> glucose &lt;200 plus two of HCO₃ ≥15, pH &gt;7.3, anion gap ≤12. Overlap subcutaneous insulin 1–2 h before stopping the infusion (2024). Treat the precipitating cause throughout.</p>'],
+  ['Complications', '<h3>6. Watch for treatment complications</h3><p>Hypoglycaemia and hypokalaemia (2009 consensus); <b>cerebral oedema</b> in up to about 1% of children with DKA (Wikipedia; 2009: 0.3–1.0%), rare in adults; hyperchloraemic normal-anion-gap acidosis after large volumes of saline (2024 consensus).</p>'],
+];
+const MX_NOTE = 'Adult doses and thresholds, given only as the named open consensus states them (both reports cover adults; children follow paediatric guidance, not covered here): 2024 = ADA/EASD/JBDS/AACE/DTS consensus; 2009 = ADA consensus (Kitabchi). A learning aid, not a protocol.';
+
+/* hypoglycaemia */
+const HYPO_BANDS = [[20, 54, 'Level 2: <54'], [54, 70, 'Level 1'], [70, 120, '≥70: not hypoglycaemia']];
+const CR = [
+  ['Insulin falls', 1, '<h3>First: insulin secretion falls</h3><p>The first line of defence as glucose reaches the low-normal range; the liver increases glycogenolysis and gluconeogenesis (Wikipedia).</p>'],
+  ['Glucagon', 2, '<h3>Then glucagon</h3><p>Raises glucose output from liver and kidneys (Wikipedia). In type 1 diabetes the α-cell glucagon response to hypoglycaemia is lost (a 2019 review).</p>'],
+  ['Adrenaline', 3, '<h3>Then adrenaline (epinephrine)</h3><p>Released if glucagon does not restore glucose (Wikipedia); ADA 2026: 70 mg/dL is the threshold for adrenergic responses in people without diabetes.</p>'],
+  ['Cortisol, GH', 4, '<h3>Later: cortisol and growth hormone</h3><p>Released when hypoglycaemia is prolonged, and far less effective than adrenaline (Wikipedia). Recurrent hypoglycaemia blunts all these responses → <b>impaired awareness</b> (hypoglycaemia-associated autonomic failure) (2024 review; ADA 2026).</p>'],
+];
+const HYPO_COLS = '<div><h3>Recognise it (GM11.14)</h3><ul><li><b>Whipple\'s triad:</b> symptoms of hypoglycaemia, a low glucose measured at the time, and relief when glucose is raised (StatPearls; Wikipedia)</li><li>Adrenergic: fast heart rate, sweating, shakiness, nervousness, hunger; neuroglycopenic: tiredness, confusion, difficulty speaking, seizures, coma (Wikipedia; ADA 2026)</li><li>Levels (ADA 2026): 1 = &lt;70 and ≥54 mg/dL; 2 = &lt;54, where neuroglycopenic symptoms begin; 3 = a severe event needing another person\'s help, at any glucose</li></ul><h3>Causes (GM11.22)</h3><ul><li>Drugs: <b>insulin, sulfonylureas, meglitinides</b>; clinically significant hypoglycaemia is rare with other classes (ADA 2026)</li><li>Severe illness, sepsis, kidney failure, liver disease, hormone deficiency (Addison disease: low cortisol), insulinoma (Wikipedia)</li><li>Alcohol (lowers the growth-hormone response, a 2025 review)</li></ul></div>'
+  + '<div><h3>Treat it (ADA 2026)</h3><ul><li>At ≤70 mg/dL: <b>15 g fast-acting carbohydrate</b>, pure glucose preferred (people on automated insulin delivery: typically 5–10 g, ADA 2026); recheck after <b>15 min</b>; repeat if still low — the "15-15 rule" (ADA 2026; Wikipedia quotes it from ADA)</li><li>On acarbose: pure glucose only</li><li>Unable to take food by mouth: <b>glucagon</b> (intranasal or ready-to-inject preferred); call emergency services if not alert; in hospital, IV glucose</li><li>Prescribe glucagon for everyone on insulin or at high risk</li><li>A level 2 or 3 event should prompt review of the treatment plan</li></ul></div>';
+
+const BASED = '<b>Based on:</b> American Diabetes Association, <i>Standards of Care in Diabetes—2026</i>, Sections 6, 10, 11, 12, 16 (Diabetes Care 2026, open access); Umpierrez et al., <i>Hyperglycemic crises in adults with diabetes: a consensus report</i> (ADA/EASD/JBDS/AACE/DTS, Diabetes Care and Diabetologia 2024); Kitabchi et al., <i>Hyperglycemic crises in adult patients with diabetes</i> (ADA consensus, Diabetes Care 2009); JBDS HHS guideline (2023); KDIGO 2024 CKD guideline; ADA neuropathy position statement (2017); StatPearls (abstracts); open-access reviews on retinopathy (2026), DKA–HHS overlap (2025), hypoglycaemia unawareness (2019, 2024), non-diabetic hypoglycaemia (2025) and GLP-1 RA adverse events (2026); Wikipedia (current wikitext checked for OpenStax/Lumen/Boundless citations).';
+const MODELS = '<b>Models used:</b> the body, fundus, KDIGO grid, flow diagram and hormone bars are schematic, not to scale (the fundus shows where lesions are typical, not a real eye). The DKA/HHS classifier, the two calculators and the potassium helper apply the published criteria to the numbers you set; they are learning aids, not clinical tools.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Med;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+$('ret-note').innerHTML = RET_NOTE; $('neph-text').innerHTML = NEPH_TEXT; $('foot-cols').innerHTML = FOOT; $('macro-note').innerHTML = MACRO_NOTE;
+$('dka-intro').innerHTML = DKA_INTRO; $('crit-note').innerHTML = CRIT_NOTE; $('dka-clin').innerHTML = DKA_CLIN; $('mx-note').innerHTML = MX_NOTE; $('hypo-cols').innerHTML = HYPO_COLS;
+
+/* ---- complications map ---- */
+const MS = {k: 'eye'};
+function drawMap() {
+  let s = `<circle cx="150" cy="40" r="28" class="body"/><path class="body" d="M110 72 L190 72 L200 200 L180 200 L178 320 L156 320 L150 210 L144 320 L122 320 L120 200 L100 200 Z"/>`;
+  for (const [k, [l, x, y]] of Object.entries(MAP)) {
+    const on = k === MS.k;
+    s += `<circle cx="${x}" cy="${y}" r="9" class="${on ? 'nodeon' : 'node'}"/>`;
+    const right = x >= 150;
+    s += `<path class="lead" d="M${x + (right ? 9 : -9)} ${y} L${right ? 232 : 68} ${y}"/>` + T(right ? 236 : 64, y + 4, l, on ? 'b l' : 's', right ? 'start' : 'end');
+  }
+  s += T(4, 14, 'schematic', 's', 'start');
+  $('map-svg').innerHTML = s; $('map-find').innerHTML = MAP[MS.k][3];
+}
+Med.toggles('map-tg', Object.entries(MAP).map(([k, v]) => [k, v[0]]), k => { MS.k = k; drawMap(); }, 'eye'); drawMap();
+Med.toggles('mech-tg', Object.entries(MECH).map(([k, v]) => [k, v[0]]), k => { $('mech-find').innerHTML = '<p>' + MECH[k][1] + '</p>'; }, 'age');
+$('mech-find').innerHTML = '<p>' + MECH.age[1] + '</p><p class="note">Four interconnected oxidative pathways in retinopathy (a 2026 review): AGEs, PKC, polyol, hexosamine.</p>';
+
+/* ---- retinopathy ---- */
+const RS = {s: 0};
+function drawRet() {
+  const lv = RET[RS.s][1];
+  const cx = 160, cy = 150, R = 130, labs = [];
+  const lab = (x, y, ly, t) => labs.push([x, y, ly, t]);
+  let s = `<circle cx="${cx}" cy="${cy}" r="${R}" class="fund"/><circle cx="110" cy="150" r="20" class="disc"/><circle cx="215" cy="150" r="5" style="fill:none;stroke:var(--muted);stroke-width:1"/>`;
+  lab(110, 150, 150, 'optic disc'); lab(220, 150, 170, 'macula');
+  const vessels = [['M110 132 Q150 70 240 50', 'art'], ['M110 168 Q150 230 240 250', 'art'], ['M104 132 Q130 60 200 36', 'ven'], ['M104 168 Q130 240 200 264', 'ven'], ['M100 140 Q70 100 45 80', 'art'], ['M100 160 Q70 200 45 220', 'ven']];
+  for (const [d, c] of vessels) s += `<path class="${c}" d="${d}"/>`;
+  if (lv === 3) { s += `<path class="ven" d="M150 61 q5 -4 10 0 q5 4 10 0 q5 -4 10 0" style="stroke-width:5"/><path class="ven" d="M150 239 q5 4 10 0 q5 -4 10 0 q5 4 10 0" style="stroke-width:5"/>`; lab(180, 61, 40, 'venous beading'); }
+  const ma = [[180, 110], [200, 190], [150, 120], [235, 120], [190, 210], [140, 190]];
+  if (lv >= 1 && lv <= 4) { ma.slice(0, lv === 1 ? 3 : 6).forEach(([x, y]) => { s += `<circle cx="${x}" cy="${y}" r="2.6" class="ma"/>`; }); lab(235, 120, 100, 'microaneurysms'); }
+  if (lv >= 2 && lv <= 4) {
+    const hem = lv >= 3 ? [[90, 80], [230, 80], [90, 220], [230, 220], [70, 120], [255, 175], [125, 230], [200, 70]] : [[230, 90], [120, 215]];
+    hem.forEach(([x, y]) => { s += `<circle cx="${x}" cy="${y}" r="5.5" class="hem"/>`; });
+    lab(230, lv >= 3 ? 80 : 90, 70, lv >= 3 ? 'haemorrhages (4 quadrants)' : 'dot-blot haemorrhages');
+    [[205, 130], [210, 168], [195, 176]].forEach(([x, y]) => { s += `<rect x="${x - 2}" y="${y - 2}" width="4" height="4" class="hex"/>`; });
+    lab(212, 170, 190, 'hard exudates');
+    s += `<ellipse cx="160" cy="95" rx="9" ry="6" class="cws"/>`; lab(169, 95, 130, 'cotton-wool spot');
+  }
+  if (lv === 3) { s += `<path class="nv" d="M175 225 l6 -6 l6 6 l6 -6" style="stroke-width:1.4"/>`; lab(193, 222, 230, 'IRMA'); }
+  if (lv === 4) { s += `<path class="nv" d="M112 132 c10 -16 -4 -20 6 -30 c8 -8 18 6 10 14 c-8 8 -20 -6 -10 -14"/><path class="nv" d="M190 220 c8 -10 20 0 12 8 c-8 8 -20 -4 -10 -12"/>`; lab(205, 222, 250, 'new vessels'); s += `<path class="hem" d="M60 230 q30 -20 50 10 q-20 20 -50 -10 z"/>`; lab(108, 240, 272, 'vitreous haemorrhage'); }
+  if (lv === 5) { s += `<circle cx="215" cy="150" r="26" class="oed"/>`; [[200, 136], [230, 140], [222, 166], [205, 165]].forEach(([x, y]) => { s += `<rect x="${x - 2}" y="${y - 2}" width="4" height="4" class="hex"/>`; }); lab(241, 150, 210, 'macular oedema'); }
+  // right-hand label column, sorted by label y; leaders from the lesion
+  labs.sort((a, b) => a[2] - b[2]);
+  let last = -99;
+  for (const l of labs) { if (l[2] < last + 15) l[2] = last + 15; last = l[2]; }
+  for (const [x, y, ly, t] of labs) s += `<path class="lead" d="M${x} ${y} L296 ${ly - 4} L300 ${ly - 4}"/>` + T(304, ly, t, 's', 'start');
+  s += T(10, 296, 'schematic fundus (right eye, disc on the nasal side)', 's', 'start');
+  $('ret-svg').innerHTML = s; $('ret-find').innerHTML = RET[RS.s][2];
+}
+Med.stepper('ret-step', RET.map(r => r[0]), drawRet, RS);
+Med.key('ret-key', [['--artery', 'retinal artery'], ['--vein', 'retinal vein'], ['--rbc', 'blood: microaneurysm (dot), haemorrhage'], ['--muted', 'hard exudate'], ['--fluid', 'oedema']]);
+
+/* ---- KDIGO grid ---- */
+const NS = {gfr: 52, ua: 120};
+function drawNeph() {
+  const gi = G_CAT.findIndex(g => NS.gfr >= g[1] && NS.gfr < g[2]), ai = NS.ua < 30 ? 0 : NS.ua <= 300 ? 1 : 2; // KDIGO 2024: A2 30–300, A3 >300
+  let s = '';
+  A_CAT.forEach(([a, , , d, r], j) => { s += T(160 + j * 66 + 33, 18, a, 'b', 'middle') + T(160 + j * 66 + 33, 32, r, 's', 'middle'); });
+  G_CAT.forEach(([g, , , d, r], i) => {
+    const y = 42 + i * 34;
+    s += T(10, y + 21, g, 'b', 'start') + T(48, y + 21, r, 's', 'start');
+    A_CAT.forEach((a, j) => { s += `<rect x="${160 + j * 66 + 3}" y="${y + 3}" width="60" height="28" rx="4" class="${i === gi && j === ai ? 'cellon' : 'cell'}"/>`; });
+  });
+  s += T(10, 254, 'eGFR mL/min/1.73 m² (rows) × UACR mg/g (columns); KDIGO 2024', 's', 'start');
+  $('neph-svg').innerHTML = s;
+  const g = G_CAT[gi], a = A_CAT[ai];
+  const ckd = NS.gfr < 60 || NS.ua >= 30;
+  $('neph-out').innerHTML = `<span class="big">${g[0]} ${a[0]}</span><p><b>${g[0]}:</b> ${g[3]} (${g[4]}). <b>${a[0]}:</b> ${a[3]} (${a[4]} mg/g).${NS.ua === 300 ? ' At exactly 300 mg/g KDIGO 2024 says A2 (30–300); ADA 2026 counts ≥300 as severely increased.' : ''}</p><p>${ckd ? 'Meets the ADA 2026 description of CKD if it persists (eGFR &lt;60 and/or albuminuria) — UACR must be abnormal in two of three samples over 3–6 months.' : 'Neither eGFR &lt;60 nor albuminuria: not CKD by these two markers.'}${NS.gfr >= 20 && ckd ? ' SGLT2 inhibitor eligible by the ADA 2026 eGFR rule (≥20).' : ''}</p>`;
+}
+Med.slider('neph-sl', {id: 'gfr', label: 'eGFR (mL/min/1.73 m²)', min: 5, max: 120, step: 1, value: NS.gfr, fmt: v => v}, v => { NS.gfr = v; drawNeph(); }).init();
+Med.slider('neph-sl', {id: 'ua2', label: 'UACR (mg/g)', min: 0, max: 1000, step: 5, value: NS.ua, fmt: v => v}, v => { NS.ua = v; drawNeph(); }).init();
+drawNeph();
+
+Med.table('neuro-table', ['Type', 'Features (source)', 'Examine / screen'], NEURO);
+Med.table('macro-table', ['Target', 'ADA 2026', 'Source'], MACRO);
+
+/* ---- DKA / HHS classifier ---- */
+const D = {ed: '2024', glu: 450, ph: 7.15, hco: 12, na: 134, cl: 100, ket: 'hi', kd: 'yes'};
+const sl = {};
+function sev(ph, hco, ed) { // worst of pH and HCO3; pH in hundredths to avoid float edges
+  // 2024 Table 2: mild >7.25 to <7.30, moderate 7.0–7.25, severe <7.0. 2009: mild 7.25–7.30, moderate 7.00 to <7.24 (7.24 unassigned: counted moderate here), severe <7.00
+  const q = Math.round(ph * 100);
+  const p = q < 700 ? 3 : (ed === '2024' ? q <= 725 : q < 725) ? 2 : 1, h = hco < 10 ? 3 : hco < 15 ? 2 : 1;
+  return ['', 'mild', 'moderate', 'severe'][Math.max(p, h)];
+}
+function classify() {
+  const {ed, glu, ph, hco, na, cl, ket, kd} = D;
+  const ag = na - (cl + hco), osm = 2 * na + glu / 18;
+  let dka, hhs, extra = '';
+  if (ed === '2024') {
+    dka = (glu >= 200 || kd === 'yes') && ket === 'hi' && (ph < 7.3 || hco < 18);
+    hhs = glu >= 600 && osm > 300 && ket === 'lo' && ph >= 7.3 && hco >= 15;
+    if (dka && glu < 200) extra = ' <b>Euglycaemic DKA</b> (glucose &lt;200 mg/dL, about 10% of DKA; SGLT2 inhibitors cause most cases now; 2024 consensus).';
+    if (dka && glu >= 600 && osm > 300) extra = ' Glucose ≥600 and effective osmolality &gt;300 as well: <b>mixed DKA–HHS</b> (2024 consensus: insulin then started at the DKA rate).';
+  } else {
+    dka = glu > 250 && ket === 'hi' && ph <= 7.30 && hco <= 18;
+    hhs = glu > 600 && ph > 7.30 && hco > 18 && ket === 'lo' && osm > 320;
+    if (!dka && ket === 'hi' && (ph <= 7.30 || hco <= 18) && glu <= 250) extra = ' Ketoacidosis with glucose ≤250 mg/dL does <b>not</b> meet the 2009 glucose criterion — switch to 2024 to see euglycaemic DKA counted.';
+    if (dka && glu > 600 && osm > 320) extra = ' Also hyperosmolar (glucose &gt;600, osmolality &gt;320): features of both.';
+  }
+  let dx, why;
+  if (dka) { dx = 'DKA, ' + sev(ph, hco, ed); why = 'All criteria met: ' + (ed === '2024' ? 'glucose ≥200 or known diabetes, raised ketones, pH &lt;7.3 and/or HCO₃ &lt;18' : 'glucose &gt;250, ketones positive, pH ≤7.30, HCO₃ ≤18') + '. Severity by the worse of pH and bicarbonate.'; }
+  else if (hhs) { dx = 'HHS'; why = ed === '2024' ? 'Glucose ≥600, effective osmolality &gt;300, no significant ketonaemia, pH ≥7.3 and HCO₃ ≥15: all four met.' : 'Glucose &gt;600, pH &gt;7.30, HCO₃ &gt;18, small ketones, effective osmolality &gt;320.'; }
+  else { dx = 'Neither by these criteria'; why = 'Not all criteria are met for DKA or HHS' + (ed === '2024' ? ' (2024).' : ' (2009).') + ' Look at which value misses its cut-off in the table below.'; }
+  const flag = (bad, txt) => bad ? `<span class="over">${txt}</span>` : txt;
+  $('dka-calc').innerHTML = `<div class="ans"><span class="tag">Anion gap</span><span class="big">${ag}</span><span class="note">= ${na} − (${cl} + ${hco}) mmol/L; ${ag < 0 || ag > 40 ? '<b>unusual value: check the entered numbers</b>' : ag > 12 ? ((ph < 7.3 || hco < 18) ? '&gt;12: high anion gap, with acidosis by pH/HCO₃' : '&gt;12: high anion gap (pH and HCO₃ show no acidosis)') : '≤12'}</span></div>`
+    + `<div class="ans"><span class="tag">Effective osmolality</span><span class="big">${osm.toFixed(0)}</span><span class="note">= 2 × ${na} + ${glu} ÷ 18 mOsm/kg; ${flag(osm > (ed === '2024' ? 300 : 320), (ed === '2024' ? '&gt;300 is the 2024 HHS cut-off' : '&gt;320 is the 2009 HHS cut-off'))}</span></div>`
+    + `<div class="ans"><span class="tag">Glucose</span><span class="big">${glu}</span><span class="note">mg/dL = ${(glu / 18).toFixed(1)} mmol/L</span></div>`;
+  $('dka-out').innerHTML = `<span class="big">${dx}</span><p>${why}${extra}</p>`;
+}
+const setKetLabels = () => {
+  const items = D.ed === '2024' ? [['hi', 'β-hydroxybutyrate ≥3.0 mmol/L (or urine ≥2+)'], ['lo', 'BHB <3.0 (urine <2+)']] : [['hi', 'Positive (nitroprusside)'], ['lo', 'Small / minimal']];
+  Med.toggles('dka-ket', items, v => { D.ket = v; classify(); }, D.ket);
+  $('kd-q').hidden = D.ed !== '2024';
+};
+Med.toggles('dka-ed', [['2024', '2024 consensus (ADA 2026)'], ['2009', '2009 ADA consensus']], v => { D.ed = v; setKetLabels(); classify(); }, '2024');
+const SPEC = [['glu', 'Plasma glucose (mg/dL)', 40, 1200, 10, v => v], ['ph', 'pH', 6.8, 7.5, 0.01, v => v.toFixed(2)], ['hco', 'Bicarbonate (mmol/L)', 2, 32, 1, v => v], ['na', 'Sodium (mmol/L)', 115, 170, 1, v => v], ['cl', 'Chloride (mmol/L)', 80, 125, 1, v => v]];
+for (const [k, l, mn, mx, st, f] of SPEC) sl[k] = Med.slider('dka-sl', {id: 'd' + k, label: l, min: mn, max: mx, step: st, value: D[k], fmt: f}, v => { D[k] = v; classify(); });
+Object.values(sl).forEach(o => o.init());
+Med.toggles('dka-kd', [['yes', 'Yes'], ['no', 'No']], v => { D.kd = v; classify(); }, 'yes');
+Med.toggles('dka-pre', Object.entries(PRE).map(([k, v]) => [k, v[0]]), k => {
+  const p = PRE[k][1]; Object.assign(D, p);
+  for (const kk of Object.keys(sl)) { sl[kk].el.value = D[kk]; sl[kk].init(); }
+  setKetLabels(); Med.toggles('dka-kd', [['yes', 'Yes'], ['no', 'No']], v => { D.kd = v; classify(); }, D.kd); classify();
+}, 'dka');
+setKetLabels(); classify();
+Med.table('crit-table', ['Criterion', 'DKA 2009', 'DKA 2024', 'HHS 2009', 'HHS 2024'], CRIT);
+
+/* ---- DKA pathophysiology ---- */
+const BOX = {ins: [20, 20, 'Insulin ↓↓'], cr: [190, 20, 'Glucagon, cortisol,', 'adrenaline, GH ↑'], liv: [20, 120, 'Liver: gluconeogenesis,', 'glycogenolysis ↑'], fat: [370, 120, 'Adipose: lipolysis'], glu: [20, 220, 'Hyperglycaemia'], ffa: [370, 200, 'Free fatty acids'], ket: [200, 200, 'Liver: ketone bodies'], acid: [200, 278, 'Acidosis (high gap),', 'Kussmaul breathing'], diu: [20, 278, 'Osmotic diuresis:', 'water, Na, K lost']};
+const ARR = [['ins', 'liv'], ['cr', 'liv'], ['cr', 'fat'], ['ins', 'fat'], ['liv', 'glu'], ['fat', 'ffa'], ['ffa', 'ket'], ['ket', 'acid'], ['glu', 'diu']];
+const DS = {s: 0};
+function drawDkap() {
+  const lit = new Set(DKAP[DS.s][1]);
+  const W = 150, H = 40;
+  const ctr = k => { const [x, y] = BOX[k]; return [x + W / 2, y + H / 2]; };
+  let s = Med.DEFS;
+  for (const [a, b] of ARR) {
+    const [x1, y1] = ctr(a), [x2, y2] = ctr(b), on = lit.has(a) && lit.has(b);
+    const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy);
+    const tx = Math.abs(dx) / (W / 2 + 4) > Math.abs(dy) / (H / 2 + 4) ? (W / 2 + 4) / Math.abs(dx) : (H / 2 + 4) / Math.abs(dy);
+    s += `<path class="flow ${on ? '' : 'fdim'}" d="M${(x1 + dx * tx).toFixed(1)} ${(y1 + dy * tx).toFixed(1)} L${(x2 - dx * tx).toFixed(1)} ${(y2 - dy * tx).toFixed(1)}"/>`;
+  }
+  for (const [k, [x, y, l1, l2]] of Object.entries(BOX)) {
+    const on = lit.has(k);
+    s += `<g class="${on ? '' : 'fdim'}"><rect x="${x}" y="${y}" width="${W}" height="${H}" rx="8" class="${on ? 'fboxon' : 'fbox'}"/>` + T(x + W / 2, y + (l2 ? 17 : 25), l1, 'b', 'middle') + (l2 ? T(x + W / 2, y + 32, l2, 's', 'middle') : '') + '</g>';
+  }
+  s += T(530, 326, 'schematic', 's', 'end');
+  $('dkap-svg').innerHTML = s; $('dkap-find').innerHTML = DKAP[DS.s][2];
+}
+Med.stepper('dkap-step', DKAP.map(r => r[0]), drawDkap, DS);
+
+/* ---- management ---- */
+const XS = {s: 0};
+Med.stepper('mx-step', MX.map(r => r[0]), () => { $('mx-find').innerHTML = MX[XS.s][1]; }, XS);
+const KS = {k: 3.4};
+function drawK() {
+  const k = KS.k;
+  const r24 = k <= 3.5 ? '<b>⚠ Hold insulin.</b> Give potassium 10 mmol/h until K &gt;3.5 mmol/L.' : k < 5.0 ? 'Start insulin; add potassium (usually 20–30 mmol per litre of fluid), aiming for 4–5 mmol/L.' : 'Start insulin; no potassium yet (start once K &lt;5.0); recheck.';
+  const r09 = k <= 3.3 ? '<b>⚠ Hold insulin.</b> Replace potassium with the fluids until K &gt;3.3 mEq/L.' : k < 5.0 ? 'Start insulin; replace potassium (20–30 mEq per litre), target 4–5.' : 'Start insulin; begin potassium once below the upper normal (5.0–5.2).';
+  $('k-out').innerHTML = `<div class="ans"><span class="tag">Serum K</span><span class="big">${k.toFixed(1)}</span><span class="note">mmol/L</span></div><div class="ans"><span class="tag">2024 consensus</span><p>${r24}</p></div><div class="ans"><span class="tag">2009 consensus</span><p>${r09}</p></div><p class="note" style="grid-column:1/-1">Adult thresholds and doses (2024 and 2009 consensus reports are for adults); children follow paediatric guidance, not covered here.</p>`;
+}
+Med.slider('k-sl', {id: 'k', label: 'Serum potassium (mmol/L)', min: 2.0, max: 6.5, step: 0.1, value: KS.k, fmt: v => v.toFixed(1)}, v => { KS.k = v; drawK(); }).init(); drawK();
+
+/* ---- hypoglycaemia ---- */
+const HS = {g: 60};
+function drawHypo() {
+  const x = v => 20 + 380 * (v - 20) / 100;
+  let s = '';
+  HYPO_BANDS.forEach(([a, b, l]) => { const on = HS.g >= a && (HS.g < b || b === 120); s += `<rect x="${x(a)}" y="22" width="${x(b) - x(a)}" height="18" class="zone ${on ? 'zoneon' : ''}" style="${on ? '' : 'fill:var(--bg)'}"/>` + T((x(a) + x(b)) / 2, 56, l, on ? 'b' : 's', 'middle'); });
+  [20, 54, 70, 120].forEach(v => { s += T(x(v), 72, String(v), 's', v === 20 ? 'start' : v === 120 ? 'end' : 'middle'); });
+  s += `<path d="M${x(HS.g) - 6} 8 L${x(HS.g) + 6} 8 L${x(HS.g)} 18 Z" style="fill:var(--mark)"/>` + T(20, 90, 'glucose, mg/dL (ADA 2026 levels; level 3 is defined clinically)', 's', 'start');
+  $('hypo-svg').innerHTML = s;
+  const lvl = HS.g < 54 ? '<b>Level 2</b> (&lt;54 mg/dL, &lt;3.0 mmol/L): clinically significant; the threshold at which neuroglycopenic symptoms begin, needing immediate action; treat and review the plan (ADA 2026).' : HS.g < 70 ? '<b>Level 1</b> (&lt;70 and ≥54 mg/dL): treat; &lt;70 matters whatever the symptoms (ADA 2026; StatPearls: often defined as &lt;70).' : (HS.g === 70 ? '70 mg/dL is not a hypoglycaemia level (level 1 is &lt;70), but it is ADA\'s <b>alert value</b>: treat with fast-acting carbohydrate at 70 mg/dL or less (ADA 2026).' : 'Not hypoglycaemia by the ADA levels (above the 70 mg/dL alert value).');
+  $('hypo-out').innerHTML = `<span class="big">${HS.g} mg/dL</span><p>${lvl} Level 3 = any event needing someone else\'s help, at any glucose.</p>`;
+}
+Med.slider('hypo-sl', {id: 'hg', label: 'Measured glucose (mg/dL)', min: 20, max: 120, step: 1, value: HS.g, fmt: v => v + ' mg/dL'}, v => { HS.g = v; drawHypo(); }).init(); drawHypo();
+const CS = {s: 0};
+function drawCr() {
+  const n = CR[CS.s][1];
+  const labs = ['Insulin ↓', 'Glucagon ↑', 'Adrenaline ↑', 'Cortisol, GH ↑'];
+  let s = `<path class="axis" d="M30 160 L340 160"/>`;
+  labs.forEach((l, i) => {
+    const x = 40 + i * 76, h = i < n ? [90, 110, 120, 50][i] : 0;
+    s += `<rect x="${x}" y="${160 - h}" width="50" height="${h}" class="hbar" style="${i === n - 1 ? 'fill:var(--accent);fill-opacity:.7' : ''}"/>` + T(x + 25, 176, l, i === n - 1 ? 'b' : 's', 'middle');
+  });
+  s += T(30, 194, 'order as Wikipedia gives it; heights schematic', 's', 'start');
+  $('cr-svg').innerHTML = s; $('cr-find').innerHTML = CR[CS.s][2];
+}
+Med.stepper('cr-step', CR.map(r => r[0]), drawCr, CS);
+Med.swipeHints();
+</script>
+</body>
+</html>

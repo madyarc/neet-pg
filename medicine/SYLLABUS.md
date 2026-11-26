@@ -257,30 +257,30 @@ Source notes: Coded GM in the 2024 curriculum (IM in the 2019 one). GM9.8, GM14.
 
 ### 11. Diabetes Mellitus
 
-- [ ] **GM11.1** Define and classify diabetes
-- [ ] **GM11.2** Describe and discuss the epidemiology and pathogenesis and risk factors and clinical evolution of type 1 diabetes
-- [ ] **GM11.3** Describe and discuss the epidemiology and pathogenesis and risk factors economic Impact and clinical evolution of type 2 diabetes
-- [ ] **GM11.4** Describe and discuss the genetic background and the influence of the environment on diabetes
-- [ ] **GM11.5** Describe and discuss the pathogenesis and temporal evolution of microvascular and macrovascular complications of diabetes
-- [ ] **GM11.6** Describe and discuss the pathogenesis and precipitating factors, recognition and management of diabetic emergencies
-- [ ] **GM11.7** Elicit document and present a medical history that will differentiate the aetiologies of diabetes including risk factors, precipitating factors, lifestyle, nutritional history, family history, medication history, co-morbidities and target organ disease
-- [ ] **GM11.8** Perform a systematic examination that establishes the diagnosis and severity that includes skin, peripheral pulses, blood pressure measurement, fundus examination, detailed examination of the foot (pulses, nervous and deformities and injuries)
-- [ ] **GM11.9** Describe and recognise the clinical features of patients who present with a diabetic emergency
-- [ ] **GM11.10** Generate a differential diagnosis and prioritise based on clinical features that suggest a specific aetiology
-- [ ] **GM11.11** Order and interpret laboratory tests to diagnose diabetes and its complications including: glucoses, glucose tolerance test, glycosylated hemoglobin, urinary micro albumin, ECG, electrolytes, ABG, ketones, renal function tests and lipid profile
-- [ ] **GM11.12** Perform and interpret a capillary blood glucose test
-- [ ] **GM11.13** Perform and interpret a urinary ketone estimation with a dipstick
-- [ ] **GM11.14** Recognise the presentation of hypoglycaemia and outline the principles on its therapy
-- [ ] **GM11.15** Recognise the presentation of diabetic emergencies and outline the principles of therapy
-- [ ] **GM11.16** Discuss and describe the pharmacologic therapies for diabetes their indications, contraindications, adverse reactions and interactions
-- [ ] **GM11.17** Outline a therapeutic approach to therapy of T2Diabetes based on presentation, severity and complications in a cost-effective manner
-- [ ] **GM11.18** Describe and discuss the pharmacology, indications, adverse reactions and interactions of drugs used in the prevention and treatment of target organ damage and complications of Type II Diabetes including neuropathy, nephropathy, retinopathy, hypertension, dyslipidemia and cardiovascular disease
-- [ ] **GM11.19** Demonstrate and counsel patients on the correct technique to administer insulin
-- [ ] **GM11.20** Demonstrate to and counsel patients correct technique on the of self-monitoring of blood glucoses
-- [ ] **GM11.21** Recognise the Importance of patient preference while selecting therapy for diabetes
-- [ ] **GM11.22** Enumerate the causes of hypoglycaemia and describe the counter hormone response and the initial approach and treatment
-- [ ] **GM11.23** Describe the precipitating causes, pathophysiology, recognition, clinical features, diagnosis, stabilisation and management of diabetic ketoacidosis
-- [ ] **GM11.24** Describe the precipitating causes, pathophysiology, recognition, clinical features, diagnosis, stabilisation and management of Hyperosmolar non ketotic state
+- [x] **GM11.1** Define and classify diabetes — *ADA 2026 classification picker: [Diabetes Mellitus: Types, Pathogenesis and Laboratory Tests](endocrine/diabetes-types-pathogenesis.html)*
+- [~] **GM11.2** Describe and discuss the epidemiology and pathogenesis and risk factors and clinical evolution of type 1 diabetes — *T1/T2 feature picker; no India prevalence data (not open): [Diabetes Mellitus: Types, Pathogenesis and Laboratory Tests](endocrine/diabetes-types-pathogenesis.html)*
+- [~] **GM11.3** Describe and discuss the epidemiology and pathogenesis and risk factors economic Impact and clinical evolution of type 2 diabetes — *genes and environment; no economic data (not open): [Diabetes Mellitus: Types, Pathogenesis and Laboratory Tests](endocrine/diabetes-types-pathogenesis.html)*
+- [x] **GM11.4** Describe and discuss the genetic background and the influence of the environment on diabetes — *pathogenesis stepper incl. teplizumab in stage 2: [Diabetes Mellitus: Types, Pathogenesis and Laboratory Tests](endocrine/diabetes-types-pathogenesis.html)*
+- [x] **GM11.5** Describe and discuss the pathogenesis and temporal evolution of microvascular and macrovascular complications of diabetes — *complications map, retinopathy stepper, KDIGO grid, neuropathy, foot: [Diabetes: Complications, DKA, HHS and Hypoglycaemia](endocrine/complications-emergencies.html)*
+- [x] **GM11.6** Describe and discuss the pathogenesis and precipitating factors, recognition and management of diabetic emergencies — *DKA/HHS classifier 2009 vs 2024 with anion gap and osmolality: [Diabetes: Complications, DKA, HHS and Hypoglycaemia](endocrine/complications-emergencies.html)*
+- [~] **GM11.7** Elicit document and present a medical history that will differentiate the aetiologies of diabetes including risk factors, precipitating factors, lifestyle, nutritional history, family history, medication history, co-morbidities and target organ disease — *history principles: [Diabetes Mellitus: Types, Pathogenesis and Laboratory Tests](endocrine/diabetes-types-pathogenesis.html)*
+- [~] **GM11.8** Perform a systematic examination that establishes the diagnosis and severity that includes skin, peripheral pulses, blood pressure measurement, fundus examination, detailed examination of the foot (pulses, nervous and deformities and injuries) — *examination principles incl. skin lesions: [Diabetes Mellitus: Types, Pathogenesis and Laboratory Tests](endocrine/diabetes-types-pathogenesis.html)*
+- [x] **GM11.9** Describe and recognise the clinical features of patients who present with a diabetic emergency — *DKA/HHS pathophysiology and diagnosis: [Diabetes: Complications, DKA, HHS and Hypoglycaemia](endocrine/complications-emergencies.html)*
+- [~] **GM11.10** Generate a differential diagnosis and prioritise based on clinical features that suggest a specific aetiology — *feature comparison: [Diabetes Mellitus: Types, Pathogenesis and Laboratory Tests](endocrine/diabetes-types-pathogenesis.html)*
+- [x] **GM11.11** Order and interpret laboratory tests to diagnose diabetes and its complications including: glucoses, glucose tolerance test, glycosylated hemoglobin, urinary micro albumin, ECG, electrolytes, ABG, ketones, renal function tests and lipid profile — *C-peptide, UACR, glycaemic goals; diagnosis via biochemistry: [Diabetes Mellitus: Types, Pathogenesis and Laboratory Tests](endocrine/diabetes-types-pathogenesis.html)*
+- [~] **GM11.12** Perform and interpret a capillary blood glucose test — *principles of self-monitoring: [Diabetes Treatment: Drugs, Insulin and the ADA 2026 Approach](endocrine/diabetes-treatment.html)*
+- [x] **GM11.13** Perform and interpret a urinary ketone estimation with a dipstick — *nitroprusside dipstick principle: [Diabetes: Complications, DKA, HHS and Hypoglycaemia](endocrine/complications-emergencies.html)*
+- [x] **GM11.14** Recognise the presentation of hypoglycaemia and outline the principles on its therapy — *hypoglycaemia levels, alert value, counter-regulation, causes: [Diabetes: Complications, DKA, HHS and Hypoglycaemia](endocrine/complications-emergencies.html)*
+- [x] **GM11.15** Recognise the presentation of diabetic emergencies and outline the principles of therapy — *DKA/HHS management stepper (adult doses, 2024 and 2009 consensus): [Diabetes: Complications, DKA, HHS and Hypoglycaemia](endocrine/complications-emergencies.html)*
+- [x] **GM11.16** Discuss and describe the pharmacologic therapies for diabetes their indications, contraindications, adverse reactions and interactions — *mechanism map, ADA Table 9.2 incl. tirzepatide, interactions as sourced: [Diabetes Treatment: Drugs, Insulin and the ADA 2026 Approach](endocrine/diabetes-treatment.html)*
+- [x] **GM11.17** Outline a therapeutic approach to therapy of T2Diabetes based on presentation, severity and complications in a cost-effective manner — *drug classes, insulin profiles: [Diabetes Treatment: Drugs, Insulin and the ADA 2026 Approach](endocrine/diabetes-treatment.html)*
+- [x] **GM11.18** Describe and discuss the pharmacology, indications, adverse reactions and interactions of drugs used in the prevention and treatment of target organ damage and complications of Type II Diabetes including neuropathy, nephropathy, retinopathy, hypertension, dyslipidemia and cardiovascular disease — *ADA 2026 BP/LDL/aspirin targets: [Diabetes: Complications, DKA, HHS and Hypoglycaemia](endocrine/complications-emergencies.html)*
+- [~] **GM11.19** Demonstrate and counsel patients on the correct technique to administer insulin — *principles of injection technique: [Diabetes Treatment: Drugs, Insulin and the ADA 2026 Approach](endocrine/diabetes-treatment.html)*
+- [~] **GM11.20** Demonstrate to and counsel patients correct technique on the of self-monitoring of blood glucoses — *principles of insulin use and monitoring: [Diabetes Treatment: Drugs, Insulin and the ADA 2026 Approach](endocrine/diabetes-treatment.html)*
+- [~] **GM11.21** Recognise the Importance of patient preference while selecting therapy for diabetes — *ADA 2026 comorbidity picker with kidney limits: [Diabetes Treatment: Drugs, Insulin and the ADA 2026 Approach](endocrine/diabetes-treatment.html)*
+- [x] **GM11.22** Enumerate the causes of hypoglycaemia and describe the counter hormone response and the initial approach and treatment — *hypoglycaemia treatment, 15-15 rule: [Diabetes: Complications, DKA, HHS and Hypoglycaemia](endocrine/complications-emergencies.html)*
+- [x] **GM11.23** Describe the precipitating causes, pathophysiology, recognition, clinical features, diagnosis, stabilisation and management of diabetic ketoacidosis — *DKA/HHS management: [Diabetes: Complications, DKA, HHS and Hypoglycaemia](endocrine/complications-emergencies.html)*
+- [x] **GM11.24** Describe the precipitating causes, pathophysiology, recognition, clinical features, diagnosis, stabilisation and management of Hyperosmolar non ketotic state — *DKA/HHS complications and resolution: [Diabetes: Complications, DKA, HHS and Hypoglycaemia](endocrine/complications-emergencies.html)*
 
 ### 12. Thyroid Dysfunction
 
