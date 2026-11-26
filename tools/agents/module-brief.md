@@ -30,6 +30,8 @@ scripts (expand.py pastes quotes from saved search output; shingle/copy checks; 
   Fetch the CURRENT wikitext (action=raw, follow redirects) for every Wikipedia article you quote: older saved copies
   go stale. tools/test/wp_audit.sh checks all quoted articles. Already excluded: see the EXCLUDED notes in the sheets
   (e.g. Fontanelle, Joint, Connective tissue, Psoriasis, Atypical antipsychotic, Standard anatomical position).
+  An article whose only OpenStax link is an infobox image (e.g. "2228 Immune Hypersensitivity new.jpg") is not excluded:
+  we quote its text, not the image. Any text citation of OpenStax/cnx/Boundless/Lumen excludes the article.
 - Clinical content: drug doses, schedules, cut-offs, staging and classifications only from a named, dated official
   guideline or society statement (say "<body> <year>" on the page); otherwise give the principle without numbers.
   No patient photos. Indian national programme facts from MoHFW/NCDC/ICMR documents, with year.

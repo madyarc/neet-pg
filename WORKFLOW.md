@@ -88,7 +88,10 @@ Last updated: 2026-11-23
   ADA discordant wording, colours) [x] fixes (602 quotes) [x] committed 2026-11-26. P02 [x] build (427 quotes) [x] review (no wrong facts; one-source pairs, transmigration drawn transcellular,
   drug blocks off-arrow, path.js stepper focus) [x] fixes (472 quotes) [x] committed 2026-11-26.
   (bioc.js has the stepper-end focus fix in another form: verified; only path.js lacked it, P02 fix adds it.) M02 [x] build (474 quotes; MoHFW 2017, CDC 2024; Wikipedia Humoral immunity, Type II hypersensitivity excluded)
-  [ ] review (running). G02 [ ] build (running; medicine/endocrine/,
+  [x] review (pemphigus Dsg quote is paraneoplastic, crossmatch quote is transfusion, open-vial lists (safety),
+  several drawings mechanically wrong, colour misuse) [ ] fixes (running).
+  POLICY (default, 2026-11-26): a Wikipedia article whose only OpenStax link is an infobox IMAGE is not excluded (we
+  quote its text, which does not cite OpenStax). Text citations of OpenStax/Boundless/Lumen still exclude. Ask user. G02 [ ] build (running; medicine/endocrine/,
   GM11.1–11.24). C02 [ ] build (running; community-medicine/biostatistics/, CM6.1–6.4).
   R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,
   NICE head-injury adult rule, 10-day rule year, radiograph densities unsourced, PET geometry) [x] fixes (364 quotes) [x] committed 2026-11-26.
