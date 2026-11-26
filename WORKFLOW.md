@@ -84,7 +84,7 @@ Last updated: 2026-11-23
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
   colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. S01 [x] build (243 quotes; EU trauma 2023 / ATLS 10th, Sepsis-3, SSC 2021, ERAS; Wikipedia Homeostasis excluded)
   [x] review (ERAS carbohydrate loading misattributed, TBI/spinal exception missing at the instruction (safety),
-  ebb/flow curve directions, SSC 2021 gaps) [ ] fixes (running). O01 [ ] build (running; orthopaedics/trauma/). An01 [ ] build (running; anaesthesia/resuscitation-airway/,
+  ebb/flow curve directions, SSC 2021 gaps) [ ] fixes (running). O01 [x] build (313 quotes; BOAST 2017, ATLS 11th 2025, WHO 2005/2018) [ ] review (running). An01 [ ] build (running; anaesthesia/resuscitation-airway/,
   AS2 + AS11). Ps01 [x] build (289 quotes) [x] review (no wrong facts; duration-picker logic, missing arrowheads,
   mesocortical path, synapse marks, clozapine schedule) [x] fixes (322 quotes) [x] committed 2026-11-25. C01 [x] build (328 quotes; CDC 2012, WHO 1968, SRS 2020, NFHS-5, IDSP; no new tokens) [x] review (no wrong formulas; disability limitation level
   one-source, rate/time misattribution, --accent/--clin misuse, gaps: indirect standardisation, field trial) [x] fixes (374 quotes) [x] committed 2026-11-25. Pd01 [x] build (458 quotes; WHO 2006/2007 LMS z-score chart, CDC 2022 milestones via Zubler 2022) [x] review.
