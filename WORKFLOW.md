@@ -10,7 +10,12 @@ Last updated: 2026-11-23
 
 - RESUMED 2026-11-26 02:34 after the terminal tab closed at 02:29 (no crash, no OOM, no core dump; Konsole was flooding
   notifications). New tab had no cap: set 9G/10G again. S01, O01, An01 builders resumed (S01/O01 had ~200 downloads each,
-  no pages; An01 nothing). Live wikitext audit resumed. Server from the old session still serving :8765.
+  no pages; An01 nothing). Server from the old session still serving :8765.
+  Live wikitext audit COMPLETE (all titles, 0 failed). New beyond the fixed set, QUEUED for the re-sourcing agent
+  (next free slot): Sarcomere (muscle-tissue 10), Skeletal_muscle (muscle-tissue 7), Tendon_sheath (connective-tissue 1),
+  Anatomical_terms_of_motion in joints-ankle-foot (2), Osteoarthritis in joints-hip-knee (3); pages anatomy/general/
+  muscle.html, connective-tissue.html, lower-limb/joints.html. (The audit also lists excluded quotes still kept in
+  sheets as unused; expected.)
   USER (outside project): kernel btrfs zstd error also on inode 96460 = /var/lib/pacman/local/snappy-1.3.1-1/files
   (pacman DB entry; `sudo pacman -S snappy` rewrites it). wp_Spermiogenesis.txt replacement still awaiting the user.
 - RESUMED 2026-11-25 (cap re-set to 10G on the new tab; server up): M01 fix agent resumed, F01 review running, FM01
