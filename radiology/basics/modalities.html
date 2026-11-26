@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Imaging Modalities and Choosing One</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/rad.css">
+<style>
+/* No new colour tokens. Image panels are drawn in plain greys on black (the image's own grey scale, the same in both themes);
+   UI selection is --accent, the selected point on a scale --mark, hazards and contraindications --clin. */
+svg.sch .img{fill:#000}
+svg.sch .imgtxt{font:600 11.5px var(--f-body);fill:#fff;paint-order:stroke;stroke:#000;stroke-width:3px;stroke-linejoin:round}
+svg.sch .imgtxt.s{font-size:10.5px;font-weight:500}
+svg.sch text.imgtxt,svg.sch text.imgtxt.s{fill:#fff;stroke:#000;stroke-width:3px;paint-order:stroke}
+svg.sch .sel{stroke:var(--accent);stroke-width:2.5;fill:none}
+svg.sch .beam{fill:var(--ink);fill-opacity:.07;stroke:none}
+svg.sch .ray{stroke:var(--ink);fill:none;marker-end:url(#arr)}
+svg.sch .hz{fill:var(--clin)}
+svg.sch .part{cursor:pointer}
+.mod-card{min-height:12em}
+.mod-card .tag{display:inline-block;margin-right:8px}
+.ion-y,.ion-n{font:600 11.5px var(--f-mono);padding:1px 7px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+.ion-y{color:var(--clin);border-color:var(--clin)}
+.ion-n{color:var(--muted)}
+.bars{display:flex;flex-direction:column;gap:6px}
+.res{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg)}
+.res .big{font-size:20px}
+.qrow{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}
+.qrow .lab{font-weight:600;font-size:13.5px}
+.cap.keyp{border-left-color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Radiodiagnosis</a> <span class="muted">· Module 01: <span aria-current="page">Imaging modalities</span> · <a href="radiation-safety.html">Radiation safety and PC-PNDT</a></span></nav>
+
+<header class="stack">
+  <h1>Imaging Modalities: How They Work and Which One to Choose</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-how">How each works</a> <a href="#h-ion">Ionising or not</a> <a href="#h-dose">Relative dose</a> <a href="#h-choose">Choosing a modality</a> <a href="#h-before">Before you request</a> <a href="#h-preg">Pregnancy</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-how">
+  <h2 id="h-how">How each modality makes its picture</h2>
+  <div class="chips" id="mod-tg" aria-label="Modality"></div>
+  <div class="sliders" id="mod-sl"></div>
+  <div class="chips" id="mod-sub" aria-label="Part or setting"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="mod-svg" viewBox="0 0 560 360" role="img" aria-label="Schematic of the chosen imaging modality"></svg></div>
+    <div class="prose find mod-card" id="mod-find" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="mod-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ion">
+  <h2 id="h-ion">Ionising or non-ionising</h2>
+  <div class="prose" id="ion-text"></div>
+  <div class="scroll"><table id="ion-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-dose">
+  <h2 id="h-dose">Relative dose: how many chest X-rays is a CT?</h2>
+  <div class="chips" id="dose-tg" aria-label="Dose table"></div>
+  <div class="schbox"><svg class="fig sch" id="dose-svg" viewBox="0 0 640 330" role="img" aria-label="Approximate effective doses of common examinations on a logarithmic scale, from the chosen table"></svg></div>
+  <div class="chips" id="dose-ex" aria-label="Examination"></div>
+  <div class="res" id="dose-out" aria-live="polite"></div>
+  <div class="prose" id="dose-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-choose">
+  <h2 id="h-choose">Choosing a modality</h2>
+  <div class="prose" id="choose-text"></div>
+  <h3>First-line imaging where a named guideline says so</h3>
+  <div class="chips" id="scn-tg" aria-label="Scenario"></div>
+  <div class="res prose" id="scn-out" aria-live="polite"></div>
+  <p class="muted" id="scn-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-before">
+  <h2 id="h-before">Before you request: four questions, and contrast safety</h2>
+  <div class="step" id="bef-step"></div>
+  <div class="prose find" id="bef-find" aria-live="polite"></div>
+  <div class="scroll"><table id="con-table"></table></div>
+  <p class="muted" id="con-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-preg">
+  <h2 id="h-preg">Pregnancy and imaging</h2>
+  <div class="prose" id="preg-text"></div>
+  <h3>Could she be pregnant? The UK pathway (HPA, RCR and College of Radiographers 2009)</h3>
+  <div class="qrow"><span class="lab">Is she pregnant?</span><div class="chips" id="pq-preg"></div></div>
+  <div class="qrow" id="pq-per-row"><span class="lab">Is her period overdue?</span><div class="chips" id="pq-per"></div></div>
+  <div class="qrow" id="pq-dose-row"><span class="lab">Expected fetal dose of the examination</span><div class="chips" id="pq-dose"></div></div>
+  <div class="res prose" id="pq-out" aria-live="polite"></div>
+  <div class="prose" id="preg-rule"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-exam">
+  <h2 id="h-exam">Exam points</h2>
+  <div class="scroll"><table id="exam-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BImaging%20Modalities%3A%20How%20They%20Work%20and%20Which%20One%20to%20Choose%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fradiology%2Fbasics%2Fmodalities.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/rad.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-r01.md, Part A) ===================== */
+const LEDE = 'Pick a modality and see how its picture is made: X-rays absorbed by bone, a CT window you can slide, echoes and Doppler shift, T1 against T2, a tracer finding the hot spots. Then compare doses, see which test a guideline puts first, and work through the questions to ask before any request. Normal radiographic anatomy is on the anatomy pages: <a href="../../anatomy/upper-limb/radiographs-landmarks.html">upper limb</a>, <a href="../../anatomy/lower-limb/radiographs-landmarks.html">lower limb</a>, <a href="../../anatomy/abdomen-pelvis/imaging-abdomen.html">abdomen</a>.';
+
+/* X-ray: the densities, in order of attenuation (order from the Hounsfield values and radiograph descriptions; greys schematic) */
+const DENS = [
+  ['air', 'Air (gas)', 0.04, 'Least attenuating: shows <b>black</b> — the air-filled lungs look black on a chest radiograph (Wikipedia). CT: −1000 HU (StatPearls; Wikipedia).'],
+  ['fat', 'Fat', 0.3, 'Drawn dark grey because its CT number is negative, about −120 to −90 HU (Wikipedia; a 2026 review uses −190 to −30 HU for fat in muscle) — the shade is inferred from HU, not quoted for radiographs.'],
+  ['soft', 'Soft tissue and fluid', 0.5, 'Drawn mid grey, between fat and bone, from CT numbers: water 0 HU, muscle about +35 to +55 (Wikipedia). Wikipedia\'s Radiodensity article instead describes muscle and skin as looking "black or dark gray" on typical radiographs — the sources do not agree on a shade.'],
+  ['bone', 'Bone', 0.88, 'Dense, absorbs much of the beam: shows <b>white</b> (Wikipedia). CT: up to about +1000 HU (StatPearls); cortical bone +500 to +1900 (Wikipedia), 700–1500 (a 2024 review).'],
+  ['metal', 'Metal', 1.0, 'Denser still: white (Wikipedia: bony tissue and metals absorb more X-ray photons). CT: more than +3000 HU for metals such as steel (StatPearls).'],
+];
+/* CT phantom: [key, label, HU used for the schematic, where the value comes from] */
+const CT_TIS = [
+  ['air', 'air', -1000, 'air −1000 (StatPearls; Wikipedia)'],
+  ['lung', 'lung', -650, 'lung −700 to −600 (Wikipedia)'],
+  ['fat', 'fat', -105, 'fat −120 to −90 (Wikipedia)'],
+  ['water', 'water', 0, 'water 0 (StatPearls; Wikipedia)'],
+  ['muscle', 'muscle', 45, 'muscle +35 to +55 (Wikipedia)'],
+  ['canc', 'cancellous', 350, 'cancellous bone +300 to +400 (Wikipedia)'],
+  ['cort', 'cortical bone', 1000, 'bone up to about +1000 (StatPearls); cortical +500 to +1900 (Wikipedia)'],
+];
+const CT_PRESET = {full: ['Whole range (L 0, W 2000)', 0, 2000], brain: ['Wikipedia\'s brain example (0 to 80 HU)', 40, 80], low: ['Centred on fat and lung (L −500, W 1000)', -500, 1000], high: ['Centred on bone (L 700, W 1000)', 700, 1000]};
+/* ultrasound targets */
+const US_T = {
+  tis: ['Soft tissue', 'Echoes from tissue interfaces are recorded; brightness depends on how much each tissue reflects. Higher echogenicity is <b>hyperechoic</b> (lighter), lower is <b>hypoechoic</b> (darker) (Wikipedia; a 2026 review uses the terms for fatty muscle).'],
+  cyst: ['Fluid', 'A region that returns no echoes is <b>anechoic</b> and shown black (Wikipedia). The schematic draws fluid this way.'],
+  stone: ['Stone', 'A gallstone or calcific deposit is bright, with a dark <b>acoustic shadow</b> behind it (Wikipedia, for gallstones; a 2024 review, for calcific deposits).'],
+  gas: ['Gas', '<b>Air blocks the ultrasound beam</b>, so healthy lung cannot be imaged directly (Wikipedia) — air-containing structures are better shown by X-ray (the NMC curriculum\'s own example for RD1.1).'],
+};
+/* MRI head phantom greys [T1, T2]; sources in the caption */
+const MR = {
+  fat: ['Scalp fat', 0.95, 0.6], bone: ['Skull (cortical bone)', 0.07, 0.07], gm: ['Grey matter', 0.45, 0.62], wm: ['White matter', 0.68, 0.42], csf: ['CSF (ventricles)', 0.1, 0.95],
+};
+const MR_T = {
+  t1: '<p><b>T1-weighted:</b> fat is <b>bright</b>; CSF, bone and air are dark (Wikipedia; a 2021 review). White matter looks whiter than grey matter (Wikipedia). Gadolinium contrast is also bright on T1 (Wikipedia; 2021 review).</p>',
+  t2: '<p><b>T2-weighted:</b> water and fluid — CSF, oedema — are <b>bright</b> (Wikipedia; a 2021 review); white matter darker than grey matter (Wikipedia). Fat on T2 depends on the sequence: Wikipedia\'s table lists it as low, but notes that fat and fluid look similar on fast spin-echo, so the schematic draws it mid-grey.</p>',
+};
+const MOD = {
+  xr: {name: 'X-ray', ion: true, text: '<h3>Plain radiograph (X-ray)</h3><p>X-rays are ionising electromagnetic radiation (StatPearls; Wikipedia). As the beam crosses the body each tissue <b>attenuates</b> it according to its density and composition (Wikipedia); what gets through forms the image, so the more a tissue absorbs, the <b>whiter</b> it looks (Wikipedia). Tap a column, or a chip, to see each one. No source we could use lists "five radiographic densities"; the order air &lt; fat &lt; soft tissue/fluid &lt; bone &lt; metal is inferred from CT numbers (StatPearls; Wikipedia; 2024 and 2026 reviews) and from Wikipedia\'s descriptions of air black and bone and metal white.</p>'},
+  fl: {name: 'Fluoroscopy', ion: true, text: '<h3>Fluoroscopy</h3><p>An X-ray tube (classically under the table) gives images on a monitor in <b>real time</b> (StatPearls), now through an image intensifier or a flat-panel detector (Wikipedia). It gives a functional as well as anatomic assessment in real time, usually with contrast, and can guide procedures (StatPearls).</p><p><b>Dose:</b> the continuous exposure gives a higher dose than a single radiograph (Wikipedia), and fluoroscopic procedures give medical staff their greatest dose (StatPearls; AERB 2016 for interventional work). Barium sulfate is used for the upper GI tract and small bowel but is <b>contraindicated if perforation is suspected</b> (ACR Manual on Contrast Media 2024).</p>'},
+  ct: {name: 'CT', ion: true, text: '<h3>Computed tomography</h3><p>An X-ray tube and a row of detectors <b>rotate in a gantry</b> round the patient (StatPearls; Wikipedia); a computer reconstructs slices. Each pixel\'s attenuation is a <b>Hounsfield unit</b>: water 0, air −1000 (StatPearls; Wikipedia); denser tissue is positive and bright, less dense negative and dark (StatPearls).</p><p><b>Windowing</b> maps a chosen range of HU onto the grey scale: below the window is black, above it white (Wikipedia). Slide the level and width and watch tissues appear and vanish.</p>'},
+  us: {name: 'Ultrasound', ion: false, text: '<h3>Ultrasound</h3><p>A transducer (piezoelectric, Wikipedia) sends sound pulses; tissues with different reflecting properties send back <b>echoes</b> that are turned into the image (Wikipedia; StatPearls). Real time, low cost, <b>no ionising radiation</b> (StatPearls).</p>'},
+  dop: {name: 'Doppler', ion: false, text: '<h3>Doppler ultrasound</h3><p>Echoes from moving blood come back at a shifted frequency — the <b>Doppler effect</b> (Wikipedia). Doppler shows whether flow is <b>towards or away from the probe</b> and its relative speed (Wikipedia): towards above the baseline, away below it on a spectral trace (Wikipedia). It is used for vessel patency and organ perfusion (StatPearls). Colour Doppler conventions differ between laboratories (Wikipedia), so this schematic uses labels, not colours.</p>'},
+  mri: {name: 'MRI', ion: false, text: '<h3>Magnetic resonance imaging</h3><p>A strong magnet (clinical scanners usually <b>1.5–3 T</b>), gradient coils and a radiofrequency coil (StatPearls); the signal comes mostly from hydrogen nuclei — water protons (Wikipedia). <b>No ionising radiation</b> (StatPearls), and better soft-tissue contrast than CT (Wikipedia; StatPearls).</p>'},
+  nm: {name: 'Bone scan', ion: true, text: '<h3>Nuclear medicine: the bone scan</h3><p>A radiopharmaceutical, usually given orally or intravenously (StatPearls; Wikipedia also lists inhalation), goes to its target organ, and a <b>gamma camera</b> records what it emits (StatPearls; Wikipedia). For a bone scan the tracer is <b>technetium-99m methylene diphosphonate (Tc-99m MDP)</b> (StatPearls; Wikipedia); it binds the hydroxyapatite of bone, more where turnover and osteoblastic activity are high (StatPearls; Wikipedia). Tc-99m gives 140 keV photons and has a 6-hour half-life (StatPearls).</p>'},
+  pet: {name: 'PET', ion: true, text: '<h3>Positron emission tomography (PET)</h3><p>The tracer emits <b>positrons</b>; each meets an electron and the pair <b>annihilate</b> into gamma rays, which a <b>ring of detectors</b> records (StatPearls; Wikipedia) — two 511 keV photons going almost exactly opposite ways (Wikipedia). <b>FDG</b> (fluorodeoxyglucose) is a glucose analogue taken up by high-glucose-using cells — normal brain, kidney, many cancers (Wikipedia) — so active areas show as bright spots (StatPearls).</p>'},
+};
+const MRI_HAZ = '<p class="cap warn"><b>MRI hazards:</b> ferromagnetic objects become <b>projectiles</b> (Wikipedia; a 2023 review). Wikipedia lists as contraindications most <b>cardiac pacemakers and cochlear implants</b> and <b>metallic foreign bodies in the eye</b>; StatPearls says only that the magnetic, gradient and radiofrequency fields <b>can interact with implanted devices</b>. Devices are labelled <b>MR Safe, MR Conditional or MR Unsafe</b>, and some patients with a pacemaker can now be scanned (Wikipedia) — check the device. <b>Sources differ</b> on passive implants: StatPearls calls heart valves, stents and artificial joints generally safe (they may cause artefacts), while Wikipedia lists stents and orthopaedic implants among possible contraindications or risk-complications. An orbit X-ray can look for metal before MRI (Wikipedia). CT can be used when MRI is contraindicated (Wikipedia). Claustrophobia may need sedation (Wikipedia); some children need general anaesthesia (a 2023 review).</p>';
+const MOD_NOTE = 'All panels are schematics, not images of patients. Grey levels are illustrative: only their order and the HU numbers quoted come from the sources.';
+
+const ION_TEXT = '<p><b>Ionising</b> radiation has enough energy to remove electrons from atoms; <b>non-ionising</b> radiation only excites them (StatPearls; Wikipedia). Radiography, fluoroscopy and CT use X-rays and nuclear medicine uses radioactive tracers (StatPearls); ultrasound and MRI use no ionising radiation, and are the alternatives to consider in pregnancy (HPA–RCR–CoR 2009) and in patients needing repeated imaging (StatPearls).</p>';
+const ION_TABLE = [
+  ['X-ray, fluoroscopy, CT', 'X-rays from a tube', '<span class="ion-y">ionising</span>'],
+  ['Bone scan, other nuclear medicine', 'Gamma rays from a radiopharmaceutical (e.g. Tc-99m)', '<span class="ion-y">ionising</span>'],
+  ['PET', 'Positron → two gamma photons', '<span class="ion-y">ionising</span>'],
+  ['Ultrasound (and Doppler)', 'Sound', '<span class="ion-n">non-ionising</span>'],
+  ['MRI', 'Magnetic field and radiofrequency', '<span class="ion-n">non-ionising</span>'],
+];
+
+/* approximate effective doses (mSv) and the table's own background-radiation equivalent: two named, dated tables */
+const DOSE = {
+  uk: {name: 'UKHSA (gov.uk), updated 2026', bg: 'UK average background 2.1 mSv a year', cxr: 'cxr', rows: [
+    ['cxr', 'Chest X-ray (PA)', 0.02, '3 days'], ['abd', 'Abdomen X-ray', 0.7, '4 months'], ['ls', 'Lumbar spine X-ray', 1.3, '7 months'],
+    ['cth', 'CT head', 2, '1 year'], ['bone', 'Bone scan (Tc-99m)', 4, '2 years'], ['ctc', 'CT chest', 8, '3.6 years'], ['cta', 'CT abdomen/pelvis', 10, '4.5 years']]},
+  us: {name: 'RadiologyInfo (ACR/RSNA), reviewed 2025', bg: 'US average about 3 mSv a year from natural radiation', cxr: 'cxr', rows: [
+    ['cxr', 'Chest X-ray', 0.1, '10 days'], ['cth', 'CT brain', 1.6, '7 months'], ['ctc', 'CT chest', 6.1, '2 years'], ['cta', 'CT abdomen and pelvis', 7.7, '2.6 years'], ['pet', 'PET/CT whole body', 22.7, '7.6 years']]},
+};
+const DOSE_TEXT = '<p class="muted">Approximate typical <b>effective doses</b>; doses vary with the patient and the machine (RadiologyInfo). The two tables <b>disagree</b> — a chest X-ray is 0.02 mSv in UKHSA\'s table and 0.1 mSv in RadiologyInfo\'s — so each "chest X-ray equivalent" is worked out within one table. Ultrasound and MRI give no ionising dose. Background equivalents also differ: Wikipedia puts a routine abdominal CT at about three years of background radiation (the figure used on the <a href="../../anatomy/abdomen-pelvis/imaging-abdomen.html">abdomen imaging page</a>), UKHSA at 4.5 years and RadiologyInfo at 2.6 years. RCR iRefer and the ACR Appropriateness Criteria also list dose bands but are not openly available, so they are not used here.</p>';
+
+/* first-line imaging: [label, modality, detail, guideline line] */
+const SCN = {
+  gall: ['Suspected gallstones', 'Ultrasound (with liver function tests)', 'Ultrasound first; consider MRCP if ultrasound has not detected common bile duct stones but the duct is dilated and/or liver function tests are abnormal (NICE). Diagnosis is typically confirmed by abdominal ultrasound (Wikipedia).', 'NICE CG188 (2014)'],
+  renal: ['Renal colic, adult', 'Low-dose non-contrast CT within 24 h', 'NICE offers urgent low-dose non-contrast CT to adults with suspected renal colic; Wikipedia also gives non-contrast helical CT as the test to confirm stones.', 'NICE NG118 (2019)'],
+  renalp: ['Renal colic, pregnant', 'Ultrasound instead of CT', 'NICE: if a woman is pregnant, offer ultrasound instead of CT; ultrasound has no radiation exposure (Wikipedia).', 'NICE NG118 (2019)'],
+  renalc: ['Renal colic, child', 'Ultrasound first-line', 'NICE: ultrasound first for children and young people; consider low-dose non-contrast CT only if still uncertain.', 'NICE NG118 (2019)'],
+  pe: ['Suspected PE (Wells likely)', 'CT pulmonary angiogram (CTPA)', 'NICE: CTPA immediately if possible; for contrast allergy, severe renal impairment or a high risk from irradiation, consider a V/Q SPECT (or planar V/Q) scan instead. CTPA is the recommended first-line test for most people (Wikipedia).', 'NICE NG158 (2020, updated 2023)'],
+  stroke: ['Suspected acute stroke', 'Non-enhanced CT brain, immediately (when NICE\'s criteria apply)', 'NICE lists when to image immediately (e.g. thrombolysis or thrombectomy candidates, anticoagulants). CT rules out bleeding but may miss early ischaemia (Wikipedia).', 'NICE NG128 (2019, updated 2022)'],
+  head: ['Head injury in an adult, with risk factors', 'CT head within 1 hour', 'NICE (rec 1.5.8, people 16 and over): CT head within 1 hour if any of — GCS 12 or less on initial assessment; GCS below 15 at 2 hours; suspected open or depressed skull fracture; any sign of basal skull fracture; post-traumatic seizure; focal neurological deficit; more than one episode of vomiting. Not every head injury needs CT. CT is the preferred emergency test for traumatic brain injury (Wikipedia).', 'NICE NG232 (2023)'],
+  mscc: ['Suspected spinal cord compression (metastatic)', 'MRI (within 24 h)', 'NICE: MRI as soon as possible and always within 24 hours for suspected metastatic cord compression; diagnosis is preferably by MRI of the whole spine (Wikipedia).', 'NICE NG234 (2023)'],
+};
+const SCN_NOTE = 'Only scenarios where an openly available guideline (NICE) names the first test are shown, each with its year; follow local protocols. ACR Appropriateness Criteria and RCR iRefer were not used. For suspected appendicitis in pregnancy only StatPearls (one source) was found: it calls ultrasound and MRI usually appropriate.';
+const CHOOSE_TEXT = '<p><b>Principles</b> (RD1.1, RD2.2): use the test that answers the question with the least harm. Air blocks ultrasound, so air-filled structures need X-ray or CT (Wikipedia; the NMC curriculum\'s example). MRI gives the best soft-tissue contrast (Wikipedia; StatPearls) without ionising radiation, which makes it useful in pregnancy, children and people needing repeated imaging (StatPearls). CT is used when MRI is contraindicated (Wikipedia). A CT delivers far more dose than a plain film (Wikipedia: 10–20 mGy organ dose against 0.01–0.15 mGy).</p><p><b>Children</b> are at higher radiation risk than adults (StatPearls; UKHSA: lifetime risks about twice those of adults). AERB 2016 calls adult exposure protocols for children, and not considering MRI or ultrasound, unjustified. MRI may need sedation or anaesthesia in a child (a 2023 review); child-friendly equipment and protocols can avoid sedation (a 2024 review).</p>';
+
+/* before you request: the four questions (RD2.1) */
+const BEF = [
+  ['Pregnant?', '<h3>Could she be pregnant?</h3><p>Ask every woman of childbearing age before an X-ray that may include the pelvis (diaphragm to knees) or any nuclear medicine study (HPA–RCR–CoR 2009; AERB 2016). Use the <a href="#h-preg">pregnancy pathway below</a>. Ultrasound and MRI avoid ionising radiation (HPA 2009); gadolinium should be given with caution in pregnancy (ACR 2024).</p>'],
+  ['Allergy?', '<h3>Allergy or a previous contrast reaction?</h3><p>A previous <b>allergic-like or unknown-type reaction to the same class of contrast</b> is the greatest risk factor for another (ACR Manual on Contrast Media 2024). <b>Shellfish or povidone-iodine allergy is not</b> a significant risk factor (ACR 2024). Whether to premedicate follows the ACR manual or local protocol; doses are not given here.</p>'],
+  ['Kidneys?', '<h3>Kidney function?</h3><p><b>Iodinated contrast (CT):</b> ACR 2024 finds very little evidence that IV iodinated contrast causes AKI at eGFR ≥ 30 mL/min/1.73 m²; if a threshold is used, 30 has the most evidence, and prophylaxis (hydration) is indicated in AKI or eGFR below 30. Contrast-induced nephropathy is usually defined as a 25% rise in creatinine, or 0.5 mg/dL, within 48–72 hours (StatPearls).</p><p><b>Gadolinium (MRI):</b> <b>nephrogenic systemic fibrosis</b> — fibrosis of skin and organs — occurs after gadolinium in severe kidney disease, usually CKD stage 4–5 (StatPearls; ACR 2024). ACR 2024: group I agents are contraindicated at eGFR below 30 or on dialysis; with group II agents the risk is "sufficiently low or possibly nonexistent".</p>'],
+  ['Implants?', '<h3>Implanted devices, metal?</h3><p>Before MRI: implanted devices can interact with the scanner\'s fields (StatPearls); Wikipedia names pacemakers, cochlear implants and metallic foreign bodies in the eye — check whether each device is MR Safe, MR Conditional or MR Unsafe (Wikipedia). If MRI is contraindicated, CT may be used (Wikipedia).</p>'],
+];
+const CON_TABLE = [
+  ['Iodinated (CT, angiography)', 'Kidney: risk mainly at eGFR &lt; 30; prophylaxis then (ACR 2024). Allergic-like reactions: prior reaction to the same class is the main risk factor (ACR 2024). Thyroid storm: avoid (ACR 2024).'],
+  ['Gadolinium (MRI)', 'NSF in severe kidney disease (StatPearls; ACR 2024): avoid group I agents at eGFR &lt; 30 or on dialysis; group II risk very low (ACR 2024). Pregnancy: give with caution (ACR 2024).'],
+  ['Barium (fluoroscopy)', 'Not if gastrointestinal perforation is suspected (ACR 2024).'],
+];
+const CON_NOTE = 'Contrast rules are those of the ACR Manual on Contrast Media 2024 (American College of Radiology; one guideline) unless another source is named.';
+
+const PREG_TEXT = '<p>The fetus\'s radiation dose matters most, but a needed test should not be avoided for fear of radiation (StatPearls). Prefer ultrasound or MRI when they answer the question (HPA–RCR–CoR 2009; StatPearls); for renal colic in pregnancy NICE NG118 (2019) offers ultrasound instead of CT. Away from the uterus (chest, skull, limbs), use beam limitation, abdominal shielding and low-dose protocols (AERB 2016).</p><p><b>Fetal doses:</b> most diagnostic examinations give fetal doses up to about a milligray; routine diagnostic exposures should never exceed 100 mGy, and ICRP 2007 expects no deterministic effects of practical significance below at least 100 mGy (HPA 2009). StatPearls gives a similar picture (below 50 mGy considered safe; above 100–150 mGy for harmful effects). Termination of pregnancy is not justified on the radiation risk of a diagnostic test alone (HPA 2009).</p>';
+const PQ = {
+  preg: [['no', 'No possibility'], ['cant', 'Cannot be excluded'], ['yes', 'Definitely or probably']],
+  per: [['n', 'Not overdue'], ['y', 'Overdue']],
+  dose: [['low', 'Low (below about 10 mGy)'], ['high', 'High (above about 10 mGy, e.g. CT of lower abdomen and pelvis)']],
+};
+const PQ_OUT = {
+  no: '<p class="readout">Proceed</p><p>No possibility of pregnancy: proceed, even with a high fetal-dose examination (HPA 2009).</p>',
+  yes: '<p class="readout">Review the justification</p><p>Pregnant or probably pregnant: review the justification with the radiologist (and referrer) and decide whether to defer until after delivery — remembering a test that helps the mother may help the fetus, and delay can carry more risk. If still justified, keep the fetal dose to the minimum consistent with the diagnostic purpose (HPA 2009).</p>',
+  overdue: '<p class="readout">Treat as probably pregnant</p><p>Period overdue: treat as probably pregnant and review the justification (HPA 2009).</p>',
+  low: '<p class="readout">Proceed</p><p>Low-dose procedure (fetal dose likely below 10 mGy — most routine examinations) and the period not overdue: proceed (HPA 2009). This is the <b>28-day rule</b> (RCR 2013).</p>',
+  high: '<p class="readout">Book in the first 10 days, or rebook</p><p>High-dose procedure (fetal dose above about 10 mGy) and pregnancy not excluded: either book women of childbearing potential in the <b>first ten days of the cycle</b>, or rebook those who attend in the second half of the cycle (HPA 2009). This is the limited use of the old <b>10-day rule</b> (RCR 2013).</p>',
+};
+const PREG_RULE = '<p class="cap keyp"><b>10-day and 28-day rules.</b> The 10-day rule limited higher-dose examinations to the first ten days of the cycle, when conception is very unlikely (HPA 2009). The <b>28-day rule replaced it</b>: if a woman cannot say she is not pregnant, check her last period, and consider postponing only if the period is overdue (RCR 2013). The 10-day rule is still advised for the few high-dose examinations (RCR 2013; HPA 2009). These are UK documents, and RCR co-wrote both, so they are not independent sources.</p>';
+
+const EXAM = [
+  ['Hounsfield units', 'Water 0, air −1000 (StatPearls; Wikipedia); fat negative (−120 to −90, Wikipedia); bone positive, up to about +1000 (StatPearls), metal above +3000 (StatPearls).'],
+  ['Radiograph densities', 'Air black, bone and metal white (Wikipedia; StatPearls for metal on CT); the full order air &lt; fat &lt; soft tissue/fluid &lt; bone &lt; metal is inferred from CT numbers — Wikipedia\'s Radiodensity article calls muscle "black or dark gray" on radiographs.'],
+  ['T1 vs T2', 'Fat bright on T1; water/CSF bright on T2 and dark on T1 (Wikipedia; 2021 review).'],
+  ['Bone scan tracer', 'Tc-99m methylene diphosphonate (MDP) (StatPearls; Wikipedia).'],
+  ['PET tracer', 'FDG, a glucose analogue (StatPearls; Wikipedia); 511 keV photon pairs (Wikipedia).'],
+  ['Non-ionising', 'Ultrasound and MRI (StatPearls; HPA 2009).'],
+  ['MRI contraindications', 'Most pacemakers and cochlear implants, metallic foreign body in the eye (Wikipedia); implanted devices can interact with the fields (StatPearls); MR Conditional devices under set conditions (Wikipedia).'],
+  ['Contrast and kidneys', 'Iodinated: risk mainly at eGFR &lt; 30; gadolinium: NSF in severe CKD (ACR 2024; StatPearls).'],
+  ['10-day rule', 'Replaced by the 28-day rule; kept only for high-dose (&gt; ~10 mGy fetal) examinations (RCR 2013; HPA 2009).'],
+];
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); open-access reviews (MRI sequences 2021, MR safety 2023, radiation dose optimisation 2024, FDG-PET/CT 2014, CT values of muscle fat 2026, imaging of crystal arthropathies 2024); Wikipedia (current wikitext checked); ACR Manual on Contrast Media 2024; HPA, RCR and College of Radiographers, <i>Protection of Pregnant Patients during Diagnostic Medical Exposures</i> (2009); RCR, <i>Radiation and the early fetus</i> (2013); AERB Safety Code SC-3 (2016); UKHSA patient dose table (2026); RadiologyInfo (ACR/RSNA, 2025); NICE CG188 (2014), NG118 (2019), NG128 (2019), NG158 (2020), NG232 (2023), NG234 (2023).';
+const MODELS = '<b>Models used:</b> every picture is a schematic, not a patient image; grey levels are illustrative and only their order (and the quoted HU values) come from the sources. The CT phantom uses one representative HU per tissue from the ranges quoted; the Doppler panel shows only the cos θ dependence (Wikipedia), with no clinical angle limits.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Rad;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS; $('mod-note').textContent = MOD_NOTE;
+const gr = v => { const c = Math.round(255 * Math.max(0, Math.min(1, v))); return `rgb(${c},${c},${c})`; };
+const IT = (x, y, s, cls = '', a = 'middle') => `<text x="${(+x).toFixed(1)}" y="${(+y).toFixed(1)}" class="imgtxt ${cls}" text-anchor="${a}">${Rad.mn(s)}</text>`;
+const MS = {m: 'xr', dens: 'bone', ang: 30, L: 0, W: 2000, ct: 'water', us: 'stone', dang: 30, dir: 'to', mr: 't1', s: 0};
+let sliders = {};
+
+function setSub(items, start, fn) { if (!items) { $('mod-sub').innerHTML = ''; $('mod-sub').hidden = true; return; } $('mod-sub').hidden = false; Rad.toggles('mod-sub', items, fn, start); }
+function setSl(list) { $('mod-sl').innerHTML = ''; sliders = {}; $('mod-sl').hidden = !list.length; for (const s of list) { sliders[s.id] = Rad.slider('mod-sl', s, s.on); sliders[s.id].init(); } }
+
+function drawXr() {
+  const x0 = 70, cw = 84, top = 110, bot = 230;
+  let s = `<rect x="${x0}" y="${bot + 37}" width="${5 * cw}" height="42" class="img"/>` + Rad.DEFS + `<rect x="230" y="14" width="100" height="34" rx="5" class="box"/>` + T(280, 36, 'X-ray tube', 'b', 'middle');
+  s += `<path class="beam" d="M262 48 L${x0} ${top - 12} L${x0 + 5 * cw} ${top - 12} L298 48 Z"/>`;
+  DENS.forEach(([k, lab, g], i) => {
+    const x = x0 + i * cw, trans = 1 - g;
+    s += `<g class="part" data-k="${k}"><rect x="${x + 4}" y="${top}" width="${cw - 8}" height="${bot - top}" rx="4" style="fill:${gr(0.15 + 0.7 * g)};stroke:var(--line)"/>`;
+    s += `<path class="ray" style="stroke-width:${(0.6 + 4 * trans).toFixed(1)}" d="M${x + cw / 2} ${top - 14} L${x + cw / 2} ${bot + 34}"/>`;
+    s += `<rect x="${x + 4}" y="${bot + 40}" width="${cw - 8}" height="36" style="fill:${gr(g)}"/>`;
+    s += T(x + cw / 2, bot + 96, lab.split(' (')[0].replace(' and fluid', ''), 's', 'middle') + `</g>`;
+    if (k === MS.dens) s += `<rect x="${x + 1}" y="${top - 4}" width="${cw - 2}" height="${bot - top + 108}" rx="6" class="sel"/>`;
+  });
+  s += T(x0 - 8, top + 60, 'body', 'h', 'end') + T(x0 - 8, bot + 63, 'image', 'h', 'end');
+  s += T(x0, bot + 110, 'Thick arrow = much of the beam gets through (dark); thin = absorbed (white).', 's', 'start') + T(x0, bot + 124, 'Order of densities inferred from CT numbers; schematic.', 's', 'start');
+  $('mod-svg').innerHTML = s;
+  $('mod-svg').querySelectorAll('.part').forEach(g => g.onclick = () => { MS.dens = g.dataset.k; syncSub(); draw(); });
+  const d = DENS.find(r => r[0] === MS.dens);
+  $('mod-find').innerHTML = MOD.xr.text + `<h3>${d[1]}</h3><p>${d[3]}</p>`;
+}
+function drawFl() {
+  let s = Rad.DEFS + `<rect x="60" y="250" width="300" height="12" class="box"/>` + T(210, 280, 'table', 's', 'middle');
+  s += `<rect x="170" y="290" width="80" height="34" rx="5" class="box"/>` + T(210, 312, 'X-ray tube', 'b', 'middle');
+  s += `<path class="beam" d="M195 290 L150 120 L270 120 L225 290 Z"/>`;
+  s += `<ellipse cx="210" cy="225" rx="120" ry="22" class="memb"/>` + T(210, 229, 'patient', 's', 'middle');
+  s += `<rect x="140" y="80" width="140" height="40" rx="5" class="box"/>` + T(210, 98, 'image intensifier', 's', 'middle') + T(210, 112, 'or flat panel', 's', 'middle');
+  s += `<path class="flow" d="M280 100 L390 100"/>` + `<rect x="395" y="60" width="130" height="90" rx="6" class="img"/>` + IT(460, 100, 'live image') + IT(460, 118, 'on a monitor', 's');
+  s += T(460, 172, 'real time', 'b', 'middle');
+  $('mod-svg').innerHTML = s; $('mod-find').innerHTML = MOD.fl.text;
+}
+function ctGrey(hu) { const lo = MS.L - MS.W / 2; return Math.max(0, Math.min(1, (hu - lo) / MS.W)); }
+function drawCt() {
+  const cx = 95, cy = 140, R = 66, a = MS.ang * Math.PI / 180;
+  let s = Rad.DEFS + `<circle cx="${cx}" cy="${cy}" r="${R + 12}" class="memb"/><circle cx="${cx}" cy="${cy}" r="${R - 12}" style="fill:var(--surface);stroke:var(--line)"/>`;
+  s += T(cx, cy - R - 20, 'gantry', 'h', 'middle') + `<ellipse cx="${cx}" cy="${cy}" rx="30" ry="21" class="box"/>`;
+  const tx = cx + R * Math.cos(a), ty = cy + R * Math.sin(a), dx = cx - R * Math.cos(a), dy = cy - R * Math.sin(a);
+  const px = -Math.sin(a), py = Math.cos(a);
+  s += `<path class="beam" d="M${tx.toFixed(1)} ${ty.toFixed(1)} L${(dx + 30 * px).toFixed(1)} ${(dy + 30 * py).toFixed(1)} L${(dx - 30 * px).toFixed(1)} ${(dy - 30 * py).toFixed(1)} Z"/>`;
+  s += `<rect x="${(tx - 10).toFixed(1)}" y="${(ty - 7).toFixed(1)}" width="20" height="14" rx="3" style="fill:var(--ink)" transform="rotate(${MS.ang} ${tx.toFixed(1)} ${ty.toFixed(1)})"/>`;
+  s += `<path d="M${(dx + 32 * px).toFixed(1)} ${(dy + 32 * py).toFixed(1)} L${(dx - 32 * px).toFixed(1)} ${(dy - 32 * py).toFixed(1)}" style="stroke:var(--ink);stroke-width:5"/>`;
+  s += `<rect x="20" y="236" width="16" height="10" rx="2" style="fill:var(--ink)"/>` + T(42, 245, 'X-ray tube', 's', 'start') + `<path d="M110 241 L130 241" style="stroke:var(--ink);stroke-width:5"/>` + T(136, 245, 'detectors', 's', 'start');
+  // phantom slice (schematic)
+  const qx = 330, qy = 140;
+  s += `<rect x="205" y="40" width="250" height="200" rx="6" style="fill:${gr(ctGrey(-1000))}"/>`;
+  s += `<ellipse cx="${qx}" cy="${qy}" rx="105" ry="78" style="fill:${gr(ctGrey(-105))}"/><ellipse cx="${qx}" cy="${qy}" rx="92" ry="66" style="fill:${gr(ctGrey(45))}"/>`;
+  s += `<ellipse cx="${qx - 42}" cy="${qy - 12}" rx="28" ry="36" style="fill:${gr(ctGrey(-650))}"/><circle cx="${qx + 38}" cy="${qy - 18}" r="20" style="fill:${gr(ctGrey(0))}"/>`;
+  s += `<circle cx="${qx + 18}" cy="${qy + 38}" r="18" style="fill:${gr(ctGrey(1000))}"/><circle cx="${qx + 18}" cy="${qy + 38}" r="12" style="fill:${gr(ctGrey(350))}"/>`;
+  const pt = {air: [445, 52], lung: [qx - 42, qy - 12], fat: [qx + 98, qy + 20], water: [qx + 38, qy - 18], muscle: [qx - 10, qy + 40], canc: [qx + 18, qy + 38], cort: [qx + 34, qy + 44]};
+  CT_TIS.forEach(([k, l], i) => { const y = 56 + i * 26, p = pt[k], on = k === MS.ct;
+    s += `<path class="lead" d="M466 ${y - 4} L${p[0]} ${p[1]}"/><circle cx="${p[0]}" cy="${p[1]}" r="2.5" style="fill:${on ? 'var(--mark)' : '#fff'};stroke:#000;stroke-width:1"/>` + T(470, y, l, on ? 'b' : 's', 'start'); });
+  // HU scale with window band
+  const X = Rad.scale(-1000, 2000, 30, 540), yb = 300;
+  for (let h = -1000; h <= 2000; h += 10) s += `<rect x="${X(h).toFixed(1)}" y="${yb}" width="${(X(h + 10) - X(h) + 0.4).toFixed(1)}" height="12" style="fill:${gr(ctGrey(h))}"/>`;
+  s += `<rect x="30" y="${yb}" width="510" height="12" style="fill:none;stroke:var(--line)"/>`;
+  const lo = Math.max(-1000, MS.L - MS.W / 2), hi = Math.min(2000, MS.L + MS.W / 2);
+  s += `<path d="M${X(lo).toFixed(1)} ${yb - 4} L${X(hi).toFixed(1)} ${yb - 4}" style="stroke:var(--accent);stroke-width:3"/>`;
+  for (const h of [-1000, 0, 1000, 2000]) s += T(X(h), yb + 28, h > 0 ? '+' + h : h, 's', 'middle');
+  s += T(30, yb - 10, 'Hounsfield scale with the window (blue)', 'h', 'start');
+  const t = CT_TIS.find(r => r[0] === MS.ct); s += `<circle cx="${X(t[2]).toFixed(1)}" cy="${yb + 6}" r="5" style="fill:var(--mark);stroke:var(--surface)"/>`;
+  $('mod-svg').innerHTML = s;
+  const g = ctGrey(t[2]);
+  $('mod-find').innerHTML = MOD.ct.text + `<p class="readout">Window ${Rad.mn(Math.round(MS.L - MS.W / 2))} to ${Rad.mn(Math.round(MS.L + MS.W / 2))} HU</p><p><b>${t[1]}</b> (${Rad.mn(t[3])}) shows as <b>${g <= 0 ? 'black' : g >= 1 ? 'white' : Math.round(g * 100) + '% grey'}</b> in this window.</p>`;
+}
+function drawUs() {
+  let s = Rad.DEFS + `<rect x="20" y="40" width="520" height="290" rx="6" class="img"/>`;
+  const ax = 280, ay = 44, r = 270, sa = 0.75, lx = ax - r * Math.sin(sa), rx = ax + r * Math.sin(sa), by = ay + r * Math.cos(sa);
+  const sec = `M${ax} ${ay} L${lx.toFixed(1)} ${by.toFixed(1)} A${r} ${r} 0 0 0 ${rx.toFixed(1)} ${by.toFixed(1)} Z`;
+  s += `<defs><clipPath id="usclip"><path d="${sec}"/></clipPath><pattern id="speck" width="17" height="13" patternUnits="userSpaceOnUse"><rect width="17" height="13" style="fill:${gr(0.38)}"/><circle cx="4" cy="3" r="1.5" style="fill:${gr(0.58)}"/><circle cx="12" cy="9" r="1.3" style="fill:${gr(0.52)}"/></pattern></defs><g clip-path="url(#usclip)"><path d="${sec}" style="fill:url(#speck)"/>`;
+  s += `<ellipse cx="205" cy="190" rx="34" ry="26" style="fill:#000"/>`;
+  s += `<path d="M285 160 L315 160 L335 330 L265 330 Z" style="fill:#000;opacity:.9"/><path d="M283 160 Q300 144 317 160" style="stroke:${gr(1)};stroke-width:6;fill:none"/>`;
+  s += `<path d="M352 200 L410 216 L420 330 L352 330 Z" style="fill:#000"/><path d="M352 200 L410 216" style="stroke:${gr(0.95)};stroke-width:4"/></g>`;
+  s += IT(205, 256, 'fluid: anechoic') + IT(300, 126, 'stone') + IT(300, 270, 'shadow', 's') + IT(460, 200, 'gas') + IT(386, 262, 'no image', 's') + IT(160, 300, 'tissue', 's');
+  const sel = {cyst: [205, 190, 42], stone: [300, 166, 30], gas: [382, 214, 30], tis: [160, 262, 26]}[MS.us];
+  s += `<circle cx="${sel[0]}" cy="${sel[1]}" r="${sel[2]}" class="sel"/>`;
+  s += `<rect x="${ax - 34}" y="12" width="68" height="20" rx="4" style="fill:var(--surface);stroke:var(--ink)"/>` + T(ax, 26, 'probe', 's', 'middle');
+  $('mod-svg').innerHTML = s;
+  $('mod-find').innerHTML = MOD.us.text + `<h3>${US_T[MS.us][0]}</h3><p>${US_T[MS.us][1]}</p>`;
+}
+function drawDop() {
+  const th = MS.dang * Math.PI / 180, sgn = MS.dir === 'to' ? 1 : -1, sh0 = sgn * Math.cos(th), shift = Math.abs(sh0) < 0.005 ? 0 : sh0;
+  let s = Rad.DEFS + `<rect x="250" y="120" width="280" height="44" rx="10" class="memb"/>` + T(530, 112, 'vessel (schematic)', 'h', 'end');
+  // flow arrows
+  for (const x of [310, 420]) s += `<path class="flow" d="M${MS.dir === 'to' ? x + 60 : x} 142 L${MS.dir === 'to' ? x : x + 60} 142"/>`;
+  // beam from probe at angle th to flow: probe above-left/right; flow direction 'to' = towards the probe side
+  const bx = 280, by = 142, L = 100, px = bx + L * Math.cos(th) * (-1), py = by - L * Math.sin(th);
+  s += `<path d="M${px.toFixed(1)} ${py.toFixed(1)} L${bx} ${by}" style="stroke:var(--ink);stroke-width:2;stroke-dasharray:6 4"/>`;
+  s += `<rect x="${(px - 22).toFixed(1)}" y="${(py - 12).toFixed(1)}" width="44" height="18" rx="4" style="fill:var(--surface);stroke:var(--ink)" transform="rotate(${(-MS.dang).toFixed(1)} ${px.toFixed(1)} ${py.toFixed(1)})"/>`;
+  s += T(px - 30, py - 16, 'probe', 's l', 'end');
+  s += `<path d="M${bx - 40} ${by} A40 40 0 0 1 ${(bx - 40 * Math.cos(th)).toFixed(1)} ${(by - 40 * Math.sin(th)).toFixed(1)}" style="stroke:var(--ink);fill:none;stroke-width:1.5"/>` + T(bx - 48, by - 10, 'θ ' + MS.dang + '°', 'm l', 'end');
+  // spectral trace
+  const y0 = 270, amp = 60 * shift; let pts = [];
+  for (let x = 60; x <= 520; x += 4) { const ph = ((x - 60) % 115) / 115, w = ph < 0.3 ? Math.sin(Math.PI * ph / 0.3) : 0.25 * (1 - (ph - 0.3) / 0.7); pts.push([x, y0 - amp * w]); }
+  s += `<path class="axis" d="M60 ${y0} L520 ${y0}"/>` + T(56, y0 + 4, 'baseline', 's', 'end') + `<path class="trace" d="${Rad.path(pts)}"/>`;
+  s += T(20, 196, 'spectral Doppler trace (schematic): towards the probe above the baseline, away below', 's', 'start');
+  $('mod-svg').innerHTML = s;
+  $('mod-find').innerHTML = MOD.dop.text + `<p class="readout">Relative shift = ${MS.dir === 'to' ? '+' : '−'}cos ${MS.dang}° = ${Rad.mn(shift.toFixed(2))}${shift === 0 ? ' (no shift at 90°)' : ''}</p><p class="muted">The measured shift depends on the angle between beam and flow through cos θ (Wikipedia, Doppler effect): largest when the beam is along the vessel, zero at 90°. Schematic; no clinical angle limits are given here.</p>`;
+}
+function drawMr() {
+  const w = MS.mr === 't1' ? 1 : 2, cx = 160, cy = 180;
+  let s = Rad.DEFS + `<rect x="20" y="20" width="300" height="320" rx="6" class="img"/>`;
+  s += `<ellipse cx="${cx}" cy="${cy}" rx="118" ry="142" style="fill:${gr(MR.fat[w])}"/><ellipse cx="${cx}" cy="${cy}" rx="108" ry="132" style="fill:${gr(MR.bone[w])}"/>`;
+  s += `<ellipse cx="${cx}" cy="${cy}" rx="98" ry="122" style="fill:${gr(MR.gm[w])}"/><ellipse cx="${cx}" cy="${cy}" rx="78" ry="100" style="fill:${gr(MR.wm[w])}"/>`;
+  s += `<path d="M${cx - 6} ${cy - 46} Q${cx - 40} ${cy - 30} ${cx - 30} ${cy + 30} Q${cx - 14} ${cy + 10} ${cx - 6} ${cy + 20} Z" style="fill:${gr(MR.csf[w])}"/><path d="M${cx + 6} ${cy - 46} Q${cx + 40} ${cy - 30} ${cx + 30} ${cy + 30} Q${cx + 14} ${cy + 10} ${cx + 6} ${cy + 20} Z" style="fill:${gr(MR.csf[w])}"/>`;
+  s += T(340, 40, MS.mr === 't1' ? 'T1-weighted (schematic)' : 'T2-weighted (schematic)', 'b', 'start');
+  const P = {fat: [cx + 56, cy - 118], csf: [cx + 22, cy], wm: [cx + 40, cy + 50], gm: [cx + 88, cy + 10], bone: [cx + 89, cy - 63]};
+  let y = 70; for (const k of ['fat', 'csf', 'wm', 'gm', 'bone']) { const p = P[k];
+    s += `<path class="lead" d="M336 ${y - 4} L${p[0]} ${p[1]}"/><circle cx="${p[0]}" cy="${p[1]}" r="2.5" style="fill:#fff;stroke:#000;stroke-width:1"/>`;
+    s += `<rect x="340" y="${y - 11}" width="22" height="14" style="fill:${gr(MR[k][w])};stroke:var(--line)"/>` + T(370, y, MR[k][0], 's', 'start'); y += 30; }
+  $('mod-svg').innerHTML = s;
+  $('mod-find').innerHTML = MOD.mri.text + MR_T[MS.mr] + MRI_HAZ;
+}
+const NM_STEPS = [['Inject', 'Tc-99m MDP is given IV (StatPearls; Wikipedia).'], ['Uptake', 'It binds bone hydroxyapatite, more where turnover and osteoblastic activity are high (StatPearls; Wikipedia) — e.g. healing injury or metastasis (Wikipedia).'], ['Image', 'A gamma camera records the 140 keV photons (StatPearls) and forms planar or SPECT images (Wikipedia).']];
+const PET_STEPS = [['Inject', 'FDG (fluorodeoxyglucose, labelled with fluorine-18) is injected (Wikipedia).'], ['Uptake', 'High-glucose-using cells take it up — brain, kidney, most cancers (Wikipedia; StatPearls: brighter spots where metabolism is higher).'], ['Annihilation', 'Each positron meets an electron; two 511 keV photons fly off almost opposite (Wikipedia).'], ['Detect', 'The ring of detectors records the photon pairs; a computer builds the image (StatPearls).']];
+function drawNm() {
+  const st = MS.s;
+  let s = Rad.DEFS + `<rect x="150" y="30" width="260" height="46" rx="6" class="box"/>` + T(280, 58, 'gamma camera', 'b', 'middle');
+  s += `<rect x="90" y="230" width="380" height="14" class="box"/>`;
+  s += `<path d="M120 200 Q140 170 200 172 L360 172 Q420 170 440 200 Q420 226 360 226 L200 226 Q140 228 120 200 Z" class="memb"/>` + T(280, 262, 'patient (side view) on the table', 's', 'middle');
+  if (st >= 1) for (const [x, y] of [[210, 196], [300, 190], [380, 200]]) s += `<circle cx="${x}" cy="${y}" r="7" style="fill:var(--ink)"/>`;
+  if (st >= 2) for (const [x, y] of [[210, 186], [300, 180], [380, 190]]) s += `<path class="ray" d="M${x} ${y} L${x} 84"/>`;
+  if (st === 0) s += `<path class="flow" d="M80 150 L150 185"/>` + T(76, 146, 'IV tracer', 's', 'end');
+  s += T(280, 290, ['1. inject', '2. tracer binds bone (dots)', '3. photons reach the camera'][st], 'b', 'middle');
+  $('mod-svg').innerHTML = s;
+  $('mod-find').innerHTML = MOD.nm.text + `<p class="readout">${NM_STEPS[st][0]}</p><p>${NM_STEPS[st][1]}</p>`;
+}
+function drawPet() {
+  const st = MS.s, cx = 200, cy = 175, R = 130;
+  let s = Rad.DEFS + `<circle cx="${cx}" cy="${cy}" r="${R}" style="fill:none;stroke:var(--ink);stroke-width:14;stroke-dasharray:10 3"/>` + T(cx, cy - R - 16, 'ring of detectors', 'h', 'middle');
+  s += `<ellipse cx="${cx}" cy="${cy}" rx="70" ry="50" class="memb"/>`;
+  if (st >= 1) s += `<circle cx="${cx + 20}" cy="${cy - 10}" r="12" style="fill:var(--ink);fill-opacity:.25"/>` + `<path class="lead" d="M${cx + 20} ${cy + 2} L${cx + 20} ${cy + 62}"/>` + T(cx + 20, cy + 76, 'uptake', 's l', 'middle');
+  const ex = cx + 20, ey = cy - 10, ua = Math.cos(-0.5), va = Math.sin(-0.5), dx = ex - cx, dy = ey - cy, bb = dx * ua + dy * va, cc = dx * dx + dy * dy - R * R;
+  const hit = sg => { const t = -bb + sg * Math.sqrt(bb * bb - cc); return [ex + t * ua, ey + t * va, t]; };
+  if (st >= 2) { s += `<circle cx="${ex}" cy="${ey}" r="4" style="fill:var(--ink)"/>`; for (const sg of [1, -1]) { const [hx, hy, t] = hit(sg), k = (Math.abs(t) - 9) / Math.abs(t); s += `<path class="ray" d="M${ex} ${ey} L${(ex + (hx - ex) * k).toFixed(1)} ${(ey + (hy - ey) * k).toFixed(1)}"/>`; } s += T(cx + 120, cy + 110, '511 keV each, ~180° apart', 's', 'start'); }
+  if (st >= 3) { for (const sg of [1, -1]) { const [hx, hy] = hit(sg); s += `<circle cx="${hx.toFixed(1)}" cy="${hy.toFixed(1)}" r="10" class="sel"/>`; } s += T(cx + 120, cy + 128, 'both detectors fire together', 's', 'start'); }
+  if (st === 0) s += `<path class="flow" d="M40 290 L120 210"/>` + T(40, 306, 'IV FDG', 's', 'start');
+  $('mod-svg').innerHTML = s;
+  $('mod-find').innerHTML = MOD.pet.text + `<p class="readout">${PET_STEPS[st][0]}</p><p>${PET_STEPS[st][1]}</p>`;
+}
+const DRAW = {xr: drawXr, fl: drawFl, ct: drawCt, us: drawUs, dop: drawDop, mri: drawMr, nm: drawNm, pet: drawPet};
+function draw() { DRAW[MS.m](); }
+function syncSub() { $('mod-sub').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === (MS.m === 'xr' ? MS.dens : MS.m === 'ct' ? MS.ct : MS.m === 'us' ? MS.us : '')))); }
+function selMod(k) {
+  MS.m = k; MS.s = 0;
+  if (k === 'xr') { setSl([]); setSub(DENS.map(r => [r[0], r[1]]), MS.dens, v => { MS.dens = v; draw(); }); }
+  else if (k === 'ct') {
+    setSl([{id: 'ang', label: 'Tube angle in the gantry', min: 0, max: 360, step: 5, value: MS.ang, fmt: v => v + '°', on: v => { MS.ang = v; draw(); }},
+      {id: 'lev', label: 'Window level (centre)', min: -1000, max: 1000, step: 10, value: MS.L, fmt: v => v + ' HU', on: v => { MS.L = v; clearPre(); draw(); }},
+      {id: 'wid', label: 'Window width', min: 20, max: 3000, step: 10, value: MS.W, fmt: v => v + ' HU', on: v => { MS.W = v; clearPre(); draw(); }}]);
+    const box = document.createElement('div'); box.className = 'chips'; box.id = 'ct-pre'; box.style.gridColumn = '1 / -1'; $('mod-sl').append(box);
+    Rad.toggles('ct-pre', Object.entries(CT_PRESET).map(([k, v]) => [k, v[0]]), p => { APPLY = true; sliders.lev.set(CT_PRESET[p][1]); sliders.wid.set(CT_PRESET[p][2]); APPLY = false; }, 'full');
+    setSub(CT_TIS.map(r => [r[0], r[1]]), MS.ct, v => { MS.ct = v; draw(); });
+  }
+  else if (k === 'us') { setSl([]); setSub(Object.entries(US_T).map(([k, v]) => [k, v[0]]), MS.us, v => { MS.us = v; draw(); }); }
+  else if (k === 'dop') { setSl([{id: 'dang', label: 'Angle between beam and flow', min: 0, max: 90, step: 5, value: MS.dang, fmt: v => v + '°', on: v => { MS.dang = v; draw(); }}]); setSub([['to', 'Flow towards the probe'], ['away', 'Flow away']], MS.dir, v => { MS.dir = v; draw(); }); }
+  else if (k === 'mri') { setSl([]); setSub([['t1', 'T1-weighted'], ['t2', 'T2-weighted']], MS.mr, v => { MS.mr = v; draw(); }); }
+  else if (k === 'nm' || k === 'pet') { setSl([]); $('mod-sub').hidden = false; Rad.stepper('mod-sub', (k === 'nm' ? NM_STEPS : PET_STEPS).map(r => r[0]), draw, MS); return; }
+  else { setSl([]); setSub(null); }
+  draw();
+}
+let APPLY = false;
+function clearPre() { if (!APPLY && $('ct-pre')) $('ct-pre').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); }
+$('mod-sub').onkeydown = null;
+Rad.toggles('mod-tg', Object.entries(MOD).map(([k, v]) => [k, v.name]), k => { $('mod-sub').onkeydown = null; selMod(k); }, 'xr');
+selMod('xr');
+
+/* ionising */
+$('ion-text').innerHTML = ION_TEXT; Rad.table('ion-table', ['Modality', 'Uses', 'Radiation'], ION_TABLE);
+
+/* dose chart */
+const DS = {src: 'uk', ex: 'cta'};
+function drawDose() {
+  const D = DOSE[DS.src]; if (!D.rows.find(r => r[0] === DS.ex)) DS.ex = D.rows[D.rows.length - 1][0]; const cx = D.rows.find(r => r[0] === D.cxr)[2], X = v => 200 + 400 * (Math.log10(v) + 2) / 4; // 0.01 .. 100 mSv
+  let s = ''; const rowH = 34, y0 = 30;
+  for (const v of [0.01, 0.1, 1, 10, 100]) s += `<path class="grid" d="M${X(v)} 20 L${X(v)} ${y0 + D.rows.length * rowH}"/>` + T(X(v), y0 + D.rows.length * rowH + 16, v + ' mSv', 's', 'middle');
+  D.rows.forEach(([k, lab, v], i) => {
+    const y = y0 + i * rowH; s += T(192, y + 15, lab, k === DS.ex ? 'b' : '', 'end');
+    s += `<rect x="200" y="${y + 4}" width="${(X(v) - 200).toFixed(1)}" height="16" rx="3" style="fill:${k === DS.ex ? 'var(--accent)' : 'var(--ink)'};fill-opacity:${k === DS.ex ? 0.9 : 0.25}"/>` + T(X(v) + 6, y + 16, v + '', 'm', 'start');
+  });
+  s += T(200, y0 + D.rows.length * rowH + 36, 'approximate effective dose (log scale)', 's', 'start');
+  $('dose-svg').setAttribute('viewBox', `0 0 640 ${y0 + D.rows.length * rowH + 46}`); $('dose-svg').innerHTML = s;
+  const r = D.rows.find(q => q[0] === DS.ex), n = r[2] / cx;
+  $('dose-out').innerHTML = `<p><span class="tag">${D.name}</span></p><p><b>${r[1]}</b>: about <span class="big">${r[2]} mSv</span> ≈ <b>${n >= 10 ? Math.round(n) : n.toFixed(n < 1 ? 2 : 1)}</b> chest X-ray${n === 1 ? '' : 's'} in this table, or <b>${r[3]}</b> of natural background (${D.bg}).</p>`;
+  if (DS.built !== DS.src) { DS.built = DS.src; Rad.toggles('dose-ex', D.rows.map(q => [q[0], q[1]]), k => { DS.ex = k; drawDose(); }, DS.ex); }
+  else $('dose-ex').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === DS.ex)));
+}
+Rad.toggles('dose-tg', [['uk', 'UKHSA 2026'], ['us', 'RadiologyInfo 2025']], k => { DS.src = k; drawDose(); }, 'uk');
+$('dose-text').innerHTML = DOSE_TEXT; drawDose();
+
+/* scenarios */
+$('choose-text').innerHTML = CHOOSE_TEXT; $('scn-note').textContent = SCN_NOTE;
+const drawScn = k => { const r = SCN[k]; $('scn-out').innerHTML = `<p><span class="tag">${r[3]}</span></p><p class="readout">${r[1]}</p><p>${r[2]}</p>`; };
+Rad.toggles('scn-tg', Object.entries(SCN).map(([k, v]) => [k, v[0]]), drawScn, 'gall'); drawScn('gall');
+
+/* before you request */
+const BS = {s: 0};
+Rad.stepper('bef-step', BEF.map(r => r[0]), () => { $('bef-find').innerHTML = BEF[BS.s][1]; }, BS);
+Rad.table('con-table', ['Contrast', 'Safety principles'], CON_TABLE); $('con-note').textContent = CON_NOTE;
+
+/* pregnancy pathway */
+$('preg-text').innerHTML = PREG_TEXT; $('preg-rule').innerHTML = PREG_RULE;
+const PS = {preg: 'cant', per: 'n', dose: 'low'};
+function drawPq() {
+  const showPer = PS.preg === 'cant', showDose = showPer && PS.per === 'n';
+  $('pq-per-row').hidden = !showPer; $('pq-dose-row').hidden = !showDose;
+  $('pq-out').innerHTML = PS.preg === 'no' ? PQ_OUT.no : PS.preg === 'yes' ? PQ_OUT.yes : PS.per === 'y' ? PQ_OUT.overdue : PQ_OUT[PS.dose];
+}
+for (const q of ['preg', 'per', 'dose']) Rad.toggles('pq-' + q, PQ[q], v => { PS[q] = v; drawPq(); }, PS[q]);
+drawPq();
+
+Rad.table('exam-table', ['Point', 'What the sources say'], EXAM);
+Rad.swipeHints();
+</script>
+</body>
+</html>

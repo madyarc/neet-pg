@@ -161,6 +161,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [Hearing and Hearing Tests](ent/ear/hearing-tests.html), [Hearing Loss, Otosclerosis and the Eustachian Tube](ent/ear/hearing-loss-otosclerosis.html) | Ear | Hearing-pathway stepper, impedance matching, Rinne/Weber simulator, audiogram builder with presets, masking and WHO 2021 grades, tympanogram types, acoustic reflex; conductive vs sensorineural by site, sudden SNHL, otosclerosis stepper, Eustachian tube adult vs child, NPPCD |
 
+### Radiodiagnosis — [`radiology/`](radiology/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [Imaging Modalities](radiology/basics/modalities.html), [Radiation Safety and the PC-PNDT Act](radiology/basics/radiation-safety.html) | Basics | Modality picker (X-ray densities, CT window/level, ultrasound, Doppler angle, MRI T1/T2, bone scan, PET), dose tables, NICE first-line scenarios, contrast and pregnancy checks; radiation types, deterministic vs stochastic plot, units converter, IAEA vs AERB limits, inverse-square calculator, dosimeters, PC-PNDT walkthrough |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and

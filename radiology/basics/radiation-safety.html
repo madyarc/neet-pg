@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Radiation Safety, Dosimetry and the PC-PNDT Act</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/rad.css">
+<style>
+/* No new colour tokens: radiation and curves are ink (solid vs dashed, labelled), the selected item is --accent (UI selection),
+   the cursor/selected point --mark, thresholds and offences --clin (clinical point / warning). */
+svg.sch .barrier{fill:var(--ink);fill-opacity:.10;stroke:var(--muted);stroke-width:1}
+svg.sch .rad{stroke:var(--ink);stroke-width:2.4;fill:none;marker-end:url(#arr)}
+svg.sch .rad.on{stroke:var(--accent);stroke-width:3}
+svg.sch .faint{stroke-opacity:.35}
+svg.sch .det{stroke:var(--ink);stroke-width:2.4;fill:none}
+svg.sch .sto{stroke:var(--ink);stroke-width:2.4;fill:none;stroke-dasharray:7 5}
+svg.sch .thr{stroke:var(--muted);stroke-width:1.4;stroke-dasharray:3 3}
+svg.sch .cur{stroke:var(--mark);stroke-width:1.5}
+svg.sch .src{fill:var(--ink)}
+svg.sch .ring{fill:none;stroke:var(--ink);stroke-opacity:.18}
+.res{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg)}
+.res .big{font-size:22px}
+.cap.keyp{border-left-color:var(--accent)}
+.unitrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.unitrow input[type=number]{font:500 15px var(--f-mono);width:9em;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
+.unitrow select{font:500 14px var(--f-body);padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
+.unitrow input:focus-visible,.unitrow select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.diff{color:var(--ink);font-weight:700;text-decoration:underline dotted}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Radiodiagnosis</a> <span class="muted">· Module 01: <a href="modalities.html">Imaging modalities</a> · <span aria-current="page">Radiation safety and PC-PNDT</span></span></nav>
+
+<header class="stack">
+  <h1>Radiation Safety: Hazards, Units, Limits, ALARA, Dosimeters and the PC-PNDT Act</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-types">Types and penetration</a> <a href="#h-eff">Deterministic and stochastic</a> <a href="#h-sens">Radiosensitivity</a> <a href="#h-units">Units</a> <a href="#h-lim">Dose limits</a> <a href="#h-alara">ALARA</a> <a href="#h-dosi">Dosimeters</a> <a href="#h-pndt">PC-PNDT Act</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-types">
+  <h2 id="h-types">Types of radiation and how far they get</h2>
+  <div class="chips" id="typ-tg" aria-label="Radiation type"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="typ-svg" viewBox="0 0 560 300" role="img" aria-label="Schematic: alpha, beta, gamma or X-ray and neutron radiation meeting paper, aluminium, lead and hydrogen-rich material, and where each is stopped"></svg></div>
+    <div class="prose find" id="typ-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="typ-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-eff">
+  <h2 id="h-eff">Deterministic and stochastic effects</h2>
+  <div class="chips" id="eff-tg" aria-label="What the vertical axis shows"></div>
+  <div class="sliders" id="eff-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="eff-svg" viewBox="0 0 560 320" role="img" aria-label="Schematic dose–effect plot: a deterministic effect with a threshold and a stochastic effect rising from zero dose, with a cursor at the chosen dose"></svg></div>
+    <div class="prose find" id="eff-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="thr-table"></table></div>
+  <p class="muted" id="eff-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-sens">
+  <h2 id="h-sens">Which cells are most radiosensitive?</h2>
+  <div class="schbox"><svg class="fig sch" id="sens-svg" viewBox="0 0 560 210" role="img" aria-label="Scale from most to least radiosensitive cells, as the sources give them"></svg></div>
+  <div class="prose" id="sens-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-units">
+  <h2 id="h-units">Units and conversions</h2>
+  <div class="unitrow"><label for="u-val">Value</label><input type="number" id="u-val" value="1" step="any"><label for="u-unit">unit</label><select id="u-unit"></select></div>
+  <div class="chips" id="u-pre" aria-label="Examples"></div>
+  <div class="res" id="u-out" aria-live="polite"></div>
+  <div class="scroll"><table id="u-table"></table></div>
+  <p class="muted" id="u-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-lim">
+  <h2 id="h-lim">Dose limits</h2>
+  <div class="chips" id="lim-tg" aria-label="Who"></div>
+  <div class="res prose" id="lim-out" aria-live="polite"></div>
+  <div class="scroll"><table id="lim-table"></table></div>
+  <div class="prose" id="lim-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-alara">
+  <h2 id="h-alara">ALARA: time, distance and shielding</h2>
+  <div class="prose" id="alara-text"></div>
+  <div class="sliders" id="al-sl"></div>
+  <div class="chips" id="al-pre" aria-label="Examples"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="al-svg" viewBox="0 0 560 230" role="img" aria-label="A point source and a worker at the chosen distance; the dose rate falls with the square of the distance"></svg></div>
+    <div class="res" id="al-out" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="shield-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-dosi">
+  <h2 id="h-dosi">Personal dosimeters</h2>
+  <div class="chips" id="dos-tg" aria-label="Dosimeter"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="dos-svg" viewBox="0 0 560 280" role="img" aria-label="Schematic of how the chosen dosimeter is read, and where badges are worn"></svg></div>
+    <div class="prose find" id="dos-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="dos-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pndt">
+  <h2 id="h-pndt">The PC-PNDT Act 1994 (amended 2003): what a primary care doctor must know</h2>
+  <div class="prose" id="pndt-text"></div>
+  <h3>A pregnant woman comes for an obstetric ultrasound: step by step</h3>
+  <div class="step" id="pn-step"></div>
+  <div class="prose find" id="pn-find" aria-live="polite"></div>
+  <div class="scroll"><table id="pn-table"></table></div>
+  <p class="muted" id="pn-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-exam">
+  <h2 id="h-exam">Exam points</h2>
+  <div class="scroll"><table id="exam-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BRadiation%20Safety%3A%20Hazards%2C%20Units%2C%20Limits%2C%20ALARA%2C%20Dosimeters%20and%20the%20PC-PNDT%20Act%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fradiology%2Fbasics%2Fradiation-safety.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/rad.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-r01.md, Parts B and C) ===================== */
+const LEDE = 'Send alpha, beta, gamma and neutrons at a stack of barriers; slide the dose and watch a deterministic effect switch on at its threshold while the stochastic risk climbs from zero; convert grays to rads and curies to becquerels; compare ICRP/IAEA and AERB dose limits; move away from a source and watch the inverse-square law; and walk through the PC-PNDT Act as a clinic must apply it. How each imaging test works is on <a href="modalities.html">Imaging modalities</a>.';
+
+/* radiation types: [label, what it is, stopped by (barrier index: 0 paper, 1 aluminium, 2 lead, 3 water/hydrogen-rich), text] */
+const BARR = ['paper', 'aluminium (mm)', 'lead / concrete', 'hydrogen-rich material'];
+const TYP = {
+  a: ['Alpha (α)', 0, '<h3>Alpha particles</h3><p>Two protons and two neutrons — a helium-4 nucleus (Wikipedia). Heavy and charged, they travel only a few centimetres in air and are <b>stopped by a sheet of paper</b> or the dead outer layer of skin (Wikipedia). Radiation weighting factor 20 (Wikipedia).</p>'],
+  b: ['Beta (β)', 1, '<h3>Beta particles</h3><p>Electrons; more penetrating than alpha but <b>stopped by a few millimetres of aluminium</b>; high-energy beta is shielded with low-atomic-number material such as plastic (Wikipedia). Weighting factor 1 (Wikipedia).</p>'],
+  g: ['Gamma and X-rays', 2, '<h3>Gamma rays and X-rays</h3><p>Photons. They need <b>dense shielding — lead, steel or concrete</b> — which reduces rather than abolishes them (AERB; Wikipedia: "large amounts of shielding mass"). X-ray room walls contain lead or barium plaster (Wikipedia). Weighting factor 1 (Wikipedia).</p>'],
+  n: ['Neutrons', 3, '<h3>Neutrons</h3><p>They are shielded best by <b>hydrogen-rich material</b> such as hydrocarbons (Wikipedia).</p>'],
+};
+const TYP_TEXT = '<p class="muted">The neutron arrow is drawn through paper, aluminium and lead only to reach the barrier the source names; none of our sources describes how neutrons pass those materials. Penetration and the barrier for alpha, beta and neutrons are from Wikipedia (one source; several articles); the lead/concrete barrier for gamma and X-rays is also on AERB\'s radiation-protection page. ICRP 103 (2007) says only that the radiation weighting factors for photons, electrons and alpha particles are unchanged; the numbers 1 and 20 are Wikipedia\'s. Schematic: thickness and distances are not to scale.</p>';
+
+/* effects */
+const EFF = {
+  det: '<h3>Deterministic effect (tissue reaction)</h3><p>Injury to <b>populations of cells</b> with a <b>threshold dose</b>; above it, <b>severity rises with dose</b> (ICRP 103 2007; AERB 2016; HPA 2009). ICRP defines the threshold as the dose giving a 1% incidence (ICRP 103). Examples: skin erythema, cataract, acute radiation syndrome, fetal malformation.</p>',
+  sto: '<h3>Stochastic effect</h3><p>Cancer and heritable effects. <b>No threshold</b> is assumed: the <b>probability</b> rises with dose but the <b>severity does not</b> (ICRP 103; AERB 2016; IAEA 2014). Damage to a single cell can start it (HPA 2009). The <b>linear no-threshold model</b> is used for protection (Wikipedia; StatPearls: any exposure increases the risk). ICRP 2007 puts the combined detriment at about <b>5% per sievert</b> (ICRP 103; IAEA 2014).</p>',
+};
+const THR_TABLE = [
+  ['Skin erythema', '2 Gy', 'AERB SC-3 (2016)'],
+  ['Cataract (lens opacity)', '0.5 Gy', 'ICRP statement 2011, as reported in a 2014 review'],
+  ['Fetal malformation and other deterministic fetal effects', 'none of practical significance below at least 100 mGy', 'HPA–RCR–CoR 2009, citing ICRP 2007 (StatPearls: above 100–150 mGy)'],
+  ['Acute radiation syndrome (haematopoietic, gastrointestinal, neurovascular forms)', 'above about 0.7 Gy whole body in minutes; above 8 Gy almost always lethal', 'Wikipedia (StatPearls: high dose over a short period)'],
+];
+const EFF_NOTE = 'The plot is schematic: no numbers on the vertical axis; the threshold is placed for illustration. Each threshold in the table is from the single source named, so it is attributed.';
+
+/* radiosensitivity scale: [label, position 0 (most) .. 1 (least), source] */
+const SENS = [
+  ['lymphocytes', 0.04, 'Wikipedia; 2020 review'],
+  ['spermatogonia, oocytes', 0.14, 'Wikipedia'],
+  ['erythroblasts (marrow)', 0.25, 'Wikipedia'],
+  ['gut and epidermal stem cells', 0.36, 'Wikipedia'],
+  ['nerve cells', 0.86, 'Wikipedia; StatPearls'],
+  ['muscle fibres', 0.97, 'Wikipedia'],
+];
+const SENS_TEXT = '<p><b>Law of Bergonié and Tribondeau</b> (1906): cells with greater reproductive activity are more affected by radiation (Wikipedia; a 2020 review). The most sensitive cells are undifferentiated, dividing quickly and metabolically active (Wikipedia). <b>Lymphocytes</b> are very radiosensitive although they do not divide, dying by apoptosis (Wikipedia; 2020 review); lymphoproliferative tissues with rapid turnover are the most susceptible and nervous tissue the least (StatPearls). Wikipedia also lists spermatogonia, erythroblasts and gut and epidermal stem cells, and oocytes, among the most sensitive, and bone marrow\'s high radiosensitivity behind leukaemia after whole-body exposure. A 2016 review names thyroid, eyes, hands and gonads as the organs to protect. <b>Sources differ</b> on which single cell is "most" sensitive, so the scale shows groups, not a ranking within them.</p><p>Within the cell cycle, cells are least sensitive in S phase and most sensitive in M phase (Wikipedia); a 2020 review also calls G2/M the radiosensitive phase.</p>';
+
+/* units: factor to the SI base for each quantity */
+const UNITS = {
+  Gy: ['absorbed', 1, 'gray (Gy)'], mGy: ['absorbed', 1e-3, 'milligray (mGy)'], rad: ['absorbed', 0.01, 'rad'],
+  Sv: ['equivalent', 1, 'sievert (Sv)'], mSv: ['equivalent', 1e-3, 'millisievert (mSv)'], rem: ['equivalent', 0.01, 'rem'],
+  'C/kg': ['exposure', 1, 'coulomb per kg (C/kg)'], R: ['exposure', 2.58e-4, 'roentgen (R)'],
+  Bq: ['activity', 1, 'becquerel (Bq)'], MBq: ['activity', 1e6, 'megabecquerel (MBq)'], Ci: ['activity', 3.7e10, 'curie (Ci)'], mCi: ['activity', 3.7e7, 'millicurie (mCi)'],
+};
+const U_PRE = {gy: ['1 Gy', 1, 'Gy'], sv: ['1 Sv', 1, 'Sv'], ci: ['1 Ci', 1, 'Ci'], lim: ['20 mSv (worker limit)', 20, 'mSv'], tc: ['740 MBq (Tc-99m MDP bone scan, up to)', 740, 'MBq']};
+const U_TABLE = [
+  ['Absorbed dose', 'energy deposited per kg', 'gray (Gy) = 1 J/kg', 'rad: 1 Gy = 100 rad'],
+  ['Equivalent / effective dose', 'absorbed dose weighted for radiation type (and tissue, for effective dose)', 'sievert (Sv)', 'rem: 1 Sv = 100 rem'],
+  ['Activity', 'decays per second of a source', 'becquerel (Bq) = 1 decay per second', 'curie: 1 Ci = 3.7 × 10¹⁰ Bq = 37 GBq'],
+  ['Exposure (ionisation of air)', 'charge produced in air per kg', 'coulomb per kilogram (C/kg)', 'roentgen: 1 R = 2.58 × 10⁻⁴ C/kg (2016 review; Wikipedia calls the roentgen obsolete)'],
+];
+const U_NOTE = 'Gy = J/kg: ICRP 103 (2007); IAEA 2014; Wikipedia. Sievert for equivalent and effective dose: ICRP 103; Wikipedia; effective dose = sum of tissue equivalent doses × tissue weighting factors (AERB 2016; IAEA 2014). The old-unit conversions (rad, rem, curie) are in Wikipedia and in the units table of a 2016 review on patient dose; the roentgen conversion is from that review. The 740 MBq example is Wikipedia\'s bone-scan activity.';
+
+/* dose limits: rows [quantity, IAEA GSR Part 3 2014, AERB (India)] */
+const LIM = {
+  worker: ['Radiation worker (adult)', [
+    ['Effective dose', '20 mSv/yr averaged over 5 years (100 mSv in 5 years)', '20 mSv/yr averaged over 5 years', 0],
+    ['Effective dose in any single year', '50 mSv', '30 mSv', 1],
+    ['Lens of the eye', '20 mSv/yr averaged over 5 years; 50 mSv in any year', '150 mSv/yr', 1],
+    ['Skin / hands and feet', '500 mSv/yr', '500 mSv/yr', 0]]],
+  trainee: ['Trainee or apprentice, 16–18 years', [
+    ['Effective dose', '6 mSv/yr', '6 mSv/yr (under supervision); under 16 years never', 0],
+    ['Lens of the eye', '20 mSv/yr', '—', 0],
+    ['Skin / hands and feet', '150 mSv/yr', '—', 0]]],
+  public: ['Member of the public', [
+    ['Effective dose', '1 mSv/yr', '1 mSv/yr', 0],
+    ['Lens of the eye', '15 mSv/yr', '15 mSv/yr', 0],
+    ['Skin', '50 mSv/yr', '50 mSv/yr', 0]]],
+  preg: ['Pregnant worker (after declaring)', [
+    ['Embryo / fetus', 'the same broad protection as a member of the public', 'web page: not more than 1 mSv to the embryo/fetus after declaration; 2020 guidance: less than 1 mSv over the entire pregnancy term', 0]]],
+  patient: ['Patient', [
+    ['Any', 'no dose limit: each exposure must be justified and optimised', 'no dose limit: justification and optimisation', 0]]],
+};
+const LIM_TEXT = '<p><b>ICRP Publication 103 (2007)</b> kept its earlier dose limits for planned exposure (ICRP 103). The full ICRP table is not openly available, so the numbers shown are those of the <b>IAEA Basic Safety Standards, GSR Part 3 (2014)</b> and of <b>AERB</b> (India: the AERB radiation-protection web page and AERB\'s 2020 personnel-monitoring guidance). The headline numbers agree: <b>20 mSv a year averaged over 5 years</b> for workers and <b>1 mSv a year</b> for the public. <span class="diff">They differ</span> on the single-year maximum (IAEA 50, AERB 30 mSv) and on the lens of the eye: IAEA 2014 follows ICRP\'s 2011 statement (20 mSv a year averaged), AERB still gives 150 mSv — the earlier limit (a 2021 review). Medical exposure of patients has no dose limit (AERB 2016; IAEA 2014).</p>';
+
+/* ALARA */
+const AL_PRE = {one: ['1 m, 10 min', 1, 10], two: ['2 m, 10 min', 2, 10], half: ['0.5 m, 10 min', 0.5, 10], short: ['1 m, 5 min', 1, 5]};
+const ALARA_TEXT = '<p><b>ALARA — as low as reasonably achievable</b>: doses to workers are kept ALARA and patients\' doses are optimised (AERB; StatPearls). The three principles of radiological protection are <b>justification, optimisation and dose limitation</b> (ICRP 103; StatPearls). For staff, ALARA rests on <b>time, distance and shielding</b> (Wikipedia; a 2021 and a 2024 review; AERB). Dose is <b>proportional to time</b> (AERB; Wikipedia). Dose rate falls with the <b>square of the distance</b>: I₁d₁² = I₂d₂², so doubling the distance gives a quarter of the dose rate (AERB; a 2016 review: one fourth of the scatter; Wikipedia).</p>';
+const SHIELD_TEXT = '<p><b>Shielding:</b> lead aprons and thyroid shields must have at least <b>0.25 mm lead equivalence</b> (AERB SC-3 2016); barriers, aprons, goggles and thyroid shields are used during X-ray work (AERB 2016); table skirts and ceiling-suspended and mobile shields cut scatter in fluoroscopy (a 2021 review), which also reports 90% or more scatter reduction with 0.5 mm aprons. For staff, the main source is <b>scatter from the patient</b> (a 2021 review). A material\'s <b>half-value layer</b> is the thickness that halves the intensity of the radiation entering it (Wikipedia; AERB 2016 uses HVL to specify X-ray tube filtration).</p><p class="muted">The calculator uses dose = dose rate at 1 m × (1 m ÷ distance)² × time, in arbitrary units — it shows the law, not a real dose. The inverse-square law holds for a source radiating evenly in all directions (Wikipedia).</p>';
+
+/* dosimeters */
+const DOS = {
+  tld: ['TLD', '<h3>Thermoluminescent dosimeter (TLD)</h3><p>A crystal traps energy from ionising radiation; when <b>heated</b> it gives it out as <b>light</b>, in proportion to the dose (Wikipedia; a 2008 review contrasts TLD heating with OSL). Common materials: <b>lithium fluoride</b> (Wikipedia; a 2007 study of LiF TLD-100) and calcium fluoride (Wikipedia). In India AERB requires personnel monitoring of radiation workers with <b>TLD badges</b> (AERB 2020).</p>'],
+  film: ['Film badge', '<h3>Film badge</h3><p>Radiation darkens a film, read after development; <b>one use only</b>; being replaced by TLDs, aluminium oxide (OSL) dosimeters and electronic dosimeters (Wikipedia).</p>'],
+  osl: ['OSL', '<h3>Optically stimulated luminescence (OSL)</h3><p>Like a TLD, but read by <b>light instead of heat</b>; <b>aluminium oxide (Al₂O₃:C)</b> dominates (a 2008 review); aluminium-oxide dosimeters are replacing film badges (Wikipedia).</p>'],
+  drd: ['Pocket / electronic', '<h3>Direct-reading (pocket) and electronic dosimeters</h3><p>Show the dose as you work. Electronic dosimeters read out cumulative dose and dose rate and can <b>alarm</b> (Wikipedia). AERB calls pocket dosimeters "direct reading dosimeters" (DRDs) and advises them in addition for interventional radiology (AERB 2020).</p>'],
+};
+const DOS_TEXT = '<p><b>Where to wear it.</b> AERB 2020: a whole-body <b>chest badge</b>, plus a <b>wrist badge</b> where the hands get far more dose (nuclear medicine, brachytherapy, interventional radiology). A 2021 review describes ICRP\'s advice for interventional staff: <b>two dosimeters</b>, one under the apron and one at the collar above it (or a single one under the apron at the waist). A badge is <b>not a substitute for safe practice</b> (AERB 2020).</p>';
+
+/* PC-PNDT */
+const PNDT_TEXT = '<p>The <b>Pre-Conception and Pre-Natal Diagnostic Techniques (Prohibition of Sex Selection) Act, 1994</b> was enacted to stop female foeticide (Wikipedia; IJRI 2012). Originally the PNDT Act, it was amended in 2003 to bring <b>pre-conception sex selection</b> and <b>ultrasound</b> within it (Wikipedia). It <b>prohibits sex selection before or after conception</b> and allows prenatal diagnostic techniques only to detect specified abnormalities (Act, sections 4 and 6; Wikipedia).</p>';
+const PN = [
+  ['Registered?', '<h3>1. The clinic must be registered — and show it</h3><p>Every genetic counselling centre, laboratory, clinic and <b>ultrasound clinic</b> must be registered (Act, section 18; Wikipedia; IJRI 2012). The registration certificate (valid <b>5 years</b>) is displayed at a conspicuous place (Rules, MoHFW 2006 handbook). Ultrasound machines may be sold only to registered bodies (Act, section 3B).</p>'],
+  ['Display board', '<h3>2. The notice board</h3><p>A notice in <b>English and the local language</b> that <b>disclosure of the sex of the fetus is prohibited</b> must be displayed prominently (Rule 17, MoHFW 2006 handbook; IJRI 2012: "the board of prohibition on sex determination").</p>'],
+  ['Indication', '<h3>3. Why is she being scanned?</h3><p>For <b>ultrasound</b>, the indication is recorded on <b>Form F</b>, which carries the Central Supervisory Board\'s representative list of indications for ultrasound in pregnancy (MoHFW 2006 handbook). For prenatal diagnostic <b>tests</b>, the Act allows them only to detect <b>chromosomal abnormalities, genetic metabolic diseases, haemoglobinopathies, sex-linked genetic diseases, congenital anomalies</b> (and others the Central Supervisory Board specifies) (Act, section 4(2)). Before conducting a prenatal diagnostic test the qualified person must record in writing that at least one condition holds: <b>age above 35</b>, <b>two or more spontaneous abortions or fetal losses</b>, exposure to potentially <b>teratogenic</b> drugs, radiation, infection or chemicals, or a <b>family history</b> of mental retardation, physical deformity or genetic disease (Act, section 4(3)).</p>'],
+  ['Declarations', '<h3>4. Ultrasound: two declarations (consent is for invasive tests)</h3><p>For <b>ultrasonography</b>, Rule 10(1A) requires (i) the woman to <b>declare before the scan that she does not want to know the sex</b> of her fetus, and (ii) the person scanning to <b>declare on each report</b> that he or she has <b>neither detected nor disclosed the sex</b> of the fetus to anybody (MoHFW 2006 handbook; the Form F declaration). <b>Written consent in Form G</b> is required for <b>invasive</b> procedures such as amniocentesis, chorionic villus biopsy or cordocentesis, after explaining side effects and giving her a copy (Act, section 5(1); Rule 10(1), MoHFW 2006 handbook).</p>'],
+  ['Form F', '<h3>5. Form F for every pregnant woman scanned</h3><p>Whoever does ultrasonography on a pregnant woman must keep a complete record (Act, section 4(3) proviso) — <b>Form F</b>, the record for a pregnant woman at an ultrasound clinic or imaging centre (Rules, MoHFW 2006 handbook; IJRI 2012: fill Form F accurately and submit it on time). A deficiency in the record counts as a contravention of sections 5 or 6 unless proved otherwise (Act). A complete report of each month\'s procedures goes to the <b>Appropriate Authority by the 5th of the following month</b> (Rules, MoHFW 2006 handbook).</p>'],
+  ['Never disclose', '<h3>6. Never disclose the sex</h3><p>No one may communicate the sex of the fetus to the woman, her relatives or anyone else "<b>by words, signs, or in any other manner</b>" (Act, section 5(2); IJRI 2012). No technique, including ultrasonography, may be used to determine the sex (Act, section 6; Wikipedia).</p>'],
+  ['Records', '<h3>7. Keep the records</h3><p>All records, forms and consent letters are preserved for <b>2 years</b> (longer if proceedings are pending) and open to the Appropriate Authority (Act, section 29; IJRI 2012).</p>'],
+  ['Penalties', '<h3>8. Penalties (section 23)</h3><p>A doctor or clinic staff member who contravenes the Act or Rules: <b>up to 3 years and fine up to ₹10,000</b>; subsequent conviction up to 5 years and ₹50,000. The name is reported to the <b>State Medical Council</b>: registration suspended once charges are framed, removed for 5 years on a first conviction and permanently after a subsequent one. A person who seeks sex selection: up to 3 years and ₹50,000 (subsequent: 5 years, ₹1 lakh); a woman <b>compelled</b> to undergo it is not punished (Act, section 23). Advertising sex determination is also an offence (Act, section 22). The Act penalises both sex determination and failure to keep records (IJRI 2012).</p>'],
+];
+const PN_TABLE = [
+  ['Section 3A, 6', 'Sex selection and sex determination prohibited'],
+  ['Section 3B', 'Ultrasound machines sold only to registered bodies'],
+  ['Section 4', 'Permitted purposes and conditions; records of every ultrasound of a pregnant woman'],
+  ['Section 5', 'Written consent for prenatal diagnostic procedures; no communication of the sex of the fetus'],
+  ['Section 18', 'Registration'],
+  ['Section 22', 'No advertisement of sex determination'],
+  ['Section 23', 'Penalties; State Medical Council'],
+  ['Section 29', 'Records kept 2 years'],
+  ['Rules', 'Form F (record of every pregnant woman scanned; monthly report by the 5th); Rule 10(1A) declarations for ultrasound; Form G consent for invasive procedures; notice board (Rule 17); certificate displayed'],
+];
+const PN_NOTE = 'Quoted from the Act as amended (India Code) and the MoHFW 2006 handbook of the Act and Rules. Later amendments to the Rules (e.g. online Form F) are not covered here; check the current Rules.';
+
+const EXAM = [
+  ['Deterministic vs stochastic', 'Deterministic: threshold, severity rises with dose (e.g. erythema, cataract). Stochastic: no threshold, probability rises (cancer, heritable) (ICRP 103; AERB 2016).'],
+  ['Most radiosensitive', 'Rapidly dividing, undifferentiated cells; lymphocytes; least: nerve and muscle (Wikipedia; StatPearls; 2020 review).'],
+  ['Units', '1 Gy = 1 J/kg = 100 rad; 1 Sv = 100 rem; 1 Ci = 3.7 × 10¹⁰ Bq; 1 R = 2.58 × 10⁻⁴ C/kg (Wikipedia; 2016 review).'],
+  ['Dose limits', 'Worker 20 mSv/yr averaged over 5 years; public 1 mSv/yr (IAEA 2014; AERB). Single year: 50 (IAEA) vs 30 mSv (AERB). Pregnant worker: 1 mSv to the fetus after declaration (AERB web page; AERB 2020: over the entire pregnancy).'],
+  ['Inverse square law', 'Double the distance → ¼ the dose rate (AERB; 2016 review; Wikipedia).'],
+  ['TLD', 'Heated crystal emits light ∝ dose; lithium fluoride (Wikipedia; 2007 study); AERB uses TLD badges.'],
+  ['Apron', 'At least 0.25 mm lead equivalence (AERB 2016).'],
+  ['PC-PNDT', 'Registration, display board, Form F for every pregnant woman scanned (monthly report by the 5th), Rule 10(1A) declarations for ultrasound (Form G consent only for invasive tests), no sex disclosure, records 2 years, up to 3 years and ₹10,000 for a first offence by a doctor (Act; MoHFW 2006).'],
+];
+const BASED = '<b>Based on:</b> ICRP Publication 103 (2007; free extract); IAEA Basic Safety Standards GSR Part 3 (2014); AERB Safety Code SC-3 (2016), AERB personnel-monitoring guidance (2020) and AERB radiation-protection web page; HPA, RCR and College of Radiographers (2009); the PC-PNDT Act 1994 as amended (India Code) and the MoHFW Handbook of the Act and Rules (2006); StatPearls (abstracts); open-access reviews (radiation protection in interventional radiology 2021, ALARA in orthopaedics 2016, dose optimisation 2024, classification of radiation effects 2014, radiation tissue damage 2020, OSL dosimetry 2008, LiF TLD 2007, PC-PNDT 2012 ×2); Wikipedia (current wikitext checked).';
+const MODELS = '<b>Models used:</b> all drawings are schematic. The penetration diagram is not to scale; the dose–effect plot has no numbers on its effect axis; the inverse-square calculator uses arbitrary units and assumes a point source.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Rad;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+
+/* types */
+function drawTyp(k) {
+  const bx = [190, 270, 350, 440], bw = [6, 14, 30, 50];
+  let s = Rad.DEFS + Rad.arrowDef('arrA', 'var(--accent)');
+  BARR.forEach((b, i) => { s += `<rect x="${bx[i]}" y="40" width="${bw[i]}" height="210" rx="2" class="barrier"/>` + T(bx[i] + bw[i] / 2, 32, b, 's', 'middle'); });
+  s += `<rect x="30" y="56" width="14" height="178" rx="3" class="src"/>` + T(37, 252, 'sources', 's', 'middle');
+  Object.entries(TYP).forEach(([kk, [lab, stop]], i) => {
+    const y = 70 + i * 50, xe = bx[stop] - 2, on = kk === k;
+    s += `<path class="rad${on ? ' on' : ''}" ${on ? 'style="marker-end:url(#arrA)"' : ''} d="M48 ${y} L${xe} ${y}"/>` + T(54, y - 7, lab, on ? 'b' : 's', 'start');
+    if (kk === 'g') s += `<path class="rad faint${on ? ' on' : ''}" style="marker-end:none" d="M${bx[2] + bw[2] + 2} ${y} L${bx[3] - 4} ${y}"/>`;
+  });
+  s += T(20, 284, 'Arrow ends where the beam is stopped (gamma/X: reduced by lead, fainter beyond). Schematic.', 's', 'start');
+  $('typ-svg').innerHTML = s; $('typ-find').innerHTML = TYP[k][2];
+}
+Rad.toggles('typ-tg', Object.entries(TYP).map(([k, v]) => [k, v[0]]), drawTyp, 'a'); drawTyp('a');
+$('typ-text').innerHTML = TYP_TEXT;
+
+/* effects plot */
+const ES = {mode: 'prob', d: 50};
+function drawEff() {
+  const x0 = 60, x1 = 520, y0 = 270, y1 = 40, X = Rad.scale(0, 100, x0, x1), th = 40;
+  const detP = d => { const x = Math.max(0, Math.min(1, (d - th) / 45)); return x * x * (3 - 2 * x); };
+  const detS = d => d <= th ? 0 : Math.min(1, (d - th) / 55);
+  const stoP = d => 0.008 * d;
+  const Y = v => y0 - (y0 - y1) * v;
+  const f1 = ES.mode === 'prob' ? detP : detS, f2 = ES.mode === 'prob' ? stoP : (d => d > 0 ? 0.35 : 0);
+  let s = `<path class="axis" d="M${x0} ${y1 - 10} L${x0} ${y0} L${x1 + 10} ${y0}"/>` + T(x1, y0 + 14, 'dose →', 's', 'end') + T(x0 - 8, y1 - 16, ES.mode === 'prob' ? 'probability of the effect' : 'severity in an affected person', 'h', 'start');
+  s += `<path class="thr" d="M${X(th)} ${y1} L${X(th)} ${y0}"/>` + T(X(th), y0 + 14, 'threshold', 's', 'middle');
+  const p1 = [], p2 = []; for (let d = 0; d <= 100; d += 0.5) { p1.push([X(d), Y(f1(d))]); if (!(ES.mode === 'sev' && d === 0)) p2.push([X(d), Y(f2(d))]); }
+  s += `<path class="det" d="${Rad.path(p1)}"/><path class="sto" d="${Rad.path(p2)}"/>`;
+  s += `<path class="det" d="M${x0 + 10} ${y0 + 40} L${x0 + 40} ${y0 + 40}"/>` + T(x0 + 46, y0 + 44, 'deterministic', 's', 'start') + `<path class="sto" d="M${x0 + 160} ${y0 + 40} L${x0 + 190} ${y0 + 40}"/>` + T(x0 + 196, y0 + 44, 'stochastic (linear, no threshold)', 's', 'start');
+  s += `<path class="cur" d="M${X(ES.d)} ${y1} L${X(ES.d)} ${y0}"/><circle cx="${X(ES.d)}" cy="${Y(f1(ES.d))}" r="5" style="fill:var(--mark)"/><circle cx="${X(ES.d)}" cy="${Y(f2(ES.d))}" r="5" style="fill:var(--surface);stroke:var(--mark);stroke-width:2"/>`;
+  $('eff-svg').setAttribute('viewBox', '0 0 560 330'); $('eff-svg').innerHTML = s;
+  const above = ES.d > th;
+  $('eff-find').innerHTML = `<p class="readout">${above ? 'Above' : 'Below'} the threshold</p><p>${above ? 'The deterministic effect can now occur, and it gets worse as dose rises.' : 'No deterministic effect below its threshold.'} The stochastic risk is ${ES.d === 0 ? 'zero at zero dose' : 'already above zero and rises in proportion to dose'}${ES.mode === 'sev' ? ', but if cancer occurs its severity does not depend on the dose' : ''}.</p>` + EFF.det + EFF.sto;
+}
+Rad.toggles('eff-tg', [['prob', 'Probability'], ['sev', 'Severity']], k => { ES.mode = k; drawEff(); }, 'prob');
+Rad.slider('eff-sl', {id: 'dose', label: 'Dose (schematic)', min: 0, max: 100, step: 1, value: ES.d, fmt: v => v + ' (arbitrary)'}, v => { ES.d = v; drawEff(); }).init();
+drawEff(); Rad.table('thr-table', ['Effect', 'Threshold as sourced', 'Source'], THR_TABLE); $('eff-note').textContent = EFF_NOTE;
+
+/* radiosensitivity: two group bands, items listed without order inside each */
+(function () {
+  let s = Rad.DEFS + `<path class="flow" d="M40 24 L520 24"/>` + T(40, 16, 'more sensitive', 'h', 'start') + T(520, 16, 'less sensitive', 'h', 'end');
+  const band = (x, w, title, items) => { let t = `<rect x="${x}" y="36" width="${w}" height="${30 + items.length * 34}" rx="6" class="box"/>` + T(x + 10, 54, title, 'b', 'start');
+    items.forEach(([l, src], i) => { t += T(x + 10, 76 + i * 34, l, "", "start") + T(x + 10, 91 + i * 34, src, 's', 'start'); }); return t; };
+  s += band(40, 290, 'Most sensitive (not ranked)', SENS.filter(r => r[1] < 0.5).map(r => [r[0], r[2]]));
+  s += band(350, 170, 'Least sensitive', SENS.filter(r => r[1] >= 0.5).map(r => [r[0], r[2]]));
+  $('sens-svg').innerHTML = s;
+})();
+$('sens-text').innerHTML = SENS_TEXT;
+
+/* units */
+const usel = $('u-unit'); usel.innerHTML = Object.entries(UNITS).map(([k, v]) => `<option value="${k}">${v[2]}</option>`).join('');
+const fmt = v => { if (v === 0) return '0'; const a = Math.abs(v); if (a >= 1e5 || a < 1e-3) { const e = Math.floor(Math.log10(a)), m = v / 10 ** e; return Rad.mn((+m.toPrecision(4)) + ' × 10' + String(e).split('').map(c => '⁰¹²³⁴⁵⁶⁷⁸⁹'['0123456789'.indexOf(c)] || '⁻').join('')); } return Rad.mn(String(+v.toPrecision(6))); };
+function drawU() {
+  const v = parseFloat($('u-val').value), u = usel.value, [q, f] = UNITS[u];
+  if (!isFinite(v) || v < 0) { $('u-out').innerHTML = '<p>Enter a number of zero or more.</p>'; return; }
+  const base = v * f, rows = Object.entries(UNITS).filter(([k, x]) => x[0] === q && k !== u).map(([k, x]) => `<span class="readout">${fmt(base / x[1])} ${k}</span>`);
+  $('u-out').innerHTML = `<p><span class="tag">${q === 'absorbed' ? 'absorbed dose' : q === 'equivalent' ? 'equivalent / effective dose' : q === 'exposure' ? 'exposure' : 'activity'}</span></p><p><span class="big">${fmt(v)} ${u}</span> = ${rows.join(' = ')}</p>`;
+}
+$('u-val').min = 0; $('u-val').oninput = () => { clearU(); drawU(); }; usel.onchange = () => { clearU(); drawU(); };
+let UAPPLY = false; const clearU = () => { if (!UAPPLY) $('u-pre').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); };
+Rad.toggles('u-pre', Object.entries(U_PRE).map(([k, v]) => [k, v[0]]), k => { UAPPLY = true; $('u-val').value = U_PRE[k][1]; usel.value = U_PRE[k][2]; drawU(); UAPPLY = false; }, 'gy');
+drawU(); Rad.table('u-table', ['Quantity', 'What it measures', 'SI unit', 'Old unit'], U_TABLE); $('u-note').textContent = U_NOTE;
+
+/* limits */
+function drawLim(k) {
+  const [who, rows] = LIM[k];
+  $('lim-out').innerHTML = `<h3>${who}</h3>` + rows.map(r => `<p><b>${r[0]}</b>: IAEA 2014 <span class="readout">${r[1]}</span> · AERB <span class="readout">${r[2]}</span>${r[3] ? ' <span class="diff">(sources differ)</span>' : ''}</p>`).join('');
+}
+Rad.toggles('lim-tg', Object.entries(LIM).map(([k, v]) => [k, v[0]]), drawLim, 'worker'); drawLim('worker');
+Rad.table('lim-table', ['Who', 'Quantity', 'IAEA GSR Part 3 (2014)', 'AERB (India)'], Object.values(LIM).flatMap(([w, rows]) => rows.map(r => [w, r[0], r[1], r[2] + (r[3] ? ' <span class="diff">≠</span>' : '')])));
+$('lim-text').innerHTML = LIM_TEXT;
+
+/* ALARA calculator */
+$('alara-text').innerHTML = ALARA_TEXT; $('shield-text').innerHTML = SHIELD_TEXT;
+const AS = {d: 1, t: 10, r: 1}; let AAPPLY = false; const alS = {};
+const clearA = () => { if (!AAPPLY) $('al-pre').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); };
+function drawAl() {
+  const rate = AS.r / (AS.d * AS.d), dose = rate * AS.t / 60, ref = AS.r * AS.t / 60;
+  const X = Rad.scale(0, 4, 60, 520);
+  let s = `<circle cx="60" cy="110" r="9" class="src"/>` + T(60, 140, 'source', 's', 'middle');
+  s += `<path class="axis" d="M60 190 L520 190"/>`; for (const r of [0, 1, 2, 3, 4]) s += T(X(r), 208, r + ' m', 's', 'middle');
+  const px = X(AS.d); s += `<circle cx="${px}" cy="92" r="9" style="fill:none;stroke:var(--ink);stroke-width:2"/><path d="M${px} 101 L${px} 140 M${px - 14} 116 L${px + 14} 116 M${px} 140 L${px - 10} 165 M${px} 140 L${px + 10} 165" style="stroke:var(--ink);stroke-width:2;fill:none"/>`;
+  s += `<path class="cur" d="M${px} 172 L${px} 190"/><circle cx="${px}" cy="190" r="4" style="fill:var(--mark)"/>` + T(px, 60, 'worker', 's', 'middle');
+  $('al-svg').innerHTML = s;
+  $('al-out').innerHTML = `<p><span class="tag">dose rate at ${Rad.mn(AS.d)} m</span><br><span class="big">${(+rate.toPrecision(3))}</span> × the rate at 1 m (1 ÷ ${AS.d}²)</p><p><span class="tag">dose in ${AS.t} min</span><br><span class="readout">${(+dose.toPrecision(3))} ${+dose.toPrecision(3) === 1 ? 'unit' : 'units'}</span> (${(+(dose / ref).toPrecision(3))} × the dose at 1 m for the same time)</p>`;
+}
+alS.d = Rad.slider('al-sl', {id: 'dist', label: 'Distance from the source', min: 0.5, max: 4, step: 0.1, value: 1, fmt: v => v.toFixed(1) + ' m'}, v => { AS.d = v; clearA(); drawAl(); }); alS.d.init();
+alS.t = Rad.slider('al-sl', {id: 'time', label: 'Time near the source', min: 1, max: 60, step: 1, value: 10, fmt: v => v + ' min'}, v => { AS.t = v; clearA(); drawAl(); }); alS.t.init();
+Rad.toggles('al-pre', Object.entries(AL_PRE).map(([k, v]) => [k, v[0]]), k => { AAPPLY = true; alS.d.set(AL_PRE[k][1]); alS.t.set(AL_PRE[k][2]); AAPPLY = false; }, 'one');
+drawAl();
+
+/* dosimeters */
+function drawDos(k) {
+  let s = Rad.DEFS;
+  if (k === 'tld' || k === 'osl') {
+    s += `<rect x="40" y="70" width="90" height="60" rx="6" class="box"/>` + T(85, 104, k === 'tld' ? 'LiF crystal' : 'Al₂O₃:C', 's', 'middle') + T(85, 60, '1. exposed: energy trapped', 's', 'middle');
+    s += `<path class="flow" d="M140 100 L200 100"/>` + `<rect x="210" y="70" width="90" height="60" rx="6" class="box"/>` + T(255, 104, k === 'tld' ? 'heated' : 'lit by light', 'b', 'middle') + T(255, 60, '2. reader', 's', 'middle');
+    s += `<path class="flow" d="M310 100 L370 100"/>` + T(375, 96, 'emits light', 's', 'start') + T(375, 112, '∝ dose', 'b', 'start');
+  } else if (k === 'film') {
+    s += `<rect x="40" y="70" width="110" height="60" rx="6" class="box"/>` + T(95, 104, 'film', 's', 'middle') + `<path class="flow" d="M160 100 L220 100"/>` + T(250, 96, 'developed:', 's', 'start') + T(250, 112, 'darkening ∝ dose', 'b', 'start') + T(40, 60, 'one use only', 's', 'start');
+  } else {
+    s += `<rect x="40" y="60" width="110" height="80" rx="8" class="box"/>` + `<rect x="55" y="74" width="80" height="26" rx="3" class="memb"/>` + T(95, 92, '— mSv', 'm', 'middle') + T(95, 126, 'live readout', 's', 'middle') + T(170, 96, 'alarm when a set dose or dose rate is passed (electronic)', 's', 'start');
+  }
+  // where badges are worn
+  const ox = 120, oy = 170;
+  s += T(20, oy, 'Where worn:', 'b', 'start');
+  s += `<circle cx="${ox + 80}" cy="${oy + 14}" r="10" style="fill:none;stroke:var(--ink);stroke-width:2"/><rect x="${ox + 62}" y="${oy + 26}" width="36" height="66" rx="8" class="memb"/>` + T(ox + 80, oy + 106, 'apron', 's', 'middle');
+  s += `<rect x="${ox + 74}" y="${oy + 62}" width="12" height="9" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.5;stroke-dasharray:2 2"/><path class="lead" d="M${ox + 98} ${oy + 66} L${ox + 150} ${oy + 66}"/>` + T(ox + 154, oy + 62, 'under the apron (2021 review);', 's', 'start') + T(ox + 154, oy + 76, 'AERB: a chest badge for whole-body dose', 's', 'start');
+  s += `<rect x="${ox + 74}" y="${oy + 26}" width="12" height="7" style="fill:none;stroke:var(--ink);stroke-width:1.5"/><path class="lead" d="M${ox + 98} ${oy + 28} L${ox + 150} ${oy + 28}"/>` + T(ox + 154, oy + 30, 'collar, above the apron (interventional; 2021 review)', 's', 'start');
+  s += `<path class="lead" d="M${ox + 62} ${oy + 60} L${ox + 36} ${oy + 60}"/>` + T(ox + 32, oy + 64, 'wrist badge (AERB)', 's', 'end');
+  $('dos-svg').innerHTML = s; $('dos-find').innerHTML = DOS[k][1];
+}
+Rad.toggles('dos-tg', Object.entries(DOS).map(([k, v]) => [k, v[0]]), drawDos, 'tld'); drawDos('tld');
+$('dos-text').innerHTML = DOS_TEXT;
+
+/* PC-PNDT */
+$('pndt-text').innerHTML = PNDT_TEXT;
+const PS = {s: 0};
+Rad.stepper('pn-step', PN.map(r => r[0]), () => { $('pn-find').innerHTML = PN[PS.s][1]; }, PS);
+Rad.table('pn-table', ['Provision', 'What it says'], PN_TABLE); $('pn-note').textContent = PN_NOTE;
+
+Rad.table('exam-table', ['Point', 'What the sources say'], EXAM);
+Rad.swipeHints();
+</script>
+</body>
+</html>

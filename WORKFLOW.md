@@ -86,7 +86,7 @@ Last updated: 2026-11-23
   [x] review (ERAS carbohydrate loading misattributed, TBI/spinal exception missing at the instruction (safety),
   ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. ROUND 1 SECOND MODULES started: B02 [ ] build (running; biochemistry/carbohydrates/, BC3.1–3.6).
   R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,
-  NICE head-injury adult rule, 10-day rule year, radiograph densities unsourced, PET geometry) [ ] fixes (running).
+  NICE head-injury adult rule, 10-day rule year, radiograph densities unsourced, PET geometry) [x] fixes (364 quotes) [x] committed 2026-11-26.
   TOOLING FIX 2026-11-26: tools/capped passed args through systemd-run env expansion (${X} in --js was mangled);
   now --expand-environment=no. Inline --js tests before this date that used ${...} may have been wrong. E01 [x] build (388 quotes; WHO 2021 grades, ASHA 1990; Wikipedia Rinne/Weber excluded; ABC/Schwabach cut)
   [x] review (audiogram symbol text reversed, ET angle reference planes mixed, bone>air nonsense, ear

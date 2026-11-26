@@ -12,19 +12,19 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 1. General principles of imaging equipment
 
-- [ ] **RD1.1** Knowledgeable about the general principles of functioning of imaging modalities such as Plain Xray, Fluoroscopy, CT, Ultrasound, Nuclear medicine modalities (bone scan, PET) and MRI, to the extent that they would be able to (a) exhibit mindful behavior regarding the potential hazards associated with each imaging modality (b) make rational choices about the appropriateness of the modality for a particular purpose, such as what will be seen better in which modality (E.g.: air containing structures would be imaged better in x-ray than in ultrasound)
+- [x] **RD1.1** Knowledgeable about the general principles of functioning of imaging modalities such as Plain Xray, Fluoroscopy, CT, Ultrasound, Nuclear medicine modalities (bone scan, PET) and MRI, to the extent that they would be able to (a) exhibit mindful behavior regarding the potential hazards associated with each imaging modality (b) make rational choices about the appropriateness of the modality for a particular purpose, such as what will be seen better in which modality (E.g.: air containing structures would be imaged better in x-ray than in ultrasound) — *principles of each modality, ionising vs non-ionising, relative doses: [Imaging Modalities](basics/modalities.html)*
 
 ### 2. Rational choice of modality for a patient
 
-- [ ] **RD2.1** Obtain relevant clinical history to select patients for imaging modalities, in order toto determine suitability for radiation exposure/contrast administration/exposure to magnetic fields (including allergies, renal function, pregnancy, implanted devices)
-- [ ] **RD2.2** Select the correct imaging modality and procedure for broad pathology type (infections, tumour, trauma, congenital), body part/system (CNS, head and neck, chest, abdomen and extremities) in adults, children and pregnancy women, mindful of unique needs of pediatric patients with respect to radiation and sedation.
+- [x] **RD2.1** Obtain relevant clinical history to select patients for imaging modalities, in order toto determine suitability for radiation exposure/contrast administration/exposure to magnetic fields (including allergies, renal function, pregnancy, implanted devices) — *before you request: pregnancy (HPA 2009), contrast (ACR 2024), kidneys, implants: [Imaging Modalities](basics/modalities.html)*
+- [~] **RD2.2** Select the correct imaging modality and procedure for broad pathology type (infections, tumour, trauma, congenital), body part/system (CNS, head and neck, chest, abdomen and extremities) in adults, children and pregnancy women, mindful of unique needs of pediatric patients with respect to radiation and sedation. — *NICE first-line scenarios, children, pregnancy; no ACR/iRefer, congenital and head-and-neck scenarios missing: [Imaging Modalities](basics/modalities.html)*
 
 ### 3. Safety and legal requirements
 
-- [ ] **RD3.1** Awareness of different types of radiation and the stochastic and non-stochastic hazards of radiation in human beings (acute and long-term)
-- [ ] **RD3.2** Knowledgeable about best practices (time, distance and shielding) and provisions to keep x-ray exposure ALARA (as low as reasonably achievable) in clinical practice of radiology and general principles to be followed as per AERB regulatory guidelines
-- [ ] **RD3.3** Knowledgeable about monitoring radiation exposure in health care workers with dosimeter such as thermoluminescent dosimeter and awareness of the units to measure radiation exposure in human Beings
-- [ ] **RD3.4** Knowledgeable about the purpose and components of the PC-PNDT act relevant to a primary care physician
+- [x] **RD3.1** Awareness of different types of radiation and the stochastic and non-stochastic hazards of radiation in human beings (acute and long-term) — *radiation types, deterministic vs stochastic, radiosensitivity, ARS: [Radiation Safety and the PC-PNDT Act](basics/radiation-safety.html)*
+- [x] **RD3.2** Knowledgeable about best practices (time, distance and shielding) and provisions to keep x-ray exposure ALARA (as low as reasonably achievable) in clinical practice of radiology and general principles to be followed as per AERB regulatory guidelines — *ALARA, inverse square, IAEA 2014 and AERB limits: [Radiation Safety and the PC-PNDT Act](basics/radiation-safety.html)*
+- [x] **RD3.3** Knowledgeable about monitoring radiation exposure in health care workers with dosimeter such as thermoluminescent dosimeter and awareness of the units to measure radiation exposure in human Beings — *dosimeters, units and conversions: [Radiation Safety and the PC-PNDT Act](basics/radiation-safety.html)*
+- [x] **RD3.4** Knowledgeable about the purpose and components of the PC-PNDT act relevant to a primary care physician — *PC-PNDT Act and Rules (MoHFW 2006 handbook; later amendments not covered): [Radiation Safety and the PC-PNDT Act](basics/radiation-safety.html)*
 
 ### 4. Interdisciplinary communication and interaction
 
