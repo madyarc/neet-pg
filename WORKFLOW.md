@@ -89,7 +89,7 @@ Last updated: 2026-11-23
   drug blocks off-arrow, path.js stepper focus) [x] fixes (472 quotes) [x] committed 2026-11-26.
   (bioc.js has the stepper-end focus fix in another form: verified; only path.js lacked it, P02 fix adds it.) M02 [x] build (474 quotes; MoHFW 2017, CDC 2024; Wikipedia Humoral immunity, Type II hypersensitivity excluded)
   [ ] review (running). G02 [ ] build (running; medicine/endocrine/,
-  GM11.1–11.24).
+  GM11.1–11.24). C02 [ ] build (running; community-medicine/biostatistics/, CM6.1–6.4).
   R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,
   NICE head-injury adult rule, 10-day rule year, radiograph densities unsourced, PET geometry) [x] fixes (364 quotes) [x] committed 2026-11-26.
   TOOLING FIX 2026-11-26: tools/capped passed args through systemd-run env expansion (${X} in --js was mangled);
