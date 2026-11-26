@@ -91,8 +91,7 @@ Last updated: 2026-11-23
   [x] review (pemphigus Dsg quote is paraneoplastic, crossmatch quote is transfusion, open-vial lists (safety),
   several drawings mechanically wrong, colour misuse) [ ] fixes (running).
   POLICY (default, 2026-11-26): a Wikipedia article whose only OpenStax link is an infobox IMAGE is not excluded (we
-  quote its text, which does not cite OpenStax). Text citations of OpenStax/Boundless/Lumen still exclude. Ask user. G02 [ ] build (running; medicine/endocrine/,
-  GM11.1–11.24). C02 [ ] build (running; community-medicine/biostatistics/, CM6.1–6.4).
+  quote its text, which does not cite OpenStax). Text citations of OpenStax/Boundless/Lumen still exclude. Ask user. G02 [x] build (413 quotes; ADA 2026, 2024 crises consensus vs 2009, KDIGO 2022/2024) [ ] review (running). C02 [ ] build (running; community-medicine/biostatistics/, CM6.1–6.4).
   R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,
   NICE head-injury adult rule, 10-day rule year, radiograph densities unsourced, PET geometry) [x] fixes (364 quotes) [x] committed 2026-11-26.
   TOOLING FIX 2026-11-26: tools/capped passed args through systemd-run env expansion (${X} in --js was mangled);
