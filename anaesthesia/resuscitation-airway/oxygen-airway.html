@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oxygen Therapy and Airway Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/anaes.css">
+<style>
+/* tokens from anaes.css with their site meanings: --bone (mandible, palate, cervical vertebrae), --cart (epiglottis, laryngeal and tracheal
+   cartilage), --musc (the tongue, muscle tissue), --clin (a clinical point: obstruction, contraindication, a pressure limit), --mark (the value
+   chosen on a slider), --accent (UI selection only). Devices, ranges and gas bars are ink/grey. */
+svg.sch .head{fill:var(--bg);stroke:var(--muted);stroke-width:1.4}
+svg.sch .bone{fill:var(--bone);stroke:var(--muted);stroke-width:1}
+svg.sch .cart{fill:var(--cart);stroke:var(--muted);stroke-width:1}
+svg.sch .tongue{fill:var(--musc);fill-opacity:.85;stroke:var(--ink);stroke-width:.8}
+svg.sch .wall{stroke:var(--ink);stroke-width:2;fill:none}
+svg.sch .air{stroke:var(--muted);stroke-width:1.2;fill:none;stroke-dasharray:4 3}
+svg.sch .dev{stroke:var(--ink);stroke-width:5;fill:none;stroke-linecap:round;stroke-opacity:.8}
+svg.sch .cuff{fill:var(--surface);stroke:var(--ink);stroke-width:1.6}
+svg.sch .meas{stroke:var(--ink);stroke-width:1.4;stroke-dasharray:6 3;fill:none}
+svg.sch .block{fill:var(--clin);fill-opacity:.85}
+svg.sch .rng{fill:var(--ink);fill-opacity:.32}
+svg.sch .o2{fill:var(--ink);fill-opacity:.55}
+svg.sch .room{fill:var(--ink);fill-opacity:.12;stroke:var(--muted);stroke-width:.8}
+svg.sch .lim{stroke:var(--clin);stroke-width:1.6;stroke-dasharray:5 3}
+svg.sch .trace2{stroke:var(--ink);stroke-width:2;fill:none;stroke-linejoin:round}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:640px){.cols{grid-template-columns:minmax(0,1fr)}}
+.cols ul,.prose ul{margin:4px 0 0;padding-left:20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.card{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg);font-size:14px}
+.card h3{font-size:14.5px}
+.dis{border-left:3px solid var(--ink);padding:2px 0 2px 10px;font-size:13.5px}
+#air-svg,#dev-svg,#adj-svg{max-width:360px}
+svg.sch .head2{fill:none;stroke:var(--muted);stroke-width:1.4}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anaesthesiology</a> <span class="muted">· Module 01: <a href="cpr-bls-als.html">CPR: BLS and ALS</a> · <span aria-current="page">Oxygen and airway</span></span></nav>
+
+<header class="stack">
+  <h1>Oxygen Therapy and Airway Management</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-dev">Oxygen devices</a> <a href="#h-perf">Fixed vs flow-dependent</a> <a href="#h-tgt">Targets and safety</a> <a href="#h-man">Opening the airway</a> <a href="#h-adj">OPA and NPA</a> <a href="#h-ind">Advanced airway: when</a> <a href="#h-adv">BVM, LMA, ETT</a> <a href="#h-conf">Confirming the tube</a> <a href="#h-vent">Ventilation</a> <a href="#h-key">Key points</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-dev">
+  <h2 id="h-dev">Oxygen delivery devices: flow and approximate FiO₂</h2>
+  <div class="chips" id="dev-pick" aria-label="Device"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="dev-ranges" viewBox="0 0 420 300" role="img" aria-label="Schematic scales of oxygen flow in litres per minute and approximate FiO2 in percent, with the range each source gives for the chosen device"></svg></div>
+    <div class="prose find" id="dev-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="dev-table"></table></div>
+  <p class="muted">FiO₂ for low-flow devices is approximate: it depends on the patient's breathing, and the sources give different ranges — each is shown.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-perf">
+  <h2 id="h-perf">Fixed performance vs FiO₂ that varies with breathing</h2>
+  <div class="sliders" id="perf-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="perf-svg" viewBox="0 0 420 230" role="img" aria-label="Schematic make-up of one breath: with a 4 litre per minute cannula the share of room air grows as the patient breathes in faster; with a Venturi mask the mixture is set by the diluter"></svg></div>
+    <div class="prose" id="perf-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tgt">
+  <h2 id="h-tgt">Oxygen therapy: targets, monitoring and safety</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="tgt-svg" viewBox="0 0 420 170" role="img" aria-label="Schematic SpO2 scale from 80 to 100 percent with the target ranges of BTS 2017 and TSANZ 2022"></svg></div>
+    <div class="prose" id="tgt-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-man">
+  <h2 id="h-man">Opening the airway: head tilt–chin lift or jaw thrust</h2>
+  <div class="q"><span class="qt">Manoeuvre</span><div class="chips" id="man-pick"></div></div>
+  <div class="q"><span class="qt">Suspected cervical-spine injury?</span><div class="chips" id="man-cs"></div></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="air-svg" viewBox="0 0 320 350" role="img" aria-label="Schematic sagittal section of head and neck, face to the left: tongue, mandible, pharynx, epiglottis, larynx and trachea; the tongue blocks the pharynx when the patient is unconscious and moves forward with each manoeuvre"></svg></div>
+    <div class="prose find" id="man-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-adj">
+  <h2 id="h-adj">Airway adjuncts: oropharyngeal (OPA) and nasopharyngeal (NPA)</h2>
+  <div class="chips" id="adj-pick" aria-label="Adjunct"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="adj-svg" viewBox="0 0 320 350" role="img" aria-label="Schematic sagittal section showing the chosen adjunct in place and the dashed line used to size it"></svg></div>
+    <div class="prose find" id="adj-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ind">
+  <h2 id="h-ind">When is an advanced airway needed?</h2>
+  <div class="cards" id="ind-cards"></div>
+  <p class="muted" id="ind-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-adv">
+  <h2 id="h-adv">Bag-valve-mask, laryngeal mask and tracheal tube: where each one sits</h2>
+  <div class="chips" id="adv-pick" aria-label="Device"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="dev-svg" viewBox="0 0 320 350" role="img" aria-label="Schematic sagittal section showing the chosen device: face mask over nose and mouth, laryngeal mask cuff over the laryngeal inlet, or tracheal tube passing through the vocal cords with its cuff in the trachea"></svg></div>
+    <div class="prose find" id="adv-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-conf">
+  <h2 id="h-conf">Confirming tracheal tube placement</h2>
+  <div class="step" id="conf-step"></div>
+  <div class="chips" id="conf-where" aria-label="Where the tube is"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="conf-svg" viewBox="0 0 420 170" role="img" aria-label="Schematic capnography trace: a repeating carbon dioxide waveform with each breath when the tube is in the trachea, no carbon dioxide when it is in the oesophagus"></svg></div>
+    <div class="prose find" id="conf-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-vent">
+  <h2 id="h-vent">Mechanical ventilation: volume control vs pressure control</h2>
+  <div class="chips" id="vent-mode" aria-label="Mode"></div>
+  <div class="sliders" id="vent-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="vent-svg" viewBox="0 0 420 260" role="img" aria-label="Schematic airway pressure and volume over two breaths for the chosen mode and lung compliance"></svg></div>
+    <div class="stack"><div class="ans prose" id="vent-out" aria-live="polite"></div><div class="prose" id="vent-text"></div></div>
+  </div>
+  <div class="sliders" id="pbw-sl"></div>
+  <p class="readout" id="pbw-out" aria-live="polite"></p>
+  <div class="scroll"><table id="vent-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-key">
+  <h2 id="h-key">Key points, with their sources</h2>
+  <div class="scroll"><table id="key-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BOxygen%20Therapy%20and%20Airway%20Management%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fanaesthesia%2Fresuscitation-airway%2Foxygen-airway.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/anaes.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources unless attributed: sources-local/facts/fill-an01.md, Part B) ===================== */
+const LEDE = 'Pick an oxygen device and see its flow and approximate FiO₂ as each source gives it; open the airway on a schematic; place an adjunct, a laryngeal mask or a tube; confirm the tube with capnography; and see how volume and pressure control behave as the lungs stiffen. Oxygen targets, hypoxia and oxygen toxicity: <a href="../../physiology/respiratory/applied-environment.html#h-oxy">physiology: oxygen therapy</a> and <a href="../../physiology/respiratory/applied-environment.html#h-hyp">hypoxia</a>; the dissociation curve: <a href="../../physiology/respiratory/gas-transport-control.html#h-odc">physiology</a>; pharynx and larynx: <a href="../../anatomy/head-neck/mouth-pharynx-nose.html#h-phar">anatomy: the pharynx</a>; airway in cardiac arrest: <a href="cpr-bls-als.html">CPR page</a>.';
+
+/* devices: key, label, flow [lo, hi, note], fio2 ranges [[source, lo, hi]], performance, html */
+const DEV = [
+  ['nc', 'Nasal cannula', [1, 6, '1–6 L/min'], [['SRFAC 2026', 24, 44], ['Wikipedia (Oxygen therapy)', 24, 40], ['Wikipedia (Nasal cannula, ≤5 L/min)', 28, 44]], 'Low flow: FiO₂ varies with breathing',
+    '<h3>Nasal cannula</h3><p>Low flow, <b>1–6 L/min</b> (SRFAC 2026; Wikipedia; StatPearls: up to 4–6 L/min). FiO₂ about <b>24–44%</b>, sources differ; SRFAC 2026 adds about 4% per extra L/min. In low-flow cannula therapy FiO₂ is tied to the flow (StatPearls). BTS 2017 prefers nasal cannulae at 2–6 L/min (or a simple mask at 5–10 L/min) for patients needing moderate oxygen.</p>'],
+  ['sfm', 'Simple face mask', [5, 10, '5–10 L/min'], [['Wikipedia (Oxygen therapy)', 35, 55], ['SRFAC 2026 (5–8 L/min)', 40, 60], ['Wikipedia (Simple face mask)', 30, 60], ['KACPR 2025', 30, 50]], 'Low flow: FiO₂ varies with breathing',
+    '<h3>Simple face mask</h3><p><b>5–10 L/min</b> (BTS 2017; Wikipedia). SRFAC 2026: at least <b>5 L/min</b> to prevent rebreathing. FiO₂ roughly <b>30–60%</b> — every source gives a different band. The final concentration depends on how much room air mixes in (Wikipedia).</p>'],
+  ['vm', 'Venturi mask', [2, 4, '24–28% masks only: 24% at 2–3 L/min, 28% at 4 L/min (BTS 2017)'], [['BTS 2017 (V24–V60)', 24, 60], ['SRFAC 2026', 24, 30, '24–30% or 35–50%', [[35, 50]]], ['Wikipedia', 24, 50]], 'FIXED performance',
+    '<h3>Venturi (air-entrainment) mask — fixed performance</h3><p>Delivers a <b>predetermined, constant FiO₂</b>, consistent regardless of the patient’s peak inspiratory flow (a 2024 RCT; Wikipedia: "fixed performance … jet mixing"). The colour-coded <b>diluter</b> sets the FiO₂ (SRFAC 2026: 24–30% or 35–50%; BTS 2017 lists 24, 28, 35, 40 and 60% masks). <b>Turning up the oxygen flow does not raise the concentration</b> (BTS 2017). Used for <b>controlled oxygen</b>, e.g. COPD (SRFAC 2026; BTS 2017: 24% at 2–3 L/min or 28% at 4 L/min, target 88–92%). Mechanism: the Venturi effect / Bernoulli principle (Wikipedia).</p>'],
+  ['nrb', 'Non-rebreather (reservoir) mask', [10, 15, '15 L/min (SRFAC: 10–15)'], [['Wikipedia', 60, 90], ['SRFAC 2026', 60, 80], ['2024 review: conventional devices', 60, 70]], 'Low flow with reservoir',
+    '<h3>Non-rebreather (reservoir) mask</h3><p>Reservoir bag filled before use, <b>15 L/min</b> (Wikipedia; BTS 2017; a 2024 review: at least 15 L/min); SRFAC 2026: 10–15 L/min, at least 10 to keep the bag inflated. One-way valves stop rebreathing of exhaled gas (Wikipedia). FiO₂ about <b>60–90%</b> (Wikipedia), 60–80% (SRFAC 2026); a 2024 review: conventional oxygen rarely exceeds 60–70% in the upper airway — very few patients get near 100% (Wikipedia). <b>Use:</b> severe hypoxaemia — BTS 2017 starts a reservoir mask at 15 L/min when SpO₂ is below 85%; carbon monoxide poisoning (BTS 2017; Wikipedia).</p>'],
+  ['bvm', 'Bag-valve-mask', [null, null, 'high-flow O₂ source (StatPearls)'], [['Wikipedia (with reservoir)', 95, 100, 'close to 100%'], ['KACPR 2025 (with reservoir)', 60, 95]], 'Positive-pressure ventilation',
+    '<h3>Bag-valve-mask</h3><p>A hand-held device for <b>positive-pressure ventilation</b> of patients who are not breathing or not breathing adequately (Wikipedia; StatPearls). With a reservoir and an oxygen supply the concentration rises towards 100% (Wikipedia) — KACPR 2025 says 60–95%. It needs a high-flow oxygen source (StatPearls). <b>Two-person</b> technique — one holds the mask with both hands, one squeezes — is more effective (KACPR 2025; Wikipedia). A poor seal hypoventilates and pushes air into the oesophagus → gastric inflation, aspiration (KACPR 2025; AHA 2020). See <a href="#h-adv">where the mask sits</a>.</p>'],
+  ['hfnc', 'High-flow nasal cannula (HFNC)', [0, 60, 'up to 60 L/min'], [['StatPearls; Wikipedia (set FiO₂)', 21, 100, 'up to 100%'], ['2024 review (achievable)', 80, 98, '≥80–90%', null, 'open']], 'Flow above demand: set FiO₂ kept (Wikipedia)',
+    '<h3>High-flow nasal cannula</h3><p><b>Heated, humidified</b> gas at up to <b>60 L/min</b>, FiO₂ up to <b>100%</b> (StatPearls; Wikipedia). The flow exceeds the patient’s inspiratory demand, so little room air is entrained and the set FiO₂ is kept (Wikipedia); a 2024 review: it can reach FiO₂ above 80–90% where conventional masks cannot. With the mouth closed it gives some end-expiratory pressure (Wikipedia). Humidification and heating matter more as flow rises (Wikipedia). A 2024 review suggests HFNC as first-line non-invasive support for hypoxaemic patients needing more than 6 L/min.</p>'],
+];
+
+const PERF_TEXT = '<p><b>Fixed performance</b> (Venturi): the mask itself mixes oxygen and air in a set ratio, so the FiO₂ stays the same whatever the patient’s inspiratory flow (a 2024 RCT; Wikipedia). <b>Low-flow devices</b> (cannula, simple mask, reservoir mask): the patient draws in room air on top of the oxygen flow, so the FiO₂ falls as breathing gets faster and deeper — the final concentration depends on how much room air mixes in (Wikipedia; StatPearls: FiO₂ tied to flow). <b>HFNC</b> avoids this by giving more flow than the patient demands (Wikipedia).</p><p class="note">Bars: mixing arithmetic for a 4 L/min cannula (oxygen flow ÷ inspiratory flow), illustrative only — the real FiO₂ is also raised by gas stored in the nose and mouth.</p>';
+
+const TGT = [['BTS 2017', 94, 98, 88, 92], ['TSANZ 2022', 92, 96, 88, 92]];
+const TGT_TEXT = '<p><b>Oxygen is a drug</b>: prescribe it to a <b>target saturation range</b>, written on the drug chart (BTS 2017; TSANZ 2022; StatPearls). Targets differ: <b>94–98%</b> for most acutely ill adults (BTS 2017) vs <b>92–96%</b> (TSANZ 2022); both use <b>88–92%</b> when there is a risk of hypercapnic respiratory failure, e.g. COPD. Why targets, and what hypoxia and too much oxygen do: <a href="../../physiology/respiratory/applied-environment.html#h-oxy">physiology</a> — note that page quotes Wikipedia’s 94–96% (citing the UK ambulance JRCALC 2009 update), a third set of numbers: targets depend on the guideline and its year.</p><ul><li><b>Monitor</b> with pulse oximetry, and arterial blood gases when needed (StatPearls; TSANZ 2022: ABG is the gold standard).</li><li><b>Adjust flow</b> to keep within the range; avoid both hypoxaemia and hyperoxia (a 2024 review: SpO₂ above 92% and below 98%). With a Venturi mask, change the diluter, not the flow (BTS 2017).</li><li><b>Do not stop suddenly</b> in those at risk: rebound hypoxaemia (BTS 2017).</li><li><b>Fire:</b> oxygen is not flammable itself but makes fires burn far more intensely (Wikipedia); near ignition sources use the lowest effective FiO₂ (a 2026 review).</li><li><b>Humidify</b> high flows (Wikipedia; StatPearls: HFNC gas is heated and humidified).</li></ul>';
+
+/* manoeuvres */
+const MAN = [['none', 'Unconscious, no manoeuvre'], ['htcl', 'Head tilt–chin lift'], ['jt', 'Jaw thrust']];
+const MAN_TXT = {
+  none: '<h3>Why the airway closes</h3><p>When a person becomes unconscious the jaw muscles relax and the <b>tongue falls back against the pharynx</b>, obstructing the airway (Wikipedia; StatPearls; SRFAC 2026).</p>',
+  htcl: '<h3>Head tilt–chin lift</h3><p>Tilt the head back with pressure on the forehead and lift the chin (Wikipedia). The standard way to open the airway when cervical-spine injury is not a concern (Wikipedia); shown to be effective (AHA 2020). Neck flexion with head extension at the atlanto-occipital joint — the sniffing position — lifts the tongue away from the back of the throat (Wikipedia; StatPearls).</p>',
+  jt: '<h3>Jaw thrust</h3><p>Index and middle fingers behind the angles of the mandible push the jaw <b>forward</b>; the tongue comes forward with it (Wikipedia; StatPearls) — <b>without tilting the head</b>.</p>',
+};
+const CS_TXT = {
+  no: '<p class="dis">No suspected spinal injury: head tilt–chin lift (Wikipedia; AHA 2020).</p>',
+  yes: '<p class="dis"><b>Suspected or not excluded C-spine injury: use jaw thrust</b> instead of head tilt–chin lift (AHA 2020; KACPR 2025; Wikipedia). If jaw thrust and adjuncts fail to open the airway, use head tilt–chin lift — a patent airway comes first (AHA 2020). Wikipedia reports that ILCOR found no spine-protecting advantage of jaw thrust.</p>',
+};
+
+const ADJ = [['opa', 'Oropharyngeal (OPA)'], ['npa', 'Nasopharyngeal (NPA)']];
+const ADJ_TXT = {
+  opa: '<h3>Oropharyngeal (Guedel) airway</h3><ul><li><b>Only in unconscious patients</b> with no gag reflex — it can trigger gagging, vomiting and aspiration (Wikipedia; StatPearls: patients with a gag reflex may not tolerate an OPA).</li><li><b>Size:</b> from the incisors to the <b>angle of the jaw</b> (Wikipedia; dashed line).</li><li><b>Adults:</b> insert upside down and rotate 180° at the back of the throat; <b>children:</b> hold the tongue forward with a tongue depressor and insert right side up (Wikipedia).</li><li>Sits between the tongue and the posterior pharyngeal wall, stops the tongue falling back, allows suction and acts as a bite block (SRFAC 2026).</li><li>Does not replace the recovery position or protect against aspiration of fluids (Wikipedia).</li></ul>',
+  npa: '<h3>Nasopharyngeal airway</h3><ul><li>Tolerated by <b>semiconscious patients with an intact gag reflex</b> (StatPearls; SRFAC 2026; Wikipedia).</li><li><b>Size:</b> nostril to the earlobe or angle of the jaw (Wikipedia; dashed line) — a 2020 case report used the nares-to-tragus distance.</li><li>Lubricate; insert with the <b>bevel towards the septum</b> until the flange rests at the nostril (Wikipedia).</li><li><b>Avoid with facial trauma or a suspected basal skull fracture</b> (Wikipedia; AHA 2020: case reports of intracranial placement — an oral airway is preferred).</li></ul>',
+};
+
+const IND = [
+  ['Cannot keep or protect the airway', 'Coma — Glasgow Coma Scale below about 8–9 (Wikipedia: <8; a 2024 review: <9) — or actual/impending obstruction (Wikipedia).'],
+  ['Failure of oxygenation or ventilation', 'Hypoxaemia despite maximal oxygen, hypoventilation, apnoea (Wikipedia; a 2024 review).'],
+  ['Cardiac or respiratory arrest', 'A criterion in the 2024 review; in arrest, move stepwise from bag-mask to advanced techniques only if ventilation is ineffective (ERC 2021, as reported; AHA 2020 weighs interrupted compressions and misplacement).'],
+  ['Procedures and anaesthesia', 'Airway manipulation and general anaesthesia (Wikipedia): the tube gives the most reliable oxygenation and ventilation and the best protection from aspiration.'],
+];
+const IND_NOTE = 'Unanticipated difficult intubation (DAS 2015): plan A — face mask and intubation, at most three attempts (a fourth by a more experienced colleague: "3+1"); then declare failed intubation → plan B — oxygenate through a supraglottic airway, at most three attempts; after three failed SAD attempts → plan C — a final attempt at face-mask ventilation; when intubation and SAD have both failed, waking the patient is the default; cannot intubate, cannot oxygenate → plan D — emergency front-of-neck access, with scalpel cricothyroidotomy the preferred technique.';
+
+const ADV = [['bvm', 'Bag-valve-mask'], ['lma', 'Laryngeal mask (LMA)'], ['ett', 'Tracheal tube (ETT)']];
+const ADV_TXT = {
+  bvm: '<h3>Bag-valve-mask</h3><p>The mask sits on the face over nose and mouth; the airway must be opened (head tilt–chin lift or jaw thrust) and an OPA/NPA may help (StatPearls). Two-person technique is more effective (KACPR 2025; Wikipedia). Each breath over about 1 s, just enough for visible chest rise; excess volume inflates the stomach (KACPR 2025; AHA 2020).</p>',
+  lma: '<h3>Laryngeal mask airway (supraglottic)</h3><p>A cuffed mask that sits <b>over the laryngeal inlet</b> — it seals on top of the glottis rather than passing through it (StatPearls; Wikipedia). Easier to place than a tube; less throat pain, but a <b>less secure airway</b> with less protection against aspiration (StatPearls), so it is not used where aspiration risk is high (Wikipedia). A rescue device when mask ventilation and intubation fail: DAS 2015 plan B is oxygenation through a supraglottic airway (StatPearls; DAS 2015). In in-hospital arrest, either a supraglottic airway or intubation may be used (KACPR 2025). Cuff checked before insertion, inflated after (Wikipedia).</p>',
+  ett: '<h3>Tracheal intubation</h3><ol><li><b>Position:</b> sniffing position (StatPearls; Wikipedia).</li><li><b>Preoxygenate</b> — recommended for all patients (DAS 2015; Wikipedia, as part of rapid-sequence induction).</li><li><b>Laryngoscopy:</b> see the vocal cords and pass the tube <b>between them</b> into the trachea, not the oesophagus (Wikipedia; StatPearls).</li><li><b>Inflate the cuff</b> to seal the trachea against gas leak and aspiration (Wikipedia).</li><li><b>Confirm</b> placement — see the next section.</li></ol><p>The tube gives the most reliable oxygenation and ventilation and the greatest protection against aspiration (Wikipedia).</p>',
+};
+
+const CONF = [
+  ['See it pass', '<h3>1. See the tube pass between the vocal cords</h3><p>The first of DAS 2015’s checks.</p>'],
+  ['Chest rise', '<h3>2. Bilateral chest expansion</h3><p>DAS 2015 lists it with auscultation and capnography.</p>'],
+  ['Auscultate', '<h3>3. Auscultation</h3><p>Listen over both lungs (DAS 2015). But breath sounds, mist in the tube and chest rise <b>are not reliable on their own</b> (AHA 2020).</p>'],
+  ['Capnography', '<h3>4. Waveform capnography — the gold standard</h3><p>A continuous capnography waveform is the <b>gold standard</b> for confirming the tube is in the trachea (DAS 2015; Wikipedia). It is <b>mandatory</b> when intubating (ERC 2021, as reported). In cardiac arrest it was 100% specific, though less sensitive after a prolonged arrest (AHA 2020). <b>No exhaled CO₂</b> means the lungs are not being ventilated — <b>oesophageal intubation</b> or complete obstruction (DAS 2015; Wikipedia: capnography detects oesophageal intubation earlier than clinical judgement). Quantitative waveform capnography is the most reliable method (SRFAC 2026; RCUK 2021, as reported, also uses it to monitor the patient during resuscitation). Simple colorimetric detectors show only presence or absence of CO₂ (StatPearls).</p>'],
+  ['Chest X-ray', '<h3>5. Chest X-ray for depth</h3><p>Tip in the mid-trachea, about 2 cm above the carina (Wikipedia).</p>'],
+];
+
+/* ventilation */
+const VENT_TEXT = '<p><b>Volume control:</b> tidal volume and flow are set; the airway pressure is whatever the lungs need (Wikipedia; ATS 2020). <b>Pressure control:</b> the inspiratory pressure is set; the tidal volume is the result (Wikipedia; ATS 2020). Assist-control is the most common mode in acute illness (ATS 2020). Compliance is the change in volume divided by the change in pressure: in stiff lungs a small volume needs a large pressure and risks barotrauma (StatPearls).</p><p>Minute ventilation = rate × tidal volume; CO₂ is changed with tidal volume or rate, oxygenation with FiO₂ or PEEP (StatPearls).</p>';
+const VENT_TABLE = [
+  ['Tidal volume', 'After cardiac arrest: <b>6–8 mL/kg</b> predicted body weight (KACPR 2025; SRFAC 2026, citing ERC–ESICM). ARDS: <b>4–8 mL/kg</b>, start at about 6', 'KACPR 2025; SRFAC 2026 | ATS 2020; a 2013 review'],
+  ['Plateau pressure', 'below <b>30 cmH₂O</b> (higher → barotrauma)', 'StatPearls; a 2013 review; a 2025 meta-analysis'],
+  ['PEEP', 'at least <b>5 cmH₂O</b>; keeps alveoli from collapsing', 'a 2013 review; ATS 2020; StatPearls'],
+  ['FiO₂', 'start high (100% in the ATS ARDS example), then titrate to the SpO₂ target (94–98% after cardiac arrest)', 'ATS 2020; KACPR 2025'],
+  ['Rate', 'about 20/min to start (ARDS example)', 'ATS 2020; a 2013 review'],
+];
+
+const KEY = [
+  ['Fixed-performance device', 'Venturi mask — FiO₂ set by the diluter, not the flow', 'a 2024 RCT; Wikipedia; BTS 2017'],
+  ['Non-rebreather FiO₂', 'about 60–90% at 15 L/min (sources: 60–80%, 60–90%)', 'Wikipedia; SRFAC 2026; BTS 2017 (15 L/min)'],
+  ['Nasal cannula', '1–6 L/min, about 24–44%', 'SRFAC 2026; Wikipedia'],
+  ['HFNC', 'up to 60 L/min, FiO₂ up to 100%, heated and humidified', 'StatPearls; Wikipedia'],
+  ['Hypercapnic-risk target', 'SpO₂ 88–92%', 'BTS 2017; TSANZ 2022'],
+  ['C-spine injury suspected', 'jaw thrust (head tilt–chin lift if it fails)', 'AHA 2020; KACPR 2025; Wikipedia'],
+  ['OPA', 'unconscious, no gag reflex; incisors → angle of jaw', 'Wikipedia; StatPearls (sizing: Wikipedia)'],
+  ['NPA contraindication', 'facial trauma, suspected basal skull fracture', 'Wikipedia; AHA 2020'],
+  ['Tube confirmation', 'waveform capnography = gold standard', 'DAS 2015; Wikipedia; ERC 2021 (as reported)'],
+  ['Lung-protective ventilation', 'Vt 6–8 mL/kg PBW after cardiac arrest (4–8, start at 6, in ARDS), plateau <30, PEEP ≥5', 'KACPR 2025; ATS 2020; StatPearls; a 2013 review'],
+];
+
+const BASED = 'Based on: BTS 2017 guideline for oxygen use in adults; TSANZ 2022 position statement on acute oxygen use; Difficult Airway Society 2015 guidelines; AHA 2020 Guidelines for CPR and ECC (Parts 3, 4); 2025 Korean Guidelines for CPR (KACPR); Singapore ACLS and post-cardiac arrest guidelines 2026 (SRFAC); ERC 2021 as reported by BJA Education 2022; open reviews (oxygen therapy in hypoxaemic respiratory failure 2024; oxygen devices after surgery, RCT 2024; high-flow nasal oxygen in anaesthesia 2026; initial ventilator settings 2013; ATS Scholar 2020; PCV vs VCV meta-analysis 2025; NPA sizing case report 2020); StatPearls (Oxygen Therapy; High-Flow Nasal Cannula; Oropharyngeal Airway; Nasopharyngeal Airway; Bag-Valve-Mask Ventilation; Endotracheal Intubation Techniques; Laryngeal Mask Airway; Capnography; Ventilator Management; PEEP); Wikipedia (Oxygen therapy; Nasal cannula; Simple face mask; Venturi mask; Non-rebreather mask; Bag valve mask; Heated humidified high-flow therapy; Head tilt/Chin lift; Jaw-thrust maneuver; Oropharyngeal airway; Nasopharyngeal airway; Airway management; Tracheal intubation; Laryngeal mask airway; Capnography; Modes of mechanical ventilation; Recovery position).';
+const MODELS = 'Models used: the head-and-neck section, device positions, capnography trace and ventilator waveforms are schematic (not to scale, not anatomically exact; manoeuvres shown as simple rotations and shifts). Range bars show what each source states; the breath make-up bar and the pressure/volume numbers are illustrative arithmetic, not device data or settings.';
+
+/* ===================== CODE ===================== */
+const A = window.Anaes, $ = A.$, T = A.T;
+$('lede').innerHTML = LEDE;
+
+/* device picker */
+const devSt = {k: 'nc'};
+function drawDev() {
+  const d = DEV.find(x => x[0] === devSt.k);
+  const F = A.scale(0, 60, 80, 400), P = A.scale(20, 100, 80, 400);
+  let s = A.DEFS + T(10, 18, 'Flow (L/min)', 'h');
+  for (const v of [0, 10, 20, 30, 40, 50, 60]) s += `<path class="grid" d="M${F(v)} 28 L${F(v)} 58"/>` + T(F(v), 72, v, 's', 'middle');
+  if (d[2][0] !== null) s += `<rect x="${F(d[2][0])}" y="34" width="${Math.max(4, F(d[2][1]) - F(d[2][0]))}" height="16" rx="3" class="rng"/>`;
+  else s += T(F(30), 46, 'no flow range in the sources', 's', 'middle');
+  s += T(400, 92, d[2][2], 's', 'end');
+  const y0 = 122;
+  s += T(10, y0 - 10, 'Approximate FiO₂ (%) — each source’s range', 'h');
+  const n = d[3].length;
+  for (const v of [21, 40, 60, 80, 100]) s += `<path class="grid" d="M${P(v)} ${y0} L${P(v)} ${y0 + 8 + n * 36}"/>` + T(P(v), y0 + 22 + n * 36, v, 's', 'middle');
+  d[3].forEach((r, i) => {
+    const y = y0 + 6 + i * 36;
+    if (r[5] === 'open') s += `<path d="M${P(r[1])} ${y + 20} L${P(r[2])} ${y + 20}" style="stroke:var(--ink);stroke-width:5;stroke-opacity:.4;marker-end:url(#arr)"/>`;
+    else s += `<rect x="${P(r[1])}" y="${y + 14}" width="${Math.max(5, P(r[2]) - P(r[1]))}" height="12" rx="3" class="rng"/>`;
+    for (const [a, b] of r[4] || []) s += `<rect x="${P(a)}" y="${y + 14}" width="${P(b) - P(a)}" height="12" rx="3" class="rng"/>`;
+    s += T(80, y + 10, r[0] + ': ' + (r[3] || r[1] + (r[1] !== r[2] ? '–' + r[2] : '') + '%'), 's');
+  });
+  s += T(10, y0 + 46 + n * 36, d[4], 'b');
+  const svg = $('dev-ranges'); svg.setAttribute('viewBox', `0 0 420 ${y0 + 56 + n * 36}`); svg.innerHTML = s;
+  $('dev-find').innerHTML = d[5];
+}
+A.toggles('dev-pick', DEV.map(d => [d[0], d[1]]), k => { devSt.k = k; drawDev(); }, 'nc');
+drawDev();
+A.table('dev-table', ['Device', 'Flow', 'Approx. FiO₂ (sources differ)', 'Performance'], DEV.map(d => [d[1], d[2][2], d[3].map(r => (r[3] || r[1] + (r[1] !== r[2] ? '–' + r[2] : '') + '%') + ' (' + r[0] + ')').join('; '), d[4]]));
+
+/* fixed vs variable */
+const perfSt = {f: 30};
+function drawPerf() {
+  const W = A.scale(0, 1, 120, 400), share = Math.min(1, 4 / perfSt.f);
+  let s = T(10, 18, 'Make-up of each breath (schematic)', 'h');
+  s += T(10, 56, 'Cannula 4 L/min', 'b') + T(10, 72, 'low flow', 's');
+  s += `<rect x="${W(0)}" y="42" width="${W(share) - W(0)}" height="26" class="o2"/><rect x="${W(share)}" y="42" width="${W(1) - W(share)}" height="26" class="room"/>`;
+  s += T(W(1), 86, 'O₂ from the cannula ' + Math.round(share * 100) + '% of the inspired flow; the rest is room air', 's', 'end');
+  s += T(10, 132, 'Venturi mask', 'b') + T(10, 148, 'fixed', 's');
+  const v = 0.35;
+  s += `<rect x="${W(0)}" y="118" width="${W(v) - W(0)}" height="26" class="o2"/><rect x="${W(v)}" y="118" width="${W(1) - W(v)}" height="26" class="room"/>`;
+  s += T(W(1), 162, 'mixture set by the diluter: unchanged by breathing', 's', 'end');
+  s += `<rect x="120" y="186" width="12" height="12" class="o2"/>` + T(138, 196, 'oxygen supplied', 's') + `<rect x="250" y="186" width="12" height="12" class="room"/>` + T(268, 196, 'room air drawn in', 's');
+  $('perf-svg').innerHTML = s;
+}
+const perfSl = A.slider('perf-sl', {id: 'insp', label: 'Patient’s inspiratory flow (illustrative)', min: 10, max: 60, step: 5, value: 30, fmt: v => v + ' L/min'}, v => { perfSt.f = v; drawPerf(); });
+perfSl.init(); drawPerf(); $('perf-text').innerHTML = PERF_TEXT;
+
+/* targets */
+(function () {
+  const X = A.scale(80, 100, 90, 400);
+  let s = T(10, 18, 'SpO₂ targets (%)', 'h');
+  for (let v = 80; v <= 100; v += 2) s += `<path class="grid" d="M${X(v)} 28 L${X(v)} 132"/>` + T(X(v), 148, v, 's', 'middle');
+  TGT.forEach((t, i) => {
+    const y = 34 + i * 50;
+    s += T(10, y + 14, t[0], 'b');
+    s += `<rect x="${X(t[1])}" y="${y}" width="${X(t[2]) - X(t[1])}" height="16" rx="3" class="rng"/>` + T((X(t[1]) + X(t[2])) / 2, y + 12, t[1] + '–' + t[2], 's', 'middle');
+    s += `<rect x="${X(t[3])}" y="${y + 20}" width="${X(t[4]) - X(t[3])}" height="16" rx="3" class="room"/>` + T((X(t[3]) + X(t[4])) / 2, y + 32, t[3] + '–' + t[4], 's', 'middle');
+  });
+  s += `<rect x="90" y="166" width="12" height="10" class="rng"/>` + T(106, 175, 'most acutely ill', 's') + `<rect x="220" y="166" width="12" height="10" class="room"/>` + T(236, 175, 'risk of hypercapnia', 's');
+  $('tgt-svg').setAttribute('viewBox', '0 0 420 184'); $('tgt-svg').innerHTML = s;
+})();
+$('tgt-text').innerHTML = TGT_TEXT;
+
+/* head-and-neck schematic: face to the left. opts: man ('none'|'htcl'|'jt'), dev ('', 'opa','npa','bvm','lma','ett'), meas (bool) */
+function head(o) {
+  /* o.man rotates (head tilt) or shifts (jaw thrust) the face, mandible and tongue; devices are drawn only with an unrotated head
+     (adjuncts with man 'none'; BVM/LMA/ETT with o.open = tongue clear of the wall), so their coordinates match the fixed pharynx and larynx */
+  const rot = o.man === 'htcl' ? 14 : 0, jx = o.man === 'jt' ? -16 : 0, tx = o.man === 'htcl' ? -12 : (o.man === 'jt' ? -16 : 0);
+  const blocked = o.man === 'none' && !o.open && !['opa', 'npa'].includes(o.dev);
+  const bx = blocked ? 210 : 186;
+  let s = A.DEFS;
+  /* fixed: spine, posterior pharyngeal wall, oesophagus, larynx, epiglottis, trachea */
+  for (let i = 0; i < 6; i++) s += `<rect x="240" y="${150 + i * 28}" width="32" height="22" rx="4" class="bone"/>`;
+  s += `<path class="wall" d="M214 96 C220 140 218 200 214 262"/>`;
+  s += `<path class="head" d="M192 262 L192 330 L214 330 L214 262"/>`;   // oesophagus (open at the top)
+  s += `<path class="head" d="M150 262 L150 330 L186 330 L186 262 Z"/>`;   // trachea
+  for (let i = 0; i < 4; i++) s += `<rect x="150" y="${272 + i * 14}" width="36" height="6" rx="2" class="cart"/>`;
+  s += `<path class="cart" d="M146 246 L188 246 L186 262 L150 262 Z"/>`;   // larynx; its inlet is the top edge
+  s += `<path class="cart" d="M146 248 C144 232 150 220 164 212 L168 216 C156 224 152 236 152 248 Z"/>`;   // epiglottis, in front of the inlet
+  s += T(294, 234, 'cervical spine', 's', 'middle', ' transform="rotate(-90 294 234)"');
+  /* moving parts */
+  s += `<g transform="rotate(${rot} 220 200)">`;
+  s += `<path class="head2" d="M266 150 C284 90 254 30 194 22 C134 14 80 30 60 70 L52 98 L34 126 L50 132 L56 150 L52 160 L62 168 L60 180 L70 204 C90 214 120 214 140 208"/>`;   // skull and face profile
+  s += `<path class="bone" d="M62 136 L150 136 L150 142 L62 142 Z"/>`;   // hard palate
+  s += `<path class="air" d="M48 128 L182 122"/>`;   // nasal airway
+  s += `<g transform="translate(${jx} 0)"><path class="bone" d="M66 190 C72 210 110 214 150 204 L162 150 L170 152 L160 214 C120 226 74 222 60 200 Z"/></g>`;   // mandible
+  s += `<g transform="translate(${tx} 0)"><path class="tongue" d="M66 162 C90 146 150 146 ${bx} 174 C${bx + 4} 190 ${bx - 8} 204 160 206 C120 202 90 194 66 176 Z"/></g>`;
+  if (o.dev === 'bvm') s += `<path class="cuff" d="M24 108 C16 140 22 190 52 196 L64 192 L60 106 Z"/><path class="dev" d="M22 150 L0 150"/>` + T(4, 96, 'mask', 's');
+  s += `</g>`;
+  if (blocked) s += `<path class="block" d="M204 172 L216 172 L216 200 L204 200 Z" style="fill-opacity:.35"/><path class="lead" d="M96 262 L204 192"/>` + T(20, 276, 'tongue blocks', 'c', 'start') + T(20, 292, 'the pharynx', 'c', 'start');
+  /* devices (unrotated head only) */
+  if (o.dev === 'opa') { s += `<path class="dev" d="M58 160 C100 140 170 142 196 170 C204 182 202 194 198 204"/>`; if (o.meas) s += `<path class="meas" d="M58 170 L152 208"/>` + T(20, 250, 'size: incisors →', 's') + T(20, 266, 'angle of jaw', 's'); }
+  if (o.dev === 'npa') { s += `<path class="dev" d="M44 128 L182 122 C200 128 204 160 202 196"/>`; if (o.meas) s += `<path class="meas" d="M44 118 L246 108"/>` + T(20, 250, 'size: nostril →', 's') + T(20, 266, 'earlobe or tragus', 's'); }
+  if (o.dev === 'lma') { s += `<path class="dev" d="M56 158 C100 140 176 144 196 176 C202 194 200 214 198 232"/><ellipse cx="200" cy="252" rx="9" ry="22" class="cuff"/><path class="lead" d="M120 266 L190 254"/>` + T(20, 270, 'LMA bowl over the', 's') + T(20, 286, 'laryngeal inlet; tip', 's') + T(20, 302, 'towards the oesophagus', 's'); }
+  if (o.dev === 'ett') { s += `<path class="dev" d="M56 158 C100 140 176 144 192 176 C200 196 176 226 168 250 L168 330"/><rect x="157" y="292" width="22" height="16" rx="7" class="cuff"/><path class="lead" d="M120 282 L156 298"/>` + T(20, 270, 'tube between the cords;', 's') + T(20, 286, 'cuff in the trachea', 's'); }
+  s += T(146, 322, 'trachea', 's', 'end') + T(220, 344, 'oesophagus', 's', 'middle');
+  s += T(8, 14, 'schematic; face to the left', 's');
+  return s;
+}
+
+const manSt = {m: 'none', cs: 'no'};
+function drawMan() {
+  $('air-svg').innerHTML = head({man: manSt.m, dev: ''});
+  $('man-find').innerHTML = MAN_TXT[manSt.m] + CS_TXT[manSt.cs];
+}
+A.toggles('man-pick', MAN, k => { manSt.m = k; drawMan(); }, 'none');
+A.toggles('man-cs', [['no', 'No'], ['yes', 'Yes']], k => { manSt.cs = k; drawMan(); }, 'no');
+drawMan();
+
+const adjSt = {k: 'opa'};
+function drawAdj() { $('adj-svg').innerHTML = head({man: 'none', dev: adjSt.k, meas: true}); $('adj-find').innerHTML = ADJ_TXT[adjSt.k]; }
+A.toggles('adj-pick', ADJ, k => { adjSt.k = k; drawAdj(); }, 'opa');
+drawAdj();
+
+const indBox = $('ind-cards');
+for (const [h, t] of IND) { const c = document.createElement('div'); c.className = 'card'; c.innerHTML = `<h3>${h}</h3><p>${t}</p>`; indBox.append(c); }
+$('ind-note').textContent = IND_NOTE;
+
+const advSt = {k: 'bvm'};
+function drawAdv() { $('dev-svg').innerHTML = head({man: 'none', open: true, dev: advSt.k}); $('adv-find').innerHTML = ADV_TXT[advSt.k]; }
+A.toggles('adv-pick', ADV, k => { advSt.k = k; drawAdv(); }, 'bvm');
+drawAdv();
+
+/* confirmation */
+const confSt = {s: 3, where: 'tr'};
+function drawConf() {
+  const X = A.scale(0, 12, 50, 410), Y = A.scale(0, 1, 130, 50);
+  let s = T(10, 14, 'Capnography (schematic CO₂ trace)', 'h') + `<path class="axis" d="M50 130 L410 130 M50 130 L50 32"/>` + T(46, 40, 'CO₂', 's', 'end') + T(410, 150, 'time (breaths)', 's', 'end');
+  let p = [[0, 0]];
+  if (confSt.where === 'tr') for (let b = 0; b < 4; b++) { const t = b * 3; p.push([t + 0.6, 0], [t + 0.9, 0.85], [t + 2.1, 0.95], [t + 2.3, 0], [t + 3, 0]); }
+  else p.push([12, 0]);
+  s += `<path class="trace2" d="${A.path(p.map(([t, v]) => [X(t), Y(v)]))}"/>`;
+  s += T(230, 36, confSt.where === 'tr' ? 'a CO₂ waveform with every breath' : 'no exhaled CO₂: tube is not in the trachea', confSt.where === 'tr' ? 's' : 'c', 'middle');
+  $('conf-svg').innerHTML = s;
+  $('conf-find').innerHTML = CONF[confSt.s][1];
+}
+A.stepper('conf-step', CONF.map(c => c[0]), drawConf, confSt);
+A.toggles('conf-where', [['tr', 'Tube in the trachea'], ['oe', 'Tube in the oesophagus']], k => { confSt.where = k; drawConf(); }, 'tr');
+
+/* ventilation */
+const ventSt = {mode: 'vc', c: 40, set: 500, pc: 12, peep: 5, pbw: 60};
+function drawVent() {
+  const vc = ventSt.mode === 'vc';
+  const vt = vc ? ventSt.set : Math.round(ventSt.c * ventSt.pc / 10) * 10, dp = vc ? ventSt.set / ventSt.c : ventSt.pc, pp = ventSt.peep + dp;
+  const X = A.scale(0, 8, 60, 410), YP = A.scale(0, 45, 110, 36), YV = A.scale(0, 1200, 230, 150);
+  let s = T(10, 12, 'Airway pressure (cmH₂O)', 'h') + `<path class="axis" d="M60 110 L410 110 M60 110 L60 26"/>`;
+  for (const v of [0, 15, 30, 45]) s += T(54, YP(v) + 4, v, 's', 'end');
+  s += `<path class="lim" d="M60 ${YP(30)} L410 ${YP(30)}"/>` + T(410, YP(30) - 4, 'plateau limit 30', 'c', 'end');
+  const pts = [], vts = [];
+  for (let b = 0; b < 2; b++) {
+    const t = b * 4;
+    if (vc) { pts.push([t, ventSt.peep], [t + 1.2, pp], [t + 1.35, ventSt.peep], [t + 4, ventSt.peep]); vts.push([t, 0], [t + 1.2, vt], [t + 2.6, 0], [t + 4, 0]); }
+    else { pts.push([t, ventSt.peep], [t + 0.1, pp], [t + 1.2, pp], [t + 1.3, ventSt.peep], [t + 4, ventSt.peep]); vts.push([t, 0], [t + 0.3, vt * 0.7], [t + 0.6, vt * 0.92], [t + 1.2, vt], [t + 2.6, 0], [t + 4, 0]); }
+  }
+  s += `<path class="trace2" d="${A.path(pts.map(([t, v]) => [X(t), YP(Math.min(45, v))]))}"/>`;
+  s += T(10, 132, 'Volume (mL)', 'h') + `<path class="axis" d="M60 230 L410 230 M60 230 L60 140"/>`;
+  for (const v of [0, 600, 1200]) s += T(54, YV(v) + 4, v, 's', 'end');
+  s += `<path class="trace2" d="${A.path(vts.map(([t, v]) => [X(t), YV(Math.min(1200, v))]))}"/>`;
+  s += T(410, 252, vc ? 'time, two breaths; schematic (volume and flow are set)' : 'time, two breaths; schematic (set pressure: volume is the result)', 's', 'end');
+  $('vent-svg').innerHTML = s;
+  const lim = 8 * ventSt.pbw, vwarn = vt > lim ? ` <b style="color:var(--clin)">above 8 mL/kg for a ${ventSt.pbw} kg predicted body weight (${lim} mL)</b>` : '';
+  const warn = pp > 30 ? ' <b style="color:var(--clin)">above 30 cmH₂O — barotrauma risk (StatPearls)</b>' : '';
+  $('vent-out').innerHTML = vc ? `<span class="big">${Math.round(pp)} cmH₂O</span><p>Set tidal volume ${ventSt.set} mL; with compliance ${ventSt.c} mL/cmH₂O the pressure rises ${Math.round(dp)} above PEEP ${ventSt.peep} (schematic, P = V ÷ C).${warn}${vwarn}</p>`
+    : `<span class="big">${vt} mL</span><p>Set pressure ${ventSt.pc} cmH₂O above PEEP; with compliance ${ventSt.c} mL/cmH₂O the tidal volume is about ${vt} mL (schematic, V = C × P) — it falls as the lungs stiffen.${vwarn}${pp > 30 ? ' <b style="color:var(--clin)">pressure above 30 cmH₂O</b>' : ''}</p>`;
+}
+function buildVent() {
+  const box = $('vent-sl'); box.innerHTML = '';
+  A.slider(box, {id: 'comp', label: 'Lung compliance (stiff ← → normal), illustrative', min: 20, max: 60, step: 5, value: ventSt.c, fmt: v => v + ' mL/cmH₂O'}, v => { ventSt.c = v; drawVent(); }).init();
+  if (ventSt.mode === 'vc') A.slider(box, {id: 'vt', label: 'Set tidal volume', min: 300, max: 700, step: 50, value: ventSt.set, fmt: v => v + ' mL'}, v => { ventSt.set = v; drawVent(); }).init();
+  else A.slider(box, {id: 'pc', label: 'Set inspiratory pressure above PEEP', min: 5, max: 20, step: 1, value: ventSt.pc, fmt: v => v + ' cmH₂O'}, v => { ventSt.pc = v; drawVent(); }).init();
+  drawVent();
+}
+A.toggles('vent-mode', [['vc', 'Volume control'], ['pc', 'Pressure control']], k => { ventSt.mode = k; buildVent(); }, 'vc');
+buildVent();
+$('vent-text').innerHTML = VENT_TEXT;
+const pbwSl = A.slider('pbw-sl', {id: 'pbw', label: 'Predicted body weight (enter the value; the formula is not given here)', min: 40, max: 100, step: 1, value: 60, fmt: v => v + ' kg'}, v => { ventSt.pbw = v; $('pbw-out').textContent = `${v * 6}–${v * 8} mL at 6–8 mL/kg (post-cardiac-arrest care: KACPR 2025; SRFAC 2026) · ${v * 4}–${v * 8} mL at 4–8 mL/kg (ARDS: ATS 2020; a 2013 review)`; drawVent(); });
+pbwSl.set(60);
+A.table('vent-table', ['Setting', 'Principle', 'Source'], VENT_TABLE);
+
+A.table('key-table', ['Point', 'What to remember', 'Sources'], KEY);
+$('based').textContent = BASED; $('models').textContent = MODELS;
+A.swipeHints();
+</script>
+</body>
+</html>

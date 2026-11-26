@@ -21,8 +21,8 @@ Source notes: AS5.4 is not in the PDF (numbering gap in the source).
 
 ### 2. Cardiopulmonary resuscitation
 
-- [ ] **AS2.1** Enumerate the indications, describe the steps and demonstrate in a simulated environment, Basic Life Support in adults, children and neonates
-- [ ] **AS2.2** Enumerate the indications, describe the steps and demonstrate in a simulated environment, Advanced Life Support in adults and children *(skill)*
+- [x] **AS2.1** Enumerate the indications, describe the steps and demonstrate in a simulated environment, Basic Life Support in adults, children and neonates — *chain of survival, adult/child/infant BLS steppers, depth/rate/ratio per guideline, newborn stepper: [CPR: Basic and Advanced Life Support](resuscitation-airway/cpr-bls-als.html)*
+- [x] **AS2.2** Enumerate the indications, describe the steps and demonstrate in a simulated environment, Advanced Life Support in adults and children *(skill)* — *shockable/non-shockable ALS time line, drug timing per guideline (AHA 2020, KACPR 2025, SRFAC 2026, RCUK 2021 as reported), 4 Hs and 4 Ts, post-ROSC: [CPR: Basic and Advanced Life Support](resuscitation-airway/cpr-bls-als.html)*
 
 ### 3. Preoperative evaluation and medication
 
@@ -89,12 +89,12 @@ Source notes: AS5.4 is not in the PDF (numbering gap in the source).
 
 ### 11. Oxygen Delivery Devices, Oxygen Therapy and Airway Management
 
-- [ ] **AS11.1** Describe oxygen delivery devices - nasal cannulas, simple face masks, Venturi masks non-rebreathing masks, BVM, and HFNC. Understand the indications in accordance with clinical scenarios. Demonstrate correct setup and usage of oxygen delivery devices ensuring patient safety and device efficiency.
-- [ ] **AS11.2** Describe the principles of oxygen therapy, importance of FiO2, flow rate adjustment, monitoring and safety precautions during oxygen therapy. *(skill)*
-- [ ] **AS11.3** Describe and demonstrate the techniques of opening the airway (head tilt, chin lift, jaw thrust) in a simulated environment. *(skill)*
-- [ ] **AS11.4** Observe and demonstrate correct insertion of oropharyngeal and nasopharyngeal airways. *(skill)*
-- [ ] **AS11.5** Enumerate the indications of advanced airway management. *(skill)*
-- [ ] **AS11.6** Describe the steps and demonstrate in a simulated environment - manual ventilation by BVM, Endotracheal intubation, and LMA insertion. Ventilation Techniques Explain the principle and settings of mechanical ventilation. *(skill)*
+- [x] **AS11.1** Describe oxygen delivery devices - nasal cannulas, simple face masks, Venturi masks non-rebreathing masks, BVM, and HFNC. Understand the indications in accordance with clinical scenarios. Demonstrate correct setup and usage of oxygen delivery devices ensuring patient safety and device efficiency. — *device picker with flow and FiO₂ per source: [Oxygen Therapy and Airway Management](resuscitation-airway/oxygen-airway.html)*
+- [x] **AS11.2** Describe the principles of oxygen therapy, importance of FiO2, flow rate adjustment, monitoring and safety precautions during oxygen therapy. *(skill)* — *targets (BTS 2017 vs TSANZ 2022), fixed vs variable performance, monitoring, safety: [Oxygen Therapy and Airway Management](resuscitation-airway/oxygen-airway.html)*
+- [x] **AS11.3** Describe and demonstrate the techniques of opening the airway (head tilt, chin lift, jaw thrust) in a simulated environment. *(skill)* — *head tilt–chin lift vs jaw thrust, C-spine: [Oxygen Therapy and Airway Management](resuscitation-airway/oxygen-airway.html)*
+- [x] **AS11.4** Observe and demonstrate correct insertion of oropharyngeal and nasopharyngeal airways. *(skill)* — *OPA/NPA sizing, insertion, contraindications: [Oxygen Therapy and Airway Management](resuscitation-airway/oxygen-airway.html)*
+- [x] **AS11.5** Enumerate the indications of advanced airway management. *(skill)* — *indications, DAS 2015 plans A–D and attempt limits: [Oxygen Therapy and Airway Management](resuscitation-airway/oxygen-airway.html)*
+- [~] **AS11.6** Describe the steps and demonstrate in a simulated environment - manual ventilation by BVM, Endotracheal intubation, and LMA insertion. Ventilation Techniques Explain the principle and settings of mechanical ventilation. *(skill)* — *BVM/LMA/ETT, capnography confirmation, VC vs PC; no PBW formula, no SIMV: [Oxygen Therapy and Airway Management](resuscitation-airway/oxygen-airway.html)*
 
 ## Existing material: Revision Hub
 

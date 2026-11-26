@@ -149,6 +149,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [Fracture Principles](orthopaedics/trauma/fracture-principles.html), [Trauma Care, Soft-Tissue Injuries and Open Fractures](orthopaedics/trauma/trauma-open-fractures.html) | Trauma | Fracture builder, greenstick/torus, Salter–Harris picker, healing time slider, complications timeline with ΔP calculator, non-union types; WHO pre-hospital care, START, ATLS xABCDE stepper, sprain grades, crush syndrome, Gustilo–Anderson classifier with the BOAST 2017 clock |
 
+### Anaesthesiology — [`anaesthesia/`](anaesthesia/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [CPR: Basic and Advanced Life Support](anaesthesia/resuscitation-airway/cpr-bls-als.html), [Oxygen Therapy and Airway Management](anaesthesia/resuscitation-airway/oxygen-airway.html) | Resuscitation and airway | Chain of survival, adult/child/infant BLS and newborn steppers with each guideline's numbers, ALS time line, reversible causes, post-ROSC; oxygen-device picker, SpO₂ targets, airway manoeuvres and adjuncts, DAS 2015 plans, tube confirmation, VC vs PC ventilator |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and

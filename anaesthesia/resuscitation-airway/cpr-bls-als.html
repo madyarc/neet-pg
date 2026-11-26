@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CPR: Basic and Advanced Life Support</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/anaes.css">
+<style>
+/* tokens from anaes.css with their site meanings: --accent (selection: the current step), --clin (a
+   clinical point: a shock, a drug, a warning). Everything else is ink or grey. */
+svg.sch .node{fill:var(--surface);stroke:var(--muted);stroke-width:1.2}
+svg.sch .node.on{stroke:var(--accent);stroke-width:2.6}
+svg.sch .node.done{fill:var(--bg)}
+svg.sch .band{fill:var(--ink);fill-opacity:.14}
+svg.sch .band2{fill:var(--ink);fill-opacity:.3}
+svg.sch .lim{stroke:var(--clin);stroke-width:2.4}
+svg.sch .shock{fill:var(--clin)}
+svg.sch .drug{fill:var(--surface);stroke:var(--clin);stroke-width:2}
+svg.sch .cpr{fill:var(--ink);fill-opacity:.12;stroke:var(--muted);stroke-width:1}
+svg.sch .cpr.on{fill-opacity:.28;stroke:var(--accent);stroke-width:2}
+.causes{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.cause{font:500 13px var(--f-body);text-align:left;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 9px;cursor:pointer}
+.cause[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.cause .tag{display:block;margin-top:2px}
+.cause.core{border-left:4px solid var(--ink)}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:640px){.cols{grid-template-columns:minmax(0,1fr)}}
+.cols ul,.prose ul{margin:4px 0 0;padding-left:20px}
+#bls-svg,#neo-svg{max-width:340px}
+.dis{border-left:3px solid var(--ink);padding:2px 0 2px 10px;font-size:13.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Anaesthesiology</a> <span class="muted">· Module 01: <span aria-current="page">CPR: BLS and ALS</span> · <a href="oxygen-airway.html">Oxygen and airway</a></span></nav>
+
+<header class="stack">
+  <h1>CPR: Basic and Advanced Life Support</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-chain">Chain of survival</a> <a href="#h-bls">BLS stepper</a> <a href="#h-num">Depth, rate, ratio</a> <a href="#h-neo">Newborn</a> <a href="#h-als">ALS algorithm</a> <a href="#h-hst">Hs and Ts</a> <a href="#h-rosc">After ROSC</a> <a href="#h-key">Key numbers</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-gl">
+  <h2 id="h-gl">Which guidelines this page uses</h2>
+  <div class="prose" id="gl-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-chain">
+  <h2 id="h-chain">The chain of survival</h2>
+  <div class="step" id="chain-step"></div>
+  <div class="schbox"><svg class="fig sch" id="chain-svg" viewBox="0 0 620 120" role="img" aria-label="Schematic chain of six links: recognition and call, CPR, defibrillation, advanced life support, post-cardiac arrest care, recovery; the chosen link is outlined"></svg></div>
+  <div class="prose find" id="chain-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-bls">
+  <h2 id="h-bls">Basic life support, step by step</h2>
+  <div class="chips" id="bls-age" aria-label="Patient"></div>
+  <div class="step" id="bls-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="bls-svg" viewBox="0 0 360 430" role="img" aria-label="Schematic BLS flowchart; the current step is outlined"></svg></div>
+    <div class="prose find" id="bls-find" aria-live="polite"></div>
+  </div>
+  <p class="muted">Flowchart schematic: the order of steps as the cited guidelines give them. Use the arrow keys after clicking a step.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-num">
+  <h2 id="h-num">Compression depth, rate and ratio: where the guidelines agree and differ</h2>
+  <div class="chips" id="num-age" aria-label="Patient"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="num-svg" viewBox="0 0 420 300" role="img" aria-label="Schematic depth scale in centimetres with the range each guideline gives, and the rate band 100 to 120 per minute"></svg></div>
+    <div class="stack"><div class="scroll"><table id="num-table"></table></div><div class="prose" id="num-note"></div></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-neo">
+  <h2 id="h-neo">Newborn resuscitation: the heart rate decides each step</h2>
+  <div class="step" id="neo-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="neo-svg" viewBox="0 0 360 430" role="img" aria-label="Schematic newborn resuscitation flowchart from birth through initial steps, positive pressure ventilation, chest compressions and adrenaline, with heart-rate thresholds 100 and 60 per minute"></svg></div>
+    <div class="prose find" id="neo-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-als">
+  <h2 id="h-als">Advanced life support: shockable and non-shockable arms</h2>
+  <div class="chips" id="als-arm" aria-label="Rhythm"></div>
+  <div class="step" id="als-step"></div>
+  <div class="schbox"><svg class="fig sch" id="als-svg" viewBox="0 0 640 196" role="img" aria-label="Schematic time line of 2-minute CPR cycles with rhythm checks, shocks and drug marks for the chosen arm"></svg></div>
+  <div class="key" id="als-key"></div>
+  <div class="prose find" id="als-find" aria-live="polite"></div>
+  <p class="muted" id="als-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-hst">
+  <h2 id="h-hst">Reversible causes: the Hs and Ts</h2>
+  <div class="prose" id="hst-text"></div>
+  <div class="causes" id="hst-grid"></div>
+  <div class="prose find" id="hst-find" aria-live="polite"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-rosc">
+  <h2 id="h-rosc">After return of spontaneous circulation (ROSC)</h2>
+  <div class="scroll"><table id="rosc-table"></table></div>
+  <p class="muted" id="rosc-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-key">
+  <h2 id="h-key">Key numbers, with their guideline</h2>
+  <div class="scroll"><table id="key-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BCPR%3A%20Basic%20and%20Advanced%20Life%20Support%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fanaesthesia%2Fresuscitation-airway%2Fcpr-bls-als.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/anaes.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources unless attributed: sources-local/facts/fill-an01.md, Part A) ===================== */
+const LEDE = 'Every number here comes from a named, dated guideline; where guidelines differ, both are shown. ECG appearances of VF and VT: <a href="../../physiology/cvs/cardiac-electrophysiology.html#h-rhy">physiology: arrhythmias</a>; oxygen after ROSC and oxygen toxicity: <a href="../../physiology/respiratory/applied-environment.html#h-oxy">physiology: oxygen therapy</a>; airway devices: <a href="oxygen-airway.html">Oxygen and airway</a>.';
+
+const GL_TEXT = '<p><b>AHA 2020</b>: American Heart Association Guidelines for CPR and ECC, Parts 3 (adult), 4 (paediatric), 5 (neonatal). <b>ILCOR 2020</b>: International Consensus on CPR Science with Treatment Recommendations (CoSTR). <b>KACPR 2025</b>: 2025 Korean Guidelines for CPR. <b>SRFAC 2026</b>: Singapore Resuscitation and First Aid Council guidelines 2026. <b>ERC 2021</b> and the <b>ERC 2025 newborn</b> guideline could not be downloaded as full text; their points appear only as reported by open reviews ("ERC 2021, as reported" — BJA Education 2022; "ERC 2025, as reported" — a 2026 overview). <b>RCUK 2021</b>: Resuscitation Council UK guidelines, as reported by a 2022 UK review (Medicine). The Korean and Singaporean councils both adapt ILCOR evidence, so their agreement is shown as "both guidelines", not as independent proof.</p><p class="note">Drug doses appear only where an open guideline text states them, and are attributed to it. This is revision material, not a substitute for a certified BLS/ACLS course.</p>';
+
+/* chain of survival: [label, html] */
+const CHAIN = [
+  ['Recognise, call', '<h3>1. Early recognition and call for help</h3><p>Recognise the arrest and activate the emergency response system (Wikipedia; KACPR 2025, which counts five links).</p>'],
+  ['Early CPR', '<h3>2. Early (bystander) CPR</h3><p>Immediate bystander CPR (KACPR 2025; Wikipedia: early CPR is the second link).</p>'],
+  ['Defibrillation', '<h3>3. Early defibrillation</h3><p>Early defibrillation with an AED (KACPR 2025; Wikipedia). Wikipedia calls early, rapid defibrillation the most important link.</p>'],
+  ['Advanced care', '<h3>4. Advanced life support</h3><p>Early advanced life support by trained providers (Wikipedia; KACPR 2025 joins ALS and post-arrest care in one link).</p>'],
+  ['Post-arrest care', '<h3>5. Post-cardiac arrest care</h3><p>A critical component of the chain (AHA 2020); the American Heart Association added post-resuscitation care as a link in 2010 (Wikipedia). See <a href="#h-rosc">after ROSC</a>.</p>'],
+  ['Recovery', '<h3>6. Recovery</h3><p>Added by the AHA in 2020 as the sixth link: rehabilitation and support for survivors and families (AHA 2020; Wikipedia). AHA 2020 draws separate chains for out-of-hospital (OHCA) and in-hospital (IHCA) arrest.</p>'],
+];
+
+/* BLS: per age, steps [short label, box text (lines), html] */
+const BLS = {
+  adult: [
+    ['Safe?', ['Scene safe?'], '<h3>1. Check the scene is safe</h3><p>Before approaching, make sure the environment is safe for you (KACPR 2025; SRFAC 2026 "check for danger").</p>'],
+    ['Responsive?', ['Check response', 'and breathing'], '<h3>2. Unresponsive, not breathing normally?</h3><p>CPR is indicated for anyone <b>unresponsive with no breathing or only occasional agonal gasps</b> (Wikipedia; AHA 2020). <b>Agonal breathing</b> — slow, irregular gasps — does not ventilate and must not be mistaken for breathing (AHA 2020; Wikipedia).</p>'],
+    ['Call, AED', ['Call for help /', 'emergency number; AED'], '<h3>3. Call for help and get an AED</h3><p>Lay rescuers who find someone unresponsive with absent or abnormal breathing should assume cardiac arrest, call for help and start CPR; send a second person for an AED if one is available (AHA 2020; KACPR 2025 algorithm).</p>'],
+    ['Pulse ≤10 s', ['Healthcare provider:', 'pulse + breathing ≤10 s'], '<h3>4. (Healthcare provider) pulse and breathing together, within 10 s</h3><p>Check the <b>carotid pulse</b> and breathing simultaneously, taking no more than 10 seconds (KACPR 2025). Providers often take too long and find it hard to judge a pulse (AHA 2020) — if in doubt, start CPR.</p>'],
+    ['Compress', ['30 compressions', 'lower half of sternum'], '<h3>5. Compressions</h3><p>Hands on the <b>lower half of the sternum</b> (ILCOR 2020; KACPR 2025; SRFAC 2026). Depth about <b>5 cm</b>, avoiding more than 6 cm (ILCOR 2020; KACPR 2025) — SRFAC 2026 says 4–6 cm (see the <a href="#h-num">depth scale</a>). Rate <b>100–120/min</b> (ILCOR 2020; KACPR 2025; SRFAC 2026). Allow <b>full recoil</b> — do not lean on the chest (ILCOR 2020; AHA 2020: incomplete recoil raises intrathoracic pressure and lowers coronary perfusion). Keep pauses short: pulse checks no more than 10 s (KACPR 2025); keep the <b>chest compression fraction</b> — the share of CPR time spent compressing — at <b>60% or more</b> (AHA 2020; KACPR 2025).</p>'],
+    ['Breaths 30:2', ['2 breaths', '(30:2)'], '<h3>6. Two breaths after every 30 compressions</h3><p><b>30:2</b> (ILCOR 2020; KACPR 2025; SRFAC 2026). Each breath over about <b>1 s</b>, just enough for visible chest rise (KACPR 2025; AHA 2020 — about 500–600 mL). <b>Excessive ventilation</b> causes gastric inflation, regurgitation and aspiration and, by raising intrathoracic pressure, lowers venous return (AHA 2020; Wikipedia). Untrained or unwilling lay rescuers give <b>compression-only CPR</b> (AHA 2020; KACPR 2025).</p>'],
+    ['AED shock', ['AED: pads on,', 'analyse, stand clear'], '<h3>7. AED as soon as it arrives</h3><p>Use the AED when available (AHA 2020). Attach the pads; nobody touches the patient while it analyses or shocks (Wikipedia; KACPR 2025). After a shock, <b>resume compressions immediately</b> — ROSC is less frequent when compressions are not resumed at once (KACPR 2025; AHA 2020).</p>'],
+    ['Every 2 min', ['2 min CPR,', 'rhythm check, swap'], '<h3>8. Cycles of 2 minutes</h3><p>The AED re-analyses every <b>2 minutes</b> (KACPR 2025); change the compressor every 2 minutes to keep quality up (AHA 2020; KACPR 2025). Once an advanced airway is in place: continuous compressions with <b>1 breath every 6 s (10/min)</b> (KACPR 2025; SRFAC 2026). If the patient breathes normally with a pulse but stays unresponsive: <b>recovery position</b> (KACPR 2025; Wikipedia).</p>'],
+  ],
+  child: [
+    ['Why', ['Arrest is usually', 'respiratory / shock'], '<h3>Why children differ</h3><p>Cardiac arrest in infants and children is usually the end of progressive <b>respiratory failure or shock</b>, not a primary cardiac event (AHA 2020; StatPearls). So breaths matter more: compression-only CPR is less good for children (Wikipedia; AHA 2020 observational data favour compressions with ventilation).</p>'],
+    ['Safe, respond', ['Scene safe;', 'responsive? breathing?'], '<h3>1–2. Safety, response, breathing</h3><p>As in adults: check for danger, response and breathing (SRFAC 2026; KACPR 2025).</p>'],
+    ['Lone rescuer', ['Alone, no phone:', 'CPR first, then call'], '<h3>3. Alone without a phone?</h3><p>Start CPR before going for help, because respiratory arrest is the commonest cause (AHA 2020) — about 2 minutes, which is five cycles of 30:2 (KACPR 2025).</p>'],
+    ['Pulse', ['Pulse ≤10 s:', 'carotid / femoral'], '<h3>4. Pulse within 10 s</h3><p>Child: <b>carotid or femoral</b> pulse (KACPR 2025; SRFAC 2026 names carotid). Start CPR unless a pulse is definitely felt within 10 s (ILCOR 2020; SRFAC 2026). Also start compressions when the heart rate is <b>below 60/min with poor perfusion</b> despite oxygen and ventilation (KACPR 2025; ILCOR 2020; SRFAC 2026: ≤60).</p>'],
+    ['Compress', ['Compress ≥⅓ AP', 'lower half of sternum'], '<h3>5. Compressions</h3><p>Lower half of the sternum, one or two hands (KACPR 2025; SRFAC 2026). Depth at least <b>one-third of the AP chest diameter</b> (AHA 2020; KACPR 2025): about <b>4–5 cm</b> in a child (KACPR 2025; SRFAC 2026). Rate 100–120/min.</p>'],
+    ['Ratio', ['30:2 one rescuer', '15:2 two rescuers'], '<h3>6. Ratio — the guidelines differ</h3><p><b>KACPR 2025:</b> 30:2 for one rescuer, <b>15:2 for two</b>. <b>SRFAC 2026:</b> healthcare rescuers use <b>15:2</b> for infants and children up to 12 years (30:2 if unfamiliar with 15:2). AHA 2020: both 15:2 and 30:2 did better than compression-only CPR in large observational studies. With an advanced airway: <b>20–30 breaths/min</b> (AHA 2020; KACPR 2025).</p>'],
+    ['AED, drugs', ['AED; 2 J/kg then ≥4 J/kg;', 'adrenaline 0.01 mg/kg (KACPR 2025)'], '<h3>7. Shocks and drugs (as the guidelines state)</h3><p>First shock <b>2 J/kg</b>, later ≥4 J/kg (KACPR 2025). <b>Adrenaline 0.01 mg/kg</b> IV/IO every 3–5 min (KACPR 2025; SRFAC 2026), as soon as possible in non-shockable rhythms (SRFAC 2026).</p>'],
+  ],
+  infant: [
+    ['Why', ['Arrest is usually', 'respiratory / shock'], '<h3>Infants (under 1 year)</h3><p>As in children, arrest usually follows respiratory failure or shock (AHA 2020; StatPearls), so ventilation is part of CPR.</p>'],
+    ['Pulse', ['Pulse ≤10 s:', 'brachial'], '<h3>Pulse within 10 s</h3><p>Infant: <b>brachial pulse</b> (KACPR 2025; SRFAC 2026). Start compressions if no pulse, or heart rate <60/min with poor perfusion (KACPR 2025; ILCOR 2020; SRFAC 2026).</p>'],
+    ['Where', ['Sternum just below', 'the nipple line'], '<h3>Where to press</h3><p>On the sternum just below the line joining the nipples (KACPR 2025).</p>'],
+    ['Technique', ['Two-thumb', 'encircling hands'], '<h3>Technique — the guidelines differ</h3><p><b>KACPR 2025:</b> everyone, lay or professional, uses the <b>two-thumb encircling-hands</b> technique, not two fingers (one-hand heel as backup). <b>SRFAC 2026:</b> two-thumb encircling <i>or</i> the one-hand method.</p>'],
+    ['Depth, rate', ['≥⅓ AP, about 4 cm', '100–120/min'], '<h3>Depth and rate</h3><p>At least one-third of the AP diameter (AHA 2020; KACPR 2025): <b>about 4 cm</b> (KACPR 2025; Wikipedia) — SRFAC 2026 gives 3–4 cm. Rate 100–120/min (KACPR 2025; SRFAC 2026).</p>'],
+    ['Ratio', ['30:2 one rescuer', '15:2 two rescuers'], '<h3>Ratio</h3><p>KACPR 2025: 30:2 single rescuer, 15:2 two rescuers; SRFAC 2026: 15:2 for healthcare rescuers. With an advanced airway: 30 breaths/min under 1 year (KACPR 2025; AHA 2020: 20–30/min).</p>'],
+  ],
+};
+const BLS_AGES = [['adult', 'Adult'], ['child', 'Child (1 year–puberty)'], ['infant', 'Infant (<1 year)']];
+
+/* depth ranges per age: [source, from cm, to cm, kind ('approx' = about X, avoid > Y), note] */
+const DEPTH = {
+  adult: [['ILCOR 2020', 5, 6, 'about 5 cm; avoid more than 6 cm', 'dot'], ['KACPR 2025', 5, 6, 'about 5 cm; more than 6 cm adds complications', 'dot'], ['RCUK 2021*', 5, 6, '5–6 cm (as reported)'], ['SRFAC 2026', 4, 6, '4–6 cm; deeper than 5 cm "may not be necessary" in its population'], ['Wikipedia', 5, 6, '5–6 cm']],
+  child: [['KACPR 2025', 4, 5, '≥⅓ AP: 4–5 cm'], ['SRFAC 2026', 4, 5, '4–5 cm']],
+  infant: [['KACPR 2025', 4, 4, '≥⅓ AP: about 4 cm'], ['SRFAC 2026', 3, 4, '3–4 cm'], ['Wikipedia', 4, 4, 'about 4 cm, ≥⅓ AP']],
+};
+const NUM_ROWS = {
+  adult: [['Depth', 'about 5 cm, not >6 cm (ILCOR 2020; KACPR 2025)', '4–6 cm (SRFAC 2026)'], ['Rate', '100–120/min (ILCOR 2020; KACPR 2025; SRFAC 2026)', '—'], ['Ratio (no advanced airway)', '30:2 (ILCOR 2020; KACPR 2025; SRFAC 2026)', '—'], ['With advanced airway', '1 breath every 6 s = 10/min, compressions continuous (KACPR 2025; SRFAC 2026)', '—']],
+  child: [['Depth', '≥⅓ AP, 4–5 cm (KACPR 2025; SRFAC 2026)', '—'], ['Rate', '100–120/min', '—'], ['Ratio', '30:2 one rescuer, 15:2 two rescuers (KACPR 2025)', '15:2 for healthcare rescuers, ≤12 years (SRFAC 2026)'], ['With advanced airway', '20–30/min (AHA 2020; KACPR 2025)', '—']],
+  infant: [['Depth', '≥⅓ AP, about 4 cm (KACPR 2025; Wikipedia)', '3–4 cm (SRFAC 2026)'], ['Rate', '100–120/min', '—'], ['Ratio', '30:2 one rescuer, 15:2 two rescuers (KACPR 2025)', '15:2 for healthcare rescuers (SRFAC 2026)'], ['Technique', 'two-thumb encircling hands (KACPR 2025)', 'two-thumb or one hand (SRFAC 2026)']],
+};
+const NUM_NOTE = {
+  adult: '<p class="dis"><b>Depth disagreement.</b> ILCOR 2020 and KACPR 2025 recommend about 5 cm and warn against more than 6 cm; RCUK 2021 (*as reported by a 2022 UK review) gives 5–6 cm; SRFAC 2026 allows 4–6 cm, citing a North American study in which survival peaked at a depth of about 4.6 cm (40–55 mm); Wikipedia gives 5–6 cm. The AHA 2020 recommendation table is an image; its text reports better outcomes at a depth of at least 5 cm than below 4 cm.</p>',
+  child: '<p class="dis"><b>Ratio disagreement.</b> One rescuer 30:2 and two rescuers 15:2 (KACPR 2025) versus 15:2 for all healthcare rescuers (SRFAC 2026).</p>',
+  infant: '<p class="dis"><b>Depth and technique differ</b> between KACPR 2025 (about 4 cm; two-thumb encircling for everyone) and SRFAC 2026 (3–4 cm; two-thumb or one hand).</p>',
+};
+
+/* newborn: [label, box lines, html] */
+const NEO = [
+  ['Birth', ['Birth: vigorous?', 'delay cord clamping ≥60 s'], '<h3>Birth</h3><p>For a vigorous newborn, delay cord clamping for <b>at least 60 s</b> (KACPR 2025; ERC 2025, as reported).</p>'],
+  ['Initial steps', ['Warm, position airway,', 'clear if needed, dry, stimulate'], '<h3>Initial steps</h3><p><b>Warmth</b> (normothermia), position to open the airway (neutral "sniffing"), clear secretions only if needed, <b>dry</b> and give <b>tactile stimulation</b> (KACPR 2025; StatPearls; AHA 2020).</p>'],
+  ['PPV', ['Apnoea / gasping / HR <100:', 'PPV within 60 s'], '<h3>Positive-pressure ventilation within the golden minute</h3><p>If the baby is <b>apnoeic or gasping</b>, or the <b>heart rate is below 100/min</b> after the initial steps, start PPV <b>within 60 s</b> of birth (KACPR 2025; AHA 2020; Wikipedia; ERC 2025, as reported). AHA 2020 gives 40–60 breaths/min; ERC 2025 (as reported) starts with <b>five inflation breaths</b> of up to 3 s. Start with <b>air (21%)</b> at ≥35 weeks (AHA 2020; KACPR 2025); preterm: up to 30% (AHA 2020) or ≥30% below 32 weeks (KACPR 2025). Heart rate is best measured by <b>ECG</b> (AHA 2020).</p>'],
+  ['Compressions', ['HR <60 after 30 s good PPV:', 'compressions 3:1'], '<h3>Chest compressions</h3><p>If the heart rate stays <b>below 60/min after at least 30 s of effective PPV</b>, start compressions (AHA 2020; KACPR 2025), two-thumb encircling, coordinated <b>3:1</b> — <b>90 compressions and 30 inflations a minute</b> (120 events) (AHA 2020; KACPR 2025; SRFAC 2026; ERC 2025, as reported). Raise oxygen to <b>100%</b> during compressions (AHA 2020; ERC 2025, as reported).</p>'],
+  ['Adrenaline', ['HR still <60:', 'IV adrenaline'], '<h3>Adrenaline</h3><p>If the heart rate is still below 60/min: <b>adrenaline</b>, ideally intravenous (AHA 2020). <i>When</i> differs: after <b>60 s</b> of compressions (AHA 2020) versus when the heart rate is still below 60/min <b>and not increasing</b> after at least <b>30 s</b> of CPR (ERC 2025, as reported; dose 10–30 µg/kg). IV dose <b>0.01–0.03 mg/kg</b> (AHA 2020; KACPR 2025).</p>'],
+];
+
+/* ALS */
+const ALS_ARMS = [['shock', 'Shockable: VF / pulseless VT'], ['non', 'Non-shockable: asystole / PEA']];
+const ALS = {
+  shock: [
+    ['Rhythm: VF/pVT', 0, '<h3>Shockable rhythm</h3><p>VF and pulseless VT are <b>shockable</b>: they respond to defibrillation (KACPR 2025; StatPearls; Wikipedia).</p>'],
+    ['Shock 1', 1, '<h3>Shock, then CPR at once</h3><p>Defibrillate immediately: biphasic <b>120–200 J</b> as the manufacturer recommends (200 J if unknown), monophasic 360 J (KACPR 2025; Wikipedia gives 120–200 J for biphasic AEDs). Resume CPR <b>immediately for 2 minutes</b> without checking the rhythm (KACPR 2025; AHA 2020).</p>'],
+    ['Shock 2', 2, '<h3>Check, shock, CPR</h3><p>After 2 min, re-check the rhythm; still VF/pVT → shock again and 2 more minutes of CPR (KACPR 2025). KACPR 2025: if VF/pVT persists after this second shock and 2 min of CPR, it is refractory — prepare amiodarone or lidocaine.</p>'],
+    ['Shock 3, drugs', 3, '<h3>Adrenaline and the antiarrhythmic — timing as each guideline states</h3><p><b>Adrenaline</b>: after initial defibrillation attempts fail (ILCOR 2020); the trials AHA 2020 relied on gave it <b>after the third shock</b>, 1 mg every 3–5 min (every second cycle is reasonable); KACPR 2025: give it promptly after defibrillation (no fixed timing); RCUK 2021 (as reported): 1 mg after the third shock, then every 3–5 min. <b>Amiodarone</b> for refractory VF/pVT: <b>300 mg</b> IV after the third shock, then <b>150 mg</b> (SRFAC 2026: if it persists; RCUK 2021, as reported: after the fifth shock). <b>Lidocaine</b> is the alternative (KACPR 2025; RCUK 2021, as reported); RCUK 2021 (as reported): 100 mg, plus 50 mg after the fifth shock. <b>KACPR 2025</b> calls VF/pVT refractory once it persists after the second shock and 2 min of CPR.</p>'],
+    ['Repeat', 5, '<h3>Keep cycling</h3><p>2-minute CPR cycles with rhythm checks and shocks as needed; adrenaline every 3–5 min (AHA 2020; SRFAC 2026; RCUK 2021, as reported); treat <a href="#h-hst">reversible causes</a>.</p>'],
+  ],
+  non: [
+    ['Rhythm: asystole/PEA', 0, '<h3>Non-shockable rhythm</h3><p>Asystole and PEA do not need defibrillation (KACPR 2025; StatPearls). Survival in asystole is very low; the main chance lies in finding and correcting a <b>reversible cause</b> (KACPR 2025).</p>'],
+    ['Adrenaline ASAP', 1, '<h3>Adrenaline as soon as possible</h3><p>Give adrenaline <b>as soon as feasible</b> once CPR is under way and IV/IO access is secured (ILCOR 2020; KACPR 2025; SRFAC 2026 and RCUK 2021, as reported: 1 mg). Earlier adrenaline was linked with more ROSC in every observational study reviewed (AHA 2020).</p>'],
+    ['CPR 2 min', 2, '<h3>2 minutes of CPR, rhythm check</h3><p>After 2 minutes of CPR, re-assess the rhythm (KACPR 2025). If it becomes shockable, switch to the shockable arm.</p>'],
+    ['Repeat', 5, '<h3>Every 3–5 minutes</h3><p>Adrenaline every 3–5 min (AHA 2020; SRFAC 2026; RCUK 2021, as reported; Wikipedia’s PEA article: 1 mg every 3–5 min), high-quality CPR, and look for the Hs and Ts.</p>'],
+  ],
+};
+const ALS_NOTE = 'Time line schematic: 2-minute CPR blocks with rhythm checks between them. Shockable arm marks follow adrenaline after the third shock, then every second cycle (AHA 2020 trial protocol; RCUK 2021, as reported) and amiodarone 300 mg after the third shock (SRFAC 2026; RCUK 2021) and 150 mg after the fifth (RCUK 2021, as reported); other guidelines differ as described in the text. *RCUK 2021 = Resuscitation Council UK 2021 guidelines, as reported by a 2022 UK review. With an advanced airway, compressions continue with 10 breaths/min, and placement is confirmed with waveform capnography (AHA 2020; ERC 2021, as reported) — see <a href="oxygen-airway.html#h-conf">tube confirmation</a>.';
+
+/* Hs and Ts: [key, name, core?, lists[], note] ; lists: ka KACPR 2025 adult, sa SRFAC 2026 adult, kp KACPR 2025 paediatric, sp SRFAC 2026 paediatric,
+   st StatPearls (children), rc RCUK 2021 (as reported, 2022 UK review), er ERC 2025 (as reported, 2026 paper), uk 2023 UK paramedic case report ("commonly taught") */
+const HST_TEXT = '<p>Two ways of listing the same causes. The <b>"4 Hs and 4 Ts"</b> — hypoxia, hypovolaemia, hypo-/hyperkalaemia and other metabolic causes, hypothermia; thrombosis (coronary or pulmonary), tamponade, toxins, tension pneumothorax — is the UK/European list (RCUK 2021, as reported by a 2022 UK review; ERC 2025, as reported by a 2026 paper, which says <b>hypo-/hyperthermia</b>). KACPR 2025 and SRFAC 2026 list <b>five Hs and five Ts</b>, adding hydrogen ion (acidosis) and, in some lists, trauma; paediatric lists add hypoglycaemia (KACPR 2025 "6H and 5T"; SRFAC 2026). <b>Eight causes appear in every list</b> (thick left edge). Tap a cause to see which lists hold it.</p>';
+const LISTS = {ka: 'KACPR 2025 adult', sa: 'SRFAC 2026 adult', kp: 'KACPR 2025 paediatric', sp: 'SRFAC 2026 paediatric', st: 'StatPearls (children)', rc: 'RCUK 2021 (as reported)', er: 'ERC 2025 (as reported)', uk: 'UK paramedic report 2023'};
+const ALL = ['ka', 'sa', 'kp', 'sp', 'st', 'rc', 'er', 'uk'], FIVE = ['ka', 'sa', 'kp', 'sp', 'st'];
+const HST = [
+  ['hypox', 'Hypoxia', 1, ALL, ''],
+  ['hypovol', 'Hypovolaemia', 1, ALL, 'With hypoxia, the commonest cause in children (StatPearls).'],
+  ['k', 'Hypo-/hyperkalaemia', 1, ALL, 'The 4H lists add "metabolic" causes (RCUK 2021; ERC 2025, as reported); SRFAC 2026 (paediatric) widens it to calcium and magnesium.'],
+  ['temp', 'Hypothermia', 1, ALL, 'ERC 2025 (as reported) says hypo-/hyperthermia; SRFAC 2026 (paediatric) lists "Temperature" (hypo- and hyperthermia) among its Ts.'],
+  ['h', 'Hydrogen ion (acidosis)', 0, FIVE, 'Not a separate item in the 4H/4T lists. Wikipedia: the most important treatment of acidosis is adequate ventilation.'],
+  ['glu', 'Hypoglycaemia', 0, ['kp', 'sp'], 'Paediatric lists only; Wikipedia notes the AHA removed it from its list in 2010.'],
+  ['tension', 'Tension pneumothorax', 1, ALL, ''],
+  ['tamp', 'Tamponade (cardiac)', 1, ALL, ''],
+  ['tox', 'Toxins', 1, ALL, ''],
+  ['thromb', 'Thrombosis (coronary / pulmonary)', 1, ALL, 'KACPR 2025 counts coronary and pulmonary thrombosis as two of its five Ts.'],
+  ['trauma', 'Trauma', 0, ['sa', 'kp', 'st'], 'SRFAC 2026 removed trauma from its paediatric list ("a composite" of the other causes).'],
+];
+/* core (third field) = present in all eight lists shown */
+
+/* post-ROSC: [system, target, sources] */
+const ROSC = [
+  ['Oxygenation', 'Titrate FiO₂ to SpO₂ <b>94–98%</b> — avoid hypoxaemia and hyperoxaemia', 'KACPR 2025; SRFAC 2026 (citing AHA and ERC–ESICM). AHA 2020: 92–98%'],
+  ['Ventilation', 'Normocapnia, PaCO₂ <b>35–45 mmHg</b>; lung-protective tidal volume <b>6–8 mL/kg</b> predicted (ideal) body weight, given for post-cardiac-arrest care', 'SRFAC 2026 (citing ERC–ESICM); KACPR 2025 (AHA 2020: normocapnia)'],
+  ['Circulation', 'MAP at least <b>60–65 mmHg</b> (KACPR 2025); avoid MAP <b>below 65</b> (ERC 2021, as reported)', 'KACPR 2025; ERC 2021 (BJA Educ 2022)'],
+  ['Cause', '<b>12-lead ECG</b> promptly; immediate <b>coronary angiography</b> (and PCI) when the ECG shows ST elevation', 'KACPR 2025; AHA 2020; SRFAC 2026'],
+  ['Temperature', 'Comatose patients: actively prevent fever (<b>&gt;37.7 °C</b>) for at least <b>72 h</b> (ERC–ESICM, as reported) — KACPR 2025: active fever prevention for 36–72 h', 'ERC–ESICM, updated after ILCOR (as reported, BJA Educ 2022); KACPR 2025'],
+  ['Prognosis', 'Multimodal neuroprognostication no earlier than <b>72 h</b> after ROSC (after rewarming, confounders excluded)', 'SRFAC 2026; AHA 2020'],
+];
+const ROSC_NOTE = 'Post-ROSC care is the fifth link of the chain; targets above are as each guideline states them. Oxygen physiology and toxicity: physiology module (linked above).';
+
+/* key numbers */
+const KEY = [
+  ['Adult compression depth', 'about 5 cm, not >6 cm', 'ILCOR 2020; KACPR 2025 (SRFAC 2026: 4–6 cm)'],
+  ['Compression rate (all ages)', '100–120/min', 'ILCOR 2020; KACPR 2025; SRFAC 2026'],
+  ['Adult ratio', '30:2', 'ILCOR 2020; KACPR 2025; SRFAC 2026'],
+  ['Child/infant ratio, two rescuers', '15:2', 'KACPR 2025; SRFAC 2026 (all healthcare rescuers)'],
+  ['Newborn ratio', '3:1 (90 + 30 a minute)', 'AHA 2020; KACPR 2025; SRFAC 2026'],
+  ['Pulse/breathing check', '≤10 s', 'KACPR 2025; SRFAC 2026; ILCOR 2020 (children)'],
+  ['Breaths with an advanced airway (adult)', '1 every 6 s (10/min)', 'KACPR 2025; SRFAC 2026'],
+  ['Shockable rhythms', 'VF, pulseless VT', 'KACPR 2025; StatPearls; Wikipedia'],
+  ['Adrenaline interval', 'every 3–5 min', 'AHA 2020; SRFAC 2026; RCUK 2021 (as reported); KACPR 2025 (children)'],
+  ['Amiodarone (refractory VF/pVT)', '300 mg after the 3rd shock, then 150 mg', 'SRFAC 2026; RCUK 2021 (as reported: 150 mg after the 5th)'],
+  ['Chest compression fraction', '≥60%', 'AHA 2020; KACPR 2025'],
+  ['Adrenaline in non-shockable', 'as soon as feasible', 'ILCOR 2020; KACPR 2025; SRFAC 2026'],
+  ['Newborn PPV trigger', 'apnoea, gasping or HR <100/min, within 60 s', 'AHA 2020; KACPR 2025'],
+  ['Newborn compressions trigger', 'HR <60/min after 30 s effective PPV', 'AHA 2020; KACPR 2025'],
+  ['Tube confirmation', 'waveform capnography', 'AHA 2020; ERC 2021 (as reported); RCUK 2021 (as reported); DAS 2015'],
+  ['Reversible causes', '4 Hs and 4 Ts (UK/ERC); 5 Hs and 5 Ts (KACPR, SRFAC)', 'RCUK 2021, ERC 2025 (as reported); KACPR 2025; SRFAC 2026'],
+];
+
+const BASED = 'Based on: AHA 2020 Guidelines for CPR and ECC (Parts 3, 4, 5); ILCOR CoSTR 2020 (adult BLS, ALS, paediatric, executive summary); 2025 Korean Guidelines for CPR (KACPR, Parts 1–4 and 6–9); Singapore Resuscitation and First Aid Council guidelines 2026 (BCLS and AED, ACLS, post-cardiac arrest, paediatric, neonatal); ERC 2021 as reported by Kane and Nolan, BJA Education 2022; ERC 2025 newborn guideline as reported by a 2026 overview; RCUK 2021 as reported by a 2022 review (Medicine); ERC 2025 ALS reversible causes as reported by a 2026 paper (J Clin Med); a 2023 UK paramedic case report; StatPearls (ACLS; Pediatric and Neonatal Resuscitation; PEA; Asystole); Wikipedia (Chain of survival; Cardiopulmonary resuscitation; Basic life support; Automated external defibrillator; Asystole; Pulseless electrical activity; Hs and Ts; Neonatal resuscitation; Recovery position).';
+const MODELS = 'Models used: flowcharts, the chain, the depth scale and the ALS time line are schematic (not to scale; cycle lengths and drug marks show the order the guidelines give, not exact clock times).';
+
+/* ===================== CODE ===================== */
+const A = window.Anaes, $ = A.$, T = A.T;
+$('lede').innerHTML = LEDE; $('gl-text').innerHTML = GL_TEXT;
+
+/* chain */
+const chainSt = {s: 0};
+function drawChain() {
+  let s = '';
+  CHAIN.forEach((c, i) => {
+    const x = 12 + i * 101, on = i === chainSt.s;
+    s += `<rect x="${x}" y="30" width="92" height="46" rx="23" class="node${on ? ' on' : ''}"/>`;
+    if (i < CHAIN.length - 1) s += `<path d="M${x + 88} 53 L${x + 105} 53" style="stroke:var(--muted);stroke-width:5"/>`;
+    const w = c[0].split(' ');
+    if (w.length > 1) s += T(x + 46, 49, w[0], on ? 'b' : '', 'middle') + T(x + 46, 67, w.slice(1).join(' '), on ? 'b' : '', 'middle');
+    else s += T(x + 46, 58, c[0], on ? 'b' : '', 'middle');
+    s += T(x + 46, 98, String(i + 1), 's', 'middle');
+  });
+  s += T(310, 18, 'Chain of survival (schematic; AHA 2020 six links)', 's', 'middle');
+  $('chain-svg').innerHTML = s;
+  $('chain-find').innerHTML = CHAIN[chainSt.s][1];
+}
+A.stepper('chain-step', CHAIN.map(c => c[0]), drawChain, chainSt);
+
+/* flowchart helper: boxes in a column */
+function flow(svgId, items, cur, opts = {}) {
+  const W = 360, bw = 250, bh = 40, gap = opts.gap || 12, x = (W - bw) / 2;
+  let s = A.DEFS, y = 10;
+  items.forEach((it, i) => {
+    const cls = i === cur ? 'node on' : (i < cur ? 'node done' : 'node');
+    s += `<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="8" class="${cls}"/>`;
+    s += T(W / 2, y + 17, it[0], i === cur ? 'b' : '', 'middle') + T(W / 2, y + 32, it[1] || '', 's', 'middle');
+    if (i < items.length - 1) s += `<path class="flow" d="M${W / 2} ${y + bh} L${W / 2} ${y + bh + gap - 1}"/>`;
+    y += bh + gap;
+  });
+  const svg = $(svgId); svg.setAttribute('viewBox', `0 0 ${W} ${y + 4}`); svg.innerHTML = s;
+}
+
+/* BLS */
+const blsSt = {s: 0, age: 'adult'};
+function drawBls() {
+  const steps = BLS[blsSt.age];
+  flow('bls-svg', steps.map(x => x[1]), blsSt.s);
+  $('bls-find').innerHTML = steps[blsSt.s][2];
+}
+function buildBls() { blsSt.s = 0; A.stepper('bls-step', BLS[blsSt.age].map(x => x[0]), drawBls, blsSt); }
+A.toggles('bls-age', BLS_AGES, k => { blsSt.age = k; buildBls(); }, 'adult');
+buildBls();
+
+/* depth scale */
+const numSt = {age: 'adult'};
+function drawNum() {
+  const rows = DEPTH[numSt.age], X = A.scale(0, 7, 70, 400);
+  let s = T(10, 16, 'Compression depth (cm)', 'h') + T(10, 32, 'dot = "about"; red tick = upper limit; bar = range', 's');
+  for (let c = 0; c <= 7; c++) s += `<path class="grid" d="M${X(c)} 42 L${X(c)} ${56 + rows.length * 34}"/>` + T(X(c), 68 + rows.length * 34, c, 's', 'middle');
+  rows.forEach((r, i) => {
+    const y = 52 + i * 34, x0 = X(r[1]), x1 = X(r[2]);
+    if (r[4] === 'dot') s += `<circle cx="${x0}" cy="${y + 10}" r="7" style="fill:var(--ink);fill-opacity:.55"/><path d="M${x1} ${y} L${x1} ${y + 20}" class="lim"/>` + T(x1 + 5, y + 14, 'avoid >' + r[2], 's');
+    else if (r[1] === r[2]) s += `<circle cx="${x0}" cy="${y + 10}" r="7" style="fill:var(--ink);fill-opacity:.55"/>`;
+    else s += `<rect x="${x0}" y="${y + 3}" width="${x1 - x0}" height="14" rx="3" class="band2"/>`;
+    s += T(8, y + 14, r[0], 'b');
+  });
+  const yr = 96 + rows.length * 34, R = A.scale(80, 140, 70, 400);
+  s += T(10, yr, 'Compression rate (per minute) — all guidelines', 'h');
+  for (const v of [80, 100, 120, 140]) s += `<path class="grid" d="M${R(v)} ${yr + 10} L${R(v)} ${yr + 40}"/>` + T(R(v), yr + 54, v, 's', 'middle');
+  s += `<rect x="${R(100)}" y="${yr + 16}" width="${R(120) - R(100)}" height="16" rx="3" class="band2"/>` + T((R(100) + R(120)) / 2, yr + 28, '100–120', 'm', 'middle');
+  const svg = $('num-svg'); svg.setAttribute('viewBox', `0 0 420 ${yr + 64}`); svg.innerHTML = s;
+  A.table('num-table', ['', 'Agreed / main', 'Differs'], NUM_ROWS[numSt.age]);
+  $('num-note').innerHTML = NUM_NOTE[numSt.age];
+}
+A.toggles('num-age', BLS_AGES, k => { numSt.age = k; drawNum(); }, 'adult');
+drawNum();
+
+/* newborn */
+const neoSt = {s: 0};
+function drawNeo() { flow('neo-svg', NEO.map(x => x[1]), neoSt.s, {gap: 22}); $('neo-find').innerHTML = NEO[neoSt.s][2]; }
+A.stepper('neo-step', NEO.map(x => x[0]), drawNeo, neoSt);
+
+/* ALS time line */
+const alsSt = {s: 0, arm: 'shock'};
+function drawAls() {
+  const arm = alsSt.arm, steps = ALS[arm], cur = steps[alsSt.s][1];
+  const n = 6, x0 = 30, bw = 88, gap = 10;
+  let s = T(20, 18, arm === 'shock' ? 'Shockable arm (schematic time line)' : 'Non-shockable arm (schematic time line)', 'h');
+  for (let i = 0; i < n; i++) {
+    const x = x0 + i * (bw + gap);
+    const on = (cur >= 1 && i === Math.min(cur - 1, n - 1)) || (cur === 5 && i >= 3);
+    s += `<rect x="${x}" y="70" width="${bw}" height="34" rx="5" class="cpr${on ? ' on' : ''}"/>` + T(x + bw / 2, 92, 'CPR 2 min', 's', 'middle');
+    /* rhythm check before each block */
+    s += `<path d="M${x - gap / 2} 56 L${x - gap / 2} 118" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3"/>`;
+    if (arm === 'shock') s += `<path d="M${x - gap / 2} 40 l-6 12 h5 l-3 10 l10 -14 h-5 l3 -8 z" class="shock"/>`;
+    s += T(x + bw / 2, 132, (i * 2) + '–' + (i * 2 + 2) + ' min', 's', 'middle');
+  }
+  s += T(x0 - gap / 2, 36, arm === 'shock' ? 'shock if still VF/pVT' : 'rhythm check', 's', 'start');
+  /* drugs */
+  const drugAt = arm === 'shock' ? [2, 4] : [0, 2, 4];   // block index where adrenaline is given (AHA 2020 trial protocol: after shock 3 = during block 2, then every second cycle; non-shockable: at once, then every second cycle)
+  for (const b of drugAt) { const x = x0 + b * (bw + gap) + 16; s += `<circle cx="${x}" cy="160" r="9" class="drug"/>` + T(x, 164, 'A', 'b', 'middle'); }
+  if (arm === 'shock') for (const [b, dose] of [[2, '300'], [4, '150']]) { const x = x0 + b * (bw + gap) + 52; s += `<rect x="${x - 17}" y="151" width="34" height="18" rx="3" class="drug"/>` + T(x, 164, 'Am', 's', 'middle') + T(x, 186, dose + ' mg', 's', 'middle'); }
+  $('als-svg').innerHTML = s;
+  $('als-find').innerHTML = steps[alsSt.s][2];
+}
+function buildAls() { alsKey(); alsSt.s = 0; A.stepper('als-step', ALS[alsSt.arm].map(x => x[0]), drawAls, alsSt); }
+A.toggles('als-arm', ALS_ARMS, k => { alsSt.arm = k; buildAls(); }, 'shock');
+function alsKey() { A.key('als-key', alsSt.arm === 'shock' ? [['--clin', 'shock if still VF/pVT'], ['--surface', 'A = adrenaline 1 mg (after 3rd shock, then every 3–5 min)', 'border-color:var(--clin);border-radius:50%'], ['--surface', 'Am = amiodarone (300 mg after 3rd, 150 mg after 5th shock)', 'border-color:var(--clin)']] : [['--surface', 'A = adrenaline: as soon as feasible, then every 3–5 min (drawn every second cycle)', 'border-color:var(--clin);border-radius:50%']]); }
+buildAls();
+$('als-note').innerHTML = ALS_NOTE;
+
+/* Hs and Ts */
+$('hst-text').innerHTML = HST_TEXT;
+const hstBox = $('hst-grid');
+function selHst(k) {
+  hstBox.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === k)));
+  const c = HST.find(x => x[0] === k);
+  $('hst-find').innerHTML = `<h3>${c[1]}${c[2] ? ' — in every list' : ''}</h3><p>Listed by: ${c[3].map(l => LISTS[l]).join('; ')}.${Object.keys(LISTS).filter(l => !c[3].includes(l)).length ? ' Not in: ' + Object.keys(LISTS).filter(l => !c[3].includes(l)).map(l => LISTS[l]).join('; ') + '.' : ''}</p>${c[4] ? '<p>' + c[4] + '</p>' : ''}`;
+}
+for (const c of HST) {
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'cause' + (c[2] ? ' core' : ''); b.dataset.k = c[0];
+  b.innerHTML = c[1] + `<span class="tag">${['tension', 'tamp', 'tox', 'thromb', 'trauma'].includes(c[0]) ? 'T' : 'H'} · ${c[3].length} of ${ALL.length} lists</span>`;
+  b.setAttribute('aria-pressed', 'false'); b.onclick = () => selHst(c[0]); hstBox.append(b);
+}
+selHst('hypox');
+
+A.table('rosc-table', ['', 'Target / action', 'Guideline'], ROSC);
+$('rosc-note').textContent = ROSC_NOTE;
+A.table('key-table', ['Item', 'Value', 'Guideline'], KEY);
+$('based').textContent = BASED; $('models').textContent = MODELS;
+A.swipeHints();
+</script>
+</body>
+</html>
