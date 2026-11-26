@@ -137,6 +137,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [Psoriasis](dermatology/papulosquamous/psoriasis.html), [Lichen Planus and Other Papulosquamous Disorders](dermatology/papulosquamous/lichen-planus.html) | Papulosquamous | IL-23/Th17 stepper, normal vs psoriatic histology, clinical-type body maps, nail signs, grattage stepper, PASI/BSA calculator, NICE CG153 ladder; 6 Ps, LP histology picker, variants, HCV meta-analyses, lichenoid drug eruptions, differential picker |
 
+### General Surgery — [`surgery/`](surgery/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [Metabolic Response to Injury and Perioperative Care](surgery/general/metabolic-response.html), [Shock](surgery/general/shock.html) | General | Ebb/flow slider, mediator cascade, fuel diagram, ERAS stepper; shock cell chain, type classifier with treatment principles, ATLS blood-loss slider, shock index, EU 2023 resuscitation targets, Sepsis-3 and SIRS checklists |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and

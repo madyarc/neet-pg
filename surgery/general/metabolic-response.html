@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Metabolic Response to Injury</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/surg.css">
+<style>
+/* tokens from surg.css with their site meanings: --musc (muscle tissue), --fat (lipid: lipolysis), --fluid (body fluids: plasma, body water),
+   --mark (the chosen time on the ebb–flow slider), --accent (selection), --clin (a warning). Curves otherwise ink/muted with dash patterns. */
+svg.sch .node{fill:var(--surface);stroke:var(--muted);stroke-width:1.2}
+svg.sch .nodeon{fill:var(--surface);stroke:var(--accent);stroke-width:2.6}
+svg.sch .ar{stroke:var(--muted);stroke-width:1.4;fill:none}
+svg.sch .aron{stroke:var(--ink);stroke-width:2.4;fill:none}
+svg.sch .ph{fill:var(--ink);fill-opacity:.05}
+svg.sch .phon{fill:var(--accent);fill-opacity:.10}
+svg.sch .musc{fill:var(--musc);fill-opacity:.55;stroke:var(--ink);stroke-width:.8}
+svg.sch .fat{fill:var(--fat);stroke:var(--ink);stroke-width:.8}
+svg.sch .wat{fill:var(--fluid);stroke:var(--ink);stroke-width:.8}
+svg.sch .dim{opacity:.3}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← General Surgery</a> <span class="muted">· Module 01: <span aria-current="page">Metabolic response to injury</span> · <a href="shock.html">Shock</a></span></nav>
+
+<header class="stack">
+  <h1>Metabolic Response to Injury and Perioperative Care</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-homeo">Homeostasis and stress</a> <a href="#h-ebb">Ebb and flow</a> <a href="#h-med">Mediators</a> <a href="#h-meta">Metabolic changes</a> <a href="#h-fac">Modifying factors</a> <a href="#h-eras">Perioperative care and ERAS</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-homeo">
+  <h2 id="h-homeo">Homeostasis and the stress response</h2>
+  <div class="prose" id="homeo-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ebb">
+  <h2 id="h-ebb">Ebb and flow: the phases after injury</h2>
+  <div class="sliders" id="ebb-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="ebb-svg" viewBox="0 0 560 270" role="img" aria-label="Schematic curves after injury against a dashed baseline: metabolic rate (solid) falls in the ebb phase and rises in the flow phase; catabolism rises and nitrogen balance is negative in the flow phase; a marker shows the chosen time"></svg></div>
+    <div class="prose find" id="ebb-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="ebb-key"></div>
+  <p class="muted" id="ebb-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-med">
+  <h2 id="h-med">Mediators: a cascade from injury to the liver</h2>
+  <div class="step" id="med-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="med-svg" viewBox="0 0 560 330" role="img" aria-label="Schematic cascade: injury, immune cells and cytokines, hypothalamus and pituitary, adrenal medulla and cortex, pancreas, posterior pituitary, kidney, liver; the current step is highlighted"></svg></div>
+    <div class="prose find" id="med-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="med-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-meta">
+  <h2 id="h-meta">Metabolic changes: where the fuel comes from</h2>
+  <div class="chips" id="meta-tg" aria-label="Change"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="meta-svg" viewBox="0 0 560 280" role="img" aria-label="Schematic: muscle releases amino acids by proteolysis, fat releases fatty acids by lipolysis, the liver releases glucose by glycogenolysis and gluconeogenesis into the plasma, tissues are insulin resistant, the kidney retains water and sodium"></svg></div>
+    <div class="prose find" id="meta-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="meta-key"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fac">
+  <h2 id="h-fac">Factors that change the size of the response</h2>
+  <div class="chips" id="fac-tg" aria-label="Factor"></div>
+  <div class="prose find" id="fac-find" aria-live="polite"></div>
+  <div class="scroll"><table id="fac-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-eras">
+  <h2 id="h-eras">Perioperative care: enhanced recovery after surgery (ERAS)</h2>
+  <div class="step" id="eras-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="eras-svg" viewBox="0 0 560 200" role="img" aria-label="Schematic ERAS pathway as a timeline: before, during and after surgery, with audit throughout; the chosen phase is highlighted"></svg></div>
+    <div class="prose find" id="eras-find" aria-live="polite"></div>
+  </div>
+  <div class="prose" id="eras-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BMetabolic%20Response%20to%20Injury%20and%20Perioperative%20Care%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fsurgery%2Fgeneral%2Fmetabolic-response.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/surg.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-s01.md, Part A; surgery/DATA-SOURCES.md) ===================== */
+const LEDE = 'Injury and surgery set off a stress response. Drag through the <b>ebb and flow</b> phases, step through the <b>hormones and cytokines</b> from the injury to the liver, see where the extra fuel comes from, compare what makes the response bigger or smaller, and walk through an <b>ERAS</b> pathway. Shock itself: <a href="shock.html">Shock</a>.';
+
+const HOMEO_TEXT = '<p><b>Homeostasis</b> is the body\'s keeping of its internal environment steady by feedback; the feedback loop is drawn on the physiology page (<a href="../../physiology/general/cell-transport-fluids.html#h-homeo">Homeostasis and feedback</a>; body fluid compartments: <a href="../../physiology/general/cell-transport-fluids.html#h-fluid">60–40–20 rule</a>). Any physical or psychological stimulus that disrupts homeostasis produces a <b>stress response</b>, run by nervous, endocrine and immune mechanisms: the <b>sympathetic–adrenal-medullary (SAM) axis</b>, the <b>hypothalamic–pituitary–adrenal (HPA) axis</b> and the immune system (StatPearls; a 2025 review).</p><p>After trauma or surgery the response is <b>adaptive</b> — it helps limit further tissue damage and has feedback loops that favour homeostasis — but when it is intense or prolonged it becomes <b>harmful</b>, and it can produce a systemic inflammatory response with hypermetabolism and hypercatabolism (StatPearls; a 2025 review; a 2024 review).</p>';
+
+/* ebb–flow: phase boundaries on a schematic 0–100 axis (no time scale: sources disagree on timing) */
+const EBB_END = 22, FLOW_END = 78;
+const EBB_PH = {
+  ebb: '<h3>Ebb phase (early)</h3><p><b>Hypometabolic</b> and hypodynamic: metabolic rate, oxygen consumption, body temperature and enzyme activity fall (a 2019 review); cardiac function and tissue perfusion are down-regulated, with glucose intolerance (a 2020 review). The body is trying to maintain homeostasis (a 2024 review).</p><p class="muted">How long? "The first hours" (2024 review); "short … immediately after" the injury (2019 review); from about 2 h to 2–3 days (2020 review, describing Cuthbertson).</p>',
+  flow: '<h3>Flow phase (late)</h3><p><b>Hypermetabolic and hypercatabolic</b>: oxygen consumption and resting energy expenditure rise, catabolism increases (a 2019 review; a 2024 review), with higher blood glucose and <b>muscle wasting</b> (a 2020 review). Protein, fat and carbohydrate are broken down (a 2025 review; Wikipedia), insulin resistance appears, and nitrogen balance is <b>negative</b> — more nitrogen lost than taken in, i.e. overall protein catabolism (a 2025 review; Wikipedia).</p><p class="muted">Lasts "days and weeks" (2020 review); "longer" than the ebb (2019 review).</p>',
+  rec: '<h3>Recovery</h3><p>A 2024 review describes a third, <b>recovery</b> phase after the flow phase; our sources do not describe its metabolism, so the curves are shown dotted here. The ebb and flow phases are now also called the <b>early</b> and <b>late</b> periods (the same 2024 review).</p>',
+};
+const EBB_NOTE = 'Described by David Cuthbertson in trauma patients (a 2020 review; a 2019 review). Schematic: the curves show direction only (up, down, negative) relative to the dashed baseline, with no units and no time scale. Dotted parts are not described by our sources; catabolism and nitrogen balance are drawn only for the flow phase, where our sources describe them.';
+
+/* mediator cascade steps: [label, highlighted nodes, highlighted arrows, text] */
+const MED = [
+  ['Injury', ['inj'], [], '<h3>1. Injury or surgery</h3><p>Tissue injury starts the response. Its size follows the <b>magnitude, invasiveness and duration</b> of surgery (a 2024 review); catecholamine release rises in proportion to the extent of the operation (a 2025 review).</p>'],
+  ['Cytokines', ['inj', 'imm'], ['a-ii'], '<h3>2. Cytokines: IL-1, IL-6, TNF-α</h3><p>Local inflammatory cells (neutrophils, macrophages) release cytokines, notably <b>IL-1, IL-6 and TNF-α</b> (Wikipedia); a surge of these pro-inflammatory cytokines follows within hours of surgical injury (a 2025 review; a 2020 review). TNF also causes fever and activates white cells, and IL-6 mediates fever (Wikipedia).</p>'],
+  ['HPA axis: cortisol ↑', ['imm', 'hyp', 'ctx'], ['a-ih', 'a-hc'], '<h3>3. HPA axis → cortisol ↑</h3><p>The cytokines stimulate the <b>hypothalamic–pituitary–adrenal axis</b>, releasing cortisol and catecholamines (a 2020 review; Wikipedia "Cortisol" describes the same IL-1/IL-6/TNF loop). <b>Cortisol rises</b> in response to stress (Wikipedia; a 2024 review, which says secretion increases immediately after surgery and peaks at 4–6 h).</p>'],
+  ['SAM axis: catecholamines ↑', ['inj', 'med'], ['a-im'], '<h3>4. Sympathetic–adrenal axis → catecholamines ↑</h3><p>Sympathetic activation makes the adrenal medulla release <b>adrenaline and noradrenaline</b>, causing hypertension and tachycardia (a 2024 review). Release rises with the extent and invasiveness of surgery (a 2025 review); high blood catecholamines go with stress (Wikipedia).</p>'],
+  ['Pancreas: glucagon ↑, insulin ↓', ['pan'], [], '<h3>5. Pancreas → glucagon ↑, insulin ↓</h3><p><b>Glucagon secretion increases</b> (glycogenolysis and hepatic gluconeogenesis) and <b>insulin secretion decreases</b>, together raising blood glucose after surgery (a 2024 review). Glucagon is elevated under stress (Wikipedia).</p>'],
+  ['ADH and aldosterone: water and Na⁺ kept', ['pp', 'kid', 'ctx'], ['a-hp', 'a-kc'], '<h3>6. ADH and the renin–aldosterone system → water and sodium retained</h3><p><b>ADH (vasopressin)</b> is raised during and early after surgery and enhances <b>water retention</b> (a 2025 review); a low arterial blood volume stimulates its release (Wikipedia). Low renal blood flow raises <b>renin</b>, which drives <b>aldosterone</b> from the adrenal cortex (a 2024 review); aldosterone causes <b>sodium and water retention</b> (Wikipedia). Cascade detail: <a href="../../physiology/cvs/haemodynamics-bp-regulation.html#h-local">RAAS stepper</a>.</p>'],
+  ['Liver: acute-phase proteins', ['imm', 'liv'], ['a-il'], '<h3>7. Liver → acute-phase proteins</h3><p><b>IL-6</b> is the main cytokine that makes the liver produce acute-phase reactants; IL-1, TNF-α and IFN-γ can too (StatPearls; Wikipedia "Interleukin 6"). <b>Positive</b> acute-phase proteins rise — <b>CRP</b>, fibrinogen, α2-macroglobulin; <b>negative</b> ones fall — <b>albumin</b>, transferrin (a 2024 review; StatPearls; 2011 and 2021 reviews). CRP can rise 20- to 1000-fold (Wikipedia).</p>'],
+  ['Growth hormone?', ['hyp'], [], '<h3>8. Growth hormone: sources differ</h3><p><b>A disagreement:</b> a 2025 review lists a "transient elevation" of GH around surgery, varying with the stress and the anaesthetic; a 2011 review on the acute-phase reaction says GH secretion is <b>reduced</b>. Wikipedia says only that stress affects GH secretion. So no single direction is given here.</p>'],
+];
+const MED_TABLE = [
+  ['Catecholamines', '↑', 'Adrenal medulla (SAM axis)', 'Tachycardia, hypertension'],
+  ['Cortisol', '↑', 'Adrenal cortex (HPA axis)', 'Mobilises energy; opposes insulin (Wikipedia)'],
+  ['Glucagon', '↑', 'Pancreas', 'Glycogenolysis, gluconeogenesis'],
+  ['Insulin', '↓ (2024 review)', 'Pancreas', 'With insulin resistance: hyperglycaemia'],
+  ['ADH', '↑', 'Posterior pituitary', 'Water retention'],
+  ['Aldosterone (via renin)', '↑', 'Adrenal cortex', 'Sodium and water retention'],
+  ['Growth hormone', 'sources differ', 'Anterior pituitary', '—'],
+  ['IL-1, IL-6, TNF-α', '↑ within hours', 'Immune cells', 'Fever (Wikipedia); HPA axis; acute-phase proteins (IL-6 main)'],
+  ['CRP, fibrinogen', '↑', 'Liver', 'Positive acute-phase proteins'],
+  ['Albumin, transferrin', '↓', 'Liver', 'Negative acute-phase proteins'],
+];
+
+/* metabolic changes: [key, label, highlighted nodes, text] */
+const META = [
+  ['glu', 'Hyperglycaemia', ['liv', 'blood', 'tis'], '<h3>Hyperglycaemia and insulin resistance</h3><p><b>Stress hyperglycaemia</b> ("diabetes of injury") is a transient rise in blood glucose due to the stress of illness (Wikipedia). Glycogenolysis and gluconeogenesis supply glucose to vital organs (a 2025 review), and the stress response causes <b>insulin resistance</b> (ERAS Society emergency laparotomy 2023; a 2025 review: hormonal and cytokine signalling). Cortisol opposes insulin, increasing hepatic gluconeogenesis and reducing peripheral glucose use (Wikipedia).</p>'],
+  ['pro', 'Proteolysis', ['mus', 'blood'], '<h3>Proteolysis and negative nitrogen balance</h3><p>Muscle protein is broken down; proteolysis provides <b>amino acids</b> as substrates (a 2025 review). The result is <b>negative nitrogen balance</b>, muscle catabolism and weight loss during a long recovery (a 2025 review; Wikipedia: negative nitrogen balance goes with serious tissue injury and means overall protein catabolism).</p>'],
+  ['lip', 'Lipolysis', ['fat', 'blood'], '<h3>Lipolysis</h3><p>Lipolysis provides <b>fatty acids</b> as substrates for energy and repair (a 2025 review); hypermetabolism includes increased breakdown of triglycerides (Wikipedia). Catecholamines stimulate lipolysis in fat cells (Wikipedia).</p>'],
+  ['wat', 'Water and sodium', ['kid'], '<h3>Water and sodium retention</h3><p><b>ADH</b> enhances water retention (a 2025 review: also hyponatraemia and oedema as consequences) and <b>aldosterone</b> retains sodium and water, increasing blood volume (Wikipedia; a 2024 review on the renin–aldosterone rise).</p>'],
+];
+
+/* modifying factors: [key, label, direction, text] */
+const FAC = [
+  ['size', 'Bigger, longer operation', 'larger', '<h3>Magnitude, invasiveness, duration</h3><p>The response is influenced by the <b>magnitude, invasiveness and duration</b> of surgery (a 2024 review); catecholamine release increases in proportion to the extent and invasiveness, with longer or more complex operations giving a stronger response (a 2025 review).</p>'],
+  ['mis', 'Minimally invasive surgery', 'smaller', '<h3>Laparoscopic or robotic surgery</h3><p>Less tissue damage and manipulation restrain the stress response (a 2024 review); open procedures generally produce a greater response than laparoscopic or robotic ones (a 2020 review). In colorectal surgery laparoscopy gave lower IL-6, IL-1β, CRP and TNF (a 2024 review).</p>'],
+  ['rega', 'Regional (neuraxial) anaesthesia', 'smaller', '<h3>Central neural blockade, epidural</h3><p>Inhibition of the stress response is greatest with <b>central neural blockade</b> and minimally invasive surgery; epidural with general anaesthesia reduced the rise in cortisol and urinary adrenaline (a 2024 review). Thoracic epidural analgesia can modify the stress response (ERAS Society liver surgery 2022).</p>'],
+  ['post', 'Short fasting, early feeding, mobilisation', 'smaller', '<h3>Perioperative measures</h3><p>Multimodal analgesia, early mobilisation and early enteral nutrition decrease the stress response (a 2024 review). To prevent stress-related catabolism, the ESPEN 2021 surgical nutrition guideline recommends short preoperative fasting with oral carbohydrate and early enteral nutrition (as cited in the 2024 review). Carbohydrate loading improves insulin resistance (ERAS Society liver surgery 2022). See ERAS below.</p>'],
+  ['pt', 'Patient factors', 'larger', '<h3>Patient factors</h3><p>Cancer, obesity, metabolic syndrome, diabetes and sarcopenia contribute to a hyperinflammatory state and insulin resistance (a 2024 review, one source).</p>'],
+  ['burn', 'Severe burns', 'largest', '<h3>Severe burns</h3><p>The stress response to severe burns is "unrivaled" in magnitude and duration; polytrauma and sepsis also cause hypermetabolism, but less and for a shorter time (a 2016 review, one source). Burns are a later module.</p>'],
+];
+
+/* ERAS phases: [label, highlighted phase, text] */
+const ERAS = [
+  ['Before surgery', 'pre', '<h3>Before surgery</h3><ul><li><b>Patient and family education</b> before surgery where possible (ERAS Society emergency laparotomy 2021; StatPearls).</li><li><b>Avoid long fasting; carbohydrate loading</b>: a carbohydrate drink the evening before and a few hours before surgery keeps the patient hydrated and reduces insulin resistance (ERAS Society liver 2022; StatPearls lists carbohydrate loading among common ERAS interventions). <b>Not recommended in emergency laparotomy</b> (ERAS Society 2021).</li></ul>'],
+  ['During surgery', 'intra', '<h3>During surgery</h3><ul><li><b>Fluids</b>: goal-directed fluid therapy targets cardiac output and end-organ perfusion (ERAS Society liver 2022; StatPearls); balanced crystalloid preferred over 0.9% saline or colloid as maintenance (liver 2022).</li><li><b>Normothermia</b>: active warming, warmed fluids; hypothermia increases bleeding, wound infection and cardiac morbidity (ERAS Society liver 2022; emergency laparotomy 2023).</li><li><b>Multimodal, opioid-sparing analgesia</b> (liver 2022; emergency laparotomy 2023) and multimodal <b>PONV prophylaxis</b> (both).</li><li>Minimally invasive surgery where possible (emergency laparotomy 2023; see factors above).</li></ul>'],
+  ['After surgery', 'post', '<h3>After surgery</h3><ul><li><b>No routine nasogastric tube</b> (ERAS Society liver 2022).</li><li><b>Early oral intake</b> (liver 2022; emergency laparotomy 2023: early feeding may benefit even in emergencies).</li><li><b>Early mobilisation</b>, from the day of operation (liver 2022; emergency laparotomy 2023; StatPearls).</li></ul>'],
+  ['Audit', 'all', '<h3>Throughout: audit</h3><p>Regular <b>audit and feedback</b> of outcomes and of compliance with the ERAS programme (ERAS Society liver 2022).</p>'],
+];
+const ERAS_TEXT = '<p><b>ERAS</b> pathways are multidisciplinary, multiphase bundles of practices that aim to improve outcomes after major surgery (StatPearls); the idea began with the Danish colorectal surgeon Henrik Kehlet in the 1990s (StatPearls). Guidelines named here: <b>ERAS Society recommendations for liver surgery 2022</b> (World J Surg 2023) and <b>ERAS Society emergency laparotomy</b> recommendations, Part 1 (2021) and Part 2 (2023).</p><p class="muted">Principles only: the guidelines\' fasting times, drug choices and doses are not reproduced here.</p>';
+
+const BASED = '<b>Based on:</b> StatPearls (NCBI Bookshelf; abstracts); ERAS Society recommendations for liver surgery (2022) and emergency laparotomy (2021, 2023); open-access reviews on the surgical stress response and anaesthesia (2024), the endocrine, immune and metabolic surgical stress response (2025), the trauma of major surgery (2020), indirect calorimetry (2019), the metabolic stress response to burns (2016) and acute-phase proteins (2011, 2021) (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> the ebb–flow curves, mediator cascade, fuel diagram and ERAS timeline are schematic drawings: directions only, no units or time scale.';
+
+/* ===================== CODE ===================== */
+const S = Surg, {$, T} = S;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+$('homeo-text').innerHTML = HOMEO_TEXT;
+
+/* ---- ebb and flow ---- */
+const EB = {t: 10};
+function ebbCurves() {
+  /* schematic shapes on u = 0..100 */
+  const B = 0.45, rise = t => Math.sin(Math.PI * t * 0.85), endF = B + 0.32 * rise(1);
+  const met = u => u < EBB_END ? B - 0.25 * Math.sin(Math.PI * u / EBB_END) : u < FLOW_END ? B + 0.32 * rise((u - EBB_END) / (FLOW_END - EBB_END)) : B + (endF - B) * Math.exp(-(u - FLOW_END) / 6);
+  const cat = u => u < EBB_END ? B : u < FLOW_END ? B + 0.18 * rise((u - EBB_END) / (FLOW_END - EBB_END)) : B + 0.18 * rise(1) * Math.exp(-(u - FLOW_END) / 6);
+  const nb = u => u < EBB_END ? 0 : u < FLOW_END ? -0.6 * Math.sin(Math.PI * (u - EBB_END) / (FLOW_END - EBB_END) * 0.8 + 0.2) : -0.6 * Math.sin(Math.PI * 0.8 + 0.2) * Math.exp(-(u - FLOW_END) / 8);
+  return {met, cat, nb, B};
+}
+function drawEbb() {
+  const x0 = 50, x1 = 540, X = S.scale(0, 100, x0, x1);
+  const Ya = S.scale(0, 1, 120, 20), Yb = S.scale(-0.7, 0.2, 240, 160);
+  const {met, cat, nb, B} = ebbCurves(), u0 = EB.t;
+  const ph = u0 < EBB_END ? 'ebb' : u0 < FLOW_END ? 'flow' : 'rec';
+  let s = '';
+  for (const [k, a, b, lab] of [['ebb', 0, EBB_END, 'EBB'], ['flow', EBB_END, FLOW_END, 'FLOW'], ['rec', FLOW_END, 100, 'RECOVERY']]) s += `<rect x="${X(a)}" y="14" width="${X(b) - X(a)}" height="232" class="${k === ph ? 'phon' : 'ph'}"/>` + T((X(a) + X(b)) / 2, 262, lab, 'h', 'middle');
+  s += `<path class="axis" d="M${x0} 14 L${x0} 246"/>` + T(x0 - 4, 24, '↑', 's', 'end') + T(x0 - 4, 118, '↓', 's', 'end');
+  s += `<path class="grid dash" d="M${x0} ${Yb(0)} L${x1} ${Yb(0)}"/>` + T(x0 - 4, Yb(0) + 4, '0', 's', 'end');
+  s += T(x0 + 4, 12, 'injury', 's', 'start') + `<path class="grid dash" d="M${x0} ${Ya(B)} L${x1} ${Ya(B)}"/>` + T(x0 - 4, Ya(B) + 4, 'baseline', 's', 'end');
+  const seg = (f, Y, a, b, st) => { const pts = []; for (let u = a; u <= b + 0.01; u += 1) pts.push([X(u), Y(f(u))]); return `<path d="${S.path(pts)}" style="fill:none;stroke-width:2.4;stroke-linejoin:round;${st}"/>`; };
+  const inkS = 'stroke:var(--ink)', musS = 'stroke:var(--muted);stroke-dasharray:8 4', nbS = 'stroke:var(--ink);stroke-dasharray:10 3 2 3';
+  s += seg(met, Ya, 0, FLOW_END, inkS) + seg(met, Ya, FLOW_END, 100, inkS + ';stroke-dasharray:2 4;opacity:.6');
+  s += seg(cat, Ya, EBB_END, FLOW_END, musS) + seg(cat, Ya, FLOW_END, 100, musS + ';stroke-dasharray:2 4;opacity:.6');
+  s += seg(nb, Yb, EBB_END, FLOW_END, nbS) + seg(nb, Yb, FLOW_END, 100, 'stroke:var(--muted);stroke-dasharray:2 4;opacity:.6');
+  s += `<path d="M${X(u0)} 14 L${X(u0)} 246" style="stroke:var(--mark);stroke-width:2"/><circle cx="${X(u0)}" cy="${Ya(met(u0))}" r="5" style="fill:var(--mark)"/>`;
+  /* the curves are named in the key below (on-curve labels collided with the moving marker) */
+  $('ebb-svg').innerHTML = s; $('ebb-find').innerHTML = EBB_PH[ph];
+}
+S.slider('ebb-sl', {id: 'ebb', label: 'Time after injury (schematic, no scale)', min: 0, max: 100, step: 1, value: EB.t, fmt: v => v < EBB_END ? 'ebb phase' : v < FLOW_END ? 'flow phase' : 'recovery'}, v => { EB.t = v; drawEbb(); }).init();
+S.key('ebb-key', [['--ink', 'metabolic rate, O₂ consumption (solid)', 'height:3px;border:0'], ['--muted', 'catabolism: protein, fat, carbohydrate breakdown (dashed)', 'background:repeating-linear-gradient(90deg,var(--muted) 0 6px,transparent 6px 9px);height:3px;border:0'], ['--ink', 'nitrogen balance, below 0 = negative (dash-dot)', 'background:repeating-linear-gradient(90deg,var(--ink) 0 7px,transparent 7px 9px,var(--ink) 9px 11px,transparent 11px 13px);height:3px;border:0'], ['--mark', 'chosen time']]);
+$('ebb-note').textContent = EBB_NOTE; drawEbb();
+
+/* ---- mediator cascade ---- */
+const MS = {s: 0};
+const MNODE = {inj: [20, 180, 110, 'Injury', 'surgery, trauma'], imm: [20, 262, 110, 'Immune cells', 'IL-1, IL-6, TNF-α'], hyp: [200, 20, 150, 'Hypothalamus', '+ anterior pituitary'],
+  pp: [390, 20, 150, 'Posterior pituitary', 'ADH ↑'], ctx: [200, 100, 150, 'Adrenal cortex', 'cortisol ↑, aldosterone ↑'], med: [200, 180, 150, 'Adrenal medulla', 'catecholamines ↑'],
+  liv: [200, 262, 150, 'Liver', 'acute-phase proteins'], kid: [390, 100, 150, 'Kidney', 'renin ↑'], pan: [390, 180, 150, 'Pancreas', 'glucagon ↑, insulin ↓']};
+const MARR = {'a-ii': 'M75 224 L75 260', 'a-ih': 'M20 284 L8 284 L8 36 L198 36', 'a-hc': 'M275 64 L275 98', 'a-im': 'M130 202 L198 202',
+  'a-hp': 'M350 42 L388 42', 'a-kc': 'M390 122 L352 122', 'a-il': 'M130 284 L198 284'};
+function drawMed() {
+  const [, nodes, arrs, txt] = MED[MS.s], on = new Set(nodes), ao = new Set(arrs);
+  let s = S.arrowDef('am', 'var(--muted)') + S.arrowDef('amo', 'var(--ink)');
+  for (const [k, d] of Object.entries(MARR)) s += `<path d="${d}" class="${ao.has(k) ? 'aron' : 'ar'}" marker-end="url(#${ao.has(k) ? 'amo' : 'am'})"/>`;
+  for (const [k, [x, y, w, a, b]] of Object.entries(MNODE)) {
+    s += `<rect x="${x}" y="${y}" width="${w}" height="44" rx="8" class="${on.has(k) ? 'nodeon' : 'node'}"/>` + T(x + w / 2, y + 19, a, 'b', 'middle') + T(x + w / 2, y + 35, k === 'hyp' && MS.s === 7 ? 'GH: sources differ' : b, 's', 'middle');
+  }
+  $('med-svg').innerHTML = s; $('med-find').innerHTML = txt;
+}
+S.stepper('med-step', MED.map(r => r[0]), drawMed, MS);
+S.table('med-table', ['Mediator', 'Change after injury', 'Source organ', 'Main effect'], MED_TABLE);
+
+/* ---- metabolic changes ---- */
+function drawMeta(k) {
+  const r = META.find(x => x[0] === k), on = new Set(r[2]);
+  const cl = n => on.has(n) ? '' : ' dim';
+  let s = S.arrowDef('ax', 'var(--ink)');
+  const box = (n, x, y, w, h, cls, a, b) => `<g class="${cl(n).trim()}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" class="${cls}"/>` + T(x + w / 2, y + h / 2 - 2, a, 'b', 'middle') + b.split('|').map((t, i) => T(x + w / 2, y + h / 2 + 14 + i * 14, t, 's', 'middle')).join('') + '</g>';
+  s += box('mus', 20, 20, 150, 60, 'musc', 'Muscle', 'proteolysis');
+  s += box('fat', 20, 110, 150, 60, 'fat', 'Fat', 'lipolysis');
+  s += box('liv', 20, 196, 150, 72, 'node', 'Liver', 'glycogenolysis,|gluconeogenesis');
+  s += `<g class="${cl('blood').trim()}"><rect x="240" y="20" width="120" height="240" rx="12" style="fill:var(--fluid);stroke:var(--muted)"/>` + T(300, 40, 'Plasma', 'b', 'middle') + T(300, 82, 'amino acids', 'l', 'middle') + T(300, 142, 'fatty acids', 'l', 'middle') + T(300, 232, 'glucose ↑', 'l b', 'middle') + '</g>';
+  s += box('tis', 410, 40, 130, 70, 'node', 'Tissues', 'insulin resistant');
+  s += box('kid', 410, 170, 130, 70, 'wat', 'Kidney', 'H₂O, Na⁺ retained');
+  const ar = (n, d) => `<path d="${d}" class="${on.has(n) ? 'aron' : 'ar'}" marker-end="url(#ax)" style="${on.has(n) ? '' : 'opacity:.3'}"/>`;
+  s += ar('mus', 'M170 50 L238 78') + ar('fat', 'M170 140 L238 138') + ar('liv', 'M170 230 L238 228') + ar('tis', 'M362 100 L408 80');
+  s += T(470, 270, 'ADH, aldosterone', 's', 'middle');
+  $('meta-svg').innerHTML = s; $('meta-find').innerHTML = r[3];
+}
+S.toggles('meta-tg', META.map(r => [r[0], r[1]]), drawMeta, 'glu'); drawMeta('glu');
+S.key('meta-key', [['--musc', 'muscle'], ['--fat', 'fat (lipid)'], ['--fluid', 'body fluids: plasma, body water (kidney retains it)']]);
+
+/* ---- factors ---- */
+S.toggles('fac-tg', FAC.map(r => [r[0], r[1]]), k => { $('fac-find').innerHTML = FAC.find(r => r[0] === k)[3]; }, 'size');
+$('fac-find').innerHTML = FAC[0][3];
+S.table('fac-table', ['Factor', 'Response'], FAC.map(r => [r[1], r[2]]));
+
+/* ---- ERAS ---- */
+const ES = {s: 0};
+function drawEras() {
+  const [, ph, txt] = ERAS[ES.s];
+  let s = S.arrowDef('ae', 'var(--ink)');
+  const blocks = [['pre', 20, 'Before', ['education', 'carbohydrate drink']], ['intra', 200, 'During', ['goal-directed fluid', 'normothermia', 'multimodal analgesia']], ['post', 380, 'After', ['no routine NG tube', 'early oral intake', 'early mobilisation']]];
+  for (const [k, x, lab, items] of blocks) {
+    const hl = ph === k || ph === 'all';
+    s += `<rect x="${x}" y="30" width="160" height="120" rx="10" class="${hl ? 'nodeon' : 'node'}"/>` + T(x + 80, 52, lab, 'b', 'middle');
+    items.forEach((t, i) => { s += T(x + 80, 78 + i * 20, t, 's', 'middle'); });
+  }
+  s += `<path d="M20 176 L540 176" style="stroke:var(--${ph === 'all' ? 'accent' : 'muted'});stroke-width:${ph === 'all' ? 3 : 1.5}" marker-end="url(#ae)"/>` + T(280, 194, 'audit and feedback throughout', 's', 'middle');
+  s += `<rect x="186" y="10" width="8" height="150" style="fill:var(--ink);fill-opacity:.25"/>` + T(190, 22, 'operation', 's', 'middle');
+  $('eras-svg').innerHTML = s; $('eras-find').innerHTML = txt;
+}
+S.stepper('eras-step', ERAS.map(r => r[0]), drawEras, ES);
+$('eras-text').innerHTML = ERAS_TEXT;
+S.swipeHints();
+</script>
+</body>
+</html>

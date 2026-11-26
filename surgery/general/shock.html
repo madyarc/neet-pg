@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/surg.css">
+<style>
+/* tokens from surg.css with their site meanings: --rbc (blood: the blood-volume bar and blood products), --fluid (crystalloid / plasma),
+   --artery (arterial pressure on the target gauge), --platelet (platelets; physiology value), --accent (selection), --clin (a warning: high shock-index bands).
+   Markers for guideline bounds and the calculated shock index are ink. */
+svg.sch .node{fill:var(--surface);stroke:var(--muted);stroke-width:1.2}
+svg.sch .nodeon{fill:var(--surface);stroke:var(--accent);stroke-width:2.6}
+svg.sch .ar{stroke:var(--muted);stroke-width:1.4;fill:none}
+svg.sch .aron{stroke:var(--ink);stroke-width:2.4;fill:none}
+.vrow{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+table.t td.on,table.t th.on{background:color-mix(in srgb,var(--accent) 14%,transparent)}
+table.atls td{font-family:var(--f-mono);font-size:13px} table.atls td:first-child{font-family:var(--f-body)}
+.chk{display:flex;flex-direction:column;gap:6px;font-size:14px}
+.chk label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+.chk input{accent-color:var(--accent);margin-top:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← General Surgery</a> <span class="muted">· Module 01: <a href="metabolic-response.html">Metabolic response to injury</a> · <span aria-current="page">Shock</span></span></nav>
+
+<header class="stack">
+  <h1>Shock: Pathophysiology, Types and Resuscitation</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-cell">Definition and cells</a> <a href="#h-type">Types and profiles</a> <a href="#h-clin">Clinical features</a> <a href="#h-atls">ATLS classes</a> <a href="#h-si">Shock index</a> <a href="#h-res">Resuscitation</a> <a href="#h-end">Endpoints</a> <a href="#h-sep">Septic shock (Sepsis-3)</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-cell">
+  <h2 id="h-cell">Definition, and what happens in the cells</h2>
+  <div class="prose" id="def-text"></div>
+  <div class="step" id="cell-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="cell-svg" viewBox="0 0 560 220" role="img" aria-label="Schematic chain: oxygen delivery falls, cells switch to anaerobic glycolysis, lactate accumulates, cells die and organs fail; the current step is highlighted"></svg></div>
+    <div class="prose find" id="cell-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-type">
+  <h2 id="h-type">Types of shock and their haemodynamic profiles</h2>
+  <div class="chips" id="ty-tg" aria-label="Type of shock"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="ty-svg" viewBox="0 0 380 230" role="img" aria-label="Arrows for cardiac output, systemic vascular resistance and filling pressure in the chosen type of shock; not given where our sources do not state it"></svg></div>
+    <div class="prose find" id="ty-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="ty-table"></table></div>
+  <div class="prose" id="ty-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-clin">
+  <h2 id="h-clin">Clinical features: the three windows</h2>
+  <div class="prose" id="clin-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-atls">
+  <h2 id="h-atls">ATLS classes of haemorrhage: drag the blood loss</h2>
+  <div class="sliders" id="atls-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="atls-svg" viewBox="0 0 380 120" role="img" aria-label="Bar of circulating blood volume with the lost fraction marked and the four ATLS class bands"></svg></div>
+    <div class="prose" id="atls-out" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="atls-table" class="atls"></table></div>
+  <div class="prose" id="atls-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-si">
+  <h2 id="h-si">Shock index calculator</h2>
+  <div class="chips" id="si-tg" aria-label="Example"></div>
+  <div class="sliders" id="si-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="si-svg" viewBox="0 0 380 110" role="img" aria-label="Shock index scale from 0.3 to 1.6 with the sourced ranges and the calculated value marked"></svg></div>
+    <div class="prose" id="si-out" aria-live="polite"></div>
+  </div>
+  <p class="muted" id="si-note"></p>
+</section>
+
+<section class="block panel" aria-labelledby="h-res">
+  <h2 id="h-res">Resuscitation principles</h2>
+  <div class="chips" id="res-tg" aria-label="Situation"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="res-svg" viewBox="0 0 380 150" role="img" aria-label="Blood-pressure gauge with the guideline target for the chosen situation"></svg></div>
+    <div class="prose find" id="res-find" aria-live="polite"></div>
+  </div>
+  <h3>Massive transfusion: products in the first packs</h3>
+  <div class="chips" id="mt-tg" aria-label="Strategy"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="mt-svg" viewBox="0 0 380 110" role="img" aria-label="Blood-product bags in the chosen ratio"></svg></div>
+    <div class="prose" id="mt-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="fl-table"></table></div>
+  <div class="prose" id="res-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-end">
+  <h2 id="h-end">Endpoints and monitoring of resuscitation</h2>
+  <div class="scroll"><table id="end-table"></table></div>
+  <div class="prose" id="end-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-sep">
+  <h2 id="h-sep">Septic shock: Sepsis-3 (2016) and the Surviving Sepsis Campaign (2021)</h2>
+  <div class="cls">
+    <div class="q"><h3>qSOFA (Sepsis-3 2016): tick what is present</h3><div class="chk" id="qs-chk"></div><div class="ans" id="qs-out" aria-live="polite"></div></div>
+    <div class="q"><h3>Septic shock criteria (Sepsis-3 2016)</h3><div class="chk" id="ss-chk"></div><div class="ans" id="ss-out" aria-live="polite"></div></div>
+  </div>
+  <div class="prose" id="sep-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BShock%3A%20Pathophysiology%2C%20Types%20and%20Resuscitation%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fsurgery%2Fgeneral%2Fshock.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/surg.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-s01.md, Part B; surgery/DATA-SOURCES.md) ===================== */
+const LEDE = 'Step from falling oxygen delivery to lactate, compare the haemodynamics of each type of shock, drag the blood loss across the <b>ATLS classes</b>, calculate a <b>shock index</b>, choose a pressure target by situation from the <b>European trauma guideline 2023</b> and the <b>Surviving Sepsis Campaign 2021</b>, and test the <b>Sepsis-3</b> criteria. The physiology behind it: <a href="../../physiology/cvs/haemodynamics-bp-regulation.html#h-shock">Haemodynamics and shock</a>, <a href="../../physiology/cvs/haemodynamics-bp-regulation.html#h-starling">Starling forces</a>, <a href="../../physiology/general/cell-transport-fluids.html#h-fluid">body fluids</a>; cardiogenic shock after MI: <a href="../../medicine/cardiology/ihd-acs.html#h-cx">MI complications</a>. The stress response: <a href="metabolic-response.html">Metabolic response to injury</a>.';
+
+const DEF_TEXT = '<p><b>Shock</b> is a life-threatening, generalised form of <b>acute circulatory failure</b> with inadequate oxygen use by the cells (ESICM consensus 2014; StatPearls: a manifestation of circulatory failure; Wikipedia: insufficient blood flow to the tissues). It causes cellular and tissue <b>hypoxia</b>, cell death and organ dysfunction; its effects are <b>reversible early</b> but delay leads to irreversible multi-organ failure and death (StatPearls).</p>';
+/* cellular steps: [label, highlighted boxes, text] */
+const CELL = [
+  ['O₂ delivery falls', ['o2'], '<h3>1. Oxygen delivery falls</h3><p>When oxygen delivery is insufficient, tissue hypoxia develops (a 2021 review; StatPearls: circulatory shock leads to cellular and tissue hypoxia). In haemorrhage, cells first extract more O₂, so a patient can look stable although up to about 30% of blood volume is lost (<b>compensated</b> shock; a 2021 review).</p>'],
+  ['Anaerobic glycolysis', ['o2', 'ana'], '<h3>2. Cells switch to anaerobic metabolism</h3><p>Cells switch from aerobic to <b>anaerobic metabolism</b> (Wikipedia; a 2021 review); in hypovolaemic shock lactate is made mainly by anaerobic glycolysis, so it is an indirect marker of cellular hypoxia (European guideline 2023).</p>'],
+  ['Lactate ↑', ['ana', 'lac'], '<h3>3. Lactate accumulates: lactic acidosis</h3><p>Lactic acidosis occurs when lactate production exceeds clearance (StatPearls); lactate is typically <b>above 2 mmol/L</b> in shock (ESICM 2014). <b>Not only hypoxia:</b> lactate also rises with excess aerobic glycolysis (shivering, seizures, hyperventilation) or decreased use (liver failure) (a 2012 review on shock), after adrenaline, and with poor clearance in liver dysfunction and sepsis (a 2013 review on lactate).</p>'],
+  ['Cell death, organ failure', ['lac', 'org'], '<h3>4. Decompensation and organ failure</h3><p>Without resuscitation, ongoing haemorrhage progresses to <b>decompensated</b> shock and then <b>refractory</b> shock with haemodynamic collapse (a 2021 review); Wikipedia names four stages — initial, compensatory, progressive and refractory — and stresses that there is no sudden transition between them. Hypoxia leads to cell death and dysfunction of vital organs (StatPearls).</p>'],
+];
+
+/* types: [key, name, causes, CO, SVR, filling, profile note, text]; arrows 1 up, -1 down, 0 'decreased or normal', null not given */
+const TYPES = [
+  ['hypo', 'Hypovolaemic', 'Blood loss (trauma, childbirth, internal bleeding); fluid loss (vomiting, diarrhoea, burns)', -1, 1, -1, 'Preload ↓ (low JVP)', '<h3>Hypovolaemic shock</h3><p>Too little circulating volume: <b>inadequate preload</b> (2019 and 2012 reviews). As ventricular filling falls, cardiac output falls; the body compensates with tachycardia, contractility and <b>peripheral vasoconstriction</b> (cool extremities, delayed capillary refill) (Wikipedia). Low jugular venous distension (Wikipedia).</p><p><b>Treatment principle:</b> restore blood volume quickly — fluids, blood transfusion when needed — and stop the bleeding, surgically if necessary (StatPearls); in trauma see the resuscitation section below (European guideline 2023).</p>'],
+  ['card', 'Cardiogenic', 'Acute MI (commonest); other disorders of myocardium, valves, conduction system or pericardium', -1, 1, 1, 'PCWP >15 mmHg; JVP raised', '<h3>Cardiogenic shock</h3><p>Acute MI is the commonest cause (StatPearls; Wikipedia). The pump fails (altered contractility; 2012 review). "Cold and wet": low cardiac index, high SVR, wedge pressure above 15 mmHg — the same criteria as on the physiology page (StatPearls; a 2019 review). Raised filling pressures distend the jugular veins (Wikipedia). <b>Exception:</b> a subgroup with a systemic inflammatory reaction has low-to-normal SVR (a 2019 review). <p><b>Treatment principle:</b> early <b>revascularisation</b> of the occluded coronary artery when shock follows MI (Wikipedia; a 2019 review; StatPearls: reperfusion therapy) and <b>inotropes</b> such as dobutamine to improve contraction (Wikipedia; a 2019 review of vasoactive drugs). After MI: <a href="../../medicine/cardiology/ihd-acs.html#h-cx">complications timeline</a>.</p>'],
+  ['obs', 'Obstructive', 'Tamponade, pulmonary embolism, tension pneumothorax', -1, null, null, 'Venous return ↓ or afterload ↑', '<h3>Obstructive shock</h3><p>Cardiac output falls because <b>venous return is decreased</b> (e.g. tamponade) or the <b>afterload is higher</b> (Wikipedia; a 2012 review: increased afterload). Low-flow state (ESICM 2014). Our sources give no SVR or filling-pressure pattern for this type, as on the physiology page.</p><p><b>Treatment principle: relieve the obstruction.</b> Tamponade needs immediate relief (a 2019 review), e.g. needle pericardiocentesis at the bedside (Wikipedia); tension pneumothorax needs rapid needle decompression (Wikipedia, one source). Our sources give no treatment detail for pulmonary embolism here.</p>'],
+  ['sep', 'Septic (distributive)', 'Infection', 1, -1, null, 'Vasodilatation, capillary leak', '<h3>Septic shock</h3><p>Cytokines cause massive <b>vasodilatation</b>, increased capillary permeability and <b>low SVR</b> (Wikipedia; a 2019 review: excessive arteriolar vasodilatation, warm extremities). Despite myocardial depression, distributive shock is generally associated with an <b>increased cardiac output</b> — the hyperkinetic pattern (a 2012 review; ESICM 2014). Sepsis can mix distributive, hypovolaemic and cardiogenic forms (2012 review).</p><p><b>Treatment principle:</b> see Surviving Sepsis Campaign 2021 under <a href="#h-res">Resuscitation</a>.</p>'],
+  ['ana', 'Anaphylactic (distributive)', 'Allergen (IgE, mast cells)', null, -1, null, 'Vasodilatation (histamine)', '<h3>Anaphylactic shock</h3><p>Low blood pressure from <b>systemic vasodilatation</b> and decreased SVR, triggered mainly by histamine from mast cells (Wikipedia "Anaphylaxis" and "Distributive shock"; a 2019 review for distributive shock in general). A permeability-related hypovolaemic component can add to it (2012 review). Cardiac output is not stated separately for anaphylaxis by our sources.</p><p><b>Treatment principle:</b> <b>adrenaline (epinephrine)</b> is first-line (Wikipedia; a 2019 review\'s vasopressor table), given into a muscle with intravenous fluids (Wikipedia, one source). No doses here.</p>'],
+  ['neu', 'Neurogenic (distributive)', 'Cervical or upper thoracic spinal cord injury (T6 and above)', 0, -1, -1, 'Bradycardia; warm skin', '<h3>Neurogenic shock</h3><p>Loss of <b>sympathetic</b> vascular tone after cervical or upper thoracic spinal cord injury, T6 and above (StatPearls; a 2021 report): vasodilatation, low SVR and hypotension (Wikipedia; 2021 report). Loss of sympathetic supply to the heart gives <b>bradycardia</b> or no tachycardic response (2021 report; Wikipedia: unopposed vagal response); the skin is warm and flushed (Wikipedia). Wikipedia ("Distributive shock") alone gives the rest of the profile: CVP and PAOP decreased, cardiac output decreased or normal. Not the same as spinal shock (StatPearls).</p><p><b>Treatment principle:</b> fluids first, then vasopressors if the patient does not respond (a 2021 report; Wikipedia: noradrenaline the commonest first-line), and <b>atropine</b> for bradycardia (2021 report; Wikipedia).</p>'],
+];
+const TY_TEXT = '<p>Four types: three <b>low-flow</b> (hypovolaemic, cardiogenic, obstructive) and one <b>hyperkinetic</b> (distributive) (ESICM 2014; Wikipedia). The high-output pattern describes septic and distributive shock in general (ESICM 2014; StatPearls: normal or raised cardiac output early); <b>neurogenic shock is the exception</b> — loss of sympathetic tone causes bradycardia and limits cardiac output (StatPearls; Wikipedia "Distributive shock", one source, gives cardiac output decreased or normal). Septic, anaphylactic and neurogenic shock are distributive (StatPearls; Wikipedia). These are typical patterns, not rules: mixed forms occur (2012 review).</p><p><b>Which type is commonest? Sources differ:</b> Wikipedia ("Shock") calls hypovolaemic shock the most common type in one section and septic shock the most common form in another; a 2019 review says septic shock is the most common type overall. Haemorrhage is the commonest cause of shock after <b>injury</b> (a 2021 review; Wikipedia says the same, but its wording overlaps that review, so it is not counted separately).</p><p class="muted">"Filling" = central venous pressure or pulmonary capillary wedge pressure as stated by each source. Cells marked "not given" are those our sources do not state. The physiology page shows cardiac output and SVR only (no filling-pressure column) and also gives obstructive SVR as "not given".</p>';
+const CLIN_TEXT = '<p>Tissue perfusion can be judged through three "windows" (ESICM consensus 2014): the <b>skin</b> (cold, clammy, blue, pale or discoloured), the <b>kidney</b> (urine output below 0.5 mL/kg/h) and the <b>brain</b> (altered mental state: obtundation, disorientation, confusion). Early signs also include tachycardia and pallor from catecholamine release, prolonged capillary refill, weak peripheral pulses and cold extremities (Wikipedia; ESICM 2014). In distributive shock the extremities may be <b>warm</b> (a 2019 review; Wikipedia for neurogenic shock).</p><p><b>Hypotension</b> — systolic &lt;90 mmHg, MAP &lt;65 mmHg or a fall ≥40 mmHg from baseline — is common but should <b>not be required</b> to diagnose shock; <b>lactate</b> is typically &gt;2 mmol/L (ESICM 2014 consensus). Monitor heart rate, blood pressure, temperature, urine output and mental state frequently (ESICM 2014).</p>';
+
+/* ATLS 10th ed. (American College of Surgeons 2018) as reprinted in Table 2 of the European guideline 2023 */
+const ATLS_HEAD = ['Parameter', 'Class I', 'Class II (mild)', 'Class III (moderate)', 'Class IV (severe)'];
+const ATLS_ROWS = [
+  ['Approximate blood loss', '&lt;15%', '15–30%', '31–40%', '&gt;40%'],
+  ['Heart rate', '↔', '↔/↑', '↑', '↑/↑↑'],
+  ['Blood pressure', '↔', '↔', '↔/↓', '↓'],
+  ['Pulse pressure', '↔', '↓', '↓', '↓'],
+  ['Respiratory rate', '↔', '↔', '↔/↑', '↑'],
+  ['Urine output', '↔', '↔', '↓', '↓↓'],
+  ['Glasgow coma scale', '↔', '↔', '↓', '↓'],
+  ['Base deficit', '0 to −2 mEq/L', '−2 to −6 mEq/L', '−6 to −10 mEq/L', '−10 mEq/L or less'],
+  ['Need for blood products', 'Monitor', 'Possible', 'Yes', 'Massive transfusion protocol'],
+];
+const ATLS_OLD = ['Up to 15%, about 750 mL; HR normal or minimally raised', '15–30%, 750–1500 mL; HR 100–120, RR 20–24; pulse pressure narrows', '30–40%, 1500–2000 mL; HR and RR significantly raised (HR &gt;120); BP falls, mental status changes; urine output falls', '&gt;40%; HR &gt;120; pulse pressure &lt;25 mmHg; urine output minimal'];
+const ATLS_TEXT = '<p><b>Source:</b> American College of Surgeons, <i>ATLS® Advanced Trauma Life Support</i> student course manual, <b>10th edition (2018)</b>, as reprinted in Table 2 of the open-access <b>European guideline on major bleeding and coagulopathy following trauma, 6th edition (2023)</b>; ↔ unchanged, ↑ increased, ↓ decreased. The base-deficit row was added after Mutschler and colleagues (2013) showed that base deficit separated transfusion needs better than the vital signs (2013 paper; a 2024 reappraisal: base deficit "was incorporated into the updated ATLS classification").</p>'
+ + '<p><b>Where sources differ.</b> (1) Boundary: ATLS 10th / European guideline 2023 put 30% in class II and start class III at <b>31%</b>; Wikipedia ("Bleeding", "Hypovolemic shock") writes class III as <b>30–40%</b>. (2) <b>Numbers vs arrows:</b> the 10th edition table uses arrows; Wikipedia\'s list (citing StatPearls 2018, not ATLS 10th directly) gives numbers — shown in the last row as "older numeric version", for a healthy 70 kg adult. (3) <b>Validity:</b> registry analyses found ATLS overestimates the tachycardia that goes with hypotension and underestimates mental change (Mutschler 2013); the classification "oversimplifies clinical reality" (2024 reappraisal) and is "not without limitations" (European guideline 2023).</p><p class="muted">A narrow pulse pressure (&lt;40 or &lt;30 mmHg in different studies) is a class II signal (European guideline 2023).</p>';
+
+/* shock index cut-offs (European guideline 2023; 2019 review) */
+const SI0 = {hr: 80, sbp: 120};
+const SI_PRE = {n: ['Healthy adult (HR 70, SBP 120)', {hr: 70, sbp: 120}], m: ['HR 100, SBP 110', {hr: 100, sbp: 110}], s: ['HR 130, SBP 90', {hr: 130, sbp: 90}]};
+const SI_NOTE = 'Shock index = heart rate ÷ systolic blood pressure, unitless (2019 review; European guideline 2023; Wikipedia). The European guideline 2023 recommends using the shock index and/or pulse pressure to assess the degree of hypovolaemic shock and transfusion needs (Grade 1C). There is no single agreed cut-off: studies used ≥0.8 to ≥1.0. A learning aid, not a clinical tool.';
+
+/* resuscitation situations: [key, label, gauge {kind:'sbp'|'map', lo, hi}, text] */
+const RES = [
+  ['tr', 'Bleeding trauma, no brain or spinal injury', {kind: 'SBP', lo: 80, hi: 90, map: 'MAP 50–60'}, '<h3>Bleeding trauma without brain or spinal injury (European guideline 2023)</h3><ul><li><b>Minimise the time</b> from injury to bleeding control; damage control surgery in the severely injured patient with haemorrhagic shock, ongoing bleeding or coagulopathy (Recs 1, 19).</li><li><b>Permissive hypotension:</b> restricted volume replacement with a target <b>systolic 80–90 mmHg (MAP 50–60)</b> until major bleeding has stopped (Rec 13, Grade 1B) — <b>not with TBI or spinal injury; caution in the elderly and chronic hypertension</b> (EU 2023). If that fails, <b>noradrenaline</b> in addition to fluids (Rec 14).</li><li>It is a <b>temporising</b> measure before bleeding control (StatPearls); fluid without bleeding control is thought to dislodge the clot (Wikipedia).</li><li>Fluid: <b>0.9% saline or balanced crystalloid</b>; <b>restrict colloids</b> (adverse effects on haemostasis) (Rec 15). If red cells are needed, target Hb 70–90 g/L (Rec 16). Keep the patient <b>warm</b> (Rec 18). Tranexamic acid as soon as possible and <b>within 3 h of injury</b> (Rec 23; dose not given here).</li></ul><p class="muted"><b>A disagreement:</b> Wikipedia gives a lower goal (MAP 40–50, systolic ≤80 mmHg); the 2023 guideline\'s 80–90 systolic is used here.</p>'],
+  ['tbi', 'Severe traumatic brain injury', {kind: 'MAP', lo: 80, hi: null}, '<h3>Severe traumatic brain injury, GCS ≤8 (European guideline 2023)</h3><p>Maintain <b>MAP ≥80 mmHg</b> (Rec 13, Grade 1C). Permissive hypotension and restrictive volume resuscitation are <b>contraindicated</b> with brain or spinal injury, and should be considered carefully in the elderly and in chronic hypertension. <b>Avoid hypotonic solutions such as Ringer\'s lactate</b> in severe head trauma (Rec 15).</p>'],
+  ['sep', 'Septic shock', {kind: 'MAP', lo: 65, hi: null}, '<h3>Septic shock (Surviving Sepsis Campaign 2021)</h3><ul><li>Initial <b>MAP target 65 mmHg</b> in patients on vasopressors (strong recommendation).</li><li><b>Crystalloids first-line</b> (strong); <b>balanced crystalloids</b> rather than normal saline (weak); <b>albumin</b> for patients who received large volumes of crystalloid (weak); <b>not starches</b> (strong), not gelatin (weak).</li><li>At least <b>30 mL/kg</b> IV crystalloid within the first 3 h for sepsis-induced hypoperfusion or septic shock — the guideline\'s own figure, a <b>weak</b> recommendation on low-quality evidence.</li><li><b>Noradrenaline (norepinephrine) first-line</b> vasopressor (strong); if MAP stays inadequate, <b>add vasopressin</b> rather than escalating noradrenaline (weak).</li><li><b>Antimicrobials immediately</b>, ideally within 1 h of recognising possible septic shock (strong).</li><li><b>IV corticosteroids</b> for septic shock with an ongoing vasopressor requirement (weak; no dose here).</li><li><b>Restrictive</b> (over liberal) red-cell transfusion strategy (strong).</li></ul>'],
+];
+/* massive transfusion strategies: [key, label, bags [FFP, platelets, pRBC] or null, text] */
+const MT = [
+  ['eu', 'European guideline 2023', [1, 0, 2], '<p><b>European guideline 2023 (Rec 25)</b>, for expected massive haemorrhage, one of two strategies: <b>fibrinogen concentrate or cryoprecipitate with pRBC</b>, or <b>FFP:pRBC of at least 1:2</b>; with a high platelet:pRBC ratio suggested. Drawn: FFP:pRBC 1:2 (the lowest ratio allowed).</p>'],
+  ['pr', 'PROPPR trial: 1:1:1', [1, 1, 1], '<p><b>PROPPR</b> randomised 680 trauma patients to plasma:platelets:pRBC <b>1:1:1 vs 1:1:2</b>: mortality was comparable, but 1:1:1 gave better haemostasis and fewer deaths from exsanguination (as summarised in the European guideline 2023). A review suggested ratios between 1:1:1 and 1:1:2.</p>'],
+];
+const MT_NOTE = '<p class="muted"><b>Massive transfusion</b> is traditionally 10 or more units of whole blood or packed red cells within 24 h — a definition StatPearls calls arbitrary.</p>';
+const FL_TABLE = [
+  ['Crystalloid (0.9% saline, balanced solutions such as Ringer\'s lactate)', 'Salts in water; also expands interstitial and intracellular volume; much cheaper (Wikipedia)', 'First-line in trauma bleeding (EU 2023) and sepsis (SSC 2021); balanced preferred in sepsis (SSC 2021); avoid hypotonic solutions in severe head injury (EU 2023)'],
+  ['Colloid (albumin, gelatin, starch)', 'Larger molecules hold colloid osmotic pressure; more expensive (Wikipedia)', 'No evidence better than crystalloid after trauma, burns or surgery (Wikipedia); restrict in trauma (EU 2023); in sepsis albumin after large crystalloid volumes, against starches and gelatin (SSC 2021)'],
+];
+const RES_TEXT = '<p><b>Damage control resuscitation</b> limits unnecessary crystalloid, gives blood products when indicated, prevents heat loss and keeps perfusion without worsening bleeding (StatPearls); it pairs with restricted fluid and a reduced systolic target of 80–90 mmHg (European guideline 2023) — <b>not with TBI or spinal injury; caution in the elderly and chronic hypertension</b> (EU 2023). <b>Damage control surgery</b> addresses the "lethal triad" of <b>acidosis, hypothermia and coagulopathy</b> with an abbreviated operation, ICU resuscitation and later definitive repair (Wikipedia; StatPearls).</p>';
+
+const END_TABLE = [
+  ['Lactate', 'Sensitive test of bleeding and hypoperfusion; base deficit if lactate unavailable (EU 2023, Grade 1B)', 'Guide resuscitation to decrease raised lactate (SSC 2021, weak)'],
+  ['Blood pressure', 'SBP 80–90 until bleeding controlled, not with TBI or spinal injury; MAP ≥80 in severe TBI (EU 2023)', 'Initial MAP 65 mmHg on vasopressors (SSC 2021, strong)'],
+  ['Capillary refill time', '—', 'Adjunct to other perfusion measures (SSC 2021, weak)'],
+  ['Urine output, mental state, skin', 'Perfusion windows; oliguria &lt;0.5 mL/kg/h (ESICM 2014)', 'No urine-output target is given by these guidelines'],
+  ['Haemoglobin', 'Repeated Hb/Hct; target 70–90 g/L if transfusing (EU 2023)', 'Restrictive transfusion strategy, trigger typically Hb 70 g/L (SSC 2021, strong)'],
+];
+const END_TEXT = '<p>Raised lactate carries higher morbidity and mortality (a 2013 review); it is a marker of tissue hypoperfusion and part of the Sepsis-3 definition of septic shock (Wikipedia; SSC 2021). Lactate above 2 mmol/L without acidosis is hyperlactataemia; above 4 mmol/L, usually with acidaemia, is lactic acidosis (StatPearls). The ESICM 2014 consensus notes that resolving oliguria and lactate is the aim, though these signs may lag.</p>';
+
+const QS = ['Respiratory rate ≥22/min', 'Altered mentation', 'Systolic blood pressure ≤100 mmHg'];
+const SS = ['Suspected or documented infection with an acute rise of ≥2 SOFA points (sepsis)', 'Vasopressor needed to keep MAP ≥65 mmHg', 'Serum lactate >2 mmol/L (18 mg/dL)', 'Despite adequate fluid resuscitation'];
+const SEP_TEXT = '<p><b>Sepsis</b> = life-threatening organ dysfunction caused by a dysregulated host response to infection; organ dysfunction = an acute rise in the <b>SOFA score of ≥2 points</b>, which carries an in-hospital mortality above 10% (Sepsis-3, JAMA 2016; StatPearls). <b>Septic shock</b> = a subset of sepsis in which circulatory, cellular and metabolic abnormalities are profound enough to raise mortality substantially; clinically, a <b>vasopressor requirement to keep MAP ≥65 mmHg and lactate &gt;2 mmol/L despite adequate fluids</b> (Sepsis-3; StatPearls). Hospital mortality: over 40% (Sepsis-3); about 35–40% (StatPearls).</p><p><b>qSOFA</b> (respiratory rate ≥22, altered mentation, systolic ≤100; ≥2 points) identifies infected patients likely to have a poor outcome and prompts a search for organ dysfunction (Sepsis-3; Wikipedia). The <b>Surviving Sepsis Campaign 2021</b> recommends <b>against</b> using qSOFA, compared with SIRS, NEWS or MEWS, as a <b>single screening tool</b> (strong recommendation), because of its poor sensitivity; it also suggests measuring blood lactate in suspected sepsis (weak).</p><p><b>SIRS criteria</b> (Bone et al., as tabulated in Sepsis-3): two or more of temperature &gt;38 °C or &lt;36 °C, heart rate &gt;90/min, respiratory rate &gt;20/min or PaCO₂ &lt;32 mmHg, white cell count &gt;12 000 or &lt;4000/mm³ or &gt;10% immature bands (Sepsis-3; Wikipedia). Sepsis-3 found the use of 2 or more SIRS criteria to identify sepsis unhelpful (poor specificity); SSC 2021 still prefers SIRS, NEWS or MEWS over qSOFA for screening.</p>';
+
+const BASED = '<b>Based on:</b> European guideline on management of major bleeding and coagulopathy following trauma, 6th ed. (Crit Care 2023), with its reprint of the ATLS® 10th ed. (American College of Surgeons 2018) classification; Sepsis-3 (JAMA 2016); Surviving Sepsis Campaign guidelines 2021 (Intensive Care Med 2021); ESICM consensus on circulatory shock (2014); StatPearls (NCBI Bookshelf; abstracts); open-access reviews on circulatory shock (2012), shock and vasoactive drugs (2019), cardiogenic shock (2019), haemorrhagic shock (2021), neurogenic shock (2021), base deficit in trauma (2013, 2024), the shock index (2019) and lactate (2013) (Europe PMC); Wikipedia (articles that cite OpenStax were not used).';
+const MODELS = '<b>Models used:</b> the cell chain, haemodynamic arrows, blood-volume bar, shock-index scale, pressure gauge and transfusion bags are schematic. The calculators and checklists apply the sourced rules to the values chosen; they are learning aids, not clinical tools.';
+
+/* ===================== CODE ===================== */
+const S = Surg, {$, T} = S;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+$('def-text').innerHTML = DEF_TEXT;
+
+/* ---- cell chain ---- */
+const CS = {s: 0};
+function drawCell() {
+  const on = new Set(CELL[CS.s][1]);
+  let s = S.arrowDef('ac', 'var(--ink)');
+  const bx = [['o2', 10, 'O₂ delivery ↓', 'hypoperfusion'], ['ana', 150, 'Anaerobic', 'glycolysis'], ['lac', 290, 'Lactate ↑', 'lactic acidosis'], ['org', 430, 'Cell death', 'organ failure']];
+  bx.forEach(([k, x, a, b], i) => {
+    s += `<rect x="${x}" y="70" width="120" height="64" rx="10" class="${on.has(k) ? 'nodeon' : 'node'}"/>` + T(x + 60, 98, a, 'b', 'middle') + T(x + 60, 116, b, 's', 'middle');
+    if (i < 3) s += `<path d="M${x + 122} 102 L${x + 148} 102" class="${on.has(bx[i + 1][0]) && on.has(k) ? 'aron' : 'ar'}" marker-end="url(#ac)"/>`;
+  });
+  s += `<path d="M20 175 L540 175" style="stroke:var(--muted);stroke-width:1.2" marker-end="url(#ac)"/>` + T(20, 196, 'compensated', 's', 'start') + T(280, 196, 'decompensated', 's', 'middle') + T(540, 196, 'refractory', 's', 'end');
+  s += T(20, 40, 'schematic chain (not to scale)', 's', 'start');
+  $('cell-svg').innerHTML = s; $('cell-find').innerHTML = CELL[CS.s][2];
+}
+S.stepper('cell-step', CELL.map(r => r[0]), drawCell, CS);
+
+/* ---- types ---- */
+const ARW = v => v === 1 ? '↑' : v === -1 ? '↓' : v === 0 ? '↓ or ↔ (Wikipedia)' : 'not given';
+function drawType(k) {
+  const r = TYPES.find(x => x[0] === k);
+  let s = T(190, 20, r[1] + ' shock (typical pattern)', 'l b', 'middle');
+  const col = (x, lab, v) => {
+    const y0 = 110; s += T(x, 214, lab, 's', 'middle');
+    if (v === null) { s += T(x, y0, 'not given', 's', 'middle'); return; }
+    if (v === 0) { s += T(x, y0 - 6, '↓ or ↔', 'b', 'middle') + T(x, y0 + 12, '(Wikipedia)', 's', 'middle'); return; }
+    const up = v === 1;
+    s += `<path d="M${x} ${up ? y0 + 40 : y0 - 40} L${x} ${up ? y0 - 40 : y0 + 40}" style="stroke:var(--ink);stroke-width:6"/><path d="M${x - 14} ${up ? y0 - 30 : y0 + 30} L${x} ${up ? y0 - 52 : y0 + 52} L${x + 14} ${up ? y0 - 30 : y0 + 30} Z" style="fill:var(--ink)"/>`;
+  };
+  col(70, 'cardiac output', r[3]); col(190, 'SVR', r[4]); col(310, 'filling (CVP/PCWP)', r[5]);
+  $('ty-svg').innerHTML = s; $('ty-find').innerHTML = r[7];
+}
+S.toggles('ty-tg', TYPES.map(r => [r[0], r[1]]), drawType, 'hypo'); drawType('hypo');
+S.table('ty-table', ['Type', 'Causes', 'Cardiac output', 'SVR', 'Filling pressure', 'Key feature'], TYPES.map(r => [r[1], r[2], ARW(r[3]), ARW(r[4]), ARW(r[5]), r[6]]));
+$('ty-text').innerHTML = TY_TEXT; $('clin-text').innerHTML = CLIN_TEXT;
+
+/* ---- ATLS ---- */
+const AT = {loss: 10};
+const atlsClass = p => p < 15 ? 1 : p <= 30 ? 2 : p <= 40 ? 3 : 4;
+function drawAtls() {
+  const p = AT.loss, c = atlsClass(p);
+  const x0 = 20, x1 = 360, X = S.scale(0, 100, x0, x1);
+  let s = `<rect x="${x0}" y="30" width="${x1 - x0}" height="34" rx="4" style="fill:var(--rbc);fill-opacity:.75"/><rect x="${X(0)}" y="30" width="${X(p) - X(0)}" height="34" style="fill:var(--surface);stroke:var(--rbc);stroke-dasharray:4 3"/>`;
+  for (const [a, b, lab] of [[0, 15, 'I'], [15, 30, 'II'], [30, 40, 'III'], [40, 100, 'IV']]) s += `<path d="M${X(b)} 26 L${X(b)} 70" style="stroke:var(--ink);stroke-width:1"/>` + T((X(a) + X(b)) / 2, 88, lab, atlsClass(p) === ['I', 'II', 'III', 'IV'].indexOf(lab) + 1 ? 'b' : 's', 'middle');
+  for (const v of [0, 15, 30, 40, 100]) s += T(X(v), 104, v + '%', 's', 'middle');
+  s += `<path d="M${X(p)} 22 L${X(p)} 72" style="stroke:var(--mark);stroke-width:3"/>` + T(x0, 18, 'circulating blood volume (lost part dashed); ATLS class', 's', 'start');
+  $('atls-svg').innerHTML = s;
+  const edge = p === 30 ? ' <span class="muted">At exactly 30%: class II in ATLS 10th / EU 2023, class III in Wikipedia\'s 30–40%.</span>' : '';
+  $('atls-out').innerHTML = `<p><span class="tag">ATLS 10th ed. (2018)</span> <span class="big">Class ${['I', 'II', 'III', 'IV'][c - 1]}</span></p><p>Blood loss ${p}% of circulating volume. Need for blood products: <b>${ATLS_ROWS[8][c]}</b>.${edge}</p>`;
+  const t = $('atls-table');
+  t.querySelectorAll('tr').forEach(tr => tr.querySelectorAll('th,td').forEach((cell, i) => cell.classList.toggle('on', i === c)));
+}
+S.table('atls-table', ATLS_HEAD, ATLS_ROWS.concat([['Older numeric version (Wikipedia, citing StatPearls 2018)'].concat(ATLS_OLD)]));
+S.slider('atls-sl', {id: 'loss', label: 'Blood loss (% of circulating volume)', min: 0, max: 60, step: 1, value: AT.loss, fmt: v => v + '%'}, v => { AT.loss = v; drawAtls(); }).init();
+$('atls-text').innerHTML = ATLS_TEXT; drawAtls();
+
+/* ---- shock index ---- */
+const SV = Object.assign({}, SI0), SIS = {}, SIP = {busy: false};
+function siBand(si) {
+  if (si < 0.5) return ['below 0.5', 'Below the usual healthy range of 0.5–0.7 (EU 2023; 2019 review).'];
+  if (si <= 0.7) return ['0.5–0.7: normal range', 'Typical of healthy adults (European guideline 2023; 2019 review).'];
+  if (si < 0.9) return ['above 0.7', 'Above the accepted normal range; the 2019 review notes some evidence that up to 0.9 is acceptable. Studies of massive transfusion used cut-offs from 0.8 upward (EU 2023).'];
+  if (si <= 1.0) return ['0.9–1.0', 'SI ≥0.9–1.0 was associated with more massive transfusion, interventional radiology and surgery in bleeding trauma patients (EU 2023); values approaching 1.0 indicate worsening haemodynamics (2019 review).'];
+  return ['above 1.0', 'SI >1.0 predicts increased mortality and markers of morbidity such as massive-transfusion activation and ICU admission (2019 review); also above the EU 2023 threshold of ≥0.9–1.0.'];
+}
+function drawSi() {
+  const si = SV.hr / SV.sbp, [band, txt] = siBand(+si.toFixed(2));
+  const x0 = 20, x1 = 360, X = S.scale(0.3, 1.6, x0, x1), v = Math.max(0.3, Math.min(1.6, si));
+  let s = `<rect x="${X(0.5)}" y="34" width="${X(0.7) - X(0.5)}" height="24" style="fill:var(--ink);fill-opacity:.14"/><rect x="${X(0.9)}" y="34" width="${X(1.0) - X(0.9)}" height="24" style="fill:var(--clin);fill-opacity:.25"/><rect x="${X(1.0)}" y="34" width="${X(1.6) - X(1.0)}" height="24" style="fill:var(--clin);fill-opacity:.45"/>`;
+  s += `<path class="axis" d="M${x0} 58 L${x1} 58"/>`;
+  for (const t of [0.3, 0.5, 0.7, 0.9, 1.0, 1.2, 1.4, 1.6]) s += `<path class="axis" d="M${X(t)} 58 L${X(t)} 63"/>` + T(X(t), 78, t.toFixed(1), 's', 'middle');
+  const off = si < 0.3 || si > 1.6;
+  s += off ? T(si < 0.3 ? x0 : x1, 20, (si < 0.3 ? '◀ ' : '') + si.toFixed(2) + ' off scale' + (si > 1.6 ? ' ▶' : ''), 'l b', si < 0.3 ? 'start' : 'end') : `<path d="M${X(v)} 26 L${X(v)} 66" style="stroke:var(--ink);stroke-width:3"/>` + T(Math.min(x1 - 30, Math.max(x0 + 30, X(v))), 20, si.toFixed(2), 'l b', 'middle');
+  s += T(x0, 100, 'grey 0.5–0.7 normal; red ≥0.9 (EU 2023), >1.0 (2019 review)', 's', 'start');
+  $('si-svg').innerHTML = s;
+  $('si-out').innerHTML = `<p><span class="tag">Shock index = HR ÷ SBP</span></p><p class="big">${SV.hr} ÷ ${SV.sbp} = ${si.toFixed(2)}</p><p><b>${band}.</b> ${txt}</p>`;
+}
+for (const [k, lab, mn, mx, u] of [['hr', 'Heart rate', 40, 180, ' /min'], ['sbp', 'Systolic BP', 50, 200, ' mmHg']]) { SIS[k] = S.slider('si-sl', {id: k, label: lab, min: mn, max: mx, step: 1, value: SI0[k], fmt: v => v + u}, v => { SV[k] = v; if (!SIP.busy) $('si-tg').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); drawSi(); }); SIS[k].init(); }
+S.toggles('si-tg', Object.entries(SI_PRE).map(([k, v]) => [k, v[0]]), k => { const p = SI_PRE[k][1]; SIP.busy = true; SIS.hr.set(p.hr); SIS.sbp.set(p.sbp); SIP.busy = false; }, null);
+$('si-note').textContent = SI_NOTE; drawSi();
+
+/* ---- resuscitation ---- */
+function drawRes(k) {
+  const r = RES.find(x => x[0] === k), g = r[2];
+  const x0 = 20, x1 = 360, X = S.scale(30, 130, x0, x1);
+  let s = T(x0, 18, g.kind === 'SBP' ? 'systolic blood pressure (mmHg)' : 'mean arterial pressure (mmHg)', 's', 'start');
+  s += `<rect x="${x0}" y="40" width="${x1 - x0}" height="26" rx="4" style="fill:var(--artery);fill-opacity:.12;stroke:var(--artery)"/>`;
+  const hi = g.hi === null ? 130 : g.hi;
+  s += `<rect x="${X(g.lo)}" y="40" width="${X(hi) - X(g.lo)}" height="26" style="fill:var(--artery);fill-opacity:.5"/>`;
+  for (const t of [30, 50, 65, 80, 90, 110, 130]) s += `<path class="axis" d="M${X(t)} 66 L${X(t)} 72"/>` + T(X(t), 86, t, 's', 'middle');
+  s += `<path d="M${X(g.lo)} 32 L${X(g.lo)} 74" style="stroke:var(--ink);stroke-width:3"/>`;
+  s += T((X(g.lo) + X(hi)) / 2, 112, g.hi === null ? `target: ${g.kind} ≥${g.lo}` : `target: ${g.kind} ${g.lo}–${g.hi}${g.map ? ' (' + g.map + ')' : ''}`, 'l b', 'middle');
+  s += T(x0, 140, k === 'sep' ? 'Surviving Sepsis Campaign 2021' : 'European trauma guideline 2023', 's', 'start');
+  $('res-svg').innerHTML = s; $('res-find').innerHTML = r[3];
+}
+S.toggles('res-tg', RES.map(r => [r[0], r[1]]), drawRes, 'tr'); drawRes('tr');
+function drawMt(k) {
+  const r = MT.find(x => x[0] === k), [ffp, plt, rbc] = r[2];
+  let s = '', x = 20;
+  const bag = (col, lab) => { const o = `<rect x="${x}" y="24" width="44" height="56" rx="8" style="fill:${col};stroke:var(--ink);stroke-width:.8"/>` + T(x + 22, 98, lab, 's', 'middle'); x += 58; return o; };
+  for (let i = 0; i < ffp; i++) s += bag('var(--fluid)', 'FFP');
+  for (let i = 0; i < plt; i++) s += bag('var(--platelet)', 'platelets');
+  for (let i = 0; i < rbc; i++) s += bag('var(--rbc)', 'pRBC');
+  s += T(x + 6, 56, k === 'eu' ? 'FFP:pRBC ≥1:2' : 'plasma:platelets:pRBC 1:1:1', 'l b', 'start');
+  $('mt-svg').innerHTML = s; $('mt-find').innerHTML = r[3] + MT_NOTE;
+}
+S.toggles('mt-tg', MT.map(r => [r[0], r[1]]), drawMt, 'eu'); drawMt('eu');
+S.table('fl-table', ['Fluid', 'What it is', 'Guideline position'], FL_TABLE);
+$('res-text').innerHTML = RES_TEXT;
+
+/* ---- endpoints ---- */
+S.table('end-table', ['Endpoint', 'Bleeding trauma (EU 2023)', 'Septic shock (SSC 2021)'], END_TABLE);
+$('end-text').innerHTML = END_TEXT;
+
+/* ---- Sepsis-3 checklists ---- */
+function checks(id, items, onChange) {
+  const box = $(id);
+  items.forEach((t, i) => { const l = document.createElement('label'); l.innerHTML = `<input type="checkbox" id="${id}-${i}"><span>${t}</span>`; box.append(l); });
+  box.addEventListener('change', onChange);
+  return () => items.map((_, i) => $(id + '-' + i).checked);
+}
+const qsGet = checks('qs-chk', QS, drawQs), ssGet = checks('ss-chk', SS, drawSs);
+function drawQs() {
+  const n = qsGet().filter(Boolean).length;
+  $('qs-out').innerHTML = `<span class="big">qSOFA ${n}/3</span>` + (n >= 2 ? '<b>≥2: higher risk of death or prolonged ICU stay</b> in suspected infection — look for organ dysfunction (Sepsis-3). Not a single screening tool (SSC 2021).' : 'Fewer than 2 points. A low qSOFA does not rule out sepsis: SSC 2021 notes its poor sensitivity.');
+}
+function drawSs() {
+  const v = ssGet(), all = v.every(Boolean);
+  $('ss-out').innerHTML = `<span class="big">${all ? 'Septic shock' : v[0] ? 'Sepsis' : '—'}</span>` + (all ? 'Meets the Sepsis-3 clinical criteria for septic shock (hospital mortality above 40%).' : v[0] ? 'Sepsis; septic shock needs all of vasopressor for MAP ≥65, lactate &gt;2 mmol/L, and adequate fluids given.' : 'Septic shock is a subset of sepsis: start from infection with an acute SOFA rise ≥2.');
+}
+drawQs(); drawSs();
+$('sep-text').innerHTML = SEP_TEXT;
+S.swipeHints();
+</script>
+</body>
+</html>

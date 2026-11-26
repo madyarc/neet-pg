@@ -14,14 +14,14 @@ Source notes: SU26.2 is not in the PDF (numbering gap in the source). Topics 24 
 
 ### 1. Metabolic response to injury
 
-- [ ] **SU1.1** Describe Basic concepts of homeo stasis, enumerate the metabolic changes in injury and their mediators.
-- [ ] **SU1.2** Describe the factors that affect the metabolic response to injury.
-- [ ] **SU1.3** Describe basic concepts of perioperative care.
+- [x] **SU1.1** Describe Basic concepts of homeo stasis, enumerate the metabolic changes in injury and their mediators. — *ebb/flow slider, mediator cascade, metabolic changes: [Metabolic Response to Injury and Perioperative Care](general/metabolic-response.html)*
+- [x] **SU1.2** Describe the factors that affect the metabolic response to injury. — *modifying factors: [Metabolic Response to Injury and Perioperative Care](general/metabolic-response.html)*
+- [~] **SU1.3** Describe basic concepts of perioperative care. — *ERAS principles (ERAS Society 2021–2023); wider perioperative care later: [Metabolic Response to Injury and Perioperative Care](general/metabolic-response.html)*
 
 ### 2. Shock
 
-- [ ] **SU2.1** Describe Pathophysiology of shock, types of shock & principles of resuscitation including fluid replacement and monitoring.
-- [ ] **SU2.2** Describe the clinical features of shock and its appropriate treatment.
+- [x] **SU2.1** Describe Pathophysiology of shock, types of shock & principles of resuscitation including fluid replacement and monitoring. — *cell chain, type classifier with treatment principles, ATLS 10th ed. (2018), resuscitation (EU 2023, SSC 2021), endpoints, shock index: [Shock: Pathophysiology, Types and Resuscitation](general/shock.html)*
+- [x] **SU2.2** Describe the clinical features of shock and its appropriate treatment. — *clinical windows (ESICM 2014), Sepsis-3 qSOFA and septic shock, SIRS: [Shock: Pathophysiology, Types and Resuscitation](general/shock.html)*
 - [ ] **SU2.3** Communicate and counsel patients and families about the treatment and prognosis of shock demonstrating empathy and care *(skill)*
 
 ### 3. Blood and blood components
