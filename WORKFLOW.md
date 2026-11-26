@@ -11,7 +11,7 @@ Last updated: 2026-11-23
 - RESUMED 2026-11-26 02:34 after the terminal tab closed at 02:29 (no crash, no OOM, no core dump; Konsole was flooding
   notifications). New tab had no cap: set 9G/10G again. S01, O01, An01 builders resumed (S01/O01 had ~200 downloads each,
   no pages; An01 nothing). Server from the old session still serving :8765.
-  Live wikitext audit COMPLETE (all titles, 0 failed). New beyond the fixed set, SENT to the re-sourcing agent: Sarcomere (muscle-tissue 10), Skeletal_muscle (muscle-tissue 7), Tendon_sheath (connective-tissue 1),
+  Live wikitext audit COMPLETE (all titles, 0 failed). New beyond the fixed set, DONE and committed (c8f9664): Sarcomere (muscle-tissue 10), Skeletal_muscle (muscle-tissue 7), Tendon_sheath (connective-tissue 1),
   Anatomical_terms_of_motion in joints-ankle-foot (2), Osteoarthritis in joints-hip-knee (3); pages anatomy/general/
   muscle.html, connective-tissue.html, lower-limb/joints.html. (The audit also lists excluded quotes still kept in
   sheets as unused; expected.)
@@ -83,7 +83,7 @@ Last updated: 2026-11-23
   official text missing). Inducer/inhibitor lists: use FDA DDI table (public domain) + Wikipedia/StatPearls. G01 [x] build (549 quotes; 3 pages; no new tokens; guidelines via open papers) [x] review (17: ACS picker
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
   colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. S01 [x] build (243 quotes; EU trauma 2023 / ATLS 10th, Sepsis-3, SSC 2021, ERAS; Wikipedia Homeostasis excluded)
-  [ ] review (next free slot). O01 [ ] build (running; orthopaedics/trauma/). An01 [ ] build (running; anaesthesia/resuscitation-airway/,
+  [ ] review (running). O01 [ ] build (running; orthopaedics/trauma/). An01 [ ] build (running; anaesthesia/resuscitation-airway/,
   AS2 + AS11). Ps01 [x] build (289 quotes) [x] review (no wrong facts; duration-picker logic, missing arrowheads,
   mesocortical path, synapse marks, clozapine schedule) [x] fixes (322 quotes) [x] committed 2026-11-25. C01 [x] build (328 quotes; CDC 2012, WHO 1968, SRS 2020, NFHS-5, IDSP; no new tokens) [x] review (no wrong formulas; disability limitation level
   one-source, rate/time misattribution, --accent/--clin misuse, gaps: indirect standardisation, field trial) [x] fixes (374 quotes) [x] committed 2026-11-25. Pd01 [x] build (458 quotes; WHO 2006/2007 LMS z-score chart, CDC 2022 milestones via Zubler 2022) [x] review.
