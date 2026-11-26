@@ -71,7 +71,7 @@ Last updated: 2026-11-23
     anaesthesia 2: An01 CPR + oxygen + airway (AS2, AS11) · An02 general and regional anaesthesia (AS4, AS5)
     radiology 1: R01 modality choice and image interpretation basics (radiation safety)
     ENT 1: E01 ear anatomy-physiology + hearing tests
-    obgyn 4: OG01 physiology of conception+placenta · OG02 antenatal care+maternal changes · OG03 labour · OG04 contraception
+    obgyn 4: OG01 conception, placenta and maternal changes (OG3.1, 4.1, 7.1) · OG02 diagnosis of pregnancy + antenatal care · OG03 labour · OG04 contraception
   2026-11-24 integrity: 4 tracked files differed from git with a clean git status (2 bytes each, 4 bytes apart, bit
   0x40 flipped): thick-skin.jpg + ext_intercostal.bin in page cache only (disk intact), calc_tendon.bin + manubrium.bin
   on disk. Restored from git blobs, verified by direct read; fsck clean; commits unaffected. Keep the hash check before
@@ -84,7 +84,8 @@ Last updated: 2026-11-23
   pain overrode ECG/troponin (safety), reperfusion >24 h, thrombolysis list incomplete, NP cut-offs = ESC 2016, artery/vein
   colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. S01 [x] build (243 quotes; EU trauma 2023 / ATLS 10th, Sepsis-3, SSC 2021, ERAS; Wikipedia Homeostasis excluded)
   [x] review (ERAS carbohydrate loading misattributed, TBI/spinal exception missing at the instruction (safety),
-  ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. R01 [ ] build (running; radiology/basics/, RD1–RD3). E01 [ ] build (running; ent/ear/, hearing tests + loss). O01 [x] build (313 quotes; BOAST 2017, ATLS 11th 2025, WHO 2005/2018) [x] review (SALTER mnemonic orientation reversed,
+  ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. R01 [ ] build (running; radiology/basics/, RD1–RD3). E01 [ ] build (running; ent/ear/, hearing tests + loss). OG01 [ ] build (running;
+  obstetrics-gynaecology/obstetrics/, OG3.1, 4.1, 7.1). O01 [x] build (313 quotes; BOAST 2017, ATLS 11th 2025, WHO 2005/2018) [x] review (SALTER mnemonic orientation reversed,
   START missing airway-reposition RED branch, ATLS 11th C-spine wording + edition-switch bug) [x] fixes (341 quotes) [x] committed 2026-11-26. An01 [x] build (312 quotes; AHA 2020 (archived), ILCOR 2020, KACPR 2025, SRFAC 2026, BTS 2017, TSANZ 2022,
   DAS 2015; ERC only as reported (403)) [x] review (LMA/ETT drawn through the tongue, PC volume
   unbounded, quiz-sourced quotes, 4Hs4Ts open source found, depth scale) [x] fixes (341 quotes) [x] committed 2026-11-26. Ps01 [x] build (289 quotes) [x] review (no wrong facts; duration-picker logic, missing arrowheads,
