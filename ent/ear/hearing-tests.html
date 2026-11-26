@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hearing and Hearing Tests: Tuning Forks, Audiogram, Tympanogram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/ent.css">
+<style>
+/* Tokens from ent.css with their site-wide meanings: --skin (auricle, canal), --tm (tympanic membrane), --bone (ossicles), --fluid
+   (perilymph), --labyr (bony labyrinth), --nerve (VIII and the central path), --ear-r / --ear-l (right / left ear on an audiogram only),
+   --clin (a lesion), --mark (selected point), --accent (UI). No new tokens. */
+svg.sch .skin{fill:var(--skin);stroke:var(--ink);stroke-width:1}
+svg.sch .tmf{fill:var(--tm);stroke:var(--ink);stroke-width:1}
+svg.sch .oss{fill:var(--bone);stroke:var(--ink);stroke-width:1}
+svg.sch .peri{fill:var(--fluid);stroke:var(--ink);stroke-width:1}
+svg.sch .lab{fill:none;stroke:var(--labyr);stroke-width:2}
+svg.sch .nv{stroke:var(--nerve);stroke-width:4;fill:none;stroke-linecap:round}
+svg.sch .nbox{fill:var(--surface);stroke:var(--nerve);stroke-width:2}
+svg.sch .on{stroke:var(--accent)!important;stroke-width:3!important}
+svg.sch .hcell{fill:var(--ink);stroke:none}
+svg.sch .bm{stroke:var(--ink);stroke-width:1.6;fill:none}
+svg.sch .wave{stroke:var(--ink);stroke-width:2.2;fill:none}
+svg.sch .er{stroke:var(--ear-r);fill:none;stroke-width:2}
+svg.sch .el{stroke:var(--ear-l);fill:none;stroke-width:2}
+svg.sch .erf{fill:var(--ear-r)} svg.sch .elf{fill:var(--ear-l)}
+svg.sch text.r,svg.sch text.lf{fill:var(--ink);font-weight:600}
+svg.sch .band{fill:var(--ink);fill-opacity:.05}
+svg.sch .band2{fill:var(--ink);fill-opacity:.11}
+svg.sch .sel{stroke:var(--muted);stroke-width:2;fill:none;stroke-dasharray:4 3}
+svg.sch .gmark{stroke:var(--mark);stroke-width:3;fill:none}
+svg.sch .lesion{stroke:var(--clin);stroke-width:3;fill:none;stroke-linecap:round}
+svg.sch .face{fill:var(--skin);stroke:var(--ink);stroke-width:1.2}
+svg.sch .curve{stroke:var(--ink);stroke-width:2.4;fill:none}
+svg.sch .ghost{stroke:var(--muted);stroke-width:1.2;fill:none;stroke-dasharray:4 3}
+svg.sch.fitmax{max-width:520px}
+.res{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 14px}
+@media (max-width:600px){.res{grid-template-columns:minmax(0,1fr)}}
+.res .ans h3{margin-bottom:2px}
+.flag{color:var(--clin);font-weight:600}
+.ok{font-weight:600}
+.sym{font:600 13px var(--f-mono)}
+.sym.r,.sym.l{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← ENT</a> <span class="muted">· Module 01: <span aria-current="page">Hearing and hearing tests</span> · <a href="hearing-loss-otosclerosis.html">Hearing loss, otosclerosis and the Eustachian tube</a></span></nav>
+
+<header class="stack">
+  <h1>Hearing and Hearing Tests: Tuning Forks, the Audiogram and the Tympanogram</h1>
+  <p class="lede">How sound gets from the air to the cortex, why the middle ear is needed, and the tests that tell a conductive loss from a sensorineural one: Rinne and Weber you can run on any lesion, an audiogram you can draw, the WHO 2021 grades, and the tympanogram types. The anatomy of the ear in 3D is on the <a href="../../anatomy/head-neck/ear-eye.html">Ear and Eye</a> page.</p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-path">Hearing pathway</a> <a href="#h-imp">Impedance matching</a> <a href="#h-fork">Tuning forks</a> <a href="#h-pta">Audiogram</a> <a href="#h-grade">WHO grades</a> <a href="#h-tymp">Tympanogram</a> <a href="#h-reflex">Acoustic reflex</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-path">
+  <h2 id="h-path">The hearing pathway, from the air to the cortex</h2>
+  <div class="step" id="path-step"></div>
+  <div class="schbox"><svg class="fig sch" id="path-svg" viewBox="0 0 680 320" role="img" aria-label="Schematic hearing pathway: auricle and canal, tympanic membrane, ossicles, oval window, the cochlea drawn uncoiled with the basilar membrane between two perilymph channels, the cochlear nerve, and the central relays from the cochlear nuclei up to the auditory cortex"></svg></div>
+  <div class="sliders" id="path-sl"></div>
+  <div class="find" id="path-text" aria-live="polite"></div>
+  <p class="muted">Schematic, not to scale: the cochlea is drawn uncoiled (base on the left, at the oval window; apex on the right). The central relays are shown for one side only; above the cochlear nuclei each ear projects to both sides.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-imp">
+  <h2 id="h-imp">Why the middle ear is needed: impedance matching</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="imp-svg" viewBox="0 0 420 250" role="img" aria-label="Schematic: the large vibrating area of the tympanic membrane beside the small stapes footplate, and the ossicular lever with the malleus arm longer than the incus arm"></svg></div>
+    <div class="stack">
+      <div id="imp-chips" aria-label="Which figures"></div>
+      <div class="ans"><span class="big" id="imp-big"></span><span id="imp-out" aria-live="polite"></span></div>
+      <div class="prose" id="imp-text"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fork">
+  <h2 id="h-fork">Tuning-fork tests: Rinne and Weber on any lesion</h2>
+  <div class="prose" id="fork-intro"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="fork-svg" viewBox="0 0 420 312" role="img" aria-label="Schematic patient seen from the front, with a tuning fork on the forehead for the Weber test, an arrow showing where the sound is heard, and the Rinne result for each ear"></svg></div>
+    <div class="stack">
+      <div><span class="tag">Lesion</span><div id="fork-les" aria-label="Lesion"></div></div>
+      <div><span class="tag">How much</span><div id="fork-sev" aria-label="Severity"></div></div>
+      <div class="res" id="fork-res" aria-live="polite"></div>
+    </div>
+  </div>
+  <p class="muted">The patient faces you: the patient's <b>right</b> ear is on <b>your left</b>.</p>
+  <div class="prose" id="fork-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pta">
+  <h2 id="h-pta">The pure tone audiogram: draw one</h2>
+  <div class="prose" id="pta-intro"></div>
+  <div><span class="tag">Presets</span><div id="pta-pre" aria-label="Audiogram presets"></div></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit" id="pta-svg" viewBox="0 0 500 470" role="img" aria-label="Audiogram: frequency 250 to 8000 hertz across, hearing level minus 10 to 120 decibels downward, with air- and bone-conduction thresholds for each ear in the standard symbols"></svg></div>
+    <div class="stack">
+      <div><span class="tag">Edit: ear</span><div id="pta-ear" aria-label="Ear"></div></div>
+      <div><span class="tag">Conduction</span><div id="pta-mode" aria-label="Air or bone conduction"></div></div>
+      <div><span class="tag">Frequency</span><div id="pta-f" aria-label="Frequency"></div></div>
+      <div class="sliders" id="pta-sl"></div>
+      <div id="pta-mask" aria-label="Symbols"></div>
+      <div class="res" id="pta-res" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="key" id="pta-key"></div>
+  <div class="prose" id="pta-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-grade">
+  <h2 id="h-grade">How bad is it? WHO 2021 grades of hearing loss</h2>
+  <div class="schbox"><svg class="fig sch fit fitmax" id="grade-svg" viewBox="0 0 420 120" role="img" aria-label="Scale of hearing threshold from minus 10 to 120 decibels divided into the WHO 2021 grades, with a marker at the chosen value"></svg></div>
+  <div class="sliders" id="grade-sl"></div>
+  <div class="ans" id="grade-out" aria-live="polite"></div>
+  <div class="scroll"><table id="grade-table"></table></div>
+  <div class="prose" id="grade-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-tymp">
+  <h2 id="h-tymp">Impedance audiometry: tympanogram types</h2>
+  <div class="prose" id="tymp-intro"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="tymp-svg" viewBox="0 0 460 300" role="img" aria-label="Schematic tympanogram: admittance against ear-canal pressure from minus 400 to plus 200 decapascals, showing the chosen Jerger type"></svg></div>
+    <div class="stack">
+      <div id="tymp-chips" aria-label="Tympanogram type"></div>
+      <div class="ans" id="tymp-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="scroll"><table id="tymp-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-reflex">
+  <h2 id="h-reflex">The acoustic (stapedial) reflex</h2>
+  <div class="prose" id="refl-intro"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="refl-svg" viewBox="0 0 440 260" role="img" aria-label="Schematic reflex arc: each ear's middle ear, cochlea and cochlear nerve lead to the brainstem, which drives the facial nerve to the stapedius on both sides"></svg></div>
+    <div class="stack">
+      <div id="refl-chips" aria-label="Lesion"></div>
+      <div class="scroll"><table id="refl-table"></table></div>
+      <p class="note" id="refl-note"></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BHearing%20and%20Hearing%20Tests%3A%20Tuning%20Forks%2C%20the%20Audiogram%20and%20the%20Tympanogram%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fent%2Fear%2Fhearing-tests.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+<script src="../assets/ent.js"></script>
+<script>
+(function () {
+'use strict';
+const E = window.Ent, $ = E.$, T = E.T;
+
+/* ================= DATA (facts: sources-local/facts/fill-e01.md, part A) ================= */
+const PATH = [
+  {k: 'Auricle and canal', on: ['pinna', 'canal'], t: `<h3>1. Auricle and ear canal</h3><p>The funnel-shaped external ear captures the air vibrations and directs them along the canal to the tympanic membrane (StatPearls). Outer and middle ear make up the <b>conductive</b> part of hearing; a block anywhere from the pinna to the stapes footplate gives a conductive loss.</p>`},
+  {k: 'Tympanic membrane', on: ['tm'], t: `<h3>2. Tympanic membrane</h3><p>The drum vibrates at the frequency and amplitude of the sound (StatPearls).</p>`},
+  {k: 'Ossicles', on: ['oss'], t: `<h3>3. Ossicles</h3><p>Malleus, incus and stapes carry the vibration of the drum across the middle ear to the oval window, and amplify it (StatPearls, Wikipedia): see impedance matching below.</p>`},
+  {k: 'Oval window', on: ['ow', 'sv', 'st', 'rw'], t: `<h3>4. Oval window and the cochlear fluids</h3><p>Stapes movements in the oval window set up fluid waves in the cochlear channels (perilymph) that run along the basilar membrane (PMC10658786). Wikipedia: the channels join at the apex (helicotrema), and the round window bulges out as the oval window moves in.</p>`},
+  {k: 'Basilar membrane', on: ['bm'], t: `<h3>5. Basilar membrane: frequency by place</h3><p>The wave travels along the basilar membrane. At the <b>base</b> (near the oval window) the membrane is narrow and stiff and responds to <b>high</b> frequencies; at the <b>apex</b> it is wide and floppy and responds to <b>low</b> frequencies (PMC10658786, PMC5738938, Wikipedia). Move the slider to see where a tone peaks.</p>`},
+  {k: 'Hair cells', on: ['bm', 'hc'], t: `<h3>6. Hair cells</h3><p><b>Inner hair cells</b> convert the vibration into electrical signals (they carry most of the auditory nerve fibres); <b>outer hair cells</b> amplify and sharpen the response (the cochlear amplifier) (StatPearls, Wikipedia, PMC12645837). Loud noise damages mainly the outer hair cells.</p>`},
+  {k: 'VIII → cochlear nuclei', on: ['n8', 'cn'], t: `<h3>7. Cochlear nerve and cochlear nuclei</h3><p>Spiral ganglion neurons form the cochlear part of VIII, which ends in the <b>cochlear nuclei</b> of the <b>same side</b> (PMC10658786; StatPearls).</p>`},
+  {k: 'Superior olive', on: ['soc'], t: `<h3>8. Superior olivary complex</h3><p>In the pons, the superior olivary complex is the <b>first place where input from the two ears converges</b> (PMC10658786, Wikipedia): the basis of locating sound.</p>`},
+  {k: 'Lemniscus → colliculus', on: ['ll', 'ic'], t: `<h3>9. Lateral lemniscus and inferior colliculus</h3><p>The lateral lemniscus carries the signal up the brainstem to the <b>inferior colliculus</b> in the midbrain, the main centre of convergence there (StatPearls, PMC10658786, Wikipedia).</p>`},
+  {k: 'Geniculate → cortex', on: ['mgb', 'ac'], t: `<h3>10. Medial geniculate body and auditory cortex</h3><p>From the inferior colliculus to the <b>medial geniculate body</b> of the thalamus, then to the <b>primary auditory cortex</b> in the superior temporal gyrus (PMC10658786; Wikipedia adds the transverse temporal gyri of Heschl). Because the pathways cross several times, each ear reaches both hemispheres (PMC5738938), so damage to one side above the cochlear nuclei gives only slight hearing loss (Wikipedia).</p>`}
+];
+const IMP = {
+  eff: {k: 'Effective area', area: 14, lever: null, big: '≈14 × area', out: ' — Wikipedia: the effective vibrating area of the drum is about 14 times the oval window, giving a pressure gain of at least 18.1 (with the lever).'},
+  anat: {k: 'Anatomical area + lever', area: 20, lever: 1.3, big: '20 × 1.3 ≈ 26 ×', out: ' — Wikipedia: drum ≈20 times the stapes footplate, malleus 1.3 times longer than the incus; together ≈26 times the pressure, about 30 dB.'}
+};
+/* tuning forks: lesion x severity -> results (hand-checked against StatPearls Rinne/Weber, PMC5738938, PMC7029235, PMC7961717, PMC13270388) */
+const LES = [['none', 'Normal'], ['rc', 'Right conductive'], ['lc', 'Left conductive'], ['rs', 'Right sensorineural'], ['ls', 'Left sensorineural']];
+const SEV = {c: [['small', 'Small air–bone gap (≈10 dB)'], ['large', 'Large gap (>30 dB)']], s: [['mod', 'Moderate'], ['total', 'Severe or total (“dead ear”)']]};
+function forkResult(les, sev) {
+  const side = les[0] === 'r' ? 'R' : 'L', other = side === 'R' ? 'L' : 'R', name = {R: 'right', L: 'left'};
+  const res = {R: ['Positive', 'AC > BC (normal)'], L: ['Positive', 'AC > BC (normal)'], weber: 'midline', wtxt: 'Heard in the midline (no one-sided loss).'};
+  if (les === 'none') return res;
+  if (les[1] === 'c') {
+    if (sev === 'large') res[side] = ['Negative', 'BC > AC: conductive loss in this ear'];
+    else res[side] = ['Usually positive', 'an air–bone gap of about 15 dB or less still gives a positive Rinne (PMC7961717)'];
+    res.weber = side; res.wtxt = `Lateralises to the <b>${name[side]}</b> (affected) ear${sev === 'small' ? ' — earlier studies cited in PMC13615065 found the Weber can lateralise with a gap of only 2.5–4 dB, so it may pick up a loss the Rinne misses' : ''}.`;
+  } else {
+    if (sev === 'total') res[side] = ['Negative (false)', 'the fork on the mastoid is heard by the other, good cochlea, so “BC” seems better than AC; ask which ear hears it'];
+    else res[side] = ['Positive', 'AC > BC, both reduced: a positive Rinne does not mean normal hearing'];
+    res.weber = other; res.wtxt = `Lateralises to the <b>${name[other]}</b> (better) ear.`;
+  }
+  return res;
+}
+/* audiogram */
+const FREQ = [250, 500, 1000, 2000, 4000, 8000], BCF = [250, 500, 1000, 2000, 4000];
+const PRE = {
+  normal: {k: 'Normal', R: {ac: [10, 10, 5, 10, 10, 15], bc: [5, 5, 5, 10, 5]}, L: {ac: [10, 5, 10, 10, 15, 15], bc: [5, 5, 5, 5, 10]}, masked: false,
+    t: 'Normal: every threshold better than 20 dB HL, air and bone together.'},
+  cond: {k: 'Conductive (R)', R: {ac: [40, 40, 35, 35, 30, 30], bc: [10, 10, 10, 10, 10]}, L: {ac: [10, 10, 10, 10, 10, 15], bc: [5, 5, 5, 5, 10]}, masked: true,
+    t: 'Right conductive loss: bone conduction normal, air conduction down, an air–bone gap at every frequency.'},
+  sn: {k: 'Sensorineural (R)', R: {ac: [30, 35, 45, 55, 65, 70], bc: [25, 35, 40, 55, 60]}, L: {ac: [10, 10, 10, 10, 10, 15], bc: [5, 5, 5, 5, 10]}, masked: true,
+    t: 'Right sensorineural loss: air and bone equally raised, no gap.'},
+  mixed: {k: 'Mixed (R)', R: {ac: [60, 60, 60, 65, 70, 75], bc: [30, 30, 35, 40, 45]}, L: {ac: [10, 10, 10, 10, 10, 15], bc: [5, 5, 5, 5, 10]}, masked: true,
+    t: 'Right mixed loss: bone conduction raised and an air–bone gap on top. Air conduction differs between the ears by more than 40 dB, so the right air thresholds need masking too.'},
+  nihl: {k: 'Noise (4 kHz notch)', R: {ac: [10, 10, 15, 20, 50, 25], bc: [10, 10, 15, 20, 50]}, L: {ac: [10, 15, 15, 20, 55, 25], bc: [10, 15, 15, 20, 55]}, masked: false,
+    t: 'Noise-induced loss: both ears, a notch deepest at 4 kHz with recovery at 8 kHz, no gap.'},
+  oto: {k: 'Otosclerosis (R, Carhart)', R: {ac: [50, 50, 45, 45, 40, 40], bc: [10, 10, 15, 30, 15]}, L: {ac: [10, 10, 10, 10, 10, 15], bc: [5, 5, 5, 5, 10]}, masked: true,
+    t: 'Right otosclerosis: conductive loss, worse at low frequencies (Wikipedia), with a bone-conduction dip at 2 kHz — the Carhart notch.'},
+  presby: {k: 'Presbycusis', R: {ac: [15, 15, 20, 35, 55, 70], bc: [15, 15, 20, 35, 55]}, L: {ac: [15, 20, 20, 35, 60, 70], bc: [15, 20, 20, 35, 55]}, masked: false,
+    t: 'Presbycusis: both ears alike, sloping down into the high frequencies, no gap.'}
+};
+/* WHO 2021 (World report on hearing, Table 1.3); older grades: Bull WHO 2019 Table 1 (Olusanya et al.) */
+const WHO = [[-10, 20, 'Normal hearing', 'No problem hearing sounds', 'No or minimal problem hearing sounds'],
+  [20, 35, 'Mild', 'Does not have problems hearing conversational speech', 'May have difficulty hearing conversational speech'],
+  [35, 50, 'Moderate', 'May have difficulty hearing conversational speech', 'Difficulty hearing and taking part in conversation'],
+  [50, 65, 'Moderately severe', 'Difficulty hearing conversational speech; can hear raised voices without difficulty', 'Difficulty hearing most speech and taking part in conversation'],
+  [65, 80, 'Severe', 'Does not hear most conversational speech; may have difficulty hearing and understanding raised voices', 'Extreme difficulty hearing speech and taking part in conversation'],
+  [80, 95, 'Profound', 'Extreme difficulty hearing raised voices', 'Conversational speech cannot be heard'],
+  [95, 120, 'Complete or total', 'Cannot hear speech and most environmental sounds', 'Cannot hear speech and most environmental sounds']];
+const WHO_OLD = [[-10, 25, '0: no impairment (25 dB or better)'], [26, 40, '1: slight (26–40 dB)'], [41, 60, '2: moderate (41–60 dB)'], [61, 80, '3: severe (61–80 dB)'], [81, 120, '4: profound, incl. deafness (81 dB or more)']];
+/* tympanograms (schematic shapes; Jerger types as PMC5738938, Wikipedia, PMC13720400, PMC4859046) */
+const TYMP = {
+  A: {k: 'A', peak: 0, h: 1.0, w: 70, vol: 'normal', t: '<b>Type A</b>: a clear peak near 0 daPa (normal range ±150 daPa, PMC5738938; +50 to −99 daPa, PMC13720400). Normal middle ear. Otosclerosis can also give a normal A (Wikipedia).'},
+  As: {k: 'As (shallow)', peak: 0, h: 0.35, w: 70, vol: 'normal', t: '<b>Type As</b>: peak at normal pressure but low: a <b>stiff</b> system — <b>otosclerosis</b>, a scarred rigid drum (PMC5738938, Wikipedia; Brazilian task force 2023: As or Ar in otosclerosis).'},
+  Ad: {k: 'Ad (deep)', peak: 0, h: 2.1, w: 70, vol: 'normal', t: '<b>Type Ad</b>: peak at normal pressure but very high: a floppy system — <b>ossicular discontinuity</b> (e.g. a defect of the incus), a scarred slack or monomeric drum (PMC5738938, Wikipedia).'},
+  B: {k: 'B (normal volume)', peak: null, h: 0.12, w: 0, vol: 'normal', t: '<b>Type B</b>, normal canal volume: flat, no peak — <b>fluid in the middle ear</b> (OME, glue ear) (PMC5738938, Wikipedia, PMC6570640, PMC4859046). A flat trace can also be a blocked probe or the probe against the canal wall (PMC5738938).'},
+  Bv: {k: 'B (large volume)', peak: null, h: 0.12, w: 0, vol: 'large', t: '<b>Type B</b> with an ear-canal volume above normal: the probe measures the canal plus the middle ear — Wikipedia: a <b>perforation</b> or an open ventilation tube (PMC4859046 treats this as a separate group from fluid).'},
+  C: {k: 'C (negative)', peak: -220, h: 0.9, w: 75, vol: 'normal', t: '<b>Type C</b>: the peak is at <b>negative pressure</b>: negative middle-ear pressure from <b>Eustachian tube dysfunction</b>, with a retracted drum (Wikipedia, PMC5738938, PMC13720400). A peak below −50 daPa is highly suggestive of obstructive tube dysfunction (PMC13720400).'}
+};
+/* acoustic reflex: probe (recording) ear, stimulated ear; lesions on the RIGHT */
+const RLES = [['none', 'Normal'], ['me', 'Right middle-ear (conductive, e.g. otosclerosis)'], ['co', 'Right cochlear (mild–moderate)'], ['n8', 'Right VIII (retrocochlear)'], ['n7', 'Right facial nerve palsy (above the nerve to stapedius)']];
+function reflex(les, stim, rec) {
+  if (les === 'me' && (stim === 'R' || rec === 'R')) return ['Absent', stim === 'R' ? 'the loud tone is damped on its way into the right ear' : 'the fixed right stapes cannot move the drum, so no change is recorded'];
+  if (les === 'n8' && stim === 'R') return ['Raised or absent', 'the afferent (VIII) limb from the right ear is damaged'];
+  if (les === 'n7' && rec === 'R') return ['Absent', 'the right stapedius gets no facial-nerve signal'];
+  if (les === 'co') return ['Present', 'threshold near normal (PMC5738938: up to a hearing loss of about 50 dB)'];
+  return ['Present', 'arc intact'];
+}
+
+/* ================= HEARING PATHWAY ================= */
+const ps = {s: 0}; let freq = 1000;
+function drawPath() {
+  const on = new Set(PATH[ps.s].on), c = k => on.has(k) ? ' on' : '';
+  let h = E.DEFS;
+  // auricle and canal
+  h += `<path class="skin${c('pinna')}" d="M18 150 C 6 110 30 70 52 80 C 66 88 62 118 56 140 L 56 190 C 60 214 40 236 24 220 C 12 206 26 184 18 150 Z"/>`;
+  h += `<rect class="skin${c('canal')}" x="56" y="150" width="78" height="26" rx="3"/>`;
+  h += `<rect class="tmf${c('tm')}" x="134" y="132" width="7" height="62" rx="2"/>`;
+  // ossicles
+  h += `<path class="oss${c('oss')}" d="M141 150 L150 118 L170 112 L178 122 L162 128 L155 160 Z"/><path class="oss${c('oss')}" d="M170 112 L196 110 L204 122 L190 128 L188 150 L180 150 L182 126 Z"/><path class="oss${c('oss')}" d="M184 150 L200 146 L226 142 L226 166 L200 162 Z"/>`;
+  // cochlea uncoiled: labyrinth wall, scala vestibuli, scala tympani, basilar membrane
+  h += `<rect class="lab" x="228" y="118" width="250" height="92" rx="10"/>`;
+  h += `<rect class="peri${c('sv')}" x="232" y="124" width="238" height="36" rx="4"/><rect class="peri${c('st')}" x="232" y="168" width="238" height="36" rx="4"/>`;
+  h += `<rect class="oss${c('ow')}" x="226" y="134" width="6" height="18"/>`;
+  h += `<rect class="tmf${c('rw')}" x="226" y="176" width="6" height="18"/>`;
+  h += `<path class="bm${c('bm')}" d="M232 164 L470 164"/>`;
+  // place peak for the chosen frequency (schematic, log-spaced: 20 kHz at the base, 20 Hz at the apex, PMC10658786)
+  const fx = 236 + (Math.log(20000 / freq) / Math.log(1000)) * 228;
+  if (ps.s === 4 || ps.s === 5) h += `<path class="wave" d="M${(fx - 40).toFixed(1)} 164 Q ${(fx - 15).toFixed(1)} 164 ${fx.toFixed(1)} 150 Q ${(fx + 15).toFixed(1)} 164 ${(fx + 40).toFixed(1)} 164"/>`;
+  if (ps.s === 5) for (let i = 0; i < 9; i++) h += `<circle cx="${244 + i * 27}" cy="164" r="3" class="hcell"/>`;
+  // nerve to the brainstem
+  h += `<path class="nv${c('n8')}" d="M478 164 C 500 164 500 280 522 280"/>`;
+  const BOX = [['cn', 'Cochlear nuclei', 280], ['soc', 'Superior olivary complex', 232], ['ll', 'Lateral lemniscus', 184], ['ic', 'Inferior colliculus', 136], ['mgb', 'Medial geniculate body', 88], ['ac', 'Auditory cortex', 40]];
+  for (let i = 0; i < BOX.length; i++) {
+    const [k, n, y] = BOX[i];
+    if (i) h += `<path class="nv" d="M599 ${y + 34} L599 ${y + 14}" style="stroke-width:3"/>`;
+    h += `<rect class="nbox${c(k)}" x="522" y="${y - 14}" width="154" height="28" rx="5"/>` + T(599, y + 4, n, 's', 'middle');
+  }
+  // labels
+  h += T(30, 64, 'Auricle', 's', 'start') + T(96, 196, 'Canal', 's', 'middle') + T(138, 212, 'Drum', 's', 'middle') + T(184, 100, 'Ossicles', 's', 'middle');
+  h += T(236, 224, 'Base: high Hz', 's', 'start') + T(474, 224, 'Apex: low Hz', 's', 'end');
+  h += T(350, 146, 'Scala vestibuli (perilymph)', 's', 'middle') + T(350, 190, 'Scala tympani (perilymph)', 's', 'middle') + T(350, 244, 'Basilar membrane: the line between the two', 's', 'middle');
+  h += T(150, 292, 'Oval window (stapes) above, round window below', 's', 'start');
+  h += T(486, 300, 'VIII', 's', 'start');
+  if (ps.s === 4 || ps.s === 5) h += T(Math.max(262, Math.min(446, fx)), 108, (freq >= 1000 ? freq / 1000 + ' kHz' : freq + ' Hz'), 'm', 'middle');
+  $('path-svg').innerHTML = h;
+  $('path-text').innerHTML = PATH[ps.s].t;
+}
+const goPath = E.stepper('path-step', PATH.map(p => p.k), drawPath, ps);
+const FSTEP = [125, 250, 500, 1000, 2000, 4000, 8000, 16000];
+E.slider('path-sl', {id: 'freq', label: 'Tone frequency (steps 5–6)', min: 0, max: FSTEP.length - 1, step: 1, value: 3, fmt: v => (FSTEP[v] >= 1000 ? FSTEP[v] / 1000 + ' kHz' : FSTEP[v] + ' Hz')}, v => { freq = FSTEP[v]; if (ps.s !== 4 && ps.s !== 5) goPath(4); else drawPath(); }).init();
+
+/* ================= IMPEDANCE MATCHING ================= */
+let imp = 'eff';
+function drawImp() {
+  const d = IMP[imp]; let h = E.DEFS;
+  const R = 70, r = R / Math.sqrt(d.area);
+  h += `<circle class="tmf" cx="95" cy="110" r="${R}"/>` + T(95, 200, 'Drum: vibrating area', 's', 'middle');
+  h += `<ellipse class="oss" cx="245" cy="110" rx="${(r * 1.4).toFixed(1)}" ry="${(r / 1.4).toFixed(1)}"/>` + T(245, 140, 'Stapes footplate', 's', 'middle');
+  h += T(245, 172, `area ≈ ${d.area} : 1`, 'm', 'middle');
+  h += `<path class="flow" d="M168 110 L228 110"/>`;
+  // lever
+  if (d.lever) {
+    const px = 340, py = 70;
+    h += `<path class="bm" d="M${px} ${py} L${px} ${py + 130}"/><circle cx="${px}" cy="${py}" r="4" style="fill:var(--ink)"/>`;
+    h += `<rect class="oss" x="${px - 30}" y="${py}" width="10" height="${130}" rx="3"/>` + T(px - 34, py + 140, 'Malleus 1.3', 's', 'end');
+    h += `<rect class="oss" x="${px + 20}" y="${py}" width="10" height="${100}" rx="3"/>` + T(px + 26, py + 116, 'Incus 1', 's', 'start');
+    h += T(px, py - 12, 'Lever 1.3 : 1', 'm', 'middle');
+  } else h += T(350, 110, 'lever counted in', 's', 'middle') + T(350, 126, 'the 18.1 gain', 's', 'middle');
+  h += T(210, 240, 'Schematic; figures from Wikipedia only', 's', 'middle');
+  $('imp-svg').innerHTML = h;
+  $('imp-big').textContent = d.big; $('imp-out').textContent = d.out;
+}
+E.toggles('imp-chips', Object.entries(IMP).map(([k, v]) => [k, v.k]), k => { imp = k; drawImp(); }, imp);
+$('imp-text').innerHTML = `<p>Air has a far lower acoustic impedance than the cochlear fluids, so sound striking fluid directly would mostly be reflected (Wikipedia: only about 0.05% of the energy would pass). The middle ear matches the two (Wikipedia; PMC9589510): the force collected over the large drum is concentrated on the small footplate (<b>area ratio</b>), and the malleus handle is longer than the long process of the incus (<b>lever</b>).</p>
+<p>The numbers are from <b>Wikipedia only</b>, and its figures differ (≈14 times effective area, or ≈20 times anatomical area × 1.3). Wikipedia adds that the gain actually measured is about <b>20 dB</b> across 200–10,000 Hz. A 2022 review (PMC9589510) argues the middle ear works more as an impedance <i>match</i> (less reflection) than as a pressure "transformer".</p>`;
+
+/* ================= TUNING FORKS ================= */
+let les = 'none', sev = {c: 'large', s: 'mod'};
+function sevKey() { return les === 'none' ? null : les[1]; }
+function buildSev() {
+  const k = sevKey(), box = $('fork-sev');
+  if (!k) { box.innerHTML = '<span class="note">Pick a lesion first.</span>'; return; }
+  E.toggles('fork-sev', SEV[k], v => { sev[k] = v; drawFork(); const b = box.querySelector(`[data-k="${v}"]`); if (b) b.focus(); }, sev[k]);
+}
+function drawFork() {
+  const k = sevKey(), r = forkResult(les, k ? sev[k] : null);
+  let h = E.DEFS;
+  h += `<ellipse class="face" cx="210" cy="150" rx="88" ry="108"/>`;
+  // patient's right ear on the viewer's left
+  h += `<ellipse class="face" cx="118" cy="160" rx="16" ry="30"/><ellipse class="face" cx="302" cy="160" rx="16" ry="30"/>`;
+  h += T(96, 214, 'Right ear', 'r', 'middle') + T(324, 214, 'Left ear', 'lf', 'middle');
+  // lesion marks
+  if (les !== 'none') { const x = les[0] === 'r' ? 118 : 302; h += `<path class="lesion" d="M${x - 10} 150 L${x + 10} 170 M${x + 10} 150 L${x - 10} 170"/>`; }
+  // fork on the forehead
+  h += `<path d="M204 30 L204 70 M216 30 L216 70 M204 70 Q210 80 216 70 M210 76 L210 92" style="stroke:var(--ink);stroke-width:3;fill:none"/>` + T(210, 22, 'Weber: fork on the forehead', 's', 'middle');
+  if (r.weber === 'midline') h += `<path d="M210 100 L210 128" class="wave" marker-end="url(#arr)"/>` + T(210, 146, 'midline', 'm', 'middle');
+  else { const x = r.weber === 'R' ? 142 : 278; h += `<path d="M210 104 Q ${(210 + x) / 2} 112 ${x} 150" class="wave" marker-end="url(#arr)"/>`; }
+  h += T(10, 278, 'Rinne: ' + r.R[0], 'r', 'start') + T(410, 278, 'Rinne: ' + r.L[0], 'lf', 'end');
+  h += T(210, 296, 'Schematic', 's', 'middle');
+  $('fork-svg').innerHTML = h;
+  $('fork-res').innerHTML = `<div class="ans"><h3>Weber</h3><p>${r.wtxt}</p></div><div class="ans"><h3>Rinne, right ear: ${r.R[0]}</h3><p>${r.R[1]}.</p></div><div class="ans"><h3>Rinne, left ear: ${r.L[0]}</h3><p>${r.L[1]}.</p></div>`;
+}
+E.toggles('fork-les', LES, v => { les = v; buildSev(); drawFork(); $('fork-les').querySelector(`[data-k="${v}"]`).focus(); }, les);
+$('fork-intro').innerHTML = `<p>Both tests use a vibrating fork, usually <b>512 Hz</b> (a 512 Hz Rinne was correct in 96.6% of ears without a conductive loss, PMC7029235; sensitivity 97% for otosclerosis, PMC13270388). The fork on the skull stimulates both inner ears by bone conduction (PMC5738938).</p>
+<ul><li><b>Rinne</b> (one ear at a time): the fork on the <b>mastoid</b> (bone conduction, BC), then in front of the ear canal (air conduction, AC). <b>Positive</b> = louder in front of the ear, AC &gt; BC: a normal ear <i>or</i> a sensorineural loss. <b>Negative</b> = louder on the mastoid, BC &gt; AC: a <b>conductive</b> loss in that ear (StatPearls, PMC13270388, Brazilian task force 2023, PMC5738938).</li>
+<li><b>Weber</b>: the fork on the <b>midline</b> (forehead or vertex). Normal or symmetrical hearing: heard in the midline. A one-sided <b>conductive</b> loss lateralises to the <b>affected</b> ear; a one-sided <b>sensorineural</b> loss lateralises to the <b>better</b> ear (StatPearls, PMC5738938, PMC7029235, Wikipedia).</li></ul>`;
+$('fork-text').innerHTML = `<p><b>False-negative Rinne.</b> In a severe or total one-sided sensorineural loss the fork on the mastoid is heard by the <i>other</i> cochlea (bone conduction is not side-specific), so the Rinne looks negative although the ear has no conductive loss (StatPearls, PMC5738938, PMC7029235). The Weber then goes to the good ear; ask which ear hears the mastoid fork. In audiometry the same problem is solved by masking (below).</p>
+<p><b>How big a gap turns the Rinne negative? The sources differ:</b> a gap of 15 dB or less still gave a positive Rinne in one study, about 40 dB was needed in another (both reviewed in PMC7961717); a German review puts it at about 20 dB (PMC5738938); in 121 otosclerosis patients a negative Rinne became likely (50%) from a gap of 13.9 dB with a 512 Hz fork, 18.7 dB with 1024 Hz and 31.3 dB with 2048 Hz (PMC13270388) — the higher the fork, the bigger the gap needed.</p>
+<p><b>Limits.</b> Forks do not measure thresholds, can miss mild, bilateral or mixed losses (StatPearls), cannot be clearly read in a mixed loss, and the Weber does not help in bilateral loss (PMC5738938). StatPearls: they are not for general screening and do not replace audiometry.</p>
+<p class="note">The ABC (absolute bone conduction) and Schwabach tests are not shown: we found no two open sources that describe how to read them.</p>`;
+
+/* ================= AUDIOGRAM ================= */
+const A = {x0: 70, oct: 60, y0: 50, dbpx: 3};
+const ax = f => A.x0 + Math.log2(f / 250) * A.oct, ay = db => A.y0 + (db + 10) * A.dbpx;
+let aud = JSON.parse(JSON.stringify({R: PRE.oto.R, L: PRE.oto.L})), masked = PRE.oto.masked, pre = 'oto', edEar = 'R', edMode = 'ac', edF = 2000, edited = false;
+const avg = a => a.reduce((s, v) => s + v, 0) / a.length;
+const pta = arr => avg([arr[1], arr[2], arr[3], arr[4]]);                         // 0.5, 1, 2, 4 kHz
+const ptaB = arr => avg([arr[1], arr[2], arr[3], arr[4]]);
+function classify(e) {
+  const ac = pta(aud[e].ac), bc = ptaB(aud[e].bc), gap = ac - bc;
+  let type;
+  const invalid = BCF.some((f, i) => aud[e].bc[i] > aud[e].ac[i]);
+  if (invalid) type = 'bone worse than air: not a valid audiogram';
+  else if (ac < 20) type = 'Normal';
+  else if (gap >= 15 && bc < 20) type = 'Conductive';
+  else if (gap >= 15) type = 'Mixed';
+  else type = 'Sensorineural';
+  const notch = aud[e].ac[3] <= aud[e].ac[4] - 10 && aud[e].ac[5] <= aud[e].ac[4] - 10;
+  const carhart = aud[e].bc[3] >= (aud[e].bc[2] + aud[e].bc[4]) / 2 + 7.5;
+  return {ac, bc, gap, type, notch, carhart, invalid};
+}
+function whoGrade(v) { for (const g of WHO) if (v < g[1] || g === WHO[WHO.length - 1]) return g; }
+function symbol(e, mode, f, v) {
+  const x = ax(f), y = ay(v), cls = e === 'R' ? 'er' : 'el', s = 6;
+  if (mode === 'ac') {
+    if (!masked || !maskAt(e, FREQ.indexOf(f))) return e === 'R' ? `<circle class="${cls}" cx="${x}" cy="${y}" r="${s}"/>` : `<path class="${cls}" d="M${x - s} ${y - s} L${x + s} ${y + s} M${x + s} ${y - s} L${x - s} ${y + s}"/>`;
+    return e === 'R' ? `<path class="${cls}" d="M${x} ${y - s - 1} L${x + s + 1} ${y + s} L${x - s - 1} ${y + s} Z"/>` : `<rect class="${cls}" x="${x - s}" y="${y - s}" width="${2 * s}" height="${2 * s}"/>`;
+  }
+  // bone: right on the left of the frequency line (< or [), left on the right (> or ])
+  const dx = e === 'R' ? -11 : 11;
+  if (!masked) return e === 'R' ? `<path class="${cls}" d="M${x + dx + 5} ${y - 7} L${x + dx - 3} ${y} L${x + dx + 5} ${y + 7}"/>` : `<path class="${cls}" d="M${x + dx - 5} ${y - 7} L${x + dx + 3} ${y} L${x + dx - 5} ${y + 7}"/>`;
+  return e === 'R' ? `<path class="${cls}" d="M${x + dx + 5} ${y - 7} L${x + dx - 2} ${y - 7} L${x + dx - 2} ${y + 7} L${x + dx + 5} ${y + 7}"/>` : `<path class="${cls}" d="M${x + dx - 5} ${y - 7} L${x + dx + 2} ${y - 7} L${x + dx + 2} ${y + 7} L${x + dx - 5} ${y + 7}"/>`;
+}
+function maskAt(e, i) { const o = e === 'R' ? 'L' : 'R'; return aud[e].ac[i] - aud[o].ac[i] > 40; }
+function maskList(e) { return FREQ.filter((f, i) => maskAt(e, i)).map(f => f >= 1000 ? f / 1000 + ' kHz' : f + ' Hz'); }
+function drawPTA() {
+  let h = E.DEFS;
+  // WHO bands (right margin labels)
+  WHO.forEach((g, i) => { const y1 = ay(Math.max(g[0], -10)), y2 = ay(Math.min(g[1], 120)); h += `<rect class="${i % 2 ? 'band2' : 'band'}" x="${ax(250) - 20}" y="${y1}" width="${ax(8000) - ax(250) + 40}" height="${y2 - y1}"/>` + T(ax(8000) + 28, (y1 + y2) / 2 + 4, g[2].replace('Moderately severe', 'Mod. severe').replace('Complete or total', 'Total').replace('Normal hearing', 'Normal'), 's', 'start'); });
+  for (let db = -10; db <= 120; db += 10) h += `<path class="grid" d="M${ax(250) - 20} ${ay(db)} L${ax(8000) + 20} ${ay(db)}"/>` + T(ax(250) - 26, ay(db) + 4, db, 's', 'end');
+  for (const f of FREQ) h += `<path class="grid" d="M${ax(f)} ${ay(-10)} L${ax(f)} ${ay(120)}"/>` + T(ax(f), A.y0 - 12, f >= 1000 ? f / 1000 + 'k' : f, 's', 'middle');
+  h += T(ax(250) + 40, A.y0 - 30, 'Frequency (Hz)', 'h', 'start') + T(4, A.y0 - 30, 'dB HL', 'h', 'start');
+  h += `<path class="axis" d="M${ax(250) - 20} ${ay(0)} L${ax(8000) + 20} ${ay(0)}" style="stroke-width:2"/>`;
+  // selected point
+  const sv = edMode === 'ac' ? aud[edEar].ac[FREQ.indexOf(edF)] : aud[edEar].bc[BCF.indexOf(edF)];
+  h += `<circle class="sel" cx="${ax(edF) + (edMode === 'bc' ? (edEar === 'R' ? -11 : 11) : 0)}" cy="${ay(sv)}" r="11"/>`;
+  for (const e of ['R', 'L']) {
+    const cls = e === 'R' ? 'er' : 'el';
+    h += `<path class="${cls}" d="${E.path(FREQ.map((f, i) => [ax(f), ay(aud[e].ac[i])]))}" style="stroke-width:1.4"/>`;
+    FREQ.forEach((f, i) => { h += symbol(e, 'ac', f, aud[e].ac[i]); });
+    BCF.forEach((f, i) => { h += symbol(e, 'bc', f, aud[e].bc[i]); });
+  }
+  $('pta-svg').innerHTML = h;
+  // readouts
+  const cR = classify('R'), cL = classify('L'), better = Math.min(cR.ac, cL.ac), worse = Math.max(cR.ac, cL.ac);
+  const g = whoGrade(better), uni = better < 20 && worse >= 35;
+  const card = (e, c) => `<div class="ans"><h3><span class="sym ${e === 'R' ? 'r' : 'l'}">${e === 'R' ? 'Right' : 'Left'}</span>: ${c.type}</h3><p class="readout">AC ${c.ac.toFixed(1)} · BC ${c.bc.toFixed(1)}${c.invalid ? '' : ' · gap ' + c.gap.toFixed(1) + ' dB'}</p>${!c.invalid && c.notch ? '<p class="flag">Notch at 4 kHz (recovers at 8 kHz)</p>' : ''}${!c.invalid && c.carhart ? '<p class="flag">Bone-conduction dip at 2 kHz: Carhart notch</p>' : ''}${maskList(e).length ? '<p class="flag">Air conduction &gt;40 dB worse than the other ear at ' + maskList(e).join(', ') + ': mask there</p>' : ''}</div>`;
+  $('pta-res').innerHTML = card('R', cR) + card('L', cL) + `<div class="ans" style="grid-column:1/-1"><h3>WHO 2021 grade (better ear, ${better.toFixed(1)} dB): ${g[2]}${g[2] === 'Normal hearing' ? '' : ' hearing loss'}</h3>${uni ? '<p class="ok">Unilateral hearing loss (better ear &lt;20, worse ear ≥35 dB).</p>' : ''}<p class="note">${edited ? 'Edited. ' : PRE[pre].t + ' '}Averages are of 0.5, 1, 2 and 4 kHz.</p></div>`;
+}
+function buildFreqChips() {
+  const list = edMode === 'ac' ? FREQ : BCF; if (!list.includes(edF)) edF = list[list.length - 1];
+  E.toggles('pta-f', list.map(f => [String(f), f >= 1000 ? f / 1000 + ' kHz' : f + ' Hz']), v => { edF = +v; syncSlider(); drawPTA(); $('pta-f').querySelector(`[data-k="${v}"]`).focus(); }, String(edF));
+}
+let sl;
+function cur() { return edMode === 'ac' ? aud[edEar].ac[FREQ.indexOf(edF)] : aud[edEar].bc[BCF.indexOf(edF)]; }
+function syncSlider() { sl.el.value = cur(); $('sl-thr-o').textContent = E.mn(cur() + ' dB HL'); }
+sl = E.slider('pta-sl', {id: 'thr', label: 'Threshold of the selected point', min: -10, max: 120, step: 5, value: 45, fmt: v => v + ' dB HL'}, v => {
+  if (edMode === 'ac') aud[edEar].ac[FREQ.indexOf(edF)] = v; else aud[edEar].bc[BCF.indexOf(edF)] = v;
+  edited = true; $('pta-pre').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false')); drawPTA();
+});
+E.toggles('pta-pre', Object.entries(PRE).map(([k, v]) => [k, v.k]), k => { pre = k; aud = JSON.parse(JSON.stringify({R: PRE[k].R, L: PRE[k].L})); masked = PRE[k].masked; edited = false; setMaskChip(); syncSlider(); drawPTA(); $('pta-pre').querySelector(`[data-k="${k}"]`).focus(); }, pre);
+E.toggles('pta-ear', [['R', 'Right (O)'], ['L', 'Left (X)']], v => { edEar = v; syncSlider(); drawPTA(); $('pta-ear').querySelector(`[data-k="${v}"]`).focus(); }, edEar);
+E.toggles('pta-mode', [['ac', 'Air'], ['bc', 'Bone']], v => { edMode = v; buildFreqChips(); syncSlider(); drawPTA(); $('pta-mode').querySelector(`[data-k="${v}"]`).focus(); }, edMode);
+function setMaskChip() { E.toggles('pta-mask', [['u', 'Unmasked symbols'], ['m', 'Masked symbols']], v => { masked = v === 'm'; drawPTA(); $('pta-mask').querySelector(`[data-k="${v}"]`).focus(); }, masked ? 'm' : 'u'); }
+setMaskChip(); buildFreqChips(); syncSlider();
+E.key('pta-key', [['--ear-r', 'Right ear (red, Wikipedia): O air, &lt; bone, △ masked air, [ masked bone'], ['--ear-l', 'Left ear (blue): X air, &gt; bone, □ masked air, ] masked bone']]);
+$('pta-intro').innerHTML = `<p>A tone is presented to one ear at a time and made softer until it is heard only half the time: that is the <b>threshold</b>, in dB hearing level (HL), usually at 250–8000 Hz (StatPearls; PMC5738938: 125 Hz–8 kHz). <b>Air conduction</b> (earphones) tests the whole pathway; <b>bone conduction</b> (a vibrator on the mastoid) bypasses the outer and middle ear (StatPearls). Frequency runs across on a log scale, hearing level runs <b>downward</b> (worse hearing lower), one octave spanning 20 dB (ASHA 1990).</p>`;
+$('pta-text').innerHTML = `<p><b>Reading it.</b> An <b>air–bone gap</b> means a conductive component; air and bone raised together with no gap means a sensorineural loss (StatPearls); both raised with a gap is mixed. Wikipedia counts a gap of at least 15 dB (its otosclerosis article: more than 10 dB); the readout uses ≥15 dB over 0.5–4 kHz (the average StatPearls uses for the gap). A gap never exceeds about 50–60 dB, the gain of the middle ear (PMC5738938).</p>
+<p><b>Patterns</b> (presets; numbers hand-made, schematic): <b>noise</b> — a notch at 3–6 kHz, deepest at 4 kHz, with recovery at 8 kHz, in both ears (Wikipedia, PMC12645837, PMC4399645; the readout flags a notch when 2 and 8 kHz are both at least 10 dB better than 4 kHz, the Wilson definition, PMC5484347); <b>presbycusis</b> — bilateral, symmetrical, sloping high-frequency loss (Wikipedia, StatPearls); <b>otosclerosis</b> — conductive loss with a bone-conduction dip greatest at <b>2 kHz</b>, the <b>Carhart notch</b> (PMC7982757, PMC12297053, Wikipedia; flagged when bone at 2 kHz is at least 7.5 dB worse than the mean of 1 and 4 kHz, the definition in PMC7982757 and PMC12297053).</p>
+<p><b>Masking.</b> A tone loud enough to cross the head (beyond the <b>interaural attenuation</b>) can be heard by the other ear (cross-hearing), so noise is put into the non-test ear (StatPearls, Wikipedia). For air conduction, StatPearls masks when the ears differ by more than <b>40 dB</b> (55 dB with insert earphones); attenuation is about 50 dB for supra-aural earphones (PMC5738938; Wikipedia: 40–80 dB). For bone conduction the attenuation is near <b>0</b> (StatPearls; ≤10 dB, PMC5738938; 0–20 dB, Wikipedia): the vibrator stimulates both cochleae, so an unmasked bone threshold cannot be assigned to either ear (ASHA 1990) — the one-sided presets therefore show masked bone symbols. Too much masking noise raises the test ear's threshold (over-masking, PMC5738938).</p>
+<p><b>Symbols.</b> Bone: the symbol sits beside the frequency line with its open side facing the line, right ear to the left of it (&lt;, masked [), left ear to the right (&gt;, masked ]) (ASHA 1990, Wikipedia). Wikipedia: air O right, X left; masked air △ right, □ left; red for right, blue for left when colour is used — ASHA 1990 says colour is not needed (the symbols carry the side).</p>`;
+
+/* ================= WHO GRADES ================= */
+let gv = 40;
+function drawGrade() {
+  const x = v => 12 + (v + 10) / 130 * 396; let h = '';
+  WHO.forEach((g, i) => { h += `<rect class="${i % 2 ? 'band2' : 'band'}" x="${x(g[0])}" y="30" width="${x(Math.min(g[1], 120)) - x(g[0])}" height="40"/>`; });
+  WHO.forEach((g, i) => { const mid = (x(g[0]) + x(Math.min(g[1], 120))) / 2; h += T(mid, i % 2 ? 88 : 22, g[2].replace('Moderately severe', 'Mod. severe').replace('Complete or total', 'Total').replace('Normal hearing', 'Normal'), 's', 'middle'); });
+  for (const v of [-10, 20, 35, 50, 65, 80, 95, 120]) h += T(x(v), 108, v, 's', 'middle');
+  h += `<path class="gmark" d="M${x(gv)} 26 L${x(gv)} 74"/>`;
+  $('grade-svg').innerHTML = h;
+  const g = whoGrade(gv), o = WHO_OLD.find(r => gv <= r[1]) || WHO_OLD[WHO_OLD.length - 1];
+  $('grade-out').innerHTML = `<span class="big">${g[2]}${g[2] === 'Normal hearing' ? '' : ' hearing loss'}</span><p><b>Quiet:</b> ${g[3]}. <b>Noise:</b> ${g[4]}.</p><p class="note">Older WHO grade (1991, as in Bull WHO 2019): ${o[2]}.</p>`;
+}
+E.slider('grade-sl', {id: 'pta', label: 'Better-ear average threshold (0.5, 1, 2, 4 kHz)', min: -10, max: 120, step: 1, value: gv, fmt: v => v + ' dB HL'}, v => { gv = v; drawGrade(); }).init();
+E.table('grade-table', ['WHO 2021 grade', 'Better ear (dB HL)', 'Quiet', 'Noise'], WHO.map(g => [g[2], g[0] === -10 ? '&lt;20' : g[1] === 120 ? '≥95' : `${g[0]} to &lt;${g[1]}`, g[3], g[4]]).concat([['Unilateral', '&lt;20 better ear, ≥35 worse ear', 'May not have problem unless sound is near the poorer hearing ear; may have difficulty in locating sounds', 'May have difficulty with speech, conversation and locating sounds']]));
+$('grade-text').innerHTML = `<p><b>WHO World report on hearing, 2021</b> (Table 1.3): grades by the average threshold at 500, 1000, 2000 and 4000 Hz in the <b>better</b> ear, in equal 15-dB steps; the same cut-offs as the Global Burden of Disease expert group that proposed them (Olusanya et al., Bull WHO 2019). The limit of normal fell from 25 to 20 dB HL and a separate unilateral category was added (Bull WHO 2019). WHO: the grades are for epidemiological use in adults, and should not alone decide disability or hearing aids. WHO 2021: globally more than 1.5 billion people have some degree of hearing loss; an estimated 430 million of moderate or higher severity in the better ear.</p>`;
+
+/* ================= TYMPANOGRAM ================= */
+let ty = 'A';
+function drawTymp() {
+  const d = TYMP[ty], X = p => 60 + (p + 400) / 600 * 370, Y = a => 250 - a / 2.4 * 210;
+  let h = E.DEFS;
+  for (let p = -400; p <= 200; p += 100) h += `<path class="grid" d="M${X(p)} 40 L${X(p)} 250"/>` + T(X(p), 268, p, 's', 'middle');
+  h += `<path class="axis" d="M${X(-400)} 250 L${X(200)} 250 M${X(-400)} 250 L${X(-400)} 36"/>`;
+  h += T(X(-100), 290, 'Ear-canal pressure (daPa)', 'h', 'middle') + T(60, 24, 'Admittance ↑', 'h', 'start');
+  // normal ghost
+  const g = p => 0.12 + 1.0 * Math.exp(-Math.pow(p / 70, 2));
+  const pts = (f) => { const a = []; for (let p = -400; p <= 200; p += 5) a.push([X(p), Y(f(p))]); return a; };
+  h += `<path class="ghost" d="${E.path(pts(g))}"/>`;
+  const f = d.peak === null ? (p => 0.12 + 0.04 * Math.max(0, -p) / 400) : (p => 0.12 + d.h * Math.exp(-Math.pow((p - d.peak) / d.w, 2)));
+  h += `<path class="curve" d="${E.path(pts(f))}"/>`;
+  if (d.peak !== null) h += `<circle cx="${X(d.peak)}" cy="${Y(f(d.peak))}" r="4" style="fill:var(--ink)"/>`;
+  h += T(X(200), 24, 'Dashed: normal (A). Schematic.', 's', 'end');
+  $('tymp-svg').innerHTML = h;
+  $('tymp-out').innerHTML = `<p>${d.t}</p><p class="note">Ear-canal volume: ${d.vol === 'large' ? 'above normal' : 'normal (0.3–1 mL in PMC4859046)'}.</p>`;
+}
+E.toggles('tymp-chips', Object.entries(TYMP).map(([k, v]) => [k, v.k]), k => { ty = k; drawTymp(); $('tymp-chips').querySelector(`[data-k="${k}"]`).focus(); }, ty);
+$('tymp-intro').innerHTML = `<p>A probe sealed in the ear canal plays a <b>226 Hz</b> tone and measures how much is reflected, while the pump sweeps the canal pressure (about +200 to −400 daPa); the result, admittance (compliance) against pressure, is the <b>tympanogram</b> (Wikipedia, PMC4859046). The position of the <b>peak</b> shows the middle-ear pressure (PMC5738938; PMC13720400: peak pressure stands in for tube ventilation) and its <b>height</b> how mobile the system is (PMC5738938: high compliance = high mobility of the drum). It is not a hearing test and is read with the audiogram (Wikipedia). Types after <b>Jerger</b>:</p>`;
+E.table('tymp-table', ['Type', 'Shape', 'Typical cause'], [['A', 'Peak near 0 daPa', 'Normal (also many otosclerosis ears)'], ['As', 'Low (shallow) peak at 0', 'Otosclerosis; stiff, scarred drum'], ['Ad', 'High (deep) peak at 0', 'Ossicular discontinuity; flaccid drum'], ['B', 'Flat', 'Fluid (OME); with a large canal volume: perforation or open grommet (Wikipedia)'], ['C', 'Peak at negative pressure', 'Eustachian tube dysfunction, retracted drum']]);
+
+/* ================= ACOUSTIC REFLEX ================= */
+let rl = 'none';
+function drawRefl() {
+  let h = E.DEFS;
+  const box = (x, y, w, t, cls = 'box') => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="26" rx="5"/>` + T(x + w / 2, y + 17, t, 's', 'middle');
+  h += box(10, 40, 110, 'R middle ear') + box(10, 100, 110, 'R cochlea + VIII') + box(320, 40, 110, 'L middle ear') + box(320, 100, 110, 'L cochlea + VIII');
+  h += box(155, 100, 130, 'Brainstem: CN, SOC', 'nbox') + box(10, 180, 110, 'R VII → stapedius', 'nbox') + box(320, 180, 110, 'L VII → stapedius', 'nbox');
+  h += `<path class="flow" d="M65 66 L65 98"/><path class="flow" d="M375 66 L375 98"/><path class="flow" d="M120 113 L153 113"/><path class="flow" d="M320 113 L287 113"/>`;
+  h += `<path class="flow" d="M190 126 L90 178"/><path class="flow" d="M250 126 L350 178"/>`;
+  h += `<path class="flow dash" d="M12 190 C 0 150 0 90 12 58"/><path class="flow dash" d="M428 190 C 440 150 440 90 428 58"/>`;
+  h += T(220, 30, 'Loud tone in one ear → stapedius contracts on BOTH sides', 's', 'middle');
+  h += T(220, 240, 'Stapedius stiffens the chain: admittance falls (recorded by the probe)', 's', 'middle');
+  const out = {me: 40, co: 100, n7: 180}[rl];
+  if (out !== undefined) h += `<rect class="lesion" x="8" y="${out - 2}" width="114" height="30" rx="6"/>`;
+  if (rl === 'n8') h += `<path class="lesion" d="M128 104 L146 122 M146 104 L128 122"/>`;
+  $('refl-svg').innerHTML = h;
+  const rows = [['R', 'R', 'Right ipsilateral'], ['R', 'L', 'Tone right, record left'], ['L', 'L', 'Left ipsilateral'], ['L', 'R', 'Tone left, record right']].map(([s, r, n]) => { const x = reflex(rl, s, r); return [n, x[0] === 'Present' ? x[0] : `<span class="flag">${x[0]}</span>`, x[1]]; });
+  E.table('refl-table', ['Condition', 'Reflex', 'Why'], rows);
+}
+E.toggles('refl-chips', RLES, k => { rl = k; drawRefl(); $('refl-chips').querySelector(`[data-k="${k}"]`).focus(); }, rl);
+$('refl-intro').innerHTML = `<p>A loud tone (normal threshold about 70–100 dB, Wikipedia; testing starts at about 70 dB HL, PMC5738938) makes the <b>stapedius</b> contract on <b>both</b> sides, stiffening the ossicular chain; the probe records the fall in admittance (Wikipedia, PMC5738938). In humans it is mainly the stapedius (Wikipedia). The arc is <b>acoustico-facial</b>: middle ear, cochlea and VIII are the afferent limb, the brainstem nuclei (cochlear nucleus, superior olivary complex) connect it, and the <b>facial nerve</b> is the efferent limb (PMC5738938, Wikipedia; StatPearls).</p>
+<p>So the reflex is <b>absent in a middle-ear (conductive) loss</b> — tone in the bad ear, or probe in the bad ear (PMC5738938, Wikipedia; Brazilian task force 2023: absent in otosclerosis); <b>raised or absent</b> with a lesion of VIII (PMC5738938; Wikipedia: suggests a retrocochlear lesion); and lost on the side of a facial palsy above the nerve to stapedius but kept when the injury is beyond it (Wikipedia). In a cochlear loss it stays close to normal (PMC5738938, up to about 50 dB loss). Wikipedia warns that absence alone may not pin down the site.</p>`;
+$('refl-intro').innerHTML += `<p><b>Objective tests and newborn screening.</b> Otoacoustic emissions (OAE) measure sound made by working outer hair cells and are widely used in newborn hearing screening (StatPearls; PMC5738938: TEOAE and DPOAE suit screening); automated auditory brainstem response (ABR, BERA) also plays a major role (PMC5738938) and estimates hearing in infants and others who cannot do a behavioural test (StatPearls). WHO 2021: screening can be universal or of at-risk newborns, and helps when followed by early intervention.</p>`;
+$('refl-note').textContent = 'Lesions are on the right. Rows follow the arc as the sources describe it; schematic.';
+
+/* ================= FOOTER ================= */
+$('based').innerHTML = 'Based on: WHO <i>World report on hearing</i> (2021); StatPearls (NCBI Bookshelf); Wikipedia; ASHA <i>Guidelines for audiometric symbols</i> (1990); open-access reviews and studies (current audiological diagnostics 2017, tuning-fork studies 2020–2026, Carhart notch 2021 and 2025, Brazilian Society of Otology otosclerosis task force 2023, tympanometry in OME 2012 and 2016, Eustachian tube function tests 2026, noise-induced hearing loss 2013 and 2025, notched audiograms 2017, middle-ear mechanics 2022, ascending auditory pathway 2023, hearing-loss grades in Bull WHO 2019).';
+$('models').innerHTML = 'Models used: every drawing is a schematic (not to scale); the audiogram presets and tympanogram shapes are hand-made examples that meet the definitions quoted on the page.';
+E.swipeHints(); drawImp(); buildSev(); drawFork(); drawPTA(); drawGrade(); drawTymp(); drawRefl();
+})();
+</script>
+</body>
+</html>

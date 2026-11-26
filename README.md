@@ -155,6 +155,12 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 |---|---|---|---|
 | 01 | [CPR: Basic and Advanced Life Support](anaesthesia/resuscitation-airway/cpr-bls-als.html), [Oxygen Therapy and Airway Management](anaesthesia/resuscitation-airway/oxygen-airway.html) | Resuscitation and airway | Chain of survival, adult/child/infant BLS and newborn steppers with each guideline's numbers, ALS time line, reversible causes, post-ROSC; oxygen-device picker, SpO₂ targets, airway manoeuvres and adjuncts, DAS 2015 plans, tube confirmation, VC vs PC ventilator |
 
+### ENT — [`ent/`](ent/index.html)
+
+| # | Module | Branch | What it does |
+|---|---|---|---|
+| 01 | [Hearing and Hearing Tests](ent/ear/hearing-tests.html), [Hearing Loss, Otosclerosis and the Eustachian Tube](ent/ear/hearing-loss-otosclerosis.html) | Ear | Hearing-pathway stepper, impedance matching, Rinne/Weber simulator, audiogram builder with presets, masking and WHO 2021 grades, tympanogram types, acoustic reflex; conductive vs sensorineural by site, sudden SNHL, otosclerosis stepper, Eustachian tube adult vs child, NPPCD |
+
 ## Syllabus
 
 [`SYLLABUS.md`](SYLLABUS.md) indexes all 19 subjects; each `<subject>/SYLLABUS.md` lists every NMC CBME 2024 topic and

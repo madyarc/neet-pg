@@ -12,15 +12,15 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 
 ### 1. Anatomy and Physiology of ear, nose, throat, head & neck
 
-- [ ] **EN1.1** Describe the Anatomy & physiology of ear, nose, throat, head & neck
+- [~] **EN1.1** Describe the Anatomy & physiology of ear, nose, throat, head & neck — *ear only: hearing pathway, impedance matching (anatomy on anatomy/head-neck/ear-eye; vestibular physiology not yet): [Hearing and Hearing Tests](ear/hearing-tests.html)*
 - [ ] **EN1.2** Describe the pathophysiology of common diseases in ENT like Chronic Otitis Media,,Otosclerosis, Adeno tonsillitis,Nasal polyposis.
 
 ### 2. Clinical Skills
 
 - [ ] **EN2.1** Elicit document and present an appropriate history in a patient presenting with an ENT complaint
 - [ ] **EN2.2** Demonstrate the correct use of conventional methods including head lamp in the examination of ear, nose and throat, the correct technique of examination of the nose & paranasal sinuses including the use of nasal speculum, examination of the throat including the use of a tongue depressor, examination of neck including elicitation of laryngeal crepitus *(skill)*
-- [ ] **EN2.3** Demonstrate the correct technique of examination of the ear including Otoscopy and demonstrate the correct technique of performance and interpretation of tuning fork tests.
-- [ ] **EN2.4** Describe the correct technique to perform and interpret pure tone audiogram & impedance audiogram
+- [x] **EN2.3** Demonstrate the correct technique of examination of the ear including Otoscopy and demonstrate the correct technique of performance and interpretation of tuning fork tests. — *knowledge part: Rinne/Weber simulator incl. false-negative Rinne and Rinne by fork frequency; ABC/Schwabach not covered: [Hearing and Hearing Tests](ear/hearing-tests.html)*
+- [x] **EN2.4** Describe the correct technique to perform and interpret pure tone audiogram & impedance audiogram — *audiogram builder, masking, WHO 2021 grades, Jerger tympanograms, acoustic reflex, OAE/ABR: [Hearing and Hearing Tests](ear/hearing-tests.html)*
 - [ ] **EN2.5** Demonstrate the correct technique of otoscopy, to hold visualize and assess the mobility of the tympanic membrane, interpret and diagrammatically represent the findings.
 - [ ] **EN2.6** Choose correctly and interpret radiological, microbiological & histological investigations relevant to the ENT disorders
 - [ ] **EN2.7** Identify and describe the use of common instruments used in ENT surgery. Nose: FESS, Septoplasty, Nasal Bone Reduction Ear Tympanoplasty, mastoidectomy, Myringotomy Throat: Adenotonsillectomy, Foreign Body Removal from Airway and Food passage, Tracheostomy
@@ -28,7 +28,7 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **EN2.9** Counsel and administer informed consent to patients and their families in a simulated environment for Ear: Tympanoplasty, mastoidectomy, Myringotomy Nose: FESS, Septoplasty, Nasal Bone Reduction Throat: Adenotonsillectomy, Foreign Body Removal from Airway and Food passage, Tracheostomy. *(skill)*
 - [ ] **EN2.10** Identify, resuscitate and manage ENT emergencies in a simulated environment (including tracheostomy, anterior nasal packing, removal of foreign bodies in ear, nose, throat, upper respiratory tract and food passages).
 - [ ] **EN2.11** Demonstrate the correct technique to instill topical medications into the ear, nose and throat in a simulated environment.
-- [ ] **EN2.12** Describe the national programs for prevention of deafness, cancer, noise & environmental pollution and participate actively in deafness week and world hearing day
+- [~] **EN2.12** Describe the national programs for prevention of deafness, cancer, noise & environmental pollution and participate actively in deafness week and world hearing day — *NPPCD (Dte.GHS/NHM) only; deafness week not sourced: [Hearing Loss, Otosclerosis and the Eustachian Tube](ear/hearing-loss-otosclerosis.html)*
 
 ### 3. Diagnostic and Therapeutic competencies in ENT
 
@@ -50,9 +50,9 @@ Source: NMC, *Competency Based Medical Education Curriculum 2024* (revised guide
 - [ ] **EN4.10** Observe and describe the indications for and steps involved in myringotomy and tympanoplasty *(skill)*
 - [ ] **EN4.11** Observe and describe the indications for and steps involved in mastoidectomy *(skill)*
 - [ ] **EN4.12** Describe the clinical features, investigations and principles of management of Acoustic neuroma
-- [ ] **EN4.13** Describe the clinical features, investigations and principles of management of Otosclerosis
-- [ ] **EN4.14** Describe the clinical features, investigations, and principles of management of Conductive Hearing Loss and Sensorineural hearing loss including Sudden Sensorineural Hearing Loss and Noise Induced Hearing Loss.
-- [ ] **EN4.15** Describe the anatomy of eustachian tube and discuss the clinical features, investigations, and management of Eustachian tube disorders.
+- [x] **EN4.13** Describe the clinical features, investigations and principles of management of Otosclerosis — *otosclerosis stages, signs (Schwartze, paracusis, Gellé as reported), Carhart notch, management: [Hearing Loss, Otosclerosis and the Eustachian Tube](ear/hearing-loss-otosclerosis.html)*
+- [x] **EN4.14** Describe the clinical features, investigations, and principles of management of Conductive Hearing Loss and Sensorineural hearing loss including Sudden Sensorineural Hearing Loss and Noise Induced Hearing Loss. — *conductive vs SNHL by site, ototoxic drugs, sudden SNHL (ABORL/SBO 2026), noise, presbycusis, hearing aids and implants: [Hearing Loss, Otosclerosis and the Eustachian Tube](ear/hearing-loss-otosclerosis.html)*
+- [x] **EN4.15** Describe the anatomy of eustachian tube and discuss the clinical features, investigations, and management of Eustachian tube disorders. — *Eustachian tube adult vs child, function, dysfunction types, OME: [Hearing Loss, Otosclerosis and the Eustachian Tube](ear/hearing-loss-otosclerosis.html)*
 - [ ] **EN4.16** Describe the clinical features, investigations, and principles of management of Facial Nerve palsy
 - [ ] **EN4.17** Describe the clinical features, investigations and management of Vertigo and assessment of vestibular functions.
 - [ ] **EN4.18** Describe the clinical features, investigations, and principles of management of Meniere’s Disease

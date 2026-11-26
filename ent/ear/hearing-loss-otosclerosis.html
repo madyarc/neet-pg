@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hearing Loss, Otosclerosis and the Eustachian Tube</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/ent.css">
+<style>
+/* Tokens from ent.css with their site-wide meanings: --skin (auricle, canal), --tm (tympanic membrane), --bone (ossicles, bony walls, the
+   bony Eustachian tube), --cart (the cartilaginous Eustachian tube), --labyr (bony labyrinth = otic capsule outline), --fluid (perilymph,
+   middle-ear effusion), --nerve (VIII), --clin (a lesion: the otosclerotic focus, a blocked site), --mark (selected point), --accent (UI).
+   No new tokens. */
+svg.sch .skin{fill:var(--skin);stroke:var(--ink);stroke-width:1}
+svg.sch .tmf{fill:var(--tm);stroke:var(--ink);stroke-width:1}
+svg.sch .oss{fill:var(--bone);stroke:var(--ink);stroke-width:1}
+svg.sch .cartf{fill:var(--cart);stroke:var(--ink);stroke-width:1}
+svg.sch .peri{fill:var(--fluid);stroke:var(--ink);stroke-width:1}
+svg.sch .lab{fill:none;stroke:var(--labyr);stroke-width:2.4}
+svg.sch .nv{stroke:var(--nerve);stroke-width:5;fill:none;stroke-linecap:round}
+svg.sch .focus{fill:var(--clin);fill-opacity:.55;stroke:var(--clin);stroke-width:1.5}
+svg.sch .hit{fill:var(--accent);fill-opacity:0;stroke:none;cursor:pointer}
+svg.sch .hit.on{fill-opacity:.16;stroke:var(--accent);stroke-width:2}
+svg.sch .hit:focus-visible{outline:none;stroke:var(--accent);stroke-width:3}
+svg.sch .air{fill:var(--surface);stroke:var(--ink);stroke-width:1}
+svg.sch .ref{stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 3;fill:none}
+svg.sch .arc{stroke:var(--muted);stroke-width:1.8;fill:none}
+svg.sch.fitmax{max-width:560px}
+.res{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 14px}
+@media (max-width:600px){.res{grid-template-columns:minmax(0,1fr)}}
+.flag{color:var(--clin);font-weight:600}
+.ok{font-weight:600}
+.tl{display:flex;flex-wrap:wrap;gap:8px}
+.tl .ans{flex:1 1 180px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← ENT</a> <span class="muted">· Module 01: <a href="hearing-tests.html">Hearing and hearing tests</a> · <span aria-current="page">Hearing loss, otosclerosis and the Eustachian tube</span></span></nav>
+
+<header class="stack">
+  <h1>Hearing Loss, Otosclerosis and the Eustachian Tube</h1>
+  <p class="lede">Where along the ear a lesion sits decides the type of hearing loss; then the losses NEET-PG asks about — sudden sensorineural, noise-induced, age-related — otosclerosis from focus to stapedotomy, the Eustachian tube in a child and an adult, and India's deafness programme. The tests themselves are on <a href="hearing-tests.html">Hearing and hearing tests</a>; the anatomy in 3D on <a href="../../anatomy/head-neck/ear-eye.html">the Ear and Eye</a>.</p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-site">Conductive vs sensorineural</a> <a href="#h-ss">Sudden SNHL</a> <a href="#h-nihl">Noise and age</a> <a href="#h-oto">Otosclerosis</a> <a href="#h-et">Eustachian tube</a> <a href="#h-ome">OME</a> <a href="#h-nppcd">NPPCD</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-site">
+  <h2 id="h-site">Conductive or sensorineural? Pick the site</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="site-svg" viewBox="0 0 560 230" role="img" aria-label="Schematic ear from the canal to the brainstem; tap a part to see the type of hearing loss and its causes"></svg></div>
+    <div class="stack">
+      <div id="site-chips" aria-label="Site"></div>
+      <div class="ans" id="site-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="scroll"><table id="cvs-table"></table></div>
+  <div class="prose" id="aid-text"></div>
+  <p class="muted">Schematic, not to scale. Test results in the table are explained on <a href="hearing-tests.html#h-fork">Hearing and hearing tests</a>.</p>
+</section>
+
+<section class="block panel" aria-labelledby="h-ss">
+  <h2 id="h-ss">Sudden sensorineural hearing loss: does it qualify?</h2>
+  <div class="two">
+    <div class="stack">
+      <div class="sliders" id="ss-sl"></div>
+      <div class="ans" id="ss-out" aria-live="polite"></div>
+    </div>
+    <div class="prose" id="ss-text"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-nihl">
+  <h2 id="h-nihl">Noise-induced hearing loss and presbycusis</h2>
+  <div class="scroll"><table id="nihl-table"></table></div>
+  <div class="prose" id="nihl-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-oto">
+  <h2 id="h-oto">Otosclerosis: from a focus to a fixed stapes</h2>
+  <div class="step" id="oto-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="oto-svg" viewBox="0 0 560 300" role="img" aria-label="Schematic of the tympanic membrane, ossicles and the stapes footplate in the oval window of the otic capsule, with the otosclerotic focus at each stage"></svg></div>
+    <div class="find" id="oto-text" aria-live="polite"></div>
+  </div>
+  <p class="muted">Schematic, not to scale; front (anterior) is up, so the fissula ante fenestram lies above the oval window.</p>
+  <div class="scroll"><table id="oto-table"></table></div>
+  <div class="prose" id="oto-text2"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-et">
+  <h2 id="h-et">The Eustachian tube: adult and child</h2>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch fit fitmax" id="et-svg" viewBox="0 0 560 290" role="img" aria-label="Schematic of the Eustachian tube running from the middle ear down to the nasopharynx, drawn to scale for an adult or a child, with its angle to the horizontal"></svg></div>
+    <div class="stack">
+      <div id="et-chips" aria-label="Adult or child"></div>
+      <div class="ans" id="et-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="prose" id="et-text"></div>
+  <h3>Eustachian tube dysfunction</h3>
+  <div id="etd-chips" aria-label="Type of dysfunction"></div>
+  <div class="ans" id="etd-out" aria-live="polite"></div>
+  <div class="prose" id="etd-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-ome">
+  <h2 id="h-ome">Otitis media with effusion (glue ear)</h2>
+  <div class="prose" id="ome-text"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-nppcd">
+  <h2 id="h-nppcd">India: National Programme for Prevention and Control of Deafness (NPPCD)</h2>
+  <div class="tl" id="np-tl"></div>
+  <div class="prose" id="np-text"></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BHearing%20Loss%2C%20Otosclerosis%20and%20the%20Eustachian%20Tube%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fent%2Fear%2Fhearing-loss-otosclerosis.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+<script src="../assets/ent.js"></script>
+<script>
+(function () {
+'use strict';
+const E = window.Ent, $ = E.$, T = E.T;
+
+/* ================= DATA (facts: sources-local/facts/fill-e01.md, part B) ================= */
+const SITES = [
+  {k: 'canal', n: 'Ear canal', type: 'Conductive', t: 'Outer ear: <b>wax</b> (Wikipedia: a very common cause, can come on suddenly), and (Wikipedia) a narrowed or absent canal (stenosis, atresia, with microtia).'},
+  {k: 'tm', n: 'Drum', type: 'Conductive', t: 'A <b>perforated</b> drum (infection, trauma such as a slap or an object in the canal — WHO 2021); Wikipedia: tympanosclerosis (scarring).'},
+  {k: 'me', n: 'Middle ear', type: 'Conductive', t: '<b>Fluid</b> — Wikipedia: the commonest middle-ear cause, especially in children (otitis media with effusion); acute and chronic otitis media (chronic: mild to moderate conductive loss, WHO 2021); Eustachian tube dysfunction; cholesteatoma (Wikipedia).'},
+  {k: 'oss', n: 'Ossicles / stapes', type: 'Conductive', t: '<b>Otosclerosis</b> fixing the stapes (StatPearls: the most common cause of acquired conductive loss with stapes fixation); ossicular problems (Wikipedia).'},
+  {k: 'coch', n: 'Cochlea', type: 'Sensorineural (sensory)', t: 'Hair-cell damage: <b>age</b> (presbycusis), <b>noise</b>, <b>ototoxic drugs</b> — aminoglycosides (Wikipedia: the most important group) and platinum drugs such as cisplatin (Wikipedia, PMC12645837), loop diuretics such as furosemide (Wikipedia, PMC12405425, WHO 2021), salicylates/aspirin (PMC12405425, Wikipedia); Wikipedia adds quinine and macrolides, genetic causes, infections (congenital rubella, CMV — Wikipedia: the commonest cause of progressive SNHL in children; meningitis — WHO 2021: perhaps 6% of SNHL in children), Ménière’s disease, sudden SNHL. Otosclerosis that reaches the cochlea.'},
+  {k: 'n8', n: 'VIII / brainstem', type: 'Sensorineural (neural, retrocochlear)', t: 'Damage to the cochlear nerve: <b>vestibular schwannoma</b> (acoustic neuroma) — a cause of sudden SNHL too; temporal-bone fractures can injure the nerve (WHO 2021).'}
+];
+const SS_SL = [
+  {id: 'db', label: 'Drop in hearing', min: 0, max: 90, step: 5, value: 40, fmt: v => v + ' dB'},
+  {id: 'nf', label: 'Contiguous frequencies affected', min: 1, max: 6, step: 1, value: 3, fmt: v => String(v)},
+  {id: 'h', label: 'Developed over', min: 6, max: 240, step: 6, value: 24, fmt: v => v + ' h'}
+];
+const OTO = [
+  {k: 'Normal', t: '<h3>Normal</h3><p>The stapes footplate sits in the oval window, held by the annular ligament, and moves the perilymph. The otic capsule round the labyrinth is dense endochondral bone (StatPearls).</p>'},
+  {k: 'Active focus', t: '<h3>Active (spongy) focus</h3><p>The dense bone is replaced by irregular <b>spongy, vascular</b> bone — hence <b>otospongiosis</b> (StatPearls, PMC3999364, Wikipedia). The commonest site is the <b>fissula ante fenestram</b>, just in front of the oval window (Wikipedia, PMC3999364, Brazilian task force 2023). In this active phase the vessels can show through the drum as a reddish blush on the promontory: <b>Schwartze sign</b> (Brazilian task force 2023: the active phase; StatPearls: about 10%; its absence does not exclude the disease).</p>'},
+  {k: 'Stapes fixed', t: '<h3>Fixed footplate: conductive loss</h3><p>The lesion reaches the footplate and annular ligament and later hardens, <b>fixing the stapes</b> in the oval window: a conductive loss with a normal drum (StatPearls, Wikipedia, Brazilian task force 2023). This is <b>fenestral</b> otosclerosis.</p>'},
+  {k: 'Cochlear spread', t: '<h3>Spread to the cochlea</h3><p>Spread inward to the cochlea (<b>retrofenestral / cochlear</b> otosclerosis) adds a <b>sensorineural</b> loss, so the loss becomes mixed (StatPearls, PMC3999364, Brazilian task force 2023, WHO 2021). The two are a continuum: cochlear disease rarely occurs without fenestral involvement (PMC3999364).</p>'},
+  {k: 'Stapedotomy', t: '<h3>Stapedotomy</h3><p>The stapes superstructure is removed and a <b>small hole</b> made in the footplate for a <b>piston</b> prosthesis hung from the incus (StatPearls, Wikipedia). In a <b>stapedectomy</b> all or most of the footplate is removed. Hearing results are similar; stapedotomy is preferred (fewer complications, Wikipedia; PMC11723788; Brazilian task force 2023).</p>'}
+];
+const ET = {
+  adult: {k: 'Adult', len: 36, ang: 45, t: '<b>Adult</b>: about <b>36 mm</b> (StatPearls, PMC12801116, Gray 1918) — Gray: the lateral (bony) third about 12 mm, the medial (cartilaginous) two-thirds about 24 mm, narrowest where they meet (the isthmus). It runs down, forward and medially, about <b>30–40°</b> to the horizontal (Gray 1918; a CT study: 33.7–35.4°); PMC12801116 gives about 45° to the cranial base, the angle drawn here.'},
+  child: {k: 'Child', len: 18, ang: 10, t: '<b>Child</b>: <b>shorter</b> and <b>more horizontal</b> (Wikipedia, PMC12801116, PMC6570640), and narrower (Wikipedia, PMC12801116) — about <b>18 mm</b> and about <b>10°</b> to the skull base (PMC12801116). Secretions stagnate and nasopharyngeal bacteria reach the middle ear more easily, so otitis media is common in children (Wikipedia, PMC12801116; StatPearls). The tube lengthens and becomes more oblique with growth (PMC12801116). <b>Note:</b> a CT study (PMC7197768) measured longer tubes even in children aged 4–7 (37.9 mm, vs 40.1 mm in older patients), which does not fit the 18 mm figure.'}
+};
+const ETD = {
+  dil: {k: 'Dilatory / obstructive', t: '<b>Dilatory (obstructive)</b>, the commonest form: the tube fails to open enough to ventilate the middle ear (PMC13720400), typically after an upper respiratory infection or allergic rhinitis/sinusitis (PMC9745447); adenoids can cause it (PMC13720400). Persistent: negative middle-ear pressure, retraction, effusion and conductive loss (StatPearls); retraction pockets can progress to cholesteatoma (PMC13720400). Tympanogram: <b>C</b> or <b>B</b> support it, but 60–71% have a normal A (PMC13720400).'},
+  baro: {k: 'Baro-challenge', t: '<b>Baro-challenge-induced</b>: the tube works at ambient pressure but not during rapid pressure change — air travel or diving (PMC13720400; PMC9745447: ambient pressure change); otoscopy and tympanometry are usually normal (Wikipedia), so the history makes the diagnosis.'},
+  pat: {k: 'Patulous', t: '<b>Patulous</b>: the tube stays abnormally open at rest (PMC13720400; Wikipedia: rare, intermittently open), so the patient hears their own voice and breathing — <b>autophony</b> (PMC9745447, Wikipedia). Its treatment differs from obstruction (StatPearls).'}
+};
+
+/* ================= SITE PICKER ================= */
+let site = 'me';
+function drawSite() {
+  let h = E.DEFS; const on = k => site === k ? ' on' : '';
+  h += `<rect class="skin" x="10" y="90" width="100" height="40" rx="4"/>` + T(60, 150, 'Canal', 's', 'middle');
+  h += `<rect class="tmf" x="110" y="70" width="8" height="80" rx="2"/>` + T(114, 186, 'Drum', 's', 'middle');
+  h += `<rect class="air" x="118" y="50" width="122" height="120" rx="6"/>` + T(179, 40, 'Middle ear (air)', 's', 'middle');
+  h += `<path class="oss" d="M118 100 L140 74 L160 74 L164 86 L152 90 L150 112 Z"/><path class="oss" d="M160 74 L186 72 L194 84 L180 90 L180 108 L172 108 L172 88 Z"/><path class="oss" d="M176 108 L196 104 L232 100 L232 120 L196 116 Z"/>`;
+  h += `<rect class="lab" x="240" y="40" width="170" height="140" rx="14"/><path class="peri" d="M252 70 C 252 50 398 50 398 70 L398 150 C 398 170 252 170 252 150 Z"/>` + T(325, 112, 'Cochlea', 's', 'middle');
+  h += `<path class="nv" d="M410 110 L520 110"/>` + T(465, 98, 'VIII', 's', 'middle') + `<rect class="box" x="486" y="124" width="64" height="40" rx="5"/>` + T(518, 148, 'Brainstem', 's', 'middle');
+  h += T(64, 205, 'Conductive', 'b', 'middle') + `<path class="ref" d="M10 190 L238 190"/>` + T(400, 205, 'Sensorineural', 'b', 'middle') + `<path class="ref" d="M242 190 L550 190"/>`;
+  const HIT = {canal: [8, 86, 104, 48], tm: [104, 64, 20, 92], me: [120, 50, 118, 118], oss: [138, 66, 100, 58], coch: [244, 44, 162, 132], n8: [412, 84, 140, 84]};
+  for (const [k, r] of Object.entries(HIT)) h += `<rect class="hit${on(k)}" data-k="${k}" tabindex="0" role="button" aria-label="${SITES.find(s => s.k === k).n}" x="${r[0]}" y="${r[1]}" width="${r[2]}" height="${r[3]}" rx="6"/>`;
+  $('site-svg').innerHTML = h;
+  $('site-svg').querySelectorAll('.hit').forEach(el => { const go = () => { setSite(el.dataset.k); $('site-svg').querySelector(`[data-k="${el.dataset.k}"]`).focus(); }; el.onclick = go; el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { go(); e.preventDefault(); } }; });
+  const s = SITES.find(x => x.k === site);
+  $('site-out').innerHTML = `<h3>${s.n}: ${s.type} loss</h3><p>${s.t}</p>`;
+}
+function setSite(k) { site = k; $('site-chips').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === k))); drawSite(); }
+E.toggles('site-chips', SITES.map(s => [s.k, s.n]), k => { site = k; drawSite(); }, site);
+$('aid-text').innerHTML = `<p><b>Hearing aids and cochlear implants.</b> Most people with hearing loss have a mild to moderate loss (WHO 2021), the main group for hearing aids. Wikipedia: hearing aids partly make up for a sensorineural loss and suit a conductive loss well. A <b>cochlear implant</b> is for a (moderate-to-)profound sensorineural loss when a hearing aid gives little or no benefit (WHO 2021, Wikipedia, umbrella review 2026); Wikipedia: children with severe loss can be implanted from 9 months. WHO 2021: only 17% of those who would benefit from a hearing aid use one.</p>`;
+E.table('cvs-table', ['', 'Conductive', 'Sensorineural'], [
+  ['Site', 'Outer or middle ear: anywhere from the pinna to the stapes footplate (StatPearls)', 'Cochlea or auditory nerve (StatPearls)'],
+  ['Rinne', 'Negative in the affected ear (once the gap is large enough)', 'Positive (beware the false negative of a dead ear)'],
+  ['Weber', 'To the affected ear', 'To the better ear'],
+  ['Audiogram', 'Bone normal, air worse: air–bone gap', 'Air and bone equally worse: no gap'],
+  ['Tympanogram', 'Often abnormal: B (fluid), C (tube), As (otosclerosis), Ad (discontinuity)', '—'],
+  ['Acoustic reflex', 'Absent (or raised) with the tone or the probe in the affected ear', 'Present near normal (cochlear); raised or absent (VIII)']]);
+
+/* ================= SUDDEN SNHL ================= */
+const ss = {db: 40, nf: 3, h: 24};
+function drawSS() {
+  const okDb = ss.db >= 30, okNf = ss.nf >= 3, okH = ss.h <= 72, ok = okDb && okNf && okH;
+  const li = (c, t) => `<li>${c ? '✓' : '<span class="flag">✗</span>'} ${t}</li>`;
+  $('ss-out').innerHTML = `<span class="big">${ok ? 'Meets the definition' : 'Does not meet it'}</span><ul>${li(okDb, 'loss of 30 dB or more')}${li(okNf, 'over at least three contiguous frequencies')}${li(okH, 'developing within 72 hours')}</ul><p class="note">${ok ? 'Treat as an emergency: audiometry, start treatment early, MRI for a retrocochlear cause.' : 'Any sudden loss still needs urgent assessment (StatPearls).'}</p>`;
+}
+SS_SL.forEach(sp => E.slider('ss-sl', sp, v => { ss[sp.id] = v; drawSS(); }).init());
+$('ss-text').innerHTML = `<p><b>Definition</b> (Brazilian ABORL/SBO guideline 2026): a hearing loss greater than 30 dB (elsewhere in the guideline: at least 30 dB; the checker uses 30 dB or more) over at least three contiguous frequencies developing within 72 hours; a 2020 review: at least 30 dB over three frequencies within three days; Wikipedia: at least 30 dB in three adjacent frequencies.</p>
+<p>Usually <b>one ear</b>, often with tinnitus or dizziness (Wikipedia); most cases are <b>idiopathic</b> (PMC9587755, Wikipedia). It is an <b>otological emergency</b> (guideline 2026, PMC9587755; StatPearls: delay may limit recovery). The Weber goes to the good ear in a severe loss (PMC7029235).</p>
+<p><b>Management principles</b>: corticosteroids — systemic, intratympanic or both — as initial treatment (guideline 2026; oral steroids first line, PMC7231990), with intratympanic steroids as salvage (guideline 2026); the evidence for steroids is contested (PMC7231990). <b>MRI</b> of the internal auditory canals and brain to exclude a <b>vestibular schwannoma</b> and other retrocochlear disease (guideline 2026; contrast MRI, PMC7231990). PMC9587755: 45–65% recover on their own. No doses here.</p>`;
+
+/* ================= NIHL AND PRESBYCUSIS ================= */
+E.table('nihl-table', ['', 'Noise-induced', 'Presbycusis (age-related)'], [
+  ['Cause', 'Long exposure to loud sound, or one blast (acute acoustic trauma)', 'Age changes in hair cells, stria vascularis and spiral ganglion neurons (StatPearls)'],
+  ['Ears', 'Usually both, similar (PMC4399645)', 'Both, symmetrical (Wikipedia, StatPearls)'],
+  ['Audiogram', 'Notch at 3–6 kHz, deepest at 4 kHz, recovery at 8 kHz', 'Sloping high-frequency loss'],
+  ['Course', 'Temporary threshold shift (recovers in hours to days) → permanent with repeated exposure; dead hair cells never regrow', 'Slowly progressive; noticeable around 60 (StatPearls)'],
+  ['Hallmark', 'Mainly the outer hair cells (Wikipedia, PMC12645837)', 'Trouble with high-frequency speech sounds (consonants) (StatPearls, Wikipedia)'],
+  ['Management', 'Prevention: hearing conservation from 85 dB(A) over an 8-hour day', 'Hearing aids; no cure (StatPearls)']]);
+$('nihl-text').innerHTML = `<p>Presbycusis is the commonest sensorineural loss and noise-induced loss the second (Wikipedia). For noise, the US action level of <b>85 dB(A)</b> averaged over 8 hours dates from 1983 (PMC12645837; OSHA, Wikipedia); many countries set the limit at 85 dB(A) (PMC12645837). With steady exposure the 3–6 kHz loss levels off after 10–15 years (PMC4399645). Presbycusis types: sensory, neural, strial (metabolic), and mixed or indeterminate (Wikipedia). See both on the <a href="hearing-tests.html#h-pta">audiogram presets</a>.</p>`;
+
+/* ================= OTOSCLEROSIS ================= */
+const os = {s: 0};
+function drawOto() {
+  const s = os.s; let h = E.DEFS;
+  // drum and ossicles (lateral, left) — otic capsule (medial, right)
+  h += `<rect class="tmf" x="40" y="80" width="9" height="140" rx="3"/>` + T(44, 240, 'Drum', 's', 'middle');
+  h += `<path class="oss" d="M49 150 L80 96 L110 92 L116 108 L96 114 L92 160 Z"/><path class="oss" d="M110 92 L150 90 L160 106 L142 112 L140 168 L130 168 L132 110 Z"/>` + T(98, 76, 'Malleus, incus', 's', 'middle');
+  // otic capsule with the oval window opening
+  h += `<path class="oss" d="M290 30 L540 30 L540 270 L290 270 L290 175 L300 175 L300 125 L290 125 Z" style="fill-opacity:.55"/>`;
+  h += `<path class="lab" d="M300 125 L300 60 C 300 45 315 40 330 40 L520 40 L520 260 L330 260 C 315 260 300 255 300 240 L300 175"/>`;
+  h += `<path class="peri" d="M310 120 L310 70 C 310 55 320 50 335 50 L510 50 L510 250 L335 250 C 320 250 310 245 310 230 L310 180 Z"/>` + T(420, 214, 'Vestibule / cochlea (perilymph)', 's', 'middle');
+  h += T(300, 22, 'Otic capsule (bone)', 's', 'middle');
+  // stapes
+  if (s < 4) h += `<path d="M152 160 L286 134 M152 168 L286 166" style="stroke:var(--ink);stroke-width:7;fill:none;stroke-linecap:round"/><path d="M152 160 L286 134 M152 168 L286 166" style="stroke:var(--bone);stroke-width:4.4;fill:none;stroke-linecap:round"/><rect class="oss" x="132" y="156" width="22" height="16" rx="4"/><rect class="oss" x="286" y="128" width="10" height="44" rx="2"/>`;
+  else {
+    h += `<rect class="oss" x="286" y="128" width="10" height="44" rx="2"/><rect x="286" y="145" width="10" height="10" style="fill:var(--fluid);stroke:var(--ink);stroke-width:1"/>`;
+    h += `<path d="M136 170 L250 150" style="stroke:var(--ink);stroke-width:1.5;fill:none"/><rect x="250" y="145" width="58" height="10" rx="3" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.5"/>` + T(250, 136, 'piston', 's', 'middle');
+  }
+  h += T(220, 196, s < 4 ? 'Stapes' : 'Stapes removed', 's', 'middle') + T(250, 290, 'Oval window (footplate)', 's', 'middle');
+  // fissula ante fenestram, in front (above) of the oval window
+  h += T(278, 92, 'Fissula ante fenestram', 's', 'end') + `<path class="lead" d="M280 94 L292 106"/>`;
+  if (s >= 1) {
+    if (s === 1) h += `<ellipse class="focus" cx="296" cy="108" rx="14" ry="12"/>`;
+    if (s === 2) h += `<path class="focus" d="M282 96 C 300 86 312 96 308 120 L304 176 L284 176 L282 124 Z"/>`;
+    if (s === 3) h += `<path class="focus" d="M282 96 C 310 84 360 70 380 92 C 390 110 360 120 330 126 L306 180 L284 180 L282 124 Z"/>`;
+    if (s === 4) h += `<path class="focus" d="M282 96 C 300 86 312 96 308 120 L306 128 L284 128 L282 120 Z" style="fill-opacity:.3"/>`;
+  }
+  if (s === 1) h += T(20, 262, 'Active focus: vascular (Schwartze sign)', 'c', 'start');
+  if (s === 2) h += T(20, 262, 'Footplate fixed → conductive loss', 'c', 'start');
+  if (s === 3) h += T(20, 262, 'Into the cochlea → sensorineural part', 'c', 'start');
+  h += T(16, 22, '↑ front', 'h', 'start');
+  $('oto-svg').innerHTML = h; $('oto-text').innerHTML = OTO[s].t;
+}
+E.stepper('oto-step', OTO.map(o => o.k), drawOto, os);
+E.table('oto-table', ['', 'Otosclerosis'], [
+  ['Who', 'Mostly White people: histological foci in up to 12%, symptoms in 0.3–0.4% (StatPearls); about 0.5% eventually diagnosed (Wikipedia). Women more often: 1.5–2 : 1 (StatPearls), 2–3 times (Brazilian task force 2023); Wikipedia: twice as often in clinics but only slightly more in family studies. Onset 15–45 years (Brazilian task force 2023; 2nd–4th decades, PMC3999364). Often both ears (two-thirds in one series, PMC12297053).'],
+  ['Cause', 'Familial: autosomal dominant with incomplete penetrance (StatPearls, Brazilian task force 2023, Wikipedia); about 60% have a family history (Brazilian task force 2023). Measles virus RNA found in the footplate; vaccinated populations have less otosclerosis (Wikipedia; measles is among the environmental factors in the task force).'],
+  ['Pregnancy', '<b>Sources differ:</b> StatPearls — pregnancy has been reported to speed the loss; Brazilian task force 2023 and Wikipedia — no evidence that pregnancy worsens it.'],
+  ['Symptoms', 'Slowly progressive conductive loss with a <b>normal drum</b> (“the doctor sees nothing, and the patient hears nothing”, StatPearls); <b>tinnitus</b> common (the main accompanying symptom, PMC12297053; Wikipedia); <b>paracusis Willisii</b> — hears speech better in noise (StatPearls, Brazilian task force 2023: the loss damps the background noise), rare in one series (2.5%, PMC12297053).'],
+  ['Signs', '<b>Schwartze sign</b>: reddish blush on the promontory through the drum, the active phase (StatPearls ≈10%; not needed for the diagnosis). Rinne negative at 512 Hz; Weber to the worse ear (Brazilian task force 2023). <b>Gellé test</b>: negative in 79 of 80 otosclerotic ears in one series, which calls it reliable (PMC12297053; no open source we found describes how it is done).'],
+  ['Audiogram', 'Conductive loss with an air–bone gap, often worse at low frequencies first (Wikipedia); <b>Carhart notch</b> — bone conduction worst at <b>2 kHz</b>, which improves after successful surgery (PMC7982757); found in about half to two-thirds (53%, PMC7982757; 69%, PMC12297053); not pathognomonic (Brazilian task force 2023, PMC12297053).'],
+  ['Impedance', 'Tympanogram <b>As</b> (or A; the Brazilian task force 2023 writes “As or Ar”, without defining Ar); <b>acoustic reflex absent</b> (Brazilian task force 2023, Wikipedia).'],
+  ['Imaging', 'HRCT temporal bone is the imaging of choice (PMC3999364) — a hypodense plaque at the fissula. <b>Sources differ</b> on need: usually not needed before surgery (Wikipedia; PMC3999364: not usually done in typical cases) vs recommended before surgery (Brazilian task force 2023).']]);
+$('oto-text2').innerHTML = `<p><b>Management principles</b> (no doses):</p><ul>
+<li><b>Hearing aids</b> if the patient does not want surgery (Brazilian task force 2023; umbrella review 2026); they help but do not stop progression (Wikipedia).</li>
+<li><b>Stapes surgery</b>: <b>stapedotomy</b> (small fenestra + piston; the preferred, most accepted technique) or <b>stapedectomy</b> (all or most of the footplate removed); similar closure of the air–bone gap (StatPearls, PMC11723788, Wikipedia; Brazilian task force 2023: stapedotomy for fenestral disease with good cochlear reserve). StatPearls: the aim is a gap of 10 dB or less.</li>
+<li><b>Sodium fluoride, bisphosphonates</b>: <b>sources differ</b> — a 2014 imaging review says retrofenestral disease is treated with fluorides; the 2026 umbrella review finds insufficient evidence for routine use, and the 2023 task force little benefit from drugs.</li>
+<li><b>Cochlear implant</b> for profound deafness (Brazilian task force 2023; PMC3999364 for retrofenestral disease).</li></ul>`;
+
+/* ================= EUSTACHIAN TUBE ================= */
+let et = 'adult';
+function drawET() {
+  const d = ET[et], px = 6, x0 = 150, y0 = 70, a = d.ang * Math.PI / 180, L = d.len * px;
+  const x1 = x0 + L * Math.cos(a), y1 = y0 + L * Math.sin(a);
+  let h = E.DEFS;
+  h += `<rect class="air" x="40" y="40" width="110" height="70" rx="8"/>` + T(95, 80, 'Middle ear', 's', 'middle');
+  const seg = (fx0, fx1, cls) => { const ax0 = x0 + L * fx0 * Math.cos(a), ay0 = y0 + L * fx0 * Math.sin(a), ax1 = x0 + L * fx1 * Math.cos(a), ay1 = y0 + L * fx1 * Math.sin(a), nx = -Math.sin(a) * 7, ny = Math.cos(a) * 7;
+    return `<path class="${cls}" d="M${(ax0 + nx).toFixed(1)} ${(ay0 + ny).toFixed(1)} L${(ax1 + nx).toFixed(1)} ${(ay1 + ny).toFixed(1)} L${(ax1 - nx).toFixed(1)} ${(ay1 - ny).toFixed(1)} L${(ax0 - nx).toFixed(1)} ${(ay0 - ny).toFixed(1)} Z"/>`; };
+  if (et === 'adult') {
+    h += seg(0, 1 / 3, 'oss') + seg(1 / 3, 1, 'cartf');
+    const ix = x0 + L / 3 * Math.cos(a), iy = y0 + L / 3 * Math.sin(a);
+    h += `<path class="lead" d="M${ix.toFixed(1)} ${(iy + 9).toFixed(1)} L${(ix - 6).toFixed(1)} ${(iy + 34).toFixed(1)}"/>` + T(ix - 8, iy + 46, 'Isthmus', 's', 'end');
+    h += T(170, 26, 'Bony ⅓ ≈12 mm, cartilaginous ⅔ ≈24 mm (Gray)', 's', 'start');
+  } else {
+    h += seg(0, 1, 'air') + T(170, 26, 'Narrower lumen, more flexible cartilage (PMC12801116)', 's', 'start');
+  }
+  h += `<rect class="box" x="${(x1 - 20).toFixed(1)}" y="${(y1 + 6).toFixed(1)}" width="120" height="36" rx="8"/>` + T(x1 + 40, y1 + 29, 'Nasopharynx', 's', 'middle');
+  h += `<path class="ref" d="M${x0} ${y0} L${x0 + 330} ${y0}"/>` + T(x0 + 334, y0 + 4, 'skull base', 's', 'start');
+  const r = 70; h += `<path class="arc" d="M${x0 + r} ${y0} A ${r} ${r} 0 0 1 ${(x0 + r * Math.cos(a)).toFixed(1)} ${(y0 + r * Math.sin(a)).toFixed(1)}"/>` + T(et === 'adult' ? x0 + r + 14 : x1 + 12, et === 'adult' ? y0 + 14 : y0 - 6, '≈' + d.ang + '°', 'm', 'start');
+  h += T(30, 282, `Schematic; length to scale (${d.len} mm); angle to the skull base, ${et === 'adult' ? '≈45° in adults' : '≈10° in children'} (PMC12801116)`, 's', 'start');
+  $('et-svg').innerHTML = h; $('et-out').innerHTML = d.t;
+}
+E.toggles('et-chips', Object.entries(ET).map(([k, v]) => [k, v.k]), k => { et = k; drawET(); $('et-chips').querySelector(`[data-k="${k}"]`).focus(); }, et);
+$('et-text').innerHTML = `<p><b>Function.</b> Normally closed, it opens briefly in swallowing and yawning, mainly by the <b>tensor veli palatini</b> (StatPearls, PMC13720400, Wikipedia); PMC13720400 adds sneezing. It <b>ventilates</b> the middle ear and equalises its pressure, <b>drains</b> secretions by mucociliary action and <b>protects</b> the middle ear from nasopharyngeal secretions, pathogens and pressure swings (StatPearls, PMC13720400, PMC9745447). Valsalva and Toynbee manoeuvres test whether it can open (PMC9745447); no single test reliably proves dysfunction (StatPearls).</p>`;
+let etd = 'dil';
+E.toggles('etd-chips', Object.entries(ETD).map(([k, v]) => [k, v.k]), k => { etd = k; $('etd-out').innerHTML = ETD[k].t; $('etd-chips').querySelector(`[data-k="${k}"]`).focus(); }, etd);
+$('etd-out').innerHTML = ETD[etd].t;
+$('etd-text').innerHTML = `<p>Symptoms: aural fullness or pressure, popping, muffled hearing, tinnitus, earache, autophony (StatPearls). Work-up: otoscopy and pneumatic otoscopy, audiometry, tympanometry, nasopharyngeal endoscopy (StatPearls). Treatment by type (StatPearls): swallowing, yawning, autoinflation or Valsalva; treat nasal or sinus disease; ventilation tubes and adenoidectomy in selected (mostly) children; balloon dilation of the tube for selected obstructive cases.</p>`;
+
+/* ================= OME ================= */
+$('ome-text').innerHTML = `<p>Fluid in the middle ear <b>without signs of acute infection</b> (StatPearls; Wikipedia), serous or mucoid — mucoid is <b>glue ear</b> (StatPearls). Mainly a disease of children (Wikipedia: about 80% before age ten), from an immature or blocked <b>Eustachian tube</b>: mucus trapped in the tube lowers middle-ear pressure (PMC6570640); the fluid damps the drum and causes a <b>conductive loss</b> (StatPearls, Wikipedia) — the usual cause of conductive loss in childhood (Wikipedia), which can delay speech and language (StatPearls).</p>
+<p><b>Diagnosis:</b> audiometry and tympanometry (StatPearls); a <b>type B</b> tympanogram with normal canal volume (PMC6570640, PMC4859046; see <a href="hearing-tests.html#h-tymp">tympanogram</a>). Chronic when it lasts 3 months or more (StatPearls). <b>Management:</b> watchful waiting for many (StatPearls); <b>ventilation (tympanostomy) tubes</b>, with adenoidectomy in some, are the main surgery (PMC6570640, StatPearls; tonsillectomy does not help). Wikipedia: antibiotics are not recommended for OME.</p>`;
+
+/* ================= NPPCD ================= */
+$('np-tl').innerHTML = [
+  ['2007', 'Started as a <b>pilot</b> in 25 districts of 11 States/UTs (11th Five-Year Plan; 100% centrally sponsored), then 192 districts in 20 States/UTs.'],
+  ['March 2017', '12th Plan: 200 more districts, covering <b>all States/UTs</b>.'],
+  ['2024', '<b>587 districts</b> in 36 States/UTs.'],
+  ['2023–25', 'NHM: 16.8 lakh people screened in 2023–24, 30.0 lakh in 2024–25.']].map(([y, t]) => `<div class="ans"><span class="big">${y}</span><p>${t}</p></div>`).join('');
+$('np-text').innerHTML = `<p>A programme of the Directorate General of Health Services (MoHFW), listed among the National Health Mission's non-communicable disease programmes (NHM). <b>Goal:</b> to eliminate “preventable deafness”. Work: early detection and management of ear and hearing problems and rehabilitation (hearing and speech), training, ENT and audiology capacity in district hospitals, community and primary health centres and Ayushman Arogya Mandirs, and awareness (IEC), including <b>World Hearing Day</b> (Dte.GHS NPPCD page, current 2026). In India World Hearing Day was observed on <b>3 March</b> 2025 (NHM); WHO has promoted it as an annual event since 2011 (WHO 2021 report). Sources: Dte.GHS and NHM pages (MoHFW).</p>`;
+
+/* ================= FOOTER ================= */
+$('based').innerHTML = 'Based on: StatPearls (NCBI Bookshelf); Wikipedia; WHO <i>World report on hearing</i> (2021); Gray’s <i>Anatomy</i> (20th ed., 1918); Brazilian Society of Otology task force on otosclerosis (2023) and ABORL/SBO sudden hearing loss guideline (2026); open-access reviews and studies (otosclerosis 2014–2026, Eustachian tube 2020–2026, OME 2019, sudden SNHL 2020 and 2022, noise-induced hearing loss 2013 and 2025); Dte.GHS and NHM (MoHFW) NPPCD pages.';
+$('models').innerHTML = 'Models used: every drawing is a schematic; the Eustachian tube is drawn to the lengths and angles quoted, the rest not to scale.';
+E.swipeHints(); drawSite(); drawSS(); drawET();
+})();
+</script>
+</body>
+</html>
