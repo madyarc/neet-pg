@@ -56,8 +56,8 @@ Server http://127.0.0.1:8765/ (running; never start another). Only
 `tools/capped ~/personal/buildenv/bin/python -I tools/test/ffshot.py URL out.png [--phone] [--js ...]` (llvmpipe).
 Desktop + --phone, light + dark: no JS errors (window error + unhandledrejection), every control at min/mid/max and
 every preset, focus stays on the activated control after redraw, steppers by arrow keys after switching chips, no page
-overflow at 390 px, no clipped/overlapping SVG text (getBBox in every state). Screenshots only in the scratchpad folder
-your task names; delete it at the end. Background loops: `pgrep -f '[n]ame'` (a plain pattern matches itself and never
+overflow at 390 px, no clipped/overlapping SVG text (getBBox in every state). Screenshots and all temporary files only in the scratchpad
+subfolder your task names; delete that subfolder at the end (never wildcard-delete in the shared scratchpad root). Background loops: `pgrep -f '[n]ame'` (a plain pattern matches itself and never
 ends); stop every loop you start before replying. Heavy jobs via tools/capped; one browser at a time.
 
 ## Limits
