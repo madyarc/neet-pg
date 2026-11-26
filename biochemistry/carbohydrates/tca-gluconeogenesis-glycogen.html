@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TCA Cycle, Gluconeogenesis and Glycogen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/bioc.css">
+<style>
+/* tokens from bioc.css with their B01 meanings: --enz (an enzyme), --sub (a metabolite), --inhib (an inhibitor), --cofac (a coenzyme:
+   NAD+/NADH, FAD/FADH2, CoA, GTP/ATP as carriers); --accent the selected step only; --clin a clinical point (the enzyme missing in a disease). No page tokens. */
+svg.sch .met{fill:var(--sub);fill-opacity:.22;stroke:var(--sub);stroke-width:1.4}
+svg.sch .enzp{fill:var(--enz);fill-opacity:.22;stroke:var(--enz);stroke-width:1.2}
+svg.sch .cofp{fill:var(--cofac);fill-opacity:.3;stroke:var(--cofac);stroke-width:1.2}
+svg.sch .inhp{fill:var(--inhib);fill-opacity:.2;stroke:var(--inhib);stroke-width:1.2}
+svg.sch .sel{stroke:var(--accent);stroke-width:3;fill:none}
+svg.sch .thin{stroke:var(--muted);stroke-width:1.4;fill:none;marker-end:url(#arr)}
+svg.sch .bold{stroke:var(--ink);stroke-width:2.4;fill:none;marker-end:url(#arrT)}
+svg.sch .off{opacity:.3}
+svg.sch .clinx{stroke:var(--clin);stroke-width:3.2;fill:none}
+svg.sch .organ{fill:var(--bg);stroke:var(--muted);stroke-width:1.2}
+.ledger{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:14px}
+.ledger b{font-family:var(--f-mono)}
+select{font:500 13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 6px}
+.sel3{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13.5px;align-items:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Biochemistry</a> <span class="muted">· Module 02: <a href="carb-chemistry-glycolysis.html">Carbohydrates and glycolysis</a> · <span aria-current="page">TCA, gluconeogenesis, glycogen</span> · <a href="minor-pathways-glucose.html">Minor pathways and blood glucose</a></span></nav>
+
+<header class="stack">
+  <h1>TCA Cycle, Gluconeogenesis and Glycogen</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-tca">TCA cycle</a> <a href="#h-yield">ATP yield</a> <a href="#h-gng">Gluconeogenesis</a> <a href="#h-cyc">Cori and alanine cycles</a> <a href="#h-gly">Glycogen</a> <a href="#h-gsd">Glycogen storage diseases</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-tca">
+  <h2 id="h-tca">The TCA (citric acid, Krebs) cycle, step by step</h2>
+  <p class="muted" id="tca-intro"></p>
+  <div class="step" id="tca-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="tca-svg" viewBox="0 0 520 470" role="img" aria-label="Schematic of the TCA cycle with the selected step highlighted"></svg></div>
+    <div class="stack">
+      <div class="prose find" id="tca-find" aria-live="polite"></div>
+      <div class="ledger" id="tca-ledger" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="key" id="tca-key"></div>
+  <div class="cap" id="tca-reg"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-yield">
+  <h2 id="h-yield">ATP per glucose: a calculator</h2>
+  <p class="muted" id="yield-intro"></p>
+  <div class="chips" id="yield-tg" aria-label="Preset"></div>
+  <div class="sel3" id="yield-sel"></div>
+  <div class="scroll"><table id="yield-table"></table></div>
+  <p class="readout" id="yield-out" aria-live="polite"></p>
+  <div class="cap" id="yield-note"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gng">
+  <h2 id="h-gng">Gluconeogenesis: four bypass enzymes</h2>
+  <p class="muted" id="gng-intro"></p>
+  <div class="chips" id="gng-tg" aria-label="Starting material"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="gng-svg" viewBox="0 0 520 520" role="img" aria-label="Schematic of glycolysis and gluconeogenesis side by side with the bypass enzymes and the entry point of the chosen precursor"></svg></div>
+    <div class="prose find" id="gng-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="gng-key"></div>
+  <div class="scroll"><table id="gng-table"></table></div>
+  <div class="cap" id="gng-rl"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-cyc">
+  <h2 id="h-cyc">Cori cycle and glucose–alanine cycle</h2>
+  <div class="chips" id="cyc-tg" aria-label="Cycle"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="cyc-svg" viewBox="0 0 520 230" role="img" aria-label="Schematic of the chosen cycle between muscle and liver"></svg></div>
+    <div class="prose find" id="cyc-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gly">
+  <h2 id="h-gly">Glycogen: making it, breaking it, and the hormones</h2>
+  <div class="chips" id="gly-tg" aria-label="State"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="gly-svg" viewBox="0 0 520 400" role="img" aria-label="Schematic of glycogen synthesis and breakdown in the chosen state"></svg></div>
+    <div class="prose find" id="gly-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="gly-key"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gsd">
+  <h2 id="h-gsd">Glycogen storage diseases: pick a type</h2>
+  <p class="muted" id="gsd-intro"></p>
+  <div class="chips" id="gsd-tg" aria-label="Type"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="gsd-svg" viewBox="0 0 520 350" role="img" aria-label="Schematic of glycogen metabolism with the missing enzyme of the chosen type crossed out"></svg></div>
+    <div class="prose find" id="gsd-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="gsd-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BTCA%20Cycle%2C%20Gluconeogenesis%20and%20Glycogen%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fbiochemistry%2Fcarbohydrates%2Ftca-gluconeogenesis-glycogen.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/bioc.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-b02.md, Part B; biochemistry/DATA-SOURCES.md) =====================
+   IUBMB = Enzyme Nomenclature entries; "a 2023 review" = TCA cycle (J Biol Chem 2023); "a 2018 review" = hepatic gluconeogenesis (Front Endocrinol
+   2018); "the 2016 reviews" = liver glucose metabolism and glycogen metabolism in humans (one author group, 2016); GeneReviews = the GSD chapters. */
+const LEDE = 'Turn the TCA cycle one step at a time and count NADH, FADH₂, GTP and CO₂; work out ATP per glucose with old and new P/O values; feed lactate, alanine or glycerol into gluconeogenesis; switch glycogen metabolism between fed, fasting and exercise; and cross out the missing enzyme of each glycogen storage disease. Before this: <a href="carb-chemistry-glycolysis.html">glycolysis and PDH</a>. After: <a href="minor-pathways-glucose.html">minor pathways and blood glucose</a>.';
+
+/* TCA steps: [chip, from, to, enzyme, EC, NADH, FADH2, GTP, CO2, regulated, text] */
+const TCA_INTRO = 'In the mitochondrial matrix (Wikipedia; a 2023 review), acetyl-CoA from pyruvate dehydrogenase (and from fat and amino acids: StatPearls) joins oxaloacetate; eight enzymes oxidise the acetyl group to two CO₂ (Wikipedia). Arrow keys step through it. Reactions as in Wikipedia and the IUBMB entries.';
+const TCA = [
+  ['1', 'Oxaloacetate + acetyl-CoA', 'Citrate', 'Citrate synthase', '2.3.3.1', 0, 0, 0, 0, true, '<h3>1. Citrate synthase: 2 C + 4 C → 6 C</h3><p>The acetyl group of acetyl-CoA joins the 4-carbon <b>oxaloacetate</b> to make 6-carbon <b>citrate</b> (Wikipedia; a 2023 review; IUBMB). A regulated, rate-controlling step (2023 review); Wikipedia: the "pace-making" enzyme.</p>'],
+  ['2', 'Citrate', 'Isocitrate', 'Aconitase', '4.2.1.3', 0, 0, 0, 0, false, '<h3>2. Aconitase: citrate ⇌ isocitrate</h3><p>Rearrangement through cis-aconitate; IUBMB: an iron–sulfur protein, at equilibrium about 91% citrate.</p>'],
+  ['3', 'Isocitrate', 'α-Ketoglutarate', 'Isocitrate dehydrogenase (NAD⁺)', '1.1.1.41', 1, 0, 0, 1, true, '<h3>3. Isocitrate dehydrogenase: first CO<sub>2</sub>, first NADH</h3><p>Isocitrate → α-ketoglutarate (2-oxoglutarate) + CO<sub>2</sub> + NADH (IUBMB; a 2023 review). The NAD<sup>+</sup> enzyme is mitochondrial and allosteric (IUBMB). Inhibited by NADH and by ATP (a high ATP/ADP ratio) (2023 review; Wikipedia); Wikipedia: Ca<sup>2+</sup> activates it.</p>'],
+  ['4', 'α-Ketoglutarate', 'Succinyl-CoA', 'α-Ketoglutarate dehydrogenase complex', '1.2.4.2', 1, 0, 0, 1, true, '<h3>4. α-Ketoglutarate dehydrogenase: second CO<sub>2</sub>, second NADH</h3><p>α-Ketoglutarate + NAD<sup>+</sup> + CoA → succinyl-CoA + CO<sub>2</sub> + NADH (Wikipedia; a 2023 review). Built like pyruvate dehydrogenase, with the <b>same five cofactors</b>: TPP, CoA, lipoate, FAD, NAD<sup>+</sup> (Wikipedia; IUBMB: E1 contains thiamine diphosphate). Inhibited by its products, succinyl-CoA and NADH (Wikipedia); a key control point (Wikipedia; 2023 review).</p>'],
+  ['5', 'Succinyl-CoA', 'Succinate', 'Succinyl-CoA synthetase', '6.2.1.4', 0, 0, 1, 0, false, '<h3>5. Succinyl-CoA synthetase: GTP (or ATP)</h3><p>The thioester energy makes one <b>GTP</b> (or ATP) (Wikipedia; IUBMB lists GDP- and ADP-forming forms: EC 6.2.1.4 and 6.2.1.5).</p>'],
+  ['6', 'Succinate', 'Fumarate', 'Succinate dehydrogenase', '1.3.5.1', 0, 1, 0, 0, false, '<h3>6. Succinate dehydrogenase: FADH<sub>2</sub></h3><p>Its FAD cofactor is reduced to <b>FADH<sub>2</sub></b>, which passes the electrons to ubiquinone in the membrane (Wikipedia); IUBMB: the enzyme sits in the inner mitochondrial membrane.</p>'],
+  ['7', 'Fumarate', 'Malate', 'Fumarase', '4.2.1.2', 0, 0, 0, 0, false, '<h3>7. Fumarase: add water</h3><p>Fumarate + H<sub>2</sub>O ⇌ malate (IUBMB, "fumarate hydratase").</p>'],
+  ['8', 'Malate', 'Oxaloacetate', 'Malate dehydrogenase', '1.1.1.37', 1, 0, 0, 0, false, '<h3>8. Malate dehydrogenase: third NADH, oxaloacetate back</h3><p>Malate + NAD<sup>+</sup> → oxaloacetate + NADH (IUBMB), ready for the next acetyl-CoA. Per turn: <b>3 NADH, 1 FADH<sub>2</sub>, 1 GTP (or ATP), 2 CO<sub>2</sub></b> (Wikipedia; a 2023 review). Two turns per glucose (Wikipedia).</p>'],
+];
+const TCA_REG = '<b>Regulated enzymes:</b> citrate synthase, isocitrate dehydrogenase and α-ketoglutarate dehydrogenase catalyse the rate-controlling steps (a 2023 review); all three are inhibited by <b>NADH</b> (2023 review; Wikipedia). Wikipedia adds: succinyl-CoA inhibits α-KGDH and citrate synthase; Ca<sup>2+</sup> activates isocitrate and α-ketoglutarate dehydrogenases. Intermediates are drawn off for synthesis and must be refilled (a 2023 review); the cycle is both catabolic and anabolic — <b>amphibolic</b> (Wikipedia).';
+
+/* yield: per glucose */
+const YIELD_INTRO = 'Per glucose: glycolysis gives 2 ATP and 2 cytosolic NADH; pyruvate dehydrogenase 2 NADH; two turns of the cycle 6 NADH, 2 FADH₂, 2 GTP. How much ATP each carrier is worth decides the total.';
+const YP = {
+  modern: ['Modern: 2.5 / 1.5, malate–aspartate', 2.5, 1.5, 'ma'],
+  gp: ['Modern, glycerol-phosphate shuttle', 2.5, 1.5, 'gp'],
+  old: ['Older books: 3 / 2', 3, 2, 'ma'],
+  oldgp: ['Older, glycerol-phosphate shuttle', 3, 2, 'gp'],
+};
+const YIELD_NOTE = 'Wikipedia: about 2.5 ATP per NADH and 1.5 per FADH₂ are observed, which gives about <b>30</b> ATP per glucose; the theoretical maximum with 3 and 2 is <b>38</b>, and <b>36</b> if the glycerol-phosphate shuttle carries the cytosolic NADH. StatPearls gives <b>32</b> (versus 2 from anaerobic glycolysis). The calculator only does the arithmetic: with 2.5/1.5 it gives 32 (malate–aspartate) or 30 (glycerol-phosphate, cytosolic NADH counted at the FADH₂ value — an assumption of this calculator). Which shuttle where (a 2023 review): the malate–aspartate shuttle became accepted as the main route for cytosolic NADH in heart and other tissues; the glycerol 3-phosphate shuttle is not the major route in most mammalian cells but is particularly active in brown adipose tissue.';
+
+/* gluconeogenesis */
+const GNG_INTRO = 'Glucose from non-carbohydrate precursors — lactate, glycerol, glucogenic amino acids (chiefly alanine) — mainly in the liver and, less, the kidney cortex (StatPearls; Wikipedia; a 2018 review). It is not simply glycolysis backwards: the three irreversible steps are got round by four enzymes (StatPearls; a 2018 review; Wikipedia).';
+const GNG = {
+  lac: ['Lactate', '<h3>Lactate</h3><p>Lactate dehydrogenase turns lactate back into <b>pyruvate</b> in the liver (a 2016 review; Wikipedia); pyruvate enters the mitochondrion and <b>pyruvate carboxylase</b> makes oxaloacetate (a 2018 review). Wikipedia: Cori-cycle lactate is quantitatively the largest substrate.</p>'],
+  ala: ['Alanine', '<h3>Alanine (from muscle protein)</h3><p>Alanine is converted to <b>pyruvate</b> in the liver and used to make glucose (a 2016 review; Wikipedia); its nitrogen goes to urea (Wikipedia). Entry as for lactate: pyruvate → oxaloacetate (a 2018 review).</p>'],
+  gly: ['Glycerol', '<h3>Glycerol (from fat)</h3><p>Glycerol from triacylglycerols enters as <b>dihydroxyacetone phosphate</b> (a 2016 review), above the pyruvate carboxylase and PEPCK steps, so it needs only the two bypasses nearer glucose.</p>'],
+  odd: ['Odd-chain fatty acids', '<h3>Odd-chain fatty acids (propionate)</h3><p>Wikipedia: their propionyl-CoA becomes succinyl-CoA, which the TCA cycle turns into oxaloacetate. StatPearls lists propionate as a precursor.</p>'],
+  ace: ['Acetyl-CoA (even-chain fat)', '<h3>Acetyl-CoA: no net glucose</h3><p>Two carbons enter the TCA cycle as acetyl-CoA and two leave as CO<sub>2</sub>, so even-chain fatty acids give <b>no net glucose</b> (Wikipedia). Acetyl-CoA does <b>activate pyruvate carboxylase</b> (Wikipedia).</p>'],
+};
+const GNG_TABLE = [
+  ['Glucokinase / hexokinase', 'Glucose-6-phosphatase', 'G6P + H₂O → glucose + Pi; in the ER lumen (G6P carried in by a translocase); liver and kidney, not muscle', 'StatPearls; a 2018 review; Wikipedia; a 2016 review; IUBMB'],
+  ['PFK-1', 'Fructose-1,6-bisphosphatase', 'F1,6BP + H₂O → F6P + Pi; inhibited by fructose 2,6-bisphosphate (Wikipedia)', 'StatPearls; a 2018 review; Wikipedia; IUBMB'],
+  ['Pyruvate kinase', 'Pyruvate carboxylase, then PEP carboxykinase', 'pyruvate + HCO₃⁻ + ATP → oxaloacetate (mitochondrial; Wikipedia: biotin, activated by acetyl-CoA); oxaloacetate + GTP → PEP + CO₂ (PEPCK)', 'StatPearls; a 2018 review; Wikipedia; IUBMB'],
+];
+const GNG_RL = '<b>Which step is rate-limiting? Sources differ.</b> Wikipedia (Gluconeogenesis): the rate is "ultimately controlled" by <b>fructose-1,6-bisphosphatase</b>. Wikipedia (PEPCK): PEPCK is "a rate-controlling step" and the first committed step. A 2018 review: <b>PEPCK and glucose-6-phosphatase</b> are the key rate-limiting enzymes, controlled through gene expression. Hormones: <b>glucagon and cortisol</b> stimulate (e.g. PEPCK), <b>insulin</b> inhibits (StatPearls; a 2018 review; Wikipedia). Cost: 4 ATP + 2 GTP from pyruvate to glucose 6-phosphate (Wikipedia).';
+
+const CYC = {
+  cori: ['Cori cycle', '<h3>Cori cycle</h3><p><b>Lactate</b> from anaerobic glycolysis in muscle goes to the <b>liver</b>, is made into glucose, and the glucose returns to the muscle (Wikipedia; a 2016 review). Wikipedia: glycolysis gives 2 ATP, gluconeogenesis costs 6, so each turn costs the body a net <b>4 ATP</b>. Red cells, which have no mitochondria, also make lactate (StatPearls).</p>'],
+  ala: ['Glucose–alanine (Cahill) cycle', '<h3>Glucose–alanine cycle</h3><p>Muscle transaminates pyruvate to <b>alanine</b>, which carries amino-group nitrogen (and carbon) to the liver: the nitrogen enters the <b>urea</b> cycle and the pyruvate is made into glucose (Wikipedia; a 2016 review). Wikipedia: less productive than the Cori cycle because urea has to be made.</p>'],
+};
+
+/* glycogen states */
+const GLYS = {
+  fed: ['Fed (insulin)', '<h3>Fed: insulin, glycogen is made</h3><p>Glucose 6-P → glucose 1-P → <b>UDP-glucose</b> (UDP-glucose pyrophosphorylase; Wikipedia; IUBMB). <b>Glycogenin</b> makes a short primer, <b>glycogen synthase</b> extends it with α(1→4) bonds from UDP-glucose, and the <b>branching enzyme</b> adds α(1→6) branches (the 2016 reviews; Wikipedia). Insulin <b>activates glycogen synthase and inhibits phosphorylase</b> (StatPearls; 2016 review): the phosphatase PP1 dephosphorylates both — synthase on, phosphorylase off (2016 review; Wikipedia). Glucose 6-phosphate activates the synthase (Wikipedia; a 2009 review).</p>'],
+  fast: ['Fasting liver (glucagon)', '<h3>Fasting liver: glucagon, glycogen is broken down</h3><p>Glucagon → cAMP → protein kinase A (StatPearls; StatPearls Glycogenolysis): <b>phosphorylation activates glycogen phosphorylase and inactivates glycogen synthase</b> (Wikipedia; 2016 review). <b>Phosphorylase</b> (pyridoxal phosphate cofactor, Wikipedia) releases glucose 1-P from α(1→4) bonds — Wikipedia: the rate-limiting step; the <b>debranching enzyme</b> moves short chains and frees the α(1→6) glucose (2016 review; IUBMB; Wikipedia). Phosphoglucomutase gives G6P, and liver <b>glucose-6-phosphatase</b> releases free glucose into the blood (Wikipedia).</p>'],
+  ex: ['Exercising muscle (adrenaline, Ca²⁺, AMP)', '<h3>Exercising muscle: adrenaline, Ca<sup>2+</sup>, AMP</h3><p>Adrenaline acts on liver and muscle through cAMP and PKA; <b>glucagon has no effect on muscle</b> (StatPearls; Wikipedia). With contraction, <b>Ca<sup>2+</sup>–calmodulin</b> activates phosphorylase kinase (IUBMB; Wikipedia), and <b>AMP</b> activates muscle phosphorylase (2016 review; Wikipedia). Muscle has no glucose-6-phosphatase, so its glycogen feeds its own glycolysis, not the blood (Wikipedia).</p>'],
+};
+
+/* GSD: key -> [chip, type, eponym, enzyme, organ, features, sources, block id] */
+const GSD_INTRO = 'Inherited errors that leave glycogen abnormal in amount or structure; problems come either from failing to turn glycogen into energy or from toxic glycogen build-up (StatPearls). Each type: enzyme and organ from at least two sources (GeneReviews, StatPearls, an open review, Wikipedia); details attributed. Types 0 and VII are added from a 2016 review, StatPearls and Wikipedia.';
+const GSD = {
+  t0: ['0 (glycogen synthase)', '0', '—', '<b>Glycogen synthase</b>: liver (<i>GYS2</i>) or muscle (<i>GYS1</i>) isoenzyme', 'liver (0a); muscle (0b)', 'liver form: autosomal recessive, less glycogen made in the liver (a 2016 review); Wikipedia: no extra glycogen is stored, but it is classed with the GSDs because it causes similar problems; the 2016 review: frequent protein-rich meals and bedtime cornstarch help', 'a 2016 review; StatPearls; Wikipedia', 'gs'],
+  t1: ['I (von Gierke)', 'I a', 'von Gierke (StatPearls; Wikipedia)', '<b>Glucose-6-phosphatase</b> (in the ER)', 'liver, kidney', 'from 3–4 months: <b>severe fasting hypoglycaemia</b>, hepatomegaly, <b>lactic acidosis</b>, <b>hyperuricaemia</b> (gout), <b>hyperlipidaemia</b>/hypertriglyceridaemia (GeneReviews; StatPearls; Wikipedia). GeneReviews: doll-like face, short stature, bleeding tendency; risk of hepatic adenomas', 'GeneReviews; StatPearls; Wikipedia', 'g6pase'],
+  t1b: ['Ib', 'I b', '—', '<b>Glucose-6-phosphate translocase</b> (carries G6P into the ER)', 'liver, kidney; neutrophils', 'as type Ia (StatPearls); GeneReviews: neutropenia and poor neutrophil function, with recurrent infections', 'StatPearls; GeneReviews', 'trans'],
+  t2: ['II (Pompe)', 'II', 'Pompe (StatPearls; Wikipedia)', '<b>Acid α-glucosidase</b> (acid maltase) — in <b>lysosomes</b>', 'heart, skeletal muscle (generalised)', 'infantile form: <b>hypotonia, hypertrophic cardiomyopathy / cardiomegaly</b>, respiratory failure (StatPearls; GeneReviews; Wikipedia); GeneReviews: short PR interval. Late-onset: proximal weakness, respiratory insufficiency (StatPearls; GeneReviews). Enzyme replacement therapy (GeneReviews; StatPearls)', 'GeneReviews; StatPearls; Wikipedia', 'gaa'],
+  t3: ['III (Cori)', 'III', 'Cori or Forbes disease; limit dextrinosis (Wikipedia)', '<b>Debranching enzyme</b> (amylo-α-1,6-glucosidase)', 'liver and muscle (IIIa, about 85%); liver only (IIIb, about 15%) (GeneReviews)', 'hepatomegaly, failure to thrive, <b>ketotic</b> fasting hypoglycaemia, hyperlipidaemia, raised transaminases (GeneReviews); later <b>skeletal myopathy</b> and cardiac hypertrophy/cardiomyopathy (GeneReviews; Wikipedia: abnormal glycogen in liver, muscles and sometimes heart)', 'GeneReviews; Wikipedia', 'debr'],
+  t4: ['IV (Andersen)', 'IV', 'Andersen disease (a 2021 review; Wikipedia)', '<b>Branching enzyme</b> → amylopectin-like glycogen (polyglucosan)', 'liver; neuromuscular forms (muscle, heart, nerve) (GeneReviews; a 2021 review)', 'classic hepatic form: failure to thrive, hepatomegaly, <b>progressive cirrhosis</b>; without liver transplantation, death by about 5 years (GeneReviews; a 2021 review; Wikipedia)', 'GeneReviews; a 2021 review; Wikipedia', 'branch'],
+  t5: ['V (McArdle)', 'V', 'McArdle (StatPearls; GeneReviews; Wikipedia)', '<b>Muscle glycogen phosphorylase</b> (myophosphorylase)', 'skeletal muscle', '<b>exercise intolerance</b>, cramps, <b>"second wind"</b>, high CK; myoglobinuria in about half, rhabdomyolysis, risk of renal failure (GeneReviews; a 2019 review; StatPearls); no rise in lactate on the forearm ischaemic exercise test (a 2019 review)', 'GeneReviews; StatPearls; a 2019 review; Wikipedia', 'mphos'],
+  t6: ['VI (Hers)', 'VI', 'Hers disease (a 2021 review; Wikipedia)', '<b>Liver glycogen phosphorylase</b>', 'liver', 'usually mild: hepatomegaly, growth delay, <b>ketotic hypoglycaemia</b>, raised transaminases, hyperlipidaemia (GeneReviews; a 2021 review; Wikipedia)', 'GeneReviews; a 2021 review; Wikipedia', 'lphos'],
+  t7: ['VII (Tarui)', 'VII', 'Tarui disease (a 2016 review; Wikipedia)', '<b>Phosphofructokinase-1</b> in muscle', 'skeletal muscle; Wikipedia: also haemolysis', 'autosomal recessive (2016 review); Wikipedia: myopathy, exercise-induced cramps, myoglobinuria and compensated haemolysis, and no "second wind"', 'a 2016 review; StatPearls; Wikipedia', 'pfk'],
+  t9: ['IX (phosphorylase kinase)', 'IX', '—', '<b>Phosphorylase kinase</b>', 'liver (commonest: X-linked <i>PHKA2</i>); also muscle', 'hepatomegaly, slowed growth, fasting hypoglycaemia with ketosis (GeneReviews; Wikipedia); X-linked or autosomal recessive (GeneReviews; Wikipedia); GeneReviews: long-term risk of liver fibrosis', 'GeneReviews; Wikipedia', 'phk'],
+};
+
+const BASED = '<b>Based on:</b> StatPearls and GeneReviews (NCBI Bookshelf; abstracts); IUBMB Enzyme Nomenclature entries (accessed 2026); open-access reviews on the TCA cycle (J Biol Chem 2023), hepatic gluconeogenesis (2018), liver glucose and glycogen metabolism in humans (2016, one author group), glucokinase (2009), McArdle disease (2019), GSD IV liver transplantation (2021) and GSD VI (2021) (Europe PMC / NCBI); Wikipedia (wikitext checked for OpenStax/Lumen/Boundless citations).';
+const MODELS = '<b>Models used:</b> the cycle, pathway and organ drawings are schematic, not to scale. The yield calculator multiplies the carrier counts by the chosen P/O values; the glycerol-phosphate option counts cytosolic NADH at the FADH₂ value (an assumption of the calculator).';
+
+/* ===================== CODE ===================== */
+const {$, T} = Bioc;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+const NB = '‑';
+Bioc.DEFS = Bioc.DEFS.replace('</defs>', '<marker id="arrT" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="3.6" markerHeight="3.6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink)"/></marker></defs>');
+const box = (x, y, w, h, cls = 'met', rx = 6) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}"/>`;
+const pill = (x, y, txt, cls, w) => { w = w || Math.max(40, txt.length * 6.6 + 14); return box(x - w / 2, y - 11, w, 22, cls, 11) + T(x, y + 4, txt, 's', 'middle'); };
+const nb = t => t.replace(/-(?=\d)/g, NB);
+
+/* ---- TCA ---- */
+$('tca-intro').innerHTML = TCA_INTRO; $('tca-reg').innerHTML = TCA_REG;
+const TS = {s: 0}; let turns = 1;
+const MET = ['Citrate', 'Isocitrate', 'α‑Ketoglutarate', 'Succinyl‑CoA', 'Succinate', 'Fumarate', 'Malate', 'Oxaloacetate'];
+function drawTCA() {
+  const i = TS.s, st = TCA[i], cx = 260, cy = 240, R = 170, RX = 196;
+  let s = Bioc.DEFS;
+  const pos = MET.map((m, j) => { const a = -Math.PI / 2 + (j + 0.5) * 2 * Math.PI / 8; return [cx + RX * Math.cos(a), cy + R * Math.sin(a)]; });
+  /* arcs between metabolites: step j goes from MET[j-1] (OAA for j = 0) to MET[j] */
+  for (let j = 0; j < 8; j++) {
+    const a0 = -Math.PI / 2 + (j - 0.5) * 2 * Math.PI / 8 + 0.2, a1 = -Math.PI / 2 + (j + 0.5) * 2 * Math.PI / 8 - 0.2;
+    const p0 = [cx + RX * Math.cos(a0), cy + R * Math.sin(a0)], p1 = [cx + RX * Math.cos(a1), cy + R * Math.sin(a1)];
+    const d = `M${p0[0].toFixed(1)} ${p0[1].toFixed(1)} A${RX} ${R} 0 0 1 ${p1[0].toFixed(1)} ${p1[1].toFixed(1)}`;
+    s += `<path class="${TCA[j][9] ? 'bold' : 'thin'}" d="${d}"/>`;
+    if (j === i) s += `<path class="sel" d="${d}"/>`;
+    const am = -Math.PI / 2 + j * 2 * Math.PI / 8, lx = cx + (RX - 30) * Math.cos(am), ly = cy + (R - 26) * Math.sin(am);
+    s += T(lx, ly + 4, String(j + 1), 'm', 'middle');
+  }
+  pos.forEach(([x, y], j) => { s += box(x - 56, y - 13, 112, 26) + T(x, y + 4, MET[j], '', 'middle'); if (j === i) s += `<rect class="sel" x="${x - 60}" y="${y - 17}" width="120" height="34" rx="8"/>`; });
+  /* acetyl-CoA entry at step 1 */
+  s += pill(cx, 30, 'acetyl' + NB + 'CoA', 'met', 96) + `<path class="thin" d="M${cx} 42 L${cx} 58"/>`;
+  s += pill(cx, cy - 26, nb(st[3]), 'enzp', 240) + T(cx, cy, 'EC ' + st[4], 's', 'middle');
+  if (st[9]) s += T(cx, cy + 20, 'regulated (rate-controlling)', 'b', 'middle');
+  const out = [];
+  if (st[5]) out.push('NADH'); if (st[6]) out.push('FADH₂'); if (st[7]) out.push('GTP'); if (st[8]) out.push('CO₂');
+  out.forEach((o, j) => { s += pill(cx - (out.length - 1) * 38 + j * 76, cy + 50, o, o === 'CO₂' ? 'met' : 'cofp', 64); });
+  $('tca-svg').innerHTML = s; $('tca-find').innerHTML = st[10];
+  let n = 0, f = 0, g = 0, c = 0;
+  for (let j = 0; j <= i; j++) { n += TCA[j][5]; f += TCA[j][6]; g += TCA[j][7]; c += TCA[j][8]; }
+  $('tca-ledger').innerHTML = `<span>NADH <b>${n}</b></span><span>FADH₂ <b>${f}</b></span><span>GTP <b>${g}</b></span><span>CO₂ <b>${c}</b></span><span class="muted">one turn, after step ${i + 1}; per glucose double it (two acetyl-CoA)</span>`;
+}
+Bioc.stepper('tca-step', TCA.map(t => t[0]), drawTCA, TS);
+Bioc.key('tca-key', [['--sub', 'metabolite', 'opacity:.4'], ['--enz', 'enzyme', 'opacity:.5'], ['--cofac', 'reduced carrier / GTP', 'opacity:.5'], ['--accent', 'selected step'], ['var(--ink)', 'thick arrow: regulated step']]);
+
+/* ---- yield calculator ---- */
+$('yield-intro').innerHTML = YIELD_INTRO; $('yield-note').innerHTML = YIELD_NOTE;
+const Y = {n: 2.5, f: 1.5, sh: 'ma'};
+$('yield-sel').innerHTML = '<label>ATP per NADH <select id="y-n"><option value="2.5">2.5</option><option value="3">3</option></select></label><label>ATP per FADH₂ <select id="y-f"><option value="1.5">1.5</option><option value="2">2</option></select></label><label>Cytosolic NADH shuttle <select id="y-sh"><option value="ma">malate–aspartate</option><option value="gp">glycerol-phosphate</option></select></label>';
+function drawYield() {
+  const cyt = Y.sh === 'ma' ? Y.n : Y.f;
+  const rows = [
+    ['Glycolysis', '2 ATP (net)', 2],
+    ['Glycolysis', '2 NADH (cytosol) × ' + cyt, 2 * cyt],
+    ['Pyruvate dehydrogenase', '2 NADH × ' + Y.n, 2 * Y.n],
+    ['TCA cycle (2 turns)', '6 NADH × ' + Y.n, 6 * Y.n],
+    ['TCA cycle (2 turns)', '2 FADH₂ × ' + Y.f, 2 * Y.f],
+    ['TCA cycle (2 turns)', '2 GTP', 2],
+  ];
+  const tot = rows.reduce((a, r) => a + r[2], 0);
+  Bioc.table('yield-table', ['Stage', 'Made', 'ATP'], rows.map(r => [r[0], r[1], `<span class="num">${r[2]}</span>`]));
+  $('yield-out').innerHTML = `Total: <span class="big">${tot}</span> ATP per glucose`;
+}
+const ysync = () => { $('y-n').value = String(Y.n); $('y-f').value = String(Y.f); $('y-sh').value = Y.sh; };
+const yclear = () => $('yield-tg').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false'));
+['y-n', 'y-f'].forEach(id => $(id).onchange = e => { Y[id === 'y-n' ? 'n' : 'f'] = +e.target.value; yclear(); drawYield(); });
+$('y-sh').onchange = e => { Y.sh = e.target.value; yclear(); drawYield(); };
+Bioc.toggles('yield-tg', Object.entries(YP).map(([k, v]) => [k, v[0]]), k => { Y.n = YP[k][1]; Y.f = YP[k][2]; Y.sh = YP[k][3]; ysync(); drawYield(); }, 'modern');
+ysync(); drawYield();
+
+/* ---- gluconeogenesis ---- */
+$('gng-intro').innerHTML = GNG_INTRO; $('gng-rl').innerHTML = GNG_RL;
+Bioc.table('gng-table', ['Glycolytic step bypassed', 'Bypass enzyme', 'Reaction and notes', 'Sources'], GNG_TABLE);
+const GR = [['Glucose', 30], ['Glucose 6‑P', 100], ['Fructose 6‑P', 160], ['Fructose 1,6‑bisP', 230], ['DHAP / G3P', 290], ['PEP', 360], ['Pyruvate', 470]];
+function drawGNG(k) {
+  let s = Bioc.DEFS; const lx = 140, rx = 300;
+  s += `<rect class="organ" x="200" y="380" width="310" height="130" rx="20"/>` + T(214, 400, 'mitochondrion', 'h');
+  GR.forEach(([n, y]) => { s += box(lx - 75, y - 13, 150, 26) + T(lx, y + 4, n, '', 'middle'); });
+  s += T(lx, 18 - 6, 'glycolysis ↓', 'h', 'middle') + T(rx + 80, 18 - 6, 'gluconeogenesis ↑', 'h', 'middle');
+  for (let j = 0; j < GR.length - 1; j++) s += `<path class="thin" d="M${lx - 30} ${GR[j][1] + 14} L${lx - 30} ${GR[j + 1][1] - 14}"/>`;
+  /* reversible steps used both ways (2, 4–9): up arrows at lx + 30 */
+  [[1, 2], [3, 4], [4, 5]].forEach(([a, b]) => { s += `<path class="thin" d="M${lx + 30} ${GR[b][1] - 14} L${lx + 30} ${GR[a][1] + 14}"/>`; });
+  /* bypasses */
+  s += `<path class="bold" d="M${lx + 75} ${GR[1][1]} C ${lx + 130} ${GR[1][1]}, ${lx + 130} ${GR[0][1]}, ${lx + 77} ${GR[0][1]}"/>` + pill(rx + 40, 65, 'glucose' + NB + '6' + NB + 'phosphatase', 'enzp', 160);
+  s += `<path class="bold" d="M${lx + 75} ${GR[3][1]} C ${lx + 130} ${GR[3][1]}, ${lx + 130} ${GR[2][1]}, ${lx + 77} ${GR[2][1]}"/>` + pill(rx + 40, 195, 'fructose' + NB + '1,6' + NB + 'bisphosphatase', 'enzp', 190);
+  s += box(rx + 10, 425, 130, 26) + T(rx + 75, 442, 'Oxaloacetate', '', 'middle');
+  s += `<path class="bold" d="M${lx + 75} ${GR[6][1]} C ${rx - 30} 470, ${rx - 20} 440, ${rx + 8} 438"/>` + pill(rx + 8, 498, 'pyruvate carboxylase (biotin)', 'enzp', 188);
+  s += `<path class="bold" d="M${rx + 75} 423 C ${rx + 75} 380, ${lx + 120} 360, ${lx + 77} ${GR[5][1]}"/>` + pill(rx + 100, 340, 'PEP carboxykinase', 'enzp', 150) + T(rx + 100, 366, 'GTP', 's', 'middle');
+  /* entry of chosen precursor */
+  const entry = {lac: [GR[6][1], 'lactate', 'from LDH'], ala: [GR[6][1], 'alanine', 'by transamination'], gly: [GR[4][1], 'glycerol', 'as DHAP'], odd: [438, 'propionyl' + NB + 'CoA', 'via succinyl' + NB + 'CoA'], ace: [438, 'acetyl' + NB + 'CoA', 'no net glucose']}[k];
+  const ex = k === 'odd' || k === 'ace' ? rx + 200 : 22;
+  if (k === 'odd' || k === 'ace') {
+    s += pill(455, 474, entry[1], 'met', 104) + `<path class="thin" d="M405 470 L442 448"/>` + T(455, 500, entry[2], 's', 'middle');
+    if (k === 'ace') s += `<path d="M414 450 L430 466 M430 450 L414 466" style="stroke:var(--muted);stroke-width:3;fill:none"/>`;
+  } else if (k === 'gly') {
+    s += pill(310, entry[0], entry[1], 'met', 80) + `<path class="thin" d="M270 ${entry[0]} L${lx + 77} ${entry[0]}"/>` + T(310, entry[0] + 26, entry[2], 's', 'middle');
+  } else {
+    s += pill(ex + 30, entry[0] - 40, entry[1], 'met', 80) + `<path class="thin" d="M${ex + 30} ${entry[0] - 28} L${lx - 76} ${entry[0] - 6}"/>` + T(ex + 30, entry[0] - 58, entry[2], 's', 'middle');
+  }
+  $('gng-svg').innerHTML = s; $('gng-find').innerHTML = GNG[k][1];
+}
+Bioc.toggles('gng-tg', Object.entries(GNG).map(([k, v]) => [k, v[0]]), drawGNG, 'lac'); drawGNG('lac');
+Bioc.key('gng-key', [['--enz', 'bypass enzyme', 'opacity:.5'], ['--sub', 'metabolite / precursor', 'opacity:.4'], ['var(--ink)', 'thick arrow: bypass']]);
+
+/* ---- cycles ---- */
+function drawCyc(k) {
+  let s = Bioc.DEFS;
+  s += `<rect class="organ" x="20" y="40" width="170" height="160" rx="16"/>` + T(105, 32, k === 'cori' ? 'muscle (and red cells)' : 'muscle', 'h', 'middle');
+  s += `<rect class="organ" x="330" y="40" width="170" height="160" rx="16"/>` + T(415, 32, 'liver', 'h', 'middle');
+  s += T(260, 120, 'blood', 'h', 'middle');
+  if (k === 'cori') {
+    s += pill(105, 70, 'glucose', 'met', 80) + `<path class="thin" d="M105 82 L105 156"/>` + T(115, 122, '+2 ATP', 's') + pill(105, 170, 'lactate', 'met', 80);
+    s += pill(415, 170, 'lactate', 'met', 80) + `<path class="thin" d="M415 158 L415 84"/>` + T(425, 122, '−6 ATP', 's') + pill(415, 70, 'glucose', 'met', 80);
+    s += `<path class="bold" d="M147 170 L373 170"/><path class="bold" d="M373 70 L147 70"/>`;
+    s += T(260, 222, 'net cost about 4 ATP per turn (Wikipedia)', 's', 'middle');
+  } else {
+    s += pill(105, 70, 'glucose', 'met', 80) + `<path class="thin" d="M105 82 L105 120"/>` + pill(105, 132, 'pyruvate', 'met', 80) + `<path class="thin" d="M105 144 L105 158"/>` + pill(105, 170, 'alanine', 'met', 80) + T(30, 156, '+ NH₂', 's');
+    s += pill(415, 170, 'alanine', 'met', 80) + `<path class="thin" d="M415 158 L415 144"/>` + pill(415, 132, 'pyruvate', 'met', 80) + `<path class="thin" d="M415 120 L415 84"/>` + pill(415, 70, 'glucose', 'met', 80) + T(415, 194, 'N → urea', 's', 'middle');
+    s += `<path class="bold" d="M147 170 L373 170"/><path class="bold" d="M373 70 L147 70"/>`;
+  }
+  $('cyc-svg').innerHTML = s; $('cyc-find').innerHTML = CYC[k][1];
+}
+Bioc.toggles('cyc-tg', Object.entries(CYC).map(([k, v]) => [k, v[0]]), drawCyc, 'cori'); drawCyc('cori');
+
+/* ---- glycogen ---- */
+function drawGly(k) {
+  let s = Bioc.DEFS; const make = k === 'fed', liver = k === 'fast';
+  s += box(30, 30, 130, 26) + T(95, 48, k === 'ex' ? 'glycolysis (muscle)' : 'glucose (blood)', '', 'middle');
+  s += box(30, 110, 130, 26) + T(95, 128, 'Glucose 6‑P', '', 'middle');
+  s += box(30, 190, 130, 26) + T(95, 208, 'Glucose 1‑P', '', 'middle');
+  s += box(30, 270, 130, 26) + T(95, 288, 'UDP‑glucose', '', 'middle');
+  s += `<ellipse class="met" cx="400" cy="235" rx="105" ry="55"/>` + T(400, 231, 'GLYCOGEN', 'b', 'middle') + T(400, 249, 'α(1→4) chains, α(1→6) branches', 's', 'middle');
+  /* making arm */
+  const mk = make ? '' : ' class="off"';
+  s += `<g${mk}><path class="thin" d="M110 136 L110 188"/><path class="thin" d="M95 216 L95 268"/><path class="bold" d="M162 283 L280 262"/>` + pill(210, 300, 'glycogen synthase', 'enzp', 150) + pill(400, 320, 'branching enzyme', 'enzp', 140) + T(95, 336, 'glycogenin primer', 's', 'middle') + `</g>`;
+  if (k !== 'fed') s += T(210, 324, 'phosphorylated: OFF', 's', 'middle'); else s += T(210, 324, 'dephosphorylated: ON', 'b', 'middle');
+  /* breaking arm */
+  const br = make ? ' class="off"' : '';
+  s += `<g${br}><path class="bold" d="M280 200 L162 203"/>` + pill(205, 172, 'phosphorylase (PLP)', 'enzp', 150) + pill(410, 150, 'debranching enzyme', 'enzp', 150) + `<path class="thin" d="M78 188 L78 138"/></g>`;
+  s += T(205, 152, make ? 'dephosphorylated: OFF' : 'phosphorylated: ON', make ? 's' : 'b', 'middle');
+  /* exit */
+  if (k === 'fast') s += `<path class="bold" d="M95 108 L95 58"/>` + pill(250, 82, 'glucose' + NB + '6' + NB + 'phosphatase', 'enzp', 160) + T(250, 108, 'liver: glucose to blood', 's', 'middle');
+  else if (k === 'ex') s += `<path class="bold" d="M95 108 L95 58"/>` + T(180, 82, 'no glucose' + NB + '6' + NB + 'phosphatase in muscle', 's');
+  else s += `<path class="thin" d="M95 58 L95 108"/>`;
+  s += T(380, 380, k === 'fed' ? 'insulin → PP1' : k === 'fast' ? 'glucagon → cAMP → PKA' : 'adrenaline → PKA; Ca²⁺, AMP', 'b', 'middle');
+  $('gly-svg').innerHTML = s; $('gly-find').innerHTML = GLYS[k][1];
+}
+Bioc.toggles('gly-tg', Object.entries(GLYS).map(([k, v]) => [k, v[0]]), drawGly, 'fed'); drawGly('fed');
+Bioc.key('gly-key', [['--enz', 'enzyme', 'opacity:.5'], ['--sub', 'metabolite', 'opacity:.4'], ['var(--muted)', 'faded / grey text: switched off']]);
+
+/* ---- GSD ---- */
+$('gsd-intro').innerHTML = GSD_INTRO;
+const NODE = {
+  g6pase: [250, 62, 'glucose‑6‑phosphatase'], trans: [250, 92, 'G6P translocase (into ER)'], phk: [230, 122, 'phosphorylase kinase'],
+  lphos: [230, 150, 'liver phosphorylase'], mphos: [230, 178, 'muscle phosphorylase'], debr: [420, 142, 'debranching enzyme'],
+  gs: [250, 268, 'glycogen synthase'], branch: [250, 302, 'branching enzyme'], gaa: [420, 52, 'acid α‑glucosidase'], pfk: [428, 110, 'PFK‑1 (muscle glycolysis)'],
+};
+function drawGSD(k) {
+  const g = GSD[k]; let s = Bioc.DEFS;
+  s += `<rect class="organ" x="335" y="16" width="170" height="56" rx="12"/>` + T(345, 32, 'lysosome', 'h');
+  s += box(30, 30, 130, 26) + T(95, 48, 'glucose (blood)', '', 'middle');
+  s += box(30, 120, 130, 26) + T(95, 138, 'Glucose 6‑P', '', 'middle') + `<path class="thin" d="M95 118 L95 58"/>`;
+  s += box(30, 200, 130, 26) + T(95, 218, 'Glucose 1‑P', '', 'middle') + `<path class="thin" d="M95 198 L95 148"/>`;
+  s += `<ellipse class="met" cx="420" cy="220" rx="80" ry="40"/>` + T(420, 225, 'GLYCOGEN', 'b', 'middle');
+  s += `<path class="thin" d="M338 210 L162 210"/>` + `<path class="thin" d="M162 222 C 190 258, 300 270, 352 246"/>`;
+  Object.entries(NODE).forEach(([id, [x, y, lab]]) => {
+    const w = Math.max(110, lab.length * 6.4 + 14);
+    s += pill(x, y, lab, 'enzp', w);
+    if (id === g[7]) { const cx = x > 300 ? x - w / 2 - 14 : x + w / 2 + 14; s += `<rect class="sel" x="${x - w / 2 - 4}" y="${y - 15}" width="${w + 8}" height="30" rx="14"/>` + `<path class="clinx" d="M${cx - 8} ${y - 8} L${cx + 8} ${y + 8} M${cx + 8} ${y - 8} L${cx - 8} ${y + 8}"/>`; }
+  });
+  s += T(260, 342, 'organ: ' + g[4].replace(/<[^>]+>/g, '').slice(0, 80), 's', 'middle');
+  $('gsd-svg').innerHTML = s;
+  $('gsd-find').innerHTML = `<h3>Type ${g[1]}${g[2] !== '—' ? ' — ' + g[2] : ''}</h3><p><b>Missing:</b> ${g[3]}</p><p><b>Organ:</b> ${g[4]}</p><p><b>Key features:</b> ${g[5]}.</p><p class="note">Sources: ${g[6]}.</p>`;
+}
+Bioc.toggles('gsd-tg', Object.entries(GSD).map(([k, v]) => [k, v[0]]), drawGSD, 't1'); drawGSD('t1');
+Bioc.table('gsd-table', ['Type', 'Eponym', 'Missing enzyme', 'Organ', 'Sources'], Object.values(GSD).map(g => [g[1], g[2], g[3], g[4], g[6]]));
+Bioc.swipeHints();
+</script>
+</body>
+</html>

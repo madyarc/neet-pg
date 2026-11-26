@@ -82,6 +82,7 @@ step. Sister project of [jee-materials](https://github.com/madyarc/jee-materials
 | # | Module | Branch | What it does |
 |---|---|---|---|
 | 01 | [Enzymes: Concepts, Classes, Kinetics and Inhibition](biochemistry/enzymes/enzymes-kinetics.html), [Enzymes in the Clinic: Serum Markers and Isoenzymes](biochemistry/enzymes/clinical-enzymes.html) | Enzymes | Cofactor and isoenzyme concepts, seven IUBMB classes, active-site steppers, Michaelis–Menten and Lineweaver–Burk sliders, inhibition picker with drug table, allostery and zymogens; enzyme–organ picker, cardiac-marker time course, 4UDMI 2018 tree, LDH/CK/ALP isoenzymes, Atlanta rule |
+| 02 | [Carbohydrates, Glycolysis and PDH](biochemistry/carbohydrates/carb-chemistry-glycolysis.html), [TCA Cycle, Gluconeogenesis and Glycogen](biochemistry/carbohydrates/tca-gluconeogenesis-glycogen.html), [Minor Pathways, Glucose Homeostasis and Diagnosis](biochemistry/carbohydrates/minor-pathways-glucose.html) | Carbohydrates | Glycolysis stepper with ATP ledger, PFK-1 and PDH, 2,3-BPG shunt; TCA stepper and yield calculator, gluconeogenesis, Cori/alanine cycles, glycogen, GSD picker; HMP shunt and G6PD (CPIC 2023), galactose/fructose disorders, fed-to-starvation slider, ADA 2026/WHO glucose classifier |
 
 ### Pathology — [`pathology/`](pathology/index.html)
 

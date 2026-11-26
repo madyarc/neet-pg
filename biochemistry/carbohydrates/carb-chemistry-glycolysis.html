@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("neetpg-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Carbohydrates and Glycolysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/bioc.css">
+<style>
+/* tokens from bioc.css with their B01 meanings: --enz (an enzyme), --sub (a substrate or metabolite), --inhib (an inhibitor),
+   --cofac (a cofactor or coenzyme: NAD+, FAD, TPP, lipoate, CoA); --accent marks only the selected step; --clin clinical points only. No page tokens. */
+svg.sch .met{fill:var(--sub);fill-opacity:.22;stroke:var(--sub);stroke-width:1.4}
+svg.sch .enzp{fill:var(--enz);fill-opacity:.22;stroke:var(--enz);stroke-width:1.2}
+svg.sch .cofp{fill:var(--cofac);fill-opacity:.3;stroke:var(--cofac);stroke-width:1.2}
+svg.sch .inhp{fill:var(--inhib);fill-opacity:.2;stroke:var(--inhib);stroke-width:1.2}
+svg.sch .sel{stroke:var(--accent);stroke-width:3;fill:none}
+svg.sch .oneway{stroke:var(--ink);stroke-width:3.2;fill:none;marker-end:url(#arrT)}
+svg.sch .thin{stroke:var(--muted);stroke-width:1.4;fill:none;marker-end:url(#arr)}
+svg.sch .clinx{stroke:var(--clin);stroke-width:3;fill:none}
+svg.sch .ring{fill:var(--sub);fill-opacity:.25;stroke:var(--sub);stroke-width:1.6}
+svg.sch .bond{stroke:var(--ink);stroke-width:1.6;fill:none}
+svg.sch .gk{stroke:var(--enz);stroke-width:2.6;fill:none}
+svg.sch .hk{stroke:var(--ink);stroke-width:2.2;fill:none;stroke-dasharray:6 4}
+svg.sch .pt{fill:var(--mark);stroke:var(--surface);stroke-width:1.5}
+svg.sch.fit{max-width:460px}
+.ledger{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:14px}
+.ledger b{font-family:var(--f-mono)}
+.mchips .chip[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="back"><a href="../index.html">← Biochemistry</a> <span class="muted">· Module 02: <span aria-current="page">Carbohydrates and glycolysis</span> · <a href="tca-gluconeogenesis-glycogen.html">TCA, gluconeogenesis, glycogen</a> · <a href="minor-pathways-glucose.html">Minor pathways and blood glucose</a></span></nav>
+
+<header class="stack">
+  <h1>Carbohydrates, Glycolysis and Pyruvate Dehydrogenase</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="jump" aria-label="On this page"><span class="muted">On this page:</span> <a href="#h-cls">Classes</a> <a href="#h-dig">Digestion disorders</a> <a href="#h-gly">Glycolysis, step by step</a> <a href="#h-reg">Regulated steps</a> <a href="#h-fate">Fate of pyruvate, red cell</a> <a href="#h-pdh">Pyruvate dehydrogenase</a></nav>
+</header>
+
+<section class="block panel" aria-labelledby="h-cls">
+  <h2 id="h-cls">Mono-, di-, oligo- and polysaccharides</h2>
+  <div class="chips" id="cls-tg" aria-label="Class"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="cls-svg" viewBox="0 0 520 250" role="img" aria-label="Schematic of the chosen class of carbohydrate"></svg></div>
+    <div class="prose find" id="cls-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="cls-table"></table></div>
+  <div class="key" id="cls-key"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-dig">
+  <h2 id="h-dig">Digestion: the disorders</h2>
+  <p class="muted" id="dig-intro"></p>
+  <div class="chips" id="dig-tg" aria-label="Lactase"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="dig-svg" viewBox="0 0 520 230" role="img" aria-label="Schematic of lactose in the small intestine and colon"></svg></div>
+    <div class="prose find" id="dig-find" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table id="dig-table"></table></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-gly">
+  <h2 id="h-gly">Glycolysis, step by step</h2>
+  <p class="muted" id="gly-intro"></p>
+  <div class="step" id="gly-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="gly-svg" viewBox="0 0 520 560" role="img" aria-label="Schematic of the ten steps of glycolysis with the selected step highlighted"></svg></div>
+    <div class="stack">
+      <div class="prose find" id="gly-find" aria-live="polite"></div>
+      <div class="ledger" id="gly-ledger" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="key" id="gly-key"></div>
+</section>
+
+<section class="block panel" aria-labelledby="h-reg">
+  <h2 id="h-reg">The three regulated steps</h2>
+  <p class="muted" id="reg-intro"></p>
+  <div class="scroll"><table id="reg-table"></table></div>
+  <h3>Hexokinase vs glucokinase</h3>
+  <div class="sliders" id="hk-sl"></div>
+  <div class="two">
+    <svg class="fig sch fit" id="hk-svg" viewBox="0 0 360 250" role="img" aria-label="Schematic rate curves of hexokinase and glucokinase against glucose concentration"></svg>
+    <div class="prose find" id="hk-find" aria-live="polite"></div>
+  </div>
+  <h3>PFK-1: switch the effectors</h3>
+  <div class="chips mchips" id="pfk-tg" aria-label="Effectors present"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pfk-svg" viewBox="0 0 520 260" role="img" aria-label="Schematic of PFK-1 with its activators and inhibitors"></svg></div>
+    <div class="prose find" id="pfk-find" aria-live="polite"></div>
+  </div>
+  <h3>The PFK-2 switch: fed vs fasting liver</h3>
+  <div class="chips" id="pk2-tg" aria-label="State"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pk2-svg" viewBox="0 0 520 220" role="img" aria-label="Schematic of the bifunctional PFK-2/FBPase-2 enzyme and fructose 2,6-bisphosphate"></svg></div>
+    <div class="prose find" id="pk2-find" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-fate">
+  <h2 id="h-fate">The fate of pyruvate: with oxygen, without it, and in the red cell</h2>
+  <div class="chips" id="fate-tg" aria-label="Condition"></div>
+  <div class="sliders" id="fate-sl"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="fate-svg" viewBox="0 0 520 280" role="img" aria-label="Schematic of what happens to pyruvate in the chosen condition"></svg></div>
+    <div class="stack">
+      <div class="prose find" id="fate-find" aria-live="polite"></div>
+      <div class="ledger" id="fate-ledger" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block panel" aria-labelledby="h-pdh">
+  <h2 id="h-pdh">Pyruvate dehydrogenase: three enzymes, five cofactors</h2>
+  <div class="step" id="pdh-step"></div>
+  <div class="two">
+    <div class="schbox"><svg class="fig sch" id="pdh-svg" viewBox="0 0 520 270" role="img" aria-label="Schematic of the pyruvate dehydrogenase complex with the selected step highlighted"></svg></div>
+    <div class="prose find" id="pdh-find" aria-live="polite"></div>
+  </div>
+  <div class="key" id="pdh-key"></div>
+  <h3>When it fails</h3>
+  <div class="scroll"><table id="pdh-table"></table></div>
+</section>
+
+<footer>
+  <p id="based"></p>
+  <p id="models"></p>
+</footer>
+<!-- feedback -->
+<p class="feedback" style="margin:18px 0 0;padding:12px 14px;border:1px solid var(--line,#ccd);border-radius:10px;font-size:14px;line-height:1.5;color:var(--muted,#556)">Spotted a mistake, or something unclear? <a href="https://github.com/madyarc/neet-pg/issues/new?template=feedback.yml&amp;title=%5BCarbohydrates%2C%20Glycolysis%20and%20Pyruvate%20Dehydrogenase%5D%20&amp;page=https%3A%2F%2Fmadyarc.github.io%2Fneet-pg%2Fbiochemistry%2Fcarbohydrates%2Fcarb-chemistry-glycolysis.html" target="_blank" rel="noopener"><b>Report it</b></a>: a short form on GitHub, with this page already filled in. No GitHub account? Sign up in a few seconds with your Google account. Signing in keeps out spam, and every report is checked against our sources, so your fix helps everyone. Reports are public: please don't include personal details.</p>
+<!-- /feedback -->
+</div>
+
+<script src="../assets/bioc.js"></script>
+<script>
+"use strict";
+/* ===================== DATA (checked in two sources: sources-local/facts/fill-b02.md, Part A; biochemistry/DATA-SOURCES.md) =====================
+   IUBMB = the IUBMB Enzyme Nomenclature entries; "a 2024 review" = Glycolysis, J Biol Chem 2024; "a 2016 review" = Liver glucose metabolism in humans
+   (Biosci Rep 2016); "a 2018 review" = hepatic gluconeogenesis (Front Endocrinol 2018); "a 2024 study" = structure of human PFK-1 (Nat Commun 2024);
+   "a 2025 review" = 2,3-DPG (Br J Nutr 2025); "a 2015 review" = lactose intolerance (Nutrients 2015); "the 2026 consensus guideline" = PDC deficiency
+   (J Inherit Metab Dis 2026); "a 2009 review" = glucokinase (Cell Mol Life Sci 2009); "a 2023 review" = the TCA cycle (J Biol Chem 2023). */
+const LEDE = 'Sort sugars into classes, follow lactose to the colon when lactase is missing, step through the ten reactions of glycolysis with a running ATP and NADH count, switch the effectors of PFK-1, divert red-cell glycolysis through the 2,3-BPG shunt and build the pyruvate dehydrogenase complex cofactor by cofactor. Next: <a href="tca-gluconeogenesis-glycogen.html">TCA cycle, gluconeogenesis and glycogen</a>. Enzyme regulation in general: <a href="../enzymes/enzymes-kinetics.html#h-reg">Enzymes</a>.';
+
+/* classes: key -> [label, text] (drawings in drawCls) */
+const CLS = {
+  mono: ['Monosaccharides', '<h3>Monosaccharides: one sugar unit</h3><p>The simplest carbohydrates: they <b>cannot be hydrolysed</b> to smaller ones (Wikipedia; StatPearls). Examples: <b>glucose, fructose, galactose</b> (StatPearls; Wikipedia). Wikipedia: with an aldehyde group a sugar is an <b>aldose</b>, with a ketone group a <b>ketose</b>; by carbon number, triose (3), tetrose, pentose (5), hexose (6). Glucose is an aldohexose; fructose a ketohexose; galactose the C-4 epimer of glucose; ribose (in RNA, ATP, NAD, FAD) a pentose (all Wikipedia).</p>'],
+  di: ['Disaccharides', '<h3>Disaccharides: two units and a glycosidic bond</h3><p>Two monosaccharides joined by a <b>glycosidic bond</b>, with loss of water (Wikipedia; StatPearls; IUPAC-IUBMB 1996 definition). <b>Sucrose</b> = glucose + fructose, <b>lactose</b> = galactose + glucose, <b>maltose</b> = glucose + glucose (Wikipedia; StatPearls; the IUBMB entries for lactase and sucrase-isomaltase give the same splits). Wikipedia gives the bonds: lactose β(1→4), maltose α(1→4).</p>'],
+  oligo: ['Oligosaccharides', '<h3>Oligosaccharides: a few units</h3><p>StatPearls: three to ten monosaccharides, e.g. maltodextrins and raffinose.</p>'],
+  poly: ['Polysaccharides', '<h3>Polysaccharides: long chains</h3><p>Long chains of monosaccharides joined by glycosidic bonds (StatPearls; Wikipedia). They <b>store energy</b> — <b>starch</b> in plants, <b>glycogen</b> in animals — or are <b>structural</b>, like <b>cellulose</b> (Wikipedia; StatPearls). Glycogen is highly branched: α(1→4) chains with α(1→6) branches about every 8–12 residues, kept mainly in liver and muscle (StatPearls; Wikipedia). Starch is linear amylose plus branched amylopectin (Wikipedia). Cellulose is β(1→4)-linked glucose that humans cannot digest: it is <b>dietary fibre</b> (Wikipedia; StatPearls).</p><p><b>Glycosaminoglycans</b> (mucopolysaccharides) are chains of repeating disaccharides in every tissue (StatPearls; Wikipedia); Wikipedia: each unit is a uronic acid plus an amino sugar.</p>'],
+};
+/* example table: [name, class, units, bond / note, role, sources] */
+const CLS_TABLE = [
+  ['Glucose', 'monosaccharide (aldohexose)', '—', 'C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>', 'main fuel; used to make glycogen, starch, cellulose', 'StatPearls; Wikipedia'],
+  ['Fructose', 'monosaccharide (ketohexose)', '—', 'a ketose (Wikipedia)', 'honey, fruits; with glucose it makes sucrose', 'Wikipedia; StatPearls'],
+  ['Galactose', 'monosaccharide', '—', 'C-4 epimer of glucose (Wikipedia)', 'from milk lactose (StatPearls)', 'StatPearls; Wikipedia'],
+  ['Sucrose', 'disaccharide', 'glucose + fructose', 'non-reducing (Wikipedia)', 'table sugar (StatPearls)', 'Wikipedia; StatPearls; IUBMB'],
+  ['Lactose', 'disaccharide', 'galactose + glucose', 'β(1→4) (Wikipedia)', 'milk sugar (Wikipedia; StatPearls: the main sugar of breast milk)', 'Wikipedia; StatPearls; IUBMB'],
+  ['Maltose', 'disaccharide', 'glucose + glucose', 'α(1→4) (Wikipedia)', 'malt sugar (Wikipedia)', 'Wikipedia; StatPearls'],
+  ['Starch', 'polysaccharide', 'glucose', 'amylose + amylopectin (Wikipedia)', 'plant energy store', 'Wikipedia; StatPearls'],
+  ['Glycogen', 'polysaccharide', 'glucose', 'α(1→4), branches α(1→6)', 'animal energy store: liver, muscle', 'StatPearls; Wikipedia'],
+  ['Cellulose', 'polysaccharide', 'glucose', 'β(1→4)', 'plant structure; dietary fibre', 'Wikipedia; StatPearls'],
+];
+
+/* digestion */
+const DIG_INTRO = 'How starch and sugars are digested and absorbed (amylase, brush-border enzymes, SGLT1, GLUT5, GLUT2) is on the physiology page: <a href="../../physiology/gi/digestion-motility.html#h-abs">Digestion and absorption</a>. Here, what goes wrong.';
+const DIG = {
+  ok: ['Lactase present', '<h3>Lactase present</h3><p>Brush-border <b>lactase</b> splits lactose into <b>glucose and galactose</b>, which are absorbed (StatPearls; Wikipedia; IUBMB EC 3.2.1.108).</p>'],
+  low: ['Lactase deficient', '<h3>Lactose intolerance</h3><p>Too little <b>lactase</b> (Wikipedia; StatPearls; a 2015 review). Unsplit lactose stays in the gut: its <b>osmotic load</b> draws water in, and <b>colonic bacteria ferment</b> it to short-chain fatty acids and gas (H<sub>2</sub>, CO<sub>2</sub>, methane) (a 2015 review). Symptoms: abdominal pain, bloating, flatulence, nausea, diarrhoea (Wikipedia; StatPearls). Supporting test: the <b>hydrogen breath test</b> (Wikipedia; the 2015 review\'s table of tests).</p>'],
+};
+const DIG_TABLE = [
+  ['Primary lactase deficiency', 'genetically programmed fall in lactase after weaning, in about two thirds of the world (2015 review); the commonest disaccharidase deficiency (StatPearls)', 'Wikipedia; StatPearls; a 2015 review'],
+  ['Secondary lactase deficiency', 'injury to the small intestine: infection, inflammatory bowel disease, surgery', 'Wikipedia; StatPearls; a 2015 review'],
+  ['Congenital lactase deficiency', 'extremely rare; little or no lactase from birth', 'Wikipedia; StatPearls; a 2015 review'],
+  ['Developmental', 'premature babies; usually improves', 'Wikipedia'],
+  ['Glucose–galactose malabsorption', 'rare; defect of the Na<sup>+</sup>/glucose cotransporter <b>SGLT1</b>: glucose and galactose cannot be taken up', 'Wikipedia'],
+];
+
+/* glycolysis steps: [chip, enzyme, EC, from, to, ATP change per glucose, NADH per glucose, irreversible, text] */
+const GLY_INTRO = 'In the cytosol, ten enzymes turn one glucose (6 C) into two pyruvate (3 C) (Wikipedia; a 2024 review). No oxygen is needed (StatPearls). Step with the arrow keys; the count on the right is per glucose. Each reaction as in Wikipedia and its IUBMB entry.';
+const GLY = [
+  ['1', 'Hexokinase (glucokinase in liver)', '2.7.1.1', 'Glucose', 'Glucose 6-phosphate', -1, 0, true, '<h3>1. Glucose → glucose 6-phosphate</h3><p><b>Hexokinase</b> transfers a phosphate from ATP (Wikipedia; IUBMB). Wikipedia: the first regulated step; in the liver the isoenzyme glucokinase does it (IUBMB: "the liver isoenzyme has sometimes been called glucokinase"). One ATP spent.</p>'],
+  ['2', 'Phosphoglucose isomerase', '5.3.1.9', 'Glucose 6-phosphate', 'Fructose 6-phosphate', 0, 0, false, '<h3>2. Glucose 6-P ⇌ fructose 6-P</h3><p>An isomerisation by <b>phosphoglucose isomerase</b> (glucose-6-phosphate isomerase) (Wikipedia; IUBMB).</p>'],
+  ['3', 'Phosphofructokinase-1 (PFK-1)', '2.7.1.11', 'Fructose 6-phosphate', 'Fructose 1,6-bisphosphate', -1, 0, true, '<h3>3. Fructose 6-P → fructose 1,6-bisphosphate</h3><p><b>PFK-1</b> spends the second ATP (Wikipedia; IUBMB). This is the <b>committed, rate-limiting step</b> of glycolysis (a 2024 study; Wikipedia) and, coupled to ATP hydrolysis, irreversible (Wikipedia). Its effectors: <a href="#h-reg">below</a>.</p>'],
+  ['4', 'Aldolase', '4.1.2.13', 'Fructose 1,6-bisphosphate', 'DHAP + glyceraldehyde 3-P', 0, 0, false, '<h3>4. Split into two trioses</h3><p><b>Aldolase</b> splits the hexose into <b>dihydroxyacetone phosphate</b> (DHAP, a ketose) and <b>glyceraldehyde 3-phosphate</b> (an aldose) (Wikipedia; IUBMB, which calls DHAP glycerone phosphate).</p>'],
+  ['5', 'Triose phosphate isomerase', '5.3.1.1', 'DHAP', 'Glyceraldehyde 3-P', 0, 0, false, '<h3>5. DHAP ⇌ glyceraldehyde 3-P</h3><p><b>Triose phosphate isomerase</b> interconverts the two trioses (Wikipedia; IUBMB), so both go down the same path: from here every step happens <b>twice per glucose</b>.</p>'],
+  ['6', 'Glyceraldehyde-3-P dehydrogenase', '1.2.1.12', 'Glyceraldehyde 3-P', '1,3-Bisphosphoglycerate', 0, 2, false, '<h3>6. The oxidation: NADH is made</h3><p><b>Glyceraldehyde-3-phosphate dehydrogenase</b> oxidises the aldehyde and adds inorganic phosphate, giving 1,3-bisphosphoglycerate and <b>NADH</b> (Wikipedia; IUBMB). Two per glucose. Wikipedia: <b>arsenate</b> can replace phosphate here, so the next step makes no ATP — it uncouples glycolysis. Without a way to turn NADH back into NAD<sup>+</sup>, glycolysis would stop (Wikipedia) — see <a href="#h-fate">anaerobic glycolysis</a>.</p>'],
+  ['7', 'Phosphoglycerate kinase', '2.7.2.3', '1,3-Bisphosphoglycerate', '3-Phosphoglycerate', 2, 0, false, '<h3>7. First ATP made</h3><p><b>Phosphoglycerate kinase</b> moves a phosphate from 1,3-bisphosphoglycerate to ADP: <b>ATP</b> (Wikipedia; IUBMB). Two per glucose, which repays the two spent. In red cells some 1,3-BPG skips this step: <a href="#h-fate">the 2,3-BPG shunt</a>.</p>'],
+  ['8', 'Phosphoglycerate mutase', '5.4.2.11', '3-Phosphoglycerate', '2-Phosphoglycerate', 0, 0, false, '<h3>8. 3-P-glycerate ⇌ 2-P-glycerate</h3><p><b>Phosphoglycerate mutase</b> moves the phosphate (Wikipedia; IUBMB).</p>'],
+  ['9', 'Enolase', '4.2.1.11', '2-Phosphoglycerate', 'Phosphoenolpyruvate (PEP)', 0, 0, false, '<h3>9. Dehydration to PEP</h3><p><b>Enolase</b> removes water, giving phosphoenolpyruvate (Wikipedia; IUBMB, where enolase is "phosphopyruvate hydratase"). Wikipedia: <b>fluoride</b> inhibits enolase, competing with its substrate.</p>'],
+  ['10', 'Pyruvate kinase', '2.7.1.40', 'Phosphoenolpyruvate (PEP)', 'Pyruvate', 2, 0, true, '<h3>10. PEP → pyruvate: second ATP</h3><p><b>Pyruvate kinase</b>: a substrate-level phosphorylation makes pyruvate and <b>ATP</b> (Wikipedia; IUBMB). Irreversible in the cell (Wikipedia). Net for the whole pathway: <b>2 ATP and 2 NADH per glucose</b> — 2 ATP spent, 4 made (StatPearls; Wikipedia; a 2024 review).</p>'],
+];
+
+/* regulated steps table: [step, enzyme, activators, inhibitors, hormones, sources] */
+const REG_INTRO = 'Three steps have large negative free-energy changes, are irreversible and are the ones regulated (Wikipedia): hexokinase/glucokinase, PFK-1 and pyruvate kinase (Wikipedia; a 2018 review). Gluconeogenesis needs other enzymes to get round them: <a href="tca-gluconeogenesis-glycogen.html#h-gng">bypass enzymes</a>.';
+const REG_TABLE = [
+  ['1', 'Hexokinase I–III', '—', 'glucose 6-phosphate, its product (Wikipedia; the 2016 review: "unlike other hexokinases" glucokinase is not)', '—', 'Wikipedia; a 2016 review'],
+  ['1 (liver, β cell)', 'Glucokinase (hexokinase IV)', 'glucose (works as a glucose sensor)', 'not inhibited by glucose 6-P', 'insulin raises, glucagon lowers its activity in human liver cells (2016 review)', 'Wikipedia; a 2016 review; a 2009 review'],
+  ['3', 'PFK-1', 'AMP, ADP; fructose 2,6-bisphosphate', 'ATP, citrate', 'insulin → more F2,6BP; glucagon → less (Wikipedia)', 'a 2024 study; Wikipedia; a 2009 review'],
+  ['10', 'Pyruvate kinase', 'fructose 1,6-bisphosphate (Wikipedia)', 'ATP (2024 review; Wikipedia); alanine (Wikipedia)', 'liver form: glucagon → PKA phosphorylates it → inactive; insulin re-activates (Wikipedia)', 'Wikipedia; a 2024 review'],
+];
+
+/* PFK-1 effectors: key -> [label, sign, text] */
+const PFK = {
+  atp: ['ATP high', -1, 'ATP (a high ATP/ADP ratio) inhibits'],
+  cit: ['Citrate high', -1, 'citrate inhibits'],
+  amp: ['AMP / ADP high', 1, 'AMP and ADP activate'],
+  f26: ['F2,6BP high', 1, 'fructose 2,6-bisphosphate activates'],
+};
+const PFK_TEXT = '<p>PFK-1 is allosteric (Wikipedia). It is activated by signals of <b>low energy</b> — AMP, ADP — and inhibited by signals of <b>high energy</b> — ATP, citrate (a 2024 study; Wikipedia for the ATP/ADP ratio). A potent activator is <b>fructose 2,6-bisphosphate</b> (Wikipedia; a 2009 review; a 2015 review). When activators and inhibitors are both present the page does not say which wins: the balance is not modelled.</p>';
+const PK2 = {
+  fed: ['Fed: insulin', '<h3>Fed liver: insulin</h3><p>The bifunctional enzyme <b>PFK-2/FBPase-2</b> makes and destroys fructose 2,6-bisphosphate (Wikipedia; a 2009 review). <b>Dephosphorylated</b>, its kinase is active and F2,6BP is made (Wikipedia): PFK-1 is switched on and glycolysis runs; Wikipedia: insulin\'s dephosphorylation stimulates glycolysis. F2,6BP also inhibits fructose 1,6-bisphosphatase, the gluconeogenic enzyme (Wikipedia).</p>'],
+  fast: ['Fasting: glucagon', '<h3>Fasting liver: glucagon</h3><p><b>Phosphorylated</b> (glucagon → PKA), PFK-2 works as a phosphatase and F2,6BP falls (a 2018 review; Wikipedia): PFK-1 slows, and the brake on fructose 1,6-bisphosphatase is released, so gluconeogenesis can run (Wikipedia).</p>'],
+};
+
+/* fate of pyruvate: key -> [label, text] */
+const FATE = {
+  aer: ['With oxygen (mitochondria)', '<h3>Aerobic: into the mitochondrion</h3><p>With oxygen, pyruvate enters the mitochondrial matrix and is made into <b>acetyl-CoA</b>, which feeds the citric acid cycle and oxidative phosphorylation (StatPearls; Wikipedia; a 2024 review). The yield rises from 2 to about 32 ATP per glucose (StatPearls): <a href="tca-gluconeogenesis-glycogen.html#h-yield">yield calculator</a>.</p>'],
+  ana: ['No oxygen (working muscle)', '<h3>Anaerobic: lactate</h3><p>Without oxygen, pyruvate stays in the cytoplasm and <b>lactate dehydrogenase</b> reduces it to <b>lactate</b> (StatPearls; Wikipedia; a 2016 review). This reoxidises NADH to <b>NAD<sup>+</sup></b>, which step 6 needs, so glycolysis can go on (StatPearls; a 2024 review; Wikipedia). Only <b>2 ATP</b> per glucose (StatPearls). The liver turns the lactate back into glucose: the <a href="tca-gluconeogenesis-glycogen.html#h-gng">Cori cycle</a> (Wikipedia).</p>'],
+  rbc: ['Red cell', '<h3>Red cell: no mitochondria, and the 2,3-BPG shunt</h3><p>Red cells have <b>no mitochondria</b>, so they rely on glycolysis and make lactate (StatPearls). In the <b>Rapoport–Luebering shunt</b>, <b>bisphosphoglycerate mutase</b> converts 1,3-BPG into <b>2,3-BPG</b> (Wikipedia; a 2025 review; IUBMB EC 5.4.2.4), <b>bypassing phosphoglycerate kinase</b>, so that ATP is not made (Wikipedia; the 2025 review). The 2025 review: about 20% of glycolytic flux goes this way. 2,3-BPG binds <b>deoxyhaemoglobin</b>, stabilises its low-affinity T state and so <b>lowers O<sub>2</sub> affinity</b>, helping O<sub>2</sub> unloading in the tissues (Wikipedia; the 2025 review; StatPearls). The curve shift: <a href="../../physiology/respiratory/gas-transport-control.html#h-odc">oxygen–haemoglobin dissociation curve</a>.</p><p><b>Pyruvate kinase deficiency</b>: an inherited defect that shortens red-cell survival — a hereditary <b>non-spherocytic haemolytic anaemia</b> (StatPearls; Wikipedia). StatPearls: the most common glycolytic enzyme defect causing haemolysis; Wikipedia: the second commonest enzyme-deficiency haemolytic anaemia after G6PD deficiency, mostly autosomal recessive, with raised 2,3-BPG.</p>'],
+};
+
+/* PDH steps: [chip, text] */
+const PDH = [
+  ['E1: decarboxylation', '<h3>E1, pyruvate dehydrogenase — thiamine</h3><p>In the <b>mitochondrial matrix</b> (Wikipedia; a 2023 review) pyruvate binds E1 with its cofactor <b>thiamine diphosphate</b> (TPP, from vitamin B<sub>1</sub>) (the 2026 consensus guideline; Wikipedia; IUBMB EC 1.2.4.1). <b>CO<sub>2</sub></b> is released and the 2-carbon unit passes to E2 (the 2026 guideline).</p>'],
+  ['E2: acetyl to CoA', '<h3>E2, dihydrolipoyl transacetylase — lipoic acid, CoA</h3><p>The 2-carbon unit acetylates the <b>lipoamide</b> arm of E2 (cofactor <b>lipoic acid</b>), and E2 hands the acetyl group to <b>coenzyme A</b>: <b>acetyl-CoA</b> (the 2026 guideline; Wikipedia).</p>'],
+  ['E3: NADH', '<h3>E3, dihydrolipoyl dehydrogenase — FAD, NAD<sup>+</sup></h3><p>E3, a flavoprotein (<b>FAD</b>), reoxidises the reduced lipoamide (the 2026 guideline; IUBMB EC 1.8.1.4) and passes the electrons to <b>NAD<sup>+</sup></b>, giving <b>NADH</b> (IUBMB; Wikipedia). The five cofactors — TPP, lipoate, CoA, FAD, NAD<sup>+</sup> — are the same in α-ketoglutarate dehydrogenase (Wikipedia). Wikipedia: the reaction is <b>irreversible</b>.</p>'],
+  ['Control', '<h3>Switched off by phosphorylation and by its products</h3><p><b>PDH kinase</b> phosphorylates E1 and inactivates the complex; <b>PDH phosphatase</b> reactivates it (Wikipedia; IUBMB EC 2.7.11.2). High <b>NADH, acetyl-CoA and ATP</b> inhibit it (a 2023 review; Wikipedia: raised ATP/ADP, NADH/NAD<sup>+</sup> and acetyl-CoA/CoA ratios).</p>'],
+];
+/* disorders: [condition, what fails, findings, sources] */
+const PDH_TABLE = [
+  ['Thiamine (TPP) enzymes', 'TPP is the cofactor of pyruvate dehydrogenase and α-ketoglutarate dehydrogenase (their E1: IUBMB; Wikipedia) and of transketolase (IUBMB; StatPearls)', 'Wikipedia: thiamine deficiency is diagnosed by measuring erythrocyte transketolase activity', 'IUBMB; Wikipedia; StatPearls'],
+  ['Thiamine (B<sub>1</sub>) deficiency', 'TPP is the coenzyme of PDH and of transketolase (StatPearls; Wikipedia)', '<b>dry beriberi</b> (symmetrical peripheral neuropathy), <b>wet beriberi</b> (high-output heart failure), <b>Wernicke–Korsakoff</b> syndrome (StatPearls; Wikipedia). Wikipedia: raised blood lactate and pyruvate, lactic acidosis in infantile beriberi; diagnosis by the erythrocyte transketolase test', 'StatPearls; Wikipedia'],
+  ['PDH complex deficiency', 'most cases: <b>PDHA1</b>, the X-linked gene for E1α (2026 guideline; Wikipedia)', '<b>lactic acidosis</b> (Wikipedia; 2026 guideline: lactate and pyruvate raised, more often in CSF than blood; can be normal). Treatment: <b>ketogenic diet</b> (recommended by the 2026 guideline; Wikipedia); the 2026 guideline: thiamine should not be withheld', 'the 2026 consensus guideline; Wikipedia'],
+];
+
+const BASED = '<b>Based on:</b> StatPearls and GeneReviews (NCBI Bookshelf; abstracts); IUBMB Enzyme Nomenclature entries (accessed 2026) and IUPAC-IUBMB <i>Nomenclature of Carbohydrates</i> (1996); open-access reviews and studies on glycolysis (J Biol Chem 2024), liver glucose metabolism (2016), hepatic gluconeogenesis (2018), glucokinase (2009), human PFK-1 structure (2024), the pentose phosphate pathway (2015), 2,3-DPG (2025), lactose intolerance (2015), the TCA cycle (2023) and the 2026 consensus guideline on pyruvate dehydrogenase complex deficiency (Europe PMC / NCBI); Wikipedia (wikitext checked for OpenStax/Lumen/Boundless citations).';
+const MODELS = '<b>Models used:</b> sugar rings, the pathway map, the PDH complex and the lactose drawing are schematic, not to scale. The hexokinase/glucokinase curves use Km 0.5 mM for hexokinase (illustrative; Wikipedia: below 1 mM) and a half-saturation near 5 mM for glucokinase (a 2016 review: Km near plasma glucose, 5 mM); the S-shape is schematic. The PFK-1 arrow shows directions only. The shunt ATP count is arithmetic from the step balance.';
+
+/* ===================== CODE ===================== */
+const {$, T} = Bioc;
+$('lede').innerHTML = LEDE; $('based').innerHTML = BASED; $('models').innerHTML = MODELS;
+const DEFS = Bioc.DEFS.replace('</defs>', '<marker id="arrT" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink)"/></marker></defs>');
+const box = (x, y, w, h, cls = 'met', rx = 6) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}"/>`;
+const pill = (x, y, txt, cls, w) => { w = w || Math.max(40, txt.length * 6.6 + 14); return box(x - w / 2, y - 11, w, 22, cls, 11) + T(x, y + 4, txt, 's', 'middle'); };
+/* hexagon (pyranose) and pentagon (furanose) rings */
+function ring(cx, cy, r, n, lab) {
+  const pts = [];
+  for (let i = 0; i < n; i++) { const a = -Math.PI / 2 + i * 2 * Math.PI / n; pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); }
+  return `<path class="ring" d="${Bioc.path(pts)} Z"/>` + T(cx, cy + 4, lab, 'm', 'middle');
+}
+
+/* ---- classes ---- */
+function drawCls(k) {
+  let s = Bioc.DEFS;
+  if (k === 'mono') {
+    s += ring(110, 110, 38, 6, 'Glc') + ring(260, 110, 34, 5, 'Fru') + ring(410, 110, 38, 6, 'Gal');
+    s += T(110, 175, 'glucose', 'b', 'middle') + T(110, 192, 'aldohexose', 's', 'middle') + T(260, 175, 'fructose', 'b', 'middle') + T(260, 192, 'ketohexose', 's', 'middle') + T(410, 175, 'galactose', 'b', 'middle') + T(410, 192, 'C‑4 epimer of glucose', 's', 'middle');
+    s += T(260, 230, 'one unit: cannot be hydrolysed further', 's', 'middle');
+  } else if (k === 'di') {
+    const row = (y, a, an, b, bn, lab, bond) => ring(90, y, 26, an, a) + `<path class="bond" d="M118 ${y} L152 ${y}"/>` + ring(180, y, 26, bn, b) + T(225, y - 2, lab, 'b') + T(225, y + 14, bond, 's');
+    s += row(45, 'Glc', 6, 'Fru', 5, 'sucrose', 'glucose + fructose') + row(125, 'Gal', 6, 'Glc', 6, 'lactose', 'galactose + glucose · β(1→4)') + row(205, 'Glc', 6, 'Glc', 6, 'maltose', 'glucose + glucose · α(1→4)');
+    s += T(470, 128, 'glycosidic', 's', 'middle') + T(470, 143, 'bond, water lost', 's', 'middle');
+  } else if (k === 'oligo') {
+    for (let i = 0; i < 5; i++) { s += ring(80 + i * 80, 110, 26, 6, ''); if (i < 4) s += `<path class="bond" d="M${106 + i * 80} 110 L${134 + i * 80} 110"/>`; }
+    s += T(260, 175, '3–10 units (StatPearls)', 'b', 'middle') + T(260, 195, 'e.g. maltodextrins, raffinose', 's', 'middle');
+  } else {
+    /* glycogen-like branch: main chain and one branch */
+    const unit = (x, y) => ring(x, y, 15, 6, '');
+    for (let i = 0; i < 9; i++) { s += unit(40 + i * 52, 150); if (i < 8) s += `<path class="bond" d="M${55 + i * 52} 150 L${77 + i * 52} 150"/>`; }
+    for (let i = 0; i < 5; i++) { s += unit(196 + i * 52, 70); if (i < 4) s += `<path class="bond" d="M${211 + i * 52} 70 L${233 + i * 52} 70"/>`; }
+    s += `<path class="bond" d="M196 85 L196 135"/>` + T(204, 112, 'α(1→6) branch', 's');
+    s += T(40, 186, 'α(1→4) chain', 's') + T(260, 220, 'glycogen (schematic): branches about every 8–12 residues', 's', 'middle') + T(260, 238, 'starch: amylose (linear) + amylopectin · cellulose: β(1→4), unbranched', 's', 'middle');
+  }
+  $('cls-svg').innerHTML = s; $('cls-find').innerHTML = CLS[k][1];
+}
+Bioc.toggles('cls-tg', Object.entries(CLS).map(([k, v]) => [k, v[0]]), drawCls, 'mono'); drawCls('mono');
+Bioc.table('cls-table', ['Example', 'Class', 'Units', 'Bond / note', 'Role', 'Sources'], CLS_TABLE);
+Bioc.key('cls-key', [['--sub', 'sugar unit (schematic ring: hexagon = 6-membered, pentagon = 5-membered)']]);
+
+/* ---- digestion ---- */
+$('dig-intro').innerHTML = DIG_INTRO;
+function drawDig(k) {
+  let s = Bioc.DEFS;
+  s += `<rect class="memb" x="20" y="40" width="300" height="70" rx="8"/>` + T(30, 32, 'small intestine (lumen)', 'h');
+  s += `<rect class="memb" x="340" y="40" width="160" height="70" rx="8"/>` + T(350, 32, 'colon', 'h');
+  s += ring(70, 75, 18, 6, 'Gal') + `<path class="bond" d="M88 75 L102 75"/>` + ring(120, 75, 18, 6, 'Glc') + T(95, 128, 'lactose', 's', 'middle');
+  if (k === 'ok') {
+    s += pill(200, 60, 'lactase', 'enzp') + `<path class="flow" d="M142 75 L250 75"/>` + ring(280, 62, 12, 6, '') + ring(280, 90, 12, 6, '');
+    s += `<path class="flow" d="M280 112 L280 160"/>` + T(280, 178, 'glucose + galactose absorbed', 's', 'middle') + T(420, 80, 'no sugar reaches here', 's', 'middle');
+  } else {
+    s += pill(200, 60, 'lactase low', 'enzp') + `<path class="clinx" d="M190 82 L210 98 M210 82 L190 98"/>` + `<path class="flow" d="M142 75 L360 75"/>`;
+    s += ring(390, 75, 12, 6, '') + `<path class="bond" d="M402 75 L410 75"/>` + ring(422, 75, 12, 6, '');
+    s += T(210, 165, 'osmotic load: water drawn in', 'c', 'middle') + T(420, 140, 'bacteria ferment: H₂, CO₂, CH₄', 'c', 'middle') + T(420, 160, 'short‑chain fatty acids', 'c', 'middle');
+    s += T(420, 200, 'H₂ in breath → breath test', 's', 'middle');
+  }
+  $('dig-svg').innerHTML = s; $('dig-find').innerHTML = DIG[k][1];
+}
+Bioc.toggles('dig-tg', Object.entries(DIG).map(([k, v]) => [k, v[0]]), drawDig, 'low'); drawDig('low');
+Bioc.table('dig-table', ['Type', 'What happens', 'Sources'], DIG_TABLE);
+
+/* ---- glycolysis stepper ---- */
+$('gly-intro').innerHTML = GLY_INTRO;
+/* rows: metabolite name and y; DHAP sits to the right of row 4 */
+const ROWS = [['Glucose', 26], ['Glucose 6-phosphate', 78], ['Fructose 6-phosphate', 130], ['Fructose 1,6-bisphosphate', 182], ['Glyceraldehyde 3-P', 252], ['1,3-Bisphosphoglycerate', 322], ['3-Phosphoglycerate', 374], ['2-Phosphoglycerate', 426], ['Phosphoenolpyruvate', 478], ['Pyruvate', 530]];
+const GS = {s: 0};
+function drawGly() {
+  const i = GS.s, st = GLY[i];
+  let s = DEFS; const x = 100, w = 172;
+  ROWS.forEach(([n, y]) => { s += box(x - w / 2, y - 14, w, 28) + T(x, y + 4, n, '', 'middle'); });
+  s += box(300, 238, 120, 28) + T(360, 256, 'DHAP', '', 'middle');
+  /* arrows: steps 1–3 between rows 0–3; step 4 to G3P and DHAP; step 5 DHAP -> G3P; 6–10 between rows 4–9 */
+  const arrows = [[0, 1], [1, 2], [2, 3], [3, 4], null, [4, 5], [5, 6], [6, 7], [7, 8], [8, 9]];
+  arrows.forEach((a, j) => {
+    let d, lx, ly;
+    if (j === 4) { d = 'M300 252 L192 252'; lx = 246; ly = 238; }
+    else { const y0 = ROWS[a[0]][1] + 14, y1 = ROWS[a[1]][1] - 14; d = `M${x} ${y0} L${x} ${y1}`; lx = x + 10; ly = (y0 + y1) / 2 + 4; }
+    s += `<path class="${GLY[j][7] ? 'oneway' : 'thin'}" d="${d}"/>`;
+    if (j === i) { s += `<path class="sel" d="${d}"/>`; const to = j === 4 ? ROWS[4] : ROWS[a[1]]; s += `<rect class="sel" x="${x - w / 2 - 4}" y="${to[1] - 18}" width="${w + 8}" height="36" rx="8"/>`; }
+    s += (j === 4 ? T(lx, ly, '5', 'm', 'middle') : T(lx, ly, String(j + 1), 'm'));
+  });
+  s += `<path class="thin" d="M${x + 60} 196 C 200 210, 290 222, 330 238"/>` + T(250, 212, '4', 'm');
+  if (i === 3) s += `<path class="sel" d="M${x + 60} 196 C 200 210, 290 222, 330 238"/>`;
+  s += T(300, 300, '×2 from here: two trioses', 'b');
+  /* enzyme pill for the selected step */
+  s += pill(400, 40, st[1], 'enzp', 220) + T(400, 70, 'EC ' + st[2], 's', 'middle');
+  if (st[7]) s += T(400, 92, 'irreversible, regulated', 'b', 'middle');
+  if (st[5] < 0) s += pill(400, 120, 'ATP spent', 'cofp', 90);
+  if (st[5] > 0) s += pill(400, 120, '2 ATP made', 'cofp', 100);
+  if (st[6] > 0) s += pill(400, 120, '2 NADH made', 'cofp', 106);
+  s += T(320, 400, 'thick arrow = irreversible', 's') + T(320, 418, '(Wikipedia; a 2018 review)', 's');
+  $('gly-svg').innerHTML = s; $('gly-find').innerHTML = st[8];
+  let used = 0, made = 0, nadh = 0;
+  for (let j = 0; j <= i; j++) { if (GLY[j][5] < 0) used -= GLY[j][5]; else made += GLY[j][5]; nadh += GLY[j][6]; }
+  $('gly-ledger').innerHTML = `<span>ATP spent <b>${used}</b></span><span>ATP made <b>${made}</b></span><span>net ATP <b>${Bioc.mn(made - used)}</b></span><span>NADH <b>${nadh}</b></span><span class="muted">per glucose, after step ${i + 1}</span>`;
+}
+Bioc.stepper('gly-step', GLY.map(g => g[0]), drawGly, GS);
+Bioc.key('gly-key', [['--sub', 'metabolite', 'opacity:.4'], ['--enz', 'enzyme', 'opacity:.5'], ['--cofac', 'ATP / NADH', 'opacity:.5'], ['--accent', 'selected step']]);
+
+/* ---- regulated steps ---- */
+$('reg-intro').innerHTML = REG_INTRO;
+Bioc.table('reg-table', ['Step', 'Enzyme', 'Activated by', 'Inhibited by', 'Hormones', 'Sources'], REG_TABLE);
+/* hexokinase vs glucokinase */
+const hkV = g => g / (0.5 + g), gkV = g => Math.pow(g, 1.7) / (Math.pow(5, 1.7) + Math.pow(g, 1.7));
+let hkG = 5;
+function drawHK() {
+  const X = Bioc.scale(0, 20, 50, 340), Y = Bioc.scale(0, 1, 210, 30);
+  let s = `<path class="axis" d="M50 30 L50 210 L340 210"/>` + T(195, 240, 'glucose (mM)', 's', 'middle') + T(56, 20, 'rate (% of own maximum)', 's');
+  [0, 5, 10, 15, 20].forEach(v => { s += T(X(v), 225, v, 's', 'middle'); });
+  s += T(44, 34, '100', 's', 'end') + T(44, 214, '0', 's', 'end');
+  const ptsH = [], ptsG = [];
+  for (let g = 0; g <= 20.001; g += 0.25) { ptsH.push([X(g), Y(hkV(g))]); ptsG.push([X(g), Y(gkV(g))]); }
+  s += `<path class="hk" d="${Bioc.path(ptsH)}"/><path class="gk" d="${Bioc.path(ptsG)}"/>`;
+  s += `<path class="guide" d="M${X(hkG)} 30 L${X(hkG)} 210" style="stroke:var(--muted);stroke-dasharray:3 3"/>`;
+  s += `<circle class="pt" cx="${X(hkG)}" cy="${Y(hkV(hkG))}" r="5"/><circle class="pt" cx="${X(hkG)}" cy="${Y(gkV(hkG))}" r="5"/>`;
+  s += T(330, Y(hkV(20)) - 8, 'hexokinase', 's', 'end') + T(330, Y(gkV(20)) + 18, 'glucokinase', 's', 'end');
+  $('hk-svg').innerHTML = s;
+  $('hk-find').innerHTML = `<p>At <b>${hkG} mM</b> glucose: hexokinase <b>${Math.round(100 * hkV(hkG))}%</b>, glucokinase <b>${Math.round(100 * gkV(hkG))}%</b> of its own maximum (schematic).</p><p>Hexokinases I–III have a <b>low K<sub>m</sub></b> (high affinity; Wikipedia: below 1 mM) and are inhibited by their product, glucose 6-phosphate (Wikipedia). <b>Glucokinase</b> (hexokinase IV), in the <b>liver and pancreatic β cells</b> (Wikipedia; a 2009 review), has a <b>lower affinity</b>, a K<sub>m</sub> close to plasma glucose (about 5 mM), so its rate follows the blood glucose — a <b>glucose sensor</b> — and it is <b>not inhibited by glucose 6-phosphate</b> (a 2016 review; Wikipedia). Wikipedia: it shows positive cooperativity with glucose (an S-shaped curve).</p>`;
+}
+Bioc.slider('hk-sl', {id: 'hkg', label: 'Glucose', min: 1, max: 20, step: 1, value: 5, fmt: v => v + ' mM'}, v => { hkG = v; drawHK(); }).init(); drawHK();
+
+/* PFK-1 effectors: multi-select chips */
+const pfkOn = {atp: false, cit: false, amp: false, f26: true};
+(function () {
+  const b = $('pfk-tg');
+  Object.entries(PFK).forEach(([k, v]) => {
+    const c = document.createElement('button'); c.className = 'chip'; c.type = 'button'; c.textContent = v[0]; c.setAttribute('aria-pressed', String(pfkOn[k]));
+    c.onclick = () => { pfkOn[k] = !pfkOn[k]; c.setAttribute('aria-pressed', String(pfkOn[k])); drawPFK(); };
+    b.append(c);
+  });
+})();
+function drawPFK() {
+  let s = Bioc.DEFS + Bioc.arrowDef('arrI', 'var(--inhib)');
+  s += box(170, 100, 180, 60, 'enzp', 12) + T(260, 126, 'PFK‑1', 'b', 'middle') + T(260, 146, 'F6P → F1,6BP', 's', 'middle');
+  const pos = {atp: [70, 40], cit: [70, 220], amp: [450, 40], f26: [450, 220]};
+  let net = 0;
+  Object.entries(PFK).forEach(([k, v]) => {
+    const [x, y] = pos[k], on = pfkOn[k];
+    const lab = {atp: 'ATP', cit: 'citrate', amp: 'AMP, ADP', f26: 'F2,6BP'}[k];
+    s += pill(x, y, lab, v[1] < 0 ? 'inhp' : 'box', 92);
+    if (on) {
+      net += v[1];
+      const tx = x < 260 ? 175 : 345, ty = y < 130 ? 108 : 152;
+      s += `<path d="M${x} ${y + (y < 130 ? 12 : -12)} L${tx} ${ty}" style="stroke:${v[1] < 0 ? 'var(--inhib)' : 'var(--ink)'};stroke-width:2;fill:none" ${v[1] < 0 ? '' : 'marker-end="url(#arr)"'}/>`;
+      if (v[1] < 0) s += `<path d="M${tx - 7} ${ty - 7} L${tx + 7} ${ty + 7}" style="stroke:var(--inhib);stroke-width:3"/>`;
+      s += T((x + tx) / 2 + (x < 260 ? 14 : -14), (y + ty) / 2 + (y < 130 ? -6 : 14), v[1] < 0 ? '−' : '+', 'b', 'middle');
+    }
+  });
+  const on = Object.keys(PFK).filter(k => pfkOn[k]), act = on.filter(k => PFK[k][1] > 0).length, inh = on.length - act;
+  s += T(260, 252, act && inh ? 'activators and inhibitors both act: balance not modelled' : act ? 'activator(s) on: activity up' : inh ? 'inhibitor(s) on: activity down' : 'no effector on', 's', 'middle');
+  $('pfk-svg').innerHTML = s;
+  const list = Object.entries(PFK).filter(([k]) => pfkOn[k]).map(([, v]) => v[2]);
+  $('pfk-find').innerHTML = PFK_TEXT + (list.length ? `<p>Now: ${list.join('; ')}.</p>` : '<p>No effector switched on.</p>');
+}
+drawPFK();
+function drawPK2(k) {
+  const fed = k === 'fed';
+  let s = Bioc.DEFS;
+  s += box(150, 70, 220, 64, 'enzp', 12) + T(260, 96, 'PFK‑2 / FBPase‑2', 'b', 'middle') + T(260, 118, fed ? 'dephosphorylated: kinase on' : 'phosphorylated: phosphatase on', 's', 'middle');
+  s += T(260, 40, fed ? 'insulin' : 'glucagon → cAMP → PKA', 'b', 'middle') + `<path class="flow" d="M260 46 L260 68"/>`;
+  s += box(20, 160, 110, 30) + T(75, 180, 'F6P', '', 'middle') + box(390, 160, 110, 30) + T(445, 180, 'F2,6BP', '', 'middle');
+  s += fed ? `<path class="flow" d="M132 175 L388 175"/>` + T(260, 168, 'made', 's', 'middle') : `<path class="flow" d="M388 175 L132 175"/>` + T(260, 168, 'broken down', 's', 'middle');
+  s += T(395, 212, fed ? 'high → PFK‑1 on, glycolysis' : 'low → PFK‑1 slows, FBPase‑1 freed', 's', 'middle');
+  $('pk2-svg').innerHTML = s; $('pk2-find').innerHTML = PK2[k][1];
+}
+Bioc.toggles('pk2-tg', Object.entries(PK2).map(([k, v]) => [k, v[0]]), drawPK2, 'fed'); drawPK2('fed');
+
+/* ---- fate of pyruvate ---- */
+let fateK = 'ana', shunt = 20;
+const FSL = Bioc.slider('fate-sl', {id: 'shunt', label: 'Share of 1,3-BPG sent through the shunt', min: 0, max: 100, step: 10, value: 20, fmt: v => v + '%'}, v => { shunt = v; drawFate(); });
+FSL.init();
+function drawFate() {
+  const k = fateK; let s = Bioc.DEFS;
+  $('fate-sl').hidden = k !== 'rbc';
+  s += box(20, 20, 150, 30) + T(95, 40, 'Glucose', '', 'middle') + `<path class="flow" d="M95 52 L95 ${k === 'rbc' ? 88 : 98}"/>` + T(105, 74, 'glycolysis', 's');
+  if (k === 'rbc') {
+    s += box(20, 90, 150, 26) + T(95, 108, '1,3‑BPG', '', 'middle');
+    s += `<path class="flow" d="M95 118 L95 148"/>` + pill(178, 133, 'PGK: 1 ATP', 'cofp', 90);
+    s += box(20, 150, 150, 26) + T(95, 168, '3‑P‑glycerate', '', 'middle') + `<path class="flow" d="M95 178 L95 203"/>` + pill(218, 191, 'via PEP · pyruvate kinase: 1 ATP', 'cofp', 210);
+    s += box(20, 205, 150, 26) + T(95, 223, 'pyruvate', '', 'middle') + `<path class="flow" d="M95 233 L95 246"/>` + box(20, 248, 150, 26) + T(95, 266, 'lactate', '', 'middle');
+    s += `<path class="flow" d="M172 103 L300 103"/>` + pill(236, 86, 'BPG mutase', 'enzp', 96) + box(300, 90, 110, 26) + T(355, 108, '2,3‑BPG', 'b', 'middle');
+    s += `<path class="flow" d="M355 118 L355 160 L172 162"/>` + T(365, 140, 'phosphatase (no ATP)', 's');
+    s += T(470, 50, 'binds deoxy‑Hb', 's', 'middle') + T(470, 66, 'O₂ affinity ↓', 'b', 'middle') + `<path class="lead" d="M412 98 L450 72"/>`;
+    s += T(300, 262, 'no mitochondria: no TCA', 's') + T(300, 244, 'per triose; ×2 per glucose', 's');
+  } else {
+    s += box(20, 100, 150, 30) + T(95, 120, 'Pyruvate', 'b', 'middle');
+    if (k === 'aer') {
+      s += `<rect class="memb" x="230" y="70" width="270" height="190" rx="40"/>` + T(250, 92, 'mitochondrial matrix', 'h');
+      s += `<path class="flow" d="M172 115 L280 140"/>` + pill(370, 125, 'pyruvate dehydrogenase', 'enzp', 180);
+      s += box(300, 160, 150, 30) + T(375, 180, 'acetyl‑CoA', '', 'middle') + `<path class="flow" d="M375 192 L375 222"/>` + T(375, 240, 'TCA cycle → ETC', 'b', 'middle');
+    } else {
+      s += `<path class="flow" d="M95 132 L95 200"/>` + pill(270, 165, 'lactate dehydrogenase', 'enzp', 170) + box(20, 200, 150, 30) + T(95, 220, 'Lactate', 'b', 'middle');
+      s += pill(380, 160, 'NADH', 'cofp', 70) + `<path class="flow" d="M380 148 L380 90"/>` + pill(380, 78, 'NAD⁺', 'cofp', 70) + T(420, 60, 'back to step 6', 's', 'middle');
+      s += T(300, 250, 'lactate → liver (Cori cycle)', 's');
+    }
+  }
+  $('fate-svg').innerHTML = s; $('fate-find').innerHTML = FATE[k][1];
+  if (k === 'rbc') {
+    const pgk = 2 * (1 - shunt / 100), net = pgk + 2 - 2;
+    $('fate-ledger').innerHTML = `<span>ATP from PGK <b>${pgk.toFixed(1)}</b></span><span>from pyruvate kinase <b>2</b></span><span>spent <b>2</b></span><span>net ATP per glucose <b>${net.toFixed(1)}</b></span><span class="muted">arithmetic from the step balance; 20% = the 2025 review's figure</span>`;
+  } else $('fate-ledger').innerHTML = k === 'ana' ? '<span>net ATP per glucose <b>2</b></span><span class="muted">(StatPearls)</span>' : '<span>net ATP per glucose about <b>32</b></span><span class="muted">(StatPearls; see the yield calculator)</span>';
+}
+Bioc.toggles('fate-tg', Object.entries(FATE).map(([k, v]) => [k, v[0]]), k => { fateK = k; drawFate(); }, 'ana'); drawFate();
+
+/* ---- PDH ---- */
+const PS = {s: 0};
+function drawPDH() {
+  const i = PS.s; let s = Bioc.DEFS;
+  s += `<rect class="memb" x="10" y="10" width="500" height="250" rx="30"/>` + T(30, 34, 'mitochondrial matrix', 'h');
+  const E = [[120, 140, 'E1', 'TPP'], [260, 140, 'E2', 'lipoate'], [400, 140, 'E3', 'FAD']];
+  E.forEach(([x, y, n, c], j) => {
+    s += `<circle class="enzp" cx="${x}" cy="${y}" r="42"/>` + T(x, y - 4, n, 'b', 'middle');
+    s += pill(x, y + 20, c, 'cofp', 60);
+    if (j === i) s += `<circle class="sel" cx="${x}" cy="${y}" r="48"/>`;
+  });
+  s += box(30, 50, 100, 28) + T(80, 69, 'pyruvate', '', 'middle') + `<path class="flow" d="M90 80 L105 98"/>`;
+  s += T(120, 222, 'CO₂ out', 's', 'middle') + `<path class="flow" d="M120 184 L120 205"/>`;
+  s += `<path class="flow" d="M163 140 L216 140"/>` + `<path class="flow" d="M303 140 L356 140"/>`;
+  s += pill(260, 70, 'CoA', 'cofp', 50) + `<path class="flow" d="M260 82 L260 96"/>` + box(200, 196, 120, 28) + T(260, 215, 'acetyl‑CoA', '', 'middle') + `<path class="flow" d="M260 184 L260 194"/>`;
+  s += pill(400, 70, 'NAD⁺', 'cofp', 56) + `<path class="flow" d="M400 82 L400 96"/>` + pill(400, 212, 'NADH', 'cofp', 60) + `<path class="flow" d="M400 184 L400 199"/>`;
+  if (i === 3) {
+    s += pill(110, 240, 'PDH kinase: P → off', 'enzp', 150) + pill(300, 240, 'PDH phosphatase → on', 'enzp', 170);
+    s += T(500, 34, 'inhibited by NADH, acetyl‑CoA, ATP', 's', 'end');
+  }
+  $('pdh-svg').innerHTML = s; $('pdh-find').innerHTML = PDH[i][1];
+}
+Bioc.stepper('pdh-step', PDH.map(p => p[0]), drawPDH, PS);
+Bioc.key('pdh-key', [['--enz', 'enzyme', 'opacity:.5'], ['--cofac', 'cofactor / coenzyme', 'opacity:.5'], ['--accent', 'selected step']]);
+Bioc.table('pdh-table', ['Condition', 'What fails', 'Findings and management', 'Sources'], PDH_TABLE);
+
+Bioc.swipeHints();
+</script>
+</body>
+</html>

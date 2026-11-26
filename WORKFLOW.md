@@ -85,7 +85,7 @@ Last updated: 2026-11-23
   colours used for oxygenation) [x] fixes (573 quotes) [x] committed 2026-11-24. S01 [x] build (243 quotes; EU trauma 2023 / ATLS 10th, Sepsis-3, SSC 2021, ERAS; Wikipedia Homeostasis excluded)
   [x] review (ERAS carbohydrate loading misattributed, TBI/spinal exception missing at the instruction (safety),
   ebb/flow curve directions, SSC 2021 gaps) [x] fixes (291 quotes) [x] committed 2026-11-26. ROUND 1 SECOND MODULES started: B02 [x] build (552 quotes) [x] review (Wikipedia misread Katz&Tayek 1998 Cori %, WHO joint criteria,
-  ADA discordant wording, colours) [ ] fixes (running). P02 [x] build (427 quotes) [x] review (no wrong facts; one-source pairs, transmigration drawn transcellular,
+  ADA discordant wording, colours) [x] fixes (602 quotes) [x] committed 2026-11-26. P02 [x] build (427 quotes) [x] review (no wrong facts; one-source pairs, transmigration drawn transcellular,
   drug blocks off-arrow, path.js stepper focus) [ ] fixes (running).
   (bioc.js has the stepper-end focus fix in another form: verified; only path.js lacked it, P02 fix adds it.) M02 [ ] build (running; microbiology/immunology/, MI2.1–2.8).
   R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,
