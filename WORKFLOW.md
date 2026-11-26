@@ -8,6 +8,11 @@ Last updated: 2026-11-23
 
 ## Now
 
+- RESUMED 2026-11-26 02:34 after the terminal tab closed at 02:29 (no crash, no OOM, no core dump; Konsole was flooding
+  notifications). New tab had no cap: set 9G/10G again. S01, O01, An01 builders resumed (S01/O01 had ~200 downloads each,
+  no pages; An01 nothing). Live wikitext audit resumed. Server from the old session still serving :8765.
+  USER (outside project): kernel btrfs zstd error also on inode 96460 = /var/lib/pacman/local/snappy-1.3.1-1/files
+  (pacman DB entry; `sudo pacman -S snappy` rewrites it). wp_Spermiogenesis.txt replacement still awaiting the user.
 - RESUMED 2026-11-25 (cap re-set to 10G on the new tab; server up): M01 fix agent resumed, F01 review running, FM01
   build restarted.
 - PAUSED 2026-11-24 by user (session limit hit; resets 07:10 America/New_York). Resume state for round 1:
