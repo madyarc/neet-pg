@@ -96,8 +96,8 @@ Last updated: 2026-11-23
   At G02 commit: include biochemistry/carbohydrates/minor-pathways-glucose.html line 245 (planned → Medicine 02). C02 [x] build (360 quotes; 6 Wikipedia stats articles excluded for OpenStax/CNX/Boundless) [x] review (curved r≠0; copied
   sources (Pune 2013 copies Bangalore 2009; Ali&Bhaskar~Nahm); ogive median; duplicate id; small text fixes) [ ] fixes (STOPPED: monthly spend limit, 2026-11-26;
   resume the C02 builder via SendMessage once the limit resets — its work so far is saved, uncommitted).
-  P03 [ ] build (running; pathology/general/, PA5.1–5.6).
-  FM02 [ ] build (running; forensic-medicine/injuries/, FM5.1–5.6; BNS 2023 official text).
+  P03 [ ] build (STOPPED at spend limit mid-research; resume builder via SendMessage).
+  FM02 [ ] build (probably stopped at spend limit; resume via SendMessage; forensic-medicine/injuries/, FM5.1–5.6; BNS 2023 official text).
   R01 [x] build (346 quotes) [x] review (PC-PNDT consent/Form G wrong for ultrasound, Form F indications,
   NICE head-injury adult rule, 10-day rule year, radiograph densities unsourced, PET geometry) [x] fixes (364 quotes) [x] committed 2026-11-26.
   TOOLING FIX 2026-11-26: tools/capped passed args through systemd-run env expansion (${X} in --js was mangled);
